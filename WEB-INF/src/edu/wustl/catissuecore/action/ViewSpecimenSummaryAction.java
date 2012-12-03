@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
@@ -220,7 +221,13 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			{
 				this.populateSpecimenSummaryForm(summaryForm, specimenMap);
 			}
-
+			
+			Collection<GenericSpecimen> list = summaryForm.getSpecimenList();
+			StringBuffer buffer = new StringBuffer();
+			updateSpecimenIds(buffer,list);
+			
+			request.setAttribute("popUpSpecList", buffer.toString());
+			request.setAttribute("IsToShowButton", Boolean.TRUE);
 			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(summaryForm
 					.getRequestType()))
 			{
@@ -286,6 +293,26 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			return mapping.findForward(target);
 		}
 
+	}
+
+	private void updateSpecimenIds(StringBuffer buffer,
+			Collection<GenericSpecimen> list) 
+	{
+		for (GenericSpecimen genericSpecimen : list) 
+		{
+			buffer.append(genericSpecimen.getId());
+			buffer.append(",");
+			if(genericSpecimen.getAliquotSpecimenCollection() != null)
+			{
+				Map<String, GenericSpecimen> aliqMap = genericSpecimen.getAliquotSpecimenCollection();
+				updateSpecimenIds(buffer, aliqMap.values());
+			}
+			if(genericSpecimen.getDeriveSpecimenCollection() != null)
+			{
+				Map<String, GenericSpecimen> deriveMap = genericSpecimen.getDeriveSpecimenCollection();
+				updateSpecimenIds(buffer, deriveMap.values());
+			}
+		}
 	}
 
 	/**

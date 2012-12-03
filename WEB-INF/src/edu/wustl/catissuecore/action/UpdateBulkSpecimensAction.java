@@ -156,6 +156,11 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			this.specimenSummaryForm.setReadOnly(true);
 			// bug 12959
 			request.setAttribute("readOnly", true);
+//			List<GenericSpecimen> genSpec = specimenSummaryForm.getSpecimenList();
+			StringBuffer buffer = new StringBuffer();
+			updateSpecimenIds(buffer,specimenSummaryForm.getSpecimenList());
+			updateSpecimenIds(buffer,specimenSummaryForm.getDerivedList());
+			request.setAttribute("popUpSpecList", buffer.toString());
 
 			// if(request.getParameter("pageOf") != null)
 			// return mapping.findForward(request.getParameter("pageOf"));
@@ -298,6 +303,17 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 	}
 
+	private void updateSpecimenIds(StringBuffer buffer,
+			List<GenericSpecimen> specimenList) 
+	{
+		for (GenericSpecimen genericSpecimen : specimenList) 
+		{
+			buffer.append(genericSpecimen.getId());
+			buffer.append(",");
+		}
+		
+	}
+
 	/**
 	 *
 	 * @param specimenSummaryForm : specimenSummaryForm
@@ -380,6 +396,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 						.getSpecimenPosition().getPositionDimensionTwoString()));
 			}
 			specimenDataBean.setLabel(specimen.getLabel());
+			specimenDataBean.setId(specimen.getId());
 			final LinkedHashMap<String, GenericSpecimen> derivesMap = specimenDataBean
 					.getDeriveSpecimenCollection();
 			final Collection derivesCollection = derivesMap.values();
@@ -400,6 +417,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				}
 				deriveSpecimenDataBean.setParentSpecimen((Specimen)deriveSpec.getParentSpecimen());
 				deriveSpecimenDataBean.setLabel(deriveSpec.getLabel());
+				deriveSpecimenDataBean.setId(deriveSpec.getId());
 				deriveSpecimenDataBean.setParentName(deriveSpec.getParentSpecimen().getLabel());
 
 			}
@@ -559,6 +577,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			}
 			formSpecimen.setDisplayName(specimen.getLabel());
 			formSpecimen.setBarCode(specimen.getBarcode());
+			formSpecimen.setId(specimen.getId());
 			this.setParentLabelToFormSpecimen(specimen, formSpecimen);
 			if (specimenDataBean.getDeriveSpecimenCollection() != null)
 			{
