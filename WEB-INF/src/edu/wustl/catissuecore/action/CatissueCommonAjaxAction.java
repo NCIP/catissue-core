@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -33,6 +34,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -414,6 +416,31 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		{
 			AppUtility.closeJDBCSession(jdbcdao);
 		}
+		return null;
+	}
+	
+	public ActionForward getSpecimenIds(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		AddDeleteCartAction action = new AddDeleteCartAction();
+		final List<List<String>> dataList = action.getPaginationDataList(request);
+		String specIndex = request.getParameter("specIndex");
+		HttpSession session = request.getSession();
+		
+		int index = 0;
+		if(!Validator.isEmpty(specIndex))
+		{
+			index = Integer.valueOf(specIndex);
+		}
+		StringBuffer responseString = new StringBuffer();
+		for (List<String> list : dataList) 
+		{
+			responseString.append(list.get(index-1));
+			responseString.append(",");
+		}
+		session.setAttribute("specIds", responseString.toString());
+		response.setContentType(Constants.CONTENT_TYPE_XML);
+		response.getWriter().write(responseString.toString());
 		return null;
 	}
 }

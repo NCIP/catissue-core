@@ -35,7 +35,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		Tag tag = new Tag();
 		tag.setLabel(label);
 		tag.setUserId(userId);
-		TagDAO tagDao = new TagDAO(entityName);
+		TagDAO tagDao = new TagDAO(entityName,userId);
 		tagDao.insertTag(tag);
 		return tag.getIdentifier();
 	}
@@ -59,7 +59,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		tagItem.setTag(tag);
 		tagItem.setObjId(objId);
 
-		TagDAO<AbstractSpecimen> tagDao = new TagDAO<AbstractSpecimen>(entityName);
+		TagDAO<AbstractSpecimen> tagDao = new TagDAO<AbstractSpecimen>(entityName,objId);
 		tagDao.insertTagItem(tagItem);
 	}
 
@@ -70,11 +70,11 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @throws DAOException,BizLogicException.
 	 */
 	@Override
-	public List<Tag> getTagList(String entityName) throws DAOException, BizLogicException
+	public List<Tag> getTagList(String entityName,long userId) throws DAOException, BizLogicException
 	{
 		List<Tag> tagList = null;
 		TagDAO tagDao = null;
-		tagDao = new TagDAO(entityName);
+		tagDao = new TagDAO(entityName,userId);
 		tagList = tagDao.getTags();
 		return tagList;
 	}
@@ -90,7 +90,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	@Override
 	public Tag getTagById(String entityName, long tagId) throws DAOException, BizLogicException
 	{
-		TagDAO tagDao = new TagDAO(entityName);
+		TagDAO tagDao = new TagDAO(entityName,tagId);
 		Tag tag = tagDao.getTagById(tagId);
 		return tag;
 	}
@@ -104,7 +104,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 */
 	public Set<TagItem> getTagItemByTagId(String entityName, long tagId) throws BizLogicException
 	{
-		TagDAO tagDao = new TagDAO(entityName);
+		TagDAO tagDao = new TagDAO(entityName,tagId);
 		Set<TagItem> tagItem = tagDao.getTagItemBytagId(tagId);
 		return tagItem;
 	}
@@ -119,7 +119,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	@Override
 	public void deleteTag(String entityName, long tagId) throws DAOException, BizLogicException
 	{
-		TagDAO tagDao = new TagDAO(entityName);
+		TagDAO tagDao = new TagDAO(entityName,tagId);
 		Tag tag = tagDao.getTagById(tagId);
 		tagDao.deleteTag(tag);
 	}
@@ -135,7 +135,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	public void deleteTagItem(String entityName, long itemId) throws DAOException,
 			BizLogicException
 	{
-		TagDAO tagDAO = new TagDAO(entityName);
+		TagDAO tagDAO = new TagDAO(entityName,itemId);
 		TagItem tagItem = tagDAO.getTagItemById(itemId);
 		tagDAO.deleteTagItem(tagItem);
 	}

@@ -36,7 +36,7 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="TAG_LABEL" type="${text.type}(255)">
-				<constraints unique="true" nullable="false" />
+				<constraints nullable="false" />
 			</column>
 			<column name="USER_ID" type="${int.type}">
 				<constraints nullable="false" />
