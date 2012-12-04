@@ -111,7 +111,7 @@ function popupWindow(nofConsentTiers)
 	{	
 		var isPageConsent = false;
 		
-		<%if(pageOf.equals("pageOfConsent"))
+		<%if("pageOfConsent".equals(pageOf))
 			{%>
 		alert("Consent status updated, register participant to save the changes.");
 		isPageConsent = true;
@@ -143,7 +143,7 @@ function popupWindow(nofConsentTiers)
 		else
 		{
 			submitString();
-			<%if(specimenList!=null && specimenList.size()>1 || !(pageOf.equals("pageOfNewSpecimenCPQuery")))
+			<%if(specimenList!=null && specimenList.size()>1 || !"pageOfNewSpecimenCPQuery".equals(pageOf))
 			{%>	
 		
 				var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw&pageOf="+"<%=pageOf%>";
@@ -188,35 +188,35 @@ function popupWindow(nofConsentTiers)
 	
 	if(pageOf!=null)
 	{
-		if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery"))
+		if("pageOfCollectionProtocolRegistration".equals(pageOf) || "pageOfCollectionProtocolRegistrationCPQuery".equals(pageOf))
 		{
 	width="81%";
 	innerWidth="100%";
 	collection="responseList";
 		}
-		else if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup"))
+		else if("pageOfSpecimenCollectionGroupCPQuery".equals(pageOf) ||"pageOfSpecimenCollectionGroup".equals(pageOf))
 		{
 	width="636px";
 	innerWidth = "636px";
 	collection="specimenCollectionGroupResponseList";
 		}
-        else if(pageOf.equals("pageOfNewSpecimen")||pageOf.equals("pageOfNewSpecimenCPQuery"))
+        else if("pageOfNewSpecimen".equals(pageOf)||"pageOfNewSpecimenCPQuery".equals(pageOf))
 		{
 	width="100%";
 	innerWidth="100%";
 	collection="specimenResponseList";
      	}  
-        else if(pageOf.equals("pageOfDistribution"))
+        else if("pageOfDistribution".equals(pageOf))
 		{
 	width="100%";
 	innerWidth="100%";
 		}
-		else if(pageOf.equals("pageOfOrdering"))
+		else if("pageOfOrdering".equals(pageOf))
 		{
 	width="100%";
 	innerWidth="100%";
 		}
-		if(pageOf.equals("pageOfConsent"))
+		if("pageOfConsent".equals(pageOf))
 		{
 	width="100%";
 	innerWidth="100%";
@@ -253,7 +253,7 @@ function popupWindow(nofConsentTiers)
 		
 			<%-- If page of Collection Protocol Registration --%>						
 			<%
-										if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery") || pageOf.equals("pageOfConsent"))
+										if("pageOfCollectionProtocolRegistration".equals(pageOf)||"pageOfCollectionProtocolRegistrationCPQuery".equals(pageOf) || "pageOfConsent".equals(pageOf))
 										{
 									%>
 			<tr>
@@ -286,7 +286,7 @@ function popupWindow(nofConsentTiers)
 							</td>	
 							<td class="noneditable">
 							<%
-								if(pageOf.equals("pageOfConsent"))
+								if("pageOfConsent".equals(pageOf))
 												{
 													if(signedConsentDate.trim().length() > 0)
 													{
@@ -363,9 +363,9 @@ function popupWindow(nofConsentTiers)
 			<%-- If page of Specimen Collection Group or New Specimen --%>						
 			<%
 			}
-			if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-					||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")
-					||pageOf.equals("pageOfOrdering")
+			if("pageOfSpecimenCollectionGroupCPQuery".equals(pageOf)||"pageOfNewSpecimen".equals(pageOf)
+					||"pageOfNewSpecimenCPQuery".equals(pageOf)||"pageOfSpecimenCollectionGroup".equals(pageOf)||"pageOfDistribution".equals(pageOf)
+					||"pageOfOrdering".equals(pageOf)
 					)
 			{
 				Object formObject = form;
@@ -397,7 +397,7 @@ function popupWindow(nofConsentTiers)
 							<td class="noneditable">
 								<label>
 								<%
-									if(signedUrl==null||signedUrl.equals(""))
+									if(signedUrl==null || "".equals(signedUrl))
 									{
 								%>
 										&nbsp;
@@ -420,7 +420,7 @@ function popupWindow(nofConsentTiers)
 							<td class="noneditable">
 								<label >
 									<%
-									if(witnessName==null||witnessName.equals(""))
+									if(witnessName==null || "".equals(witnessName))
 									{
 									%>
 										&nbsp;
@@ -444,7 +444,7 @@ function popupWindow(nofConsentTiers)
 							<td class="noneditable">
 								<label>
 									<%
-									if(consentDate==null||consentDate.equals(""))
+									if(consentDate==null||"".equals(consentDate))
 									{
 									%>
 										&nbsp;
@@ -483,8 +483,9 @@ function popupWindow(nofConsentTiers)
 							</td>
 							
 							<%
-							if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
+							if("pageOfSpecimenCollectionGroupCPQuery".equals(pageOf)||"pageOfNewSpecimen".equals(pageOf)
+									||"pageOfNewSpecimenCPQuery".equals(pageOf)||"pageOfSpecimenCollectionGroup".equals(pageOf)||"pageOfDistribution".equals(pageOf)
+									||"pageOfOrdering".equals(pageOf))
 							{
 							%>
 							<%-- Title ( Response Status if page of SCG or New Specimen --%>									
@@ -510,8 +511,9 @@ function popupWindow(nofConsentTiers)
 							 String consents = stringArray[1];
 							 String participantResponseKey =stringArray[2];
 							 String participantResponseIDKey=stringArray[3];
-							 if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-										||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
+							 if("pageOfSpecimenCollectionGroupCPQuery".equals(pageOf)||"pageOfNewSpecimen".equals(pageOf)
+										||"pageOfNewSpecimenCPQuery".equals(pageOf)||"pageOfSpecimenCollectionGroup".equals(pageOf)
+										||"pageOfDistribution".equals(pageOf)||"pageOfOrdering".equals(pageOf))
 							 {
 								responseKey=stringArray[4];
 								responseIdKey=stringArray[5];
@@ -586,7 +588,7 @@ function popupWindow(nofConsentTiers)
 							</td>
 							<%-- If Page of Collection Protocol Reg then show drop down --%>										
 							<%
-							if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery")  || pageOf.equals("pageOfConsent"))
+							if("pageOfCollectionProtocolRegistration".equals(pageOf)|| "pageOfCollectionProtocolRegistrationCPQuery".equals(pageOf)  || "pageOfConsent".equals(pageOf))
 							{
 							%>
 								<td class='${pageScope.style}'>
@@ -599,8 +601,9 @@ function popupWindow(nofConsentTiers)
 							<%-- If Page of SCG or New Specimen or Distribution then show participant Response. --%>																			
 							<%
 							}
-							else if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
+							else if("pageOfSpecimenCollectionGroupCPQuery".equals(pageOf)||"pageOfNewSpecimen".equals(pageOf)
+									||"pageOfNewSpecimenCPQuery".equals(pageOf)||"pageOfSpecimenCollectionGroup".equals(pageOf)
+									||"pageOfDistribution".equals(pageOf)||"pageOfOrdering".equals(pageOf))
 							{
 							%>
 							<td class='${pageScope.style}'>
@@ -611,10 +614,10 @@ function popupWindow(nofConsentTiers)
 							<%-- If Page of SCG then show SCG level Response dropdown --%>																												
 							<%
 							}
-							if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup"))
+							if("pageOfSpecimenCollectionGroupCPQuery".equals(pageOf)|| "pageOfSpecimenCollectionGroup".equals(pageOf))
 							{
 								
-								if(operation.equals(Constants.EDIT))
+								if(Constants.EDIT.equals(operation))
 								{
 									idKey ="changeInResponse('"+idKey+"')";
 								}
@@ -625,7 +628,7 @@ function popupWindow(nofConsentTiers)
 
 							%>
 							<%
-								if(operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
+								if(Constants.EDIT.equals(operation) && Constants.WITHDRAWN.equals(statusDisplay))
 								{
 							%>
 								<td class='${pageScope.style}'>
@@ -652,17 +655,17 @@ function popupWindow(nofConsentTiers)
 							<%-- If Page of New Specimen then show Specimen level Response dropdown --%>									
 							<%
 							}
-							else if(pageOf.equals("pageOfNewSpecimen")||pageOf.equals("pageOfNewSpecimenCPQuery"))
+							else if("pageOfNewSpecimen".equals(pageOf)||"pageOfNewSpecimenCPQuery".equals(pageOf))
 							{
 								String keyValue=";";
-								if(operation.equals(Constants.EDIT))
+								if(Constants.EDIT.equals(operation))
 								{
 									keyValue="changeInResponse('"+statusKey+"')";
 								}
 					
 							%>
 							<%
-								if(statusDisplay!=null&&operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
+								if(statusDisplay!=null && Constants.EDIT.equals(operation) && Constants.WITHDRAWN.equals(statusDisplay))
 								{
 							%>
 								<td class='${pageScope.style}'>
@@ -689,7 +692,7 @@ function popupWindow(nofConsentTiers)
 							<%-- If Page of Distribution then show Specimen Level response --%>																											
 							<%
 							}
-							else if(pageOf.equals("pageOfDistribution") || pageOf.equals("pageOfOrdering"))
+							else if("pageOfDistribution".equals(pageOf) || "pageOfOrdering".equals(pageOf))
 							{
 							%>
 							<td class='${pageScope.style}'>
@@ -705,7 +708,7 @@ function popupWindow(nofConsentTiers)
 								<%-- For loop Ends --%>						
 						<% 
 						}
-						if(pageOf.equals("pageOfDistribution") ||pageOf.equals("pageOfOrdering"))
+						if("pageOfDistribution".equals(pageOf) || "pageOfOrdering".equals(pageOf))
 						{
 						%>
 						<%--Verification Message --%>													
@@ -748,13 +751,13 @@ function popupWindow(nofConsentTiers)
 			<td class="buttonbg" align="left">
 
 			<%
-			if(pageOf.equals("pageOfDistribution") ||pageOf.equals("pageOfOrdering"))
+			if("pageOfDistribution".equals(pageOf) ||"pageOfOrdering".equals(pageOf))
 						{%>
 
 						<input type="button" name="doneButton" class="blue_ar_b" value="Ok" onclick="submitAllResponses()"/>
 						
 					<%	}
-			if(operation.equals(Constants.EDIT))
+			if(Constants.EDIT.equals(operation))
 				{
 				String str = "withdrawAll('"+ consentTierList.size()+"')";
 				%>
@@ -765,7 +768,7 @@ function popupWindow(nofConsentTiers)
 				}
 				%>
 				
-			<% if(operation.equals(Constants.EDIT) && pageOf.equals("pageOfConsent") )	
+			<% if(Constants.EDIT.equals(operation) && "pageOfConsent".equals(pageOf) )	
 		     	{
 		     %>
 		     	    &nbsp;|&nbsp;
@@ -774,7 +777,7 @@ function popupWindow(nofConsentTiers)
 		    %>
 		     	 
 				
-			<%	if(pageOf.equals("pageOfConsent"))
+			<%	if("pageOfConsent".equals(pageOf))
 						{
 						%>
 							<%-- action button --%>																
