@@ -80,7 +80,13 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 
 		String target = Constants.SUCCESS;
 		String isSubmitRequest=request.getParameter("isSubmitRequest");
-		String IsToShowButton=request.getParameter("IsToShowButton");
+		String IsToShowButton=Boolean.TRUE.toString();
+		String multipleViewMode = request.getParameter("mode");
+		
+		if("add".equalsIgnoreCase(multipleViewMode))
+		{
+			IsToShowButton = "false";
+		}
 		if(IsToShowButton!=null)
 		{
 			request.setAttribute("IsToShowButton", IsToShowButton);
@@ -227,7 +233,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			updateSpecimenIds(buffer,list);
 			
 			request.setAttribute("popUpSpecList", buffer.toString());
-			request.setAttribute("IsToShowButton", Boolean.TRUE);
+			//request.setAttribute("IsToShowButton", Boolean.TRUE);
 			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(summaryForm
 					.getRequestType()))
 			{
