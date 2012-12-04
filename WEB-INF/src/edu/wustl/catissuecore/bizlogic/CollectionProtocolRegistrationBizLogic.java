@@ -1597,7 +1597,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			if(cpSyncAudit!=null)
 			{	
 				String syncStatus=cpSyncAudit.getStatus();
-				if("In Progress".equalsIgnoreCase(syncStatus))
+				if("In Process".equalsIgnoreCase(syncStatus))
 				{
 					throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
 				}
@@ -2322,11 +2322,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		try
 		{
 			daoForEachCPR=getHibernateDao(getAppName(),null);
-			// process each CPR of the CP. 
+			// process each CPR of the CP.
+			cpSyncAudit=synchronizeCollectionProtocolBizLogic.startSyncProcessAudit(collectionProtocol.getId(),daoForEachCPR,sessionDataBean.getUserId());
 			while (registrations.hasNext()) {
-				
-				
-				cpSyncAudit=synchronizeCollectionProtocolBizLogic.startSyncProcessAudit(collectionProtocol.getId(),daoForEachCPR,sessionDataBean.getUserId());
 				CollectionProtocolRegistration protocolRegistration=(CollectionProtocolRegistration) daoForEachCPR.retrieveById(CollectionProtocolRegistration.class.getName(), ((CollectionProtocolRegistration)registrations.next()).getId());
 				if(Constants.ACTIVITY_STATUS_ACTIVE.equals(protocolRegistration.getActivityStatus()))
 				{	
@@ -2349,7 +2347,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				}
 				else if(cprProcessCount%10==0)
 				{
-					synchronizeCollectionProtocolBizLogic.updateSyncProcessStatus(cpSyncAudit,"In Progress",new Long(cprProcessCount),daoForEachCPR);
+					synchronizeCollectionProtocolBizLogic.updateSyncProcessStatus(cpSyncAudit,"In Process",new Long(cprProcessCount),daoForEachCPR);
 					daoForEachCPR.commit();
 					daoForEachCPR=getHibernateDao(getAppName(),null);
 				}
