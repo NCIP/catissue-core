@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -376,7 +376,7 @@ public final class StorageContainerUtil
 			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
 	throws BizLogicException
 	{
-		final Map map = new TreeMap();
+		final Map map = new LinkedHashMap();
 		int count = 0;
 		// Logger.out.debug("dimX:"+positionDimensionOne+":dimY:"+positionDimensionTwo);
 		// if (!container.isFull().booleanValue())
@@ -417,7 +417,7 @@ public final class StorageContainerUtil
 		// Logger.out.info("Map :"+map);
 		if (count < aliquotCount)
 		{
-			return new TreeMap();
+			return new LinkedHashMap();
 		}
 		return map;
 	}

@@ -126,7 +126,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		// This will give Event key, Under that event Specimens are collected
 		// when flow is from Define event Page.
 
-		final String key = selectedNode.substring(selectedNode.indexOf('_')+1,selectedNode.indexOf('_')+3);
+		final String key = selectedNode.substring(selectedNode.lastIndexOf('_')+1,selectedNode.length());
 
 		final List specimenTypeList = AppUtility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
 		final List tissueSiteList = new ArrayList();
