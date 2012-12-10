@@ -2108,7 +2108,7 @@ else
 													autocomplete="off"
 													size="30"
 													class="black_ar x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
-												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
+												onclick="showHideStorageContainerGridOnSpecimenPage(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
 									</td>
