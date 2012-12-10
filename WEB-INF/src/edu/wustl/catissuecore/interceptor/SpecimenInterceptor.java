@@ -244,7 +244,10 @@ public class SpecimenInterceptor implements InterceptProcessor
 		xmlSpecimen.setType(specimen.getSpecimenType());
 		xmlSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		xmlSpecimen.setQuantity(specimen.getAvailableQuantity());
-		xmlSpecimen.setIsAvailable(specimen.getIsAvailable());
+		if(specimen.getIsAvailable()!=null)
+		{
+			xmlSpecimen.setIsAvailable(specimen.getIsAvailable());
+		}
 		xmlSpecimen.setActivityStatus(specimen.getActivityStatus());
 		// add specimen characterastics
 		SpecimenCharacteristicsType xmlCharacterastics = new SpecimenCharacteristicsTypeImpl();
