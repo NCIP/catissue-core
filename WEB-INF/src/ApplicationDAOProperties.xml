@@ -49,7 +49,7 @@
 	 </Application>
 	 
 	<!-- objectProcessingPeriod specifies the time in minutes after which the the processing will rerun recurringly. --> 
- <!-- InterceptorObject objectProcessingPeriod="2">
+ <InterceptorObject objectProcessingPeriod="2">
 		<class name="edu.wustl.catissuecore.domain.Specimen"  onInsert="edu.wustl.catissuecore.interceptor.SpecimenInterceptor" onupdate="edu.wustl.catissuecore.interceptor.SpecimenInterceptor" />
-	</InterceptorObject-->
+	</InterceptorObject>
 </Applications>
