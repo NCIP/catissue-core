@@ -64,9 +64,9 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 		if (Constants.ADD_TO_ORDER_LIST.equals(operation))
 		{
+			this.removeSessionAttributes(session);
 			if(!"specimenListView".equals(pageOf))
-			{	
-				this.removeSessionAttributes(session);
+			{					
 				this.getOrderableEntityIds(searchForm, session, cart);
 			}
 			else
