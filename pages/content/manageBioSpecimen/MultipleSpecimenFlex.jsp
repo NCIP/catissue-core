@@ -87,7 +87,7 @@ if(navigator.userAgent.indexOf('Mac')>=0)
       }else{
 %>
 			<td id="td1" height=100%>
-				<div id="multiplespeId" style="overflow:auto;height:100%;width:100%">
+				<div id="multiplespeId" style="overflow:auto;height:700;width:100%">
 <%
 }
 %>
