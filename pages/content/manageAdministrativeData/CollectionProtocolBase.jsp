@@ -196,7 +196,7 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 		document.getElementById('saveCPButton').style.visibility="hidden";
 		document.getElementById('exCPButton').style.visibility="";
 		document.getElementById('syncCPButton').style.visibility="hidden";
-		document.getElementById('stopCPButton').disabled=false;
+		document.getElementById('stopCPButton').style.visibility="visible";
 	}
 
   function resizeIframe()
@@ -357,7 +357,7 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 					<logic:equal name="isParticipantReg" value="true">
 					<html:button styleClass="blue_ar_b" styleId="syncCPButton" property="forwardPage" value="Start Sync" onclick="syncCP()">
 					</html:button>
-					<html:button styleClass="blue_ar_b" styleId="stopCPButton" property="forwardPage" value="Stop Sync" onclick="stopSync()" disabled="true">
+					<html:button styleClass="blue_ar_b" styleId="stopCPButton" property="forwardPage" value="Stop Sync" onclick="stopSync()" style="visibility:hidden" >
 					</html:button>	
 		</logic:equal>
 	</logic:notEqual>
