@@ -241,32 +241,6 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		// vipin :- without ajax
-	/*	function onSiteChange(dd)
-		{
-			var siteElement = document.getElementById("siteId");
-			document.forms[0].siteName.value = siteElement.options[siteElement.selectedIndex].text;
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isSiteChanged=true";
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}*/
-
-	/*	function onChangeGetCPs(element)
-		{
-			var contElement = document.forms[0].customListBox_1_0;
-		//	document.forms[0].parentContainerId.value = contElement.options[contElement.selectedIndex].text;
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isContainerChanged=true";
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}
-		function onContManualChange()
-		{
-			var contElement = document.forms[0].selectedContainerName;
-			document.forms[0].selectedContainerName.value = contElement.options[contElement.selectedIndex].text;
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isContainerChanged=true";
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}*/
 		// vipin:- with ajax
 		function onChangeGetCPs(data)
 		{
@@ -825,7 +799,7 @@ function calltest()
 							String tdStyleClass = "black_ar";
 							boolean disabled = true;
 							String onChange = "";
-							onChange = "onCustomListBoxChange(this),onParentlocationChange(this)";
+							onChange = "onCustomListBoxChangeForContainer(this);onParentlocationChange(this);";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
