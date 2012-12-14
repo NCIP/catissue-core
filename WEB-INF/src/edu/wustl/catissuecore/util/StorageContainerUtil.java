@@ -797,9 +797,8 @@ public final class StorageContainerUtil
 			Integer xPos;
 			Integer yPos;
 			final Capacity scCapacity = getContainerCapacity(container, dao);
-			final Map positionMap = getAvailablePositionMapForContainer(String
-					.valueOf(container.getId()), 0, scCapacity.getOneDimensionCapacity(),
-					scCapacity.getTwoDimensionCapacity(), dao);
+			final Map positionMap =getAvailablePositionMapForContainer(String
+					.valueOf(container.getId()), 0, scCapacity.getOneDimensionCapacity(),scCapacity.getTwoDimensionCapacity(), dao,0,0);
 			if (positionMap != null)
 			{
 				final Iterator<NameValueBean> containerPosIterator = positionMap.keySet().iterator();
