@@ -3070,18 +3070,18 @@
 		<echo message="jboss.container.secure property is set to: ${jboss.container.secure} protocol set to: ${protocol}" />
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
-		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.2 Successfully Deployed" encoding="plain" failonerror="false">
+		<mail mailhost="${email.mailServer}" subject="caTissue Plus v2.0 Successfully Deployed" encoding="plain" failonerror="false">
 			<from address="${email.sendEmailFrom.emailAddress}" />
 			<to address="${email.administrative.emailAddress}" />
 			<message>
-Dear caTissueSuite Administrator,
+Dear caTissue Plus Administrator,
 
-	This is to validate that caTissueSuite application has been installed at
+	This is to validate that caTissue Plus application has been installed at
 the following location: ${jboss.home.dir}
 
 	To complete the deployment, you have to now perform the post installation
 steps described in section "Post Installation Configuration" in the deployment
-guide (caTissueSuite v1.1.p5 Deployment Guide.doc).
+guide.
 
 	Once you have completed deployment, you should be able to login with the following
 details:
@@ -3090,7 +3090,7 @@ Username:${first.admin.emailAddress}
 Password:${first.admin.password}
 
 Thanking You,
--caTissue Suite
+-caTissue Plus
 			</message>
 		</mail>
 		<echo>
