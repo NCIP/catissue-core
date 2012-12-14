@@ -61,6 +61,13 @@ function setTextBoxValueForContainer(elementId,elementValue)
 	id.value = decodeURI(elementValue.replace("+","%20"));
 }
 
+function setTextBoxValueForContainerPage(elementId,elementValue)
+{
+	var id = parent.opener.document.getElementById(elementId);	
+	id.value = decodeURI(elementValue.replace("+","%20"));
+	id.onchange();
+}
+
 function setTextBoxValue(elementId,elementValue)
 {
 	var id = parent.opener.document.getElementById(elementId);	

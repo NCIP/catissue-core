@@ -406,6 +406,7 @@ public class ShowStorageGridViewAction extends BaseAction
 						    String storageContainerIdFromMap=(String)session.getAttribute("StorageContainerIdFromMap");
 						    String hyperLinkTag="<a href=\\\\\"#\\\\\">";
 						    String onClickEvent="";
+						    String addContainer=(String)session.getAttribute("storageContainer");
 							if (Constants.PAGE_OF_MULTIPLE_SPECIMEN.equals(pageOf)) 
 							{
 								if(enablePage)
@@ -423,9 +424,15 @@ public class ShowStorageGridViewAction extends BaseAction
 								if(enablePage)
 								{
 									value=hyperLinkTag;
-									onClickEvent="onclick=\\\\\"setTextBoxValueForContainer(\\\'"+selectedContainerName+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\');\\ " 
+									String methodName="setTextBoxValueForContainer";
+									if(addContainer!=null && "true".equals(addContainer))
+									{
+										methodName="setTextBoxValueForContainerPage";
+									}
+									onClickEvent="onclick=\\\\\""+methodName+"(\\\'"+selectedContainerName+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\');\\ " 
 											+"setTextBoxValue(\\\'"+pos1+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
 											+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ ";
+									
 								}
 								value = value+"<img " +onClickEvent;
 								if(storageContainerIdFromMap!=null)
