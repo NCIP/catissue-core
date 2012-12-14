@@ -752,7 +752,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		final String emailMsgFooterRegards = "\n" + "Regards, ";
-		final String emailMsgFooterSign = "\n" + "caTissueSuite Administrator";
+		final String emailMsgFooterSign = "\n" + "caTissuePlus Administrator";
 		final String emailMsgFooter = emailMsgFooterRegards + emailMsgFooterSign;
 		emailFormat = emailBodyHeader + emailBody + emailMsgFooter;
 		return emailFormat;
