@@ -2155,7 +2155,30 @@ else
 										}
 										else{%>
 												<%
-												if((newSpecimenForm.getStContSelection()==1)&&(newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&(newSpecimenForm.getCollectionStatus().equals("Collected") || newSpecimenForm.getCollectionStatus().equals("Complete")))
+												//if((newSpecimenForm.getStContSelection()==1)&&(newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&(newSpecimenForm.getCollectionStatus().equals("Collected") || newSpecimenForm.getCollectionStatus().equals("Complete")))
+												if(
+														(
+															(
+																newSpecimenForm.getSelectedContainerName()==null
+																||
+																"".equals(newSpecimenForm.getSelectedContainerName())
+																||
+																"Virtual".equals(newSpecimenForm.getSelectedContainerName().trim())
+															)
+															&&
+															(
+																"".equals(newSpecimenForm.getStorageContainer())
+																||
+																"-1".equals(newSpecimenForm.getStorageContainer())
+															)
+														)
+													&&
+														(
+															"Collected".equals(newSpecimenForm.getCollectionStatus()) 
+															|| 
+															"Complete".equals(newSpecimenForm.getCollectionStatus())
+														)
+												   )
 												{%>
 												<tr>
 														<td class="black_ar" colspan="2">
