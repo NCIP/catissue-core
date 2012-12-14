@@ -124,7 +124,7 @@ public class StorageContainerAction extends SecureAction
 			}
 			final String operation = request.getParameter(Constants.OPERATION);
 			request.setAttribute(Constants.OPERATION, operation);
-			if (operation.equals(Constants.EDIT) && storageContainerBean != null
+			if (Constants.EDIT.equals(operation) && storageContainerBean != null
 					&& Constants.PAGE_OF_STORAGE_CONTAINER.equals(pageOf))
 			{
 				this.initStorageContainerForm(storageContainerForm, storageContainerBean);
@@ -215,13 +215,13 @@ public class StorageContainerAction extends SecureAction
 				}
 			}
 
-			if (operation.equals(Constants.ADD))
+			if (Constants.ADD.equals(operation))
 			{
 				this.setParentStorageContainersForAdd(containerMap, storageContainerForm, request,
 						dao);
 			}
 
-			if (operation.equals(Constants.EDIT))
+			if (Constants.EDIT.equals(operation))
 			{
 
 				if (StorageContainerUtil.isContainerFull(storageContainerForm.getId() + "",
@@ -236,6 +236,8 @@ public class StorageContainerAction extends SecureAction
 				request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 				this.setParentStorageContainersForEdit(containerMap, storageContainerForm, request,
 						dao);
+				storageContainerForm.setPos1(storageContainerForm.getPositionDimensionOne());
+				storageContainerForm.setPos2(storageContainerForm.getPositionDimensionTwo());
 			}
 
 			request.setAttribute("storageContainerIdentifier", storageContainerForm.getId());
