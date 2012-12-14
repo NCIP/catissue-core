@@ -256,7 +256,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				if (transferEventParametersForm.getPos2() != null
 						&& !transferEventParametersForm.getPos2().equals("-1"))
 				{
-					startingPoints[2] = transferEventParametersForm.getPos1();
+					startingPoints[2] = transferEventParametersForm.getPos2();
 				}
 				initialValues = new ArrayList();
 				this.logger.info("Starting points[0]" + startingPoints[0]);
