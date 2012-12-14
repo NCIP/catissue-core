@@ -277,7 +277,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				final List participantResponseList = new ArrayList(consentTierResponseList);
 				specimenCollectionGroupForm
 						.setCollectionProtocolRegistrationId(collectionProtocolRegistration.getId());
-				if (operation.equalsIgnoreCase(Constants.ADD))
+				if (Constants.ADD.equalsIgnoreCase(operation))
 				{
 					final ActionErrors errors = (ActionErrors) request
 							.getAttribute(Globals.ERROR_KEY);
@@ -286,7 +286,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 						final String protocolEventID = request
 								.getParameter(Constants.PROTOCOL_EVENT_ID);
 						if (protocolEventID == null
-								|| protocolEventID.equalsIgnoreCase(Constants.FALSE))
+								|| Constants.FALSE.equalsIgnoreCase(protocolEventID))
 						{
 							final Map tempMap = this.prepareConsentMap(participantResponseList);
 							specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
