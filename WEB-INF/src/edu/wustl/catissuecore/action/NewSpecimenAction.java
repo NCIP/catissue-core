@@ -885,31 +885,34 @@ public class NewSpecimenAction extends CatissueBaseAction
 							if (errors == null || errors.size() == 0)
 							{
 								final String[] startingPoints1 = new String[3];
-								String stContName=StorageContainerUtil
-										.checkForInitialValuesForDisplay(containerMap);
-								StorageContainer stCont=StorageContainerUtil.getContainerWithCapacityByContainerName(stContName,dao);
-								
-								startingPoints1[0] =stContName;
-								//Position position=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);
-								//startingPoints1[1] = StorageContainerUtil.convertSpecimenPositionsToString(stContName, 1, position.getXPos());
-								//startingPoints1[2] = StorageContainerUtil.convertSpecimenPositionsToString(stContName, 2, position.getYPos());
-								startingPoints1[1]="";
-								startingPoints1[2]="";
-								
-								final List positionList= StorageContainerUtil.getAvailablePositionListForContainer(String
-										.valueOf(stCont.getId()), 0, Integer.parseInt(String
-										.valueOf(stCont.getCapacity().getOneDimensionCapacity())),
-										Integer.parseInt(String.valueOf(stCont.getCapacity().getTwoDimensionCapacity())), dao);
-							if(positionList!=null && !positionList.isEmpty())
-							{
-								String[] values=((String) positionList.get(0)).split(",");
-								startingPoints1[1]=StorageContainerUtil.convertSpecimenPositionsToString(stContName, 1,Integer.valueOf(values[0]));
-								startingPoints1[2]=StorageContainerUtil.convertSpecimenPositionsToString(stContName, 2,Integer.valueOf(values[1]));
-							}
-								initialValues = new ArrayList<String[]>();
-								initialValues.add(startingPoints1);
-								//initialValues = StorageContainerUtil
-										//.checkForInitialValues(containerMap);
+								if(containerMap!=null)
+								{
+									String stContName=StorageContainerUtil
+											.checkForInitialValuesForDisplay(containerMap);
+									StorageContainer stCont=StorageContainerUtil.getContainerWithCapacityByContainerName(stContName,dao);
+
+									startingPoints1[0] =stContName;
+									//Position position=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);
+									//startingPoints1[1] = StorageContainerUtil.convertSpecimenPositionsToString(stContName, 1, position.getXPos());
+									//startingPoints1[2] = StorageContainerUtil.convertSpecimenPositionsToString(stContName, 2, position.getYPos());
+									startingPoints1[1]="";
+									startingPoints1[2]="";
+
+									final List positionList= StorageContainerUtil.getAvailablePositionListForContainer(String
+											.valueOf(stCont.getId()), 0, Integer.parseInt(String
+													.valueOf(stCont.getCapacity().getOneDimensionCapacity())),
+													Integer.parseInt(String.valueOf(stCont.getCapacity().getTwoDimensionCapacity())), dao);
+									if(positionList!=null && !positionList.isEmpty())
+									{
+										String[] values=((String) positionList.get(0)).split(",");
+										startingPoints1[1]=StorageContainerUtil.convertSpecimenPositionsToString(stContName, 1,Integer.valueOf(values[0]));
+										startingPoints1[2]=StorageContainerUtil.convertSpecimenPositionsToString(stContName, 2,Integer.valueOf(values[1]));
+									}
+									initialValues = new ArrayList<String[]>();
+									initialValues.add(startingPoints1);
+									//initialValues = StorageContainerUtil
+									//.checkForInitialValues(containerMap);
+								}
 							}
 							else
 							{
