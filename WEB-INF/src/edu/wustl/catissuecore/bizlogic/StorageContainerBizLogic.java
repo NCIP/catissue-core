@@ -1508,6 +1508,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				final ContainerPosition cntPos = container.getLocatedAtPosition();
 				cntPos.setPositionDimensionOne(position.getXPos());
 				cntPos.setPositionDimensionTwo(position.getYPos());
+				cntPos.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(cont.getName(), 1, position.getXPos()));
+				cntPos.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(cont.getName(), 2, position.getYPos()));
 				cntPos.setOccupiedContainer(container);
 			}
 			else

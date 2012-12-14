@@ -305,6 +305,8 @@ public class SimilarContainersAction extends SecureAction
 								//.parseInt(similarContainersForm.getPos1()));
 						similarContainersForm.setPositionDimensionTwo(similarContainersForm.getPos2());//Integer
 								//.parseInt(similarContainersForm.getPos2()));
+						similarContainersForm.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 1, Integer.valueOf(similarContainersForm.getPos1())));
+						similarContainersForm.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 2, Integer.valueOf(similarContainersForm.getPos2())));
 					}
 					else
 					{
@@ -395,9 +397,9 @@ public class SimilarContainersAction extends SecureAction
 
 					startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
 					startingPoints[1] = similarContainersForm
-							.getPositionDimensionOne();
+							.getPositionDimensionOneString();
 					startingPoints[2] = similarContainersForm
-							.getPositionDimensionTwo();
+							.getPositionDimensionTwoString();
 
 					if (similarContainersForm.getParentContainerId() != 0l)
 					{

@@ -320,6 +320,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		{
 			this.parentContainerId = parent.getId().longValue();
 			this.parentContainerSelected = "Auto";
+			this.selectedContainerName=parent.getName();
+			this.pos1=container.getLocatedAtPosition().getPositionDimensionOneString();
+			this.pos2=container.getLocatedAtPosition().getPositionDimensionTwoString();
 
 			final StorageContainer parentContainer = (StorageContainer) HibernateMetaData
 					.getProxyObjectImpl(parent);
@@ -1577,4 +1580,31 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	{
 		return this.printerLocation;
 	}
+	String positionDimensionOneString;
+	String positionDimensionTwoString;
+
+	
+	public String getPositionDimensionOneString()
+	{
+		return positionDimensionOneString;
+	}
+
+	
+	public void setPositionDimensionOneString(String positionDimensionOneString)
+	{
+		this.positionDimensionOneString = positionDimensionOneString;
+	}
+
+	
+	public String getPositionDimensionTwoString()
+	{
+		return positionDimensionTwoString;
+	}
+
+	
+	public void setPositionDimensionTwoString(String positionDimensionTwoString)
+	{
+		this.positionDimensionTwoString = positionDimensionTwoString;
+	}
+	
 }
