@@ -246,7 +246,7 @@ public class EmailHandler
 				   +"\n\tIgnore this email if you have not requested for the password reset and you will be able to login with your old password."
 				   + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			
-			System.out.println(CommonServiceLocator.getInstance().getAppURL()+"/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken="+userToken);
+			//System.out.println(CommonServiceLocator.getInstance().getAppURL()+"/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken="+userToken);
 
 			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
 			logEmailStatus(user, emailStatus);

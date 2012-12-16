@@ -67,46 +67,23 @@ table#browserDetailsContainer {
 							</tr>
 							<!-- Mandar : 16Jan09 PSPL Info -->
 							<tr>
-								<td><a
-									href="PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file"
-									class="view"><span class="wh_ar_b"></span><bean:message
-									key="app.privacyNotice" /></a></td>
+								<td><a href="http://www.krishagni.com" target="_blank" class="view">
+								<span class="wh_ar_b"></span>Krishagni Solutions</a>
+								</td>
 							</tr>
 							<tr>
-								<td><a
-									href="Disclaimer.do?PAGE_TITLE_KEY=app.disclaimer&FILE_NAME_KEY=app.disclaimer.file"
-									class="view"><span class="wh_ar_b"></span><bean:message
-									key="app.disclaimer" /></a></td>
+								<td><a href="http://pluswiki.krishagni.com/newinplus" target="_blank" 
+									class="view"><span class="wh_ar_b"></span>Whats new in caTissue Plus</a></td>
 
 							</tr>
-							<tr>
-									<td><a
-										href="https://docs.google.com/uc?export=download&confirm=no_antivirus&id=0B_M0QgP01-xjbExjYWNRQUU4QXc"
-										class="view"><span class="wh_ar_b"></span><bean:message
-										key="app.mobileapplink" /></a></td>
-							</tr>
 							<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
-								<tr>
-									<td><a
-										href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
-										class="view"><span class="wh_ar_b"></span><bean:message
-										key="app.accessibility" /></a></td>
-								</tr>
 								<tr>
 									<td style="padding-bottom: 16px;"><a
 										href="RedirectToHelp.do" class="view"><span
 										class="wh_ar_b"></span><bean:message key="app.help" /></a></td>
 								</tr>
 							</logic:empty>
-							<logic:notEmpty scope="session"
-								name="<%=Constants.SESSION_DATA%>">
-								<tr>
-									<td style="padding-bottom: 16px;"><a
-										href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
-										class="view"><span class="wh_ar_b"></span><bean:message
-										key="app.accessibility" /></a></td>
-								</tr>
-							</logic:notEmpty>
+							
 							
 						</table>
 						</td>
@@ -130,6 +107,7 @@ table#browserDetailsContainer {
 			</a>
 		</p>
  --> <!--Mandar:7dec09 <br /> --></td>
+
 		<td width="0%" rowspan="3" valign="top"><img
 			src="images/uIEnhancementImages/sep_left.gif" width="8" height="458" /></td>
 		<td width="49%" rowspan="3" align="center" valign="top"><img
@@ -270,9 +248,8 @@ table#browserDetailsContainer {
 		</td>
 	</tr>
 	<tr>
-		<!-- 		<td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td>
- -->
-		<td align="center" valign="bottom">&nbsp</td>
+	<td/>
+		<!--td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td-->
 		<td rowspan="2" align="right" valign="bottom">
 		<table width="96%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
