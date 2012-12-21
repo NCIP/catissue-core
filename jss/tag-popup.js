@@ -265,12 +265,11 @@ else
 function doOnDelete()
 {  
    if (xmlHttpobj.readyState == 4) 
-	 {
- var selId = popupmygrid.getSelectedId()
-        popupmygrid.deleteRow(selId);
-	grid.deleteRow(selId);
-      	}
- 
+   {
+	var selId = popupmygrid.getSelectedId();
+	popupmygrid.deleteRow(selId);
+       grid.deleteRow(selId);
+   } 
 }
 //Ajax Function for Delete Queries in Folders  of TreeGrid 
 function ajaxObjDeleteCall(tagItemId) {
@@ -298,10 +297,10 @@ else
 function doOnObjDelete()
 {
    if (xmlHttpobj.readyState == 4) 
-	 {
-   var selId = popupmygrid.getSelectedId()
-        popupmygrid.deleteRow(selId);
-}
+   {
+   	var selId = popupmygrid.getSelectedId();
+       popupmygrid.deleteRow(selId);
+   }
 } 
 var tagID;
 //Ajax Function for Selection of rows in  TreeGrid Add Child By lazyLoad 
