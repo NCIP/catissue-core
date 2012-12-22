@@ -718,7 +718,7 @@ function loadSpecimenGrid()
 	</tr>
 	 <tr>
 		<td class="messagetextsuccess">&nbsp;
-			<bean:message key="ShoppingCart.emptyCartTitle"/>&nbsp;<bean:message key="specimenList.empty.message"/>
+			There are no saved specimen lists. Please use advance query results page or any specimen collection page to create new specimen list.
 		</td>
 	</tr>
 	<tr>
