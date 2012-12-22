@@ -60,7 +60,7 @@ function popup(windowname) {
 //---------------------------Tree Grid Function---------------------------
 function doOnTreeGridRowSelected(rId)
 {
-	ajaxTreeGridRowSelectCall(rId); 
+	//ajaxTreeGridRowSelectCall(rId); 
 }
 var popupmygrid;
 function doInItTreeGrid()
@@ -266,7 +266,8 @@ function doOnDelete()
 {  
    if (xmlHttpobj.readyState == 4) 
    {
-	var selId = popupmygrid.getSelectedId();
+
+	var selId = popupmygrid.getSelectedId();
 	popupmygrid.deleteRow(selId);
        grid.deleteRow(selId);
    } 
