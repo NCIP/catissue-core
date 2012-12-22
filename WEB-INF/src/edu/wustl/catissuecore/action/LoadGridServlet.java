@@ -75,7 +75,7 @@ public class LoadGridServlet extends ConnectorServlet
 			String sql = gridImplObj.getGridQuery(aliasName,getSessionDataBean());
 			String tableColString =gridImplObj.getTableColumnString();
 			connector.dynamic_loading(true);
-			connector.dynamic_loading(250);
+			connector.dynamic_loading(Integer.MAX_VALUE); 
 			connector.render_sql(sql, gridImplObj.getTableColumnString(), tableColString);
 		} catch (Exception e) {
 			e.printStackTrace();
