@@ -22,7 +22,7 @@ dhtmlXGridObject.prototype.doExpand=function(obj){
  	this.editStop();
     var row = obj.parentNode.parentNode.parentNode;
 	var r=this._h2.get[row.idd];
- 	//ajaxTreeGridRowSelectCall(row.idd);
+ 	ajaxTreeGridRowSelectCall(row.idd);
 	if (!this.callEvent("onOpen",[row.idd,(r.state=="plus"?-1:1)])) return;
  
     if(r.state=="plus")
@@ -455,7 +455,13 @@ eXcell_tree.prototype = new eXcell;
         	html.push(_tgc.plus);
         	row.state="plus"
         	}
-	
+	else if(count>0 && row.level==0)
+	{
+        	html.push(_tgc.plus);
+        	row.state="plus"
+		count--;
+		 
+        	}
         else 
         	html.push(_tgc.imst+row.state+".gif"+_tgc.imact);
                         
