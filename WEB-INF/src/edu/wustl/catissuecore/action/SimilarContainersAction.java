@@ -278,6 +278,8 @@ public class SimilarContainersAction extends SecureAction
 							{
 								similarContainersForm.setPos1(position.getXPos() + "");
 								similarContainersForm.setPos2(position.getYPos() + "");
+								similarContainersForm.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 1, Integer.valueOf(similarContainersForm.getPos1())));
+								similarContainersForm.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 2, Integer.valueOf(similarContainersForm.getPos2())));
 
 							}
 							else
@@ -301,12 +303,11 @@ public class SimilarContainersAction extends SecureAction
 							}
 						}
 
-						similarContainersForm.setPositionDimensionOne(similarContainersForm.getPos1());//Integer
-								//.parseInt(similarContainersForm.getPos1()));
-						similarContainersForm.setPositionDimensionTwo(similarContainersForm.getPos2());//Integer
-								//.parseInt(similarContainersForm.getPos2()));
-						similarContainersForm.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 1, Integer.valueOf(similarContainersForm.getPos1())));
-						similarContainersForm.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 2, Integer.valueOf(similarContainersForm.getPos2())));
+						similarContainersForm.setPositionDimensionOne(similarContainersForm.getPos1());
+						similarContainersForm.setPositionDimensionTwo(similarContainersForm.getPos2());
+						
+						similarContainersForm.setPositionDimensionOneString(similarContainersForm.getPos1());
+						similarContainersForm.setPositionDimensionTwoString(similarContainersForm.getPos2());
 					}
 					else
 					{
