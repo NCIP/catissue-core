@@ -637,8 +637,8 @@
 	</target>
 
 	<target name="create_zip_old" depends="createJavaDoc,installable_build_war">
-		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
-		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
+		<property name="zip.dir" value="${base.dir}/caTISSUE_Plus_v${application.version}_Installable" />
+		<property name="zip.file" value="${base.dir}/caTissue_Plus_v${application.version}_Installable.zip" />
 
 		<delete file="${zip.file}" />
 		<delete dir="${zip.dir}" />
@@ -791,8 +791,8 @@
 	</target>
 
 	<target name="create_zip" depends="createJavaDoc,installable_build_war">
-		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
-		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
+		<property name="zip.dir" value="${base.dir}/caTISSUE_Plus_v${application.version}_Installable" />
+		<property name="zip.file" value="${base.dir}/caTissue_Plus_v${application.version}_Installable.zip" />
 
 		<delete file="${zip.file}" />
 		<delete dir="${zip.dir}" />
@@ -948,8 +948,8 @@
 	</target>
 
 	<target name="create_API_client_zip">
-		<property name="APIclientzip.dir" value="${base.dir}/caTISSUE_Suite_API_Client_v${application.version}_Installable" />
-		<property name="APIclientzip.file" value="${base.dir}/caTissue_Suite_API_Client_v${application.version}_Installable.zip" />
+		<property name="APIclientzip.dir" value="${base.dir}/caTISSUE_Plus_API_Client_v${application.version}_Installable" />
+		<property name="APIclientzip.file" value="${base.dir}/caTissue_Plus_API_Client_v${application.version}_Installable.zip" />
 		<delete file="${APIclientzip.file}" />
 		<delete dir="${APIclientzip.dir}" />
 		<mkdir dir="${APIclientzip.dir}" />
