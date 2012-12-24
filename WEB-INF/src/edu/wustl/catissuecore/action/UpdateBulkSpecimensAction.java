@@ -495,6 +495,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 						.next();
 				specimenEventParameters.setSpecimen(specimen);
 				specimenEventParameters.setId(null);
+				specimen.getSpecimenEventCollection().add(specimenEventParameters);
 			}
 		}
 
