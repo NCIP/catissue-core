@@ -17,9 +17,12 @@ import java.util.Date;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.exception.BizLogicException;
@@ -245,11 +248,13 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
         			headerString.append("Tissue Side#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
         			valueString.append("\"").append(specimenRequirement.getSpecimenCharacteristics().getTissueSide()).append("\"").append(",");
         			
+        			appendSpecimenEventData(specimenRequirement.getSpecimenEventCollection(),eventsCount+"#"+specimenRequirementCount,headerString,valueString);
         			if(specimenRequirement.getLabelFormat()!=null)
         			{	
         				headerString.append("Label Format#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
         				valueString.append("\"").append(specimenRequirement.getLabelFormat()).append("\"").append(",");
         			}
+        			appendSpecimenEventData(specimenRequirement.getSpecimenEventCollection(),eventsCount+"#"+specimenRequirementCount,headerString,valueString);
         			updateMapForChildSpecimen(headerString,valueString,specimenRequirement.getChildSpecimenCollection(),"#"+eventsCount+"#"+specimenRequirementCount);
         			specimenRequirementCount++;
         		}
@@ -314,8 +319,37 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
 				headerString.append("Label Format").append(postfix).append("#").append(childSpecimenCount).append(",");
 				valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getLabelFormat()).append("\"").append(",");
 			}
+			appendSpecimenEventData(((SpecimenRequirement)abstractSpecimen).getSpecimenEventCollection(),postfix+"#"+childSpecimenCount,headerString,valueString);
 			updateMapForChildSpecimen(headerString,valueString,((SpecimenRequirement)abstractSpecimen).getChildSpecimenCollection(),postfix+"#"+childSpecimenCount);
 			childSpecimenCount++;
 		}
+    }
+    private void appendSpecimenEventData(Collection<SpecimenEventParameters> specimenEventParameters,String prefixString,StringBuffer headerString,StringBuffer valueString)
+    {
+    	for (SpecimenEventParameters specimenEventParameter : specimenEventParameters) {
+    		if(specimenEventParameter instanceof CollectionEventParameters)
+    		{
+    			CollectionEventParameters collectionEventParameters=((CollectionEventParameters)specimenEventParameter);
+    			
+    			headerString.append("Collector").append(prefixString).append("#1,");
+    			valueString.append("\"").append(collectionEventParameters.getUser().getId()).append("\"").append(",");
+    			
+    			headerString.append("Collection Procedure").append(prefixString).append("#1,");
+    			valueString.append("\"").append(collectionEventParameters.getCollectionProcedure()).append("\"").append(",");
+    			
+    			headerString.append("Collection Container").append(prefixString).append("#1,");
+    			valueString.append("\"").append(collectionEventParameters.getContainer()).append("\"").append(",");
+    		}
+    		else if(specimenEventParameter instanceof ReceivedEventParameters)
+    		{
+    			ReceivedEventParameters receivedEventParameters=((ReceivedEventParameters)specimenEventParameter);
+    			
+    			headerString.append("Receiver").append(prefixString).append("#1,");
+    			valueString.append("\"").append(receivedEventParameters.getUser().getId()).append("\"").append(",");
+    			
+    			headerString.append("Received Quality").append(prefixString).append("#1,");
+    			valueString.append("\"").append(receivedEventParameters.getReceivedQuality()).append("\"").append(",");
+    		}
+    	}
     }
 }
