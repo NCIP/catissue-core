@@ -353,13 +353,7 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 					<logic:equal parameter="operation"	value='edit'>
 					<html:button styleClass="blue_ar_b" styleId="exCPButton" property="forwardPage" value="Export" onclick="exportCP()">
 					</html:button>	
-					</logic:equal>
-					<logic:equal name="isParticipantReg" value="true">
-					<html:button styleClass="blue_ar_b" styleId="syncCPButton" property="forwardPage" value="Start Sync" onclick="syncCP()">
-					</html:button>
-					<html:button styleClass="blue_ar_b" styleId="stopCPButton" property="forwardPage" value="Stop Sync" onclick="stopSync()" style="visibility:hidden" >
-					</html:button>	
-		</logic:equal>
+					</logic:equal>					
 	</logic:notEqual>
 	
 		<logic:equal name="isSyncOn" value="true">
@@ -367,10 +361,6 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 					<html:button styleClass="blue_ar_b" property="forwardPage" value="Export" onclick="exportCP()" disabled="true">
 					</html:button>	
 					</logic:equal>
-					
-					<html:button styleClass="blue_ar_b" property="forwardPage" value="Stop Sync" onclick="stopSync()">
-					</html:button>	
-
 		</logic:equal>
 		
 				   </td>
