@@ -1348,7 +1348,7 @@ CREATE TABLE KEY_SEQ_GENERATOR
 CREATE TABLE `csm_migrate_user` (
   `LOGIN_NAME` varchar(100) NOT NULL,
   `TARGET_IDP_NAME` varchar(100) default NULL,
-  `MIGRATED_LOGIN_NAME` varchar(100) default NULL,
+  `WUSTLKEY` varchar(100) default NULL,
   `MIGRATION_STATUS` varchar(100) default NULL,
   PRIMARY KEY  (`LOGIN_NAME`)
 );
