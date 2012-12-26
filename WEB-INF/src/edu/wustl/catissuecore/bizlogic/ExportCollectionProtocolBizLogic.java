@@ -248,13 +248,12 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
         			headerString.append("Tissue Side#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
         			valueString.append("\"").append(specimenRequirement.getSpecimenCharacteristics().getTissueSide()).append("\"").append(",");
         			
-        			appendSpecimenEventData(specimenRequirement.getSpecimenEventCollection(),eventsCount+"#"+specimenRequirementCount,headerString,valueString);
         			if(specimenRequirement.getLabelFormat()!=null)
         			{	
         				headerString.append("Label Format#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
         				valueString.append("\"").append(specimenRequirement.getLabelFormat()).append("\"").append(",");
         			}
-        			appendSpecimenEventData(specimenRequirement.getSpecimenEventCollection(),eventsCount+"#"+specimenRequirementCount,headerString,valueString);
+        			appendSpecimenEventData(specimenRequirement.getSpecimenEventCollection(),"#"+eventsCount+"#"+specimenRequirementCount,headerString,valueString);
         			updateMapForChildSpecimen(headerString,valueString,specimenRequirement.getChildSpecimenCollection(),"#"+eventsCount+"#"+specimenRequirementCount);
         			specimenRequirementCount++;
         		}
