@@ -12,7 +12,9 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,8 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
+import edu.wustl.catissuecore.util.SpecimenRequirementComparator;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
@@ -177,8 +181,11 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     		headerString.append("Aliquot Specimen Label Format").append(",");
     		valueString.append("\"").append(collectionProtocol.getAliquotLabelFormat()).append("\"").append(",");
     	}
-    	
+
     	Collection<CollectionProtocolEvent> events=collectionProtocol.getCollectionProtocolEventCollection();
+    	final CollectionProtocolEventComparator comparator = new CollectionProtocolEventComparator();
+    	List<CollectionProtocolEvent> eventsList = new ArrayList(events);
+    	Collections.sort(eventsList, comparator);
     	int eventsCount=1;
     	for (CollectionProtocolEvent collectionProtocolEvent : events) {
     		//headerDataMap.put("Study Calender Event Point#"+eventsCount,collectionProtocolEvent.getStudyCalendarEventPoint().toString());
@@ -207,8 +214,13 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
         	headerString.append("ActivityStatus#").append(eventsCount).append(",");
         	valueString.append("\"").append(collectionProtocolEvent.getActivityStatus()).append("\"").append(",");
         	Collection<SpecimenRequirement> requirements=collectionProtocolEvent.getSpecimenRequirementCollection();
+        	
+        	final SpecimenRequirementComparator sprComparator = new SpecimenRequirementComparator();
+        	List<SpecimenRequirement> requirementsList = new ArrayList(requirements);
+        	Collections.sort(requirementsList, sprComparator);
+        	
         	int specimenRequirementCount=1;
-        	for (SpecimenRequirement specimenRequirement : requirements) {
+        	for (SpecimenRequirement specimenRequirement : requirementsList) {
         		if(specimenRequirement.getParentSpecimen()==null)
         		{
         			if(specimenRequirement.getSpecimenRequirementLabel()!=null)
@@ -273,8 +285,12 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     }
     private void updateMapForChildSpecimen(StringBuffer headerString,StringBuffer valueString,Collection specimenCollection,String postfix)
     {
+    	final SpecimenRequirementComparator sprComparator = new SpecimenRequirementComparator();
+    	List<SpecimenRequirement> requirementsList = new ArrayList(specimenCollection);
+    	Collections.sort(requirementsList, sprComparator);
+    	
     	int childSpecimenCount=1;
-    	for (Object abstractSpecimen : specimenCollection) {
+    	for (Object abstractSpecimen : requirementsList) {
     		
     		if(((SpecimenRequirement)abstractSpecimen).getSpecimenRequirementLabel()!=null)
     		{	
