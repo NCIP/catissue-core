@@ -147,7 +147,7 @@
   function exportCP()
   {
     var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
-	var action="ExportCollectionProtocol.do?title="+cpDetailsForm.title.value;	
+	var action="ExportCollectionProtocol.do?title="+cpDetailsForm.title.value+"&shortTitle="+cpDetailsForm.shortTitle.value;	
 	mywindow = window.open(action, "Download", "width=10,height=10");
 	mywindow.moveTo(0,0);
   }

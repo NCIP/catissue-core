@@ -1,13 +1,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.OutputStream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,11 +8,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import edu.wustl.catissuecore.bizlogic.ExportCollectionProtocolBizLogic;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -52,7 +42,7 @@ public class ExportCollectionProtocolAction extends SecureAction
 			response.setBufferSize(downloadFile.length());
 			response.getWriter().append(downloadFile);
 			response.setContentType("application/download");
-            response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("title")+".csv\"");
+            response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("shortTitle")+".csv\"");
 
             
 		} catch (Exception exp) {
