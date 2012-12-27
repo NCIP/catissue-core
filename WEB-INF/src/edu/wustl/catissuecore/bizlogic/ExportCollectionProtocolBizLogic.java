@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenRequirementComparator;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -126,8 +128,11 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     	valueString.append("\"").append(getDateAsString(collectionProtocol.getStartDate())).append("\"").append(",");
     	
     	//headerDataMap.put("URL",collectionProtocol.getDescriptionURL());
-    	headerString.append("URL").append(",");
-    	valueString.append("\"").append(collectionProtocol.getDescriptionURL()).append("\"").append(",");
+    	if(collectionProtocol.getDescriptionURL()!=null && !"".equals(collectionProtocol.getDescriptionURL()))
+    	{	
+    		headerString.append("URL").append(",");
+    		valueString.append("\"").append(collectionProtocol.getDescriptionURL()).append("\"").append(",");
+    	}
     	
     	//headerDataMap.put("Activity Status",collectionProtocol.getActivityStatus());
     	headerString.append("Activity Status").append(",");
@@ -148,9 +153,14 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     		headerString.append("Enrollment").append(",");
         	valueString.append("\"").append(collectionProtocol.getEnrollment().toString()).append("\"").append(",");
     	}
+    	
     	Collection<ConsentTier> consentTiers=collectionProtocol.getConsentTierCollection();
     	int consentTiersCount=1;
-    	for (ConsentTier consentTier : consentTiers) {
+    	Comparator consentTierComparator = new IdComparator();
+    	List<ConsentTier> consentTiersAsList = new ArrayList(consentTiers);
+		Collections.sort(consentTiersAsList, consentTierComparator);
+		
+    	for (ConsentTier consentTier : consentTiersAsList) {
     		//headerDataMap.put("Statements#"+consentTiersCount++,consentTier.getStatement());
     		headerString.append("Statements#").append(consentTiersCount++).append(",");
         	valueString.append("\"").append(consentTier.getStatement()).append("\"").append(",");
