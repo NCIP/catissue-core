@@ -58,13 +58,13 @@ function setCustomListBoxValue(elementId,elementValue)
 function setTextBoxValueForContainer(elementId,elementValue)
 {
 	var id = parent.opener.document.getElementById(elementId);	
-	id.value = decodeURI(elementValue.replace("+","%20"));
+	id.value = elementValue;
 }
 
 function setTextBoxValueForContainerPage(elementId,elementValue)
 {
 	var id = parent.opener.document.getElementById(elementId);	
-	id.value = decodeURI(elementValue.replace("+","%20"));
+	id.value = elementValue;
 	id.onchange();
 }
 

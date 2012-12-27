@@ -429,7 +429,7 @@ public class ShowStorageGridViewAction extends BaseAction
 									{
 										methodName="setTextBoxValueForContainerPage";
 									}
-									onClickEvent="onclick=\\\\\""+methodName+"(\\\'"+selectedContainerName+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\');\\ " 
+									onClickEvent="onclick=\\\\\""+methodName+"(\\\'"+selectedContainerName+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
 											+"setTextBoxValue(\\\'"+pos1+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
 											+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ ";
 									

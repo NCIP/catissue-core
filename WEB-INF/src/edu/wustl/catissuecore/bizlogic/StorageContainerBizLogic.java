@@ -1317,6 +1317,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			validateStTypeAndTemp(container, validator);
 			validatePosition(dao, container, validator);
 			validateStatus(operation, container);
+			validateContainerName(container);
 			//validateLabellingSchemes(dao,container);
 			StorageContainerUtil.populateSpecimenType(container);
 			return true;
@@ -1350,6 +1351,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	}*/
 
 	
+	private void validateContainerName(StorageContainer container) throws BizLogicException
+	{
+		if(container.getName()!=null && (container.getName().contains("'")||container.getName().contains("\"")))
+		{
+			throw this.getBizLogicException(null, "error.quotes.stcont.name", "");
+		}
+		
+	}
+
 	/**
 	 * @param operation Operation
 	 * @param container Storage Container

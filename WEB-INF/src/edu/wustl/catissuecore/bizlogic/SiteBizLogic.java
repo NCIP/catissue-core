@@ -313,6 +313,10 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 		}
+		if(site.getName()!=null && (site.getName().contains("'")|| site.getName().contains("\"")))
+		{
+			throw this.getBizLogicException(null, "error.quotes.site.name", "");
+		}
 
 		if (site.getAddress() == null || Validator.isEmpty(site.getAddress().getCountry()))
 		{

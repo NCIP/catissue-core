@@ -236,8 +236,8 @@ public class StorageContainerAction extends SecureAction
 				request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 				this.setParentStorageContainersForEdit(containerMap, storageContainerForm, request,
 						dao);
-				storageContainerForm.setPos1(storageContainerForm.getPositionDimensionOne());
-				storageContainerForm.setPos2(storageContainerForm.getPositionDimensionTwo());
+				//storageContainerForm.setPos1(storageContainerForm.getPositionDimensionOne());
+				//storageContainerForm.setPos2(storageContainerForm.getPositionDimensionTwo());
 			}
 
 			request.setAttribute("storageContainerIdentifier", storageContainerForm.getId());
