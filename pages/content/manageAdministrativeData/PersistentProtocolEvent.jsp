@@ -94,7 +94,7 @@
 										<div id="csDropDownIddiv" class="x-form-field-wrap" style="width:202px;">
 											<input id="clinicalStatusDropDown"
 													onkeydown="keyNavigationCall(event,clinicalStatusDropDownInfo,csGrid);"
-													onKeyUp="autoCompleteControl(event,clinicalStatusDropDownInfo,csGrid);"
+													onKeyUp="autoCompleteControlGeneric(event,clinicalStatusDropDownInfo,csGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="31"
@@ -136,7 +136,7 @@
 										<div id="dsDropDownIddiv" class="x-form-field-wrap " style="width:202px;">
 											<input id="defaultSiteDropDown"
 													onkeydown="keyNavigationCall(event,siteDropDownInfo,dsGrid);"
-													onKeyUp="autoCompleteControl(event,siteDropDownInfo,dsGrid);"
+													onKeyUp="autoCompleteControlGeneric(event,siteDropDownInfo,dsGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="31"

@@ -80,7 +80,28 @@ function keyNavigation(evnt,gridDropDownInfo, gridObj,isGridVisible)
 		}
 	}
 }
-
+function autoCompleteControlGeneric(event,gridDropDownInfo,gridObj)
+{ 
+	if(event.keyCode != 13)
+	{
+		if(document.getElementById(gridDropDownInfo['dropDownId']).value=="")
+		{
+			document.getElementsByName(gridDropDownInfo['propertyId']).value = "";
+			hideGrid(gridDropDownInfo['gridDiv']);
+			gridDropDownInfo['visibilityStatusVariable'] = false;
+			gridInit=0;
+		}
+		else
+		{
+			if(gridOn==0)
+			{
+				showGrid(gridDropDownInfo['gridDiv'],gridDropDownInfo['dropDownId']);
+				gridDropDownInfo['visibilityStatusVariable'] = true;
+			}
+			gridObj.filterBy(0,document.getElementById(gridDropDownInfo['dropDownId']).value);
+		}
+	}	
+}
 function autoCompleteControl(event,gridDropDownInfo,gridObj)
 { 
 	if(event.keyCode != 13 && event.keyCode != 39 && event.keyCode != 37 )
