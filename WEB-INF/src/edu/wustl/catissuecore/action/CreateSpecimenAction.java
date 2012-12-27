@@ -497,9 +497,17 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		}
 		this.setPageData(request, createForm);
 		Specimen specimen=new Specimen();
-		specimen.setId(Long.valueOf(createForm.getParentSpecimenId()));
+		if(createForm.getParentSpecimenId()!=null)
+		{
+			specimen.setId(Long.valueOf(createForm.getParentSpecimenId()));
+		}
 		Long collectionProtocolId=new NewSpecimenBizLogic().getCPId(dao, null, specimen);
-		request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, collectionProtocolId.toString());
+		String cpId="";
+		if(collectionProtocolId!=null)
+		{
+			cpId=collectionProtocolId.toString();
+		}
+		request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId);
 		request.setAttribute("createdDate", createForm.getCreatedDate());
 		final List dataList = (List) request
 				.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
