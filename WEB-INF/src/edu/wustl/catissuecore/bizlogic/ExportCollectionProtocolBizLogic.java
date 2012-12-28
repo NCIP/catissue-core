@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenRequirementComparator;
 import edu.wustl.common.exception.BizLogicException;
@@ -193,11 +194,10 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     	}
 
     	Collection<CollectionProtocolEvent> events=collectionProtocol.getCollectionProtocolEventCollection();
-    	final CollectionProtocolEventComparator comparator = new CollectionProtocolEventComparator();
     	List<CollectionProtocolEvent> eventsList = new ArrayList(events);
-    	Collections.sort(eventsList, comparator);
+    	CollectionProtocolUtil.getSortedCPEventList(eventsList);
     	int eventsCount=1;
-    	for (CollectionProtocolEvent collectionProtocolEvent : events) {
+    	for (CollectionProtocolEvent collectionProtocolEvent : eventsList) {
     		//headerDataMap.put("Study Calender Event Point#"+eventsCount,collectionProtocolEvent.getStudyCalendarEventPoint().toString());
     		headerString.append("Study Calender Event Point#").append(eventsCount).append(",");
         	valueString.append("\"").append(collectionProtocolEvent.getStudyCalendarEventPoint().toString()).append("\"").append(",");
