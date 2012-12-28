@@ -276,11 +276,8 @@ public class SimilarContainersAction extends SecureAction
 									.getFirstAvailablePositionInContainer(container, dao);
 							if (position != null)
 							{
-								similarContainersForm.setPos1(position.getXPos() + "");
-								similarContainersForm.setPos2(position.getYPos() + "");
-								similarContainersForm.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 1, Integer.valueOf(similarContainersForm.getPos1())));
-								similarContainersForm.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 2, Integer.valueOf(similarContainersForm.getPos2())));
-
+								similarContainersForm.setPos1(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 1, Integer.valueOf(position.getXPos())));
+								similarContainersForm.setPos2(StorageContainerUtil.convertSpecimenPositionsToString(similarContainersForm.getSelectedContainerName(), 2, Integer.valueOf(position.getYPos())));
 							}
 							else
 							{
@@ -303,11 +300,6 @@ public class SimilarContainersAction extends SecureAction
 							}
 						}
 
-						similarContainersForm.setPositionDimensionOne(similarContainersForm.getPos1());
-						similarContainersForm.setPositionDimensionTwo(similarContainersForm.getPos2());
-						
-						similarContainersForm.setPositionDimensionOneString(similarContainersForm.getPos1());
-						similarContainersForm.setPositionDimensionTwoString(similarContainersForm.getPos2());
 					}
 					else
 					{
@@ -396,11 +388,21 @@ public class SimilarContainersAction extends SecureAction
 					// request.setAttribute("siteForParentList", siteNameList);
 					final String[] startingPoints = new String[3];
 
-					startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
-					startingPoints[1] = similarContainersForm
-							.getPositionDimensionOneString();
-					startingPoints[2] = similarContainersForm
-							.getPositionDimensionTwoString();
+					if (Constants.STORAGE_TYPE_POSITION_MANUAL.equals(selectedParentContainer))
+					{
+						startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
+						startingPoints[1] = similarContainersForm.getPos1();
+						startingPoints[2] = similarContainersForm.getPos2();
+					}
+					else
+					{
+						startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
+						startingPoints[1] = similarContainersForm
+								.getPositionDimensionOne();
+						startingPoints[2] = similarContainersForm
+								.getPositionDimensionTwo();
+					}
+					
 
 					if (similarContainersForm.getParentContainerId() != 0l)
 					{
