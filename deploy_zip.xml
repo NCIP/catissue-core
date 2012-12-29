@@ -2135,6 +2135,7 @@
 		<antcall target="insert_dashboard_queries"/>
 		<antcall target="liquibase_aqupgrade_target" />
 		<antcall target="upgrade_db_from_v1.0_to_v2.0"/>
+		<antcall target="alter_bulk_operation_table"/>
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -5500,4 +5501,39 @@ Thanking You,
             </java>
             <!--delete dir="${temp.dir}"/-->
     </target>
+	<target name="alter_bulk_operation_table" description="alter the colum type from varchar2 to CLOB">
+		<antcall target="unzip_bulkoperation_installable" />
+				<if>
+					<equals arg1="${database.type}" arg2="oracle"/>
+					<then>
+						<sql driver="${oracle.driver.string}"
+							url="${database.url}"
+							userid="${database.username}" password="${database.password}" rdbms="oracle">
+							<transaction src="${temp.dir}/bulkoperation/SQL/Oracle/ALTER_BULK_OPERATION_TABLES_FOR_ORACLE.sql" />
+							<transaction>commit;</transaction>
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+						</sql>
+					</then>
+				<elseif>
+					<equals arg1="${database.type}" arg2="mysql"/>
+					<then>
+						<sql driver="${mysql.driver.string}"
+							url="${database.url}"
+								userid="${database.username}" password="${database.password}" >
+							<transaction src="${temp.dir}/bulkoperation/SQL/MySql/ALTER_BULK_OPERATION_TABLES_FOR_MYSQL.sql" />
+							<transaction>commit;</transaction>
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+						</sql>
+					</then>
+				</elseif>
+				</if>
+			</target>
 </project>
