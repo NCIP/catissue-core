@@ -178,7 +178,32 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			hql.append("select cpr.participant.id");
 			if(isPHIView)
 			{	
-				hql.append(",cpr.participant.lastName||', '||cpr.participant.firstName||'( '||cpr.protocolParticipantIdentifier||' )'");				
+				/*Added case  statements because when we add participants from BO or SPR reports,
+				 * participant's first name, last name can be null. If the last name,
+				 * first name or ppid is null then it will be replaced by blank string.
+				 */
+				String columnName=", case"+ 
+									" when cpr.participant.lastName is null"+
+									" then '' "+
+									"else"+
+									" cpr.participant.lastName"+ 
+									" end"+
+									"||', '||"+
+									"case "+
+									" when cpr.participant.firstName is null"+ 
+									" then '' "+ 
+									"else "+
+									"cpr.participant.firstName"+ 
+									" end"+
+									"||'( '||"+
+									"case"+
+									" when cpr.protocolParticipantIdentifier is null"+ 
+									" then '' "+
+									"else"+
+									" cpr.protocolParticipantIdentifier "+ 
+									"end"+
+									"||' )'";
+				hql.append(columnName);
 			}		
 			else
 			{
@@ -208,7 +233,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
     				Long identifier = (Long) participantObj[0];
     				participantInfoList.add(new CpAndParticipentsBean(display_name, identifier.toString(),isPHIView));
     			}
-		}
+    	}
 		catch (final DAOException daoExp)
 		{
 			CpBasedViewBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
