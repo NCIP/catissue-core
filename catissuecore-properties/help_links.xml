@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
 	<property>
-		name>edu.wustl.catissuecore.actionForm.UserForm</name>
+		<name>edu.wustl.catissuecore.actionForm.UserForm</name>
 		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-ProvisioningcaTissueSuiteUsers</value>
 	</property>
 	<property>
