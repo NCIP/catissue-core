@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
 	<property>
-		<name>edu.wustl.catissuecore.actionForm.UserForm</name>
+		name>edu.wustl.catissuecore.actionForm.UserForm</name>
 		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-ProvisioningcaTissueSuiteUsers</value>
 	</property>
 	<property>
@@ -58,11 +58,11 @@
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.OrderForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11+-+Ordering+Biospecimens+v1.2#id-11-OrderingBiospecimensv12-OrderingWorkflow</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4.8+-+Ordering+Biospecimens+v2.0#id-48-OrderingBiospecimensv20-OrderingWorkflow</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.OrderSpecimenForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11+-+Ordering+Biospecimens+v1.2#id-11-OrderingBiospecimensv12-OrderingWorkflow</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4.8+-+Ordering+Biospecimens+v2.0#id-48-OrderingBiospecimensv20-OrderingWorkflow</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm</name>
@@ -70,11 +70,11 @@
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.shippingtracking.ShipmentRequestForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-CreatingaNewShipment</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-RequestingaShipment</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-ProcessingaReceivedShipment</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-ProcessingtheShipmentorShipmentRequest</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.ParticipantForm</name>
@@ -82,11 +82,11 @@
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.NewSpecimenForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-SpecimenOperations</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.CreateSpecimenForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-CreatingBiospecimenDerivative</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.AliquotForm</name>
@@ -102,7 +102,7 @@
 	</property>
 	<property>
 		<name>edu.wustl.query.actionForm.SaveQueryForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11.6+-+Save+Query+v1.1#id-116-SaveQueryv11-GettingStarted</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#id-13-PerformingSearchesv12-SavingtheQuery</value>
 	</property>
 	<property>
 		<name>edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm</name>
@@ -131,11 +131,11 @@
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.ConflictViewForm</name>
-		<value></value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4.5+-+Surgical+Pathology+Report+v2.0#id-45-SurgicalPathologyReportv20-ConflictingSPRs</value>
 	</property>
 	<property>
 		<name>edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchForm</name>
-		<value></value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4.1+-+Registering+Participants+v2.0</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm</name>
@@ -156,6 +156,14 @@
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.AdvanceSearchForm</name>
 		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#id-13-PerformingSearchesv12-UsingtheAdvancedQueryWizard</value>
+	</property>
+	<property>
+		<name>edu.wustl.catissuecore.actionForm.QuickEventsForm</name>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-AddingaBiospecimenEvent</value>
+	</property>
+	<property>
+		<name>edu.wustl.catissuecore.actionForm.ConfigureResultViewForm</name>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4.9+-+Distributing+Biospecimens+v2.0</value>
 	</property>
 	<property>
 		<name>helpHomePage</name>
