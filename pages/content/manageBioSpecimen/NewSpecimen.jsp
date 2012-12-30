@@ -343,13 +343,11 @@ function showPopUp()
 	}
 	else
 	{
-	<%
-		 frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
-											+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-											+ "&" + Constants.CAN_HOLD_SPECIMEN_TYPE+"="+sptype
-											+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
-	%>
-	mapButtonClickedOnNewSpecimen('<%=frameUrl%>','newSpecimenPage');
+		var className=document.getElementById("className").value;
+		var sptype=document.getElementById("type").value;
+		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
+						+ "&holdSpecimenClass="+className+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
+		mapButtonClickedOnNewSpecimen(frameUrl,'newSpecimenPage');
 	}
 }
 function onContainerListReady()

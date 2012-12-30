@@ -170,7 +170,7 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 
 					<%
 					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId+"&amp;"+
-					Constants.CAN_HOLD_SPECIMEN_CLASS+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" +bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID");
+					Constants.CAN_HOLD_SPECIMEN_CLASS+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+ "&amp;" +Constants.CAN_HOLD_SPECIMEN_TYPE+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_SPECTYPE")+ "&amp;" +  Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" +bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID");
 					String buttonOnClicked = "showMap('"+selContainerId+"','"+pos1Id+"','"+pos2Id+"','"+url+"')";//"mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	
 					%>
 					<td class="black_ar"  colspan="2"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >

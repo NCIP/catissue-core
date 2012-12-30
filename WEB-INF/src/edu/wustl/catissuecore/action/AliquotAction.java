@@ -1769,6 +1769,7 @@ public class AliquotAction extends SecureAction
 		}
 		this.saveErrors(request, errors);
 		request.setAttribute("aliquotBeanList", aliquotBeanList);
+		request.setAttribute("cpId", scp);
 	}
 
 	/**

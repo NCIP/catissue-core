@@ -101,7 +101,7 @@ function showPopUp()
 		var className=document.getElementById("className").value;
 		var sptype=document.getElementById("type").value;
 		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
-						+ "&holdSpecimenClass="+className+ "&holdContainerType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
+						+ "&holdSpecimenClass="+className+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
 		mapButtonClickedOnNewSpecimen(frameUrl,'newSpecimenPage');
 	}
 }

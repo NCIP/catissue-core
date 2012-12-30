@@ -117,6 +117,7 @@ function showPopUp()
 	{
 	<% String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName="
 				+ "storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
+				+ "&holdSpecimenType=" + sptype
 				+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS + "=" + className + "&"
 				+ Constants.CAN_HOLD_COLLECTION_PROTOCOL + "=" + collectionProtocolId;
 %>

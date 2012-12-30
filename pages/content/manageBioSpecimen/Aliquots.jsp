@@ -101,9 +101,9 @@ function showPopUp(storageContainerDropDown,selectedContainerName,positionDimens
 					"&pos2=" + positionDimensionTwo +
 					"&containerId=" +containerId +
 					"&StorageContainerIdFromMap=" + storageContainerIdFromMap +
-					"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
-					"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
-					"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId ;
+					"&holdSpecimenClass="+specimenClassName +
+					"&holdSpecimenType="+spType +
+					"&holdCollectionProtocol=" + cpId ;
 					frameUrl+="&storageContainerName="+storageContainer;
 					openPopupWindow(frameUrl,'newSpecimenPage');
 			}
@@ -660,8 +660,7 @@ function setContainerValues()
 							</td>
 							<td class="groupelements"><html:text styleClass="black_ar"  size="1" styleId="${aliquotBean.pos2Style}" property="${aliquotBean.pos2FromMapKey}" />&nbsp;
 							</td>
-							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" 
-							onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','<%=form.getClassName()%>','<%=form.getType()%>','<%=form.getColProtId()%>','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >
+							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','${aliquotForm.className}','${aliquotForm.type}','${requestScope.cpId}','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >
 									<bean:message key="buttons.map"/>
 									</html:button>
 							</td>
@@ -751,14 +750,13 @@ function setContainerValues()
 <script language="JavaScript" type="text/javascript">
 function applyFirstToAll()
 {
-		//var containerName= document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
 		
 		var containerName=document.getElementById('storageContainerDropDown_1').value;
 		var containerId=document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
 		
 			<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">	
 				document.getElementsByName('value(Specimen:${counter+2}_StorageContainer_id_fromMap)')[0].value = containerId;
-				document.getElementById(containerDropDownInfo_${counter+2}['dropDownId']).value =containerName;// scGrid_${counter+2}.cellById(containerName,0).getValue();
+				document.getElementById(containerDropDownInfo_${counter+2}['dropDownId']).value =containerName;
 				hideGrid(containerDropDownInfo_${counter+2}['gridDiv']);
 				scGridVisible_${counter+2} = false;
 				document.getElementsByName('value(Specimen:${counter+2}_positionDimensionOne_fromMap)')[0].value = "";
