@@ -51,7 +51,7 @@
 <script>var imgsrc="images/de/";</script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+
 <script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
@@ -61,13 +61,12 @@
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
 
-<script src="jss/script.js"></script>
-<script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/commonSpecimen.js"></script>
 
 
 <%
@@ -86,25 +85,7 @@ String frameUrl="";
 
 <script language="JavaScript">
 //declaring DHTMLX Drop Down controls required variables
-var containerDropDownInfo, scGrid;
 var scGridVisible = false;
-
-function showPopUp() 
-{
-	var storageContainer =document.getElementById("storageContainerDropDown").value;
-    if(storageContainer!="")
-	{
-		loadDHTMLXWindow();
-	}
-	else
-	{
-		var className=document.getElementById("className").value;
-		var sptype=document.getElementById("type").value;
-		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
-						+ "&holdSpecimenClass="+className+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
-		mapButtonClickedOnNewSpecimen(frameUrl,'newSpecimenPage');
-	}
-}
 
 function onContainerListReady()
 	{
@@ -130,14 +111,6 @@ function onContainerListReady()
 		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
 		return url;
 	}
-function doOnLoad()
-{
-	var url=getActionToDoURL();
-	//Drop Down components information
-	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady,visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
-	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo,false); 
-}
 
 </script>
 <script language="JavaScript" >
@@ -608,10 +581,11 @@ function doOnLoad()
 								<html:text styleClass="black_ar"  size="1" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
 							</td>
 							<td class="groupelements">
-								<html:button styleClass="black_ar" property="containerMap" onclick="showPopUp()">
+								<html:button styleClass="black_ar" property="containerMap" onclick="showPopUp('<%=collectionProtocolId%>')">
 											<bean:message key="buttons.map"/>
 								</html:button>
 							</td>
+							
 						</tr>
 					</table>
 											</logic:equal>
@@ -796,19 +770,5 @@ function doOnLoad()
 	</html:form>
 <script language="JavaScript" type="text/javascript">
 showPriterTypeLocation();
-
-function updateStorageContainerValue()
-	{
-		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
-		document.getElementById("selectedContainerName").value=containerName;
-		if("Virtual"==containerName)
-		{
-			document.getElementById("virtuallyLocated").value="true";
-		}
-		else
-		{
-			document.getElementById("virtuallyLocated").value="false";
-		}
-	}
 </script>
 </body>
