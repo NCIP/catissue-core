@@ -386,17 +386,16 @@ else
 		 arrObj = eval('(' +tree+ ')');	 
 		 var objLength=arrObj.treeData.length;
 		 var count;
-		 
  		 childCount=popupmygrid.hasChildren(tagID);
-	 if(childCount==0)
-		{
-		 childCount=arrObj.childCount;
- 		for(count=0;count<objLength;count++)
+ 		 if(childCount==0)
+ 		 {
+		 	childCount=arrObj.childCount;
+ 			for(count=0;count<objLength;count++)
  			{
-			var tagItemId=arrObj.treeData[count].id;
-			 		
-popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall('"+tagItemId+"','"+popupFolderDeleteMessage+"')'/>"],0,tagID);
- 	pause(10);			}
+ 				var tagItemId=arrObj.treeData[count].id; 		
+ 				popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall('"+tagItemId+"','"+folderDeleteMsg+"')'/>"],0,tagID);
+ 				pause(10);			
+ 			}
 		}
-ajaxTagDeleteCall(tagID);	}	
+ 		ajaxTagDeleteCall(tagID);	}	
 }
