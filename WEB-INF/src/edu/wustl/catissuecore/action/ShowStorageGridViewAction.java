@@ -42,13 +42,16 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
@@ -620,12 +623,11 @@ public class ShowStorageGridViewAction extends BaseAction
 	 *            The HttpServletRequest object reference.
 	 * @param storageContainer
 	 *            The Storage container object reference.
-	 * @throws BizLogicException
-	 *             : BizLogicException
+	 * @throws ApplicationException 
 	 */
 	private boolean setEnablePageAttributeIfRequired(HttpServletRequest request,
 			StorageContainer storageContainer)
-			throws BizLogicException
+			throws ApplicationException
 	{
 		boolean enablePage = true;
 		String activityStatus = request.getParameter(Status.ACTIVITY_STATUS.toString());
@@ -644,6 +646,8 @@ public class ShowStorageGridViewAction extends BaseAction
 		}
 
 		final HttpSession session = request.getSession();
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
 		// checking for container type.
 		final String holdContainerType = (String) session
 				.getAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
@@ -656,9 +660,11 @@ public class ShowStorageGridViewAction extends BaseAction
 		CollectionProtocolBizLogic cpBiz = new CollectionProtocolBizLogic();
 		final String holdCollectionProtocol = (String) session
 				.getAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
-		if (enablePage && holdCollectionProtocol != null)
+		final String specimenId = (String) session
+				.getAttribute(Constants.SPECIMEN_ID);
+		if (enablePage)
 		{
-			if (!holdCollectionProtocol.equals(""))
+			if (holdCollectionProtocol != null && !holdCollectionProtocol.equals(""))
 			{
 				final int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
 				enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,
@@ -666,7 +672,15 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 			else
 			{
-				enablePage = false;
+				if(specimenId==null ||"".equals(specimenId))
+				{
+					enablePage = false;
+				}
+				else
+				{
+					final int collectionProtocolId = Integer.parseInt(CollectionProtocolUtil.getCPIdFromSpecimen(specimenId, sessionData));
+					enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,storageContainer);
+				}
 			}
 		}
 
@@ -685,17 +699,25 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 		}
 
-		final String holdspType = (String) session
+		String holdspType = (String) session
 				.getAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE);
-		if (enablePage && holdspType != null)
+		if (enablePage)
 		{
-			if (!holdspType.equals(""))
+			if (holdspType != null && !holdspType.equals(""))
 			{
 				enablePage = nspBiz.canHoldSpecimenType(holdspType, storageContainer);
 			}
 			else
 			{
-				enablePage = false;
+				if(specimenId==null ||"".equals(specimenId))
+				{
+					enablePage = false;
+				}
+				else
+				{
+					holdspType  = SpecimenUtil.getSpecimenTypeBySpecimenId(Long.valueOf(specimenId), sessionData);
+					enablePage = nspBiz.canHoldSpecimenType(holdspType, storageContainer);
+				}
 			}
 		}
 

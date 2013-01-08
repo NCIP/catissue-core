@@ -45,6 +45,8 @@ public class ShippingTrackingUtility
 		container.getHoldsSpecimenArrayTypeCollection();
 		container.setName(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX + shipmentForm.getLabel());
 		container.setSpecimenPositionCollection(new LinkedHashSet<SpecimenPosition>());
+		container.setOneDimensionLabellingScheme(edu.wustl.catissuecore.util.global.Constants.LABELLING_SCHEME_NUMBERS);
+		container.setTwoDimensionLabellingScheme(edu.wustl.catissuecore.util.global.Constants.LABELLING_SCHEME_NUMBERS);
 		return container;
 	}
 

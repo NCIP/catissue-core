@@ -54,6 +54,7 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -1522,13 +1523,27 @@ public class CollectionProtocolUtil
 	 * @param dao - DAO obj
 	 *
 	 * @return collectionProtocolId - collectionProtocolId
-	 *
-	 * @throws BizLogicException - BizLogicException
+	 * @throws ApplicationException 
 	 */
+	
+	public static String getCPIdFromSpecimen(String specimenId, SessionDataBean sessionDataBean) throws ApplicationException
+	{
+		DAO dao=null;
+		try
+		{
+			dao=AppUtility.openDAOSession(sessionDataBean);
+			return getCPIdFromSpecimen(specimenId, dao);
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+	}
+
 	public static String getCPIdFromSpecimen(String specimenId, DAO dao) throws BizLogicException
 	{
 		String collectionProtocolId = "";
-		if (specimenId != null && !specimenId.trim().equals(""))
+		if (specimenId != null && !"".equals(specimenId.trim()))
 		{
 			final Specimen specimen = new Specimen();
 			specimen.setId(Long.parseLong(specimenId));

@@ -83,7 +83,21 @@ String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_
 
 function submitForm()
 {
+	updateContainerNames();
 	document.forms[0].submit();
+}
+function updateContainerNames()
+{
+	var idArray = getCount();
+	for(var i=0;i<idArray.length;i++)
+	{
+		var variable="specimenItem["+i+"].id";
+		var id=getElement("specimenItem["+i+"].id").value;
+		var attributeName=document.getElementsByName('specimenDetails(selectedContainerName_'+id+')')[0];
+		var elemId = "storageContainerDropDown_"+id;
+		var valueToSet =document.getElementById(elemId).value;
+		attributeName.value=valueToSet;
+	}
 }
 function doOnLoad()
 {
@@ -102,7 +116,8 @@ Long specimenId=specimen.getId();
 			var containerName=document.getElementById("storageContainerDropDown_<%=specimenId%>").value;
 			document.getElementsByName('specimenDetails(selectedContainerName_<%=specimenId%>)')[0].value = id;
 			document.getElementById(containerDropDownInfo_<%=specimenId%>['dropDownId']).value = scGrid_<%=specimenId%>.cellById(id,ind).getValue();
-			
+			document.getElementsByName('specimenDetails(position1_<%=specimenId%>)')[0].value="";
+			document.getElementsByName('specimenDetails(position2_<%=specimenId%>)')[0].value="";
 			hideGrid(containerDropDownInfo_<%=specimenId%>['gridDiv']);
 			scGridVisible_<%=specimenId%> = false;
 		}
@@ -131,14 +146,15 @@ function setContainerValues()
 		{
 			Specimen gs2=specimenList.get(i);
 			Long stringToAppend=gs2.getId();
+			
+			String[] selectedContainerName=(String[])form.getSpecimenDetails("Specimen:" + gs2.getId()	+ "_initialValues");
 			%>
-				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='Virtual';
+				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=selectedContainerName[0]%>';
 <%}}%>	
 }
 
 //declaring DHTMLX Drop Down controls required variables
 <%
-
 for(int i=0;i<specimenList.size();i++){
 Specimen specimen=specimenList.get(i);
 Long specimenId=specimen.getId();
@@ -150,7 +166,7 @@ var gridDivObject_<%=specimenId%> ;
 
 <%}%>
 
-function showPopUp(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName) 
+function showPopUp(specimenId,storageContainerDropDown,positionDimensionOne,positionDimensionTwo,collectionProtocolId,specimenClassName) 
 {
 	var storageContainer =document.getElementById(storageContainerDropDown).value;
 	if(storageContainer!="")
@@ -159,15 +175,13 @@ function showPopUp(storageContainerDropDown,positionDimensionOne,positionDimensi
 	}
 	else
 	{
-		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
-			"selectedContainerName=" + storageContainerDropDown +
-			"&pos1=" + positionDimensionOne +
-			"&pos2=" + positionDimensionTwo +
-			"&containerId=" +containerId +
-			"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
-			"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=<%=collectionProtocolId%>";
-			frameUrl+="&storageContainerName="+storageContainer;
-			openPopupWindow(frameUrl,'newSpecimenPage');
+			var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
+			"selectedContainerName=storageContainerDropDown_" +specimenId+
+			"&pos1=position1_" +specimenId+
+			"&pos2=position2_" +specimenId+
+			"&holdSpecimenClass="+specimenClassName+
+			"&specimenId="+specimenId;
+			openPopupWindow(frameUrl,"newSpecimenPage");
 	}
 }
 
@@ -209,7 +223,6 @@ function ApplyToAll(object)
 	{
 	   setValues(idArray[i],storageContainerValue,idArray[0]);		
 	}
-
 }
 
 function setValues(idArrayI,valueToSet,idArray0)
@@ -228,7 +241,7 @@ function setValues(idArrayI,valueToSet,idArray0)
 	document.getElementById(elemName).value="";
 	
 	var elemName = "specimenDetails(selectedContainerName_"+idArray0+")";
-	var firstContainerId=getElement(elemName).value;
+	var firstContainerId=valueToSet;
 	updateField(specimenId,valueToSet,firstContainerId);
 }
 
@@ -358,29 +371,7 @@ function addAutoManualDiv(element,isApplyToAll)
 			}
 		}
 
-function setCPId()
-{
-	if ((xmlHttpReq.readyState == 4) && (xmlHttpReq.status == 200))
-	{
-		var msg = xmlHttpReq.responseText;
-		if(msg.indexOf('#') != -1)
-		{
-			var tag=(msg).split("#");
-			var spId=tag[0];
-			var spClass=tag[1];
-			var cpId=tag[2];
-			
-            var e1=document.getElementById("mapButton_"+controlRowNumber);
-			
-			e1.onclick=function(){
-				var storageContainer = 'selectedContainerName_'+spId.value;
-				frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=selectedContainerName_'+spId+'&pos1=position1_'+spId+'&pos2=position2_'+spId+'&containerId=containerId_'+spId+'&holdSpecimenClass='+spClass+'&holdCollectionProtocol='+cpId;
-				frameUrl+="&storageContainerName="+storageContainer;
-			openPopupWindow(frameUrl,"newSpecimenPage");
-			}
-		}
-	}
-}
+
 
    function setSCLocation()
    {
@@ -699,8 +690,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																	</html:select></label>       
 																</td>
 															
-																	<c:set var="spClass" value="${specimenItem.specimenClass}"/>
-																	<jsp:useBean id="spClass" type="java.lang.String"/>
+																	
 																	
 																	<%  String operation = (String)request.getAttribute(Constants.OPERATION); 
 																		
@@ -840,7 +830,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																						<jsp:useBean id="stContainerId" type="java.lang.String"/>
 									
 																						<html:hidden styleId="<%=stContainerId%>" property="<%=stContainerName%>"/>
-																						<c:set var="functionCall">showPopUp('storageContainerDropDown_<bean:write name="specimenItem" property="id"/>','<c:out value="${pos1Id}"/>','<c:out value="${pos2Id}"/>','<c:out value="${stContainerId}"/>','<c:out value="${specimenItem.specimenClass}"/>')</c:set>
+																						<c:set var="functionCall">showPopUp('<bean:write name="specimenItem" property="id"/>','storageContainerDropDown_<bean:write name="specimenItem" property="id"/>','<c:out value="${pos1Id}"/>','<c:out value="${pos2Id}"/>','<c:out value="${stContainerId}"/>','<c:out value="${specimenItem.specimenClass}"/>','')</c:set>
 																						<jsp:useBean id="functionCall" type="java.lang.String"/>
 									
 																						<c:set var="buttonName">containerMap_<bean:write name="specimenItem" property="id"/></c:set>
@@ -1112,7 +1102,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																														<bean:message key="buttons.map" bundle="msg.shippingtracking"/>
 																											</html:button>
 																											
-																											<c:set var="frameUrlCont">ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=<c:out value="${contSelectedContainerId}"/>&pos1=<c:out value="${contpos1Id}"/>&pos2=<c:out value="${contpos2Id}"/>&containerId=<c:out value="${containerIdControlid}"/>&storageContainer=true&storageType=</c:set>
+																											<c:set var="frameUrlCont">ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=<c:out value="${contSelectedContainerId}"/>&pos1=<c:out value="${contpos1Id}"/>&pos2=<c:out value="${contpos2Id}"/>&containerId=<c:out value="${containerIdControlid}"/>&storageType=</c:set>
 																											<jsp:useBean id="frameUrlCont" type="java.lang.String"/>
 																											<script>
 																										//		setParentContainerType("<%=contbuttonName%>");

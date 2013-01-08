@@ -499,10 +499,15 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 					this.closeJDBCSession(jdbcdao);
 				}
 			}
-			else
+			else if("Virtual".equals(specimenPosition.getStorageContainer().getName()))
 			{
 				// Storage Location is Virtual.
 				specimen.setSpecimenPosition( null );
+			}
+			else
+			{
+				throw this.getBizLogicException( null, "errors.specimen.storageContainerEditBox",
+						null );
 			}
 		}
 		catch (final ApplicationException exp)
@@ -526,6 +531,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		specimen.getSpecimenPosition().setStorageContainer( container );
 		specimen.getSpecimenPosition().setPositionDimensionOne( pos1 );
 		specimen.getSpecimenPosition().setPositionDimensionTwo( pos2 );
+		specimen.getSpecimenPosition().setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 1, pos1));
+		specimen.getSpecimenPosition().setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 2, pos2));
 	}
 
 	/**

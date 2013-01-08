@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -1164,20 +1165,20 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			str[1] = this.getFormattedValue(specimen.getSelectedContainerName());
 			str[2] = elementNamePrefix + "positionDimensionOne";
 			String collectionStatus=specimen.getCollectionStatus();			
-			/*if("Collected".equals(collectionStatus) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
+			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
 			{
 				str[3] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),1,Integer.valueOf(specimen.getPositionDimensionOne())));
 			}
-			else*/
+			else
 			{
 				str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
 			}
 			str[4] = elementNamePrefix + "positionDimensionTwo";
-			/*if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
+			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
 			{
 				str[5] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),2,Integer.valueOf(specimen.getPositionDimensionTwo())));
 			}
-			else*/
+			else
 			{
 				str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
 			}

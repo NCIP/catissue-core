@@ -209,7 +209,8 @@ public class Shipment extends BaseShipment
 							if (storageLocationSelection != null
 									&& storageLocationSelection.trim().equals("3"))
 							{
-								spPosContainer.setId(Long.parseLong(containerId));
+								//spPosContainer.setId(Long.parseLong(containerId));
+								spPosContainer.setName(containerId);
 							}
 						}
 						//Bug 14267
@@ -221,8 +222,8 @@ public class Shipment extends BaseShipment
 							spPosition.setPositionDimensionTwoString(pos2);
 							 if(storageLocationSelection.trim().equals("3"))
 							{
-								spPosition.setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(spPosContainer.getId().toString(), 1, pos1));
-								spPosition.setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(spPosContainer.getId().toString(), 2, pos2));
+								spPosition.setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(spPosContainer.getName(), 1, pos1));
+								spPosition.setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(spPosContainer.getName(), 2, pos2));
 							}
 						}
 						else // if 0 was not set then it will show positions from in transit container 
@@ -346,18 +347,20 @@ public class Shipment extends BaseShipment
 							if (position != null)
 							{
 								position.setParentContainer(container);
-								position.setPositionDimensionOne(Integer.parseInt(positionDim1));
-								position.setPositionDimensionTwo(Integer.parseInt(positionDim2));
+								position.setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(containerName, 1, positionDim1));
+								position.setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(containerName, 2, positionDim2));
+								position.setPositionDimensionOneString(positionDim1);
+								position.setPositionDimensionTwoString(positionDim2);
 							}
 							else
 							{
 								final ContainerPosition containerPosition = new ContainerPosition();
 								containerPosition.setOccupiedContainer(containerObject);
 								containerPosition.setParentContainer(container);
-								containerPosition.setPositionDimensionOne(Integer
-										.parseInt(positionDim1));
-								containerPosition.setPositionDimensionTwo(Integer
-										.parseInt(positionDim2));
+								containerPosition.setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(containerName, 1, positionDim1));
+								containerPosition.setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(containerName, 2, positionDim2));
+								containerPosition.setPositionDimensionOneString(positionDim1);
+								containerPosition.setPositionDimensionTwoString(positionDim2);
 								containerObject.setLocatedAtPosition(containerPosition);
 							}
 						}

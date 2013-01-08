@@ -9,7 +9,10 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Validator;
@@ -253,5 +256,38 @@ public final class SpecimenUtil
 			lineage="Dervied"+gs.getParentSpecimen().getId();
 		}
 		return lineage;
+	}
+	
+	public static String getSpecimenTypeBySpecimenId(Long specimenId, SessionDataBean sessionDataBean) throws ApplicationException
+	{
+		DAO dao=null;
+		try
+		{
+			dao=AppUtility.openDAOSession(sessionDataBean);
+			return getSpecimenTypeBySpecimenId(specimenId, dao);
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+	}
+	
+	private static String getSpecimenTypeBySpecimenId(Long specimenId,DAO dao) throws ApplicationException
+	{
+		String specimenType="";
+		if (specimenId != null)
+		{
+			final String sourceObjectName = Specimen.class.getName();
+			final String[] selectColumnName = {"specimenType"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(specimenId)));
+			dao=AppUtility.openDAOSession(null);
+			final List<String> list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			if (list.size() != 0)
+			{
+				specimenType = list.get(0);
+			}
+		}
+		return specimenType;
 	}
 }

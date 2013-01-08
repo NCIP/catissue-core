@@ -373,6 +373,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 											.getPositionDimensionOne() );
 									tempPosition.setPositionDimensionTwo( position
 											.getPositionDimensionTwo() );
+									tempPosition.setPositionDimensionOneString( position
+											.getPositionDimensionOne().toString() );
+									tempPosition.setPositionDimensionTwoString( position
+											.getPositionDimensionTwo().toString() );
 									tempPosition.setStorageContainer( position
 											.getStorageContainer() );
 									tempPosition.setSpecimen( position.getSpecimen() );
@@ -409,6 +413,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 								.getPositionDimensionOne() );
 						position.setPositionDimensionTwo( specimenPosition
 								.getPositionDimensionTwo() );
+						position.setPositionDimensionOneString( specimenPosition
+								.getPositionDimensionOne().toString() );
+						position.setPositionDimensionTwoString( specimenPosition
+								.getPositionDimensionTwo().toString() );
 						dao.update( specimen );
 					}
 				}

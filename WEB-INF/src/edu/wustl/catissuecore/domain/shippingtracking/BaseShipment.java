@@ -701,6 +701,8 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 		// of dimension (number of specimens,1)
 		position.setPositionDimensionOne(positionDimensionOne);
 		position.setPositionDimensionTwo(1);
+		position.setPositionDimensionOneString(String.valueOf(positionDimensionOne));
+		position.setPositionDimensionTwoString("1");
 		position.setStorageContainer(container);
 
 		return position;

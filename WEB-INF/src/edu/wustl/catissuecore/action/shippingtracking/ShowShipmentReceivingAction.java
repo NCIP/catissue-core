@@ -112,6 +112,17 @@ public class ShowShipmentReceivingAction extends SecureAction
 						{
 							spType = (String)shipmentBizLogic.retrieveAttribute(Specimen.class.getName(), Long.valueOf( specimenId ), "specimenType");
 						}
+						String selectedContainerName = map.get( "selectedContainerName_"+specimenId )!=null?map.get( "selectedContainerName_"+specimenId ).toString():"Virtual";
+						String pos_1 = map.get( "position1_"+specimenId )!=null?map.get( "position1_"+specimenId ).toString():"";
+						String pos_2 = map.get( "position2_"+specimenId )!=null?map.get( "position2_"+specimenId ).toString():"";
+						final String initailValuesKey1 = "Specimen:" + specimenId
+						+ "_initialValues";
+						String[] initialValues1 = new String[3];
+						initialValues1[0] = selectedContainerName;
+						initialValues1[1] = pos_1;
+						initialValues1[2] = pos_2;
+						map.put(initailValuesKey1, initialValues1);
+						
 						if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
 								&& requestFor != null && !requestFor.trim().equals("") )
 						{
