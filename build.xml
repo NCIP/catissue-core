@@ -36,7 +36,7 @@
 	<!-- csm related properties -->
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
-	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
+	<property name="mysql.dialect.h3.string" value="edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect"/>
 	<property name="client.dir" value="${base.dir}/caTissueSuite_Client" />
 	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
 	<property name="custom.impl.lib.dir" value="${base.dir}/custom_impl_lib" />
