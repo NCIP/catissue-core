@@ -239,7 +239,7 @@ function showTreeMessage() {
 	}
 } 
 //Ajax Function for Delete Folders of TreeGrid 
-function ajaxTagDeleteCall(tagId,msg) {
+function ajaxTagDeleteCall(tagId) {
  var childCount=popupmygrid.hasChildren(tagId);
 folderDeleteMsg = folderDeleteMsg.replace('{0}',1);
 folderDeleteMsg = folderDeleteMsg.replace(/\d+/g,childCount); 
@@ -323,7 +323,7 @@ else
 	 
 	xmlHttpobj.onreadystatechange =getJsonObj;
 	xmlHttpobj.send("&tagId=" +tagId +"&entityTag=" +entityTag);
- }
+}
  //function for Adding Child by LazyLoad
  var childCount;
  var arrObj;
@@ -354,6 +354,8 @@ popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img sr
 //Ajax function to get Count of Queries Inside the Folder 
 function ajaxDeleteCall(tagId) {
 	var url = "GetTreeGridChildAction.do";
+if(entityTag == "SpecimenListTag"){ajaxTagDeleteCall(tagId);}
+else{ 
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -368,7 +370,7 @@ else
 			"application/x-www-form-urlencoded");
 	xmlHttpobj.onreadystatechange =getJsonDeleteObj;
 	xmlHttpobj.send("&tagId=" +tagId+"&entityTag=" +entityTag);
- }
+ }}
  function pause(numberMillis) {
 	var now = new Date();
 	var exitTime = now.getTime() + numberMillis;
