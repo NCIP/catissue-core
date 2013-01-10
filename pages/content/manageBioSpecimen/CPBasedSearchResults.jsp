@@ -103,7 +103,7 @@ function hideCursor(){
 			</TD>
 			<td width="73%" valign="top" height="100%" id="contentTd">
 			<div id="SearchLeftPart2" style=" width:100%;height:100%; overflow:none;">
-				<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="none" frameborder="0" width="100%" height="100%">
+				<iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="CPDashboardAction.do?isSystemDashboard=true" scrolling="none" frameborder="0" width="100%" height="100%">
 				Your Browser doesn't support IFrames.
 			</iframe>
 			</div>

@@ -1,23 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
+	
+	<%@ page isELIgnored ="false" %> 
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-<%@ page import="edu.wustl.labelSQLApp.form.CPDashboardForm"%>
+<%@ page import="edu.wustl.common.labelSQLApp.form.CPDashboardForm"%>
+<%@ taglib uri="/WEB-INF/scheduler.tld" prefix="scheduler"%>
 
 
 <%@page import="java.util.*"%>
 <%@page import="java.util.HashMap"%>
 
 
+<head>
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<script src="jss/caTissueSuite.js"></script>
+<script src="jss/common.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<script src="jss/calendarComponent.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="css/advQuery/styleSheet.css" />
 <link rel="stylesheet" type="text/css"
 	href="css/advQuery/catissue_suite.css" />
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
+<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script  src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
+	</head>
+
 <script>
+var noReports = false;
 
  function getResults(key) 
    {
@@ -45,39 +61,29 @@
 
 
 <%
-
-Object formObj = request.getAttribute("cpDashboardForm");
 boolean isWhite = false;
-String displayStyle= "display:block";
-
-CPDashboardForm form = (CPDashboardForm)formObj;
-
-HashMap<String,Long> labelQueryListMap = form.getDisplayNameAndAssocMap();
-
-HttpSession newSession = request.getSession();
-
-if(labelQueryListMap != null)
-{
-	newSession.setAttribute("labelQueryResultList",labelQueryListMap);
-	
-}
-else
-{
-	newSession.setAttribute("labelQueryResultList",null);
-}
-if(labelQueryListMap.size() == 0)
-{
-	displayStyle = "display:none";
-}
-else
-{
-	displayStyle = "display:block";
-}
 
 %>
+<script>
+	var currentCsId=0;
+	var isSysDashboard = false;
+	function initSchedulerProp()
+	{
+		currentCsId="${param.cpSearchCpId}";
+		if(currentCsId==null || currentCsId=='null' ||  currentCsId=="undefined" || currentCsId==0)
+		{
+		currentCsId=0;
+		isSysDashboard=true;
+		}
+	}
+	
+	initSchedulerProp();
+</script>
+
 
 <body>
-
+<div id="a_tabbar" style="width:100% ;height: 100%;background-color: white;">
+	<div id="html_1" style="width:100% ;height: 100%;overflow: auto;background-color: white; padding: 5px;">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 	
 	<tr>
@@ -183,5 +189,134 @@ else
 	</table>
 
 </table>
+</div>
+
+<div id="html_2">
+		<div style="width: 100%; height: 100%">
+<html:form
+	action="/GenerateCPReports.do" name="hsReports"
+	type="edu.wustl.common.actionForm.ReportForm"
+	styleId="reportForm">
+	<table style="width:100%; padding: 5px">
+		<tr class="tr_bg_blue1">
+			<td><span class="blue_ar_b">Reports</span></td>
+		</tr>
+		<tr>
+			<td>
+				<c:if test="${empty reportNameList}" >
+							<div class="red_ar_b"><font style="color: black">No Reports configured</font></div>
+							
+				</c:if>
+			</td>
+		</tr>
+		<tr>
+		<td width="100%">
+			<table style="padding: 5px; width:100%;">
+				<tr>
+					<td class="black_new" style="padding-right: 50px">Name:</td>
+					<td>
+						<html:select property="reportName"
+								styleClass="formFieldSizedNew" styleId="reportName" size="1">
+								<html:options collection="reportNameList"
+									labelProperty="name" property="value" />
+						</html:select>
+					</td>
+				</tr>
+				<tr><td></td></tr>
+				<tr>
+					<td class="black_new">Duration:</td>
+					<td>
+						<html:text property="fromDate" styleId="fromDate1" styleClass="black_new" style="width: 100px"/>
+						
+					</td>
+					<td align="left" class="black_new" width="10%">
+							To:
+					</td>
+					<td width="65%">
+						<html:text property="toDate" styleId="toDate1" styleClass="black_new" style="width: 100px"/>
+						
+					</td>
+				</tr>
+				<tr><td></td></tr>				
+				<tr>
+					<td></td>
+					<td>
+						<input type="button" class="blue_ar_b" id="downloadBtn" value="Download" onClick="downloadReport();">
+						<c:if test="${empty reportNameList}" >
+							<script>
+							document.getElementById("downloadBtn").disabled=true;
+							</script>
+						</c:if>
+						
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</html:form>
+</div>
+	</div>
+	<div id="html_3">
+	<div style="width: 100%;height: 510px; overflow: auto">
+	
+ <scheduler:scheduler 
+	scheduleType="edu.wustl.common.scheduler.domain.ReportSchedule"
+ 	dropDownURL="CommonScheduleAction.do?type=populateSavedReportsDropDown"
+  	userDropDownURL="CommonScheduleAction.do?type=populateUsers"
+  	captionName="Report"
+  	/>
+		</div>
+	</div>
+	</div> 
+<script>
+var isSchedulerLoaded = false;
+var toDate;
+var fromDate;
+
+function initCalendarUI()
+{
+	toDate= doInitCalendar("toDate1");
+	fromDate= doInitCalendar("fromDate1");	
+	document.getElementById("toDate1").value="MM-DD-YYYY";
+	document.getElementById("fromDate1").value="MM-DD-YYYY";
+}
+
+function downloadReport()
+{
+	var dateMessage="MM-DD-YYYY";
+	if(document.getElementById("toDate1").value==dateMessage || document.getElementById("fromDate1").value==dateMessage)
+	{
+		document.getElementById("toDate1").value="";
+		document.getElementById("fromDate1").value="";
+	}
+	var demoForm=document.getElementById("reportForm");
+	demoForm.submit();
+}
+
+function loadUI()
+{
+	tabbar = new dhtmlXTabBar("a_tabbar", "top");
+	tabbar.setSkin('default');
+	tabbar.setImagePath("dhtmlx_suite/imgs/");
+	tabbar.setSkinColors("#FFFFFF", "#FFFFFF");
+	tabbar.addTab("a1", "Dashboard", "200px");
+	tabbar.addTab("a2", "Reports", "200px");
+	tabbar.addTab("a3", "Report Scheduler", "200px");
+	tabbar.setContent("a1", "html_1");
+	tabbar.setContent("a2", "html_2");
+	tabbar.setContent("a3", "html_3");
+	tabbar.setTabActive("a1");
+	tabbar.attachEvent("onSelect", function(id,last_id){
+        if(id=="a3" && isSchedulerLoaded==false)
+        	{
+	        	loadFormUI();
+	        	isSchedulerLoaded=true;
+        	}
+        return true;
+    });
+}
+loadUI();
+</script>
 
 </body>

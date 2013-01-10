@@ -4,6 +4,9 @@
 <%@ page
 	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.XMLPropertyHandler,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean"%>
 
+<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script  src="dhtmlx_suite/js/dhtmlxcommon_debug.js"></script>
+
 <style type="text/css">
 table#browserDetailsContainer {
 	font-family: arial, helvetica, verdana, sans-serif;
@@ -13,7 +16,38 @@ table#browserDetailsContainer {
 </style>
 <script language="JavaScript">
 
-	function forgotId()
+	//if session data empty do this
+        var pageOf="${param.pageOf}";
+        var file = "${param.file}";
+        var sessiond= "${sessionScope.sessionData}";
+        var url="Login.do";
+        var  downloadUrl= "";
+          
+     if(sessiond == null || sessiond=="")
+     {
+    	 if(pageOf!=null && pageOf!='null'  && pageOf == "pageOfDownload")
+        {
+    		 url += "?pageOf="+pageOf+"&file="+file;  		  		 
+    	}
+     
+     }
+        
+        
+     else
+    {
+        if(pageOf!=null && pageOf!='null'  && pageOf == "pageOfDownload")
+	{
+	  if(file==null || file== "null") 
+      {
+            file = '<%=request.getAttribute("file")%>'; 
+      }
+      downloadUrl="DownloadAction.do?file="+file;
+    }
+   }
+
+         
+
+        function forgotId()
 	{
 		var url= "https://connect.wustl.edu/login/wuforgotID.aspx";
 		window.open(url,'WustlLoginForm','height=630,width=800,scrollbars=1,resizable=1');
@@ -140,8 +174,12 @@ table#browserDetailsContainer {
 						<td colspan="3" align="left" class="showhide1"><%@ include
 							file="/pages/content/common/ActionErrors.jsp"%>
 						<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+								
+							
 							<html:form styleId="form1" styleClass="whitetable_bg"
 								action="/Login.do">
+                                                        <script>
+document.getElementById("form1").action = url;</script>
 								<table width="98%" border="0" cellpadding="4" cellspacing="0">
 									<tr>
 										<td class="black_ar"><bean:message key="app.UserID" /></td>
@@ -205,6 +243,37 @@ table#browserDetailsContainer {
 							name="<%=Constants.SESSION_DATA%>">
 							<tr>
 								<TD class="welcomeContent">
+								<!-- Rinku: report download -->
+								
+									<script>
+									if(downloadUrl!="")
+{
+                                                                       dhtmlxAjax.get(downloadUrl+"&message=true",downloadHandler);
+}
+									
+									function downloadHandler(loader)
+									{
+										var message =loader.xmlDoc.responseText;
+										if(message=="You are not authorized to download this file."|| message=="The file has already been deleted.")
+											{
+												alert(message);
+											}
+									}
+
+									
+									</script>
+									<iframe name="downloadframe" src="" style="display:none"></iframe> 
+                   <script>if(downloadUrl!="")
+{
+                 window.frames["downloadframe"].document.location.href = downloadUrl ;
+}</script>
+
+								
+								<!-- End of Report download -->
+								
+								
+								
+								
 								<%
 								    Object obj = request.getSession().getAttribute(
 														Constants.SESSION_DATA);
