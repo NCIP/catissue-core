@@ -4272,4 +4272,20 @@ public class AppUtility {
 		}
 		return str;
 	}
+	
+	public static List<NameValueBean> executeNVBHqlQuery(final String hql,List<ColumnValueBean> colvaluebeanlist)
+			throws ApplicationException {
+	DAO dao = null; 
+	try{	
+		final IDAOFactory daofactory = DAOConfigFactory.getInstance()
+				.getDAOFactory(Constants.APPLICATION_NAME);
+		dao = daofactory.getDAO();
+		dao.openSession(null);
+		final List<NameValueBean> list = dao.executeQuery(hql,colvaluebeanlist);
+		return list; 
+	 }finally{
+		dao.closeSession();
+	 }
+		
+	}
 }
