@@ -54,8 +54,8 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.query.generator.ColumnValueBean;
-import edu.wustl.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
-import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 
 
 // TODO: Auto-generated Javadoc
@@ -533,7 +533,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			//Retrieving associations from CPId
 			List<LabelSQLAssociation> labelSQLAssociations = new LabelSQLAssociationBizlogic()
-					.getLabelSQLAssocCollectionByCPId(cpId);
+					.getLabelSQLAssocCollection(cpId);
 
 			if (labelSQLAssociations.size() != 0)
 			{

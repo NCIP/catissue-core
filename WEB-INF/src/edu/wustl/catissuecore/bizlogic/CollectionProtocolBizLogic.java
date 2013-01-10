@@ -2022,4 +2022,23 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		return collectionProtocol;
 	}
+	
+	/** This method returns all the PI and cordinators of the study
+	 * @param cpId
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List<NameValueBean> getCPPIAndCordinators(Long cpId) throws ApplicationException
+	{
+		String sql = "select new edu.wustl.common.beans.NameValueBean(user.lastName||', '||user.firstName , user.id)" +
+		 " from edu.wustl.catissuecore.domain.CollectionProtocol cp, edu.wustl.catissuecore.domain.User user"+  
+		" where (user MEMBER OF cp.coordinatorCollection or user.id = cp.principalInvestigator.id) and cp.id = ?";
+
+		ColumnValueBean colValueBean = new ColumnValueBean(cpId);
+		List<ColumnValueBean> colvaluebeanlist = new ArrayList<ColumnValueBean>();
+		colvaluebeanlist.add(colValueBean);
+		final List<NameValueBean> ppincordinatorList =  AppUtility.executeNVBHqlQuery(sql, colvaluebeanlist);
+		 
+		return ppincordinatorList;
+	}
 }

@@ -91,9 +91,10 @@ public class LoginAction extends XSSSupportedAction
                 forwardTo = processUserLogin(form, request);
 
                 String pageOf = request.getParameter(Constants.PAGE_OF);
-                if (pageOf != null && pageOf.equals(CDMSIntegrationConstants.SCG))
+                if (pageOf != null && ( pageOf.equals(CDMSIntegrationConstants.SCG) || pageOf.equals("pageOfDownload")))
 				{
-					forwardTo=Constants.SCG;
+					request.setAttribute(Constants.PAGE_OF, pageOf);
+                	forwardTo=pageOf;
 				}
             }
             catch (final Exception ex)
@@ -490,4 +491,5 @@ public class LoginAction extends XSSSupportedAction
             saveMessages(request, msg);
         }
     }
+    
 }

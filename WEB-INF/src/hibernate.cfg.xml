@@ -8,8 +8,8 @@
     <session-factory>
 
     	<property name="show_sql">false</property>
-    	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-	      <property name="connection.datasource">java:/catissuecore</property>
+    	<property name="dialect">edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect</property>
+	    <property name="connection.datasource">java:/catissuecore</property>
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
@@ -132,17 +132,21 @@
 		<!-- caTissue-cider integration -->
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCiderMessage.hbm.xml"/>
 		
-		<!-- CP Dashboard-->
-		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL.hbm.xml" />
-		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQLAssociation.hbm.xml" />
-		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL_HQL.hbm.xml" />
-
-			<mapping resource="QueryTag.hbm.xml" />
+		<!-- CS Dashboard-->
+		<mapping resource="edu/wustl/common/labelSQLApp/hbm/LabelSQL.hbm.xml" />
+		<mapping resource="edu/wustl/common/labelSQLApp/hbm/LabelSQLAssociation.hbm.xml" />
+		<mapping resource="edu/wustl/common/labelSQLApp/hbm/LabelSQL_HQL.hbm.xml" />
+		
+		<mapping resource="QueryTag.hbm.xml" />
 		<mapping resource="QueryTagItem.hbm.xml" />
 		
 
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenListTagItem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenListTag.hbm.xml"/>
+		
+		<!-- Scheduler -->
+		<mapping resource="edu/wustl/common/scheduler/hbm/Schedule.hbm.xml" />
+		<mapping resource="edu/wustl/common/scheduler/hbm/GeneratedFileDetails.hbm.xml" />
 		
     </session-factory>
 

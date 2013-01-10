@@ -24,8 +24,8 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.labelSQLApp.bizlogic.LabelSQLBizlogic;
-import edu.wustl.labelSQLApp.domain.LabelSQL;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLBizlogic;
+import edu.wustl.common.labelSQLApp.domain.LabelSQL;
 
 /**
  * The Class ClinportalStudyFormAjaxSearchAction.
