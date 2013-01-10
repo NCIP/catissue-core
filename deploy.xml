@@ -25,11 +25,11 @@
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common" />
 	<property name="mssqlserver.sql.dir" value="${base.dir}/SQL/MsSqlServer" />
 	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect" />
-	<property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect" />
+	<property name="mysql.dialect.string" value="edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect" />
 	<property name="catissue.datasource" value="java:/catissuecore" />
 	<property name="dynamicextensions.datasource" value="java:/dynamicextensions" />
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
-	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
+	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySqlCustomDialect" />
 	<property name="mssqlserver.dialect.string" value="org.hibernate.dialect.SQLServerDialect" />
 
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
@@ -55,7 +55,7 @@
 	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
 	<property name="oracle.dao.datasource.prop.filename" value="OracleDataSourceDAOProperties.xml"/>
 	<property name="mysql.dao.datasource.prop.filename" value="MysqlDataSourceDAOProperties.xml"/>
-
+	
 	<var name="databaseurl" value="" />
 	<import file="DEDeploy.xml" />
 
@@ -734,7 +734,6 @@
 			<replacefilter token="@@empiDBUserPassword@@" value="${empi.database.password}" />
 			<replacefilter token="@@empiDBDriverName@@" value="${db2.driver.string}" />
 			<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
-			
 			<replacefilter token="@@WMQServerName@@" value="${wmq.server.name}" />
 			<replacefilter token="@@WMQMGRName@@" value="${wmq.mgr.name}" />
 			<replacefilter token="@@WMQChannel@@" value="${wmq.channel}" />
@@ -776,6 +775,20 @@
 				<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 				<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 				<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
+			
+			<!-- Scheduler config -->
+						<replacefilter token="@@threadPool@@" value="${scheduler.threadPool.size}" />
+						<replacefilter token="@@time.hrs@@" value="${scheduler.execution.time.hrs}" />
+						<replacefilter token="@@time.min@@" value="${scheduler.execution.time.min}" />
+						<replacefilter token="@@mail.alias@@" value="${host.mail.alias}" />
+						<replacefilter token="@@timeInterval@@" value="${scheduler.cleanUp.timeInterval.days}" />
+						<!-- End of scheduler config -->
+						<replacefilter token="@@database.type@@" value="${database.type}" />
+						<replacefilter token="@@database.host@@" value="${database.host}" />
+						<replacefilter token="@@database.port@@" value="${database.port}" />
+						<replacefilter token="@@database.name@@" value="${database.name}" />
+						<replacefilter token="@@database.userName@@" value="${database.username}" />
+						<replacefilter token="@@database.password@@" value="${database.password}" />
 
 		</replace>
 		<!-- Add values to properties if EMPI feature is enabled-->
@@ -909,17 +922,22 @@
 	<target name="upgrade_db_to_plus_v20">
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v20.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
-		</target>
+	</target>
+	<target name="upgrade_db_to_plus_v30">
+				<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v30.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
 		<antcall target="upgrade_db_to_plus_v10"/>
 		<antcall target="upgrade_db_to_plus_v20"/>
+		<antcall target="upgrade_db_to_plus_v30"/>
 	</target>
 	
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
 			<echo message="Upgrading DB using Liquibase Targets"/>
 			<antcall target="upgrade_db_to_plus_v20"/>
-		</target>
+	</target>
 	<target name="upgrade_liquibase_to_plus_v1plus">
 				<echo message="Upgrading DataBase with URL ${final.database.url}username=${database.username}password=${database.password}" />	
 				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/queryfolder_script.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
@@ -1297,7 +1315,7 @@
 				<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 			</tstamp>
 			<echo>before cacore: ${before_cacore}</echo>
-			<antcall target="generate.cacore.for.xmi" />
+		 	<antcall target="generate.cacore.for.xmi" />
 			<tstamp>
 				<format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 			</tstamp>
@@ -1676,6 +1694,7 @@
 			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
 			<replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
 			<replacefilter token="@@catissue-cdms-integration-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCdmsIntegration.properties" />
+			<replacefilter token="@@custom-report-dir@@" value="${jboss.home.dir}/server/default/custom-reports" />
 		</replace>
 
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
@@ -5190,4 +5209,90 @@ Thanking You,
 				
 		<!--delete dir="${temp.dir}" /-->
 	</target>
+	
+	<!--Ashraf: CS dashboard configuration script-->
+			
+			                      
+			                       
+				<property name="filename" value=" " />
+				<target name="configureDashboardItem">
+				<antcall target="prepare_temp_folder_for_class_execution" /> 
+					<java classname="edu.wustl.common.labelSQLApp.util.InsertCSDashboardItem"  fork="true" classpath="${temp.dir}/catissuecore/WEB-INF/classes" maxmemory="1024m">
+					<arg value="${filename}" />
+						<classpath>
+							<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+								<include name="**/*.jar" />
+							</fileset>
+							<fileset dir="${lib.dir}">
+								<include name="**/*.jar" />
+							</fileset>
+						</classpath>
+					</java>
+				</target>
+	
+	<target name="prepare_temp_folder_for_class_execution">
+			<delete quiet="true" includeemptydirs="true">
+				<fileset dir="${temp.dir}/catissuecore">
+					<include name="**/*" />
+				</fileset>
+			</delete>
+
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+			<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+
+						<antcall target="copy_de_hibernateconfig_for_class_execution" />
+
+			<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
+			<echo message="Concatenating the Application Resource Properties file" />
+			<concat destfile="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" append="true">
+				<fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
+			</concat>
+			<copy file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${temp.dir}/clinportal/WEB-INF/classes" overwrite="true" />
+
+			<if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+					</replace>
+				</then>
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+							<include name="*.cfg.xml" />
+							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+						</replace>
+					</then>
+				</elseif>
+			</if>
+			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+				<include name="*.cfg.xml" />
+				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+			</replace>
+
+			<delete dir="${tempcacore.dir}" />
+			<mkdir dir="${tempcacore.dir}" />
+
+		</target>
+	    
+	
+	<target name="copy_de_hibernateconfig_for_class_execution">
+			<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+			<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+			<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadtaa.xml" overwrite="true" />
+
+			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+				<include name="DynamicExtensionsHibernate.cfg.xml" />
+				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+			</replace>
+	</target>
+		
 </project>
