@@ -118,16 +118,28 @@ function showPopup() {
 }
 
 //function called for AllQueries,SharedQueries,MyQueries
-function submitTheForm(theNewAction,btn) {
-	var theForm = parent.document.forms['saveQueryForm']
-	theForm.action = theNewAction;
-	theForm.submit();
+function submitTheForm(url,btn) {
+  	ajaxQueryGridInitCall(url);
+    	if (btn == "myQueries")
+	{
+		document.getElementById('myQueries').className='activebtn';
+		document.getElementById('allQueries').className='btn1';
+		document.getElementById('sharedQueries').className='btn1';
+	}
+	else if (btn == "allQueries")
+	{
+		document.getElementById('myQueries').className='btn1';
+		document.getElementById('allQueries').className='activebtn';
+		document.getElementById('sharedQueries').className='btn1';
+	}
+	else
+	{
+		document.getElementById('myQueries').className='btn1';
+		document.getElementById('allQueries').className='btn1';
+		document.getElementById('sharedQueries').className='activebtn';
+	}	
 }
-//Function called on click of folder in Grid of "left" div  
-function submitTagName(tagId) {
-	document.forms['saveQueryForm'].action = "TagClickAction.do?tagId=" + tagId;
-	document.forms['saveQueryForm'].submit();
-}
+ 
 //Ajax Function for Assign Query to folder (Assign Button on Pop up) 
 function ajaxAssignTagFunctionCall(url,msg,msg1) 
 {
