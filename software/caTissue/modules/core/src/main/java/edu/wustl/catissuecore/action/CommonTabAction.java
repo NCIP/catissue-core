@@ -20,7 +20,7 @@ import edu.wustl.common.action.XSSSupportedAction;
  * @author nitesh_marwaha
  *
  */
-public class CommonTabAction extends XSSSupportedAction
+public class CommonTabAction extends CatissueBaseAction
 {
 
 	/**
@@ -38,7 +38,7 @@ public class CommonTabAction extends XSSSupportedAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{

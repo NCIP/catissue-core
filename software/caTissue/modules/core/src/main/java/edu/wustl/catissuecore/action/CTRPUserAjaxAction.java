@@ -32,13 +32,14 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.coppa.po.Person;
+import edu.wustl.catissuecore.action.CatissueBaseAction;
 
-public class CTRPUserAjaxAction extends SecureAction {
+public class CTRPUserAjaxAction extends CatissueBaseAction {
 	private transient final Logger logger = Logger
 			.getCommonLogger(CTRPUserAjaxAction.class);
 
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping,
+	protected ActionForward executeCatissueAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -251,7 +252,7 @@ public class CTRPUserAjaxAction extends SecureAction {
 		mainJsonObject.put("row", jsonUserRecords);
 		return mainJsonObject;
 	}
-	
+
 	public ActionForward checkForXSSViolation(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception, IOException {
@@ -262,8 +263,8 @@ public class CTRPUserAjaxAction extends SecureAction {
 		} finally {
 			request.getSession().setAttribute(Constants.FORM_BEAN_STACK,
 					formBeanStack);
-		} 
+		}
 	}
-	
-	
+
+
 }

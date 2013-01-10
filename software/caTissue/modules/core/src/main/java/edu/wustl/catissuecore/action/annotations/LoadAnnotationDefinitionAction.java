@@ -43,6 +43,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.PathObject;
@@ -72,7 +73,7 @@ import edu.wustl.dao.exception.DAOException;
 /**
  * This class is responsible for loading the annotation information
  */
-public class LoadAnnotationDefinitionAction extends SecureAction
+public class LoadAnnotationDefinitionAction extends CatissueBaseAction
 {
 
 	private static final Logger LOGGER = Logger
@@ -86,8 +87,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @return ActionForward
 	 * @throws Exception - Exception
 	 */
-	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, final ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, final ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 
