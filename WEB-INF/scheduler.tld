@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib>
+<tlibversion>1.0</tlibversion>
+<jspversion>1.1</jspversion>
+<shortname>Scheduler</shortname>
+<info>UI for Scheduler</info>
+<uri></uri>
+<tag>
+    <name>scheduler</name>
+    <tagclass>edu.wustl.common.scheduler.tag.SchedulerTag</tagclass>
+    <info>Scheduler</info>
+    <attribute>
+      <name>scheduleType</name>
+      <required>true</required>
+  </attribute>
+    <attribute>
+      <name>dropDownURL</name>
+      <required>true</required>
+  </attribute>
+    <attribute>
+      <name>userDropDownURL</name>
+      <required>true</required>
+  </attribute>
+  <attribute>
+      <name>captionName</name>
+      <required>true</required>
+  </attribute>
+</tag>
+</taglib>
