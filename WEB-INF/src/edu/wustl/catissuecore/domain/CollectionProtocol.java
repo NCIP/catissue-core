@@ -30,7 +30,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.KeyComparator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
+import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 
 /**
  * A set of written procedures that describe how a biospecimen is prospectively
