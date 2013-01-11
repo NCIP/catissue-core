@@ -67,9 +67,9 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
-import edu.wustl.labelSQLApp.domain.LabelSQL;
-import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.common.labelSQLApp.domain.LabelSQL;
+import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1030,7 +1030,7 @@ public class CollectionProtocolUtil
 		else
 		{
 			collectionProtocol.setLabelSQLAssociationCollection(new LinkedHashSet(
-					new LabelSQLAssociationBizlogic().getLabelSQLAssocCollectionByCPId(cpBean
+					new LabelSQLAssociationBizlogic().getLabelSQLAssocCollection(cpBean
 							.getIdentifier())));
 		}
 		return collectionProtocol;
