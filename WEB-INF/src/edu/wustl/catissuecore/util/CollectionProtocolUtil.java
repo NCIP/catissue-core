@@ -1567,6 +1567,82 @@ public class CollectionProtocolUtil
 		return collectionProtocolId;
 	}
 
+	
+	public static String getCPIdFromSpecimenLabel(String specimenLabel, SessionDataBean sessionDataBean) throws ApplicationException
+	{
+		DAO dao=null;
+		String collectionProtocolId = "";
+		try
+		{
+			dao=AppUtility.openDAOSession(sessionDataBean);
+
+			if (specimenLabel != null && !"".equals(specimenLabel.trim()))
+			{
+				final Specimen specimen = new Specimen();
+				specimen.setLabel(specimenLabel);
+				try
+				{
+					final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+							.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+					collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
+					if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
+					{
+						collectionProtocolId = collectionProtocolId.split("_")[1];
+					}
+				}
+				catch (final ApplicationException appEx)
+				{
+					collectionProtocolId = "";
+					throw new BizLogicException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
+				}
+			}
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		return collectionProtocolId;
+	}
+	
+	public static String getCPIdFromSpecimenBarcode(String specimenBarcode, SessionDataBean sessionDataBean) throws ApplicationException
+	{
+		DAO dao=null;
+		String collectionProtocolId = "";
+		try
+		{
+			dao=AppUtility.openDAOSession(sessionDataBean);
+
+			if (specimenBarcode != null && !"".equals(specimenBarcode.trim()))
+			{
+				final Specimen specimen = new Specimen();
+				specimen.setBarcode(specimenBarcode);
+				try
+				{
+					final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+							.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+					collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
+					if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
+					{
+						collectionProtocolId = collectionProtocolId.split("_")[1];
+					}
+				}
+				catch (final ApplicationException appEx)
+				{
+					collectionProtocolId = "";
+					throw new BizLogicException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
+				}
+			}
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		return collectionProtocolId;
+	}
+
+
 	/**
 	 * Converts the JSON string to for dashboard items to LableSQLAssociationCollection object
 	 * @param dashboardLabelJsonValue

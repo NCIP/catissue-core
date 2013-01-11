@@ -100,8 +100,10 @@ function showPopUp()
 	{
 		var className=document.getElementById("className").value;
 		var sptype=document.getElementById("type").value;
+		var parentSpecimenLabel=document.getElementById("parentSpecimenLabel").value;
+		var parentSpecimenBarcode=document.getElementById("parentSpecimenBarcode").value;
 		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
-						+ "&holdSpecimenClass="+className+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
+						+ "&holdSpecimenClass="+className+"&parentSpecimenLabel="+parentSpecimenLabel+"&parentSpecimenBarcode="+parentSpecimenBarcode+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
 		mapButtonClickedOnNewSpecimen(frameUrl,'newSpecimenPage');
 	}
 }
@@ -126,8 +128,10 @@ function onContainerListReady()
 	{
 		var className=document.getElementById("className").value;
 		var sptype=document.getElementById("type").value;
+		var parentSpecimenLabel=document.getElementById("parentSpecimenLabel").value;
+		var parentSpecimenBarcode=document.getElementById("parentSpecimenBarcode").value;
 		var collectionProtocolId="<%=collectionProtocolId%>";
-		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
+		var url="CatissueCommonAjaxAction.do?type=getStorageContainerListForDerivative&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&parentSpecimenLabel="+parentSpecimenLabel+"&parentSpecimenBarcode="+parentSpecimenBarcode+"&stContSelection="+"<%=form.getStContSelection()%>";
 		return url;
 	}
 function doOnLoad()

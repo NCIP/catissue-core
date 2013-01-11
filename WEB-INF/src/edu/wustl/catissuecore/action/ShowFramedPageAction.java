@@ -85,6 +85,8 @@ public class ShowFramedPageAction extends XSSSupportedAction
 		session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE);
 		session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 		session.removeAttribute(Constants.SPECIMEN_ID);
+		session.removeAttribute(Constants.PARENT_SPECIMEN_LABEL_KEY);
+		session.removeAttribute("parentSpecimenBarcode");
 
 		if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
 				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
@@ -97,6 +99,8 @@ public class ShowFramedPageAction extends XSSSupportedAction
 					.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 			final String specimenClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
 			final String specimenId = request.getParameter(Constants.SPECIMEN_ID);
+			final String parentSpecimenBarcode = request.getParameter("parentSpecimenBarcode");
+			final String parentSpecimenLabel = request.getParameter(Constants.PARENT_SPECIMEN_LABEL_KEY);
 			final String specimenType = request.getParameter(Constants.CAN_HOLD_SPECIMEN_TYPE);
 			final String specimenarrayType = request
 					.getParameter(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
@@ -107,6 +111,8 @@ public class ShowFramedPageAction extends XSSSupportedAction
 			session.setAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE, specimenType);
 			session.setAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE, specimenarrayType);
 			session.setAttribute(Constants.SPECIMEN_ID,specimenId);
+			session.setAttribute(Constants.PARENT_SPECIMEN_LABEL_KEY,parentSpecimenLabel);
+			session.setAttribute("parentSpecimenBarcode",parentSpecimenBarcode);
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 		{

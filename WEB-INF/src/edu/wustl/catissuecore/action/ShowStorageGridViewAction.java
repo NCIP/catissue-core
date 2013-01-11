@@ -651,72 +651,94 @@ public class ShowStorageGridViewAction extends BaseAction
 		// checking for container type.
 		final String holdContainerType = (String) session
 				.getAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
+		final String holdCollectionProtocol = (String) session
+				.getAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
+		final String specimenId = (String) session
+				.getAttribute(Constants.SPECIMEN_ID);
+		final String parentSpecimenLabel = (String) session
+				.getAttribute(Constants.PARENT_SPECIMEN_LABEL_KEY);
+		final String parentSpecimenBarcode = (String) session
+				.getAttribute("parentSpecimenBarcode");
 		if (enablePage && holdContainerType != null && !holdContainerType.equals(""))
 		{
 			final int typeId = Integer.parseInt(holdContainerType);
 			StorageTypeBizLogic stBiz = new StorageTypeBizLogic();
 			enablePage = stBiz.canHoldContainerType(typeId, storageContainer);
 		}
-		CollectionProtocolBizLogic cpBiz = new CollectionProtocolBizLogic();
-		final String holdCollectionProtocol = (String) session
-				.getAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
-		final String specimenId = (String) session
-				.getAttribute(Constants.SPECIMEN_ID);
-		if (enablePage)
+		else if(enablePage 
+				&& (specimenId!=null || parentSpecimenLabel!=null || holdCollectionProtocol!=null || parentSpecimenBarcode!=null))
 		{
-			if (holdCollectionProtocol != null && !holdCollectionProtocol.equals(""))
+			CollectionProtocolBizLogic cpBiz = new CollectionProtocolBizLogic();
+			if (enablePage)
 			{
-				final int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
-				enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,
-						storageContainer);
-			}
-			else
-			{
-				if(specimenId==null ||"".equals(specimenId))
+				if (holdCollectionProtocol != null && !holdCollectionProtocol.equals(""))
 				{
-					enablePage = false;
+					final int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
+					enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,
+							storageContainer);
 				}
 				else
 				{
-					final int collectionProtocolId = Integer.parseInt(CollectionProtocolUtil.getCPIdFromSpecimen(specimenId, sessionData));
-					enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,storageContainer);
+					if((specimenId==null ||"".equals(specimenId))
+							&& (parentSpecimenLabel==null ||"".equals(parentSpecimenLabel))
+							&& (parentSpecimenBarcode==null ||"".equals(parentSpecimenBarcode)))
+					{
+						enablePage = false;
+					}
+					else
+					{
+						Integer collectionProtocolId=null;
+						if(specimenId!=null && !"".equals(specimenId))
+						{
+							collectionProtocolId = Integer.parseInt(CollectionProtocolUtil.getCPIdFromSpecimen(specimenId, sessionData));
+						}
+						else if(parentSpecimenLabel!=null && !"".equals(parentSpecimenLabel))
+						{
+							collectionProtocolId = Integer.parseInt(CollectionProtocolUtil.getCPIdFromSpecimenLabel(parentSpecimenLabel, sessionData));
+						}
+						else if(parentSpecimenBarcode!=null && !"".equals(parentSpecimenBarcode))
+						{
+							collectionProtocolId = Integer.parseInt(CollectionProtocolUtil.getCPIdFromSpecimenBarcode(parentSpecimenBarcode, sessionData));
+						}
+							enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,storageContainer);
+					}
 				}
 			}
-		}
-
-		NewSpecimenBizLogic nspBiz = new NewSpecimenBizLogic();
-		final String holdspecimenClass = (String) session
-				.getAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
-		if (enablePage && holdspecimenClass != null)
-		{
-			if (!holdspecimenClass.equals(""))
+	
+			NewSpecimenBizLogic nspBiz = new NewSpecimenBizLogic();
+			final String holdspecimenClass = (String) session
+					.getAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
+			if (enablePage && holdspecimenClass != null)
 			{
-				enablePage = nspBiz.canHoldSpecimenClass(holdspecimenClass, storageContainer);
-			}
-			else
-			{
-				enablePage = false;
-			}
-		}
-
-		String holdspType = (String) session
-				.getAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE);
-		if (enablePage)
-		{
-			if (holdspType != null && !holdspType.equals(""))
-			{
-				enablePage = nspBiz.canHoldSpecimenType(holdspType, storageContainer);
-			}
-			else
-			{
-				if(specimenId==null ||"".equals(specimenId))
+				if (!holdspecimenClass.equals(""))
 				{
-					enablePage = false;
+					enablePage = nspBiz.canHoldSpecimenClass(holdspecimenClass, storageContainer);
 				}
 				else
 				{
-					holdspType  = SpecimenUtil.getSpecimenTypeBySpecimenId(Long.valueOf(specimenId), sessionData);
+					enablePage = false;
+				}
+			}
+	
+			String holdspType = (String) session
+					.getAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE);
+			if (enablePage)
+			{
+				if (holdspType != null && !holdspType.equals(""))
+				{
 					enablePage = nspBiz.canHoldSpecimenType(holdspType, storageContainer);
+				}
+				else
+				{
+					if(specimenId==null ||"".equals(specimenId))
+					{
+						enablePage = false;
+					}
+					else
+					{
+						holdspType  = SpecimenUtil.getSpecimenTypeBySpecimenId(Long.valueOf(specimenId), sessionData);
+						enablePage = nspBiz.canHoldSpecimenType(holdspType, storageContainer);
+					}
 				}
 			}
 		}
