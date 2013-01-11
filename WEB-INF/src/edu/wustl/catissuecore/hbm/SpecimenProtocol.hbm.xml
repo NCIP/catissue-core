@@ -448,7 +448,7 @@
               />
 
               <one-to-many
-                  class="edu.wustl.labelSQLApp.domain.LabelSQLAssociation"
+                  class="edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation"
               />
         </set>
 		
