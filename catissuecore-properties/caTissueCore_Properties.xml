@@ -783,5 +783,85 @@
 		<name>logout.mapping</name>
 		<value>/catissuecore/Logout.do</value>
 	</property>
+	
+	<property><!-- The class which retrieves host data  -->
+		<name>host.user.retrieval.implName</name>
+		<value>edu.wustl.catissuecore.scheduleImpls.HostAppUserDataRetrieverImpl</value>
+	</property>
+	<property>
+		<name>scheduler.mail.subject</name>
+		<value>Clinportal Report Scheduler:</value>
+	</property>
+	<property>
+		<name>scheduler.mail.header</name>
+		<value>The following report(s) are ready for download:</value>
+	</property>
+	<property>
+		<name>scheduler.mail.end</name>
+	<value>
+Please note that the report(s) will be available for download until ? after which it/they will be deleted from the server.
+Thank You,
+ClinPortal</value>
+	</property>
+	<property>
+		<name>host.mail.alias</name>
+		<value>@@mail.alias@@</value>
+	</property>
+	<property>
+		<name>scheduler.cleanUp.timeInterval.days</name>
+		<value>@@timeInterval@@</value>
+	</property>
+	
+	 <property>
+		<name>rprParticipantForm</name>
+		<value>@@rprParticipantForm@@</value>
+	</property>
+	
+	<!-- 
+		Scheduler properties
+	 -->
+	<property><!-- The types of schedules currently in the system  -->
+		<name>schedule.types</name>
+		<value>edu.wustl.common.scheduler.domain.ReportSchedule</value>
+	</property>
+	<property>
+		<name>scheduler.threadPool.size</name>
+		<value>@@threadPool@@</value>
+	</property>
+	<property>
+		<name>scheduler.execution.time.hrs</name>
+		<value>@@time.hrs@@</value>
+	</property>
+	<property>
+		<name>scheduler.execution.time.min</name>
+		<value>@@time.min@@</value>
+	</property>
+	
+	 <!-- End of Scheduler properties  -->
+	 
+	 <property>
+		<name>database.type</name>
+		<value>@@database.type@@</value>
+	</property>
+	<property>
+		<name>database.host</name>
+		<value>@@database.host@@</value>
+	</property>
+	<property>
+		<name>database.port</name>
+		<value>@@database.port@@</value>
+	</property>
+	<property>
+		<name>database.name</name>
+		<value>@@database.name@@</value>
+	</property>
+	 <property>
+		<name>database.userName</name>
+		<value>@@database.userName@@</value>
+	</property>
+	<property>
+		<name>database.password</name>
+		<value>@@database.password@@</value>
+	</property>
 
 </properties>
