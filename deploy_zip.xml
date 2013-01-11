@@ -1649,6 +1649,7 @@
 			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
 			<replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
 			<replacefilter token="@@catissue-cdms-integration-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCdmsIntegration.properties" />
+			<replacefilter token="@@custom-report-dir@@" value="${jboss.home.dir}/server/default/custom-reports" />
 		</replace>
 
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
