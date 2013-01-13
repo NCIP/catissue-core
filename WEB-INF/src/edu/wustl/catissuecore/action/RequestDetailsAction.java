@@ -388,6 +388,12 @@ public class RequestDetailsAction extends BaseAction
 	private void getRequestDetailsList(OrderDetails orderDetails, RequestDetailsForm requestDetailsForm,
 			HttpServletRequest request, JSONArray jsonDataRow) throws Exception
 			{
+		String selectedTab=(String) request.getAttribute("selectedTab");
+		Boolean getChildSpecimens=Boolean.FALSE;
+		if("AdvancedViewTab".equals(selectedTab))
+		{
+			getChildSpecimens=Boolean.TRUE;
+		}
 		// 	fetching the order object corresponding to obtained id.
 
 		final long startTime = System.currentTimeMillis();
@@ -504,7 +510,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else
 			{
-				this.populateRequestForMap(requestDetailsForm, orderDetails,jsonDataRow,dao);
+				this.populateRequestForMap(requestDetailsForm, orderDetails,jsonDataRow,dao,getChildSpecimens);
 			}
 
 		}
@@ -555,7 +561,7 @@ public class RequestDetailsAction extends BaseAction
 	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void populateRequestForMap(RequestDetailsForm requestDetailsForm,
-			OrderDetails orderDetails, JSONArray jsonDataRow, DAO dao) throws DAOException, BizLogicException
+			OrderDetails orderDetails, JSONArray jsonDataRow, DAO dao, Boolean getChildSpecimens) throws DAOException, BizLogicException
 			{
 		final Map valuesMap = requestDetailsForm.getValues();
 		final Set keySet = valuesMap.keySet();
@@ -589,7 +595,7 @@ public class RequestDetailsAction extends BaseAction
 					final DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
 
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
-							.getParentSpecimen());
+							.getParentSpecimen(),getChildSpecimens);
 					final SpecimenComparator comparator = new SpecimenComparator();
 					Collections.sort(allSpecimen, comparator);
 					allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,
@@ -618,7 +624,7 @@ public class RequestDetailsAction extends BaseAction
 					SpecimenOrderBean specimenOrderBean = null;
 						specimenOrderBean = specOrderMap.get(existingSpecimenOrderItem.getId());
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem
-							.getSpecimen());
+							.getSpecimen(),getChildSpecimens);
 					final SpecimenComparator comparator = new SpecimenComparator();
 					Collections.sort(allSpecimen, comparator);
 					allSpecimensToDisplay = specimenOrderBean.getChildSpecimens();
@@ -730,6 +736,12 @@ public class RequestDetailsAction extends BaseAction
 	private List populateRequestDetailsListForSpecimenOrderItems(OrderItem orderItem,
 			HttpServletRequest request, List requestDetailsList, Map definedArrayMap, int requestDetailsBeanCounter, RequestDetailsForm requestDetailsForm, JSONArray jsonDataRow, Map<Long, SpecimenOrderBean> specOrderMap) throws ApplicationException
 			{
+		String selectedTab=(String) request.getAttribute("selectedTab");
+		Boolean getChildSpecimens=Boolean.FALSE;
+		if("AdvancedViewTab".equals(selectedTab))
+		{
+			getChildSpecimens=Boolean.TRUE;
+		}
 		// The row number to update available quantity on selecting the required
 		// specimen from 'request for' drop down.
 		int finalSpecimenListId = 0;
@@ -828,7 +840,7 @@ public class RequestDetailsAction extends BaseAction
 						actualSpecimenClass, actualSpecimenType, assignStatus,
 						consentVerificationkey, canDistributeKey, rowStatuskey,
 						selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
-						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean,jsonDataRow,requestDetailsBeanCounter);
+						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean,jsonDataRow,requestDetailsBeanCounter,getChildSpecimens);
 				finalSpecimenListId++;
 			}
 			else if (orderItem instanceof DerivedSpecimenOrderItem)
@@ -844,7 +856,7 @@ public class RequestDetailsAction extends BaseAction
 						actualSpecimenClass, actualSpecimenType, assignStatus,
 						consentVerificationkey, canDistributeKey, rowStatuskey,
 						selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
-						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean,jsonDataRow,requestDetailsBeanCounter);
+						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean,jsonDataRow,requestDetailsBeanCounter,getChildSpecimens);
 				finalSpecimenListId++;
 			}
 			else if (orderItem instanceof PathologicalCaseOrderItem)
@@ -886,7 +898,7 @@ public class RequestDetailsAction extends BaseAction
 			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass,
 			String actualSpecimenType, String assignStatus, String consentVerificationkey,
 			String canDistributeKey, String rowStatuskey, String selectedSpecimenTypeKey,
-			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, RequestDetailsForm requestDetailsForm, SpecimenOrderBean specimenOrderBean, JSONArray jsonDataRow, int finalSpecimenListId)
+			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, RequestDetailsForm requestDetailsForm, SpecimenOrderBean specimenOrderBean, JSONArray jsonDataRow, int finalSpecimenListId,Boolean getChildSpecimens)
 			throws BizLogicException
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
@@ -991,7 +1003,7 @@ public class RequestDetailsAction extends BaseAction
 			else
 			{
 				allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
-						.getParentSpecimen());
+						.getParentSpecimen(),getChildSpecimens);
 			}
 
 			final SpecimenComparator comparator = new SpecimenComparator();

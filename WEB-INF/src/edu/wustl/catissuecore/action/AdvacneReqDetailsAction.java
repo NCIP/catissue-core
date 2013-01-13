@@ -328,6 +328,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 	private void getRequestDetailsList(String id, RequestDetailsForm requestDetailsForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		Boolean getChildSpecimens=Boolean.TRUE;
 		// fetching the order object corresponding to obtained id.
 
 		final long startTime = System.currentTimeMillis();
@@ -439,7 +440,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 			}
 			else
 			{
-				this.populateRequestForMap(requestDetailsForm, orderDetails);
+				this.populateRequestForMap(requestDetailsForm, orderDetails,getChildSpecimens);
 			}
 
 		}
@@ -494,8 +495,9 @@ public class AdvacneReqDetailsAction extends BaseAction
 	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void populateRequestForMap(RequestDetailsForm requestDetailsForm,
-			OrderDetails orderDetails) throws DAOException, BizLogicException
+			OrderDetails orderDetails,Boolean getChildSpecimens) throws DAOException, BizLogicException
 	{
+		
 		final Map valuesMap = requestDetailsForm.getValues();
 		final Set keySet = valuesMap.keySet();
 		final Iterator iter = keySet.iterator();
@@ -535,7 +537,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 					 */
 
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
-							.getParentSpecimen());
+							.getParentSpecimen(),getChildSpecimens);
 					final SpecimenComparator comparator = new SpecimenComparator();
 					Collections.sort(allSpecimen, comparator);
 					allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,
@@ -558,7 +560,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 					List allSpecimen = new ArrayList();
 					final ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem
-							.getSpecimen());
+							.getSpecimen(),getChildSpecimens);
 					final SpecimenComparator comparator = new SpecimenComparator();
 					Collections.sort(allSpecimen, comparator);
 					allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,

@@ -245,24 +245,27 @@ public final class OrderingSystemUtil
 	 * @return all Specimen List
 	 * @throws BizLogicException BizLogic Exception
 	 */
-	public static List getAllSpecimen(Specimen specimen) throws BizLogicException
+	public static List getAllSpecimen(Specimen specimen,Boolean getChildSpecimens) throws BizLogicException
 	{
 		final List allSpecimenList = new ArrayList();
 		Set childSpecimens = new HashSet();
 		allSpecimenList.add(specimen);
-		childSpecimens = (Set) new DefaultBizLogic().retrieveAttribute(AbstractSpecimen.class,
-				specimen.getId(), "elements(childSpecimenCollection)");
-		final Iterator childSpec = childSpecimens.iterator();
-		while (childSpec.hasNext())
+		if(getChildSpecimens)
 		{
-			final List subChildNodesList = getAllSpecimen((Specimen) childSpec.next());
-			for (int i = 0; i < subChildNodesList.size(); i++)
+			childSpecimens = (Set) new DefaultBizLogic().retrieveAttribute(AbstractSpecimen.class,
+					specimen.getId(), "elements(childSpecimenCollection)");
+			final Iterator childSpec = childSpecimens.iterator();
+			while (childSpec.hasNext())
 			{
-				//Order only collected specimens.
-				Specimen specimenInner = (Specimen)subChildNodesList.get(i);
-				if(!Status.ACTIVITY_STATUS_PENDING.toString().equals(specimenInner.getCollectionStatus()))
+				final List subChildNodesList = getAllSpecimen((Specimen) childSpec.next(), getChildSpecimens);
+				for (int i = 0; i < subChildNodesList.size(); i++)
 				{
-					allSpecimenList.add(subChildNodesList.get(i));
+					//Order only collected specimens.
+					Specimen specimenInner = (Specimen)subChildNodesList.get(i);
+					if(!Status.ACTIVITY_STATUS_PENDING.toString().equals(specimenInner.getCollectionStatus()))
+					{
+						allSpecimenList.add(subChildNodesList.get(i));
+					}
 				}
 			}
 		}
@@ -413,7 +416,7 @@ public final class OrderingSystemUtil
 							pathologicalCaseOrderItem.getSpecimenType()))
 			{
 				totalSpecimenColl.add(specimen);
-				final List childSpecimenCollection = OrderingSystemUtil.getAllSpecimen(specimen);
+				final List childSpecimenCollection = OrderingSystemUtil.getAllSpecimen(specimen,Boolean.FALSE);
 				if (childSpecimenCollection != null)
 				{
 					final Iterator childSpecimenCollectionIterator = childSpecimenCollection

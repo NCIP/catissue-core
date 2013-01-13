@@ -302,6 +302,12 @@ public class RequestDetailsForm extends AbstractActionForm
 	public void setAllValuesForOrder(AbstractDomainObject abstractDomain,
 			HttpServletRequest request) throws BizLogicException
 	{
+		String selectedTab=(String) request.getAttribute("selectedTab");
+		Boolean getChildSpecimens=Boolean.FALSE;
+		if("AdvancedViewTab".equals(selectedTab))
+		{
+			getChildSpecimens=Boolean.TRUE;
+		}
 		int requestDetailsBeanCounter = 0;
 		int existingArrayBeanCounter = 0;
 		final OrderDetails order = (OrderDetails) abstractDomain;
@@ -404,7 +410,7 @@ public class RequestDetailsForm extends AbstractActionForm
 							actualSpecimenClass, actualSpecimenType, assignStatus,
 							consentVerificationkey, canDistributeKey, rowStatuskey,
 							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
-							selectedSpecimenQuantity);
+							selectedSpecimenQuantity,getChildSpecimens);
 					requestDetailsBeanCounter++;
 				}
 				else
@@ -624,7 +630,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		this.populateValuesMap(specimenOrderItem, requestedItem, availableQty, specimenClass,
 				specimenType, requestFor, specimenId, assignQty, instanceOf, specimenList,
 				specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass,
-				actualSpecimenType, assignStatus, "", "", "", "", "", "");
+				actualSpecimenType, assignStatus, "", "", "", "", "", "",Boolean.TRUE);
 		this.putCommonValuesInValuesMap(specimenOrderItem, assignStatus, description, requestedQty,
 				assignQty, orderItemId, "");
 	}
@@ -680,7 +686,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass,
 			String actualSpecimenType, String assignStatus, String consentVerificationkey,
 			String canDistributeKey, String rowStatuskey, String selectedSpecimenTypeKey,
-			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity)
+			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity,Boolean getChildSpecimens)
 			throws BizLogicException
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
@@ -764,7 +770,7 @@ public class RequestDetailsForm extends AbstractActionForm
 
 			List allSpecimen = new ArrayList();
 			allSpecimen = OrderingSystemUtil
-					.getAllSpecimen(existingSpecimenOrderItem.getSpecimen());
+					.getAllSpecimen(existingSpecimenOrderItem.getSpecimen(),getChildSpecimens);
 			final SpecimenComparator comparator = new SpecimenComparator();
 			Collections.sort(allSpecimen, comparator);
 			final List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
@@ -798,7 +804,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			else
 			{
 				allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
-						.getParentSpecimen());
+						.getParentSpecimen(),getChildSpecimens);
 			}
 
 			final SpecimenComparator comparator = new SpecimenComparator();
