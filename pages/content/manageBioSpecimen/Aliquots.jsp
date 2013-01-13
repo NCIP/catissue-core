@@ -150,7 +150,7 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 	function (id,ind)
 		{
 			var containerName=document.getElementById("storageContainerDropDown_<%=i%>").value;
-			document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = id;
+			document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_name_fromMap)')[0].value = id;
 			document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(id,ind).getValue();
 			hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
 			scGridVisible_<%=i%> = false;
@@ -207,6 +207,8 @@ function setContainerValues()
 
 		document.forms[0].submit();
 	}
+	
+
 
 	function onRadioButtonClick(element)
 	{
@@ -222,8 +224,20 @@ function setContainerValues()
 		}
 	}
 
+	function updateContainerNames()
+	{
+		for(var i=1;i<='<%=aliquotBeanList.size()%>';i++)
+		{
+			var containerNameFromDropDown=document.getElementById("storageContainerDropDown_"+i).value;
+			var variable="value(Specimen:"+i+"_StorageContainer_name_fromMap)";
+			var containerNameInMap=document.getElementsByName(variable)[0];
+			containerNameInMap.value=containerNameFromDropDown;
+		}
+	}
+	
 	function onCreate()
 	{
+	updateContainerNames();
 		var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
 		document.forms[0].submittedFor.value = "ForwardTo";
 		document.forms[0].action = action + "?pageOf=" + '${requestScope.PAGEOF_CREATE_ALIQUOT}' + "&operation=add&menuSelected=15&buttonClicked=create";
@@ -621,7 +635,7 @@ function setContainerValues()
 							<td class="groupelements" size="48">
 								
 								<td width="50%" align="left" class="black_ar">
-								<html:hidden property="${aliquotBean.containerIdFromMapKey}" styleId="${aliquotBean.containerIdFromMapKey}"/>
+								<html:hidden property="${aliquotBean.containerNameFromMapKey}" styleId="${aliquotBean.containerNameFromMapKey}"/>
 						<!--input type="hidden" name="selectedContainerName_${counter+1}" styleId="selectedContainerName_${counter+1}" value="" /-->
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
@@ -752,10 +766,10 @@ function applyFirstToAll()
 {
 		
 		var containerName=document.getElementById('storageContainerDropDown_1').value;
-		var containerId=document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
+		var containerId=document.getElementsByName('value(Specimen:1_StorageContainer_name_fromMap)')[0].value;
 		
 			<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">	
-				document.getElementsByName('value(Specimen:${counter+2}_StorageContainer_id_fromMap)')[0].value = containerId;
+				document.getElementsByName('value(Specimen:${counter+2}_StorageContainer_name_fromMap)')[0].value = containerId;
 				document.getElementById(containerDropDownInfo_${counter+2}['dropDownId']).value =containerName;
 				hideGrid(containerDropDownInfo_${counter+2}['gridDiv']);
 				scGridVisible_${counter+2} = false;

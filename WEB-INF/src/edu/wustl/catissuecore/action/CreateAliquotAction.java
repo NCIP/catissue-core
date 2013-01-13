@@ -425,28 +425,11 @@ public class CreateAliquotAction extends BaseAction
 			 * validate the the container name,id,pos1 and pos2 is not empty
 			 * depending on Auto,virtual,manual selection
 			 */
-			/*if (radioButton != null)
-			{*/
-				if (/*"2".equals(radioButton) &&*/ Validator.isEmpty(containerId))
-				{
-					throw AppUtility.getApplicationException(null, "errors.item.format",
-							ApplicationProperties.getValue("specimen.storageContainer"));
-				}
-				/*if ("3".equals(radioButton) && Validator.isEmpty(containername))
-				{
-					throw AppUtility.getApplicationException(null, "errors.item.format",
-							ApplicationProperties.getValue("specimen" + ".storageContainer"));
-				}*/
-				/*// bug 11479 S bug
-				if ("2".equals(radioButton)
-						&& (Validator.isEmpty(posDim1) || Validator.isEmpty(posDim2)))
-
-				{
-					throw AppUtility.getApplicationException(null, "errors.item.format",
-							ApplicationProperties.getValue("specimen"
-									+ ".positionInStorageContainer"));
-				}*/
-			//}
+			if (Validator.isEmpty(containername) && Validator.isEmpty(containerId))
+			{
+				throw AppUtility.getApplicationException(null, "errors.item.format",
+						ApplicationProperties.getValue("specimen.storageContainer"));
+			}
 			final Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
