@@ -5560,89 +5560,70 @@ Thanking You,
 	
 	
 	<!--Rinku: System level dashboard configuration script-->                   
-				                       
-				<property name="filename" value=" " />
-					<target name="configureDashboardItem">
-					<antcall target="prepare_temp_folder_for_class_execution" /> 
-						<java classname="edu.wustl.common.labelSQLApp.util.InsertCSDashboardItem"  fork="true" classpath="${temp.dir}/catissuecore/WEB-INF/classes" maxmemory="1024m">
-						<arg value="${filename}" />
-							<classpath>
-								<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-									<include name="**/*.jar" />
-								</fileset>
-								<fileset dir="${lib.dir}">
-									<include name="**/*.jar" />
-								</fileset>
-							</classpath>
-						</java>
-					</target>
-		
-		<target name="prepare_temp_folder_for_class_execution">
-				<delete quiet="true" includeemptydirs="true">
-					<fileset dir="${temp.dir}/catissuecore">
-						<include name="**/*" />
-					</fileset>
-				</delete>
+					                       
+					<property name="filename" value=" " />
+						<target name="configureDashboardItem">
+						<antcall target="prepare_temp_folder_for_class_execution" /> 
+							<java classname="edu.wustl.common.labelSQLApp.util.InsertCSDashboardItem"  fork="true" classpath="${temp.dir}/catissuecore/WEB-INF/classes" maxmemory="1024m">
+							<arg value="${filename}" />
+								<classpath>
+									<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+										<include name="**/*.jar" />
+									</fileset>
+									<fileset dir="${lib.dir}">
+										<include name="**/*.jar" />
+									</fileset>
+								</classpath>
+							</java>
+						</target>
+			
+			<target name="prepare_temp_folder_for_class_execution">
+					<delete quiet="true" includeemptydirs="true">
+						<fileset dir="${temp.dir}/catissuecore">
+							<include name="**/*" />
+						</fileset>
+					</delete>
 
-				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-				<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+					<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+					 <copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" /> 
 
-							<antcall target="copy_de_hibernateconfig_for_class_execution" />
+								
+					<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
+					<echo message="Concatenating the Application Resource Properties file" />
+					<concat destfile="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" append="true">
+						<fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
+					</concat>
+					<copy file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${temp.dir}/clinportal/WEB-INF/classes" overwrite="true" />
 
-				<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
-				<echo message="Concatenating the Application Resource Properties file" />
-				<concat destfile="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" append="true">
-					<fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
-				</concat>
-				<copy file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${temp.dir}/clinportal/WEB-INF/classes" overwrite="true" />
-
-				<if>
-					<equals arg1="mysql" arg2="${database.type}" />
-					<then>
-						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-							<include name="*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
-						</replace>
-					</then>
-					<elseif>
-						<equals arg1="oracle" arg2="${database.type}" />
+					<if>
+						<equals arg1="mysql" arg2="${database.type}" />
 						<then>
 							<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 								<include name="*.cfg.xml" />
-								<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-								<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+								<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+								<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+								<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
 							</replace>
 						</then>
-					</elseif>
-				</if>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-				</replace>
+						<elseif>
+							<equals arg1="oracle" arg2="${database.type}" />
+							<then>
+								<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+									<include name="*.cfg.xml" />
+									<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+									<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+									<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+								</replace>
+							</then>
+						</elseif>
+					</if>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+						<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+					</replace>
 
-				<delete dir="${tempcacore.dir}" />
-				<mkdir dir="${tempcacore.dir}" />
-
-			</target>
-		    
-		
-		<target name="copy_de_hibernateconfig_for_class_execution">
-				<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
-				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
-				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadtaa.xml" overwrite="true" />
-
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="DynamicExtensionsHibernate.cfg.xml" />
-					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-				</replace>
-		</target>
-	
-	
+				</target>
 	
 	
 	
