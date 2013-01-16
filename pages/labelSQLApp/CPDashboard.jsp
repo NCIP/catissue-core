@@ -81,7 +81,7 @@ boolean isWhite = false;
 </script>
 
 
-<body>
+<body onLoad="initCalendarUI()";>
 <div id="a_tabbar" style="width:100% ;height: 100%;background-color: white;">
 	<div id="html_1" style="width:100% ;height: 100%;overflow: auto;background-color: white; padding: 5px;">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -227,6 +227,7 @@ boolean isWhite = false;
 					<td class="black_new">Duration:</td>
 					<td>
 						<html:text property="fromDate" styleId="fromDate1" styleClass="black_new" style="width: 100px"/>
+						<img width="24" vspace="0" hspace="0" height="22" src="images/calendar.gif" alt="Calendar">
 						
 					</td>
 					<td align="left" class="black_new" width="10%">
@@ -234,6 +235,7 @@ boolean isWhite = false;
 					</td>
 					<td width="65%">
 						<html:text property="toDate" styleId="toDate1" styleClass="black_new" style="width: 100px"/>
+						<img width="24" vspace="0" hspace="0" height="22" src="images/calendar.gif" alt="Calendar">
 						
 					</td>
 				</tr>
