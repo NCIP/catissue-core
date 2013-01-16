@@ -923,29 +923,20 @@
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v20.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
-	<target name="upgrade_db_to_plus_v30">
+	<target name="upgrade_db_to_plus_v21">
 				<echo message="Upgrading DataBase with URL ${final.database.url}" />	
-				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v30.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v21.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
 		<antcall target="upgrade_db_to_plus_v10"/>
 		<antcall target="upgrade_db_to_plus_v20"/>
-		<antcall target="upgrade_db_to_plus_v30"/>
 	</target>
 	
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
 			<echo message="Upgrading DB using Liquibase Targets"/>
 			<antcall target="upgrade_db_to_plus_v20"/>
 	</target>
-	<target name="upgrade_liquibase_to_plus_v1plus">
-				<echo message="Upgrading DataBase with URL ${final.database.url}username=${database.username}password=${database.password}" />	
-				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/queryfolder_script.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
-			</target>
-			<target name="liquibase_aqupgrade_target">
-				<echo message="Upgrading DB using Liquibase Targets"/>
-				<antcall target="upgrade_liquibase_to_plus_v1plus"/>
-			</target>
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
 		<antcall target="assert" />
@@ -956,7 +947,6 @@
 		    <echo>before deploy_db: ${time}</echo>
 
 		<antcall target="deploy_db" />
-		<antcall target="liquibase_aqupgrade_target" />
 		<tstamp>
 		      <format property="time2" pattern="MM/dd/yyyy hh:mm:ss aa"
 		            />
@@ -1765,8 +1755,8 @@
 						</tstamp>
 						<echo>After Insert paths: ${pathtime}</echo>
 		<antcall target="liquibase_upgrade_target"/>
+		<antcall target="upgrade_db_from_plusv20_plusv2.1"/>
 
-		<antcall target="liquibase_aqupgrade_target"/>
 
 		<antcall target="addEMPIMetadata" />
 
@@ -5294,5 +5284,18 @@ Thanking You,
 				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 			</replace>
 	</target>
+	
+	<target name="upgrade_db_from_plusv20_plusv2.1">
+		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v21.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	
+	</target>
+	
+	
+	<target name="upgrade_db_from_plusv1.2_to_plusv2.1">
+		<antcall target="upgrade_db_from_suitev1.2_to_plus20" />
+		<antcall target="upgrade_db_from_plusv20_plusv2.1" />
+	</target>
+	
 		
 </project>
