@@ -2106,9 +2106,12 @@
 	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from Plusv1.0  to Plusv2.0">
 	</target>
 	
-	<!--Target for Application and Database Upgrade from Suite 1.2 to Plus 2.0-->
-		<target name="upgrade_all_from_suitev1.2_to_plusv20" depends="assert, upgrade_db_from_suitev1.2_to_plus20, upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
-		</target>
+	<!--Target for Application and Database Upgrade from Suite 1.2 to Plus 2.1-->
+	<target name="upgrade_NCI_1.2" depends="assert, upgrade_db_from_plusv1.2_to_plusv2.1, upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
+	</target>
+	<!--Target for Application and Database Upgrade from Suite 2.0 to Plus 2.1-->
+	<target name="upgrade_Plus_2.0" depends="assert, upgrade_db_from_plusv20_plusv2.1, upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
+	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
 	<!--<target name="upgrade_all_from_core_1.2.2" depends="core_1.2.2_upgrade_check">
