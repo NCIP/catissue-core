@@ -790,7 +790,7 @@
 	</property>
 	<property>
 		<name>scheduler.mail.subject</name>
-		<value>Clinportal Report Scheduler:</value>
+		<value>Catissue Report Scheduler:</value>
 	</property>
 	<property>
 		<name>scheduler.mail.header</name>
