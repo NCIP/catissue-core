@@ -3930,65 +3930,74 @@ public class AppUtility {
 		return alphabet;
 	}
 	
-	public static String stringToRoman(String alphabet)
+	public static String stringToRoman(String alphabet) throws ApplicationException
 	{
 		int num=stringToInteger(alphabet);
 		String roman=integerToRoman(num);
 		return roman;
 	}
 	
-	public static Integer stringToInteger(String name)
+	public static Integer stringToInteger(String name) throws ApplicationException
 	{
 		Integer number = 0;
-		    int pow = 1;
+		try{
+			 if( !Double.isNaN(Double.valueOf(name)))
+			 {
+				 throw getApplicationException(new NumberFormatException("Invalid Position "+name), null, null);
+			 }
+		}
+		catch(NumberFormatException exception)
+		{
+			int pow = 1;
 		    for (int i = name.length() - 1; i >= 0; i--)
 		    {
 		        number += (name.toUpperCase().charAt(i) - 'A' + 1) * pow;
 		        pow *= 26;
 		    }
+		}
 		    return number;
 	}
 	
 	public static String getPositionValue(String labellingScheme, int position)
 	{
 		String positionVal="";
-		if(labellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_NUMBERS))
+		if(Constants.LABELLING_SCHEME_NUMBERS.equalsIgnoreCase(labellingScheme))
 		{
 			positionVal= String.valueOf(position);
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE))
+		else if(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE.equals(labellingScheme))
 		{
 			positionVal=integerToString(Integer.valueOf(position)).toLowerCase();
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
+		else if(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE.equals(labellingScheme))
 		{
 			positionVal=integerToString(Integer.valueOf(position)).toUpperCase();
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE))
+		else if(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE.equals(labellingScheme))
 		{
 			positionVal=integerToRoman(Integer.valueOf(position)).toUpperCase();
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		else if(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE.equals(labellingScheme))
 		{
 			positionVal=integerToRoman(Integer.valueOf(position)).toLowerCase();
 		}
 		return positionVal;
 	}
 	
-	public static Integer getPositionValueInInteger(String labellingScheme, String position)
+	public static Integer getPositionValueInInteger(String labellingScheme, String position) throws  ApplicationException
 	{
 		int positionVal=-1;
-		if(labellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_NUMBERS))
+		if(Constants.LABELLING_SCHEME_NUMBERS.equalsIgnoreCase(labellingScheme))
 		{
 			positionVal= Integer.valueOf(position);
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE)
-			|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
+		else if(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE.equals(labellingScheme)
+			|| (Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE.equals(labellingScheme)))
 		{
 			positionVal=stringToInteger(position.toUpperCase());
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
-				|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
+		else if(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE.equals(labellingScheme)
+				|| (Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE.equals(labellingScheme)))
 		{
 			positionVal=romanToInteger(position.toUpperCase());
 		}

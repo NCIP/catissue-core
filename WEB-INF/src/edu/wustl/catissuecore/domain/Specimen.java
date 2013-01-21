@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
@@ -902,8 +903,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	/**
 	 * This method will be called to set the specimen position.
 	 * @param form
+	 * @throws ApplicationException 
 	 */
-	private void setSpecimenPosition(final SpecimenForm form)
+	private void setSpecimenPosition(final SpecimenForm form) throws ApplicationException
 	{
 		if (!form.isVirtuallyLocated())
 		{

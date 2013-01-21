@@ -1503,29 +1503,37 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	private void validateForContFull(DAO dao, final StorageContainer container)
 			throws BizLogicException
 	{
-		final Integer xPos = container.getLocatedAtPosition().getPositionDimensionOne();
-		final Integer yPos = container.getLocatedAtPosition().getPositionDimensionTwo();
-		/**
-		 * Following code is added to set the x and y dimension in case only
-		 * storage container is given and x and y positions are not given
-		 */
-		if (xPos == null || yPos == null)
+		try
 		{
-			final Container cont = container.getLocatedAtPosition().getParentContainer();
-			final Position position = StorageContainerUtil.getFirstAvailablePositionInContainer(cont, dao);
-			if (position != null)
+			final Integer xPos = container.getLocatedAtPosition().getPositionDimensionOne();
+			final Integer yPos = container.getLocatedAtPosition().getPositionDimensionTwo();
+			/**
+			 * Following code is added to set the x and y dimension in case only
+			 * storage container is given and x and y positions are not given
+			 */
+			if (xPos == null || yPos == null)
 			{
-				final ContainerPosition cntPos = container.getLocatedAtPosition();
-				cntPos.setPositionDimensionOne(position.getXPos());
-				cntPos.setPositionDimensionTwo(position.getYPos());
-				cntPos.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(cont.getName(), 1, position.getXPos()));
-				cntPos.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(cont.getName(), 2, position.getYPos()));
-				cntPos.setOccupiedContainer(container);
+				final Container cont = container.getLocatedAtPosition().getParentContainer();
+				final Position position = StorageContainerUtil.getFirstAvailablePositionInContainer(cont, dao);
+				if (position != null)
+				{
+					final ContainerPosition cntPos = container.getLocatedAtPosition();
+					cntPos.setPositionDimensionOne(position.getXPos());
+					cntPos.setPositionDimensionTwo(position.getYPos());
+					cntPos.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(cont.getName(), 1, position.getXPos()));
+					cntPos.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(cont.getName(), 2, position.getYPos()));
+					cntPos.setOccupiedContainer(container);
+				}
+				else
+				{
+					throw this.getBizLogicException(null, "storage.specified.full", "");
+				}
 			}
-			else
-			{
-				throw this.getBizLogicException(null, "storage.specified.full", "");
-			}
+		}
+		catch (ApplicationException exception)
+		{
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
 		}
 	}
 	/**

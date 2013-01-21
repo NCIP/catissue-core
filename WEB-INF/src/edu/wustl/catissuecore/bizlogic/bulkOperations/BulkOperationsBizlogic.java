@@ -20,7 +20,9 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
@@ -117,81 +119,90 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 			Map<String, String> eventSpecificData) throws ParseException, BizLogicException
 	{
 		final List<TransferEventParameters> events = new ArrayList<TransferEventParameters>();
-		TransferEventParameters transferEventParameters = null;
-		Set<String> allocatedPositions = new HashSet<String>();
-		StorageContainer fromContainer = null;
-		StorageContainer toContainer = null;
-		String containerValue = null;
-		String specimenId = null;
-		for (int i = 0; i < specimenIds.size(); i++)
+		 try
+			{
+			TransferEventParameters transferEventParameters = null;
+			Set<String> allocatedPositions = new HashSet<String>();
+			StorageContainer fromContainer = null;
+			StorageContainer toContainer = null;
+			String containerValue = null;
+			String specimenId = null;
+			for (int i = 0; i < specimenIds.size(); i++)
+			{
+				transferEventParameters = new TransferEventParameters();
+				specimenId = (String) specimenIds.get(i);
+				this.setCommonEventParameters(specimenId, userId, dateOfEvent, timeInHours,
+						timeInseconds, comments, transferEventParameters, i);
+	
+				fromContainer = new StorageContainer();
+				if (eventSpecificData.get("ID_" + specimenId + "_FROMLOCID").equals(""))
+				{
+					transferEventParameters.setFromPositionDimensionOne(null);
+					transferEventParameters.setFromPositionDimensionTwo(null);
+					transferEventParameters.setFromStorageContainer(null);
+	
+				}
+				else
+				{
+					fromContainer.setId(new Long(eventSpecificData.get("ID_" + specimenId
+							+ "_FROMLOCID")));
+					transferEventParameters.setFromPositionDimensionOne(Integer
+							.valueOf(eventSpecificData.get("ID_" + specimenId + "_FROMLOCPOS1")));
+					transferEventParameters.setFromPositionDimensionTwo(Integer
+							.valueOf(eventSpecificData.get("ID_" + specimenId + "_FROMLOCPOS2")));
+					fromContainer.setName(eventSpecificData.get("ID_" + specimenId + "_FROMLOC"));
+					transferEventParameters.setFromStorageContainer(fromContainer);
+				}
+	
+				toContainer = new StorageContainer();
+				String containerName=eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL");
+				toContainer.setName(containerName);
+				if(null==toContainer.getName() || "".equals(toContainer.getName()))
+				{
+					throw this.getBizLogicException( null,
+							"invalid.container.name", null );
+				}
+				if(!"Virtual".equalsIgnoreCase(containerName))
+				{
+					String pos1="",pos2="";
+					if(eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")!=null && eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")!=null && !eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1").toString().trim().equals( "" ) && !eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2").trim().equals( "" ))
+					{
+					//bug 14417 start
+					
+						pos1 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 1, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")).toString();
+						pos2 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 2, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")).toString();
+					}
+					if(pos1!=null && pos2!=null && !pos1.trim().equals( "" ) && !pos2.trim().equals( "" ))
+					{
+						//bug 15083 start
+						/**
+						 * Added check for duplicate storage positions
+						 */
+						containerValue = StorageContainerUtil.getStorageValueKey(toContainer.getName(),
+								null, Integer.valueOf(pos1), Integer.valueOf(pos2));				
+						if (allocatedPositions.contains(containerValue))
+						{
+							throw this.getBizLogicException( null,
+									"shipment.samePositionForSpecimens", null );					
+						}
+						else
+						{
+							allocatedPositions.add( containerValue );
+							transferEventParameters.setToPositionDimensionOne(Integer.valueOf(pos1));
+							transferEventParameters.setToPositionDimensionTwo(Integer.valueOf(pos2));
+						}
+						//bug 15083 end
+					}
+					//bug 14417 end
+					transferEventParameters.setToStorageContainer(toContainer);
+				}	
+				events.add(transferEventParameters);
+			}
+		}
+		catch (ApplicationException exception)
 		{
-			transferEventParameters = new TransferEventParameters();
-			specimenId = (String) specimenIds.get(i);
-			this.setCommonEventParameters(specimenId, userId, dateOfEvent, timeInHours,
-					timeInseconds, comments, transferEventParameters, i);
-
-			fromContainer = new StorageContainer();
-			if (eventSpecificData.get("ID_" + specimenId + "_FROMLOCID").equals(""))
-			{
-				transferEventParameters.setFromPositionDimensionOne(null);
-				transferEventParameters.setFromPositionDimensionTwo(null);
-				transferEventParameters.setFromStorageContainer(null);
-
-			}
-			else
-			{
-				fromContainer.setId(new Long(eventSpecificData.get("ID_" + specimenId
-						+ "_FROMLOCID")));
-				transferEventParameters.setFromPositionDimensionOne(Integer
-						.valueOf(eventSpecificData.get("ID_" + specimenId + "_FROMLOCPOS1")));
-				transferEventParameters.setFromPositionDimensionTwo(Integer
-						.valueOf(eventSpecificData.get("ID_" + specimenId + "_FROMLOCPOS2")));
-				fromContainer.setName(eventSpecificData.get("ID_" + specimenId + "_FROMLOC"));
-				transferEventParameters.setFromStorageContainer(fromContainer);
-			}
-
-			toContainer = new StorageContainer();
-			String containerName=eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL");
-			toContainer.setName(containerName);
-			if(null==toContainer.getName() || "".equals(toContainer.getName()))
-			{
-				throw this.getBizLogicException( null,
-						"invalid.container.name", null );
-			}
-			if(!"Virtual".equalsIgnoreCase(containerName))
-			{
-				String pos1="",pos2="";
-				if(eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")!=null && eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")!=null && !eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1").toString().trim().equals( "" ) && !eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2").trim().equals( "" ))
-				{
-				//bug 14417 start
-				 pos1 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 1, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")).toString();
-				 pos2 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 2, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")).toString();
-				}
-				if(pos1!=null && pos2!=null && !pos1.trim().equals( "" ) && !pos2.trim().equals( "" ))
-				{
-					//bug 15083 start
-					/**
-					 * Added check for duplicate storage positions
-					 */
-					containerValue = StorageContainerUtil.getStorageValueKey(toContainer.getName(),
-							null, Integer.valueOf(pos1), Integer.valueOf(pos2));				
-					if (allocatedPositions.contains(containerValue))
-					{
-						throw this.getBizLogicException( null,
-								"shipment.samePositionForSpecimens", null );					
-					}
-					else
-					{
-						allocatedPositions.add( containerValue );
-						transferEventParameters.setToPositionDimensionOne(Integer.valueOf(pos1));
-						transferEventParameters.setToPositionDimensionTwo(Integer.valueOf(pos2));
-					}
-					//bug 15083 end
-				}
-				//bug 14417 end
-				transferEventParameters.setToStorageContainer(toContainer);
-			}	
-			events.add(transferEventParameters);
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
 		}
 		return events;
 	}

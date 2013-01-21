@@ -74,58 +74,67 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			throws BizLogicException
 	{
 		final boolean isValid = true;
-		final Collection < StorageContainer > containerCollection = shipment
-				.getContainerCollection();
-		for (final StorageContainer storageContainer : containerCollection)
+		try
 		{
-			final StorageType storageType = storageContainer.getStorageType();
-			if (storageType != null
-					&& ( ( storageType.getName() != null ) && ( Constants.SHIPMENT_CONTAINER_TYPE_NAME
-							.equals( storageType.getName().trim() ) ) ))
+			
+			final Collection < StorageContainer > containerCollection = shipment
+					.getContainerCollection();
+			for (final StorageContainer storageContainer : containerCollection)
 			{
-				final Collection < SpecimenPosition > spPosCollection = storageContainer
-						.getSpecimenPositionCollection();
-				if (spPosCollection.size() > 1)
+				final StorageType storageType = storageContainer.getStorageType();
+				if (storageType != null
+						&& ( ( storageType.getName() != null ) && ( Constants.SHIPMENT_CONTAINER_TYPE_NAME
+								.equals( storageType.getName().trim() ) ) ))
 				{
-					final Iterator < SpecimenPosition > iterator = spPosCollection.iterator();
-					final List < String > specimenPosList = new ArrayList < String >();
-					while (iterator.hasNext())
+					final Collection < SpecimenPosition > spPosCollection = storageContainer
+							.getSpecimenPositionCollection();
+					if (spPosCollection.size() > 1)
 					{
-						final SpecimenPosition pos = iterator.next();
-						if (pos != null)
+						final Iterator < SpecimenPosition > iterator = spPosCollection.iterator();
+						final List < String > specimenPosList = new ArrayList < String >();
+						while (iterator.hasNext())
 						{
-							final StorageContainer container = pos.getStorageContainer();
-							if (pos.getPositionDimensionOne() != 0
-									|| pos.getPositionDimensionTwo() != 0)
+							final SpecimenPosition pos = iterator.next();
+							if (pos != null)
 							{
-								String storageValue = "";
-								if (container.getName() == null)
+								final StorageContainer container = pos.getStorageContainer();
+								if (pos.getPositionDimensionOne() != 0
+										|| pos.getPositionDimensionTwo() != 0)
 								{
-									storageValue = StorageContainerUtil.getStorageValueKey( null,
-											container.getId().toString(), pos.getPositionDimensionOne(),
-											pos.getPositionDimensionTwo() );
-								}
-								else
-								{
-									storageValue = StorageContainerUtil.getStorageValueKey( container
-											.getName(), null, pos.getPositionDimensionOne(), pos
-											.getPositionDimensionTwo() );
-								}
-								if (specimenPosList.contains( storageValue ))
-								{
-									throw this.getBizLogicException( null,
-											"shipment.samePositionForSpecimens", null );
-								}
-								else
-								{
-									specimenPosList.add( storageValue );									
+									String storageValue = "";
+									if (container.getName() == null)
+									{
+										storageValue = StorageContainerUtil.getStorageValueKey( null,
+												container.getId().toString(), pos.getPositionDimensionOne(),
+												pos.getPositionDimensionTwo() );
+									}
+									else
+									{
+										storageValue = StorageContainerUtil.getStorageValueKey( container
+												.getName(), null, pos.getPositionDimensionOne(), pos
+												.getPositionDimensionTwo() );
+									}
+									if (specimenPosList.contains( storageValue ))
+									{
+										throw this.getBizLogicException( null,
+												"shipment.samePositionForSpecimens", null );
+									}
+									else
+									{
+										specimenPosList.add( storageValue );									
+									}
 								}
 							}
 						}
 					}
 				}
+	
 			}
-
+		}
+		catch (ApplicationException exception)
+		{
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
 		}
 		return isValid;
 	}
@@ -524,42 +533,60 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param pos2 - position 2
 	 * @param container - StorageContainer obj
 	 * @param specimen - Specimen obj
+	 * @throws BizLogicException 
 	 */
 	private void setPositionDataToSpecimen(Integer pos1, Integer pos2, StorageContainer container,
-			Specimen specimen)
+			Specimen specimen) throws BizLogicException
 	{
-		specimen.getSpecimenPosition().setStorageContainer( container );
-		specimen.getSpecimenPosition().setPositionDimensionOne( pos1 );
-		specimen.getSpecimenPosition().setPositionDimensionTwo( pos2 );
-		specimen.getSpecimenPosition().setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 1, pos1));
-		specimen.getSpecimenPosition().setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 2, pos2));
+		try
+		{
+			specimen.getSpecimenPosition().setStorageContainer( container );
+			specimen.getSpecimenPosition().setPositionDimensionOne( pos1 );
+			specimen.getSpecimenPosition().setPositionDimensionTwo( pos2 );
+			specimen.getSpecimenPosition().setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 1, pos1));
+			specimen.getSpecimenPosition().setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 2, pos2));
+		}
+		catch (ApplicationException exception)
+		{
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
+		}
 	}
 
 	/**
 	 * Add storage values as container name or id : pos1,pos2
 	 * @param specimen - Specimen obj
 	 * @param storageContainerIds - Hashset containing storagevalues
+	 * @throws BizLogicException 
 	 */
-	private void addStorageValues(Specimen specimen, Set < String > storageContainerIds)
+	private void addStorageValues(Specimen specimen, Set < String > storageContainerIds) throws BizLogicException
 	{
-		String storageValue = null;
-		final Long containerId = specimen.getSpecimenPosition().getStorageContainer().getId();
-		final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
-		final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-		final String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
-		if (containerName != null)
+		try
 		{
-			storageValue = StorageContainerUtil
-					.getStorageValueKey( containerName, null, pos1, pos2 );
+			String storageValue = null;
+			final Long containerId = specimen.getSpecimenPosition().getStorageContainer().getId();
+			final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+			final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+			final String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
+			if (containerName != null)
+			{
+				storageValue = StorageContainerUtil
+						.getStorageValueKey( containerName, null, pos1, pos2 );
+			}
+			else
+			{
+				storageValue = StorageContainerUtil
+						.getStorageValueKey( null, containerId.toString(), pos1, pos2 );
+			}
+			if (!storageContainerIds.contains( storageValue ))
+			{
+				storageContainerIds.add( storageValue );
+			}
 		}
-		else
+		catch (ApplicationException exception)
 		{
-			storageValue = StorageContainerUtil
-					.getStorageValueKey( null, containerId.toString(), pos1, pos2 );
-		}
-		if (!storageContainerIds.contains( storageValue ))
-		{
-			storageContainerIds.add( storageValue );
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
 		}
 	}
 

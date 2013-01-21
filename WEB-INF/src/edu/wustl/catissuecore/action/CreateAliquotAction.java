@@ -444,22 +444,21 @@ public class CreateAliquotAction extends BaseAction
 			{
 				final SpecimenPosition specPos = new SpecimenPosition();
 
-				//if (!"".equals(posDim1) && !"".equals(posDim2))
-				//{
+				if (!"".equals(posDim1) && !"".equals(posDim2))
+				{
 					if(containerId!=null)
 					{
+						StorageContainerUtil.setContainerPositionForAutoOption(containerId, posDim1, posDim2, specPos);
 						specPos.setPositionDimensionOneString(posDim1);
 						specPos.setPositionDimensionTwoString(posDim2);
-						StorageContainerUtil.setContainerPositionForAutoOption(containerId, posDim1, posDim2, specPos);
 					}
 					else
 					{
+						StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
 						specPos.setPositionDimensionOneString(posDim1);
 						specPos.setPositionDimensionTwoString(posDim2);
-						StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
 					}
-					sContainer.setId(storageContainerId);
-				//}
+				}
 				sContainer.setName(containername);
 				specPos.setStorageContainer(sContainer);
 				specPos.setSpecimen(aliquotSpecimen);

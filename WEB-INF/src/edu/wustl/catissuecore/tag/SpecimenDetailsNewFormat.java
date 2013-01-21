@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -420,6 +421,18 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			ioe.printStackTrace();
 			throw new JspTagException("Error:IOException while writing to the user");
 		}
+		catch (NumberFormatException exp)
+		{
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
+			throw new JspTagException("Error:NumberFormatException while writing to the user");
+		}
+		catch (ApplicationException exp)
+		{
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
+			throw new JspTagException("Error:ApplicationException while writing to the user");
+		}
 		return SKIP_BODY;
 	}
 
@@ -730,8 +743,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 * @return the string
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
-	private String generateRowOutput() throws IOException
+	private String generateRowOutput() throws IOException, NumberFormatException, ApplicationException
 	{
 		final StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("");
@@ -780,10 +795,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 * @param counter the counter
 	 * @param specimen the specimen
 	 * @param isTextRow the is text row
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
 	private void addEditableRow(StringBuffer stringBuffer,
 			int counter, GenericSpecimen specimen,
-			boolean isTextRow)
+			boolean isTextRow) throws NumberFormatException, ApplicationException
 	{
 		// ------------ Mandar : 2Dec08 New Code for new formatUI start----------------
 		if (this.dataListTypes[1].equalsIgnoreCase(this.dataListType)) // for aliquots
@@ -839,10 +856,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 * @param specimen the specimen
 	 * @param elementNamePrefix the element name prefix
 	 * @param isTextRow the is text row
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
 	private void createParentComponent(StringBuffer stringBuffer,
 			GenericSpecimen specimen,
-			String elementNamePrefix, boolean isTextRow)
+			String elementNamePrefix, boolean isTextRow) throws NumberFormatException, ApplicationException
 	{
 		final String nameValue[] = this.get1EleDetAt(0, specimen, elementNamePrefix);
 		if (this.showParentId)
@@ -1110,8 +1129,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 * @param elementNamePrefix the element name prefix
 	 *
 	 * @return the 1 ele det at
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
-	private String[] get1EleDetAt(int counter, GenericSpecimen specimen, String elementNamePrefix)
+	private String[] get1EleDetAt(int counter, GenericSpecimen specimen, String elementNamePrefix) throws NumberFormatException, ApplicationException
 	{
 		String str[] = new String[2];
 		if (SpecimenDetailsNewFormat.HDR1_COLS[0].equalsIgnoreCase(this.columnList.get(counter)
@@ -1261,10 +1282,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 * @param specimen the specimen
 	 * @param elementNamePrefix the element name prefix
 	 * @param isTextRow the is text row
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
 	private void createFieldRow(StringBuffer stringBuffer,
 			int counter, GenericSpecimen specimen,
-			String elementNamePrefix, boolean isTextRow)
+			String elementNamePrefix, boolean isTextRow) throws NumberFormatException, ApplicationException
 	{
 		int tmpd = 0, tmpcwd = 0;
 
@@ -1691,9 +1714,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 * @param elementNamePrefix the element name prefix
 	 * @param specimen the specimen
 	 * @param isTextRow the is text row
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
 	private void addRemainingSpecimenElements(StringBuffer stringBuffer, String elementNamePrefix,
-			GenericSpecimen specimen, boolean isTextRow)
+			GenericSpecimen specimen, boolean isTextRow) throws NumberFormatException, ApplicationException
 	{
 		final String nameValue[][] = this.getRemainingSpecimenElementsData(specimen,
 				elementNamePrefix);

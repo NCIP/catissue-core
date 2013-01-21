@@ -303,6 +303,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
+		catch (ApplicationException exception)
+		{
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
+		}
 	}
 
 	/**

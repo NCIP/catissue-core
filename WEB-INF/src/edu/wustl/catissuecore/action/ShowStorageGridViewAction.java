@@ -438,10 +438,10 @@ public class ShowStorageGridViewAction extends BaseAction
 									
 								}
 								value = value+"<img " +onClickEvent;
-								if(storageContainerIdFromMap!=null)
+								/*if(storageContainerIdFromMap!=null)
 								{
 									value=value +"setTextBoxValue(\\\'"+storageContainerIdFromMap+"\\\',\\\'"+id+"\\\');\\ ";
-								}
+								}*/
 								value=value+"closeFramedWindow()\\\\\" "
 									  +"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}

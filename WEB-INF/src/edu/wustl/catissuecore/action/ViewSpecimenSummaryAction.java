@@ -327,8 +327,9 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 * @param session
 	 *            : session
 	 * @throws CatissueException 
+	 * @throws ApplicationException 
 	 */
-	private void updateSessionBean(ViewSpecimenSummaryForm summaryForm, HttpSession session, String isSubmitRequest) throws CatissueException
+	private void updateSessionBean(ViewSpecimenSummaryForm summaryForm, HttpSession session, String isSubmitRequest) throws CatissueException, ApplicationException
 	{
 		final String eventId = summaryForm.getEventId();
 		if (eventId == null
@@ -374,9 +375,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 * @param specimenMap
 	 *            : specimenMap
 	 * @throws CatissueException 
+	 * @throws ApplicationException 
 	 */
 	private void updateSpecimenToSession(ViewSpecimenSummaryForm summaryForm,
-			LinkedHashMap specimenMap, String isSubmitRequest) throws CatissueException
+			LinkedHashMap specimenMap, String isSubmitRequest) throws CatissueException, ApplicationException
 	{
 		// Collection specimenCollection = specimenMap.values();
 		final Iterator iterator = summaryForm.getSpecimenList().iterator();
@@ -404,9 +406,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 * @param selectedSpecimen
 	 *            : selectedSpecimen
 	 * @throws CatissueException 
+	 * @throws ApplicationException 
 	 */
 	private void updateAliquotToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimen selectedSpecimen,String isSubmitRequest) throws CatissueException
+			GenericSpecimen selectedSpecimen,String isSubmitRequest) throws CatissueException, ApplicationException
 	{
 		final Iterator aliquotIterator = summaryForm.getAliquotList().iterator();
 
@@ -430,9 +433,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 * @param selectedSpecimen
 	 *            : selectedSpecimen
 	 * @throws CatissueException 
+	 * @throws ApplicationException 
 	 */
 	private void updateDerivedToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimen selectedSpecimen,String isSubmitRequest) throws CatissueException
+			GenericSpecimen selectedSpecimen,String isSubmitRequest) throws CatissueException, ApplicationException
 	{
 		final Iterator derivedIterator = summaryForm.getDerivedList().iterator();
 
@@ -459,9 +463,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 * @param derivedSessionVO
 	 *            : derivedSessionVO
 	 * @throws CatissueException 
+	 * @throws ApplicationException 
 	 */
 	private void setFormValuesToSession(GenericSpecimen derivedFormVO,
-			GenericSpecimen derivedSessionVO, String isSubmitRequest) throws CatissueException
+			GenericSpecimen derivedSessionVO, String isSubmitRequest) throws CatissueException, ApplicationException
 	{
 		derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
 		derivedSessionVO.setPrintSpecimen(derivedFormVO.getPrintSpecimen());// janhavi
@@ -537,51 +542,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				}
 			}
 		}
-		/*if(!"Virtual".equals(derivedSessionVO.getSelectedContainerName()) 
-				&& ("".equals(derivedSessionVO.getPositionDimensionOne()) || "".equals(derivedSessionVO.getPositionDimensionTwo()))
-				&& "Pending".equals(derivedSessionVO.getCollectionStatus()))
-		{
-			try
-			{
-			StorageContainer storageContainer=new StorageContainer();
-			List idList = null;
-			if(null==derivedSessionVO.getContainerId() && !"".equals(derivedSessionVO.getSelectedContainerName()))
-			{
-				idList = AppUtility.executeSQLQuery("Select identifier from catissue_container where name like '"+derivedSessionVO.getSelectedContainerName()+"'");	
-			}			
-			if(idList!=null)
-			{
-				
-				String id=(String) ((ArrayList)idList.get(0)).get(0);
-				derivedSessionVO.setContainerId(id);
-				storageContainer.setId(Long.valueOf(id));
-
-				DAO dao=AppUtility.openDAOSession(null);
-				Position position;
-
-				position = StorageContainerUtil
-						.getFirstAvailablePositionsInContainer(storageContainer, new HashSet<String>(), dao, null, null);
-
-				derivedSessionVO.setPositionDimensionOne(String.valueOf(position.getXPos()));
-				derivedSessionVO.setPositionDimensionTwo(String.valueOf(position.getYPos()));
-				//StorageContainerUtil.setContainerPositionAsString(storageContainer.getName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
-			}
-			}
-			catch (ApplicationException e)
-			{
-				this.LOGGER.error(e.getMessage(), e);
-				try
-				{
-					throw new BizLogicException(e.getErrorKey(),e,e.getMsgValues());
-				}
-				catch (BizLogicException e1)
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		}
-*/		derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
+		derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
 		derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
 		derivedSessionVO.setFormSpecimenVo(derivedFormVO);
 		if(derivedSessionVO.getParentName() != null && !"".equals(derivedSessionVO.getParentName()) && !"AutoGenerated".equals(derivedSessionVO.getParentName()))

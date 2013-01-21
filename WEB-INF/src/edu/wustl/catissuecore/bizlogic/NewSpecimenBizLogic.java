@@ -2534,46 +2534,54 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException Database related exception
 	 */
 	private void allocatePositionForSpecimen(Specimen specimen) throws BizLogicException
-	{
-		if (specimen != null
-				&& specimen.getSpecimenPosition() != null
-				&& (specimen.getSpecimenPosition().getPositionDimensionOne() != null || specimen
-						.getSpecimenPosition().getPositionDimensionTwo() != null))
 		{
-			if (specimen.getSpecimenPosition() != null
-					&& specimen.getSpecimenPosition().getStorageContainer() != null)
+		try
+		{
+			if (specimen != null
+					&& specimen.getSpecimenPosition() != null
+					&& (specimen.getSpecimenPosition().getPositionDimensionOne() != null || specimen
+							.getSpecimenPosition().getPositionDimensionTwo() != null))
 			{
-				// bug 8294
-				String storageValue = null;
-				final Long storageContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
-				final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
-				final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-				final String containerName = specimen.getSpecimenPosition().getStorageContainer()
-						.getName();
-
-				if (storageContainerId != null)
+				if (specimen.getSpecimenPosition() != null
+						&& specimen.getSpecimenPosition().getStorageContainer() != null)
 				{
-					storageValue = StorageContainerUtil.getStorageValueKey(null, storageContainerId.toString(),
-							pos1, pos2);
-				}
-				else
-				{
-					storageValue = StorageContainerUtil.getStorageValueKey(containerName, null,
-							pos1, pos2);
-				}
-				if (!this.storageContainerIds.contains(storageValue))
-				{
-					this.storageContainerIds.add(storageValue);
-				}
-				else
-				{
-					//final Object[] arguments = {specimen.getLabel(), containerName, pos1, pos2};
-					//final String errorMsg = Constants.CONTAINER_ERROR_MSG;
-					throw this.getBizLogicException(null, "spec.storage.not.free", specimen
-							.getLabel()
-							+ ":" + containerName + ":" + pos1 + ":" + pos2);
+					// bug 8294
+					String storageValue = null;
+					final Long storageContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
+					final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+					final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+					final String containerName = specimen.getSpecimenPosition().getStorageContainer()
+							.getName();
+	
+					if (storageContainerId != null)
+					{
+						storageValue = StorageContainerUtil.getStorageValueKey(null, storageContainerId.toString(),
+								pos1, pos2);
+					}
+					else
+					{
+						storageValue = StorageContainerUtil.getStorageValueKey(containerName, null,
+								pos1, pos2);
+					}
+					if (!this.storageContainerIds.contains(storageValue))
+					{
+						this.storageContainerIds.add(storageValue);
+					}
+					else
+					{
+						//final Object[] arguments = {specimen.getLabel(), containerName, pos1, pos2};
+						//final String errorMsg = Constants.CONTAINER_ERROR_MSG;
+						throw this.getBizLogicException(null, "spec.storage.not.free", specimen
+								.getLabel()
+								+ ":" + containerName + ":" + pos1 + ":" + pos2);
+					}
 				}
 			}
+		}
+		catch (ApplicationException exception)
+		{
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
 		}
 	}
 

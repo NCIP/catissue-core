@@ -23,7 +23,9 @@ import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 
 /**
  * Shipment details. Shipment contains specimen(s) and/or container(s). Shipment
@@ -107,26 +109,34 @@ public class Shipment extends BaseShipment
 	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
-		if (arg0 instanceof ShipmentReceivingForm)
+		try
 		{
-			final ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) arg0;
-
-			this.setBasicShipmentReceivingProperties(shipmentReceivingForm);
-			this.setShipmentReceivingContents(shipmentReceivingForm);
-		}
-		else
-		{
-			super.setAllValues(arg0);
-			if (arg0 instanceof ShipmentForm)
+			if (arg0 instanceof ShipmentReceivingForm)
 			{
-				this.barcode = ((ShipmentForm) arg0).getBarcode();
-				if (((ShipmentForm) arg0).getShipmentRequestId() != 0)
+				final ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) arg0;
+	
+				this.setBasicShipmentReceivingProperties(shipmentReceivingForm);
+				this.setShipmentReceivingContents(shipmentReceivingForm);
+			}
+			else
+			{
+				super.setAllValues(arg0);
+				if (arg0 instanceof ShipmentForm)
 				{
-					final ShipmentRequest request = new ShipmentRequest();
-					request.setId(((ShipmentForm) arg0).getShipmentRequestId());
-					this.shipmentRequest = request;
+					this.barcode = ((ShipmentForm) arg0).getBarcode();
+					if (((ShipmentForm) arg0).getShipmentRequestId() != 0)
+					{
+						final ShipmentRequest request = new ShipmentRequest();
+						request.setId(((ShipmentForm) arg0).getShipmentRequestId());
+						this.shipmentRequest = request;
+					}
 				}
 			}
+		}
+		catch (ApplicationException exception)
+		{
+			final ErrorKey errorkey = ErrorKey.getErrorKey("invalid.container.name");
+			throw new AssignDataException(errorkey, exception, "");
 		}
 	}
 
@@ -143,8 +153,9 @@ public class Shipment extends BaseShipment
 	/**
 	 * Set the specimens and containers.
 	 * @param shipmentReceivingForm form containing all values.
+	 * @throws ApplicationException 
 	 */
-	private void setShipmentReceivingContents(ShipmentReceivingForm shipmentReceivingForm)
+	private void setShipmentReceivingContents(ShipmentReceivingForm shipmentReceivingForm) throws ApplicationException
 	{
 		// set the specimens and containers in containerCollection
 		this.populateContainerContents(shipmentReceivingForm);
@@ -154,8 +165,9 @@ public class Shipment extends BaseShipment
 	/**
 	 * Set the specimen(s).
 	 * @param shipmentReceivingForm form containing all values.
+	 * @throws ApplicationException 
 	 */
-	private void populateSpecimenContents(ShipmentReceivingForm shipmentReceivingForm)
+	private void populateSpecimenContents(ShipmentReceivingForm shipmentReceivingForm) throws ApplicationException
 	{
 		StorageContainer container = null;
 		container = ShippingTrackingUtility.getInTransitContainer(this.containerCollection);
@@ -253,8 +265,9 @@ public class Shipment extends BaseShipment
 	/**
 	 * Sets the container(s).
 	 * @param shipmentReceivingForm form containing all values.
+	 * @throws ApplicationException 
 	 */
-	private void populateContainerContents(ShipmentReceivingForm shipmentReceivingForm)
+	private void populateContainerContents(ShipmentReceivingForm shipmentReceivingForm) throws ApplicationException
 	{
 		String siteFromUser = "";
 		String parentContainerSelected = "";

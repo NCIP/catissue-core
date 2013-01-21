@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
@@ -584,13 +585,24 @@ public class SpecimenForm extends AbstractActionForm
 			logger.info("-----------Container while getting from domain--:" + container);
 			this.storageContainer = String.valueOf(container.getId());
 			this.selectedContainerName = container.getName();
-			this.pos1 = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,specimen.getSpecimenPosition()
-					.getPositionDimensionOne());
-			this.pos2 = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,specimen.getSpecimenPosition()
-					.getPositionDimensionTwo());
-			this.positionInStorageContainer =container.getName()+ " : "// container.getStorageType().getName() + " : "
-					+ container.getId() + " Pos(" + this.pos1 + ","
-					+ this.pos2 + ")";
+			try
+			{
+				this.pos1 = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,specimen.getSpecimenPosition()
+						.getPositionDimensionOne());
+				this.pos2 = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,specimen.getSpecimenPosition()
+						.getPositionDimensionTwo());
+				this.positionInStorageContainer =container.getName()+ " : "// container.getStorageType().getName() + " : "
+						+ container.getId() + " Pos(" + this.pos1 + ","
+						+ this.pos2 + ")";
+			}
+			catch (ApplicationException e)
+			{
+				this.pos1="";
+				this.pos2="";
+				this.positionInStorageContainer="";
+				e.printStackTrace();
+			}
+		
 			//this.setStContSelection(2);
 		}
 		//Bug 12374 and 12662

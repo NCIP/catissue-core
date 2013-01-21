@@ -227,6 +227,13 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 			e.printStackTrace();
 			throw this.getBizLogicException(e, "utility.error", "");
 		}
+		catch (ApplicationException appExp)
+		{
+			this.logger.error(appExp.getMessage(), appExp);
+			appExp.printStackTrace();
+			throw this
+					.getBizLogicException(appExp, appExp.getErrorKeyName(), appExp.getMsgValues());
+		}
 	}
 
 	/**

@@ -14,8 +14,10 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
@@ -340,6 +342,12 @@ public class SpecimenArray extends Container
 			this.logger.error(e.getMessage(),e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		catch (ApplicationException e)
+		{
+			e.printStackTrace();
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "SpecimenArray.java :");
 		}
 	}
 

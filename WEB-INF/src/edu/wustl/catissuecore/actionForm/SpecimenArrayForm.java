@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -287,20 +288,39 @@ public class SpecimenArrayForm extends ContainerForm
 			{
 				if (specimenArray != null && specimenArray.getLocatedAtPosition() != null)
 				{
+				try{	
 					this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 1, specimenArray.getLocatedAtPosition()
 							.getPositionDimensionOne());
 					this.positionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 2, specimenArray.getLocatedAtPosition()
 							.getPositionDimensionTwo());
+				}
+				catch (ApplicationException e)
+				{
+					// TODO Auto-generated catch block
+					this.positionDimensionOne="";
+					this.positionDimensionTwo="";
+					e.printStackTrace();
+				}
 				}
 			}
 			else
 			{
 				if (specimenArray != null && specimenArray.getLocatedAtPosition() != null)
 				{
-					this.pos1 = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 1, specimenArray.getLocatedAtPosition()
-							.getPositionDimensionOne());
-					this.pos2 = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 2, specimenArray.getLocatedAtPosition()
-							.getPositionDimensionTwo());
+					try
+					{
+						this.pos1 = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 1, specimenArray.getLocatedAtPosition()
+								.getPositionDimensionOne());
+						this.pos2 = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(), 2, specimenArray.getLocatedAtPosition()
+								.getPositionDimensionTwo());
+					}
+					catch (ApplicationException e)
+					{
+						// TODO Auto-generated catch block
+						this.pos1="";
+						this.pos2="";
+						e.printStackTrace();
+					}
 				}
 			}
 			//            this.positionInStorageContainer = container.getStorageType().getName() + " : " 
