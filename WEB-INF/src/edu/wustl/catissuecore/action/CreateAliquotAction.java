@@ -439,7 +439,7 @@ public class CreateAliquotAction extends BaseAction
 
 			final StorageContainer sContainer = new StorageContainer();				
 			// bug 11479
-			if ((containerId != null || containername != null) && !"-1".equals(containerId) /*&& posDim1 != null
+			if ((containerId != null || (containername != null && !"Virtual".equals(containername))) && !"-1".equals(containerId) /*&& posDim1 != null
 					&& posDim2 != null*/)
 			{
 				final SpecimenPosition specPos = new SpecimenPosition();
