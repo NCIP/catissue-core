@@ -761,15 +761,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			SpecimenCollectionGroup persistentSCG) throws BizLogicException {
 			Collection<ConsentTierStatus> consentColl=specimenCollectionGroup.getConsentTierStatusCollection();
 			Collection<ConsentTierStatus> persistConsentTierStatusCollection=persistentSCG.getConsentTierStatusCollection();
-			for (ConsentTierStatus consentTierStatus : consentColl) {
-				for (ConsentTierStatus persistConsentTierStatus : persistConsentTierStatusCollection) {
-					if(persistConsentTierStatus.getConsentTier().getId().equals(consentTierStatus.getConsentTier().getId()))
-					{
-						persistConsentTierStatus.setStatus(consentTierStatus.getStatus());
+			if(consentColl!=null)
+			{
+				for (ConsentTierStatus consentTierStatus : consentColl) {
+					if(persistConsentTierStatusCollection!=null)
+					{	
+						for (ConsentTierStatus persistConsentTierStatus : persistConsentTierStatusCollection) {
+							if(persistConsentTierStatus.getConsentTier().getId().equals(consentTierStatus.getConsentTier().getId()))
+							{
+								persistConsentTierStatus.setStatus(consentTierStatus.getStatus());
+							}
+						}
 					}
 				}
 			}
-
 	}
 
 	/**
