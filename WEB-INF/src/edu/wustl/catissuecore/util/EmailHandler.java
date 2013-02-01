@@ -321,8 +321,12 @@ public class EmailHandler
      */
     private boolean sendEmailToUser(final String userEmailAddress, final String subject, String body)
     {
-    	 final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+    	final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+    	final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
  		final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+ 		final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
+ 		final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
+ 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
  		final String appUrl = CommonServiceLocator.getInstance().getAppURL();
  		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") +
  		appUrl;
@@ -338,7 +342,7 @@ public class EmailHandler
          boolean emailStatus;
  		try
  		{
- 			email = new SendEmail(mailServer,sendFromEmailAddress);
+ 			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
  			emailStatus=email.sendMail(emailDetails);
  		}
  		catch (final MessagingException messExcp)
@@ -361,7 +365,11 @@ public class EmailHandler
     {
     	final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
         final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+        final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
         final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+        final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
+    	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
+ 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
         final String appUrl = CommonServiceLocator.getInstance().getAppURL();
         body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") +
         appUrl;
@@ -378,7 +386,7 @@ public class EmailHandler
         boolean emailStatus;
 		try
 		{
-			email = new SendEmail(mailServer,sendFromEmailAddress);
+			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
 			emailStatus=email.sendMail(emailDetails);
 		}
 		catch (final MessagingException messExcp)
@@ -400,7 +408,11 @@ public class EmailHandler
     {
     	 final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
          final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+         final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
          final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+         final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
+     	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
+ 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
          final String appUrl = CommonServiceLocator.getInstance().getAppURL();
          body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") +
          appUrl;
@@ -416,7 +428,7 @@ public class EmailHandler
          boolean emailStatus;
  		try
  		{
- 			email = new SendEmail(mailServer,sendFromEmailAddress);
+ 			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
  			emailStatus=email.sendMail(emailDetails);
  		}
  		catch (final MessagingException messExcp)
@@ -439,7 +451,11 @@ public class EmailHandler
     {
     	final String toEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
     	final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+    	final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
     	final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+    	final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
+    	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
+ 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
 
     	/*SendEmail email = new SendEmail();
     	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress,null,
@@ -453,7 +469,7 @@ public class EmailHandler
         boolean emailStatus;
 		try
 		{
-			email = new SendEmail(mailServer,sendFromEmailAddress);
+			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
 			emailStatus=email.sendMail(emailDetails);
 		}
 		catch (final MessagingException messExcp)
@@ -470,7 +486,11 @@ public class EmailHandler
 
     public boolean sendEmailForOrderDistribution(final String body,final String toEmailAddress,final String fromEmailAddress, final String ccEmailAddress, final String bccEmailAddress,  final String subject)
     {
+    	final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
     	final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+    	final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
+    	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
+ 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
         /*SendEmail email = new SendEmail();
         logger.info("Email body..........  \n"  + body);
         System.out.println("Email body..........  \n"  + body);
@@ -486,7 +506,7 @@ public class EmailHandler
         boolean emailStatus;
 		try
 		{
-			email = new SendEmail(mailServer,fromEmailAddress);
+			email = new SendEmail(mailServer,fromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
 			emailStatus=email.sendMail(emailDetails);
 		}
 		catch (final MessagingException messExcp)

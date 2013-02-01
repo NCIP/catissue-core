@@ -271,6 +271,33 @@
 				<echo>email.mailServer can be left blank.</echo>
 			</then>
 		</if>
+		<if>
+			<equals arg1="" arg2="${email.sendEmailFrom.emailPassword}" />
+			<then>
+				<echo>email.sendEmailFrom.emailPassword can be left blank.</echo>
+			</then>
+			<else>
+				<if>
+					<equals arg1="" arg2="${email.mailServer.port}" />
+					<then>
+						<echo>email.mailServer.port cannot be left blank.</echo>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${email.smtp.auth.enabled}" />
+					<then>
+						<echo>email.smtp.auth.enabled cannot be left blank.</echo>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${email.smtp.starttls.enabled}" />
+					<then>
+						<echo>email.smtp.starttls.enabled cannot be left blank.</echo>
+					</then>
+				</if>
+			</else>
+		</if>
+		
 
 
 		<!-- Check whether JAVA_HOME environment variable set or not -->
@@ -713,6 +740,10 @@
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
+			<replacefilter token="@@SENDEMAILFROM-EMAILPASSWORD@@" value="${email.sendEmailFrom.emailPassword}" />
+			<replacefilter token="@@MAILSERVER-PORT@@" value="${email.mailServer.port}" />
+			<replacefilter token="@@MAILSERVER-AUTHENTICATON@@" value="${email.smtp.auth.enabled}" />
+			<replacefilter token="@@MAILSERVER-TLS-ENABLED@@" value="${email.smtp.starttls.enabled}" />
 			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />
 			<replacefilter token="@@SESSION-TIME-OUT@@" value="${session.timeout}" />
 			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
@@ -1316,6 +1347,7 @@
 			<antcall target="integrate_cas" />-->
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
+			<antcall target="copyMailjar"/>
 			<antcall target="send_mail" />
 			<!--<delete dir="${temp.dir}" />-->
 		</target>
@@ -3067,6 +3099,10 @@
 		</java>
 	</target>
 
+	<target name="copyMailjar">
+		<copy file="WEB-INF/lib/mail.jar" todir="${env.ANT_HOME}/lib" overwrite="true"/>
+	</target>
+	
 	<!--Send mail to user-->
 	<target name="send_mail" description="Send mail to user">
 	    <condition property="protocol" value="https" else="http">
@@ -3078,7 +3114,8 @@
 		<echo message="jboss.container.secure property is set to: ${jboss.container.secure} protocol set to: ${protocol}" />
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
-		<mail mailhost="${email.mailServer}" subject="caTissue Plus v2.0 Successfully Deployed" encoding="plain" failonerror="false">
+		<mail mailhost="${email.mailServer}" subject="caTissue Plus v2.1 Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" 
+			password="${email.sendEmailFrom.emailPassword}"  encoding="mime" mailPort="${email.mailServer.port}" failonerror="false">
 			<from address="${email.sendEmailFrom.emailAddress}" />
 			<to address="${email.administrative.emailAddress}" />
 			<message>
