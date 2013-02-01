@@ -107,10 +107,29 @@
 	</property>
 
 	<property>
+		<name>email.sendEmailFrom.emailPassword</name>
+		<value>@@SENDEMAILFROM-EMAILPASSWORD@@</value>
+	</property>
+	
+	<property>
 		<name>email.mailServer</name>
 		<value>@@MAILSERVER-EMAILADDRESS@@</value>
 	</property>
 
+	<property>
+		<name>email.mailServer.port</name>
+		<value>@@MAILSERVER-PORT@@</value>
+	</property>
+	
+	<property>
+		<name>email.smtp.auth.enabled</name>
+		<value>@@MAILSERVER-AUTHENTICATON@@</value>
+	</property>
+	
+	<property>
+		<name>email.smtp.starttls.enabled</name>
+		<value>@@MAILSERVER-TLS-ENABLED@@</value>
+	</property>
 
 	<!--  Properties needed for Common Package Error Email  -->
 	<property>
