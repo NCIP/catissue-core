@@ -1,0 +1,13 @@
+Display Label,User defined Label,IsSystemOrDefault
+Header,Participant Details,Default
+NUM_REG_PARTICIPANTS,Total number of registered participants,Default
+NUM_CONSENTED_PARTICIPANT,Total number of consented participants,Default
+NUM_MALE_PARTICIPANTS,Total number of male participants,Default
+NUM_FEMALE_PARTICIPANTS,Total number of female participants,Default
+Header,SCG Details,default
+NUM_COMPLETE_SCG,Total number of completed SCGs,Default
+NUM_PENDING_SCG,Total number of pending SCGs as of today,Default
+Header,Specimen Details,default
+NUM_AVAILABLE_SPECIMEN,Total number of available specimens,Default
+NUM_PENDING_SPECIMEN,Total number of pending specimens as of today,Default
+NUM_DISTRIBUTED_SPECIMENS,Total number of distributed specimens,Default
