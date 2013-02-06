@@ -5895,6 +5895,11 @@ public class Constants
 	public static final String PAGE_OF_CREATE_DERIVATIVE="pageOfCreateDerivative";
 	
 	public static final String PAGE_OF_SPECIMEN_SUMMARY="specimenSummaryPage";
+	public static final String DASHBOARD_ITEMS_FILE_PATH = "dashboard.items.file";
+	public static final String USER_DEFINED_LABEL = "userDefinedLabel";
+	public static final String LABEL_ID = "labelId";
+	public static final String SEQ_ORDER = "seqOrder";
+	public static final String ASSOC_ID = "assocId";
 
 
 }

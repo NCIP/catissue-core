@@ -35,19 +35,20 @@
 <script>
 var noReports = false;
 
- function getResults(key) 
-   {
-	 if (key!=0)
+function getResults(key) 
+{
+	 if (key!=0) 
 	 {
+		var cpId = "${param.cpSearchCpId}";
 		var request = newXMLHTTPReq();
 		var url = "QueryResultAjaxAction.do";//AJAX action class
 		request.onreadystatechange = getReadyStateHandler(request,updatePage,true);//AJAX handler
 		request.open("POST", url, true);
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-		var dataToSend = "labelSQLAssocID=" + key;
+		var dataToSend = "labelSQLId=" + key+"&cpId="+cpId;
 		request.send(dataToSend);
 	 }
-   }
+}
 
    function updatePage(responseString)
 {	

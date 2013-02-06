@@ -29,8 +29,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
@@ -48,14 +46,14 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.query.generator.ColumnValueBean;
-import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
-import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 
 
 // TODO: Auto-generated Javadoc
@@ -154,6 +152,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		if (Constants.ADD.equals(operation) && invokeFunction == null && !condition1) //bug 18481
 		{
 			this.initCleanSession(request);
+			final CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
+			collectionProtocolForm.setDashboardLabelJsonValue(CollectionProtocolUtil.populateDashboardLabelJsonValue(null));
+			request.setAttribute("isDefaultDashBoard",true);
+			
 		}
 
 		this.LOGGER.debug("operation in coll prot action" + operation);
@@ -433,9 +435,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 * @param mapping
 	 *            : mapping
 	 * @return ActionForward : ActionForward
+	 * @throws Exception 
 	 */
 	private ActionForward initCollectionProtocolPage(HttpServletRequest request, ActionForm form,
-			String pageOf, ActionMapping mapping)
+			String pageOf, ActionMapping mapping) throws Exception
 	{
 		final CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
 		final HttpSession session = request.getSession();
@@ -499,9 +502,18 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean
 				.getParentCollectionProtocolId());
 		collectionProtocolForm.setIsEMPIEnable(collectionProtocolBean.getIsEMPIEnable());
+		Boolean isDefaultDashboard = false;
+		//Retrieving associations from CPId
+		List<LabelSQLAssociation> labelSQLAssociations = new LabelSQLAssociationBizlogic()
+				.getLabelSQLAssocCollection(collectionProtocolBean
+						.getIdentifier());
+		if(labelSQLAssociations.isEmpty())
+		{
+			isDefaultDashboard = true;
+		}
 		collectionProtocolForm
-				.setDashboardLabelJsonValue(populateDashboardLabelJsonValue(collectionProtocolBean
-						.getIdentifier()));
+				.setDashboardLabelJsonValue(CollectionProtocolUtil.populateDashboardLabelJsonValue(labelSQLAssociations));
+		request.setAttribute("isDefaultDashBoard", isDefaultDashboard);
 		return mapping.findForward(pageOf);
 	}
 
@@ -519,48 +531,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 	}
 	
-	/**
-	 * Creates JSON for CP Dashboard items from domain objects
-	 * @param cpId
-	 * @return
-	 */
-	private String populateDashboardLabelJsonValue(Long cpId)
-	{
-		String dashboardLabelJsonValue;
-		JSONObject mainJsonObject = new JSONObject();
-		JSONArray innerDataArray = new JSONArray();
-		try
-		{
-			//Retrieving associations from CPId
-			List<LabelSQLAssociation> labelSQLAssociations = new LabelSQLAssociationBizlogic()
-					.getLabelSQLAssocCollection(cpId);
-
-			if (labelSQLAssociations.size() != 0)
-			{
-				//Putting the JSON values from the objects
-				for (LabelSQLAssociation labelSQLAssociation : labelSQLAssociations)
-				{
-					JSONObject innerJsonObject = new JSONObject();
-
-					innerJsonObject.put("assocId", labelSQLAssociation.getId());
-					innerJsonObject.put("seqOrder", labelSQLAssociation.getSeqOrder());
-					innerJsonObject.put("labelId", labelSQLAssociation.getLabelSQL().getId());
-					innerJsonObject.put("userDefinedLabel", labelSQLAssociation
-							.getUserDefinedLabel());
-					innerDataArray.put(innerJsonObject);
-
-				}
-			}
-			mainJsonObject.put("row", innerDataArray);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-
-		dashboardLabelJsonValue = mainJsonObject.toString();
-		Logger.out.info("JSON string for CP Dashboard: " + dashboardLabelJsonValue);
-		return dashboardLabelJsonValue;
-	}
+	
 
 }

@@ -68,6 +68,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLBizlogic;
 import edu.wustl.common.labelSQLApp.domain.LabelSQL;
 import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 
@@ -1925,6 +1926,65 @@ public class CollectionProtocolUtil
 
 		}
 		return specimenRequirementBean;
+	}
+	
+	/**
+	 * Creates JSON for CP Dashboard items from domain objects
+	 * @param cpId
+	 * @return
+	 */
+	public static String populateDashboardLabelJsonValue(List<LabelSQLAssociation> labelSQLAssociations)
+	{
+		String dashboardLabelJsonValue;
+		JSONObject mainJsonObject = new JSONObject();
+		JSONArray innerDataArray = new JSONArray();
+		try
+		{
+			  if(labelSQLAssociations!=null && labelSQLAssociations.size() > 0)	
+			  {
+			    //Putting the JSON values from the objects
+				for (LabelSQLAssociation labelSQLAssociation : labelSQLAssociations)
+				{
+					JSONObject innerJsonObject = new JSONObject();
+
+					innerJsonObject.put(Constants.ASSOC_ID, labelSQLAssociation.getId());
+					innerJsonObject.put(Constants.SEQ_ORDER, labelSQLAssociation.getSeqOrder());
+					innerJsonObject.put(Constants.LABEL_ID, labelSQLAssociation.getLabelSQL().getId());
+					innerJsonObject.put(Constants.USER_DEFINED_LABEL, labelSQLAssociation
+							.getUserDefinedLabel());
+					innerDataArray.put(innerJsonObject);
+				}
+			  }
+			  else
+			  {
+					List<String[]> dashbrdItems = edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD_ITEMS;
+					int seqorder = 1; 
+					LabelSQLBizlogic bizlogic = new LabelSQLBizlogic();
+					for(String[] item:dashbrdItems)
+					 {
+					    Long labelsqlId = bizlogic.getLabelSqlIdByLabel(item[0]);
+					  if(labelsqlId!=null)
+					  {
+					    JSONObject innerJsonObject = new JSONObject();
+						innerJsonObject.put(Constants.ASSOC_ID, Constants.DOUBLE_QUOTES); //Association id is not availabel for defualt items
+						innerJsonObject.put(Constants.SEQ_ORDER, seqorder++);
+						innerJsonObject.put(Constants.LABEL_ID, labelsqlId);
+						innerJsonObject.put(Constants.USER_DEFINED_LABEL,item[1]);
+						innerDataArray.put(innerJsonObject);
+					  }
+					 }
+				}
+			
+			mainJsonObject.put("row", innerDataArray);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+		dashboardLabelJsonValue = mainJsonObject.toString();
+		Logger.out.info("JSON string for CP Dashboard: " + dashboardLabelJsonValue);
+		return dashboardLabelJsonValue;
 	}
 
 }

@@ -9,7 +9,7 @@
 			<pathelement location="./lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
-
+	
 	<property environment="env" />
 	<import file="build-properties.xml"/>
 	<import file="dbunit_temp.xml"/>
@@ -62,6 +62,9 @@
 	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
 	<property name="cacaore.deployables" value="${cacore.deployable.location}" />
+	
+	<property name="dashboard.csv.dir" value="${base.dir}/insert_dashboard_queries" />
+	<property name="dashboard.parameters.csv.file" value="dashboard_sqls.csv" />
 
 	<property name="jboss.server.host.port" value="${jboss.server.host}:${jboss.server.port}" />
 	<if>
@@ -734,6 +737,7 @@
 			<fileset dir="${basedir}">
 				<include name="caTissueCdmsIntegration.properties" />
 			</fileset>
+			<fileset file="${dashboard.items.file}" />
 		</copy>
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
 
@@ -822,6 +826,7 @@
 						<replacefilter token="@@database.name@@" value="${database.name}" />
 						<replacefilter token="@@database.userName@@" value="${database.username}" />
 						<replacefilter token="@@database.password@@" value="${database.password}" />
+			            <replacefilter token="@@dashboard.items.file@@" value="${dashboard.items.file}" />
 
 		</replace>
 		<!-- Add values to properties if EMPI feature is enabled-->
@@ -5340,6 +5345,67 @@ Thanking You,
 		<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 		<antcall target="update_protection_element" />
 	</target>
+	
+	<!-- this task insert the dashboard labelsql queries to labelSql table in database -->
+	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}"/> 
+		<target name="insert_dashboard_queries">	
+			<echo message="------------------------------" />
+			<echo message="Inserting dashboard queries..." />
+			<echo message="------------------------------" />
+			<for param="line" list="${query_file}" delimiter="${line.separator}">
+				<sequential>
+							<propertyregex property="arg1"
+								input="@{line}"
+								regexp="(.+?),(.+)"
+								select="\1"
+								casesensitive="false" 
+								override = "true"/>
+							<propertyregex property="arg2"
+								input="@{line}"
+								regexp="(.+?),(.+)"
+								select="\2"
+								casesensitive="false" 
+								override = "true"/>
+					<if>	
+						<equals arg1="mysql" arg2="${database.type}" />
+							<then>
+								<sql driver="${mysql.driver.string}" 
+								url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
+								userid="${database.username}" 
+								password="${database.password}">
+								<classpath>
+									<fileset dir="${lib.dir}">
+										<include name="*.jar" />
+									</fileset>
+								</classpath>
+								insert into labelsql values(NULL,'${arg1}',${arg2});
+								</sql>	
+							</then>
+							
+						<elseif >
+						<equals arg1="oracle" arg2="${database.type}" />
+							<then>					
+								<sql driver="${oracle.driver.string}"
+								url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+								userid="${database.username}"
+								password="${database.password}"
+								rdbms="oracle">
+								<classpath>
+									<fileset dir="${lib.dir}">
+										<include name="*.jar" />
+									</fileset>
+								</classpath>
+								insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}',${arg2});
+								</sql>
+							</then>
+						</elseif>
+					</if>		
+				</sequential>
+			</for>
+			<echo message="---------------------------------------" />
+			<echo message="Inserting dashboard queries finished..." />
+			<echo message="---------------------------------------" />
+		</target>
 	
 		
 </project>

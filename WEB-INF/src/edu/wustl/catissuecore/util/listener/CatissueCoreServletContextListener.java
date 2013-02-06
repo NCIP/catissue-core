@@ -6,7 +6,11 @@
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
@@ -15,6 +19,10 @@ import javax.mail.MessagingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import org.apache.commons.io.FilenameUtils;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import net.sf.ehcache.CacheException;
 import titli.model.util.TitliResultGroup;
@@ -77,10 +85,12 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
  * */
 public class CatissueCoreServletContextListener implements ServletContextListener
 {
+
 	/**
 	 * CatissueCoreServletContextListener Logger.
 	 */
-	private static final Logger logger = Logger.getCommonLogger(CatissueCoreServletContextListener.class);
+	private static final Logger logger = Logger
+			.getCommonLogger(CatissueCoreServletContextListener.class);
 	/**
 	 * DATASOURCE_JNDI_NAME.
 	 */
@@ -115,7 +125,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
 			initCiderIntegration();
 			QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
-			if(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
+			if (XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
 			{
 				BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
 				// eMPI integration initialization
@@ -127,19 +137,20 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (final Exception e)
 		{
-			CatissueCoreServletContextListener.logger.error("Application failed to initialize"
-					+e.getMessage(),e);
+			CatissueCoreServletContextListener.logger.error(
+					"Application failed to initialize" + e.getMessage(), e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
 
 	private void initCiderIntegration()
 	{
-		if(XMLPropertyHandler.getValue("CiderWmqEnabled").equalsIgnoreCase("true"))
+		if (XMLPropertyHandler.getValue("CiderWmqEnabled").equalsIgnoreCase("true"))
 		{
 			SpecimenWmqProcessor.getInstance();
 			Timer dataBackloader = new Timer(true);
-			dataBackloader.scheduleAtFixedRate(new SpecimenDataBackloader(), DAOUtility.getStartTimeForTodaysDate("23:30"),(24*60*60*1000) );
+			dataBackloader.scheduleAtFixedRate(new SpecimenDataBackloader(),
+					DAOUtility.getStartTimeForTodaysDate("23:30"), (24 * 60 * 60 * 1000));
 		}
 	}
 
@@ -160,8 +171,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			}
 			catch (Exception excep)
 			{
-				logger
-						.error(" ####### ERROR WHILE INITIALISING THE SHECUDER FOR PROCESSING THE PARTICIPANTS ######### ");
+				logger.error(" ####### ERROR WHILE INITIALISING THE SHECUDER FOR PROCESSING THE PARTICIPANTS ######### ");
 				logger.error(excep.getMessage(), excep);
 			}
 
@@ -173,8 +183,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (Exception excep)
 		{
-			logger
-					.error("Could not initialized application, Error in loading the HL7 race gender code property handler.");
+			logger.error("Could not initialized application, Error in loading the HL7 race gender code property handler.");
 			logger.error(excep.getMessage(), excep);
 		}
 		catch (Error excep)
@@ -206,8 +215,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 * @throws DAOException DAOException
 	 * @throws ParseException ParseException
+	 * @throws IOException 
 	 */
-	public void initCatissueParams() throws ClassNotFoundException, DAOException, ParseException
+	public void initCatissueParams() throws ClassNotFoundException, DAOException, ParseException,
+			IOException
 	{
 		edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
 		this.addDefaultProtectionGroupsToMap();
@@ -222,12 +233,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		Utility.initializePrivilegesMap();
 		this.initTitliIndex();
 		this.initCDEManager();
+		this.initDashboardCache();
 		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "PrintServiceImplementor.properties";
 		Variables.setPrinterInfo(absolutePath);
-		System
-				.setProperty("app.propertiesDir", CommonServiceLocator.getInstance()
-						.getPropDirPath());
+		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
 	}
 
 	/**
@@ -243,7 +253,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
 		HelpXMLPropertyHandler.init(CommonServiceLocator.getInstance().getPropDirPath()
-				+ File.separator+"help_links.xml");
+				+ File.separator + "help_links.xml");
 	}
 
 	/**
@@ -262,8 +272,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		try
 		{
-			final CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
-					.getInstance();
+			final CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
 			AnnotationUtil.getSystemEntityList();
 			final Long participantId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
@@ -276,8 +285,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			cacheManager.addObjectToCache("specimenEntityId", specimenEntityId);
 			final Long cpEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
-			cacheManager.addObjectToCache(
-					AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID, cpEntityId);
+			cacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,
+					cpEntityId);
 
 			final Long entityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
@@ -289,18 +298,18 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					spRecEtyId);
 			final Long scgRecEtyId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
-			cacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,
-					scgRecEtyId);
+			cacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgRecEtyId);
 			EntityCache.getInstance();
 			logger.debug("Entity Cache is initialised");
 		}
 		catch (final Exception e)
 		{
-			CatissueCoreServletContextListener.logger.error("Exception occured while initialising " +
-					"entity cache"+e.getMessage(),e);
+			CatissueCoreServletContextListener.logger.error("Exception occured while initialising "
+					+ "entity cache" + e.getMessage(), e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
+
 	/**
 	 * Initialize CDE Manager.
 	 */
@@ -312,8 +321,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (final Exception ex)
 		{
-			CatissueCoreServletContextListener.logger.error("Could not initialized application, " +
-					"Error in creating CDE manager.");
+			CatissueCoreServletContextListener.logger.error("Could not initialized application, "
+					+ "Error in creating CDE manager.");
 			CatissueCoreServletContextListener.logger.error(ex.getMessage(), ex);
 			throw new RuntimeException(ex);
 		}
@@ -327,8 +336,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 
 		final String appHome = CommonServiceLocator.getInstance().getAppHome();
 		final StringBuffer fileName = new StringBuffer();
-		fileName.append(appHome).append(File.separator).append(
-				ApplicationProperties.getValue("application.version.file"));
+		fileName.append(appHome).append(File.separator)
+				.append(ApplicationProperties.getValue("application.version.file"));
 		final CVSTagReader cvsTagReader = new CVSTagReader();
 		final String cvsTag = cvsTagReader.readTag(fileName.toString());
 		Variables.applicationCvsTag = cvsTag;
@@ -442,20 +451,20 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			SpecimenWmqProcessor.cleanup();
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.shutdown();
-			
+
 		}
 		catch (final CacheException e)
 		{
-			CatissueCoreServletContextListener.logger.error("Exception occured while shutting " +
-					"instance of CatissueCoreCacheManager"
-					+e.getMessage(),e);
+			CatissueCoreServletContextListener.logger.error("Exception occured while shutting "
+					+ "instance of CatissueCoreCacheManager" + e.getMessage(), e);
 		}
 		catch (final DAOException e)
 		{
-			CatissueCoreServletContextListener.logger.error("Exception occured while updating " +
-					"the Bulk Operation job status." + e.getMessage(), e);
+			CatissueCoreServletContextListener.logger.error("Exception occured while updating "
+					+ "the Bulk Operation job status." + e.getMessage(), e);
 		}
 	}
+
 	/**
 	 * Initialize variables required for Edinburg requirement.
 	 */
@@ -486,6 +495,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			Variables.isEthnicityRemove = true;
 		}
 	}
+
 	/**
 	 * Initialize variables required for DFCI requirement.
 	 */
@@ -508,4 +518,55 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					.getValue(Constants.APP_ADDITIONAL_INFO);
 		}
 	}
+
+	/** This method reads the file containing default dashboard items and system level dashboard items.
+	 *  And stores the items in two different Arraylist defined as Constants. These constants are further used
+	 *  to display the respective dashboard.
+	 */
+
+	private void initDashboardCache() throws IOException
+	{
+
+		String filepath = XMLPropertyHandler.getValue(Constants.DASHBOARD_ITEMS_FILE_PATH);
+		String filename = FilenameUtils.getName(filepath);
+		
+		//get the file from server's properties folder
+		String server_file_path =  CommonServiceLocator.getInstance().getPropDirPath()
+				+ File.separator + filename;
+		
+		if (filepath != null && !filepath.isEmpty())
+		{
+			CSVReader reader = new CSVReader(new FileReader(server_file_path));
+
+			List<String[]> dashboardItems = reader.readAll();
+			List<String[]> systemDashboardItems = new ArrayList<String[]>();
+			List<String[]> defaultDashboardItems = new ArrayList<String[]>();
+
+			if (!dashboardItems.isEmpty())
+				dashboardItems.remove(0); //remove the header from items
+
+			for (String[] item : dashboardItems)
+			{
+				if (item.length == 3)
+				{
+					String type = item[2];
+					if (edu.wustl.common.util.global.Constants.SYSTEM_DASHBOARD
+							.equalsIgnoreCase(type))
+					{
+						systemDashboardItems.add(item);
+					}
+					else if (edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD
+							.equalsIgnoreCase(type))
+					{
+						defaultDashboardItems.add(item);
+					}
+				}
+			}
+			edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD_ITEMS = defaultDashboardItems;
+			edu.wustl.common.util.global.Constants.SYSTEM_DASHBOARD_ITEMS = systemDashboardItems;
+
+			reader.close();
+		}
+	}
+
 }

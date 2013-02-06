@@ -839,6 +839,10 @@
 		<copy todir="${zip.dir}/modules/insert_dashboard_queries" overwrite="true">
 			<fileset dir="${base.dir}/insert_dashboard_queries" />
 		</copy>
+		<!-- Rinku: Add Default and system dashboard item file to zip -->
+		<copy todir="${zip.dir}" overwrite="true">
+			<fileset file="${base.dir}/Default_cp_And_System_dashboard.csv" />
+		</copy>
 		
 		<!--<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />-->
 

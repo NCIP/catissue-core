@@ -1,6 +1,6 @@
 var dashboardItemGrid, dashboardItemGridCombo, dashboardItemRowCounter = 1;
 function doCPDashboardInitGrid() {
-	dashboardItemGrid = new dhtmlXGridObject('cpDashboard_container');
+dashboardItemGrid = new dhtmlXGridObject('cpDashboard_container');
 	dashboardItemGrid.setImagePath("dhtmlx_suite/imgs/");
 	dashboardItemGrid.setSkin("dhx_skyblue");
 	dashboardItemGrid
@@ -32,8 +32,10 @@ function initdashboardItemGridCombo(loader) {
 }
 
 function initdashboardItemGridForEdit() {
-
-	var jsonObject = eval('(' + document
+    
+    var disableEdit = isdefault;
+    
+    var jsonObject = eval('(' + document
 			.getElementById("dashboardLabelJsonValue").value + ')');
 
 	if (jsonObject.row.length == 0) {
@@ -49,12 +51,26 @@ function initdashboardItemGridForEdit() {
 				jsonObject.row[i].seqOrder);
 		dashboardItemGrid.cellById(counter, 2)
 				.setValue(jsonObject.row[i].labelId);
+dashboardItemGrid.cellById(counter, 2).setDisabled(disableEdit);
 		dashboardItemGrid.cellById(counter, 3).setValue(
 				jsonObject.row[i].userDefinedLabel);
+dashboardItemGrid.cellById(counter, 3).setDisabled(disableEdit);
 		dashboardItemGrid.cellById(counter, 4).setValue("false");
-	}
 
-	dashboardItemGrid.selectRowById(0);
+
+	}
+document.getElementById("addSpecimenReq").disabled = (disableEdit == "true");
+document.getElementById("deleteStudyForm").disabled = (disableEdit == "true");
+if(disableEdit == "true") 
+{
+ document.getElementById("mesgSpan").style.display = "none";
+} 
+else
+{
+document.getElementById("mesgSpan").style.display = "block";
+}
+ 
+dashboardItemGrid.selectRowById(0);
 }
 
 function addCSLevelFormRow() {
@@ -73,17 +89,25 @@ function checkValue() {
 	}
 }
 function setCSLevelFormData() {
-	var count = dashboardItemGrid.getRowsNum();
+	
+	var isSavedashboard = true; 
+	
 	var dataArrayString = "";
-
-	if (count == 1) {
+  	if(document.getElementById("saveDashboard") != null)
+  	{
+  		isSavedashboard = document.getElementById("saveDashboard").checked;
+  	}
+	if(isSavedashboard)
+  {
+	 var count = dashboardItemGrid.getRowsNum();
+	 if (count == 1) {
 		var rowID = dashboardItemGrid.getRowId(0);
 		var labelId = dashboardItemGrid.cellById(rowID, 2).getValue();
 		var userDefinedLabel = dashboardItemGrid.cellById(rowID, 3).getValue();
 		if (labelId == "" && userDefinedLabel == "") {
 			count = 0;
 		}
-	}
+	 }
 	for ( var i = 0; i < count; i++) {
 		var rowID = dashboardItemGrid.getRowId(i);
 
@@ -103,9 +127,32 @@ function setCSLevelFormData() {
 			dataArrayString = dataArrayString + jsonString + ',';
 		}
 	}
+  }
 
 	var mainJsonString = '{"row":[' + dataArrayString + ']}';
 
 	document.getElementById("dashboardLabelJsonValue").value = mainJsonString;// JSON.stringify(jsonObject);
 
+}
+
+function enableDisableGrid(checkbox)
+{
+	var cbStatus = !(checkbox.checked);
+        document.getElementById("addSpecimenReq").disabled = cbStatus ;
+        document.getElementById("deleteStudyForm").disabled = cbStatus ; 
+         if(cbStatus == true ) //checkbox is not checked
+      {
+           document.getElementById("mesgSpan").style.display = "none";
+      } 
+     else
+     {
+          document.getElementById("mesgSpan").style.display = "block";
+     }
+	
+        var count = dashboardItemGrid.getRowsNum();
+	for ( var i = 0; i < count; i++) {
+		var rowID = dashboardItemGrid.getRowId(i);
+		dashboardItemGrid.cellById(rowID, 2).setDisabled(cbStatus);
+ 		dashboardItemGrid.cellById(rowID, 3).setDisabled(cbStatus);
+         }
 }

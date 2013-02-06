@@ -731,6 +731,7 @@
 			<fileset dir="${base.dir}/modules/caTissue/conf">
 				<include name="caTissueCdmsIntegration.properties" />
 			</fileset>
+			<fileset file="${dashboard.items.file}" />
 		</copy>
 
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
@@ -778,6 +779,7 @@
 									<replacefilter token="@@database.name@@" value="${database.name}" />
 									<replacefilter token="@@database.userName@@" value="${database.username}" />
 									<replacefilter token="@@database.password@@" value="${database.password}" />
+			<replacefilter token="@@dashboard.items.file@@" value="${dashboard.items.file}" />
 		</replace>
 		<!-- Add values to properties if EMPI feature is enabled-->
 		<if>
