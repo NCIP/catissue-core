@@ -153,8 +153,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			this.initCleanSession(request);
 			final CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
-			collectionProtocolForm.setDashboardLabelJsonValue(CollectionProtocolUtil.populateDashboardLabelJsonValue(null));
-			request.setAttribute("isDefaultDashBoard",true);
+			if(!edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD_ITEMS.isEmpty())
+			{
+			 collectionProtocolForm.setDashboardLabelJsonValue(CollectionProtocolUtil.populateDashboardLabelJsonValue(null));
+			 request.setAttribute("isDefaultDashBoard",true);
+			}
 			
 		}
 
@@ -507,7 +510,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		List<LabelSQLAssociation> labelSQLAssociations = new LabelSQLAssociationBizlogic()
 				.getLabelSQLAssocCollection(collectionProtocolBean
 						.getIdentifier());
-		if(labelSQLAssociations.isEmpty())
+		if(labelSQLAssociations.isEmpty() && !edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD_ITEMS.isEmpty())
 		{
 			isDefaultDashboard = true;
 		}
