@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
+	<property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+	<property name="clob.type" value="longtext" dbms="mysql" />
+	<property name="clob.type" value="clob" dbms="oracle" />
+
+	<property name="now" value="sysdate" dbms="oracle" />
+	<property name="now" value="now()" dbms="mysql" />
+
+	<changeSet id="1" author="catissuecore" dbms="oracle">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">SELECT COUNT(*) FROM
+				CSM_PROTECTION_GROUP CPG INNER JOIN CSM_APPLICATION CA ON
+				CPG.APPLICATION_ID = CA.APPLICATION_ID
+				WHERE
+				CPG.PROTECTION_GROUP_NAME = 'PUBLIC_QUERY_PROTECTION_GROUP' AND
+				CA.APPLICATION_NAME = 'catissuecore';
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="CSM_PROTECTION_GROUP">
+			<column name="PROTECTION_GROUP_ID" valueComputed="(CSM_PROTECTIO_PROTECTION_G_SEQ.nextval)" />
+			<column name="PROTECTION_GROUP_NAME" value="PUBLIC_QUERY_PROTECTION_GROUP" />
+			<column name="PROTECTION_GROUP_DESCRIPTION" value="NULL" />
+			<column name="APPLICATION_ID" valueNumeric="1" />
+			<column name="LARGE_ELEMENT_COUNT_FLAG" valueNumeric="0" />
+			<column name="UPDATE_DATE" valueDate="${now}" />
+			<column name="PARENT_PROTECTION_GROUP_ID" value="NULL" />
+		</insert>
+	</changeSet>
+
+	<changeSet id="2" author="catissuecore" dbms="mysql">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">SELECT COUNT(*) FROM
+				CSM_PROTECTION_GROUP CPG INNER JOIN CSM_APPLICATION CA ON
+				CPG.APPLICATION_ID = CA.APPLICATION_ID
+				WHERE
+				CPG.PROTECTION_GROUP_NAME = 'PUBLIC_QUERY_PROTECTION_GROUP' AND
+				CA.APPLICATION_NAME = 'catissuecore';
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="CSM_PROTECTION_GROUP">
+			<column name="PROTECTION_GROUP_NAME" value="PUBLIC_QUERY_PROTECTION_GROUP" />
+			<column name="PROTECTION_GROUP_DESCRIPTION" value="NULL" />
+			<column name="APPLICATION_ID" valueNumeric="1" />
+			<column name="LARGE_ELEMENT_COUNT_FLAG" valueNumeric="0" />
+			<column name="UPDATE_DATE" valueDate="${now}" />
+			<column name="PARENT_PROTECTION_GROUP_ID" value="NULL" />
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>

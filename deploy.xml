@@ -104,6 +104,7 @@
 		<then>
 			<property name ="final.database.driver" value="${mysql.driver.string}"/>
 			<property name="final.database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+			<property name="final.csm.database.url" value="jdbc:mysql://${csm.database.host}:${csm.database.port}/${csm.database.name}" />
 		</then>
 
 		<elseif>
@@ -111,6 +112,7 @@
 			<then>
 				<property name ="final.database.driver" value="${oracle.driver.string}"/>
 				<property name="final.database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+				<property name="final.csm.database.url" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}" />
 			</then>
 		</elseif>
 	</if>
@@ -1784,6 +1786,7 @@
 						<echo>After Insert paths: ${pathtime}</echo>
 		<antcall target="liquibase_upgrade_target"/>
 		<antcall target="upgrade_db_from_plusv20_plusv2.1"/>
+		<antcall target="update_protection_element" />
 
 
 		<antcall target="addEMPIMetadata" />
@@ -2142,7 +2145,7 @@
 	<target name="upgrade_NCI_1.2" depends="assert, upgrade_db_from_plusv1.2_to_plusv2.1, upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
 	</target>
 	<!--Target for Application and Database Upgrade from Suite 2.0 to Plus 2.1-->
-	<target name="upgrade_Plus_2.0" depends="assert, upgrade_db_from_plusv20_plusv2.1, upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
+	<target name="upgrade_Plus_2.0" depends="assert, upgrade_db_from_plusv20_plusv2.1,update_protection_element, upgrade_app" description="Target for Application and Database Upgrade from Suitev1.2  to Plusv2.0">
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
@@ -3100,7 +3103,7 @@
 	</target>
 
 	<target name="copyMailjar">
-		<copy file="WEB-INF/lib/mail.jar" todir="${env.ANT_HOME}/lib" overwrite="true"/>
+		<copy file="WEB-INF/lib/mail.jar" todir="${env.ANT_HOME}/lib" overwrite="true" failonerror="false"/>
 	</target>
 	
 	<!--Send mail to user-->
@@ -5327,10 +5330,15 @@ Thanking You,
 	
 	</target>
 	
+	<target name="update_protection_element">
+			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_protection_element.xml" driver="${final.database.driver}" url="${final.csm.database.url}" username="${csm.database.username}" password="${csm.database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
 	
 	<target name="upgrade_db_from_plusv1.2_to_plusv2.1">
 		<antcall target="upgrade_db_from_suitev1.2_to_plus20" />
 		<antcall target="upgrade_db_from_plusv20_plusv2.1" />
+		<antcall target="update_protection_element" />
 	</target>
 	
 		
