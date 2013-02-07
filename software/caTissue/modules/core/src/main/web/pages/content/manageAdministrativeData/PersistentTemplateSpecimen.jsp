@@ -207,7 +207,7 @@ Ext.onReady(function(){
   							   <logic:notEqual name="isPersistent" value="true">
 								<td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="storageLocationForSpecimen"
-									  optionsList = "<%=request.getAttribute("storageContainerList")%>"
+									  optionsList = '<%=request.getAttribute("storageContainerList")%>'
 									  initialValue="<%=form.getStorageLocationForSpecimen()%>"
 									  styleClass="black_ar"
 									  size="20"
@@ -257,7 +257,7 @@ Ext.onReady(function(){
                               <td align="left" class="black_ar">Specimen Creation Event</td>
 							  <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="creationEventForSpecimen"
-									  optionsList = "<%=request.getAttribute("sppEventList")%>"
+									  optionsList = '<%=request.getAttribute("sppEventList")%>'
 									  initialValue="${createSpecimenTemplateForm.creationEventForSpecimen}"
 									  styleClass="black_ar"
 									  size="32"

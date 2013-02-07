@@ -17,15 +17,9 @@ public abstract class CatissueBaseAction extends SecureAction
 			ActionForm arg1, HttpServletRequest arg2, HttpServletResponse arg3)
 			throws Exception
 	{
-		if ( isTokenValid(arg2) )
-		{
-			resetToken(arg2);
-			saveToken(arg2);
-		}
-		else
-		{
-			saveToken(arg2);
-		}
+		System.out.println("CatissueBaseAction B4 TOKEN : "+arg2.getParameter("org.apache.struts.taglib.html.TOKEN"));
+		System.out.println("CatissueBaseAction B4  SESSION TOKEN : " + arg2.getSession().getAttribute("org.apache.struts.action.TOKEN"));
+		saveToken(arg2);
 		return executeCatissueAction(arg0, arg1, arg2, arg3);
 	}
 

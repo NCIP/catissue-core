@@ -42,6 +42,8 @@ public class CommonTabAction extends CatissueBaseAction
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
+		System.out.println("CommonTabAction  TOKEN : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
+		System.out.println("CommonTabAction  SESSION TOKEN : " + request.getSession().getAttribute("org.apache.struts.action.TOKEN"));
 		final String page = request.getParameter(Constants.PAGE_OF);
 		if (page == null)
 		{

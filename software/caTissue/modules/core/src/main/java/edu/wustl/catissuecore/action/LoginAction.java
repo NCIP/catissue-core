@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -69,76 +70,78 @@ public class LoginAction extends XSSSupportedAction
         CommonLoginInfoUtility infoUtility = new CommonLoginInfoUtility();
     	String referer=request.getHeader("referer");
     	boolean invalidRequest=false;
-
-		if (form == null)
-		{
-			LoginAction.LOGGER.debug("Form is Null");
-			forwardTo = Constants.FAILURE;
-		}
-		else
-		{
-			try
-			{
-				cleanSession(request);
-				LoginAction.LOGGER.info("Inside Login Action, Just before validation");
-			   if(request.getRequestURL()!=null)
-				{
-					CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
-				}
-				String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
-				String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
-				String reDirectHomeURL=CommonServiceLocator.getInstance().getAppURL()+"/RedirectHome.do";
-				if(!logOutURL.equals(referer) && !logInURL.equals(referer) && !reDirectHomeURL.equals(referer))
-				{
-					if(referer != null)
+    	
+        if (form == null)
+        {
+            LoginAction.LOGGER.debug("Form is Null");
+            forwardTo = Constants.FAILURE;
+        }
+        else
+        {
+            try
+            {
+                cleanSession(request);
+                //cleanCookie(request,response);
+                LoginAction.LOGGER.info("Inside Login Action, Just before validation");
+ 			   if(request.getRequestURL()!=null)
+ 				{
+ 					CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
+ 				}
+ 				String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
+ 				String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
+ 				String reDirectHomeURL=CommonServiceLocator.getInstance().getAppURL()+"/RedirectHome.do";
+ 				if(!logOutURL.equals(referer) && !logInURL.equals(referer) && !reDirectHomeURL.equals(referer))
+ 				{
+ 					if(referer != null)
  					{
-						invalidRequest=true;
-						throw new Exception();
-					}
-				}
-
-				if (isRequestFromClinportal(request))
-				{
-					forwardTo = Constants.SUCCESS;
-				}
-				else
-				{
-					SSOcaTissueCommonLoginUtility loginUtility = new SSOcaTissueCommonLoginUtility();
-					LoginCredentials loginCredentials = new LoginCredentials();
-					loginCredentials.setLoginName(((LoginForm)form).getLoginName());
-					loginCredentials.setPassword(((LoginForm)form).getPassword());
-					LoginAction.LOGGER.info("Inside Login Action, Just before authentication");
-					loginCredentials = loginUtility.processUserAuthentication(loginCredentials, request, ((LoginForm)form).getLoginName());
-					LoginAction.LOGGER.info("Inside Login Action, Just before authorization");
-					infoUtility = loginUtility.processUserAuthorization(loginCredentials, ((LoginForm)form).getLoginName(), request);
-					if(infoUtility.getActionErrors() != null)
-					{
-						saveErrors(request, infoUtility.getActionErrors());
-					}
-					if(infoUtility.getActionMessages() != null)
-					{
-						saveMessages(request, infoUtility.getActionMessages());
-					}
-				}
-			}
-			catch (final Exception ex)
-			{
-				String message = "";
-				try{
-					message = CatissueLoginProcessor.auditLogin(false, ((LoginForm)form).getLoginName(), request.getRemoteAddr());
-					}catch(CatissueException e)
-					{LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
-				LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
-				cleanSession(request);
-				if(Validator.isEmpty(message))
-					handleError(request, "errors.invalid","username or password");
-				else
-					handleError(request, "error.account.locked","");
-				forwardTo = Constants.FAILURE;
-
-				infoUtility.setForwardTo(forwardTo);
-			}
-		}
+ 						invalidRequest=true;
+ 						throw new Exception();
+ 					}
+ 				}
+                
+                if (isRequestFromClinportal(request))
+                {
+                    forwardTo = Constants.SUCCESS;
+                }
+                else
+                {
+                	SSOcaTissueCommonLoginUtility loginUtility = new SSOcaTissueCommonLoginUtility();
+                	LoginCredentials loginCredentials = new LoginCredentials();
+                    loginCredentials.setLoginName(((LoginForm)form).getLoginName());
+                    loginCredentials.setPassword(((LoginForm)form).getPassword());
+                    LoginAction.LOGGER.info("Inside Login Action, Just before authentication");
+                	loginCredentials = loginUtility.processUserAuthentication(loginCredentials, request, ((LoginForm)form).getLoginName());
+                	LoginAction.LOGGER.info("Inside Login Action, Just before authorization");
+                	infoUtility = loginUtility.processUserAuthorization(loginCredentials, ((LoginForm)form).getLoginName(), request);
+                	if(infoUtility.getActionErrors() != null)
+                	{
+                		saveErrors(request, infoUtility.getActionErrors());
+                	}
+                	if(infoUtility.getActionMessages() != null)
+                	{
+                		saveMessages(request, infoUtility.getActionMessages());
+                	}
+                }
+            }
+            catch (final Exception ex)
+            {
+            	String message = "";
+            	try{
+            		message = CatissueLoginProcessor.auditLogin(false, ((LoginForm)form).getLoginName(), request.getRemoteAddr());
+                    }catch(CatissueException e)
+                    {LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
+                LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
+                cleanSession(request);
+                if(Validator.isEmpty(message))
+                	handleError(request, "errors.invalid","username or password");
+                else
+                	handleError(request, "error.account.locked","");
+                forwardTo = Constants.FAILURE; 
+                
+                infoUtility.setForwardTo(forwardTo);
+            }
+        }
+        
         return getActionForward(mapping, form, infoUtility);
     }
 
@@ -161,7 +164,7 @@ public class LoginAction extends XSSSupportedAction
         }
         return actionForward;
 	}
-
+    
     private boolean isRequestFromClinportal(final HttpServletRequest request)
     {
         return request.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL) != null
@@ -178,12 +181,27 @@ public class LoginAction extends XSSSupportedAction
      */
     private void cleanSession(final HttpServletRequest request)
     {
-        final HttpSession prevSession = request.getSession();
+        final HttpSession prevSession = request.getSession(false);
         if (prevSession != null)
         {
             prevSession.invalidate();
         }
     }
+
+    private void cleanCookie(final HttpServletRequest request, final HttpServletResponse response)
+    {
+    	Cookie[] cookies = request.getCookies();
+    	if (cookies != null) 
+    	{
+	    	 for (Cookie cookie : cookies) 
+	    	 {    		 	    		 
+	    		 Cookie prevCookie = new Cookie(cookie.getName(), "");
+	    		 cookie.setMaxAge(0);
+	    		 response.addCookie(cookie);
+	    	 }	    
+    	}
+    }
+
 
     /**
      *

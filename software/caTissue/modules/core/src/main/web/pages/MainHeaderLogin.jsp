@@ -1,5 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/Owasp.CsrfGuard.tld" prefix="csrf" %>
 <%@ page
 	import="edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables;"%>
 
@@ -15,8 +16,8 @@
 			<tr>
 				<td width="50%" valign="middle"><span class="wh_ar_b"><bean:message
 					key="app.welcomeNote"
-					arg0="<%=ApplicationProperties.getValue("app.name")%>"
-					arg1="<%=ApplicationProperties.getValue("app.version")%>"
+					arg0='<%=ApplicationProperties.getValue("app.name")%>'
+					arg1='<%=ApplicationProperties.getValue("app.version")%>'
 					arg2="<%=Variables.applicationAdditionInfo%>" /> </span></td>
 				<td width="50%" align="right" valign="top">
 				<a

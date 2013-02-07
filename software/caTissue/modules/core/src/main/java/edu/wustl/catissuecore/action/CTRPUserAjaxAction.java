@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -42,6 +44,19 @@ public class CTRPUserAjaxAction extends CatissueBaseAction {
 	protected ActionForward executeCatissueAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+				/*
+		System.out.println("CTRPUserAjaxAction :: TOKEN : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
+		System.out.println("CTRPUserAjaxAction  :: SESSION TOKEN : " + request.getSession().getAttribute("org.apache.struts.action.TOKEN"));
+		if ( !isTokenValid(request) ) {
+			System.out.println("CTRPUserAjaxAction :: TOKEN NOT Valid : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
+			ActionErrors actionErrors = new ActionErrors();
+			ActionError actionError = new ActionError("errors.item","Invalid request");
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+			saveErrors(request, actionErrors);
+			return null;
+		}
+		resetToken(request);
+		*/
 
 		final IFactory factory = AbstractFactoryConfig.getInstance()
 				.getBizLogicFactory();

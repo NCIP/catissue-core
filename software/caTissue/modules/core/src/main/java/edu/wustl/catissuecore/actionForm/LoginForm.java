@@ -81,7 +81,7 @@ public class LoginForm extends AbstractActionForm
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		final HttpSession prevSession = request.getSession();
+		final HttpSession prevSession = request.getSession(false);
 		if (prevSession != null)
 		{
 			prevSession.invalidate();
