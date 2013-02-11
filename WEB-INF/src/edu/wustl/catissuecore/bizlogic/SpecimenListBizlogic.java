@@ -27,7 +27,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @throws DAOException,BizLogicException.
 	 */
 
- 
+	
 	public long createNewTag(String entityName, String label, long userId) throws DAOException,
 			BizLogicException
 	{
@@ -46,7 +46,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param objId.
 	 * @throws DAOException,BizLogicException.
 	 */
- 
+	
 	public void assignTag(String entityName, long tagId, long objId) throws DAOException,
 			BizLogicException
 	{
@@ -68,8 +68,8 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param obj Object to be inserted in database
 	 * @throws DAOException,BizLogicException.
 	 */
- 
-	public List<Tag> getTagList(String entityName, long userId) throws DAOException, BizLogicException
+	
+	public List<Tag> getTagList(String entityName,long userId) throws DAOException, BizLogicException
 	{
 		List<Tag> tagList = null;
 		TagDAO tagDao = null;
@@ -86,7 +86,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @return Tag Object.
 	 * @throws DAOException,BizLogicException.
 	 */
- 
+
 	public Tag getTagById(String entityName, long tagId) throws DAOException, BizLogicException
 	{
 		TagDAO tagDao = new TagDAO(entityName,tagId);
@@ -115,7 +115,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param tagId to retrieve TagItem Object and delete it from database.
 	 * @throws DAOException,BizLogicException.
 	 */
- 
+
 	public void deleteTag(String entityName, long tagId) throws DAOException, BizLogicException
 	{
 		TagDAO tagDao = new TagDAO(entityName,tagId);
@@ -130,7 +130,6 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @throws DAOException,BizLogicException.
 	 */
 
- 
 	public void deleteTagItem(String entityName, long itemId) throws DAOException,
 			BizLogicException
 	{
@@ -197,17 +196,15 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		tagDao.insertTag(tag);
 	}
 
-	public void shareTags(String entityName, Set<Long> tagIdList, Set<Long> selectedUsers)
+	public void shareTags(String entityName, Set<Long> tagIdSet, Set<Long> selectedUsers)
 			throws DAOException, BizLogicException 
 	{
-		for(Long tagId : tagIdList) 
+		for(Long tagId : tagIdSet) 
 		{
 			TagDAO tagDao = new TagDAO(entityName,tagId);
 			Tag tag = getTagById(entityName, tagId);
 			tag.getSharedUserIds().addAll(selectedUsers);
-		    	tagDao.updateTag(tag);
+			tagDao.updateTag(tag);
 		} 
 	}
- 
-	  
 }

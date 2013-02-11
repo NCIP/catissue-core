@@ -8,7 +8,7 @@ function toggle(div_id) {
 	if ( el.style.display == 'none' ) {	el.style.display = 'block';}
 	else {el.style.display = 'none';}
 }
-function blanket_size(popUpDivVar) {
+function blanket_size(popUpDivVar) { 
 	if (typeof window.innerWidth != 'undefined') {
 		viewportheight = window.innerHeight;
 	} else {
@@ -223,6 +223,56 @@ function assignTagItemFunction() {
 			doInitGrid();	 
 		}
 }
+
+function ajaxShareTagFunctionCall(url,msg) 
+{
+	if (window.XMLHttpRequest)
+	  { 
+	  xmlHttpobj=new XMLHttpRequest();
+	  }
+	else
+	  { 
+	  xmlHttpobj=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+		var tagChkBoxString = new String();
+		var userString = new String();
+		var i;
+		xmlHttpobj.open("POST", url, true);
+		xmlHttpobj.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded");
+	 
+		var tagChkBoxAr = document.getElementsByName("tagCheckbox");
+		var userIdAr = document.getElementById('protocolCoordinatorIds');
+		var tagName = document.getElementById('newTagName').value;
+		document.getElementById('newTagName').value ='';
+		
+		xmlHttpobj.onreadystatechange = closePopup;
+		for (i = 0; i < tagChkBoxAr.length; i++) {
+			if (tagChkBoxAr[i].checked == true) {
+				tagChkBoxString = tagChkBoxAr[i].value + "," + tagChkBoxString;
+				tagChkBoxAr[i].checked = false;
+				
+			}
+		}
+		for (i = 0; i < userIdAr.options.length; i++) {
+				userString = userIdAr.options[i].value + "," + userString;		
+		}
+		if(tagChkBoxString==''&&tagName=='')
+	 	{
+			alert(msg);
+		}else{
+			xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&tagName=" + tagName +"&entityTag="+ entityTag
+				+"&userString=" + userString);
+		}
+}
+
+function closePopup() {
+	if (xmlHttpobj.readyState == 4) {	
+		popup('popUpDiv');
+		doInitGrid();	 
+	}
+}
+ 
 //Ajax Function for Initialize TreeGrid
 function ajaxTreeGridInitCall(msg,msg1,entityTagName,entityTagItemName) {
 queryDeleteMsg=msg;
@@ -246,8 +296,27 @@ else
 } 
 function showTreeMessage() {
 	if (xmlHttpobj.readyState == 4) {
-	doInItTreeGrid();
-	 popup('popUpDiv');
+		doInItTreeGrid(); 
+		popup('popUpDiv');
+	 
+		document.getElementById('shareToCheckbox').checked = false;
+		var td = "multiSelectId";
+		document.getElementById(td).style.display="none";
+ 	
+		var objCheckBoxAr = document.getElementsByName("objCheckbox");
+	 
+		for (i = 0; i < objCheckBoxAr.length; i++) {
+		if (objCheckBoxAr[i].checked == true) {
+		     document.getElementById("shareCheckboxId").style.display = "none";
+		     document.getElementById("shareLabelId").style.display = "none";
+			 break;
+		} else {
+			document.getElementById("shareCheckboxId").style.display = "inline";
+		     document.getElementById("shareLabelId").style.display = "inline";
+		}
+		
+	} 
+	 
 	}
 } 
 //Ajax Function for Delete Folders of TreeGrid 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
+	<property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+	<!-- ALTER TABLE CATISSUE_USER -->
+	<changeSet id="1" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_SPECIMEN_PROTOCOL">
+			<column name="PPID_FORMAT" type="${text.type}(255)" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="2" author="catissuecore" runOnChange="true">
+	<createTable tableName="CATISSUE_REPORT_FILECONTENT">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="true" >
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REPORT_ID" type="${int.type}(20)">
+				<constraints nullable="false" />
+			</column>			
+			
+	</createTable>
+	</changeSet>	
+	
+	<!-- Darpan's changes for SHARE QUERY FOLDER -->
+	<changeSet id="3" author="catissue" runOnChange="true">
+
+		<createTable tableName="SHARED_QUERY_TAGS">
+			<column name="TAG_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<addForeignKeyConstraint constraintName="FK_SHAREQUERY_USER_ID"
+			baseTableName="SHARED_QUERY_TAGS" baseColumnNames="TAG_ID"
+			referencedTableName="QUERY_TAGS" referencedColumnNames="IDENTIFIER" /> 
+	
+		<addForeignKeyConstraint constraintName="FK_QUERYTAG_SHARE_USER_ID"
+			baseTableName="SHARED_QUERY_TAGS" baseColumnNames="USER_ID" 				referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER" />
+
+               <addUniqueConstraint constraintName="Q_TAGID_USERID_UNIQUE_KEY"
+			tableName="SHARED_QUERY_TAGS" columnNames="TAG_ID,USER_ID" />
+	</changeSet>	 
+	<!-- Darpan's changes for SHARE SPECIMEN LIST -->
+	<changeSet id="4" author="catissue" runOnChange="true">
+
+		<createTable tableName="SHARED_SPECIMENLIST_TAGS">
+			<column name="TAG_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<addForeignKeyConstraint constraintName="FK_SHARESPECIMENLIST_USER_ID"
+			baseTableName="SHARED_SPECIMENLIST_TAGS" baseColumnNames="TAG_ID"
+			referencedTableName="caTissue_specimenList_tags"
+                        referencedColumnNames="IDENTIFIER" /> 
+
+		<addForeignKeyConstraint constraintName="FK_SPECIMENLIST_SHARE_USER_ID"
+			baseTableName="SHARED_SPECIMENLIST_TAGS" baseColumnNames="USER_ID" 				referencedTableName="CATISSUE_USER"
+			referencedColumnNames="IDENTIFIER" />
+
+		<addUniqueConstraint constraintName="S_TAGID_USERID_UNIQUE_KEY"
+			tableName="SHARED_SPECIMENLIST_TAGS" columnNames="TAG_ID,USER_ID" />
+	</changeSet>
+ 	 
+</databaseChangeLog>         

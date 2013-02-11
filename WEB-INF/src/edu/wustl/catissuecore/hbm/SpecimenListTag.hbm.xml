@@ -9,12 +9,17 @@
 			<generator class="increment"/>
 		</id>
 		<property name="label" type="java.lang.String" column="tag_label"/>
- 			<set name="tagItem"  table="caTissue_specimenList_tag_items"  cascade="save-update,all-delete-orphan" inverse="true" lazy="false" fetch="select">
-   		        <key>
-                	<column name="tag_id" not-null="true" />
-            	</key>            
- 				<one-to-many  entity-name="SpecimenListTagItem"/>
- 			</set>  
+ 		<set name="tagItem"  table="caTissue_specimenList_tag_items"  cascade="save-update,all-delete-orphan" inverse="true" lazy="false" fetch="select">
+   			<key>
+        	       		<column name="tag_id" not-null="true" />
+          	 	</key>            
+ 			<one-to-many  entity-name="SpecimenListTagItem"/>
+ 		</set>
+ 			
+ 		<set name="sharedUserIds" table="shared_specimenList_tags" cascade="save-update,all-delete-orphan" lazy="false">
+        		<key column="TAG_ID"/>
+        		<element column="USER_ID" type="long"/>
+        	</set>  
  		<property name="userId" type="java.lang.Long" column="user_id"/>   
 	</class>
 </hibernate-mapping>
