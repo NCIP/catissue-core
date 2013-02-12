@@ -615,7 +615,8 @@ public class AppUtility {
 
 	}
 
-	private static String pattern = "MM-dd-yyyy";
+	private static String pattern = CommonServiceLocator.getInstance()
+			.getDatePattern();//"MM-dd-yyyy";
 
 	/**
 	 * @param date
@@ -2948,7 +2949,7 @@ public class AppUtility {
 	 * To check the validity of the date format specified by user in the config
 	 * file.
 	 */
-	public static boolean isValidDateFormat(final String dateFormat) {
+/*	public static boolean isValidDateFormat(final String dateFormat) {
 		boolean result = false;
 		boolean result1 = false;
 		boolean isValidDatePattern = false;
@@ -2983,7 +2984,7 @@ public class AppUtility {
 		// System.out.println("dtCh : " +dtCh );
 		return isValidDatePattern;
 	}
-
+*/
 	/**
 	 * This method gets Display Label For Underscore.
 	 * 
@@ -4280,6 +4281,40 @@ public class AppUtility {
 			str = obj.toString();
 		}
 		return str;
+	}
+	
+	
+	public static List getStateList(){
+		List retList = new ArrayList();
+		String stateListStr = ApplicationProperties.getValue("user.state.list");
+		if(stateListStr!=null && ""!=stateListStr){
+			String[] stateList = stateListStr.split(",");
+			for(int i = stateList.length; i >0 ; i--){
+				retList.add(0,new NameValueBean(stateList[i-1],stateList[i-1]));;
+			}
+			retList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
+		}
+		return retList;
+	}
+	/**
+	 *  Method Definition.
+	 * @param rawText the String with comma seprated value
+	 * @return return ArrayList of each Token delimeted by comma
+	 */
+	public static List<String> getListOnCommaToken(String rawText)
+	{
+		ArrayList<String> tokenList=new ArrayList<String>();
+				StringTokenizer labelToken=new StringTokenizer(rawText,",");
+				while(labelToken.hasMoreTokens())
+				{
+					String singleLabel=labelToken.nextToken();
+					if(singleLabel !=null && !singleLabel.isEmpty())
+					{
+						singleLabel=singleLabel.trim();
+						tokenList.add(singleLabel);
+					}
+				}
+		return 	tokenList;
 	}
 	
 	public static List<NameValueBean> executeNVBHqlQuery(final String hql,List<ColumnValueBean> colvaluebeanlist)

@@ -278,7 +278,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			{
 				request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
 			}
-			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
+			// Remove Transfer Event Parameters From Event Drop - Down List
+			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.QUICK_EVENT_PARAMETERS);
 		}
 		catch (final Exception e)
 		{
@@ -396,8 +397,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			// Utility.parseDateToString(date,Constants.TIMESTAMP_PATTERN ); //
 			// Sri: Changed format for bug #463
 			final String eventDate = CommonUtilities.parseDateToString(date, CommonServiceLocator
-					.getInstance().getDatePattern()
-					+ edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS);
+					.getInstance().getTimeStampPattern());
 			rowData.add(eventDate);
 
 			final String paggeOf = (String) rowDataMap.get(Constants.PAGE_OF);

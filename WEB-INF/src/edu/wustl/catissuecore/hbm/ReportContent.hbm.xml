@@ -41,6 +41,32 @@
         -->
 
         <joined-subclass
+            name="edu.wustl.catissuecore.domain.pathology.FileContent"
+            table="CATISSUE_REPORT_FILECONTENT"
+            dynamic-update="false"
+            dynamic-insert="false"
+            lazy="true"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <many-to-one
+            name="surgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="REPORT_ID"
+            not-null="false"
+        />
+
+        </joined-subclass>
+
+
+
+        <joined-subclass
             name="edu.wustl.catissuecore.domain.pathology.TextContent"
             table="CATISSUE_REPORT_TEXTCONTENT"
             dynamic-update="false"

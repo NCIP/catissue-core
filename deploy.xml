@@ -812,6 +812,10 @@
 				<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 				<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 				<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
+				
+				<!-- added By Mosin for spr report dir -->
+				<replacefilter token="@@spr.dir.location@@" value="${spr.dir.location}" />
+			
 			
 			<!-- Scheduler config -->
 						<replacefilter token="@@threadPool@@" value="${scheduler.threadPool.size}" />
@@ -961,10 +965,15 @@
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v20.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
+	<target name="upgrade_db_to_plus_v30">
+			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v30.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+		</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
 		<antcall target="upgrade_db_to_plus_v10"/>
 		<antcall target="upgrade_db_to_plus_v20"/>
+		<antcall target="upgrade_db_to_plus_v30"/>
 	</target>
 	
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
@@ -980,7 +989,8 @@
 		    </tstamp>
 		    <echo>before deploy_db: ${time}</echo>
 
-		<antcall target="deploy_db" />
+		<antcall target="deploy_db" /> 
+		<antcall target="upgrade_db_to_plus_v30"/>
 		<tstamp>
 		      <format property="time2" pattern="MM/dd/yyyy hh:mm:ss aa"
 		            />
@@ -2217,7 +2227,6 @@
 		<antcall target="liquibase_upgrade_target"/>
 		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 		<antcall target="insert_dashboard_queries"/>
-		<antcall target="liquibase_aqupgrade_target" />
 		<antcall target="upgrade_db_from_v1.0_to_v2.0"/>
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -2241,7 +2250,6 @@
 			<echo message="Upgrading Database from plusv1.0 to plusv2.0" />
 			<!--antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/-->
 			<antcall target="liquibase_upgrade_from_plusv1.0_to_plusv2.0"/>
-			<antcall target="liquibase_aqupgrade_target" />
 			<antcall target="upgrade_db_from_v1.0_to_v2.0" />
 			<!--antcall target="add_labelsql_tables_for_cp_dashboard"/-->
 			<!--antcall target="upgrade_db_v1.2.4 to v1.2.5"/-->

@@ -51,6 +51,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.tokenprocessor.TokenManager;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
@@ -2180,15 +2181,22 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		{
 			try
 			{
-				final TaskTimeCalculater labelGen = TaskTimeCalculater.startTask(
-						"Time required for label Generator", CollectionProtocolRegistration.class);
-				final LabelGenerator spLblGenerator = LabelGeneratorFactory
-						.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
-				spLblGenerator.setLabel(collectionProtocolRegistration);
-				TaskTimeCalculater.endTask(labelGen);
+				String PPIdformat = getPPIdformat(collectionProtocolRegistration.getCollectionProtocol().getId());
+				if(PPIdformat!=null && !Constants.DOUBLE_QUOTES.equals(PPIdformat) ){
+					collectionProtocolRegistration.setProtocolParticipantIdentifier(TokenManager.getLabelValue(collectionProtocolRegistration.getCollectionProtocol(), 
+							PPIdformat));
+				}else{
+					final LabelGenerator spLblGenerator = LabelGeneratorFactory
+							.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
+					spLblGenerator.setLabel(collectionProtocolRegistration);
+				}
 			}
 			catch (final NameGeneratorException e)
 			{
+				LOGGER.error(e.getMessage(), e);
+				throw this.getBizLogicException(e, "name.generator.exp", "");
+			}
+			catch(ApplicationException e){
 				LOGGER.error(e.getMessage(), e);
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
@@ -2201,6 +2209,35 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 			}
 		}
+	}
+	
+	/**
+	 * @param sessionData
+	 * @param specimenid
+	 * @return
+	 * @throws ApplicationException
+	 * @throws DAOException
+	 */
+	private String getPPIdformat(Long cpid) throws ApplicationException, DAOException {
+		final String hql1 = "select cp.ppidFormat"
+				+ " from edu.wustl.catissuecore.domain.CollectionProtocol as cp where "
+				+ "cp.id= ?";
+		ColumnValueBean columnValue = new ColumnValueBean(cpid);
+        List<ColumnValueBean> columnValueList = new ArrayList<ColumnValueBean>();
+        columnValueList.add(columnValue);
+       
+		List<String> list = null;
+		DAO dao = null;
+		try
+		{
+		  dao = AppUtility.openDAOSession(null);
+		  list = dao.executeQuery(hql1, columnValueList);
+		}
+		finally
+		{
+			dao.closeSession();
+		}
+		return list.get(0);
 	}
 
 	/**

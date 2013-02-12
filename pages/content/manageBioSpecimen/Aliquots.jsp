@@ -21,7 +21,6 @@
 <head>
 <script src="jss/ajax.js"></script>
 <script src="jss/script.js"></script>
-<script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
@@ -66,10 +65,12 @@
 <script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
-<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+
+<script language="JavaScript" type="text/javascript" src="jss/aliquots.js"></script>
 <script language="JavaScript">
 //declaring DHTMLX Drop Down controls required variables
 <%
@@ -101,36 +102,13 @@ function showPopUp(storageContainerDropDown,selectedContainerName,positionDimens
 					"&pos2=" + positionDimensionTwo +
 					"&containerId=" +containerId +
 					"&StorageContainerIdFromMap=" + storageContainerIdFromMap +
-					"&holdSpecimenClass="+specimenClassName +
-					"&holdSpecimenType="+spType +
-					"&holdCollectionProtocol=" + cpId ;
+					"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
+					"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
+					"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId ;
 					frameUrl+="&storageContainerName="+storageContainer;
 					openPopupWindow(frameUrl,'newSpecimenPage');
 			}
 }
-
-
-function showHideStorageContainerGrid(e,gridDivId, dropDownId,scGridVisible,containerDropDownInfo,scGrid)
-{		
-		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
-		if(containerDropDownInfo['visibilityStatusVariable'])
-		{
-			hideGrid(containerDropDownInfo['gridDiv']);
-			containerDropDownInfo['visibilityStatusVariable'] = false;
-		}
-		else 
-		 {	
-			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
-			containerDropDownInfo['visibilityStatusVariable'] = true;
-			var containerName=document.getElementById(containerDropDownInfo['dropDownId']);
-			if(null== containerName)
-			{
-				containerName="";
-			}
-			scGrid.load(containerDropDownInfo['actionToDo'],"");
-		 }
-}
-	
 
 function doOnLoad()
 {
@@ -150,7 +128,7 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 	function (id,ind)
 		{
 			var containerName=document.getElementById("storageContainerDropDown_<%=i%>").value;
-			document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_name_fromMap)')[0].value = id;
+			document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = id;
 			document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(id,ind).getValue();
 			hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
 			scGridVisible_<%=i%> = false;
@@ -178,17 +156,6 @@ function setContainerValues()
 
 </script>
 
-<script language="JavaScript" >
-		//Set last refresh time
-		if(window.parent!=null)
-		{
-			if(window.parent.lastRefreshTime!=null)
-			{
-				window.parent.lastRefreshTime = new Date().getTime();
-			}
-		}
-</script>
-
 <logic:notEmpty name="CPQuery">
 		<script language="javascript">
 			${requestScope.refreshTree}
@@ -207,37 +174,9 @@ function setContainerValues()
 
 		document.forms[0].submit();
 	}
-	
 
-
-	function onRadioButtonClick(element)
-	{
-		if(element.value == 1)
-		{
-			document.forms[0].specimenLabel.disabled = false;
-			document.forms[0].barcode.disabled = true;
-		}
-		else
-		{
-			document.forms[0].barcode.disabled = false;
-			document.forms[0].specimenLabel.disabled = true;
-		}
-	}
-
-	function updateContainerNames()
-	{
-		for(var i=1;i<='<%=aliquotBeanList.size()%>';i++)
-		{
-			var containerNameFromDropDown=document.getElementById("storageContainerDropDown_"+i).value;
-			var variable="value(Specimen:"+i+"_StorageContainer_name_fromMap)";
-			var containerNameInMap=document.getElementsByName(variable)[0];
-			containerNameInMap.value=containerNameFromDropDown;
-		}
-	}
-	
 	function onCreate()
 	{
-	updateContainerNames();
 		var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
 		document.forms[0].submittedFor.value = "ForwardTo";
 		document.forms[0].action = action + "?pageOf=" + '${requestScope.PAGEOF_CREATE_ALIQUOT}' + "&operation=add&menuSelected=15&buttonClicked=create";
@@ -287,7 +226,7 @@ function setContainerValues()
 		NewWindow(frameUrl,'name','800','600','no');
     }
 
-    function onAddToCart()
+    /* function onAddToCart()
 	 {
 		var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
 
@@ -295,7 +234,7 @@ function setContainerValues()
 		document.forms[0].action ='${requestScope.action2}';
 		document.forms[0].nextForwardTo.value = "success";
 		document.forms[0].submit();
-	}
+	} */
 
 	function checkForStoragePosition()
 	{
@@ -562,9 +501,7 @@ function setContainerValues()
 		  			value='${requestScope.createdDate}'
 		  			pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 		  			styleClass="black_ar"/>
-					<span class="grey_ar_s">
-				<bean:message key="page.dateFormat" />
-					</span>
+					 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 			</td>
 		</tr>
 	</table>
@@ -635,7 +572,7 @@ function setContainerValues()
 							<td class="groupelements" size="48">
 								
 								<td width="50%" align="left" class="black_ar">
-								<html:hidden property="${aliquotBean.containerNameFromMapKey}" styleId="${aliquotBean.containerNameFromMapKey}"/>
+								<html:hidden property="${aliquotBean.containerIdFromMapKey}" styleId="${aliquotBean.containerIdFromMapKey}"/>
 						<!--input type="hidden" name="selectedContainerName_${counter+1}" styleId="selectedContainerName_${counter+1}" value="" /-->
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
@@ -674,7 +611,8 @@ function setContainerValues()
 							</td>
 							<td class="groupelements"><html:text styleClass="black_ar"  size="1" styleId="${aliquotBean.pos2Style}" property="${aliquotBean.pos2FromMapKey}" />&nbsp;
 							</td>
-							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','${aliquotForm.className}','${aliquotForm.type}','${requestScope.cpId}','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >
+							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" 
+							onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','<%=form.getClassName()%>','<%=form.getType()%>','<%=form.getColProtId()%>','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >
 									<bean:message key="buttons.map"/>
 									</html:button>
 							</td>
@@ -764,13 +702,14 @@ function setContainerValues()
 <script language="JavaScript" type="text/javascript">
 function applyFirstToAll()
 {
+		//var containerName= document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
 		
 		var containerName=document.getElementById('storageContainerDropDown_1').value;
-		var containerId=document.getElementsByName('value(Specimen:1_StorageContainer_name_fromMap)')[0].value;
+		var containerId=document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
 		
 			<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">	
-				document.getElementsByName('value(Specimen:${counter+2}_StorageContainer_name_fromMap)')[0].value = containerId;
-				document.getElementById(containerDropDownInfo_${counter+2}['dropDownId']).value =containerName;
+				document.getElementsByName('value(Specimen:${counter+2}_StorageContainer_id_fromMap)')[0].value = containerId;
+				document.getElementById(containerDropDownInfo_${counter+2}['dropDownId']).value =containerName;// scGrid_${counter+2}.cellById(containerName,0).getValue();
 				hideGrid(containerDropDownInfo_${counter+2}['gridDiv']);
 				scGridVisible_${counter+2} = false;
 				document.getElementsByName('value(Specimen:${counter+2}_positionDimensionOne_fromMap)')[0].value = "";

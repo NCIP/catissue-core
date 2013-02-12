@@ -411,7 +411,7 @@ Ext.onReady(function(){
 			{
                 text: 'Saved Queries',
 				tooltip:'Saved Queries',
-			    href : 'ShowQueryDashboardAction.do?pageOf=myQueries'
+			    href : 'ShowQueryDashboardAction.do'
             },
 			{
                 text: 'Simple',

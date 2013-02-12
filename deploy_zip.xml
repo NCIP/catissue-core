@@ -765,6 +765,8 @@
 			<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 			<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
+			<!-- added By Mosin for spr report dir -->
+				<replacefilter token="@@spr.dir.location@@" value="${spr.dir.location}" />
 			
 			<!-- Scheduler config -->
 									<replacefilter token="@@threadPool@@" value="${scheduler.threadPool.size}" />
@@ -919,10 +921,15 @@
 				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v20.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 	
+	<target name="upgrade_db_to_plus_v30">
+				<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v30.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
 		<antcall target="upgrade_db_to_plus_v10"/>
 		<antcall target="upgrade_db_to_plus_v20"/>
+		<antcall target="upgrade_db_to_plus_v30"/>
 	</target>
 	
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">

@@ -5,10 +5,15 @@
 	// variable to get the current display style of collect recieve event table
 	String crDispType1=request.getParameter("crDispType");
 %><link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
+  <link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
+
+<script	src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="collectionEvent">
 	<tr onclick="showHide('event')">
@@ -62,39 +67,11 @@
 							</label>
 		</td>
         <td class="black_ar">
-							<%
-								if(currentCollectionDate.trim().length() > 0)
-												{
-													Integer collectionYear = new Integer(AppUtility.getYear(currentCollectionDate ));
-													Integer collectionMonth = new Integer(AppUtility.getMonth(currentCollectionDate ));
-													Integer collectionDay = new Integer(AppUtility.getDay(currentCollectionDate ));
-							%>
-							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
-										  id="collectionEventdateOfEvent"
-										  formName="<%=formNameForCal%>"
-										  month= "<%=collectionMonth%>"
-										  year= "<%=collectionYear%>"
-										  day= "<%=collectionDay%>"
-										  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-										  value="<%=currentCollectionDate%>"
-										  styleClass="black_ar"
-												/>
-							<%
-								}
-													else
-													{
-							%>
-							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
-										  id="collectionEventdateOfEvent"
-										  formName="<%=formNameForCal%>"
-										  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-										  styleClass="black_ar"
-												/>
-							<%
-								}
-							%>
-							<span class="grey_ar_s" ><bean:message key="scecimen.dateformat" /></span>
-		</td>
+							<html:text property="collectionEventdateOfEvent" styleClass="black_ar"
+							     styleId="collectionEventdateOfEvent" size="10" value="<%=currentCollectionDate%>" 
+                               onclick="doInitCalendar('collectionEventdateOfEvent',false);" />			
+							 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+		 </td>
       </tr>
       <tr>
         <td width="1%" align="center">
@@ -224,38 +201,11 @@
 							</label>
 		</td>
         <td class="black_ar">
-								<%
-									if(currentReceivedDate.trim().length() > 0)
-														{
-															Integer receivedYear = new Integer(AppUtility.getYear(currentReceivedDate ));
-															Integer receivedMonth = new Integer(AppUtility.getMonth(currentReceivedDate ));
-															Integer receivedDay = new Integer(AppUtility.getDay(currentReceivedDate ));
-								%>
-								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
-											  id="receivedEventDateOfEvent"
-											  month= "<%= receivedMonth %>"
-											  year= "<%= receivedYear %>"
-											  day= "<%= receivedDay %>"
-											  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-											  value="<%=currentReceivedDate %>"
-											  formName= "<%=formNameForCal %>"
-											  styleClass="black_ar"
-													/>
-								<% 
-									}
-									else
-									{  
-								 %>
-								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
-											  id="receivedEventDateOfEvent"
-											  formName="<%=formNameForCal %>"
-											  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-											  styleClass="black_ar"
-													/>
-								<% 
-									} 
-								%> 
-								<span class="grey_ar_s" ><bean:message key="scecimen.dateformat" /></span>
+								
+						<html:text property="receivedEventDateOfEvent" styleClass="black_ar"
+							       styleId="receivedEventDateOfEvent" size="10"  value="<%=currentReceivedDate %>" 
+                                   onclick="doInitCalendar('receivedEventDateOfEvent',false);" />	
+					     <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 		</td>
       </tr>
       <tr>

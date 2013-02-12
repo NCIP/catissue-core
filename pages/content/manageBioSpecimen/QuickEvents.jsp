@@ -21,6 +21,23 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
 	<script language="JavaScript">
+	var defualtHelpText="Enter comma separated label list";
+	function clearContents(fld)
+	{
+		if(fld.value ==defualtHelpText)
+		{
+			fld.value='';
+			fld.style.color='';
+		}	
+	}
+	function showHelpText(fld)
+	{
+		if(fld.value =="")
+		{
+			fld.style.color='grey';
+			fld.value=defualtHelpText;	
+		}
+	}
 		function onRadioButtonClick(element)
 		{
 	
@@ -37,11 +54,30 @@
 		}
 		
 		// called when the event is selected from the combo
-		function onParameterChange()
+		function onParameterChange(dropDownFld)
 		{
-						
-			document.forms[0].action = "QuickEventsSearch.do";//action;			
-			document.forms[0].submit();		
+			var specimenLabelText=document.forms[0].specimenLabel.value;
+			var selectedEvent=document.forms[0].specimenEventParameter.value;
+			if(specimenLabelText == defualtHelpText || specimenLabelText =="")
+			{
+				alert("please enter specimen label(s)");
+				document.forms[0].specimenEventParameter.value="-- Select --";
+			}
+			else
+			{
+				if(selectedEvent !="-- Select --")
+				{
+					document.forms[0].action = "QuickEventsSearch.do";//action;			
+					document.forms[0].submit();	
+				}
+				else
+				{
+					document.forms[0].action = "QuickEvents.do";//action;			
+					document.forms[0].submit();
+				}	
+					
+			} 	
+					
 		}		
 		
 	//code for auto height of iframe
@@ -53,7 +89,7 @@
 	{
 		var slope=-30;
 	}
-window.onresize = function() {  mdFrmResizer("newEventFrame",30); }
+window.onresize = function() {  mdFrmResizer("newEventFrame",65); }
 //window.onload = function() { adjFrmHt('newEventFrame', .5,slope);}
 //window.onresize = function() { adjFrmHt('newEventFrame', .5,slope); }
 	</script>
@@ -65,6 +101,11 @@ window.onresize = function() {  mdFrmResizer("newEventFrame",30); }
 String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
 String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 String iframeSrc="blankScreenAction.do";
+String defualtLabelText="Enter comma separated label list";
+if((String)request.getParameter("specimenLabel") !=null)
+{
+	defualtLabelText=(String)request.getParameter("specimenLabel");
+}
 if(eventSelected != null)	
 {
 	iframeSrc = getEventAction(eventSelected, specimenIdentifier);
@@ -127,22 +168,41 @@ session.setAttribute("EventOrigin", "QuickEvents");
 									</td>
 									<td align="left" valign="middle" width="84%">
 										<table width="53%" border="0" cellspacing="0" cellpadding="0" >
-											<tr class="groupElements">
-												<td valign="middle" nowrap>
-													<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
+											<tr >
+												<td>
+												
+													<%-- <html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1"
 													onclick="onRadioButtonClick(this)">
 													</html:radio>
-													<span class="black_ar">
+													
 													<bean:message key="specimen.label"/>&nbsp;
 													<logic:equal name="quickEventsForm" 	property="checkedButton" value="1">
 														<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" property="specimenLabel" disabled="false" />
-													</logic:equal>
-													<logic:equal name="quickEventsForm" property="checkedButton" value="2">
+														
+													</logic:equal> --%>
+													<%
+														if(defualtLabelText.equals("Enter comma separated label list"))
+														{
+															%>
+																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;color:grey;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);">
+																</html:textarea>
+															<%
+														}
+														else
+														{
+															%>
+																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);">
+																</html:textarea>
+															<%
+														}
+													%>
+													
+													<%-- <logic:equal name="quickEventsForm" property="checkedButton" value="2">
 														<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" 	property="specimenLabel" disabled="true" />
-													</logic:equal>&nbsp;&nbsp; 
-													</span>
+													</logic:equal>&nbsp;&nbsp; --%> 
+													
 												</td>
-												<td align="left" valign="middle" nowrap="nowrap" >
+												<%-- <td align="left" valign="middle" nowrap="nowrap" >
 													<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" 	onclick="onRadioButtonClick(this)">
 													</html:radio>
 													<span class="black_ar">
@@ -154,8 +214,8 @@ session.setAttribute("EventOrigin", "QuickEvents");
 														<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="barcode" property="barCode" disabled="false" />
 														</logic:equal>
 													</span>
-												</td>
-												<td align="left" valign="top">&nbsp;</td>
+												</td> --%>
+												<!-- <td align="left" valign="top">&nbsp;</td> -->
 											</tr>
 										</table>
 									</td>
@@ -169,16 +229,16 @@ session.setAttribute("EventOrigin", "QuickEvents");
 										<bean:message key="eventparameters.event"/>
 									</td>
 									<td align="left" nowrap="nowrap" class="black_ar">
-										<autocomplete:AutoCompleteTag property="specimenEventParameter"
-										optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>" initialValue="<%=request.getParameter("specimenEventParameter")%>"
-										styleClass="black_ar" size="29"/>
+										<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this);" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+											<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
+										</html:select>
 									</td>
 									<td align="left" valign="top">&nbsp;</td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-					<tr>
+					<%-- <tr>
 						<td class="dividerline" >&nbsp;
 							<html:button property="quickEventsButton" onclick="onParameterChange()" styleClass="blue_ar_b"><bean:message key="quickEvents.add" />
 							</html:button>
@@ -186,10 +246,10 @@ session.setAttribute("EventOrigin", "QuickEvents");
 					</tr>
 					<tr>
 						<td align="left" class="toptd">&nbsp;</td>
-					</tr>
+					</tr> --%>
 					<tr height="*">
 						<td align="left" class="black_ar" >
-							<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="100%" frameborder="0" scrolling="auto">
+							<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="100%" height="321px" frameborder="0" scrolling="auto">
 							</iframe>	
 						</td>
 					</tr>
@@ -205,6 +265,6 @@ session.setAttribute("EventOrigin", "QuickEvents");
 </html:form>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
- mdFrmResizer("newEventFrame",30);
+ mdFrmResizer("newEventFrame",65);
 //-->
 </SCRIPT>

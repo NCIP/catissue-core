@@ -22,6 +22,7 @@
 		<html:hidden property="id" />
 		<html:hidden property="onSubmit" />
 		<html:hidden property="pageOf" />
+		<html:hidden property="defaultCountry" />
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
@@ -118,7 +119,7 @@
                   <td align="left" valign="top">&nbsp;</td>
                 </tr>
                 <tr>
-                  <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+                  <td align="center" class="black_ar"><span class="blue_ar_b"><!-- img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /--></span></td>
                   <td align="left" class="black_ar"><label for="state">
 											<bean:message key="site.state" /> </label> </td>
                   <td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
@@ -129,7 +130,7 @@
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                   <td align="left" class="black_ar"><label for="zipCode">
-											<bean:message key="site.zipCode" /> </label></td>
+											<bean:message key="address.zipCode" /> </label></td>
                   <td align="left"><html:text styleClass="black_ar"
 												maxlength="30" size="30" styleId="zipCode"
 												property="zipCode"  style="text-align:right"/></td>
@@ -143,7 +144,7 @@
 												property="country" optionsList='${countryList}'
 												initialValue='${siteForm.country}'
 												styleClass="black_ar" 
-												size="27"/></td>
+												size="27"  onChange="stateChange(this)"/></td>
                   <td align="left" class="black_ar">&nbsp;</td>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><label
@@ -154,6 +155,22 @@
 												property="phoneNumber" style="text-align:right"/></td>
                   <td align="left" valign="top">&nbsp;</td>
                 </tr>
+                <script>
+					function stateChange(obj){
+						var defaultCntr = document.getElementsByName("defaultCountry")[0].value
+						if(document.getElementById("country").value ==defaultCntr){
+							document.getElementById("state").readOnly = false;
+							document.getElementById("state").disabled = false;
+							document.getElementById("state").style.background = '';
+						}else{
+						document.getElementById("state").value = "";
+							document.getElementById("state").disabled = true;
+							document.getElementById("state").readOnly = true;
+							document.getElementById("state").style.background = '#dddddd';
+						}
+					}
+				</script>
+                
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><label for="faxNumber">
@@ -203,3 +220,6 @@
   </tr>
   </html:form>
 </table>
+<script>
+    window.onload = stateChange();
+</script>

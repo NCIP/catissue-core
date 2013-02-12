@@ -22,10 +22,6 @@
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
-
-
-
-
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 List<String[]> initValueForContainer = (List<String[]>)request.getAttribute("initValues");
@@ -40,9 +36,8 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 		else
 		 collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);	
 %>
- <script type="text/javascript" src="jss/tag-popup.js"></script>
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
 <link rel="STYLESHEET" type="text/css"
 	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
@@ -53,10 +48,11 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
 
-
 <link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
+
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
@@ -67,7 +63,7 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+
 <script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
@@ -76,31 +72,11 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 <script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
 <script>var imgsrc="images/de/";</script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
-<script src="jss/script.js" type="text/javascript"></script>
 
-<script src="jss/script.js"></script>
-<script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
@@ -108,44 +84,9 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-
-
-<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
-
-
-
-
-
-
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
-
 
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
@@ -154,37 +95,14 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
-<script src="jss/script.js" type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
-<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
-<script>var imgsrc="images/de/";</script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
-<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
-<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/commonSpecimen.js"></script>
 
-
-
-
-<script src="jss/script.js"></script>
-<script src="jss/calendarComponent.js"></script>
-<SCRIPT>var imgsrc="images/";</SCRIPT>
-<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
 <script>
-function updateHelpURL()
+	function updateHelpURL()
 	{
 		var URL="";
 		if("pageOfNewSpecimenCPQuery"=="<%=pageOf%>")
@@ -193,9 +111,6 @@ function updateHelpURL()
 		}
 		return URL;
 	}
-	
-	
-	
 </script>
 <%
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
@@ -234,7 +149,7 @@ function updateHelpURL()
 	if (reqPath != null)
 		appendingPath = reqPath + "|/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
 
-	   	if(!operation.equals(Constants.ADD) )
+	   	if(!(Constants.ADD).equals(operation))
 	   	{
 	   		if(form != null)
 	   		{
@@ -244,15 +159,9 @@ function updateHelpURL()
 	   	}
 
 	Map map = form.getExternalIdentifier();
+	Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);
 %>
 <head>
-<style>
-	.hidden
-	{
-	 display:none;
-	}
-</style>
-
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 
@@ -261,18 +170,17 @@ function updateHelpURL()
 	List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 	//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 
-
 	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
 	boolean readOnlyValue=false,readOnlyForAll=false;
 
-	if(operation.equals(Constants.EDIT))
+	if(Constants.EDIT.equals(operation))
 	{
-		editViewButton="buttons."+Constants.VIEW;
+		editViewButton="buttons."+Constants. VIEW;
 		formName = Constants.SPECIMEN_EDIT_ACTION;
 		readOnlyValue=true;
-		if(pageOf.equals(Constants.QUERY))
+		if(Constants.QUERY.equals(pageOf))
 			formName = Constants.QUERY_SPECIMEN_EDIT_ACTION + "?pageOf="+pageOf;
-		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 		{
 			formName = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION + "?pageOf="+pageOf;
 		}
@@ -282,7 +190,7 @@ function updateHelpURL()
 	{
 		formName = Constants.SPECIMEN_ADD_ACTION;
 		readOnlyValue=false;
-		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 		{
 			formName = Constants.CP_QUERY_SPECIMEN_ADD_ACTION + "?pageOf="+pageOf;
 		}
@@ -290,23 +198,17 @@ function updateHelpURL()
 	}
 
 	String formNameForCal = "newSpecimenForm";
-	
-	
-		String className = form.getClassName();
-		String sptype = form.getType();
-			if (className==null)
-				className="";
-				
-		String frameUrl="";
-
+	String className = form.getClassName();
+	String sptype = form.getType();
+	if (className==null)
+			className="";
+	String frameUrl="";
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 
 	<%
-
 	String refreshTree = (String)request.getAttribute("refresh");
-
-	if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
+	if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
 	{
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	%>
@@ -315,25 +217,10 @@ function updateHelpURL()
 	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');
 		</script>
 	<%}
-
 %>
-<script language="JavaScript" >
-		//Set last refresh time
-		if(window.parent!=null)
-		{
-			if(window.parent.lastRefreshTime!=null)
-			{
-				window.parent.lastRefreshTime = new Date().getTime();
-			}
-		}
-		
-		
-</script>
-<script language="JavaScript">
-//declaring DHTMLX Drop Down controls required variables
-var containerDropDownInfo, scGrid;
-var scGridVisible = false;
 
+<script language="JavaScript">
+var scGridVisible = false;
 function showPopUp() 
 {
 	var storageContainer =document.getElementById("storageContainerDropDown").value;
@@ -351,11 +238,11 @@ function showPopUp()
 	}
 }
 function onContainerListReady()
-	{
+{
 		var containerName = '${newSpecimenForm.selectedContainerName}';
 		if(containerName != "" && containerName != 0 && containerName != null)
 			containerOnRowSelect(containerName,0);
-	}
+}
 	
 function getActionToDoURL()
 {
@@ -366,135 +253,29 @@ function getActionToDoURL()
 	return url;
 }
 
-function doOnLoad()
-{
-	var url=getActionToDoURL();
-	//Drop Down components information
-	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady, visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
-	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo,false); 
-}
-
-
-function getStorageContainers()
-{
-    var name = document.getElementById("selectedContainer").value;
-    var request = newXMLHTTPReq();
-	if(request == null)
-    {
-		alert ("Your browser does not support AJAX!");
-		return;
-	}
-	var handlerFunction = getReadyStateHandler(request,true);
-    request.onreadystatechange = handlerFunction;
-	var param = "containerName="+name;
-    var url = "StorageContainerAjaxAction.do?containerName="+name;
- 	request.open("POST",url,true);
-	
-	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-	request.send(param);
-	return false;
-
-}
-
-
-
-
 	function deleteExternalIdentifiers()
 	{
-	<%if(!pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	<%if(!(Constants.PAGE_OF_SPECIMEN_CP_QUERY).equals(pageOf))
 	{%>
 		deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
 	<%} else {%>
 		deleteChecked('addExternalIdentifier','CPQueryNewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimenCPQuery&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
 	<%}%>
-
 	}
+	
 	function deleteBioHazards()
 	{
-	<%if(!pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	<%if(!(Constants.PAGE_OF_SPECIMEN_CP_QUERY).equals(pageOf))
 	{%>
 		deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
 	<%} else {%>
 		deleteChecked('addBiohazardRow','CPQueryNewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimenCPQuery&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
 	<%}%>
-
-
 	}
-	//this method is called when aliquot or derivative is selected
-	function onCheckboxButtonClick(radioButton)
-		{
-			var childSpecimenCount  = document.getElementById("noOfAliquots");
-			var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
-			var countForDerive=document.getElementById("derivedDiv");
-			var countForAliquot=document.getElementById("aliquotDiv");
-
-
-			if(radioButton.value==1)
-			{
-				childSpecimenCount.disabled = true;
-				qtyPerAliquotTextBox.disabled = true;
-				countForDerive.style.display="none";
-				countForAliquot.style.display="block";
-			}
-			else if(radioButton.value==2)
-			{
-
-				childSpecimenCount.disabled = false;
-				qtyPerAliquotTextBox.disabled = false;
-				countForDerive.style.display="none";
-				countForAliquot.style.display="block";
-			}
-			else if(radioButton.value==3)
-			{
-				childSpecimenCount.disabled = false;
-				qtyPerAliquotTextBox.disabled = true;
-				countForDerive.style.display="block";
-				countForAliquot.style.display="none";
-			}
-			else
-			{
-				childSpecimenCount.disabled = true;
-				qtyPerAliquotTextBox.disabled = true;
-				countForDerive.style.display="none";
-				countForAliquot.style.display="block";
-			}
-		}
-
-function showStorageContDropDown()
-	{
-	var manualDiv=document.getElementById("manualDiv");
-	var stCont=document.getElementById("storageContainerDropDown");
-	var pos1=document.getElementById("pos1");
-	var pos2=document.getElementById("pos2");
-		if(document.getElementById('virtualCheckbox').checked == true)
-		{
-			stCont.value = '';
-			pos1.value = '';
-			pos2.value = '';
-			manualDiv.style.display = 'none';
-		}
-		else
-		{
-		document.getElementById('virtualCheckbox').value=false;
-		onCollOrClassChange();
-		
-		}
-	}
-
-
-function showPositionTextBoxes()
-{
-document.forms[0].pos1.style.display="block";
-document.forms[0].pos2.style.display="block";
-document.forms[0].pos1.disabled = false;
-document.forms[0].pos2.disabled = false;
-}
-
 
 	function onDeriveSubmit()
 	{
-	var operation = document.forms[0].operation.value;
+		var operation = document.forms[0].operation.value;
 		<%String forwardToPrintPath = "PrintSpecimenAdd";%>
 
 		if(document.getElementById("deriveChk").checked == true)
@@ -506,8 +287,8 @@ document.forms[0].pos2.disabled = false;
 				if(operation == "add")
 				{
 					<%
-				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				   {
+				    if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
+					{
 				  	    forwardToPrintPath = "CPQueryPrintSpecimenAdd";
 				    }%>
 					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"deriveMultiple");
@@ -517,22 +298,20 @@ document.forms[0].pos2.disabled = false;
 				{
 					<%
 					forwardToPrintPath = "PrintSpecimenEdit";
-				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				    if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 				   {
 				  	    forwardToPrintPath = "CPQueryPrintSpecimenEdit";
 				    }%>
 					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"deriveMultiple");
 					confirmDisable("<%=formName%>","document.forms[0].activityStatus");
 				}
-
-
 			}
 			else
 			{
 				if(operation == "add")
 				{
 						<%
-				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				    if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 				   {
 				  	    forwardToPrintPath = "CPQueryPrintSpecimenAdd";
 				    }%>
@@ -543,18 +322,15 @@ document.forms[0].pos2.disabled = false;
 				{
 					<%
 					forwardToPrintPath = "PrintSpecimenEdit";
-				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				   {
+				    if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
+				    {
 				  	      forwardToPrintPath = "CPQueryPrintSpecimenEdit";
 				    }%>
 
 					setSubmitted("ForwardTo",'<%=forwardToPrintPath%>',"createNew");
 					confirmDisable("<%=formName%>","document.forms[0].activityStatus");
 				}
-
 			}
-
-
 		}
 		else
 		{
@@ -577,7 +353,6 @@ document.forms[0].pos2.disabled = false;
 		}
 	}
 
-
 		function onNormalSubmit()
 		{
 			var operation = document.forms[0].operation.value;
@@ -589,8 +364,6 @@ document.forms[0].pos2.disabled = false;
 			   checked = true;
 			   document.forms[0].checkedButton.value=true;
 			}
-
-
 			var temp = "<%=frdTo%>";
 			<%String forwardToValue = "PrintSpecimenAdd";%>
 			//Bug ID: 4040(Virender)
@@ -602,7 +375,7 @@ document.forms[0].pos2.disabled = false;
 				if(operation == "add")
 				{
 					<%actionToCall = "NewSpecimenAdd.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 					{
 					  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 						forwardToValue = "CPQueryPrintSpecimenAdd";
@@ -614,10 +387,8 @@ document.forms[0].pos2.disabled = false;
 					}
 					else
 					{
-
 						setSubmitted('ForwardTo','<%=forwardToValue%>','pageOfCreateAliquot');
                     }
-
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 				else
@@ -625,7 +396,7 @@ document.forms[0].pos2.disabled = false;
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					forwardToValue = "PrintSpecimenEdit";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 					{
 						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
                         forwardToValue = "CPQueryPrintSpecimenEdit";
@@ -640,17 +411,12 @@ document.forms[0].pos2.disabled = false;
 					{
 						setSubmitted('ForwardTo','<%=forwardToValue%>','pageOfCreateAliquot');
 					}
-
-
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 			}
 			else
 			{
-
-
 			// for cp child submit
-
 				var cpChildChkFlag = false;
 				if(operation == "edit" && document.getElementById("createCpChildCheckBox").checked == true)
 				{
@@ -663,7 +429,7 @@ document.forms[0].pos2.disabled = false;
 						String cpChildSubmitAction = "NewSpecimenEdit.do";
 						actionToCall = "NewSpecimenEdit.do";
 						forwardToValue = "PrintSpecimenEdit";
-						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							cpChildSubmitAction = "CPQueryPrintSpecimenEdit";//Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
@@ -673,7 +439,7 @@ document.forms[0].pos2.disabled = false;
 						var printFlag = document.getElementById("printCheckbox");
 			            if(printFlag.checked)
 					    {
-			            	<% if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+			            	<% if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 							{
 							   	cpChildSubmitAction = "CPQueryPrintSpecimenEdit";
 							}
@@ -692,7 +458,7 @@ document.forms[0].pos2.disabled = false;
 						<%
 						actionToCall = "NewSpecimenAdd.do";
 						forwardToValue = "PrintSpecimenAdd";
-						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 							forwardToValue = "CPQueryPrintSpecimenAdd";
@@ -724,7 +490,7 @@ document.forms[0].pos2.disabled = false;
 						<%
 						actionToCall = "NewSpecimenEdit.do";
 						forwardToValue = "PrintSpecimenEdit";
-						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+						if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							forwardToValue = "CPQueryPrintSpecimenEdit";
@@ -742,500 +508,12 @@ document.forms[0].pos2.disabled = false;
 				}
 			}
 		}
-
-		function onCollOrClassChange(element)
-		{
-			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
-			var manualDiv = document.getElementById("manualDiv");
-			var classNameElement = document.getElementById("className").value;
-			classNameElement = trim(classNameElement);
-			var classSet = false;
-			if(classNameElement == "Fluid" || classNameElement == "Cell"||classNameElement == "Tissue"||classNameElement == "Molecular")
-			{
-
-			    classSet = true;
-			}
-			else
-			{
-				alert("Please select the appropriate specimen class");
-				resetVirtualLocated();
-			}
-			var value;
-
-			if(specimenCollGroupElement.value != "-1" && classSet)
-			{
-				if(element=='1')
-				{
-					value=true;
-				}
-				else
-				{
-					value=false;
-				}
-				<%
-				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false&tab=newSpecimenForm&showConsents=yes&tableId4=disable";
-				System.out.println(actionOnCollOrClassChange);
-				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				{
-					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
-				}
-
-					String forwardTo = form.getForwardTo();
-				%>
-				var action = "<%=actionOnCollOrClassChange%>"+"&value="+value;
-				manualDiv.style.display = 'block';
-				doOnLoad();
-				//document.forms[0].action = action + "&onCollOrClassChange=true"+"&forwardTo="+"<%=forwardTo%>";
-				//document.forms[0].submit();
-
-			}
-		}
-		function onCollectionGroupChange(element)
-		{
-			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
-			if(specimenCollGroupElement.value != "-1")
-			{
-				if(element=='1')
-				{
-					value=true;
-				}
-				else
-				{
-					value=false;
-				}
-				<%
-				actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false&tab=newSpecimenForm&showConsents=yes&tableId4=disable";
-				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				{
-					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
-				}%>
-				var action = "<%=actionOnCollOrClassChange%>"+"&value="+value+"&scgName="+specimenCollGroupElement.value;
-				document.forms[0].action = action + "&onCollOrClassChange=true";
-				document.forms[0].submit();
-			}
-		}
-		//FUNCTION CALLED FOR RESETTING THE SELECT BOX TO VIRTUAL
-		function resetVirtualLocated()
-		{
-			document.getElementById("manualDiv").style.display="none";
-			document.getElementById("virtualCheckbox").checked=true;
-			//document.getElementById("stContSelection").value=1;
-			//document.getElementById("autoDiv").style.display="none";
-			//document.getElementById("manualDiv").style.display="none";
-		}
-		/**
- 			* Name : Ashish Gupta
- 			* Reviewer Name : Sachin Lale
- 			* Bug ID: 2741
- 			* Patch ID: 2741_20
- 			* Description: Function to make ajax call to server to get all events associated with the selected scg
-			*/
-
-	/**
-	 *  This function updates the events for selected scg (Added by Ashish)
-	 */
-		var url,request;
-		function getEventsFromSCG()
-		{
-			var scgId = document.getElementById("specimenCollectionGroupName").value;
-			url = "GetEventsFromScg.do?scgId="+scgId;
-			sendRequestForEvents();
-		}
-
-
-
-	/**
-	 * This function sends 'GET' request to the server for updating quantity (Added by Ashish)
-	 */
-	function sendRequestForEvents()
-	{
-		request = newXMLHTTPReq();
-
-		if(request)
-		{
-			request.onreadystatechange = handleResponseForEvents;
-			try
-			{
-				request.open("GET", url, true);
-				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				request.send("");
-			}
-			catch(e)
-			{}
-		}
-	}
-	function handleResponseForEvents()
-	{
-		if(request.readyState == 4)
-		{
-			//Response is ready
-			if(request.status == 200)
-			{
-				/* Response contains required output.
-				 * Get the response from server.
-				 */
-				var responseString = request.responseText;
-				/* Bug Id: 4138 */
-				if(responseString != null && responseString != "")
-				{
-					var xmlDocument = getDocumentElementForXML(responseString);
-
-					var collectionUserId = xmlDocument.getElementsByTagName('CollectorId')[0].firstChild.nodeValue;
-					var collectorName = xmlDocument.getElementsByTagName('CollectorName')[0].firstChild.nodeValue;
-					var collectionDate = xmlDocument.getElementsByTagName('CollectionDate')[0].firstChild.nodeValue;
-					var collectionTimeHrs = xmlDocument.getElementsByTagName('CollectionTimeHours')[0].firstChild.nodeValue;
-					var collectionTimeMinutes = xmlDocument.getElementsByTagName('CollectionTimeMinutes')[0].firstChild.nodeValue;
-					var collectionProcedure = xmlDocument.getElementsByTagName('CollectionProcedure')[0].firstChild.nodeValue;
-					var collectionContainer = xmlDocument.getElementsByTagName('CollectionContainer')[0].firstChild.nodeValue;
-
-					var tempCollComments = xmlDocument.getElementsByTagName('CollectionComments')[0].firstChild;
-					if(tempCollComments != null)
-					{
-						var collectionComments = tempCollComments.nodeValue;
-						document.getElementById("collectionEventComments").value = collectionComments;
-					}
-					else
-					{
-						document.getElementById("collectionEventComments").value = " ";
-					}
-
-					var receivedDate = xmlDocument.getElementsByTagName('ReceivedDate')[0].firstChild.nodeValue;
-					var receivedUserId = xmlDocument.getElementsByTagName('ReceiverId')[0].firstChild.nodeValue;
-					var receiverName = xmlDocument.getElementsByTagName('ReceiverName')[0].firstChild.nodeValue;
-					var receivedTimeHrs = xmlDocument.getElementsByTagName('ReceivedTimeHours')[0].firstChild.nodeValue;
-					var receivedTimeMinutes = xmlDocument.getElementsByTagName('ReceivedTimeMinutes')[0].firstChild.nodeValue;
-					var receivedQuality = xmlDocument.getElementsByTagName('ReceivedQuality')[0].firstChild.nodeValue;
-					var tempRecComments = xmlDocument.getElementsByTagName('ReceivedComments')[0].firstChild;
-
-					if(tempRecComments != null)
-					{
-						var receivedComments = tempRecComments.nodeValue;
-						document.getElementById("receivedEventComments").value = receivedComments;
-					}
-					else
-					{
-						document.getElementById("receivedEventComments").value = " ";
-					}
-					if(collectionUserId != null)
-					{
-						document.getElementById("collectionEventdateOfEvent").value = collectionDate;
-						document.getElementById("collectionEventUserId").value = collectionUserId;
-						document.getElementById("displaycollectionEventUserId").value = collectorName;
-						document.getElementById("displaycollectionEventTimeInHours").value = collectionTimeHrs;
-						document.getElementById("displaycollectionEventTimeInMinutes").value = collectionTimeMinutes;
-						document.getElementById("collectionEventCollectionProcedure").value = collectionProcedure;
-					    document.getElementById("collectionEventContainer").value = collectionContainer;
-
-						var recDate = document.getElementById("receivedEventdateOfEvent");
-						if(recDate != null)
-						{
-							recDate.value = receivedDate;
-						}
-						document.getElementById("receivedEventUserId").value = receivedUserId;
-						document.getElementById("displayreceivedEventUserId").value = receiverName;
-						document.getElementById("displayreceivedEventTimeInHours").value = receivedTimeHrs;
-						document.getElementById("displayreceivedEventTimeInMinutes").value = receivedTimeMinutes;
-						document.getElementById("receivedEventReceivedQuality").value = receivedQuality;
-					}
-				}
-			}//End if(request.status == 200)
-		}//End if(request.readyState == 4)
-	}
-	function getDocumentElementForXML(xmlString)
-	{
-	    var document = null;
-	    if (window.ActiveXObject) // code for IE
-	    {
-	                document = new ActiveXObject("Microsoft.XMLDOM");
-	                document.async="false";
-	                document.loadXML(xmlString);
-	    }
-	    else // code for Mozilla, Firefox, Opera, etc.
-	    {
-	                var parser = new DOMParser();
-	                document = parser.parseFromString(xmlString,"text/xml");
-	    }
-	return document;
-	}
-
-
-		function eventClicked()
-		{
-			  // Clear the value of onSubmit
-		    document.forms[0].onSubmit.value="";
-		    var consentTier=document.forms[0].consentTierCounter.value;
-			//var answer = confirm("Do you want to submit any changes?");
-			var formName;
-			<% String formNameAction = null;%>
-			/*if (answer){
-				setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','eventParameters');
-				<%
-				formNameAction = "NewSpecimenEdit.do";
-				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				{
-					formNameAction = "CPQueryNewSpecimenEdit.do";
-				}%>
-				formName = "<%=formNameAction%>?consentTierCounter="+consentTier;
-			}
-			else{*/
-				var id = document.forms[0].id.value;
-				var label = document.getElementById("label").value;
-
-				<%
-				formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
-				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				{
-					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
-				}%>
-
-				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15&consentTierCounter="+consentTier;
-			//}
-
-
-			confirmDisable(formName,document.forms[0].activityStatus);
-		}
-
-    // Consent Tracking Module Virender mehta
-	function switchToTab(selectedTab)
-	{
-		var switchImg1=document.getElementById("specimenDetailsTab");
-		var switchImg2=document.getElementById("consentViewTab");
-		if(selectedTab=="specimenDetailsTab")
-		{
-			document.getElementById("consentTable").style.display='none';
-			document.getElementById("mainTable").style.display='block';
-			switchImg1.innerHTML="<img src='images/uIEnhancementImages/tab_specimen_details1.gif' alt='Specimen Details' width='126' height='22' border='0'>";
-			switchImg2.innerHTML="<img src='images/uIEnhancementImages/tab_consents2.gif' alt='Consents' width='76' height='22' border='0'>";
-		}
-		else
-		{
-
-			document.getElementById("consentTable").style.display='block';
-			document.getElementById("mainTable").style.display='none';
-			switchImg2.innerHTML="<img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'>";
-			switchImg1.innerHTML="<img src='images/uIEnhancementImages/tab_specimen_details2.gif' alt='Specimen Details' width='126' height='22' border='0'>";
-		}
-
-	}
-
-	function switchToNewTab(selectedTab)
-	{
-		specimenImage=document.getElementById("newSpecimenTab");
-		consentImage=document.getElementById("newConsentTab");
-
-		if(selectedTab == "newSpecimenTab")
-		{
-			document.getElementById("consentTable").style.display='none';
-			document.getElementById("mainTable").style.display='block';
-			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen_selected.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
-			consentImage.innerHTML="<img src='images/uIEnhancementImages/tab_consents2.gif' alt='Consents' width='76' height='22' border='0'>";
-		}
-		else
-		{
-			document.getElementById("consentTable").style.display='block';
-			document.getElementById("mainTable").style.display='none';
-			specimenImage.innerHTML="<img src='images/uIEnhancementImages/new_specimen_unselected.gif' alt='Specimen Details'  width='115' height='22' border='0'>";
-			consentImage.innerHTML="<img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'>";
-		}
-
-	}
-
-
-
-
-		//This function will Switch tab to newSpecimen page
-		function newspecimenPage()
-		{
-			switchToTab("specimenDetailsTab");
-		}
-
-		//This function will switch page to consentPage
-		function consentPage()
-		{
-			checkForConsents();
-		}
-
-		function newSpecimenTab()
-		{
-			switchToNewTab("newSpecimenTab");
-		}
-
-		function newConsentTab()
-		{
-			switchToNewTab("newConsentTab");
-		}
-
-		function checkForConsents()
-		{
-			<%
-				if(form.getConsentTierCounter()>0)
-				{
-				%>
-					switchToTab("consentTab");
-				<%
-				}
-				else
-				{
-				%>
-					alert("No consents available for selected Specimen Collection Group");
-				<%
-				}
-				%>
-		}
-
-	  function showConsents()
-	  {
-		var showConsents = "<%=tab%>";
-		if(showConsents=="<%=Constants.NULL%>" || showConsents=="specimen" || showConsents=="<%=Constants.NEWSPECIMEN_FORM%>")
-		{
-			newspecimenPage();
-		}
-		else
-		{
-			consentPage();
-		}
-	  }
-// Consent Tracking Module Virender mehta
-	 	//View SPR Vijay pande
-		function viewSPR()
-		{
-			<% Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID); %>
-			var reportId='<%=reportId%>';
-			if(reportId==null || reportId==-1)
-			{
-				alert("There is no associate report in the system!");
-			}
-			else if(reportId==null || reportId==-2)
-			{
-				alert("Associated report is under quarantined request! Please contact administrator for further details.");
-			}
-			else
-			{
-		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&reportId="+reportId;
-				document.forms[0].action=action;
-				document.forms[0].submit();
-			}
-		}
-
-		function setSubmitted(forwardTo,printaction,nextforwardTo)
-		{
-				//alert(forwardTo+"   "+printaction+"    "+nextforwardTo);
-			var printFlag = document.getElementById("printCheckbox");
-
-			if(printFlag.checked)
-			{
-			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
-			}
-			else
-			{
-			  setSubmittedFor(forwardTo,nextforwardTo);
-			}
-		}
-
-	    function setSize()
-	    {
-
-		  //  var container = document.getElementById("Container");
-			var tempWidth =document.body.clientWidth;
-
-    	   //  container.style.width=tempWidth-50;
-        }
-
-	function showConsent()
-        {
-
-		   <%
-			if( tab == null)
-            {
-			%>
-                switchToTab("specimenDetailsTab");
-            <%
-           	}
-            if( tab != null)
-            {
-              if(tab.equals("consent"))
-			  {
-			  %>
-                consentTab();
-              <%
-              }
-             else
-             {
-             %>
-              	switchToTab("specimenDetailsTab");
-             <%
-             }
-            }
-            %>
-	 }
-		function consentTab()
-		{
-			<%
-				if(form.getConsentTierCounter()>0)
-				{
-				%>
-					switchToTab("consentTab");
-				<%
-				}
-				else
-				{
-				%>
-					alert("No consents available for selected Specimen");
-				<%
-				}
-			%>
-		}
-		//Function called on storage position change
-    function onStorageRadioClickInSpecimen(element)
-	{
-		var autoDiv=document.getElementById("autoDiv");
-		var manualDiv=document.getElementById("manualDiv");
-
-		if(element.value==1)
-		{
-			autoDiv.style.display = 'none';
-			manualDiv.style.display = 'none';
-			document.forms[0].selectedContainerName.disabled = true;
-			document.forms[0].pos1.disabled = true;
-			document.forms[0].pos2.disabled = true;
-			document.forms[0].containerMap.disabled = true;
-			document.forms[0].customListBox_1_0.disabled = true;
-			document.forms[0].customListBox_1_1.disabled = true;
-			document.forms[0].customListBox_1_2.disabled = true;
-		}
-		else if(element.value==2)
-		{
-			autoDiv.style.display = 'block';
-			manualDiv.style.display = 'none';
-			document.forms[0].selectedContainerName.disabled = true;
-			document.forms[0].pos1.disabled = true;
-			document.forms[0].pos2.disabled = true;
-			document.forms[0].containerMap.disabled = true;
-			document.forms[0].customListBox_1_0.disabled = false;
-			document.forms[0].customListBox_1_1.disabled = false;
-			document.forms[0].customListBox_1_2.disabled = false;
-			onCollOrClassChange();
-		}
-		else
-		{
-			autoDiv.style.display = 'none';
-			manualDiv.style.display = 'block';
-			document.forms[0].selectedContainerName.disabled = false;
-			document.forms[0].pos1.disabled = false;
-			document.forms[0].pos2.disabled = false;
-			document.forms[0].containerMap.disabled = false;
-			document.forms[0].customListBox_1_0.disabled = true;
-			document.forms[0].customListBox_1_1.disabled = true;
-			document.forms[0].customListBox_1_2.disabled = true;
-			onCollOrClassChange();
-		}
-	}
 	/*
 	    Added separate mappings for pages opened from CP based view(without menubar) and
 	    Biospecimen data -> Specimen (with menubar)
 	*/
 
-    function onAddToCart()
+ <%--    function onAddToCart()
 	{
 	    <% String actionToCall1 = "NewSpecimenEdit.do";
 	       String nextForwardToForAddToCart = "";
@@ -1245,7 +523,7 @@ document.forms[0].pos2.disabled = false;
 	    if(document.getElementById("aliquotChk").checked == true)
 		 {
 	    	<%forwardToPath = "addSpecimenToCartForwardtoAliquot";
-	  			if(pageOf == (Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	  			if((Constants.PAGE_OF_SPECIMEN_CP_QUERY) == pageOf)
 	  			{
 	  				nextForwardToForAddToCart = "pageOfCreateAliquot";
 	  			}
@@ -1259,7 +537,7 @@ document.forms[0].pos2.disabled = false;
 		else if(document.getElementById("deriveChk").checked == true)
 		{
 			<%forwardToPath = "addSpecimenToCartForwardtoDerive";
-			   if(pageOf == (Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+			   if((Constants.PAGE_OF_SPECIMEN_CP_QUERY) == pageOf)
 	  			{
 	  				nextForwardToForAddToCart = "createNew";
 	  			}
@@ -1273,7 +551,7 @@ document.forms[0].pos2.disabled = false;
 		{
 			<%forwardToPath = "addSpecimenToCartForwardtoCpChild";
 
-			 if(pageOf == (Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+			 if((Constants.PAGE_OF_SPECIMEN_CP_QUERY) == pageOf )
 	  			{
 	  				nextForwardToForAddToCart = "CPQuerycpChildSubmit";
 	  			}
@@ -1288,26 +566,12 @@ document.forms[0].pos2.disabled = false;
 			setSubmittedFor("ForwardTo",'addSpecimenToCart');
 		}
 		<%
-		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		if(Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(pageOf))
 		{
 			actionToCall1 = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 		}%>
 		confirmDisable('<%=actionToCall1%>',document.forms[0].activityStatus);
-	}
-	
-	function hideStorageContainerDiv()
-	{
-		var manualDiv=document.getElementById("manualDiv");
-		manualDiv.style.display = 'none';
-	}
-	function loadContainerValues()
-	{
-	<% if(!form.isVirtuallyLocated())
-	{
-	%>
-	doOnLoad();
-	<%}%>
-	}
+	} --%>
 	
 	</script>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
@@ -1316,17 +580,15 @@ document.forms[0].pos2.disabled = false;
 <%
 if(showSpecList.equals("true"))
 						{%>
-<body onload="doOnLoad();initWindow();loadContainerValues();setContainerValues();showConsent();">
+<body onload="doOnLoad();initWindow();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsent('<%=tab%>','<%=form.getConsentTierCounter()%>');">
 <%
 }
 else
 {%>
-<body onload="doOnLoad();initWindow();loadContainerValues();setContainerValues();showConsents();">
-
+<body onload="doOnLoad();initWindow();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsents('<%=tab%>','<%=form.getConsentTierCounter()%>');">
 <%
 }		int exIdRows=1;
 		int bhRows=1;
-
 		String unitSpecimen = "";
 		if(form != null)
 		{
@@ -1335,11 +597,11 @@ else
 			if(form.getClassName().equals("Tissue"))
 				{
 					//Mandar : 25-Apr-06 :Bug 1414
-					if((form.getType()!=null) && (form.getType().equals(Constants.FROZEN_TISSUE_SLIDE)||form.getType().equals(Constants.FIXED_TISSUE_BLOCK)||form.getType().equals(Constants.FROZEN_TISSUE_BLOCK)||form.getType().equals(Constants.NOT_SPECIFIED)||form.getType().equals(Constants.FIXED_TISSUE_SLIDE)))
+					if((form.getType()!=null) && (Constants.FROZEN_TISSUE_SLIDE.equals(form.getType()))|| (Constants.FIXED_TISSUE_BLOCK.equals(form.getType()))|| (Constants.FROZEN_TISSUE_BLOCK.equals(form.getType()))|| (Constants.NOT_SPECIFIED.equals(form.getType()))|| (Constants.FIXED_TISSUE_SLIDE.equals(form.getType())))
 					{
 						unitSpecimen = Constants.UNIT_CN;
 					}
-					else if((form.getType()!=null) && (form.getType().equals(Constants.MICRODISSECTED)))
+					else if((form.getType()!=null) && (Constants.MICRODISSECTED.equals(form.getType())))
 					{
 						unitSpecimen = Constants.UNIT_CL;
 					}
@@ -1367,7 +629,7 @@ else
 	<%
 
 				String printAction = "CPQueryPrintSpecimenAdd";
-				if(operation.equals(Constants.EDIT))
+				if(Constants.EDIT.equals(operation))
 				{
 					 printAction = "CPQueryPrintSpecimenEdit";
 				}
@@ -1443,9 +705,23 @@ else
 	{
 	%>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		      <tr><td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td><td valign="bottom"><a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked();" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR();"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a></td>
-		        <td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
-				</td></tr>
+		      <tr>
+				<td class="td_tab_bg" >
+					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+						<td valign="bottom">
+							<a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	
+								<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0">
+							</a>
+						</td>
+					<td valign="bottom">
+					<a href="#">
+						<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked('<%=pageOf%>');" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('<%=reportId%>','<%=pageOf%>');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" >
+							<a id="consentViewTab" href="#" onClick="consentTab('<%=form.getConsentTierCounter()%>')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
+					</a>
+					</td>
+					<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
+					</td>
+				</tr>
 		    </table>
 	<%
 	}
@@ -1456,8 +732,19 @@ else
 	%><table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
-			<td valign="bottom"><a onclick="newSpecimenTab()" id="newSpecimenTab" href="#"><img src="images/uIEnhancementImages/new_specimen_selected.gif" alt="Specimen Details"  width="115" height="22" border="0"></a></td><td onClick="newConsentTab()" valign="bottom" ><a id="newConsentTab" href="#" onClick="consentTab()"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" ></a></td><td width="90%" class="td_tab_bg" >&nbsp;</td></tr>
-		</table>
+			<td valign="bottom">
+				<a onclick="newSpecimenTab()" id="newSpecimenTab" href="#">
+					<img src="images/uIEnhancementImages/new_specimen_selected.gif" alt="Specimen Details"  width="115" height="22" border="0">
+				</a>
+			</td>
+			<td onClick="newConsentTab()" valign="bottom" >
+				<a id="newConsentTab" href="#" onClick="consentTab('<%=form.getConsentTierCounter()%>')">
+					<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" >
+				</a>
+			</td>
+			<td width="90%" class="td_tab_bg" >&nbsp;</td>
+		</tr>
+	</table>
 
 	<%
 	}
@@ -1490,14 +777,11 @@ else
 									<%=form.getSpecimenCollectionGroupName()%>
 								</label>
 						  </td>
-
-
 				</logic:equal>
-
 
 				<%
 										String specimenColSpan;
-										if(operation.equals(Constants.EDIT))
+										if(Constants.EDIT.equals(operation))
 										{
 											specimenColSpan="1";
 										}
@@ -1544,8 +828,8 @@ else
 				</logic:equal>
 						</tr>
 				<% // if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
-				if(form.getCollectionStatus() != null &&( (!form.getCollectionStatus().equals("Pending") && operation.equals(Constants.EDIT))
-				|| (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && (!form.isGenerateLabel()))
+				if(form.getCollectionStatus() != null &&( (!form.getCollectionStatus().equals("Pending") && Constants.EDIT.equals(operation))
+				|| (!form.getCollectionStatus().equals("Collected") && Constants.EDIT.equals(operation) && (!form.isGenerateLabel()))
 				|| ((!form.isGenerateLabel()) && !Variables.isSpecimenBarcodeGeneratorAvl)))
 				{
 				%>
@@ -1611,15 +895,12 @@ else
 
 				<%}
 							//else  if(((!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
-								//	&& !form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
-					else  if(!form.isGenerateLabel() && operation.equals(Constants.ADD) )
-
-
+								//	&& !form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && Constants.ADD.equals(operation))
+					else  if(!form.isGenerateLabel() && Constants.ADD.equals(operation))
 				{
 				%>
-
-						<tr>
-							<td align="center" class="black_ar">
+				<tr>
+					<td align="center" class="black_ar">
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 				</logic:notEqual>
@@ -1638,9 +919,8 @@ else
 							</td>
 						</tr>
 				<%
-						 }else if((form.isGenerateLabel()) && operation.equals(Constants.ADD) )
+						 }else if((form.isGenerateLabel()) && (Constants.ADD).equals(operation) )
 						{
-
 				%>
 						<tr>
 							<td align="center" class="black_ar">&nbsp;</td>
@@ -1662,7 +942,6 @@ else
 					   <%
 					}
 			 %>
-
 						<tr>
 							<td align="center" class="black_ar">
 								<span class="blue_ar_b">
@@ -1676,13 +955,13 @@ else
 							</td>
 							<td align="left" class="black_new">
 							<input type="hidden" id="initialClassValue" value="<%=form.getClassName()%>" >
-					<%
+					  <%
 							String classReadOnly = "false";
-							if(operation.equals(Constants.EDIT))
+							if(Constants.EDIT.equals(operation))
 							{
 								    classReadOnly = "true";
 							}
-					%>
+					  %>
 								 <autocomplete:AutoCompleteTag property="className"
 								  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 								  initialValue="<%=form.getClassName()%>"
@@ -1721,13 +1000,10 @@ else
 													specimenTypeList = new ArrayList();
 													specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
 												}
-
 												pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-
 												String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan');doOnLoad();";
-
 												String readOnlyForAliquot = "false";
-												if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) {
+												if(Constants.ALIQUOT.equals(form.getLineage())&& (Constants.EDIT).equals(operation)) {
 												      readOnlyForAliquot = "true";
 												}
 						%>
@@ -1829,7 +1105,6 @@ else
 						        </td>
 				</logic:equal>
 
-
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 								<td align="center" class="black_ar">&nbsp;
 								</td>
@@ -1839,13 +1114,10 @@ else
 									</label>
 								</td>
 								<td class="black_ar" >
-									<ncombo:DateTimeComponent name="createdDate" id="createdDate"
-			  							formName="newSpecimenForm"
-			  							pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-			  							value='${requestScope.createdDate}'
-			  							styleClass="black_ar"/>
-										<span class="grey_ar_s">
-									<bean:message key="page.dateFormat" /></span>&nbsp;
+								<html:text property="createdDate" styleClass="black_ar"
+							       styleId="createdDate" size="10" value='${requestScope.createdDate}'
+                                   onclick="doInitCalendar('createdDate',false);" />
+							   	<span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 								</td>
 				</logic:equal>
 							</tr>
@@ -1870,9 +1142,7 @@ else
 									 </span>
 								     <html:hidden property="unit"/>
 								</td>
-
-				                <td align="center" class="black_ar">&nbsp;
-								</td>
+				                <td align="center" class="black_ar">&nbsp;</td>
 								<td align="left" class="black_ar">
 									<label for="concentration">
 										<bean:message key="specimen.concentration"/>
@@ -1881,14 +1151,8 @@ else
 								<td align="left" class="black_ar">
 					<%
 						//boolean concentrationDisabled = true;
-						/*if(form.getClassName().equals("Molecular") && Constants.ALIQUOT.equals(form.getLineage()))
-						{
-								//concentrationDisabled = false;
-								// Fix for bug #9950
-								readOnlyForAll = true;
-						}*/
 						readOnlyForAll = true;
-						if(form.getClassName().equals("Molecular")&& !Constants.ALIQUOT.equals(form.getLineage()))
+						if(form.getClassName().equals("Molecular")&& !(Constants.ALIQUOT).equals(form.getLineage()))
 						{
 							readOnlyForAll = false;
 						}
@@ -2000,7 +1264,7 @@ else
 								</td>
 								<%
 										boolean readOnly=true;
-										if(operation.equals(Constants.ADD))
+										if(Constants.ADD.equals(operation))
 											readOnly=false;
 									%>
 
@@ -2059,12 +1323,9 @@ else
 											dropDownDisable = true;
 											manualDisplayStyle = "display:block";
 										}
-
-
 									%>
 
-
-									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+								<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 								<td colspan="4" >
 					<!-------Select Box Begins----->
 
@@ -2079,13 +1340,7 @@ else
 								<% if( operation.equals("add") || (showContainer!=null&&showContainer.equals("Pending")))
 						{%>
 								<tr >
-							<!--td width="10%">
-									<html:checkbox styleId="virtualCheckbox" property="virtuallyLocated" value="" onclick="showStorageContDropDown()">
-														<span class="black_ar">
-															Virtual
-														</span>
-									</html:checkbox>
-								</td-->
+							
 								<td width="100%" >
 			<div class="black_ar" id="manualDiv" style="display:block">
 											<table cellpadding="0" cellspacing="0" border="0" >
@@ -2144,11 +1399,10 @@ else
 					</div>
 		</td>
 		</tr>
-
 		<%}%>
-											<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+									<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 
-											<% if(showContainer!=null&&showContainer.equals("Pending"))
+										<% if(showContainer!=null&&showContainer.equals("Pending"))
 										{
 										}
 										else{%>
@@ -2216,9 +1470,6 @@ else
 										}%>
 
 											</logic:notEqual>
-
-
-
 									</table>
 											</td>
 											</tr>
@@ -2297,60 +1548,42 @@ else
 		  -->
 		  <td valign="top">
 		  <table width="100%" border="0" cellpadding="3" cellspacing="0">
-
-                <tr>
+		       <tr>
                   <td width="17%" align="left" nowrap class="black_ar" colspan="2">
 						<input type="radio" value="1" id="aliquotCheck" name="specimenChild" onclick="onCheckboxButtonClick(this)" checked="true"/>
-						<bean:message key="app.none" />&nbsp;
+								<bean:message key="app.none" />&nbsp;
 						<input type="radio" value="2" id="aliquotChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-										<bean:message key="aliquots.title"/>
-									&nbsp;
-										<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-										<bean:message key="specimen.derivative" />
-									&nbsp;
-										<!-- 11706 S Desctiption : Remove equal check for Edit operation only....-->
-										<input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-										<bean:message key="create.CpChildSp"/>
-										<!-- 11706 E -->
-									</td>
-								</tr>
+								<bean:message key="aliquots.title"/>
+								&nbsp;
+						<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+								<bean:message key="specimen.derivative" />
+								&nbsp;
+						<!-- 11706 S Desctiption : Remove equal check for Edit operation only....-->
+						<input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+								<bean:message key="create.CpChildSp"/>
+						<!-- 11706 E -->
+					</td>
+				</tr>
 
+				<!--specimenPageButton-->
+				<tr><td colspan="2"></td></tr>
 
-							<!--specimenPageButton-->
+					<tr>
+						<td class="black_ar" width="18%" nowrap>
+								 <div style="display:none" id="derivedDiv">
+								 <bean:message key="summary.page.count" />&nbsp;
+								<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
+								<div style="display:block" id="aliquotDiv"><bean:message key="summary.page.count" />&nbsp;
+								<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/></div>
+								</td>
+								<td class="black_ar" width="75%">
+								<bean:message key="aliquots.qtyPerAliquot"/>&nbsp;
 
-								<tr><td colspan="2"></td></tr>
+								<html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" disabled="true" style="text-align:right"/>
 
-								<tr>
-								<td class="black_ar" width="18%" nowrap>
-										 <div style="display:none" id="derivedDiv">
-										 <bean:message key="summary.page.count" />&nbsp;
-										<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
-										<div style="display:block" id="aliquotDiv"><bean:message key="summary.page.count" />&nbsp;
-										<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/></div>
-										</td>
-										<td class="black_ar" width="75%">
-						                <bean:message key="aliquots.qtyPerAliquot"/>&nbsp;
-
-										<html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" disabled="true" style="text-align:right"/>
-
-								    </td>
-								</tr>
-
-							<!--	//The check box is changed to radio button
-								<tr>
-											<td class="dividerline" colspan="2" valign="center">
-													<html:checkbox styleId="createCpChildCheckBox" property="createCpChildCheckBox" value="true" onclick="">
-														<span class="black_ar">
-
-														<bean:message key="create.CpChildSp"/>
-
-														</span>
-														</html:checkbox>
-											</td>
-								</tr>					-->
-
-
- 							       <tr>
+						</td>
+					</tr>
+				     <tr>
 								<td class="dividerline" colspan="3"><span class="black_ar"></td>
 								</tr>
 								<tr>
@@ -2373,8 +1606,8 @@ else
 			 				</tr>
 			<!--  End : Displaying   printer type and location -->
 							<tr>
-          <td class="bottomtd"></td>
-        </tr>
+								<td class="bottomtd"></td>
+							</tr>
 								<!-- Bio-hazards End here -->
 						   	 	<tr>
 							  		<td align="left" colspan="2" class="buttonbg">
@@ -2392,45 +1625,16 @@ else
 		<tr>
 			<td height="*">&nbsp;</td>
 		</tr>
-
 		</table>
-								</td>
-								</tr>
-	</table>
-
+	 </td>
+   </tr>
+</table>
 <html:hidden property="stContSelection"/>
 <html:hidden property="lineage"/>
 <html:hidden property="nextForwardTo" />
 <html:hidden property="restrictSCGCheckbox"/>
 </html:form>
 <script language="JavaScript" type="text/javascript">
-showPriterTypeLocation();
-function updateStorageContainerValue()
-	{
-		var containerElement=document.getElementById(containerDropDownInfo['dropDownId']);
-		if(containerElement!=null)
-		{
-			var containerName=containerElement.value;
-			document.getElementById("selectedContainerName").value=containerName;
-			if("Virtual"==containerName)
-			{
-				document.getElementById("virtuallyLocated").value="true";
-			}
-			else
-			{
-				document.getElementById("virtuallyLocated").value="false";
-			}
-		}
-	}
-	
-function setContainerValues()
-{
-<%//if(!"".equalsIgnoreCase(containerName)) {%>
-	document.getElementById(containerDropDownInfo['dropDownId']).value='<%=containerName%>';
-	document.getElementById("selectedContainerName").value='<%=containerName%>';
-	document.getElementById("pos1").value='<%=pos1%>';
-	document.getElementById("pos2").value='<%=pos2%>';
-<%//}%>	
-}
+	showPriterTypeLocation();
 </script>
 </body>

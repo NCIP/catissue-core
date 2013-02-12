@@ -36,21 +36,21 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	//	{
 	//		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
 	//	}
-	private long specimenId;
-
+	private String specimenId;
+	
 	/**
 	 * @return Returns the specimenId.
 	 */
-	public long getSpecimenId()
-	{
-		return this.specimenId;
+	
+	public String getSpecimenId() {
+		return specimenId;
 	}
-
+	
 	/**
 	 * @param specimenId The specimenId to set.
-	 */
-	public void setSpecimenId(long specimenId)
-	{
+	*/
+	
+	public void setSpecimenId(String specimenId) {
 		this.specimenId = specimenId;
 	}
 
@@ -77,7 +77,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 
 		if (specimenEventParameters.getSpecimen() != null)
 		{
-			this.specimenId = specimenEventParameters.getSpecimen().getId().longValue();
+			this.specimenId = specimenEventParameters.getSpecimen().getId().toString();
 		}
 	}
 
@@ -92,7 +92,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	{
 		final ActionErrors errors = super.validate(mapping, request);
 
-		if (this.specimenId == -1L)
+		if (this.specimenId == null)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					"Specimen Id"));

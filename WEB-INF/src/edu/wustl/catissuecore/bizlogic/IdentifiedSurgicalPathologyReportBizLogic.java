@@ -1,23 +1,39 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
+
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.pathology.FileContent;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.dto.SprReportDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.global.Permissions;
 
 /**
@@ -191,4 +207,324 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
 				.getReadDeniedPrivilegeName());
 	}
+	
+	
+	public Long createSprPdfReport(Long scgId, FileItem fileItem,
+			SessionDataBean sessionDataBean) throws ApplicationException {
+		DAO dao = null;
+		Long reportId = null;
+		try {
+			String sprReportPath = XMLPropertyHandler.getValue(Constants.SPR_DIR_LOACTION);
+
+			
+			File destinationDir = new File(sprReportPath);
+			if (!destinationDir.exists()) {
+				destinationDir.mkdirs();
+			}
+			String fileName = scgId+"_" +fileItem.getName();
+			File file = new File(destinationDir, fileName);
+			fileItem.write(file);
+			
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			FileContent fileContent = this.checkForFileContent(scgId, dao);
+			if (fileContent == null) {
+				SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+				scg.setId(scgId);
+				IdentifiedSurgicalPathologyReport sprReport = new IdentifiedSurgicalPathologyReport();
+				sprReport.setSpecimenCollectionGroup(scg);
+				scg.setIdentifiedSurgicalPathologyReport(sprReport);
+				fileContent = new FileContent();
+				fileContent.setData(fileName);
+				fileContent.setSurgicalPathologyReport(sprReport);
+				sprReport.setFileContent(fileContent);
+				sprReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				this.insert(sprReport, dao, sessionDataBean);
+				reportId = sprReport.getId();
+			} else {
+				fileContent.setData(fileName);
+				dao.update(fileContent);
+				reportId = fileContent.getSurgicalPathologyReport().getId();
+			}
+			
+			dao.commit();
+		} catch (ApplicationException e) {
+			throw new BizLogicException(e.getErrorKey(), e, e.getMessage());
+			
+		} catch(Exception ex){
+			throw new BizLogicException(null,null, ex.getMessage());
+		}finally {
+			if (dao != null)
+				AppUtility.closeDAOSession(dao);
+		}
+
+		return reportId;
+	}
+	
+	private FileContent checkForFileContent(Long scgId, DAO dao)
+			throws ApplicationException {
+		IdentifiedSurgicalPathologyReport result = new IdentifiedSurgicalPathologyReport();
+		String hql = "select fileContent from IdentifiedSurgicalPathologyReport as ispr where ispr.specimenCollectionGroup.id=?";
+		final ColumnValueBean columnValueBean = new ColumnValueBean(scgId);
+		final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
+
+		final List resultList = AppUtility.executeHqlQuery(hql,
+				columnValueBeanList);
+		final Iterator iterator = resultList.iterator();
+		FileContent data = null;
+		if (iterator.hasNext()) {
+			data = (FileContent) iterator.next();
+		}
+		return data;
+
+	}
+	
+	public List<Object> getFileName(Long scgId, SessionDataBean sessionDataBean)
+			throws ApplicationException {
+		DAO dao = null;
+		String fileName = null;
+		byte[] byteArr= {};
+		List<Object> retList = new ArrayList<Object>();
+		try {
+			dao = AppUtility.openDAOSession(sessionDataBean);
+
+			IdentifiedSurgicalPathologyReport result = new IdentifiedSurgicalPathologyReport();
+			String hql = "select fileContent.data from IdentifiedSurgicalPathologyReport as ispr where ispr.id=?";
+			final ColumnValueBean columnValueBean = new ColumnValueBean(scgId);
+			final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+			columnValueBeanList.add(columnValueBean);
+
+			final List resultList = AppUtility.executeHqlQuery(hql,
+					columnValueBeanList);
+			final Iterator iterator = resultList.iterator();
+			if (iterator.hasNext()) {
+				fileName = (String) iterator.next();
+
+			}
+			String sprReportPath = XMLPropertyHandler.getValue(Constants.SPR_DIR_LOACTION);
+			File file = new File(sprReportPath + "\\" + fileName);
+			FileInputStream fin = new FileInputStream(file);
+			byteArr = IOUtils.toByteArray(fin);
+			fileName = fileName.substring(fileName.indexOf("_") + 1,
+					fileName.length());
+			retList.add(fileName);
+			retList.add(byteArr);
+		
+		} catch (ApplicationException ex) {
+			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
+			
+		}catch (IOException  ex) {
+			throw new BizLogicException(null, null, ex.getMessage());
+			
+		} finally {
+			if (dao != null)
+				AppUtility.closeDAOSession(dao);
+		}
+		return retList;
+
+	}
+	
+	/**
+	 * @param identifiedReportId
+	 *            : identifiedReportId
+	 * @return Long : Long
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
+	public Long getParticipantId(Long identifiedReportId) throws BizLogicException
+	{
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
+				.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
+
+		final String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
+		final String[] selectColumnName = {Constants.COLUMN_NAME_SCG_CPR_PARTICIPANT_ID};
+		final String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColumnCondition = {"="};
+		final Object[] whereColumnValue = {identifiedReportId};
+		final String joinCondition = "";
+
+		final List participantIdList = bizLogic.retrieve(sourceObjectName, selectColumnName,
+				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		if (participantIdList != null && !participantIdList.isEmpty())
+		{
+			return (Long) participantIdList.get(0);
+		}
+		return null;
+	}
+	
+	public SprReportDTO getIdentifiedReportData(Long reportId ,Long deReportId,SessionDataBean sessionDataBean) throws ApplicationException{
+		DAO dao = null;
+		Object[] obj = null ;
+		SprReportDTO dto = new SprReportDTO();
+		try {
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			/*
+			 * Below query is written to fetch Identified report details required for PDF 
+			 * Below are the details fetched this query
+			 * CP_title,Participant Name (PPID),participant gender,Text Content data,Participant MRN Number
+			 * 
+			 */
+			
+			String hql = "select ispr.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.title," +
+					" ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.birthDate," +
+					" case"+ 
+					" when ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.lastName is null"+
+					" then '' "+
+					"else"+
+					" ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.lastName"+ 
+					" end"+
+					"||', '||"+
+					"case "+
+					" when ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.firstName is null"+ 
+					" then '' "+ 
+					"else "+
+					" ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.firstName"+ 
+					" end"+
+					"||'( '||"+
+					" case"+
+					" when ispr.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier is null"+ 
+					" then '' "+
+					"else"+
+					" ispr.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier "+ 
+					"end"+
+					"||' )',"+
+					" ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.gender, " +
+					" ispr.textContent.data,ispr.reportSource.id," +
+					" mri.medicalRecordNumber "  +
+					" from IdentifiedSurgicalPathologyReport as ispr, ParticipantMedicalIdentifier as mri " +
+					" where ispr.id=? and mri.participant.id = ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.id and mri.site.id = ispr.reportSource.id";
+			
+			ColumnValueBean columnValueBean = new ColumnValueBean(reportId);
+			List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+			columnValueBeanList.add(columnValueBean);
+
+			List resultList = AppUtility.executeHqlQuery(hql,
+					columnValueBeanList);
+			Iterator iterator = resultList.iterator();
+			
+			if (iterator.hasNext()) {
+				dto = new SprReportDTO();
+				obj = (Object[])iterator.next();
+				dto.setBirthDate(obj[1]!=null?(Date)obj[1]:null);
+				dto.setCpTitle(obj[0]!=null?obj[0].toString():"");
+				dto.setData(obj[4]!=null?obj[4].toString():"");
+				dto.setGender(obj[3]!=null?obj[3].toString():"");
+				dto.setParticipantName(obj[2]!=null?obj[2].toString():"");
+				dto.setMrnString(obj[6].toString());
+				dto.setConceptReferentMap(getConceptReferentMap(deReportId));
+				
+				dto.setAge(obj[1]!=null?getAge((Date)obj[1]):0);
+			}
+		} catch (ApplicationException ex) {
+			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
+			
+		} finally {
+			if (dao != null)
+				AppUtility.closeDAOSession(dao);
+		}
+		return dto;
+	}
+	
+	private Map<String,String> getConceptReferentMap(Long deReportId) throws ApplicationException{
+		String hql="select distinct crc.name from ConceptReferentClassification as crc";
+		List<Object[]> resultList = AppUtility.executeQuery(hql);
+		Iterator iterator = resultList.iterator();
+		Map<String,String> map = new HashMap<String,String>();
+		String crcString = "";
+		while(iterator.hasNext()){
+			crcString = (String)iterator.next();
+			map.put(crcString, "");
+		}
+		if(deReportId!=0L){	
+			hql = "select cr.conceptReferentClassification.name,cr.concept.name,cr.concept.conceptUniqueIdentifier from ConceptReferent as cr where cr.deIdentifiedSurgicalPathologyReport.id = ?";
+			ColumnValueBean columnValueBean = new ColumnValueBean(deReportId);
+			List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+			columnValueBeanList.add(columnValueBean);
+			resultList = AppUtility.executeHqlQuery(hql,
+					columnValueBeanList);
+			iterator = resultList.iterator();
+			while(iterator.hasNext()){
+				Object[] obj = (Object[])iterator.next();
+				map.put(obj[0].toString(), map.get(obj[0].toString())+obj[1]+"("+obj[2]+"), ");
+			}
+			
+		}
+		return map;
+		
+	}
+	
+	public SprReportDTO getDidentifiedReportData(Long reportId,SessionDataBean sessionDataBean) throws ApplicationException{
+		DAO dao = null;
+		Object[] obj = null ;
+		SprReportDTO dto = new SprReportDTO();
+		try {
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			
+			/*
+			 * Below query is written to fetch DEIdentified report details required for PDF 
+			 * Below are the details fetched this query
+			 * CP_title,PPID,participant gender,Text Content data
+			 * 
+			 */
+			
+			String hql = "select dispr.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.title," +
+					"dispr.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier,"+ 
+					" dispr.specimenCollectionGroup.collectionProtocolRegistration.participant.gender, " +
+					" dispr.textContent.data," +
+					" dispr.specimenCollectionGroup.collectionProtocolRegistration.participant.birthDate" +
+					" from DeidentifiedSurgicalPathologyReport as dispr where dispr.id=?";
+			final ColumnValueBean columnValueBean = new ColumnValueBean(reportId);
+			final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+			columnValueBeanList.add(columnValueBean);
+
+			final List<Object[]> resultList = AppUtility.executeHqlQuery(hql,
+					columnValueBeanList);
+			final Iterator<Object[]> iterator = resultList.iterator();
+			if (iterator.hasNext()) {
+				dto = new SprReportDTO();
+				obj = iterator.next();
+				dto.setCpTitle(obj[0]!=null?obj[0].toString():"");
+				dto.setData(obj[3]!=null?obj[3].toString():"");
+				dto.setGender(obj[2]!=null?obj[2].toString():"");
+				dto.setParticipantName(obj[1]!=null?obj[1].toString():"");
+
+				dto.setConceptReferentMap(getConceptReferentMap(reportId));
+				dto.setAge(obj[4]!=null?getAge((Date)obj[4]):0);
+			}
+		} catch (ApplicationException ex) {
+			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
+		} finally {
+			if (dao != null)
+				AppUtility.closeDAOSession(dao);
+		}
+		return dto;
+	}
+	
+	public int getAge(Date birthDate){
+		Calendar now = Calendar.getInstance();
+		Calendar dob = Calendar.getInstance();
+		dob.setTime(birthDate);
+		if (dob.after(now)) {
+		  throw new IllegalArgumentException("Can't be born in the future");
+		}
+		int year1 = now.get(Calendar.YEAR);
+		int year2 = dob.get(Calendar.YEAR);
+		int age = year1 - year2;
+		int month1 = now.get(Calendar.MONTH);
+		int month2 = dob.get(Calendar.MONTH);
+		if (month2 > month1) {
+		  age--;
+		} else if (month1 == month2) {
+		  int day1 = now.get(Calendar.DAY_OF_MONTH);
+		  int day2 = dob.get(Calendar.DAY_OF_MONTH);
+		  if (day2 > day1) {
+		    age--;
+		  }
+		}
+		return age;
+	}
+
+	
+	
 }

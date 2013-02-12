@@ -62,6 +62,7 @@
 		<html:hidden property="id" />
 		<html:hidden property="csmUserId" />
 		<html:hidden property='${requestScope.redirectTo}' />
+		<html:hidden property="defaultCountry" />
 		<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
 			<html:hidden property="activityStatus" />
 		</logic:equal>
@@ -309,26 +310,41 @@
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
 						<tr>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
+							<td align="center" class="black_ar"><!--span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
+								width="6" height="6" hspace="0" vspace="0" /></span--></td>
 							<td align="left" class="black_ar"><bean:message
 								key="user.state" /></td>
 							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
-								property="state" optionsList='${requestScope.stateList}'
+							 	property="state" optionsList='${requestScope.stateList}'
 								initialValue='${userForm.state}' styleClass="black_ar" size="27" /></td>
 							<td align="left" class="black_ar">&nbsp;</td>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
 							<td align="left" class="black_ar"><bean:message
-								key="user.zipCode" /></td>
+								key="address.zipCode" /></td>
 							<td align="left" class="black_ar"><html:text
 								style="text-align:right" styleClass="black_ar" maxlength="30"
 								size="30" styleId="zipCode" property="zipCode" /></td>
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
 						<tr>
+							<script>
+							function stateChange(obj){
+							var defaultCntr = document.getElementsByName("defaultCountry")[0].value
+								if(document.getElementById("country").value ==defaultCntr){
+									document.getElementById("state").readOnly = false;
+									document.getElementById("state").disabled = false;
+									document.getElementById("state").style.background = '';
+								}else{
+								document.getElementById("state").value = "";
+									document.getElementById("state").disabled = true;
+									document.getElementById("state").readOnly = true;
+									document.getElementById("state").style.background = '#dddddd';
+								}
+							}
+							</script>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 								width="6" height="6" hspace="0" vspace="0" /></span></td>
@@ -337,7 +353,7 @@
 							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
 								property="country" optionsList='${requestScope.countryList}'
 								initialValue='${userForm.country}' styleClass="black_ar"
-								size="27" /></td>
+								size="27" onChange="stateChange(this)"/></td>
 							<td align="left" class="black_ar">&nbsp;</td>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -839,3 +855,6 @@
 					</html:form>
 			</table>
 </body>
+<script>
+    window.onload = stateChange();
+</script>

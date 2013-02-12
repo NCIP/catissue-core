@@ -1,10 +1,9 @@
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
-<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 <%
 	String[] activityStatusList = (String[]) request.getAttribute(Constants.ACTIVITYSTATUSLIST);
+    ParticipantForm form = (ParticipantForm) request.getAttribute("participantForm");
 %>
 
 <%
@@ -376,6 +375,9 @@ function participantRegRow(subdivtag)
 					<%
 						if(!Variables.isSSNRemove) {
 					%>
+						<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    	  
+						 <c:if test="${attributeName == 'Social Security Number'}">
+						
 						<tr>
 							<td width="1%" align="center" class="black_ar">&nbsp;</td>
 							<td width="17%"><label for="socialSecurityNumber"
@@ -401,6 +403,8 @@ function participantRegRow(subdivtag)
 								onchange="intOnly(this);" onkeyup="intOnly(this);"
 								style="text-align:right" /></td>
 						</tr>
+						</c:if>
+						</c:forEach>   		
 					<%
 						}
 					%>
@@ -433,29 +437,21 @@ function participantRegRow(subdivtag)
 						</table>
 						</td>
 					</tr>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Birth Date'}">
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><label for="birthDate" class="black_ar"><bean:message
 							key="participant.birthDate" /></label></td>
 						<td>
-						<%
-							if (currentBirthDate.trim().length() > 0) {
-														Integer birthYear = new Integer(AppUtility
-														.getYear(currentBirthDate));
-														Integer birthMonth = new Integer(AppUtility
-														.getMonth(currentBirthDate));
-														Integer birthDay = new Integer(AppUtility.getDay(currentBirthDate));
-						%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
-							formName="participantForm" month="<%=birthMonth%>"
-							year="<%=birthYear%>" day="<%=birthDay%>" pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-							value="<%=currentBirthDate%>" styleClass="black_ar" /> <%
- 	} else {
- %> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
-							formName="participantForm" pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>" styleClass="black_ar" /> <%
- 	}
- %> <span class="grey_ar_s"> <bean:message
-							key="page.dateFormat" /> </span>&nbsp;</td>
+						<html:text property="birthDate" styleClass="black_ar"
+							styleId="birthDate" size="10"  
+							value="<%=currentBirthDate%>" onclick="doInitCalendar('birthDate',false);" />
+			
+			           <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 					</tr>
+					</c:if>
+					</c:forEach>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Vital Status'}">	
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><label for="vitalStatus" class="black_ar"><bean:message
@@ -475,36 +471,25 @@ function participantRegRow(subdivtag)
 					</tr>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar"><bean:message
-							key="participant.deathDate" /></td>
-
+						<td class="black_ar"><bean:message key="participant.deathDate" /></td>
 						<td>
 						<%
-							ParticipantForm form = (ParticipantForm) request
-															.getAttribute("participantForm");
+							
 													Boolean deathDisable = new Boolean("false");
-													if (form.getVitalStatus()!=null && !form.getVitalStatus().trim().equals("Dead")) {
+													if(form.getVitalStatus()!=null && !form.getVitalStatus().trim().equals("Dead")) {
 														deathDisable = new Boolean("true");
 													}
-													if (currentDeathDate.trim().length() > 0) {
-														Integer deathYear = new Integer(AppUtility
-														.getYear(currentDeathDate));
-														Integer deathMonth = new Integer(AppUtility
-														.getMonth(currentDeathDate));
-														Integer deathDay = new Integer(AppUtility.getDay(currentDeathDate));
-						%> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
-							formName="participantForm" month="<%=deathMonth%>"
-							year="<%=deathYear%>" day="<%=deathDay%>" pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-							value="<%=currentDeathDate%>" styleClass="black_ar"
-							disabled="<%=deathDisable%>" /> <%
- 	} else {
- %> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
-							formName="participantForm"  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>" styleClass="black_ar"
-							disabled="<%=deathDisable%>" /> <%
- 	}
- %> <span class="grey_ar_s"> <bean:message
-							key="page.dateFormat" /> </span>&nbsp;</td>
+						%> 
+													
+					    <html:text property="deathDate" styleClass="black_ar"
+							   styleId="deathDate" size="10" value="<%=currentDeathDate%>" 
+                               disabled="<%=deathDisable%>" onclick="doInitCalendar('deathDate',false);" />								
+					    <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 					</tr>
+					</c:if>
+					</c:forEach>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}"> 
+					 <c:if test="${attributeName == 'Gender'}">
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
@@ -520,9 +505,12 @@ function participantRegRow(subdivtag)
 							</html:radio>&nbsp; &nbsp;
 								</logic:iterate></td>
 					</tr>
+					</c:if>
+					</c:forEach>	
 				<%
 					if(!Variables.isSexGenoTypeRemove) {
 				%>
+				    <c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Sex Genotype'}">
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
@@ -536,12 +524,15 @@ function participantRegRow(subdivtag)
 							styleClass="black_ar" size="27"/></label></td>
 
 					</tr>
+					</c:if>
+					</c:forEach>
 				<%
 					}
 				%>
 				<%
 					if(!Variables.isRaceRemove) {
 				%>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Race'}">
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar_t"><bean:message
@@ -555,12 +546,16 @@ function participantRegRow(subdivtag)
 								labelProperty="name" property="value" />
 						</html:select></td>
 					</tr>
+					</c:if>
+					</c:forEach>
 				<%
 					}
 				%>
 				<%
 					if(!Variables.isEthnicityRemove){
 				%>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}"> 
+					 <c:if test="${attributeName == 'Ethnicity'}">
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><span class="black_ar"><bean:message
@@ -571,6 +566,8 @@ function participantRegRow(subdivtag)
 							initialValue="<%=form.getEthnicity()%>"
 							styleClass="black_ar" size="27" /></label></td>
 					</tr>
+					</c:if>
+					</c:forEach>
 			   <%
 			   	}
 			   %>

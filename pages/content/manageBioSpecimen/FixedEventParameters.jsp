@@ -76,7 +76,7 @@
 			  formName="fixedEventParametersForm"
 			  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 			  styleClass="black_ar" />
-</logic:empty><span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
+</logic:empty><span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;</td>
 
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="15%"><bean:message key="eventparameters.time"/></td>

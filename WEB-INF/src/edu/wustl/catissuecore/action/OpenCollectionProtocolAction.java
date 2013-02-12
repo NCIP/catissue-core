@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
  * Forward to collection protocol main page.
@@ -81,7 +82,8 @@ public class OpenCollectionProtocolAction extends BaseAction
 					else
 					{
 						Date endDate=cpSyncAudit.getEndDate();
-						String DATE_FORMAT_NOW = "MM/dd/yyyy";
+						String DATE_FORMAT_NOW = CommonServiceLocator.getInstance()
+								.getDatePattern();
 						SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);						
 						if("Done".equalsIgnoreCase(cpSyncAudit.getStatus()))
 						{

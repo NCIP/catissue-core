@@ -287,7 +287,7 @@
 					<%
 						}
 					%>
-					<bean:message key="page.dateFormat" />&nbsp;
+					<span class="capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 
 				 	</td>
 				</tr>

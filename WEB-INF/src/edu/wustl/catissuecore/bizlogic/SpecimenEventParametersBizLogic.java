@@ -116,7 +116,51 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			this.insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
 		}
 	}
-
+	/**
+	 * Saves the SpecimenEventParameters object in the database.
+	 * @param specimenIdentifiers Single Specimen identifier OR Multiple Comma Sperated Specimen Identifier
+	 * @param obj SpecimenEventParameter Object
+	 * @param sessionDataBean SessionDataBean object
+	 * @return return Long of newly created Event Identifier
+	 * @throws BizLogicException throws CloneNotSupportedException,ApplicationException.
+	 */
+	public Long insertBulkSpecimenEvents(String specimenIdentifiers,SpecimenEventParameters obj,
+			SessionDataBean sessionDataBean) throws CloneNotSupportedException, ApplicationException
+	{
+		Long createdObjectId=null;
+		DAO dao = null;
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		//List<String> idList=getSpecimenIdList(specimenIdentifiers);
+		List<String> idList=AppUtility.getListOnCommaToken(specimenIdentifiers);
+		Iterator<String> specimenIdIt=idList.iterator();
+		final List<String> specimenIds = new ArrayList<String>();
+		while(specimenIdIt.hasNext())
+		{
+			try 
+			{
+				dao = AppUtility.openDAOSession(sessionDataBean);
+				SpecimenEventParameters specimenEventParameters=(SpecimenEventParameters) obj.clone();
+				Specimen specimen=new Specimen();
+				specimen.setId(Long.valueOf(specimenIdIt.next()));
+				specimenEventParameters.setSpecimen(specimen);
+				insertEvent(specimenEventParameters, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
+				createdObjectId=specimenEventParameters.getId();
+				dao.commit();
+			}catch (final DAOException daoException) {
+				LOGGER.error(daoException.getMessage(),daoException);
+				throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
+						daoException.getMsgValues());	
+			}
+			finally
+			{
+				AppUtility.closeDAOSession(dao);
+			}
+		}
+		return createdObjectId;
+	}
+	
 	/**
 	 * @param obj - Object.
 	 * @param dao - DAO object.
@@ -275,23 +319,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 				if (specimenEvent instanceof DisposalEventParameters)
 				{
-					final DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEvent;
-					if (disposalEventParameters.getActivityStatus().equals(
-							Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-					{
-						this.disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
-					}
-					final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
-					specimen.setSpecimenPosition(null);
-					specimen.setIsAvailable(Boolean.FALSE);
-					specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
-					dao.update(specimen);
-					if (prevPosition != null)
-					{
-						dao.delete(prevPosition);
-					}
+					disposeEvent((DisposalEventParameters)specimenEvent, specimen, dao,specimenIds);
 				}
-
 			}
 			specimen.getSpecimenEventCollection().add(specimenEvent);
 			specimenEvent.doRoundOff();
@@ -309,7 +338,33 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throw new BizLogicException(errorkey , exception, exception.getMsgValues());
 		}
 	}
-
+	/**
+	 * Handle Disposal Event
+	 * @param disposalEventParameters - Object of DisposalEventParameters class.
+	 * @param specimen - Specimen object
+	 * @param dao - DAO object.
+	 * @param specimenIds - List of Specimen Id
+	 * @throws BizLogicException 
+	 * @throws DAOException 
+	 */
+	private void disposeEvent(DisposalEventParameters disposalEventParameters, Specimen specimen, DAO dao, 
+			List specimenIds) throws BizLogicException, DAOException
+	{
+		if (disposalEventParameters.getActivityStatus().equals(
+				Status.ACTIVITY_STATUS_DISABLED.getStatus()))
+		{
+			this.disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
+		}
+		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
+		specimen.setSpecimenPosition(null);
+		specimen.setIsAvailable(Boolean.FALSE);
+		specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
+		dao.update(specimen);
+		if (prevPosition != null)
+		{
+			dao.delete(prevPosition);
+		}
+	}
 	/**
 	 * Retrieve specimen by label name.
 	 * @param dao DAO

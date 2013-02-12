@@ -114,6 +114,17 @@ public class CollectionProtocolBean implements Serializable
 
 	/** clinicalDiagnosis values. */
 	private String[] clinicalDiagnosis;
+	
+	private String ppidFormat;
+
+	public String getPpidFormat() {
+		return ppidFormat;
+	}
+
+	public void setPpidFormat(String ppidFormat) {
+		this.ppidFormat = ppidFormat;
+	}
+
 
 	/**
 	 * Gets the label format.

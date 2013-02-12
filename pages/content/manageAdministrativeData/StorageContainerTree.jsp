@@ -42,6 +42,7 @@
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/ext/dhtmlxtree_dragin.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 </head>
@@ -80,6 +81,17 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 
 	<script language="javascript">
 	 window.parent.tabSelected("viewMapTab");
+	var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
+	if(!interVeil||interVeil==null)
+	{
+	var element = document.createElement("div");
+	element.setAttribute("id", "loadingDivWthBg");
+	element.style.display="none";
+	element.innerHTML= '<div class="lightbox_overlay" style="background-color: #FFFFFF;height: 100%;left: 0;opacity: 0.5;filter: alpha(opacity = 50);	position: fixed; *position: absolute; top: 0; width: 100%;">&nbsp;</div><div class="holder" style="border-radius: 7px;background: #6b6a63;padding: 6px; position: absolute; left: 50%; top: 50%; "><img src="images/uIEnhancementImages/loading.gif" id="lodImg" /></div>';
+	window.parent.document.body.appendChild(element);
+	var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
+	}
+	
 	function expand(id,mode)
 	{
 		var iCountCount=tree.hasChildren(id);
@@ -184,6 +196,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 			<%-- parent node id for root node is "0" --%>
 			tree=new dhtmlXTreeObject("treeboxbox_tree","100%","100%",0);
 			tree.setImagePath("dhtml_comp/imgs/");
+			tree.enableDragAndDrop(true);
 			tree.setOnClickHandler(tonclick);
 			tree.setOnOpenHandler(expand);
 
@@ -222,6 +235,53 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 				{%>
 			tree.closeAllItems("0");
 			<% }%>
+			tree._drag = function(sourceHtmlObject, dhtmlObject, targetHtmlObject) {
+				sourceText = sourceHtmlObject.firstChild.innerHTML;
+				targetText = encodeURI(targetHtmlObject.firstChild.innerHTML);
+					var parameter='sourceText='+sourceText+'&targetText='+targetText;
+					var request = newXMLHTTPReq();
+					request.onreadystatechange=function(){
+						if(request.readyState == 4)
+						{
+							//Response is ready
+							if(request.status == 200)
+							{
+								var responseString = request.responseText;
+								var myJsonResponse = eval('(' + responseString + ')');
+								
+									if(tree._autoOpenTimer)clearTimeout(tree._autoOpenTimer);
+									if(!targetHtmlObject.parentObject){
+										targetHtmlObject=tree.htmlNode.htmlNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0];
+										tree.dadmodec=0;
+									}
+									tree._clearMove(targetHtmlObject);
+									var z=targetHtmlObject.parentObject.treeNod;
+									z._clearMove("");
+									if((!tree.dragMove)||(tree.dragMove()))
+									{
+										if(myJsonResponse&&myJsonResponse.success){
+											var newID=tree._moveNode(sourceHtmlObject.parentObject,targetHtmlObject.parentObject);
+											z.selectItem(newID);
+										}
+										else{
+											alert("can't move");
+										}
+									}
+									try{}
+									catch(e){
+										return;
+									}
+							}
+							interVeil.style.display="none";
+						}
+					};
+					request.open("POST","CatissueCommonAjaxAction.do?type=swapTreeNodeUsingDrag",true);
+					request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+					request.send(parameter);
+					interVeil.style.display="block";				
+				return true;
+				}
+				
 	</script>
 </body>
 </html>

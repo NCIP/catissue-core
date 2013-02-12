@@ -481,4 +481,11 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		}
 		throw new DynamicExtensionsApplicationException(buffer.toString());
 	}
+
+	@Override
+	public Long insertDEObject(String arg0, String arg1,
+			Map<String, Object> arg2) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

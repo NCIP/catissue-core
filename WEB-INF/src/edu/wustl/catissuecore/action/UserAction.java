@@ -37,8 +37,8 @@ import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.CaTissuePrivilegeUtility;
 import edu.wustl.catissuecore.util.MSRUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -234,7 +234,8 @@ public class UserAction extends SecureAction
 
             if (userForm.getCountry() == null)
             {
-                userForm.setCountry((String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY));
+             //   userForm.setCountry((String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY));
+            	userForm.setCountry(Constants.DEFAULT_COUNTRY_NAME);
             }
 
         }
@@ -273,8 +274,9 @@ public class UserAction extends SecureAction
         request.setAttribute("countryList", countryList);
 
         // Sets the stateList attribute to be used in the Add/Edit User Page.
-        final List stateList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST,
-                null);
+//        final List stateList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST,
+//                null);
+        final List stateList = AppUtility.getStateList();
         request.setAttribute("stateList", stateList);
 
         // Sets the pageOf attribute (for Add,Edit or Query Interface).

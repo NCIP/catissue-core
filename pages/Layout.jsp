@@ -12,16 +12,6 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 
-<script src="jss/script.js" type="text/javascript"></script>
-<script src="jss/overlib_mini.js" type="text/javascript"></script>
-<script src="jss/calender.js" type="text/javascript"></script>
-<script src="jss/splitter.js" type="text/javascript"></script>
-<script src="jss/ajax.js" type="text/javascript"></script>
-<script src="jss/caTissueSuite.js" type="text/javascript"></script>
-<script type="text/javascript" src="jss/dhtmlwindow.js"></script>
-<script type="text/javascript" src="jss/modal.js"></script>
-<script type="text/javascript" src="jss/ajax.js"></script>
-
 <html>
 <tiles:importAttribute />
 <head>
@@ -197,16 +187,9 @@
 			}			
 		}
 	</script>
-	
-
 <!--Jitendra -->
 
-<!-- Mandar 11-Aug-06 : For calendar changes -->
-<script src="jss/calendarComponent.js"></script>
-
-<SCRIPT>var imgsrc="images/";
-
-</SCRIPT>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
 
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
@@ -253,4 +236,14 @@
 	</tr>
 </table>
 </body>
+<!-- Mandar 11-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+<script src="jss/overlib_mini.js" type="text/javascript"></script>
+<script src="jss/calender.js" type="text/javascript"></script>
+<script src="jss/splitter.js" type="text/javascript"></script>
+<script src="jss/caTissueSuite.js" type="text/javascript"></script>
+<script type="text/javascript" src="jss/dhtmlwindow.js"></script>
+<script type="text/javascript" src="jss/modal.js"></script>
+<script type="text/javascript" src="jss/ajax.js"></script>
 </html>

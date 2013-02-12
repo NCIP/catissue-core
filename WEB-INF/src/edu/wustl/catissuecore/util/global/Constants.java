@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.util.Locale;
+
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -124,7 +126,9 @@ public class Constants
 
 	/** The Constant DEFAULT_COUNTRY. */
 	public static final String DEFAULT_COUNTRY = "defaultCountry";
-
+	
+	public static final String DEFAULT_COUNTRY_NAME = Locale.getDefault().getDisplayCountry(); 
+			
 	/** The Constant DEFAULT_HISTOLOGICAL_QUALITY. */
 	public static final String DEFAULT_HISTOLOGICAL_QUALITY = "defaultHistologicalQuality";
 
@@ -491,10 +495,10 @@ public class Constants
 	public static final String DEFINE_SEARCH_RULES = "Define Limits For";
 
 	/** The Constant DATE_FORMAT. */
-	public static final String DATE_FORMAT = "MM-dd-yyyy";
+//	public static final String DATE_FORMAT = "MM-dd-yyyy";
 
 	/** The Constant NEW_DATE_FROMAT. */
-	public static final String NEW_DATE_FROMAT = "MM/DD/YYYY";
+//	public static final String NEW_DATE_FROMAT = "MM/DD/YYYY";
 
 	/** The Constant OUTPUT_TREE_MAP. */
 	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
@@ -683,13 +687,13 @@ public class Constants
 	public static final String OR_JOIN_CONDITION = "OR";
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
 	/** The Constant TIMESTAMP_PATTERN. */
-	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
+//	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
 
 	/** The Constant TIMESTAMP_PATTERN_MM_SS. */
-	public static final String TIMESTAMP_PATTERN_MM_SS = "HH:mm";
+//	public static final String TIMESTAMP_PATTERN_MM_SS = "HH:mm";
 
 	/** The Constant DATE_PATTERN_YYYY_MM_DD. */
-	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
+//	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 
 	/** The Constant QUERY_ID. */
 	public static final String QUERY_ID = "queryId";
@@ -2403,6 +2407,10 @@ public class Constants
 			"Cell Specimen Review", "Check In Check Out", "Collection", "Disposal", "Embedded",
 			"Fixed", "Fluid Specimen Review", "Frozen", "Molecular Specimen Review", "Procedure",
 			"Received", "Spun", "Thaw", "Tissue Specimen Review", "Transfer"};
+	public static final String QUICK_EVENT_PARAMETERS[] = {Constants.SELECT_OPTION,
+		"Cell Specimen Review", "Check In Check Out", "Collection", "Disposal", "Embedded",
+		"Fixed", "Fluid Specimen Review", "Frozen", "Molecular Specimen Review", "Procedure",
+		"Received", "Spun", "Thaw", "Tissue Specimen Review"};
 
 	/** The Constant EVENT_PARAMETERS_COLUMNS. */
 	public static final String EVENT_PARAMETERS_COLUMNS[] = {"Identifier", "Event Parameter",
@@ -4406,6 +4414,8 @@ public class Constants
 
 	/** The Constant IDENTIFIED_REPORT_NOT_FOUND_MSG. */
 	public static final String IDENTIFIED_REPORT_NOT_FOUND_MSG = "Indentified Report Not Found!";
+	
+	public static final String UPLOADED_REPORT_MSG= "SPR cannot be displayed since it was manually uploaded. Please click on Download to view.";
 
 	/** The Constant DEID_REPORT_NOT_FOUND_MSG. */
 	public static final String DEID_REPORT_NOT_FOUND_MSG = "De-Indentified Report Not Found!";
@@ -5830,7 +5840,7 @@ public class Constants
 	public static final String CP_PARTICIPANT_LOOKUP_ACTION = "CPQueryParticipantLookup.do";
 	public static final String SPREADSHEET_DATA_LIST = "spreadsheetDataList";
 	public static final String QUERY_PARTICIPANT_ADD = "CPQueryParticipantAdd.do";
-	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
+//	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 
 	public static final String CLICKED_ROW_SELECTED = "clickedRowSelected";
 	public static final String JSON_DATA_ROW  = "rows";
@@ -5895,11 +5905,21 @@ public class Constants
 	public static final String PAGE_OF_CREATE_DERIVATIVE="pageOfCreateDerivative";
 	
 	public static final String PAGE_OF_SPECIMEN_SUMMARY="specimenSummaryPage";
+	
+	//SPR Reports String
+	public static final String IDENTIFIED = "Identified";
+	public static final String DEIDENTIFIED = "Deidentified";
+	public static final String CONTENT_TYPE_PDF = "application/pdf";
+	public static final String CONTENT_DISPOSITION ="Content-Disposition";
+	public static final String SPR_DIR_LOACTION ="spr.dir.location";
+	public static final String DWD_ERROR_MESSAGE = "Problem occured while downloading report.";
 	public static final String DASHBOARD_ITEMS_FILE_PATH = "dashboard.items.file";
 	public static final String USER_DEFINED_LABEL = "userDefinedLabel";
 	public static final String LABEL_ID = "labelId";
 	public static final String SEQ_ORDER = "seqOrder";
 	public static final String ASSOC_ID = "assocId";
+
+	public static final String UPLOAD_ERROR_MESSAGE = "Problem occured while uploading report.";
 
 
 }

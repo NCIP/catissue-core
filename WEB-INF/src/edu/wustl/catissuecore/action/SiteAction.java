@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -96,8 +97,7 @@ public class SiteAction extends CatissueBaseAction
 		request.setAttribute(Constants.COUNTRYLIST, countryList);
 
 		// Sets the stateList attribute to be used in the Add/Edit User Page.
-		final List stateList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_STATE_LIST, null);
+		final List stateList =  AppUtility.getStateList();
 		request.setAttribute(Constants.STATELIST, stateList);
 
 		// Sets the activityStatusList attribute to be used in the Site Add/Edit

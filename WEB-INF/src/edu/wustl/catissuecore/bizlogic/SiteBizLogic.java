@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -305,14 +306,14 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			message = ApplicationProperties.getValue("site.city");
 			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
-		if (edu.wustl.catissuecore.util.global.Variables.isStateRequired)
+		/*if (edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 		{
 			if (site.getAddress() == null || Validator.isEmpty(site.getAddress().getState()))
 			{
 				message = ApplicationProperties.getValue("site.state");
 				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
-		}
+		}*/
 		if(site.getName()!=null && (site.getName().contains("'")|| site.getName().contains("\"")))
 		{
 			throw this.getBizLogicException(null, "error.quotes.site.name", "");
@@ -350,11 +351,10 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		{
 			throw this.getBizLogicException(null, "type.errMsg", message);
 		}
-		if ((site.getAddress().getState() != null && site.getAddress().getState() != null)
+		if ((site.getAddress().getState() != null && site.getAddress().getState() != null && !"".equals( site.getAddress().getState() ))
 				&& edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 		{
-			if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_STATE_LIST, null), site.getAddress().getState()))
+			if (!Validator.isEnumeratedValue(AppUtility.getStateList(), site.getAddress().getState()))
 			{
 				throw this.getBizLogicException(null, "state.errMsg", "");
 			}

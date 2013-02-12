@@ -86,6 +86,8 @@ public class Variables
 	public static Map<String, List<String>> roleEntityMap = new HashMap<String, List<String>>();
 
 	public static Map<String, SessionDataBean> sessionDataMap = new HashMap<String, SessionDataBean>();
+	
+	public static List<String> attributesTodisplay=null;
 
 	public static String prepareColTypes(List dataColl)
 	{

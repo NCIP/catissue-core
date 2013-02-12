@@ -1,4 +1,4 @@
-
+/*
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -44,14 +44,14 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.query.util.querysuite.EntityCacheFactory;
 
-/**
+*//**
  * @author renuka_bajpai
  *
- */
+ *//*
 public class NewShopingCartAction extends BaseAction
 {
 
-	/**
+	*//**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
 	 * @param mapping
@@ -71,7 +71,7 @@ public class NewShopingCartAction extends BaseAction
 	 * @throws DynamicExtensionsApplicationException
 	 *             : DynamicExtensionsApplicationException
 	 * @return ActionForward : ActionForward
-	 */
+	 *//*
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws BizLogicException,
@@ -92,12 +92,12 @@ public class NewShopingCartAction extends BaseAction
 		final List<String> columnList = new ArrayList<String>();
 		final String pageOf = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGE_OF);
-		/**
+		*//**
 		 * value of readOnly attribute is specified in UpdateBulkSpecimensAction
 		 * and UpdateSpecimenStatusAction This value will only true in case of
 		 * addition of multiple specimen. This is done to disable collected
 		 * checkbox in specimen summary page. bug 12959
-		 */
+		 *//*
 		final Boolean readOnly = (Boolean) request.getAttribute("readOnly");
 		if (readOnly != null)
 		{
@@ -169,7 +169,7 @@ public class NewShopingCartAction extends BaseAction
 		}
 		else
 		{
-			/* deleted the cart */
+			 deleted the cart 
 			if (queryShoppingCart.isEmpty())
 			{
 				queryShoppingCart.setCartAttributeList(cartAttributeList);
@@ -258,11 +258,11 @@ public class NewShopingCartAction extends BaseAction
 		return mapping.findForward(pageOf);
 	}
 
-	/**
+	*//**
 	 *
 	 * @param oldAttributeList : oldAttributeList
 	 * @return String[] : String[]
-	 */
+	 *//*
 	private String[] getManiputedColumnList(List<AttributeInterface> oldAttributeList)
 	{
 
@@ -279,14 +279,14 @@ public class NewShopingCartAction extends BaseAction
 		return selectColumnName;
 	}
 
-	/**
+	*//**
 	 *
 	 * @param form : form
 	 * @param selectColumnName : selectColumnName
 	 * @param request : request
 	 * @return List < List < String >> : List < List < String >>
 	 * @throws BizLogicException : BizLogicException
-	 */
+	 *//*
 	private List<List<String>> createListOfItems(ActionForm form, String[] selectColumnName,
 			HttpServletRequest request) throws BizLogicException
 	{
@@ -351,12 +351,12 @@ public class NewShopingCartAction extends BaseAction
 
 	}
 
-	/**
+	*//**
 	 * @param domainObjectName
 	 *            name of domain object
 	 * @return IBizLogic : IBizLogic
 	 * @throws BizLogicException : BizLogicException
-	 */
+	 *//*
 	private IBizLogic getBizLogic(String domainObjectName) throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -365,10 +365,10 @@ public class NewShopingCartAction extends BaseAction
 
 	}
 
-	/**
+	*//**
 	 * @param list : list
 	 * @return List < String > : list
-	 */
+	 *//*
 	private List<String> createList(List list)
 	{
 
@@ -398,10 +398,10 @@ public class NewShopingCartAction extends BaseAction
 		return Arrays.asList(cartList);
 	}
 
-	/**
+	*//**
 	 * @param request
 	 *            : request
-	 */
+	 *//*
 	private void addDifferentCartViewError(HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
@@ -427,3 +427,4 @@ public class NewShopingCartAction extends BaseAction
 	// return searchTarget;
 	// }
 }
+*/

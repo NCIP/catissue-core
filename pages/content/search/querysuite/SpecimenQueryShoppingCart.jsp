@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%> 
 
 <%@ page import="edu.wustl.catissuecore.actionForm.ShoppingCartForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -31,6 +31,9 @@
 	<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css">
 <script type="text/javascript" src="dhtmlx_suite/gridexcells/dhtmlxgrid_excell_combo.js"></script>
 <script src="jss/script.js"></script>
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/spec_dhtmlXTreeGrid.js"></script>  
 
 <style>
 .active-column-0 {width:30px}
@@ -213,14 +216,9 @@ function onSubmit(orderedString)
 		{
 		    dobulkTransferOperations(orderedString);
 		}
-		else if(document.getElementById('specimenEventParameter').value == "Disposal")
-		{
-			
-			dobulkDisposals();
-		}
 		else
 		{
-			alert("Only Transfer and Disposal bulk functionality is available in this version");
+			dobulkSpecimenEventsPage();
 		}
 	}
 	else if(document.forms[0].chkName[1].checked == true)
@@ -342,13 +340,32 @@ function dobulkTransferOperations(orderedString)
 			}
 		}
 		
-function dobulkDisposals()
+function dobulkSpecimenEventsPage()
 		{
 			var isChecked = updateHiddenFields();
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "BulkCart.do?operation=bulkDisposals&requestFromPage=specimenListView";
+				//var action = "BulkCart.do?operation=bulkDisposals&requestFromPage=specimenListView";
+				var checkedRows = mygrid.getCheckedRows(0);
+				var selectedEvent=document.getElementById('specimenEventParameter').value;
+				if(checkedRows.length > 0)
+				{
+					var cb = checkedRows.split(",");
+					var specLabels="";
+					
+					for(i=0;i<cb.size();i++)
+					{
+						var cl = mygrid.cells(cb[i],10).getValue();
+						specLabels = specLabels + cl +",";
+					}
+					if(specLabels[specLabels.length - 1] == ",")
+					{
+						specLabels=specLabels.substring(0, specLabels.length - 1);	
+					}	
+					
+				}
+				var action = "QuickEvents.do?specimenLabel="+specLabels+"&specimenEventParameter="+selectedEvent+"&fromPage=SpecimenList";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -591,8 +608,11 @@ function loadSpecimenGrid()
 		}
 %>
 				</select>
-				
+			<%
+ 						String	organizeTarget = "shareSpecimenList('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
+ 			%>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="    Delete List     " onClick="deleteList()"/>
+				<input type="button" value="    Share List     " onClick="<%=organizeTarget %>"/>
 			</td>
 		</tr>
 		<tr>
@@ -744,8 +764,20 @@ function loadSpecimenGrid()
 			<input type="hidden" name="orderedString">
 		</td>
     </tr>
-  </table>
+  </table> 
+  <%
+	String specId = "12";
+	String	assignTargetCall = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
+ %>
+<%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
+  
 <script language="JavaScript" type="text/javascript">
+function shareSpecimenList(Msg,DMsg,entityTag,entityTagItem)
+{
+	ajaxTreeGridInitCall(Msg,DMsg,entityTag,entityTagItem);
+	var tagChkBoxAr = document.getElementsByName("tagCheckbox");
+	document.getElementById("shareToCheckbox").checked = true;
+}
 	//showHideComponents();
 </script>
 	</body>

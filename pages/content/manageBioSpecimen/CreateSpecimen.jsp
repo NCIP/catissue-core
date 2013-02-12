@@ -234,7 +234,7 @@ function doOnLoad()
 			}
 		}
 
-		function onAddToCart()
+		/* function onAddToCart()
 		{
 
 			var printFlag = document.getElementById("printCheckbox");
@@ -250,7 +250,7 @@ function doOnLoad()
             }
 			confirmDisable(actionToCall,document.forms[0].activityStatus);
 
-		}
+		} */
 
 		</script>
 	<logic:equal name="showRefreshTree" value="true">
@@ -547,9 +547,7 @@ function doOnLoad()
 											pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 											value='${requestScope.createdDate}'
 											styleClass="black_ar" />
-											<span class="grey_ar_s">
-												<bean:message key="page.dateFormat"/>
-											</span>
+											 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 										</td>
 										<td align="left">&nbsp;</td>
 										<td align="left">&nbsp;</td>

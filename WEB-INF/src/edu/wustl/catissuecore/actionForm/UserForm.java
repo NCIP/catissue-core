@@ -129,7 +129,7 @@ public class UserForm extends AbstractActionForm
     /**
      * The Country where the user stays.
      */
-    private String country = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
+    private String country = Constants.DEFAULT_COUNTRY_NAME;//(String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
 
     /**
      * The zip code of city where the user stays.
@@ -179,7 +179,18 @@ public class UserForm extends AbstractActionForm
      * Site ID's.
      */
     private String[] siteIds;
+    
+    private String defaultCountry = Constants.DEFAULT_COUNTRY_NAME;
 
+   
+    public String getDefaultCountry() {
+		return defaultCountry;
+	}
+
+	public void setDefaultCountry(String defaultCountry) {
+		this.defaultCountry = defaultCountry;
+	}
+    
     /**
      * @return String[]
      */
@@ -188,7 +199,8 @@ public class UserForm extends AbstractActionForm
         return siteIds;
     }
 
-    /**
+   
+	/**
      * Set Site ID's.
      *
      * @param siteIds
@@ -1117,10 +1129,10 @@ public class UserForm extends AbstractActionForm
             chkNames(errors, validator, "user.lastName", lastName);
             chkNames(errors, validator, "user.firstName", firstName);
             chkEmpty(errors, validator, "user.city", city);
-            if (edu.wustl.catissuecore.util.global.Variables.isStateRequired)
+            /*if (edu.wustl.catissuecore.util.global.Variables.isStateRequired)
             {
                 chkValOpt(errors, validator, "user.state", state);
-            }
+            }*/
             chkValOpt(errors, validator, "user.country", country);
             chkValOpt(errors, validator, "user.institution", String.valueOf(institutionId));
             chkValOpt(errors, validator, "user.department", String.valueOf(departmentId));

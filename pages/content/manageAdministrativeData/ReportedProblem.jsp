@@ -60,8 +60,9 @@
 									<td width="28%" class="tableheading"><strong><bean:message
 										key="reportedProblem.from" /></strong></td>
 									<td width="27%" class="tableheading"><strong><bean:message
-										key="reportedProblem.reportedDate" /></strong> <span class="grey_ar_s">
-									<bean:message key="reportedProblem.dateFormat" /> </span></td>
+										key="reportedProblem.reportedDate" /></strong> 
+										 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+									</td>
 								</tr>
 								</logic:notEmpty>
 								<logic:empty name="showDomainObjectList">

@@ -24,7 +24,7 @@
 <script src="jss/ajax.js"></script> 
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes --> 
-<script src="jss/calendar.js"></script>
+
 <script src="jss/calendarComponent.js"></script>
 <script src="jss/titli.js"></script>
 <script src="jss/wz_tooltip.js"></script>
@@ -33,6 +33,16 @@
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 
 <script src="jss/participant.js"></script>
+
+<script	src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+
+<script src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>	
+<script src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css" />
+
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
@@ -67,14 +77,14 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		String id = request.getParameter("id");
 
 		 pageView=operation;
-		if(operation.equals(Constants.EDIT))
+		if(Constants.EDIT.equals(operation))
 		{
 	editViewButton="buttons."+Constants.VIEW;
 	formName = Constants.PARTICIPANT_EDIT_ACTION;
 	readOnlyValue=true;
-	if(pageOf.equals(Constants.QUERY))
+	if(Constants.QUERY.equals(pageOf))
 		formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
-	if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	if(Constants.PAGE_OF_PARTICIPANT_CP_QUERY.equals(pageOf))
 	{
 		formName = Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
 	}
@@ -82,14 +92,13 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		else
 		{
 	formName = Constants.PARTICIPANT_LOOKUP_ACTION;
-	if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	if(Constants.PAGE_OF_PARTICIPANT_CP_QUERY.equals(pageOf))
 	{
 		formName = Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION;
 	}
 
 	readOnlyValue=false;
 		}
-
 
 		Object obj = request.getAttribute("participantForm");
 		int noOfRows=0;
@@ -177,14 +186,13 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 			%>
 		</logic:equal>
 	<%} 
-
 %>
 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" >
 		//Set last refresh time
-                var isPHIVIEW =   ${participantForm.pHIView};
+        var isPHIVIEW =   ${participantForm.pHIView};
 		var disablePHIView = !isPHIVIEW;
 		if(window.parent!=null)
 		{
@@ -311,7 +319,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 			document.forms[0].radioValue.value="GenerateHL7Mes";
 			document.forms[0].action="<%=edu.wustl.common.participant.utility.Constants.PARTICIPANT_EMPI_GENERATION_ACTION%>";
 			document.forms[0].isGenerateHL7.value="yes";
-			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			<%if(Constants.PAGE_OF_PARTICIPANT_CP_QUERY.equals(pageOf))
 			{%>
 				document.forms[0].action="<%=edu.wustl.common.participant.utility.Constants.CP_QUERY_PARTICIPANT_EMPI_GENERATION_ACTION%>";
 			<%}%>
@@ -364,8 +372,9 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	}
 	%>
 	<%
-	if(pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+	if(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT.equals(pageView))
 	{
+	
 	%>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable" style="height:100%">
 		<tr height="100%">
@@ -452,25 +461,24 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	</html:form>
 <script>
 function updateHelpURL()
+{
+	var URL="";
+	if("pageOfParticipantCPQuery"=="<%=pageOf%>")
 	{
-		var URL="";
-		if("pageOfParticipantCPQuery"=="<%=pageOf%>")
+		if("viewAnnotations"=="<%=pageView%>")
 		{
-			if("viewAnnotations"=="<%=pageView%>")
-			{
-				URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm")%>";
-			}
-			else
-			{
-				URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.ParticipantForm")%>";
-			}
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm")%>";
 		}
-		return URL;
+		else
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.ParticipantForm")%>";
+		}
 	}
+	return URL;
+}
 
 if(disablePHIView)
 {
-disableTabs();
+	disableTabs();
 }
-
 </script>

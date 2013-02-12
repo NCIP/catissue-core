@@ -72,6 +72,18 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 * Binary content of the pathology report.
 	 */
 	protected BinaryContent binaryContent;
+	
+	protected FileContent fileContent;
+	
+	
+
+	public FileContent getFileContent() {
+		return fileContent;
+	}
+
+	public void setFileContent(FileContent fileContent) {
+		this.fileContent = fileContent;
+	}
 
 	/**
 	 * Soure (site) of the pathology report.

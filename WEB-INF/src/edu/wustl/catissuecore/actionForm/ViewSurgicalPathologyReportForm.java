@@ -153,6 +153,19 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * CollectionProtocol Identifier
 	 */
 	private long collectionProtocolId;
+	
+	/**
+	 * Boolean variable to check for uploaded report from system
+	 * */
+	private boolean hasUploadedReport;
+
+	public boolean isHasUploadedReport() {
+		return hasUploadedReport;
+	}
+
+	public void setHasUploadedReport(boolean hasUploadedReport) {
+		this.hasUploadedReport = hasUploadedReport;
+	}
 
 	/**
 	 * Return CP id
@@ -439,6 +452,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 				final IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) abstractDomain;
 				if (identifiedReport != null)
 				{
+					this.setHasUploadedReport(false);
 					this.setIdentifiedReport(identifiedReport);
 					this.setDeIdentifiedReport(identifiedReport
 							.getDeIdentifiedSurgicalPathologyReport());
@@ -518,6 +532,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			{
 				this.identifiedReportTextContent = Constants.IDENTIFIED_REPORT_NOT_FOUND_MSG;
 			}
+			if(ispr.getFileContent()!=null){
+				this.hasUploadedReport = true;
+				this.identifiedReportTextContent = Constants.UPLOADED_REPORT_MSG;
+			}
+			
 		}
 	}
 

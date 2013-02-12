@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE digester-rules PUBLIC          
+          "-//Apache Commons //DTD digester-rules XML V1.0//EN"           
+          "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+          
+<digester-rules>
+
+<pattern value="COLLECTION_PROTOCOL_PARTICIPANT_CONFIG">
+ <object-create-rule classname="edu.wustl.catissuecore.util.ParticipantConfig"/>
+</pattern>
+
+<pattern value="COLLECTION_PROTOCOL_PARTICIPANT_CONFIG/ATTRIBUTE">
+ <object-create-rule classname="edu.wustl.catissuecore.dto.ParticipantAttributeDisplayInfoDTO"/>
+ <set-properties-rule/>	
+ <bean-property-setter-rule pattern="attributeName"/>
+ <bean-property-setter-rule pattern="defaultValue"/>
+ <call-method-rule pattern="XMLPermissibleValues/permissible-value" methodname="addPermissibleValue" paramcount="1"/> 
+ <call-param-rule pattern="XMLPermissibleValues/permissible-value" paramnumber="0"/> 	
+ <set-next-rule methodname="addParticipantAttributeDisplayInfo"/>
+</pattern>
+
+</digester-rules>   

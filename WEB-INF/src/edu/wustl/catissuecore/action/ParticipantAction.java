@@ -51,6 +51,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -428,7 +429,7 @@ public class ParticipantAction extends CatissueBaseAction {
 		// amol changes
 		setEMPStatus(request, participantForm, mapCPR, count);
 		LOGGER.debug("pageOf :---------- " + pageOf);
-
+		request.setAttribute("participantAttributeDisplaySetInfo", Variables.attributesTodisplay);
 		return mapping.findForward(pageOf);
 	}
 

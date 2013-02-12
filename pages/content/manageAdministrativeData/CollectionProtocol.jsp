@@ -501,8 +501,7 @@ div#d999 {
 						day='${requestScope.collectionProtocolDay}'
 						pattern="<%=CommonServiceLocator.getInstance().getDatePattern() %>"
 						value='${requestScope.currentCollectionProtocolDate}'
-						styleClass="black_ar" /> <span class="grey_ar_s"><bean:message
-						key="page.dateFormat" /></span></td>
+						styleClass="black_ar" /> <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 				</tr>
 				<tr>
 					<td align="center" class="black_ar">&nbsp;</td>
@@ -524,6 +523,58 @@ div#d999 {
 						maxlength="10" size="30" styleId="enrollment"
 						property="enrollment" readonly='${requestScope.readOnlyValue}' /></td>
 				</tr>
+				<tr>
+					<td align="center" class="black_ar">&nbsp;</td>
+					<td align="left" class="black_ar"><bean:message
+						key="collectionprotocol.ppidformat" /></td>
+					<td align="left"><div style="width:100%;"><div style="float:left;"><div><span class="black_ar">Prefix</span></div>
+						<div><html:text styleClass="black_ar" maxlength="255" size="10" styleId="prefixPid"
+						property="prefixPid" readonly='${requestScope.readOnlyValue}' onblur="genSamplePPID()"/></div></div>
+						<div style="float:left;margin-left: 10px;"><div><span class="black_ar">Id Size</span></div>
+						<div><html:text styleClass="black_ar" maxlength="255" size="10" styleId="noOfDigitPid"
+						property="noOfDigitPid" readonly='${requestScope.readOnlyValue}' onblur="genSamplePPID()"/></div>
+						</div>
+						<div style="float:left;margin-left: 10px;"><div><span class="black_ar">Postfix</span></div>
+						<div><html:text styleClass="black_ar" maxlength="255" size="10" styleId="postfixPid"
+						property="postfixPid" readonly='${requestScope.readOnlyValue}' onblur="genSamplePPID()"/></div>
+						</div>
+						<div style="float:left;margin-left: 10px;">
+							<div><span class="black_ar">Preview</span></div>
+							<span id="samplePPID" class="black_ar"></span>
+						</div>
+						</div>
+					</td>
+				</tr>
+				<script>
+				genSamplePPID();
+					function genSamplePPID(){
+						var prefix = document.getElementById("prefixPid").value;
+						var postfix = document.getElementById("postfixPid").value;
+						if((prefix==undefined || prefix == "")&&(postfix==undefined || postfix == "")){
+							document.getElementById("samplePPID").textContent = "";
+							document.getElementById("samplePPID").innerText = "";
+							return;
+						}
+						var sampleid = ""+prefix+getSampleDigit()+ postfix;
+						
+						document.getElementById("samplePPID").textContent = sampleid;
+						document.getElementById("samplePPID").innerText = sampleid;
+						
+					}
+					function getSampleDigit(){
+						var num = document.getElementById("noOfDigitPid").value;
+						if(num==undefined || num == ""){
+							return 7;
+						}else{
+							var retVal = "";
+							for(var cnt =0; cnt<num-1; cnt++){
+								retVal += "0"
+							}
+							retVal += "7";
+							return retVal;
+						}
+					}
+				</script>
 				<tr>
 					<td align="center" class="black_ar">&nbsp;</td>
 					<td align="left" class="black_ar"><label for="departmentId"><bean:message

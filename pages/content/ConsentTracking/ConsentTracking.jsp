@@ -352,9 +352,7 @@ function popupWindow(nofConsentTiers)
 								}
 							}
 							%>
-							<span class="grey_ar_s">
-							<bean:message key="page.dateFormat" />&nbsp;
-							</span>
+							<span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 							</td>
 						</tr>
 					</table>

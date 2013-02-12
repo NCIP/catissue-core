@@ -13,7 +13,9 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxcommon.js"></script>
 	<script  language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxgrid.js"></script> 
-	<script language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script> 
+	<script language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script>
+	<script language="JavaScript" type="text/javascript" src="newDhtmlx/ext/dhtmlxgrid_drag_custom.js"></script> 
+	<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script> 
 	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
 	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
 </head>
@@ -506,9 +508,19 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 </table>
 <iframe id = "containerExportFrame" width = "0%" height = "0%" frameborder="0">
 	</iframe>
-	
 <script>
 var grid = new dhtmlXGridObject("containerGrid");
+var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
+if(!interVeil||interVeil==null)
+{
+var element = document.createElement("div");
+element.setAttribute("id", "loadingDivWthBg");
+element.style.display="none";
+element.innerHTML= '<div class="lightbox_overlay" style="background-color: #FFFFFF;height: 100%;left: 0;opacity: 0.5;filter: alpha(opacity = 50);	position: fixed; *position: absolute; top: 0; width: 100%;">&nbsp;</div><div class="holder" style="border-radius: 7px;background: #6b6a63;padding: 6px; position: absolute; left: 50%; top: 50%; "><img src="images/uIEnhancementImages/loading.gif" id="lodImg" /></div>';
+window.parent.document.body.appendChild(element);
+var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
+}
+
 function loadGrid()
 {
 //var grid = new dhtmlXGridObject("containerGrid");
@@ -566,6 +578,47 @@ menu.addNewChild("export", 0, "pdf", "Pdf", false, "");
 
 grid.enableAlterCss("even","uneven");
 grid.init();
+grid.enableDragAndDrop(true);
+grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
+	a= grid.cells(sId,sInd).getValue();
+	b= grid.cells(tId,tInd).getValue();
+	var isImg = a.search('<img ');
+
+	if(sInd!=0&&tInd!=0){
+		if(isImg==-1){
+			var parameter='sId='+sId+'&tId='+tId+'&sInd='+sInd+'&tInd='+tInd;
+			var request = newXMLHTTPReq();
+			request.onreadystatechange=function(){
+				if(request.readyState == 4)
+				{  
+					//Response is ready
+					if(request.status == 200)
+					{
+						var responseString = request.responseText;
+						var myJsonResponse = eval('(' + responseString + ')');
+						if(myJsonResponse.success){
+							grid.cells(sId,sInd).setValue(b);
+							grid.cells(tId,tInd).setValue(a);
+						}
+						else
+							alert("can't move");
+					}
+					interVeil.style.display="none";
+					
+				}	
+			};
+			request.open("POST","CatissueCommonAjaxAction.do?type=swapContainerUsingDrag",true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			request.send(parameter);
+			interVeil.style.display="block";
+		}
+		else{
+			alert("can't move");
+		}
+		
+	}
+	return false;
+});
 
 grid.parse(myObject,"json");
 }

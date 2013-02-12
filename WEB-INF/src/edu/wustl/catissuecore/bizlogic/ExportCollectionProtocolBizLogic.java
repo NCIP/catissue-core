@@ -289,7 +289,8 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     }
     private String getDateAsString(Date date)
     {
-    	DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    	DateFormat formatter = new SimpleDateFormat(CommonServiceLocator.getInstance()
+				.getDatePattern());
     	String dateString = formatter.format(date);
     	return dateString;
     }

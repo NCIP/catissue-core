@@ -53,7 +53,7 @@ public class QuickEventsAction extends BaseAction
 		 *  Constants.SYSTEM_IDENTIFIER, true);
 		 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList); */
 
-		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
+		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.QUICK_EVENT_PARAMETERS);
 
 		//add messages from session to request
 		final HttpSession session = request.getSession(true);
@@ -67,7 +67,13 @@ public class QuickEventsAction extends BaseAction
 			}
 		}
 
-		final String pageOf = Constants.SUCCESS;
+		String pageOf = Constants.SUCCESS;
+		// populate particular EventForm on QuickEvent Page in the case of request come from specimenList Page 
+		if(request.getParameter("fromPage") !=null && request.getParameter("fromPage").toString().equals("SpecimenList"))
+		{
+			pageOf ="redirectEventPage";
+			request.setAttribute("fromPage", null);
+		}
 
 		return mapping.findForward(pageOf);
 	}

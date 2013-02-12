@@ -11,6 +11,8 @@
 
 package edu.wustl.catissuecore.action;
 
+
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.QuickEventsForm;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -80,15 +83,52 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 			final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			String specimenFound = "0";
 			String errorString = "";
+			String invalidLabels="";
 			String specimenLabel = "";
-			if (qEForm.getCheckedButton().equals("1"))
+			String specimenIds="";
+			if (("1").equals(qEForm.getCheckedButton()))
 			{
 				specimenLabel = qEForm.getSpecimenLabel();
-				specimenFound = this.isExistingSpecimen(Constants.SYSTEM_LABEL, specimenLabel,
-						bizLogic);
+				
+				// Handle Multiple Specimen Case
+				
+				if(specimenLabel.contains(","))
+				{
+					//List<String> labels=this.populateSpecimenLabelList(specimenLabel);
+					List<String> labels=AppUtility.getListOnCommaToken(specimenLabel);
+					Iterator<String> lblIterator=labels.iterator();
+					while(lblIterator.hasNext())
+					{
+						String singleSpecimenLabel=lblIterator.next();
+						specimenFound = this.isExistingSpecimen(Constants.SYSTEM_LABEL, singleSpecimenLabel,bizLogic);
+						if(("0").equalsIgnoreCase(specimenFound) && singleSpecimenLabel !=null)
+						{
+							invalidLabels = invalidLabels + singleSpecimenLabel+" ,";
+						}
+						else
+						{
+							specimenIds =specimenIds + specimenFound+",";
+						}
+					}
+					if(invalidLabels.contains(","))
+					{
+						invalidLabels=invalidLabels.substring(0,invalidLabels.length()-1);
+					}
+					if(specimenIds.contains(","))
+					{
+						specimenIds=specimenIds.substring(0,specimenIds.length()-1);
+					}
+				}
+				else
+				{
+					specimenFound = this.isExistingSpecimen(Constants.SYSTEM_LABEL, specimenLabel,bizLogic);
+					specimenIds=specimenFound;
+				}	
+				
 				errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
+				errorString =errorString +" "+invalidLabels;
 			}
-			else if (qEForm.getCheckedButton().equals("2"))
+			else if (("2").equals(qEForm.getCheckedButton()))
 			{
 				final String barCode = qEForm.getBarCode();
 				specimenFound = this
@@ -96,9 +136,9 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 				errorString = ApplicationProperties.getValue("quickEvents.barcode");
 			}
 
-			if (!specimenFound.equalsIgnoreCase("0"))
+			if (! ("0").equals(specimenFound) && invalidLabels.equals("") )
 			{
-				request.setAttribute(Constants.SPECIMEN_ID, specimenFound);
+				request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 				request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
 				final String selectedEvent = qEForm.getSpecimenEventParameter();
 				request.setAttribute(Constants.EVENT_SELECTED, selectedEvent);
@@ -146,7 +186,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 					ApplicationProperties.getValue("quickEvents.specimenLabel")));
 			pageOf = Constants.FAILURE;
 		}
-		if (form.getCheckedButton().equals("2") && Validator.isEmpty(form.getBarCode()))
+		if (("2").equals(form.getCheckedButton()) && Validator.isEmpty(form.getBarCode()))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("quickEvents.barcode")));
@@ -187,10 +227,10 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 
 		final String sourceObjectName = Specimen.class.getName();
 		final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		final String[] whereColumnName = {sourceObject, Status.ACTIVITY_STATUS.toString()};
+		final String[] whereColumnName = {sourceObject, Status.ACTIVITY_STATUS.toString(), Status.ACTIVITY_STATUS.toString()};
 		//"storageContainer."+Constants.SYSTEM_IDENTIFIER
-		final String[] whereColumnCondition = {"=", "!="};
-		final Object[] whereColumnValue = {value, Status.ACTIVITY_STATUS_DISABLED.toString()};
+		final String[] whereColumnCondition = {"=", "!=", "!="};
+		final Object[] whereColumnValue = {value, Status.ACTIVITY_STATUS_DISABLED.toString(), Status.ACTIVITY_STATUS_CLOSED.toString()};
 		final String joinCondition = Constants.AND_JOIN_CONDITION;
 
 		final List list = bizlogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,

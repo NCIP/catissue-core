@@ -76,8 +76,7 @@ public class SiteForm extends AbstractActionForm
 
 	private String state = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
 
-	private String country = (String) DefaultValueManager
-			.getDefaultValue(Constants.DEFAULT_COUNTRY);
+	private String country = Constants.DEFAULT_COUNTRY_NAME;;
 
 	/**
 	 * The zip code of city where the site is.
@@ -99,6 +98,17 @@ public class SiteForm extends AbstractActionForm
 	 */
 	private long coordinatorId;
 
+	private String defaultCountry = Constants.DEFAULT_COUNTRY_NAME;
+
+	   
+    public String getDefaultCountry() {
+		return defaultCountry;
+	}
+
+	public void setDefaultCountry(String defaultCountry) {
+		this.defaultCountry = defaultCountry;
+	}
+	
 	/**
 	 * No argument constructor for StorageTypeForm class
 	 */
@@ -432,12 +442,12 @@ public class SiteForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.city")));
 			}
-			if (!validator.isValidOption(state))
+		/*	if (!validator.isValidOption(state))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.state")));
 			}
-
+*/
 			if (!validator.isValidOption(country))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",

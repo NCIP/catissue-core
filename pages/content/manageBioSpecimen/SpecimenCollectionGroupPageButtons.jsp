@@ -36,7 +36,7 @@
 											<tr>
 												<td colspan="3" align="left" class="buttonbg">
 												<%
-												if(operation.equals(Constants.ADD))
+												if(Constants.ADD.equals(operation))
 												{
 												%>
 													<html:button styleClass="blue_ar_b"

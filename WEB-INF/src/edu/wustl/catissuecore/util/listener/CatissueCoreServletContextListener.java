@@ -54,6 +54,7 @@ import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
+import edu.wustl.catissuecore.util.ParticipantAttributeDisplayInfoUtility;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -110,14 +111,15 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		{
 			logger.info("Initializing catissue application");
 			final ServletContext servletContext = sce.getServletContext();
+			ApplicationProperties
+			.initBundle(servletContext.getInitParameter("resourcebundleclass"));
+	
 			CommonServiceLocator.getInstance().setAppHome(sce.getServletContext().getRealPath(""));
 			logger.info(":::::::::::::Application home ::::::::::::"
 					+ CommonServiceLocator.getInstance().getAppHome());
 			ErrorKey.init("~");
 			AuditManager.init();
 			LoggerConfig.configureLogger(CommonServiceLocator.getInstance().getPropDirPath());
-			ApplicationProperties
-					.initBundle(servletContext.getInitParameter("resourcebundleclass"));
 			this.setGlobalVariable();
 			this.initCatissueParams();
 			logApplnInfo();
@@ -133,6 +135,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			}
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.init();
+			initializeParticipantConfig();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -517,6 +520,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			Variables.applicationAdditionInfo = XMLPropertyHandler
 					.getValue(Constants.APP_ADDITIONAL_INFO);
 		}
+	}
+	private void initializeParticipantConfig() throws Exception
+	{
+		ParticipantAttributeDisplayInfoUtility.initializeParticipantConfigObject();
 	}
 
 	/** This method reads the file containing default dashboard items and system level dashboard items.

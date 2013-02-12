@@ -100,6 +100,29 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	protected String derivativeLabelFormat;
 
 	protected String aliquotLabelFormat;
+	
+	/*
+	 * Label format for participant protocol id
+	 * */
+	protected String ppidFormat;
+	
+	/*
+	 * Return participant protocol id format 
+	 * @return participant protocol id format 
+	 * */
+	public String getPpidFormat() {
+		return ppidFormat;
+	}
+
+
+	/**
+	 * Set participant protocol id format
+	 * @param participant protocol id format 
+	 */
+	public void setPpidFormat(String ppidFormat) {
+		this.ppidFormat = ppidFormat;
+	}
+
 
 
 	/**
@@ -392,6 +415,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
 			this.principalInvestigator = new User();
 			this.principalInvestigator.setId(Long.valueOf(spForm.getPrincipalInvestigatorId()));
+			this.setPpidFormat(spForm.getPpidFormat());
 		}
 		catch (final Exception excp)
 		{

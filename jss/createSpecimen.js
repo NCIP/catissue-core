@@ -11,26 +11,7 @@
 				document.forms[0].parentSpecimenLabel.disabled = true;
 			}
 		}		 
-		function resetVirtualLocated()
-		{
-		    try
-			{
-			var radioArray = document.getElementsByName("stContSelection");	
-			radioArray[0].checked= true;
-			document.forms[0].selectedContainerName.disabled = true;
-			document.forms[0].pos1.disabled = true;
-			document.forms[0].pos2.disabled = true;
-			document.forms[0].containerMap.disabled = true;
-
-			document.forms[0].customListBox_1_0.disabled = true;
-			document.forms[0].customListBox_1_1.disabled = true;
-			document.forms[0].customListBox_1_2.disabled = true;
-			}
-			catch(e)
-			{
-			}
-		}
-
+		
 		function closeWindow()
 		{
 		  window.close();
@@ -95,7 +76,7 @@
 			document.forms[0].submit();
 		}
 	
-		function insExIdRow(subdivtag)
+	function insExIdRow(subdivtag)
 	{
 		var val = parseInt(document.forms[0].exIdCounter.value);
 		val = val + 1;
@@ -106,13 +87,6 @@
 		var q = r.length;
 		var rowno = q + 1;
 		var x=document.getElementById(subdivtag).insertRow(0);
-	
-		//var spreqno=x.insertCell(0);
-		//spreqno.className="black_ar";
-		//sname=(q+1);
-		//var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_id)";
-		//var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-		//spreqno.innerHTML="" + rowno + "." + hiddenTag;
 	
 		// First Cell
 		var checkb=x.insertCell(0);
@@ -147,4 +121,35 @@
 		
 		spreqsubtype.innerHTML="" + sname;
 	}
-			
+	
+	function updateStorageContainerValue()
+	{
+		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
+		document.getElementById("selectedContainerName").value=containerName;
+		if("Virtual"==containerName)
+		{
+			document.getElementById("virtuallyLocated").value="true";
+		}
+		else
+		{
+			document.getElementById("virtuallyLocated").value="false";
+		}
+	}
+	
+function showPopUp(collectionProtocolId) 
+{
+	var storageContainer =document.getElementById("storageContainerDropDown").value;
+    if(storageContainer!="")
+	{
+		loadDHTMLXWindow();
+	}
+	else
+	{
+		var className=document.getElementById("className").value;
+		var sptype=document.getElementById("type").value;
+		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
+						+ "&holdSpecimenClass="+className+ "&holdContainerType="+sptype	+ "&holdCollectionProtocol=" +collectionProtocolId;
+		mapButtonClickedOnNewSpecimen(frameUrl,'newSpecimenPage');
+	}
+}
+	

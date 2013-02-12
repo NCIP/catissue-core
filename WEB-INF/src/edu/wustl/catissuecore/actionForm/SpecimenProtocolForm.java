@@ -63,6 +63,47 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	protected String enrollment;
 
 	protected String aliquotLabelFormat;
+	
+	protected String ppidFormat;
+	
+	protected String prefixPid;
+	
+	protected String postfixPid;
+	
+	protected String noOfDigitPid;
+	
+	
+	public String getPrefixPid() {
+		return prefixPid;
+	}
+
+	public void setPrefixPid(String prefixPid) {
+		this.prefixPid = prefixPid;
+	}
+
+	public String getPostfixPid() {
+		return postfixPid;
+	}
+
+	public void setPostfixPid(String postfixPid) {
+		this.postfixPid = postfixPid;
+	}
+
+	public String getNoOfDigitPid() {
+		return noOfDigitPid;
+	}
+
+	public void setNoOfDigitPid(String noOfDigitPid) {
+		this.noOfDigitPid = noOfDigitPid;
+	}
+
+	public String getPpidFormat() {
+		return ppidFormat;
+	}
+
+	public void setPpidFormat(String ppidFormat) {
+		this.ppidFormat = ppidFormat;
+	}
 
 	public String getAliquotLabelFormat()
 	{
@@ -340,6 +381,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.descriptionURL = CommonUtilities.toString(protocol.getDescriptionURL());
 
 		this.setActivityStatus(CommonUtilities.toString(protocol.getActivityStatus()));
+		this.setPpidFormat(CommonUtilities.toString(protocol.getPpidFormat()));
 	}
 
 	/**
@@ -463,6 +505,19 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 								ApplicationProperties.getValue("collectionprotocol.participants")));
 					}
 				}
+				if(!Validator.isEmpty(noOfDigitPid)){
+					try
+					{
+						Integer.parseInt(noOfDigitPid);
+					}
+					catch (final NumberFormatException e)
+					{
+						SpecimenProtocolForm.logger.error(e.getMessage(),e);
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.ppid",
+								ApplicationProperties.getValue("collectionprotocol.ppidformat")));
+					}
+					
+				}	
 			}
 		}
 		catch (final Exception excp)

@@ -109,7 +109,19 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setSequenceNumber(cpForm.getSequenceNumber());
 		cpBean.setParentCollectionProtocolId(cpForm.getParentCollectionProtocolId());
 		cpBean.setDashboardLabelJsonValue(cpForm.getDashboardLabelJsonValue());
+		
+		cpBean.setPpidFormat(generatePpidFormat(cpForm));
 
 	}
-
+	
+	private String generatePpidFormat(CollectionProtocolForm cpForm){
+		String format = "";
+		if(!"".equals(cpForm.getPostfixPid().trim()) || !"".equals(cpForm.getPrefixPid().trim()) || !"".equals(cpForm.getNoOfDigitPid())){
+			format = String.format("%s%sd%s",cpForm.getPrefixPid(),"%0"+ Integer.parseInt(cpForm.getNoOfDigitPid()),cpForm.getPostfixPid());
+			format = "\""+format + "\",PPID";
+		}
+		
+		return format;
+	}
+	
 }

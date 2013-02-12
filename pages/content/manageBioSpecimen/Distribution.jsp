@@ -572,7 +572,7 @@
 						styleClass="formDateSized10" />
 					<%
 						}
-					%> <bean:message key="page.dateFormat" />&nbsp;</td>
+					%> <span class="capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;</td>
 				</tr>
 				
 				<!-- hours & minutes -->	

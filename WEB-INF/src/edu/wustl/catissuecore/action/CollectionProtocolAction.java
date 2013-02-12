@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -517,9 +519,37 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm
 				.setDashboardLabelJsonValue(CollectionProtocolUtil.populateDashboardLabelJsonValue(labelSQLAssociations));
 		request.setAttribute("isDefaultDashBoard", isDefaultDashboard);
+		collectionProtocolForm.setPpidFormat(collectionProtocolBean.getPpidFormat());
+		if(collectionProtocolBean.getPpidFormat()!=null && !"".equals(collectionProtocolBean.getPpidFormat())){
+			formPidFormat(collectionProtocolForm,collectionProtocolBean.getPpidFormat());
+		}
 		return mapping.findForward(pageOf);
 	}
+	
+	private void formPidFormat(CollectionProtocolForm form ,String Format){
+		Format = Format.substring(1,(Format.length()-"\",PPID".length()));
+		String pattern = "%\\d*d";
+	    Pattern p = Pattern.compile(pattern);
+	    Matcher m = p.matcher(Format);
+	    m.find();
+	    String[] strArray = p.split(Format);
+	    if(strArray.length==2){
+	    	form.setPrefixPid(strArray[0]);
+	    	form.setPostfixPid(strArray[1]);
+	    	
+	    }else if(strArray.length==1){
+		    if(m.start()==0){
+		    	form.setPostfixPid(strArray[0]);
+		    }else{
+		    	form.setPrefixPid(strArray[0]);
+		    }
+		 }
+	    String noOfDigit = Format.substring(m.start(),m.end());
+	    form.setNoOfDigitPid(noOfDigit.substring(1,(noOfDigit.length()-1)));
+		
+	}
 
+	
 	/**
 	 * While initialisation cleans the session.
 	 * @param request

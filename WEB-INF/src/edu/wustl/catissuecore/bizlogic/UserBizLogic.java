@@ -1630,8 +1630,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			if ((user.getAddress().getState() != "null" && user.getAddress().getState() != "")
 					&& edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 			{
-				if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_STATE_LIST, null), user.getAddress().getState()))
+				if (!Validator.isEnumeratedValue(AppUtility.getStateList(), user.getAddress().getState()))
 				{
 
 					throw getBizLogicException(null, "state.errMsg", "");
@@ -1834,13 +1833,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			message = ApplicationProperties.getValue("user.city");
 			throw getBizLogicException(null, ERRORS_ITEM_REQUIRED, message);
 		}
-		if (edu.wustl.catissuecore.util.global.Variables.isStateRequired
+	/*	if (edu.wustl.catissuecore.util.global.Variables.isStateRequired
 				&& (!validator.isValidOption(user.getAddress().getState()) || validator.isEmpty(user.getAddress()
 						.getState())))
 		{
 			message = ApplicationProperties.getValue("user.state");
 			throw getBizLogicException(null, ERRORS_ITEM_REQUIRED, message);
-		}
+		}*/
 		if (!validator.isValidOption(user.getAddress().getCountry())
 				|| validator.isEmpty(user.getAddress().getCountry()))
 		{

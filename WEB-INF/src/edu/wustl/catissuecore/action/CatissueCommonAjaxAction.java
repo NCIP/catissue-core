@@ -402,6 +402,56 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		executerImpl.startSync(jobName,(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA));
 		return null;
 	}
+	public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+
+		try{
+			Thread.sleep(5000l);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		String sId = request.getParameter("sId");
+		String tId = request.getParameter("tId");
+		String sInd = request.getParameter("sInd");
+		String tInd = request.getParameter("tInd");
+		String responseString = "";
+		if(tInd.equals("3")){
+			responseString = "{'success':true,'sId':'"+sId+"','tId':'"+tId+"','sInd':'"+sInd+"','tInd':'"+tInd+"'}";
+		}
+		else{
+			responseString = "{'success':false,'sId':'"+sId+"','tId':'"+tId+"','sInd':'"+sInd+"','tInd':'"+tInd+"'}";
+		}
+		
+		response.getWriter().write(responseString.toString());
+		return null;
+		
+	}
+	public ActionForward swapTreeNodeUsingDrag(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+
+		try{
+			Thread.sleep(5000l);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		String sourceText = request.getParameter("sourceText");
+		String targetText = request.getParameter("targetText");
+		String responseString = "";
+		if(sourceText.equals("nccs")){
+			responseString = "{'success':true,'sourceText':'"+sourceText+"','targetText':'"+targetText+"'}";
+		}
+		else{
+			responseString = "{'success':false,'sourceText':'"+sourceText+"','targetText':'"+targetText+"'}";
+		}
+		
+		response.getWriter().write(responseString.toString());
+		return null;
+		
+	}
 	
 	public ActionForward stopSyncCP(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException

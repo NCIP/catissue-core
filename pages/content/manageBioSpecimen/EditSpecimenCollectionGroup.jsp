@@ -2,7 +2,6 @@
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <script type="text/javascript" src="jss/combos.js"></script>
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
 	/**
  			* Name : Ashish Gupta
@@ -12,11 +11,11 @@
  			* Description: Adding check for changes function
 	*/
 String printaction = "CPQueryPrintSCGAdd";
-if(operation.equals(Constants.ADD))
+if(Constants.ADD.equals(operation))
 {
 	 printaction = "CPQueryPrintSCGAdd";
 }
-else if(operation.equals(Constants.EDIT))
+else if(Constants.EDIT.equals(operation))
 {
  	 printaction = "CPQueryPrintSCGEdit";
 }
@@ -33,7 +32,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		* Description: passing "button=multipleSpecimen"with the url so that validation is done only on click of "Add Multiple Specimen" button
 	*/
 	String confirmDisableFuncNameForMultipleSpecimen = "";
-	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+	if(Constants.PAGE_OF_SCG_CP_QUERY.equals(pageOf))
 	{
 		// In case of CP based view query, formName variable already has
 		// some parameter appended to the url. hence appending the button parameter by "&"
@@ -46,13 +45,13 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	String normalSubmit = "";
 	String forwardToSubmit = "";
 	String forwardToSubmitForMultipleSpecimen = "";
-	if(operation.equals(Constants.EDIT))
+	if(Constants.EDIT.equals(operation))
 	{
 		confirmDisableFuncName = "confirmDisableForSCG('" + formName +"',document.forms[0].activityStatus)";
 		normalSubmit = "checkForChanges(),"+normalSubmitFunctionName + ","+confirmDisableFuncName;
 		forwardToSubmit = "checkForChanges(),"+ forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 
-		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+		if(Constants.PAGE_OF_SCG_CP_QUERY.equals(pageOf))
 		{
 	// In case of CP based view query, formName variable already has
 	// some parameter appended to the url. hence appending the button parameter by "&"
@@ -149,7 +148,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 <tr>
 				<tr>
 				<%
-					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || operation.equals(Constants.EDIT))
+					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || Constants.EDIT.equals(operation))
 						{
 				%>
 
@@ -158,7 +157,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSC"   maxlength="255" styleId="name" property="name" /></td>
 
 				<%
-									}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
+									}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || Constants.EDIT.equals(operation))
 										{
 								%>
 					<td class="black_ar_t">&nbsp;</td>
@@ -202,13 +201,14 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				    <td class="black_ar_t"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 				    <td align="left" valign="top" class="black_ar"><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/></td>
 				    <td align="left" nowrap class="black_ar">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)"
+					<!-- Mandar : 434 : for tooltip -->
+					   <html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)"
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
 						</html:select>&nbsp;
 						<bean:message key="collectionprotocol.studycalendarcomment"/>
 		        	</td>
+					
 					<td class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                     <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.site"/></td>
 					<td align="left"  class="black_ar">
@@ -284,43 +284,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 									    />
 		        	  </td>
 				 </tr>
-
-			<!--	 <tr>
-			     	<td align="center" class="black_ar">&nbsp;</td>
-					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.medicalRecordNumber"/></td>
-				     <td align="left" nowrap>
-   						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
-				-->
-<!-- Mandar : 434 : for tooltip -->
-				  <!--   		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
-				     		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-						</logic:equal>
-						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
-
-				-->
-<!-- Mandar : 434 : for tooltip -->
-				<!--	     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSizedSCG" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
-					     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                	         	<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-						</logic:equal>
-		        	</td>
-				 	<td align="center" nowrap>&nbsp;</td>
-					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></td>
-					<td align="left" nowrap class="black_ar">
-				     	<html:text styleClass="formFieldSizedSC" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
-					-->     	<!-- This feature will be implemented in next release
-							&nbsp;
-							<html:submit styleClass="actionButton" disabled="true">
-								<bean:message key="buttons.getPathologyReport"/>
-							</html:submit>
-							-->
-				<!--    </td>
-
-				 </tr>
-				 -->
+	
 				 <!--comments -->
 				 <!--
 				 * Name: Shital Lawhale
@@ -330,9 +294,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 * Description : Added <TR> for comment field .
 				-->
 				 <tr>
-
 				<!-- activitystatus -->
-
 					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 					<td align="left" class="black_ar"><bean:message key="site.activityStatus" /></td>
 					<td align="left" class="black_ar">
@@ -348,7 +310,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<!-- collectionstatus -->
 					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 					<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.collectionStatus" /></td>
-					<td align="left" class="black_ar">
+					<td align="left" class="black_ar"> 
 							<autocomplete:AutoCompleteTag property="collectionStatus"
 								optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
 								initialValue="<%=form.getCollectionStatus()%>"
@@ -382,22 +344,20 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<!--  Consent Tracking Module Virender mehta	 -->
 	<%
 		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");
-			if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
-			{
+		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
+		{
 	%>
 	<tr>
 		<td colspan="3">
 		<div>
 	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %>
-			</div>
-			</td>
-		</tr>
-
+		</div>
+		</td>
+	</tr>
 	<%
-				}
-			%>
+		}
+	%>
 	<!--  Consent Tracking Module Virender mehta -->
-
 		<tr>
 			<td colspan="3">
 				<div >
@@ -458,10 +418,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			<html:hidden property="receivedEventId"/>
 			<!-- Patch ID: Bug#4227_4 -->
 			<html:hidden styleId="buttonType" property="buttonType"/>
-
 		</tr>
 	</div>
-
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
 	</table>
 	</div>

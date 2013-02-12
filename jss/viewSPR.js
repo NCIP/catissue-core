@@ -177,7 +177,8 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 	if(checkbox.checked==true)
 	{
 		var innerHtml = document.getElementById("deidentifiedReportText").innerHTML;
-		var tempStr = ReplaceTags(innerHtml);
+		
+		/*var tempStr = ReplaceTags(innerHtml);
 
 		var startArr = start.split(",");
 		var endArr = end.split(",");
@@ -219,10 +220,37 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 				}	
 			}
 			//newtext = 	textBeforeString + text + textAfterString;
+		}*/
+		
+		var conceptNameArr = conceptName.split(",");
+		
+		var uniqueArr=conceptNameArr.unique();
+
+		for(var x=0;x<uniqueArr.length;x++){
+			var text = "<span title="+uniqueArr[x]+" style='background-color:"+colour+"'>"+uniqueArr[x]+"</span>";
+			//var newStr = "/"+conceptNameArr[x]+"/gi";
+			innerHtml = innerHtml.replace(new RegExp(uniqueArr[x], 'ig'),text);
 		}
 		document.getElementById("deidentifiedReportText").innerHTML=innerHtml;
 	}
 	
+}
+
+Array.prototype.contains = function(v) {
+    for(var i = 0; i < this.length; i++) {
+        if(this[i] === v) return true;
+    }
+    return false;
+};
+
+Array.prototype.unique = function() {
+    var arr = [];
+    for(var i = 0; i < this.length; i++) {
+        if(!arr.contains(this[i])) {
+            arr.push(this[i]);
+        }
+    }
+    return arr; 
 }
 function trimString(sInString) {
   sInString = sInString.replace( /^\s+/g, "" );// strip leading

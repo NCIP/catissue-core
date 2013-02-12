@@ -838,8 +838,10 @@ PUBLIC
 			name="advanceSearchForm" scope="request">
 			<forward name="success" path="/DistributionReport.do?forward=Success" />
 		</action>
-
-		<action path="/AddSpecimenToCart"
+		
+		<!-- Remove Action mapping for AddToCart From Specimen,Anticipatory Specimen, Aliquot and Create Specimen Page -->
+		
+		<!-- <action path="/AddSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction" name="newSpecimenForm"
 			validate="false" scope="request">
 			<forward name="pageOfNewSpecimenCPQuery"
@@ -848,13 +850,13 @@ PUBLIC
 				path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen" />
 			<forward name="pageOfCreateAliquot"
 				path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
-			<!--
+			
 				<forward name="CPQueryPrintSpecimenEdit"
 				path="/CPQueryPrintSpecimenEdit.do"/>
-			-->
+			
 			<forward name="createNew"
 				path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
-			<!-- bug 12185 -->
+			bug 12185
 			<forward name="createNewDerivative"
 				path="/CreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimen" />
 			<forward name="pageOfCreateAliquotSpecimenEdit"
@@ -862,35 +864,35 @@ PUBLIC
 			<forward name="cpChildSubmit"
 				path="/AnticipatorySpecimenView.do?target=pageOfMultipleSpWithMenu" />
 			<forward name="CPQuerycpChildSubmit" path="/AnticipatorySpecimenView.do" />
-			<!--
+			
 				<forward name="PrintSpecimenEdit" path="/PrintSpecimenEdit.do"/>
-			-->
-		</action>
+			
+		</action> -->
 
-		<action path="/AddScgToCart"
+		<!-- <action path="/AddScgToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction" name="viewSpecimenSummaryForm"
 			validate="false" scope="request">
 			<forward name="success" path="/redirecttoSCG.do" />
 			<forward name="printMultiple" path="/printMultiple.do" />
-		</action>
+		</action> -->
 
-		<action path="/AddMltipleSpecimenToCart"
+		<!-- <action path="/AddMltipleSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction" name="viewSpecimenSummaryForm"
 			validate="false" scope="request">
-			<!--
+			
 				bug 11829 - previously it show AnticipatorySpecimens.jsp page
 				without menubar
-			-->
+			
 			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
-			<!-- bug 12656 -->
+			bug 12656
 			<forward name="multipleSpWithoutMenu" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="printMultiple" path="/printMultiple.do" />
-		</action>
+		</action> -->
 
-		<action path="/AddDeriveSpecimenToCart"
+		<!-- <action path="/AddDeriveSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction" name="createSpecimenForm"
 			validate="false" scope="request">
 			<forward name="pageOfNewSpecimen"
@@ -898,15 +900,15 @@ PUBLIC
 			<forward name="pageOfNewSpecimenCPQuery"
 				path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
 			<forward name="CPQueryPrintSpecimenAdd" path="/CPQueryPrintSpecimenAdd.do" />
-		</action>
+		</action> -->
 
-		<action path="/AddAliquotSpecimenToCart"
+		<!-- <action path="/AddAliquotSpecimenToCart"
 			type="edu.wustl.catissuecore.action.NewShopingCartAction" name="aliquotForm"
 			validate="false" scope="request">
 			
 			<forward name="pageOfNewSpecimen" path=".catissuecore.aliquotSummaryDef" />
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.aliquotSummaryCpQueryDef" />
-		</action>
+		</action> -->
 
 		<!--
 			<action path="/QueryMessageAction"
@@ -2883,7 +2885,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/FrozenEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/FrozenEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="frozenEventParametersForm" validate="true"
 			input="/FrozenEventParameters.do?operation=add&amp;pageOf=pageOfFrozenEventParameters"
 			scope="request">
@@ -2925,7 +2927,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/CheckInCheckOutEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/CheckInCheckOutEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="checkInCheckOutEventParametersForm" validate="true"
 			input="/CheckInCheckOutEventParameters.do?operation=add&amp;pageOf=pageOfCheckInCheckOutEventParameters"
 			scope="request">
@@ -2965,7 +2967,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/ReceivedEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/ReceivedEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="receivedEventParametersForm" validate="true"
 			input="/ReceivedEventParameters.do?operation=add&amp;pageOf=pageOfReceivedEventParameters"
 			scope="request">
@@ -3007,7 +3009,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/FluidSpecimenReviewEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/FluidSpecimenReviewEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="fluidSpecimenReviewEventParametersForm" validate="true"
 			input="/FluidSpecimenReviewEventParameters.do?operation=add&amp;pageOf=pageOfFluidSpecimenReviewParameters"
 			scope="request">
@@ -3047,7 +3049,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/CellSpecimenReviewParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/CellSpecimenReviewParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="cellSpecimenReviewParametersForm" validate="true"
 			input="/CellSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfCellSpecimenReviewParameters"
 			scope="request">
@@ -3090,7 +3092,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/TissueSpecimenReviewEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/TissueSpecimenReviewEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="tissueSpecimenReviewEventParametersForm" validate="true"
 			input="/TissueSpecimenReviewEventParameters.do?operation=add&amp;pageOf=pageOfTissueSpecimenReviewParameters"
 			scope="request">
@@ -3130,7 +3132,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/DisposalEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/DisposalEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="disposalEventParametersForm" validate="true"
 			input="/DisposalEventParameters.do?operation=add&amp;pageOf=pageOfDisposalEventParameters"
 			scope="request">
@@ -3170,7 +3172,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/ThawEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/ThawEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="thawEventParametersForm" validate="true"
 			input="/ThawEventParameters.do?operation=add&amp;pageOf=pageOfThawEventParameters"
 			scope="request">
@@ -3211,7 +3213,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/MolecularSpecimenReviewParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/MolecularSpecimenReviewParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="molecularSpecimenReviewParametersForm" validate="true"
 			input="/MolecularSpecimenReviewParameters.do?operation=add&amp;pageOf=pageOfMolecularSpecimenReviewParameters"
 			scope="request">
@@ -3251,7 +3253,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/CollectionEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/CollectionEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="collectionEventParametersForm" validate="true"
 			input="/CollectionEventParameters.do?operation=add&amp;pageOf=pageOfCollectionEventParameters"
 			scope="request">
@@ -3331,7 +3333,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/SpunEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/SpunEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="spunEventParametersForm" validate="true"
 			input="/SpunEventParameters.do?operation=add&amp;pageOf=pageOfSpunEventParameters"
 			scope="request">
@@ -3371,7 +3373,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/EmbeddedEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/EmbeddedEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="embeddedEventParametersForm" validate="true"
 			input="/EmbeddedEventParameters.do?operation=add&amp;pageOf=pageOfEmbeddedEventParameters"
 			scope="request">
@@ -3411,7 +3413,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/FixedEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/FixedEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="fixedEventParametersForm" validate="true"
 			input="/FixedEventParameters.do?operation=add&amp;pageOf=pageOfFixedEventParameters"
 			scope="request">
@@ -3451,7 +3453,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/ProcedureEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/ProcedureEventParametersAdd" type="edu.wustl.catissuecore.action.BulkEventsAddAction"
 			name="procedureEventParametersForm" validate="true"
 			input="/ProcedureEventParameters.do?operation=add&amp;pageOf=pageOfProcedureEventParameters"
 			scope="request">
@@ -4032,17 +4034,17 @@ PUBLIC
 		<!--Specimen Object View Actions End-->
 
 		<!-- Shopping Cart Actions Begins -->
-		<action path="/ShoppingCart" type="edu.wustl.catissuecore.action.ShoppingCartAction"
+		<!-- <action path="/ShoppingCart" type="edu.wustl.catissuecore.action.ShoppingCartAction"
 			name="advanceSearchForm" input="/ShoppingCart.do" validate="true"
 			scope="request">
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="success" path=".catissuecore.shoppingCartDef" />
 			<forward name="failure" path=".catissuecore.shoppingCartDef" />
-			<!--
+			
 				forward name="success" path="/pages/content/search/ShoppingCart.jsp"
 				/> <forward name="failure"
 				path="/pages/content/search/ShoppingCart.jsp" /
-			-->
+			
 			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="requestToOrder" path="/RequestToOrder.do" />
 			<forward name="editMultipleSp"
@@ -4056,7 +4058,8 @@ PUBLIC
 			<forward name="shoppingCartDelete" path="/ShoppingCart.do" />
 			<forward name="shoppingCartExport" path=".catissuecore.searchAddSuccessDef" />
 			<forward name="failure" path="/ShoppingCart.do" />
-		</action>
+		</action> -->
+		
 		<!-- Shopping Cart Actions Ends -->
 
 		<!-- Assign Privileges Action Begins -->
@@ -4399,14 +4402,15 @@ PUBLIC
 			<forward name="success" path=".catissuecore.quickEventsDef" />
 			<forward name="failure" path=".catissuecore.quickEventsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="redirectEventPage" path="/QuickEventsSearch.do" />
 		</action>
 
 		<action path="/QuickEventsSearch"
 			type="edu.wustl.catissuecore.action.QuickEventsSpecimenSearchAction"
 			name="quickEventsForm" validate="false" scope="request">
 			<forward name="success"
-				path="/QuickEvents.do?operation=add&amp;menuSelected=15" />
-			<forward name="failure" path="/QuickEvents.do" />
+				path="/QuickEvents.do?operation=add&amp;menuSelected=15&amp;fromPage=eventAdded" />
+			<forward name="failure" path="/QuickEvents.do?fromPage=eventNotAdded" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
@@ -5929,6 +5933,14 @@ PUBLIC
 			<forward name="failure" path="/BulkHandler.do?fromAction=login"/>
 			<forward name="success" path="/BulkHandler.do?fromAction=login"/>
 		</action>
+		
+		<action path="/ExportSprAction" type="edu.wustl.catissuecore.action.ExportSprAction"
+		   validate="false" scope="request">		   
+		</action>
+		<action path="/UploadSprReport" type="edu.wustl.catissuecore.action.UploadSprReport"
+		   validate="false" scope="request">		   
+		</action>
+		
 		
 		
 		<!--  Report and scheduling mapping- Rinku -->

@@ -63,8 +63,7 @@
     		  			      pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
     		  			      value="<%= eventDate %>"
 							  styleClass="black_ar"
-							/><span class="grey_ar_s">
-                   <bean:message key="page.dateFormat" />&nbsp</span></td>
+							/> <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 				</tr>
             <tr>
               <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>

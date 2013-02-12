@@ -437,6 +437,7 @@
 				<include name="caTissueSuite_v1_2_Technical_Guide.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
 				<include name="**/WEB-INF/classes/**/cdms/CdmsIntegratorImpl.class" />
+				<include name="ParticipantConfigXMLTemplateRules.xml" />
 				<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				<exclude name="**/WEB-INF/classes/**/cdms/*"/>
 

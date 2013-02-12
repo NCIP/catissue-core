@@ -41,7 +41,7 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 	{
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName;
-		String isRNA = null;
+		//String isRNA = null;
 
 		final MolecularSpecimenReviewParametersForm molecularSpecimenReviewParametersForm =
 			(MolecularSpecimenReviewParametersForm) eventParametersForm;
@@ -52,17 +52,17 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 		else
 		{
 			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
-			isRNA = (String) request.getAttribute(Constants.IS_RNA);
+			//isRNA = (String) request.getAttribute(Constants.IS_RNA);
 		}
 		final String changeAction = "setFormAction('" + formName + "');";
-		request.setAttribute("isRNA", isRNA);
+		//request.setAttribute("isRNA", isRNA);
 		request.setAttribute("changeAction", changeAction);
 		request.setAttribute("formName", formName);
 		/**
 		* Sets the isRNA attribute. It is used to display "Ratio 28S To 18S" field
 		* only for Specimen of Type = "Molecular" and subType = "RNA".
 		*/
-		final String specimenID = (String) request.getAttribute(Constants.SPECIMEN_ID);
+		/*final String specimenID = (String) request.getAttribute(Constants.SPECIMEN_ID);
 
 		if (((request.getAttribute("isRNA") != null) && (request.getAttribute("isRNA")
 				.equals("true")))
@@ -104,6 +104,6 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 		else
 		{
 			request.setAttribute("isRNA", Constants.FALSE);
-		}
+		}*/
 	}
 }

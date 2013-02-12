@@ -107,8 +107,7 @@ function roundOff(valueToBeRoundOff, precision)
 			  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 			  styleClass="formDateSized10"
 					/>
-</logic:empty><span class="grey_ar_s">
-                   <bean:message key="page.dateFormat" />&nbsp</span></td>
+</logic:empty><span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;</td>
 
                   <!-- Time -->
 

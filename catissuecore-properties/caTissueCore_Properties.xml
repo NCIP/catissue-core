@@ -336,6 +336,12 @@
 		<name>SPRThreshold2</name>
 		<value>0</value>
 	</property>
+	
+	<property>
+		<name>spr.dir.location</name>
+		<value>@@spr.dir.location@@</value>
+	</property>
+	
 	 <!-- end -->
 
 	  <!-- Constants for Password validations start -->
@@ -882,5 +888,10 @@ ClinPortal</value>
 		<name>database.password</name>
 		<value>@@database.password@@</value>
 	</property>
+	<property>
+		<name>dashboard.items.file</name>
+		<value>@@dashboard.items.file@@</value>
+</property>
+
 
 </properties>

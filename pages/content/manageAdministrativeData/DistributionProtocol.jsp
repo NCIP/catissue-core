@@ -299,7 +299,7 @@ function insRow(subdivtag)
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                    
-			       	<td align="left" class="black_ar"><label for="irbID"><bean:message key="distributionprotocol.irbid" /> </label></td>
+			       	<td align="left" class="black_ar"><label for="irbID"><bean:message key="collectionprotocol.irbid" /> </label></td>
 				  <td colspan="2" align="left"><html:text styleClass="black_ar" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
                   </td>
                 </tr>
@@ -337,7 +337,7 @@ function insRow(subdivtag)
 					  <%
 					  	}
 					  %>
-					<span class="grey_ar_s"><bean:message key="page.dateFormat" /></span>
+					 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 					  
 					</td>
                 </tr>
@@ -363,7 +363,7 @@ function insRow(subdivtag)
 								pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 	value="<%=distributionProtocolEndDate%>"
 								styleClass="black_ar"/>
-								<span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>
+								 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 						
 								</td>
 				  			  </tr>

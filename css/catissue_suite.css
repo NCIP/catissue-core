@@ -1017,3 +1017,6 @@ input.actionButton{ /* optional style for form and action buttons */
 	font-weight:bold;
 	color:#323232;
 }
+.capitalized {
+    text-transform: uppercase;
+}

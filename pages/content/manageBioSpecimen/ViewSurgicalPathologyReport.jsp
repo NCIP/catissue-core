@@ -94,6 +94,18 @@
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
 		}		
 	}
+	var download = function(reportType){
+		var dwdIframe = document.getElementById("sprExportFrame");
+		var sprNumber = '<%=formSPR.getSurgicalPathologyNumber()%>';
+		var identifiedId = document.getElementsByName("identifiedReportId")[0].value;
+		var deIdentifiedId = document.getElementsByName("deIdentifiedReportId")[0].value;
+		var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
+		if(hasUploadedReport=="true"){
+			reportType = "uploadedFile";
+		}
+		dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>&sprNumber="+sprNumber+"&reportId="+identifiedId+"&deIdentifiedId="+deIdentifiedId+"&reportType="+reportType;
+	}
+					
 	</script>	
 </head>
 <%
@@ -119,6 +131,7 @@ if(!hasAccess)
 			<html:hidden property="pageOf"/>
 			<html:hidden property="acceptReject"/>
 			<html:hidden property="participantIdForReport"/>
+			<html:hidden property="hasUploadedReport"/>
 
         <tr>
           <td colspan="2" align="left">
@@ -323,7 +336,12 @@ if(!hasAccess)
 	<table border="0" cellpadding="5" cellspacing="0" width="100%" id="identifiedReportInfo" >
 		  <tr>
 		  <td colspan="5" class="tr_bg_blue1">
-		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.identifiedReportInformation.title"/></span></td>
+		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.identifiedReportInformation.title"/> </span>
+		  <a href="#" onClick="download('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
+		  Download
+		  </a> 
+		  
+		  </td>
         </tr>
         <tr>
           <td colspan="5">
@@ -356,7 +374,11 @@ if(!hasAccess)
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="deidReportInfo" style='display:none'>
 			<tr>
 		  <td class="tr_bg_blue1">
-		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>&nbsp;</span></td>
+		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>&nbsp;</span>
+		  <a href="#" onClick="download('Deidentified')" title="Click to download SPR" class="blue_ar_b"  style="float:right; margin-right: 8px;">
+		  Download
+		  </a> 
+		  </td>
         </tr>
 			<tr>
 				<td>
@@ -474,6 +496,8 @@ if(!hasAccess)
 	</tr>
     </table>
 </html:form>	
+<iframe id = "sprExportFrame" width = "0%" height = "0%" frameborder="0">
+	</iframe>
 <%
 if(!hasAccess)
 {

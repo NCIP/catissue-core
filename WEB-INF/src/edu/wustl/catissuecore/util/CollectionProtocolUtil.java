@@ -179,7 +179,7 @@ public class CollectionProtocolUtil
 			collectionProtocolBean.setParentCollectionProtocolId(collectionProtocol
 					.getParentCollectionProtocol().getId());
 		}
-
+		collectionProtocolBean.setPpidFormat(collectionProtocol.getPpidFormat());
 		return collectionProtocolBean;
 	}
 
@@ -196,7 +196,8 @@ public class CollectionProtocolUtil
 				.getPrincipalInvestigator().getId().longValue());
 		Date date = collectionProtocol.getStartDate();
 		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date,
-				Constants.DATE_FORMAT));
+				 CommonServiceLocator.getInstance()
+					.getDatePattern()));
 		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
 		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol
 				.getUnsignedConsentDocumentURL());
@@ -1034,6 +1035,7 @@ public class CollectionProtocolUtil
 					new LabelSQLAssociationBizlogic().getLabelSQLAssocCollection(cpBean
 							.getIdentifier())));
 		}
+		collectionProtocol.setPpidFormat(cpBean.getPpidFormat());
 		return collectionProtocol;
 	}
 

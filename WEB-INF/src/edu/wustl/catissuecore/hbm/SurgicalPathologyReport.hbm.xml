@@ -84,6 +84,14 @@
             column="SOURCE_ID"
             not-null="false"
         />
+           <one-to-one
+            name="fileContent"
+            class="edu.wustl.catissuecore.domain.pathology.FileContent"
+            cascade="save-update"
+             
+            constrained="false"
+            property-ref="surgicalPathologyReport"
+        />
 
         <one-to-one
             name="textContent"

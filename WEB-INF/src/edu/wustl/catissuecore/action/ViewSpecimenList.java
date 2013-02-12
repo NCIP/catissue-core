@@ -59,19 +59,8 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 		this.setCartView(request, cart);
 		target = new String(Constants.VIEW);
 		session.removeAttribute(AQConstants.HYPERLINK_COLUMN_MAP);
-		final String eventArray[] = Constants.EVENT_PARAMETERS;
-		final String newEvenetArray[] = new String[2];
-		int count = 0;
-		for (final String eventName : eventArray)
-		{
-			if (("Transfer").equals(eventName) || ("Disposal").equals(eventName))
-			{
-				newEvenetArray[count] = eventName;
-				count++;
-			}
-		}
 		getLabels(request);
-		request.setAttribute("eventArray", newEvenetArray);
+		request.setAttribute("eventArray", Constants.EVENT_PARAMETERS);
 		request.setAttribute("advanceSearchForm", searchForm);
 		return mapping.findForward(target);
 	}
