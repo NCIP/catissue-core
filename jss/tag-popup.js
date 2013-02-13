@@ -298,25 +298,36 @@ function showTreeMessage() {
 	if (xmlHttpobj.readyState == 4) {
 		doInItTreeGrid(); 
 		popup('popUpDiv');
-	 
-		document.getElementById('shareToCheckbox').checked = false;
-		var td = "multiSelectId";
-		document.getElementById(td).style.display="none";
- 	
+	
 		var objCheckBoxAr = document.getElementsByName("objCheckbox");
-	 
+		var isQueryChecked = false;
+		
 		for (i = 0; i < objCheckBoxAr.length; i++) {
 		if (objCheckBoxAr[i].checked == true) {
-		     document.getElementById("shareCheckboxId").style.display = "none";
-		     document.getElementById("shareLabelId").style.display = "none";
-			 break;
-		} else {
-			document.getElementById("shareCheckboxId").style.display = "inline";
-		     document.getElementById("shareLabelId").style.display = "inline";
-		}
-		
-	} 
-	 
+				isQueryChecked = true;
+				break;
+			}  
+		} 
+	
+		if(isQueryChecked == true){		 
+			var tdId = "multiSelectId";
+			document.getElementById("assignButton").style.display="block"
+			document.getElementById("shareButton").style.display="none"
+			document.getElementById(tdId).style.display="none";
+			document.getElementById("newTagName").style.display="inline";
+			document.getElementById("newTagLabel").style.display="inline";
+			document.getElementById("shareLabel").style.display="none";
+			getHeader(isQueryChecked);
+		}else{
+			var tdId = "multiSelectId";
+			document.getElementById("assignButton").style.display="none"
+			document.getElementById("shareButton").style.display="block"
+			document.getElementById(tdId).style.display="block";
+			document.getElementById("newTagName").style.display="none";
+			document.getElementById("newTagLabel").style.display="none";
+			document.getElementById("shareLabel").style.display="inline";
+			getHeader(isQueryChecked);
+		} 
 	}
 } 
 //Ajax Function for Delete Folders of TreeGrid 
