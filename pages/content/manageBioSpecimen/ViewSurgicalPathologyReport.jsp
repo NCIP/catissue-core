@@ -94,7 +94,8 @@
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
 		}		
 	}
-	var download = function(reportType){
+	
+	function downloadReport(reportType){
 		var dwdIframe = document.getElementById("sprExportFrame");
 		var sprNumber = '<%=formSPR.getSurgicalPathologyNumber()%>';
 		var identifiedId = document.getElementsByName("identifiedReportId")[0].value;
@@ -105,7 +106,7 @@
 		}
 		dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>&sprNumber="+sprNumber+"&reportId="+identifiedId+"&deIdentifiedId="+deIdentifiedId+"&reportType="+reportType;
 	}
-					
+	
 	</script>	
 </head>
 <%
@@ -171,13 +172,13 @@ if(!hasAccess)
 	{
 	%>	<!-- Mandar : 21Nov08 to adjust height -->
                 <tr>
-                  <td width="27%" align="left" class="black_ar_t"><input type=radio name="review" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
+                  <td width="27%" align="left" class="black_ar_t"><input type=radio name="review" id="idenRedio" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
 							<bean:message key="viewSPR.identifiedReport" /></td>
-                <td width="28%" align="left" class="black_ar_t"><input type=radio name="review" value="abc2" onClick="clickOnLinkShowDeidReport()" />
+                <td width="28%" align="left" class="black_ar_t"><input type=radio name="review" id="deIdenRedio" alue="abc2" onClick="clickOnLinkShowDeidReport()" />
 							<bean:message key="viewSPR.deIdenfiedReport" /></td>
-                  <td width="28%" align="left" class="black_ar_t"><input type=radio name="review" value="abc3" onClick="clickOnLinkCompareReport()" />
+                  <td width="28%" align="left" class="black_ar_t"><input type=radio name="review"  id="compareRedio"  value="abc3" onClick="clickOnLinkCompareReport()" />
 							<bean:message key="viewSPR.compareReports" /></td>
-                  <td width="17%" align="left" class="black_ar_t"><input type=radio name="review" value="abc4" onClick="" disabled="true" />
+                  <td width="17%" align="left" class="black_ar_t"><input type=radio name="review"  id="myrequestRedio"  value="abc4" onClick="" disabled="true" />
 							<bean:message key="viewSPR.myRequests" /></td>
                 </tr>
 	<% 	
@@ -195,6 +196,15 @@ if(!hasAccess)
 				<%
 	}
 	%>
+	<script>
+			var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
+		if(hasUploadedReport=="true"){
+			    
+			document.getElementById("deIdenRedio").disabled=true;
+			  document.getElementById("compareRedio").disabled=true;
+			  document.getElementById("myrequestRedio").disabled=true;
+		}
+	</script>
 
 	<%
 				String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
@@ -337,7 +347,7 @@ if(!hasAccess)
 		  <tr>
 		  <td colspan="5" class="tr_bg_blue1">
 		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.identifiedReportInformation.title"/> </span>
-		  <a href="#" onClick="download('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
+		  <a href="#" onClick="downloadReport('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
 		  Download
 		  </a> 
 		  
@@ -375,7 +385,7 @@ if(!hasAccess)
 			<tr>
 		  <td class="tr_bg_blue1">
 		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>&nbsp;</span>
-		  <a href="#" onClick="download('Deidentified')" title="Click to download SPR" class="blue_ar_b"  style="float:right; margin-right: 8px;">
+		  <a href="#" onClick="downloadReport('Deidentified')" title="Click to download SPR" class="blue_ar_b"  style="float:right; margin-right: 8px;">
 		  Download
 		  </a> 
 		  </td>

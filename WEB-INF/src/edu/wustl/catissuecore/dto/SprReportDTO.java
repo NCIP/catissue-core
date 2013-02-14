@@ -12,8 +12,14 @@ public class SprReportDTO {
 	private String mrnString;
 	private Map<String,String> conceptReferentMap;
 	private int age;
+	private String ppid;
 	
-	
+	public String getPpid() {
+		return ppid;
+	}
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
+	}
 	public int getAge() {
 		return age;
 	}

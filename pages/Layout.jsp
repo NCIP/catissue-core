@@ -205,10 +205,11 @@
 <table width="100%" height="99%" border="0" cellspacing="0" cellpadding="0">
 	<tr height="8%" valign="top" >
 		<td>
-		<table width="100%" border="0" cellpadding="0" cellspacing="0"
-			bgcolor="#FFFFFF">
-			<tr>
-				<td width="30%" rowspan="2" style="border-top:4px solid #558dc0;"><tiles:insert
+		<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<!--bgcolor="#D0DCBD"-->
+				<tr>
+				<td width="30%" rowspan="2" ><tiles:insert
 					attribute="applicationheader">
 				</tiles:insert></td>
 				<td valign="top"><tiles:insert attribute="header"></tiles:insert></td>
@@ -219,6 +220,24 @@
 				</tiles:insert></td>
 			</tr>
 		</table>
+		</logic:empty>
+			<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"
+					bgcolor="#FFFFFF">
+					<tr>
+						<td width="30%" rowspan="2" style="border-top:4px solid #558dc0;"><tiles:insert
+							attribute="applicationheader">
+						</tiles:insert></td>
+						<td valign="top"><tiles:insert attribute="header"></tiles:insert></td>
+					</tr>
+					<tr>
+						<td width="70%" align="right" valign="top"><tiles:insert
+							attribute="mainmenu">
+						</tiles:insert></td>
+					</tr>
+				</table>
+			</logic:notEmpty>
+		
 		</td>
 	</tr>
 	<tr height="88%">

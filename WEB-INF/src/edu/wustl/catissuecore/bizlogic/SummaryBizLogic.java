@@ -42,6 +42,41 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * JDBCDAO object
 	 */
 	private static JDBCDAO jdbcDAO = null;
+	
+	public Map<String,String> getSummaryCount() throws  BizLogicException{
+		Map<String, String> summaryDataMap = new HashMap<String, String>();
+		try
+		{
+			jdbcDAO = this.openJDBCSession();
+			summaryDataMap.put("TissueCount", this.getSpecimenTypeCount(Constants.TISSUE));
+			summaryDataMap.put("CellCount", this.getSpecimenTypeCount(Constants.CELL));
+			summaryDataMap.put("MoleculeCount", this.getSpecimenTypeCount(Constants.MOLECULE));
+			summaryDataMap.put("FluidCount", this.getSpecimenTypeCount(Constants.FLUID));
+			
+			summaryDataMap.put("TotalSpecimenCount", this.getTotalSpecimenCount());
+			summaryDataMap.put(Constants.TOTAL_USER_COUNT, this.getTotalUserCount());
+			summaryDataMap.put(Constants.TOTAL_CP_COUNT, this.getTotalCPCount());
+			summaryDataMap.put(Constants.TOTAL_DP_COUNT, this.getTotalDPCount());
+			summaryDataMap.put(Constants.TOTAL_PART_COUNT, this.getTotalParticipantCount());
+			
+		}catch (final ClassNotFoundException e)
+		{
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
+		}
+		catch (final DAOException e)
+		{
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
+		}
+		finally
+		{
+			this.closeJDBCSession(jdbcDAO);
+		}
+		return summaryDataMap;
+		
+	}
+
 
 	/**
 	 * Returns Map which has all the details of Summary Page

@@ -5,13 +5,12 @@
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td valign="top"><img
-			src="images/uIEnhancementImages/top_bg1.jpg" alt="Top corner"
-			width="53" height="20" /></td>
+		<!--td valign="top"></td-->
 		<td width="95%" valign="top"
-			background="images/uIEnhancementImages/top_bg.jpg"
+			 bgcolor="#D6E6B8"
+			
 			style="background-repeat:repeat-x;">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<!--table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td width="50%" valign="middle"><span class="wh_ar_b"><bean:message
 					key="app.welcomeNote"
@@ -39,7 +38,7 @@
 					width="10" height="10" hspace="4" vspace="0" border="0" /><bean:message
 					key="app.summary" /></a>&nbsp;&nbsp;</td>
 			</tr>
-		</table>
+		</table-->
 		</td>
 	</tr>
 </table>

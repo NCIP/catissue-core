@@ -6,10 +6,10 @@
 <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td align="right"><a
+			<!--td align="right"><a
 				href="<bean:message key="cabig.url" />"><img border="0"
 				src="images/uIEnhancementImages/cabig_logo.jpg" alt="caBIG"
-				width="182" height="62" /></a></td>
+				width="182" height="62" /></a></td-->
 		</tr>
 	</table>
 </logic:empty>

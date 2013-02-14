@@ -15,12 +15,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.json.JSONException;
+
 
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
+
+import edu.wustl.catissuecore.bizlogic.SummaryBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Site;
@@ -546,6 +550,34 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		session.setAttribute("specIds", responseString.toString());
 		response.setContentType(Constants.CONTENT_TYPE_XML);
 		response.getWriter().write(responseString.toString());
+		return null;
+	}
+	
+	public ActionForward getSummaryCount(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		SummaryBizLogic bizLogic = new SummaryBizLogic();
+		Map<String,String> map = bizLogic.getSummaryCount();
+		org.json.JSONObject returnedJObject= new org.json.JSONObject();
+	
+		
+		
+		try {
+			returnedJObject.put("TissueCount", map.get("TissueCount"));
+			returnedJObject.put("CellCount", map.get("CellCount"));
+			returnedJObject.put("MoleculeCount", map.get("MoleculeCount"));
+			returnedJObject.put("FluidCount", map.get("FluidCount"));
+			returnedJObject.put("TotalSpecimenCount", map.get("TotalSpecimenCount"));
+			returnedJObject.put(Constants.TOTAL_USER_COUNT, map.get(Constants.TOTAL_USER_COUNT));
+			returnedJObject.put(Constants.TOTAL_CP_COUNT, map.get(Constants.TOTAL_CP_COUNT));
+			returnedJObject.put(Constants.TOTAL_PART_COUNT, map.get(Constants.TOTAL_PART_COUNT));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		response.setContentType("application/json");
+		response.getWriter().write(returnedJObject.toString());
 		return null;
 	}
 }

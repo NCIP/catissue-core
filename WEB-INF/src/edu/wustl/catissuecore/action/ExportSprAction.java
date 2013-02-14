@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,22 +41,24 @@ public class ExportSprAction extends SecureAction {
 			String sprNumber = request.getParameter("sprNumber");
 			String deIdentifiedreportIdStr = request.getParameter("deIdentifiedId");
 			Long deIdentifiedreportId = deIdentifiedreportIdStr!=null && ! "".equals(deIdentifiedreportIdStr.trim())?Long.parseLong(deIdentifiedreportIdStr):0L;
-			
+			Map<String,Object> returnMap;
 			byte[] byteArr={};
 			if (reportType.equals(Constants.IDENTIFIED)) {
-					byteArr = pdfUtil.generateIdentifiedPdf(Long.parseLong(reportId),deIdentifiedreportId,
+					returnMap = pdfUtil.generateIdentifiedPdf(Long.parseLong(reportId),deIdentifiedreportId,
 							sessionDataBean);
+					byteArr = (byte[]) returnMap.get("fileData");
 					response.setContentLength(byteArr.length);
 					response.setHeader(Constants.CONTENT_DISPOSITION, "attachment;"
-							+ "filename="+sprNumber+"_"+Constants.IDENTIFIED+".pdf");
+							+ "filename="+sprNumber+"_"+""+Constants.IDENTIFIED+".pdf");
 					response.setContentType(Constants.CONTENT_TYPE_PDF);
 					
 			}else if(reportType.equals(Constants.DEIDENTIFIED)){
-					byteArr = pdfUtil.generateDIdentifiedPdf(deIdentifiedreportId,
+				    returnMap = pdfUtil.generateDIdentifiedPdf(deIdentifiedreportId,
 							sessionDataBean);
+				    byteArr = (byte[]) returnMap.get("fileData");
 					response.setContentLength(byteArr.length);
 					response.setHeader(Constants.CONTENT_DISPOSITION, "attachment;"
-							+ "filename="+sprNumber+"_"+Constants.DEIDENTIFIED+".pdf");
+							+ "filename="+returnMap.get("fileName")+".pdf");
 					response.setContentType(Constants.CONTENT_TYPE_PDF);
 					
 			} else if (reportType.equals("uploadedFile")) {

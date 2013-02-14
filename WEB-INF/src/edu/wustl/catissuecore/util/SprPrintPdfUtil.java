@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.util;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.dto.SprReportDTO;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -32,8 +34,9 @@ import edu.wustl.common.util.global.CommonUtilities;
 
 public class SprPrintPdfUtil {
 
-	public byte[] generateIdentifiedPdf(Long reportId, Long deReportId,SessionDataBean sessionDataBean)
+	public Map<String,Object>  generateIdentifiedPdf(Long reportId, Long deReportId,SessionDataBean sessionDataBean)
 			throws DocumentException, FileNotFoundException, ApplicationException {
+		Map<String,Object> returnMap = new HashMap<String,Object>();
 		IdentifiedSurgicalPathologyReportBizLogic bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		SprReportDTO reportData = null;
@@ -191,7 +194,10 @@ public class SprPrintPdfUtil {
 		
 		document.close();
 		
-		return out.toByteArray();
+		String fileName = reportData.getPpid()+"_"+Constants.IDENTIFIED;
+		returnMap.put("fileName", fileName);
+		returnMap.put("fileData",  out.toByteArray());
+		return returnMap;
 	}
 	
 	public void createConceptCodeTable(Map<String,String> conceptReferentMap,Document document) throws DocumentException{
@@ -246,7 +252,7 @@ public class SprPrintPdfUtil {
 
 	
 	
-	public byte[] generateDIdentifiedPdf(Long reportId, SessionDataBean sessionDataBean)
+	public Map<String,Object> generateDIdentifiedPdf(Long reportId, SessionDataBean sessionDataBean)
 			throws DocumentException, FileNotFoundException, ApplicationException {
 		IdentifiedSurgicalPathologyReportBizLogic bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -391,8 +397,15 @@ public class SprPrintPdfUtil {
 		document.add(paragraph2);
 		
 		document.close();
+		
+		String fileName = reportData.getPpid()+"_"+Constants.DEIDENTIFIED;
+		Map<String,Object> returnMap = new HashMap<String,Object>();
+		
+		returnMap.put("fileName", fileName);
+		returnMap.put("fileData",  out.toByteArray());
+	
 
-		return out.toByteArray();
+		return returnMap;
 	}
 
 	

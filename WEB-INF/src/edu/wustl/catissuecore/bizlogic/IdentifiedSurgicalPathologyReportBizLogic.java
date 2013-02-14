@@ -391,7 +391,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 					"||' )',"+
 					" ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.gender, " +
 					" ispr.textContent.data,ispr.reportSource.id," +
-					" mri.medicalRecordNumber "  +
+					" mri.medicalRecordNumber, "  + " ispr.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier "+ 
 					" from IdentifiedSurgicalPathologyReport as ispr, ParticipantMedicalIdentifier as mri " +
 					" where ispr.id=? and mri.participant.id = ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.id and mri.site.id = ispr.reportSource.id";
 			
@@ -413,6 +413,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 				dto.setParticipantName(obj[2]!=null?obj[2].toString():"");
 				dto.setMrnString(obj[6].toString());
 				dto.setConceptReferentMap(getConceptReferentMap(deReportId));
+				dto.setPpid(obj[7].toString());
 				
 				dto.setAge(obj[1]!=null?getAge((Date)obj[1]):0);
 			}
@@ -491,6 +492,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 
 				dto.setConceptReferentMap(getConceptReferentMap(reportId));
 				dto.setAge(obj[4]!=null?getAge((Date)obj[4]):0);
+				dto.setPpid(obj[1]!=null?obj[1].toString():"");
 			}
 		} catch (ApplicationException ex) {
 			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());

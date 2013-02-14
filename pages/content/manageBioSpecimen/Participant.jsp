@@ -43,7 +43,6 @@
 <script src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css" />
 
-<!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 %>
@@ -217,7 +216,6 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 
 	<script language="JavaScript">
 	
-	//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
 			var val = parseInt(document.forms[0].valueCounter.value);
@@ -229,7 +227,6 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 			var q = r.length;
 			var x=document.getElementById(subdivtag).insertRow(q);
 
-			// First Cell
 			var checkb=x.insertCell(0);
 			checkb.className="black_ar";
 			checkb.colSpan=1;
@@ -261,8 +258,6 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
 
-			//Second Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
-			//Third Cell
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="black_ar";
 			spreqsubtype.colSpan=1;
@@ -281,10 +276,6 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 			var cl = mygrid.cells(participant_id,mygrid.getColumnCount()-1);
 			var pid = cl.getValue();
 			
-			//alert(pid);
-			//participant_id = pid;
-			//------------
-			//document.forms[0].participantId.value=participant_id;
 			var clicked_Row = participant_id;
 			if(document.forms[0].generateeMPIIdforPartiId.value == ""){
 				document.forms[0].generateeMPIIdforPartiId.value = document.forms[0].participantId.value;
@@ -444,10 +435,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	%>
 
 	<script language="javascript">
-	//Modified for flex by Baljeet
-	//Modified by Falguni Sachde
-	//Bug:6072 In case of LHS menu selection this property will not available.
-
+	
 	 if(top.frames["cpAndParticipantView"] != undefined)
 	 {
 		top.frames["cpAndParticipantView"].refreshCpParticipants(<%=participantId%>);
