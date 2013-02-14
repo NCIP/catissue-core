@@ -49,7 +49,7 @@ public class ExportSprAction extends SecureAction {
 					byteArr = (byte[]) returnMap.get("fileData");
 					response.setContentLength(byteArr.length);
 					response.setHeader(Constants.CONTENT_DISPOSITION, "attachment;"
-							+ "filename="+sprNumber+"_"+""+Constants.IDENTIFIED+".pdf");
+							+ "filename="+sprNumber+"_"+""+returnMap.get("fileName")+".pdf");
 					response.setContentType(Constants.CONTENT_TYPE_PDF);
 					
 			}else if(reportType.equals(Constants.DEIDENTIFIED)){
