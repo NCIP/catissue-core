@@ -968,6 +968,7 @@
 	<target name="upgrade_db_to_plus_v30">
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v30.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+			<antcall target="insert_dashboard_queries" />
 		</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
@@ -1011,7 +1012,6 @@
 						    <echo>after deploy_app: ${time_deploy_app_after}</echo>
 
 		<antcall target="server_security" />
-
 		<!-- Configure the IIS properties, if configure.IIS.properties is 'true'. -->
 		<if>
 			<equals arg1="${configure.IIS.properties}" arg2="true" />
@@ -5366,8 +5366,8 @@ Thanking You,
 	</target>
 	
 	<!-- this task insert the dashboard labelsql queries to labelSql table in database -->
-	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}"/> 
-		<target name="insert_dashboard_queries">	
+	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}" /> 
+		<target name="insert_dashboard_queries" >	
 			<echo message="------------------------------" />
 			<echo message="Inserting dashboard queries..." />
 			<echo message="------------------------------" />
@@ -5391,7 +5391,7 @@ Thanking You,
 								<sql driver="${mysql.driver.string}" 
 								url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
 								userid="${database.username}" 
-								password="${database.password}">
+								password="${database.password}" onerror="continue"> 
 								<classpath>
 									<fileset dir="${lib.dir}">
 										<include name="*.jar" />
@@ -5408,7 +5408,7 @@ Thanking You,
 								url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
 								userid="${database.username}"
 								password="${database.password}"
-								rdbms="oracle">
+								rdbms="oracle" onerror="continue">
 								<classpath>
 									<fileset dir="${lib.dir}">
 										<include name="*.jar" />
