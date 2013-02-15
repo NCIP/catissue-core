@@ -67,17 +67,24 @@ input.btn2 {
 input.btn3 {
 	display: inline-block;
 	width: 88px;
-	height: 27px;
+	height: 20px;
 	float: left;
 	color: #ffffff;
-	padding-bottom: 3px;
-	padding-top: 3px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:bold;
+	padding-bottom: 1px;
+	padding-top: 1px;
 	background: #B80000;
-	-webkit-border-radius: 7px;
-	-moz-border-radius: 7px;
-	-o-box-border-radius: 7px;
-	-ms-box-border-radius: 7px;
-	border-radius: 7px;
+	BORDER-right: #ffffff 0px solid;
+	BORDER-left: #ffffff 0px solid;
+	BORDER-bottom: #ffffff 0px solid;
+	BORDER-TOP: #ffffff 0px solid;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-box-border-radius: 3px;
+	-ms-box-border-radius: 3px;
+	border-radius: 3px;
 	cursor: pointer;
 	margin-left: 20px;
 }

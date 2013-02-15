@@ -13,24 +13,6 @@
 <script type='text/JavaScript' src='jss/advQuery/scwcalendar.js'></script>
 
 <script>
-window.onload = function(){  
-	document.getElementById('protocolCoordinatorIds').style.marginLeft= "40px";
-} 
-
-function showHideCombo(){
-	if(document.getElementById("multiSelectId").style.display =="block"){		 
-		var tdId = "multiSelectId";
-		document.getElementById("assignButton").style.display="block"
-		document.getElementById("shareButton").style.display="none"
-		document.getElementById(tdId).style.display="none";
-	}else{
-		var tdId = "multiSelectId";
-		document.getElementById("assignButton").style.display="none"
-		document.getElementById("shareButton").style.display="block"
-		document.getElementById(tdId).style.display="block";
-	}
-}
-
 function checkForValidation()
 {
 	var tdId = "multiSelectId";
@@ -72,6 +54,21 @@ combo.on("expand", function() {
 			combo.typeAheadDelay=50;
 		} else {combo.typeAheadDelay=60000}
 		});});
+		
+		
+function setHeader(isSpecimenChecked)
+{
+	if(isSpecimenChecked == true){		 
+		document.getElementById("poupHeader").textContent ="Add Specimens to list";
+		document.getElementById("poupHeader").innerText ="Add Specimens to list";
+	}else{
+		document.getElementById("poupHeader").textContent ="Share List with users";
+		document.getElementById('protocolCoordinatorIds').style.marginLeft= "15px";
+		document.getElementById('addButton_coord').style.marginLeft= "23px";
+		document.getElementById('removeButton_coord').style.marginLeft= "23px";
+		document.getElementById("poupHeader").innerText ="Share List with users";
+	} 
+}
 </script>
  
 <head>
@@ -83,17 +80,17 @@ combo.on("expand", function() {
 <!-- action buttons end -->
 	<div id="blanket" style="display: none;"></div>
 				<div id="popUpDiv" style="display: none; top: 100px; left: 210.5px;">
-					<a onclick="popup('popUpDiv')"><img style="float: right;"
+					<a onclick="popup('popUpDiv')"><img style="float: right; cursor:pointer;"
 						height='23' width='24' title="Close" src='images/advQuery/close_button.gif'
 						border='0'> </a>
 					 
 					<table class=" manage tags" width="100%" cellspacing="0"
-						cellpadding="2" border="0">
+						cellpadding="0" border="0">
 							<tr valign="center" height="35" bgcolor="#d5e8ff">
 								<td width="27%" align="left"
 									style="font-size: .82em; font-family: verdana;">
 									<p>
-										&nbsp&nbsp&nbsp&nbsp<b>Specimen Lists</b>
+										&nbsp&nbsp&nbsp&nbsp<div id="poupHeader" style="font-size: 1em; margin-left:35px; font-weight:bold; font-family: verdana;"><b> Specimen Lists </b></div>
 									</p>
 								</td>
 							</tr>
@@ -103,29 +100,29 @@ combo.on("expand", function() {
 											style="width: 530px; height: 170px; background-color: white;"></div>
 								</td>
 							</tr>
-						</table>
-						<table>
 							<tr>
 								<td  align="left">
 									<p>
-											&nbsp&nbsp&nbsp<label width="28%" align="left"
-											style="font-size: .82em; font-family: verdana;"><b>List Name 
+											<label id="newTagLabel" width="28%" align="left"
+											style="margin-left :20px; font-size: .82em; font-family: verdana;"><b>List Name 
 											: </b> </label> <input type="text" id="newTagName" name="newTagName"
 											size="17" onclick="this.value='';" maxlength="50" />
-										
-											<label id="shareCheckboxId" style="font-size: 0.7em; font-family: verdana;"><b><input type="checkbox"
-											property="shareTo" name='shareCheckbox' id="shareToCheckbox" value="users"
-											onclick="showHideCombo()" /> Share List</b> </label>&nbsp;<label id ="shareLabelId"
-											style="font-size: 0.5em;font-family: verdana;">(This List will be visible to the users you choose)</label>
+										    <label id="shareLabel" width="28%" align="left"
+											style="margin-left :20px; font-size: .82em; font-family: verdana;"><b> Share to users :
+					 						</b> </label>
 									</p>
 								</td>
 							</tr>
 							<tr>
-								<td id="multiSelectId" nowrap=""  class="black_ar_new" style="display:none;margin-left:20px" align="left">
-									<p> 
-											&nbsp&nbsp&nbsp<mCombo:multiSelectUsingCombo identifier="coord" styleClass="black_ar_new"  size="19" addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')" removeButtonOnClick="moveOptions('protocolCoordinatorIds','coord', 'edit')" selectIdentifier="protocolCoordinatorIds" collection="<%=(List)request.getAttribute("selectedCoordinators")%>"/>
-									</p>
+								<td  align="left">
+									<div id="multiSelectId" class="black_ar_new" style="display:none; margin-left:35px">
+											&nbsp&nbsp&nbsp<mCombo:multiSelectUsingCombo identifier="coord" styleClass="black_ar_new"  size="20" addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')" removeButtonOnClick="moveOptions('protocolCoordinatorIds','coord', 'edit')" selectIdentifier="protocolCoordinatorIds" collection="<%=(List)request.getAttribute("selectedCoordinators")%>"/>
+								 
+									</div>
 								</td>
+							</tr>
+							<tr>
+								<td height="10px;"> </td>
 							</tr>
 							<tr>
 								<td>	

@@ -300,16 +300,16 @@ function showTreeMessage() {
 		popup('popUpDiv');
 	
 		var objCheckBoxAr = document.getElementsByName("objCheckbox");
-		var isQueryChecked = false;
+		var isObjChecked = false;
 		
 		for (i = 0; i < objCheckBoxAr.length; i++) {
 		if (objCheckBoxAr[i].checked == true) {
-				isQueryChecked = true;
+				isObjChecked = true;
 				break;
 			}  
 		} 
 	
-		if(isQueryChecked == true){		 
+		if(isObjChecked == true){		 
 			var tdId = "multiSelectId";
 			document.getElementById("assignButton").style.display="block"
 			document.getElementById("shareButton").style.display="none"
@@ -317,7 +317,8 @@ function showTreeMessage() {
 			document.getElementById("newTagName").style.display="inline";
 			document.getElementById("newTagLabel").style.display="inline";
 			document.getElementById("shareLabel").style.display="none";
-			getHeader(isQueryChecked);
+			document.getElementById("treegridbox").style.height="240px";
+			setHeader(isObjChecked);
 		}else{
 			var tdId = "multiSelectId";
 			document.getElementById("assignButton").style.display="none"
@@ -326,7 +327,8 @@ function showTreeMessage() {
 			document.getElementById("newTagName").style.display="none";
 			document.getElementById("newTagLabel").style.display="none";
 			document.getElementById("shareLabel").style.display="inline";
-			getHeader(isQueryChecked);
+			document.getElementById("treegridbox").style.height="170px";
+			setHeader(isObjChecked);
 		} 
 	}
 } 

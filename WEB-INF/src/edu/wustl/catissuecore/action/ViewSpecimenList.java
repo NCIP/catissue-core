@@ -19,6 +19,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.tags.domain.Tag;
+import edu.wustl.common.tags.factory.TagBizlogicFactory;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.query.util.global.AQConstants;
 
@@ -67,25 +69,18 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 
 	private void getLabels(HttpServletRequest request) throws ApplicationException 
 	{
-		String sql = "select * from catissue_specimenlist_tags where user_id = ?";
-		
 		SessionDataBean sessionData = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		
-		ColumnValueBean bean = new ColumnValueBean(sessionData.getUserId());
-		List<ColumnValueBean> valueBeanList = new ArrayList<ColumnValueBean>();
-		valueBeanList.add(bean);
-		List list = AppUtility.executeSQLQuery(sql, valueBeanList);
+		List<Tag> tagList = TagBizlogicFactory.getBizLogicInstance(Constants.ENTITY_SPECIMEN_TAG).getTagList(
+				Constants.ENTITY_SPECIMEN_TAG,sessionData.getUserId()); 
 		List<NameValueBean> labelList = new ArrayList<NameValueBean>();
-		if(list !=null && list.size() > 0)
+		if(! tagList.isEmpty())
 		{
-			for (Object object : list) 
+			for (Tag tag : tagList) 
 			{
-				List result = (List)object;
-				NameValueBean valueBean  = new NameValueBean(result.get(1), result.get(0));
+				NameValueBean valueBean  = new NameValueBean(tag.getLabel(), tag.getIdentifier());
 				labelList.add(valueBean);
 			}
-			
-			
 		}
 		request.setAttribute("dropDownList", labelList);
 	}

@@ -5920,6 +5920,6 @@ public class Constants
 	public static final String ASSOC_ID = "assocId";
 
 	public static final String UPLOAD_ERROR_MESSAGE = "Problem occured while uploading report.";
-
-
+	
+	public static final String ENTITY_SPECIMEN_TAG = "SpecimenListTag";
 }
