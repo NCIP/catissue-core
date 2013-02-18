@@ -372,8 +372,8 @@ public class CaCoreAppServicesDelegator
 				catch (final Exception ex)
 				{
 					// Exception occured if Domain Oject is not having ActivityStatus field
-					LOGGER.error("in CaCoreAppServicesDelegator" + ex.getMessage());
-					ex.printStackTrace();
+					//LOGGER.error("in CaCoreAppServicesDelegator" + ex.getMessage());
+					//ex.printStackTrace();
 					result.add(abstractDomainObject);
 				}
 			}
