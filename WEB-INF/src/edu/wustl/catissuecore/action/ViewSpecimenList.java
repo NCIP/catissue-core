@@ -71,8 +71,8 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 	{
 		SessionDataBean sessionData = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		
-		List<Tag> tagList = TagBizlogicFactory.getBizLogicInstance(Constants.ENTITY_SPECIMEN_TAG).getTagList(
-				Constants.ENTITY_SPECIMEN_TAG,sessionData.getUserId()); 
+		List<Tag> tagList = TagBizlogicFactory.getBizLogicInstance(
+				Constants.ENTITY_SPECIMEN_TAG).getTagList(sessionData.getUserId());
 		List<NameValueBean> labelList = new ArrayList<NameValueBean>();
 		if(! tagList.isEmpty())
 		{

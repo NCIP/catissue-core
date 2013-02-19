@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,16 +9,20 @@ import org.json.JSONObject;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tags.bizlogic.ITagBizlogic;
 import edu.wustl.common.tags.dao.TagDAO;
 import edu.wustl.common.tags.domain.Tag;
 import edu.wustl.common.tags.domain.TagItem;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.global.AQConstants;
 
 public class SpecimenListBizlogic implements ITagBizlogic
 {
+	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenListBizlogic.class);
+	
 	/**
 	 * Insert New Tag to the database.
 	 * @param entityName from hbm file.
@@ -26,19 +31,33 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @return tag identifier.
 	 * @throws DAOException,BizLogicException.
 	 */
-
-	
-	public long createNewTag(String entityName, String label, long userId) throws DAOException,
+	public long createNewTag(String label, Long userId) throws DAOException,
 			BizLogicException
 	{
-		Tag tag = new Tag();
-		tag.setLabel(label);
-		tag.setUserId(userId);
-		TagDAO tagDao = new TagDAO(entityName,userId);
-		tagDao.insertTag(tag);
-		return tag.getIdentifier();
+		TagDAO tagDao = null;
+		try
+		{
+			Tag tag = new Tag();
+			tag.setLabel(label);
+			tag.setUserId(userId);
+			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
+			tagDao.insertTag(tag);
+			tagDao.commit();
+			return tag.getIdentifier();
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(tagDao != null)
+			{	
+				tagDao.closeSession();
+			}
+		}	
 	}
-
+	
 	/**
 	 * Assign the Query to existing folder.
 	 * @param entityName from hbm file.
@@ -46,36 +65,63 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param objId.
 	 * @throws DAOException,BizLogicException.
 	 */
-	
-	public void assignTag(String entityName, long tagId, long objId) throws DAOException,
+	public void assignTag(Long tagId, Long objId) throws DAOException,
 			BizLogicException
 	{
-		Tag tag = new Tag();
-		tag.setIdentifier(tagId);
-		TagItem<AbstractSpecimen> tagItem = new TagItem<AbstractSpecimen>();
-	 
-
-		tagItem.setTag(tag);
-		tagItem.setObjId(objId);
-
-		TagDAO<AbstractSpecimen> tagDao = new TagDAO<AbstractSpecimen>(entityName,objId);
-		tagDao.insertTagItem(tagItem);
+		TagDAO<AbstractSpecimen> tagDao = null;
+		try
+		{
+			Tag tag = new Tag();
+			tag.setIdentifier(tagId);
+			TagItem<AbstractSpecimen> tagItem = new TagItem<AbstractSpecimen>();
+	
+			tagItem.setTag(tag);
+			tagItem.setObjId(objId);
+			
+			tagDao = new TagDAO<AbstractSpecimen>(Constants.ENTITY_SPECIMEN_TAGITEM);
+			tagDao.insertTagItem(tagItem);
+			tagDao.commit();
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(tagDao != null)
+			{	
+				tagDao.closeSession();
+			}
+		}	
 	}
-
+	
 	/**
 	 * Get list of Tags from the database.
 	 * @param entityName from hbm file.
 	 * @param obj Object to be inserted in database
 	 * @throws DAOException,BizLogicException.
 	 */
-	
-	public List<Tag> getTagList(String entityName,long userId) throws DAOException, BizLogicException
+	public List<Tag> getTagList(Long userId) throws DAOException, BizLogicException
 	{
-		List<Tag> tagList = null;
 		TagDAO tagDao = null;
-		tagDao = new TagDAO(entityName,userId);
-		tagList = tagDao.getTags();
-		return tagList;
+		List<Tag> tagList = null;
+		try
+		{	 
+			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
+			tagList = tagDao.getTags(userId);
+			return tagList;
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(tagDao != null)
+			{	
+				tagDao.closeSession();
+			}
+		}	
 	}
 
  
@@ -86,12 +132,24 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @return Tag Object.
 	 * @throws DAOException,BizLogicException.
 	 */
-
-	public Tag getTagById(String entityName, long tagId) throws DAOException, BizLogicException
-	{
-		TagDAO tagDao = new TagDAO(entityName,tagId);
-		Tag tag = tagDao.getTagById(tagId);
-		return tag;
+	public Tag getTagById(Long tagId) throws DAOException, BizLogicException
+	{	TagDAO tagDao = null;
+		try
+		{
+			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
+			return tagDao.getTagById(tagId);
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(tagDao != null)
+			{	
+				tagDao.closeSession();
+			}
+		}	
 	}
 
 	/**
@@ -101,13 +159,28 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @return Set<TagItem>.
 	 * @throws DAOException,BizLogicException.
 	 */
-	public Set<TagItem> getTagItemByTagId(String entityName, long tagId) throws BizLogicException
+	public Set<TagItem> getTagItemByTagId(Long tagId) throws BizLogicException
 	{
-		TagDAO tagDao = new TagDAO(entityName,tagId);
-		Set<TagItem> tagItem = tagDao.getTagItemBytagId(tagId);
+		TagDAO tagDao = null;
+		Set<TagItem> tagItem = new HashSet<TagItem>();
+		try
+		{
+			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
+			tagItem = tagDao.getTagItemBytagId(tagId);
+		}
+		catch (BizLogicException e)
+		{
+			LOGGER.error("Error occured while getting queries", e);
+		}
+		finally
+		{
+			if(tagDao != null)
+			{	
+				tagDao.closeSession();
+			}
+		}	
 		return tagItem;
 	}
-
 	 
 	/**
 	 * Delete the Tag from database.
@@ -115,29 +188,68 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param tagId to retrieve TagItem Object and delete it from database.
 	 * @throws DAOException,BizLogicException.
 	 */
-
-	public void deleteTag(String entityName, long tagId) throws DAOException, BizLogicException
+	public void deleteTag(Long tagId, Long userId) throws DAOException, BizLogicException
 	{
-		TagDAO tagDao = new TagDAO(entityName,tagId);
-		Tag tag = tagDao.getTagById(tagId);
-		tagDao.deleteTag(tag);
+		TagDAO tagDao = null;
+		try
+		{
+			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG); 
+			Tag tag = tagDao.getTagById(tagId);
+			if(tag.getUserId() == userId){
+				tagDao.deleteTag(tag);
+			} else {
+				tag.getSharedUserIds().remove(userId);
+				tagDao.updateTag(tag);
+			}
+			tagDao.commit();
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(tagDao != null)
+			{	
+				tagDao.closeSession();
+			}
+		}	
 	}
-
+	
 	/**
 	 * Delete the Tag Item from database.
 	 * @param entityName from hbm file.
 	 * @param objId to retrieve TagItem Object and delete it from database.
 	 * @throws DAOException,BizLogicException.
 	 */
-
-	public void deleteTagItem(String entityName, long itemId) throws DAOException,
+	public void deleteTagItem(Long tagItemId, Long userId) throws DAOException,
 			BizLogicException
-	{
-		TagDAO tagDAO = new TagDAO(entityName,itemId);
-		TagItem tagItem = tagDAO.getTagItemById(itemId);
-		tagDAO.deleteTagItem(tagItem);
+	{	TagDAO tagDAO = null;
+		try
+		{ 
+			tagDAO = new TagDAO(Constants.ENTITY_SPECIMEN_TAGITEM);
+			TagItem tagItem = tagDAO.getTagItemById(tagItemId);
+			Tag tag = tagItem.getTag(); 
+			if(tag.getUserId() == userId){
+				tagDAO.deleteTagItem(tagItem);
+			} else {
+				LOGGER.error("User does not have authority to delete this item");
+			}
+			tagDAO.commit();
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(tagDAO != null)
+			{	
+				tagDAO.closeSession();
+			}
+		}	
 	}
-
+	
 	/**
 	 * Get the Tag Item from database for Tree Grid.
 	 * @param entityName from hbm file.
@@ -145,14 +257,13 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @return Json Object.
 	 * @throws DAOException,BizLogicException.
 	 */
-	public JSONObject getJSONObj(String entityName, long tagId) throws DAOException,
+	public JSONObject getJSONObj(Long tagId) throws DAOException,
 			BizLogicException
 	{
 
 		JSONObject arrayObj = new JSONObject(); 
 		try
 		{
-			Set<TagItem> tagItemList = getTagItemByTagId(entityName, tagId);
 			JSONArray treeData = new JSONArray();
 			List objDetail = AppUtility.getObjDetails(tagId);
 			
@@ -184,27 +295,38 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		// TODO Auto-generated method stub
 		
 	}
-
-	public void createNewTag(String entityName, String newTagName, long ownerId, Set<Long> selectedUsers)
-			throws DAOException, BizLogicException 
-	{
-		Tag tag = new Tag();
-		tag.setLabel(newTagName);
-		tag.setUserId(ownerId);
-		tag.setSharedUserIds(selectedUsers);
-		TagDAO tagDao = new TagDAO(entityName,ownerId);
-		tagDao.insertTag(tag);
-	}
-
-	public void shareTags(String entityName, Set<Long> tagIdSet, Set<Long> selectedUsers)
+	
+	/**
+	 * share Tags to users.
+	 * @param Set<Long> selectedUsers.
+	 * @param Set<Long> tagIdSet.
+	 * @throws DAOException.
+	 */
+	public void shareTags(Set<Long> tagIdSet, Set<Long> selectedUsers)
 			throws DAOException, BizLogicException 
 	{
 		for(Long tagId : tagIdSet) 
 		{
-			TagDAO tagDao = new TagDAO(entityName,tagId);
-			Tag tag = getTagById(entityName, tagId);
-			tag.getSharedUserIds().addAll(selectedUsers);
-			tagDao.updateTag(tag);
+			TagDAO tagDao = null;
+			try
+			{
+				tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
+				Tag tag = tagDao.getTagById(tagId);
+				tag.getSharedUserIds().addAll(selectedUsers);
+				tagDao.updateTag(tag);
+				tagDao.commit();
+			}
+			catch (DAOException e)
+			{
+				throw new BizLogicException(e);
+			}
+			finally
+			{
+				if(tagDao != null)
+				{	
+					tagDao.closeSession();
+				}
+			}	
 		} 
 	}
 }
