@@ -1529,17 +1529,40 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						.getValue("errors.specimenCollectionGroup.collectionprotocolregistration.ppid");
 						throw this.getBizLogicException(null, "errors.item.required", message);
 				}
-				List cprList = retrieve(
+				
+				String ppid = group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+				String cpShortTitle = group.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle();
+				
+				List cprList=null;
+				try
+				{
+					cprList = AppUtility.executeSQLQuery("select cpr.identifier from catissue_coll_prot_reg cpr, catissue_specimen_protocol sp " +
+							"where cpr.PROTOCOL_PARTICIPANT_ID='"+ppid+"' and cpr.COLLECTION_PROTOCOL_ID=sp.identifier and sp.SHORT_TITLE='"+cpShortTitle+"'");
+				}
+				catch (ApplicationException e)
+				{
+					e.printStackTrace();
+					message = ApplicationProperties
+						       .getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
+							throw this.getBizLogicException(null, "errors.item.invalid", message);
+				}
+				/*List cprList = retrieve(
 						group.getCollectionProtocolRegistration().getClass().getName(),
-						"protocolParticipantIdentifier", group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+						"protocolParticipantIdentifier", group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());*/
 				if(cprList == null || cprList.isEmpty())
 				{
 					    message = ApplicationProperties
 					       .getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
 						throw this.getBizLogicException(null, "errors.item.invalid", message);
 				}
-				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprList.get(0);
-				group.setCollectionProtocolRegistration(collectionProtocolRegistration);
+				else
+				{
+					CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+					ArrayList arr= (ArrayList) cprList.get(0);
+					Long cprId=Long.valueOf((String) arr.get(0));
+					collectionProtocolRegistration.setId(cprId);
+					group.setCollectionProtocolRegistration(collectionProtocolRegistration);
+				}
 			}
 
 			if (group.getSpecimenCollectionSite() == null
