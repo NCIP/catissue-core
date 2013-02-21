@@ -17,13 +17,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.json.JSONException;
 
-
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
-
 import edu.wustl.catissuecore.bizlogic.SummaryBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
@@ -37,13 +35,13 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.tags.domain.Tag;
+import edu.wustl.common.tags.factory.TagBizlogicFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public class CatissueCommonAjaxAction extends DispatchAction{
 	
@@ -467,64 +465,30 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	}
 	
 	public ActionForward deleteSpecimen(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String specIds = request.getParameter("specId");
-		String tagId = request.getParameter("tagId");
-		int numberOfParameter=specIds.split(",").length;
-		StringBuffer sql = new StringBuffer("delete from catissue_spec_tag_items where OBJ_ID in (" );
-		for(int i=0;i<numberOfParameter;i++)
-		{
-			sql.append("?");
-			if(i+1!=numberOfParameter)
-				sql.append(",");
+		Long tagId = Long.parseLong(request.getParameter("tagId"));
+
+		List<Long> specimenIds = new ArrayList<Long>();
+		for (String specIdStr : specIds.split("\\,")) {
+			specimenIds.add(Long.parseLong(specIdStr));
 		}
-		sql.append(") and TAG_ID = ?");
+		SessionDataBean sessionBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		Long userId = sessionBean.getUserId();
 		
-		List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
-		
-		for (String specId : specIds.split(",")) {
-			ColumnValueBean specIdBean = new ColumnValueBean(specId);
-			list.add(specIdBean);
-		}
-		
-		ColumnValueBean tagIdBean = new ColumnValueBean(tagId);
-		list.add(tagIdBean);
-		JDBCDAO jdbcdao = null;
-		try
-		{
-		jdbcdao = AppUtility.openJDBCSession();
-		jdbcdao.executeUpdate(sql.toString(), list);
-		jdbcdao.commit();
-		}
-		finally
-		{
-			AppUtility.closeJDBCSession(jdbcdao);
-		}
+		TagBizlogicFactory.getBizLogicInstance(
+				Constants.ENTITY_SPECIMEN_TAGITEM).deleteTagItemsFromObjIds(specimenIds, tagId, userId);
 		return null;
 	}
 	
 	public ActionForward deleteSpecimenList(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
-	{
-		String specListId = request.getParameter("specListId");
-		String sql1 = "delete from catissue_spec_tag_items where tag_id=?";
-		String sql = "delete from catissue_specimenlist_tags where identifier=?";
-		ColumnValueBean bean = new ColumnValueBean(specListId);
-		List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
-		list.add(bean);
-		JDBCDAO jdbcdao = null;
-		try
-		{
-		jdbcdao = AppUtility.openJDBCSession();
-		jdbcdao.executeUpdate(sql1,list);
-		jdbcdao.executeUpdate(sql,list);
-		jdbcdao.commit();
-		}
-		finally
-		{
-			AppUtility.closeJDBCSession(jdbcdao);
-		}
+	{ 
+		Long specListId = Long.parseLong(request.getParameter("specListId")); 
+		SessionDataBean sessionBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		Long userId = sessionBean.getUserId();
+		TagBizlogicFactory.getBizLogicInstance(Constants.ENTITY_SPECIMEN_TAG).deleteTag(specListId, userId); 
 		return null;
 	}
 	
