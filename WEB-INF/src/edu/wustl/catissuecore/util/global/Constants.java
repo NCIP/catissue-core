@@ -4415,7 +4415,7 @@ public class Constants
 	/** The Constant IDENTIFIED_REPORT_NOT_FOUND_MSG. */
 	public static final String IDENTIFIED_REPORT_NOT_FOUND_MSG = "Indentified Report Not Found!";
 	
-	public static final String UPLOADED_REPORT_MSG= "Indentified report cannot be displayed since it was manually uploaded. Please click on Download to view.";
+	public static final String UPLOADED_REPORT_MSG= "Identified report cannot be displayed since it was manually uploaded. Please click on Download to view.";
 
 	/** The Constant DEID_REPORT_NOT_FOUND_MSG. */
 	public static final String DEID_REPORT_NOT_FOUND_MSG = "De-Indentified Report Not Found!";

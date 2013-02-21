@@ -109,14 +109,10 @@ function showAnnotations()
 							}
 						});
 					};
-					var download = function(){
-						var dwdIframe = document.getElementById("sprExportFrame");
-						dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>";
-					}
 					
 					</script>
 					<!--form action="/" method="post" onsubmit="return upload();"-->
-				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+				<table id="uploadSCGTable" width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 					<tr>
 						  <td class="tr_bg_blue1">
 							<span class="blue_ar_b"> &nbsp;Upload SPR SCG Report&nbsp;</span>
@@ -130,7 +126,28 @@ function showAnnotations()
 							</div>
 						</td>
 					</tr>
-				</table>				
+				</table>
+					
+				<table id="downloadSCGTable" style="display:none;" width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg black_ar_b">
+					<tr>
+						  <td class="tr_bg_blue1">
+							<span class="blue_ar_b"> &nbsp;Download SPR SCG Report&nbsp;</span>
+						  </td>
+					</tr>
+					<tr>
+						<td>
+							<div style="margin-left: 10px; margin-top: 10px;">
+								<div style="float:left;margin-top:3px;">
+								<span>Existing SPR report : </span>&nbsp
+								<span id="existingSprName" style="font-weight:normal;"></span>
+								</div>
+								<div style="float:left;">
+									<a href="#" style="border:0px"><img  style="border:0px" src='images/delete-alt.png' onclick='deleteReport()'/></a>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>		
 				
 				<html:form action="<%=formAction%>">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">

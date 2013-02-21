@@ -158,6 +158,16 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * Boolean variable to check for uploaded report from system
 	 * */
 	private boolean hasUploadedReport;
+	
+	private String uploadedFileName;
+
+	public String getUploadedFileName() {
+		return uploadedFileName;
+	}
+
+	public void setUploadedFileName(String uploadedFileName) {
+		this.uploadedFileName = uploadedFileName;
+	}
 
 	public boolean isHasUploadedReport() {
 		return hasUploadedReport;
@@ -535,6 +545,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			if(ispr.getFileContent()!=null){
 				this.hasUploadedReport = true;
 				this.identifiedReportTextContent = Constants.UPLOADED_REPORT_MSG;
+				uploadedFileName = ispr.getFileContent().getData();
 			}
 			
 		}

@@ -30,6 +30,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -226,8 +227,9 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 			fileItem.write(file);
 			
 			dao = AppUtility.openDAOSession(sessionDataBean);
-			FileContent fileContent = this.checkForFileContent(scgId, dao);
-			if (fileContent == null) {
+			Map<String,Object> obj = this.checkForFileContent(scgId, dao);
+			FileContent fileContent;
+			if (obj.isEmpty()) {
 				SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 				scg.setId(scgId);
 				IdentifiedSurgicalPathologyReport sprReport = new IdentifiedSurgicalPathologyReport();
@@ -241,9 +243,25 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 				this.insert(sprReport, dao, sessionDataBean);
 				reportId = sprReport.getId();
 			} else {
-				fileContent.setData(fileName);
-				dao.update(fileContent);
-				reportId = fileContent.getSurgicalPathologyReport().getId();
+				
+				IdentifiedSurgicalPathologyReport report = getReportById((Long)obj.get("reportId"));
+				report.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+				if( obj.get("fileContent")==null){
+					fileContent = new FileContent();
+					fileContent.setData(fileName);
+					fileContent.setSurgicalPathologyReport(report);
+					report.setFileContent(fileContent);
+					
+				}else{
+					fileContent = (FileContent) obj.get("fileContent");
+					fileContent.setData(fileName);
+					dao.update(fileContent);
+				}
+				dao.update(report);
+				
+			//	fileContent = (FileContent) obj.get("fileContent");
+				
+				reportId =(Long)obj.get("reportId");
 			}
 			
 			dao.commit();
@@ -260,22 +278,27 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 		return reportId;
 	}
 	
-	private FileContent checkForFileContent(Long scgId, DAO dao)
+	private Map<String,Object> checkForFileContent(Long scgId, DAO dao)
 			throws ApplicationException {
 		IdentifiedSurgicalPathologyReport result = new IdentifiedSurgicalPathologyReport();
-		String hql = "select fileContent from IdentifiedSurgicalPathologyReport as ispr where ispr.specimenCollectionGroup.id=?";
+		String hql = "select scg.identifiedSurgicalPathologyReport.id,scg.identifiedSurgicalPathologyReport.fileContent from SpecimenCollectionGroup as scg where scg.id=?";
+		
 		final ColumnValueBean columnValueBean = new ColumnValueBean(scgId);
 		final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
 		columnValueBeanList.add(columnValueBean);
+		Map<String,Object> obj = new HashMap<String,Object>();
 
 		final List resultList = AppUtility.executeHqlQuery(hql,
 				columnValueBeanList);
 		final Iterator iterator = resultList.iterator();
-		FileContent data = null;
 		if (iterator.hasNext()) {
-			data = (FileContent) iterator.next();
+			Object[] data = (Object[]) iterator.next();
+			obj.put("fileContent", data[1]);
+			obj.put("reportId",data[0]);
+			
+			
 		}
-		return data;
+		return obj;
 
 	}
 	
@@ -351,6 +374,27 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 			return (Long) participantIdList.get(0);
 		}
 		return null;
+	}
+	
+	public void deleteReport(Long reportId ,SessionDataBean sessionDataBean) throws ApplicationException{
+		DAO dao = null;
+		
+		try {
+			IdentifiedSurgicalPathologyReport report = getReportById(reportId);
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			dao.delete(report);
+			dao.commit();
+		}
+		 catch (ApplicationException ex) {
+				throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
+				
+			}  catch (Exception e) {
+				throw new BizLogicException(null,null, e.getMessage());
+			}finally {
+				if (dao != null)
+					AppUtility.closeDAOSession(dao);
+			}
+		
 	}
 	
 	public SprReportDTO getIdentifiedReportData(Long reportId ,Long deReportId,SessionDataBean sessionDataBean) throws ApplicationException{

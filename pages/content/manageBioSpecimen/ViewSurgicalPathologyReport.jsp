@@ -18,6 +18,14 @@
 <script language="JavaScript" type="text/javascript" src="jss/viewSPR.js"></script>
 <LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
+
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+
 <%
 	Map mapPMI = null;
 	int noOfRowsPMI=0;
@@ -94,17 +102,84 @@
 			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
 		}		
 	}
-	
+	var dhxWins;
 	function downloadReport(reportType){
-		var dwdIframe = document.getElementById("sprExportFrame");
-		var sprNumber = '<%=formSPR.getSurgicalPathologyNumber()%>';
-		var identifiedId = document.getElementsByName("identifiedReportId")[0].value;
-		var deIdentifiedId = document.getElementsByName("deIdentifiedReportId")[0].value;
-		var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
-		if(hasUploadedReport=="true"){
-			reportType = "uploadedFile";
+		if(dhxWins == undefined){
+			dhxWins = new dhtmlXWindows();
+			dhxWins.enableAutoViewport(true);
+			dhxWins.setSkin("dhx_skyblue");
+		
 		}
-		dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>&sprNumber="+sprNumber+"&reportId="+identifiedId+"&deIdentifiedId="+deIdentifiedId+"&reportType="+reportType;
+		//dhxWins.setImagePath("dhtmlx_suite/imgs/");
+		if(dhxWins.window("containerPositionPopUp")==null){
+			var w =250;
+			var h =150;
+			var x = (screen.width / 3) - (w / 2);
+			var y = 0;
+			dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+			dhxWins.window("containerPositionPopUp").allowResize();
+			//dhxWins.window("containerPositionPopUp").setModal(true);
+			dhxWins.window("containerPositionPopUp").setText("Terms and Conditions");
+			dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+			dhxWins.window("containerPositionPopUp").button("park").hide();
+			dhxWins.window("containerPositionPopUp").button("close").hide();
+			var div = document.createElement("div");
+			div.id="popupDiv";
+			div.innerHTML = "<div style='padding-left:10px;padding-top:30px;' class='black_ar'><input type='checkbox' name='termCheckbox' id='termCheckbox' value='termCheckbox' >I agree to the <a href='#'>Terms & Condiitons.</a></div>"
+			+"<div style='padding-left:10px;padding-top:30px;' class='black_ar'>"+
+			"<input type='button' name='Ok' onClick='downloadSpr(\""+reportType+"\")' value='Ok' style='margin-left:45px'><input type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'></div>";
+			document.body.appendChild(div);
+			dhxWins.window("containerPositionPopUp").attachObject("popupDiv");
+		}
+	}
+	function downloadSpr(reportType){
+		if(document.getElementById("termCheckbox").checked){
+			var dwdIframe = document.getElementById("sprExportFrame");
+			var sprNumber = '<%=formSPR.getSurgicalPathologyNumber()%>';
+			var identifiedId = document.getElementsByName("identifiedReportId")[0].value;
+			var deIdentifiedId = document.getElementsByName("deIdentifiedReportId")[0].value;
+			var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
+			if(hasUploadedReport=="true"){
+				reportType = "uploadedFile";
+			}
+			dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>&sprNumber="+sprNumber+"&reportId="+identifiedId+"&deIdentifiedId="+deIdentifiedId+"&reportType="+reportType;
+			closeTermWindow();
+		}
+	}
+	function closeTermWindow(){
+		dhxWins.window("containerPositionPopUp").close();
+	}
+	function deleteReport(){
+		var r=confirm("Are you sure you want to delete Identified report?");
+		if (r==true)
+		  {
+			var request = new  XMLHttpRequest();
+			request.onreadystatechange=function(){
+				if(request.readyState == 4)
+				{  
+					//Response is ready
+					if(request.status == 200)
+					{
+					document.getElementsByName("identifiedReportId")[0].value="";
+						var responseString = request.responseText;
+						var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1";
+						//ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1
+									document.forms[0].action=action;
+									document.forms[0].submit();
+					}
+					
+				}	
+			};
+			var identifiedId = document.getElementsByName("identifiedReportId")[0].value;
+			request.open("POST","CatissueCommonAjaxAction.do?type=deleteSPR&reportId="+identifiedId,true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			request.send();
+		
+		  }
+		else
+		  {
+		  x="You pressed Cancel!";
+		  } 
 	}
 	
 	</script>	
@@ -133,6 +208,7 @@ if(!hasAccess)
 			<html:hidden property="acceptReject"/>
 			<html:hidden property="participantIdForReport"/>
 			<html:hidden property="hasUploadedReport"/>
+			<html:hidden property="uploadedFileName"/>
 
         <tr>
           <td colspan="2" align="left">
@@ -197,12 +273,20 @@ if(!hasAccess)
 	}
 	%>
 	<script>
-			var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
+		var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
+		var ideReportId = document.getElementsByName("identifiedReportId")[0].value;
+		
 		if(hasUploadedReport=="true"){
-			    
 			document.getElementById("deIdenRedio").disabled=true;
-			  document.getElementById("compareRedio").disabled=true;
-			  document.getElementById("myrequestRedio").disabled=true;
+			document.getElementById("compareRedio").disabled=true;
+			document.getElementById("myrequestRedio").disabled=true;
+			document.getElementById('downloadSCGTable').style.display = "";
+			document.getElementById('uploadSCGTable').style.display = "none";
+			var htmlstr = document.getElementsByName("uploadedFileName")[0].value+"&nbsp";
+			document.getElementById('existingSprName').innerHTML = htmlstr;
+		}else if(ideReportId!=undefined && ideReportId.trim()!=""){
+			document.getElementById('downloadSCGTable').style.display = "none";
+			document.getElementById('uploadSCGTable').style.display = "none";
 		}
 	</script>
 
@@ -347,9 +431,13 @@ if(!hasAccess)
 		  <tr>
 		  <td colspan="5" class="tr_bg_blue1">
 		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.identifiedReportInformation.title"/> </span>
+		 
 		  <a href="#" onClick="downloadReport('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
 		  Download
 		  </a> 
+		   <!--a href="#" onClick="deleteReport('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
+			Delete
+		  </a--> 
 		  
 		  </td>
         </tr>
@@ -516,3 +604,7 @@ if(!hasAccess)
 <%
 }
 %>
+
+<script>
+	
+</script>

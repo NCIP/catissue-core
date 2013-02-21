@@ -1772,9 +1772,9 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 		final String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 		final String[] displayEventFields = {"id"};
 		final String valueField = Constants.SYSTEM_IDENTIFIER;
-		final String[] whereColumnName = {Constants.COLUMN_NAME_SCG_ID};
-		final String[] whereColumnCondition = {"="};
-		final Object[] whereColumnValue = {scgId};
+		final String[] whereColumnName = {Constants.COLUMN_NAME_SCG_ID,Status.ACTIVITY_STATUS.getStatus()};
+		final String[] whereColumnCondition = {"=","="};
+		final Object[] whereColumnValue = {scgId,Status.ACTIVITY_STATUS_ACTIVE.getStatus()};
 		final String joinCondition = Constants.AND_JOIN_CONDITION;
 		final String separatorBetweenFields = "";
 

@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
+import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
@@ -542,6 +543,21 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		
 		response.setContentType("application/json");
 		response.getWriter().write(returnedJObject.toString());
+		return null;
+	}
+	
+	public ActionForward deleteSPR(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		IdentifiedSurgicalPathologyReportBizLogic bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
+		String reportId = request.getParameter("reportId");
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		try{
+		bizLogic.deleteReport(Long.parseLong(reportId),sessionDataBean);
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
+			
 		return null;
 	}
 }
