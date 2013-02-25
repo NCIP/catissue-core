@@ -2,8 +2,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo"%>
-<%@ taglib uri="/WEB-INF/Owasp.CsrfGuard.tld" prefix="csrf" %>
-
 <%@ page
 	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm,java.util.List,edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.simplequery.query.Operator"%>
@@ -23,9 +21,7 @@
 	display:none;
 }
 </style>
-<!-- Mandar : 434 : for tooltip 
-<script src="<%=request.getContextPath()%>/JavaScriptServlet"></script>
--->
+<!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"
@@ -68,7 +64,6 @@
 		header = alias + ".header";
 		title = alias + ".Search";
 	}
-	String tokenIdStr = (String) request.getParameter("OWASP_CSRFTOKEN");
 %>
 <script>
 
@@ -179,19 +174,9 @@ function showDatafield(element,txtFieldID)
 }
 
 function vieMapTabSelected(){
-/*
-	var tokenValue = document.getElementById(csrfTokenID);
-	alert(tokenValue);
-	if(null != tokenValue)
-	{
-		var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&OWASP_CSRFTOKEN="+tokenValue+"&pageOf=pageOfStorageContainer";
-	}else
-	{
-		var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer";
-	}
-	 alert(action);
-*/
-        var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer";
+
+
+ var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer";
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
@@ -205,14 +190,13 @@ function vieMapTabSelected(){
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 <html:form action="<%=Constants.SIMPLE_SEARCH_ACTION%>">
-		<input type="hidden" id="csrfTokenID" name="<csrf:token-name/>" value="<csrf:token-value uri='<%=Constants.SIMPLE_SEARCH_ACTION%>'/>"/>
 		<html:hidden property="aliasName" value="<%=aliasName%>" />
 		<html:hidden property="<%=Constants.MENU_SELECTED%>"
 			value="<%=selectMenu%>" />
 		<input type="hidden" name="objectChanged" id="objectChanged" value="">
 		<html:hidden property="counter" value="<%=noOfRows%>" />
 		<html:hidden property="pageOf" value="<%=pageOf%>" />
-		<html:hidden property="andOrOperation" />		
+		<html:hidden property="andOrOperation" />
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>

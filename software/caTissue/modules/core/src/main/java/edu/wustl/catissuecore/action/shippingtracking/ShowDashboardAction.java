@@ -11,7 +11,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.actionForm.shippingtracking.DashboardForm;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.BaseShipmentBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
@@ -31,7 +30,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 /**
  * this class implements dashboard viewing action.
  */
-public class ShowDashboardAction extends CatissueBaseAction
+public class ShowDashboardAction extends SecureAction
 {
 	private static final String CREATED_DATE = "createdDate";
 	private static final String RECEIVERSITE_ID = "receiverSite.id";
@@ -51,13 +50,11 @@ public class ShowDashboardAction extends CatissueBaseAction
 	 * @param response object of HttpServletResponse class.
 	 * @return forward mapping.
 	 */
-	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		//		Create DAO for passing as an argument to bizlogic's validate
 		final Logger logger = Logger.getCommonLogger(ShowDashboardAction.class);
-		System.out.println("ShowDashboardAction :: TOKEN : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-		System.out.println("ShowDashboardAction :: METHOD : "+request.getMethod());
 		DAO dao = null;
 		try
 		{

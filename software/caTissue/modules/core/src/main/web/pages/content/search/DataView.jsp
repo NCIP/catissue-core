@@ -7,7 +7,6 @@
 <%@ page import="edu.wustl.query.util.global.AQConstants"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/Owasp.CsrfGuard.tld" prefix="csrf" %>
 
 <%
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
@@ -92,7 +91,6 @@
 				<html:hidden property="<%=Constants.PAGE_OF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>
 				<html:hidden property="identifierFieldIndex" value="<%=identifierFieldIndex.toString()%>"/>
-				<input type="hidden" id="csrfTokenID" name="<csrf:token-name/>" value="<csrf:token-value uri='<%="/SpreadsheetExport"%>'/>"/>
 			
 		</td>
 	</tr>

@@ -11,8 +11,6 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -34,29 +32,15 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.coppa.po.Person;
-import edu.wustl.catissuecore.action.CatissueBaseAction;
 
-public class CTRPUserAjaxAction extends CatissueBaseAction {
+public class CTRPUserAjaxAction extends SecureAction {
 	private transient final Logger logger = Logger
 			.getCommonLogger(CTRPUserAjaxAction.class);
 
 	@Override
-	protected ActionForward executeCatissueAction(ActionMapping mapping,
+	protected ActionForward executeSecureAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-				/*
-		System.out.println("CTRPUserAjaxAction :: TOKEN : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-		System.out.println("CTRPUserAjaxAction  :: SESSION TOKEN : " + request.getSession().getAttribute("org.apache.struts.action.TOKEN"));
-		if ( !isTokenValid(request) ) {
-			System.out.println("CTRPUserAjaxAction :: TOKEN NOT Valid : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-			ActionErrors actionErrors = new ActionErrors();
-			ActionError actionError = new ActionError("errors.item","Invalid request");
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
-			saveErrors(request, actionErrors);
-			return null;
-		}
-		resetToken(request);
-		*/
 
 		final IFactory factory = AbstractFactoryConfig.getInstance()
 				.getBizLogicFactory();
@@ -267,7 +251,7 @@ public class CTRPUserAjaxAction extends CatissueBaseAction {
 		mainJsonObject.put("row", jsonUserRecords);
 		return mainJsonObject;
 	}
-
+	
 	public ActionForward checkForXSSViolation(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception, IOException {
@@ -278,8 +262,8 @@ public class CTRPUserAjaxAction extends CatissueBaseAction {
 		} finally {
 			request.getSession().setAttribute(Constants.FORM_BEAN_STACK,
 					formBeanStack);
-		}
+		} 
 	}
-
-
+	
+	
 }

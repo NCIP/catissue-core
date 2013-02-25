@@ -43,7 +43,6 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.wustl.cab2b.server.cache.EntityCache;
-import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.PathObject;
@@ -87,27 +86,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @return ActionForward
 	 * @throws Exception - Exception
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, final ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 
 		ActionForward actionfwd = null;
-		/*
-		System.out.println("LoadAnnotationDefinitionAction :: TOKEN : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-		System.out.println("LoadAnnotationDefinitionAction  :: SESSION TOKEN : " + request.getSession().getAttribute("org.apache.struts.action.TOKEN"));
-		if ( !isTokenValid(request) ) {
-			System.out.println("LoadAnnotationDefinitionAction :: TOKEN NOT Valid : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-			ActionErrors actionErrors = new ActionErrors();
-			ActionError actionError = new ActionError("errors.item","Invalid request");
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
-			saveErrors(request, actionErrors);
-			return mapping.findForward("failure");
-		}
-		resetToken(request);
-		*/
 		final AnnotationForm annotationForm = (AnnotationForm) form;
 		annotationForm.setSelectedStaticEntityId(null);
-
 
 		// Added by Ravindra to disallow Non Super Admin users to add Local Extension
 		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
@@ -778,11 +764,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				}
 
 			}
-			String csrfTokenId = request.getParameter("OWASP_CSRFTOKEN");
-			if (csrfTokenId != null)
-			{
-				editDynExtEntityURL = editDynExtEntityURL + "&OWASP_CSRFTOKEN="+csrfTokenId;
-			}
 
 			if (staticEntityId != null)
 			{
@@ -806,7 +787,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				index++;
 				//}
 			}
-
 		}
 		return entityXML.toString();
 			}

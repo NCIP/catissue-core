@@ -9,20 +9,18 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.common.action.SecureAction;
 
-public abstract class CatissueBaseAction extends SecureAction
+public abstract class CatissueBaseAction extends SecureAction 
 {
 
 	@Override
 	protected ActionForward executeSecureAction(ActionMapping arg0,
 			ActionForm arg1, HttpServletRequest arg2, HttpServletResponse arg3)
-			throws Exception
+			throws Exception 		
 	{
-		System.out.println("CatissueBaseAction B4 TOKEN : "+arg2.getParameter("org.apache.struts.taglib.html.TOKEN"));
-		System.out.println("CatissueBaseAction B4  SESSION TOKEN : " + arg2.getSession().getAttribute("org.apache.struts.action.TOKEN"));
 		saveToken(arg2);
 		return executeCatissueAction(arg0, arg1, arg2, arg3);
 	}
-
+	
 	protected abstract ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 

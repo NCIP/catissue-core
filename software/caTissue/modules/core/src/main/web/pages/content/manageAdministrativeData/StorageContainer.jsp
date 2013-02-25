@@ -2,7 +2,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ taglib uri="/WEB-INF/Owasp.CsrfGuard.tld" prefix="csrf" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
@@ -732,7 +731,6 @@ function calltest()
 <input type="hidden" name="eventOnSelectedContainerNameObj" id="eventOnSelectedContainerNameObj" value="onchange"/>
 
 <html:form action="<%=formName%>" method="post">
-<input type="hidden" id="csrfTokenID" name="<csrf:token-name/>" value="<csrf:token-value uri='<%=formName%>'/>"/>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
  <tr>
     <td>

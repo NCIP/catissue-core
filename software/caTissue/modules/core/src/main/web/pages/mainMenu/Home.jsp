@@ -1,6 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/Owasp.CsrfGuard.tld" prefix="csrf" %>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page
 	import="edu.wustl.common.util.global.Constants,edu.wustl.common.beans.SessionDataBean"%>
@@ -32,7 +31,6 @@ function editUserProfile(item){
 
 </head>
 <body>
-<input type="hidden" id="csrfTokenID" name="<csrf:token-name/>" value="<csrf:token-value uri='<%="/Home"%>'/>"/>
 <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
@@ -67,3 +65,5 @@ function editUserProfile(item){
 </table>
 </logic:notEmpty>
 </body>
+
+

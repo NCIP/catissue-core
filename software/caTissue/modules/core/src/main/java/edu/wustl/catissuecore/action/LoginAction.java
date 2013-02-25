@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -68,9 +67,6 @@ public class LoginAction extends XSSSupportedAction
     {
         String forwardTo = Constants.FAILURE;
         CommonLoginInfoUtility infoUtility = new CommonLoginInfoUtility();
-    	String referer=request.getHeader("referer");
-    	boolean invalidRequest=false;
-    	
         if (form == null)
         {
             LoginAction.LOGGER.debug("Form is Null");
@@ -81,24 +77,7 @@ public class LoginAction extends XSSSupportedAction
             try
             {
                 cleanSession(request);
-                //cleanCookie(request,response);
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
- 			   if(request.getRequestURL()!=null)
- 				{
- 					CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
- 				}
- 				String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
- 				String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
- 				String reDirectHomeURL=CommonServiceLocator.getInstance().getAppURL()+"/RedirectHome.do";
- 				if(!logOutURL.equals(referer) && !logInURL.equals(referer) && !reDirectHomeURL.equals(referer))
- 				{
- 					if(referer != null)
- 					{
- 						invalidRequest=true;
- 						throw new Exception();
- 					}
- 				}
-                
                 if (isRequestFromClinportal(request))
                 {
                     forwardTo = Constants.SUCCESS;
@@ -181,27 +160,12 @@ public class LoginAction extends XSSSupportedAction
      */
     private void cleanSession(final HttpServletRequest request)
     {
-        final HttpSession prevSession = request.getSession(false);
+        final HttpSession prevSession = request.getSession();
         if (prevSession != null)
         {
             prevSession.invalidate();
         }
     }
-
-    private void cleanCookie(final HttpServletRequest request, final HttpServletResponse response)
-    {
-    	Cookie[] cookies = request.getCookies();
-    	if (cookies != null) 
-    	{
-	    	 for (Cookie cookie : cookies) 
-	    	 {    		 	    		 
-	    		 Cookie prevCookie = new Cookie(cookie.getName(), "");
-	    		 cookie.setMaxAge(0);
-	    		 response.addCookie(cookie);
-	    	 }	    
-    	}
-    }
-
 
     /**
      *

@@ -13,8 +13,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -49,7 +47,7 @@ import edu.wustl.common.util.global.Validator;
 /**
  * class for base shipment action.
  */
-public class BaseShipmentAction extends SecureAction
+public class BaseShipmentAction extends CatissueBaseAction
 {
 
 	/**
@@ -62,20 +60,9 @@ public class BaseShipmentAction extends SecureAction
 	 * @throws Exception if some problem occurs.
 	 */
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		System.out.println("TOKEN : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-		if ( !isTokenValid(request) ) {
-			System.out.println("TOKEN NOT Valid : "+request.getParameter("org.apache.struts.taglib.html.TOKEN"));
-			ActionErrors actionErrors = new ActionErrors();
-			ActionError actionError = new ActionError("errors.item","Invalid request");
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
-			saveErrors(request, actionErrors);
-			return mapping.findForward("failure");
-		}
-		resetToken(request);
-		saveToken(request);
 		String operation = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
 		final Long shipmentId = (Long) request

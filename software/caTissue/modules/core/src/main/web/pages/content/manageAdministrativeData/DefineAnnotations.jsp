@@ -5,8 +5,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/Owasp.CsrfGuard.tld" prefix="csrf" %>
-
 <%@ page language="java" isELIgnored="false"%>
 <%-- Imports --%>
 <%@
@@ -227,7 +225,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 	<html:form styleId='annotationForm' action='/DefineAnnotations'>
 	
-	 <input type="hidden" id="csrfTokenID" name="<csrf:token-name/>" value="<csrf:token-value uri='<%="/DefineAnnotations"%>'/>"/>
+
 	 <html:hidden property="deoperation" value="<%=strDEOperation%>"/>
  	<%if (strDEOperation.equals("add") || ( link!=null && link.equals("editCondn") ))
 		{ 		
