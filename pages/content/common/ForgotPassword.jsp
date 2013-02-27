@@ -3,6 +3,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <head>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link rel="stylesheet" type="text/css" href="css/login.css" />
+<link rel="stylesheet" type="text/css" href="css/login-theam.css" />
 <script language="JavaScript">
 	function cancelButtonPressed()
 	{
@@ -13,46 +15,36 @@
 </head>
 <body >
 
-  <html:form action="/ForgotPasswordSearch">	
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-  <tr>
-    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-      </tr>
-    </table>
-      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-      
-      <tr>
-        <td align="left" class=" grey_ar_s">&nbsp; <bean:message  key="forgotpassword.subtitle" /></td>
-      </tr>
-	  <tr>
-        <td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
-      </tr>
-      <tr>
-        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="forgotpassword.title"/></span></td>
-      </tr>
-      <tr>
-        <td align="left" valign="top" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
-            
-              <tr>
-                <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-                <td width="16%" align="left" class="black_ar"><bean:message key="app.loginId"/></td>
-                <td width="83%" align="left" valign="middle"><label><span class="black_ar">
-                  <html:text styleClass="black_ar" size="30" styleId="emailAddress" property="emailAddress"/>
-                  </span></label>                  </tr>
-           
-        </table></td>
-      </tr>
-      <tr>
-        <td align="left" class="buttonbg"><html:submit styleClass="blue_ar_b" accesskey="Enter">
-						<bean:message  key="buttons.submit" />
-					</html:submit>
-          </td>
-      </tr>
-    </table></td>
-  </tr>
-</table>
-</html:form>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td colspan="5" class="td_orange_line" height="1"></td>
+		</tr>
+		<tr>
+			<td>
+				<html:form action="/ForgotPasswordSearch">	
+					<div style=" text-align:center;width:100%;">
+						<div class="black_ar box-border box-content box-background form-main-div" style="width: 282px;">
+							
+							<div class="black_ar help-header theam-font-color form-header-spacing" >
+								<span><bean:message key="forgotpassword.title"/></span>
+							</div>
+							<div style="width:100%; height: auto;">
+								<div class="form-inner-div margin-form-field">
+									<span class="form-label"><bean:message key="user.emailAddress"/></span> </br>
+									<html:text styleClass="black_ar  form-text-field" size="30" styleId="emailAddress" property="emailAddress"/>
+									
+								</div>
+							</div>
+							<html:submit styleClass="blue_ar_b submit-signup" accesskey="Enter">
+								<bean:message  key="buttons.submit" />
+							</html:submit>
+							
+						</div>
+					</div>
+				</html:form>
+			</td>
+		<tr>
+	</table>
+
 </body>
 </html>

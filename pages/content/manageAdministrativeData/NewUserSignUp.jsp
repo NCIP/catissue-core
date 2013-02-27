@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -25,396 +26,396 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
+	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link rel="stylesheet" type="text/css" href="css/login.css" />
+<link rel="stylesheet" type="text/css" href="css/login-theam.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+
 </head>
 
 <body>
 
 <script>
+var target_combo;
 function disableIdpDetails(disableStatus)
 {
-	if(disableStatus==true)
-	{
-		document.getElementById("enabledTargetIdpList").style.display="none";
-		document.getElementById("disabledTargetIdpList").style.display="block";
-
-	}
-	else
-	{
-		document.getElementById("enabledTargetIdpList").style.display="block";
-		document.getElementById("disabledTargetIdpList").style.display="none";
-	}
+	target_combo.disable(disableStatus);
 	document.getElementById("targetLoginName").disabled=disableStatus;
 	document.getElementById("targetPassword").disabled=disableStatus;
-	showHide('idpDetails');
+	//showHide('idpContentDiv');
+	var display="";
+	if(disableStatus){
+		display="none";
+	}
+	document.getElementById('idpContentDiv').style.display = display;
 }
-
 </script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script type="text/javascript" src="jss/queryModule.js"></script>
 <%
     //Object obj=  request.getAttribute(Constants.ACTIONLIST);
-			String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
-			String operation = (String) request
-					.getAttribute(Constants.OPERATION);
-			List siteList = (List) request.getAttribute(Constants.SITELIST);
-			List roleList = (List) request.getAttribute(Constants.ROLELIST);
-			List actionList = (List) request.getAttribute(Constants.ACTIONLIST);
-			List cpList = (List) request.getAttribute(Constants.CPLIST);
+	String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
+	String operation = (String) request
+			.getAttribute(Constants.OPERATION);
+	List siteList = (List) request.getAttribute(Constants.SITELIST);
+	List roleList = (List) request.getAttribute(Constants.ROLELIST);
+	List actionList = (List) request.getAttribute(Constants.ACTIONLIST);
+	List cpList = (List) request.getAttribute(Constants.CPLIST);
 %>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0"
-	class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="5" class="td_orange_line" height="1"></td>
+	</tr>
+	<tr>
+		<td>
+		<div style=" text-align:center;width:100%;">
+			<html:form action='${requestScope.formName}'>
+				<html:hidden property="operation" styleId="operation" />
+				<html:hidden property="submittedFor" />
+				<html:hidden property="pageOf" />
+				<html:hidden property="id" />
+				<html:hidden property="csmUserId" />
+				<html:hidden property='${requestScope.redirectTo}' />
+				<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
+					<html:hidden property="activityStatus" />
+				</logic:equal>
 
-	<html:form action='${requestScope.formName}'>
-		<html:hidden property="operation" styleId="operation" />
-		<html:hidden property="submittedFor" />
-		<html:hidden property="pageOf" />
-		<html:hidden property="id" />
-		<html:hidden property="csmUserId" />
-		<html:hidden property='${requestScope.redirectTo}' />
-		<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
-			<html:hidden property="activityStatus" />
-		</logic:equal>
-
-		<tr>
-			<td class="td_color_bfdcf3">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td class="td_table_head"><span class="wh_ar_b"><bean:message
-						key="app.signup" /></span></td>
-					<td align="right"><img
-						src="images/uIEnhancementImages/table_title_corner2.gif"
-						alt="Page Title - User" width="31" height="24" /></td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-		<tr>
-			<td class="tablepadding"><logic:equal name="pageOf"
-				value='${requestScope.pageOfSignUp}'>
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td valign="top" class="td_color_bfdcf3">&nbsp;</td>
-						<td valign="top" class="td_color_bfdcf3">&nbsp;</td>
-						<td valign="top" class="td_color_bfdcf3">&nbsp;</td>
-						<td valign="top" class="td_color_bfdcf3">&nbsp;</td>
-						<td width="90%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
-					</tr>
-				</table>
-			</logic:equal>
-			<table width="100%" border="0" cellpadding="3" cellspacing="0"
-				class="whitetable_bg">
-
-				<tr>
-					<td colspan="2" align="left" class="bottomtd"><%@ include
-						file="/pages/content/common/ActionErrors.jsp"%>
-					</td>
-				</tr>
-
-				<tr>
-					<td colspan="2" class="messagetexterror">
-					<div id="errorMessImgDiv" style="display: none">
-
-					<table>
-						<tr>
-							<td><c:if
-								test="${requestScope['org.apache.struts.action.ERROR'] == null }">
-								<tr>
-									<td valign="top"><img
-										src="images/uIEnhancementImages/alert-icon.gif"
-										alt="error messages" width="16" vspace="0" hspace="0"
-										height="18" valign="top"></td>
-									<td class="messagetexterror" align="left"><strong><bean:message
-										key="errors.title" /></strong></td>
-								</tr>
-							</c:if></td>
-						</tr>
-					</table>
+			<logic:notEmpty name="idpsList">
+				<div class="black_ar box-border box-content box-background form-main-div">
+					<div class="black_ar help-header theam-font-color form-header-spacing" >
+						<span><bean:message key="app.signup" /></span>
 					</div>
-					<div id="errorMess" style="display: none"></div>
-					</td>
-				</tr>
-				<logic:notEmpty name="idpsList">
-					<tr>
-						<td colspan="2" align="left">
-						<table width="100%" border="0" cellpadding="3" cellspacing="0">
-
-							<tr>
-								<td width="1%" align="center" class="black_ar"><span
-									class="blue_ar_b"><img
-									src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-									width="6" height="6" hspace="0" vspace="0" /></span></td>
-								<td width="35%" align="left" class="black_ar_b_13"><bean:message key="source.idp.question"/><br />
-									<div id="idpNames">
-									<logic:iterate id="idpDetails" name="idpsList">
-										<bean:write name="idpDetails" property="name"/>,
-									</logic:iterate>
-									</div>
-								</td>
-								<td align="left"><logic:equal name="idpSelection"
-									value="yes">
-									<input type="radio" name="idpSelection" value="yes" checked onclick="disableIdpDetails(false)"/>
-								</logic:equal> <logic:notEqual name="idpSelection" value="yes">
-									<input type="radio" name="idpSelection" value="yes" onclick="disableIdpDetails(false)"/>
-								</logic:notEqual> <span class="black_ar"><bean:message key="user.yes"/></span> &nbsp; <logic:equal
-									name="idpSelection" value="no">
-									<input type="radio" name="idpSelection" value="no" checked onclick="disableIdpDetails(true)"/>
-								</logic:equal> <logic:notEqual name="idpSelection" value="no">
-									<input type="radio" name="idpSelection" value="no" onclick="disableIdpDetails(true)"/>
-								</logic:notEqual><span class="black_ar" /><bean:message key="user.no"/></span></td>
-							</tr>
-							<tr>
-								<td colspan="3" class="bottomtd"></td>
-							</tr>
-						</table>
-					</tr>
-						<tr>
-						<td width="96%" align="left" class="tr_bg_blue1"><span
-							class="blue_ar_b">&nbsp;<bean:message key="idp.detials"/></span></td>
-						<td width="4%" align="right" class="tr_bg_blue1"><div style="display:none;"><a
-							id="imgArrow_idpDetails"><img
-							src="images/uIEnhancementImages/up_arrow.gif" width="80"
-							height="9" hspace="10" border="0" /></a></div></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="left" class="showhide">
-						<div id="idpDetails" style="display:block" >
-						<table width="100%" border="0" cellpadding="3" cellspacing="0">
-							<tr>
-								<td width="1%" align="center" class="black_ar"><span
-									class="blue_ar_b"><img
-									src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-									width="6" height="6" hspace="0" vspace="0" /></span></td>
-								<td width="17%" align="left" class="black_ar"><bean:message key="idp.selection.text"/></td>
-								<td width="19%" nowrap class="black_ar">
-									<div id="enabledTargetIdpList">
-										<autocomplete:AutoCompleteTag
-										property="targetIdp" optionsList='${requestScope.idpsList}'
-										initialValue='${userForm.targetIdp}' styleClass="black_ar"
-										staticField="false" size="27"/>
-									</div>
-									<div id="disabledTargetIdpList">
-									<autocomplete:AutoCompleteTag
-									property="targetIdp" optionsList='${requestScope.idpsList}'
-									initialValue='${userForm.targetIdp}' styleClass="black_ar"
-									staticField="false" size="27" disabled="true"/>
-									</div>
-								</td>
-								<td width="13%" align="left">&nbsp;</td>
-								<td width="1%" align="center">&nbsp;</td>
-								<td width="17%" align="left">&nbsp;</td>
-								<td width="19%" align="left">&nbsp;</td>
-								<td width="13%" align="left" valign="top">&nbsp;</td>
-							</tr>
-							<tr>
-								<td colspan="8" class="bottomtd"></td>
-							</tr>
-							<tr>
-								<td width="1%" align="center" class="black_ar"><span
-									class="blue_ar_b"><img
-									src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-									width="6" height="6" hspace="0" vspace="0" /></span></td>
-								<td width="17%" align="left" class="black_ar"><bean:message key="user.loginName"/></td>
-								<td width="19%" align="left"><html:text
-									styleClass="black_ar" maxlength="255" size="30"
-									styleId="targetLoginName" property="targetLoginName"
-									readonly='${requestScope.readOnlyEmail}' /></td>
-								<td width="13%" align="left">&nbsp;</td>
-								<td width="1%" align="center"><span class="blue_ar_b"><img
-									src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-									width="6" height="6" hspace="0" vspace="0" /></span></td>
-								<td width="17%" align="left"><label for="targetPassword"
-									class="black_ar"><bean:message key="user.password"/></label></td>
-								<td width="19%" align="left"><html:password
-									styleClass="black_ar" maxlength="255" size="30"
-									styleId="targetPassword" property="targetPassword"
-									readonly='${requestScope.readOnlyEmail}' /></td>
-								<td width="13%" align="left" valign="top">&nbsp;</td>
-							</tr>
-						</table>
+					<div class="black_ar help-header theam-font-color form-header-spacing" >
+						<div class="black_ar">
+							<%@ include	file="/pages/content/common/ActionErrors.jsp"%>
 						</div>
-						</td>
-					</tr>
+						<span style="font-size: 14px;"><bean:message key="idp.detials"/></span>
+					</div>
+					<div style="width:100%; height: auto;">
+						<div style="width:49%;float:left; ">
+							<div class="form-inner-div margin-form-field form-label">
+								<bean:message key="source.idp.question"/><br />
+										<div id="idpNames">
+										<logic:iterate id="idpDetails" name="idpsList">
+											<bean:write name="idpDetails" property="name"/>,
+										</logic:iterate>
+										</div>
+							</div>
+							
+						</div>
+						<div style="width:49%;float:left">
+							<div class="form-inner-div margin-form-field">
+									<logic:equal name="idpSelection" value="yes">
+										<input type="radio" name="idpSelection" value="yes" checked onclick="disableIdpDetails(false)"/>
+									</logic:equal> 
+									<logic:notEqual name="idpSelection" value="yes">
+										<input type="radio" name="idpSelection" value="yes" onclick="disableIdpDetails(false)"/>
+									</logic:notEqual>
+									<span class="black_ar"><bean:message key="user.yes"/></span> &nbsp; 
+									<logic:equal name="idpSelection" value="no">
+										<input type="radio" name="idpSelection" value="no" checked onclick="disableIdpDetails(true)"/>
+									</logic:equal> <logic:notEqual name="idpSelection" value="no">
+										<input type="radio" name="idpSelection" value="no" onclick="disableIdpDetails(true)"/>
+									</logic:notEqual><span class="black_ar" /><bean:message key="user.no"/></span>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div style="width:100%; height: auto;float:left;display:block;" id="idpContentDiv">
+						<div style="width:49%;float:left; ">
+							<div class="form-inner-div margin-form-field">
+								<span class="form-label"><bean:message key="idp.selection.text"/></span> </br>
+								<div class="dhtmlx-combo-margin"><select name="targetIdp"  id="target_combo">
+										<logic:iterate id="idpDetails" name="idpsList">
+											<option value="<bean:write name='idpDetails' property='name'/>"><bean:write name="idpDetails" property="name"/></option>
+										</logic:iterate>
+								</select></div>
+								<script>
+									  //common init code
+									  dhtmlx.skin ='dhx_skyblue';
+									  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+									  target_combo = new dhtmlXCombo("target_combo","target_combo","100px");
+									  target_combo.enableFilteringMode(true);
+									  target_combo.setSize(200);
+									  target_combo.setComboValue("");
+								</script>
+								
+							</div>
+							<div class="form-inner-div margin-form-field">
+									<span class="form-label"><bean:message key="user.loginName"/></span> </br>
+									<html:text styleClass="black_ar  form-text-field" maxlength="255" size="30" styleId="targetLoginName" property="targetLoginName" readonly='${requestScope.readOnlyEmail}' />
+							</div>
+						</div>
+						<div style="width:49%;float:left; ">
+							<div class="form-inner-div margin-form-field">
+								
+								
+							</div>
+							<div class="form-inner-div margin-form-field" style="margin-top:47px">
+								<span class="form-label"><bean:message key="user.password"/></span> </br>
+								<html:password styleClass="black_ar  form-text-field" maxlength="255" size="30" styleId="targetPassword" property="targetPassword" readonly='${requestScope.readOnlyEmail}' />
+							</div>
+						</div>
+					</div>
+					
+					
+				</div>
 				</logic:notEmpty>
-				<tr>
-					<td colspan="2" align="left" class="tr_bg_blue1"><span
-						class="blue_ar_b">&nbsp; <bean:message
-						key="user.details.title" /> </span></td>
-				</tr>
-				<tr>
-					<td colspan="2" align="left">
-					<table width="100%" border="0" cellpadding="3" cellspacing="0">
-						<tr>
-							<td width="1%" align="center" class="black_ar"><span
-								class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td width="17%" align="left" class="black_ar"><bean:message
-								key="user.emailAddress" /></td>
-							<td width="19%" align="left"><html:text
-								styleClass="black_ar" maxlength="255" size="30"
-								styleId="emailAddress" property="emailAddress"
-								readonly='${requestScope.readOnlyEmail}' /></td>
-							<td width="13%" align="left">&nbsp;</td>
-							<td width="1%" align="center"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td width="17%" align="left"><label
-								for="confirmEmailAddress" class="black_ar"><bean:message
-								key="user.confirmemailAddress" /></label></td>
-							<td width="19%" align="left"><html:text
-								styleClass="black_ar" maxlength="255" size="30"
-								styleId="confirmEmailAddress" property="confirmEmailAddress"
-								readonly='${requestScope.readOnlyEmail}' /></td>
-							<td width="13%" align="left" valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.lastName" /></td>
-							<td align="left"><html:text styleClass="black_ar"
-								maxlength="255" size="30" styleId="lastName" property="lastName" /></td>
-							<td align="left" class="black_ar">&nbsp;</td>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.firstName" /></td>
-							<td align="left"><html:text styleClass="black_ar"
-								maxlength="255" size="30" styleId="firstName"
-								property="firstName" /></td>
-							<td align="left" valign="top">&nbsp;</td>
-						</tr>
+					
+					
+				<div class="black_ar box-border box-content box-background form-main-div">
+				<logic:empty name="idpsList">
+					<div class="black_ar help-header theam-font-color form-header-spacing" >
+						<span><bean:message key="app.signup" /></span>
+					</div>
+				</logic:empty>
+					<div class="black_ar help-header theam-font-color form-header-spacing" >
+						<logic:empty name="idpsList">
+						<div class="black_ar">
+						<%@ include	file="/pages/content/common/ActionErrors.jsp"%>
+						</div>
+						</logic:empty>
+						<span style="font-size: 14px;"><bean:message key="user.details.title" /></span>
+					</div>
+					<div style="width:49%;float:left; ">
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.emailAddress" /></span> </br>
+							<html:text tabindex="1" styleClass=" black_ar form-text-field" maxlength="255" size="30" styleId="emailAddress" property="emailAddress" readonly='${requestScope.readOnlyEmail}' />
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.lastName" /></span> </br>
+							<html:text  tabindex="3" styleClass=" black_ar form-text-field" maxlength="255" size="30" styleId="lastName" property="lastName" />
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.street" /></span> </br>
+							<html:text  tabindex="5" styleClass="black_ar  form-text-field " maxlength="255" size="30" styleId="street" property="street" onfocus="removeClass(this,'optional-background')" onblur="addClass(this)"/>
+							
+						</div>
+						<script>
+							function hasClass(ele,cls) {
+								return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+							}
 
-						<tr>
-							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.street" /></td>
-							<td align="left"><html:text styleClass="black_ar"
-								maxlength="255" size="30" styleId="street" property="street" /></td>
-							<td align="left" class="black_ar">&nbsp;</td>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.city" /></td>
-							<td align="left"><html:text styleClass="black_ar"
-								maxlength="50" size="30" styleId="city" property="city" /></td>
-							<td align="left" valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.state" /></td>
-							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
-								property="state" optionsList='${requestScope.stateList}'
-								initialValue='${userForm.state}' styleClass="black_ar" size="27" /></td>
-							<td align="left" class="black_ar">&nbsp;</td>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.zipCode" /></td>
-							<td align="left" class="black_ar"><html:text
-								style="text-align:right" styleClass="black_ar" maxlength="30"
-								size="30" styleId="zipCode" property="zipCode" /></td>
-							<td align="left" valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.country" /></td>
-							<td align="left" nowrap class="black_ar"><autocomplete:AutoCompleteTag
-								property="country" optionsList='${requestScope.countryList}'
-								initialValue='${userForm.country}' styleClass="black_ar"
-								size="27" /></td>
-							<td align="left" class="black_ar">&nbsp;</td>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.phoneNumber" /></td>
-							<td align="left"><html:text styleClass="black_ar"
-								style="text-align:right" maxlength="50" size="30"
-								styleId="phoneNumber" property="phoneNumber" /></td>
-							<td align="left" valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar"><bean:message
-								key="user.faxNumber" /></td>
-							<td align="left"><html:text styleClass="black_ar"
-								style="text-align:right" maxlength="50" size="30"
-								styleId="faxNumber" property="faxNumber" /></td>
-							<td align="left" class="black_ar">&nbsp;</td>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><label for="institutionId"><bean:message
-								key="user.institution" /></label></td>
-							<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
-								property="institutionId"
-								optionsList='${requestScope.instituteList}'
-								initialValue='${userForm.institutionId}' styleClass="black_ar"
-								staticField="false" size="27" /></td>
-							<td align="left">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><label for="departmentId"><bean:message
-								key="user.department" /> </label></td>
-							<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
-								property="departmentId"
-								optionsList='${requestScope.departmentList}'
-								initialValue='${userForm.departmentId}' styleClass="black_ar"
-								staticField="false" size="27" /></td>
-							<td align="left">&nbsp;</td>
-							<td align="center" class="black_ar"><span class="blue_ar_b"><img
-								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-								width="6" height="6" hspace="0" vspace="0" /></span></td>
-							<td align="left" class="black_ar"><label
-								for="cancerResearchGroupId"><bean:message
-								key="user.cancerResearchGroup" /> </label></td>
-							<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
-								property="cancerResearchGroupId"
-								optionsList='${requestScope.cancerResearchGroupList}'
-								initialValue='${userForm.cancerResearchGroupId}'
-								styleClass="black_ar" staticField="false" size="27" /></td>
-							<td align="left">&nbsp;</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="bottomtd"></td>
-				</tr>
-				<tr>
-					<td colspan="2" class="buttonbg"><html:submit
-						styleClass="blue_ar_b">
-						<bean:message key="buttons.submit" />
-					</html:submit></td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-	</html:form>
-</table>
+							function removeClass(ele,cls) {
+									if (hasClass(ele,cls)) {
+										var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+										ele.className=ele.className.replace(reg,' ');
+									}
+								}
+							function addClass(ele){
+								if(ele.value==""){
+									ele.className+=" optional-background";
+								}
+							}
+
+						</script>
+						<div class="form-inner-div margin-form-field">
+							<!--img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /-->
+							<span class="form-label"><bean:message key="user.state" /></span> </br>
+							<div  class="dhtmlx-combo-margin">
+							<select  tabindex="7"  name="state"  id="state_combo" class="  optional-background">
+								<logic:iterate id="stateList" name="stateList">
+									<logic:notEqual name="stateList"  property='name' value="-- Select --">
+										<option value="<bean:write name='stateList' property='value'/>"><bean:write name="stateList" property="name"/></option>
+									</logic:notEqual>
+								</logic:iterate>
+							</select>
+							</div>
+						</div>
+						<script>
+							  //common init code
+							  dhtmlx.skin ='dhx_skyblue';
+							  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var state_combo = new dhtmlXCombo("state_combo","state_combo","100px");
+							  state_combo.enableFilteringMode(true);
+							  state_combo.setSize(200);
+							  state_combo.setComboValue("");
+							  state_combo.setComboValue('${userForm.state}');
+
+							  
+     					</script>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.country" /></span> </br>
+							<div  class="dhtmlx-combo-margin">
+							<select  tabindex="9"  name="country"  id="country_combo" class="form-text-field">
+								<logic:iterate id="countryList" name="countryList">
+									<logic:notEqual name="countryList"  property='name' value="-- Select --">
+										<option value="<bean:write name='countryList' property='value'/>"><bean:write name="countryList" property="name"/></option>
+									</logic:notEqual>
+								</logic:iterate>
+							</select>
+							</div>
+							
+							  <script>
+							  //common init code
+							  dhtmlx.skin ='dhx_skyblue';
+							  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var country_combo = new dhtmlXCombo("country_combo","country_combo","100px");
+							  country_combo.enableFilteringMode(true);
+							  country_combo.setSize(200);
+							  country_combo.setComboValue('${userForm.country}');
+							  
+							 
+							  
+							  </script>
+							
+							
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<!--img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /-->
+							<span class="form-label"><bean:message key="user.faxNumber" /></span> </br>
+							<html:text  tabindex="11" styleClass="black_ar form-text-field" style="text-align:right" maxlength="50" size="30" 	styleId="faxNumber" property="faxNumber"  onfocus="removeClass(this,'optional-background')" onblur="addClass(this)"/>
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message	key="user.department" /></span> </br>
+							<div  class="dhtmlx-combo-margin">
+							<select  tabindex="13" name="departmentId"  id="department_combo" class="form-text-field">
+								<logic:iterate id="departmentList" name="departmentList">
+									<logic:notEqual name="departmentList"  property='name' value="-- Select --">
+										<option value="<bean:write name='departmentList' property='value'/>"><bean:write name="departmentList" property="name"/></option>
+									</logic:notEqual>
+								</logic:iterate>
+							</select>
+							</div>
+													
+							  <script>
+							  //common init code
+							  var department_combo = new dhtmlXCombo("department_combo","department_combo","100px");
+							  department_combo.enableFilteringMode(true);
+							  department_combo.setSize(200);
+							  department_combo.setComboValue("");
+							  department_combo.setComboValue('${userForm.departmentId}');
+							   if('${userForm.departmentId}'!=0){
+								department_combo.setComboValue('${userForm.departmentId}');
+							  }else{
+								department_combo.setComboValue('');
+							  }
+							  </script>
+							
+						</div>
+						<div>
+							<html:submit styleClass="blue_ar_b submit-signup">
+								<bean:message key="buttons.submit" />
+							</html:submit>
+						</div>
+							
+					</div>
+					<div style="float:left;">
+						<div class="form-inner-div margin-form-field">
+							<label for="confirmEmailAddress" class="black_ar form-label"><bean:message key="user.confirmemailAddress" /></label>
+							</br><html:text tabindex="2" styleClass=" black_ar form-text-field" maxlength="255" size="30" styleId="confirmEmailAddress" property="confirmEmailAddress" readonly='${requestScope.readOnlyEmail}' />
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.firstName" /></span> </br>
+							<html:text  tabindex="4" styleClass="black_ar  form-text-field" maxlength="255" size="30" styleId="firstName" property="firstName" />
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.city" /></span> </br>
+							<html:text  tabindex="6" styleClass="black_ar  form-text-field" maxlength="50" size="30" styleId="city" property="city" />
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="address.zipCode" /></span> </br>
+							<html:text  tabindex="8" style="text-align:right" styleClass="black_ar  form-text-field" maxlength="30" size="30" styleId="zipCode" property="zipCode" onfocus="removeClass(this,'optional-background')" onblur="addClass(this)"/>
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.phoneNumber" /></span> </br>
+							<html:text  tabindex="10" styleClass="black_ar form-text-field" style="text-align:right" maxlength="50" size="30" styleId="phoneNumber" property="phoneNumber"/>
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.institution" /></span> </br>
+							<div  class="dhtmlx-combo-margin">
+							<select  tabindex="12" name="institutionId"  id="institution_combo" >
+								<logic:iterate id="instituteList" name="instituteList">
+										<logic:notEqual name="instituteList"  property='name' value="-- Select --">
+										<option value="<bean:write name='instituteList' property='value'/>"><bean:write name="instituteList" property="name"/></option>
+									</logic:notEqual>
+								</logic:iterate>
+							</select>
+							</div>
+													
+							  <script>
+							  //common init code
+							  var institute_combo = new dhtmlXCombo("institution_combo","institution_combo","100px");
+							  institute_combo.enableFilteringMode(true);
+							  institute_combo.setSize(200);
+							  institute_combo.setComboValue('${userForm.institutionId}');
+							  if('${userForm.institutionId}'!=0){
+								institute_combo.setComboValue('${userForm.institutionId}');
+							  }else{
+								institute_combo.setComboValue('');
+							  }
+							  
+							  </script>
+							
+						</div>
+						
+						<div class="form-inner-div margin-form-field">
+							<span class="form-label"><bean:message key="user.cancerResearchGroup" /></span> </br>
+							<div  class="dhtmlx-combo-margin">
+							<select  tabindex="14"  name="cancerResearchGroupId"  id="resrarch_combo">
+								<logic:iterate id="cancerResearchGroupList" name="cancerResearchGroupList">
+								<logic:notEqual name="cancerResearchGroupList"  property='name' value="-- Select --">
+										<option value="<bean:write name='cancerResearchGroupList' property='value'/>"><bean:write name="cancerResearchGroupList" property="name"/></option>
+									</logic:notEqual>	
+								</logic:iterate>
+							</select>
+							</div>
+													
+							  <script>
+							  //common init code
+							  var resrarch_combo = new dhtmlXCombo("resrarch_combo","resrarch_combo","100px");
+							  resrarch_combo.enableFilteringMode(true);
+							  resrarch_combo.setSize(200);
+							  if('${userForm.cancerResearchGroupId}'!=0){
+								resrarch_combo.setComboValue('${userForm.cancerResearchGroupId}');
+							  }else{
+								resrarch_combo.setComboValue('');
+							  }
+							 
+							  
+							  
+							  </script>
+							  
+						</div>
+						
+					</div>
+					
+				</div>
+					
+			</html:form>
+		</div>
+		</td>
+	</tr>
+	</table>
+
 </body>
 <script>
+
+addClass(document.getElementById("street"));
+addClass(document.getElementById("faxNumber"));
+addClass(document.getElementById("zipCode"));
 <logic:equal name="idpSelection" value="no">
 	disableIdpDetails(true);
+	
 </logic:equal>
 <logic:equal name="idpSelection" value="yes">
 	disableIdpDetails(false);
-	showHide('idpDetails');
 </logic:equal>
 
 function updateIdpNamesContents()

@@ -45,17 +45,17 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.forgotPasswordDef" extends=".catissuecore.homePageDef">
+	<definition name=".catissuecore.forgotPasswordDef" extends=".catissuecore.mainTitlePageDef">
 
 		<put name="content" value="/pages/content/common/ForgotPassword.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.forgotPasswordSuccessDef" extends=".catissuecore.homePageDef">
+	<definition name=".catissuecore.forgotPasswordSuccessDef" extends=".catissuecore.mainTitlePageDef">
 
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.userSignUpDef" extends=".catissuecore.homePageDef">
+	<definition name=".catissuecore.userSignUpDef" extends=".catissuecore.mainTitlePageDef">
 
 		<put name="content" value="/pages/content/manageAdministrativeData/NewUserSignUp.jsp" />
 	</definition>
