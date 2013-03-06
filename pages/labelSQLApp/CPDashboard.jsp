@@ -113,16 +113,6 @@ boolean isWhite = false;
 	</td>
 	</tr>
 	
-	
-	<tr valign="center" class='bgImage'>
-		<td width="17%">&nbsp; <img src="images/ic_saved_queries.gif"
-			id="labelSQLMenu" alt="CP Dashboard" width="38" height="44"
-			hspace="5" align="absmiddle" /><span class="blue_ar_b"> <bean:message
-			key="dashboard.title" /></span></td>
-		<td align="left" width="20%" class='bgImage'></td>
-	</tr>
-
-
 	<table width="100%" cellpadding='0' cellspacing='0' border='0'>
 
 		<tr style="height: 100%;">
@@ -299,13 +289,14 @@ function downloadReport()
 
 function loadUI()
 {
-	tabbar = new dhtmlXTabBar("a_tabbar", "top");
+	tabbar = new dhtmlXTabBar("a_tabbar", "top",25);
 	tabbar.setSkin('default');
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
 	tabbar.setSkinColors("#FFFFFF", "#FFFFFF");
-	tabbar.addTab("a1", "Dashboard", "200px");
-	tabbar.addTab("a2", "Reports", "200px");
-	tabbar.addTab("a3", "Report Scheduler", "200px");
+	
+	tabbar.addTab("a1",'<span style="position:relative;right:60px; font-size:14px"> Dashboard </span>', "200px");
+	tabbar.addTab("a2",'<span style="position:relative;right:68px; font-size:14px"> Reports </span>', "200px");
+	tabbar.addTab("a3",'<span style="position:relative;right:40px; font-size:14px"> Report Scheduler </span>', "200px");
 	tabbar.setContent("a1", "html_1");
 	tabbar.setContent("a2", "html_2");
 	tabbar.setContent("a3", "html_3");
