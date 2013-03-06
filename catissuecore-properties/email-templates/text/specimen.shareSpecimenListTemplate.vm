@@ -1,0 +1,9 @@
+Hello $sharedUser.firstName, $sharedUser.lastName
+
+#if($sharedTags.size() == 1)
+Specimen list by title $sharedTags.get(0).label has been shared to you by $user.firstName, $user.lastName. 
+#else 
+Specimen lists by title #foreach($tag in $sharedTags) #if($velocityCount == $sharedTags.size())$tag.label#{else}$tag.label,#end #end has been shared to you by $user.firstName, $user.lastName. 
+#end You can now access the query after you login to caTissue.
+
+$footer

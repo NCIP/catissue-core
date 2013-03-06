@@ -1,0 +1,6 @@
+Dear $user.lastName, $user.firstName
+
+Your account has been closed by the administrator.
+For performing eMPI id generation related activities,specified eMPI admin user should be active. So please set the activity status as "Active".
+
+$footer

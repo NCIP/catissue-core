@@ -1,0 +1,6 @@
+The following problem has been reported:
+From 	: $reportedProblem.from
+Title   : $reportedProblem.subject
+Message : $reportedProblem.messageBody
+
+$footer
