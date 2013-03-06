@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,7 @@ import edu.wustl.common.tags.bizlogic.ITagBizlogic;
 import edu.wustl.common.tags.dao.TagDAO;
 import edu.wustl.common.tags.domain.Tag;
 import edu.wustl.common.tags.domain.TagItem;
+import edu.wustl.common.tags.util.TagUtil;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.global.AQConstants;
@@ -290,21 +292,16 @@ public class SpecimenListBizlogic implements ITagBizlogic
 
 	}
 
-	public void assignTag(String arg0, String arg1, long arg2, long arg3)
-			throws DAOException, BizLogicException {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	/**
 	 * share Tags to users.
 	 * @param Set<Long> selectedUsers.
 	 * @param Set<Long> tagIdSet.
 	 * @throws DAOException.
 	 */
-	public void shareTags(Set<Long> tagIdSet, Set<Long> selectedUsers)
+	public void shareTags(Long userId, Set<Long> tagIdSet, Set<Long> selectedUsers)
 			throws DAOException, BizLogicException 
 	{
+		List<Tag> specimens = new ArrayList<Tag>();
 		for(Long tagId : tagIdSet) 
 		{
 			TagDAO tagDao = null;
@@ -312,9 +309,16 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			{
 				tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
 				Tag tag = tagDao.getTagById(tagId);
-				tag.getSharedUserIds().addAll(selectedUsers);
-				tagDao.updateTag(tag);
-				tagDao.commit();
+				if(tag.getUserId() == userId)
+				{
+					if(selectedUsers.contains(tag.getUserId())) {
+						selectedUsers.remove(tag.getUserId());
+					}
+					tag.getSharedUserIds().addAll(selectedUsers);
+					tagDao.updateTag(tag);
+					tagDao.commit();
+					specimens.add(tag);
+				}
 			}
 			catch (DAOException e)
 			{
@@ -327,6 +331,12 @@ public class SpecimenListBizlogic implements ITagBizlogic
 					tagDao.closeSession();
 				}
 			}	
+		}
+		try {
+			TagUtil.sendSharedTagEmailNotification(userId, specimens, 
+					selectedUsers, Constants.SHARE_SPECIMEN_LIST_EMAIL_TMPL);
+		} catch (Exception e) {
+			LOGGER.error("Error while sending email for query folder",e);
 		} 
 	}
 	
@@ -365,5 +375,5 @@ public class SpecimenListBizlogic implements ITagBizlogic
 				tagDAO.closeSession();
 			}
 		}	
-	}
+	}	 
 }

@@ -107,23 +107,8 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
             {
                 dao.update(user, oldUser);
             }
+            
             emailHandler(user);
-            final EmailHandler emailHandler = new EmailHandler();
-
-            // If user is approved send approval and login details emails to the
-            // user and administrator.
-            if (Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
-            {
-                // Send approval email to the user and administrator.
-                emailHandler.sendApprovalEmail(user);
-            }
-            else if (Status.ACTIVITY_STATUS_REJECT.toString().equals(user.getActivityStatus()))
-            {
-                // If user is rejected send rejection email to the user and
-                // administrator.
-                // Send rejection email to the user and administrator.
-                emailHandler.sendRejectionEmail(user);
-            }
         }
         catch (final Exception exp)
         {

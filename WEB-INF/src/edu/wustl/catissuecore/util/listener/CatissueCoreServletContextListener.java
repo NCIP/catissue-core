@@ -20,12 +20,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import net.sf.ehcache.CacheException;
+
 import org.apache.commons.io.FilenameUtils;
 
-import au.com.bytecode.opencsv.CSVReader;
-
-import net.sf.ehcache.CacheException;
 import titli.model.util.TitliResultGroup;
+import au.com.bytecode.opencsv.CSVReader;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
@@ -61,6 +61,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.audit.AuditManager;
+import edu.wustl.common.beans.EmailServerProperties;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
@@ -68,6 +69,7 @@ import edu.wustl.common.exception.ParseException;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.participant.utility.RaceGenderCodesProperyHandler;
 import edu.wustl.common.util.CVSTagReader;
+import edu.wustl.common.util.EmailClient;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -136,6 +138,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.init();
 			initializeParticipantConfig();
+			initEmailclient();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -144,6 +147,20 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					"Application failed to initialize" + e.getMessage(), e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
+	}
+
+	private void initEmailclient() {
+		EmailServerProperties emailServerProps = new EmailServerProperties();
+		emailServerProps.setFromAddr(XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress"));
+		emailServerProps.setFromPassword(XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword"));
+		emailServerProps.setIsSMTPAuthEnabled(XMLPropertyHandler.getValue("email.smtp.auth.enabled"));
+		emailServerProps.setServerHost(XMLPropertyHandler.getValue("email.mailServer"));
+		emailServerProps.setServerPort(XMLPropertyHandler.getValue("email.mailServer.port"));
+		emailServerProps.setIsStartTLSEnabled(XMLPropertyHandler.getValue("email.smtp.starttls.enabled"));
+	
+		String subPropFile = "/email-templates/emailSubjects.properties";
+		String tmplPropFile = "/email-templates/emailTemplates.properties";
+		EmailClient.initialize(emailServerProps, subPropFile, tmplPropFile);
 	}
 
 	private void initCiderIntegration()

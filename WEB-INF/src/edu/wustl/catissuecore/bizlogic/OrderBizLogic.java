@@ -132,7 +132,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-
+ 
 			boolean emailSent = false;
 			final List userList = dao.retrieve(User.class.getName(), "emailAddress",
 					sessionDataBean.getUserName());
@@ -140,13 +140,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				final User userObj = (User) userList.get(0);
 				final EmailHandler emailHandler = new EmailHandler();
-
-				final String emailBody = this.makeEmailBodyForOrderPlacement(userObj, order, dao);
-				final String subject = "The Order " + order.getName()
-						+ " has been successfully placed.";
-				emailSent = emailHandler.sendEmailForOrderingPlacement(userObj.getEmailAddress(),
-						emailBody, subject);
-
+	 
+				emailSent = emailHandler.sendEmailForOrderPlacement(userObj, order);
+ 
 				if (emailSent)
 				{
 					LOGGER
@@ -854,90 +850,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 		return orderNew;
 	}
-
-	/**
-	 * This function prepares email body for the Order Placement Mail
-	 * @param userObj
-	 *            User object containing the logged in user info
-	 * @param order
-	 *            OrderDetails instance containing details of the requested
-	 *            order and order items under that order
-	 * @param dao
-	 *            object
-	 * @return emailBody String containing the email message body
-	 * @throws DAOException
-	 *             object
-	 */
-	private String makeEmailBodyForOrderPlacement(User userObj, OrderDetails order, DAO dao)
-			throws DAOException
-	{
-		final String emailBodyHeader = "Dear caTissue Administrator ,";
-
-		final Object object = dao.retrieveById(DistributionProtocol.class.getName(), order
-				.getDistributionProtocol().getId());
-		final String messageLine1 = "This is to notify that the Order " + order.getName()
-				+ " requested by " + userObj.getFirstName() + " " + userObj.getLastName()
-				+ " under Distribution Protocol " + ((DistributionProtocol) object).getTitle()
-				+ " have been placed successfully.";
-
-		// String messageLine2 = "The details of the Order are as follows:";
-
-		// String emailMsgHeader = emailBodyHeader + "\n" + messageLine1 + "\n"
-		// + messageLine2 + "\n";
-		final String emailMsgHeader = emailBodyHeader + "\n" + messageLine1 + "\n";
-		// String emailMsgFooter = "\n" +
-		// "We will get back to you shortly with status of each of the items requested"
-		// ;
-		final String emailMsgFooterRegards = "\n" + "Regards, ";
-		final String emailMsgFooterSign = "\n" + "caTissue Administrator";
-		final String emailMsgFooter = emailMsgFooterRegards + emailMsgFooterSign;
-
-//		final int serialNo = 1;
-
-//		final String orderItemHeader = "\n" + "#" + "\t" + "OrderItem" + "\t" + "Quantity" + "\n";
-
-		final Collection orderItemCollection = order.getOrderItemCollection();
-//		final Iterator orderItemCollectionItr = orderItemCollection.iterator();
-		final String itemInfo = "";
-		/*
-		 * while(orderItemCollectionItr.hasNext()) { OrderItem orderItem =
-		 * (OrderItem)orderItemCollectionItr.next(); if(orderItem instanceof
-		 * ExistingSpecimenOrderItem) { ExistingSpecimenOrderItem
-		 * existingSpecimenOrderItem =(ExistingSpecimenOrderItem)orderItem;
-		 * itemInfo = itemInfo + serialNo+ "." + "\t"+
-		 * existingSpecimenOrderItem.getSpecimen().getLabel() + "\t" +
-		 * existingSpecimenOrderItem.getRequestedQuantity().getValue() + "\n"; }
-		 * else if(orderItem instanceof DerivedSpecimenOrderItem) {
-		 * DerivedSpecimenOrderItem derivedSpecimenOrderItem =
-		 * (DerivedSpecimenOrderItem)orderItem; itemInfo = itemInfo + +
-		 * serialNo+ "." + "\t"+
-		 * derivedSpecimenOrderItem.getSpecimen().getLabel() + "\t" +
-		 * derivedSpecimenOrderItem.getRequestedQuantity().getValue() + "\n"; }
-		 * else if(orderItem instanceof PathologicalCaseOrderItem) {
-		 * PathologicalCaseOrderItem pathologicalCaseOrderItem =
-		 * (PathologicalCaseOrderItem)orderItem; itemInfo = itemInfo + +
-		 * serialNo+ "." + "\t"+
-		 * pathologicalCaseOrderItem.getSpecimenCollectionGroup().getName() +
-		 * "\t" + pathologicalCaseOrderItem.getRequestedQuantity().getValue() +
-		 * "\n"; } else if(orderItem instanceof NewSpecimenArrayOrderItem) {
-		 * NewSpecimenArrayOrderItem newSpecimenArrayOrderItem =
-		 * (NewSpecimenArrayOrderItem)orderItem; itemInfo = itemInfo + +
-		 * serialNo+ "." + "\t"+ newSpecimenArrayOrderItem.getName() + "\t" +
-		 * newSpecimenArrayOrderItem.getRequestedQuantity().getValue() + "\n"; }
-		 * else if(orderItem instanceof ExistingSpecimenArrayOrderItem) {
-		 * ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem =
-		 * (ExistingSpecimenArrayOrderItem)orderItem; itemInfo = itemInfo + +
-		 * serialNo+ "." + "\t"+
-		 * existingSpecimenArrayOrderItem.getSpecimenArray().getName() + "\t" +
-		 * existingSpecimenArrayOrderItem.getRequestedQuantity().getValue() +
-		 * "\n"; } serialNo++ ; }
-		 */
-
-		// String emailBody = emailMsgHeader + orderItemHeader + itemInfo +
-		// emailMsgFooter;
-		return emailMsgHeader + emailMsgFooter;
-	}
-
+ 
 	// Populates a List of RequestViewBean objects to display the request list
 	// on RequestListAdministratorView.jsp
 	/**

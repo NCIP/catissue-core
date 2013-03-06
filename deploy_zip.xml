@@ -415,6 +415,11 @@
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/modules/caTissue/conf/catissuecore-properties" />
 		</copy>
+		<echo message="Copying email-templates to WEB-INF/classes" />	
+		<copy todir="${temp.dir}/catissuecore/WEB-INF/classes/email-templates">
+			<fileset dir="${base.dir}/catissuecore-properties/email-templates"/>
+		</copy>
+
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}/modules/custom_impl_lib" />
 		</copy>

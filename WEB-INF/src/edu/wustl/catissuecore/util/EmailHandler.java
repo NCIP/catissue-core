@@ -9,22 +9,23 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.mail.MessagingException;
 
+import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.EmailClient;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.EmailDetails;
 import edu.wustl.common.util.global.SendEmail;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.security.exception.SMException;
-import edu.wustl.security.manager.SecurityManagerFactory;
 
 
 /**
@@ -34,78 +35,24 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 public class EmailHandler
 {
 	private static final Logger logger = Logger.getCommonLogger(EmailHandler.class);
-	private static final String STR_CONST_CRLF = "\n\n";
-    private static final String KEY_ERROR_COMMON_EMAIL_HANDLER = "error.common.emailHandler";
-    private static final String STR_CONST_DEAR = "Dear ";
     private static final String KEY_EMAIL_ADMIN_EMAIL_ADDRESS = "email.administrative.emailAddress";
-    private static final String REGARDS_CLINPORT = "email.catissuecore.team";
-    
+    private static final String adminEmailAddress = XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS);
     /**
      * Creates and sends the user registration approval emails to user and the administrator.
      * @param user The user whose registration is approved.
      * @param roleOfUser Role of the user.
+     * @throws Exception 
      */
-    public void sendApprovalEmail(final User user) throws ApplicationException
+    public void sendApprovalEmail(final User user)
     {
-        final String subject = ApplicationProperties
-        					.getValue("userRegistration.approve.subject");
-
-        String body = "Dear " + user.getLastName() +
-			        "," + user.getFirstName() +
-			        "\n\n"+ ApplicationProperties.getValue("userRegistration.approved.body.start") +
-			        getUserDetailsEmailBody(user); // Get the user details in the body of the email.
-
-        //Send login details email to the user.
-        sendLoginDetailsEmail(user, body);
-        String migratedToWustlkey = "";
-		if(user.getTargetIdpLoginName()!=null)
-		{
-			migratedToWustlkey = ApplicationProperties.getValue("migration.msg");
-		}
-
-		body = body + "\n\n" + migratedToWustlkey + "\n\n" +ApplicationProperties.getValue("userRegistration.thank.body.end") +
-		"\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-
-		//Send the user registration details email to the administrator.
-        final boolean emailStatus = sendEmailToAdministrator(subject, body);
-
-		if (emailStatus)
-        {
-            logger.info(ApplicationProperties
-                    .getValue("user.approve.email.success")
-                    + user.getLastName() + " " + user.getFirstName());
-        }
-        else
-        {
-            logger.info(ApplicationProperties
-                    .getValue("user.approve.email.failure")
-                    + user.getLastName() + " " + user.getFirstName());
-        }
-    }
-
-    /**
-     * Returns the users details to be incorporated in the email.
-     * @param user The user object.
-     * @return the users details to be incorporated in the email.
-     */
-    private String getUserDetailsEmailBody(final User user)
-    {
-        final String userDetailsBody = "\n\n" + ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName() +
-						"\n\n" + ApplicationProperties.getValue("user.lastName")+ Constants.SEPARATOR + user.getLastName() +
-						"\n\n" + ApplicationProperties.getValue("user.firstName")+ Constants.SEPARATOR + user.getFirstName() +
-						"\n\n" + ApplicationProperties.getValue("user.street")+ Constants.SEPARATOR + user.getAddress().getStreet() +
-						"\n\n" + ApplicationProperties.getValue("user.city")+ Constants.SEPARATOR + user.getAddress().getCity() +
-						"\n\n" + ApplicationProperties.getValue("address.zipCode")+ Constants.SEPARATOR + user.getAddress().getZipCode() +
-						"\n\n" + ApplicationProperties.getValue("user.state")+ Constants.SEPARATOR + user.getAddress().getState() +
-						"\n\n" + ApplicationProperties.getValue("user.country")+ Constants.SEPARATOR + user.getAddress().getCountry() +
-						"\n\n" + ApplicationProperties.getValue("user.phoneNumber")+ Constants.SEPARATOR + user.getAddress().getPhoneNumber() +
-						"\n\n" + ApplicationProperties.getValue("user.faxNumber")+ Constants.SEPARATOR + user.getAddress().getFaxNumber() +
-						"\n\n" + ApplicationProperties.getValue("user.emailAddress")+ Constants.SEPARATOR + user.getEmailAddress() +
-						"\n\n" + ApplicationProperties.getValue("user.institution")+ Constants.SEPARATOR + user.getInstitution().getName() +
-						"\n\n" + ApplicationProperties.getValue("user.department")+ Constants.SEPARATOR + user.getDepartment().getName() +
-						"\n\n" + ApplicationProperties.getValue("user.cancerResearchGroup")+ Constants.SEPARATOR + user.getCancerResearchGroup().getName();
-
-        return userDetailsBody;
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+		contextMap.put("user", user);
+		
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				Constants.USER_SIGNUP_EMAIL_TMPL,
+				new String[] { user.getEmailAddress(), adminEmailAddress },
+				contextMap);
+		logEmailStatus(user, emailStatus);
     }
 
     /**
@@ -114,37 +61,14 @@ public class EmailHandler
      */
     public void sendRejectionEmail(final User user)
     {
-        final String subject = ApplicationProperties.getValue("userRegistration.reject.subject");
-
-        String body = "Dear " + user.getLastName()
-        + "," + user.getFirstName()
-        + "\n\n"+ ApplicationProperties.getValue("userRegistration.reject.body.start");
-
-        //Append the comments given by the administrator, if any.
-        if ((user.getComments() != null)
-                && (!"".equals(user.getComments())))
-        {
-            body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.reject.comments")
-            					 + user.getComments();
-        }
-
-        body = body + "\n\n"+ ApplicationProperties.getValue("userRegistration.thank.body.end")
-        			+ "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-
-        final boolean emailStatus = sendEmailToUserAndAdministrator(user.getEmailAddress(), subject, body);
-
-        if (emailStatus)
-        {
-            logger.info(ApplicationProperties
-                    .getValue("user.reject.email.success")
-                    + user.getLastName() + " " + user.getFirstName());
-        }
-        else
-        {
-            logger.info(ApplicationProperties
-                    .getValue("user.reject.email.success")
-                    + user.getLastName() + " " + user.getFirstName());
-        }
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+		contextMap.put("user", user);
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				Constants.USER_REJECTION_EMAIL_TMPL,
+				new String[]{ user.getEmailAddress() },
+				new String[]{ adminEmailAddress },
+				null, contextMap, null);
+		logEmailStatus(user, emailStatus);
     }
 
     /**
@@ -153,110 +77,28 @@ public class EmailHandler
      */
     public void sendUserSignUpEmail(final User user)
     {
-        final String subject = ApplicationProperties.getValue("userRegistration.request.subject");
-
-        final String body = "Dear "+ user.getLastName()+","+ user.getFirstName() + "\n\n" +
-					  ApplicationProperties.getValue("userRegistration.request.body.start") + "\n" +
-					  getUserDetailsEmailBody(user) +
-					  "\n\n\t" + ApplicationProperties.getValue("userRegistration.request.body.end") +
-					  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-
-        final boolean emailStatus = sendEmailToUserAndAdministrator(user.getEmailAddress(), subject, body);
-
-        if (emailStatus)
-        {
-            logger.info(ApplicationProperties
-                    .getValue("userRegistration.email.success")
-                    + user.getLastName() + " " + user.getFirstName());
-        }
-        else
-        {
-            logger.info(ApplicationProperties
-                    .getValue("userRegistration.email.failure")
-                    + user.getLastName() + " " + user.getFirstName());
-        }
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+    	contextMap.put("user", user);
+    	boolean emailStatus = EmailClient.getInstance().sendEmail(
+    			Constants.USER_SIGNUP_EMAIL_TMPL,
+    			new String[]{ user.getEmailAddress() }, 
+    			contextMap);
+    	logEmailStatus(user, emailStatus);
     }
-
-    /**
-     * Creates and sends the login details email to the user.
-     * Returns true if the email is successfully sent else returns false.
-     * @param user The user whose login details are to be sent.
-     * @param userDetailsBody User registration details.
-     * @return true if the email is successfully sent else returns false.
-     * @throws DAOException
-     */
-    public boolean sendLoginDetailsEmail(final User user, final String userDetailsBody) throws ApplicationException
-    {
-        boolean emailStatus = false;
-
-        try
-        {
-            final String subject = ApplicationProperties
-								.getValue("loginDetails.email.subject");
-
-			String body = "Dear " + user.getFirstName()
-			    				  + " " + user.getLastName();
-
-			if (userDetailsBody != null)
-			{
-			    body = userDetailsBody;
-			}
-
-			final gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManagerFactory.getSecurityManager().getUserById(user.getCsmUserId().toString());
-
-//			List pwdList = new ArrayList(user.getPasswordCollection());
-//			Collections.sort(pwdList);
-//			Password password = (Password) pwdList.get(0);
-//			String roleOfUser = SecurityManager.getInstance(EmailHandler.class)
-//							.getUserRole(user.getCsmUserId().longValue()).getName();
-			body = body + "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start")
-				+ "\n\t "+ ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName()
-    		    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + csmUser.getPassword()
-			    + "\n\t "+ ApplicationProperties.getValue("user.role")// +  Constants.SEPARATOR + roleOfUser
-			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-
-			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
-			logEmailStatus(user, emailStatus);
-        }
-        catch(final SMException smExp)
-        {
-        	logger.error(smExp.getMessage(), smExp);
-            throw AppUtility.getApplicationException(smExp,smExp.getErrorKeyAsString(),  smExp.getMessage());
-        }
-
-        return emailStatus;
-    }
-
+    
     
     public boolean sendForgotPasswordEmail(final User user, final String userToken) throws ApplicationException
     {
-        boolean emailStatus = false;
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+		contextMap.put("user", user);
+		contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
+		contextMap.put("userToken", userToken);
 
-        try
-        {
-            final String subject = ApplicationProperties
-								.getValue("loginDetails.email.subject");
-
-			String body = "Hi,\n";
-	
-			final gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManagerFactory.getSecurityManager().getUserById(user.getCsmUserId().toString());
-			
-			body="You have requested to reset your caTissue application password. Please click the below link to reset:"
-				   +"\n\n\t "+CommonServiceLocator.getInstance().getAppURL()+"/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken="+userToken
-				   +"\n\tIgnore this email if you have not requested for the password reset and you will be able to login with your old password."
-				   + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-			
-			//System.out.println(CommonServiceLocator.getInstance().getAppURL()+"/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken="+userToken);
-
-			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
-			logEmailStatus(user, emailStatus);
-        }
-        catch(final SMException smExp)
-        {
-        	logger.error(smExp.getMessage(), smExp);
-            throw AppUtility.getApplicationException(smExp,smExp.getErrorKeyAsString(),  smExp.getMessage());
-        }
- 
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				  Constants.USER_FORGOT_PASSWORD_EMAIL_TMPL,
+				  new String[]{ user.getEmailAddress() },
+				  contextMap);
+		logEmailStatus(user, emailStatus);
         return emailStatus;
     }
 
@@ -268,14 +110,11 @@ public class EmailHandler
 	 */
 	private void logEmailStatus(final User user, final boolean emailStatus)
 	{
-		if (emailStatus)
-		{
+		if (emailStatus){
 			logger.info(ApplicationProperties
 			    .getValue("user.loginDetails.email.success")
 			    + user.getLastName() + " " + user.getFirstName());
-		}
-		else
-		{
+		} else {
 			logger.info(ApplicationProperties
 			    .getValue("user.loginDetails.email.failure")
 			    + user.getLastName() + " " + user.getFirstName());
@@ -289,16 +128,16 @@ public class EmailHandler
     public void sendReportedProblemEmail(final ReportedProblem reportedProblem)
     {
         // Send the reported problem to administrator and the user who reported it.
-        final String body = ApplicationProperties.getValue("email.reportProblem.body.start") +
-        			  "\n " + ApplicationProperties.getValue("reportedProblem.from") + " : " + reportedProblem.getFrom() +
-        			  "\n " + ApplicationProperties.getValue("reportedProblem.title") + " : " + reportedProblem.getSubject() +
-        			  "\n " + ApplicationProperties.getValue("reportedProblem.message") + " : " + reportedProblem.getMessageBody() +
-        			  "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-
-        final String subject = ApplicationProperties.getValue("email.reportProblem.subject");
-
-        final boolean emailStatus = sendEmailToUserAndAdministrator(reportedProblem.getFrom(), subject, body);
-
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+    	contextMap.put("reportedProblem", reportedProblem);
+    	
+        boolean emailStatus = EmailClient.getInstance().sendEmail(
+        		 Constants.USER_REPORTEDPROB_EMAIL_TMPL,
+        		 new String[]{ reportedProblem.getFrom() },
+        		 new String[]{ adminEmailAddress },
+        		 null, contextMap, null);
+        
+  
         if (emailStatus)
 		{
 			logger.info(ApplicationProperties
@@ -311,172 +150,26 @@ public class EmailHandler
 		}
     }
 
-    /**
-     * Sends email to the user with the email address passed.
-     * Returns true if the email is successfully sent else returns false.
-     * @param userEmailAddress Email address of the user.
-     * @param subject The subject of the email.
-     * @param body The body of the email.
-     * @return true if the email is successfully sent else returns false.
-     */
-    private boolean sendEmailToUser(final String userEmailAddress, final String subject, String body)
-    {
-    	final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-    	final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
- 		final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
- 		final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
- 		final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
- 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
- 		final String appUrl = CommonServiceLocator.getInstance().getAppURL();
- 		body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") +
- 		appUrl;
-
- 		/*SendEmail email = new SendEmail();
-         boolean emailStatus = email.sendmail(userEmailAddress, sendFromEmailAddress,
- 				                				mailServer, subject, body);*/
-         final EmailDetails emailDetails= new EmailDetails();
-         emailDetails.setToAddress(new String[]{userEmailAddress});
-         emailDetails.setSubject(subject);
-         emailDetails.setBody(body);
-         SendEmail email;
-         boolean emailStatus;
- 		try
- 		{
- 			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
- 			emailStatus=email.sendMail(emailDetails);
- 		}
- 		catch (final MessagingException messExcp)
- 		{
- 			emailStatus=false;
- 			logger.error(messExcp.getMessage(),messExcp);
- 		}
-         return emailStatus;
-    }
-
-    /**
-     * Sends email to the administrator and user with the email address passed.
-     * Returns true if the email is successfully sent else returns false.
-     * @param userEmailAddress Email address of the user.
-     * @param subject The subject of the email.
-     * @param body The body of the email.
-     * @return true if the email is successfully sent else returns false.
-     */
-    private boolean sendEmailToUserAndAdministrator(final String userEmailAddress, final String subject, String body)
-    {
-    	final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
-        final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
-        final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
-        final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-        final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
-    	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
- 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
-        final String appUrl = CommonServiceLocator.getInstance().getAppURL();
-        body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") +
-        appUrl;
-
-        /*SendEmail email = new SendEmail();
-        boolean emailStatus = email.sendmail(userEmailAddress, adminEmailAddress,
-                							 null, sendFromEmailAddress, mailServer, subject, body);*/
-        final EmailDetails emailDetails= new EmailDetails();
-        emailDetails.setToAddress(new String[]{userEmailAddress});
-        emailDetails.setCcAddress(new String[]{adminEmailAddress});
-        emailDetails.setSubject(subject);
-        emailDetails.setBody(body);
-        SendEmail email;
-        boolean emailStatus;
-		try
-		{
-			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
-			emailStatus=email.sendMail(emailDetails);
-		}
-		catch (final MessagingException messExcp)
-		{
-			emailStatus=false;
-			logger.error(messExcp.getMessage(),messExcp);
-		}
-        return emailStatus;
-    }
-
-    /**
-     * Sends email to the administrator.
-     * Returns true if the email is successfully sent else returns false.
-     * @param subject The subject of the email.
-     * @param body The body of the email.
-     * @return true if the email is successfully sent else returns false.
-     */
-    private boolean sendEmailToAdministrator(final String subject, String body)
-    {
-    	 final String adminEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
-         final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
-         final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
-         final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-         final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
-     	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
- 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
-         final String appUrl = CommonServiceLocator.getInstance().getAppURL();
-         body = body + "\n\n" + ApplicationProperties.getValue("loginDetails.catissue.url.message") +
-         appUrl;
-
-        /* SendEmail email = new SendEmail();
-         boolean emailStatus = email.sendmail(adminEmailAddress,
-                 								sendFromEmailAddress, mailServer, subject, body);*/
-         final EmailDetails emailDetails= new EmailDetails();
-         emailDetails.setToAddress(new String[]{adminEmailAddress});
-         emailDetails.setSubject(subject);
-         emailDetails.setBody(body);
-         SendEmail email;
-         boolean emailStatus;
- 		try
- 		{
- 			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
- 			emailStatus=email.sendMail(emailDetails);
- 		}
- 		catch (final MessagingException messExcp)
- 		{
- 			emailStatus=false;
- 			logger.error(messExcp.getMessage(),messExcp);
- 		}
-         return emailStatus;
-    }
-
-    /**
+	/**
      * Sends email to Administrator and CC to Scientist on successful placement of order.
      *
      * Returns true if mail is sent successfully.
+	 * @param orderPlacementTempl 
+	 * @param contextMap 
      * @param none
      * @return boolean indicating true/false
      */
 
-    public boolean sendEmailForOrderingPlacement(final String ccEmailAddress,final String emailBody,final String subject)
+    public boolean sendEmailForOrderPlacement(User user, OrderDetails order)
     {
-    	final String toEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
-    	final String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
-    	final String sendFromEmailPassword = XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword");
-    	final String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-    	final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
-    	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
- 		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
-
-    	/*SendEmail email = new SendEmail();
-    	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress,null,
-					sendFromEmailAddress, mailServer, subject, emailBody);*/
-    	final EmailDetails emailDetails= new EmailDetails();
-        emailDetails.setToAddress(new String[]{toEmailAddress});
-        emailDetails.setCcAddress(new String[]{ccEmailAddress});
-        emailDetails.setSubject(subject);
-        emailDetails.setBody(emailBody);
-        SendEmail email;
-        boolean emailStatus;
-		try
-		{
-			email = new SendEmail(mailServer,sendFromEmailAddress,sendFromEmailPassword,mailServerPort,isSMTPAuthEnabled,isStartTLSEnabled);
-			emailStatus=email.sendMail(emailDetails);
-		}
-		catch (final MessagingException messExcp)
-		{
-			emailStatus=false;
-			logger.error(messExcp.getMessage(),messExcp);
-		}
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+		contextMap.put("user", user);
+		contextMap.put("order",order);
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				 Constants.ORDER_PLACEMENT_EMAIL_TMPL,
+				 new String[]{ adminEmailAddress },
+				 new String[]{ user.getEmailAddress() },
+				 null, contextMap, order.getName());
     	return emailStatus;
     }
     /**
@@ -491,11 +184,7 @@ public class EmailHandler
     	final String mailServerPort = XMLPropertyHandler.getValue("email.mailServer.port");
     	final String isSMTPAuthEnabled = XMLPropertyHandler.getValue("email.smtp.auth.enabled");
  		final String isStartTLSEnabled = XMLPropertyHandler.getValue("email.smtp.starttls.enabled");
-        /*SendEmail email = new SendEmail();
-        logger.info("Email body..........  \n"  + body);
-        System.out.println("Email body..........  \n"  + body);
-        boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress, bccEmailAddress,
-    			fromEmailAddress, mailServer, subject, body);*/
+     
         final EmailDetails emailDetails= new EmailDetails();
         emailDetails.setToAddress(new String[]{toEmailAddress});
         emailDetails.setCcAddress(new String[]{ccEmailAddress});
@@ -514,56 +203,33 @@ public class EmailHandler
 			emailStatus=false;
 			logger.error(messExcp.getMessage(),messExcp);
 		}
-
     	logger.info("EmailStatus  "  + emailStatus);
         return emailStatus;
     }
 
-    public void sendEMPIAdminUserNotExitsEmail() throws BizLogicException, MessagingException{
-		String subject = ApplicationProperties.getValue("empi.adminuser.notexists.subject");
-		StringBuilder body = new StringBuilder();
-		body.append(STR_CONST_DEAR);
-		body.append("Administrator");
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue("empi.adminuser.notexists.body.start"));
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue("empi.adminuser.notexists.comments"));
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue("empi.adminuser.invalid.body.end"));
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue(REGARDS_CLINPORT));
-
-		boolean emailStatus;
-		emailStatus = sendEmailToAdministrator(subject, body.toString());
-
-		if (!emailStatus)
-		{
+    public void sendEMPIAdminUserNotExitsEmail(){
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+		boolean emailStatus = EmailClient.getInstance()
+				.sendEmail(
+						Constants.EMPI_ADMINUSER_NOTEXISTS_EMAIL_TMPL,
+						new String[] { adminEmailAddress },
+						contextMap);
+		 
+		if (!emailStatus) {
 			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.notexists.email.failure") + XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
 		}
 	}
     
-    public void sendEMPIAdminUserClosedEmail(User sendEMPIAdminUserInvalidEmail) throws BizLogicException, MessagingException{
-		String subject = ApplicationProperties.getValue("empi.adminuser.closed.subject");
-		StringBuilder body = new StringBuilder();
-		body.append(STR_CONST_DEAR);
-		body.append(sendEMPIAdminUserInvalidEmail.getLastName() + ",");
-		body.append(sendEMPIAdminUserInvalidEmail.getFirstName());
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue("empi.adminuser.closed.body.start"));
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue("empi.adminuser.closed.comments"));
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue("empi.adminuser.invalid.body.end"));
-		body.append(STR_CONST_CRLF);
-		body.append(ApplicationProperties.getValue(REGARDS_CLINPORT));
-
-		boolean emailStatus;
-		emailStatus = sendEmailToAdministrator(subject, body.toString());
-
-		if (!emailStatus)
-		{
+    public void sendEMPIAdminUserClosedEmail(User eMPIAdminUser){
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+    	contextMap.put("user", eMPIAdminUser);
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				 Constants.EMPI_ADMINUSER_CLOSED_EMAIL_TMPL,
+				 new String[]{ adminEmailAddress }, 
+				 contextMap);
+			
+		if (!emailStatus) {
 			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
 		}
-	}
-    
+	}   
 }

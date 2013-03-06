@@ -5923,4 +5923,15 @@ public class Constants
 	
 	public static final String ENTITY_SPECIMEN_TAG = "SpecimenListTag";
 	public static final String ENTITY_SPECIMEN_TAGITEM = "SpecimenListTagItem";
+ 
+
+	public static final String SHARE_SPECIMEN_LIST_EMAIL_TMPL = "specimen.shareSpecimenListTemplate";
+	public static final String USER_APPROVAL_EMAIL_TMPL = "user.approvalTemplate";
+	public static final String USER_SIGNUP_EMAIL_TMPL = "user.signUpTemplate";
+	public static final String USER_REJECTION_EMAIL_TMPL = "user.rejectionTemplate"; 
+	public static final String USER_REPORTEDPROB_EMAIL_TMPL = "user.reportedProblemTemplate";
+	public static final String USER_FORGOT_PASSWORD_EMAIL_TMPL = "user.forgotPasswordTemplate";
+	public static final String EMPI_ADMINUSER_CLOSED_EMAIL_TMPL = "eMPI.adminUserClosedTemplate";  
+	public static final String EMPI_ADMINUSER_NOTEXISTS_EMAIL_TMPL = "eMPI.adminUserNotExitsTemplate"; 
+	public static final String ORDER_PLACEMENT_EMAIL_TMPL = "order.orderPlacementTemplate";
 }
