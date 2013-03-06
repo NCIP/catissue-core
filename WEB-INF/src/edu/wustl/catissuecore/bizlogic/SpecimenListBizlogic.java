@@ -340,8 +340,10 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			for(Long sUserId:selectedUsers){
 				selectedUserSet.add (UserCache.getUser(sUserId.toString()));		
 			}
-			TagUtil.sendSharedTagEmailNotification(user, specimens, 
+			if (! specimens.isEmpty()){
+				TagUtil.sendSharedTagEmailNotification(user, specimens, 
 					selectedUserSet, Constants.SHARE_SPECIMEN_LIST_EMAIL_TMPL);
+			}
 		} catch (Exception e) {
 			LOGGER.error("Error while sending email for query folder",e);
 		} 
