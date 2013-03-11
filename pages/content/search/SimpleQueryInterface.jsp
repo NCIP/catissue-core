@@ -67,7 +67,7 @@
 %>
 <script>
 
-
+ setDateFormat("<%=CommonServiceLocator.getInstance().getDatePattern()%>");
 
 function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv,ctr)
 {
