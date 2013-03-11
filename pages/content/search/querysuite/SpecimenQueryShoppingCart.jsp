@@ -33,7 +33,7 @@
 <script src="jss/script.js"></script>
 <script type="text/javascript" src="jss/tag-popup.js"></script>
 <link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
-<script src="dhtmlx_suite/dhtml_pop/js/spec_dhtmlXTreeGrid.js"></script>  
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>  
 
 <style>
 .active-column-0 {width:30px}

@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
 <script type='text/JavaScript' src='jss/advQuery/scwcalendar.js'></script>
+<link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
 
 <script>
 function checkForValidation()
@@ -26,7 +27,7 @@ function checkForValidation()
 		}
 		else
 		{
-			ajaxShareTagFunctionCall("ShareTagAction.do","Select at least one existing list or create a new list.") 
+			ajaxShareTagFunctionCall("ShareTagAction.do","Select at least one existing list.") 
 		}
 	}
 }
@@ -59,14 +60,15 @@ combo.on("expand", function() {
 function setHeader(isSpecimenChecked)
 {
 	if(isSpecimenChecked == true){		 
-		document.getElementById("poupHeader").textContent ="Add Specimens to list";
-		document.getElementById("poupHeader").innerText ="Add Specimens to list";
+		document.getElementById("poupHeader").textContent ="Assign the specimen(s) to list";
+		document.getElementById("poupHeader").innerText ="Assign the specimen(s) to list";
 	}else{
-		document.getElementById("poupHeader").textContent ="Share List with users";
+		document.getElementById("poupHeader").textContent ="Share the list(s) with user";
 		document.getElementById('protocolCoordinatorIds').style.marginLeft= "15px";
 		document.getElementById('addButton_coord').style.marginLeft= "23px";
 		document.getElementById('removeButton_coord').style.marginLeft= "23px";
-		document.getElementById("poupHeader").innerText ="Share List with users";
+		popupmygrid.setColumnHidden(2,true);
+		document.getElementById("poupHeader").innerText ="Share the list(s) with user";
 	} 
 }
 </script>
@@ -88,9 +90,9 @@ function setHeader(isSpecimenChecked)
 						cellpadding="0" border="0">
 							<tr valign="center" height="35" bgcolor="#d5e8ff">
 								<td width="27%" align="left"
-									style="font-size: .82em; font-family: verdana;">
+									style="font-size: 1em; font-family: verdana;">
 									<p>
-										&nbsp&nbsp&nbsp&nbsp<div id="poupHeader" style="font-size: 1em; margin-left:35px; font-weight:bold; font-family: verdana;"><b> Specimen Lists </b></div>
+									     <div id="poupHeader"><b> Specimen Lists </b></div>
 									</p>
 								</td>
 							</tr>
@@ -132,7 +134,7 @@ function setHeader(isSpecimenChecked)
 												onkeydown="<%=assignTargetCall%> "  class="btn3">
 				 
  										&nbsp&nbsp&nbsp
-										<input type="button"  id="shareButton" value="SHARE" title="Share List (List will be visible to the users you choose)" onclick="checkForValidation()"
+										<input type="button"  id="shareButton" value="SHARE LIST" title="Share List (List will be visible to the users you choose)" onclick="checkForValidation()"
 												onkeydown="checkForValidation()" style="display:none; width:120px; display:none" class="btn3">
 									</p>
 								</td>

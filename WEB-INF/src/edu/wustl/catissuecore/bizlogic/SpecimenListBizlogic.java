@@ -234,11 +234,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			tagDAO = new TagDAO(Constants.ENTITY_SPECIMEN_TAGITEM);
 			TagItem tagItem = tagDAO.getTagItemById(tagItemId);
 			Tag tag = tagItem.getTag(); 
-			if(tag.getUserId() == userId){
-				tagDAO.deleteTagItem(tagItem);
-			} else {
-				LOGGER.error("User does not have authority to delete this item");
-			}
+			tagDAO.deleteTagItem(tagItem); 
 			tagDAO.commit();
 		}
 		catch (DAOException e)
@@ -311,16 +307,13 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			{
 				tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
 				Tag tag = tagDao.getTagById(tagId);
-				if(tag.getUserId() == userId)
-				{
-					if(selectedUsers.contains(tag.getUserId())) {
-						selectedUsers.remove(tag.getUserId());
-					}
-					tag.getSharedUserIds().addAll(selectedUsers);
-					tagDao.updateTag(tag);
-					tagDao.commit();
-					specimens.add(tag);
+				if(selectedUsers.contains(tag.getUserId())) {
+					selectedUsers.remove(tag.getUserId());
 				}
+				tag.getSharedUserIds().addAll(selectedUsers);
+				tagDao.updateTag(tag);
+				tagDao.commit();
+				specimens.add(tag);
 			}
 			catch (DAOException e)
 			{
@@ -364,19 +357,13 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		{
 			Tag tag = getTagById(tagId);
 			tagDAO = new TagDAO(Constants.ENTITY_SPECIMEN_TAGITEM);	
-			if(tag.getUserId() == userId){
-				tagDAO.deleteTagItemsFromObjIds(specimenIds, tagId);
-			} else {
-				throw new Exception("User does not have authority to delete this item(s)");
-			}
+			tagDAO.deleteTagItemsFromObjIds(specimenIds, tagId);
 			tagDAO.commit();
 		}
 		catch (DAOException e)
 		{
 			throw new BizLogicException(e);
-		} catch (Exception e) {
-			LOGGER.error("User does not have authority to delete this item(s)",e);
-		}
+		}  
 		finally
 		{
 			if(tagDAO != null)
