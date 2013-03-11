@@ -103,34 +103,22 @@
 		}		
 	}
 	var dhxWins;
+	var interVeil;
 	function downloadReport(reportType){
-		if(dhxWins == undefined){
-			dhxWins = new dhtmlXWindows();
-			dhxWins.enableAutoViewport(true);
-			dhxWins.setSkin("dhx_skyblue");
 		
+		if(hasUploadedReport=="true"){
+			reportType = "uploadedFile";
 		}
-		//dhxWins.setImagePath("dhtmlx_suite/imgs/");
-		if(dhxWins.window("containerPositionPopUp")==null){
-			var w =250;
-			var h =150;
-			var x = (screen.width / 3) - (w / 2);
-			var y = 0;
-			dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-			dhxWins.window("containerPositionPopUp").allowResize();
-			//dhxWins.window("containerPositionPopUp").setModal(true);
-			dhxWins.window("containerPositionPopUp").setText("Terms and Conditions");
-			dhxWins.window("containerPositionPopUp").button("minmax1").hide();
-			dhxWins.window("containerPositionPopUp").button("park").hide();
-			dhxWins.window("containerPositionPopUp").button("close").hide();
-			var div = document.createElement("div");
-			div.id="popupDiv";
-			div.innerHTML = "<div style='padding-left:10px;padding-top:30px;' class='black_ar'><input type='checkbox' name='termCheckbox' id='termCheckbox' value='termCheckbox' >I agree to the <a href='#'>Terms & Condiitons.</a></div>"
-			+"<div style='padding-left:10px;padding-top:30px;' class='black_ar'>"+
-			"<input type='button' name='Ok' onClick='downloadSpr(\""+reportType+"\")' value='Ok' style='margin-left:45px'><input type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'></div>";
-			document.body.appendChild(div);
-			dhxWins.window("containerPositionPopUp").attachObject("popupDiv");
+		var options={
+			scgId:'<%=request.getParameter("id")%>',
+			dwdIframe : document.getElementById("sprExportFrame"),
+			sprNumber :'<%=formSPR.getSurgicalPathologyNumber()%>',
+			identifiedId : document.getElementsByName("identifiedReportId")[0].value,
+			deIdentifiedId : document.getElementsByName("deIdentifiedReportId")[0].value,
+			reportType :reportType
 		}
+		window.parent.downloadReport(reportType,options);
+		
 	}
 	function downloadSpr(reportType){
 		if(document.getElementById("termCheckbox").checked){
@@ -160,12 +148,11 @@
 					//Response is ready
 					if(request.status == 200)
 					{
-					document.getElementsByName("identifiedReportId")[0].value="";
-						var responseString = request.responseText;
+						document.getElementsByName("identifiedReportId")[0].value="";
 						var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1";
 						//ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1
-									document.forms[0].action=action;
-									document.forms[0].submit();
+						document.forms[0].action=action;
+						document.forms[0].submit();
 					}
 					
 				}	

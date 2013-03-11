@@ -1,9 +1,9 @@
 
 var UploadHandlerXhr = UploadHandlerXhr || {};
 var FileUploader = function(o){
-	/*if(UploadHandlerXhr.isSupported()){
+	if(UploadHandlerXhr.isSupported()){
 		new UploadHandlerXhr(o).upload()
-	}else*/{
+	}else{
 		new UploadHandlerForm(o).upload()
 	}
 }	

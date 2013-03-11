@@ -142,7 +142,7 @@ function showAnnotations()
 								<span id="existingSprName" style="font-weight:normal;"></span>
 								</div>
 								<div style="float:left;">
-									<a href="#" style="border:0px"><img  style="border:0px" src='images/delete-alt.png' onclick='deleteReport()'/></a>
+									<a href="#" style="border:0px"><img  style="border:0px" src='images/delete-alt.png'  title="Click to delete report." onclick='deleteReport()'/></a>
 								</div>
 							</div>
 						</td>
