@@ -334,11 +334,8 @@ function showTreeMessage() {
 } 
 //Ajax Function for Delete Folders of TreeGrid 
 function ajaxTagDeleteCall(tagId) {
- var childCount=popupmygrid.hasChildren(tagId);
-folderDeleteMsg = folderDeleteMsg.replace('{0}',1);
-folderDeleteMsg = folderDeleteMsg.replace(/\d+/g,childCount); 
 var url = "TagDeleteAction.do";
-var answer = confirm (folderDeleteMsg)
+var answer = confirm ("Are you sure you want to delete?")
 if (answer)
  {
 
@@ -368,7 +365,7 @@ function doOnDelete()
 }
 //Ajax Function for Delete Queries in Folders  of TreeGrid 
 function ajaxObjDeleteCall(tagItemId) {
-var answer = confirm (queryDeleteMsg)
+var answer = confirm ("Are you sure you want to delete?")
 if (answer)
  {
 var url = "TagItemDeleteAction.do";
@@ -436,35 +433,19 @@ else
 		 childCount=arrObj.childCount;
  		for(count=0;count<objLength;count++)
  			{
-			var tagItemId=arrObj.treeData[count].id;
-			 		
-popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall("+tagItemId+")'/>"],(new Date()).valueOf(),tagID);
-	pause(10);
+ 				var tagItemId=arrObj.treeData[count].id; 		
+				if(arrObj.userId != arrObj.treeData[count].ownerId){
+					popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,],0,tagID);
+				}else{
+					popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall("+tagItemId+")'/>"],(new Date()).valueOf(),tagID);
+				}
+				pause(10);
  			}
 		}
  	
 	 }	 
 }
-//Ajax function to get Count of Queries Inside the Folder 
-function ajaxDeleteCall(tagId) {
-	var url = "GetTreeGridChildAction.do";
-if(entityTag == "SpecimenListTag"){ajaxTagDeleteCall(tagId);}
-else{ 
-	if (window.XMLHttpRequest)
-  { 
-  xmlHttpobj=new XMLHttpRequest();
-  }
-else
-  { 
-  xmlHttpobj=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-	xmlHttpobj.open("POST", url, true);
-	tagID=tagId;	
-	xmlHttpobj.setRequestHeader("Content-Type",
-			"application/x-www-form-urlencoded");
-	xmlHttpobj.onreadystatechange =getJsonDeleteObj;
-	xmlHttpobj.send("&tagId=" +tagId+"&entityTag=" +entityTag);
- }}
+ 
  function pause(numberMillis) {
 	var now = new Date();
 	var exitTime = now.getTime() + numberMillis;
@@ -474,24 +455,4 @@ else
 	return;
 	}
 }
- function getJsonDeleteObj()
- {
-	 if (xmlHttpobj.readyState == 4) 
-	 {
-		 var tree=xmlHttpobj.responseText;
-		 arrObj = eval('(' +tree+ ')');	 
-		 var objLength=arrObj.treeData.length;
-		 var count;
- 		 childCount=popupmygrid.hasChildren(tagID);
- 		 if(childCount==0)
- 		 {
-		 	childCount=arrObj.childCount;
- 			for(count=0;count<objLength;count++)
- 			{
- 				var tagItemId=arrObj.treeData[count].id; 		
- 				popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall('"+tagItemId+"','"+folderDeleteMsg+"')'/>"],0,tagID);
- 				pause(10);			
- 			}
-		}
- 		ajaxTagDeleteCall(tagID);	}	
-}
+ 
