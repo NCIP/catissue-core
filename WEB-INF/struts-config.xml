@@ -5746,6 +5746,11 @@ PUBLIC
 		<action path="/StorageContainerAjaxAction"
 			type="edu.wustl.catissuecore.action.StorageContainerAjaxAction"
 			scope="request" />
+		<action path="/StoragePositionAjaxAction"
+			type="edu.wustl.catissuecore.action.StoragePositionAjaxAction"
+			scope="request" />
+		<action path="/TransferEventAction"
+			type="edu.wustl.catissuecore.action.TransferEventAjaxAction" scope="request" />
 		<action path="/SpecimenTypeDataAction"
 			type="edu.wustl.catissuecore.action.SpecimenTypeDataAction" scope="request" />
 
@@ -5955,7 +5960,6 @@ PUBLIC
 			validate="false" scope="request" parameter="type">
 			
 		</action>
-
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

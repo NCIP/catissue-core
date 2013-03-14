@@ -89,6 +89,28 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		return responseString.toString();
 	}
 	
+	/**
+	 * This function returns result in xml format to populate dhtmlxcombo box.
+	 * @param identifier
+	 * @param stringValue
+	 * @param name name of the container
+	 * @param populateValueInCombo attribute to set default selected value.
+	 * @return
+	 */
+	private String addRowToResponseXMLForDHTMLXcombo(String stringValue, String name,String populateValueInCombo)
+	{
+		String selected=" selected=\"1\" ";
+		
+		StringBuffer responseString = new StringBuffer("<option value=\""+name+"\"");
+		if("1".equals(stringValue) && "true".equals(populateValueInCombo))
+		{
+			responseString.append(selected);
+		}
+		responseString.append(">"+name);
+		responseString.append("</option>");
+		return responseString.toString();
+	}
+	
 	public ActionForward getUserListAsJSon(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
 	{
@@ -237,6 +259,53 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
 		}
 		responseString.append(Constants.XML_ROWS_END);
+		response.setContentType(Constants.CONTENT_TYPE_XML);
+		response.getWriter().write(responseString.toString());
+		return null;
+			}
+	
+	/**
+	 * This function returns storage container names list for dhtmlx combo box.
+	 */
+	
+	public ActionForward getStorageContainerListForDHTMLXcombo(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+			{
+		List <NameValueBean>containerList=new ArrayList<NameValueBean>();
+		String contName=request.getParameter(Constants.CONTAINER_NAME);
+		String populateValueInCombo=request.getParameter("populateValueInCombo");
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
+		DAO dao = AppUtility.openDAOSession(sessionData);
+		long cpId=0;
+		if(!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)) && !"null".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
+		{
+			cpId=Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
+		}
+		String spType=request.getParameter("specimenType");
+		String spClass=request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
+		StorageContainerForSpecimenBizLogic bizLogic=new StorageContainerForSpecimenBizLogic();
+		LinkedHashMap treeMap=bizLogic.getAutoAllocatedContainerListForSpecimen(AppUtility.setparameterList(cpId,spClass,0,spType), sessionData, dao, contName);
+		if(treeMap!=null)
+		{
+			containerList=AppUtility.convertMapToList(treeMap);
+		}
+		AppUtility.closeDAOSession(dao);
+		StringBuffer responseString = new StringBuffer(Constants.XML_START);
+		responseString.append("<complete>");
+		NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));
+		String tranferEventId=(String)request.getParameter("transferEventParametersId");
+		if(tranferEventId==null || "0".equals(tranferEventId))
+		{
+			Integer i=1;
+			for (NameValueBean nvb : containerList)
+			{
+				responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(), nvb.getName(),populateValueInCombo));
+				i=i+1;
+			}
+			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(), virtualBean.getName(),populateValueInCombo));
+		}
+		responseString.append("</complete>");
 		response.setContentType(Constants.CONTENT_TYPE_XML);
 		response.getWriter().write(responseString.toString());
 		return null;
