@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -451,9 +450,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setTissueSite(characteristics.getTissueSite());
 		}
 		String concentration = "";
-		if ("Molecular".equals(specimen.getClassName()))
+		if(Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
-			concentration = String.valueOf(((MolecularSpecimen) specimen)
+			concentration = String.valueOf((specimen)
 					.getConcentrationInMicrogramPerMicroliter());
 		}
 		specimenDataBean.setConcentration(concentration);

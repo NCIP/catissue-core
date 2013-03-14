@@ -266,7 +266,7 @@ public final class MultipleSpecimenValidationUtil
 
 		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
-		String specimenClass = AppUtility.getSpecimenClassName(specimen);
+		String specimenClass = specimen.getClassName();
 
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{

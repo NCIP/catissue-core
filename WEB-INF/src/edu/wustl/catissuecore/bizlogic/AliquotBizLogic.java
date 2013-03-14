@@ -15,7 +15,6 @@ import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
 import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Aliquot;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -89,7 +88,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			NewSpecimenBizLogic newSpecimenBizLogic = new NewSpecimenBizLogic();
 			for (int i = 0; i < aliquotCount; i++)
 			{
-				Specimen specimen = AppUtility.getSpecimen(aliquot.getSpecimen());
+				Specimen specimen = new Specimen();
 				populateAliquotObject(specimen, aliquot, i, specimenPosList, newSpecimenBizLogic, dao);
 				boolean flag = newSpecimenBizLogic.validate(specimen, dao, Constants.ADD);
 				if (flag)
@@ -653,9 +652,9 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		aliquotSpecimen.setAvailableQuantity(aliquotDetailObj.getQuantityPerAliquot());
 		spePositionObj.setSpecimen(aliquotSpecimen);
 		aliquotSpecimen.setSpecimenPosition(spePositionObj);
-		if(aliquotSpecimen  instanceof MolecularSpecimen ){
-			((MolecularSpecimen) aliquotSpecimen).setConcentrationInMicrogramPerMicroliter(((MolecularSpecimen)parentSpecimen).getConcentrationInMicrogramPerMicroliter());
-		}
+//		if(aliquotSpecimen  instanceof MolecularSpecimen ){
+		if(Constants.MOLECULAR.equals(aliquotSpecimen.getClassName()))
+			(aliquotSpecimen).setConcentrationInMicrogramPerMicroliter((parentSpecimen).getConcentrationInMicrogramPerMicroliter());
 		aliquotSpecimen.setCreatedOn(aliquotDetailObj.getCreatedDate());
 		aliquotSpecimen.setLineage(Constants.ALIQUOT);
 		aliquotSpecimen.setIsAvailable(Boolean.TRUE);
@@ -670,7 +669,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @return Specimen
 	 */
 	private Specimen createAliquotSpecimen(Specimen parentSpecimen){
-		Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
+		Specimen aliquotSpecimen = new Specimen();
 		aliquotSpecimen.setSpecimenClass(parentSpecimen.getClassName());
 		aliquotSpecimen.setSpecimenType(parentSpecimen.getSpecimenType());
 		aliquotSpecimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());

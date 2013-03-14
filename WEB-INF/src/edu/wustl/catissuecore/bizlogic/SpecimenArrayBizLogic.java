@@ -15,11 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ContainerPosition;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -29,7 +26,6 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -393,7 +389,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						}
 
 						// if molecular then check available quantity
-						if (specimen instanceof MolecularSpecimen)
+						if (Constants.MOLECULAR.equals(specimen.getClassName()))
 						{
 							if (specimenArrayContent.getInitialQuantity() != null)
 							{
@@ -477,7 +473,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 							|| newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
 					{
 						final Specimen oldSpecimen = this.getSpecimen(dao, oldSpecimenArrayContent);
-						if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
+						if (oldSpecimen != null && Constants.MOLECULAR.equals(oldSpecimen.getClassName()))
 						{
 							final Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity();
 							Double quantity = oldSpecimen.getAvailableQuantity();
@@ -591,12 +587,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 *            quantity
 	 * @return whether the quantity is available.
 	 */
-	private boolean isAvailableQty(Specimen specimen, double quantity)
+	private boolean isAvailableQty(Specimen molecularSpecimen, double quantity)
 	{
 
-		if (specimen instanceof MolecularSpecimen)
+		if (Constants.MOLECULAR.equals(molecularSpecimen.getClassName()))
 		{
-			final MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
 			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity()
 					.toString());// molecularSpecimen.
 			// getAvailableQuantityInMicrogram
@@ -712,7 +707,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	{
 		boolean compatible = false;
 		final String arraySpecimenClassName = arrayType.getSpecimenClass();
-		final String specSpecimenClassName = this.getClassName(specimen);
+		final String specSpecimenClassName = specimen.getClassName();//this.getClassName(specimen);
 
 		if (arraySpecimenClassName.equals(specSpecimenClassName))
 		{
@@ -728,28 +723,28 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @return String
 	 */
 
-	public final String getClassName(Specimen specimen)
-	{
-		String className = "";
-
-		if (specimen instanceof CellSpecimen)
-		{
-			className = Constants.CELL;
-		}
-		else if (specimen instanceof MolecularSpecimen)
-		{
-			className = Constants.MOLECULAR;
-		}
-		else if (specimen instanceof FluidSpecimen)
-		{
-			className = Constants.FLUID;
-		}
-		else if (specimen instanceof TissueSpecimen)
-		{
-			className = Constants.TISSUE;
-		}
-		return className;
-	}
+//	public final String getClassName(Specimen specimen)
+//	{
+//		String className = "";
+//
+//		if (specimen instanceof CellSpecimen)
+//		{
+//			className = Constants.CELL;
+//		}
+//		else if (specimen instanceof MolecularSpecimen)
+//		{
+//			className = Constants.MOLECULAR;
+//		}
+//		else if (specimen instanceof FluidSpecimen)
+//		{
+//			className = Constants.FLUID;
+//		}
+//		else if (specimen instanceof TissueSpecimen)
+//		{
+//			className = Constants.TISSUE;
+//		}
+//		return className;
+//	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.ContainerPosition;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -301,7 +300,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			while (itr.hasNext())
 			{
 				final SpecimenArrayContent arrayContent = (SpecimenArrayContent) itr.next();
-				if (arrayContent.getSpecimen() instanceof MolecularSpecimen)
+				if (Constants.MOLECULAR.equals(arrayContent.getSpecimen().getClassName()))
 				{
 					arrayContent.setInitialQuantity(Double.valueOf("0"));
 				}
@@ -418,7 +417,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 						parentSpecimenArrayContent.getSpecimen().getId());
 
 				new Double(0);
-				if (specimen instanceof MolecularSpecimen)
+				if (Constants.MOLECULAR.equals(specimen.getClassName()))
 				{
 					if (aliquotCount > 0)
 					{

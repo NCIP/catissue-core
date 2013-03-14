@@ -24,13 +24,9 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -729,26 +725,27 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public final String getDomainObjectClassName(final Specimen specimen)
 	{
-		String className = null;
+//		String className = null;
 
-		if (specimen instanceof CellSpecimen)
-		{
-			className = "Cell";
-		}
-		else if (specimen instanceof MolecularSpecimen)
-		{
-			className = "Molecular";
-		}
-		else if (specimen instanceof FluidSpecimen)
-		{
-			className = "Fluid";
-		}
-		else if (specimen instanceof TissueSpecimen)
-		{
-			className = "Tissue";
-		}
+//		if (specimen instanceof CellSpecimen)
+//		{
+//			className = "Cell";
+//		}
+//		else if (specimen instanceof MolecularSpecimen)
+//		{
+//			className = "Molecular";
+//		}
+//		
+//		
+//			
+//		else if (specimen instanceof TissueSpecimen)
+//		{
+//			className = "Tissue";
+//		}
+//		else
+//			className = specimen.getClassName();
 
-		return className;
+		return specimen.getClassName();
 	}
 
 	/**

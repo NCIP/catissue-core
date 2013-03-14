@@ -167,6 +167,16 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 */
 	private String applyChangesTo = Constants.APPLY_NONE;
 
+	private Double concentrationInMicrogramPerMicroliter; 
+	public Double getConcentrationInMicrogramPerMicroliter() {
+		return concentrationInMicrogramPerMicroliter;
+	}
+
+	public void setConcentrationInMicrogramPerMicroliter(
+			Double concentrationInMicrogramPerMicroliter) {
+		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
+	}
+
 	protected Collection<SpecimenRecordEntry> specimenRecordEntryCollection = new HashSet<SpecimenRecordEntry>();
 
 	/**
@@ -770,12 +780,13 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						}
 						else
 						{
-							this.specimenPosition.storageContainer.setName(form
+							this.setSpecimenPosition(form);
+							/*this.specimenPosition.storageContainer.setName(form
 									.getSelectedContainerName());
 							this.specimenPosition.setPositionDimensionOneString(form.getPos1());
 							this.specimenPosition.setPositionDimensionTwoString(form.getPos2());
 							StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPos1(), form.getPos2(), specimenPosition);
-							this.specimenPosition.specimen = this;
+							this.specimenPosition.specimen = this;*/
 						}
 					}
 					if (form.isParentPresent())
@@ -860,7 +871,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					}
 
 					//this.storageContainer.setId(new Long(form.getStorageContainer()));
-					this.parentSpecimen = new CellSpecimen();
+					this.parentSpecimen = new Specimen();
 
 					//this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 					((Specimen) this.parentSpecimen).setLabel(form.getParentSpecimenLabel());
@@ -1278,6 +1289,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		this.specimenClass = reqSpecimen.getClassName();
 		this.isAvailable = Boolean.FALSE;
 		this.specimenRequirement = reqSpecimen;
+		this.concentrationInMicrogramPerMicroliter = reqSpecimen.getConcentrationInMicrogramPerMicroliter();
 	}
 
 	/**

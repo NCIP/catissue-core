@@ -15,7 +15,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
@@ -26,23 +25,18 @@ import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
-import edu.wustl.catissuecore.util.ParticipantComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -842,7 +836,7 @@ public class FlexInterface
 		}
 		if (specimen.getClassName().equalsIgnoreCase("Molecular"))
 		{
-			sb.concentration = ((MolecularSpecimen) specimen)
+			sb.concentration = (specimen)
 					.getConcentrationInMicrogramPerMicroliter();
 		}
 
@@ -902,35 +896,6 @@ public class FlexInterface
 		return externalIdentiferBeanColl;
 	}
 
-	/**
-	 * Gets the specimen instance.
-	 *
-	 * @param specimenClass the specimen class
-	 *
-	 * @return Specimen object
-	 */
-	private Specimen getSpecimenInstance(String specimenClass)
-	{
-		Specimen sp = null;
-		if (specimenClass.indexOf("Tissue") != -1)
-		{
-			sp = new TissueSpecimen();
-		}
-		else if (specimenClass.indexOf("Fluid") != -1)
-		{
-			sp = new FluidSpecimen();
-		}
-		else if (specimenClass.indexOf("Molecular") != -1)
-		{
-			sp = new MolecularSpecimen();
-		}
-		else if (specimenClass.indexOf("Cell") != -1)
-		{
-			sp = new CellSpecimen();
-		}
-
-		return sp;
-	}
 
 	/**
 	 * Prepare generic specimen.
@@ -1119,7 +1084,7 @@ public class FlexInterface
 		specimenDataBean.setSpecimenEventCollection(sp.getSpecimenEventCollection());
 		if (sp.getClassName().equalsIgnoreCase("Molecular"))
 		{
-			specimenDataBean.setConcentration(((MolecularSpecimen) sp)
+			specimenDataBean.setConcentration(( sp)
 					.getConcentrationInMicrogramPerMicroliter().toString());
 		}
 		if (sp.getSpecimenPosition() != null
@@ -1187,7 +1152,7 @@ public class FlexInterface
 	 */
 	private Specimen prepareSpecimen(SpecimenBean spBean)
 	{
-		final Specimen specimen = this.getSpecimenInstance(spBean.specimenClass);
+		final Specimen specimen = new Specimen();//this.getSpecimenInstance(spBean.specimenClass);
 		specimen.setSpecimenType(spBean.specimenType);
 		specimen.setId(spBean.spID);
 		specimen.setCreatedOn(spBean.creationDate);
@@ -1198,7 +1163,7 @@ public class FlexInterface
 		specimen.setAvailableQuantity(qt);
 		if (edu.wustl.catissuecore.util.global.Constants.MOLECULAR.equals(spBean.specimenClass))
 		{
-			((MolecularSpecimen) specimen).setConcentrationInMicrogramPerMicroliter(Double
+			(specimen).setConcentrationInMicrogramPerMicroliter(Double
 					.valueOf(spBean.getConcentration()));
 
 		}

@@ -702,9 +702,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		Long fromContainerId = null;
 		Integer fromPos1 =  null;
 		Integer fromPos2 =  null;
+		String fromContainerName=null;
 		if (specimen.getSpecimenPosition() != null) 
 		{
 			fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
+			fromContainerName = specimen.getSpecimenPosition().getStorageContainer().getName();
 			fromPos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 			fromPos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
 			if(parameter.getFromStorageContainer() == null)
@@ -730,9 +732,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					.getLabel());
 		}
 		else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
-				&& !((fromContainerId.equals(parameter.getFromStorageContainer().getId())
-						&& fromPos1.equals(parameter.getFromPositionDimensionOne()) && fromPos2
-						.equals(parameter.getFromPositionDimensionTwo()))))
+				&& !(((fromContainerId.equals(parameter.getFromStorageContainer().getId())
+						||fromContainerName.equals(parameter.getFromStorageContainer().getName()))
+					&& fromPos1.equals(parameter.getFromPositionDimensionOne()) 
+					&& fromPos2.equals(parameter.getFromPositionDimensionTwo()))))
 		{
 
 			throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen

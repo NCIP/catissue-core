@@ -87,10 +87,6 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION;
 		}
 		request.setAttribute("formName", formName);
-		final String getJSForOutermostDataTable = ScriptGenerator.getJSForOutermostDataTable();
-		request.setAttribute("getJSForOutermostDataTable", getJSForOutermostDataTable);
-
-		System.out.println("************" + getJSForOutermostDataTable);
 
 		request.setAttribute("posOne", Constants.POS_ONE);
 		request.setAttribute("posTwo", Constants.POS_TWO);
@@ -219,7 +215,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			{
 
 				//final Integer id = new Integer(transferEventParametersForm.getStorageContainer());
-				String parentContainerName =transferEventParametersForm.getStorageContainer();
+				//String parentContainerName =transferEventParametersForm.getStorageContainer();
 
 				/*final Object object = dao.retrieveById(StorageContainer.class.getName(), new Long(
 						transferEventParametersForm.getStorageContainer()));

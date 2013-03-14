@@ -5,8 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.CommonUtilities;
 
 /**
@@ -99,10 +99,10 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 					.toString(specimen.getSpecimenPosition().getPositionDimensionTwo()));
 		}
 
-		if (specimen instanceof MolecularSpecimen)
+		if (Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
 			final String concentration = CommonUtilities.toString(String
-					.valueOf(((MolecularSpecimen) specimen)
+					.valueOf((specimen)
 							.getConcentrationInMicrogramPerMicroliter()));
 			dataMap.put(PrintWebServiceConstants.CONCENTRATION, concentration);
 		}

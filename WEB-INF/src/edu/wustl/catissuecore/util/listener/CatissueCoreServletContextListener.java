@@ -33,20 +33,16 @@ import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Address;
-import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
@@ -399,14 +395,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 		protectionGroupsForObjectTypes.put(Specimen.class.getName(),
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-		protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
-				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-		protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
-				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-		protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
-				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-		protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
-				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
+//		protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
+//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
+//		protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
+//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
+//		protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
+//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
+//		protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
+//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 		protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 

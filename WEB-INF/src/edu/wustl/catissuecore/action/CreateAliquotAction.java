@@ -26,7 +26,6 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -430,7 +429,7 @@ public class CreateAliquotAction extends BaseAction
 				throw AppUtility.getApplicationException(null, "errors.item.format",
 						ApplicationProperties.getValue("specimen.storageContainer"));
 			}
-			final Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
+			final Specimen aliquotSpecimen = new Specimen();
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
@@ -451,6 +450,7 @@ public class CreateAliquotAction extends BaseAction
 						StorageContainerUtil.setContainerPositionForAutoOption(containerId, posDim1, posDim2, specPos);
 						specPos.setPositionDimensionOneString(posDim1);
 						specPos.setPositionDimensionTwoString(posDim2);
+						sContainer.setId(Long.valueOf(containerId));
 					}
 					else
 					{
@@ -465,11 +465,11 @@ public class CreateAliquotAction extends BaseAction
 				aliquotSpecimen.setSpecimenPosition(specPos);
 			}
 
-			if (aliquotSpecimen instanceof MolecularSpecimen)
+			if (Constants.MOLECULAR.equals(aliquotSpecimen.getClassName()))
 			{
 				if (aliquotForm.getConcentration().equals(""))
 				{
-					((MolecularSpecimen) aliquotSpecimen)
+					(aliquotSpecimen)
 							.setConcentrationInMicrogramPerMicroliter(0.0);
 				}
 				else
@@ -477,7 +477,7 @@ public class CreateAliquotAction extends BaseAction
 					final Double concentration = Double.valueOf(aliquotForm.getConcentration());
 					if (concentration != null)
 					{
-						((MolecularSpecimen) aliquotSpecimen)
+						(aliquotSpecimen)
 								.setConcentrationInMicrogramPerMicroliter(concentration);
 					}
 				}

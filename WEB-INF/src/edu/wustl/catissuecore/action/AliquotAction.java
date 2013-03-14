@@ -43,7 +43,6 @@ import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.util.SpecimenUtil;
@@ -1121,9 +1120,9 @@ public class AliquotAction extends SecureAction
 		final Object cpID = obj[1];
 		form.setSpCollectionGroupId(Long.valueOf(scgId.toString()));
 		form.setColProtId(Long.valueOf(cpID.toString()));
-		if (specimen instanceof MolecularSpecimen)
+		if(Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
-			final String concentration = Utility.toString(((MolecularSpecimen) specimen)
+			final String concentration = Utility.toString(( specimen)
 					.getConcentrationInMicrogramPerMicroliter());
 			form.setConcentration(concentration);
 		}

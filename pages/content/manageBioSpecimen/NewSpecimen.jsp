@@ -111,6 +111,8 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 		}
 		return URL;
 	}
+	
+
 </script>
 <%
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
@@ -129,6 +131,12 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
+	StringBuffer specimenPositionAsString=new StringBuffer();
+	specimenPositionAsString.append(form.getSelectedContainerName())
+	.append(" (")
+	.append(form.getPos1())
+	.append(",")
+	.append(form.getPos2()).append(")");
 
 	String staticEntityName=null;
 	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
@@ -221,6 +229,21 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 
 <script language="JavaScript">
 var scGridVisible = false;
+
+	function loadDHTMLXWindowForTransferEvent()
+{
+	var w =700;
+	var h =450;
+	var x = (screen.width / 3) - (w / 2);
+	var y = 0;
+	dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&holdSpecimenClass=<%=form.getClassName()%>&holdSpecimenType=<%=form.getType()%>&containerName=<%=form.getSelectedContainerName()%>&collectionProtocolId=<%=collectionProtocolId%>";
+	dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+	dhxWins.window("containerPositionPopUp").button("park").hide();
+	dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+	dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
+}
 function showPopUp() 
 {
 	var storageContainer =document.getElementById("storageContainerDropDown").value;
@@ -580,12 +603,12 @@ function getActionToDoURL()
 <%
 if(showSpecList.equals("true"))
 						{%>
-<body onload="doOnLoad();initWindow();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsent('<%=tab%>','<%=form.getConsentTierCounter()%>');">
+<body onload="initWindow();doOnLoad();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsent('<%=tab%>','<%=form.getConsentTierCounter()%>');">
 <%
 }
 else
 {%>
-<body onload="doOnLoad();initWindow();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsents('<%=tab%>','<%=form.getConsentTierCounter()%>');">
+<body onload="initWindow();doOnLoad();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsents('<%=tab%>','<%=form.getConsentTierCounter()%>');">
 <%
 }		int exIdRows=1;
 		int bhRows=1;
@@ -1401,7 +1424,6 @@ else
 		</tr>
 		<%}%>
 									<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-
 										<% if(showContainer!=null&&showContainer.equals("Pending"))
 										{
 										}
@@ -1442,25 +1464,8 @@ else
 													else{
 												%>
 												<tr>
-														<td colspan="2">
-														<table cellpadding="0" cellspacing="0" border="0" >
-						<tr>
-							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
-														</td>
-							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" readonly= "true" style="text-align:right"/>
-											</td>
-							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" readonly= "true" style="text-align:right"/>
-													</td>
-							<td class="groupelements">
-															<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
-																<bean:message key="buttons.map"/>
-															</html:button>
-													</td>
-												</tr>
-											</table>
+														<td colspan="2" class="black_ar">
+														<input type="text" size="30" maxlength="255"  class="black_ar"  value='<%=specimenPositionAsString.toString()%>' readonly style="border:0px" id="storageContainerPosition" /> <input type="button" class="blue_ar_b" value="Edit" onclick="loadDHTMLXWindowForTransferEvent()" />
 														</td>
 
 													</tr>

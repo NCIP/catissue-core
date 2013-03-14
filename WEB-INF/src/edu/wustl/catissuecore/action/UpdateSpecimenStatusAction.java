@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
@@ -591,7 +590,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				LOGGER.error(exception.getMessage(), exception);
 				concentration = new Double(0);
 			}
-			((MolecularSpecimen) specimen).setConcentrationInMicrogramPerMicroliter(concentration);
+			specimen.setConcentrationInMicrogramPerMicroliter(concentration);
 		}
 		final Long identifier = this.getSpecimenId(specimenVO);
 		specimen.setId(identifier);

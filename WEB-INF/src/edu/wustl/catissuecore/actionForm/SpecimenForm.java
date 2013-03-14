@@ -22,13 +22,9 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -592,7 +588,7 @@ public class SpecimenForm extends AbstractActionForm
 				this.pos2 = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,specimen.getSpecimenPosition()
 						.getPositionDimensionTwo());
 				this.positionInStorageContainer =container.getName()+ " : "// container.getStorageType().getName() + " : "
-						+ container.getId() + " Pos(" + this.pos1 + ","
+						/*+ container.getId() */+ " Pos(" + this.pos1 + ","
 						+ this.pos2 + ")";
 			}
 			catch (ApplicationException e)
@@ -671,28 +667,26 @@ public class SpecimenForm extends AbstractActionForm
 		 this.availableQuantity = String.valueOf(((TissueSpecimen) specimen).getAvailableQuantityInGram());
 		 }*/
 
-		if (specimen instanceof CellSpecimen)
+//		if (specimen instanceof CellSpecimen)
+//		{
+//			this.className = Constants.CELL;
+//		}
+//		
+		if (Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
-			this.className = Constants.CELL;
-		}
-		else if (specimen instanceof FluidSpecimen)
-		{
-			this.className = Constants.FLUID;
-		}
-		else if (specimen instanceof MolecularSpecimen)
-		{
-			this.className = Constants.MOLECULAR;
-			this.concentration = CommonUtilities.toString(((MolecularSpecimen) specimen)
+//			this.className = Constants.MOLECULAR;
+			this.concentration = CommonUtilities.toString(specimen
 					.getConcentrationInMicrogramPerMicroliter());
 		}
-		else if (specimen instanceof TissueSpecimen)
-		{
-			this.className = Constants.TISSUE;
-		}
-		else
-		{
-			this.className = specimen.getParentSpecimen().getClassName();
-		}
+//		else if (specimen instanceof TissueSpecimen)
+//		{
+//			this.className = Constants.TISSUE;
+//		}
+//		else
+//		{
+			this.className = specimen.getClassName();
+//		}
+		
 
 		if (!AppUtility.isQuantityDouble(this.className, this.type))
 		{

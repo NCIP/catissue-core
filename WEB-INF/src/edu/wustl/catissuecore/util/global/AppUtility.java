@@ -65,8 +65,6 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -74,9 +72,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
@@ -85,7 +81,6 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
@@ -345,19 +340,6 @@ public class AppUtility {
 		return typeList;
 	}
 
-	public static String getSpecimenClassName(final AbstractSpecimen specimen) {
-		if (specimen instanceof CellSpecimen) {
-			return Constants.CELL;
-		} else if (specimen instanceof MolecularSpecimen) {
-			return Constants.MOLECULAR;
-		} else if (specimen instanceof FluidSpecimen) {
-			return Constants.FLUID;
-		} else if (specimen instanceof TissueSpecimen) {
-			return Constants.TISSUE;
-		}
-
-		return null;
-	}
 
 	public static int getEventParametersFormId(
 			final SpecimenEventParameters eventParameter) {
@@ -450,19 +432,6 @@ public class AppUtility {
 		}
 		return "";
 	}
-	public static Specimen getSpecimenByClassName(final String className){
-		if(Constants.CELL.equals(className)){
-			return new CellSpecimen();
-		}else if(Constants.MOLECULAR.equals(className)){
-			return new MolecularSpecimen();
-		}else if (Constants.FLUID.equals(className)){
-			return new FluidSpecimen();
-		} else if( Constants.TISSUE.equals(className)){
-			return new TissueSpecimen();
-		}
-		return new Specimen();
-
-	}
 	// Aniruddha : Added for enhancement - Specimen Aliquoting
 	/**
 	 * Returns the particular specimen object as per the specimen class.
@@ -471,19 +440,6 @@ public class AppUtility {
 	 *            Name of specimen class
 	 * @return the particular specimen object as per the specimen class.
 	 */
-	public static Specimen getSpecimen(final Specimen specimen) {
-		if (specimen instanceof CellSpecimen) {
-			return new CellSpecimen();
-		} else if (specimen instanceof FluidSpecimen) {
-			return new FluidSpecimen();
-		} else if (specimen instanceof MolecularSpecimen) {
-			return new MolecularSpecimen();
-		} else if (specimen instanceof TissueSpecimen) {
-			return new TissueSpecimen();
-		}
-
-		return new Specimen();
-	}
 
 	public static List getSpecimenClassTypes() {
 		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
@@ -1821,19 +1777,6 @@ public class AppUtility {
 	 * @param classType
 	 * @return
 	 */
-	public static Specimen getSpecimenObject(final String classType) {
-		Specimen specimen;
-		if (Constants.CELL.equals(classType)) {
-			specimen = new CellSpecimen();
-		} else if (Constants.MOLECULAR.equals(classType)) {
-			specimen = new MolecularSpecimen();
-		} else if (Constants.FLUID.equals(classType)) {
-			specimen = new FluidSpecimen();
-		} else {
-			specimen = new TissueSpecimen();
-		}
-		return specimen;
-	}
 
 	/**
 	 *

@@ -320,25 +320,8 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public final String getClassName()
 	{
-		String className = null;
-
-		if (this instanceof CellSpecimen || this instanceof CellSpecimenRequirement)
-		{
-			className = Constants.CELL;
-		}
-		else if (this instanceof MolecularSpecimen || this instanceof MolecularSpecimenRequirement)
-		{
-			className = Constants.MOLECULAR;
-		}
-		else if (this instanceof FluidSpecimen || this instanceof FluidSpecimenRequirement)
-		{
-			className = Constants.FLUID;
-		}
-		else if (this instanceof TissueSpecimen || this instanceof TissueSpecimenRequirement)
-		{
-			className = Constants.TISSUE;
-		}
-		return className;
+		
+		return this.specimenClass;
 	}
 
 	/**

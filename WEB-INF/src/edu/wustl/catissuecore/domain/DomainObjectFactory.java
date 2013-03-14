@@ -301,44 +301,14 @@ public class DomainObjectFactory implements IDomainObjectFactory
 			case Constants.NEW_SPECIMEN_FORM_ID :
 				final NewSpecimenForm newForm = (NewSpecimenForm) form;
 				final String type = newForm.getClassName();
-				if (Constants.TISSUE.equals(type))
-				{
-					abstractDomain = new TissueSpecimen(newForm);
-				}
-				else if (Constants.FLUID.equals(type))
-				{
-					abstractDomain = new FluidSpecimen(newForm);
-				}
-				else if (Constants.CELL.equals(type))
-				{
-					abstractDomain = new CellSpecimen(newForm);
-				}
-				else if (Constants.MOLECULAR.equals(type))
-				{
-					abstractDomain = new MolecularSpecimen(newForm);
-				}
+				abstractDomain = new Specimen(newForm);
 				break;
 
 			case Constants.CREATE_SPECIMEN_FORM_ID :
 				final CreateSpecimenForm crForm = (CreateSpecimenForm) form;
 				final String sType = crForm.getClassName();
 
-				if (Constants.TISSUE.equals(sType))
-				{
-					abstractDomain = new TissueSpecimen(crForm);
-				}
-				else if (Constants.FLUID.equals(sType))
-				{
-					abstractDomain = new FluidSpecimen(crForm);
-				}
-				else if (Constants.CELL.equals(sType))
-				{
-					abstractDomain = new CellSpecimen(crForm);
-				}
-				else if (Constants.MOLECULAR.equals(sType))
-				{
-					abstractDomain = new MolecularSpecimen(crForm);
-				}
+				abstractDomain = new Specimen(crForm);
 				break;
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
 				abstractDomain = new SpecimenCollectionGroup(form);

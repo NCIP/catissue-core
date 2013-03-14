@@ -29,24 +29,7 @@ public class SpecimenObjectFactory
 	 */
 	public AbstractDomainObject getDomainObject(String specimenType) throws AssignDataException
 	{
-		AbstractDomainObject abstractDomain = null;
-		if (Constants.TISSUE.equals(specimenType))
-		{
-			abstractDomain = new TissueSpecimen();
-		}
-		else if (Constants.FLUID.equals(specimenType))
-		{
-			abstractDomain = new FluidSpecimen();
-		}
-		else if (Constants.CELL.equals(specimenType))
-		{
-			abstractDomain = new CellSpecimen();
-		}
-		else if (Constants.MOLECULAR.equals(specimenType))
-		{
-			abstractDomain = new MolecularSpecimen();
-		}
-		return abstractDomain;
+		return new Specimen();
 	}
 
 	/**
@@ -59,23 +42,6 @@ public class SpecimenObjectFactory
 	public AbstractDomainObject getDomainObject(String specimenType, SpecimenRequirement reqSpecimen)
 			throws AssignDataException
 	{
-		AbstractDomainObject abstractDomain = null;
-		if (Constants.TISSUE.equals(specimenType))
-		{
-			abstractDomain = new TissueSpecimen(reqSpecimen);
-		}
-		else if (Constants.FLUID.equals(specimenType))
-		{
-			abstractDomain = new FluidSpecimen(reqSpecimen);
-		}
-		else if (Constants.CELL.equals(specimenType))
-		{
-			abstractDomain = new CellSpecimen(reqSpecimen);
-		}
-		else if (Constants.MOLECULAR.equals(specimenType))
-		{
-			abstractDomain = new MolecularSpecimen(reqSpecimen);
-		}
-		return abstractDomain;
+		return new Specimen(reqSpecimen);
 	}
 }

@@ -33,14 +33,11 @@ import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
-import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -48,7 +45,6 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -61,16 +57,16 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLBizlogic;
+import edu.wustl.common.labelSQLApp.domain.LabelSQL;
+import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
-import edu.wustl.common.labelSQLApp.bizlogic.LabelSQLBizlogic;
-import edu.wustl.common.labelSQLApp.domain.LabelSQL;
-import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -82,8 +78,6 @@ public class CollectionProtocolUtil
 	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolUtil.class);
 
-	/** The Constant MOLECULAR_SPECIMEN_CLASS. */
-	private static final String MOLECULAR_SPECIMEN_CLASS = "Molecular";
 
 	/** The event bean. */
 	private final LinkedHashMap<String, CollectionProtocolEventBean> eventBean = new LinkedHashMap<String, CollectionProtocolEventBean>();
@@ -605,9 +599,9 @@ public class CollectionProtocolUtil
 				.longValue());
 		speRequirementBean.setPathologicalStatus(reqSpecimen.getPathologicalStatus());
 
-		if (MOLECULAR_SPECIMEN_CLASS.equals(reqSpecimen.getClassName()))
+		if (Constants.MOLECULAR.equals(reqSpecimen.getClassName()))
 		{
-			Double concentration = ((MolecularSpecimenRequirement) reqSpecimen)
+			Double concentration = (reqSpecimen)
 					.getConcentrationInMicrogramPerMicroliter();
 			if (concentration != null)
 			{
@@ -1354,22 +1348,7 @@ public class CollectionProtocolUtil
 		SpecimenRequirement reqSpecimen = null;
 		try
 		{
-			if (form.getClassName().equals("Tissue"))
-			{
-				reqSpecimen = new TissueSpecimenRequirement();
-			}
-			else if (form.getClassName().equals("Fluid"))
-			{
-				reqSpecimen = new FluidSpecimenRequirement();
-			}
-			else if (form.getClassName().equals("Cell"))
-			{
-				reqSpecimen = new CellSpecimenRequirement();
-			}
-			else if (form.getClassName().equals("Molecular"))
-			{
-				reqSpecimen = new MolecularSpecimenRequirement();
-			}
+				reqSpecimen = new SpecimenRequirement();
 		}
 		catch (Exception e1)
 		{
@@ -1394,7 +1373,7 @@ public class CollectionProtocolUtil
 		String storageType = specimenRequirementBean.getStorageContainerForSpecimen();
 		if (specimenRequirementBean.getClassName().equalsIgnoreCase(Constants.MOLECULAR))
 		{
-			((MolecularSpecimenRequirement) reqSpecimen)
+			(reqSpecimen)
 					.setConcentrationInMicrogramPerMicroliter(new Double(specimenRequirementBean
 							.getConcentration()));
 		}

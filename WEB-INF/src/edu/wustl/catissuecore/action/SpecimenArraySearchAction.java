@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -135,7 +134,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 						value = specimen.getLabel();
 					}
 					arrayContentMap.put(key, value);
-					if (specimen instanceof MolecularSpecimen)
+					if (Constants.MOLECULAR.equals(specimen.getClassName()))
 					{
 						// check qunatity not null
 						if (arrayContent.getInitialQuantity() != null)

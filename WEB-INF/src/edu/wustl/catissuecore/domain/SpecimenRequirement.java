@@ -14,6 +14,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	private static final long serialVersionUID = -34444448799655L;
 
+	private Double concentrationInMicrogramPerMicroliter;
 	/**
 	 * storageType.
 	 */
@@ -28,6 +29,15 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 * specimenCollection.
 	 */
 	private Collection<Specimen> specimenCollection;
+
+	public Double getConcentrationInMicrogramPerMicroliter() {
+		return concentrationInMicrogramPerMicroliter;
+	}
+
+	public void setConcentrationInMicrogramPerMicroliter(
+			Double concentrationInMicrogramPerMicroliter) {
+		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
+	}
 
 	/**
 	 * labelFormat.

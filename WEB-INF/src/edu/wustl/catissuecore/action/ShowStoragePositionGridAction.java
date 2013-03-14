@@ -63,19 +63,28 @@ public class ShowStoragePositionGridAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 		String target= Constants.SUCCESS;
-		String containerName = request.getParameter(Constants.CONTAINER_NAME);
-		StorageContainerGridObject storageContainerGridObject = null;
-		storageContainerGridObject = new StorageContainerGridObject();
-		storageContainerGridObject=StorageContainerUtil.getContainerDetails(containerName);
+//		String containerName = request.getParameter(Constants.CONTAINER_NAME);
+//		StorageContainerGridObject storageContainerGridObject = null;
+//		storageContainerGridObject = new StorageContainerGridObject();
+//		storageContainerGridObject=StorageContainerUtil.getContainerDetails(containerName);
 		ActionErrors errors = new ActionErrors();
-		if(null==storageContainerGridObject)
-		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.storageContainerEditBox"));
-		}
+//		if(null==storageContainerGridObject)
+//		{
+//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.storageContainerEditBox"));
+//		}
 		this.saveErrors(request, errors);
-		request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT, storageContainerGridObject);
-		request.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
-		request.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
+//		request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT, storageContainerGridObject);
+		request.getSession().removeAttribute(Constants.POS1);
+		request.getSession().removeAttribute(Constants.POS2);
+		request.getSession().setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
+		request.getSession().setAttribute(Constants.POS2,request.getParameter(Constants.POS2)); 
+		request.setAttribute("collStatus", request.getParameter("collStatus"));
+		request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, request.getParameter(Constants.COLLECTION_PROTOCOL_ID));
+		request.setAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS, request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS));
+		request.setAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE, request.getParameter(Constants.CAN_HOLD_SPECIMEN_TYPE));
+		request.setAttribute(Constants.CONTAINER_NAME, request.getParameter(Constants.CONTAINER_NAME));
+		request.setAttribute("controlName", request.getParameter("controlName"));
+		request.setAttribute("isVirtual", request.getParameter("isVirtual"));
 		return mapping.findForward(target);
 			}
 

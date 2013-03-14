@@ -12,13 +12,9 @@ package edu.wustl.catissuecore.util.global;
 
 import java.util.Locale;
 
-import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
@@ -4808,14 +4804,10 @@ public class Constants
 	public static final String STORAGE_CONTAINER_CLASS_NAME = StorageContainer.class.getName();
 
 	/** The Constant specimenNameArray. */
-	public static final String[] specimenNameArray = {SPECIMEN_NAME, FluidSpecimen.class.getName(),
-			MolecularSpecimen.class.getName(), TissueSpecimen.class.getName(),
-			CellSpecimen.class.getName()};
+	public static final String[] specimenNameArray = {SPECIMEN_NAME};
 
 	/** The Constant entityNameArray. */
-	public static final String[] entityNameArray = {SPECIMEN_NAME, FluidSpecimen.class.getName(),
-			MolecularSpecimen.class.getName(), TissueSpecimen.class.getName(),
-			CellSpecimen.class.getName(), SPECIMEN_ARRAY_CLASS_NAME,
+	public static final String[] entityNameArray = {SPECIMEN_NAME, SPECIMEN_ARRAY_CLASS_NAME,
 			IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
 			DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, SURGICAL_PATHALOGY_REPORT_CLASS_NAME};
 
@@ -4866,12 +4858,12 @@ public class Constants
 	public static final String QUERY_ALREADY_DELETED = "queryAlreadyDeleted";
 
 	/** The Constant INHERITED_ENTITY_NAMES. */
-	public static final String[] INHERITED_ENTITY_NAMES = {FluidSpecimen.class.getName(),
-			MolecularSpecimen.class.getName(), TissueSpecimen.class.getName(),
-			CellSpecimen.class.getName(),
-	//IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-	//DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-	};
+//	public static final String[] INHERITED_ENTITY_NAMES = {FluidSpecimen.class.getName(),
+//			MolecularSpecimen.class.getName(), TissueSpecimen.class.getName(),
+//			CellSpecimen.class.getName(),
+//	//IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+//	//DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+//	};
 
 	//For enhanced CP
 	/** The Constant PARENT_CP_TYPE. */
@@ -5920,11 +5912,11 @@ public class Constants
 	public static final String ASSOC_ID = "assocId";
 
 	public static final String UPLOAD_ERROR_MESSAGE = "Problem occured while uploading report.";
-	
+
 	public static final String ENTITY_SPECIMEN_TAG = "SpecimenListTag";
 	public static final String ENTITY_SPECIMEN_TAGITEM = "SpecimenListTagItem";
- 
-
+	
+	
 	public static final String SHARE_SPECIMEN_LIST_EMAIL_TMPL = "specimen.shareSpecimenListTemplate";
 	public static final String USER_APPROVAL_EMAIL_TMPL = "user.approvalTemplate";
 	public static final String USER_SIGNUP_EMAIL_TMPL = "user.signUpTemplate";
@@ -5934,4 +5926,15 @@ public class Constants
 	public static final String EMPI_ADMINUSER_CLOSED_EMAIL_TMPL = "eMPI.adminUserClosedTemplate";  
 	public static final String EMPI_ADMINUSER_NOTEXISTS_EMAIL_TMPL = "eMPI.adminUserNotExitsTemplate"; 
 	public static final String ORDER_PLACEMENT_EMAIL_TMPL = "order.orderPlacementTemplate";
+	
+	public static final String FROM_CONTAINER_NAME="fromContainerName";
+	public static final String FROM_POSITION_DIMENSION_ONE="fromPos1";
+	public static final String FROM_POSITION_DIMENSION_TWO="fromPos2";
+	
+	public static final String TO_CONTAINER_NAME="toContainerName";
+	public static final String TO_POSITION_DIMENSION_ONE="toPos1";
+	public static final String TO_POSITION_DIMENSION_TWO="toPos2";
+	
+ 
+
 }

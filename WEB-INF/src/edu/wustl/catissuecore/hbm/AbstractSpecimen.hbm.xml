@@ -264,6 +264,15 @@
             column="AVAILABLE_QUANTITY"
             length="50"
         />
+        
+        <property
+	            name="concentrationInMicrogramPerMicroliter"
+	            type="double"
+	            update="true"
+	            insert="true"
+	            column="CONCENTRATION"
+	            length="50"
+	        />
 
 		<set
             name="specimenRecordEntryCollection"
@@ -303,46 +312,9 @@
             lazy="false"
         />
 
-        <joined-subclass
-            name="edu.wustl.catissuecore.domain.FluidSpecimen"
-            table="catissue_fluid_specimen"
-			lazy="true"
-        >
-         <key column="IDENTIFIER"/>
-        </joined-subclass>
-
-        <joined-subclass
-            name="edu.wustl.catissuecore.domain.CellSpecimen"
-            table="catissue_cell_specimen"
-			lazy="true"
-        >
-         <key column="IDENTIFIER"/>
-        </joined-subclass>
-
-        <joined-subclass
-            name="edu.wustl.catissuecore.domain.MolecularSpecimen"
-            table="catissue_molecular_specimen"
-			lazy="true"
-        >
- 			 <key column="IDENTIFIER"/>
-	        <property
-	            name="concentrationInMicrogramPerMicroliter"
-	            type="double"
-	            update="true"
-	            insert="true"
-	            column="CONCENTRATION"
-	            length="50"
-	        />
-       </joined-subclass>
-
-       <joined-subclass
-            name="edu.wustl.catissuecore.domain.TissueSpecimen"
-            table="catissue_tissue_specimen"
-			lazy="true"
-        >
-         <key column="IDENTIFIER"/>
-	   </joined-subclass>
-	 </joined-subclass>
+        
+	   
+	   	 </joined-subclass>
 
 	 <joined-subclass name="edu.wustl.catissuecore.domain.SpecimenRequirement" table="CATISSUE_CP_REQ_SPECIMEN">
 
@@ -389,6 +361,14 @@
 	            column="STORAGE_TYPE"
 	            length="50"
 		    />
+		<property
+	            name="concentrationInMicrogramPerMicroliter"
+	            type="double"
+	            update="true"
+	            insert="true"
+	            column="CONCENTRATION"
+	            length="50"
+	        />
 	       <many-to-one
 	            name="collectionProtocolEvent"
 	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
@@ -399,47 +379,7 @@
 	            column="COLLECTION_PROTOCOL_EVENT_ID"
 	        />
 
-	   <joined-subclass
-            name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"
-            table="catissue_fluid_req_specimen"
-			lazy="true"
-       >
-            <key column="IDENTIFIER"/>
-       </joined-subclass>
-
-       <joined-subclass
-            name="edu.wustl.catissuecore.domain.CellSpecimenRequirement"
-            table="catissue_cell_req_specimen"
-			lazy="true"
-       >
-            <key column="IDENTIFIER"/>
-        </joined-subclass>
-
-        <joined-subclass
-            name="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"
-            table="catissue_mol_req_specimen"
-			lazy="true"
-        >
-     		<key column="IDENTIFIER"/>
-
-	        <property
-	            name="concentrationInMicrogramPerMicroliter"
-	            type="double"
-	            update="true"
-	            insert="true"
-	            column="CONCENTRATION"
-	            length="50"
-	        />
-       </joined-subclass>
-
-       <joined-subclass
-
-            name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"
-            table="catissue_tissue_req_specimen"
-			lazy="true"
-        >
-            <key column="IDENTIFIER"/>
-	   </joined-subclass>
+	 
 
 	</joined-subclass>
   </class>

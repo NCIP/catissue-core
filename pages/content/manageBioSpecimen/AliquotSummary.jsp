@@ -337,7 +337,7 @@ function giveCall(url,msg,msg1,id)
 				<bean:message key="specimen.createdDate"/>
 			</label></strong></td>
 			<td class="noneditable">- 
-				<%=form.getCreatedDate()%>&nbsp;<span class="grey_ar_s"><bean:message key="scecimen.dateformat"/></span>
+				<%=form.getCreatedDate()%>&nbsp;<span class="grey_ar_s"><bean:message key="date.pattern"/></span>
 			<html:hidden styleId="createdDate" property="createdDate" />	
 			<html:hidden styleId="spCollectionGroupId" property="spCollectionGroupId" />
 			<html:hidden styleId="scgName" property="scgName" />

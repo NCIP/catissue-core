@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -123,10 +122,10 @@ public class WashuSpecimenCollectionGroupLabelPrinterImpl
 										.getPositionDimensionTwo()));
 					}
 
-					if (obj instanceof MolecularSpecimen)
+					if (Constants.MOLECULAR.equals(obj.getClassName()))
 					{
 						final String concentration = CommonUtilities.toString(String
-								.valueOf(((MolecularSpecimen) obj)
+								.valueOf(( obj)
 										.getConcentrationInMicrogramPerMicroliter()));
 						dataMap.put(PrintWebServiceConstants.CONCENTRATION, concentration);
 					}
