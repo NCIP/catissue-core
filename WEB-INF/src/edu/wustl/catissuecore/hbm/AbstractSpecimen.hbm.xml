@@ -104,6 +104,14 @@
             column="SPECIMEN_TYPE"
             length="50"
         />
+        <property
+	            name="concentrationInMicrogramPerMicroliter"
+	            type="double"
+	            update="true"
+	            insert="true"
+	            column="CONCENTRATION"
+	            length="50"
+	        />
 
         <set
             name="specimenEventCollection"
@@ -265,15 +273,6 @@
             length="50"
         />
         
-        <property
-	            name="concentrationInMicrogramPerMicroliter"
-	            type="double"
-	            update="true"
-	            insert="true"
-	            column="CONCENTRATION"
-	            length="50"
-	        />
-
 		<set
             name="specimenRecordEntryCollection"
             table="CATISSUE_SPECIMEN_REC_NTRY"
@@ -361,14 +360,7 @@
 	            column="STORAGE_TYPE"
 	            length="50"
 		    />
-		<property
-	            name="concentrationInMicrogramPerMicroliter"
-	            type="double"
-	            update="true"
-	            insert="true"
-	            column="CONCENTRATION"
-	            length="50"
-	        />
+		
 	       <many-to-one
 	            name="collectionProtocolEvent"
 	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"

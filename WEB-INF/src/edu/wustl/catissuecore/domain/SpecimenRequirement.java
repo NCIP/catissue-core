@@ -30,15 +30,6 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	private Collection<Specimen> specimenCollection;
 
-	public Double getConcentrationInMicrogramPerMicroliter() {
-		return concentrationInMicrogramPerMicroliter;
-	}
-
-	public void setConcentrationInMicrogramPerMicroliter(
-			Double concentrationInMicrogramPerMicroliter) {
-		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
-	}
-
 	/**
 	 * labelFormat.
 	 */

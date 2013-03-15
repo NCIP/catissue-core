@@ -167,15 +167,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 */
 	private String applyChangesTo = Constants.APPLY_NONE;
 
-	private Double concentrationInMicrogramPerMicroliter; 
-	public Double getConcentrationInMicrogramPerMicroliter() {
-		return concentrationInMicrogramPerMicroliter;
-	}
-
-	public void setConcentrationInMicrogramPerMicroliter(
-			Double concentrationInMicrogramPerMicroliter) {
-		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
-	}
+	
 
 	protected Collection<SpecimenRecordEntry> specimenRecordEntryCollection = new HashSet<SpecimenRecordEntry>();
 

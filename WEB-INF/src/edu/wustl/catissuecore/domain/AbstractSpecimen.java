@@ -98,6 +98,15 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 		logger.debug("Empty implementation of setAllValue");
 	}
 
+	protected Double concentrationInMicrogramPerMicroliter; 
+	public Double getConcentrationInMicrogramPerMicroliter() {
+		return concentrationInMicrogramPerMicroliter;
+	}
+
+	public void setConcentrationInMicrogramPerMicroliter(
+			Double concentrationInMicrogramPerMicroliter) {
+		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
+	}
 	/**
 	 * It would return the Activity Status.
 	 * @return activity status of String type.

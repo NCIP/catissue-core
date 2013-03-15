@@ -87,5 +87,13 @@
 		<addUniqueConstraint constraintName="S_TAGID_USERID_UNIQUE_KEY"
 			tableName="SHARED_SPECIMENLIST_TAGS" columnNames="TAG_ID,USER_ID" />
 	</changeSet>
+	
+	<changeSet id="5" author="catissue" runOnChange="true">
+		<addColumn tableName="catissue_abstract_specimen">
+			<column name="CONCENTRATION" type="${int.type}(20,4)" />
+		</addColumn>
+		
+		<sql>update catissue_abstract_specimen abc join catissue_molecular_specimen mc on abc.identifier = mc.identifier set abc.CONCENTRATION = mc.CONCENTRATION</sql>
+	</changeSet>
  	 
 </databaseChangeLog>         
