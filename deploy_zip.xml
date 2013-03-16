@@ -417,7 +417,7 @@
 		</copy>
 		<echo message="Copying email-templates to WEB-INF/classes" />	
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/classes/email-templates">
-			<fileset dir="${base.dir}/catissuecore-properties/email-templates"/>
+			<fileset dir="${temp.dir}/catissuecore-properties/email-templates"/>
 		</copy>
 
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
