@@ -1,0 +1,10 @@
+Dear $user.lastName, $user.firstName<br>
+<br>
+Your membership has been rejected by the Administrator.<br>
+<br>
+#if($user.comments != "null" || $user.comments != "")
+Please refer to the following comments by the Administrator : <br>
+$user.comments<br>
+#end
+<br> 
+$footer

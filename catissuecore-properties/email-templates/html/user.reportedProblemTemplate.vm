@@ -1,0 +1,14 @@
+The following problem has been reported:<br>
+<table>
+	<tr>	
+		<td>From </td><td> : $reportedProblem.from</td>
+	</tr>
+	<tr>
+		<td>Title  </td><td> : $reportedProblem.subject</td>
+	</tr>
+	<tr>
+		<td>Message </td><td> : $reportedProblem.messageBody</td>
+	</tr>
+</table>
+<br>
+$footer

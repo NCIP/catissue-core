@@ -1,5 +1,0 @@
-Dear caTissue Administrator,
-
-This is to notify that the Order $order.Name requested by $user.firstName $user.lastName under Distribution Protocol $order.distributionProtocol.title have been placed successfully.
-
-$footer
