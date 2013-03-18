@@ -151,6 +151,14 @@ login.forgot.password=Forgot password?
 			<!--span class="signin">Sign in</span-->
 			<%@ include	file="/pages/content/common/ActionErrors.jsp"%>
 			<html:form styleId="form1" action="/Login.do">
+				<%
+					String redirectTo =(String) request.getParameter("redirectTo"); 
+					if(redirectTo != null){	
+				%>
+						<input type='hidden' name='redirectTo' value='<%=redirectTo%>'/>
+				<% 
+					}  
+				%>		
 				<div class="login-inner-div">
 				<span class="login-label"><bean:message key="app.UserID" /></span>
 				<html:text styleClass="black_ar text-field-login" property="loginName" size="32" />
