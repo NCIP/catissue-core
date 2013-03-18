@@ -136,6 +136,10 @@ function setHeader(isSpecimenChecked)
  										&nbsp&nbsp&nbsp
 										<input type="button"  id="shareButton" value="SHARE LIST" title="Share List (List will be visible to the users you choose)" onclick="checkForValidation()"
 												onkeydown="checkForValidation()" style="display:none; width:120px; display:none" class="btn3">
+									
+										<img id="loadingImg" style="float:left; padding-left:5px; display:none;"
+												height='25px' width='120px' src='images/advQuery/loading_circle.gif'
+										border='0'>
 									</p>
 								</td>
 							</tr>

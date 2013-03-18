@@ -49,7 +49,7 @@ public class EmailHandler
 		contextMap.put("user", user);
 		
 		boolean emailStatus = EmailClient.getInstance().sendEmail(
-				Constants.USER_SIGNUP_EMAIL_TMPL,
+				Constants.USER_APPROVAL_EMAIL_TMPL,
 				new String[] { user.getEmailAddress(), adminEmailAddress },
 				contextMap);
 		logEmailStatus(user, emailStatus);
@@ -81,8 +81,9 @@ public class EmailHandler
     	contextMap.put("user", user);
     	boolean emailStatus = EmailClient.getInstance().sendEmail(
     			Constants.USER_SIGNUP_EMAIL_TMPL,
-    			new String[]{ user.getEmailAddress() }, 
-    			contextMap);
+    			new String[]{ user.getEmailAddress() },
+				new String[]{ adminEmailAddress },
+				null, contextMap, null);
     	logEmailStatus(user, emailStatus);
     }
     

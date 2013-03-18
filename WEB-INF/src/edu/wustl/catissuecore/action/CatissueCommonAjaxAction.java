@@ -557,8 +557,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	{ 
 		Long specListId = Long.parseLong(request.getParameter("specListId")); 
 		SessionDataBean sessionBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-		Long userId = sessionBean.getUserId();
-		TagBizlogicFactory.getBizLogicInstance(Constants.ENTITY_SPECIMEN_TAG).deleteTag(specListId, userId); 
+		TagBizlogicFactory.getBizLogicInstance(Constants.ENTITY_SPECIMEN_TAG).deleteTag(sessionBean, specListId); 
 		return null;
 	}
 	

@@ -43,6 +43,11 @@
 	
 	<!-- Darpan's changes for SHARE QUERY FOLDER -->
 	<changeSet id="3" author="catissue" runOnChange="true">
+		<addUniqueConstraint constraintName="CSM_USER_ID_UNIQUE_KEY"
+			tableName="CATISSUE_USER" columnNames="CSM_USER_ID" />
+	</changeSet>
+
+	<changeSet id="4" author="catissue" runOnChange="true">
 
 		<createTable tableName="SHARED_QUERY_TAGS">
 			<column name="TAG_ID" type="${int.type}">
@@ -58,13 +63,14 @@
 			referencedTableName="QUERY_TAGS" referencedColumnNames="IDENTIFIER" /> 
 	
 		<addForeignKeyConstraint constraintName="FK_QUERYTAG_SHARE_USER_ID"
-			baseTableName="SHARED_QUERY_TAGS" baseColumnNames="USER_ID" 				referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER" />
+			baseTableName="SHARED_QUERY_TAGS" baseColumnNames="USER_ID" 				referencedTableName="CATISSUE_USER" referencedColumnNames="CSM_USER_ID" />
 
                <addUniqueConstraint constraintName="Q_TAGID_USERID_UNIQUE_KEY"
 			tableName="SHARED_QUERY_TAGS" columnNames="TAG_ID,USER_ID" />
-	</changeSet>	 
+	</changeSet>
+	 
 	<!-- Darpan's changes for SHARE SPECIMEN LIST -->
-	<changeSet id="4" author="catissue" runOnChange="true">
+	<changeSet id="5" author="catissue" runOnChange="true">
 
 		<createTable tableName="SHARED_SPECIMENLIST_TAGS">
 			<column name="TAG_ID" type="${int.type}">
@@ -82,13 +88,13 @@
 
 		<addForeignKeyConstraint constraintName="FK_SPECIMENLIST_SHARE_USER_ID"
 			baseTableName="SHARED_SPECIMENLIST_TAGS" baseColumnNames="USER_ID" 				referencedTableName="CATISSUE_USER"
-			referencedColumnNames="IDENTIFIER" />
+			referencedColumnNames="CSM_USER_ID" />
 
 		<addUniqueConstraint constraintName="S_TAGID_USERID_UNIQUE_KEY"
 			tableName="SHARED_SPECIMENLIST_TAGS" columnNames="TAG_ID,USER_ID" />
 	</changeSet>
 	
-	<changeSet id="5" author="catissue" runOnChange="true">
+	<changeSet id="6" author="catissue" runOnChange="true">
 		<addColumn tableName="catissue_abstract_specimen">
 			<column name="CONCENTRATION" type="${int.type}(20,4)" />
 		</addColumn>

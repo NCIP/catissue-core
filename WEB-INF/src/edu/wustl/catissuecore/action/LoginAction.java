@@ -76,7 +76,7 @@ public class LoginAction extends XSSSupportedAction
     public ActionForward executeXSS(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response)
     {
-        String forwardTo = Constants.FAILURE;
+    	String forwardTo = Constants.FAILURE;
         if (form == null)
         {
             LoginAction.LOGGER.debug("Form is Null");
@@ -86,16 +86,25 @@ public class LoginAction extends XSSSupportedAction
         {
             try
             {
-                cleanSession(request);
+            	cleanSession(request); 
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
                 forwardTo = processUserLogin(form, request);
-
                 String pageOf = request.getParameter(Constants.PAGE_OF);
-                if (pageOf != null && ( pageOf.equals(CDMSIntegrationConstants.SCG) || pageOf.equals("pageOfDownload")))
-				{
-					request.setAttribute(Constants.PAGE_OF, pageOf);
-                	forwardTo=pageOf;
-				}
+                if (pageOf != null && ( pageOf.equals(CDMSIntegrationConstants.SCG) 
+                							|| pageOf.equals("pageOfDownload")))
+                {
+                	request.setAttribute(Constants.PAGE_OF, pageOf);
+                	forwardTo= pageOf;                    
+                }
+                
+                String redirectTo = request.getParameter("redirectTo");
+                if(redirectTo !=null)
+                {
+                	ActionForward forward = new ActionForward(redirectTo);
+                	forward.setRedirect(true);
+                	return forward;
+                } 
+               
             }
             catch (final Exception ex)
             {

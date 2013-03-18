@@ -599,17 +599,24 @@ function loadSpecimenGrid()
 					List<NameValueBean> labelList =  (List)request.getAttribute("dropDownList");
 					if(labelList !=null && labelList.size() > 0)
 		{
+			String tagId =(String) request.getAttribute("tagId");
 			for (NameValueBean object : labelList) 
 			{
+				if(tagId != null && object.getValue().toString().equals(tagId.toString())){
 				%>
-				<option name="Australia" value="<%=object.getValue()%>" ><%=object.getName()%></option>
-<%				
+					<option name="specimenLists" value="<%=object.getValue()%>" SELECTED><%=object.getName()%></option>
+				<%
+				} else {
+				%>
+				
+					<option name="specimenLists" value="<%=object.getValue()%>" ><%=object.getName()%></option>
+				<% }				
 			}
 		}
-%>
+				%>
 				</select>
 			<%
- 						String	organizeTarget = "shareSpecimenList('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
+ 						String	organizeTarget = "shareSpecimenList('Are you sure you want to delete?','Are you sure you want to delete?','SpecimenListTag','SpecimenListTagItem')";
  			%>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="    Delete List     " onClick="deleteList()"/>
 				<input type="button" value="    Share List     " onClick="<%=organizeTarget %>"/>

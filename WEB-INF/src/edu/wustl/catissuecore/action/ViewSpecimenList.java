@@ -64,6 +64,10 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 		getLabels(request);
 		request.setAttribute("eventArray", Constants.EVENT_PARAMETERS);
 		request.setAttribute("advanceSearchForm", searchForm);
+		
+		String tagId = request.getParameter("tagId");
+		if(tagId != null){
+			request.setAttribute("tagId", tagId);}
 		return mapping.findForward(target);
 	}
 
@@ -72,7 +76,7 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 		SessionDataBean sessionData = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		
 		List<Tag> tagList = TagBizlogicFactory.getBizLogicInstance(
-				Constants.ENTITY_SPECIMEN_TAG).getTagList(sessionData.getUserId());
+				Constants.ENTITY_SPECIMEN_TAG).getTagList(sessionData);
 		List<NameValueBean> labelList = new ArrayList<NameValueBean>();
 		if(! tagList.isEmpty())
 		{

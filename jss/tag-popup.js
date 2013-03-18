@@ -261,6 +261,8 @@ function ajaxShareTagFunctionCall(url,msg)
 	 	{
 			alert(msg);
 		}else{
+			document.getElementById("shareButton").style.display="none";
+			document.getElementById("loadingImg").style.display="block";
 			xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&tagName=" + tagName +"&entityTag="+ entityTag
 				+"&userString=" + userString);
 		}
@@ -318,6 +320,7 @@ function showTreeMessage() {
 			document.getElementById("newTagLabel").style.display="inline";
 			document.getElementById("shareLabel").style.display="none";
 			document.getElementById("treegridbox").style.height="240px";
+			document.getElementById("loadingImg").style.display="none";
 			setHeader(isObjChecked);
 		}else{
 			var tdId = "multiSelectId";
@@ -328,6 +331,7 @@ function showTreeMessage() {
 			document.getElementById("newTagLabel").style.display="none";
 			document.getElementById("shareLabel").style.display="inline";
 			document.getElementById("treegridbox").style.height="170px";
+			document.getElementById("loadingImg").style.display="none";
 			setHeader(isObjChecked);
 		} 
 	}

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tags.bizlogic.ITagBizlogic;
 import edu.wustl.common.tags.dao.TagDAO;
@@ -21,6 +22,9 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.query.util.global.UserCache;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.manager.ISecurityManager;
+import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
 public class SpecimenListBizlogic implements ITagBizlogic
@@ -105,14 +109,14 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param obj Object to be inserted in database
 	 * @throws DAOException,BizLogicException.
 	 */
-	public List<Tag> getTagList(Long userId) throws DAOException, BizLogicException
+	public List<Tag> getTagList(SessionDataBean sessionBean) throws DAOException, BizLogicException
 	{
 		TagDAO tagDao = null;
 		List<Tag> tagList = null;
 		try
 		{	 
 			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
-			tagList = tagDao.getTags(userId);
+			tagList = tagDao.getTags(sessionBean);
 			return tagList;
 		}
 		catch (DAOException e)
@@ -192,17 +196,17 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param tagId to retrieve TagItem Object and delete it from database.
 	 * @throws DAOException,BizLogicException.
 	 */
-	public void deleteTag(Long tagId, Long userId) throws DAOException, BizLogicException
+	public void deleteTag(SessionDataBean sessionBean,Long tagId) throws DAOException, BizLogicException
 	{
 		TagDAO tagDao = null;
 		try
 		{
 			tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG); 
 			Tag tag = tagDao.getTagById(tagId);
-			if(tag.getUserId() == userId){
+			if(tag.getUserId() == sessionBean.getUserId()){
 				tagDao.deleteTag(tag);
 			} else {
-				tag.getSharedUserIds().remove(userId);
+				tag.getSharedUserIds().remove(Long.parseLong(sessionBean.getCsmUserId()));
 				tagDao.updateTag(tag);
 			}
 			tagDao.commit();
@@ -296,7 +300,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	 * @param Set<Long> tagIdSet.
 	 * @throws DAOException.
 	 */
-	public void shareTags(Long userId, Set<Long> tagIdSet, Set<Long> selectedUsers)
+	public void shareTags(SessionDataBean sessionBean, Set<Long> tagIdSet, Set<Long> csmUserIds)
 			throws DAOException, BizLogicException 
 	{
 		List<Tag> specimens = new ArrayList<Tag>();
@@ -307,10 +311,11 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			{
 				tagDao = new TagDAO(Constants.ENTITY_SPECIMEN_TAG);
 				Tag tag = tagDao.getTagById(tagId);
-				if(selectedUsers.contains(tag.getUserId())) {
-					selectedUsers.remove(tag.getUserId());
+				Long csmUserId = Long.parseLong(sessionBean.getCsmUserId());
+				if(csmUserIds.contains(csmUserId)){
+					csmUserIds.remove(csmUserId);
 				}
-				tag.getSharedUserIds().addAll(selectedUsers);
+				tag.getSharedUserIds().addAll(csmUserIds); 
 				tagDao.updateTag(tag);
 				tagDao.commit();
 				specimens.add(tag);
@@ -327,21 +332,28 @@ public class SpecimenListBizlogic implements ITagBizlogic
 				}
 			}	
 		}
-		try {
-			Set<User> selectedUserSet = new HashSet<User>();
-			User user = UserCache.getUser(userId.toString());
-			for(Long sUserId:selectedUsers){
-				selectedUserSet.add (UserCache.getUser(sUserId.toString()));		
-			}
-			if (! specimens.isEmpty()){
+		try {	
+			if (!specimens.isEmpty()){
+				User user = UserCache.getUser(sessionBean.getCsmUserId().toString());
+				Set<User> users = getUsersFromCsmIds(csmUserIds);
 				TagUtil.sendSharedTagEmailNotification(user, specimens, 
-					selectedUserSet, Constants.SHARE_SPECIMEN_LIST_EMAIL_TMPL);
+					users, Constants.SHARE_SPECIMEN_LIST_EMAIL_TMPL);
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error while sending email for query folder",e);
 		} 
 	}
 	
+	public Set<User> getUsersFromCsmIds(Set<Long> csmUserIds) 
+			throws BizLogicException
+	{
+		Set<User> users = new HashSet<User>();		
+		for(Long sUserId : csmUserIds){
+			User user = UserCache.getUser(sUserId.toString()); 
+			users.add(user);	
+		}
+		return users;
+	}
 	/**
 	 * delete TagItems from object Ids.
 	 * @param List<Long> objIds.
