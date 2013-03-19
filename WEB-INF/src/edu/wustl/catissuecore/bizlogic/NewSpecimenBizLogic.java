@@ -5965,57 +5965,62 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			return list;
 		}
 
-//		public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier) 
-//		{
-//			edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = new edu.wustl.catissuecore.dto.SpecimenDTO();
-//			try {
-//				DAO dao = AppUtility.openDAOSession(null);
-//				Specimen specimen = (Specimen)dao.retrieveById(Specimen.class.getName(),identifier);
-//				specimenDTO.setId(specimen.getId());
-//				specimenDTO.setLabel(specimen.getLabel());
-//				specimenDTO.setActivityStatus(specimen.getActivityStatus());
-//				specimenDTO.setAvailable(specimen.getIsAvailable());
-//				specimenDTO.setAvailableQuantity(specimen.getAvailableQuantity());
-//				specimenDTO.setBarcode(specimen.getBarcode());
-//				specimenDTO.setClassName(specimen.getClassName());
-//				specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
-//				specimenDTO.setComments(specimen.getComment());
-////				specimenDTO.setConcentration(specimen.getc)
-//				specimenDTO.setCreatedDate(String.valueOf(specimen.getCreatedOn()));
-//				specimenDTO.setLineage(specimen.getLineage());
-//				if(specimen.getParentSpecimen() != null)
+		public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier) 
+		{
+			edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = new edu.wustl.catissuecore.dto.SpecimenDTO();
+			try {
+				DAO dao = AppUtility.openDAOSession(null);
+				Specimen specimen = (Specimen)dao.retrieveById(Specimen.class.getName(),identifier);
+				specimenDTO.setId(specimen.getId());
+				specimenDTO.setLabel(specimen.getLabel());
+				specimenDTO.setActivityStatus(specimen.getActivityStatus());
+				specimenDTO.setAvailable(specimen.getIsAvailable());
+				specimenDTO.setAvailableQuantity(specimen.getAvailableQuantity());
+				specimenDTO.setBarcode(specimen.getBarcode());
+				specimenDTO.setClassName(specimen.getClassName());
+				specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
+				specimenDTO.setComments(specimen.getComment());
+//				specimenDTO.setConcentration(specimen.getc)
+				specimenDTO.setCreatedDate(String.valueOf(specimen.getCreatedOn()));
+				specimenDTO.setLineage(specimen.getLineage());
+				if(specimen.getParentSpecimen() != null)
+				{
+					specimenDTO.setParentSpecimenId(specimen.getParentSpecimen().getId());
+					specimenDTO.setParentSpecimenName(specimen.getParentSpecimen().getLabel());
+				}
+				specimenDTO.setPathologicalStatus(specimen.getPathologicalStatus());
+				specimenDTO.setQuantity(specimen.getInitialQuantity());
+				if(specimen.getSpecimenCollectionGroup() != null)
+				{
+					specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
+					specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup().getName());
+				}
+				specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
+				specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+				specimenDTO.setType(specimen.getSpecimenType());
+				if(specimen.getSpecimenPosition()!= null)
+				{
+					specimenDTO.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
+					specimenDTO.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
+					specimenDTO.setContainerId(specimen.getSpecimenPosition().getStorageContainer().getId());
+					specimenDTO.setContainerName(specimen.getSpecimenPosition().getStorageContainer().getName());
+					specimenDTO.setIsVirtual(Boolean.FALSE);
+				}
+				else
+				{
+					specimenDTO.setIsVirtual(Boolean.TRUE);
+				}
+//				if(specimen.getExternalIdentifierCollection() != null)
 //				{
-//					specimenDTO.setParentSpecimenId(specimen.getParentSpecimen().getId());
-//					specimenDTO.setParentSpecimenName(specimen.getParentSpecimen().getLabel());
+					specimenDTO.setExternalIdentifiers(specimen.getExternalIdentifierCollection());
+					specimenDTO.setBioHazards(specimen.getBiohazardCollection());
 //				}
-//				specimenDTO.setPathologicalStatus(specimen.getPathologicalStatus());
-//				specimenDTO.setQuantity(specimen.getInitialQuantity());
-//				if(specimen.getSpecimenCollectionGroup() != null)
-//				{
-//					specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
-//					specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup().getName());
-//				}
-//				specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
-//				specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
-//				specimenDTO.setType(specimen.getSpecimenType());
-//				if(specimen.getSpecimenPosition()!= null)
-//				{
-//					specimenDTO.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
-//					specimenDTO.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
-//					specimenDTO.setContainerId(specimen.getSpecimenPosition().getStorageContainer().getId());
-//					specimenDTO.setContainerName(specimen.getSpecimenPosition().getStorageContainer().getName());
-//					specimenDTO.setIsVirtual(Boolean.FALSE);
-//				}
-//				else
-//				{
-//					specimenDTO.setIsVirtual(Boolean.TRUE);
-//				}
-//				
-//			} catch (ApplicationException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//			return specimenDTO;
-//		}
+				
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return specimenDTO;
+		}
 }

@@ -83,6 +83,7 @@ td {
 %>
 
 <script>
+//alert('ddd');
 function getActionToDoURL()
 {
 	var className="${requestScope.holdSpecimenClass}";//parent.window.document.getElementById('className').value;
@@ -215,7 +216,42 @@ function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2)
 	id1.value = elementValue1;
 	var id2 = document.getElementById(elementId2);	
 	id2.value = elementValue2;
-	transferSpecimen();
+	var speCollStat = '${requestScope.collStatus}';
+	//alert(speCollStat);
+	//alert(dhtmlxCombo.getActualValue());
+	if(speCollStat != null && speCollStat != "" )
+	{
+		if(speCollStat == 'Collected')
+		{
+			transferSpecimen();
+		}
+		else
+		{
+			updatePosition();
+		}
+	}
+	
+}
+
+function updatePosition()
+{
+	var pos1=document.getElementById('pos1').value;
+	var pos2=document.getElementById('pos2').value;
+	var containerName=dhtmlxCombo.getComboText();
+	
+	var storagePosition=parent.window.document.getElementById('storageContainerPosition');
+		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
+		storagePosition.value=newStoragePosition;
+		var isVirtual=parent.window.document.getElementById('isVirtual');
+		isVirtual.value=false;
+		var container = parent.window.document.getElementById('containerName');
+		var position1= parent.window.document.getElementById('pos1');
+		var position2= parent.window.document.getElementById('pos2');
+		
+		container.value = containerName;
+		position1.value = pos1;
+		position2.value= pos2;
+		parent.window.dhxWins.window("containerPositionPopUp").close();
 }
 
 function transferSpecimen()
@@ -488,9 +524,21 @@ function checkSpecimenStatus()
 	{
 		document.getElementById("storageContainerNameDiv").style.display="none";
 	}
+	var fromStoragePosition=parent.window.document.getElementById('storageContainerPosition').value;
+	//alert(fromStoragePosition);
+	if(fromStoragePosition != 'Virtually Located')
+	{
+		var fromContainerName=fromStoragePosition.substring(0,fromStoragePosition.lastIndexOf('(')-1);
+		var storagePositions=fromStoragePosition.substring(fromStoragePosition.lastIndexOf('(')+1,fromStoragePosition.lastIndexOf(')')).split(",");
+		var fromPos1=storagePositions[0];
+		var fromPos2=storagePositions[1];
+		document.getElementById("pos11").value=fromPos1;
+		document.getElementById("pos22").value=fromPos2;
+	}
 	else
 	{
-		//document.getElementById("storageContainerDiv").style.display="none";
+		document.getElementById("pos11").value="";
+		document.getElementById("pos22").value="";
 	}
 }
 

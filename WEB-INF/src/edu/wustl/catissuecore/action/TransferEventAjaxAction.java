@@ -134,7 +134,7 @@ public class TransferEventAjaxAction extends SecureAction
 				
 				trfrEvent.setFromStorageContainer(fromStorageContainer);
 
-				dao = AppUtility.openDAOSession(sessionDataBean);
+//				dao = AppUtility.openDAOSession(sessionDataBean);
 				final String sourceObjectName2 = StorageContainer.class.getName();
 				final String[] selectColumnName2 = {"id"};
 				final QueryWhereClause queryWhereClause2 = new QueryWhereClause(sourceObjectName2);

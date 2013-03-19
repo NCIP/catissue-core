@@ -392,6 +392,10 @@
 	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>
+	<definition name=".catissuecore.editNewSpecimenDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/EditSpecimen.jsp" />
+	</definition>
+	
 
 	<definition name=".catissuecore.newSpecimenAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />

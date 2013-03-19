@@ -907,6 +907,12 @@ public class Constants
 
 	/** The Constant SPECIMEN_TYPE_LIST. */
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
+	
+	public static final String TISSUE_TYPE_LIST = "tissueTypeList";
+	public static final String CELL_TYPE_LIST = "cellTypeList";
+	public static final String FLUID_TYPE_LIST = "fluiTypeList";
+	public static final String MOLECULAR_TYPE_LIST = "molecularTypeList";
+	
 
 	/** The Constant SPECIMEN_SUB_TYPE_LIST. */
 	public static final String SPECIMEN_SUB_TYPE_LIST = "specimenSubTypeList";
