@@ -13,120 +13,7 @@
 	}
 %>
 <script language="JavaScript">
-function participantRegRow(subdivtag)
-		{
-			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
-			collectionProtocolRegistrationVal = collectionProtocolRegistrationVal + 1;
-			document.forms[0].collectionProtocolRegistrationValueCounter.value = collectionProtocolRegistrationVal;
-			var rows = new Array();
-			rows = document.getElementById(subdivtag).rows;
-			var cprSize = rows.length;
-			var row = document.getElementById(subdivtag).insertRow(cprSize);
-			var cellNo = 0;
-			//first Cell
-			var cprCheckb=row.insertCell(cellNo);
-			cprCheckb.className="black_ar";
-			sname="";
-			cellNo +=1;
-	   		var identifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_id)";
-			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			var name = "CollectionProtocolRegistrationChk_"+(cprSize+1);
-			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')\">";
-			cprCheckb.innerHTML=""+sname;
-			// Second Cell
-			var cprTitle=row.insertCell(cellNo);
-			cprTitle.className="black_ar";
-			sname="";
-			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
-			var keyValue = name;
-			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized12' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
-			<%
-				if(collectionProtocolList!=null)
-				{
-					Iterator iterator = collectionProtocolList.iterator();
-					while(iterator.hasNext())
-					{
-						NameValueBean bean = (NameValueBean)iterator.next();
-			%>
-						sname = sname + "<option value=\"<%=bean.getValue()%>\"><%=bean.getName()%></option>";
-			<%		}
-				}
-			%>
-			sname = sname + "</select>";
-			var collectionProtocolTitleValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_shortTitle)";
-			sname = sname + "<input type='hidden' name='" + collectionProtocolTitleValue + "' value='' id='" + collectionProtocolTitleValue + "'>";
-			cprTitle.innerHTML="" + sname;
-			cellNo +=1;
-			//third Cell
-			var cprParticipantId=row.insertCell(cellNo);
-			cprParticipantId.className="black_ar";
-			sname="";
-			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_protocolParticipantIdentifier)";
-			sname="<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "'>";
-			cprParticipantId.innerHTML="" + sname;
-			cellNo +=1;
 
-			<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
-			{%>
-			//fourth Cell
-			var cprBarcode=row.insertCell(cellNo);
-			cprBarcode.className="black_ar";
-			sname="";
-			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_barcode)";
-			sname="<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "'>";
-			cprBarcode.innerHTML="" + sname;
-			cellNo +=1;
-			<%}%>
-
-			<%String registrationDate = edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());%>
-    		//Fifth Cell
-			var cprRegistrationDate=row.insertCell(cellNo);
-			cprRegistrationDate.className="black_ar";
-			cprRegistrationDate.colSpan=1;
-			sname="";
-			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_registrationDate)";
-			sname = "<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "' value = '<%=registrationDate%>'>";
-			cprRegistrationDate.innerHTML=sname;
-			cellNo +=1;
-			//Sixth Cell
-			var cprActivityStatus=row.insertCell(cellNo);
-			cprActivityStatus.className="black_ar";
-			sname="";
-			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_activityStatus)";
-			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized8' id='" + name + "' disabled='disabled' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) >";
-			<%for(int i=0 ; i<activityStatusList.length; i++)
-				{
-					String selected= "";
-					if(i==1)
-					{
-						selected="selected='selected'";
-					}%>
-					sname = sname + "<option value='<%=activityStatusList[i]%>' <%=selected%> ><%=activityStatusList[i]%></option>";
-			<%}%>
-			sname = sname + "</select>";
-			cprActivityStatus.innerHTML=sname;
-			cellNo +=1;
-
-			//Seventh Cell
-			var consent=row.insertCell(cellNo);
-			consent.className="black_ar";
-			sname="";
-
-			var spanTag=document.createElement("span");
-			var consentCheckStatus="consentCheckStatus_"+(cprSize+1);
-			spanTag.setAttribute("id",consentCheckStatus);
-
-			var name = "CollectionProtocolConsentChk_"+ (cprSize+1);
-			var anchorTagKey = "ConsentCheck_"+ (cprSize+1);
-			var collectionProtocolValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
-			var collectionProtocolTitleValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_shortTitle)";
-			var anchorTag = document.createElement("a");
-			anchorTag.setAttribute("id",anchorTagKey);
-			spanTag.innerHTML="<%=Constants.NO_CONSENTS_DEFINED%>"+"<input type='hidden' name='" + name + "' value='Consent' id='" + name + "'>";
-			spanTag.appendChild(anchorTag);
-			consent.appendChild(spanTag);
-			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus,'<%=operation%>')};
-		}
 		function setSubmittedForParticipanteMPIGenerate(submittedFor,forwardTo){
 			var noOfreg = '<%=noOrRowsCollectionProtocolRegistration%>';
             var vbirthDate = document.getElementById('birthDate');
@@ -182,7 +69,7 @@ function participantRegRow(subdivtag)
 					}
 				}
 			<%}%>
-	setCollectionProtocolTitle();
+	//setCollectionProtocolTitle();
 	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
    	{
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
@@ -199,30 +86,7 @@ function participantRegRow(subdivtag)
 			checkActivityStatusForCPR();
 	}
 }
-	function setCollectionProtocolTitle()
-	{
-		var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
-		for(i = 1 ; i <= collectionProtocolRegistrationVal ; i++)
-		{
-			var collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_CollectionProtocol_id)";
-			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
-			var collectionProtocolTitle;
-			<%if(collectionProtocolList!=null)
-			{
-				Iterator iterator = collectionProtocolList.iterator();
-				while(iterator.hasNext())
-				{
-					NameValueBean bean = (NameValueBean)iterator.next();%>
-					if(collectionProtocolIdValue =="<%=bean.getValue()%>")
-					{
-						collectionProtocolTitle = "<%=bean.getName()%>";
-					}
-			<%}
-			}%>
-			var collectionProtocolTitleKey = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_CollectionProtocol_shortTitle)";
-			document.getElementById(collectionProtocolTitleKey).value = collectionProtocolTitle;
-		}
-	}
+	
 
 <logic:equal name="participantForm" property="pHIView" value="false">
       <%  
@@ -253,6 +117,7 @@ function participantRegRow(subdivtag)
             <html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>" /> 
 			<html:hidden property="submittedFor" value="<%=submittedFor%>" /> 
 			<html:hidden property="forwardTo" value="<%=forwardTo%>" />
+			<html:hidden property="cprId"/>
 		</td>
 		<td><html:hidden property="valueCounter" /></td>
 		<td><html:hidden
@@ -590,6 +455,42 @@ function participantRegRow(subdivtag)
 							</html:select></td>
 						</tr>
 					</logic:equal>
+
+					<tr>
+						<td width="1%" align="center" class="black_ar">&nbsp;</td>
+						<td class="black_ar_t"><bean:message
+							key="participant.collectionProtocolReg.participantProtocolID" /></td>
+
+						<td class="black_ar"> <html:text property="ppId" styleClass="black_ar"
+							   styleId="ppId" size="27" />			
+							   
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="1%" align="center" class="black_ar">&nbsp;</td>
+						<td class="black_ar_t"><bean:message
+							key="participant.collectionProtocolReg.barcode" /></td>
+
+						<td class="black_ar"> <html:text property="barcode" styleClass="black_ar"
+							   styleId="barcode" size="27" />			
+							   
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="1%" align="center" class="black_ar">&nbsp;</td>
+						<td class="black_ar_t"><bean:message
+							key="participant.collectionProtocolReg.participantRegistrationDate" /></td>
+
+						<td class="black_ar"> 
+							<html:text property="registrationDate" styleClass="black_ar"
+							   styleId="registrationDate" size="10" onclick="doInitCalendar('birthDate',false);"/>	
+							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
+						</td>
+					</tr>
+					
+					
 				</table>
 				</td>
 			</tr>
@@ -679,299 +580,6 @@ function participantRegRow(subdivtag)
 			</tr>
 			<tr>
 				<td colspan="2" class="bottomtd"></td>
-			</tr>
-			<tr onclick="javascript:showHide('add_participant_registeration')">
-				<td width="90%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="participant.collectionProtocolReg" /> </span></td>
-				<td width="10%" align="right" class="tr_bg_blue1"><a href="#"
-					id="imgArrow_add_participant_registeration">
-					<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-
-							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
-					width="80" height="9" hspace="10" border="0" />
-					</logic:equal>
-					<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-
-						<img src="images/uIEnhancementImages/up_arrow.gif" alt="Hide Details"
-					width="80" height="9" hspace="10" border="0" />
-
-					</logic:notEqual>
-
-						</a></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-
-				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-						<div id="add_participant_registeration" style="display:none">
-				</logic:equal>
-				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-						<div id="add_participant_registeration" style="display:block">
-				</logic:notEqual>
-				<table width="100%" border="0" cellspacing="0" cellpadding="3">
-				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-					<tr class="tableheading">
-						<td width="3%" align="left" class="black_ar_b">Select</td>
-						<td width="18%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.protocolTitle" /></td>
-						<td width="13%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.participantProtocolID" />
-						</td>
-						<%
-							if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
-										{
-						%>
-							<td width="13%" align="left" class="black_ar_b"><bean:message
-								key="participant.collectionProtocolReg.barcode" />
-							</td>
-						<%
-							}
-						%>
-						<td width="18%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.participantRegistrationDate" />
-						</td>
-						<td width="18%" align="left" class="black_ar_b"><bean:message
-							key="participant.activityStatus" /></td>
-						<td width="16%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.consent" /></td>
-					</tr>
-				</logic:equal>
-				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
-					<tr class="tableheading">
-						<td width="3%" align="left" class="black_ar_b">Select</td>
-						<td width="25%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.protocolTitle" /></td>
-
-							<td width="13%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.participantProtocolID" />
-							</td>
-							<%
-							if(!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl)
-							{
-						%>
-							<td width="13%" align="left" class="black_ar_b"><bean:message
-								key="participant.collectionProtocolReg.barcode" />
-							</td>
-						<%
-							}
-						%>
-						<td width="25%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.participantRegistrationDate" />
-						</td>
-						<td width="25%" align="left" class="black_ar_b"><bean:message
-							key="participant.activityStatus" /></td>
-						<td width="22%" align="left" class="black_ar_b"><bean:message
-							key="participant.collectionProtocolReg.consent" /></td>
-					</tr>
-				</logic:notEqual>
-					<script> document.forms[0].collectionProtocolRegistrationValueCounter.value = <%=noOrRowsCollectionProtocolRegistration%> </script>
-					<tbody id="addMoreParticipantRegistration">
-						<%
-							for (int i = 1; i <= noOrRowsCollectionProtocolRegistration; i++) {
-														String collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_CollectionProtocol_id)";
-														String collectionProtocolTitle = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_CollectionProtocol_shortTitle)";
-														String collectionProtocolParticipantId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_protocolParticipantIdentifier)";
-														String barcode = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-															+ i + "_barcode)";
-														String barcodeKey = "CollectionProtocolRegistration:"
-															+ i + "_barcode";
-														String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_registrationDate)";
-														String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_id)";
-														String collectionProtocolRegistrationActivityStatus = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_activityStatus)";
-														String collectionProtocolCheck = "CollectionProtocolRegistrationChk_"
-														+ i;
-														String key = "CollectionProtocolRegistration:" + i + "_id";
-														String collectionProtocolConsentCheck = "CollectionProtocolConsentChk_"
-														+ i;
-														String anchorTagKey = "ConsentCheck_" + i;
-														String consentCheckStatus = "consentCheckStatus_" + i;
-
-														String consentResponseDisplay = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"
-														+ i + "_isConsentAvailable)";
-														String consentResponseDisplayKey = "CollectionProtocolRegistration:"
-														+ i + "_isConsentAvailable";
-														String consentResponseDisplayValue = (String) form
-														.getCollectionProtocolRegistrationValue(consentResponseDisplayKey);
-
-														String collectionProtocolTitleKey = "CollectionProtocolRegistration:"
-														+ i + "_CollectionProtocol_shortTitle";
-														String collectionProtocolTitleValue = (String) form
-														.getCollectionProtocolRegistrationValue(collectionProtocolTitleKey);
-
-														String collectionProtocolIdKey = "CollectionProtocolRegistration:"
-														+ i + "_CollectionProtocol_id";
-														String collectionProtocolIdValue = (String) form
-														.getCollectionProtocolRegistrationValue(collectionProtocolIdKey);
-
-														String collectionProtocolRegIdValue = (String) form
-														.getCollectionProtocolRegistrationValue("CollectionProtocolRegistration:"
-																+ i + "_id");
-
-														if (consentResponseDisplayValue == null) {
-															consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
-														}
-														boolean CollectionProtocolRegConditionBoolean = edu.wustl.common.util.Utility
-														.isPersistedValue(mapCollectionProtocolRegistration,
-																key);
-														boolean activityStatusCondition = false;
-														if (!CollectionProtocolRegConditionBoolean)
-															activityStatusCondition = true;
-
-														String onChangeFun = "getConsent('" + collectionProtocolCheck
-														+ "','" + collectionProtocolId + "', '"
-														+ collectionProtocolTitleKey + "','" + i + "','"
-														+ anchorTagKey + "','" + consentCheckStatus + "','" + operation + "')";
-						%>
-
-						<tr>
-							<%
-								String CollectionProtocolRegCondition = "";
-																if (CollectionProtocolRegConditionBoolean)
-																	CollectionProtocolRegCondition = "disabled='disabled'";
-							%>
-							<td align="left" class="black_ar"><html:hidden
-								property="<%=collectionProtocolIdentifier%>" /> <input
-								type=checkbox name="<%=collectionProtocolCheck%>"
-								id="<%=collectionProtocolCheck%>"
-								<%=CollectionProtocolRegCondition%>
-								onClick="javascript:enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')">
-							</td>
-							<td align="left" nowrap class="black_ar">
-							<%
-								if (CollectionProtocolRegConditionBoolean) {
-							%> <html:text styleClass="black_ar" maxlength="50"
-								styleId="<%=collectionProtocolTitle%>"
-								property="<%=collectionProtocolTitle%>"
-								readonly="<%=readOnlyValue%>" /> <input type="hidden"
-								id="<%=collectionProtocolId%>" name="<%=collectionProtocolId%>"
-								value="<%=collectionProtocolIdValue%>" /> <%
- 	} else {
- %> <html:select property="<%=collectionProtocolId%>"
-								styleClass="formFieldSized12"
-								styleId="<%=collectionProtocolId%>"
-								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"
-								onchange="<%=onChangeFun%>">
-								<html:options collection="<%=Constants.PROTOCOL_LIST%>"
-									labelProperty="name" property="value" />
-							</html:select> <input type="hidden" id="<%=collectionProtocolTitle%>"
-								name="<%=collectionProtocolTitle%>"
-								value="<%=collectionProtocolTitleValue%>" /> <%
- 	}
- %>
-							</td>
-							<%
-								if((!Variables.isProtocolParticipantIdentifierLabelGeneratorAvl) || operation.equals(Constants.EDIT) || operation.equals(Constants.ADD)){
-							%>
-							<td align="left" class="black_ar"><html:text
-								styleClass="black_ar" size="10" maxlength="50"
-								styleId="<%=collectionProtocolParticipantId%>"
-								property="<%=collectionProtocolParticipantId%>" /></td>
-							<%
-								}
-							%>
-							<%
-								if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)){
-							%>
-										<td align="left" class="black_ar">
-										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-										<%
-												if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null) {
-											%>
-											<label for="barcode" >
-											<%=form.getCollectionProtocolRegistrationValue(barcodeKey)%>
-											</label>
-										<%
-																				}else{
-																			%>
-											<label for="barcode" >&nbsp;
-											</label>
-										<%
-											}
-										%>
-										<html:hidden property="<%=barcode%>" />
-										</logic:equal>
-										<logic:notEqual name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-										<html:text styleClass="black_ar" size="10" maxlength="50" styleId="<%=barcode%>" property="<%=barcode%>" />
-										</logic:notEqual>
-										</td>
-							<%
-								}
-							%>
-							<td align="left" class="black_ar"><html:text
-								styleClass="black_ar" size="10" maxlength="50"
-								styleId="<%=collectionProtocolRegistrationDate%>"
-								property="<%=collectionProtocolRegistrationDate%>" /></td>
-							<td align="left" class="black_ar"><html:select
-								property="<%=collectionProtocolRegistrationActivityStatus%>"
-								styleClass="formFieldSized8"
-								styleId="<%=collectionProtocolRegistrationActivityStatus%>"
-								size="1" disabled='<%=activityStatusCondition%>'
-								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
-									labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-							</html:select></td>
-							<td align="left" class="black_ar">
-								<span id="<%=consentCheckStatus%>"> 
-								<%
-							         if (!consentResponseDisplayValue
- 									.equals(Constants.NO_CONSENTS_DEFINED)) {
- 										if (operation.equals(Constants.EDIT)) {
- 									consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
- 										}
- %> <a id="<%=anchorTagKey%>"
-								href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>','<%=collectionProtocolRegIdValue%>','<%=operation%>')">
-							<%=consentResponseDisplayValue%><br>
-							<input type='hidden' name="<%=collectionProtocolConsentCheck%>"
-								value='Consent' id="<%=collectionProtocolConsentCheck%>">
-							<input type='hidden' name="<%=consentResponseDisplay%>"
-								value="<%=consentResponseDisplayValue%>"
-								id="<%=consentResponseDisplay%>"> </a> <%
- 	} else {
- %> <%=consentResponseDisplayValue%> <input type='hidden'
-								name="<%=collectionProtocolConsentCheck%>" value='Consent'
-								id="<%=collectionProtocolConsentCheck%>"> <input
-								type='hidden' name="<%=consentResponseDisplay%>"
-								value="<%=consentResponseDisplayValue%>"
-								id="<%=consentResponseDisplay%>"> <%
- 	}
- %> </span></td>
-						</tr>
-						<%
-							}
-						%>
-					</tbody>
-					<tr>
-                                            
-						<td align="left" class="black_ar" colspan="3"><html:button
-							property="addKeyValue" styleClass="black_ar"
-							onclick="participantRegRow('addMoreParticipantRegistration')" disabled="<%=isSubmitDisabled%>">
-							<bean:message key="buttons.addMore" />
-						</html:button>
-						&nbsp;<html:button
-							property="deleteParticipantRegistrationValue"
-							styleClass="black_ar"
-							onclick="deleteChecked('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"
-							disabled="true">
-							<bean:message key="buttons.delete" />
-						</html:button></td>
-						<td class="black_ar" >&nbsp;</td>
-						<td class="black_ar">&nbsp;</td>
-						<td class="black_ar">&nbsp;</td>
-					</tr>
-				</table>
-				</div>
-				</td>
 			</tr>
 			<tr>
 				<td colspan="2" class="buttonbg">

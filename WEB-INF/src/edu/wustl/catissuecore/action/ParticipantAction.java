@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantUtil;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -48,6 +49,7 @@ import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.dto.ParticipantDTO;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -244,6 +246,8 @@ public class ParticipantAction extends CatissueBaseAction {
 
 		// Sets the collection Protocol if page is opened from collection
 		// protocol registration
+		
+		
 		if (participantForm.getOperation().equals(Constants.ADD)) {
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
 			if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY)) {
@@ -281,6 +285,7 @@ public class ParticipantAction extends CatissueBaseAction {
 							cprDateKey, cprDateValue);
 					participantForm
 							.setCollectionProtocolRegistrationValueCounter(1);
+					participantForm.setRegistrationDate(cprDateValue);
 				}
 			}
 		}
@@ -421,6 +426,23 @@ public class ParticipantAction extends CatissueBaseAction {
 					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
 					participantEntityId);
 		}
+		if (!participantForm.getOperation().equals(Constants.ADD)){ 
+			DAO dao=null;
+			try{
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+			ParticipantDTO dto = cprBizLogic.fetchCprDetailForParticipant(participantForm.getCpId(), participantForm.getId(), dao);
+			participantForm.setPpId(dto.getPpid());
+			participantForm.setBarcode(dto.getBarcode());
+			participantForm.setRegistrationDate(CommonUtilities.parseDateToString(dto.getRegistrationDate(),
+									CommonServiceLocator.getInstance().getDatePattern()));
+			participantForm.setCprId(String.valueOf(dto.getCprId()));
+			}finally{
+				AppUtility.closeDAOSession(dao);
+			}
+		}
+			
+		
 		request.setAttribute(
 				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
 				participantEntityId);

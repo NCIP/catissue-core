@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
@@ -39,6 +40,7 @@ import edu.wustl.common.participant.domain.IParticipant;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -795,13 +797,30 @@ public class Participant extends AbstractDomainObject
 			final Map mapCollectionProtocolRegistrationCollection = form
 					.getCollectionProtocolRegistrationValues();
 			logger.debug("Map " + map);
-			final MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
-					"edu.wustl.catissuecore.domain");
-			collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
-					.generateData(mapCollectionProtocolRegistrationCollection);
+			if(form.getCpId()!=-1){
+				CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+				CollectionProtocol cp = new CollectionProtocol();
+				cp.setId(form.getCpId());
+				cpr.setCollectionProtocol(cp);
+				cpr.setRegistrationDate(CommonUtilities
+						.parseDate(form.getRegistrationDate()));
+				if(form.getCprId()!=null && !form.getCprId().equals("")){
+				cpr.setId(Long.parseLong(form.getCprId()));
+				cpr.setProtocolParticipantIdentifier(form.getPpId());
+				cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+				}
+				Set<CollectionProtocolRegistration> list = new HashSet<CollectionProtocolRegistration>();
+				list.add(cpr);
+				collectionProtocolRegistrationCollection = list;
+			}else{
+				final MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
+						"edu.wustl.catissuecore.domain");
+				collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
+						.generateData(mapCollectionProtocolRegistrationCollection);
+			}
 			logger.debug("ParticipantMedicalIdentifierCollection "
 					+ participantMedicalIdentifierCollection);
-
+			
 			this.setConsentsResponseToCollectionProtocolRegistration(form);
 		}
 		catch (final Exception excp)

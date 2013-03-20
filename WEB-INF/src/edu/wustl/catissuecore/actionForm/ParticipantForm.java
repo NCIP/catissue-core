@@ -190,11 +190,63 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	 */
 	private int collectionProtocolRegistrationValueCounter;
 
-	private long cpId = -1;
 
 	protected String empiId = "";
 
 	protected String empiIdStatus = null;
+	
+	private long cpId = -1;
+	
+	private String cpTitle;
+	
+	private String ppId;
+	
+	private String barcode;
+	
+	private String registrationDate;
+	
+	private String cprId;
+
+
+	public String getCprId() {
+		return cprId;
+	}
+
+	public void setCprId(String cprId) {
+		this.cprId = cprId;
+	}
+
+	public String getCpTitle() {
+		return cpTitle;
+	}
+
+	public void setCpTitle(String cpTitle) {
+		this.cpTitle = cpTitle;
+	}
+
+	public String getPpId() {
+		return ppId;
+	}
+
+	public void setPpId(String ppId) {
+		this.ppId = ppId;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	public String getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(String registrationDate) {
+		this.registrationDate = registrationDate;
+	}
 
 	/**
 	 * Initializes an empty ParticipantForm object.
