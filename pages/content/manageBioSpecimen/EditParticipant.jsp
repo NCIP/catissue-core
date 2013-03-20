@@ -1,6 +1,10 @@
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
+<c:set var="tr_white_color" value="tr_alternate_color_white" />
+<c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
+<c:set var="i" value="1" scope="request" />
+
 <%
 	String[] activityStatusList = (String[]) request.getAttribute(Constants.ACTIVITYSTATUSLIST);
     ParticipantForm form = (ParticipantForm) request.getAttribute("participantForm");
@@ -35,6 +39,22 @@
 		
     	function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
+		
+			var disabledValue;
+			var activityStatusValue=document.forms[0].activityStatus;
+			if(activityStatusValue != null)
+			{
+				var activityStatusLength=document.forms[0].activityStatus.length;
+				for(var k=0;k<activityStatusLength;k++)
+				{
+					if((document.forms[0].activityStatus[k].checked) && (document.forms[0].activityStatus[k].value =="Disabled"))
+					{
+						disabledValue = "Disabled";
+					}
+				}
+			}
+		
+		
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
@@ -70,7 +90,7 @@
 				}
 			<%}%>
 	//setCollectionProtocolTitle();
-	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
+	if((document.forms[0].activityStatus != undefined) && (disabledValue == "Disabled"))
    	{
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 		if (go==true)
@@ -243,7 +263,14 @@
 						<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    	  
 						 <c:if test="${attributeName == 'Social Security Number'}">
 						
-						<tr>
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+					<c:set var="i" value="${i+1}" scope="request" />
+								
 							<td width="1%" align="center" class="black_ar">&nbsp;</td>
 							<td width="17%"><label for="socialSecurityNumber"
 								class="black_ar"> <bean:message
@@ -273,7 +300,13 @@
 					<%
 						}
 					%>
-					<tr>
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+					<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
 							key="participant.Name" /> </td>
@@ -302,8 +335,17 @@
 						</table>
 						</td>
 					</tr>
-					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Birth Date'}">
-					<tr>
+					
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						
+					<c:if test="${attributeName == 'Birth Date'}">
+					
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><label for="birthDate" class="black_ar"><bean:message
 							key="participant.birthDate" /></label></td>
@@ -316,8 +358,15 @@
 					</tr>
 					</c:if>
 					</c:forEach>
-					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Vital Status'}">	
-					<tr>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">   
+					<c:if test="${attributeName == 'Vital Status'}">	
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><label for="vitalStatus" class="black_ar"><bean:message
 							key="participant.vitalStatus" /></label></td>
@@ -334,7 +383,14 @@
 							</html:radio>&nbsp;&nbsp;&nbsp;
 								</logic:iterate></td>
 					</tr>
-					<tr>
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+					
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message key="participant.deathDate" /></td>
 						<td>
@@ -354,8 +410,17 @@
 					</c:if>
 					</c:forEach>
 					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}"> 
-					 <c:if test="${attributeName == 'Gender'}">
-					<tr>
+					<c:if test="${attributeName == 'Gender'}">
+					 
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+					
+						<c:set var="i" value="${i+1}" scope="request" />
+					
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
 							key="participant.gender" /></td>
@@ -368,26 +433,34 @@
 								value="<%=nameValueBean.getValue()%>">
 								<%=nameValueBean.getName()%>
 							</html:radio>&nbsp; &nbsp;
-								</logic:iterate></td>
+								</logic:iterate>
+						</td>
 					</tr>
 					</c:if>
 					</c:forEach>	
 				<%
 					if(!Variables.isSexGenoTypeRemove) {
 				%>
-				    <c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Sex Genotype'}">
-					<tr>
+				    <c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 
+					<c:if test="${attributeName == 'Sex Genotype'}">
+					
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+					
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar"><bean:message
 							key="participant.genotype" /> </td>
-
-
-						<td class="black_ar"><label><autocomplete:AutoCompleteTag
-							property="genotype"
-							optionsList="<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
-							initialValue="<%=form.getGenotype()%>"
-							styleClass="black_ar" size="27"/></label></td>
-
+						<td class="black_ar">
+							<html:select property="genotype"
+							             styleClass="black_ar" styleId="genotype" size="1">
+							       <html:options collection="genotypeList" labelProperty="name" property="value" />
+					        </html:select>
+						</td>
 					</tr>
 					</c:if>
 					</c:forEach>
@@ -397,19 +470,39 @@
 				<%
 					if(!Variables.isRaceRemove) {
 				%>
-					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}">    						 <c:if test="${attributeName == 'Race'}">
-					<tr>
+					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}"> 
+					<c:if test="${attributeName == 'Race'}">
+					
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+					
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar_t"><bean:message
 							key="participant.race" /></td>
-
-						<td class="black_ar"><html:select property="raceTypes"
-							styleClass="formFieldSizedNew" styleId="race" size="4"
-							multiple="true" disabled="<%=readOnlyForAll%>"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.RACELIST%>"
-								labelProperty="name" property="value" />
-						</html:select></td>
+						<td>
+							 <table>
+							 <tr>
+								<c:set var="iterator" value="0" />
+								<c:forEach var="rce" items="${raceList}" varStatus="loop">
+								<td>
+								<html:multibox styleId="race" property="raceTypes" value="${rce.value}"
+									           style="vertical-align: middle" />
+								<span class="black_ar" style="vertical-align:middle">
+										${rce.value}
+							    </span>
+								</td>
+								<c:if test="${((iterator+1)%3) == 0}"> 
+									</tr><tr>
+								</c:if>
+								<c:set var="iterator" value="${iterator+1}" />
+							    </c:forEach>
+							 </table>
+					     </td>
 					</tr>
 					</c:if>
 					</c:forEach>
@@ -420,16 +513,32 @@
 					if(!Variables.isEthnicityRemove){
 				%>
 					<c:forEach var="attributeName" items="${participantAttributeDisplaySetInfo}"> 
-					 <c:if test="${attributeName == 'Ethnicity'}">
-					<tr>
+					<c:if test="${attributeName == 'Ethnicity'}">
+					<c:if test="${i%2 == 0}">
+						<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						<tr class="${tr_grey_color}">
+					</c:if>
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td><span class="black_ar"><bean:message
-							key="participant.ethnicity" /></span></td>
-						<td class="black_ar"><label><autocomplete:AutoCompleteTag
-							property="ethnicity"
-							optionsList="<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
-							initialValue="<%=form.getEthnicity()%>"
-							styleClass="black_ar" size="27" /></label></td>
+							  key="participant.ethnicity" /></span></td>
+						<td class="black_ar">
+						<table width="84%">
+						<c:forEach var="eth" items="${ethnicityList}" varStatus="loop">
+							 <c:if test="${eth.name != '-- Select --'}">
+								<td width="25%" class="black_ar" style="vertical-align:middle">
+								<html:radio styleId="ethnicity" property="ethnicity" value="${eth.value}">
+										
+											${eth.value} 
+										
+								</html:radio>
+								</td>
+							  </c:if>
+						</c:forEach>
+						</table>
+						</td>
 					</tr>
 					</c:if>
 					</c:forEach>
@@ -440,23 +549,48 @@
 					<!-- activitystatus -->
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
-						<tr>
-							<td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+					 <c:if test="${i%2 == 0}">
+							<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						   <tr class="${tr_grey_color}">
+					</c:if>
+					
+						<c:set var="i" value="${i+1}" scope="request" />
+						
+							<td width="1%" align="center" class="black_ar">
+									<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
+							</td>
 
 							<td valign="middle"><label for="activityStatus"
 								class="black_ar"><bean:message
 								key="participant.activityStatus" /></label></td>
-							<td class="black_ar_s"><html:select
-								property="activityStatus" styleClass="formFieldSizedNew"
-								styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
-								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
-									labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-							</html:select></td>
+								
+							<td>
+							<table width="84%">
+							 <logic:iterate name="activityStatusList" id="listStatusId">
+							 	<c:if test="${listStatusId != '-- Select --'}">
+								<td width="25%" class="black_ar">	
+									<html:radio property="activityStatus" onclick="checkNewActivityStatus(this,'/QueryManageBioSpecimen.do')"
+								                value="${listStatusId}" style="vertical_align:middle">
+																<bean:write name='listStatusId'/>
+									</html:radio>
+								</td>	
+							   </c:if>
+							 </logic:iterate>
+							 <td width="25%"></td>
+							 </table>	
+				            </td>
 						</tr>
 					</logic:equal>
 
-					<tr>
+					<c:if test="${i%2 == 0}">
+							<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						   <tr class="${tr_grey_color}">
+					</c:if>
+						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar_t"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" /></td>
@@ -467,7 +601,13 @@
 						</td>
 					</tr>
 					
-					<tr>
+					<c:if test="${i%2 == 0}">
+							<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						   <tr class="${tr_grey_color}">
+					</c:if>
+					<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
 						<td class="black_ar_t"><bean:message
 							key="participant.collectionProtocolReg.barcode" /></td>
@@ -478,8 +618,16 @@
 						</td>
 					</tr>
 					
-					<tr>
-						<td width="1%" align="center" class="black_ar">&nbsp;</td>
+					<c:if test="${i%2 == 0}">
+							<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+						  <tr class="${tr_grey_color}">
+					</c:if>
+					<c:set var="i" value="${i+1}" scope="request" />
+						<td width="1%" align="center" class="black_ar">
+									<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
+						</td>
 						<td class="black_ar_t"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" /></td>
 

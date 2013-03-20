@@ -1,6 +1,15 @@
 // Functions from JSP Files
 	
 		var globalOperationValue;
+		
+		function initializeCombo()
+		{
+			var genotypeCombo = dhtmlXComboFromSelect("genotype");  
+			genotypeCombo.enableFilteringMode(true);
+			genotypeCombo.setOptionWidth(120);
+			genotypeCombo.setSize(150);
+		}
+	
 		function getConsent(identifier,collectionProtocolId,collectionProtocolTitle,index,anchorTagKey,consentCheckStatus,operationValue)
 		{
 			globalOperationValue =operationValue; 
@@ -234,8 +243,3 @@
 				document.forms[0].submit();
 			}
 		}
-		
-		
-		
-		
-		

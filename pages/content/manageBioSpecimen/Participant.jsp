@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
@@ -20,7 +21,9 @@
  
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
-
+<script>
+      window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+</script>
 <script src="jss/ajax.js"></script> 
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes --> 
@@ -43,6 +46,9 @@
 <script src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css" />
 
+<script	src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 %>
@@ -343,6 +349,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		}
 	</script>
 </head>
+<body onload="initializeCombo()"></body>
 
 <html:form action="<%=formName%>" style="height:100%,width=100%">
 <html:hidden property="cpId" />
@@ -383,7 +390,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" style="height:95%">
 					<tr height="100%">
 						<td>
-							<%@include file="ViewSurgicalPathologyReport.jsp" %>
+						<%@include file="ViewSurgicalPathologyReport.jsp" %>	
 						</td>
 					</tr>
 				</table>

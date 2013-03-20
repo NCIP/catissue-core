@@ -345,6 +345,9 @@ public class ParticipantAction extends CatissueBaseAction {
 		// Page.
 		final List raceList = CDEManager.getCDEManager()
 				.getPermissibleValueList(Constants.CDE_NAME_RACE, null);
+		
+		raceList.remove(0);
+		
 		request.setAttribute(Constants.RACELIST, raceList);
 
 		// Sets the vitalStatus attribute to be used in the Add/Edit Participant
