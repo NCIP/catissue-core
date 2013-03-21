@@ -1020,3 +1020,13 @@ input.actionButton{ /* optional style for form and action buttons */
 .capitalized {
     text-transform: uppercase;
 }
+
+.tr_alternate_color_white
+{
+	background-color: FFFFFF;
+}
+
+.tr_alternate_color_lightGrey
+{
+	background-color: #F5F5F5;
+}
