@@ -101,5 +101,11 @@
 		
 		<sql>update catissue_abstract_specimen abc join catissue_molecular_specimen mc on abc.identifier = mc.identifier set abc.CONCENTRATION = mc.CONCENTRATION</sql>
 	</changeSet>
+
+	<changeSet id="7" author="dpatil" runOnChange="true">
+		<addColumn tableName="QUERY_PARAMETERIZED_QUERY">
+			<column name="STATUS" type="${text.type}(32)"  defaultValue="ACTIVE"/>
+		</addColumn>
+	</changeSet>
  	 
 </databaseChangeLog>         
