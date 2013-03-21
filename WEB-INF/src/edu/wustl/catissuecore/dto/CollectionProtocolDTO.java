@@ -3,7 +3,9 @@
 
 package edu.wustl.catissuecore.dto;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -22,6 +24,24 @@ public class CollectionProtocolDTO
 	 * collectionProtocol.
 	 */
 	private CollectionProtocol collectionProtocol;
+	
+	List<Long> deletedAssocIds = new ArrayList<Long>();
+	
+	/**
+	 * @return
+	 */
+	public List<Long> getDeletedAssocIds() {
+		return deletedAssocIds;
+	}
+
+	/**
+	 * @param assocIds
+	 */
+	public void setDeletedAssocIds(List<Long> assocIds) {
+		 deletedAssocIds.addAll(assocIds);
+		
+	}
+
 	/**
 	 * rowIdBeanMap.
 	 */

@@ -57,6 +57,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
@@ -2327,15 +2328,30 @@ public class AppUtility {
 	 * @param collectionProtocol
 	 * @param session
 	 * @return
+	 * @throws JSONException 
 	 */
 	public static CollectionProtocolDTO getCoolectionProtocolDTO(
 			final CollectionProtocol collectionProtocol,
-			final HttpSession session) {
+			final HttpSession session) throws JSONException {
 		final CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
 		final Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
 				.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
+		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		String dashboardLabelJsonValue = collectionProtocolBean.getDashboardLabelJsonValue();
+		JSONObject gridJson = new JSONObject(dashboardLabelJsonValue);
+		String deletedassocIds = gridJson.getString("deletedAssocIds");
+		if(!deletedassocIds.isEmpty())
+		{
+		 String[] ids = deletedassocIds.split(",");
+		 List<Long> deletedAssocIds = new ArrayList<Long>();
+		 for(String id:ids)
+		{
+			 deletedAssocIds.add(Long.valueOf(id));
+		}
+		 collectionProtocolDTO.setDeletedAssocIds(deletedAssocIds);
+		}
 		return collectionProtocolDTO;
 	}
 

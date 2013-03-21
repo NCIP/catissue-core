@@ -51,6 +51,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -334,14 +335,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
      */
     @Override
     protected void update(final DAO dao, final Object obj, final Object oldObj,
-            final SessionDataBean sessionDataBean) throws BizLogicException
+            final SessionDataBean sessionDataBean) throws BizLogicException 
     {
         CollectionProtocol collectionProtocol = null;
         Map<String, SiteUserRolePrivilegeBean> rowIdMap = null;
+        List<Long> deletedassocIds = null;
         if (obj instanceof CollectionProtocolDTO)
         {
             final CollectionProtocolDTO cpDto = (CollectionProtocolDTO) obj;
             collectionProtocol = cpDto.getCollectionProtocol();
+            deletedassocIds = cpDto.getDeletedAssocIds();
             rowIdMap = cpDto.getRowIdBeanMap();
             final HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
             protectionObjects.add(collectionProtocol);
@@ -351,8 +354,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
             collectionProtocol = (CollectionProtocol) obj;
         }
         isCollectionProtocolLabelUnique(collectionProtocol);
+        if(deletedassocIds!=null && !deletedassocIds.isEmpty())
+		{
+        	for (Long lsaId : deletedassocIds) {
+       		 deleteLabelSqlAssociaton(dao, lsaId);
+       		}
+		}
         modifyCPObject(dao, sessionDataBean, collectionProtocol);
-
         final Vector<SecurityDataBean> authorizationData = new Vector<SecurityDataBean>();
         if (rowIdMap != null)
         {
@@ -437,7 +445,28 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
     }
 
-    /**
+    
+    /** This method deletes the labelsqlAssociation item from database for given id.
+     * @param dao
+     * @param labelsqlAssoId
+     * @throws BizLogicException
+     */
+    public void deleteLabelSqlAssociaton(DAO dao,
+			Long labelsqlAssoId) throws BizLogicException {
+		try
+        {
+            final LabelSQLAssociation labelsqlAssoc = (LabelSQLAssociation) dao.retrieveById(LabelSQLAssociation.class.getName(), labelsqlAssoId);
+            dao.delete(labelsqlAssoc);
+        }
+        catch (final DAOException daoExp)
+        {
+            CollectionProtocolBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
+            throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+        }
+		
+	}
+
+	/**
      * @param dao
      * @param collectionProtocol
      * @throws BizLogicException

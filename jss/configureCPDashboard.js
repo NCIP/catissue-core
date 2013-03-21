@@ -1,4 +1,5 @@
 var dashboardItemGrid, dashboardItemGridCombo, dashboardItemRowCounter = 1;
+var associationIds = "";
 function doCPDashboardInitGrid() {
 dashboardItemGrid = new dhtmlXGridObject('cpDashboard_container');
 	dashboardItemGrid.setImagePath("dhtmlx_suite/imgs/");
@@ -85,6 +86,11 @@ function checkValue() {
 	var checkedRows = dashboardItemGrid.getCheckedRows(4);
 	var ids = checkedRows.split(",");
 	for ( var i = 0; i < ids.length; i++) {
+	     var assocId = dashboardItemGrid.cellById(ids[i], 0).getValue();
+		 if(associationIds == "")
+			 associationIds = associationIds + assocId;
+		 else
+			 associationIds = associationIds +"," + assocId;
 		dashboardItemGrid.deleteRow(ids[i]);
 	}
 }
@@ -129,7 +135,7 @@ function setCSLevelFormData() {
 	}
   }
 
-	var mainJsonString = '{"row":[' + dataArrayString + ']}';
+	var mainJsonString = '{"row":[' + dataArrayString + '],"deletedAssocIds":"'+ associationIds +'"}';
 
 	document.getElementById("dashboardLabelJsonValue").value = mainJsonString;// JSON.stringify(jsonObject);
 
