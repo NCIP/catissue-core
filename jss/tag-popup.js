@@ -320,8 +320,8 @@ function showTreeMessage() {
 				break;
 			}  
 		} 
-	
-		if(isObjChecked == true){		 
+
+		if (isObjChecked == true) {		 
 			var tdId = "multiSelectId";
 			document.getElementById("assignButton").style.display="block"
 			document.getElementById("shareButton").style.display="none"
@@ -332,7 +332,7 @@ function showTreeMessage() {
 			document.getElementById("treegridbox").style.height="240px";
 			document.getElementById("loadingImg").style.display="none";
 			setHeader(isObjChecked);
-		}else{
+		} else {
 			var tdId = "multiSelectId";
 			document.getElementById("assignButton").style.display="none"
 			document.getElementById("shareButton").style.display="block"
@@ -344,6 +344,9 @@ function showTreeMessage() {
 			document.getElementById("loadingImg").style.display="none";
 			setHeader(isObjChecked);
 		} 
+
+		document.getElementById('coord').value= "--Select--";
+		document.getElementById('protocolCoordinatorIds').options.length = 0;		
 	}
 } 
 //Ajax Function for Delete Folders of TreeGrid 
