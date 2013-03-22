@@ -206,7 +206,7 @@ if(clinDataEntryURL != null && clinDataEntryURL != "" && clinDataEntryURL != "nu
 	//window.top.location=clinDataEntryURL;
 }
 
-function giveCall(url,msg,msg1,id)
+function giveCallToPopup(url,msg,msg1,id)
 {
 	document.getElementsByName('objCheckbox').value=id;
 	document.getElementsByName('objCheckbox').checked = true;
@@ -1068,6 +1068,6 @@ displayPrinterTypeLocation();
 </script>
 </html><%
 	String specId = (String)request.getAttribute("popUpSpecList");
-	String	assignTargetCall = "giveCall('AssignTagAction.doentityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
+	String	assignTargetCall = "giveCallToPopup('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
 %>
 	  <%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
