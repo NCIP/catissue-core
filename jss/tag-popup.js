@@ -143,6 +143,7 @@ function submitTheForm(url,btn) {
 //Ajax Function for Assign Query to folder (Assign Button on Pop up) 
 function ajaxAssignTagFunctionCall(url,msg,msg1) 
 {
+ 
 if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -194,22 +195,18 @@ else
 	else if((objChkBoxString!=''&& tagChkBoxString!='')||(objChkBoxString!=''&& tagName!=''))
  	{
 		 xmlHttpobj.onreadystatechange =assignTagItemFunction;
-		for (i = 0; i < objCheckBoxAr.length; i++) {
-		if (objCheckBoxAr[i].checked == true) {
-			 objCheckBoxAr[i].checked = false;
-			}
-		}
+		 if (entityTag != 'SpecimenListTag'){
+			 clearCheckboxes(objCheckBoxAr)
+		 }
 xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
 			+ objChkBoxString + "&tagName=" + tagName +"&entityTag="+ entityTag+"&entityTagItem="+ entityTagItem);
 	}
 	else if((queryChkBoxString!=''&& tagChkBoxString!=''&& tagName!=''))
 	{
 		 xmlHttpobj.onreadystatechange =assignTagItemFunction;
-		for (i = 0; i < objCheckBoxAr.length; i++) {
-		if (objCheckBoxAr[i].checked == true) {
-			 objCheckBoxAr[i].checked = false;
-			}
-		}
+		 if (entityTag != 'SpecimenListTag'){
+			 clearCheckboxes(objCheckBoxAr);
+		 }
 xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
 			+ objChkBoxString + "&tagName=" + tagName +"&entityTag="+ entityTag+"&entityTagItem="+ entityTagItem);
 	}
@@ -217,6 +214,19 @@ xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
  	
 
 }
+
+function clearCheckboxes(objCheckBoxAr){
+	for (i = 0; i < objCheckBoxAr.length; i++) 
+	{
+		if (objCheckBoxAr[i].checked == true) 
+		{
+			 objCheckBoxAr[i].checked = false;
+		}
+	}	
+}
+
+
+
 function assignTagItemFunction() {
 		if (xmlHttpobj.readyState == 4) {	
 			popup('popUpDiv');
