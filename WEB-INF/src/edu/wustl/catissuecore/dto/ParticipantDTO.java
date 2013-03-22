@@ -7,6 +7,8 @@ public class ParticipantDTO {
 	private Date registrationDate;
 	private String barcode;
 	private Long cprId;
+	protected String activityStatus;
+	
 	
 	public Long getCprId() {
 		return cprId;
@@ -33,5 +35,14 @@ public class ParticipantDTO {
 		this.barcode = barcode;
 	}
 	
-
+	public String getActivityStatus()
+	{
+		return 	activityStatus;
+	}
+	
+	public void  setActivityStatus(String activityStatus)
+	{
+		this.activityStatus=activityStatus;
+	}
+	
 }

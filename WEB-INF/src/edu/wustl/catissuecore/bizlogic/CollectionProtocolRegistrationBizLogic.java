@@ -2466,7 +2466,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	}
 	
 	public edu.wustl.catissuecore.dto.ParticipantDTO fetchCprDetailForParticipant(Long cpid,Long pid,DAO dao) throws BizLogicException{
-		String hql = "select protocolParticipantIdentifier,registrationDate,barcode,id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr " +
+		String hql = "select protocolParticipantIdentifier,registrationDate,barcode,id,activityStatus from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr " +
 				" where cpr.collectionProtocol.id=:cpid and  cpr.participant.id = :pid";
 		ColumnValueBean columnValueBean=new ColumnValueBean(cpid);
 		columnValueBean.setColumnName("cpid");
@@ -2485,6 +2485,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				dto.setRegistrationDate((Date)arr[1]);
 				dto.setBarcode(String.valueOf(arr[2]!=null?arr[2]:""));
 				dto.setCprId(Long.parseLong(String.valueOf(arr[3])));
+				dto.setActivityStatus((String) arr[4]);
 			}
 		} 
 		catch (DAOException e) {

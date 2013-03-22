@@ -206,7 +206,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	private String registrationDate;
 	
 	private String cprId;
+	
+	private String  cprActivityStatus;
 
+
+	public String getCprActivityStatus() {
+		return cprActivityStatus;
+	}
+
+	public void setCprActivityStatus(String cprActivityStatus) {
+		this.cprActivityStatus = cprActivityStatus;
+	}
 
 	public String getCprId() {
 		return cprId;

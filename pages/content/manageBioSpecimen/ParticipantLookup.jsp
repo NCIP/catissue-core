@@ -20,9 +20,7 @@
 
 %>
  <!-- Data Grid for Participant Details Starts -->
-         	<tr>
-				<td colspan="2" class="bottomtd"></td>
-			</tr>
+         	
 			<%
 				if (request.getAttribute(Constants.SPREADSHEET_DATA_LIST) != null
 									&& dataList.size() > 0) {

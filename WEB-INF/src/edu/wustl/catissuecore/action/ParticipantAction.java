@@ -440,9 +440,10 @@ public class ParticipantAction extends CatissueBaseAction {
 			participantForm.setRegistrationDate(CommonUtilities.parseDateToString(dto.getRegistrationDate(),
 									CommonServiceLocator.getInstance().getDatePattern()));
 			participantForm.setCprId(String.valueOf(dto.getCprId()));
+			participantForm.setCprActivityStatus(dto.getActivityStatus());
 			}finally{
 				AppUtility.closeDAOSession(dao);
-			}
+			}  
 		}
 			
 		

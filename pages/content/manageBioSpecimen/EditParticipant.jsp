@@ -197,7 +197,7 @@
 					<td valign="bottom" ><html:link href="#" onclick="showAnnotations()" styleId="showAnnotation"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></html:link></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td></tr></table>
 			</logic:equal>
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
-			class="whitetable_bg" >
+				class="whitetable_bg" >
 			<tr>
 				<td colspan="2" align="left" class="bottomtd">
 
@@ -209,23 +209,19 @@
 				</tr>
 			<%}else{%>
 			<tr>
-				<td colspan="2" align="left" class="bottomtd"><%@ include
+				<td colspan="2" align="left" ><%@ include
 					file="/pages/content/common/ActionErrors.jsp"%></td>
 			</tr>
            <%}%>
 				</td>
 			</tr>
-	    	<tr>
-				<td colspan="2" align="left" class="tr_bg_blue1"><span
-					class="blue_ar_b">&nbsp;<bean:message
-					key="participant.details" /></span></td>
-			</tr>
+	    	
 			 <!--This included jsp file is used to include Participant matching grid. -->
 			 <jsp:include page="/pages/content/manageBioSpecimen/ParticipantLookup.jsp"/>
 
 			<tr>
-				<td colspan="2" align="left" class="showhide" height="100%">
-				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
+				<td colspan="2" align="left"  height="100%">
+					<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
 					<!-- Added by Amol -->
 					<%if(pageView.equals("edit") && csEMPIStatus.equals("true") && generateeMPIButtonName!=null && !generateeMPIButtonName.equals("")){%>
 						<tr>
@@ -308,8 +304,8 @@
 					</c:if>
 					<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar"><bean:message
-							key="participant.Name" /> </td>
+						<td class="black_ar align_right_style" align="right">
+							<b><bean:message key="participant.Name" /> </b> </td>
 						<td>
 						<table width="35%" border="0" cellpadding="0" cellspacing="0">
 							<tr>
@@ -347,8 +343,8 @@
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td><label for="birthDate" class="black_ar"><bean:message
-							key="participant.birthDate" /></label></td>
+						<td  class="black_ar align_right_style" align="right"><label for="birthDate">
+						<b>	<bean:message key="participant.birthDate" /> </b></label></td>
 						<td>
 						<html:text property="birthDate" styleClass="black_ar"
 							styleId="birthDate" size="10"  
@@ -368,8 +364,9 @@
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td><label for="vitalStatus" class="black_ar"><bean:message
-							key="participant.vitalStatus" /></label></td>
+						<td  class="black_ar align_right_style" align="right">
+							<label for="vitalStatus" class="black_ar">
+								<b><bean:message key="participant.vitalStatus" /> </b></label></td>
 
 						<td class="black_ar"><logic:iterate id="nvb"
 							name="<%=Constants.VITAL_STATUS_LIST%>">
@@ -378,7 +375,7 @@
 							%>
 							<html:radio property="vitalStatus"
 								onclick="onVitalStatusRadioButtonClick(this)"
-								value="<%=nameValueBean.getValue()%>">
+								value="<%=nameValueBean.getValue()%>" style="vertical-align:bottom">
 								<%=nameValueBean.getName()%>
 							</html:radio>&nbsp;&nbsp;&nbsp;
 								</logic:iterate></td>
@@ -392,7 +389,7 @@
 					
 						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar"><bean:message key="participant.deathDate" /></td>
+						<td class="black_ar align_right_style" align="right"> <b><bean:message key="participant.deathDate" /></b></td>
 						<td>
 						<%
 							
@@ -422,15 +419,15 @@
 						<c:set var="i" value="${i+1}" scope="request" />
 					
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar"><bean:message
-							key="participant.gender" /></td>
+						<td  class="black_ar align_right_style" align="right"> <b><bean:message
+							key="participant.gender" /> </b></td>
 						<td class="black_ar"><logic:iterate id="nvb"
 							name="<%=Constants.GENDER_LIST%>">
 							<%
 								NameValueBean nameValueBean = (NameValueBean) nvb;
 							%>
 							<html:radio property="gender"
-								value="<%=nameValueBean.getValue()%>">
+								value="<%=nameValueBean.getValue()%>" style="vertical-align:bottom">
 								<%=nameValueBean.getName()%>
 							</html:radio>&nbsp; &nbsp;
 								</logic:iterate>
@@ -453,8 +450,8 @@
 					
 						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar"><bean:message
-							key="participant.genotype" /> </td>
+						<td class="black_ar align_right_style" align="right"><b><bean:message
+							key="participant.genotype" /></b> </td>
 						<td class="black_ar">
 							<html:select property="genotype"
 							             styleClass="black_ar" styleId="genotype" size="1">
@@ -482,8 +479,8 @@
 					
 						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar_t"><bean:message
-							key="participant.race" /></td>
+						<td class="black_ar_t align_right_style" align="right"> <b><bean:message
+							key="participant.race" /> </b></td>
 						<td>
 							 <table>
 							 <tr>
@@ -522,17 +519,15 @@
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td><span class="black_ar"><bean:message
-							  key="participant.ethnicity" /></span></td>
+						<td class="black_ar align_right_style" align="right"><span class="black_ar">
+							<b><bean:message  key="participant.ethnicity" /> </b></span></td>
 						<td class="black_ar">
 						<table width="84%">
 						<c:forEach var="eth" items="${ethnicityList}" varStatus="loop">
 							 <c:if test="${eth.name != '-- Select --'}">
-								<td width="25%" class="black_ar" style="vertical-align:middle">
-								<html:radio styleId="ethnicity" property="ethnicity" value="${eth.value}">
-										
-											${eth.value} 
-										
+								<td width="25%" class="black_ar">
+								<html:radio styleId="ethnicity" property="ethnicity" value="${eth.value}" style="vertical-align:bottom">
+										${eth.value} 
 								</html:radio>
 								</td>
 							  </c:if>
@@ -545,8 +540,7 @@
 			   <%
 			   	}
 			   %>
-			  
-					<!-- activitystatus -->
+			  	<!-- activitystatus -->
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
 					 <c:if test="${i%2 == 0}">
@@ -555,16 +549,14 @@
 					<c:if test="${i%2 == 1}">
 						   <tr class="${tr_grey_color}">
 					</c:if>
-					
 						<c:set var="i" value="${i+1}" scope="request" />
-						
-							<td width="1%" align="center" class="black_ar">
-									<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
-							</td>
-
-							<td valign="middle"><label for="activityStatus"
-								class="black_ar"><bean:message
-								key="participant.activityStatus" /></label></td>
+							<td></td>
+							<td valign="middle" class="black_ar align_right_style" align="right"><label for="activityStatus"
+								class="black_ar">
+								<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
+								
+								<b><bean:message
+								key="participant.activityStatus" /></b></label></td>
 								
 							<td>
 							<table width="84%">
@@ -572,76 +564,97 @@
 							 	<c:if test="${listStatusId != '-- Select --'}">
 								<td width="25%" class="black_ar">	
 									<html:radio property="activityStatus" onclick="checkNewActivityStatus(this,'/QueryManageBioSpecimen.do')"
-								                value="${listStatusId}" style="vertical_align:middle">
+								                value="${listStatusId}" style="vertical-align:bottom">
 																<bean:write name='listStatusId'/>
 									</html:radio>
 								</td>	
 							   </c:if>
 							 </logic:iterate>
 							 <td width="25%"></td>
-							 </table>	
+							</table>	
 				            </td>
 						</tr>
 					</logic:equal>
-
+					</table>
+					</td>
+			</tr>
+			<tr>
+			<td colspan="2" align="left"  class="showhide" height="100%">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" height="120%">
+					<tr>
+						<td colspan="4" align="left" class="tr_bg_blue1">
+							<span class="blue_ar_b">&nbsp;<bean:message key="participant.collectionProtocolRegDetails" /> </span>
+						</td>
+					</tr>
 					<c:if test="${i%2 == 0}">
-							<tr class="${tr_white_color}">
+						<tr class="${tr_white_color}">
 					</c:if>
 					<c:if test="${i%2 == 1}">
-						   <tr class="${tr_grey_color}">
+						<tr class="${tr_grey_color}">
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
-						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar_t"><bean:message
-							key="participant.collectionProtocolReg.participantProtocolID" /></td>
-
-						<td class="black_ar"> <html:text property="ppId" styleClass="black_ar"
-							   styleId="ppId" size="27" />			
-							   
+						<td valign="middle" class="black_ar align_right_style1" align="right" height="100%" width="18%">
+							&nbsp; <b> <bean:message key="participant.collectionProtocolReg.participantProtocolID" /> </b>
 						</td>
-					</tr>
+
+						<td valign="middle"  class="black_ar align_left_style" height="100%" width="18%"> 
+							<html:text property="ppId" styleClass="black_ar" styleId="ppId" size="27" />			
+						</td>
+						
+						<td valign="middle"   class="black_ar align_right_style" align="right" height="100%" width="18%"><b>
+								<bean:message key="participant.collectionProtocolReg.barcode" /> </b>
+						</td>
+
+						<td valign="middle" class="black_ar" height="100%"> 
+							<html:text property="barcode" styleClass="black_ar"  styleId="barcode" size="27" />			
+						</td>
+					   </tr>
 					
 					<c:if test="${i%2 == 0}">
-							<tr class="${tr_white_color}">
+						<tr class="${tr_white_color}">
 					</c:if>
 					<c:if test="${i%2 == 1}">
-						   <tr class="${tr_grey_color}">
+						 <tr class="${tr_grey_color}">
 					</c:if>
 					<c:set var="i" value="${i+1}" scope="request" />
-						<td width="1%" align="center" class="black_ar">&nbsp;</td>
-						<td class="black_ar_t"><bean:message
-							key="participant.collectionProtocolReg.barcode" /></td>
-
-						<td class="black_ar"> <html:text property="barcode" styleClass="black_ar"
-							   styleId="barcode" size="27" />			
-							   
+						<td valign="middle" class="black_ar align_right_style1"  align="right" height="100%">
+							<span class="blue_ar_b">
+							&nbsp;
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
+							 <b>	<bean:message key="participant.collectionProtocolReg.participantRegistrationDate" /> </b>
 						</td>
-					</tr>
-					
-					<c:if test="${i%2 == 0}">
-							<tr class="${tr_white_color}">
-					</c:if>
-					<c:if test="${i%2 == 1}">
-						  <tr class="${tr_grey_color}">
-					</c:if>
-					<c:set var="i" value="${i+1}" scope="request" />
-						<td width="1%" align="center" class="black_ar">
-									<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
-						</td>
-						<td class="black_ar_t"><bean:message
-							key="participant.collectionProtocolReg.participantRegistrationDate" /></td>
 
-						<td class="black_ar"> 
+						<td valign="middle" class="black_ar align_left_style" height="100%"> 
 							<html:text property="registrationDate" styleClass="black_ar"
 							   styleId="registrationDate" size="10" onclick="doInitCalendar('birthDate',false);"/>	
-							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
+							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 						</td>
-					</tr>
-					
-					
+						
+						<td valign="middle" height="100%"  class="black_ar align_right_style" align="right">
+							<label for="activityStatus"	class="black_ar">
+								<b><bean:message
+								key="participant.activityStatus" /> </b></label>
+						</td>
+								
+						<td  valign="middle" height="100%">
+						<table width="84%">
+						 <logic:iterate name="activityStatusList" id="listStatusId">
+							<c:if test="${listStatusId != '-- Select --'}">
+							<td  valign="middle" width="25%" class="black_ar">	
+								<html:radio property="cprActivityStatus" value="${listStatusId}" style="vertical-align:bottom">
+												<bean:write name='listStatusId'/>
+											
+								</html:radio>
+							</td>	
+						   </c:if>
+						 </logic:iterate>
+						 </table>	
+						</td>
+					 </tr>
 				</table>
-				</td>
-			</tr>
+			</td>
+		</tr>
+			
 
 			<!-- Medical Identifiers Begin here -->
 			<tr onclick="javascript:showHide('add_medical_identifier')">

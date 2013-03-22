@@ -1030,3 +1030,15 @@ input.actionButton{ /* optional style for form and action buttons */
 {
 	background-color: #F5F5F5;
 }
+
+.align_right_style{
+		padding-right: 17px;	
+}
+
+.align_right_style1{
+		padding-right: 10px;	
+}
+
+.align_left_style{
+		padding-left:12px;
+}
