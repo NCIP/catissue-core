@@ -100,8 +100,6 @@
 		<addColumn tableName="catissue_abstract_specimen">
 			<column name="CONCENTRATION" type="${int.type}(20,4)" />
 		</addColumn>
-		
-		<sql>update catissue_abstract_specimen abc join catissue_molecular_specimen mc on abc.identifier = mc.identifier set abc.CONCENTRATION = mc.CONCENTRATION</sql>
 	</changeSet>
 
 	<changeSet id="7" author="dpatil" runOnChange="true">
@@ -111,5 +109,12 @@
 	</changeSet>
 	<changeSet id="8" author="catissue" runOnChange="true" dbms="mysql">
 		<modifyDataType tableName="JOB_DETAILS" columnName="LOG_FILE" newDataType="${longblob.type}"/>
+	</changeSet>
+	
+	<changeSet id="10" author="catissue" runOnChange="true" dbms="oracle">
+		<sql>update (select abc.CONCENTRATION as old, mc.CONCENTRATION as new from catissue_abstract_specimen abc join catissue_molecular_specimen mc on abc.identifier = mc.identifier )t set t.old = t.new</sql>
+	</changeSet>
+	<changeSet id="11" author="catissue" runOnChange="true" dbms="mysql">
+		<sql>update catissue_abstract_specimen abc join catissue_molecular_specimen mc on abc.identifier = mc.identifier set abc.CONCENTRATION = mc.CONCENTRATION</sql>
 	</changeSet> 	 
 </databaseChangeLog>         
