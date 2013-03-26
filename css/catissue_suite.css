@@ -1042,3 +1042,39 @@ input.actionButton{ /* optional style for form and action buttons */
 .align_left_style{
 		padding-left:12px;
 }
+
+/* Added By Ashraf for ExternalIdentifier and Biohazard tags */
+.tagEditor {
+    margin: 0;
+    padding: 0;
+}
+
+.tagEditor li {
+    background-color: #eef5fb;
+    cursor: pointer;
+    display: inline;
+    margin: 0 4px;
+    padding: 2px 2px 2px 6px;
+	border: 1px groove grey;
+	border-top-left-radius:2em;
+	border-bottom-left-radius:2em;
+	font-family: verdana;
+	font-size: 11px;
+	color: #003366;
+	vertical-align:middle;
+}
+
+.tagEditor a {
+	padding: 2px 2px 2px 2px;
+	color:grey;
+	text-decoration: none;
+}
+
+.link {
+	font-family: verdana;
+	cursor: pointer;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
+}
+/*End of tags CSS - Ashraf*/
