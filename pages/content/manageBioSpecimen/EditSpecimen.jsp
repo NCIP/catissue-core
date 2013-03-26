@@ -5,11 +5,6 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script>
-
-window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
-
-</script>
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
 <script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
@@ -20,7 +15,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
-
+<script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
 <!------------------------------------------------------------------------------->
 
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
@@ -32,9 +27,10 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
-
+<script>
+	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+</script>
 <!----------------------------------------------------------------------->
-
 <html:form action="NewSpecimenEdit.do">
 
 							  <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -486,6 +482,96 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 										<html:textarea styleClass="black_ar_s"  rows="3" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
 									</td>
 								</tr>
+								
+								<tr>
+									<td align="left">&nbsp;</td>
+									<td align="left" class="black_ar">
+										<bean:message key="specimen.externalIdentifier"/>
+									</td>
+
+									<td>
+										<a id="addExternalId" title="Add New External Identifier" class="link" onclick="showAddExternalIdDiv()">Add New</a>
+									</td>
+									<td class="black_ar" colspan="4">
+										
+										<div id="addExternalIdDiv" style="display:none;">
+											&nbsp;<input id="extIdName" name="extIdName" type="text" class="black_ar" size="16" maxlength="255" class="black_ar" />
+								
+											&nbsp;<input id="extIdValue" type="text" class="black_ar" size="16" maxlength="255" style="text-align:right;" class="black_ar" />
+											
+											&nbsp;<input id="addEditExtIdButton" name="addEditExtIdButton" type="button" value="Add" class="black_ar" onclick="addEditExtIdTag(this)" />
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td align="left" colspan="2">&nbsp;</td>
+								 	<td align="left" colspan="4" valign="middle">
+										
+										<ul id="externalIDList" class="tagEditor">
+											<c:if test="${not empty specimenDTO.externalIdentifiers}">
+													<c:forEach var="externalId" items="${specimenDTO.externalIdentifiers}">
+														<c:if test="${not empty externalId.name}">
+														<li id="li${externalId.id}" title="Edit">
+															<span id="${externalId.id}" name="ExtIds" onclick="editTag(this)">${externalId.name} - ${externalId.value}</span>
+															<a title="Delete" onclick="deleteTag(this)">X</a>
+															<input type="hidden" name="${externalId.id}Status" id="${externalId.id}Status" value=${externalId.status}>
+														</li>
+														</c:if>
+													</c:forEach>		
+											</c:if>
+										</ul>
+										
+									</td>
+								</tr>
+								
+								<tr>
+									<td align="left">&nbsp;</td>
+									<td align="left" class="black_ar">
+										<bean:message key="specimen.biohazards"/>
+									</td>
+
+									<td>
+										<a id="addBioHazard" title="Add New BioHazard" class="link" onclick="showAddBioHazardDiv()">Add New</a>
+									</td>
+									<td class="black_ar" colspan="3">
+										
+										<div id="addBioHazardDiv" style="display:none;">
+											<table width="100%">
+											<tr valign="bottom">
+												<td>
+													<html:select property="biohazardType" name="specimenDTO" styleClass="formFieldSized15" styleId="biohazardType" size="1" onchange="onBiohazardTypeSelected(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+														<html:options collection="biohazardTypeList" labelProperty="name" property="value"/>
+													</html:select>
+												</td>
+												<td>
+													<div id="biohazardSelect"></div>
+												</td>
+												<td>
+													<input id="addEditBioHazButton" name="addEditBioHazButton" type="button" value="Add" class="black_ar" onclick="addEditBioHazTag(this)" />
+												</td>
+											</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td align="left" colspan="2">&nbsp;</td>
+								 	<td align="left" colspan="4" valign="middle">
+										
+										<ul id="bioHazardList" class="tagEditor">
+											<c:if test="${not empty specimenDTO.bioHazards}">
+													<c:forEach var="biohazard" items="${specimenDTO.bioHazards}">
+														<li id="li${biohazard.id}" title="Edit">
+															<span id="${biohazard.id}" name="Biohazards" onclick="editTag(this)">${biohazard.type} - ${biohazard.name}</span>
+															<a title="Delete" onclick="deleteTag(this)">X</a>
+															<input type="hidden" name="${biohazard.id}Status" id="${biohazard.id}Status" value=${biohazard.status}>
+														</li>
+													</c:forEach>		
+											</c:if>
+										</ul>
+										
+									</td>
+								</tr>
 							</table>
 							</td>
 							</tr>
@@ -605,9 +691,9 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
 		
 						| --><input type="button" value="Submit"
-							onclick="submitTabData()" class="blue_ar_b">
+							onclick="submitTabData()" class="blue_ar_b"/>
 	
-		<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
+		<!--<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>-->
 		</td>
 	</tr>
 </table>
@@ -628,6 +714,8 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </html:form>
 
 <script>
+
+initializeSpecimenPage(${biohazardNameListJSON});
 var z = dhtmlXComboFromSelect("tissueSite");
 z.enableFilteringMode(true);
 var z = dhtmlXComboFromSelect("tissueSide");
@@ -665,6 +753,9 @@ tabDataJSON["id"] = document.getElementById("id").value;
 //submits changed data
 function submitTabData()
 {
+	var extidJSON = createExtIdJSON();
+	var biohazardJSON = createBioHazardJSON();
+	
 	var isVirtual = document.getElementById("isVirtual").value;
 	if(!isVirtual)
 	{
@@ -672,7 +763,7 @@ function submitTabData()
 		tabDataJSON["pos1"]= document.getElementById("pos1").value;
 		tabDataJSON["pos2"]= document.getElementById("pos2").value;
 	}
-	dhtmlxAjax.postSync("UpdateSpecimen.do","dataJSON="+JSON.stringify(tabDataJSON));
+	dhtmlxAjax.postSync("UpdateSpecimen.do","dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON));
 }
 
 function updateHelpURL()
