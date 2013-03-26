@@ -9,22 +9,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.LabelValueBean;
 
 import com.google.gson.Gson;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.dao.DAO;
 
 public class SpecimenEditAction extends CatissueBaseAction{
 
@@ -64,7 +59,39 @@ public class SpecimenEditAction extends CatissueBaseAction{
 			collectionStatusList.add(new NameValueBean(status,status));
 		}
 		request.setAttribute(Constants.COLLECTIONSTATUSLIST,collectionStatusList);
-		
+
+		List<NameValueBean> biohazardList = new ArrayList<NameValueBean>();
+		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_BIOHAZARD, null);
+		biohazardList.remove(0);
+		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
+
+		/* Dummy BioHazard list. To be replaced by Nitesh with actual List*/
+		ArrayList<NameValueBean> biohazardNameList = new ArrayList<NameValueBean>();
+
+		ArrayList<String> dummyTypeList = new ArrayList<String>();
+		dummyTypeList.add("Carcinogen");
+		dummyTypeList.add("Infectious");
+		dummyTypeList.add("Mutagen");
+		dummyTypeList.add("Radioactive");
+		dummyTypeList.add("Toxic");
+		dummyTypeList.add("Not Specified");
+
+		for (String type : dummyTypeList)
+		{
+			/*name value pair where name is biohazard name and value is type*/
+			biohazardNameList.add(new NameValueBean(type + 1, type));
+			biohazardNameList.add(new NameValueBean(type + 2, type));
+			biohazardNameList.add(new NameValueBean(type + 3, type));
+		}
+
+		request.setAttribute(Constants.BIOHAZARD_NAME_LIST, biohazardNameList);
+		Gson gson = new Gson();
+		String biohazardNameListJSON = gson.toJson(biohazardNameList);
+
+		request.setAttribute("biohazardNameListJSON", biohazardNameListJSON);
+
+
 		return mapping.findForward(Constants.PAGE_OF_NEW_SPECIMEN);
 	}
 

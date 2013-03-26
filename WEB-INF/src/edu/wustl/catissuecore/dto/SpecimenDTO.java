@@ -1,10 +1,6 @@
 package edu.wustl.catissuecore.dto;
 
 import java.util.Collection;
-import java.util.List;
-
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.ExternalIdentifier;
 
 
 public class SpecimenDTO 
@@ -37,8 +33,10 @@ public class SpecimenDTO
 	private long containerId;
 	private String pos1;
 	private String pos2;
-	private Collection<ExternalIdentifier> externalIdentifiers;
-	private Collection<Biohazard> bioHazards;
+	private Collection<ExternalIdentifierDTO> externalIdentifiers;
+	private Collection<BiohazardDTO> bioHazards;
+	private String biohazardType;
+	private String biohazardName;
 	
 	public String getLabel() {
 		return label;
@@ -208,18 +206,58 @@ public class SpecimenDTO
 	public void setPos2(String pos2) {
 		this.pos2 = pos2;
 	}
-	public Collection<ExternalIdentifier> getExternalIdentifiers() {
+
+	public Collection<ExternalIdentifierDTO> getExternalIdentifiers()
+	{
 		return externalIdentifiers;
 	}
-	public void setExternalIdentifiers(Collection<ExternalIdentifier> externalIdentifiers) {
+
+	public void setExternalIdentifiers(Collection<ExternalIdentifierDTO> externalIdentifiers)
+	{
 		this.externalIdentifiers = externalIdentifiers;
 	}
-	public Collection<Biohazard> getBioHazards() {
+
+	public Collection<BiohazardDTO> getBioHazards()
+	{
 		return bioHazards;
 	}
-	public void setBioHazards(Collection<Biohazard> bioHazards) {
+
+	public void setBioHazards(Collection<BiohazardDTO> bioHazards)
+	{
 		this.bioHazards = bioHazards;
 	}
 	
+	/**
+	 * @return the biohazardType
+	 */
+	public String getBiohazardType()
+	{
+		return biohazardType;
+	}
+
+	/**
+	 * @param biohazardType the biohazardType to set
+	 */
+	public void setBiohazardType(String biohazardType)
+	{
+		this.biohazardType = biohazardType;
+	}
+
+	/**
+	 * @return the biohazardName
+	 */
+	public String getBiohazardName()
+	{
+		return biohazardName;
+	}
+
+	/**
+	 * @param biohazardName the biohazardName to set
+	 */
+	public void setBiohazardName(String biohazardName)
+	{
+		this.biohazardName = biohazardName;
+	}
+
 }
  
