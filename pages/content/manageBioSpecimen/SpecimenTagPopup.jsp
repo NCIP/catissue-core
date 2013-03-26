@@ -6,7 +6,6 @@
 
 
 <script>var imgsrc="/images/de/";</script>
-<script language="JavaScript" type="text/javascript" src="javascripts/de/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/scr.js"></script>
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
@@ -50,7 +49,7 @@ combo.on("expand", function() {
 	}
 	}, {single: true});
 	ds.on('load',function(){
-		if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) 
+		if (this.getAt(0) != null && this.getAt(0).get('excerpt')) 
 		{
 			combo.typeAheadDelay=50;
 		} else {combo.typeAheadDelay=60000}
