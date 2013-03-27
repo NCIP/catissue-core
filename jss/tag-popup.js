@@ -73,14 +73,22 @@ function doInItTreeGrid()
 	popupmygrid.setInitWidths("25,*,40");
 	popupmygrid.setColAlign("left,left,left");
 	popupmygrid.setColTypes("txt,tree,txt");
-	popupmygrid.setColSorting("str,str,str");
+	popupmygrid.setColSorting("str,str_custom,str");
 	popupmygrid.attachEvent("onRowSelect", doOnTreeGridRowSelected);
+	popupmygrid.setCustomSorting(str_custom, 1);
 	popupmygrid.setEditable(false);
 	popupmygrid.init();
 	popupmygrid.setSkin("dhx_skyblue");
 	doInitParseTree();
 }
- 
+
+function str_custom(a,b,order){     
+    if (order=="asc")
+        return (a.toLowerCase()>b.toLowerCase()?1:-1);
+    else
+        return (a.toLowerCase()>b.toLowerCase()?-1:1);
+} 
+
 function doInitParseTree()
 {
 	popupmygrid.loadXML("TreeGridInItAction.do?entityTag="+entityTag);
