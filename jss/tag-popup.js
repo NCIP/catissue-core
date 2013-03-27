@@ -68,7 +68,7 @@ function doInItTreeGrid()
 	popupmygrid = new dhtmlXGridObject('treegridbox');
 	popupmygrid.selMultiRows = true;
 	popupmygrid.imgURL = "dhtmlx_suite/dhtml_pop/imgs/";
-	popupmygrid.setHeader(",<div style='text-align:center;'></div>,");
+	popupmygrid.setHeader(",<img  style='height: 3px;' src='dhtmlx_suite/dhtml_pop/imgs/blank.gif' >,");
 	//popupmygrid.setNoHeader(true);
 	popupmygrid.setInitWidths("25,*,40");
 	popupmygrid.setColAlign("left,left,left");
