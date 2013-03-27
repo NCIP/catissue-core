@@ -539,7 +539,7 @@
 											<table width="100%">
 											<tr valign="bottom">
 												<td>
-													<html:select property="biohazardType" name="specimenDTO" styleClass="formFieldSized15" styleId="biohazardType" size="1" onchange="onBiohazardTypeSelected(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+													<html:select property="biohazardType" name="specimenDTO" styleClass="formFieldSized" styleId="biohazardType" onchange="onBiohazardTypeSelected(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 														<html:options collection="biohazardTypeList" labelProperty="name" property="value"/>
 													</html:select>
 												</td>
