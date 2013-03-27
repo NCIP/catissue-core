@@ -36,7 +36,6 @@ public class SpecimenDTO
 	private Collection<ExternalIdentifierDTO> externalIdentifiers;
 	private Collection<BiohazardDTO> bioHazards;
 	private String biohazardType;
-	private String biohazardName;
 	
 	public String getLabel() {
 		return label;
@@ -243,21 +242,6 @@ public class SpecimenDTO
 		this.biohazardType = biohazardType;
 	}
 
-	/**
-	 * @return the biohazardName
-	 */
-	public String getBiohazardName()
-	{
-		return biohazardName;
-	}
-
-	/**
-	 * @param biohazardName the biohazardName to set
-	 */
-	public void setBiohazardName(String biohazardName)
-	{
-		this.biohazardName = biohazardName;
-	}
 
 }
  
