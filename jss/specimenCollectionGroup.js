@@ -8,6 +8,65 @@ if(window.parent!=null)
 	}
 }
 
+function initializeSCGCombo()
+{
+		var clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
+		clinicalStatusCombo.setOptionWidth(165);
+		clinicalStatusCombo.setSize(165);
+	
+		var collectionEventCollectionProcedureCombo = dhtmlXComboFromSelect("collectionEventCollectionProcedure");  
+		collectionEventCollectionProcedureCombo.setOptionWidth(165);
+		collectionEventCollectionProcedureCombo.setSize(165);
+		
+		var collectionEventContainerCombo = dhtmlXComboFromSelect("collectionEventContainer");  
+		collectionEventContainerCombo.setOptionWidth(165);
+		collectionEventContainerCombo.setSize(165);
+		
+		
+		var receivedEventReceivedQualityCombo = dhtmlXComboFromSelect("receivedEventReceivedQuality");  
+		receivedEventReceivedQualityCombo.setOptionWidth(165);
+		receivedEventReceivedQualityCombo.setSize(165);
+		
+
+		var activityStatusCombo = dhtmlXComboFromSelect("activityStatus");  
+		activityStatusCombo.setOptionWidth(165);
+		activityStatusCombo.setSize(165);
+		
+		activityStatusCombo.attachEvent("onChange", 
+			function()
+			{
+				var activityValue=activityStatusCombo.getSelectedValue();
+				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
+			});
+
+		var collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");  
+		collectionStatusCombo.setOptionWidth(165);
+		collectionStatusCombo.setSize(165);
+		
+		collectionStatusCombo.attachEvent("onChange", 
+			function()
+			{
+				var activityValue=collectionStatusCombo.getSelectedValue();
+				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
+			});
+		
+			var collectionEventTimeInHoursCombo = dhtmlXComboFromSelect("collectionEventTimeInHours");  
+			collectionEventTimeInHoursCombo.setOptionWidth(50);
+			collectionEventTimeInHoursCombo.setSize(50);
+			
+			var collectionEventTimeInMinutesCombo = dhtmlXComboFromSelect("collectionEventTimeInMinutes");  
+			collectionEventTimeInMinutesCombo.setOptionWidth(50);
+			collectionEventTimeInMinutesCombo.setSize(50);
+			
+			var receivedEventTimeInHoursCombo = dhtmlXComboFromSelect("receivedEventTimeInHours");  
+			receivedEventTimeInHoursCombo.setOptionWidth(50);
+			receivedEventTimeInHoursCombo.setSize(50);
+			
+			var receivedEventTimeInMinutesCombo = dhtmlXComboFromSelect("receivedEventTimeInMinutes");  
+			receivedEventTimeInMinutesCombo.setOptionWidth(50);
+			receivedEventTimeInMinutesCombo.setSize(50);
+}
+
 function onRadioButtonClick(element)
 { 
 	if(element.value == 1)

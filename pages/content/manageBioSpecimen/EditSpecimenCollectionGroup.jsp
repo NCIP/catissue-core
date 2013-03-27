@@ -2,6 +2,9 @@
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <script type="text/javascript" src="jss/combos.js"></script>
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
+<c:set var="tr_white_color" value="tr_alternate_color_white" />
+<c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
+<c:set var="i" value="1" scope="request" />
 <%
 	/**
  			* Name : Ashish Gupta
@@ -93,7 +96,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			var newReceivedDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalReceiveddate);
 			document.getElementById("receivedEventDateOfEvent").value=newReceivedDate;
 		 }
-			</script>
+	</script>
 	<div style="width:100%">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
@@ -120,51 +123,36 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 						<html:hidden property="withdrawlButtonStatus"/>
 
-				 <!--Collection Protocol -->
-				 <tr>
-			     	<td width="1%" class="black_ar_t"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></span></td>
-				   <td width="12%" align="left" valign="top" class="black_ar_t"><LABEL for="collectionProtocolId"><bean:message key="specimenCollectionGroup.protocolTitle"/></LABEL></td>
-
-					<td width="36%" align="left" valign="top"><span class="black_ar_t"><%=form.getCollectionProtocolName()%></span>
-
-						<input type="hidden" id="collectionProtocolId" value="<%=form.getCollectionProtocolId()%>" />
-						<input type="hidden" id="collectionProtocolName" value="<%=form.getCollectionProtocolName()%>" />
-
-		        	</td>
-				    <td width="1%" class="black_ar_t" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /> </td>
-                    <td width="18%" align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></td>
-					<!--
-					 	* Name : Chetan Patil
- 						* Reviewer Name :
- 						* Bug ID: 14582
- 						* Patch ID:
- 						* Description: When the names are too long, a horizontal scrollbar is displayed.
- 						*              Removed nowrap from td to fix this issue.
-					 -->
-					<td width="32%" align="left" class="black_ar_t"><%=form.getParticipantNameWithProtocolId()%></td>
-					<html:hidden property="participantName"/>
-					<html:hidden property="protocolParticipantIdentifier"/>
-				</tr>
-				 <tr>
-				<tr>
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
 				<%
 					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || Constants.EDIT.equals(operation))
 						{
 				%>
 
-					 <td class="black_ar_t" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></td>
-					<td align="left" nowrap><span class="black_ar"><label for="name"><bean:message key="specimenCollectionGroup.groupName" /></label></span></td>
-					<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSC"   maxlength="255" styleId="name" property="name" /></td>
+					<c:set var="i" value="${i+1}" scope="request" />
+					<td width="20%" align="right" valign="top" class="black_ar">
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" />	
+						<span class="black_ar"><label for="name">
+								<bean:message key="specimenCollectionGroup.groupName" /></label>
+						</span>
+					</td>
+					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+						<html:text styleClass="formFieldSizedSC"   maxlength="255" styleId="name" property="name" />
+					</td>
 
 				<%
 									}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || Constants.EDIT.equals(operation))
 										{
 								%>
-					<td class="black_ar_t">&nbsp;</td>
-					<td align="left" valign="top" class="black_ar_t"><bean:message key="specimenCollectionGroup.barcode" /></td>
+					<td width="20%" align="right" class="black_ar">
+					<bean:message key="specimenCollectionGroup.barcode" /></td>
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-						<td width="18%" align="left" class="black_ar_t">
 							<%
 								if(form.getBarcode()!=null)
 												{
@@ -183,41 +171,57 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 								}
 							%>
 						<html:hidden property="barcode"/>
-						</td>
 						</logic:equal>
 						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-						<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
+							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+						    </td>
 						</logic:notEqual>
-					</logic:equal>
-					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-						<td align="left" valign="top" nowrap><html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" /></td>
-					</logic:notEqual>
+					   </logic:equal>
+					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+						</td>
+					  </logic:notEqual>
 					<%
 						}
 					%>
 				</tr>
+				
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
 
-				<tr>
-				    <td class="black_ar_t"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-				    <td align="left" valign="top" class="black_ar"><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/></td>
-				    <td align="left" nowrap class="black_ar">
+				    <td width="20%" align="right" valign="top" class="black_ar">
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+						<b><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/> </b>
+					</td>
+				    
+					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
 					<!-- Mandar : 434 : for tooltip -->
 					   <html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)"
-				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				     	            onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
 						</html:select>&nbsp;
 						<bean:message key="collectionprotocol.studycalendarcomment"/>
 		        	</td>
 					
-					<td class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-                    <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.site"/></td>
-					<td align="left"  class="black_ar">
+					
+                    <td  width="20%" align="right" class="black_ar">
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />	
+						<b><bean:message key="specimenCollectionGroup.site"/></b>
+					</td>
+					<td width="30%" align="left"  class="black_ar align_left_style1">
 					 <autocomplete:AutoCompleteTag property="siteId"
 										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
 										  initialValue="<%=new Long(form.getSiteId())%>"
 										  styleClass="black_ar"
 										  staticField="false"
-										  size="22"
+										  size="21"
 									    />
 
 
@@ -228,16 +232,21 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</html:link>
 						</logic:notEqual>
 		        	</td>
-
-
 				</tr>
-				 <tr>
-				 	 <td align="center" nowrap>&nbsp;</td>
-					 <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.offset" /></td>
-					 <td align="left" nowrap class="black_ar"><html:text styleClass="formFieldSizedSCG" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
-					 <td align="center" nowrap>&nbsp;</td>
-					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></td>
-					<td align="left" nowrap class="black_ar">
+				
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				  	 
+					 <td width="20%" align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.offset" /></b></td>
+					 <td width="30%" align="left" nowrap class="black_ar align_left_style1"><html:text styleClass="formFieldSizedSCG" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
+					 
+					<td  width="20%"align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></b></td>
+					<td  width="30%" align="left" nowrap class="black_ar align_left_style1">
 				     	<html:text styleClass="formFieldSizedSC" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
 					     	<!-- This feature will be implemented in next release
 							&nbsp;
@@ -247,10 +256,18 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							-->
 				    </td>
 				</tr>
-				 <tr>
-				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-				     <td align="left" valign="top" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
-					 <td align="left" class="black_ar" colspan="1">
+				
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				     <td  width="20%" align="right" valign="top" class="black_ar">
+					 <img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+					 <b> <bean:message key="specimenCollectionGroup.clinicalDiagnosis"/> </b></td>
+					 <td width="30%" align="left" class="black_ar align_left_style1" colspan="1">
                              <!--<autocomplete:AutoCompleteTag property="clinicalDiagnosis"
 										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
 										  initialValue="<%=form.getClinicalDiagnosis()%>"
@@ -263,7 +280,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 									<td>
 										<div>
 										<input property="clinicalDiagnosis" type="text" id="clinicaldiagnosis" name="clinicalDiagnosis"
-										value="<%=request.getAttribute("clinicalDiagnosis")%>" onmouseover="showTip(this.id)"/>
+										       value="<%=request.getAttribute("clinicalDiagnosis")%>" onmouseover="showTip(this.id)" />
 										</div>
 									</td>
 									<td>
@@ -273,16 +290,15 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 									<!-- // Patch ID: Bug#3090_22 -->
 									&nbsp;<!--  <a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a>--></td></tr></table>
 								</td>
-				     <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-				     <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
-					 <td align="left" class="black_ar">
-					 			 <autocomplete:AutoCompleteTag property="clinicalStatus"
-										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
-										  initialValue="<%=form.getClinicalStatus()%>"
-										   styleClass="formFieldSizedAutoSCG"
-
-									    />
-		        	  </td>
+				     <td width="20%" align="right" class="black_ar">
+					 <img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+					 <b><bean:message key="specimenCollectionGroup.clinicalStatus"/></b></td>
+					 <td width="30%" align="left" class="black_ar align_left_style1">
+					 		<html:select property="clinicalStatus"
+							             styleClass="black_ar" styleId="clinicalStatus" size="1">
+							       <html:options collection="cinicalStatusList" labelProperty="name" property="value" />
+					        </html:select>	
+					 </td>
 				 </tr>
 	
 				 <!--comments -->
@@ -293,39 +309,50 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			     * See also: 1_1 to 1_5
 				 * Description : Added <TR> for comment field .
 				-->
-				 <tr>
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
 				<!-- activitystatus -->
-					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-					<td align="left" class="black_ar"><bean:message key="site.activityStatus" /></td>
-					<td align="left" class="black_ar">
-							<autocomplete:AutoCompleteTag property="activityStatus"
-								  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
-								  initialValue="<%=form.getActivityStatus()%>"
-								  onChange="<%=strCheckStatus%>"
-								   styleClass="formFieldSizedAutoSCG"
-
-							/>
+					<td width="20%" align="right" class="black_ar">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+					<b><bean:message key="site.activityStatus" /></b></td>
+					<td width="30%" align="left" class="black_ar  align_left_style1">
+					<html:select property="activityStatus" styleClass="black_ar" styleId="activityStatus" size="1">
+								<logic:iterate name="activityStatusList" id="listStatusId">
+									<html:option  value="${listStatusId}"> ${listStatusId} </html:option>
+							    </logic:iterate>
+					</html:select>
 					</td>
 
 					<!-- collectionstatus -->
-					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-					<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.collectionStatus" /></td>
-					<td align="left" class="black_ar"> 
-							<autocomplete:AutoCompleteTag property="collectionStatus"
-								optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
-								initialValue="<%=form.getCollectionStatus()%>"
-								onChange="<%=strCheckStatus%>"
-								 styleClass="formFieldSizedAutoSCG"
-
-							/>
+					<td width="20%" align="right" nowrap class="black_ar">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+					<b>	<bean:message key="specimenCollectionGroup.collectionStatus" /> </b></td>
+					<td  width="30%" align="left" class="black_ar align_left_style1"> 
+					<html:select property="collectionStatus" styleClass="black_ar" styleId="collectionStatus" size="1">
+								   <logic:iterate name="collectionStatusList" id="collectionStatusId">
+										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
+							       </logic:iterate>
+					</html:select>
 					</td>
 				</tr>
 				 <tr><td colspan="3" class="bottomtd"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="left" class="black_ar_t"><bean:message key="app.comments"/></td>
-					<td colspan="4" align="left" ><html:textarea styleClass="black_ar" rows="3"  cols="73" property="comment"/></td>
-				 </tr>
+				
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				
+					<td width="20%" align="right" class="black_ar_t"><b><bean:message key="app.comments"/></b></td>
+					<td width="30%" colspan="4" align="left"  class="align_left_style1"><html:textarea styleClass="black_ar" rows="1"  cols="73" property="comment"/></td>
+					</tr>
 
 				 		<tr>
 				  		<td align="right" colspan="3">

@@ -190,16 +190,20 @@ function changeUrl(element,str)
 		
 		function checkNewActivityStatus(element,url)
 		{
-		    str = element.value;
+			if(element.type!=null && element.type == "radio")
+			{
+				str = element.value;
+			}
+			else
+			{
+				str=element;
+			}
 		    if(str == "Disabled")
 			{
 				document.forms[0].onSubmit.value=url;
 			}
 		}
 		
-		
-		
-	
 		function changeSubmitTo(url)
 		{
 			var str = document.forms[0].onSubmit.value;

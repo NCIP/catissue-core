@@ -17,6 +17,11 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<script>
+      window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+</script>
+
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -24,6 +29,10 @@
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="jss/specimenCollectionGroup.js"></script>
+
+<script	src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
 <%
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	Long reportIdVal=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);
@@ -338,7 +347,7 @@ function updateHelpURL()
 	if(pageView != null && !("viewAnnotations").equals(pageView) && !(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT).equals(pageView))
 	{
 %>
-	<body onload="disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');">
+	<body onload="disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo();">
 <%
 	}else{
 %>
