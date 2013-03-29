@@ -59,6 +59,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.AuditException;
@@ -2494,4 +2495,28 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		return dto;
 		
 	}
+
+	/** Get registration id.
+	 * @param sessionData
+	 * @param specimenid
+	 * @return
+	 * @throws ApplicationException
+	 * @throws DAOException
+	 */
+	public Long getRegistrationId(final DAO dao,
+			Long cpId,Long participantId) throws ApplicationException, DAOException {
+		final String hql1 = "select cpr.id "
+				+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
+				+ "cpr.collectionProtocol.id= ? and cpr.participant.id= ?";
+		List<Object> list = null;
+		ColumnValueBean columnValueBean1=new ColumnValueBean(participantId);
+		ColumnValueBean columnValueBean2=new ColumnValueBean(cpId);
+	      List<ColumnValueBean>  columnValueBeans=new ArrayList();
+	      columnValueBeans.add(columnValueBean1);
+	      columnValueBeans.add(columnValueBean2);
+		list = dao.executeQuery(hql1, columnValueBeans);
+		//((HibernateDAO)dao).executeNamedQuery("", arg1)
+		return (Long)list.get(0);
+	}
+
 }

@@ -779,6 +779,11 @@
 	<definition name=".catissuecore.advanceQueryDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/AdvanceQuery.jsp" />
 	</definition>
+	
+	<!--  Added By Ankush -->
+	<definition name=".catissuecore.queryParticipantViewEditDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/ParticipantView.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.queryResultsDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/QueryResultsView.jsp" />
@@ -795,6 +800,18 @@
 	<definition name=".catissuecore.querySpecimenCollectionGroupViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
 	</definition>
+	
+	<!--  Added By Ankush -->
+	
+	<definition name=".catissuecore.specimenCollectionGroupViewFormDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroupView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.newSpecimenQueryViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenView.jsp" />
+	</definition>
+	
+	
 
 	<definition name=".catissuecore.querySpecimenViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />

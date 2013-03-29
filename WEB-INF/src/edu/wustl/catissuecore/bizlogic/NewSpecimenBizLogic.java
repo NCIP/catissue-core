@@ -30,9 +30,15 @@ import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.dao.SpecimenDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -56,6 +62,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
+import edu.wustl.catissuecore.dto.NewSpecimenDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelException;
@@ -75,6 +82,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -104,6 +112,7 @@ import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -6142,4 +6151,35 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		return biohazardDTOs;
 	}
+	
+	public NewSpecimenDTO getSpecimenDTO(Long id) throws BizLogicException
+	{
+		NewSpecimenDTO newSpecimenDTO =new NewSpecimenDTO();
+	    return newSpecimenDTO;
+	}
+
+	/** This method returns a NameValueBeanList of specimen label and its id.
+	 * @param scgId
+	 * @return
+	 * @throws DAOException
+	 * @throws JSONException 
+	 * @throws BizLogicException 
+	 */
+	public List<NameValueBean> getSpecimeLables(DAO dao,Long scgId) throws BizLogicException {
+		
+		SpecimenDAO specDao= new SpecimenDAO();
+		List<NameValueBean> speicmens;
+		
+		try{
+		  speicmens =  specDao.getSpecimenLableAndId(dao,scgId);
+		}catch (final DAOException daoExp)
+		{
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		return speicmens;
+	}
+
+	
 }

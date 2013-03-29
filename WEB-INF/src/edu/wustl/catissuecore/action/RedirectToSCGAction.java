@@ -45,7 +45,10 @@ public class RedirectToSCGAction extends XSSSupportedAction
 	{
 
 		final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
-		final Long id = (Long) request.getSession().getAttribute("SCGFORM");
+		Long id = (Long) request.getSession().getAttribute("SCGFORM");
+		if(id==null || id==0){
+			id = (Long) request.getSession().getAttribute("scgId");
+		}
 		final IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
 				CommonServiceLocator.getInstance().getAppName());
 		DAO hibernateDao = null;

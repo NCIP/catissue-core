@@ -115,7 +115,7 @@ public class AliquotAction extends SecureAction
 		 */
 		// if(((AliquotForm)form).getCreatedDate() == null||)
 		if ((((AliquotForm) form).getNextForwardTo() != null)
-				&& (((AliquotForm) form).getNextForwardTo()).equals(""))
+				&& (((AliquotForm) form).getNextForwardTo()).equals("")  || "participantView".equals(request.getParameter("requestFrom")) )
 		{
 			((AliquotForm) form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance()
 					.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
@@ -374,7 +374,7 @@ public class AliquotAction extends SecureAction
 			 * Store the values of label/barcode,aliquot count, quantity per
 			 * aliquot on click of submit
 			 */
-			if (aliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
+			if (aliquotForm.getButtonClicked().equalsIgnoreCase("submit")  || "participantView".equals(request.getParameter("requestFrom")) )
 			{
 				tempAliquotMap.put("aliquotcount", aliquotForm.getNoOfAliquots());
 				tempAliquotMap.put("quantityperaliquot", aliquotForm.getQuantityPerAliquot());

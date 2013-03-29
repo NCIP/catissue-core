@@ -178,13 +178,13 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			{
 				final Map forwardToHashMap = (Map) request
 						.getAttribute(Constants.FORWARD_TO_HASHMAP);
+				typeRadioButton = Constants.PARTICIPANT_ID;
 				if (forwardToHashMap != null)
 				{
 					selectedCPId = forwardToHashMap.get(Constants.COLLECTION_PROTOCOL_ID)
 							.toString();
 					selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 							Constants.PARTICIPANT_ID).toString();
-					typeRadioButton = Constants.PARTICIPANT_ID;
 					if ("0".equals(selectedParticipantOrPPIdentifierId))
 					{
 						selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
@@ -192,6 +192,12 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 						typeRadioButton = Constants.PARTICIPANT_PROTOCOL_ID;
 					}
 				}
+				else
+				{
+					selectedCPId = request.getParameter("cpId");
+					selectedParticipantOrPPIdentifierId = request.getParameter("pId");
+				}
+				
 			}
 			else
 			{
@@ -565,16 +571,32 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			// ************* ForwardTo implementation *************
 			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
+			Long collectionProtocolId ;
+			Long participantId ;
+			String participantProtocolId = null ;
+			Long cpeId = null;
+		    if(forwardToHashMap!=null || "participantView".equals(request.getParameter("requestFrom")))
+		   {	  
 			if (forwardToHashMap != null)
 			{
-
 				/**
 				 * Name: Falguni Sachde Reviewer Name: Attribute
 				 * collectionProtocolName added to show Collection ProtocolName in
 				 * Add mode only.
 				 */
 
-				Long collectionProtocolId = (Long) forwardToHashMap.get("collectionProtocolId");
+				collectionProtocolId = (Long) forwardToHashMap.get("collectionProtocolId");
+				participantId = (Long) forwardToHashMap.get("participantId");
+				participantProtocolId = (String) forwardToHashMap
+						.get("participantProtocolId");
+				cpeId = (Long) forwardToHashMap.get("COLLECTION_PROTOCOL_EVENT_ID");
+			}
+			else
+			{
+				collectionProtocolId = Long.valueOf(request.getParameter("cpId"));
+				participantId = Long.valueOf(request.getParameter("pId"));
+			}
+				
 				final String collectionProtocolName = (String) request.getSession().getAttribute(
 						"cpTitle");
 				if (collectionProtocolId == null && request.getParameter("cpId") != null
@@ -582,10 +604,6 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				{
 					collectionProtocolId = Long.valueOf(request.getParameter("cpId"));
 				}
-
-				final Long participantId = (Long) forwardToHashMap.get("participantId");
-				String participantProtocolId = (String) forwardToHashMap
-						.get("participantProtocolId");
 
 				specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId
 						.longValue());
@@ -669,7 +687,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				 * Removing the above patch, as it no more required. Now the new CP
 				 * based entry page takes care of this.
 				 */
-				final Long cpeId = (Long) forwardToHashMap.get("COLLECTION_PROTOCOL_EVENT_ID");
+				
 				if (cpeId != null)
 				{
 					specimenCollectionGroupForm.setCollectionProtocolEventId(cpeId);
@@ -708,7 +726,8 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 						+ participantId);
 				LOGGER.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"
 						+ participantProtocolId);
-			}
+		  }
+			
 			// ************* ForwardTo implementation *************
 			// Populate the group name field with default value in the form of
 			// <Collection Protocol Name>_<Participant ID>_<Group Id>
@@ -717,7 +736,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			// Get the collection protocol title for the collection protocol Id
 			// selected
 			String collectionProtocolTitle = "";
-			String collectionProtocolName = "";
+			String collectionProtocolName= "";
 
 			final Object cPObject = dao.retrieveById(CollectionProtocol.class.getName(),
 					specimenCollectionGroupForm.getCollectionProtocolId());
@@ -726,7 +745,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			{
 				final CollectionProtocol collectionProtocol = (CollectionProtocol) cPObject;
 				collectionProtocolTitle = collectionProtocol.getTitle();
-				collectionProtocolName = collectionProtocol.getShortTitle();
+				collectionProtocolName= collectionProtocol.getShortTitle();
 				specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
 				if(collectionProtocol.getCollectionProtocolEventCollection()!= null)
 				{
@@ -752,7 +771,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			if (forwardToHashMap != null
 					|| (specimenCollectionGroupForm.getName() != null && specimenCollectionGroupForm
 							.getName().equals(""))
-					|| (resetName != null && resetName.equals("Yes")))
+					|| (resetName != null && resetName.equals("Yes")) || "participantView".equals(request.getParameter("requestFrom")))
 			{
 				if (!collectionProtocolTitle.equals("")
 						&& (groupParticipantId > 0 || (protocolParticipantId != null && !protocolParticipantId
@@ -1772,9 +1791,9 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 		final String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 		final String[] displayEventFields = {"id"};
 		final String valueField = Constants.SYSTEM_IDENTIFIER;
-		final String[] whereColumnName = {Constants.COLUMN_NAME_SCG_ID,Status.ACTIVITY_STATUS.getStatus()};
-		final String[] whereColumnCondition = {"=","="};
-		final Object[] whereColumnValue = {scgId,Status.ACTIVITY_STATUS_ACTIVE.getStatus()};
+		final String[] whereColumnName = {Constants.COLUMN_NAME_SCG_ID};
+		final String[] whereColumnCondition = {"="};
+		final Object[] whereColumnValue = {scgId};
 		final String joinCondition = Constants.AND_JOIN_CONDITION;
 		final String separatorBetweenFields = "";
 

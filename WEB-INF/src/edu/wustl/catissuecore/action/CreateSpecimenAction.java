@@ -180,13 +180,20 @@ public class CreateSpecimenAction extends CatissueBaseAction
 					// Bug-2784: If coming from NewSpecimen page, then only set
 					// parent specimen label.
 					final Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
-					if (forwardToHashMap != null
+					if ((forwardToHashMap != null
 							&& forwardToHashMap.get("parentSpecimenId") != null
-							&& forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null)
+							&& forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null) || "participantView".equalsIgnoreCase(request.getParameter("requestFrom")) )
 					{
+					  if("participantView".equalsIgnoreCase(request.getParameter("requestFrom")) )
+					 {
+						  parentSpecimenID = Long.valueOf(request.getParameter("parentSpecimenId"));
+						  parentSpecLbl =  request.getParameter("parentLabel");
+					 }
+					  else{
 						parentSpecimenID = (Long) forwardToHashMap.get("parentSpecimenId");
 						parentSpecLbl = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
 								.toString();
+					  }
 						request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
 						createForm.setParentSpecimenLabel(parentSpecLbl);
 						String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +

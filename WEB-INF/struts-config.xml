@@ -29,6 +29,10 @@ PUBLIC
 		<form-bean name="createSpecimenForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"/>
 		<form-bean name="summaryForm" type="edu.wustl.catissuecore.actionForm.SummaryForm"/>
 		<form-bean name="participantForm" type="edu.wustl.catissuecore.actionForm.ParticipantForm"/>
+		<form-bean name="participantViewForm" type="edu.wustl.catissuecore.actionForm.ParticipantViewForm"/>
+		<form-bean name="specimenCollectionGroupViewForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupViewForm"/>
+		<form-bean name="newSpecimenViewForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenViewForm"/>
+		
 		<form-bean name="collectionProtocolRegistrationForm" type="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"/>
 		<form-bean name="specimenCollectionGroupForm" type="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"/>
 		<form-bean name="institutionForm" type="edu.wustl.catissuecore.actionForm.InstitutionForm"/>
@@ -6010,6 +6014,38 @@ PUBLIC
 			validate="false" scope="request" parameter="type">
 			
 		</action>
+		
+		<!-- Readonly participant view -->
+		
+		<action path="/QueryParticipantSearchForView" type="edu.wustl.catissuecore.action.ParticipantViewAction"
+			    name="participantViewForm" validate="false" scope="request">
+			 	<forward name="newParticipantViewPage"	 
+			 			  path=".catissuecore.queryParticipantViewEditDef"/> 
+		</action>
+				
+		<action path="/SpecimenCollectionGroupView" type="edu.wustl.catissuecore.action.SpecimenCollectionGroupViewAction"
+			    name="specimenCollectionGroupViewForm" validate="false" scope="request">
+			 	<forward name="specimenCollectionGroupViewPage"	 
+			 			  path=".catissuecore.specimenCollectionGroupViewFormDef"/> 
+		</action>
+		
+		<action path="/NewSpecimenView" type="edu.wustl.catissuecore.action.NewSpecimenViewAction"
+			    name="newSpecimenViewForm" validate="false" scope="request">
+			 	<forward name="newSpecimenPageForView"	 
+			 			  path=".catissuecore.newSpecimenQueryViewDef"/> 
+		</action>
+		
+		<action path="/DeleteParticipant" type="edu.wustl.catissuecore.action.ParticipantDeleteAction"
+			    name="participantViewForm" validate="false" scope="request">
+			 	<forward name="success"	 
+			 			  path=".catissuecore.managehomedef"/> 
+		</action>
+		
+        <action path="/ParticipantViewAjax"
+			type="edu.wustl.catissuecore.action.ParticipantViewAjaxAction"
+			validate="false" scope="request" parameter="method">
+			
+		</action>		
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
@@ -6020,7 +6056,7 @@ PUBLIC
 
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
 		<set-property property="definitions-config"
-			value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
+			value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 		<set-property property="definitions-parser-validate"
 			value="true" />

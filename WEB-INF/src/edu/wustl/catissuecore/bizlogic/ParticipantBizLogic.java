@@ -12,6 +12,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -25,12 +26,17 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Race;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.MedicalRecordNumberDTO;
+import edu.wustl.catissuecore.dto.ParticipantDTO;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -49,6 +55,7 @@ import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.participant.bizlogic.CommonParticipantBizlogic;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
@@ -1606,5 +1613,129 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		return true;
 	}
+	public ParticipantDTO getParticipantDTO(DAO dao,Long pId,Long cpId) throws BizLogicException
+	{
+		ParticipantDTO participantDTO=new ParticipantDTO();
+	    try
+	    {
+			ColumnValueBean columnValueBean=new ColumnValueBean(pId);
+		    List<ColumnValueBean>  columnValueBeans=new ArrayList();
+		    columnValueBeans.add(columnValueBean);
+			
+			String hql="select participant.lastName,participant.firstName,participant.middleName," +
+					"participant.birthDate,participant.gender,participant.socialSecurityNumber," +
+					"participant.ethnicity from " + Participant.class.getName()
+		+ " as participant where participant.id = ?";
+			List participants=dao.executeQuery(hql, columnValueBeans);
+			Object[] participantInfo=(Object[])participants.get(0);
+			participantDTO.setLastName((String)participantInfo[0]);
+			participantDTO.setFirstName((String)participantInfo[1]);
+			Date dobdate = (Date)participantInfo[3];
+			if(dobdate!=null && !"".equals(dobdate))
+			{
+			   participantDTO.setDob(dobdate);
+			}
+			participantDTO.setGender((String)participantInfo[4]);
+			participantDTO.setSsn((String)participantInfo[5]);
+			participantDTO.setEthnicity((String)participantInfo[6]);
+			participantDTO.setParticipantId(pId);
+			participantDTO.setCpId(cpId);
+			
+			String mrnhql="select pmi.medicalRecordNumber ,site.name from "+ParticipantMedicalIdentifier.class.getName() + " as pmi, "+Site.class.getName() +" as site where pmi.participant.id=? and pmi.site.id=site.id";
+			List mrns=dao.executeQuery(mrnhql, columnValueBeans);
+			if(!mrns.isEmpty())
+			{	
+				List<MedicalRecordNumberDTO> mrnDtos = new ArrayList<MedicalRecordNumberDTO>();
+				for (Object mrn : mrns) {
+					 Object[] mrnArray = (Object[])mrn;
+					MedicalRecordNumberDTO mrnDto = new MedicalRecordNumberDTO();
+					mrnDto.setMrn(mrnArray[0].toString());
+					mrnDto.setSiteName(mrnArray[1].toString());
+					mrnDtos.add(mrnDto);
+					//mrnBuffer.append(((Object[])mrn)[1]).append("(").append(((Object[])mrn)[0]).append(")").append(",");
+				}
+			 participantDTO.setMrns(mrnDtos);
+			}	
+			
+			String raceSql="select race.raceName from "+Race.class.getName()+" as race where race.participant.id=?";
+			List races=dao.executeQuery(raceSql, columnValueBeans);
+			if(!races.isEmpty())
+			{
+				List<String> participantRaces = new ArrayList<String>();
+				for (Object race : races) {
+					participantRaces.add(race.toString());
+				}
+				participantDTO.setRace(participantRaces);
+			}
+			
+		    String cprSql="select cpr.protocolParticipantIdentifier,cpr.registrationDate from "+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?";
+		    ColumnValueBean columnValueBeanCp=new ColumnValueBean(new Long(cpId));
+		    columnValueBeans.add(columnValueBeanCp);
+		    
+		    List cprs=dao.executeQuery(cprSql, columnValueBeans);
+		    if(!cprs.isEmpty())
+		    {	
+			    Object[] protocolInfo=(Object[])cprs.get(0);
+			    participantDTO.setPpid((String)protocolInfo[0]);
+			    
+			    participantDTO.setRegistrationDate((Date)protocolInfo[1]);
+		    }
+		    
+		    List consentResponses = getConsentResponse(dao,columnValueBeans);		    
+		    if(!consentResponses.isEmpty())
+		    {
+		    	for (Object consentResponse : consentResponses) {
+		    		//(ArrayList<String>)consentResponse.get
+		    		if(Constants.YES.equals(((ConsentTierResponse)consentResponse).getResponse()) || 
+		    				"No".equals(((ConsentTierResponse)consentResponse).getResponse()))
+		    		{
+		    			participantDTO.setIsConsented(Constants.YES);
+		    			break;
+		    		}
+				}
+		    }
+	    }
+	    catch(DAOException e)
+	    {
+	    	throw new BizLogicException(ErrorKey.getErrorKey("biz.exequery.error"), null,null);
+	    }
+	    return participantDTO;
+	}
 
+	public List getConsentResponse(DAO dao,
+			List<ColumnValueBean> columnValueBeans) throws DAOException {
+		String consentResponsesHql="select ccpr.consentTierResponseCollection from "+CollectionProtocolRegistration.class.getName()+" as ccpr  where ccpr.participant.id=? and ccpr.collectionProtocol.id=?";
+		List consentResponses=dao.executeQuery(consentResponsesHql, columnValueBeans);
+		return consentResponses;
+	}
+	public void disableParticipant(Long participantId) throws BizLogicException
+	{
+		DAO dao=null;
+		Participant participant=new Participant();
+		participant.setId(participantId);
+		try
+		{
+			dao = this.openDAOSession(null);
+			disableObject(dao,participant);
+		}	
+		catch(BizLogicException daoException)
+		{
+			throw new BizLogicException(ErrorKey.getErrorKey("biz.disableobj.error"), null,
+					participantId.toString());
+		}
+		finally
+		{
+		   try
+		   {
+			if (dao!=null) {
+				dao.closeSession();
+			}
+		   }
+		   catch(DAOException exception)
+		   {
+			   throw new BizLogicException(ErrorKey.getErrorKey("biz.closesession.error"), null,
+						participantId.toString());
+		   }
+		}
+	}
 }

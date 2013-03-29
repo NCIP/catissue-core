@@ -69,7 +69,11 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 
 		}
 		final String numberOfSpecimens = this.getNumberOfSpecimens(request);
-		final String parentName = this.getParentName(request, parentType);
+		String parentName = this.getParentName(request, parentType);
+		if(parentName.isEmpty())
+		{
+			parentName = request.getParameter("parentLabel");
+		}
 
 		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
