@@ -424,6 +424,7 @@
 			<fileset dir="${base.dir}/modules/custom_impl_lib" />
 		</copy>
 		<antcall target="configure_log4j" />
+		<antcall target="configure_appResources" />
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 
@@ -434,6 +435,33 @@
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
 		<copy file="${base.dir}/modules/caTissue/conf/login-config.xml" todir="${temp.dir}" overwrite="true" />
 		<copy file="${base.dir}/modules/caTissue/conf/properties-service.xml" todir="${temp.dir}" overwrite="true" />
+		<if>
+			<not>
+				<equals arg1="" arg2="${theam.css.path}" />
+			</not>
+			<then>
+				<copy file="${theam.css.path}" tofile="${temp.dir}/catissuecore/css/login-theam.css" overwrite="true" />
+			</then>
+		</if>
+		
+		<if>
+			<not>
+				<equals arg1="" arg2="${institute.logo.path}" />
+			</not>
+			<then>
+				<copy file="${institute.logo.path}" todir="${temp.dir}/catissuecore/images" overwrite="true" />
+			</then>
+		</if>
+		
+		
+		
+		
+	</target>
+	<target name="configure_appResources" description="Configure ApplicationResources.properties">
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+			<include name ="ApplicationResources.properties"/>
+			<replacefilter token="@@institute.logo.path@@" value="${institute.logo.path}"/>
+		</replace>
 	</target>
 
 	<target name="configure_log4j" description="Configure log4j.properties">
@@ -770,8 +798,11 @@
 			<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 			<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
-			<!-- added By Mosin for spr report dir -->
+			<!-- added for spr report dir -->
 				<replacefilter token="@@spr.dir.location@@" value="${spr.dir.location}" />
+				<replacefilter token="@@theam.css.path@@" value="${theam.css.path}" />
+				<replacefilter token="@@institute.logo.hyperlink@@" value="${institute.logo.hyperlink}" />
+			
 			
 			<!-- Scheduler config -->
 									<replacefilter token="@@threadPool@@" value="${scheduler.threadPool.size}" />

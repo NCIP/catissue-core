@@ -354,9 +354,9 @@ login.forgot.password=Forgot password?
 							<img
 							src="images/uIEnhancementImages/krishagni_logo.png"
 							alt="" border="0"  /></a>
-							<a   class="logo-margin"  href="http://www.biorepository.unsw.edu.au/"><img
-							src="images/uIEnhancementImages/institute.png"
-							alt="" order="0" /></a>
+							<a   class="logo-margin" id="instituteLink" href="" style="display:none;"><img
+							src=""
+							alt="" order="0" id="InstituteLogo"/></a>
 							
 							<br />
 						</td>
@@ -387,7 +387,37 @@ login.forgot.password=Forgot password?
 </div>
 <script>
 
-window.onload = loadSummaryCount();
+window.onload = homePageLoad();
+
+function homePageLoad(){
+	loadSummaryCount();
+	loadInstituteLogo();
+}
+
+function loadInstituteLogo(){
+	var request = new  XMLHttpRequest();
+	request.onreadystatechange=function(){
+		if(request.readyState == 4)
+		{  
+			//Response is ready
+			if(request.status == 200)
+			{
+				var responseString = request.responseText;
+				var myJsonResponse = eval('(' + responseString + ')');
+				       
+				document.getElementById("InstituteLogo").src = myJsonResponse.logo;
+				document.getElementById("instituteLink").link =  myJsonResponse.link;
+				document.getElementById("instituteLink").style.display="";
+			}
+			
+			
+		}	
+	};
+	request.open("POST","CatissueCommonAjaxAction.do?type=getInstituteLogoName",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.send();
+
+}
 function loadSummaryCount() {
         var request = new  XMLHttpRequest();
 			request.onreadystatechange=function(){

@@ -5916,7 +5916,10 @@ public class Constants
 	public static final String LABEL_ID = "labelId";
 	public static final String SEQ_ORDER = "seqOrder";
 	public static final String ASSOC_ID = "assocId";
-
+	
+	public static final String INSTITUTE_LINK = "institute.logo.hyperlink";
+	public static final String INSTITUTE_LOGO_WEB_PATH = "images/";
+	
 	public static final String UPLOAD_ERROR_MESSAGE = "Problem occured while uploading report.";
 
 	public static final String ENTITY_SPECIMEN_TAG = "SpecimenListTag";

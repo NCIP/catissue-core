@@ -39,6 +39,8 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tags.factory.TagBizlogicFactory;
+import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
@@ -632,6 +634,26 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			System.out.println(ex.getMessage());
 		}
 			
+		return null;
+	}
+	
+	public ActionForward getInstituteLogoName(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		org.json.JSONObject returnedJObject= new org.json.JSONObject();
+		try {
+			String fileName =ApplicationProperties.getValue("institute.logo.path");
+			
+			int idx = fileName.contains("\\")?fileName.replaceAll("\\", "/").lastIndexOf("/"):fileName.lastIndexOf("/");
+			fileName =  idx >= 0 ? fileName.substring(idx + 1) : fileName;
+			returnedJObject.put("logo",Constants.INSTITUTE_LOGO_WEB_PATH+fileName);
+			returnedJObject.put("link",XMLPropertyHandler.getValue(Constants.INSTITUTE_LINK));
+			response.setContentType("application/json");
+			response.getWriter().write(returnedJObject.toString());
+		} catch (JSONException e) {
+
+			throw new ApplicationException(null,null,e.getMessage());
+		}
 		return null;
 	}
 
