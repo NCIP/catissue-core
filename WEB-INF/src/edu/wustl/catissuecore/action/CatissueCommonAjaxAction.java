@@ -21,6 +21,8 @@ import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SummaryBizLogic;
@@ -36,7 +38,6 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.tags.domain.Tag;
 import edu.wustl.common.tags.factory.TagBizlogicFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -478,25 +479,32 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
 	{
 
-		try{
-			Thread.sleep(5000l);
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-		}
 		String sId = request.getParameter("sId");
 		String tId = request.getParameter("tId");
 		String sInd = request.getParameter("sInd");
 		String tInd = request.getParameter("tInd");
-		String responseString = "";
-		if(tInd.equals("3")){
-			responseString = "{'success':true,'sId':'"+sId+"','tId':'"+tId+"','sInd':'"+sInd+"','tInd':'"+tInd+"'}";
+		String containerName = request.getParameter("containerName");;
+		String specimenLabel = request.getParameter("specimenLabel");
+		String hasContainer = request.getParameter("hasContainer");
+		org.json.JSONObject returnedJObject= new org.json.JSONObject();
+		
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
+		SpecimenEventParametersBizLogic bizLogic = new SpecimenEventParametersBizLogic();
+		String msg;
+		try{
+		if(Constants.TRUE.equals(hasContainer)){
+			StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+			msg = scBizLogic.updateStorageContainerPosition(sessionData, specimenLabel, containerName,tId,tInd);
+		}else{
+			msg = bizLogic.specimenEventTransferFromMobile(sessionData,specimenLabel,containerName,tId,tInd);
 		}
-		else{
-			responseString = "{'success':false,'sId':'"+sId+"','tId':'"+tId+"','sInd':'"+sInd+"','tInd':'"+tInd+"'}";
+		msg = "{'success':true,'msg':'"+msg+"'}";
+		}catch(final ApplicationException exp){
+			msg = "{'success':false,'msg':'"+exp.getMessage()+"'}";
 		}
 		
-		response.getWriter().write(responseString.toString());
+		response.getWriter().write(msg);
 		return null;
 		
 	}
@@ -504,20 +512,18 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
 	{
 
-		try{
-			Thread.sleep(5000l);
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-		}
 		String sourceText = request.getParameter("sourceText");
 		String targetText = request.getParameter("targetText");
+		StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 		String responseString = "";
-		if(sourceText.equals("nccs")){
-			responseString = "{'success':true,'sourceText':'"+sourceText+"','targetText':'"+targetText+"'}";
-		}
-		else{
-			responseString = "{'success':false,'sourceText':'"+sourceText+"','targetText':'"+targetText+"'}";
+		try{
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
+		
+		String msg = scBizLogic.updateStorageContainerPosition(sessionData, sourceText, targetText,"","");
+		responseString = "{'success':true,'msg':'"+msg+"'}";
+		}catch(final ApplicationException exp){
+			responseString = "{'success':false,'msg':'"+exp.getMessage()+"'}";
 		}
 		
 		response.getWriter().write(responseString.toString());
@@ -628,4 +634,5 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			
 		return null;
 	}
+
 }

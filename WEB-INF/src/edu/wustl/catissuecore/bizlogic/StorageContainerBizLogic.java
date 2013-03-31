@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1969,7 +1970,99 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		return sql;
 	}
 	
+	public String updateStorageContainerPosition(
+			SessionDataBean sessionDataBean, String containerName,
+			String parentContainerName, String pos1, String pos2)
+			throws ApplicationException {
+		DAO dao = null;
+		String msg = "";
+		try {
+
+			dao = AppUtility.openDAOSession(sessionDataBean);
+
+			StorageContainer sc = getStorageContainerFromName(dao,
+					containerName);
+			ContainerPosition pos = null;
+			if ("".equals(pos1) && "".equals(pos2)) {
+				StorageContainer parentSc = getStorageContainerFromName(dao,
+						parentContainerName);
+				if (parentSc != null) {
+					Position position = StorageContainerUtil
+							.getFirstAvailablePositionsInContainer(parentSc,
+									new HashSet<String>(), dao, null, null);
+					if( sc.getLocatedAtPosition()!=null ){
+						pos = (ContainerPosition) sc.getLocatedAtPosition();
+						pos.setParentContainer(parentSc);
+						pos.setPositionDimensionOne(position.getXPos());
+						pos.setPositionDimensionTwo(position.getYPos());
+						dao.update(pos);
+						dao.commit();
+					}else{
+						pos = new ContainerPosition();
+						pos.setParentContainer(parentSc);
+						pos.setPositionDimensionOne(position.getXPos());
+						pos.setPositionDimensionTwo(position.getYPos());
+						pos.setOccupiedContainer(sc);
+						sc.setLocatedAtPosition(pos);
+						SiteBizLogic siteBizLogic = new SiteBizLogic();
+						sc.setSite(siteBizLogic.getSite(dao,parentSc.getId()));
+						dao.insert(pos);
+						dao.update(sc);
+						dao.commit();
+					}
+					
+				}else{
+					SiteBizLogic sitBizLogic= new SiteBizLogic();
+					Long id = sitBizLogic.retriveSiteIdByName(dao, parentContainerName);
+					Site site = new Site();
+					site.setId(id);
+					sc.setSite(site);
+					pos = (ContainerPosition) sc.getLocatedAtPosition();
+					pos.setOccupiedContainer(null);
+					sc.setLocatedAtPosition(null);
+					
+					dao.update(sc);
+					dao.update(pos);
+					dao.commit();
+				}
+
+			} else {
+
+				List labellingList = StorageContainerUtil
+						.getLabellingSchemeByContainerId(sc.getId().toString());
+				String oneDimensionLabellingScheme = (String) labellingList
+						.get(0);// ((ArrayList)labellingList.get(0)).get(0);
+				String twoDimensionLabellingScheme = (String) labellingList
+						.get(1);// ((ArrayList)labellingList.get(0)).get(1);
+				Integer pos1Integer = AppUtility.getPositionValueInInteger(
+						oneDimensionLabellingScheme, pos1);
+				Integer pos2Integer = AppUtility.getPositionValueInInteger(
+						twoDimensionLabellingScheme, pos2);
+				pos = (ContainerPosition) sc.getLocatedAtPosition();
+				pos.setPositionDimensionOne(pos1Integer);
+				pos.setPositionDimensionTwo(pos2Integer);
+				dao.update(pos);
+				dao.commit();
+			}
+
+		} catch (final ApplicationException exp) {
+			String msgString = "";
+			if (exp.getErrorKey() != null) {
+				msgString = exp.getErrorKey().getMessageWithValues();
+			} else {
+				msgString = exp.getMsgValues();
+			}
+
+			throw new BizLogicException(exp.getErrorKey(), exp, msgString);
+		} finally {
+			if (dao != null) {
+				AppUtility.closeDAOSession(dao);
+			}
+		}
+		return msg;
+	}
 	
+
 	
 	
 	

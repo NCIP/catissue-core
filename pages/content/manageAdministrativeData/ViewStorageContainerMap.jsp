@@ -496,7 +496,12 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 				<tr>
 					<td width="5" class="black_ar_t" align="center"><b><%=verTempOne%>&darr;<b></td>
 					<td width="100%" height="100%" >
-				<div id="containerGrid"></div>
+					<div class="holder black_ar" id="successMessageStrip" style="margin-top:50px;padding: 1em 2.5em 1em 1em;display:none; border-radius: 7px;border-color:#9EB6D4;background:#F9EDBE;padding: 6px; position: absolute; margin-left: 40%;z-index:1; ">
+							<span>Transfered Successfully</span>
+						</div>
+					<div style="width:100%;height:100%;">
+						<div id="containerGrid"></div>
+					</div>
 			</td>
 				</tr>
 		<tr>
@@ -509,6 +514,35 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 <iframe id = "containerExportFrame" width = "0%" height = "0%" frameborder="0">
 	</iframe>
 <script>
+
+function showsuccessMessageStrip(){
+	showIt();
+	setTimeout("hideIt()", 1000); 
+}
+function showIt() {
+document.getElementById("successMessageStrip").style.opacity = 1;
+	document.getElementById("successMessageStrip").style.display = "block";
+}
+function hideIt() {
+fade(document.getElementById("successMessageStrip"));
+	//document.getElementById("successMessageStrip").style.display = "none";
+	
+}
+function fade(element) {
+    var op = 1;  // initial opacity
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 50);
+}
+
+
+
 var grid = new dhtmlXGridObject("containerGrid");
 var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
 if(!interVeil||interVeil==null)
@@ -583,10 +617,14 @@ grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 	a= grid.cells(sId,sInd).getValue();
 	b= grid.cells(tId,tInd).getValue();
 	var isImg = a.search('<img ');
-
+	var isImgB = b.search('<img ');
 	if(sInd!=0&&tInd!=0){
-		if(isImg==-1){
-			var parameter='sId='+sId+'&tId='+tId+'&sInd='+sInd+'&tInd='+tInd;
+		if(isImg==-1 && isImgB != -1){
+			hasContainer = false;
+			if(a.indexOf("containerChanged()")!=-1){
+				hasContainer = true
+			}
+			var parameter='hasContainer='+hasContainer+'&sId='+grid.hdrLabels[sId]+'&tId='+grid.hdrLabels[tId]+'&sInd='+grid.cells(sInd,0).getValue()+'&tInd='+grid.cells(tInd,0).getValue()+'&containerName=<%=request.getAttribute("containerName")%>&specimenLabel='+ReplaceTags(a).trim();
 			var request = newXMLHTTPReq();
 			request.onreadystatechange=function(){
 				if(request.readyState == 4)
@@ -599,9 +637,12 @@ grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 						if(myJsonResponse.success){
 							grid.cells(sId,sInd).setValue(b);
 							grid.cells(tId,tInd).setValue(a);
+							//window.parent.showsuccessMessageStrip();
+							showsuccessMessageStrip();
 						}
-						else
-							alert("can't move");
+						else{
+							alert(myJsonResponse.msg);
+						}
 					}
 					interVeil.style.display="none";
 					
@@ -613,7 +654,12 @@ grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 			interVeil.style.display="block";
 		}
 		else{
-			alert("can't move");
+			if(isImgB==-1){
+				alert("The specified Storage Container position is already in use.")
+			}else if(isImg!=-1){
+				alert("The selected Storage Container position is empty.");
+			}
+			
 		}
 		
 	}
@@ -628,6 +674,13 @@ loadGrid();
   }
 
 //document.getElementByTag("Body");
+var regExp = /<\/?[^>]+>/gi;
+function ReplaceTags(xStr)
+{
+  xStr = xStr.replace(regExp,"");
+  return xStr;
+}
+
 
 </script>
 <%!

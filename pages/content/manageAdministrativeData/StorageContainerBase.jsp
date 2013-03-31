@@ -144,6 +144,7 @@ else
       </tr>
 </table>
 </div>
+
 	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
           <td colspan="2" align="left" width="100%" class="bottomtd"></td>

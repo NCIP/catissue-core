@@ -39,9 +39,12 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
-	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
-	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
-	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
+	<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
+
+	
+	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmxtreeCommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/ext/dhtmlxtree_dragin.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
@@ -196,6 +199,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 			<%-- parent node id for root node is "0" --%>
 			tree=new dhtmlXTreeObject("treeboxbox_tree","100%","100%",0);
 			tree.setImagePath("dhtml_comp/imgs/");
+			tree.setSkin('dhx_skyblue');
 			tree.enableDragAndDrop(true);
 			tree.setOnClickHandler(tonclick);
 			tree.setOnOpenHandler(expand);
@@ -237,8 +241,8 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 			<% }%>
 			tree._drag = function(sourceHtmlObject, dhtmlObject, targetHtmlObject) {
 				sourceText = sourceHtmlObject.firstChild.innerHTML;
-				targetText = encodeURI(targetHtmlObject.firstChild.innerHTML);
-					var parameter='sourceText='+sourceText+'&targetText='+targetText;
+				targetText = ReplaceTags(targetHtmlObject.firstChild.innerHTML);
+					var parameter='sourceText='+ReplaceTags(sourceText)+'&targetText='+targetText;
 					var request = newXMLHTTPReq();
 					request.onreadystatechange=function(){
 						if(request.readyState == 4)
@@ -281,7 +285,13 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 					interVeil.style.display="block";				
 				return true;
 				}
-				
+				var regExp = /<\/?[^>]+>/gi;
+				function ReplaceTags(xStr)
+				{
+				  xStr = xStr.replace(regExp,"");
+				  return xStr;
+				}
+
 	</script>
 </body>
 </html>
