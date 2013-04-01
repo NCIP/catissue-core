@@ -466,8 +466,8 @@ else
 				}
 				pause(10);
  			}
+ 		 	popupmygrid.openItem(tagID);
 		}
- 	
 	 }	 
 }
  
