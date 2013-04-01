@@ -341,6 +341,16 @@
 		<name>spr.dir.location</name>
 		<value>@@spr.dir.location@@</value>
 	</property>
+
+	<property>
+		<name>theam.css.path</name>
+		<value>@@theam.css.path@@</value>
+	</property>
+	<property>
+		<name>institute.logo.hyperlink</name>
+		<value>@@institute.logo.hyperlink@@</value>
+	</property>
+	
 	
 	 <!-- end -->
 
