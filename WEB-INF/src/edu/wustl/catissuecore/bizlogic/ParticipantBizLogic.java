@@ -1643,9 +1643,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			
 			String mrnhql="select pmi.medicalRecordNumber ,site.name from "+ParticipantMedicalIdentifier.class.getName() + " as pmi, "+Site.class.getName() +" as site where pmi.participant.id=? and pmi.site.id=site.id";
 			List mrns=dao.executeQuery(mrnhql, columnValueBeans);
+			List<MedicalRecordNumberDTO> mrnDtos = new ArrayList<MedicalRecordNumberDTO>();
 			if(!mrns.isEmpty())
 			{	
-				List<MedicalRecordNumberDTO> mrnDtos = new ArrayList<MedicalRecordNumberDTO>();
 				for (Object mrn : mrns) {
 					 Object[] mrnArray = (Object[])mrn;
 					MedicalRecordNumberDTO mrnDto = new MedicalRecordNumberDTO();
@@ -1654,19 +1654,19 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					mrnDtos.add(mrnDto);
 					//mrnBuffer.append(((Object[])mrn)[1]).append("(").append(((Object[])mrn)[0]).append(")").append(",");
 				}
-			 participantDTO.setMrns(mrnDtos);
 			}	
+			 participantDTO.setMrns(mrnDtos);
 			
 			String raceSql="select race.raceName from "+Race.class.getName()+" as race where race.participant.id=?";
 			List races=dao.executeQuery(raceSql, columnValueBeans);
+			List<String> participantRaces = new ArrayList<String>();
 			if(!races.isEmpty())
 			{
-				List<String> participantRaces = new ArrayList<String>();
 				for (Object race : races) {
 					participantRaces.add(race.toString());
 				}
-				participantDTO.setRace(participantRaces);
 			}
+			participantDTO.setRace(participantRaces);
 			
 		    String cprSql="select cpr.protocolParticipantIdentifier,cpr.registrationDate from "+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?";
 		    ColumnValueBean columnValueBeanCp=new ColumnValueBean(new Long(cpId));

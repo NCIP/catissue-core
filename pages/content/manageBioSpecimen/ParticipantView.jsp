@@ -101,8 +101,8 @@
 				</html:button>
 			</td>
 			<td width="20%">
-				<html:button styleClass="blue_ar_b"	property="deleteParticipant"	title="Delete Only" value="Delete" >
-				</html:button>
+			<!--	<html:button styleClass="blue_ar_b"	property="deleteParticipant"	title="Delete Only" value="Delete" >
+				</html:button> -->
 				
 			</td>
 			<td colspan="2"> 
