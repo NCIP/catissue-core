@@ -22,9 +22,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.query.util.global.UserCache;
-import edu.wustl.security.exception.SMException;
-import edu.wustl.security.manager.ISecurityManager;
-import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
 public class SpecimenListBizlogic implements ITagBizlogic
@@ -79,15 +76,19 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		TagDAO<AbstractSpecimen> tagDao = null;
 		try
 		{
-			Tag tag = new Tag();
-			tag.setIdentifier(tagId);
-			TagItem<AbstractSpecimen> tagItem = new TagItem<AbstractSpecimen>();
-	
-			tagItem.setTag(tag);
-			tagItem.setObjId(objId);
-			
 			tagDao = new TagDAO<AbstractSpecimen>(Constants.ENTITY_SPECIMEN_TAGITEM);
-			tagDao.insertTagItem(tagItem);
+			boolean alreadyAssigned = tagDao.isTagItemAlreadyAssigned(tagId, objId);
+			if (! alreadyAssigned)
+			{
+				Tag tag = new Tag();
+				tag.setIdentifier(tagId);
+				TagItem<AbstractSpecimen> tagItem = new TagItem<AbstractSpecimen>();
+		
+				tagItem.setTag(tag);
+				tagItem.setObjId(objId);
+	
+				tagDao.insertTagItem(tagItem);
+			}
 			tagDao.commit();
 		}
 		catch (DAOException e)
