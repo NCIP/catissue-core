@@ -2221,10 +2221,24 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				orderStatus=Constants.ORDER_STATUS_REJECTED;
 			}
-			
+			params = new HashMap<String, NamedQueryParam>();
 			params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getSite()));
 			params.put("1", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
+			dao.executeUpdateWithNamedQuery("updateDistributionDetails",params);
+			
+			params = new HashMap<String, NamedQueryParam>();
+			params.put("0", new NamedQueryParam(DBTypes.STRING, orderStatus));
+			if(orderSubmissionDTO.getComments()==null)
+			{
+				params.put("1", new NamedQueryParam(DBTypes.STRING, ""));
+			}
+			else
+			{
+				params.put("1", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getComments()));
+			}
+			params.put("2", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
 			dao.executeUpdateWithNamedQuery("updateOrderDetails",params);
+
 			orderStatusDTO.setStatus(orderStatus);
 			orderStatusDTO.setSpecimensWithError(specimensWithError);
 			orderStatusDTO.setOrderId(orderSubmissionDTO.getId());

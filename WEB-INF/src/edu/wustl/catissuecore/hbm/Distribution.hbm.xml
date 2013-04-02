@@ -126,5 +126,6 @@
         -->
 
     </class>
-
+<query name="updateDistributionDetails">UPDATE edu.wustl.catissuecore.domain.Distribution distribution SET distribution.toSite = ? WHERE distribution.orderDetails.id= ?
+</query>
 </hibernate-mapping>
