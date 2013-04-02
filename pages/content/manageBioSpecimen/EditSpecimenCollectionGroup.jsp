@@ -133,12 +133,11 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || Constants.EDIT.equals(operation))
 						{
 				%>
-
 					<c:set var="i" value="${i+1}" scope="request" />
 					<td width="20%" align="right" valign="top" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" />	
 						<span class="black_ar"><label for="name">
-								<bean:message key="specimenCollectionGroup.groupName" /></label>
+							<b>	<bean:message key="specimenCollectionGroup.groupName" /> </b></label>
 						</span>
 					</td>
 					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
@@ -150,7 +149,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 										{
 								%>
 					<td width="20%" align="right" class="black_ar">
-					<bean:message key="specimenCollectionGroup.barcode" /></td>
+					<b><bean:message key="specimenCollectionGroup.barcode" /> </b></td>
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 							<%
@@ -158,14 +157,14 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 												{
 							%>
 								<label for="barcode">
-									<%=form.getBarcode()%>
+										<%=form.getBarcode()%> 
 								</label>
 							<%
 								}
 												else
 												{
 							%>
-								<label for="barcode">
+								<label for="barcode"><b></b>
 								</label>
 							<%
 								}
@@ -216,16 +215,12 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<b><bean:message key="specimenCollectionGroup.site"/></b>
 					</td>
 					<td width="30%" align="left"  class="black_ar align_left_style1">
-					 <autocomplete:AutoCompleteTag property="siteId"
-										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
-										  initialValue="<%=new Long(form.getSiteId())%>"
-										  styleClass="black_ar"
-										  staticField="false"
-										  size="21"
-									    />
-
-
-						<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+					
+						<html:select property="siteId" styleClass="black_ar" styleId="siteId" size="1">
+							       <html:options collection="siteList" labelProperty="name" property="value" />
+					    </html:select>
+						
+					   <logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						&nbsp;
 						<html:link href="#" styleId="newSite" styleClass="view" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
 							<bean:message key="buttons.addNew" />

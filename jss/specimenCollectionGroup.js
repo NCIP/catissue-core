@@ -7,64 +7,75 @@ if(window.parent!=null)
 		window.parent.lastRefreshTime = new Date().getTime();
 	}
 }
+var scgCombo={};
 
 function initializeSCGCombo()
 {
-		var clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
-		clinicalStatusCombo.setOptionWidth(165);
-		clinicalStatusCombo.setSize(165);
+		scgCombo.clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
+		scgCombo.clinicalStatusCombo.setOptionWidth(165);
+		scgCombo.clinicalStatusCombo.setSize(165);
 	
-		var collectionEventCollectionProcedureCombo = dhtmlXComboFromSelect("collectionEventCollectionProcedure");  
-		collectionEventCollectionProcedureCombo.setOptionWidth(165);
-		collectionEventCollectionProcedureCombo.setSize(165);
+		scgCombo.collectionEventCollectionProcedureCombo = dhtmlXComboFromSelect("collectionEventCollectionProcedure");  
+		scgCombo.collectionEventCollectionProcedureCombo.setOptionWidth(165);
+		scgCombo.collectionEventCollectionProcedureCombo.setSize(165);
 		
-		var collectionEventContainerCombo = dhtmlXComboFromSelect("collectionEventContainer");  
-		collectionEventContainerCombo.setOptionWidth(165);
-		collectionEventContainerCombo.setSize(165);
+		scgCombo.collectionEventContainerCombo = dhtmlXComboFromSelect("collectionEventContainer");  
+		scgCombo.collectionEventContainerCombo.setOptionWidth(165);
+		scgCombo.collectionEventContainerCombo.setSize(165);
 		
-		
-		var receivedEventReceivedQualityCombo = dhtmlXComboFromSelect("receivedEventReceivedQuality");  
-		receivedEventReceivedQualityCombo.setOptionWidth(165);
-		receivedEventReceivedQualityCombo.setSize(165);
-		
+		scgCombo.receivedEventReceivedQualityCombo = dhtmlXComboFromSelect("receivedEventReceivedQuality");  
+		scgCombo.receivedEventReceivedQualityCombo.setOptionWidth(165);
+		scgCombo.receivedEventReceivedQualityCombo.setSize(165);
 
-		var activityStatusCombo = dhtmlXComboFromSelect("activityStatus");  
-		activityStatusCombo.setOptionWidth(165);
-		activityStatusCombo.setSize(165);
+		scgCombo.activityStatusCombo = dhtmlXComboFromSelect("activityStatus");  
+		scgCombo.activityStatusCombo.setOptionWidth(165);
+		scgCombo.activityStatusCombo.setSize(165);
 		
-		activityStatusCombo.attachEvent("onChange", 
+		scgCombo.activityStatusCombo.attachEvent("onChange", 
 			function()
 			{
-				var activityValue=activityStatusCombo.getSelectedValue();
+				var activityValue=scgCombo.activityStatusCombo.getSelectedValue();
 				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
 			});
 
-		var collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");  
-		collectionStatusCombo.setOptionWidth(165);
-		collectionStatusCombo.setSize(165);
+		scgCombo.collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");  
+		scgCombo.collectionStatusCombo.setOptionWidth(165);
+		scgCombo.collectionStatusCombo.setSize(165);
 		
-		collectionStatusCombo.attachEvent("onChange", 
+		scgCombo.collectionStatusCombo.attachEvent("onChange", 
 			function()
 			{
-				var activityValue=collectionStatusCombo.getSelectedValue();
+				var activityValue=scgCombo.collectionStatusCombo.getSelectedValue();
 				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
 			});
 		
-			var collectionEventTimeInHoursCombo = dhtmlXComboFromSelect("collectionEventTimeInHours");  
-			collectionEventTimeInHoursCombo.setOptionWidth(50);
-			collectionEventTimeInHoursCombo.setSize(50);
+			scgCombo.collectionEventTimeInHoursCombo = dhtmlXComboFromSelect("collectionEventTimeInHours");  
+			scgCombo.collectionEventTimeInHoursCombo.setOptionWidth(50);
+			scgCombo.collectionEventTimeInHoursCombo.setSize(50);
 			
-			var collectionEventTimeInMinutesCombo = dhtmlXComboFromSelect("collectionEventTimeInMinutes");  
-			collectionEventTimeInMinutesCombo.setOptionWidth(50);
-			collectionEventTimeInMinutesCombo.setSize(50);
+			scgCombo.collectionEventTimeInMinutesCombo = dhtmlXComboFromSelect("collectionEventTimeInMinutes");  
+			scgCombo.collectionEventTimeInMinutesCombo.setOptionWidth(50);
+			scgCombo.collectionEventTimeInMinutesCombo.setSize(50);
 			
-			var receivedEventTimeInHoursCombo = dhtmlXComboFromSelect("receivedEventTimeInHours");  
-			receivedEventTimeInHoursCombo.setOptionWidth(50);
-			receivedEventTimeInHoursCombo.setSize(50);
+			scgCombo.receivedEventTimeInHoursCombo = dhtmlXComboFromSelect("receivedEventTimeInHours");  
+			scgCombo.receivedEventTimeInHoursCombo.setOptionWidth(50);
+			scgCombo.receivedEventTimeInHoursCombo.setSize(50);
 			
-			var receivedEventTimeInMinutesCombo = dhtmlXComboFromSelect("receivedEventTimeInMinutes");  
-			receivedEventTimeInMinutesCombo.setOptionWidth(50);
-			receivedEventTimeInMinutesCombo.setSize(50);
+			scgCombo.receivedEventTimeInMinutesCombo = dhtmlXComboFromSelect("receivedEventTimeInMinutes");  
+			scgCombo.receivedEventTimeInMinutesCombo.setOptionWidth(50);
+			scgCombo.receivedEventTimeInMinutesCombo.setSize(50);
+			
+			scgCombo.collectionEventUserIdCombo = dhtmlXComboFromSelect("collectionEventUserId");  
+			scgCombo.collectionEventUserIdCombo.setOptionWidth(165);
+			scgCombo.collectionEventUserIdCombo.setSize(165);
+			
+			scgCombo.receivedEventUserIdCombo = dhtmlXComboFromSelect("receivedEventUserId");  
+			scgCombo.receivedEventUserIdCombo.setOptionWidth(165);
+			scgCombo.receivedEventUserIdCombo.setSize(165);
+			
+			scgCombo.siteIdCombo = dhtmlXComboFromSelect("siteId");  
+			scgCombo.siteIdCombo.setOptionWidth(165);
+			scgCombo.siteIdCombo.setSize(165);
 }
 
 function onRadioButtonClick(element)
@@ -93,13 +104,12 @@ function changeAction(action)
 function checkForChanges()
 {
 	var collectionEventdateOfEvent = document.getElementById("collectionEventdateOfEvent").value;
-	var collectionEventUserId = document.getElementById("collectionEventUserId").value;
-	var collectionEventTimeInHours = document.getElementById("displaycollectionEventTimeInHours").value;
-	var collectionEventTimeInMinutes = document.getElementById("displaycollectionEventTimeInMinutes").value;
-	var collectionEventCollectionProcedure = document.getElementById("collectionEventCollectionProcedure").value;
-	var collectionEventContainer = document.getElementById("collectionEventContainer").value;
+	var collectionEventUserId=scgCombo.collectionEventUserIdCombo.getSelectedText();
+	var collectionEventTimeInHours=scgCombo.collectionEventTimeInHoursCombo.getSelectedText();
+	var collectionEventTimeInMinutes=scgCombo.collectionEventTimeInMinutesCombo.getSelectedText();
+	var collectionEventCollectionProcedure =scgCombo.collectionEventCollectionProcedureCombo.getSelectedText();
+	var collectionEventContainer=scgCombo.collectionEventContainerCombo.getSelectedText();
 	var collectionEventComments = document.getElementById("collectionEventComments").value;
-
 	var receivedEventdateOfEvent;
 	var currentReceivedDateForm;
 	var recDate = document.getElementById("receivedEventdateOfEvent");
@@ -108,10 +118,10 @@ function checkForChanges()
 		receivedEventdateOfEvent = recDate.value;
 		 currentReceivedDateForm = document.getElementById("currentReceivedDateForm").value;
 	}
-	var receivedEventUserId = document.getElementById("receivedEventUserId").value;
-	var receivedEventTimeInHours = document.getElementById("displayreceivedEventTimeInHours").value;
-	var receivedEventTimeInMinutes = document.getElementById("displayreceivedEventTimeInMinutes").value;
-	var receivedEventReceivedQuality = document.getElementById("receivedEventReceivedQuality").value;
+	var receivedEventUserId =scgCombo.receivedEventUserIdCombo.getSelectedText();
+	var receivedEventTimeInHours=scgCombo.receivedEventTimeInHoursCombo.getSelectedText();
+	var receivedEventTimeInMinutes=scgCombo.receivedEventTimeInMinutesCombo.getSelectedText();
+	var receivedEventReceivedQuality=scgCombo.receivedEventReceivedQualityCombo.getSelectedText();
 	var receivedEventComments = document.getElementById("receivedEventComments").value;
 
 	//Values from form
@@ -327,4 +337,3 @@ function showAnnotations(scgEntityIdValue,idValue,staticEntityNameValue,pageOfVa
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
-

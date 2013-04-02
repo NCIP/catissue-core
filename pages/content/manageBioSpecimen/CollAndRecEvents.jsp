@@ -46,13 +46,10 @@
 			</label>
 		</td>
         <td align="left" width="60%" class="align_left_style1">
-						
-							<autocomplete:AutoCompleteTag property="collectionEventUserId"
-										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
-										  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
-        								  staticField="false"
-										  styleClass="formFieldSizedAutoSCG"
-							/>		
+						<html:select property="collectionEventUserId"
+							             styleClass="black_ar" styleId="collectionEventUserId" size="1">
+							       <html:options collection="userList" labelProperty="name" property="value" />
+					    </html:select>
 		</td>
       </tr>
       <tr class="tr_alternate_color_lightGrey">
@@ -173,12 +170,10 @@
 			</label>
 		</td>
         <td width="60%" align="left" class="black_ar align_left_style1">
-						<autocomplete:AutoCompleteTag property="receivedEventUserId"
-										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
-										  initialValue="<%=new Long(form.getReceivedEventUserId())%>"
-										  staticField="false"
-										  styleClass="formFieldSizedAutoSCG"
-					    />	
+				<html:select property="receivedEventUserId"
+								 styleClass="black_ar" styleId="receivedEventUserId" size="1">
+						   <html:options collection="userList" labelProperty="name" property="value" />
+				</html:select>		
 		</td>
       </tr>
       <tr class="tr_alternate_color_lightGrey">
