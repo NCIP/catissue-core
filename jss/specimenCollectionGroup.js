@@ -42,17 +42,32 @@ function initializeSCGCombo()
 		scgCombo.collectionStatusCombo.setOptionWidth(165);
 		scgCombo.collectionStatusCombo.setSize(165);
 		
+		
+		var clinicalDiagnosisCombo = new dhtmlXCombo("clinicalDiagnosis","clinicalDiagnosis","100px");;
+		clinicalDiagnosisCombo.setOptionWidth(165);
+		clinicalDiagnosisCombo.setSize(165);
+		var collectionProtocolId = document.getElementsByName('collectionProtocolId')[0].value;
+		clinicalDiagnosisCombo.loadXML('ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId );
+		clinicalDiagnosisCombo.setComboText(clinicalDiagnosisValue);
+		//clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
+		clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
+		
+		var collectionProtocolEventCombo = new dhtmlXCombo("collectionProtocolEventId","collectionProtocolEventId","100px");;
+		collectionProtocolEventCombo.setOptionWidth(165);
+		collectionProtocolEventCombo.setSize(165);
+		
+		
+		
 		scgCombo.collectionStatusCombo.attachEvent("onChange", 
 			function()
 			{
 				var activityValue=scgCombo.collectionStatusCombo.getSelectedValue();
 				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
 			});
-		
 			scgCombo.collectionEventTimeInHoursCombo = dhtmlXComboFromSelect("collectionEventTimeInHours");  
 			scgCombo.collectionEventTimeInHoursCombo.setOptionWidth(50);
 			scgCombo.collectionEventTimeInHoursCombo.setSize(50);
-			
+		
 			scgCombo.collectionEventTimeInMinutesCombo = dhtmlXComboFromSelect("collectionEventTimeInMinutes");  
 			scgCombo.collectionEventTimeInMinutesCombo.setOptionWidth(50);
 			scgCombo.collectionEventTimeInMinutesCombo.setSize(50);
@@ -76,6 +91,16 @@ function initializeSCGCombo()
 			scgCombo.siteIdCombo = dhtmlXComboFromSelect("siteId");  
 			scgCombo.siteIdCombo.setOptionWidth(165);
 			scgCombo.siteIdCombo.setSize(165);
+			
+			
+			
+			/*var clinicalDignosisCombo = dhtmlXComboFromSelect("clinicalDiagnosis");  
+			clinicalDignosisCombo.setOptionWidth(50);
+			clinicalDignosisCombo.setSize(50);
+			clinicalDignosisCombo.setSize(50);*/
+			
+			
+			
 }
 
 function onRadioButtonClick(element)
@@ -315,6 +340,23 @@ function viewSPR(reportIdValue,pageOfValue)
 		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
 		document.forms[0].action=action;
 		document.forms[0].submit();
+}
+
+function viewSCGSPR(reportIdValue,pageOfValue)
+{
+	var reportId=reportIdValue;
+/*	if(reportId==null || reportId==-1)
+	{		
+		alert("There is no associate report in the system!");
+	}
+	else if(reportId==null || reportId==-2)
+	{
+		alert("Associated report is under quarantined request! Please contact administrator for further details.");
+	}
+	else */
+		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
+		document.location=action;
+	//	document.forms[0].submit();
 }
 
 function setSubmitted(forwardTo,printaction,nextforwardTo)

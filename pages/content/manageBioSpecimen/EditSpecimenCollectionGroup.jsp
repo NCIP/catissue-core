@@ -1,6 +1,6 @@
-<script type="text/javascript" src="jss/ext-base.js"></script>
-<script type="text/javascript" src="jss/ext-all.js"></script>
-<script type="text/javascript" src="jss/combos.js"></script>
+<!--script type="text/javascript" src="jss/ext-base.js"></script>
+<script type="text/javascript" src="jss/ext-all.js"></script-->
+<!--script type="text/javascript" src="jss/combos.js"></script-->
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <c:set var="tr_white_color" value="tr_alternate_color_white" />
 <c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
@@ -206,7 +206,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				     	            onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
 						</html:select>&nbsp;
-						<bean:message key="collectionprotocol.studycalendarcomment"/>
+						
 		        	</td>
 					
 					
@@ -274,10 +274,14 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 								<tr>
 									<td>
 										<div>
-										<input property="clinicalDiagnosis" type="text" id="clinicaldiagnosis" name="clinicalDiagnosis"
-										       value="<%=request.getAttribute("clinicalDiagnosis")%>" onmouseover="showTip(this.id)" />
+										   <html:select property="clinicalDiagnosis" styleClass="black_ar" styleId="clinicalDiagnosis" size="1">
+											</html:select>
 										</div>
 									</td>
+									<script>
+									var clinicalDiagnosisValue = '${clinicalDiagnosis}';
+					
+					</script>
 									<td>
 									<%
 										String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";
@@ -333,6 +337,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
 							       </logic:iterate>
 					</html:select>
+					
 					</td>
 				</tr>
 				 <tr><td colspan="3" class="bottomtd"></td></tr>

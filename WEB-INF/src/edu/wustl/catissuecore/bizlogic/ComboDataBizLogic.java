@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -16,7 +17,9 @@ import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
  * @author sagar_baldwa
@@ -172,5 +175,54 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic {
 			// System.out.println(e);
 		}
 		return jsonObject;
+	}
+	
+	
+	public List<NameValueBean> getClinicalDiagnosisList(Long cpId, int listSize,JDBCDAO dao) throws DAOException, BizLogicException{
+		List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
+		if(cpId != null)
+		{
+			final String selectCDQuery = "select CLINICAL_DIAGNOSIS from  catissue_clinical_diagnosis where COLLECTION_PROTOCOL_ID = ? limit ?";
+			List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+			parameters.add(new ColumnValueBean(cpId));
+			parameters.add(new ColumnValueBean(listSize));
+			List clinicalDiagnosisValues = dao.executeQuery(selectCDQuery, parameters);
+			getClinicalDiagnosisBean(clinicalDiagnosisList, clinicalDiagnosisValues,true);
+		}
+		return clinicalDiagnosisList;
+	}
+	
+	
+	public List<NameValueBean> getClinicalDiagnosisList(String query, int listSize,JDBCDAO dao) throws DAOException, BizLogicException{
+		List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
+		String selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and value like ? limit  ?";
+		List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+		parameters.add(new ColumnValueBean(query+"%"));
+		parameters.add(new ColumnValueBean(listSize));
+		List clinicalDiagnosisValues = dao.executeQuery(selectCDQuery, parameters);
+		getClinicalDiagnosisBean(clinicalDiagnosisList, clinicalDiagnosisValues,true);
+		if(clinicalDiagnosisValues.size()<listSize){
+			parameters = new ArrayList<ColumnValueBean>(); 
+			parameters.add(new ColumnValueBean("%"+query+"%"));
+			parameters.add(new ColumnValueBean((listSize-clinicalDiagnosisValues.size())));
+			clinicalDiagnosisValues = dao.executeQuery(selectCDQuery, parameters);
+			getClinicalDiagnosisBean(clinicalDiagnosisList, clinicalDiagnosisValues,true);
+		}
+		return clinicalDiagnosisList;
+	}
+	
+	
+	private void getClinicalDiagnosisBean(
+			Collection<NameValueBean> clinicalDiagnosisBean,
+			final List<Object[]> dataList,boolean isShowAllSet)
+	{
+		final Iterator iterator = dataList.iterator();
+		while (iterator.hasNext())
+		{
+			final String clinicaDiagnosisvalue = ((List<String>)iterator.next()).get(0);
+			clinicalDiagnosisBean.add(new NameValueBean(clinicaDiagnosisvalue,
+					clinicaDiagnosisvalue));
+		}
+	
 	}
 }

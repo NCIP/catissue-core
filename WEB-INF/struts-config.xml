@@ -5809,6 +5809,8 @@ PUBLIC
 			<forward name="success" path=".catissuecore.queryResultsTreeViewNodeDef"></forward>
 		</action>
 
+		<action path="/ClinicalDiagnosisList" type="edu.wustl.catissuecore.action.ClinicalDiagnosisListAction"
+			scope="request" />
 		<action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction"
 			scope="request" />
 		<action path="/ClinicalDiagnosisData"
