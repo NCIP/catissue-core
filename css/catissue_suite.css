@@ -1032,8 +1032,11 @@ input.actionButton{ /* optional style for form and action buttons */
 }
 
 .align_right_style{
-		padding-right: 17px;	
+	padding-right: 17px;
+	font-weight:bold;
+	text-align:right;
 }
+
 
 .align_right_style1{
 		padding-right: 10px;	

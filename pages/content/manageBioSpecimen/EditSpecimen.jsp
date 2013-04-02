@@ -8,6 +8,7 @@
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
 <script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 
@@ -31,6 +32,7 @@
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
 <!----------------------------------------------------------------------->
+<body onload="initSpecimenCombo()"></body>
 <html:form action="NewSpecimenEdit.do">
 
 							  <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -44,8 +46,7 @@
 								
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-
-<tr>
+	 <tr>
 		<td class="td_color_bfdcf3">
 			<table border="0" cellpadding="0" cellspacing="0">
 		      <tr>
@@ -64,30 +65,39 @@
 
 	  <tr>
 		<td class="tablepadding">
-	
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		      <tr>
+				<tr>
 				<td class="td_tab_bg" >
-					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
-						<td valign="bottom">
-							<a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	
-								<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0">
-							</a>
-						</td>
-					<td valign="bottom">
-					<a href="#">
-						<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked('');" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('','');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations('',document.forms[0].id.value,'','','')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a id="consentViewTab" href="#" onClick="consentTab('')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
+					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
+				</td>
+				<td valign="bottom">
+					<a onclick="newspecimenPage()" id="specimenDetailsTab" href="#">	
+						<img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0">
 					</a>
-					</td>
-					<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
-					</td>
+				</td>
+				<td valign="bottom">
+					<a href="#">
+						<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked('');" border="0"></a>
+				</td>
+				<td valign="bottom">
+					<a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('','');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations('',document.forms[0].id.value,'','','')">
+					</a>
+				</td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3" >
+						<a id="consentViewTab" href="#" onClick="consentTab('')">
+							<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
+						</a>
+				</td>
+				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
+				</td>
 				</tr>
 		    </table>
 	
-		    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+		    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 			<tr>
-			<td><div id="mainTable"style="display:block"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
+			<td>
+				<div id="mainTable"style="display:block">
+				<table width="100%"  border="0" cellpadding="3" cellspacing="0" >
 				<tr>
 		          <td><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
 		        </tr>
@@ -95,40 +105,30 @@
 		          <td align="left" class="showhide">
 					<table width="100%" border="0" cellpadding="3" cellspacing="0" >
 					<!-- NEW SPECIMEN REGISTRATION BEGINS-->
-						<tr>
+						<tr class="tr_alternate_color_lightGrey">
 				<logic:empty name="specimenDTO" property="parentSpecimenName">
 				<logic:notEmpty name="specimenDTO" property="specimenCollectionGroupName">
-		                  <td width="1%" align="center" class="black_ar">
-							<span class="blue_ar_b">
-								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-							</span>
-						  </td>
-		                  <td width="17%" align="left" class="black_ar">
+		                 <td width="20%" class="black_ar align_right_style">
 							<label for="specimenCollectionGroupName">
 								<bean:message key="newSpecimen.groupName"/>
 							</label>
-						  </td>
-						  <td width="34%" align="left" class="black_ar">
+						 </td>
+						 <td width="30%" align="left" class="black_ar">
 							<html:hidden name="specimenDTO" property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
 								<label for="specimenCollectionGroupName">
 									<bean:write name="specimenDTO" property="specimenCollectionGroupName" scope="request"/>
 								</label>
-						  </td>
+						 </td>
 				</logic:notEmpty>
 				</logic:empty>
 				
 				<logic:notEmpty name="specimenDTO" property="parentSpecimenName">
-						  <td width="1%" align="center" class="black_ar">
-							<span class="blue_ar_b">
-								&nbsp;
-							</span>
-						  </td>
-						  <td width="17%" align="left" class="black_ar">
+						  <td width="20%" class="black_ar align_right_style">
 								<label for="parentSpecimenId">
 									<bean:message key="newSpecimen.parentLabel"/>
 								</label>
     					  </td>
- 			        	  <td width="34%" align="left" class="black_ar">
+ 			        	  <td width="30%" align="left" class="black_ar">
 						   		
 								<html:hidden name="specimenDTO" property="parentSpecimenName"/>
 								<label for="parentSpecimenId">
@@ -138,314 +138,239 @@
  			        	  </td>
 				</logic:notEmpty>
 
-				
-						  <td width="1%" align="center">
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+						  <td width="20%"  class="black_ar align_right_style">
+								<label for="lineage">
+									<bean:message key="specimen.lineage"/>
+								</label>
 						  </td>
-						  <td width="17%" align="left" class="black_ar">
-							<label for="lineage">
-								<bean:message key="specimen.lineage"/>
-							</label>
-						  </td>
-						  <td width="34%" align="left" class="black_ar">
+						  <td width="30%" align="left" class="black_ar">
 							<label for="lineage">
 								<bean:write name="specimenDTO" property="lineage" scope="request"/>
 								<html:hidden name="specimenDTO" property="lineage"/>
 							</label>
 						  </td>
+					</tr>
 				
-						</tr>
-				
-
-						<tr>
-							<td align="center" class="black_ar">
-				
-							</td>
-							<td align="left" class="black_ar">
+						<tr class="tr_alternate_color_white">
+							<td width="20%" class="black_ar align_right_style">
 								<label for="label">
 									<bean:message key="specimen.label"/>
 								</label>
 							</td>
-							<td align="left">
+							<td align="left" width="30%">
 								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
 							</td>
 
-							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar">
+							<td width="20%" class="black_ar align_right_style">
 								<label for="barcode">
 									<bean:message key="specimen.barcode"/>
 								</label>
 							</td>
 						
-								<td width="34%" align="left" class="black_ar">
-								
-									<label for="barcode">
+							<td width="30%" align="left" class="black_ar">
+								<label for="barcode">
 									<html:text name="specimenDTO" 
-								styleClass="black_ar" maxlength="255" size="30"
-								styleId="barcode" property="barcode" onblur="processData(this)"/>
-								
-									</label>
-
-
-								
-								</td>
-								
+											   styleClass="black_ar" maxlength="255" size="30"
+											   styleId="barcode" property="barcode" onblur="processData(this)"/>
+								</label>
+							</td>
 						</tr>
 				
-						<tr>
-							<td align="center" class="black_ar">
-								<span class="blue_ar_b">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</span>
-							</td>
-			                <td align="left" class="black_ar">
+						<tr class="tr_alternate_color_lightGrey">
+							<td  width="20%" class="black_ar align_right_style">
 								<label for="className">
 								    <bean:message key="specimen.type"/>
 						     	</label>
 							</td>
-							<td align="left" class="black_new">
-							
-							
+							<td width="30%" align="left" class="black_new">
 							<html:select property="className" name="specimenDTO" 
-							styleClass="formFieldSized" styleId="className" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
-							<html:options collection="specimenClassList"
-								labelProperty="name" property="value" />
-						</html:select>
-							
-						
-								 
+										 styleClass="formFieldSized" styleId="className" size="1"
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+								<html:options collection="specimenClassList"
+									labelProperty="name" property="value" />
+						   </html:select>
 							</td>
 
-							<td align="center" class="black_ar">
-								<span class="blue_ar_b">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</span>
-							</td>
-			                <td align="left" class="black_ar">
+							<td width="20%" class="black_ar align_right_style">
 								<label for="type">
 								     <bean:message key="specimen.subType"/>
 						     	</label>
 							</td>
-							<td align="left" class="black_new">
+							<td width="30%" align="left" class="black_new">
 							<html:select property="type" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="type" size="1"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
 							<html:options collection="specimenTypeList"
 								labelProperty="name" property="value" />
-						</html:select>
+							</html:select>
 						
-								</td>
+							  </td>
 							</tr>
-							<tr>
-								<td align="center" class="black_ar">
-									<span class="blue_ar_b">
-									</span>
-								</td>
-			                    <td align="left" class="black_ar">
+							
+							<tr class="tr_alternate_color_white">
+								<td width="20%" class="black_ar align_right_style">
 									<label for="tissueSite">
 										<bean:message key="specimen.tissueSite"/>
 									</label>
 								</td>
-								<td align="left" class="black_new" noWrap>
-								<html:select property="tissueSite" name="specimenDTO" 
-							styleClass="formFieldSized" styleId="tissueSite" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
-							<html:options collection="tissueSiteList"
-								labelProperty="name" property="value" />
-						</html:select>
-								
-									
-									<span class="black_ar">
-									<a href="#"																						onclick="NewWindow('','tissuesite','360','525','no');return							false">
-											<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"/></a></span></td>
 
-			                    <td align="center" class="black_ar">
-				
-				
+								<td>
+								<table style="border-collapse: collapse;">
+									<tr>
+									<td>	
+									<html:select property="tissueSite" name="specimenDTO" 
+									styleClass="formFieldSized" styleId="tissueSite" size="1"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+									<html:options collection="tissueSiteList"
+										labelProperty="name" property="value" />
+									</html:select> 
+									</td>
+									<td>
+									<a href="#"	 onclick="NewWindow('','tissuesite','360','525','no');return							false">
+										<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"/>
+									</a>
+									</td>
+									</tr>
+									</table>
 								</td>
-			                    <td align="left" class="black_ar">
+
+								<td width="20%" class="black_ar align_right_style">
 									<label for="tissueSide">
 										<bean:message key="specimen.tissueSide"/>
 									</label>
 								</td>
-								<td align="left" class="black_new">
+								<td width="30%" align="left" class="black_new">
 								<html:select property="tissueSide" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="tissueSide" size="1"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
 							<html:options collection="tissueSideList"
 								labelProperty="name" property="value" />
 						</html:select>
-								
-									
 								</td>
 							</tr>
-							<tr>
-								<td align="center" class="black_ar">
-				
-									&nbsp;
-				
-								</td>
-			                    <td align="left" class="black_ar">
+							
+							<tr class="tr_alternate_color_lightGrey">
+								<td width="20%" class="black_ar align_right_style">
 									<label for="pathologicalStatus">
 										<bean:message key="specimen.pathologicalStatus"/>
 									</label>
 								</td>
-				
-				
-								<td align="left" class="black_new">
+							
+								<td width="30%" align="left" class="black_new">
 								<html:select property="pathologicalStatus" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="pathologicalStatus" size="1"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
 							<html:options collection="pathologicalStatusList"
 								labelProperty="name" property="value" />
 						</html:select>
-								
-									
-						        </td>
-				
-
-				
-								<td align="center" class="black_ar">&nbsp;
 								</td>
-								<td align="left" class="black_ar">
+							
+								<td width="20%" class="black_ar align_right_style">
 									<label for="createdDate">
 										<bean:message key="specimen.createdDate"/>
 									</label>
 								</td>
-								<td class="black_ar" >
+								<td width="30%" class="black_ar" >
 								<html:text property="createdDate" styleClass="black_ar"
 							       styleId="createdDate" size="10" name="specimenDTO" onblur="processData(this)"/>
 							   	<span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 								</td>
-				
 							</tr>
-							<tr>
-								<td align="center" class="black_ar">
-				
-									&nbsp;
-				
-								</td>
-			                    <td align="left" class="black_ar">
+							
+							<tr class="tr_alternate_color_white">
+								<td width="20%" class="black_ar align_right_style">
 									<label for="quantity">
 										<bean:message key="specimen.quantity"/>
 									</label>
 								</td>
-								<td align="left" class="black_ar">
+								<td width="30%" align="left" class="black_ar">
 									<html:text styleClass="black_ar" size="10" maxlength="10"  styleId="quantity" property="quantity" name="specimenDTO"  style="text-align:right" onblur="processData(this)"/>
 								     <span id="unitSpan">
 				
 									 </span>
 								     <html:hidden property="unit"/>
 								</td>
-				                <td align="center" class="black_ar">&nbsp;</td>
-								<td align="left" class="black_ar">
+				                <td width="20%" class="black_ar align_right_style">
 									<label for="concentration">
 										<bean:message key="specimen.concentration"/>
 									</label>
 								</td>
-								<td align="left" class="black_ar">
-									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right" name="specimenDTO" onblur="processData(this)"
+								<td  width="30%" align="left" class="black_ar">
+										<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right" name="specimenDTO" onblur="processData(this)"
 							     		 disabled="false"/>
 										<bean:message key="specimen.concentrationUnit"/>
 								</td>
 							</tr>
 			
-							<tr>
-								 <td align="center" class="black_ar">&nbsp;
+							<tr class="tr_alternate_color_lightGrey">
+								 <td width="20% class="black_ar">&nbsp;
 								 </td>
-								 <td align="left" class="black_ar">&nbsp;
-								 </td>
-								 <td align="left" valign="top">
+								 <td width="30%" align="left" valign="top" >
 									<html:checkbox property="available" onblur="processData(this)">
 									</html:checkbox>
-									<span class="black_ar">
+									
+									<span class="black_ar" style="padding-bottom:7px">
 										<label for="available">
 											<bean:message key="specimen.available" />
 										</label>
 									</span>
 								</td>
-
-								<td align="center" class="black_ar">
-			
-			&nbsp;
-			
-							</td>
-							<td align="left" class="black_ar">
-								<label for="availableQuantity">
-										<bean:message key="specimen.availableQuantity" />
-								</label>
-							</td>
-								<td width="28%" align="left" class="black_ar">
+								<td width="20%" class="black_ar align_right_style">
+									<label for="availableQuantity">
+											<bean:message key="specimen.availableQuantity" />
+									</label>
+								</td>
+								<td width="30%" align="left" class="black_ar">
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="availableQuantity" property="availableQuantity"		name="specimenDTO" style="text-align:right" onblur="processData(this)"/>
 									<span id="unitSpan1">
 			
 									</span>
 								</td>
 							</tr>
-			
-			
-							<tr>
-								<td align="center" class="black_ar">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</td>
-				                <td align="left" class="black_ar">
+						
+							<tr class="tr_alternate_color_white">
+								<td width="20%" class="black_ar align_right_style">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 									<label for="collectionStatus">
 									<bean:message key="specimenCollectionGroup.collectionStatus" />
 
 									</label>
 								</td>
-								<td class="black_new">
-								
+								<td width="30%" class="black_new">
 								<html:select property="collectionStatus" name="specimenDTO" 
-							styleClass="formFieldSized" styleId="collectionStatus" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
-							<html:options collection="collectionStatusList"
-								labelProperty="name" property="value" />
-						</html:select>
-								
-									
+											 styleClass="formFieldSized" styleId="collectionStatus" size="1"
+											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+								<html:options collection="collectionStatusList"
+											  labelProperty="name" property="value" />
+								</html:select>
 								</td>
 
-								<td align="center" class="black_ar">
-									&nbsp;
-								</td>
-				                <td align="left" class="black_ar">
+							    <td width="20%" class="black_ar align_right_style">
 									<label for="activityStatus">
 										<bean:message key="participant.activityStatus" />
 									</label>
 								</td>
-								<td align="left" class="black_ar">
-								
+								<td width="30%" align="left" class="black_ar">
 									<label for="activityStatus">
-									<bean:write name="specimenDTO" property="activityStatus" scope="request"/>
-										
+										<bean:write name="specimenDTO" property="activityStatus" scope="request"/>
 									</label>
 									<html:hidden name="specimenDTO" property="activityStatus"/>
-								
 								</td>
 							</tr>
 						
-							<tr>
-								<td width="1%" align="center">
-						
-								&nbsp;
-						
-								</td>
-			                    <td width="16%" align="left" class="black_ar">
+							<tr class="tr_alternate_color_lightGrey">
+								<td width="20%" class="black_ar align_right_style">
 									<label for="className">
 									   	<bean:message key="specimen.positionInStorageContainer"/>
-								   </label>
+								    </label>
 								</td>
-								
-
-								
-								<td colspan="4" class="black_ar">
+																
+								<td colspan="3" class="black_ar">
 					<!-------Select Box Begins----->
 					
 								<logic:equal name="specimenDTO" property="isVirtual" value="true">
 									
-									<input type="text" size="30" maxlength="255"  class="black_ar"  value='Virtually Located' readonly style="border:0px" id="storageContainerPosition" />
+									<input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='Virtually Located' readonly style="border:0px;" id="storageContainerPosition" />
 								</logic:equal>
 								<logic:equal name="specimenDTO" property="isVirtual" value="false">
 								<input type="text" size="30" maxlength="255"  class="black_ar"  value='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)' readonly style="border:0px" id="storageContainerPosition" />
@@ -463,90 +388,86 @@
 								<html:hidden name="specimenDTO" property="pos1" styleId="pos1"/>
 								<html:hidden name="specimenDTO" property="pos2" styleId="pos2"/>
 								<html:hidden name="specimenDTO" property="containerId" />
-											</td>
+								</td>
+							</tr>
+
+							<tr class="tr_alternate_color_white">
+								<td width="20%" valign="top" class="black_ar align_right_style">
+									<label for="comments">
+										<bean:message key="specimen.comments"/>
+									</label>
+								</td>
+								<td align="left" valign="top" colspan="3">
+									<html:textarea styleClass="black_ar_s"  rows="3" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
+								</td>
+							</tr>
+								
+							<tr class="tr_alternate_color_lightGrey">
+								<td width="20%"  class="black_ar align_right_style">
+									<bean:message key="specimen.externalIdentifier"/>
+								</td>
+								<td width="30%">
+									<a id="addExternalId" title="Add New External Identifier" class="link" onclick="showAddExternalIdDiv()">Add New</a>
+								</td>
+								<td  width="50%" class="black_ar" colspan="2">
+									<div id="addExternalIdDiv" style="display:none;">
+										<table width="100%" border="0" cellpadding="0" cellspacing="0">
+											<tr valign="bottom">
+												<td width="44%"> 
+													<input id="extIdName" name="extIdName" type="text" class="black_ar" size="16" maxlength="255" class="black_ar" />
+												</td>
+												<td width="44%">
+													<input id="extIdValue" type="text" class="black_ar" size="16" maxlength="255" style="text-align:right;" class="black_ar" />
+												</td>
+												<td width="44%">
+													<input id="addEditExtIdButton" name="addEditExtIdButton" type="button" value="Add" class="black_ar" onclick="addEditExtIdTag(this)" />
+												</td>
 											</tr>
-
-									
-
-		
-
-								<tr>
-								<td align="left">&nbsp;</td>
-									<td align="left" valign="top" class="black_ar">
-										<label for="comments">
-											<bean:message key="specimen.comments"/>
-										</label>
-									</td>
-
-								 	<td align="left" valign="top" colspan="4">
-										<html:textarea styleClass="black_ar_s"  rows="3" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
-									</td>
-								</tr>
+									      </table>
+									</div>
+								</td>
+							</tr>
+							
+							<tr class="tr_alternate_color_lightGrey">
+								<td width="20%" > &nbsp;	</td>
+								<td colspan="3" align="left"  valign="middle">
+									<ul id="externalIDList" class="tagEditor">
+										<c:if test="${not empty specimenDTO.externalIdentifiers}">
+												<c:forEach var="externalId" items="${specimenDTO.externalIdentifiers}">
+													<c:if test="${not empty externalId.name}">
+													<li id="li${externalId.id}" title="Edit">
+														<span id="${externalId.id}" name="ExtIds" onclick="editTag(this)">${externalId.name} - ${externalId.value}</span>
+														<a title="Delete" onclick="deleteTag(this)">X</a>
+														<input type="hidden" name="${externalId.id}Status" id="${externalId.id}Status" value=${externalId.status}>
+													</li>
+													</c:if>
+												</c:forEach>		
+										</c:if>
+									</ul>
+								 </td>
+							</tr>
 								
-								<tr>
-									<td align="left">&nbsp;</td>
-									<td align="left" class="black_ar">
-										<bean:message key="specimen.externalIdentifier"/>
-									</td>
-
-									<td>
-										<a id="addExternalId" title="Add New External Identifier" class="link" onclick="showAddExternalIdDiv()">Add New</a>
-									</td>
-									<td class="black_ar" colspan="4">
-										
-										<div id="addExternalIdDiv" style="display:none;">
-											&nbsp;<input id="extIdName" name="extIdName" type="text" class="black_ar" size="16" maxlength="255" class="black_ar" />
-								
-											&nbsp;<input id="extIdValue" type="text" class="black_ar" size="16" maxlength="255" style="text-align:right;" class="black_ar" />
-											
-											&nbsp;<input id="addEditExtIdButton" name="addEditExtIdButton" type="button" value="Add" class="black_ar" onclick="addEditExtIdTag(this)" />
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td align="left" colspan="2">&nbsp;</td>
-								 	<td align="left" colspan="4" valign="middle">
-										
-										<ul id="externalIDList" class="tagEditor">
-											<c:if test="${not empty specimenDTO.externalIdentifiers}">
-													<c:forEach var="externalId" items="${specimenDTO.externalIdentifiers}">
-														<c:if test="${not empty externalId.name}">
-														<li id="li${externalId.id}" title="Edit">
-															<span id="${externalId.id}" name="ExtIds" onclick="editTag(this)">${externalId.name} - ${externalId.value}</span>
-															<a title="Delete" onclick="deleteTag(this)">X</a>
-															<input type="hidden" name="${externalId.id}Status" id="${externalId.id}Status" value=${externalId.status}>
-														</li>
-														</c:if>
-													</c:forEach>		
-											</c:if>
-										</ul>
-										
-									</td>
-								</tr>
-								
-								<tr>
-									<td align="left">&nbsp;</td>
-									<td align="left" class="black_ar">
+								<tr class="tr_alternate_color_white">
+									<td width="20%" class="black_ar align_right_style">
 										<bean:message key="specimen.biohazards"/>
 									</td>
 
-									<td>
+									<td width="30%">
 										<a id="addBioHazard" title="Add New BioHazard" class="link" onclick="showAddBioHazardDiv()">Add New</a>
 									</td>
-									<td class="black_ar" colspan="3">
-										
+									<td  width="50%" class="black_ar" colspan="2">
 										<div id="addBioHazardDiv" style="display:none;">
-											<table width="100%">
+											<table width="100%" border="0" cellpadding="0" cellspacing="0">
 											<tr valign="bottom">
-												<td>
+												<td width="44%"> 
 													<html:select property="biohazardType" name="specimenDTO" styleClass="formFieldSized" styleId="biohazardType" onchange="onBiohazardTypeSelected(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 														<html:options collection="biohazardTypeList" labelProperty="name" property="value"/>
 													</html:select>
 												</td>
-												<td>
+												<td width="44%">
 													<div id="biohazardSelect"></div>
 												</td>
-												<td>
+												<td width="44%">
 													<input id="addEditBioHazButton" name="addEditBioHazButton" type="button" value="Add" class="black_ar" onclick="addEditBioHazTag(this)" />
 												</td>
 											</tr>
@@ -554,10 +475,10 @@
 										</div>
 									</td>
 								</tr>
-								<tr>
-									<td align="left" colspan="2">&nbsp;</td>
-								 	<td align="left" colspan="4" valign="middle">
-										
+								
+								<tr class="tr_alternate_color_white">
+									<td width="20%"> &nbsp;</td>	
+									<td align="left" colspan="3" valign="middle">
 										<ul id="bioHazardList" class="tagEditor">
 											<c:if test="${not empty specimenDTO.bioHazards}">
 													<c:forEach var="biohazard" items="${specimenDTO.bioHazards}">
@@ -569,39 +490,27 @@
 													</c:forEach>		
 											</c:if>
 										</ul>
-										
 									</td>
 								</tr>
+						<tr>
+						  <td colspan="4" valign="middle" class="tr_bg_blue1">
+							<span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span>
+						  </td>
+						</tr>
+								
 							</table>
-							</td>
-							</tr>
+						  </td>
+						</tr>
+						
+					
+						
 							<!-- collectionstatus -->
-
-							<tr>
-							<td width="100%" class="bottomtd">
-
-		
-
-	
-		
-							</td></tr>
-
-		<tr>
-		<td>
-		
-							</td>
-							</tr>
-							</table>
-							</div>
-							</td>
-							</tr>
-							
-
-        <tr>
-          <td valign="middle" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span></td>
-        </tr>
-
-								<tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		    
+		    <tr>
 								<!--
           <td valign="middle" class="black_ar" >
 		  -->
@@ -626,77 +535,48 @@
 
 				<!--specimenPageButton-->
 				<tr><td colspan="2"></td></tr>
+				<tr>
+					<td class="black_ar" width="18%" nowrap>
+							 <div style="display:none" id="derivedDiv">
+							 <bean:message key="summary.page.count" />&nbsp;
+							<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
+							<div style="display:block" id="aliquotDiv"><bean:message key="summary.page.count" />&nbsp;
+							<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/></div>
+							</td>
+							<td class="black_ar" width="75%">
+							<bean:message key="aliquots.qtyPerAliquot"/>&nbsp;
 
-					<tr>
-						<td class="black_ar" width="18%" nowrap>
-								 <div style="display:none" id="derivedDiv">
-								 <bean:message key="summary.page.count" />&nbsp;
-								<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
-								<div style="display:block" id="aliquotDiv"><bean:message key="summary.page.count" />&nbsp;
-								<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/></div>
-								</td>
-								<td class="black_ar" width="75%">
-								<bean:message key="aliquots.qtyPerAliquot"/>&nbsp;
+							<html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" disabled="true" style="text-align:right"/>
 
-								<html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" disabled="true" style="text-align:right"/>
-
-						</td>
-					</tr>
-				     <tr>
-								<td class="dividerline" colspan="3"><span class="black_ar"></td>
-								</tr>
-								<tr>
-		
-	
-								  <td>
-		
-			 				        </td>
-
-			 				</tr>
-	
-							<tr>
-								<td class="bottomtd"></td>
-							</tr>
-	
-						   	 	<tr>
-							  		<td align="left" colspan="2" class="buttonbg">
-										<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
-	
-
-
-	<tr>
-
-		<td class="buttonbg">
-		  
-				<!--<html:button
+					</td>
+				</tr>
+				     							
+				<tr>
+					<td align="left" colspan="2" class="buttonbg">
+						<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
+						<tr>
+						<td class="buttonbg">
+					<!--<html:button
 					styleClass="blue_ar_b" property="submitButton"
 					title="Submit only"
 					value="Submit"
 					onclick="submit()">
-				</html:button>
-		 
-		
-		
-		
-		
-		
-			|&nbsp;<html:button
+     				</html:button>
+			
+			 |&nbsp;<html:button
 				styleClass="blue_ar_c" property="moreButton"
 				title="Submit and add events"
 				value="Submit"
 				onclick="submitMore()">
-			</html:button>
-		
-
-
-		
-						| --><input type="button" value="Submit"
+			 </html:button>
+			| -->
+				<input type="button" value="Submit"
 							onclick="submitTabData()" class="blue_ar_b"/>
 	
 		<!--<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>-->
-		</td>
-	</tr>
-</table>
+		              </td>
+	               </tr>
+				</table>
 							  		</td>
 							 	</tr>
 
@@ -716,17 +596,7 @@
 <script>
 
 initializeSpecimenPage(${biohazardNameListJSON});
-var z = dhtmlXComboFromSelect("tissueSite");
-z.enableFilteringMode(true);
-var z = dhtmlXComboFromSelect("tissueSide");
-z.enableFilteringMode(true);
-var z = dhtmlXComboFromSelect("pathologicalStatus");
-z.enableFilteringMode(true);
 
-var z = dhtmlXComboFromSelect("className");
-z.enableFilteringMode(true);
-var z = dhtmlXComboFromSelect("type");
-z.enableFilteringMode(true);
 
 //////////////////////////////////////////////////////////
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

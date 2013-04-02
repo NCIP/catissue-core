@@ -1,3 +1,33 @@
+function initSpecimenCombo()
+{
+		var tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
+		tissueSiteCombo.setOptionWidth(202);
+		tissueSiteCombo.setSize(202);
+
+		var tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
+		tissueSideCombo.setOptionWidth(203);
+		tissueSideCombo.setSize(203);
+		
+
+		var pathologicalStatusCombo = dhtmlXComboFromSelect("pathologicalStatus");
+		pathologicalStatusCombo.setOptionWidth(203);
+		pathologicalStatusCombo.setSize(203);
+
+		var classNameCombo = dhtmlXComboFromSelect("className");
+		classNameCombo.setOptionWidth(203);
+		classNameCombo.setSize(203);
+
+		var typeCombo = dhtmlXComboFromSelect("type");
+		typeCombo.setOptionWidth(203);
+		typeCombo.setSize(203);
+		
+		var collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
+	//	collectionStatusCombo.enableFilteringMode(true);
+		collectionStatusCombo.setOptionWidth(203);
+		collectionStatusCombo.setSize(203);
+		
+}
+
 function showAddExternalIdDiv()
 {
 	document.getElementById('addExternalIdDiv').style.display="block";
@@ -247,8 +277,8 @@ function createBioHazardJSON()
 
 var defaultTextForExtIdName = "Enter Identifier Name";
 var defaultTextForExtIdValue = "Enter Identifier Value";
-var defaultTextForBioName = "Select BioHazard Name";
-var defaultTextForBioType = "Select BioHazard Type";
+var defaultTextForBioName = "Select Biohazard Name";
+var defaultTextForBioType = "Select Biohazard Type";
 var biohazardCombo;
 var typeCombo;
 var biohazardNameListJSON;
