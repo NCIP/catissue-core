@@ -12,18 +12,23 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -46,7 +51,15 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
+import edu.wustl.catissuecore.dto.ConsentDTO;
+import edu.wustl.catissuecore.dto.ConsentTierDTO;
+import edu.wustl.catissuecore.dto.DisplayOrderDTO;
+import edu.wustl.catissuecore.dto.OrderItemDTO;
+import edu.wustl.catissuecore.dto.OrderItemSubmissionDTO;
+import edu.wustl.catissuecore.dto.OrderStatusDTO;
+import edu.wustl.catissuecore.dto.OrderSubmissionDTO;
 import edu.wustl.catissuecore.util.EmailHandler;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -56,20 +69,27 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.struts.ApplicationRequestProcessor;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.velocity.VelocityManager;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.INClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
@@ -87,6 +107,38 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	// To display the number of Order Items updated.
 	public static int numberItemsUpdated = 0;
+
+	public static final String[] DISTRIBUTE_STATUS_LIST = {
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL };
+	
+	public static final String[] CLOSED_STATUS_LIST = {
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL };
+	
+	public static final String[] PROCESSED_STATUS_LIST = {
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL,
+			Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,
+			Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,
+			Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE };
+	
+	public static final String[] PENDING_STATUS_LIST = {
+			Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW,
+			Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION,
+			Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION };
+	
+	public static final String[] REJECTED_STATUS_LIST = {
+		Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,
+		Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,
+		Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE };
+	
+	public static final String[] DISTRIBUTED_STATUS_LIST = {
+		Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
+		Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
+		Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL};
 
 	/**
 	 * Saves the OrderDetails object in the database.
@@ -664,6 +716,20 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		final String body = this.makeEmailBodyForOrderUpdate(dao, order);
 		emailHandler.sendEmailForOrderDistribution(body, toEmailAddress, fromEmailAddress,
 				ccEmailAddress, bccEmailAddress, subject);
+	}
+	
+	public void sendOrderUpdateEmail(String requestorName,
+			String ccEmailAddress, String toEmailAddress, String orderName,
+			String updaterName, String orderStatus, String orderUrl) {
+		
+		final EmailHandler emailHandler = new EmailHandler();
+
+		final String bccEmailAddress = XMLPropertyHandler
+				.getValue("email.administrative.emailAddress");
+	
+		emailHandler.sendOrderUpdateEmail(requestorName, toEmailAddress,
+				ccEmailAddress, bccEmailAddress, orderName, updaterName,
+				orderStatus, orderUrl);
 	}
 
 	/**
@@ -1991,5 +2057,245 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		} 
 		return count;
 	}
+	public void getOrderDetail(Long orderId) throws ApplicationException
+	{
+		final IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+		JDBCDAO dao = AppUtility.openJDBCSession();
+		
+		//OrderingSystemUtil.getSpecItemDetails(orderId,dao);
+		
+		String sql ="select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY " +
+				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where " +
+				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=? " +
+				" union "+
+				"select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY " +
+				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_derieved_sp_ord_item cat,catissue_order_item cot where " +
+				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=? ";
+		ColumnValueBean bean = new ColumnValueBean(orderId);
+		List attrList = new ArrayList();
+		attrList.add(bean);
+		attrList.add(bean);
+		// List list = dao.executeQuery(sql);
+		List list = dao.executeQuery(sql, attrList);
+	}
+	public Collection<ConsentDTO> getConsentDetails(List<String> specimenLabels,HibernateDAO dao) throws BizLogicException
+	{
+		Map<String, ConsentDTO> consentMap = new HashMap<String, ConsentDTO>();
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		for (String specimenLabel : specimenLabels) {
+			NewSpecimenBizLogic newSpecimenBizLogic=new NewSpecimenBizLogic();
+			Collection<ConsentTierDTO> consentTierDTOCollection = newSpecimenBizLogic.getConsentTireDTOs(specimenLabel,dao);
 
+  		   //find the unique key
+		    String key = getUniqueKey((ArrayList<ConsentTierDTO>)consentTierDTOCollection);
+		    
+		    if (consentMap.containsKey(key)) 
+		    {
+		    	ConsentDTO existingConsentDTO=consentMap.get(key.toString());
+		    	existingConsentDTO.getSpecimenLabels().add(specimenLabel);
+		    }
+		    else
+		    {
+		    	ConsentDTO newConsentDTO=new ConsentDTO();
+		    	List<String> labels=new ArrayList<String>();
+		    	labels.add(specimenLabel);
+		    	newConsentDTO.setSpecimenLabels(labels);
+		    	newConsentDTO.setConsentTierDTOCollection(consentTierDTOCollection);
+		    	consentMap.put(key, newConsentDTO);
+		    }
+		}
+		return consentMap.values();
+	}
+	
+	private String getUniqueKey(ArrayList<ConsentTierDTO> consentTierDTOs)
+	{
+		StringBuilder consentkey = new StringBuilder(100);
+		Collections.sort(consentTierDTOs, new IdComparator());
+		for (ConsentTierDTO consentTierDTO : consentTierDTOs)
+		{
+			consentkey.append(consentTierDTO.getId());
+			consentkey.append(consentTierDTO.getStatus());
+		}
+		return consentkey.toString();
+	}
+	public List getOrderItemsDetail(Long orderId,HibernateDAO dao) throws Exception
+	{
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
+		final List orderItemsDetails=dao.executeNamedQuery("getOrderItems", substParams);
+		List<OrderItemDTO> orderItemsDTOs=new ArrayList<OrderItemDTO>();	
+		for (Object object : orderItemsDetails) {
+			Object[] orderItemDetails=(Object[])object;
+			OrderItemDTO orderItemDTO=new OrderItemDTO();
+			orderItemDTO.setSpecLabel(orderItemDetails[0].toString());
+			orderItemDTO.setSpecimenClass(orderItemDetails[1].toString());
+			orderItemDTO.setSpecimenType(orderItemDetails[2].toString());
+			orderItemDTO.setAvailableQuantity(Double.parseDouble(orderItemDetails[3].toString()));
+			orderItemDTO.setRequestedQuantity((Double.parseDouble(orderItemDetails[4].toString())));
+			orderItemDTO.setStatus(orderItemDetails[5].toString());
+			orderItemDTO.setDescription(orderItemDetails[6].toString());
+			orderItemDTO.setOrderItemId(Long.parseLong(orderItemDetails[7].toString()));
+			orderItemDTO.setSpecimenId(Long.parseLong(orderItemDetails[8].toString()));
+			orderItemsDTOs.add(orderItemDTO);
+		}
+		
+		return orderItemsDTOs;
+	}
+	
+	public DisplayOrderDTO getOrderDetails(Long orderId,HibernateDAO dao) throws BizLogicException, DAOException
+	{
+			DisplayOrderDTO displayOrderDTO=new DisplayOrderDTO();
+			Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+			substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
+			final List orderDetails=dao.executeNamedQuery("getOrderDetails", substParams);
+			Object[] orderDetailObject= (Object[])orderDetails.get(0);
+			
+			displayOrderDTO.setOrderName(orderDetailObject[0].toString());
+			displayOrderDTO.setDistributionProtocolName(orderDetailObject[2].toString());
+			displayOrderDTO.setRequestorName(orderDetailObject[4]+","+orderDetailObject[3]);
+			displayOrderDTO.setRequestorEmail(orderDetailObject[5].toString());
+			displayOrderDTO.setRequestedDate(new java.sql.Date(((Timestamp)orderDetailObject[6]).getTime()));
+			displayOrderDTO.setComments(orderDetailObject[7].toString());
+			return displayOrderDTO;
+	}
+	public OrderStatusDTO updateOrder(OrderSubmissionDTO orderSubmissionDTO,Long userId,HibernateDAO dao) throws BizLogicException
+	{
+		OrderStatusDTO orderStatusDTO=new OrderStatusDTO();
+		try
+		{
+			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+			List<String> specimensWithError=new ArrayList<String>();
+			boolean isOrderProcessed=true;
+			boolean isOrderNew=true;
+			boolean isOrderRejected=true;
+			for (OrderItemSubmissionDTO orderItemSubmissionDTO : orderSubmissionDTO.getOrderItemSubmissionDTOs())
+			{
+				params.put("0", new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getDistQty()));
+				params.put("1", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getStatus()));
+				params.put("2", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getComments()));
+				params.put("3", new NamedQueryParam(DBTypes.LONG, orderItemSubmissionDTO.getOrderitemId()));
+				
+				dao.executeUpdateWithNamedQuery("updateOrderItemSQL",params);
+
+				SpecimenEventParametersBizLogic specimenEventParametersBizLogic=new SpecimenEventParametersBizLogic();
+				NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
+
+				if(isDistributed(orderItemSubmissionDTO.getStatus()))
+				{	
+					boolean specimenUpdatedSuccessfully=specimenBizLogic.updateReducedQuantity(orderItemSubmissionDTO.getDistQty(), orderItemSubmissionDTO.getSpecimenId(), dao);
+					if(!specimenUpdatedSuccessfully)
+					{
+						specimensWithError.add(orderItemSubmissionDTO.getSpecimenLabel());
+						break;
+					}
+					specimenEventParametersBizLogic.createDistributionEvent(orderItemSubmissionDTO.getDistQty(),orderItemSubmissionDTO.getComments(),orderItemSubmissionDTO.getSpecimenId(), dao,userId);
+				}
+				if (isClosed(orderItemSubmissionDTO.getStatus()))
+				{
+					
+					List<String> disposeReason=new ArrayList<String>();
+					disposeReason.add(orderSubmissionDTO.getDisptributionProtocolName());
+					disposeReason.add(orderSubmissionDTO.getOrderName());
+					
+					specimenEventParametersBizLogic.createDisposalEvent(ApplicationProperties.getValue("distribution.order.mail.subject", disposeReason),orderItemSubmissionDTO.getSpecimenId(), dao, userId);
+					specimenBizLogic.updateSpecimenStatusToClose(orderItemSubmissionDTO.getSpecimenId(),dao);
+				}
+				
+				isOrderProcessed=isOrderProcessed & isOrderItemProcessed(orderItemSubmissionDTO.getStatus());
+				isOrderNew=isOrderNew & isOrderItemNew(orderItemSubmissionDTO);
+				isOrderRejected=isOrderRejected & isOrderItemRejected(orderItemSubmissionDTO.getStatus());
+			}
+			
+			String orderStatus=Constants.ORDER_STATUS_PENDING;
+			if(isOrderProcessed)
+			{
+				orderStatus=Constants.ORDER_STATUS_COMPLETED;
+			}
+			else if(isOrderNew)
+			{
+				orderStatus=Constants.ORDER_STATUS_NEW;
+			}
+			else if(isOrderRejected)
+			{
+				orderStatus=Constants.ORDER_STATUS_REJECTED;
+			}
+			
+			params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getSite()));
+			params.put("1", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
+			dao.executeUpdateWithNamedQuery("updateOrderDetails",params);
+			orderStatusDTO.setStatus(orderStatus);
+			orderStatusDTO.setSpecimensWithError(specimensWithError);
+			orderStatusDTO.setOrderId(orderSubmissionDTO.getId());
+		}	
+		catch(DAOException daoException)
+		{
+			throw new BizLogicException(null, daoException, null);
+		}
+		return orderStatusDTO;
+	}
+	
+	private boolean isOrderItemNew(OrderItemSubmissionDTO orderItemSubmissionDTO) {
+		return Constants.ORDER_STATUS_NEW.equals(orderItemSubmissionDTO.getStatus());
+	}
+	
+	private boolean isOrderItemRejected(String orderStatus) {
+		for (String status : REJECTED_STATUS_LIST) {
+			if(status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isOrderItemPending(String orderStatus) {
+		for (String status : PENDING_STATUS_LIST) {
+			if(status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isOrderItemProcessed(String orderStatus) {
+		for (String status : PROCESSED_STATUS_LIST) {
+			if(status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isClosed(String orderStatus) {
+		for (String status : CLOSED_STATUS_LIST) {
+			if(status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isDistributed(String orderStatus) {
+		for (String status : DISTRIBUTE_STATUS_LIST) {
+			if(status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}	
+	
+	public String getGridXMLString(Long orderId,HibernateDAO dao) throws Exception
+	{
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
+		List orderItems=dao.executeNamedQuery("getOrderItems", substParams);
+		String gridXMLString = VelocityManager.getInstance().evaluate(orderItems,"orderGridTemplate.vm");
+		return gridXMLString;
+	}
 }

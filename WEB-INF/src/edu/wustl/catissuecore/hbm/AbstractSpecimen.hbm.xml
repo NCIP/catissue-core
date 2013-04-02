@@ -375,4 +375,12 @@
 
 	</joined-subclass>
   </class>
+   <query name="getConsentResponseCollection">Select specimen.consentTierStatusCollection from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ?
+	</query>
+	<query name="getQuantityAndAvailability">Select specimen.availableQuantity from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.id = ? and specimen.isAvailable='true' and specimen.activityStatus='Active'
+	</query>
+	<query name="updateQuantityAndAvailability">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.availableQuantity=?,specimen.isAvailable=? where specimen.id=?
+	</query>
+	<query name="updateSpecimenStatusToClose">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Closed' where specimen.id=?
+	</query>
 </hibernate-mapping>

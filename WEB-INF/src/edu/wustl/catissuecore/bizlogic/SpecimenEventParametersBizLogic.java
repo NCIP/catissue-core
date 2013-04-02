@@ -8,6 +8,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.DistributionEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
@@ -1583,5 +1585,34 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	        }
 	    }
 		return msg;
+	}
+	public void createDistributionEvent(Double distributedQuantity,String comments,Long specimenId,DAO dao,Long userId) throws BizLogicException, DAOException
+	{
+		AbstractSpecimen abstractSpecimen=new Specimen();
+		abstractSpecimen.setId(specimenId);
+		DistributionEventParameters distributionEventParameters=new DistributionEventParameters();
+		distributionEventParameters.setDistributedQuantity(distributedQuantity);
+		distributionEventParameters.setComment(comments);
+		distributionEventParameters.setSpecimen(abstractSpecimen);
+		User user=new User();
+		user.setId(userId);
+		distributionEventParameters.setUser(user);
+		dao.insert(distributionEventParameters);
+	}
+	public void createDisposalEvent(String disposalReason,Long specimenId,DAO dao,Long userId) throws BizLogicException, DAOException
+	{
+		final DisposalEventParameters disposalEvent = new DisposalEventParameters();
+		
+		AbstractSpecimen abstractSpecimen=new Specimen();
+		abstractSpecimen.setId(specimenId);
+		disposalEvent.setSpecimen(abstractSpecimen);
+		
+		disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
+		final User user = new User();
+		user.setId(userId);
+		disposalEvent.setUser(user);
+		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
+		disposalEvent.setReason(disposalReason);
+		dao.insert(disposalEvent);
 	}
 }

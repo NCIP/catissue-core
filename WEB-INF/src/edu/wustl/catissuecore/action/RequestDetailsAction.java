@@ -151,7 +151,7 @@ public class RequestDetailsAction extends BaseAction
 		if (request.getParameter("id") != null && !request.getParameter("id").equals("0"))
 		{
 			orderDetailsId = request.getParameter("id");
-
+			request.setAttribute("id",request.getParameter("id"));
 		}
 		else if (request.getParameter("type") != null
 				&& request.getParameter("type").equalsIgnoreCase("directDistribution"))

@@ -10,6 +10,9 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -22,6 +25,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.digester3.Digester;
+import org.apache.commons.digester3.binder.DigesterLoader;
+import org.xml.sax.SAXException;
 
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
@@ -37,6 +44,9 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.OrderGrid;
+import edu.wustl.catissuecore.dto.OrderItemSubmissionDTO;
+import edu.wustl.catissuecore.dto.RowDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -1010,4 +1020,31 @@ public final class OrderingSystemUtil
 		}
 		return specMap;
 	}
+	public static ArrayList<OrderItemSubmissionDTO> getOrderItemDTOs(String orderItemXMLString) throws IOException, SAXException
+	{
+		final String rulesFileLocation ="OrderItemRule.xml";
+		DigesterLoader digesterLoader = DigesterLoader.newLoader(new XmlRulesModule(rulesFileLocation));
+		Digester digester = digesterLoader.newDigester();
+		OrderGrid orderIGrid=digester.parse(new StringReader(orderItemXMLString));
+		return convertGridToDTO(orderIGrid);
+	}
+	private static ArrayList<OrderItemSubmissionDTO> convertGridToDTO(OrderGrid orderGrid)
+	{
+		Collection<RowDTO> rowDTOs=orderGrid.getRowDTOs();
+		Collection<OrderItemSubmissionDTO> orderItemSubmissionDTOs=new ArrayList<OrderItemSubmissionDTO>();
+		for (RowDTO rowDTO : rowDTOs) {
+			List<String> cells=rowDTO.getCells();
+			OrderItemSubmissionDTO orderItemSubmissionDTO=new OrderItemSubmissionDTO();
+			orderItemSubmissionDTO.setSpecimenLabel(cells.get(0));
+			orderItemSubmissionDTO.setDistQty(Double.parseDouble(cells.get(4)));
+			orderItemSubmissionDTO.setOrderitemId(Long.parseLong(cells.get(7)));
+			orderItemSubmissionDTO.setSpecimenId(Long.parseLong(cells.get(8)));
+			orderItemSubmissionDTO.setStatus(cells.get(5));
+			orderItemSubmissionDTO.setComments(cells.get(6));
+			orderItemSubmissionDTOs.add(orderItemSubmissionDTO);	
+		}
+		
+		return (ArrayList<OrderItemSubmissionDTO>)orderItemSubmissionDTOs;
+	}
+
 }

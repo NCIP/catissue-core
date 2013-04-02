@@ -1941,6 +1941,8 @@ public class Constants
 
 	/** The Constant SUMMARY_BIZLOGIC_ID. */
 	public static final int SUMMARY_BIZLOGIC_ID = 70;
+	
+	public static final int DISTRIBUTION_EVENT_PARAMETERS_FORM_ID = 71;
 	//Misc
 	/** The Constant SEPARATOR. */
 	public static final String SEPARATOR = " : ";
@@ -5149,6 +5151,7 @@ public class Constants
 	/** The Constant ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE. */
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close";
 
+	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL="Distributed And Close(Special)";
 	/** The Constant shortTitle. */
 	public static final String shortTitle = "shortTitle";
 
@@ -5935,7 +5938,7 @@ public class Constants
 	public static final String EMPI_ADMINUSER_CLOSED_EMAIL_TMPL = "eMPI.adminUserClosedTemplate";  
 	public static final String EMPI_ADMINUSER_NOTEXISTS_EMAIL_TMPL = "eMPI.adminUserNotExitsTemplate"; 
 	public static final String ORDER_PLACEMENT_EMAIL_TMPL = "order.orderPlacementTemplate";
-	
+	public static final String ORDER_DISTRIBTION_EMAIL_TMPL="order.submission";
 	public static final String FROM_CONTAINER_NAME="fromContainerName";
 	public static final String FROM_POSITION_DIMENSION_ONE="fromPos1";
 	public static final String FROM_POSITION_DIMENSION_TWO="fromPos2";
@@ -5944,6 +5947,8 @@ public class Constants
 	public static final String TO_POSITION_DIMENSION_ONE="toPos1";
 	public static final String TO_POSITION_DIMENSION_TWO="toPos2";
 	
- 
+	public static final String[] STATUS_LIST = {"-Select Status For All--","Distributed","Distributed And Close"
+		,"Distributed And Close(Special)","New","Pending - For Distribution","Pending - Protocol Review","Specimen Preparation",
+		"Rejected - Inappropriate Request","Rejected - Specimen Unavailable","Rejected - Unable to Create"};
 
 }

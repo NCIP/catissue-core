@@ -57,6 +57,7 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
+import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
@@ -93,12 +94,15 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
@@ -6169,6 +6173,71 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return speicmens;
 	}
+	public Collection<ConsentTierDTO> getConsentTireDTOs(String specimenLabel,HibernateDAO dao) throws BizLogicException
+	{
+		Collection<ConsentTierDTO> consentTierDTOs=new ArrayList<ConsentTierDTO>();
+		try
+		{
+			Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+			substParams.put("0", new NamedQueryParam(DBTypes.STRING,specimenLabel));
+			List<ConsentTierStatus> consentResponses=dao.executeNamedQuery("getConsentResponseCollection", substParams);
+			for (ConsentTierStatus consentTierStatus : consentResponses)
+			{
+				ConsentTierDTO consentTierDTO=new ConsentTierDTO();
+				consentTierDTO.setConsentStatment(consentTierStatus.getConsentTier().getStatement());
+				consentTierDTO.setStatus(consentTierStatus.getStatus());
+				consentTierDTO.setId(consentTierStatus.getConsentTier().getId());
+				consentTierDTOs.add(consentTierDTO);
+			}
+		}
+		catch(ApplicationException applicationException)
+		{
+			throw new BizLogicException(null,applicationException,null);
+		}
+		return  consentTierDTOs;
+	}
+	public boolean updateReducedQuantity(Double quantityReducedBy,Long specimenId,HibernateDAO dao) throws BizLogicException, DAOException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+		
+		final List specimenDetails=dao.executeNamedQuery("getQuantityAndAvailability", params);
+		
+		if(specimenDetails.isEmpty())
+		{
+			return false;
+		}
+		
+		Object[] specimenDetail= (Object[])specimenDetails.get(0);
 
+		Double previousQuantity=Double.parseDouble(specimenDetail[0].toString());
+		Double 	remainingQuantity = quantityReducedBy - previousQuantity.doubleValue();
+		
+		params.put("0", new NamedQueryParam(DBTypes.DOUBLE, remainingQuantity));
+		
+		int remainingQuantityMoreThenZero=remainingQuantity.compareTo(0D);
+		if(remainingQuantityMoreThenZero == -1)
+		{
+			return false;
+		}
+		else if (remainingQuantity.compareTo(0D) == 0)
+		{
+			params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, false));
+		}
+		else
+		{
+			params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, true));
+		}
+		params.put("2", new NamedQueryParam(DBTypes.LONG, specimenId));
+		dao.executeUpdateWithNamedQuery("updateQuantityAndAvailability", params);
+		
+		return true;
+	}
+	public void updateSpecimenStatusToClose(Long specimenId,HibernateDAO dao) throws DAOException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToClose", params);
+	}
 	
 }

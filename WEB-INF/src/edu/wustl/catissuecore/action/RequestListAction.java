@@ -110,7 +110,7 @@ public class RequestListAction extends SecureAction
 			{
 				JSONObject jsonObject = new JSONObject();
 				JSONArray dataArray = new JSONArray();
-				dataArray.put("<a href='RequestDetails.do?id="+bean.getRequestId()+"'>"+bean.getOrderName()+"</a>");
+				dataArray.put("<a href='Order.do?id="+bean.getRequestId()+"'>"+bean.getOrderName()+"</a>");
 				dataArray.put(bean.getDistributionProtocol());
 				dataArray.put(bean.getRequestedBy());
 				dataArray.put(bean.getRequestedDate());

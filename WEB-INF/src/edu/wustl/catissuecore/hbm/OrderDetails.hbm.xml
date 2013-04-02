@@ -118,5 +118,8 @@
         -->
 
     </class>
-
+<query name="getOrderDetails">select orderDetails.name,orderDetails.distributionProtocol.id,orderDetails.distributionProtocol.title,orderDetails.distributionProtocol.principalInvestigator.firstName,orderDetails.distributionProtocol.principalInvestigator.lastName,orderDetails.distributionProtocol.principalInvestigator.emailAddress,orderDetails.requestedDate,orderDetails.comment from edu.wustl.catissuecore.domain.OrderDetails orderDetails where orderDetails.id=?
+</query>
+<query name="updateOrderDetails">UPDATE edu.wustl.catissuecore.domain.Distribution distribution SET distribution.toSite = ? WHERE distribution.orderDetails.id= ?
+</query>
 </hibernate-mapping>

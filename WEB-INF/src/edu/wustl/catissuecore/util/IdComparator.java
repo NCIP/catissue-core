@@ -11,12 +11,14 @@ import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.dto.ConsentTierDTO;
 
 public class IdComparator implements Comparator
 {
 
 	public int compare(Object arg0, Object arg1)
 	{
+		
 		Long id1 = null;
 		Long id2 = null;
 		int returnId= 0;
@@ -76,6 +78,11 @@ public class IdComparator implements Comparator
 			{
 				id1 = ((OrderItem) arg0).getId();
 				id2 = ((OrderItem) arg1).getId();
+			}
+			if (arg0 instanceof ConsentTierDTO && arg1 instanceof ConsentTierDTO)
+			{
+				id1 = ((ConsentTierDTO) arg0).getId();
+				id2 = ((ConsentTierDTO) arg1).getId();
 			}
 //			bug 8905 end
 			if (id1 != null && id2 != null)
