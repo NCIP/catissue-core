@@ -329,22 +329,23 @@ function showTreeMessage() {
 			}  
 		} 
 
-		if (isObjChecked == true) {		 
-			var tdId = "multiSelectId";
+		if (isObjChecked == true) {		  
 			document.getElementById("assignButton").style.display="block"
 			document.getElementById("shareButton").style.display="none"
-			document.getElementById(tdId).style.display="none";
+			document.getElementById("multiSelectId").style.display="none";
+			document.getElementById("multiSelectId").style.visibility = 'hidden';
 			document.getElementById("newTagName").style.display="inline";
 			document.getElementById("newTagLabel").style.display="inline";
 			document.getElementById("shareLabel").style.display="none";
 			document.getElementById("treegridbox").style.height="240px";
 			document.getElementById("loadingImg").style.display="none";
+	
 			setHeader(isObjChecked);
 		} else {
-			var tdId = "multiSelectId";
 			document.getElementById("assignButton").style.display="none"
 			document.getElementById("shareButton").style.display="block"
-			document.getElementById(tdId).style.display="block";
+			document.getElementById("multiSelectId").style.display="block";
+			document.getElementById("multiSelectId").style.visibility = 'visible';
 			document.getElementById("newTagName").style.display="none";
 			document.getElementById("newTagLabel").style.display="none";
 			document.getElementById("shareLabel").style.display="inline";
