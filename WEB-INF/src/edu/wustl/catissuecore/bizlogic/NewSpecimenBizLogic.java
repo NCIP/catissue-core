@@ -30,11 +30,7 @@ import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -62,7 +58,6 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
-import edu.wustl.catissuecore.dto.NewSpecimenDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelException;
@@ -6152,12 +6147,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		return biohazardDTOs;
 	}
 	
-	public NewSpecimenDTO getSpecimenDTO(Long id) throws BizLogicException
-	{
-		NewSpecimenDTO newSpecimenDTO =new NewSpecimenDTO();
-	    return newSpecimenDTO;
-	}
-
 	/** This method returns a NameValueBeanList of specimen label and its id.
 	 * @param scgId
 	 * @return

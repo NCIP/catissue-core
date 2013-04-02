@@ -801,18 +801,6 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
 	</definition>
 	
-	<!--  Added By Ankush -->
-	
-	<definition name=".catissuecore.specimenCollectionGroupViewFormDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroupView.jsp" />
-	</definition>
-	
-	<definition name=".catissuecore.newSpecimenQueryViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenView.jsp" />
-	</definition>
-	
-	
-
 	<definition name=".catissuecore.querySpecimenViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>

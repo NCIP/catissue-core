@@ -23,7 +23,6 @@
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
 </head>
 <body onload="initComboForSCGEvents()">
-<html:form action="QueryParticipantSearchForView.do" >
 
 <input type="hidden" name="requestFrom" value="participantView" />
 <input type="hidden" name="CPQuery" value="CPQuery" />
@@ -230,6 +229,5 @@
 </table>
 </fieldset>
 </div>
-</html:form>
 </body>
 </html>

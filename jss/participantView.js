@@ -21,9 +21,8 @@
    var participantId=document.getElementById("pId").value;
    var cpId=document.getElementById("cpId").value;
    var action="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroupCPQuery&cpId="+cpId+"&pId="+participantId+"&requestFrom=participantView";
-   document.forms[0].action=action;
-   document.forms[0].submit();
- }
+   window.parent.frames[1].location =action;
+  }
 
 
 function editScg()
@@ -43,9 +42,8 @@ function editScg()
   +"&cpSearchParticipantId="+participantId+"&cpSearchCpId="+cpId;
  }
 
- document.forms[0].action=action;
- document.forms[0].submit();
-}
+ window.parent.frames[1].location=action;
+ }
 
 
 function editSpecimen()
@@ -63,9 +61,7 @@ function editSpecimen()
     action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+specimenId+"&refresh=true&cpSearchParticipantId="+participantId
          +"&cpSearchCpId="+cpId;
  }
- document.forms[0].action=action;
- document.forms[0].submit();
-
+ window.parent.frames[1].location=action;
 }
 
 function createAliquote()
@@ -84,8 +80,7 @@ if(isSubmit)
  action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+specimenId;
 }
 
- document.forms[0].action=action;
- document.forms[0].submit();
+ window.parent.frames[1].location=action;
 }
 
 function createDerivative()
@@ -107,8 +102,8 @@ function createDerivative()
     +"&parentLabel="+label;
  }
  
- document.forms[0].action=action;
- document.forms[0].submit();
+ window.parent.frames[1].location=action;
+ 
 }
 
 
@@ -166,8 +161,8 @@ function showEditPage()
 	var participantId=document.getElementById("pId").value;
 	var cpId=document.getElementById("cpId").value;
 	action="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=search&id="+participantId+"&cpSearchCpId="+cpId;	
-	document.forms[0].action=action;
-	document.forms[0].submit();
+	window.parent.frames[1].location=action;
+	
 }
 
 // Handles Collect Specimen button click in scg details block.
@@ -182,8 +177,34 @@ else
 {
  var nodeId = "SpecimenCollectionGroup_"+scgId;
  var action = "AnticipatorySpecimenView.do?scgId="+scgId;
- document.forms[0].action=action;
- document.forms[0].submit();
+ window.parent.frames[1].location=action;
  refreshTree(null,null,null,null,nodeId);
 }
+}
+
+function inputFocus(i){
+	if(i.value==i.defaultValue)
+		{ 
+			i.value="";
+			i.style.color="#000";
+		}
+}
+
+function inputBlur(i){
+	if(i.value=="")
+	{ 
+		i.value=i.defaultValue;
+		if(i.value == i.defaultValue)
+			i.style.color="Silver";
+	}
+}
+function initComboForSCGEvents()
+{
+ 		dhtmlx.skin ='dhx_skyblue';
+                scgCombo = new dhtmlXCombo("addSCGEvents", "addSCGEven1", 240);
+                scgCombo.addOption(scgEvenData);    
+		        //scgCombo.enableFilteringMode(true)
+                scgCombo.attachEvent("onSelectionChange",onScgSelect);
+              //  scgCombo.attachEvent("onClick",onScgClick); 
+                initComboForSpecimenLabels();
 }

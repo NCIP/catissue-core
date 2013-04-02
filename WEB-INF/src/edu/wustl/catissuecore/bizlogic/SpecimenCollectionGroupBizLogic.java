@@ -28,6 +28,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.LazyInitializationException;
+import org.json.JSONException;
 
 import edu.wustl.catissuecore.dao.SCGDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -47,7 +48,6 @@ import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.SCGEventPointDTO;
-import edu.wustl.catissuecore.dto.SpecimenCollectionGroupDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -3652,13 +3652,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			specimenToBcreated.setSpecimenCollectionGroup(specimenCollectionGroup);
 			specimenBizLogic.insert(specimenToBcreated, dao, sessionDataBean);
 	}
-	
-	public SpecimenCollectionGroupDTO getSpecimenCollectionGroupDTO(Long id) throws BizLogicException
-	{
-		SpecimenCollectionGroupDTO specimenCollectionGroupDTO =new SpecimenCollectionGroupDTO();
-	    return specimenCollectionGroupDTO;
-	}
-	
 	
 	/** This method generates the json of scg event  point to populate the event point drop down
 	 *  on new Participant page.
