@@ -6,22 +6,21 @@
 
 <digester-rules>
 
-<pattern value="*/rows">
+<pattern value="rows">
 	<object-create-rule
-		classname="edu.wustl.catissuecore.dto.OrderItemDTO" />
+		classname="edu.wustl.catissuecore.dto.OrderGrid" />
 	<set-properties-rule />
 </pattern>
 
-<pattern value="*/row">
+<pattern value="rows/row">
 	<object-create-rule
-		classname="edu.wustl.catissuecore.util.Row" />
+		classname="edu.wustl.catissuecore.dto.RowDTO" />
 	<set-properties-rule />
+	<call-method-rule pattern="cell" methodname="addCell" paramcount="1"/>
+	<call-param-rule pattern="cell" paramnumber="0"/> 
 	<set-next-rule methodname="addRow" />
+	
 </pattern>
-<pattern value="*/cell">
-      <object-create-rule classname="edu.wustl.catissuecore.util.Cell"/>
-	  <set-properties-rule/>
-	  <set-next-rule methodname="addCell"/>
-</pattern>
+
   
 </digester-rules>
