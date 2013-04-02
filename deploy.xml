@@ -666,9 +666,24 @@
 				<exclude name="**/CVS*" />
 				<exclude name="**/jta.jar" />
 				<exclude name="**/pages/subMenu/**" />
+				<!--excluded for jboss-5.1.0.GA upgrade-->				
+								<exclude name="**/WEB-INF/lib/xalan.jar" />
+								<exclude name="**/WEB-INF/lib/xbean.jar" />
+								<exclude name="**/WEB-INF/lib/xercesImpl-1.0.jar" />
+								<exclude name="**/WEB-INF/lib/xercesImpl.jar" />
+								<exclude name="**/WEB-INF/lib/xml-apis.jar" />
+								<exclude name="**/WEB-INF/lib/xmlrpc-2.0.jar" />
+								<exclude name="**/WEB-INF/lib/scrubber-runtime.jar" />
+								<exclude name="**/WEB-INF/lib/jax-qname.jar" />
+								<exclude name="**/WEB-INF/lib/dom4j-1.6.jar" />
+								<exclude name="**/WEB-INF/lib/jce-jdk13-125.jar" />
+								<exclude name="**/WEB-INF/lib/jaas.jar" />
+								<exclude name="**/WEB-INF/lib/jsr173_api.jar" />
+								<exclude name="**/WEB-INF/lib/namespace.jar" />
+								<exclude name="**/WEB-INF/lib/${mysql.lib}" />
+								<exclude name="**/WEB-INF/lib/${oracle.lib}" />
 			</fileset>
 		</war>
-
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
 
 
@@ -949,12 +964,18 @@
 			<include name="ApplicationSecurityConfig.xml" />
 			<replacefilter token="@@hibernate-config-file@@" value="${jboss.server.url}/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
 		</replace>
-		<copy todir="${jboss.server.url}/lib" overwrite="true">
-			<fileset dir="${lib.dir}">
-				<include name="${mysql.lib}" />
-				<include name="${oracle.lib}" />
-			</fileset>
-		</copy>
+		<if>
+					<equals arg1="true" arg2="${install.db.driver}" />
+						<then>
+							<copy todir="${jboss.server.url}/lib" overwrite="true">
+										<fileset dir="${lib.dir}">
+											<include name="${mysql.lib}" />
+											<include name="${oracle.lib}" />
+										</fileset>
+									</copy>							
+						</then>
+		</if>
+		
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="DAOConfig.xml" />
@@ -1619,39 +1640,62 @@
 
 		<!-- 3) Inject de-struts-config.xml entry in catisssue -> web.xml -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
-			<replacetoken>&lt;/web-app&gt;</replacetoken>
-			<replacevalue><![CDATA[
-				<listener>
-									<listener-class>edu.common.dynamicextensions.util.listener.DynamicExtensionsServletContextListener</listener-class>
-								</listener>
-								<servlet>
-									<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
-									<servlet-class>edu.common.dynamicextensions.interfaceactions.DynamicExtensionsInterfaceAction</servlet-class>
-								</servlet>
-								<servlet>
-									<servlet-name>DownloadFileAction</servlet-name>
-									<servlet-class>edu.common.dynamicextensions.ui.webui.action.DownloadFileAction</servlet-class>
-								</servlet>
-								<servlet-mapping>
-									<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
-									<url-pattern>/DynamicExtensionsInterfaceAction</url-pattern>
-								</servlet-mapping>
-								<servlet-mapping>
-									<servlet-name>DownloadFileAction</servlet-name>
-									<url-pattern>/DownloadFileAction</url-pattern>
-								</servlet-mapping>
-								<taglib>
-									<taglib-uri>/WEB-INF/dynamicExtensions.tld</taglib-uri>
-									<taglib-location>/WEB-INF/dynamicExtensions.tld</taglib-location>
-								</taglib>
-								<context-param>
-									<param-name>ResourceBundleParamName</param-name>
-									<param-value>resourcebundleclass</param-value>
-								</context-param>
-							</web-app>
-					]]></replacevalue>
-		</replace>
+					<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
+					<replacetoken>@@listener@@</replacetoken>
+					<replacevalue><![CDATA[
+						<listener>
+											<listener-class>edu.common.dynamicextensions.util.listener.DynamicExtensionsServletContextListener</listener-class>
+										</listener>
+						]]></replacevalue>
+								</replace>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+							<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
+							<replacetoken>@@servlet@@</replacetoken>
+							<replacevalue><![CDATA[
+										<servlet>
+											<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
+											<servlet-class>edu.common.dynamicextensions.interfaceactions.DynamicExtensionsInterfaceAction</servlet-class>
+										</servlet>
+										<servlet>
+											<servlet-name>DownloadFileAction</servlet-name>
+											<servlet-class>edu.common.dynamicextensions.ui.webui.action.DownloadFileAction</servlet-class>
+										</servlet>
+								]]></replacevalue>
+				</replace>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+									<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
+									<replacetoken>@@servlet-mapping@@</replacetoken>
+									<replacevalue><![CDATA[
+										<servlet-mapping>
+											<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
+											<url-pattern>/DynamicExtensionsInterfaceAction</url-pattern>
+										</servlet-mapping>
+										<servlet-mapping>
+											<servlet-name>DownloadFileAction</servlet-name>
+											<url-pattern>/DownloadFileAction</url-pattern>
+										</servlet-mapping>
+										]]></replacevalue>
+				</replace>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+											<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
+											<replacetoken>@@taglib@@</replacetoken>
+											<replacevalue><![CDATA[
+										<taglib>
+											<taglib-uri>/WEB-INF/dynamicExtensions.tld</taglib-uri>
+											<taglib-location>/WEB-INF/dynamicExtensions.tld</taglib-location>
+										</taglib>
+												]]></replacevalue>
+				</replace>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+													<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
+													<replacetoken>@@context-param@@</replacetoken>
+													<replacevalue><![CDATA[
+										<context-param>
+											<param-name>ResourceBundleParamName</param-name>
+											<param-value>resourcebundleclass</param-value>
+										</context-param>
+							]]></replacevalue>
+				</replace>
 
 		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
