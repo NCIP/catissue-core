@@ -139,4 +139,84 @@
     		<column name="DISTRIBUTED_QUANTITY"/>
 		</createIndex>
 	</changeSet>
+	
+	<changeSet id="13" author="catissue" runOnChange="true">
+		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COLL_PROT_REG_PART_ID">
+    		<column name="PARTICIPANT_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COLL_PROT_REG_CP_ID">
+    		<column name="COLLECTION_PROTOCOL_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COL_PROT_REG_ACT_STAT">
+    		<column name="ACTIVITY_STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COLL_PROT_REG_CON_WIT">
+    		<column name="CONSENT_WITNESS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_ABS_SPECI_COLL_GROUP" indexName="CATISSUE_ABS_COLL_GROUP_ST_ID">
+    		<column name="SITE_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_ABS_SPECI_COLL_GROUP" indexName="CATISSUE_ABS_COLL_GRP_CL_DAG">
+    		<column name="CLINICAL_DIAGNOSIS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_ABS_SPECI_COLL_GROUP" indexName="CATISSUE_ABS_COLL_GRP_CL_DAG">
+    		<column name="ACTIVITY_STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN_COLL_GROUP" indexName="CATISSUE_SPEC_COLL_GRP_CPR_ID">
+    		<column name="COLLECTION_PROTOCOL_REG_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN_COLL_GROUP" indexName="CATISSUE_SPEC_COLL_GRP_CPE_ID">
+    		<column name="COLLECTION_PROTOCOL_EVENT_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN_COLL_GROUP" indexName="CATISSUE_SPC_COL_GRP_COL_STAT">
+    		<column name="COLLECTION_STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_PARTICIPANT" indexName="CATISSUE_PARTICIPANT_ACT_STAT">
+    		<column name="ACTIVITY_STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN" indexName="CATISSUE_SPECIMEN_ACT_STAT">
+    		<column name="ACTIVITY_STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN" indexName="CATISSUE_SPECIMEN_SCG_ID">
+    		<column name="SPECIMEN_COLLECTION_GROUP_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN" indexName="CATISSUE_SPECIMEN_COLL_STAT">
+    		<column name="COLLECTION_STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_ABSTRACT_SPECIMEN" indexName="CATISSUE_ABS_SPEC_P_SP_ID">
+    		<column name="PARENT_SPECIMEN_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_ABSTRACT_SPECIMEN" indexName="CATISSUE_ABS_SPEC_LINEAGE">
+    		<column name="LINEAGE"/>
+		</createIndex>
+		
+		<createIndex tableName="CATISSUE_SPECIMEN_EVENT_PARAM" indexName="CATISSUE_SPEC_EV_PARAM_SCG_ID">
+    		<column name="SPECIMEN_COLL_GRP_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_SPECIMEN_EVENT_PARAM" indexName="CATISSUE_SPEC_EV_PARAM_USR_ID">
+    		<column name="USER_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_RESPONSE" indexName="CATISSUE_COSNT_TR_RES_RESP">
+    		<column name="RESPONSE"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_RESPONSE" indexName="CATISSUE_COSNT_TR_RES_CT_ID">
+    		<column name="CONSENT_TIER_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_RESPONSE" indexName="CATISSUE_COSNT_TR_RES_CPR_ID">
+    		<column name="COLL_PROT_REG_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_CT_ID">
+    		<column name="CONSENT_TIER_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_STAT">
+		
+    		<column name="STATUS"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_SPEC_ID">
+    		<column name="SPECIMEN_ID"/>
+		</createIndex>
+		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_SCG_ID">
+    		<column name="SPECIMEN_COLL_GROUP_ID"/>
+		</createIndex>
+	</changeSet>
 </databaseChangeLog>         
