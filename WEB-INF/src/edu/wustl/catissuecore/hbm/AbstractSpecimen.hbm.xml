@@ -179,8 +179,8 @@
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
             fetch="join" lazy="false"
-            inverse="false"
-            cascade="all-delete-orphan"
+            inverse="true"
+            cascade="save-update"
             sort="unsorted"
         >
 
@@ -375,12 +375,12 @@
 
 	</joined-subclass>
   </class>
-   <query name="getConsentResponseCollection">Select specimen.consentTierStatusCollection from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ?
+    <query name="getConsentResponseCollection">Select specimen.consentTierStatusCollection from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ?
 	</query>
-	<query name="getQuantityAndAvailability">Select specimen.availableQuantity from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.id = ? and specimen.isAvailable='true' and specimen.activityStatus='Active'
+	<query name="getQuantityAndAvailability">Select specimen.availableQuantity from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ? and specimen.isAvailable=? and specimen.activityStatus='Active'
 	</query>
-	<query name="updateQuantityAndAvailability">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.availableQuantity=?,specimen.isAvailable=? where specimen.id=?
+	<query name="updateQuantityAndAvailability">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.availableQuantity=?,specimen.isAvailable=? where specimen.label=?
 	</query>
-	<query name="updateSpecimenStatusToClose">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Closed' where specimen.id=?
+	<query name="updateSpecimenStatusToClose">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Closed' where specimen.label=?
 	</query>
 </hibernate-mapping>

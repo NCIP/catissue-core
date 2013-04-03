@@ -6196,29 +6196,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return  consentTierDTOs;
 	}
-	public boolean updateReducedQuantity(Double quantityReducedBy,Long specimenId,HibernateDAO dao) throws BizLogicException, DAOException
+	public String updateReducedQuantity(Double quantityReducedBy,String specimenLabel,HibernateDAO dao) throws BizLogicException, DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+		params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, true));
 		
 		final List specimenDetails=dao.executeNamedQuery("getQuantityAndAvailability", params);
 		
 		if(specimenDetails.isEmpty())
 		{
-			return false;
+			return ApplicationProperties.getValue("orderdistribution.specimen.closed.unavailable");
 		}
-		
-		Object[] specimenDetail= (Object[])specimenDetails.get(0);
-
-		Double previousQuantity=Double.parseDouble(specimenDetail[0].toString());
+		Double previousQuantity=Double.parseDouble(specimenDetails.get(0).toString());
 		Double 	remainingQuantity = quantityReducedBy - previousQuantity.doubleValue();
-		
 		params.put("0", new NamedQueryParam(DBTypes.DOUBLE, remainingQuantity));
 		
 		int remainingQuantityMoreThenZero=remainingQuantity.compareTo(0D);
 		if(remainingQuantityMoreThenZero == -1)
 		{
-			return false;
+			return ApplicationProperties.getValue("orderdistribution.requested.quantity.exceeds");
 		}
 		else if (remainingQuantity.compareTo(0D) == 0)
 		{
@@ -6228,15 +6225,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, true));
 		}
-		params.put("2", new NamedQueryParam(DBTypes.LONG, specimenId));
+		params.put("2", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateQuantityAndAvailability", params);
 		
-		return true;
+		return Constants.SUCCESS;
 	}
-	public void updateSpecimenStatusToClose(Long specimenId,HibernateDAO dao) throws DAOException
+	public void updateSpecimenStatusToClose(String specimenLabel,HibernateDAO dao) throws DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToClose", params);
 	}
 	

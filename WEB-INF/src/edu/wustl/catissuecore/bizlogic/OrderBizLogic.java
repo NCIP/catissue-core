@@ -54,6 +54,7 @@ import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.dto.ConsentDTO;
 import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.DisplayOrderDTO;
+import edu.wustl.catissuecore.dto.OrderErrorDTO;
 import edu.wustl.catissuecore.dto.OrderItemDTO;
 import edu.wustl.catissuecore.dto.OrderItemSubmissionDTO;
 import edu.wustl.catissuecore.dto.OrderStatusDTO;
@@ -2166,7 +2167,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-			List<String> specimensWithError=new ArrayList<String>();
 			boolean isOrderProcessed=true;
 			boolean isOrderNew=true;
 			boolean isOrderRejected=true;
@@ -2184,11 +2184,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 				if(isDistributed(orderItemSubmissionDTO.getStatus()))
 				{	
-					boolean specimenUpdatedSuccessfully=specimenBizLogic.updateReducedQuantity(orderItemSubmissionDTO.getDistQty(), orderItemSubmissionDTO.getSpecimenId(), dao);
-					if(!specimenUpdatedSuccessfully)
+					String specimenAvailableStatus=specimenBizLogic.updateReducedQuantity(orderItemSubmissionDTO.getDistQty(), orderItemSubmissionDTO.getSpecimenLabel(), dao);
+					if(!Constants.SUCCESS.equals(specimenAvailableStatus))
 					{
-						specimensWithError.add(orderItemSubmissionDTO.getSpecimenLabel());
-						break;
+						OrderErrorDTO orderErrorDTO=new OrderErrorDTO();
+						orderErrorDTO.setSpecimenLabel(orderItemSubmissionDTO.getSpecimenLabel());
+						orderErrorDTO.setError(specimenAvailableStatus);
+						orderStatusDTO.getOrderErrorDTOs().add(orderErrorDTO);
 					}
 					specimenEventParametersBizLogic.createDistributionEvent(orderItemSubmissionDTO.getDistQty(),orderItemSubmissionDTO.getComments(),orderItemSubmissionDTO.getSpecimenId(), dao,userId);
 				}
@@ -2200,7 +2202,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					disposeReason.add(orderSubmissionDTO.getOrderName());
 					
 					specimenEventParametersBizLogic.createDisposalEvent(ApplicationProperties.getValue("distribution.order.mail.subject", disposeReason),orderItemSubmissionDTO.getSpecimenId(), dao, userId);
-					specimenBizLogic.updateSpecimenStatusToClose(orderItemSubmissionDTO.getSpecimenId(),dao);
+					specimenBizLogic.updateSpecimenStatusToClose(orderItemSubmissionDTO.getSpecimenLabel(),dao);
 				}
 				
 				isOrderProcessed=isOrderProcessed & isOrderItemProcessed(orderItemSubmissionDTO.getStatus());
@@ -2240,7 +2242,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			dao.executeUpdateWithNamedQuery("updateOrderDetails",params);
 
 			orderStatusDTO.setStatus(orderStatus);
-			orderStatusDTO.setSpecimensWithError(specimensWithError);
 			orderStatusDTO.setOrderId(orderSubmissionDTO.getId());
 		}	
 		catch(DAOException daoException)
