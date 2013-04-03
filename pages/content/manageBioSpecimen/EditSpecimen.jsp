@@ -5,46 +5,38 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
-
-<SCRIPT>var imgsrc="images/";</SCRIPT>
-
-<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
-<!------------------------------------------------------------------------------->
-
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
+<script src="jss/json2.js" type="text/javascript"></script>
+<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 <script>
+	var imgsrc="images/";
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
 <!----------------------------------------------------------------------->
 <body onload="initSpecimenCombo()"></body>
 <html:form action="NewSpecimenEdit.do">
 
-							  <html:hidden name="specimenDTO" property="generateLabel"/>
-							  <html:hidden name="specimenDTO" property="operation"/>
+<html:hidden name="specimenDTO" property="generateLabel"/>
+<html:hidden name="specimenDTO" property="operation"/>
+<html:hidden name="specimenDTO" property="parentSpecimenId"/>
+<html:hidden name="specimenDTO" property="id" styleId="id"/>
+<html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
 								
-								<html:hidden name="specimenDTO" property="parentSpecimenId"/>
-								
-								<html:hidden name="specimenDTO" property="id" styleId="id"/>
-								
-								<html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
-								
-
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 	 <tr>
 		<td class="td_color_bfdcf3">
@@ -414,10 +406,10 @@
 										<table width="100%" border="0" cellpadding="0" cellspacing="0">
 											<tr valign="bottom">
 												<td width="44%"> 
-													<input id="extIdName" name="extIdName" type="text" class="black_ar" size="16" maxlength="255" class="black_ar" />
+													<input id="extIdName" name="extIdName" type="text" class="black_ar" size="20" maxlength="255" class="black_ar" />
 												</td>
 												<td width="44%">
-													<input id="extIdValue" type="text" class="black_ar" size="16" maxlength="255" style="text-align:right;" class="black_ar" />
+													<input id="extIdValue" type="text" class="black_ar" size="20" maxlength="255" style="text-align:right;" class="black_ar" />
 												</td>
 												<td width="44%">
 													<input id="addEditExtIdButton" name="addEditExtIdButton" type="button" value="Add" class="black_ar" onclick="addEditExtIdTag(this)" />
@@ -432,17 +424,17 @@
 								<td width="20%" > &nbsp;	</td>
 								<td colspan="3" align="left"  valign="middle">
 									<ul id="externalIDList" class="tagEditor">
-										<c:if test="${not empty specimenDTO.externalIdentifiers}">
-												<c:forEach var="externalId" items="${specimenDTO.externalIdentifiers}">
-													<c:if test="${not empty externalId.name}">
-													<li id="li${externalId.id}" title="Edit">
-														<span id="${externalId.id}" name="ExtIds" onclick="editTag(this)">${externalId.name} - ${externalId.value}</span>
-														<a title="Delete" onclick="deleteTag(this)">X</a>
-														<input type="hidden" name="${externalId.id}Status" id="${externalId.id}Status" value=${externalId.status}>
-													</li>
-													</c:if>
-												</c:forEach>		
-										</c:if>
+											<c:if test="${not empty specimenDTO.externalIdentifiers}">
+													<c:forEach var="externalId" items="${specimenDTO.externalIdentifiers}">
+														<c:if test="${not empty externalId.name}">
+														<li id="li${externalId.id}" title="Edit">
+															<span id="Ext_${externalId.id}" name="ExtIds" onclick="editTag(this)">${externalId.name} - ${externalId.value}</span>
+															<a title="Delete" onclick="deleteTag(this)">X</a>
+															<input type="hidden" name="Ext_${externalId.id}Status" id="Ext_${externalId.id}Status" value=${externalId.status}>
+														</li>
+														</c:if>
+													</c:forEach>		
+											</c:if>
 									</ul>
 								 </td>
 							</tr>
@@ -460,9 +452,7 @@
 											<table width="100%" border="0" cellpadding="0" cellspacing="0">
 											<tr valign="bottom">
 												<td width="44%"> 
-													<html:select property="biohazardType" name="specimenDTO" styleClass="formFieldSized" styleId="biohazardType" onchange="onBiohazardTypeSelected(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-														<html:options collection="biohazardTypeList" labelProperty="name" property="value"/>
-													</html:select>
+													<div id="biohazardTypeSelect"></div>
 												</td>
 												<td width="44%">
 													<div id="biohazardSelect"></div>
@@ -483,9 +473,9 @@
 											<c:if test="${not empty specimenDTO.bioHazards}">
 													<c:forEach var="biohazard" items="${specimenDTO.bioHazards}">
 														<li id="li${biohazard.id}" title="Edit">
-															<span id="${biohazard.id}" name="Biohazards" onclick="editTag(this)">${biohazard.type} - ${biohazard.name}</span>
+															<span id="Bio_${biohazard.id}" name="Biohazards" onclick="editBiohazardTag(this)">${biohazard.type} - ${biohazard.name}</span>
 															<a title="Delete" onclick="deleteTag(this)">X</a>
-															<input type="hidden" name="${biohazard.id}Status" id="${biohazard.id}Status" value=${biohazard.status}>
+															<input type="hidden" name="Bio_${biohazard.id}Status" id="Bio_${biohazard.id}Status" value=${biohazard.status}>
 														</li>
 													</c:forEach>		
 											</c:if>
@@ -594,12 +584,6 @@
 </html:form>
 
 <script>
-
-initializeSpecimenPage(${biohazardNameListJSON});
-
-
-//////////////////////////////////////////////////////////
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 var tabDataJSON = {};
 tabDataJSON["id"] = document.getElementById("id").value; 
 //alert(tabDataJSON);
@@ -662,4 +646,6 @@ dhxWins.window("containerPositionPopUp").allowResize();
 dhxWins.window("containerPositionPopUp").setModal(true);
 dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
 }
+
+initializeSpecimenPage(${biohazardTypeNameListJSON});
 </script>
