@@ -240,19 +240,19 @@ public class EmailHandler
 			String orderName, String updaterName,String orderStatus, String orderUrl)
     {
     	Map<String, Object> contextMap = new HashMap<String, Object>();
-    	contextMap.put("requestor.name", requestorName);
-    	contextMap.put("order.name", requestorName);
-    	contextMap.put("updater.name", updaterName);
-    	contextMap.put("date", new Date());
-    	contextMap.put("order.status", orderStatus);
-    	contextMap.put("order.link", orderUrl);
+    	contextMap.put("requestor", requestorName);
+    	contextMap.put("order", orderName);
+    	contextMap.put("updater", updaterName);
+    	contextMap.put("date", new Date().toString());
+    	contextMap.put("status", orderStatus);
+    	contextMap.put("link", orderUrl);
     	
 		boolean emailStatus = EmailClient.getInstance().sendEmail(
 				 Constants.ORDER_DISTRIBTION_EMAIL_TMPL,
 				 new String[]{ toEmailAddress },
 				 new String[]{ ccEmailAddress },
 				 new String[]{ bccEmailAddress },
-				 contextMap);
+				 contextMap,orderName);
 			
 		if (!emailStatus) {
 			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
