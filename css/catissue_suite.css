@@ -1053,18 +1053,21 @@ input.actionButton{ /* optional style for form and action buttons */
 }
 
 .tagEditor li {
-    background-color: #eef5fb;
+	background: linear-gradient(to bottom, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);/*FF*/
+	background: -webkit-linear-gradient(top, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);/*safari*/
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#89c3eb', endColorstr='#d5ebfb',GradientType=0 );/*IE9*/
     cursor: pointer;
-    display: inline;
-    margin: 0 4px;
+	float: left;
+    margin: 0 5px 5px 0;
     padding: 2px 2px 2px 6px;
-	border: 1px groove grey;
-	border-top-left-radius:2em;
-	border-bottom-left-radius:2em;
+	border: 1px solid #CAD8F3;
+	border-radius: 18px 4px 4px 18px;
 	font-family: verdana;
 	font-size: 11px;
 	color: #003366;
 	vertical-align:middle;
+	list-style-type: none;
+	white-space: nowrap;
 }
 
 .tagEditor a {
