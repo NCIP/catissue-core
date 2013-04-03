@@ -123,14 +123,20 @@
 			<column name="IDENTIFIER" type="${int.type}">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="DISTRIBUTION_QUALITY" type="${int.type}">				
+			<column name="DISTRIBUTED_QUANTITY" type="${int.type}">				
 			</column>
 		</createTable>
+		
 	</changeSet>
 	
 	<changeSet id="11" author="catissue" runOnChange="true">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="consent_tire_status_specimen">
     		<column name="SPECIMEN_ID"/>
+		</createIndex>
+	</changeSet>
+	<changeSet id="12" author="catissue" runOnChange="true">
+		<createIndex tableName="CATISSUE_DISTRIBUTION_EVENT_PARAM" indexName="DISTRIBUTION_EVENT_DISTRIBUTED_QUANTITY">
+    		<column name="DISTRIBUTED_QUANTITY"/>
 		</createIndex>
 	</changeSet>
 </databaseChangeLog>         
