@@ -1084,3 +1084,10 @@ input.actionButton{ /* optional style for form and action buttons */
 .align_left_style1{
 		padding-left:20px;
 }
+
+.form-text{
+	height:17px;
+	vertical-align:top;
+	font-size:11px;
+	color:#808080;
+}
