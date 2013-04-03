@@ -54,7 +54,7 @@ function addEditExtIdTag(buttonElement)
 				li.title="Edit";
 				var span = document.createElement("span");
 				span.onclick=function(){editTag(this)};
-				span.id="Ext"+ cnt++;
+				span.id="Ext_"+ cnt++;
 				span.setAttribute("name","ExtIds");
 				span.appendChild(document.createTextNode(nameObj.value+" - "+valueObj.value));
 				li.appendChild(span);
@@ -120,60 +120,70 @@ function editTag(e)
 	editElement = e;
 }
 
+function populateBiohazardTypeOptions()
+{
+	var myData=biohazardNameListJSON;
+	
+	var typeList = new Array();
+	
+	for(var i=0;i<myData.length;i++) {
+		typeList.push(myData[i].type);
+	}
+	
+	typeList= getSortedUniqueArrayElements(typeList);
+	
+	for(var i=0;i<typeList.length;i++) {
+		typeCombo.addOption(typeList[i],typeList[i]);
+	}
+}
 
-function onBiohazardTypeSelected(selectedTypeElement)
+function onBiohazardTypeSelected()
 {
 	biohazardCombo.clearAll();
 	var myData=biohazardNameListJSON;
 	for(var i=0;i<myData.length;i++) {
-		if(selectedTypeElement.getSelectedValue()==myData[i].value)
-			biohazardCombo.addOption(myData[i].value,myData[i].name);
+		if(typeCombo.getSelectedValue()==myData[i].type || typeCombo.getComboText()==myData[i].type)
+			biohazardCombo.addOption(myData[i].id+"_"+myData[i].type,myData[i].name);
 	}
-	biohazardCombo.setComboText("Select BioHazard Name");
 }
 
 function addEditBioHazTag(buttonElement)
 {
-	var biohazard = biohazardCombo.getSelectedValue()+" - "+biohazardCombo.getSelectedText();
+	
 	if(biohazardCombo.getSelectedValue()!=null)
-	{	
-		if(document.getElementById('addEditBioHazButton').value==="Add")
+	{	var idTypeForBiohazard = biohazardCombo.getSelectedValue().split("_");
+		var biohazard = idTypeForBiohazard[1]+" - "+biohazardCombo.getSelectedText();
+				
+		var ul = document.getElementById('bioHazardList');
+		var li = document.createElement("li");
+		li.title="Edit";
+		var span = document.createElement("span");
+		span.onclick=function(){editBiohazardTag(this)};
+		span.id="Bio_"+idTypeForBiohazard[0];
+		span.setAttribute("name","Biohazards");
+		span.appendChild(document.createTextNode(biohazard));
+		li.appendChild(span);
+
+		var hidden = document.createElement("input");
+		hidden.type="hidden";
+		hidden.name=span.id+"Status";
+		hidden.id=span.id+"Status";
+		hidden.value="ADD";
+		li.appendChild(hidden);
+
+		var a = document.createElement("a");
+		a.title="Delete";
+		a.onclick=function(){deleteTag(this)};
+		a.appendChild(document.createTextNode("X"));
+		li.appendChild(a);
+
+		ul.appendChild(li);
+
+		if(buttonElement.value=="Edit")
 		{
-				var ul = document.getElementById('bioHazardList');
-				var li = document.createElement("li");
-				li.title="Edit";
-				var span = document.createElement("span");
-				span.onclick=function(){editBiohazardTag(this)};
-				span.id="Bio"+ cnt++;
-				span.setAttribute("name","Biohazards");
-				span.appendChild(document.createTextNode(biohazard));
-				li.appendChild(span);
-				
-				var hidden = document.createElement("input");
-				hidden.type="hidden";
-				hidden.name=span.id+"Status";
-				hidden.id=span.id+"Status";
-				hidden.value="ADD";
-				li.appendChild(hidden);
-					
-				var a = document.createElement("a");
-				a.title="Delete";
-				a.onclick=function(){deleteTag(this)};
-				a.appendChild(document.createTextNode("X"));
-				li.appendChild(a);
-				
-				ul.appendChild(li);
-		
-		}else{
-				editElement.firstChild.nodeValue=biohazard;
-				var hidden = document.getElementById(editElement.id+"Status");
-				if(hidden.value!="ADD")
-				{
-					hidden.value="EDIT";
-				}
-			
-				document.getElementById('addEditBioHazButton').value="Add";
-			}
+			buttonElement.value="Add";
+			editElement.parentNode.parentNode.removeChild(editElement.parentNode);
+		}
 	}
 	document.getElementById('addBioHazardDiv').style.display="none";
 	biohazardCombo.setComboText(defaultTextForBioName);
@@ -187,9 +197,11 @@ function editBiohazardTag(e)
 	var n = e.firstChild.nodeValue.split(" - ");
 	
 	document.getElementById('addEditBioHazButton').value="Edit";
-	biohazardCombo.setComboText(n[1]);
 	typeCombo.setComboText(n[0]);
+	onBiohazardTypeSelected();
+	biohazardCombo.setComboText(n[1]);
 	showAddBioHazardDiv();
+	
 	editElement = e;
 }
 
@@ -227,13 +239,12 @@ function setDefaultText(id,defaultText){
 function createExtIdJSON()
 {
 	var externalIdJSON = new Array();
-	
-	var extIds = document.getElementsByName("ExtIds");	
+	var extIds = externalIDList.getElementsByTagName("span");
 	for(var i=0;i<extIds.length;i++)
 	{
 		var e = extIds[i];
 		var n = e.firstChild.nodeValue.split(" - "); 
-		var id = e.id;
+		var id = e.id.split("_")[1];
 		var status = document.getElementById(e.id+'Status').value;
 		if(status=="ADD")
 		{
@@ -252,26 +263,20 @@ function createExtIdJSON()
 function createBioHazardJSON()
 {
 	var biohazardJSON = new Array();
-	
-	var biohazards = document.getElementsByName("Biohazards");	
+	var biohazards = bioHazardList.getElementsByTagName("span");
 	for(var i=0;i<biohazards.length;i++)
 	{
 		var e = biohazards[i];
 		var n = e.firstChild.nodeValue.split(" - "); 
-		var id = e.id;
+		var id = e.id.split("_")[1];
 		var status = document.getElementById(e.id+'Status').value;
-		if(status=="ADD")
-		{
-			id=null;
-		}
-		biohazardJSON.push({ 
+		biohazardJSON.push({
 			"id"	:id,
 			"type"	:n[0],
 			"name"	:n[1],
 			"status":status
 		});
 	}
-	
 	return biohazardJSON;
 }
 
@@ -291,7 +296,28 @@ function initializeSpecimenPage(biohazardNameJSON)
 	
 	biohazardCombo=new dhtmlXCombo("biohazardSelect","biohazardSelectBox",165);
 	biohazardCombo.setComboText(defaultTextForBioName);
-	typeCombo = dhtmlXComboFromSelect("biohazardType");
+	
+	typeCombo=new dhtmlXCombo({
+	parent	: "biohazardTypeSelect",
+	name	: "biohazardTypeSelectBox",
+	width	: 165,
+	onChange:function(){
+			onBiohazardTypeSelected();
+		}
+	});
 	typeCombo.setComboText(defaultTextForBioType);
-	typeCombo.setSize(165);
+	
+	populateBiohazardTypeOptions();
+}
+
+function getSortedUniqueArrayElements(arr) {
+    arr = arr.sort(function (a, b) { return a*1 - b*1; });
+    var ret = [arr[0]];
+    for (var i = 1; i < arr.length; i++) 
+	{ 
+        if (arr[i-1] !== arr[i]) {
+            ret.push(arr[i]);
+        }
+    }
+    return ret;
 }
