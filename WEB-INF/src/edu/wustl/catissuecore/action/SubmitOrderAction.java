@@ -79,9 +79,7 @@ public class SubmitOrderAction extends BaseAction
 			dao=(HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
 			OrderStatusDTO orderStatusDTO=orderBizLogic.updateOrder(orderSubmissionDTO,userId,dao);
 			
-			dao.commit();
-			
-			if(orderStatusDTO.getSpecimensWithError().isEmpty())
+			if(orderStatusDTO.getOrderErrorDTOs().isEmpty())
 			{	
 				dao.commit();
 				orderBizLogic.sendOrderUpdateEmail(
@@ -89,16 +87,17 @@ public class SubmitOrderAction extends BaseAction
 						orderSubmissionDTO.getRequestorEmail(),
 						sessionDataBean.getUserName(),
 						orderSubmissionDTO.getOrderName(),
-						sessionDataBean.getLastName()+ sessionDataBean.getFirstName(),
+						sessionDataBean.getLastName()+","+ sessionDataBean.getFirstName(),
 						orderStatusDTO.getStatus(), request.getRequestURL()	+ "?id=" + orderStatusDTO.getOrderId());
+				response.getWriter().write("Success");
+
 			}
 			else
 			{	
-				for (String error: orderStatusDTO.getSpecimensWithError()) {
-					errors.append(error).append("\n");
-				}
+				String json = gson.toJson(orderStatusDTO);
+				response.getWriter().write(json);
 			}
-			response.getWriter().write("Success");	
+				
 		}
 		catch(Exception exception)
 		{
