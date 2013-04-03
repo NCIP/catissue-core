@@ -52,7 +52,6 @@
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
-             
             update="true"
             insert="true"
             column="SPECIMEN_ID"

@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
+import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -236,11 +237,10 @@ public class Biohazard extends AbstractDomainObject
 		}
 		catch (final Exception excp)
 		{
-			Biohazard.logger.error(excp.getMessage(),excp);
-			excp.printStackTrace() ;
-			throw new AssignDataException(
-			ErrorKey.getErrorKey("assign.data.error"), 
-			null, "Biohazard.java :");
+			Biohazard.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
+			throw new AssignDataException(ErrorKey.getErrorKey("assign.data.error"), null,
+					"Biohazard.java :");
 		}
 	}
 
@@ -282,4 +282,98 @@ public class Biohazard extends AbstractDomainObject
 		return "EI{" + "id " + this.id + "\t" + "Type " + this.type + "\t" + "Name " + this.name
 				+ "}";
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+
+		if (obj instanceof BiohazardDTO)
+		{
+			BiohazardDTO biohazardDTO = (BiohazardDTO) obj;
+			if (biohazardDTO.getId() == null)
+				return false;
+			else if (this.id.compareTo(biohazardDTO.getId()) == 0)
+				return true;
+			else
+				return false;
+		}
+		else if (!(obj instanceof Biohazard))
+		{
+			return false;
+		}
+
+		Biohazard other = (Biohazard) obj;
+		if (id == null)
+		{
+			if (other.id != null)
+			{
+				return false;
+			}
+		}
+		else if (!id.equals(other.id))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	//	/* (non-Javadoc)
+	//	 * @see java.lang.Object#hashCode()
+	//	 */
+	//	@Override
+	//	public int hashCode()
+	//	{
+	//		int hash = 7;
+	//		hash = 89 * hash + (this.id != null ? this.id.hashCode() : 0);
+	//		return hash;
+	//	}
+	//
+	//	/* (non-Javadoc)
+	//	 * @see java.lang.Object#equals(java.lang.Object)
+	//	 */
+	//	@Override
+	//	public boolean equals(Object obj)
+	//	{
+	//		if (obj == null)
+	//			return false;
+	//		else if (obj instanceof BiohazardDTO)
+	//		{
+	//			BiohazardDTO biohazardDTO = (BiohazardDTO) obj;
+	//			if (biohazardDTO.getId() == null)
+	//				return false;
+	//			else if (this.id.compareTo(biohazardDTO.getId()) == 0)
+	//				return true;
+	//		}
+	//		else
+	//		{
+	//			Biohazard biohazard = (Biohazard) obj;
+	//			if (this.id == biohazard.getId())
+	//				return true;
+	//		}
+	//		return false;
+	//	}
+
 }

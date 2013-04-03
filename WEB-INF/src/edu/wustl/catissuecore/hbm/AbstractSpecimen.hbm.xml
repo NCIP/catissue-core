@@ -179,8 +179,8 @@
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
             fetch="join" lazy="false"
-            inverse="true"
-            cascade="save-update"
+            inverse="false"
+            cascade="all-delete-orphan"
             sort="unsorted"
         >
 

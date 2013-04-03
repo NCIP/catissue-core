@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -181,4 +182,120 @@ public class ExternalIdentifier extends AbstractDomainObject
 		this.name = externalIdentifier.getName();
 		this.value = externalIdentifier.getValue();
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (obj instanceof ExternalIdentifierDTO)
+		{
+			ExternalIdentifierDTO externalIdentifierDTO = (ExternalIdentifierDTO) obj;
+			if (externalIdentifierDTO.getId() == null)
+				return false;
+			else if (this.id.compareTo(externalIdentifierDTO.getId()) == 0)
+				return true;
+			else
+				return false;
+		}
+		else if (!(obj instanceof ExternalIdentifier))
+		{
+			return false;
+		}
+		ExternalIdentifier other = (ExternalIdentifier) obj;
+		if (id == null)
+		{
+			if (other.id != null)
+			{
+				return false;
+			}
+		}
+		else if (!id.equals(other.id))
+		{
+			return false;
+		}
+		if (name == null)
+		{
+			if (other.name != null)
+			{
+				return false;
+			}
+		}
+		else if (!name.equals(other.name))
+		{
+			return false;
+		}
+		if (value == null)
+		{
+			if (other.value != null)
+			{
+				return false;
+			}
+		}
+		else if (!value.equals(other.value))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	//	/* (non-Javadoc)
+	//	 * @see java.lang.Object#hashCode()
+	//	 */
+	//	@Override
+	//	public int hashCode()
+	//	{
+	//		int hash = 7;
+	//		hash = 89 * hash + (this.id != null ? this.id.hashCode() : 0);
+	//		return hash;
+	//	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	//	@Override
+	//	public boolean equals(Object obj)
+	//	{
+	//		if (obj == null)
+	//			return false;
+	//		else if (obj instanceof ExternalIdentifierDTO)
+	//		{
+	//			ExternalIdentifierDTO externalIdentifierDTO = (ExternalIdentifierDTO) obj;
+	//			if (externalIdentifierDTO.getId() == null)
+	//				return false;
+	//			else if (this.id.compareTo(externalIdentifierDTO.getId()) == 0)
+	//				return true;
+	//		}
+	//		else
+	//		{
+	//			ExternalIdentifier externalIdentifier = (ExternalIdentifier) obj;
+	//			if (this.id == externalIdentifier.getId())
+	//				return true;
+	//		}
+	//		return false;
+	//	}
+
 }
