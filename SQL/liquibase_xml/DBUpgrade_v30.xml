@@ -111,5 +111,12 @@
 	<changeSet id="8" author="catissue" runOnChange="true" dbms="mysql">
 		<modifyDataType tableName="JOB_DETAILS" columnName="LOG_FILE" newDataType="${longblob.type}"/>
 	</changeSet>
+
+	<changeSet id="9" author="dpatil" runOnChange="true">
+	<addForeignKeyConstraint constraintName="FK_CATISSUE_USER_CSMID"
+			baseTableName="CATISSUE_USER" baseColumnNames="CSM_USER_ID"
+			referencedTableName="CSM_USER"
+                        referencedColumnNames="USER_ID" /> 
+	</changeSet>
 	
 </databaseChangeLog>         
