@@ -127,6 +127,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 				// );
 			}
 		}
+		request.setAttribute("cpId",request.getParameter("cpId"));
+		request.setAttribute("cprId",request.getParameter("cprId"));
+		
 
 		return mapping.findForward( request.getParameter( "pageOf" ) );
 	}

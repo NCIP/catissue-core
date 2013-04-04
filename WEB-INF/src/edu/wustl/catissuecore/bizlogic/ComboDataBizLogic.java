@@ -195,15 +195,17 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic {
 	
 	public List<NameValueBean> getClinicalDiagnosisList(String query, int listSize,JDBCDAO dao) throws DAOException, BizLogicException{
 		List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
-		String selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and value like ? limit  ?";
+		String selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) like ? limit  ?";
 		List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
-		parameters.add(new ColumnValueBean(query+"%"));
+		parameters.add(new ColumnValueBean(query.toLowerCase()+"%"));
 		parameters.add(new ColumnValueBean(listSize));
 		List clinicalDiagnosisValues = dao.executeQuery(selectCDQuery, parameters);
 		getClinicalDiagnosisBean(clinicalDiagnosisList, clinicalDiagnosisValues,true);
 		if(clinicalDiagnosisValues.size()<listSize){
+			selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) not like ? and lower(value) like ?  limit  ?";
 			parameters = new ArrayList<ColumnValueBean>(); 
-			parameters.add(new ColumnValueBean("%"+query+"%"));
+			parameters.add(new ColumnValueBean(query.toLowerCase()+"%"));
+			parameters.add(new ColumnValueBean("%"+query.toLowerCase()+"%"));
 			parameters.add(new ColumnValueBean((listSize-clinicalDiagnosisValues.size())));
 			clinicalDiagnosisValues = dao.executeQuery(selectCDQuery, parameters);
 			getClinicalDiagnosisBean(clinicalDiagnosisList, clinicalDiagnosisValues,true);

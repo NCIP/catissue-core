@@ -230,7 +230,7 @@ public class NewSpecimenAction extends CatissueBaseAction
 				request.setAttribute(Constants.SELECTED_TAB, tabSelected);
 			}
 			final String scg_id = String.valueOf(specimenForm.getSpecimenCollectionGroupId());
-			final SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSCGObj(scg_id,
+			final SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSCGObj(Long.parseLong(specimenForm.getSpecimenCollectionGroupId()),
 					dao);
 			// PHI Data
 			String initialURLValue = "";

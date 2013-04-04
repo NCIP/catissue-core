@@ -254,9 +254,9 @@ public class TreeDataBizLogic extends DefaultBizLogic
 			/*
 			 * This query will return child count of parent containers.
 			 */
-			final String imediateChildCountQuery = "SELECT PARENT_CONTAINER_ID,COUNT(*) FROM CATISSUE_CONTAINER_POSITION GROUP BY "
+			final String imediateChildCountQuery = "SELECT PARENT_CONTAINER_ID,COUNT(*) FROM CATISSUE_CONTAINER_POSITION where CONTAINER_ID is not null GROUP BY "
 					+ "PARENT_CONTAINER_ID HAVING PARENT_CONTAINER_ID IN ("
-					+ parentContainerIdsBuffer.toString() + ")";
+					+ parentContainerIdsBuffer.toString() + ") ";
 			final List result = dao.executeQuery(imediateChildCountQuery);
 			final Map<Long, Long> childCountMap = new LinkedHashMap<Long, Long>();
 			final Iterator itr = result.iterator();

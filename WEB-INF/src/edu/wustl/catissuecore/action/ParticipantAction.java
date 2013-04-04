@@ -445,7 +445,7 @@ public class ParticipantAction extends CatissueBaseAction {
 				AppUtility.closeDAOSession(dao);
 			}  
 		}
-			
+		request.setAttribute("cprId",participantForm.getCprId() );
 		
 		request.setAttribute(
 				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,

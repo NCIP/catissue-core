@@ -47,6 +47,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.SCGEventPointDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
@@ -3677,5 +3678,54 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		return scgEventDtolist;
 	}
 
+	
+	public  void updateScgConsentStatus(Long scgId,List<ConsentTierDTO> consentTierDtoList, DAO dao) throws BizLogicException
+	{
+		try {
+			 final String SELECT_CONSENT_RESPONSE =  "select  consentTierStatus " +
+						" from SpecimenCollectionGroup scg join scg.consentTierStatusCollection consentTierStatus " +
+						" join consentTierStatus.consentTier consentTier" +
+						" where scg.id = ? and consentTier.id = ?" ;
+			
+			Iterator<ConsentTierDTO> consentTierDtoIte = consentTierDtoList.iterator();
+			while(consentTierDtoIte.hasNext()){
+				ConsentTierDTO consentTierDto= consentTierDtoIte.next();
+				
+				List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+				parameters.add(new ColumnValueBean(scgId));
+				parameters.add(new ColumnValueBean(consentTierDto.getId()));
+				Collection consentStatus = dao.executeQuery(SELECT_CONSENT_RESPONSE,parameters);
+				Iterator ite =  consentStatus.iterator();
+				if(ite.hasNext()){
+					ConsentTierStatus statusObj = (ConsentTierStatus) ite.next();
+					statusObj.setStatus(consentTierDto.getStatus());
+					dao.update(statusObj);
+				}
+				
+			}
+		
+			List<Long> speciemnIdList = getSpecimenIdList(scgId,dao);
+			Iterator<Long> specimenIdItr = speciemnIdList.iterator();  
+			NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+			while(specimenIdItr.hasNext() )
+			{
+				specimenBizLogic.updateSpecimenConsentStatus(specimenIdItr.next(),consentTierDtoList  , dao);
+			}
+			
+		} catch (DAOException e) {
+			throw this.getBizLogicException(e,e.getErrorKeyAsString(), e.getFormattedMessage());
+		}
+	}
+	
+	private List<Long> getSpecimenIdList(Long scgId,DAO dao) throws DAOException{
+		 final String SELECT_SPECIMEN_ID =  "select  specimen.id " +
+				" from Specimen specimen join specimen.specimenCollectionGroup scg " +
+				" where scg.id = ?" ;
+		 List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+		 parameters.add(new ColumnValueBean(scgId));
+		 List<Long> specimenIdList   = dao.executeQuery(SELECT_SPECIMEN_ID,parameters);
+		  return specimenIdList;
+		 
+	}
 }
 

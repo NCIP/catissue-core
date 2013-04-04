@@ -628,6 +628,12 @@ PUBLIC
 			<forward name="success" path=".catissuecore.orderingConsentsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
+		
+		<action path="/FetchConsents"
+			type="edu.wustl.catissuecore.action.FetchConsentsAction"
+			scope="request">
+			<forward name="success" path=".catissuecore.ViewSpecimenConsents" />
+		</action>
 
 		<!-- Ordering Action ends-->
 

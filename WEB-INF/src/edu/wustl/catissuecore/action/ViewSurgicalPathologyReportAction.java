@@ -83,11 +83,18 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String reportIdStr = request.getParameter("reportId");
 		// If reportId is null in request then retrieved from form. For
 		// Review/Quarantine event param. Bug id: 9260
-		if (reportIdStr == null)
+		if (reportIdStr == null )
 		{
 			reportIdStr = viewSPR.getIdentifiedReportId();
 		}
-		final Long reportId = Long.valueOf(reportIdStr);
+		Long reportId = null;
+		try{
+			if(!reportIdStr.equals(""))
+			 reportId = Long.valueOf(reportIdStr);
+		}catch(Exception ex){
+			reportIdStr = viewSPR.getIdentifiedReportId();
+			reportId = Long.valueOf(reportIdStr);
+		}
 
 		Long sprId = null;
 		if (strId != null)
@@ -194,6 +201,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		{
 			pageOf = "gridViewReport";
 		}
+		request.setAttribute("cpId",request.getParameter("cpId"));
+		request.setAttribute("cprId",request.getParameter("cprId"));
 		return mapping.findForward(pageOf);
 
 	}

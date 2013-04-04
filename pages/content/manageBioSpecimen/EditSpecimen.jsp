@@ -37,25 +37,17 @@
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
 								
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-	 <tr>
-		<td class="td_color_bfdcf3">
-			<table border="0" cellpadding="0" cellspacing="0">
-		      <tr>
-				<td class="td_table_head">
-					<span class="wh_ar_b">
-						<bean:message key="app.newSpecimen" />
-					</span>
-				</td>
-		        <td>
-					<img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Specimen" width="31" height="24" hspace="0" vspace="0" />
-				</td>
-		      </tr>
-		    </table>
-		</td>
-	  </tr>
+								<html:hidden name="specimenDTO" property="parentSpecimenId"/>
+								
+								<html:hidden name="specimenDTO" property="id" styleId="id"/>
+								
+								<html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
+								
+<script>
+	
+</script><table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
-	  <tr>
+	<tr>
 		<td class="tablepadding">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
@@ -69,17 +61,12 @@
 				</td>
 				<td valign="bottom">
 					<a href="#">
-						<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked('');" border="0"></a>
-				</td>
-				<td valign="bottom">
-					<a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('','');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations('',document.forms[0].id.value,'','','')">
+						<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent('${specimenDTO.id}');" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('${identifiedReportId}','pageOfNewSpecimenCPQuery','${specimenDTO.id}');"></a></td>
+						<td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewSpecimenAnnotation('${specimenRecordEntryEntityId}','${specimenDTO.id}','${entityName}')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" >
+							<a id="consentViewTab" href="#" onClick="newConsentTab('${specimenDTO.id}','${identifiedReportId}','${specimenRecordEntryEntityId}','${entityName}')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
 					</a>
 				</td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3" >
-						<a id="consentViewTab" href="#" onClick="consentTab('')">
-							<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
-						</a>
-				</td>
+				
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
 				</td>
 				</tr>
@@ -628,6 +615,7 @@ function updateHelpURL()
 	
 	return URL;
 }
+
 
 function loadDHTMLXWindowForTransferEvent()
 {

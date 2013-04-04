@@ -93,9 +93,29 @@ function newSpecimenTab()
 	switchToNewTab("newSpecimenTab");
 }
 
-function newConsentTab()
+
+function viewSpecimenAnnotation(entityId,specimenId,staticEntityName){
+
+	var action="DisplayAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
+	document.location=action;
+
+}
+
+	function showEvent(specimenId)
 {
-	switchToNewTab("newConsentTab");
+		var formName = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
+		document.location=formName;
+		
+}
+
+
+function newConsentTab(specimenId,ideReportId,entityid,entityname)
+{
+
+	var action="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+ideReportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityid+"&staticEntityName="+entityname;
+	document.forms[0].action=action;
+	document.forms[0].submit();
+	//switchToNewTab("newConsentTab");
 }
 
 function showConsents(tab,ConsentTierCounter)
@@ -113,7 +133,7 @@ function showConsents(tab,ConsentTierCounter)
 
 // Consent Tracking Module Virender mehta
 //View SPR Vijay pande
-function viewSPR(reportIdValue,pageOf)
+function viewSPR(reportIdValue,pageOf,specimenId)
 {
 	var reportId=reportIdValue;
 	if(reportId==null || reportId==-1)
@@ -126,9 +146,10 @@ function viewSPR(reportIdValue,pageOf)
 	}
 	else
 	{
-		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOf+"&reportId="+reportId;
-		document.forms[0].action=action;
-		document.forms[0].submit();
+		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOf+"&reportId="+reportId+"&id="+specimenId;
+		document.location=action;
+	
+		//document.forms[0].submit();
 	}
 }
 

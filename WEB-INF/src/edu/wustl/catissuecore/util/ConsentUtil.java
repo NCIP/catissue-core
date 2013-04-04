@@ -655,7 +655,7 @@ public final class ConsentUtil
 		consentWitnessList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		Collection userCollection = null;
 		if(collectionProtocol.getId()!= null)
-		{ 
+		{
 			userCollection = (Collection)bizLogic.retrieveAttribute(CollectionProtocol.class.getName(),collectionProtocol.getId(), "elements(coordinatorCollection)");
 		}
 		

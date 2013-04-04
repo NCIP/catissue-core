@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
@@ -5013,6 +5014,34 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
+	
+	/**
+	 * return the specimen object.
+	 *
+	 * @param specimenID : specimenID
+	 * @param dao : dao
+	 *
+	 * @return Specimen
+	 *
+	 * @throws BizLogicException : BizLogicException
+	 */
+	public Specimen getSpecimenObj(Long specimenID, DAO dao) throws BizLogicException
+	{
+		try
+		{
+			final Object object = dao.retrieveById(Specimen.class.getName(),specimenID);// new
+			if (object == null)
+			{
+				throw this.getBizLogicException(null, "no.spec.returned", "");
+			}
+			return (Specimen) object;
+		}
+		catch (final DAOException exp)
+		{
+			LOGGER.error(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+		}
+	}
 
 	/**
 	 * Check parent specimen disposal.
@@ -6034,6 +6063,53 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return list;
 	}
+		
+		public  void updateSpecimenConsentStatus(Long specimenId,List<ConsentTierDTO> consentTierDtoList, DAO dao) throws BizLogicException
+		{
+			try {
+				 final String SELECT_CONSENT_RESPONSE =  "select  consentTierStatus " +
+							" from Specimen specimen join specimen.consentTierStatusCollection consentTierStatus " +
+							" join consentTierStatus.consentTier consentTier" +
+							" where specimen.id = ? and consentTier.id = ?" ;
+				
+				Iterator<ConsentTierDTO> consentTierDtoIte = consentTierDtoList.iterator();
+				while(consentTierDtoIte.hasNext()){
+					ConsentTierDTO consentTierDto= consentTierDtoIte.next();
+					
+					List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+					parameters.add(new ColumnValueBean(specimenId));
+					parameters.add(new ColumnValueBean(consentTierDto.getId()));
+					Collection consentStatus = dao.executeQuery(SELECT_CONSENT_RESPONSE,parameters);
+					Iterator ite =  consentStatus.iterator();
+					if(ite.hasNext()){
+						ConsentTierStatus statusObj = (ConsentTierStatus) ite.next();
+						statusObj.setStatus(consentTierDto.getStatus());
+						dao.update(statusObj);
+					}
+					
+				}
+			
+				List<Long> childSpecimensId = getChildSpecimenIdLis(specimenId.longValue(),dao);
+				Iterator<Long> childSpeciemnIdItr = childSpecimensId.iterator();  
+				while(childSpeciemnIdItr.hasNext() )
+				{
+					
+					updateSpecimenConsentStatus(childSpeciemnIdItr.next() ,consentTierDtoList  , dao);
+				}
+				
+			} catch (DAOException e) {
+				throw this.getBizLogicException(e,e.getErrorKeyAsString(), e.getFormattedMessage());
+			}
+		}
+		
+		public List<Long> getChildSpecimenIdLis(Long specimenId,DAO dao) throws DAOException{
+			String SELECT_CHILD_SPECIMEN_ID = "select specimen.id from Specimen specimen where specimen.parentSpecimen.id = ?";
+			 List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+			 parameters.add(new ColumnValueBean(specimenId));
+			 List<Long> specimenIdList   = dao.executeQuery(SELECT_CHILD_SPECIMEN_ID,parameters);
+			 return specimenIdList;
+			 
+		}
 
 	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier)
 	{
@@ -6236,5 +6312,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToClose", params);
 	}
+	public Long getAssociatedIdentifiedReportId(Long specimenId, DAO dao)
+			throws ApplicationException
+	{
+		Long valueToReturn = null;
+		final String hqlString = "select scg.identifiedSurgicalPathologyReport.id "
+				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, "
+				+ " edu.wustl.catissuecore.domain.Specimen as specimen" + " where specimen.id = "
+				+ specimenId + " and specimen.id in elements(scg.specimenCollection)";
+		final List reportIDList = dao.executeQuery(hqlString);
+		if (reportIDList != null && !reportIDList.isEmpty())
+		{
+			valueToReturn = ((Long) reportIDList.get(0));
+		}
+		return valueToReturn;
+	}
+
 	
 }

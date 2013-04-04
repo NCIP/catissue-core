@@ -1672,7 +1672,7 @@ public class AppUtility {
 	 *            Selected SpecimenCollectionGroup ID
 	 * @return specimenCollectionGroupObject
 	 */
-	public static SpecimenCollectionGroup getSCGObj(final String scg_id,
+	public static SpecimenCollectionGroup getSCGObj(Long scg_id,
 			final DAO dao) throws ApplicationException {
 		final Object object = dao.retrieveById(SpecimenCollectionGroup.class
 				.getName(), Long.valueOf(scg_id));

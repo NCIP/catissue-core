@@ -12,6 +12,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +28,7 @@ import java.util.Set;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -35,6 +37,8 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.ConsentResponseDto;
+import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.MedicalRecordNumberDTO;
 import edu.wustl.catissuecore.dto.ParticipantDTO;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -54,6 +58,7 @@ import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.participant.bizlogic.CommonParticipantBizlogic;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
@@ -1587,7 +1592,76 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		return participantId;
 	}
-
+	
+//	private String validateConsentField(ConsentsDto consentDto){
+//		final Validator validator = new Validator();
+//		String errorMsg = "";
+//		if(!Validator.isEmpty(consentDto.getConsentDate())){
+//			errorMsg = validator.validateDate(consentDto.getConsentDate(), false);
+//			if(!errorMsg.equals("")){
+//				
+//			}
+//		}
+//		return errorMsg;
+//	}
+	
+	public String updateConsentResponse(ConsentResponseDto consentDto,DAO dao) throws BizLogicException{
+		String returnStr = "";
+		try {
+//			returnStr = validateConsentField(consentDto);
+			if(!returnStr.equals("")){
+				throw new BizLogicException(null,null,ApplicationProperties.getValue(returnStr));
+			}
+			final String SELECT_CONSENT_RESPONSE =  "select  consentTierResponse " +
+						" from  CollectionProtocolRegistration cpr   " +
+						" join cpr.consentTierResponseCollection consentTierResponse  join consentTierResponse.consentTier consentTier " +
+						" where cpr.id = ? and consentTier.id = ?" ;
+			
+			Iterator<ConsentTierDTO> consentTierDtoIte = consentDto.getConsentTierList().iterator();
+			Set<ConsentTierResponse> consentTierResponseSet = new HashSet<ConsentTierResponse>();
+			List<ConsentTierDTO> consentTierDTOlist = new ArrayList<ConsentTierDTO>();
+			
+			while(consentTierDtoIte.hasNext()){
+				ConsentTierDTO consentTierDto= consentTierDtoIte.next();
+				List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+				parameters.add(new ColumnValueBean(consentDto.getConsentLevelId()));
+				parameters.add(new ColumnValueBean(consentTierDto.getId()));
+				Collection consentResponse = dao.executeQuery(SELECT_CONSENT_RESPONSE,parameters);
+				Iterator ite =  consentResponse.iterator();
+				if(ite.hasNext()){
+					ConsentTierResponse responseObj = (ConsentTierResponse)ite.next();
+					responseObj.setResponse(consentTierDto.getParticipantResponses());
+					//dao.update(responseObj);
+					consentTierResponseSet.add(responseObj);
+				}
+				consentTierDto.setStatus(consentTierDto.getParticipantResponses());
+				consentTierDTOlist.add(consentTierDto);
+				
+			}
+			CollectionProtocolRegistration cprObj = (CollectionProtocolRegistration)dao.retrieveById(CollectionProtocolRegistration.class.getName(), consentDto.getConsentLevelId());
+			cprObj.setConsentTierResponseCollection(consentTierResponseSet);
+			SimpleDateFormat dateFormat= new SimpleDateFormat(CommonServiceLocator.getInstance().getDatePattern(),CommonServiceLocator
+					.getInstance().getDefaultLocale());
+		
+			cprObj.setConsentSignatureDate( consentDto.getConsentDate());
+						
+			cprObj.setSignedConsentDocumentURL(consentDto.getConsentUrl());
+			User witness = new User();
+			witness.setId(consentDto.getWitnessId());
+			cprObj.setConsentWitness(witness);
+			dao.update(cprObj);
+			SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
+			Iterator<SpecimenCollectionGroup> scgIterator = cprObj.getSpecimenCollectionGroupCollection().iterator();
+			while(scgIterator.hasNext()){
+				SpecimenCollectionGroup scgObj = scgIterator.next();
+				scgBizLogic.updateScgConsentStatus(scgObj.getId(), consentTierDTOlist, dao);
+			}
+			
+		} catch (DAOException e) {
+			throw new BizLogicException(e.getErrorKey(),e,e.getMsgValues());
+		}
+		return returnStr;
+	}
 	/**
 	 * This method will check whether the participant with given id exists or
 	 * not.

@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.json.JSONException;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
+import edu.wustl.catissuecore.bizlogic.ConsentTrackingBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
@@ -30,6 +37,8 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.dto.ConsentResponseDto;
+import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -654,6 +663,41 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 
 			throw new ApplicationException(null,null,e.getMessage());
 		}
+		return null;
+	}
+	
+	public ActionForward updateConsentTierStatus(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		Gson gson = new GsonBuilder().setDateFormat(ApplicationProperties.getValue("date.pattern")).create();
+		//Gson gson = new Gson();
+		String consentTierListJSON = request.getParameter("dataJSON");
+		ConsentResponseDto consentsDto = gson.fromJson(request.getParameter("consentDto"),ConsentResponseDto.class);
+		Type listType = new TypeToken<ArrayList<ConsentTierDTO>>() {}.getType();
+		List<ConsentTierDTO> ConsentTierDtoList = gson.fromJson(consentTierListJSON, listType);
+		ConsentTrackingBizLogic consentTrackingBizLogic = new ConsentTrackingBizLogic();
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		DAO dao = null;
+		dao = AppUtility.openDAOSession(sessionDataBean);
+		consentsDto.setConsentTierList(ConsentTierDtoList);
+		 HashMap<String,String> returnMap = new HashMap<String,String>();
+		String msg = "";
+		String successString = "success";
+		try{
+			consentTrackingBizLogic.updateConsentTier(consentsDto, dao);
+			returnMap.put("msg","");
+			returnMap.put("success" , "success");
+		}catch(ApplicationException ex){
+			returnMap.put("msg",ex.getMsgValues());
+			returnMap.put("success" , "failure");
+		}
+		finally{
+			dao.commit();
+			AppUtility.closeDAOSession(dao);
+		}
+		response.setContentType("application/json");
+		response.getWriter().write(gson.toJson(returnMap));
+		
 		return null;
 	}
 

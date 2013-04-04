@@ -75,23 +75,21 @@ function updateHelpURL()
 
 <script>
 
-function showConsents()
+
+	function newConsentTab(levelId)
 {
-	<%
-		if(consentTierCounter.equals("0"))			
-		{
-	%>
-			alert("No consents available for selected Specimen Collection Group");		
-	<%
-		}
-		else
-		{
-	%>
-			addNewAction(<%= consentTab %>)			
-	<%
-		}
-	%>
+	var reportId='${identifiedReportId}';
+	var action="FetchConsents.do?consentLevelId="+levelId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId=${entityId}&staticEntityName=${staticEntityName}&pageof=<%=pageOf%>";
+	document.location=action;
+	
+	//switchToNewTab("newConsentTab");
 }
+
+function viewSpecimen(){
+		action = "QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id=<%=specimenIdentifier%>" ;
+		document.location=action;
+	}
+	
 function showEvent()
 {
 		var id = <%=specimenIdentifier%>;
@@ -139,11 +137,9 @@ function showEvent()
 		 <tr>
     <td class="tablepadding">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		
+	
 			<tr>
-				<td class="td_tab_bg" >
-					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1" border="0"></td>
-				<td valign="bottom" onclick="addNewAction(<%= specimenPath %>)">
+				<td valign="bottom" onclick="viewSpecimen()">
 					<html:link styleId="specimenDetailsTab" href="#" >
 					<img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details"  width="126" height="22" border="0"></html:link></td>
 				<td valign="bottom">
@@ -156,8 +152,8 @@ function showEvent()
 					<html:link href="#">
 					<img src="images/uIEnhancementImages/tab_view_annotation1.gif" alt="View Annotation" width="116" height="22" border="0" ></html:link></td>
 				<td align="left" valign="bottom" class="td_color_bfdcf3" >
-					<html:link styleId="consentViewTab" href="#" onclick="showConsents()">
-					<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></html:link></td>
+					<a href="#" onclick="newConsentTab(<%=specimenIdentifier%>)">
+					<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
 					</td>
 			</tr>

@@ -131,10 +131,15 @@ function editSCG()
 
 		function goToConsentPage()
 		{
-			var tempId=document.forms[0].id.value;
+			/*var tempId=document.forms[0].id.value;
 			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId+"&tab=consent";
 			document.forms[0].action=action;
+			document.forms[0].submit();*/
+			var consentLevelId = '<%=request.getParameter("id")%>';
+			var action="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId=${entityId}&staticEntityName=${staticEntityName}";
+			document.forms[0].action=action;
 			document.forms[0].submit();
+		//switchToNewTab("newConsentTab");
 		}
 </script>
 

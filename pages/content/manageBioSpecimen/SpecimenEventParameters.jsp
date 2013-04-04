@@ -189,6 +189,20 @@ function mdResDetector()
 //	alert(frmHt);
 	document.getElementById("newEventFrame").height=frmHt+" px"	;
 }
+
+function newConsentTab(levelId)
+{
+	var ideReportId = '${identifiedReportId}';;
+	var action="FetchConsents.do?consentLevelId="+levelId+"&consentLevel=specimen&reportId="+ideReportId+"&pageof=pageOfNewSpecimenCPQuery&entityId=<%=specimenEntityId%>&staticEntityName=<%=staticEntityName%>&pageof=<%=pageOf%>";
+	document.location=action;
+	//switchToNewTab("newConsentTab");
+}
+
+function viewSpecimen(){
+		action = "QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id=<%=specimenIdentifier%>" ;
+		document.location=action;
+	}
+
 window.onresize = function() { mdResDetector(); }
 //window.onload = function() { adjFrmHt('test', .1,slope);}
 //window.onresize = function() { adjFrmHt('test', .1,slope); }
@@ -208,7 +222,7 @@ window.onresize = function() { mdResDetector(); }
 							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
 						</td>
 						<td valign="bottom">
-							<a href="#" onclick="addNewAction(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details" width="126" height="22" border="0"></a>
+							<a href="#" onclick="viewSpecimen(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details" width="126" height="22" border="0"></a>
 						</td>
 						<td valign="bottom">
 							<img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22">
@@ -220,7 +234,7 @@ window.onresize = function() { mdResDetector(); }
 							<a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0"></a>
 						</td>
 						<td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a href="#" onClick="addNewAction(<%= consentTab %>)" id="consentTab"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0"></a>
+							<a href="#" onClick="newConsentTab('<%=specimenIdentifier%>')" id="consentTab"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0"></a>
 						</td>
 						<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 					</tr>

@@ -125,7 +125,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
 			request.setAttribute("clinicalDiagnosis", specimenCollectionGroupForm
 					.getClinicalDiagnosis());
-			specimenCollectionGroupForm.setClinicalDiagnosis(test);
+			//specimenCollectionGroupForm.setClinicalDiagnosis(test);
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final IBizLogic bizLogicObj = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			LOGGER.debug("SCGA : " + specimenCollectionGroupForm.getId());
@@ -305,7 +305,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				{
 					final String scgID = String.valueOf(specimenCollectionGroupForm.getId());
 					final SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSCGObj(
-							scgID, dao);
+							specimenCollectionGroupForm.getId(), dao);
 					// List added for grid
 					final List specimenDetails = new ArrayList();
 					this.getSpecimenDetails(specimenCollectionGroup, specimenDetails, dao);

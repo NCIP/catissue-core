@@ -225,7 +225,7 @@
 		}
 		
 		//View SPR Vijay pande
-		function viewSPR(reportId1,pageOf)
+		function viewSPR(reportId1,pageOf,cpId,cprId)
 		{
 			var reportId=reportId1;
 			if(reportId==null || reportId==-1)
@@ -238,7 +238,8 @@
 			}
 			else
 			{
-		    	var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOf+"&reportId="+reportId;
+				//var cpId = document.getElementsByName("cpId")[0].value;
+				var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOf+"&reportId="+reportId+"&cpId="+cpId+"&cprId="+cprId;
 				document.forms[0].action=action;
 				document.forms[0].submit();
 			}

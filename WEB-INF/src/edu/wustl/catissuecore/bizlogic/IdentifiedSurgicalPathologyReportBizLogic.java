@@ -382,6 +382,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 		try {
 			IdentifiedSurgicalPathologyReport report = getReportById(reportId);
 			dao = AppUtility.openDAOSession(sessionDataBean);
+			dao.delete(report.getFileContent());
 			dao.delete(report);
 			dao.commit();
 		}

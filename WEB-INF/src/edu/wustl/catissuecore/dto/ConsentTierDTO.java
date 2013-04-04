@@ -6,7 +6,15 @@ public class ConsentTierDTO
 	private String consentStatment;
     private String status;
     private Long id;
+	private String participantResponses;
 	
+	
+	public String getParticipantResponses() {
+		return participantResponses;
+	}
+	public void setParticipantResponses(String participantResponses) {
+		this.participantResponses = participantResponses;
+	}
 	public String getConsentStatment() {
 		return consentStatment;
 	}

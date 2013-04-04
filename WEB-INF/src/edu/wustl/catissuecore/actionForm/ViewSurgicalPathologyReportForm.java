@@ -545,7 +545,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			if(ispr.getFileContent()!=null){
 				this.hasUploadedReport = true;
 				this.identifiedReportTextContent = Constants.UPLOADED_REPORT_MSG;
-				uploadedFileName = ispr.getFileContent().getData();
+				uploadedFileName = ispr.getFileContent().getData().split("_")[1];
 			}
 			
 		}
@@ -612,7 +612,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	@Override
 	public int getFormId()
 	{
-		if (this.getSubmittedFor().equalsIgnoreCase(Constants.QUARANTINE))
+		if (this.getSubmittedFor()!=null && this.getSubmittedFor().equalsIgnoreCase(Constants.QUARANTINE))
 		{
 			return Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}

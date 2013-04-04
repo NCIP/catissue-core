@@ -53,15 +53,24 @@ function showEvent()
 {
 		var id = <%=specimenIdentifier%>;
 
-				<%
-				String formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
-				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-				{
-					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
-				}%>
-				var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";
-				document.forms[0].action=formName;
-				document.forms[0].submit();
+		<%
+		String formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
+		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		{
+			formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
+		}%>
+		var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";
+		document.forms[0].action=formName;
+		document.forms[0].submit();
+}
+
+function newConsentTab(levelId)
+{
+	var ideReportId = document.getElementsByName("identifiedReportId")[0].value;
+	var action="FetchConsents.do?consentLevelId="+levelId+"&consentLevel=specimen&reportId="+ideReportId+"&pageof=pageOfNewSpecimenCPQuery&entityId=<%=specimenEntityId%>&staticEntityName=<%=staticEntityName%>&pageof=<%=pageOf%>";
+	document.location=action;
+	
+	//switchToNewTab("newConsentTab");
 }
 
 
@@ -70,6 +79,8 @@ function showEvent()
 <html:form action="<%=formAction%>">
 
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+		
+	  
 		  <tr>
 			<td class="tablepadding">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -79,7 +90,7 @@ function showEvent()
 		        <td valign="bottom"><a href="#" onclick="showEvent()"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Show Events" border="0" width="56" height="22"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" border="0" alt="View Annotation" width="216" height="22"></td>
 				<td valign="bottom"><a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>,'<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="Consents" width="116" height="22"></a></td>
-				<td valign="bottom"><a href="#" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
+				<td valign="bottom"><a href="#" onClick="newConsentTab('${id}')" id="consentTab">
 					<img src="images/uIEnhancementImages/tab_consents2.gif" border="0" alt="Consents" width="76" height="22"></a></td>
 		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 		</tr>

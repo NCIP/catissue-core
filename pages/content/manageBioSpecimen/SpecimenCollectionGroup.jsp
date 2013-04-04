@@ -169,6 +169,14 @@ function updateHelpURL()
 		var disablePHIView = !isPHIVIEW;	
      </script>
 	<script language="JavaScript">
+	function newConsentTab()
+	{
+		var consentLevelId = document.getElementById("id").value;
+		var action="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId=<%=scgEntityId%>&staticEntityName=<%=staticEntityName%>";
+		document.forms[0].action=action;
+		document.forms[0].submit();
+		//switchToNewTab("newConsentTab");
+	}
 	function makeClinPortalUrl()
 	{
 		var submitButton = document.getElementById("submitOnly");
@@ -228,19 +236,19 @@ function updateHelpURL()
 		window.top.location=clinportalUrlPath1 + "?method=login&path=" + dataString;
 	}
 		
-	function onChangeEvent(element)
+	function onChangeEvent(element,cpID)
 	{
-		var getCPID=document.getElementById('collectionProtocolId');
-		var cpID=getCPID.value;
-		var getID=document.getElementById(element);
-		var index=getID.selectedIndex;
+		//var getCPID=document.getElementById('collectionProtocolId');
+		//var cpID=getCPID.value;
+		//var getID=document.getElementById(element);
+		var index=element.getSelectedText();
 		if(index<0)
 		{
 			alert("Please Select Valid Value");
 		}
 		else
 		{
-			if(element=='collectionProtocolEventId')
+			if(element.name=='collectionProtocolEventId')
 			{
 				var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=true&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
 					"isOnChange=true&cpID="+cpID;
@@ -306,12 +314,12 @@ function updateHelpURL()
 			if('${requestScope.operation}' == "edit")
 			{
 				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection.gif  alt=Add Specimen  Collection group  width=216 height=22 border=0>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=consentPage('<%=form%>','<%=form.getConsentTierCounter()%>')>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=newConsentTab()>"
 			}
 			else if('${requestScope.operation}' == "add")
 			{
 				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_add_scg.gif  alt=Add Specimen  Collection group  width=222 height=22 border=0>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=consentPage('<%=form%>','<%=form.getConsentTierCounter()%>')>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=newConsentTab()>"
 			}
 		}
 		else
@@ -366,7 +374,7 @@ function updateHelpURL()
 			<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 				<td valign="bottom" class="td_color_bfdcf3" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_add_scg.gif" alt="Add Specimen  Collection group"  width="222" height="22" border="0"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage('<%=form%>','<%=form.getConsentTierCounter()%>')"></a></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="newConsentTab()"></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
 			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
@@ -397,7 +405,7 @@ function updateHelpURL()
 				<td valign="bottom" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_edit_collection.gif" alt="Edit Specimen Collection Group" width="216" height="22"  border="0" onclick="specimencollgroup()"></a></td>
 				<td valign="bottom"><a href="#" onClick="viewSPR('<%=reportIdVal%>','<%=pageOf%>')" id="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
 				<td valign="bottom"><a href="#" onClick="showAnnotations('<%=scgEntityId%>','<%=id%>','<%=staticEntityName%>','<%=pageOf%>')" id="showAnnotation"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage('<%=form%>','<%=form.getConsentTierCounter()%>')" id="viewConsent" ></a></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="newConsentTab()" id="viewConsent" ></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
 			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
@@ -427,7 +435,7 @@ function updateHelpURL()
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showAnnotations('<%=scgEntityId%>','<%=id%>','<%=staticEntityName%>','<%=pageOf%>')">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage('<%=form%>','<%=form.getConsentTierCounter()%>')" id="consentTab">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="newConsentTab()" id="consentTab">
 					<bean:message key="consents.consents"/>
 				</td>
 				<td width="300" class="tabMenuSeparator" colspan="1" >&nbsp;</td>

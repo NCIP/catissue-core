@@ -337,12 +337,13 @@ function viewSPR(reportIdValue,pageOfValue)
 		alert("Associated report is under quarantined request! Please contact administrator for further details.");
 	}
 	else */
+	
 		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
 		document.forms[0].action=action;
 		document.forms[0].submit();
 }
 
-function viewSCGSPR(reportIdValue,pageOfValue)
+function viewSCGSPR(reportIdValue,pageOfValue,scgid)
 {
 	var reportId=reportIdValue;
 /*	if(reportId==null || reportId==-1)
@@ -354,7 +355,7 @@ function viewSCGSPR(reportIdValue,pageOfValue)
 		alert("Associated report is under quarantined request! Please contact administrator for further details.");
 	}
 	else */
-		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
+		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId+"&id="+scgid;
 		document.location=action;
 	//	document.forms[0].submit();
 }
