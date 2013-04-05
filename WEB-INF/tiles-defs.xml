@@ -1321,6 +1321,9 @@
 	<definition name=".catissuecore.NoPendingSPRRequest" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/NoPendingSPRRequest.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.ViewSpecimenConsents" path="/pages/content/ConsentTracking/ViewSpecimenConsents.jsp">
+		</definition>
 	<!-- For Admini View -->
 
 	<definition name=".catissuecore.SpecimenCollectionRequirementGroupEditDef" path="/pages/content/common/success.jsp">
