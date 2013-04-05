@@ -111,7 +111,9 @@ var statusId = new Array();
 												  var witness = new dhtmlXCombo("witnessIdCombo","witnessIdCombo","100px");
 												  //response_combo.enableFilteringMode(true);
 												  witness.setSize(200);
-												  witness.setComboValue('${consentsDto.witnessId}');
+												  if('${consentsDto.witnessId}'!=0){
+													witness.setComboValue('${consentsDto.witnessId}');
+												  }
 												 // comboData.push(response_combo);
 												  //statusId.push("${consentTierDTO.consentTierId}");
 											</script>
@@ -184,11 +186,11 @@ var statusId = new Array();
 									</td>
 									<%-- Get Consents # --%>	
 									<td class='black_ar' width="31%">
-									${consentTierDTO.consentTierStatement}
+									${consentTierDTO.consentStatment}
 									</td>
 									<td class='black_ar' width="31%">
 									<logic:equal name="consentLevel" value="participant">
-										<select name="participantResponse"  id="${consentTierDTO.consentTierId}">
+										<select name="participantResponse"  id="${consentTierDTO.id}">
 											<logic:iterate id="specimenResponseList" name="specimenResponseList">
 												<logic:notEqual name="specimenResponseList"  property='name' value="${consentTierDTO.participantResponses}">
 													<option value="<bean:write name='specimenResponseList' property='value'/>"><bean:write name="specimenResponseList" property="name"/></option>
@@ -200,12 +202,12 @@ var statusId = new Array();
 										</select>
 										<script>
 										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-										  var response_combo = new dhtmlXCombo("${consentTierDTO.consentTierId}","${consentTierDTO.consentTierId}","100px");
+										  var response_combo = new dhtmlXCombo("${consentTierDTO.id}","${consentTierDTO.id}","100px");
 										  //response_combo.enableFilteringMode(true);
 										  response_combo.setSize(200);
 										  response_combo.setComboValue('${consentTierDTO.participantResponses}');
 										  comboData.push(response_combo);
-										  statusId.push("${consentTierDTO.consentTierId}");
+										  statusId.push("${consentTierDTO.id}");
 										</script>
 									</logic:equal>
 									<logic:notEqual name="consentLevel" value="participant">
@@ -215,24 +217,24 @@ var statusId = new Array();
 									<logic:notEqual name="consentLevel" value="participant">
 									<td align="left" class='black_ar'>
 									
-									<select name="consentStatus"  id="${consentTierDTO.consentStatusId}">
+									<select name="consentStatus"  id="${consentTierDTO.id}">
 										<logic:iterate id="specimenResponseList" name="specimenResponseList">
-											<logic:notEqual name="specimenResponseList"  property='name' value="${consentTierDTO.consentStatus}">
+											<logic:notEqual name="specimenResponseList"  property='name' value="${consentTierDTO.status}">
 												<option value="<bean:write name='specimenResponseList' property='value'/>"><bean:write name="specimenResponseList" property="name"/></option>
 											</logic:notEqual>
-											<logic:equal name="specimenResponseList"  property='name' value="${consentTierDTO.consentStatus}">
+											<logic:equal name="specimenResponseList"  property='name' value="${consentTierDTO.status}">
 												<option value="<bean:write name='specimenResponseList' property='value'/>" selected><bean:write name="specimenResponseList" property="name"/></option>
 											</logic:equal>
 										</logic:iterate>
 									</select>
 									<script>
 										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-										  var response_combo = new dhtmlXCombo("${consentTierDTO.consentStatusId}","${consentTierDTO.consentStatusId}","100px");
+										  var response_combo = new dhtmlXCombo("${consentTierDTO.id}","${consentTierDTO.id}","100px");
 										  //response_combo.enableFilteringMode(true);
 										  response_combo.setSize(200);
-										  response_combo.setComboValue('${consentTierDTO.consentStatus}');
+										  response_combo.setComboValue('${consentTierDTO.status}');
 										  comboData.push(response_combo);
-										  statusId.push("${consentTierDTO.consentTierId}");
+										  statusId.push("${consentTierDTO.id}");
 									</script>
 									
 									</td>
@@ -274,8 +276,8 @@ var statusId = new Array();
 				for(var cnt = 0;cnt<comboData.length;cnt++){
 					var selectedField = comboData[cnt];
 					var jsonObj = {};
-					jsonObj.consentTierId = statusId[cnt];
-					jsonObj.consentStatus = selectedField.getSelectedValue();
+					jsonObj.id = statusId[cnt];
+					jsonObj.status = selectedField.getSelectedValue();
 					jsonObj.participantResponses = selectedField.getSelectedValue();
 					jsonObj.consentStatusId =  0;
 					tabDataJSON.push(jsonObj);

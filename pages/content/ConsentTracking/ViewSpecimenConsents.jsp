@@ -175,12 +175,16 @@ function viewParticipantSPR(reportId1,pageOf)
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 					  <tr>
 						<td class="td_tab_bg" >
-							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
-								<td valign="bottom">
+							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
+						</td>
+								<!--td valign="bottom">
 									<a onclick="viewSpecimen()" id="specimenDetailsTab" href="#">	
 										<img src='images/uIEnhancementImages/new_specimen_unselected.gif' alt='Specimen Details'  width='115' height='22' border='0'>
 									</a>
-								</td>
+								</td-->
+							<td valign="bottom">
+									<a href="#"><img src="images/uIEnhancementImages/new_specimen_unselected.gif" alt="Events" width="115" height="22" onclick="viewSpecimen()" border="0"></a>
+							</td>
 							<td valign="bottom">
 									<a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent('');" border="0"></a>
 							</td>

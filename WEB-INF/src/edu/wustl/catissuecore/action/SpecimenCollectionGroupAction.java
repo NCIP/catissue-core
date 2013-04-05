@@ -388,7 +388,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			{
 				specimenCollectionGroupForm.setCollectionProtocolEventId(-1l);
 			}
-
+			
 			// Populating the Collection Protocol Events
 			this.loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),
 					bizLogic, request, specimenCollectionGroupForm);
@@ -893,6 +893,10 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				formClinportalURL(request, specimenCollectionGroupForm, sessionData.getUserName());
 				long end = System.currentTimeMillis();
 			}
+			
+			SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
+			specimenCollectionGroupForm.setCollectionEventPointLabel(scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
+			request.setAttribute("CollectionEventPointLabel",scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
 
 		}
 		finally

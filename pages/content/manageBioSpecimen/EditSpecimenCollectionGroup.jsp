@@ -129,11 +129,44 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				<c:if test="${i%2 == 1}">
 					<tr class="${tr_grey_color}">
 				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				 <td width="20%" align="right" valign="top" class="black_ar">
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+						<b><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/> </b>
+					</td>
+				    
+					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+					<!-- Mandar : 434 : for tooltip -->
+					   ${CollectionEventPointLabel}
+						
+		        	</td>
+						<td width="20%" align="right" class="black_ar">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+					<b><bean:message key="site.activityStatus" /></b></td>
+					<td width="30%" align="left" class="black_ar  align_left_style1">
+					<html:select property="activityStatus" styleClass="black_ar" styleId="activityStatus" size="1">
+								<logic:iterate name="activityStatusList" id="listStatusId">
+									<html:option  value="${listStatusId}"> ${listStatusId} </html:option>
+							    </logic:iterate>
+					</html:select>
+					</td>
+					
+				
+				</tr>
+				
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				
 				<%
 					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || Constants.EDIT.equals(operation))
 						{
 				%>
-					<c:set var="i" value="${i+1}" scope="request" />
+					
 					<td width="20%" align="right" valign="top" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" />	
 						<span class="black_ar"><label for="name">
@@ -145,70 +178,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					</td>
 
 				<%
-									}if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || Constants.EDIT.equals(operation))
-										{
-								%>
-					<td width="20%" align="right" class="black_ar">
-					<b><bean:message key="specimenCollectionGroup.barcode" /> </b></td>
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-							<%
-								if(form.getBarcode()!=null)
-												{
-							%>
-								<label for="barcode">
-										<%=form.getBarcode()%> 
-								</label>
-							<%
-								}
-												else
-												{
-							%>
-								<label for="barcode"><b></b>
-								</label>
-							<%
-								}
-							%>
-						<html:hidden property="barcode"/>
-						</logic:equal>
-						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
-						    </td>
-						</logic:notEqual>
-					   </logic:equal>
-					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
-						</td>
-					  </logic:notEqual>
-					<%
-						}
-					%>
-				</tr>
-				
-				<c:if test="${i%2 == 0}">
-					<tr class="${tr_white_color}">
-				</c:if>
-				<c:if test="${i%2 == 1}">
-					<tr class="${tr_grey_color}">
-				</c:if>
-				<c:set var="i" value="${i+1}" scope="request" />
+									}%>
 
-				    <td width="20%" align="right" valign="top" class="black_ar">
-						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
-						<b><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/> </b>
-					</td>
-				    
-					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-					<!-- Mandar : 434 : for tooltip -->
-					   <html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)"
-				     	            onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
-						</html:select>&nbsp;
-						
-		        	</td>
-					
+				   
 					
                     <td  width="20%" align="right" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />	
@@ -316,16 +288,48 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				</c:if>
 				<c:set var="i" value="${i+1}" scope="request" />
 				<!-- activitystatus -->
+				
+					
+				<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || Constants.EDIT.equals(operation))
+										{
+								%>
 					<td width="20%" align="right" class="black_ar">
-					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
-					<b><bean:message key="site.activityStatus" /></b></td>
-					<td width="30%" align="left" class="black_ar  align_left_style1">
-					<html:select property="activityStatus" styleClass="black_ar" styleId="activityStatus" size="1">
-								<logic:iterate name="activityStatusList" id="listStatusId">
-									<html:option  value="${listStatusId}"> ${listStatusId} </html:option>
-							    </logic:iterate>
-					</html:select>
-					</td>
+					<b><bean:message key="specimenCollectionGroup.barcode" /> </b></td>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+							<%
+								if(form.getBarcode()!=null)
+												{
+							%>
+								<label for="barcode">
+										<%=form.getBarcode()%> 
+								</label>
+							<%
+								}
+												else
+												{
+							%>
+								<label for="barcode"><b></b>
+								</label>
+							<%
+								}
+							%>
+						<html:hidden property="barcode"/>
+						</logic:equal>
+						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+						    </td>
+						</logic:notEqual>
+					   </logic:equal>
+					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+						</td>
+					  </logic:notEqual>
+					<%
+						}
+					%>
 
 					<!-- collectionstatus -->
 					<td width="20%" align="right" nowrap class="black_ar">

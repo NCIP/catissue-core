@@ -250,6 +250,16 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/** The next forward to. */
 	private String nextForwardTo;
+	
+	private String collectionEventPointLabel;
+
+	public String getCollectionEventPointLabel() {
+		return collectionEventPointLabel;
+	}
+
+	public void setCollectionEventPointLabel(String collectionEventPointLabel) {
+		this.collectionEventPointLabel = collectionEventPointLabel;
+	}
 
 	/**
 	 * Gets the button type.

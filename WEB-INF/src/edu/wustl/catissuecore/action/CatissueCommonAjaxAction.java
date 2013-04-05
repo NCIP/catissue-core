@@ -55,6 +55,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 
 public class CatissueCommonAjaxAction extends DispatchAction{
 	
@@ -687,12 +688,16 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			consentTrackingBizLogic.updateConsentTier(consentsDto, dao);
 			returnMap.put("msg","");
 			returnMap.put("success" , "success");
-		}catch(ApplicationException ex){
+			dao.commit();
+		}catch(DAOException ex){
+			returnMap.put("msg",ex.getMsgValues());
+			returnMap.put("success" , "failure");
+		}
+		catch(ApplicationException ex){
 			returnMap.put("msg",ex.getMsgValues());
 			returnMap.put("success" , "failure");
 		}
 		finally{
-			dao.commit();
 			AppUtility.closeDAOSession(dao);
 		}
 		response.setContentType("application/json");

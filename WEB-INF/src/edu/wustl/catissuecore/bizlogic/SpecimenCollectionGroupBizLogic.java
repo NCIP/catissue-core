@@ -3717,6 +3717,15 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 	
+	public String getCollectionPointEventLabel(Long eventId,DAO dao) throws DAOException{
+		String label = "";
+		CollectionProtocolEvent event = (CollectionProtocolEvent)dao.retrieveById( CollectionProtocolEvent.class.getName(),eventId);
+		event.getCollectionPointLabel();
+		event.getStudyCalendarEventPoint();
+		label = event.getCollectionPointLabel() + " ("+event.getStudyCalendarEventPoint() +")";
+		return label;
+	}
+	
 	private List<Long> getSpecimenIdList(Long scgId,DAO dao) throws DAOException{
 		 final String SELECT_SPECIMEN_ID =  "select  specimen.id " +
 				" from Specimen specimen join specimen.specimenCollectionGroup scg " +
