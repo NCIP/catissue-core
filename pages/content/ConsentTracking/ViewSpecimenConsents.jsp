@@ -183,7 +183,7 @@ function viewParticipantSPR(reportId1,pageOf)
 									</a>
 								</td-->
 							<td valign="bottom">
-									<a href="#"><img src="images/uIEnhancementImages/new_specimen_unselected.gif" alt="Events" width="115" height="22" onclick="viewSpecimen()" border="0"></a>
+									<a href="#"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Events" width="126" height="22" onclick="viewSpecimen()" border="0"></a>
 							</td>
 							<td valign="bottom">
 									<a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent('');" border="0"></a>
