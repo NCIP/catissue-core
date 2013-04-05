@@ -122,6 +122,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="onSubmit"/>
 						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 						<html:hidden property="withdrawlButtonStatus"/>
+						<html:hidden property="collectionProtocolEventId"/>
 
 				<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
@@ -181,6 +182,57 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 									}%>
 
 				   
+				<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || Constants.EDIT.equals(operation))
+										{
+								%>
+					<td width="20%" align="right" class="black_ar">
+					<b><bean:message key="specimenCollectionGroup.barcode" /> </b></td>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+							<%
+								if(form.getBarcode()!=null)
+												{
+							%>
+								<label for="barcode">
+										<%=form.getBarcode()%> 
+								</label>
+							<%
+								}
+												else
+												{
+							%>
+								<label for="barcode"><b></b>
+								</label>
+							<%
+								}
+							%>
+						<html:hidden property="barcode"/>
+						</logic:equal>
+						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
+							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+						    </td>
+						</logic:notEqual>
+					   </logic:equal>
+					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
+								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+						</td>
+					  </logic:notEqual>
+					<%
+						}
+					%>
+					
+				</tr>
+				<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				<!-- activitystatus -->
+				
 					
                     <td  width="20%" align="right" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />	
@@ -199,7 +251,21 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</html:link>
 						</logic:notEqual>
 		        	</td>
+
+					<!-- collectionstatus -->
+					<td width="20%" align="right" nowrap class="black_ar">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+					<b>	<bean:message key="specimenCollectionGroup.collectionStatus" /> </b></td>
+					<td  width="30%" align="left" class="black_ar align_left_style1"> 
+					<html:select property="collectionStatus" styleClass="black_ar" styleId="collectionStatus" size="1">
+								   <logic:iterate name="collectionStatusList" id="collectionStatusId">
+										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
+							       </logic:iterate>
+					</html:select>
+					
+					</td>
 				</tr>
+				
 				
 				<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
@@ -280,70 +346,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			     * See also: 1_1 to 1_5
 				 * Description : Added <TR> for comment field .
 				-->
-				<c:if test="${i%2 == 0}">
-					<tr class="${tr_white_color}">
-				</c:if>
-				<c:if test="${i%2 == 1}">
-					<tr class="${tr_grey_color}">
-				</c:if>
-				<c:set var="i" value="${i+1}" scope="request" />
-				<!-- activitystatus -->
-				
-					
-				<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || Constants.EDIT.equals(operation))
-										{
-								%>
-					<td width="20%" align="right" class="black_ar">
-					<b><bean:message key="specimenCollectionGroup.barcode" /> </b></td>
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-						<logic:equal name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-							<%
-								if(form.getBarcode()!=null)
-												{
-							%>
-								<label for="barcode">
-										<%=form.getBarcode()%> 
-								</label>
-							<%
-								}
-												else
-												{
-							%>
-								<label for="barcode"><b></b>
-								</label>
-							<%
-								}
-							%>
-						<html:hidden property="barcode"/>
-						</logic:equal>
-						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
-						    </td>
-						</logic:notEqual>
-					   </logic:equal>
-					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
-						</td>
-					  </logic:notEqual>
-					<%
-						}
-					%>
-
-					<!-- collectionstatus -->
-					<td width="20%" align="right" nowrap class="black_ar">
-					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
-					<b>	<bean:message key="specimenCollectionGroup.collectionStatus" /> </b></td>
-					<td  width="30%" align="left" class="black_ar align_left_style1"> 
-					<html:select property="collectionStatus" styleClass="black_ar" styleId="collectionStatus" size="1">
-								   <logic:iterate name="collectionStatusList" id="collectionStatusId">
-										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
-							       </logic:iterate>
-					</html:select>
-					
-					</td>
-				</tr>
 				 <tr><td colspan="3" class="bottomtd"></td></tr>
 				
 				<c:if test="${i%2 == 0}">
