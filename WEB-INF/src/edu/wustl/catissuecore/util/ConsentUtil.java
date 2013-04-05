@@ -49,6 +49,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
  * This class is designed to contain common methods for the Consent Withdraw process.
@@ -671,7 +672,23 @@ public final class ConsentUtil
 		String piFullName=principalInvestigator.getLastName()+", "+principalInvestigator.getFirstName();
 		consentWitnessList.add(new NameValueBean(piFullName,principalInvestigator.getId()));
 		return consentWitnessList;
-	}	
+	}
+	
+	public static Long getCpIdFromCprId(Long cprId,DAO dao) throws DAOException{
+		Long cpid = 0l;
+		String query = "select cp.id from CollectionProtocolRegistration cpr join cpr.collectionProtocol cp where cpr.id = ?";
+		List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+		parameters.add(new ColumnValueBean(cprId));
+		List resultList = dao.executeQuery(query,parameters);
+		Iterator ite =  resultList.iterator();
+		while(ite.hasNext()){
+			cpid = (Long) ite.next();
+		}
+		 
+		
+		
+		return cpid;
+	}
 	/**
 	 * This function adds the columns to the List
 	 * @return columnList 

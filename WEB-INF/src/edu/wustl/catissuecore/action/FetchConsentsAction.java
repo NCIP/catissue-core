@@ -47,8 +47,12 @@ public class FetchConsentsAction  extends SecureAction {
 		String consentLevelId = request.getParameter("consentLevelId");
 		String cprId = request.getParameter("cprId")==null?"0":request.getParameter("cprId");
 		try{
-			final List witnessList = ConsentUtil.witnessNameList("13");
 			dao = AppUtility.openDAOSession(sessionDataBean);
+			List witnessList = new ArrayList();
+			if(consentLevel.equals("participant")){
+				Long cpId = ConsentUtil.getCpIdFromCprId(Long.parseLong(consentLevelId), dao);
+				witnessList = ConsentUtil.witnessNameList(cpId.toString());
+			}
 			ConsentTrackingBizLogic bizLogic = new ConsentTrackingBizLogic();
 			ConsentResponseDto consentsDto = bizLogic.getConsentList(consentLevel, Long.parseLong(consentLevelId),dao);
 			request.setAttribute("consentsDto", consentsDto);
