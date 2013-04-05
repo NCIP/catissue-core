@@ -23,6 +23,7 @@
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_mcol.js"></script>
 <c:set var="tr_white_color" value="tr_alternate_color_white" />
 <c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
 <head>
@@ -76,10 +77,29 @@ function submitOrderNew(consentVerifiedValues)
 		}
 		else
 		{
-			document.getElementById('error').style.display='block';
+			var numberOfcolumns=mygrid.getColumnsNum();		
+			mygrid.insertColumn(numberOfcolumns+1,'Error','ro',20,'na',null,null,null,null);
+			var obj=JSON.parse(loader.xmlDoc.responseText);
+			var orderErrorDTOs=obj['orderErrorDTOs'];
+			
+			for(var i=0;i<orderErrorDTOs.length;i++)
+			{
+			   var specimenlabel=orderErrorDTOs[i].specimenLabel;
+			   for(var row=0;row<mygrid.getRowsNum();row++)
+			   {
+				if(specimenlabel == mygrid.cellById(row+1,0).getValue())
+				{	
+				  mygrid.cellById(row+1,numberOfcolumns).setValue(orderErrorDTOs[0].error);
+				  mygrid.setRowColor(row+1,"#FF4400");
+				  
+				}
+			   }
+			}
+			tabbar.setTabActive('SimpleViewTab');
 		}
 	}
 }
+
 
 	function updateGrid(id)
 	{
@@ -398,7 +418,7 @@ function init_grid()
 	mygrid.setEditable("true");
 	mygrid.enableAutoHeigth(false);
    	mygrid.enableRowsHover(true,'grid_hover')
-	mygrid.setInitWidthsP("20,10,10,10,10,20,*,0,0");
+	mygrid.setInitWidthsP("20,10,10,10,10,10,*,0,0");
 	mygrid.setColTypes("ro,ro,ro,ro,ed,coro,ed,ro,ro");
 	mygrid.setSkin("dhx_skyblue");
 	mygrid.setColSorting("str,str,str,str,str,str,str,str,str");
