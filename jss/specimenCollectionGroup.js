@@ -52,10 +52,10 @@ function initializeSCGCombo()
 		//clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
 		clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
 		
-		var collectionProtocolEventCombo = new dhtmlXCombo("collectionProtocolEventId","collectionProtocolEventId","100px");;
+		/*var collectionProtocolEventCombo = new dhtmlXCombo("collectionProtocolEventId","collectionProtocolEventId","100px");;
 		collectionProtocolEventCombo.setOptionWidth(165);
 		collectionProtocolEventCombo.setSize(165);
-		
+		*/
 		
 		
 		scgCombo.collectionStatusCombo.attachEvent("onChange", 
