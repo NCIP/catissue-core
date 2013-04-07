@@ -130,91 +130,138 @@
 	</changeSet>
 	
 	<changeSet id="11" author="catissue" runOnChange="true">
-		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="consent_tire_status_specimen">
-    		<column name="SPECIMEN_ID"/>
-		</createIndex>
-	</changeSet>
-	<changeSet id="12" author="catissue" runOnChange="true">
 		<createIndex tableName="CATISSUE_DISTRIBUTION_EVENT_PARAM" indexName="DISTRIBUTION_EVENT_DISTRIBUTED_QUANTITY">
     		<column name="DISTRIBUTED_QUANTITY"/>
 		</createIndex>
 	</changeSet>
+	<changeSet id="12" author="catissue" runOnChange="true" failOnError="false">
+		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="consent_tire_status_specimen">
+    		<column name="SPECIMEN_ID"/>
+		</createIndex>
+	</changeSet>
 	
-	<changeSet id="13" author="catissue" runOnChange="true">
+	<changeSet id="13" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COLL_PROT_REG_PART_ID">
     		<column name="PARTICIPANT_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="14" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COLL_PROT_REG_CP_ID">
     		<column name="COLLECTION_PROTOCOL_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="15" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COL_PROT_REG_ACT_STAT">
     		<column name="ACTIVITY_STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="16" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_COLL_PROT_REG" indexName="CATISSUE_COLL_PROT_REG_CON_WIT">
     		<column name="CONSENT_WITNESS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="17" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_ABS_SPECI_COLL_GROUP" indexName="CATISSUE_ABS_COLL_GROUP_ST_ID">
     		<column name="SITE_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="18" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_ABS_SPECI_COLL_GROUP" indexName="CATISSUE_ABS_COLL_GRP_CL_DAG">
     		<column name="CLINICAL_DIAGNOSIS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="19" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_ABS_SPECI_COLL_GROUP" indexName="CATISSUE_ABS_COLL_GRP_CL_DAG">
     		<column name="ACTIVITY_STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="20" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN_COLL_GROUP" indexName="CATISSUE_SPEC_COLL_GRP_CPR_ID">
     		<column name="COLLECTION_PROTOCOL_REG_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="21" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN_COLL_GROUP" indexName="CATISSUE_SPEC_COLL_GRP_CPE_ID">
     		<column name="COLLECTION_PROTOCOL_EVENT_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="22" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN_COLL_GROUP" indexName="CATISSUE_SPC_COL_GRP_COL_STAT">
     		<column name="COLLECTION_STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="23" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_PARTICIPANT" indexName="CATISSUE_PARTICIPANT_ACT_STAT">
     		<column name="ACTIVITY_STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="24" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN" indexName="CATISSUE_SPECIMEN_ACT_STAT">
     		<column name="ACTIVITY_STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="25" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN" indexName="CATISSUE_SPECIMEN_SCG_ID">
     		<column name="SPECIMEN_COLLECTION_GROUP_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="26" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN" indexName="CATISSUE_SPECIMEN_COLL_STAT">
     		<column name="COLLECTION_STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="27" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_ABSTRACT_SPECIMEN" indexName="CATISSUE_ABS_SPEC_P_SP_ID">
     		<column name="PARENT_SPECIMEN_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="28" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_ABSTRACT_SPECIMEN" indexName="CATISSUE_ABS_SPEC_LINEAGE">
     		<column name="LINEAGE"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="29" author="catissue" runOnChange="true" failOnError="false">
 		
 		<createIndex tableName="CATISSUE_SPECIMEN_EVENT_PARAM" indexName="CATISSUE_SPEC_EV_PARAM_SCG_ID">
     		<column name="SPECIMEN_COLL_GRP_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="30" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_SPECIMEN_EVENT_PARAM" indexName="CATISSUE_SPEC_EV_PARAM_USR_ID">
     		<column name="USER_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="31" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_RESPONSE" indexName="CATISSUE_COSNT_TR_RES_RESP">
     		<column name="RESPONSE"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="32" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_RESPONSE" indexName="CATISSUE_COSNT_TR_RES_CT_ID">
     		<column name="CONSENT_TIER_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="33" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_RESPONSE" indexName="CATISSUE_COSNT_TR_RES_CPR_ID">
     		<column name="COLL_PROT_REG_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="34" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_CT_ID">
     		<column name="CONSENT_TIER_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="35" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_STAT">
-		
     		<column name="STATUS"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="36" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_SPEC_ID">
     		<column name="SPECIMEN_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="37" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_CONSENT_TIER_STATUS" indexName="CATISSUE_COSNT_TR_STAT_SCG_ID">
     		<column name="SPECIMEN_COLL_GROUP_ID"/>
 		</createIndex>
