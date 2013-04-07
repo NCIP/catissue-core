@@ -117,6 +117,17 @@ function newConsentTab(specimenId,ideReportId,entityid,entityname)
 	document.forms[0].submit();
 	//switchToNewTab("newConsentTab");
 }
+function viewSpecimen(specimenId)
+{
+		action = "QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenId ;
+		document.location=action;
+}
+function newImageTab(specimenId)
+{
+	var action="EditSpecimenImage.do?id="+specimenId;
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
 
 function showConsents(tab,ConsentTierCounter)
 {

@@ -36,7 +36,7 @@ var empiEnabled="<%=isEMPIEnabled%>";
 	<tr>
 		<td width="3%" valign="top"><img width="42" height="24"
 			src="images/uIEnhancementImages/menustartimg.gif" /></td>
-		<td width="97%" align="left">
+		<td width="94%" align="right">
 		<logic:notEmpty scope="session"
 			name="<%=Constants.SESSION_DATA%>">
 			<script type="text/javascript" src="jss/menus.js"></script>
@@ -46,9 +46,12 @@ var empiEnabled="<%=isEMPIEnabled%>";
 			<script type="text/javascript" src="jss/menu_home.js"></script>
 			<div id="toolbarLoggedOut"></div>
 		</logic:empty></td>
+		
+			<td width="3%" valign="top" align="right"
+			background="images/uIEnhancementImages/grid3-hrow.gif"
+			style="background-repeat:repeat-x;">	
+			</td>
 	</tr>
 	
 </table>
 </body>
-
-

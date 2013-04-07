@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <script src="jss/javaScript.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <head>
 <style>
 .active-column-1 {width:200px}
@@ -92,6 +93,10 @@ function newConsentTab(levelId)
 				<td valign="bottom"><a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>,'<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="Consents" width="116" height="22"></a></td>
 				<td valign="bottom"><a href="#" onClick="newConsentTab('${id}')" id="consentTab">
 					<img src="images/uIEnhancementImages/tab_consents2.gif" border="0" alt="Consents" width="76" height="22"></a></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3" >
+							<a id="imageViewTab" href="#" onClick="newImageTab('${id}')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="126" border="0" height="22" >
+					</a>
+				</td>
 		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 		</tr>
 		</table>

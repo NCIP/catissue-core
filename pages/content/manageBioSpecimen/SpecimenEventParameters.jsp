@@ -22,6 +22,7 @@
 <script src="runtime/formats/date.js"></script>
 <script src="runtime/formats/string.js"></script>
 <script src="runtime/formats/number.js"></script>
+<script src="jss/newSpecimen.js"></script>
 
 <style>
 .active-column-1 {width:200px}
@@ -236,6 +237,8 @@ window.onresize = function() { mdResDetector(); }
 						<td align="left" valign="bottom" class="td_color_bfdcf3" >
 							<a href="#" onClick="newConsentTab('<%=specimenIdentifier%>')" id="consentTab"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0"></a>
 						</td>
+						<td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="imageViewTab" href="#" onClick="newImageTab('<%=specimenIdentifier%>')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="110" border="0" height="22" ></a>
+				</td>
 						<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 					</tr>
 				</table>

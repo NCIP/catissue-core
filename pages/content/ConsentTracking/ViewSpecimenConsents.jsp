@@ -19,6 +19,7 @@
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script src="jss/fileUploader.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/specimenCollectionGroup.js"></script>
 <script>
 function showSCGAnnotations(){
@@ -175,16 +176,12 @@ function viewParticipantSPR(reportId1,pageOf)
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 					  <tr>
 						<td class="td_tab_bg" >
-							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
-						</td>
-								<!--td valign="bottom">
+							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
+								<td valign="bottom">
 									<a onclick="viewSpecimen()" id="specimenDetailsTab" href="#">	
-										<img src='images/uIEnhancementImages/new_specimen_unselected.gif' alt='Specimen Details'  width='115' height='22' border='0'>
+										<img src='images/uIEnhancementImages/tab_specimen_details2.gif' alt='Specimen Details'  width='115' height='22' border='0'>
 									</a>
-								</td-->
-							<td valign="bottom">
-									<a href="#"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Events" width="126" height="22" onclick="viewSpecimen()" border="0"></a>
-							</td>
+								</td>
 							<td valign="bottom">
 									<a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent('');" border="0"></a>
 							</td>
@@ -194,6 +191,8 @@ function viewParticipantSPR(reportId1,pageOf)
 							<td align="left" valign="bottom" class="td_color_bfdcf3" >
 								<a id="consentViewTab" href="#"><img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'></a>
 							</td>
+							<td align="left" valign="bottom" class="td_color_bfdcf3" >
+							<a id="imageViewTab" href="#" onClick="newImageTab('${consentLevelId}')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="126" border="0" height="22" >
 							<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
 							</td>
 						</tr>

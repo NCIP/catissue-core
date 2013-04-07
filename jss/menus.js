@@ -2,6 +2,8 @@
  * Ext JS Library 2.1
  *
  */
+var userName = document.getElementById('tmp_usrName').value;
+
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
@@ -436,6 +438,62 @@ Ext.onReady(function(){
         ]
     });
 
+	    var logout_menu = new Ext.menu.Menu({
+        id: 'logout_menu',
+		items: [
+			{
+                text: 'My Profile',
+				tooltip:'My Profile',
+				 handler: editUserProfile
+			},
+			{
+                text: 'Change Password',
+				tooltip:'Change Password',
+			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
+            },
+			{
+				text: 'Help Home',
+				href:'/catissuecore/RedirectToHelp.do',
+				tooltip:'Help Home'
+			},
+			{
+				text: 'User Guide',
+				href: '#',
+				handler: getUserGuideLink,
+				tooltip: 'User Guide'
+			},
+			{
+				text: 'UML Model',
+				href:'#',
+				handler: getUmlModelLink,
+				tooltip:'UML Model'
+			},
+			
+			{
+				text: 'Report Problem',
+				href:'ReportProblem.do?operation=add', 
+				tooltip:'Report Problem'
+			},
+			
+			{
+				text: 'Summary',
+				href:'Summary.do', 
+				tooltip:'Summary'
+			},
+			
+			{
+				text: 'Logout',
+				href:'/catissuecore/Logout.do', 
+				tooltip:'Log Out'
+			}
+		]
+    });
+
+	
+	
+	
+	
+
 	//For Help Tab
 
 	var helpMenu = new Ext.menu.Menu({
@@ -464,27 +522,26 @@ Ext.onReady(function(){
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
 
-	tb.add(new Ext.Toolbar.MenuButton({text: 'Home',link:'Home.do',handler: handleMenu,menu: menuHome}),
-
+		tb.add(new Ext.Toolbar.MenuButton(
 		{
-            text:'Administrative Data',
-            menu: menu  // assign menu by instance
-        },
+			text:'Administration',
+            menu: menu 
+		}),
+
         {
-            text:'Biospecimen Data',
+            text:'Biobanking',
             menu: menu_bio  // assign menu by instance
         },
 		{
        		text: 'Search',
             menu: menu_search  // assign menu by instance
         },
-		{
-			 text: 'Bulk Operations',link:'BulkOperation.do?pageOf=pageOfBulkOperation',
-			 handler: handleMenu,tooltip:'Bulk Operations'
+		
+		{	
+			text: document.getElementById('tmp_usrName').value,
+			menu: logout_menu
 		},
-		{	text:'Help',
-			menu: helpMenu
-		},'->',		
+		
 		{	
 			text: '<img src="images/help.png"/>',
 			href:'#',

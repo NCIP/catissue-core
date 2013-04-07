@@ -1,7 +1,11 @@
+<!DOCTYPE html>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+
+<%@ page language="java" isELIgnored="false"%>
+
 
 <script src="jss/titli.js"></script>
 <script type="text/javascript">
@@ -39,35 +43,41 @@ function inputBlur(i){
 					searchString = "Keyword Search";
 				}
 				%>
-						<input class="form-text"  value="Search for specimen, containers, and others..."    type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" 
+				<input type="hidden" id="tmp_usrName" value="${sessionData.firstName} ${sessionData.lastName}"/>
+						<input class="form-text"  value="Quick search for specimens, containers, and others...."    type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" 
 						size="50"  onfocus="inputFocus(this)" onblur="inputBlur(this)" />
 						<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value"></a>
 				</logic:notEmpty>
 					<a href="RequestListView.do" class="white"> 
-						<img src="images/uIEnhancementImages/orders_icon.png" width="16"
-					height="13" hspace="2" vspace="0"><bean:message
-					key="app.orders" /> 
+						<img src="images/uIEnhancementImages/order_icon.png"  title="Orders">
+						<span title="Orders" style="vertical-align:top"> 
+							<bean:message key="app.orders" /> 
+						</span> 
 					</a>
 					&nbsp;
-					<a	href="ShowQueryDashboardAction.do"
-						class="white">
-						<img src="images/uIEnhancementImages/search_basic_blue.png" alt="Summary"
-						width="16" height="13" hspace="2" vspace="0" border="0" /><bean:message	key="app.queries" /></a>&nbsp;
-					<a	href="CpBasedSearch.do" class="white"> <img
-						src="images/uIEnhancementImages/data_entry_icon.png" alt="Summary"
-						width="16" height="12" hspace="2" vspace="0" border="0" />
-						<label align="top"><bean:message key="app.dataEntry" /> </label>
+					<a href="ShowQueryDashboardAction.do" class="white">
+						<img src="images/uIEnhancementImages/search_icon.png" alt="Summary"
+						 border="0" title="Queries"/>
+						 <span title="Query" style="vertical-align:top">
+							<bean:message key="app.queries" />
+						 </span>
 					</a>
-					</td>
+					&nbsp;
+					<a	href="CpBasedSearch.do" class="white"> 
+						<img src="images/uIEnhancementImages/data_entry_icon.png" alt="Data Entry"
+						 border="0" title="Data Entry"/>
+						 <span title="Data Entry" style="vertical-align:top">
+							CP Based View </span>
+					</a>&nbsp;
+					
+					<a	href="BulkOperation.do?pageOf=pageOfBulkOperation" class="white">
+							<img src="images/uIEnhancementImages/bo.png" alt="Summary"
+								  border="0" title="Bulk Upload" />
+								  <span title="Bulk Upload" style="vertical-align:top">Bulk Upload </span>
+					</a>&nbsp;
+				</td>
 
-				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
-					<td width="14%" align="right" valign="top"><a
-						href="Logout.do"> <img
-						src="images/uIEnhancementImages/logout_button1.gif" name="Image1"
-						width="86" height="19" id="Image1"
-						onmouseover="MM_swapImage('Image1','','images/uIEnhancementImages/logout_button.gif',1)"
-						onmouseout="MM_swapImgRestore()" /> </a></td>
-				</logic:notEmpty>
+
 				<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" valign="middle" align="right"><a
 						href="Home.do" class="white"> <bean:message

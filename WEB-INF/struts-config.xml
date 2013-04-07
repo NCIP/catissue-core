@@ -4073,6 +4073,11 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.querySpecimenViewDef" />
 			<forward name="access_denied" path="/ManageBioSpecimenAccessDeniedCPBased.do" />
 		</action>
+		
+		<action path="/EditSpecimenImage" type="edu.wustl.catissuecore.action.ImageAction"
+			validate="false" scope="request">
+			<forward name="success" path=".catissuecore.querySpecimenImageDef" />
+		</action>
 			
 		<action path="/QueryCreateSpecimen" type="edu.wustl.catissuecore.action.AddSpecimenAction"
 			name="newSpecimenForm" validate="false" scope="request">
