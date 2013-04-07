@@ -192,7 +192,7 @@ function viewParticipantSPR(reportId1,pageOf)
 								<a id="consentViewTab" href="#"><img src='images/uIEnhancementImages/tab_consents1.gif' alt='Consents' width='76' height='22' border='0'></a>
 							</td>
 							<td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a id="imageViewTab" href="#" onClick="newImageTab('${consentLevelId}')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="126" border="0" height="22" >
+							<a id="imageViewTab" href="#" onClick="newImageTab('${consentLevelId}')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="110" border="0" height="22" >
 							<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
 							</td>
 						</tr>
