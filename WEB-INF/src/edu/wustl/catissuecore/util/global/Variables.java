@@ -57,6 +57,7 @@ public class Variables
 	public static boolean isPhoneNumberToBeValidated = true;
 	public static List<NameValueBean> printerLocationList = null;
 	public static List<NameValueBean> printerTypeList = null;
+	public static boolean isImagingConfigurred = false;
 
 	//Added by Geeta
 	public static boolean isStateRequired = true;
