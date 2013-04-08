@@ -5951,4 +5951,22 @@ public class Constants
 		,"Distributed And Close(Special)","New","Pending - For Distribution","Pending - Protocol Review","Specimen Preparation",
 		"Rejected - Inappropriate Request","Rejected - Specimen Unavailable","Rejected - Unable to Create"};
 
+	/** Constant for BIOHAZARD_TYPE_NAME_LIST_JSON **/
+	public static final String BIOHAZARD_TYPE_NAME_LIST_JSON = "biohazardTypeNameListJSON";
+
+	/** Constant for SPECIMEN_DTO **/
+	public static final String SPECIMEN_DTO = "specimenDTO";
+
+	/** Constant for TISSUE_TYPE_LIST_JSON **/
+	public static final String TISSUE_TYPE_LIST_JSON = "tissueTypeListJSON";
+
+	/** Constant for FLUID_TYPE_LIST_JSON **/
+	public static final String FLUID_TYPE_LIST_JSON = "fluidTypeListJSON";
+
+	/** Constant for CELL_TYPE_LIST_JSON **/
+	public static final String CELL_TYPE_LIST_JSON = "cellTypeListJSON";
+
+	/** Constant for MOLECULAR_TYPE_LIST_JSON **/
+	public static final String MOLECULAR_TYPE_LIST_JSON = "molecularTypeListJSON";
+
 }
