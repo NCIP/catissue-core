@@ -144,6 +144,7 @@ function populateBiohazardTypeOptions()
 function onBiohazardTypeSelected()
 {
 	biohazardCombo.clearAll();
+	biohazardCombo.setComboText(defaultTextForBioName);
 	var myData=biohazardNameListJSON;
 	for(var i=0;i<myData.length;i++) {
 		if(biohazardTypeCombo.getSelectedValue()==myData[i].type || biohazardTypeCombo.getComboText()==myData[i].type)
@@ -153,7 +154,6 @@ function onBiohazardTypeSelected()
 
 function addEditBioHazTag(buttonElement)
 {
-	
 	if(biohazardCombo.getSelectedValue()!=null)
 	{	var idTypeForBiohazard = biohazardCombo.getSelectedValue().split("_");
 		var biohazard = idTypeForBiohazard[1]+" - "+biohazardCombo.getSelectedText();
@@ -201,6 +201,7 @@ function editBiohazardTag(e)
 	var n = e.firstChild.nodeValue.split(" - ");
 	
 	document.getElementById('addEditBioHazButton').value="Edit";
+	biohazardTypeCombo.unSelectOption();
 	biohazardTypeCombo.setComboText(n[0]);
 	onBiohazardTypeSelected();
 	biohazardCombo.setComboText(n[1]);
