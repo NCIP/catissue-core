@@ -12,7 +12,6 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
-<script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
@@ -23,6 +22,7 @@
 <script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
 <script>
 	var imgsrc="images/";
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
@@ -153,7 +153,7 @@
 							<td width="30%" align="left" class="black_new">
 							<html:select property="className" name="specimenDTO" 
 										 styleClass="formFieldSized" styleId="className" size="1"
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenTypeChange(this)">
 								<html:options collection="specimenClassList"
 									labelProperty="name" property="value" />
 						   </html:select>
@@ -167,7 +167,7 @@
 							<td width="30%" align="left" class="black_new">
 							<html:select property="type" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="type" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="specimenTypeList"
 								labelProperty="name" property="value" />
 							</html:select>
@@ -188,15 +188,10 @@
 									<td>	
 									<html:select property="tissueSite" name="specimenDTO" 
 									styleClass="formFieldSized" styleId="tissueSite" size="1"
-									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:options collection="tissueSiteList"
 										labelProperty="name" property="value" />
 									</html:select> 
-									</td>
-									<td>
-									<a href="#"	 onclick="NewWindow('','tissuesite','360','525','no');return							false">
-										<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"/>
-									</a>
 									</td>
 									</tr>
 									</table>
@@ -210,7 +205,7 @@
 								<td width="30%" align="left" class="black_new">
 								<html:select property="tissueSide" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="tissueSide" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 							<html:options collection="tissueSideList"
 								labelProperty="name" property="value" />
 						</html:select>
@@ -227,7 +222,7 @@
 								<td width="30%" align="left" class="black_new">
 								<html:select property="pathologicalStatus" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="pathologicalStatus" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 							<html:options collection="pathologicalStatusList"
 								labelProperty="name" property="value" />
 						</html:select>
@@ -307,7 +302,7 @@
 								<td width="30%" class="black_new">
 								<html:select property="collectionStatus" name="specimenDTO" 
 											 styleClass="formFieldSized" styleId="collectionStatus" size="1"
-											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)">
+											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="collectionStatusList"
 											  labelProperty="name" property="value" />
 								</html:select>
@@ -579,6 +574,11 @@ tabDataJSON["id"] = document.getElementById("id").value;
 	tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
 }
 
+function processComboData(objName,objValue)
+{
+	tabDataJSON[objName] = objValue;
+}
+
 
 //submits changed data
 function submitTabData()
@@ -625,4 +625,5 @@ dhxWins.window("containerPositionPopUp").setText("");    //it's the title for th
 }
 
 initializeSpecimenPage(${biohazardTypeNameListJSON});
+prepareSpecimenTypeOptions(${cellTypeListJSON},${molecularTypeListJSON},${tissueTypeListJSON},${fluidTypeListJSON});
 </script>

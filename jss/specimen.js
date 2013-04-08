@@ -1,31 +1,35 @@
+var typeCombo;
 function initSpecimenCombo()
 {
 		var tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
 		tissueSiteCombo.setOptionWidth(202);
 		tissueSiteCombo.setSize(202);
+		tissueSiteCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 
 		var tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
 		tissueSideCombo.setOptionWidth(203);
 		tissueSideCombo.setSize(203);
-		
+		tissueSideCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 
 		var pathologicalStatusCombo = dhtmlXComboFromSelect("pathologicalStatus");
 		pathologicalStatusCombo.setOptionWidth(203);
 		pathologicalStatusCombo.setSize(203);
+		pathologicalStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 
 		var classNameCombo = dhtmlXComboFromSelect("className");
 		classNameCombo.setOptionWidth(203);
 		classNameCombo.setSize(203);
+		classNameCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 
-		var typeCombo = dhtmlXComboFromSelect("type");
+		typeCombo = dhtmlXComboFromSelect("type");
 		typeCombo.setOptionWidth(203);
 		typeCombo.setSize(203);
+		typeCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 		
 		var collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
-	//	collectionStatusCombo.enableFilteringMode(true);
 		collectionStatusCombo.setOptionWidth(203);
 		collectionStatusCombo.setSize(203);
-		
+		collectionStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 }
 
 function showAddExternalIdDiv()
@@ -133,7 +137,7 @@ function populateBiohazardTypeOptions()
 	typeList= getSortedUniqueArrayElements(typeList);
 	
 	for(var i=0;i<typeList.length;i++) {
-		typeCombo.addOption(typeList[i],typeList[i]);
+		biohazardTypeCombo.addOption(typeList[i],typeList[i]);
 	}
 }
 
@@ -142,7 +146,7 @@ function onBiohazardTypeSelected()
 	biohazardCombo.clearAll();
 	var myData=biohazardNameListJSON;
 	for(var i=0;i<myData.length;i++) {
-		if(typeCombo.getSelectedValue()==myData[i].type || typeCombo.getComboText()==myData[i].type)
+		if(biohazardTypeCombo.getSelectedValue()==myData[i].type || biohazardTypeCombo.getComboText()==myData[i].type)
 			biohazardCombo.addOption(myData[i].id+"_"+myData[i].type,myData[i].name);
 	}
 }
@@ -188,8 +192,8 @@ function addEditBioHazTag(buttonElement)
 	document.getElementById('addBioHazardDiv').style.display="none";
 	biohazardCombo.setComboText(defaultTextForBioName);
 	biohazardCombo.unSelectOption();
-	typeCombo.setComboText(defaultTextForBioType);
-	typeCombo.unSelectOption();
+	biohazardTypeCombo.setComboText(defaultTextForBioType);
+	biohazardTypeCombo.unSelectOption();
 	}
 
 function editBiohazardTag(e)
@@ -197,7 +201,7 @@ function editBiohazardTag(e)
 	var n = e.firstChild.nodeValue.split(" - ");
 	
 	document.getElementById('addEditBioHazButton').value="Edit";
-	typeCombo.setComboText(n[0]);
+	biohazardTypeCombo.setComboText(n[0]);
 	onBiohazardTypeSelected();
 	biohazardCombo.setComboText(n[1]);
 	showAddBioHazardDiv();
@@ -285,7 +289,7 @@ var defaultTextForExtIdValue = "Enter Identifier Value";
 var defaultTextForBioName = "Select Biohazard Name";
 var defaultTextForBioType = "Select Biohazard Type";
 var biohazardCombo;
-var typeCombo;
+var biohazardTypeCombo;
 var biohazardNameListJSON;
 
 function initializeSpecimenPage(biohazardNameJSON)
@@ -297,7 +301,7 @@ function initializeSpecimenPage(biohazardNameJSON)
 	biohazardCombo=new dhtmlXCombo("biohazardSelect","biohazardSelectBox",165);
 	biohazardCombo.setComboText(defaultTextForBioName);
 	
-	typeCombo=new dhtmlXCombo({
+	biohazardTypeCombo=new dhtmlXCombo({
 	parent	: "biohazardTypeSelect",
 	name	: "biohazardTypeSelectBox",
 	width	: 165,
@@ -305,7 +309,7 @@ function initializeSpecimenPage(biohazardNameJSON)
 			onBiohazardTypeSelected();
 		}
 	});
-	typeCombo.setComboText(defaultTextForBioType);
+	biohazardTypeCombo.setComboText(defaultTextForBioType);
 	
 	populateBiohazardTypeOptions();
 }
@@ -320,4 +324,45 @@ function getSortedUniqueArrayElements(arr) {
         }
     }
     return ret;
+}
+
+var cellTypeOptions = new Array();
+var molecularTypeOptions = new Array(); 
+var tissueTypeOptions = new Array();
+var fluidTypeOptions = new Array();
+
+function prepareSpecimenTypeOptions(cellTypeJSON,molecularTypeJSON,tissueTypeJSON,fluidTypeJSON)
+{
+	var typeLists= new Array();
+	typeLists.push(
+		[cellTypeJSON,cellTypeOptions],
+		[molecularTypeJSON,molecularTypeOptions],
+		[tissueTypeJSON,tissueTypeOptions],
+		[fluidTypeJSON,fluidTypeOptions]
+	)
+	for(var i=0;i<typeLists.length;i++) {
+		createTypeOptionsFromJSON(typeLists[i][0],typeLists[i][1]);
+	}
+}
+
+function createTypeOptionsFromJSON(jsonObject,array)
+{
+	for(var i=0;i<jsonObject.length;i++) {
+		array.push([jsonObject[i].value,jsonObject[i].name]);
+	}
+}
+
+
+function onSpecimenTypeChange(selectedElement)
+{
+	typeCombo.clearAll();
+	switch(selectedElement.getSelectedValue())
+	{
+		case 'Cell' : typeCombo.addOption(cellTypeOptions); break;
+		case 'Molecular' : typeCombo.addOption(molecularTypeOptions); break;
+		case 'Tissue' : typeCombo.addOption(tissueTypeOptions); break;
+		case 'Fluid' : typeCombo.addOption(fluidTypeOptions); break;
+		default : typeCombo.addOption(-1,"-- Select --");
+	}
+	typeCombo.selectOption(0); 
 }
