@@ -95,6 +95,8 @@ public class SpecimenBizlogic
 			oldSpecimenObj.setInitialQuantity(specimenDTO.getQuantity());
 		if (specimenDTO.getComments() != null)
 			oldSpecimenObj.setComment(specimenDTO.getComments());
+		if (specimenDTO.getCollectionStatus() != null)
+			oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
 		//		if(specimenDTO.getCreatedDate() != null)
 		//			oldSpecimenObj.setCreatedOn(CommonUtilities.parseDate(specimenDTO.getCreatedDate(),
 		//				CommonServiceLocator.getInstance().getDatePattern()));
@@ -114,7 +116,6 @@ public class SpecimenBizlogic
 		}
 		//		
 		//		oldSpecimenObj.setSpecimenPosition(position);
-		//		oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
 
 		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(oldSpecimenObj,
 				specimenDTO));
