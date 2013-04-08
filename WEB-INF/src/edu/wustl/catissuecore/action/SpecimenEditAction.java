@@ -35,8 +35,9 @@ public class SpecimenEditAction extends CatissueBaseAction
 	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-
+		Gson gson = new Gson();
 		SpecimenDTO specimenDTO = new SpecimenDTO();
+
 		String obj = request.getParameter(Constants.SYSTEM_IDENTIFIER);
 		if (!Validator.isEmpty(obj))
 		{
@@ -62,43 +63,45 @@ public class SpecimenEditAction extends CatissueBaseAction
 			}
 		}
 		List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
-		List<NameValueBean> collectionStatusList = new ArrayList<NameValueBean>();
-		// sri: create 4 lists, and in jsp allow edit
-		request.setAttribute(Constants.SPECIMEN_TYPE_LIST,
-				AppUtility.getSpecimenTypes(specimenDTO.getClassName()));
-		request.setAttribute(Constants.TISSUE_TYPE_LIST,
-				AppUtility.getSpecimenTypes(Constants.TISSUE));
-		request.setAttribute(Constants.FLUID_TYPE_LIST,
-				AppUtility.getSpecimenTypes(Constants.FLUID));
-		request.setAttribute(Constants.CELL_TYPE_LIST, AppUtility.getSpecimenTypes(Constants.CELL));
-		request.setAttribute(Constants.MOLECULAR_TYPE_LIST,
-				AppUtility.getSpecimenTypes(Constants.MOLECULAR));
+		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,
+				Constants.SELECT_OPTION_VALUE));
+		if (!specimenDTO.getClassName().equals(Constants.SELECT_OPTION))
+		{
+			specimenClassList.clear();
+			specimenClassList.addAll(AppUtility.getSpecimenTypes(specimenDTO.getClassName()));
+		}
+		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenClassList);
+
+		request.setAttribute(Constants.TISSUE_TYPE_LIST_JSON,
+				gson.toJson(AppUtility.getSpecimenTypes(Constants.TISSUE)));
+
+		request.setAttribute(Constants.FLUID_TYPE_LIST_JSON,
+				gson.toJson(AppUtility.getSpecimenTypes(Constants.FLUID)));
+
+		request.setAttribute(Constants.CELL_TYPE_LIST_JSON,
+				gson.toJson(AppUtility.getSpecimenTypes(Constants.CELL)));
+
+		request.setAttribute(Constants.MOLECULAR_TYPE_LIST_JSON,
+				gson.toJson(AppUtility.getSpecimenTypes(Constants.MOLECULAR)));
 
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST,
 				AppUtility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
 		request.setAttribute(Constants.TISSUE_SITE_LIST, AppUtility.tissueSiteList());
 		request.setAttribute(Constants.TISSUE_SIDE_LIST,
 				AppUtility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
-		//		}
 
-		specimenClassList.add(new NameValueBean(specimenDTO.getClassName(), specimenDTO
-				.getClassName()));
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, AppUtility.getSpecimenClassList());
+
+		List<NameValueBean> collectionStatusList = new ArrayList<NameValueBean>();
 		for (String status : Constants.SPECIMEN_COLLECTION_STATUS_VALUES)
 		{
 			collectionStatusList.add(new NameValueBean(status, status));
 		}
 		request.setAttribute(Constants.COLLECTIONSTATUSLIST, collectionStatusList);
 
-//		List<NameValueBean> biohazardList = new ArrayList<NameValueBean>();
-//		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
-//				Constants.CDE_NAME_BIOHAZARD, null);
-//		biohazardList.remove(0);
-//		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-
 		DAO dao = AppUtility.openDAOSession(null);
-
 		List<Biohazard> biohazardList = dao.retrieve(Biohazard.class.getName());
+
 		ArrayList<BiohazardDTO> biohazardTypeNameList = new ArrayList<BiohazardDTO>();
 		for (Biohazard biohazard : biohazardList)
 		{
@@ -109,14 +112,9 @@ public class SpecimenEditAction extends CatissueBaseAction
 
 			biohazardTypeNameList.add(biohazardDTO);
 		}
-		// set associated identified report id
-		
-	
 
-		Gson gson = new Gson();
 		String biohazardTypeNameListJSON = gson.toJson(biohazardTypeNameList);
-
-		request.setAttribute("biohazardTypeNameListJSON", biohazardTypeNameListJSON);
+		request.setAttribute(Constants.BIOHAZARD_TYPE_NAME_LIST_JSON, biohazardTypeNameListJSON);
 		
 		Long specimenEntityId = null;
 		
