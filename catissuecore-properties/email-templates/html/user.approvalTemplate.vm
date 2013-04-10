@@ -12,7 +12,7 @@ Congratulations! You are now a member of caTissue. Your registration details are
 		<td>First Name </td><td> : $user.firstName</td>
 	</tr>
 	<tr>
-		<td>Street <td><td> : $user.address.street</td>
+		<td>Street </td><td> : $user.address.street</td>
 	</tr>
 	<tr>
 		<td>City </td></td> : $user.address.city</td>
