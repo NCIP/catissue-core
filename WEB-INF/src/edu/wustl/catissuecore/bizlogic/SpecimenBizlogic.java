@@ -71,7 +71,7 @@ public class SpecimenBizlogic
 	 * @throws ApplicationException 
 	 */
 	private void getUpdatedSpecimen(Specimen oldSpecimenObj, SpecimenDTO specimenDTO)
-			throws ParseException, ApplicationException
+			throws ParseException
 	{
 		if (specimenDTO.getActivityStatus() != null)
 			oldSpecimenObj.setActivityStatus(specimenDTO.getActivityStatus());
@@ -186,7 +186,6 @@ public class SpecimenBizlogic
 	 * @throws ApplicationException 
 	 */
 	private Collection<Biohazard> getBiohazards(Specimen oldSpecimenObj, SpecimenDTO specimenDTO)
-			throws ApplicationException
 	{
 		Collection<Biohazard> biohazardCollection = oldSpecimenObj.getBiohazardCollection();
 
@@ -206,15 +205,7 @@ public class SpecimenBizlogic
 	}
 
 	private Biohazard getBiohazardDomainObjFromDTO(BiohazardDTO biohazardDTO)
-			throws ApplicationException
 	{
-		//		DAO dao = AppUtility.openDAOSession(null);
-		//
-		//		Biohazard biohazard = (Biohazard) dao.retrieveById(Biohazard.class.getName(),
-		//				biohazardDTO.getId());
-		//
-		//		AppUtility.closeDAOSession(dao);
-
 		Biohazard biohazard = new Biohazard();
 		biohazard.setId(biohazardDTO.getId());
 		biohazard.setName(biohazardDTO.getName());

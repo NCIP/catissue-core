@@ -46,19 +46,23 @@ public class SpecimenEditAction extends CatissueBaseAction
 			specimenDTO = bizLogic.getDTO(identifier);
 			request.setAttribute("specimenDTO", specimenDTO);
 			DAO dao = AppUtility.openDAOSession(null);
-			try{
-			Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(), AppUtility.openDAOSession(null));
-			if (reportId == null)
+			try
 			{
-				reportId = -1l;
+				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(),
+						AppUtility.openDAOSession(null));
+				if (reportId == null)
+				{
+					reportId = -1l;
+				}
+				else if (AppUtility.isQuarantined(reportId))
+				{
+					reportId = -2l;
+				}
+				final HttpSession session = request.getSession();
+				session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 			}
-			else if (AppUtility.isQuarantined(reportId))
+			finally
 			{
-				reportId = -2l;
-			}
-			final HttpSession session = request.getSession();
-			session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
-			}finally{
 				AppUtility.closeDAOSession(dao);
 			}
 		}
@@ -115,9 +119,9 @@ public class SpecimenEditAction extends CatissueBaseAction
 
 		String biohazardTypeNameListJSON = gson.toJson(biohazardTypeNameList);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_NAME_LIST_JSON, biohazardTypeNameListJSON);
-		
+
 		Long specimenEntityId = null;
-		
+
 		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
 				AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
 		{
@@ -132,7 +136,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
 		}
 		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
-		request.setAttribute("entityName",AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+		request.setAttribute("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
 
 		return mapping.findForward(Constants.PAGE_OF_NEW_SPECIMEN);
 	}
