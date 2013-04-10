@@ -10,6 +10,7 @@
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
 <link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
 
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
@@ -29,6 +30,7 @@
 </script>
 <!----------------------------------------------------------------------->
 <body onload="initSpecimenCombo()"></body>
+
 <html:form action="NewSpecimenEdit.do">
 
 <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -37,15 +39,7 @@
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
 								
-								<html:hidden name="specimenDTO" property="parentSpecimenId"/>
-								
-								<html:hidden name="specimenDTO" property="id" styleId="id"/>
-								
-								<html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
-								
-<script>
-	
-</script><table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
 	<tr>
 		<td class="tablepadding">
@@ -67,12 +61,19 @@
 				<div id="mainTable"style="display:block">
 				<table width="100%"  border="0" cellpadding="3" cellspacing="0" >
 				<tr>
-		          <td><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
-		        </tr>
+					<td>
+						<div id="error" class="alert alert-error" style="display:none">
+							<strong>Error!</strong> <span id="errorMsg">Change a few things up and try submitting again.</span>
+						</div>
+						<div class="alert alert-success" id="success" style="display:none">
+						   Specimen Updated Sucessfully.
+						</div>
+					</td>
+				</tr>
 				<tr>
 		          <td align="left" class="showhide">
 					<table width="100%" border="0" cellpadding="3" cellspacing="0" >
-					<!-- NEW SPECIMEN REGISTRATION BEGINS-->
+						<!-- NEW SPECIMEN REGISTRATION BEGINS-->
 						<tr class="tr_alternate_color_lightGrey">
 				<logic:empty name="specimenDTO" property="parentSpecimenName">
 				<logic:notEmpty name="specimenDTO" property="specimenCollectionGroupName">
@@ -593,7 +594,53 @@ function submitTabData()
 		tabDataJSON["pos1"]= document.getElementById("pos1").value;
 		tabDataJSON["pos2"]= document.getElementById("pos2").value;
 	}
-	dhtmlxAjax.postSync("UpdateSpecimen.do","dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON));
+	
+	var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON));
+	
+	if(loader.xmlDoc.responseText != null)
+	{
+		var response = eval('('+loader.xmlDoc.responseText+')')
+		if(response.success == "success")
+		{
+			document.getElementById('success').style.display='block';
+			forwardToChildSpecimen();
+		}
+		else
+		{
+			document.getElementById('errorMsg').innerHTML = response.msg;
+			document.getElementById('error').style.display='block';
+		}
+	}
+}
+
+function forwardToChildSpecimen() {
+    var radios = document.getElementsByName("specimenChild");
+	var checkedRadio;
+    for (var i = 0; i < radios.length; i++) {       
+        if (radios[i].checked) {
+            checkedRadio=radios[i].value;
+            break;
+        }
+    }
+	
+	var action;
+	var specimenLabel = document.getElementById('label').value;
+	var colProtId = document.getElementById("id").value; 
+	
+	switch(checkedRadio)
+	{
+		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel+'&colProtId='+colProtId; break;
+		
+		//case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true'; break;
+		
+		default	:	action = "none";
+	}
+	
+	if(action!="none")
+	{
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
 }
 
 function updateHelpURL()
