@@ -4,6 +4,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
+<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+
 <%@ page language="java" isELIgnored="false"%>
 
 
@@ -22,6 +24,26 @@ function inputBlur(i){
 		i.value=i.defaultValue;
 	}
 }
+</script>
+
+<script>
+		var strLInk=window.location.href;
+		var stringIndexValue=strLInk.lastIndexOf("/");
+		var strLinkWithoutSlash=strLInk.substring(0,stringIndexValue);
+		shortcut.add("alt+o", function() {
+		var strLinkForOrder=strLinkWithoutSlash.concat("/RequestListView.do");
+		window.location=strLinkForOrder;
+           });
+			
+		 shortcut.add("alt+q", function() {
+				var strLinkForQueries=strLinkWithoutSlash.concat("/ShowQueryDashboardAction.do");
+				window.location=strLinkForQueries;
+				});
+				
+		shortcut.add("alt+c", function() {
+				var strLinkForDataEntry=strLinkWithoutSlash.concat("/CpBasedSearch.do");
+				window.location=strLinkForDataEntry;
+				});		
 </script>
 
 
@@ -49,32 +71,32 @@ function inputBlur(i){
 						<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value"></a>
 				</logic:notEmpty>
 					<a href="RequestListView.do" class="white"> 
-						<img src="images/uIEnhancementImages/order_icon.png"  title="Orders">
-						<span title="Orders" style="vertical-align:top"> 
+						<img src="images/uIEnhancementImages/order_icon.png"  title="Orders,Press Alt + O">
+						<span title="Orders, Press Alt + O" style="vertical-align:top"> 
 							<bean:message key="app.orders" /> 
 						</span> 
 					</a>
 					&nbsp;
 					<a href="ShowQueryDashboardAction.do" class="white">
 						<img src="images/uIEnhancementImages/search_icon.png" alt="Summary"
-						 border="0" title="Queries"/>
-						 <span title="Query" style="vertical-align:top">
+						 border="0" title="Queries,Press Alt + Q"/>
+						 <span title="Query,Press Alt + Q" style="vertical-align:top">
 							<bean:message key="app.queries" />
 						 </span>
 					</a>
 					&nbsp;
 					<a	href="CpBasedSearch.do" class="white"> 
-						<img src="images/uIEnhancementImages/data_entry_icon.png" alt="Data Entry"
-						 border="0" title="Data Entry"/>
-						 <span title="Data Entry" style="vertical-align:top">
-							CP Based View </span>
+						<img src="images/uIEnhancementImages/data_entry_icon.png" alt="CP Based View"
+						 border="0" title="CP Based View, Press Alt + C"/>
+						 <span title="CP Based View, Press Alt + C" style="vertical-align:top">
+							<bean:message key="app.cpBasedView" /> </span>
 					</a>&nbsp;
 					
 					<a	href="BulkOperation.do?pageOf=pageOfBulkOperation" class="white">
 							<img src="images/uIEnhancementImages/bo.png" alt="Summary"
 								  border="0" title="Bulk Upload" />
-								  <span title="Bulk Upload" style="vertical-align:top">Bulk Upload </span>
-					</a>&nbsp;
+								  <span title="Bulk Upload" style="vertical-align:top"><bean:message key="app.bulkUplad" />  </span>
+					</a>
 				</td>
 
 
