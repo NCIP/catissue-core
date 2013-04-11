@@ -6057,7 +6057,14 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ParticipantViewAjaxAction"
 			validate="false" scope="request" parameter="method">
 			
-		</action>		
+		</action>
+
+		<action path="/DisplayScg"
+			type="edu.wustl.catissuecore.action.DisplaySCGAction"
+			validate="false" scope="request" >
+			<forward name="success"	path="/AnticipatorySpecimenView.do"/>
+			
+       </action>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
