@@ -44,38 +44,37 @@ function processData(obj)
  scgDataJSON[obj.name] = obj.value;
 }
 
-function submitSCG()
-{
-  //set received date
-  scgDataJSON["receivedDate"] = document.getElementById("receivedDate").value+" "+rhourTimeCombo.getSelectedText()+":"+rminutesTimeCombo.getSelectedText();
-  scgDataJSON["collectedDate"] = document.getElementById("collectedDate").value+" "+hourTimeCombo.getSelectedText()+ ":" + minutesTimeCombo.getSelectedText();
-  scgDataJSON["scgName"] = document.getElementById("scgName").value;
-  scgDataJSON["site"] = siteCombo.getSelectedValue();
+function submitSCG() {
+	// set received date
+	scgDataJSON["receivedDate"] = document.getElementById("receivedDate").value
+			+ " " + rhourTimeCombo.getSelectedText() + ":"
+			+ rminutesTimeCombo.getSelectedText();
+	scgDataJSON["collectedDate"] = document.getElementById("collectedDate").value
+			+ " "
+			+ hourTimeCombo.getSelectedText()
+			+ ":"
+			+ minutesTimeCombo.getSelectedText();
+	scgDataJSON["scgName"] = document.getElementById("scgName").value;
+	scgDataJSON["site"] = siteCombo.getSelectedValue();
 
-  var response = dhtmlxAjax.postSync("SaveScgAjaxAction.do","dataJSON="+JSON.stringify(scgDataJSON)); 
-  
+	var response = dhtmlxAjax.postSync("SaveScgAjaxAction.do", "dataJSON="
+			+ JSON.stringify(scgDataJSON));
 
+	if (response.xmlDoc.responseText == "success") {
+		document.getElementById("errorDiv").innerHTML = "";
+		window.parent.frames[1].pageSubmit();
+	} else {
+		var errorList = eval(response.xmlDoc.responseText);
+		var i;
+		var errormsg = "";
+		for (i = 0; i < errorList.length; i++) {
+			errormsg = errormsg + "<div>" + errorList[i].msg + "</div>";
+		}
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerHTML = document
+				.getElementById("errorDiv").innerHTML
+				+ errormsg;
 
-alert(response.xmlDoc.responseText) ;
- if(response.xmlDoc.responseText=="success")
-  {
-   document.getElementById("errorDiv").innerHTML = "";
-   window.parent.frames[1].pageSubmit();
-  }
-else
-{
-  var errorList = eval(response.xmlDoc.responseText);
- var i;
- var errormsg = "";
-alert(errorList.length);
-  for(i = 0;i<errorList.length;i++)
-{
-   errormsg = errormsg + "<div>"+errorList[i].msg+"</div>";
-}  
-   document.getElementById("errorDiv").style.display = "block";
-   document.getElementById("errorDiv").innerHTML =document.getElementById("errorDiv").innerHTML
-+ errormsg;
-   
-}
+	}
 
 }
