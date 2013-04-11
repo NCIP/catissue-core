@@ -158,6 +158,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final OrderDetails order = (OrderDetails) obj;
+			User requestedUser=new User();
+			requestedUser.setId(sessionDataBean.getUserId());
+			order.setRequestedBy(requestedUser);
 			dao.insert(order);
 		}
 		catch (final DAOException daoExp)
@@ -2153,12 +2156,31 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			final List orderDetails=dao.executeNamedQuery("getOrderDetails", substParams);
 			Object[] orderDetailObject= (Object[])orderDetails.get(0);
 			
-			displayOrderDTO.setOrderName(orderDetailObject[0].toString());
-			displayOrderDTO.setDistributionProtocolName(orderDetailObject[2].toString());
-			displayOrderDTO.setRequestorName(orderDetailObject[4]+","+orderDetailObject[3]);
-			displayOrderDTO.setRequestorEmail(orderDetailObject[5].toString());
+			if(orderDetailObject[0]!=null)
+			{
+				displayOrderDTO.setOrderName(orderDetailObject[0].toString());
+			}
+			else
+			{
+				displayOrderDTO.setOrderName("Order_"+orderId.toString());
+			}
+			if(orderDetailObject[2]!=null)
+			{
+				displayOrderDTO.setDistributionProtocolName(orderDetailObject[2].toString());
+			}
+			if(orderDetailObject[4]!=null && orderDetailObject[3]!=null)
+			{
+				displayOrderDTO.setRequestorName(orderDetailObject[4]+","+orderDetailObject[3]);
+			}
+			if(orderDetailObject[5]!=null)
+			{
+				displayOrderDTO.setRequestorEmail(orderDetailObject[5].toString());
+			}
 			displayOrderDTO.setRequestedDate(new java.sql.Date(((Timestamp)orderDetailObject[6]).getTime()));
-			displayOrderDTO.setComments(orderDetailObject[7].toString());
+			if(orderDetailObject[7]!=null)
+			{
+				displayOrderDTO.setComments(orderDetailObject[7].toString());
+			}
 			return displayOrderDTO;
 	}
 	public OrderStatusDTO updateOrder(OrderSubmissionDTO orderSubmissionDTO,Long userId,HibernateDAO dao) throws BizLogicException
@@ -2172,6 +2194,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			boolean isOrderRejected=true;
 			for (OrderItemSubmissionDTO orderItemSubmissionDTO : orderSubmissionDTO.getOrderItemSubmissionDTOs())
 			{
+				params.put("0", new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getOrderitemId()));	
 				params.put("0", new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getDistQty()));
 				params.put("1", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getStatus()));
 				params.put("2", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getComments()));
@@ -2184,14 +2207,24 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 				if(isDistributed(orderItemSubmissionDTO.getStatus()))
 				{	
-					String specimenAvailableStatus=specimenBizLogic.updateReducedQuantity(orderItemSubmissionDTO.getDistQty(), orderItemSubmissionDTO.getSpecimenLabel(), dao);
+					
+					String specimenAvailableStatus=specimenBizLogic.reduceQuantity(orderItemSubmissionDTO.getDistQty(), orderItemSubmissionDTO.getSpecimenLabel(), dao);
 					if(!Constants.SUCCESS.equals(specimenAvailableStatus))
 					{
 						OrderErrorDTO orderErrorDTO=new OrderErrorDTO();
 						orderErrorDTO.setSpecimenLabel(orderItemSubmissionDTO.getSpecimenLabel());
 						orderErrorDTO.setError(specimenAvailableStatus);
 						orderStatusDTO.getOrderErrorDTOs().add(orderErrorDTO);
+						if(ApplicationProperties.getValue("specimen.closed.unavailable").equals(specimenAvailableStatus))
+						{
+							orderErrorDTO.setNewStatus(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE);
+						}
+						else
+						{
+							orderErrorDTO.setNewStatus(Constants.ORDER_REQUEST_STATUS_NEW);
+						}
 					}
+					
 					specimenEventParametersBizLogic.createDistributionEvent(orderItemSubmissionDTO.getDistQty(),orderItemSubmissionDTO.getComments(),orderItemSubmissionDTO.getSpecimenId(), dao,userId);
 				}
 				if (isClosed(orderItemSubmissionDTO.getStatus()))
@@ -2224,21 +2257,24 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				orderStatus=Constants.ORDER_STATUS_REJECTED;
 			}
 			params = new HashMap<String, NamedQueryParam>();
+			
 			params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getSite()));
 			params.put("1", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
 			dao.executeUpdateWithNamedQuery("updateDistributionDetails",params);
 			
 			params = new HashMap<String, NamedQueryParam>();
-			params.put("0", new NamedQueryParam(DBTypes.STRING, orderStatus));
+			params.put("0", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getOrderName()));
+			params.put("1", new NamedQueryParam(DBTypes.STRING, orderStatus));
 			if(orderSubmissionDTO.getComments()==null)
 			{
-				params.put("1", new NamedQueryParam(DBTypes.STRING, ""));
+				params.put("2", new NamedQueryParam(DBTypes.STRING, ""));
 			}
 			else
 			{
-				params.put("1", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getComments()));
+				params.put("2", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getComments()));
 			}
-			params.put("2", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
+			params.put("3", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getDisptributionProtocolId()));
+			params.put("4", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
 			dao.executeUpdateWithNamedQuery("updateOrderDetails",params);
 
 			orderStatusDTO.setStatus(orderStatus);

@@ -112,6 +112,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	protected Boolean mailNotification = Boolean.FALSE;
 
 	/**
+	 * Requested User.
+	 */
+	protected User requestedBy;
+	/**
 	 * Default constructor.
 	 */
 	public OrderDetails()
@@ -288,6 +292,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	public void setStatus(String status)
 	{
 		this.status = status;
+	}
+	
+	public User getRequestedBy() {
+		return requestedBy;
+	}
+
+	public void setRequestedBy(User requestedBy) {
+		this.requestedBy = requestedBy;
 	}
 
 	/**

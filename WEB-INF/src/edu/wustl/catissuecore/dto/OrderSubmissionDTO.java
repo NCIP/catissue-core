@@ -13,6 +13,7 @@ public class OrderSubmissionDTO {
 	private Collection<OrderItemSubmissionDTO> OrderItemSubmissionDTOs;
 	private String comments;
 	private String orderName;
+	private Long disptributionProtocolId;
 	private String disptributionProtocolName;
 	private String requestorEmail;
 	private String requestorName;
@@ -48,11 +49,11 @@ public class OrderSubmissionDTO {
 	public void setOrderName(String orderName) {
 		this.orderName = orderName;
 	}
-	public String getDisptributionProtocolName() {
-		return disptributionProtocolName;
+	public Long getDisptributionProtocolId() {
+		return disptributionProtocolId;
 	}
-	public void setDisptributionProtocolName(String disptributionProtocolName) {
-		this.disptributionProtocolName = disptributionProtocolName;
+	public void setDisptributionProtocolId(Long disptributionProtocolId) {
+		this.disptributionProtocolId = disptributionProtocolId;
 	}
 	public String getRequestorEmail() {
 		return requestorEmail;
@@ -65,6 +66,12 @@ public class OrderSubmissionDTO {
 	}
 	public void setRequestorName(String requestorName) {
 		this.requestorName = requestorName;
+	}
+	public String getDisptributionProtocolName() {
+		return disptributionProtocolName;
+	}
+	public void setDisptributionProtocolName(String disptributionProtocolName) {
+		this.disptributionProtocolName = disptributionProtocolName;
 	}
 		
 }

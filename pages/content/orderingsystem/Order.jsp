@@ -33,6 +33,7 @@ var tabDataJSON = {};
 var tabbar;
 var mygrid;
 var ifAnyDistributed='false';
+var distributionProtocolNameCombo;
 function processData(obj)
 {
 	tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
@@ -40,6 +41,16 @@ function processData(obj)
 
 function submitOrderNew(consentVerifiedValues)
 {	
+	if(document.getElementById('orderName').value=="")
+	{
+		alert("Please specify Order Name.");
+		return;	
+	}	
+	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getSelectedText()=="-1")
+	{
+		alert("Please select distriution protocol.");
+		return;
+	}
 	var selectedSite=tabDataJSON['site'];
 	if(ifAnyDistributed=='false')
 	{
@@ -63,8 +74,9 @@ function submitOrderNew(consentVerifiedValues)
    	}	
 	tabDataJSON["gridXML"] = mygrid.serialize();
 	tabDataJSON["id"]=${requestScope.id};
-	tabDataJSON["orderName"]='<bean:write name="DisplayOrderDTO" property="orderName" scope="request"/>';
-	tabDataJSON["disptributionProtocolName"]='<bean:write name="DisplayOrderDTO" property="distributionProtocolName" scope="request"/>';
+	tabDataJSON["orderName"]=document.getElementById('orderName').value;
+	tabDataJSON["disptributionProtocolId"]=distributionProtocolNameCombo.getActualValue();
+	tabDataJSON["disptributionProtocolName"]=distributionProtocolNameCombo.getComboText();
 	tabDataJSON["requestorEmail"]='<bean:write name="DisplayOrderDTO" property="requestorEmail" scope="request"/>';
 	tabDataJSON["requestorName"]='<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/>';
 	var loader=dhtmlxAjax.postSync("SubmitOrder.do","dataJSON="+JSON.stringify(tabDataJSON));
@@ -89,13 +101,16 @@ function submitOrderNew(consentVerifiedValues)
 			   {
 				if(specimenlabel == mygrid.cellById(row+1,0).getValue())
 				{	
-				  mygrid.cellById(row+1,numberOfcolumns).setValue(orderErrorDTOs[0].error);
+				  mygrid.cellById(row+1,numberOfcolumns).setValue(orderErrorDTOs[i].error);
+				  mygrid.cellById(row+1,5).setValue(orderErrorDTOs[i].newStatus);	
 				  mygrid.setRowColor(row+1,"#FF4400");
 				  
 				}
 			   }
 			}
+			document.getElementById('error').style.display='block';
 			tabbar.setTabActive('SimpleViewTab');
+
 		}
 	}
 }
@@ -176,7 +191,7 @@ function switchToOlderView()
 				
     	<tr>
 		          <td><div id="error" class="alert alert-error" style="display:none">
-    <strong>Oh snap!</strong> Change a few things up and try submitting again.
+    Distribution could not be completed, please check the highlighted specimens for errors. Specimens not eligible(not available, quantity lesser than zero, virtual specimens, pending specimens) for distribution have been marked as rejected. Please correct the errors for the rest and distribute.
 </div>
 <div class="alert alert-success" id="success" style="display:none">
    Order Submitted Sucessfully.
@@ -194,17 +209,31 @@ function switchToOlderView()
 					</td>
 
 	                <td width="33%" class="black_ar">
-	                		<bean:write name="DisplayOrderDTO" property="orderName" scope="request"/>
+	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="30" name="DisplayOrderDTO" onblur="processData(this)"/>
 					</td>
 			
-					<td width="17%" class="black_ar">
+					<td width="17%" class="black_ar align_right_style">
                 		<strong>
 						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
 						</strong>
 					</td>
  					<td width="33%" class="black_ar">
-							<bean:write name="DisplayOrderDTO" property="distributionProtocolName" scope="request"/>
+						<html:select property="distributionProtocolName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="distributionProtocolName" size="1" onblur="processData(this)">
+							<html:options collection="distributionProtocolList" labelProperty="name" property="value" />
+					       </html:select>
 					</td>
+					<script>
+						distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
+						distributionProtocolNameCombo.setSize(200);
+						if(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}')==null)
+						{
+						  distributionProtocolNameCombo.setComboValue("-1");		
+						}
+						else
+						{
+						 distributionProtocolNameCombo.setComboValue(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}').value);
+						}
+    					</script>	
 				</tr>
 
 				<tr class="${tr_white_color}">

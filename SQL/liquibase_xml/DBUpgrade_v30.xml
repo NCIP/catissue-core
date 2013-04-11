@@ -266,4 +266,11 @@
     		<column name="SPECIMEN_COLL_GROUP_ID"/>
 		</createIndex>
 	</changeSet>
+	<changeSet id="38" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_ORDER">
+			<column name="REQUESTER_ID" type="${int.type}" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
 </databaseChangeLog>         

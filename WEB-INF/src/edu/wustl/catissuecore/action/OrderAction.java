@@ -42,6 +42,8 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * @author renuka_bajpai
@@ -88,7 +90,8 @@ public class OrderAction extends BaseAction
 		HibernateDAO dao=null;
 		try
 		{
-			dao=(HibernateDAO)AppUtility.openDAOSession((SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA));
+			SessionDataBean sessiondataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+			dao=(HibernateDAO)AppUtility.openDAOSession(sessiondataBean);
 			OrderBizLogic orderBizLogic=new OrderBizLogic();
 			DisplayOrderDTO displayOrderDTO=orderBizLogic.getOrderDetails(Long.parseLong(request.getParameter("id")),dao);
 			request.setAttribute("DisplayOrderDTO", displayOrderDTO);
@@ -98,6 +101,12 @@ public class OrderAction extends BaseAction
 			request.setAttribute("status", Constants.STATUS_LIST);
 			request.setAttribute("datePattern", ApplicationProperties.getValue("date.pattern"));
 			request.setAttribute("distributeStatusList", orderBizLogic.DISTRIBUTE_STATUS_LIST);
+			
+			final long csmUserId = new Long(sessiondataBean.getCsmUserId()).longValue();
+			final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
+			final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
+					sessiondataBean.getUserId(), role.getName(), sessiondataBean);
+			request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 		}
 		finally
 		{

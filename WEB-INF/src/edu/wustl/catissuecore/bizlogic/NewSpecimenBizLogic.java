@@ -6272,7 +6272,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return  consentTierDTOs;
 	}
-	public String updateReducedQuantity(Double quantityReducedBy,String specimenLabel,HibernateDAO dao) throws BizLogicException, DAOException
+	public String reduceQuantity(Double quantityReducedBy,String specimenLabel,HibernateDAO dao) throws BizLogicException, DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
