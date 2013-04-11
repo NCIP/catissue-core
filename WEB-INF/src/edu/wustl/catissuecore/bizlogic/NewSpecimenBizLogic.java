@@ -42,7 +42,6 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
@@ -6128,7 +6127,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
 			specimenDTO.setComments(specimen.getComment());
 			//				specimenDTO.setConcentration(specimen.getc)
-			specimenDTO.setCreatedDate(String.valueOf(specimen.getCreatedOn()));
+			specimenDTO.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(),
+					CommonServiceLocator.getInstance().getDatePattern()));
 			specimenDTO.setLineage(specimen.getLineage());
 			if (specimen.getParentSpecimen() != null)
 			{
