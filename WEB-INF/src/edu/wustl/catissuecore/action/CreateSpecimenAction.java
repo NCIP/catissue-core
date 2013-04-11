@@ -71,13 +71,13 @@ public class CreateSpecimenAction extends CatissueBaseAction
 	private static final Logger LOGGER = Logger.getCommonLogger(CreateSpecimenAction.class);
 
 	/** The Constant TRUE_STRING. */
-	private static final String TRUE_STRING="true";
+	private static final String TRUE_STRING = "true";
 
 	/** The Constant PAGE_OF_STRING. */
-	private static final String PAGE_OF_STRING="pageOf";
+	private static final String PAGE_OF_STRING = "pageOf";
 
 	/** The Constant INITVALUES_STRING. */
-	private final static String INITVALUES_STRING="initValues";
+	private final static String INITVALUES_STRING = "initValues";
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -97,7 +97,7 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		final CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 
 		final List<NameValueBean> strgPosList = AppUtility.getStoragePositionTypeList();
-		final String contName=request.getParameter(Constants.CONTAINER_NAME);
+		final String contName = request.getParameter(Constants.CONTAINER_NAME);
 		request.setAttribute("storageList", strgPosList);
 		// List of keys used in map of ActionForm
 		final List key = new ArrayList();
@@ -131,10 +131,11 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		 * by default should be current date.
 		 */
 
-		if(request.getParameter("path") != null || (createForm.getCreatedDate() == null || createForm.getCreatedDate() == ""))
+		if (request.getParameter("path") != null
+				|| (createForm.getCreatedDate() == null || createForm.getCreatedDate() == ""))
 		{
 			createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
-				.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
 
 		String pageOf = null;
@@ -180,52 +181,69 @@ public class CreateSpecimenAction extends CatissueBaseAction
 					// Bug-2784: If coming from NewSpecimen page, then only set
 					// parent specimen label.
 					final Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
-					if ((forwardToHashMap != null
-							&& forwardToHashMap.get("parentSpecimenId") != null
-							&& forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null) || "participantView".equalsIgnoreCase(request.getParameter("requestFrom")) )
+					if ("editSpecimenPage"
+							.equalsIgnoreCase(request.getParameter("forwardFromPage"))
+							|| (forwardToHashMap != null
+									&& forwardToHashMap.get("parentSpecimenId") != null && forwardToHashMap
+									.get(Constants.SPECIMEN_LABEL) != null)
+							|| "participantView".equalsIgnoreCase(request
+									.getParameter("requestFrom")))
 					{
-					  if("participantView".equalsIgnoreCase(request.getParameter("requestFrom")) )
-					 {
-						  parentSpecimenID = Long.valueOf(request.getParameter("parentSpecimenId"));
-						  parentSpecLbl =  request.getParameter("parentLabel");
-					 }
-					  else{
-						parentSpecimenID = (Long) forwardToHashMap.get("parentSpecimenId");
-						parentSpecLbl = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
-								.toString();
-					  }
+						if ("participantView".equalsIgnoreCase(request.getParameter("requestFrom")))
+						{
+							parentSpecimenID = Long.valueOf(request
+									.getParameter("parentSpecimenId"));
+							parentSpecLbl = request.getParameter("parentLabel");
+						}
+						else if ("editSpecimenPage".equalsIgnoreCase(request
+								.getParameter("forwardFromPage")))
+						{
+							parentSpecimenID = Long.valueOf(request
+									.getParameter("parentSpecimenId"));
+							parentSpecLbl = request.getParameter("parentLabel");
+
+						}
+						else
+						{
+							parentSpecimenID = (Long) forwardToHashMap.get("parentSpecimenId");
+							parentSpecLbl = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
+									.toString();
+						}
 						request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
 						createForm.setParentSpecimenLabel(parentSpecLbl);
-						String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
-						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
-						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
-						"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ parentSpecimenID;
+						String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "
+								+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "
+								+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "
+								+ "from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="
+								+ parentSpecimenID;
 
 						List formatList = AppUtility.executeQuery(hql);
 						String parentLabelFormat = null;
 						String deriveLabelFormat = null;
 						String alqLabelFrmt = null;
-						if(!formatList.isEmpty())
+						if (!formatList.isEmpty())
 						{
-							Object[] obje = (Object[])formatList.get(0);
-							if(obje[0] != null)
+							Object[] obje = (Object[]) formatList.get(0);
+							if (obje[0] != null)
 							{
 								parentLabelFormat = obje[0].toString();
 							}
-							if(obje[1] != null)
+							if (obje[1] != null)
 							{
 								deriveLabelFormat = obje[1].toString();
 							}
-							if(obje[2] != null)
+							if (obje[2] != null)
 							{
 								alqLabelFrmt = obje[2].toString();
 							}
 						}
-						if(Variables.isTemplateBasedLblGeneratorAvl)
+						if (Variables.isTemplateBasedLblGeneratorAvl)
 						{
-							createForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, alqLabelFrmt, Constants.DERIVED_SPECIMEN));
+							createForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(
+									parentLabelFormat, deriveLabelFormat, alqLabelFrmt,
+									Constants.DERIVED_SPECIMEN));
 						}
-						else if(Variables.isSpecimenLabelGeneratorAvl)
+						else if (Variables.isSpecimenLabelGeneratorAvl)
 						{
 							createForm.setGenerateLabel(true);
 						}
@@ -249,8 +267,8 @@ public class CreateSpecimenAction extends CatissueBaseAction
 						// bizLogic.totalNoOfSpecimen(sessionData)+1;
 						final HashMap inputMap = new HashMap();
 						inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, parentSpecLbl);
-						inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, String
-								.valueOf(parentSpecimenID));
+						inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY,
+								String.valueOf(parentSpecimenID));
 
 						// SpecimenLabelGenerator abstractSpecimenGenerator =
 						// SpecimenLabelGeneratorFactory.getInstance();
@@ -304,7 +322,8 @@ public class CreateSpecimenAction extends CatissueBaseAction
 							}
 							final String spClass = createForm.getClassName();
 							final String spType = createForm.getType();
-							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, String.valueOf(cpId));
+							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,
+									String.valueOf(cpId));
 							request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
 							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 							{
@@ -315,10 +334,9 @@ public class CreateSpecimenAction extends CatissueBaseAction
 							{
 
 								final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
-								containerMap = scbizLogic.
-								getAllocatedContainerMapForSpecimen
-								(AppUtility.setparameterList(cpId,spClass,0,spType),
-								sessionData, dao,contName);
+								containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(
+										AppUtility.setparameterList(cpId, spClass, 0, spType),
+										sessionData, dao, contName);
 								ActionErrors errors = (ActionErrors) request
 										.getAttribute(Globals.ERROR_KEY);
 								if (containerMap.isEmpty())
@@ -393,8 +411,8 @@ public class CreateSpecimenAction extends CatissueBaseAction
 				final Integer identifier = Integer.valueOf(createForm.getStorageContainer());
 				String parentCntName = "";
 
-				final Object object = dao.retrieveById(StorageContainer.class.getName(), Long.valueOf(
-						createForm.getStorageContainer()));
+				final Object object = dao.retrieveById(StorageContainer.class.getName(),
+						Long.valueOf(createForm.getStorageContainer()));
 				if (object != null)
 				{
 					final StorageContainer container = (StorageContainer) object;
@@ -431,102 +449,71 @@ public class CreateSpecimenAction extends CatissueBaseAction
 				initialValues = new ArrayList();
 				initialValues.add(startingPoints);
 			}
-		request.setAttribute(INITVALUES_STRING, initialValues);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		// -------------------------
-		// Setting the specimen type list
-		final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_SPECIMEN_TYPE, null);
-		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-		// Setting biohazard list
-		final List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_BIOHAZARD, null);
-		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
+			request.setAttribute(INITVALUES_STRING, initialValues);
+			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+			// -------------------------
+			// Setting the specimen type list
+			final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+					Constants.CDE_NAME_SPECIMEN_TYPE, null);
+			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+			// Setting biohazard list
+			final List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+					Constants.CDE_NAME_BIOHAZARD, null);
+			request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
-		final Map subTypeMap = AppUtility.getSpecimenTypeMap();
-		final List specimenClassList = AppUtility.getSpecimenClassList();
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-		// set the map to subtype
-		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
+			final Map subTypeMap = AppUtility.getSpecimenTypeMap();
+			final List specimenClassList = AppUtility.getSpecimenClassList();
+			request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+			// set the map to subtype
+			request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 
-		// ************* ForwardTo implementation *************
-		final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+			// ************* ForwardTo implementation *************
+			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
-		if (forwardToHashMap != null)
-		{
-			final Long parentSpecimenId = (Long) forwardToHashMap.get("parentSpecimenId");
+			Long parentSpecimenId = null;
 
-			if (parentSpecimenId != null)
+			if ("editSpecimenPage".equalsIgnoreCase(request.getParameter("forwardFromPage")))
 			{
-				createForm.setParentSpecimenId(parentSpecimenId.toString());
-				createForm.setPositionInStorageContainer("");
-				createForm.setSelectedContainerName("Virtual");
-				createForm.setQuantity("");
-				createForm.setPositionDimensionOne("");
-				createForm.setPositionDimensionTwo("");
-				createForm.setPos1("");
-				createForm.setPos2("");
-				createForm.setStorageContainer("");
-				createForm.setBarcode(null);
-				map.clear();
-				createForm.setExternalIdentifier(map);
-				createForm.setExIdCounter(1);
-				createForm.setVirtuallyLocated(false);
-				createForm.setStContSelection(1);
-				// containerMap =
-				// getContainerMap(createForm.getParentSpecimenId(), createForm
-				// .getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
-				// initialValues = checkForInitialValues(containerMap);
-				/**
-				 * Name : Vijay_Pande Reviewer Name : Sachin_Lale Bug ID: 4283
-				 * Patch ID: 4283_1 See also: 1-3 Description: Proper Storage
-				 * location of derived specimen was not populated while coming
-				 * from newly created parent specimen page. Initial value were
-				 * generated but not set to form variables.
-				 */
-				// if(initialValues!=null)
-				// {
-				// initialValues = checkForInitialValues(containerMap);
-				// String[] startingPoints=(String[])initialValues.get(0);
-				// createForm.setStorageContainer(startingPoints[0]);
-				// createForm.setPos1(startingPoints[1]);
-				// createForm.setPos2(startingPoints[2]);
-				// }
-				/** --patch ends here -- */
+				parentSpecimenId = Long.valueOf(request.getParameter("parentSpecimenId"));
 			}
-		}
-		// ************* ForwardTo implementation *************
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		if (createForm.isVirtuallyLocated())
-		{
-			request.setAttribute("disabled", TRUE_STRING);
-		}
-		this.setPageData(request, createForm);
-		Specimen specimen=new Specimen();
-		if(createForm.getParentSpecimenId()!=null)
-		{
-			specimen.setId(Long.valueOf(createForm.getParentSpecimenId()));
-		}
-		Long collectionProtocolId=new NewSpecimenBizLogic().getCPId(dao, null, specimen);
-		String cpId="";
-		if(collectionProtocolId!=null)
-		{
-			cpId=collectionProtocolId.toString();
-		}
-		request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId);
-		request.setAttribute("createdDate", createForm.getCreatedDate());
-		final List dataList = (List) request
-				.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
-		final List columnList = new ArrayList();
-		columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
-		AppUtility.setGridData(dataList, columnList, request);
-		int idFieldIndex = 4;
-		request.setAttribute("identifierFieldIndex", idFieldIndex);
+			else if (forwardToHashMap != null)
+			{
+				parentSpecimenId = (Long) forwardToHashMap.get("parentSpecimenId");
+			}
+			setFormData(createForm, map, parentSpecimenId);
+
+			// ************* ForwardTo implementation *************
+			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+			if (createForm.isVirtuallyLocated())
+			{
+				request.setAttribute("disabled", TRUE_STRING);
+			}
+			this.setPageData(request, createForm);
+			Specimen specimen = new Specimen();
+			if (createForm.getParentSpecimenId() != null)
+			{
+				specimen.setId(Long.valueOf(createForm.getParentSpecimenId()));
+			}
+			Long collectionProtocolId = new NewSpecimenBizLogic().getCPId(dao, null, specimen);
+			String cpId = "";
+			if (collectionProtocolId != null)
+			{
+				cpId = collectionProtocolId.toString();
+			}
+			request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId);
+			request.setAttribute("createdDate", createForm.getCreatedDate());
+			final List dataList = (List) request
+					.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
+			final List columnList = new ArrayList();
+			columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
+			AppUtility.setGridData(dataList, columnList, request);
+			int idFieldIndex = 4;
+			request.setAttribute("identifierFieldIndex", idFieldIndex);
 		}
 		catch (final DAOException daoException)
 		{
-			LOGGER.error(daoException.getMessage(),daoException);
+			LOGGER.error(daoException.getMessage(), daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -535,6 +522,54 @@ public class CreateSpecimenAction extends CatissueBaseAction
 			AppUtility.closeDAOSession(dao);
 		}
 		return mapping.findForward(Constants.SUCCESS);
+	}
+
+	/**
+	 * @param createForm
+	 * @param map
+	 * @param parentSpecimenId
+	 */
+	private void setFormData(final CreateSpecimenForm createForm, final Map map,
+			Long parentSpecimenId)
+	{
+		if (parentSpecimenId != null)
+		{
+			createForm.setParentSpecimenId(parentSpecimenId.toString());
+			createForm.setPositionInStorageContainer("");
+			createForm.setSelectedContainerName("Virtual");
+			createForm.setQuantity("");
+			createForm.setPositionDimensionOne("");
+			createForm.setPositionDimensionTwo("");
+			createForm.setPos1("");
+			createForm.setPos2("");
+			createForm.setStorageContainer("");
+			createForm.setBarcode(null);
+			map.clear();
+			createForm.setExternalIdentifier(map);
+			createForm.setExIdCounter(1);
+			createForm.setVirtuallyLocated(false);
+			createForm.setStContSelection(1);
+			// containerMap =
+			// getContainerMap(createForm.getParentSpecimenId(), createForm
+			// .getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
+			// initialValues = checkForInitialValues(containerMap);
+			/**
+			 * Name : Vijay_Pande Reviewer Name : Sachin_Lale Bug ID: 4283
+			 * Patch ID: 4283_1 See also: 1-3 Description: Proper Storage
+			 * location of derived specimen was not populated while coming
+			 * from newly created parent specimen page. Initial value were
+			 * generated but not set to form variables.
+			 */
+			// if(initialValues!=null)
+			// {
+			// initialValues = checkForInitialValues(containerMap);
+			// String[] startingPoints=(String[])initialValues.get(0);
+			// createForm.setStorageContainer(startingPoints[0]);
+			// createForm.setPos1(startingPoints[1]);
+			// createForm.setPos2(startingPoints[2]);
+			// }
+			/** --patch ends here -- */
+		}
 	}
 
 	/**
@@ -580,7 +615,7 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		}
 		catch (final DAOException excep)
 		{
-			LOGGER.error(excep.getMessage(),excep);
+			LOGGER.error(excep.getMessage(), excep);
 			throw new BizLogicException(excep);
 		}
 		return cpId;
@@ -600,7 +635,7 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		AppUtility.setDefaultPrinterTypeLocation(form);
 		final String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		this.setPageData1(request, form);
-		this.setPageData2(request,pageOf);
+		this.setPageData2(request, pageOf);
 		this.setPageData3(request, form);
 
 		this.setNComboData(request, form);
@@ -712,7 +747,7 @@ public class CreateSpecimenAction extends CatissueBaseAction
 	 * @param request : request
 	 * @param pageOf : pageOf
 	 */
-	private void setPageData2(HttpServletRequest request,String pageOf)
+	private void setPageData2(HttpServletRequest request, String pageOf)
 	{
 		setActionToCall2ToReq(request, pageOf);
 		setActionToCall1ToReq(request, pageOf);
@@ -746,16 +781,16 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		setActionToCallToReq(request, pageOf);
 
 		String showRefreshTree = "false";
-		if (isPageOfSpecimenCPQuery(pageOf) && request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null)
+		if (isPageOfSpecimenCPQuery(pageOf)
+				&& request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null)
 		{
-				final Long parentSpecimenId = (Long) request
-						.getAttribute(Constants.PARENT_SPECIMEN_ID);
-				final String nodeId = "Specimen_" + parentSpecimenId.toString();
-				showRefreshTree = TRUE_STRING;
-				final String refreshTree = "refreshTree('" + Constants.CP_AND_PARTICIPANT_VIEW
-						+ "','" + Constants.CP_TREE_VIEW + "','" + Constants.CP_SEARCH_CP_ID
-						+ "','" + Constants.CP_SEARCH_PARTICIPANT_ID + "','" + nodeId + "');";
-				request.setAttribute("refreshTree", refreshTree);
+			final Long parentSpecimenId = (Long) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
+			final String nodeId = "Specimen_" + parentSpecimenId.toString();
+			showRefreshTree = TRUE_STRING;
+			final String refreshTree = "refreshTree('" + Constants.CP_AND_PARTICIPANT_VIEW + "','"
+					+ Constants.CP_TREE_VIEW + "','" + Constants.CP_SEARCH_CP_ID + "','"
+					+ Constants.CP_SEARCH_PARTICIPANT_ID + "','" + nodeId + "');";
+			request.setAttribute("refreshTree", refreshTree);
 		}
 		request.setAttribute("showRefreshTree", showRefreshTree);
 	}

@@ -37,8 +37,17 @@ public class SpecimenEditAction extends CatissueBaseAction
 	{
 		Gson gson = new Gson();
 		SpecimenDTO specimenDTO = new SpecimenDTO();
+		String obj = null;
 
-		String obj = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+		if (request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
+		{
+			obj = request.getAttribute(Constants.SYSTEM_IDENTIFIER).toString();
+		}
+		else
+		{
+			obj = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+		}
+
 		if (!Validator.isEmpty(obj))
 		{
 			Long identifier = Long.valueOf(Utility.toLong(obj));
