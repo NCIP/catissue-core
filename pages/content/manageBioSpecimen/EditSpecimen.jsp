@@ -556,6 +556,10 @@
 </html:form>
 
 <script>
+
+var nodeId= "Specimen_"+document.getElementById("id").value;
+refreshTree(null,null,null,null,nodeId);
+
 var tabDataJSON = {};
 tabDataJSON["id"] = document.getElementById("id").value; 
 //alert(tabDataJSON);
@@ -625,15 +629,14 @@ function forwardToChildSpecimen() {
 	
 	var action;
 	var specimenLabel = document.getElementById('label').value;
-	var colProtId = document.getElementById("id").value; 
-	
+	var specimenId = document.getElementById("id").value;
 	switch(checkedRadio)
 	{
-		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel+'&colProtId='+colProtId; break;
+		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
 		
-		//case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true'; break;
+		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId; break;	
 		
-		default	:	action = "none";
+		default :	action = "none";
 	}
 	
 	if(action!="none")
