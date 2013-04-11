@@ -25,7 +25,11 @@
 <fmt:formatDate value="${scgSummaryDTO.receivedDate}" pattern="MM-dd-yyyy" var="receivedformatedDate"/>
 <fmt:formatDate value="${scgSummaryDTO.collectedDate}" pattern="MM-dd-yyyy" var="collectedformatedDate"/>
 
-<div id="error" class="messagetexterror" style="padding-left:30px;"></div>
+
+<div id="errorDiv" class="messagetexterror" style="padding-left:30px;display:none;">
+<img src="images/uIEnhancementImages/alert-icon.gif" alt="error messages"
+				width="16" vspace="0" hspace ="0" height="18" valign="top">
+</div>
 
 <div id="scgDetails" class="align_left_style">
 <fieldset class="field_set"> 
@@ -33,7 +37,7 @@
 <table width="100%" border="0"  cellpadding="3" cellspacing="0" class="whitetable_bg">	
 
 	<tr>
-		<td class="black_new padding_right_style black_ar" align="right" width="25%">
+		<td class="black_new padding_right_style black_ar" align="right" width="27%">
 		<b><bean:message key="specimenCollectionGroup.groupName"/></b></td>
 		<td colspan="3" width="25%"><html:text property="scgName" styleId="scgName" name="scgSummaryDTO" size="29" onblur="processData(this)"/> </td>
 		<td class="black_new padding_right_style black_ar" align="right" width="25%">
@@ -81,7 +85,7 @@
         <td colspan="3">
 <table><tr>
  
-	<td align="left" class="black_new" >
+	<td align="left" class="black_new date_text_field" >
 						<input type="text" name="collectedDate" class="black_ar date_text_field"  onblur="processData(this)"
 					id="collectedDate" size="10" value="${collectedformatedDate}"
 							 onclick="doInitCalendar('collectedDate',false);" /> </td>
@@ -118,7 +122,7 @@
 	</td>
  <td colspan="3">
  <table> <tr> 
-	<td align="left" class="black_new" >
+	<td align="left" class="black_new date_text_field" >
         
 						<input type="text" class="black_ar date_text_field"  name="receivedDate" onblur="processData(this)"
 							id="receivedDate" size="10" value="${receivedformatedDate}" 
