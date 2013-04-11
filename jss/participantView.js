@@ -176,7 +176,7 @@ if(scgId==null || scgId=="")
 else
 {
  var nodeId = "SpecimenCollectionGroup_"+scgId;
- var action = "AnticipatorySpecimenView.do?scgId="+scgId;
+ var action = "DisplayScg.do?scgId="+scgId;
  window.parent.frames[1].location=action;
  refreshTree(null,null,null,null,nodeId);
 }
@@ -200,7 +200,7 @@ function inputBlur(i){
 }
 function initComboForSCGEvents()
 {
- 		dhtmlx.skin ='dhx_skyblue';
+ 		        dhtmlx.skin ='dhx_skyblue';
                 scgCombo = new dhtmlXCombo("addSCGEvents", "addSCGEven1", 240);
                 scgCombo.addOption(scgEvenData);    
 		        //scgCombo.enableFilteringMode(true)

@@ -67,7 +67,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
-<script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 <script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
@@ -89,8 +88,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
-
-<script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
@@ -102,7 +99,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
 <link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
@@ -112,18 +108,11 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 
 
-<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
-
-
-
-
-
 
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
@@ -150,7 +139,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
-<script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 <script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
@@ -159,7 +147,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
@@ -175,15 +162,10 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 
 
 
-<script src="jss/script.js"></script>
+
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
-
-
-
-
 
 <script language="JavaScript">
 var clinDataEntryURL = "<%=clinicalDataEntryURL%>";
@@ -770,6 +752,7 @@ function setContainerValues()
 String lbl = "Apply first to all";
 %>
 <%@ include file="/pages/content/common/ActionErrors.jsp"%>
+<%@ include file="/pages/content/manageBioSpecimen/SpecimenCollectionGroupSummary.jsp"%>
 <logic:notEmpty name="messageKey">
 	<html:messages id="messageKey" message="true" header="messages.header"
 		footer="messages.footer">
@@ -777,9 +760,13 @@ String lbl = "Apply first to all";
 		</html:messages>
 </logic:notEmpty>
 
+
 <html:form action="${requestScope.formAction}">
 	<!-- Mandar : New Table design starts -->
-	<TABLE width="100%" cellspacing="0" cellpadding="0">
+<div id="scgDetails" class="align_left_style">
+<fieldset class="field_set"> 
+  <legend class="blue_ar_b legend_font_size"> SPECIMEN SUMMARY</legend>
+	<TABLE width="100%" cellspacing="0" cellpadding="0" border="0">
 		<TR>
 			<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
 			<TABLE width="100%" border="0">
@@ -997,6 +984,8 @@ String lbl = "Apply first to all";
         </logic:notEmpty>
 
 	</TABLE>
+</fieldset>
+</div>
 
 	<table width="100%">
 		<tr>
@@ -1046,7 +1035,7 @@ String lbl = "Apply first to all";
 				<table border="0">
 					<tr>
 						<td><input class="blue_ar_b" type="button" value="Submit"
-							onclick="pageSubmit()" /></td>
+							onclick="submitSCG()" /></td>
 						<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
  %>
@@ -1066,7 +1055,8 @@ String lbl = "Apply first to all";
 identifyDisabledCheckBox();
 displayPrinterTypeLocation();
 </script>
-</html><%
+</html>
+<%
 	String specId = (String)request.getAttribute("popUpSpecList");
 	String	assignTargetCall = "giveCallToPopup('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
 %>

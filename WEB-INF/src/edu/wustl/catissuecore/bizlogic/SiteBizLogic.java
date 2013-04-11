@@ -803,5 +803,24 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 
 		return site;
 	}
+
+	public List<NameValueBean> getSiteList(DAO dao) throws DAOException
+	{
+		List<NameValueBean> siteNVBList = new ArrayList<NameValueBean>();
+		String hql = "select site.id,site.name from edu.wustl.catissuecore.domain.Site as site where site.activityStatus='Active'";
+		List siteList;
+		siteList = dao.executeQuery(hql);
+
+			for (Object site1 : siteList)
+			{
+				Object[] site = (Object[]) site1;
+				NameValueBean bean = new NameValueBean();
+				bean.setValue((Long) site[0]);
+				bean.setName((String) site[1]);
+				siteNVBList.add(bean);
+			}
+		
+		return siteNVBList;
+	}
 	
 }

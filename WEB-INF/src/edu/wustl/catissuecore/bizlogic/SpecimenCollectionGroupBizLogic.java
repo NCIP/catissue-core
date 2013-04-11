@@ -49,6 +49,7 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.SCGEventPointDTO;
+import edu.wustl.catissuecore.dto.SCGSummaryDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -3678,6 +3679,52 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		return scgEventDtolist;
 	}
 
+	public void saveScgSummary(DAO dao, SCGSummaryDTO scgDTO,List<String> errorList) throws DAOException
+	{
+		//String response = "success";
+		if(isValid(scgDTO,errorList))
+		{
+		 SCGDAO scgdao = new SCGDAO();
+         scgdao.saveSCGSummary(dao, scgDTO);
+		}
+		
+	}
+
+	private boolean isValid(SCGSummaryDTO scgDTO, List<String> errorList)
+	{
+		boolean isValid = true;
+		if(!isValidScgName(scgDTO.getScgName()))
+		{
+			errorList.add(ApplicationProperties.getValue("error.scgName"));
+		//	errorList.add("SCG name is required");
+		}
+		if(!isValidSite(scgDTO.getSite()))
+		{
+			errorList.add(ApplicationProperties.getValue("error.siteName"));
+			//errorList.add("Site is required");
+		}
+		return errorList.isEmpty();
+	}
+
+	private boolean isValidSite(Long site)
+	{
+		boolean isvalid = true;
+		if(site==null || site<=0)
+		{
+			isvalid = false;
+		}
+			return isvalid;
+	}
+
+	private boolean isValidScgName(String scgName)
+	{
+		boolean isvalid = true;
+		if(scgName==null || scgName.isEmpty())
+		{
+			isvalid = false;
+		}
+			return isvalid;
+	}
 	
 	public  void updateScgConsentStatus(Long scgId,List<ConsentTierDTO> consentTierDtoList, DAO dao) throws BizLogicException
 	{
@@ -3716,7 +3763,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(e,e.getErrorKeyAsString(), e.getFormattedMessage());
 		}
 	}
-	
+
 	public String getCollectionPointEventLabel(Long eventId,DAO dao) throws DAOException{
 		String label = "";
 		CollectionProtocolEvent event = (CollectionProtocolEvent)dao.retrieveById( CollectionProtocolEvent.class.getName(),eventId);
@@ -3725,7 +3772,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		label = event.getCollectionPointLabel() + " ("+event.getStudyCalendarEventPoint() +")";
 		return label;
 	}
-	
+
 	private List<Long> getSpecimenIdList(Long scgId,DAO dao) throws DAOException{
 		 final String SELECT_SPECIMEN_ID =  "select  specimen.id " +
 				" from Specimen specimen join specimen.specimenCollectionGroup scg " +

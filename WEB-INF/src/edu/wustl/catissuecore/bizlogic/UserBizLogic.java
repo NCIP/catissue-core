@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
+import edu.wustl.catissuecore.dto.UserNameIdDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
@@ -2848,6 +2849,27 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 
 		return cpIds;
+	}
+	
+	public List<UserNameIdDTO> getUserList(DAO dao) throws DAOException
+	{
+		List<UserNameIdDTO> userNvblist = new ArrayList<UserNameIdDTO>();
+		
+		String hql = "select user.id,user.firstName,user.lastName from edu.wustl.catissuecore.domain.User as user where" +
+				" user.activityStatus='Active'"; 
+		List list = dao.executeQuery(hql);
+		
+		for(Object user:list)
+		{
+			UserNameIdDTO dto = new UserNameIdDTO();
+			Object[] userNV = (Object[])user;
+			dto.setUserId((Long)userNV[0]);
+			dto.setFirstName((String)userNV[1]);
+			dto.setLastName((String)userNV[2]);
+			userNvblist.add(dto);
+		}
+		return userNvblist;
+		
 	}
 
 }
