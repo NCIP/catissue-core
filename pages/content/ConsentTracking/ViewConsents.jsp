@@ -191,14 +191,9 @@ var statusId = new Array();
 									<td class='black_ar' width="31%">
 									<logic:equal name="consentLevel" value="participant">
 										<select name="participantResponse"  id="${consentTierDTO.id}">
-											<logic:iterate id="specimenResponseList" name="specimenResponseList">
-												<logic:notEqual name="specimenResponseList"  property='name' value="${consentTierDTO.participantResponses}">
-													<option value="<bean:write name='specimenResponseList' property='value'/>"><bean:write name="specimenResponseList" property="name"/></option>
-												</logic:notEqual>
-												<logic:equal name="specimenResponseList"  property='name' value="${consentTierDTO.participantResponses}">
-													<option value="<bean:write name='specimenResponseList' property='value'/>" selected><bean:write name="specimenResponseList" property="name"/></option>
-												</logic:equal>
-											</logic:iterate>
+										<c:forEach items="${requestScope.specimenResponseList}" var="response" >
+											<option value="${response.value}">${response.name}</option>        
+										</c:forEach>	
 										</select>
 										<script>
 										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
@@ -218,14 +213,9 @@ var statusId = new Array();
 									<td align="left" class='black_ar'>
 									
 									<select name="consentStatus"  id="${consentTierDTO.id}">
-										<logic:iterate id="specimenResponseList" name="specimenResponseList">
-											<logic:notEqual name="specimenResponseList"  property='name' value="${consentTierDTO.status}">
-												<option value="<bean:write name='specimenResponseList' property='value'/>"><bean:write name="specimenResponseList" property="name"/></option>
-											</logic:notEqual>
-											<logic:equal name="specimenResponseList"  property='name' value="${consentTierDTO.status}">
-												<option value="<bean:write name='specimenResponseList' property='value'/>" selected><bean:write name="specimenResponseList" property="name"/></option>
-											</logic:equal>
-										</logic:iterate>
+										<c:forEach items="${requestScope.specimenResponseList}" var="response" >
+											<option value="${response.value}">${response.name}</option>        
+										</c:forEach>	
 									</select>
 									<script>
 										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
