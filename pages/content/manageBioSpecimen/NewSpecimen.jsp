@@ -1139,7 +1139,7 @@ else
 								<td class="black_ar" >
 								<html:text property="createdDate" styleClass="black_ar"
 							       styleId="createdDate" size="10" value='${requestScope.createdDate}'
-                                   onclick="doInitCalendar('createdDate',false);" />
+                                   onclick="doInitCalendar('createdDate',false,'${uiDatePattern}');" />
 							   	<span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 								</td>
 				</logic:equal>

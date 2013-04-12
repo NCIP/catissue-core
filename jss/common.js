@@ -1,4 +1,4 @@
-function doInitCalendar(objName, defaultDate) {
+function doInitCalendar(objName, defaultDate,format) {
 	var date = document.getElementById(objName).value;
 
 	cal = new dhtmlxCalendarObject(objName, true, {
@@ -6,7 +6,7 @@ function doInitCalendar(objName, defaultDate) {
 		isYearEditable : true
 	});
 	cal.setYearsRange(1901, 2500);
-	cal.setDateFormat('%m-%d-%Y');
+	cal.setDateFormat(format);
 	cal.setSkin("dhx_skyblue");
 	if (date.length > 0) {
 		cal.setDate(date);

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
@@ -379,6 +380,8 @@ public class LoginAction extends XSSSupportedAction
 
         LoginAction.LOGGER.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
         session.setAttribute(Constants.SESSION_DATA, sessionData);
+        session.setAttribute("datePattern",ApplicationProperties.getValue("date.pattern"));
+        session.setAttribute("uiDatePattern",ApplicationProperties.getValue("ui.date.pattern"));
         session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
         return sessionData;
     }

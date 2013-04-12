@@ -16,6 +16,7 @@
 <%@page import="edu.wustl.common.util.Utility"%><head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
 <script src="jss/javaScript.js"></script>
 <%
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);

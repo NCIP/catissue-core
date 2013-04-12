@@ -63,7 +63,7 @@
         <td class="black_ar align_left_style1" align="left" width="60%">
 							<html:text property="collectionEventdateOfEvent" styleClass="black_ar"
 							     styleId="collectionEventdateOfEvent" size="10" value="<%=currentCollectionDate%>" 
-                               onclick="doInitCalendar('collectionEventdateOfEvent',false);" />			
+                               onclick="doInitCalendar('collectionEventdateOfEvent',false,'${uiDatePattern}');" />			
 							 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 		 </td>
       </tr>
@@ -187,7 +187,7 @@
 								
 						<html:text property="receivedEventDateOfEvent" styleClass="black_ar"
 							       styleId="receivedEventDateOfEvent" size="10"  value="<%=currentReceivedDate %>" 
-                                   onclick="doInitCalendar('receivedEventDateOfEvent',false);" />	
+                                   onclick="doInitCalendar('receivedEventDateOfEvent',false,'${uiDatePattern}');" />	
 					     <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 		</td>
       </tr>

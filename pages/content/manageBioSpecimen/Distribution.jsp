@@ -11,6 +11,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <script src="jss/ajax.js"></script>	   
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <%!private String changeUnit(String specimenType, String subType) {

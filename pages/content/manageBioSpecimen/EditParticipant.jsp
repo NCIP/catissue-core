@@ -361,7 +361,7 @@ function newConsentTab(levelId)
 						<td>
 						<html:text property="birthDate" styleClass="black_ar"
 							styleId="birthDate" size="10"  
-							value="<%=currentBirthDate%>" onclick="doInitCalendar('birthDate',false);" />
+							value="<%=currentBirthDate%>" onclick="doInitCalendar('birthDate',false,'${uiDatePattern}');" />
 			
 			           <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 					</tr>
@@ -414,7 +414,7 @@ function newConsentTab(levelId)
 													
 					    <html:text property="deathDate" styleClass="black_ar"
 							   styleId="deathDate" size="10" value="<%=currentDeathDate%>" 
-                               disabled="<%=deathDisable%>" onclick="doInitCalendar('deathDate',false);" />								
+                               disabled="<%=deathDisable%>" onclick="doInitCalendar('deathDate',false,'${uiDatePattern}');" />								
 					    <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 					</tr>
 					</c:if>
@@ -639,7 +639,7 @@ function newConsentTab(levelId)
 
 						<td valign="middle" class="black_ar align_left_style" height="100%"> 
 							<html:text property="registrationDate" styleClass="black_ar"
-							   styleId="registrationDate" size="10" onclick="doInitCalendar('registrationDate',false);"/>	
+							   styleId="registrationDate" size="10" onclick="doInitCalendar('registrationDate',false,'${uiDatePattern}');"/>	
 							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 						</td>
 						

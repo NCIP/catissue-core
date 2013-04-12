@@ -269,8 +269,8 @@ var fromDate;
 
 function initCalendarUI()
 {
-	toDate= doInitCalendar("toDate1");
-	fromDate= doInitCalendar("fromDate1");	
+	toDate= doInitCalendar("toDate1",false,'${uiDatePattern}');
+	fromDate= doInitCalendar("fromDate1",false,'${uiDatePattern}');	
 	document.getElementById("toDate1").value="MM-DD-YYYY";
 	document.getElementById("fromDate1").value="MM-DD-YYYY";
 }
