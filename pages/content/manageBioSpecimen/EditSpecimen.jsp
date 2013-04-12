@@ -37,7 +37,7 @@
 <html:hidden name="specimenDTO" property="operation"/>
 <html:hidden name="specimenDTO" property="parentSpecimenId"/>
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
-<html:hidden name="specimenDTO" property="specimenCollectionGroupId"/>
+<html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
 								
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
@@ -630,11 +630,14 @@ function forwardToChildSpecimen() {
 	var action;
 	var specimenLabel = document.getElementById('label').value;
 	var specimenId = document.getElementById("id").value;
+	var scgId = document.getElementById("scgId").value;
 	switch(checkedRadio)
 	{
 		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
 		
 		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId; break;	
+		
+		case '4' :	action = 'DisplayScg.do?scgId='+scgId+'&specimenId='+specimenId; break;
 		
 		default :	action = "none";
 	}
