@@ -123,7 +123,7 @@
                         referencedColumnNames="USER_ID" /> 
 	</changeSet>
 	<changeSet id="10" author="catissue" runOnChange="true">
-		<createTable tableName="CATISSUE_DISTRIBUTION_EVENT_PARAM">
+		<createTable tableName="CATISSUE_DISTRI_EVENT_PARAM">
 			<column name="IDENTIFIER" type="${int.type}">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -134,7 +134,7 @@
 	</changeSet>
 	
 	<changeSet id="11" author="catissue" runOnChange="true">
-		<createIndex tableName="CATISSUE_DISTRIBUTION_EVENT_PARAM" indexName="DISTRIBUTION_EVENT_DISTRIBUTED_QUANTITY">
+		<createIndex tableName="CATISSUE_DISTRI_EVENT_PARAM" indexName="DISTRIBUTION_EVENT_DISTRIBUTED_QUANTITY">
     		<column name="DISTRIBUTED_QUANTITY"/>
 		</createIndex>
 	</changeSet>

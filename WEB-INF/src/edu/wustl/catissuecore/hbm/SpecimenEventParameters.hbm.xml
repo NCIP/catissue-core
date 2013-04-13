@@ -541,7 +541,7 @@
         </joined-subclass>
 		<joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionEventParameters"
-            table="CATISSUE_DISTRIBUTION_EVENT_PARAM"
+            table="CATISSUE_DISTRI_EVENT_PARAM"
 			lazy="false" 
         	>
             <key
