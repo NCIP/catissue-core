@@ -177,6 +177,11 @@ PUBLIC
 			validate="false" scope="request" parameter="type">
 		</action>
 		
+		<action path="/ExportAction"
+			type="edu.wustl.catissuecore.action.ExportAction"
+			validate="false" scope="request" parameter="type">
+		</action>
+		
 			<action path="/TreeTagAction"
 			type="edu.wustl.common.tags.action.TreeGridInItAction"
 			validate="false" scope="request" parameter="type">

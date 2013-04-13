@@ -14,6 +14,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,7 +81,9 @@ public class SubmitOrderAction extends BaseAction
 			OrderStatusDTO orderStatusDTO=orderBizLogic.updateOrder(orderSubmissionDTO,userId,dao);
 			
 			if(orderStatusDTO.getOrderErrorDTOs().isEmpty())
-			{	
+			{
+				Map<String,Object> csvFileData =  orderBizLogic.getOrderCsv(orderStatusDTO.getOrderId(), getExportedName(sessionDataBean), dao);
+				
 				dao.commit();
 				orderBizLogic.sendOrderUpdateEmail(
 						orderSubmissionDTO.getRequestorName(),
@@ -88,7 +91,7 @@ public class SubmitOrderAction extends BaseAction
 						sessionDataBean.getUserName(),
 						orderSubmissionDTO.getOrderName(),
 						sessionDataBean.getLastName()+","+ sessionDataBean.getFirstName(),
-						orderStatusDTO.getStatus(), request.getRequestURL()	+ "?id=" + orderStatusDTO.getOrderId());
+						orderStatusDTO.getStatus(), request.getRequestURL()	+ "?id=" + orderStatusDTO.getOrderId(),csvFileData);
 				response.getWriter().write("Success");
 
 			}
@@ -109,4 +112,9 @@ public class SubmitOrderAction extends BaseAction
 		}
 		return null;
  }
+	private String getExportedName(SessionDataBean sessionDataBean){
+		String firstName = sessionDataBean.getFirstName()==null? "" : sessionDataBean.getFirstName();
+		String lastName = sessionDataBean.getLastName() == null ? "" : sessionDataBean.getLastName();
+		return (lastName+" "+firstName).trim();
+	}
 }	

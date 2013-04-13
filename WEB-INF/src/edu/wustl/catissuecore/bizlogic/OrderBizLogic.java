@@ -12,6 +12,11 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,6 +79,7 @@ import edu.wustl.common.struts.ApplicationRequestProcessor;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
@@ -724,16 +730,28 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	
 	public void sendOrderUpdateEmail(String requestorName,
 			String ccEmailAddress, String toEmailAddress, String orderName,
-			String updaterName, String orderStatus, String orderUrl) {
+			String updaterName, String orderStatus, String orderUrl,Map<String,Object> csvFileData) throws IOException {
 		
 		final EmailHandler emailHandler = new EmailHandler();
 
 		final String bccEmailAddress = XMLPropertyHandler
 				.getValue("email.administrative.emailAddress");
-	
-		emailHandler.sendOrderUpdateEmail(requestorName, toEmailAddress,
-				ccEmailAddress, bccEmailAddress, orderName, updaterName,
-				orderStatus, orderUrl);
+		List<File> attachmentOrderCsv = new ArrayList<File>();
+		File csvFile = null;
+		try{
+			csvFile = new File(csvFileData.get("fileName").toString());
+			csvFile.createNewFile();
+			 FileOutputStream out = new FileOutputStream(csvFile);
+			 out.write((byte[])csvFileData.get("fileData"));
+			 out.close();
+			 attachmentOrderCsv.add(csvFile);
+			emailHandler.sendOrderUpdateEmail(requestorName, toEmailAddress,
+					ccEmailAddress, bccEmailAddress, orderName, updaterName,
+					orderStatus, orderUrl,attachmentOrderCsv);
+			
+		}finally{
+			csvFile.delete();		
+		}
 	}
 
 	/**
@@ -2348,5 +2366,38 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		List orderItems=dao.executeNamedQuery("getOrderItems", substParams);
 		String gridXMLString = VelocityManager.getInstance().evaluate(orderItems,"orderGridTemplate.vm");
 		return gridXMLString;
+	}
+	
+	public Map<String,Object> getOrderCsv(Long orderId,String exportedBy,HibernateDAO dao) throws Exception
+	{
+		Map<String,Object> returnMap = new HashMap<String,Object>();
+		DisplayOrderDTO displayOrderDTO = getOrderDetails(orderId,dao);
+		PrintWriter pw = null;
+		Map<String,Object> orderDetailMap = new HashMap<String,Object>();
+		try{
+			String currentDate = CommonUtilities.parseDateToString(
+					new Date(),  CommonServiceLocator.getInstance()
+					.getDatePattern());
+			String requestedDateStr =  CommonUtilities.parseDateToString(
+					displayOrderDTO.getRequestedDate(),  CommonServiceLocator.getInstance()
+					.getDatePattern());
+			orderDetailMap.put("orderDetailMap",displayOrderDTO);
+			orderDetailMap.put("requestedDate", requestedDateStr);
+			orderDetailMap.put("exportedOn",currentDate);
+			orderDetailMap.put("exportedBy",exportedBy);
+			orderDetailMap.put("orderItemsDetail", getOrderItemsDetail(orderId,dao));
+			orderDetailMap.put("dateFormat", CommonServiceLocator.getInstance()
+					.getDatePattern());
+			String obj = VelocityManager.getInstance().evaluate(orderDetailMap,"orderGridCsvTemplate.vm");
+			returnMap.put("fileData",obj.getBytes());
+			returnMap.put("fileName",displayOrderDTO.getOrderName()+"_"+currentDate+Constants.CSV_FILE_EXTENTION);
+			
+		}finally{
+			//pw.close();
+		}
+//		requestlist.dataTabel.OrderName.label
+		
+		return returnMap;
+		
 	}
 }

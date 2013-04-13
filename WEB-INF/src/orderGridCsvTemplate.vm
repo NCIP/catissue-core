@@ -1,0 +1,13 @@
+"Order Name:","${orderDetailMap.orderName}"
+"Distribution Protocol:","${orderDetailMap.distributionProtocolName}"
+"Requestor's Name:","${orderDetailMap.requestorName}"
+"Requested Date:","$requestedDate"
+"Distribution Site:","${orderDetailMap.site}"
+"Comment:","${orderDetailMap.comments}"
+"Exported On:","$exportedOn"
+"Exported By:","$exportedBy"
+"Order Items Detail:"
+"Specimen Label","Specimen Type","Specimen Class","Available Quantity","Requested Quantity","Status","Description","OrderItemId","SpecimenId"
+#foreach( $gridData in $orderItemsDetail )
+"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${gridData.status}","${gridData.description}","${gridData.OrderItemId}","${gridData.specimenId}"
+#end

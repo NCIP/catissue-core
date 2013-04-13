@@ -9,8 +9,10 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -237,7 +239,7 @@ public class EmailHandler
 
 	public boolean sendOrderUpdateEmail(String requestorName,
 			String toEmailAddress, String ccEmailAddress,String bccEmailAddress,
-			String orderName, String updaterName,String orderStatus, String orderUrl)
+			String orderName, String updaterName,String orderStatus, String orderUrl,List<File> attachmentOrderCsv)
     {
     	Map<String, Object> contextMap = new HashMap<String, Object>();
     	contextMap.put("requestor", requestorName);
@@ -247,12 +249,12 @@ public class EmailHandler
     	contextMap.put("status", orderStatus);
     	contextMap.put("link", orderUrl);
     	
-		boolean emailStatus = EmailClient.getInstance().sendEmail(
+		boolean emailStatus = EmailClient.getInstance().sendEmailWithAttachment(
 				 Constants.ORDER_DISTRIBTION_EMAIL_TMPL,
 				 new String[]{ toEmailAddress },
 				 new String[]{ ccEmailAddress },
 				 new String[]{ bccEmailAddress },
-				 contextMap,orderName);
+				 attachmentOrderCsv,contextMap,orderName);
 			
 		if (!emailStatus) {
 			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));

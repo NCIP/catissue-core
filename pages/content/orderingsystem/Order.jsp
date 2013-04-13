@@ -187,7 +187,7 @@ function switchToOlderView()
     </table>
     <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
     <tr>
-			<td><div id="mainTable"style="display:block"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
+			<td><div id="mainTable"style="display:block;height:500px;"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
 				
     	<tr>
 		          <td><div id="error" class="alert alert-error" style="display:none">
@@ -297,6 +297,16 @@ function switchToOlderView()
                 <td class="black_ar">&nbsp;<bean:write name="DisplayOrderDTO"  property="comments"  scope="request" /></td>
 				
               </tr>
+			  <tr>
+				<td class="black_ar align_right_style"><strong>
+							<bean:message key="requestdetails.header.label.Comments" />
+ 					</strong></td>
+				<td class="black_ar_t">
+					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="45" rows="1" property="comments" onblur="processData(this)" />
+		 		</td>
+				<td class="black_ar"></td>
+				<td class="black_ar"></td>
+         </tr>
           </table></td>
         </tr>
 		 </table>
@@ -311,11 +321,11 @@ function switchToOlderView()
 			<tr>
 					<td width="100%" >
 					<table border="0" width="100%"><tr><td>
-						<div id="tabbar_div" align="left" style="width:auto;height:400px;">
+						<div id="tabbar_div" align="left" style="width:auto;height:310px;">
 						
 						<table width="100%">
 						<tr><td>
-						<div id="SimpleViewDiv" style="width:auto;height:400px;">
+						<div id="SimpleViewDiv" style="width:auto;height:310px;">
 						<table width="100%" cellpadding="3" cellspacing="0" border="0"	>
 		<tr>
 			<td>&nbsp;&nbsp;
@@ -343,21 +353,14 @@ function switchToOlderView()
 				</script>
 			</td>
 		</tr>
-<tr>
-				<td valign="top" class="black_ar_t" colspan="2">&nbsp;<br />
-                  &nbsp;
- 						<bean:message key="requestdetails.header.label.Comments" />
-	 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- 						<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="90" rows="3" property="comments" onblur="processData(this)" />
-		 			</td>
-					<td valign="top" class="black_ar"></td>
-         </tr>
 		<tr>
           <td class="bottomtd" colspan="2"></td>
         </tr>
  <tr>
           <td class="buttonbg" style="padding:6px;" colspan="2">
 					<input type="button" class="blue_ar_b" value="Next >>" onclick="goToConsentTabFromNext()" accesskey="Enter">
+					<input type="button" class="blue_ar_b" value="Export Order" onclick="exportOrder('${requestScope.id}')" accesskey="Enter">
+				
 					
 			</td>
 		</tr>
@@ -379,7 +382,10 @@ function switchToOlderView()
 </table>
    <!-- main table ends here -->
 </html:form>
+
+	<iframe id = "orderExportFrame" width = "0%" height = "0%" frameborder="0"></iframe>
 </body>
+
 <script>
 function loadTab()
 {
@@ -494,6 +500,10 @@ function qtyChange(stage,rId,cInd,nValue,oValue)
 	}
 	else
 	return true;
+}
+function exportOrder(orderId){
+	var dwdIframe = document.getElementById("orderExportFrame");
+	dwdIframe.src = "ExportAction.do?type=exportOrder&orderId="+orderId;
 }
 </script>
 <!----------------------------------------------->	
