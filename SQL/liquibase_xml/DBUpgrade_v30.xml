@@ -288,10 +288,5 @@
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
-	<changeSet id="41" author="catissuecore" runOnChange="true" dbms="mysql">
-	    <sql>INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) select SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS from catissue_distribution;</sql>
-	</changeSet>
-	<changeSet id="42" author="catissuecore" runOnChange="true" dbms="oracle">
-		<sql>INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(IDENTIFIER,SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) SELECT CATISSUE_SPEC_EVENT_PARAM_SEQ.NEXTVAL,SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS from catissue_distribution;</sql>
-	</changeSet>	
+
 </databaseChangeLog>         
