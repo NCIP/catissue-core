@@ -40,7 +40,7 @@
             type="string"
             update="true"
             insert="true"
-            column="DITRIBUTORSCOMMENT"
+            column="DISTRIBUTORSCOMMENT"
             length="1000"
         />
 
