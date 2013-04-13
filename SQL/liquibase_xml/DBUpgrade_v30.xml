@@ -278,7 +278,7 @@
 	</changeSet>
 	<changeSet id="39" author="catissuecore" runOnChange="true">
 		<addColumn tableName="CATISSUE_ORDER">
-			<column name="DISTRIBUTORSCOMMENT" type="${text.type}(1000)" />
+			<column name="DISTRIBUTORS_COMMENT" type="${text.type}(1000)" />
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
