@@ -62,6 +62,15 @@
             column="REQUESTED_QUANTITY"
             length="50"
         />
+        
+        <property
+            name="distribtedQuantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="DISTRIBUTED_QUANTITY"
+            length="50"
+        />
 		
 		<many-to-one
             name="orderDetails"
@@ -312,8 +321,8 @@
         -->
 
     </class>
-	<query name="getOrderItems">select specimen.label,specimen.specimenType,specimen.specimenClass,specimen.availableQuantity,specimenOrderItem.requestedQuantity,specimenOrderItem.status,specimenOrderItem.description,specimenOrderItem.id,specimen.id from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem specimenOrderItem join specimenOrderItem.specimen specimen where specimenOrderItem.orderDetails.id = ?
+	<query name="getOrderItems">select specimen.label,specimen.specimenType,specimen.specimenClass,specimen.availableQuantity,specimenOrderItem.requestedQuantity,specimenOrderItem.status,specimenOrderItem.description,specimenOrderItem.id,specimen.id,specimenOrderItem.distribtedQuantity from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem specimenOrderItem join specimenOrderItem.specimen specimen where specimenOrderItem.orderDetails.id = ?
 	</query>
-	<query name="updateOrderItemSQL">UPDATE edu.wustl.catissuecore.domain.OrderItem SET requestedQuantity = ?,status = ?,description =? WHERE id = ?
+	<query name="updateOrderItemSQL">UPDATE edu.wustl.catissuecore.domain.OrderItem SET distribtedQuantity = ?,status = ?,description =? WHERE id = ?
 	</query>
 </hibernate-mapping>

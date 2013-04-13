@@ -2160,6 +2160,11 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			orderItemDTO.setDescription(orderItemDetails[6].toString());
 			orderItemDTO.setOrderItemId(Long.parseLong(orderItemDetails[7].toString()));
 			orderItemDTO.setSpecimenId(Long.parseLong(orderItemDetails[8].toString()));
+			if(orderItemDetails[9]!=null)
+			{
+				orderItemDTO.setDistributedQuantity(Double.parseDouble(orderItemDetails[9].toString()));
+			}
+			
 			orderItemsDTOs.add(orderItemDTO);
 		}
 		
@@ -2199,6 +2204,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				displayOrderDTO.setComments(orderDetailObject[7].toString());
 			}
+			if(orderDetailObject[8]!=null)
+			{
+				displayOrderDTO.setDistributorsComment(orderDetailObject[8].toString());
+			}
 			return displayOrderDTO;
 	}
 	public OrderStatusDTO updateOrder(OrderSubmissionDTO orderSubmissionDTO,Long userId,HibernateDAO dao) throws BizLogicException
@@ -2212,7 +2221,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			boolean isOrderRejected=true;
 			for (OrderItemSubmissionDTO orderItemSubmissionDTO : orderSubmissionDTO.getOrderItemSubmissionDTOs())
 			{
-				params.put("0", new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getOrderitemId()));	
 				params.put("0", new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getDistQty()));
 				params.put("1", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getStatus()));
 				params.put("2", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getComments()));
@@ -2252,7 +2260,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					disposeReason.add(orderSubmissionDTO.getDisptributionProtocolName());
 					disposeReason.add(orderSubmissionDTO.getOrderName());
 					
-					specimenEventParametersBizLogic.createDisposalEvent(ApplicationProperties.getValue("distribution.order.mail.subject", disposeReason),orderItemSubmissionDTO.getSpecimenId(), dao, userId);
+					specimenEventParametersBizLogic.createDisposalEvent(ApplicationProperties.getValue("orderdistribution.disposeReason", disposeReason),orderItemSubmissionDTO.getSpecimenId(), dao, userId);
 					specimenBizLogic.updateSpecimenStatusToClose(orderItemSubmissionDTO.getSpecimenLabel(),dao);
 				}
 				
@@ -2283,13 +2291,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			params = new HashMap<String, NamedQueryParam>();
 			params.put("0", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getOrderName()));
 			params.put("1", new NamedQueryParam(DBTypes.STRING, orderStatus));
-			if(orderSubmissionDTO.getComments()==null)
+			if(orderSubmissionDTO.getDistributorsComment()==null)
 			{
 				params.put("2", new NamedQueryParam(DBTypes.STRING, ""));
 			}
 			else
 			{
-				params.put("2", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getComments()));
+				params.put("2", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getDistributorsComment()));
 			}
 			params.put("3", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getDisptributionProtocolId()));
 			params.put("4", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));

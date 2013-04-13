@@ -78,10 +78,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	protected String name;
 
 	/**
-	 * String containing the comments entered by user.
+	 * String containing the requester's comments entered by user.
 	 */
 	protected String comment;
 
+	/**
+	 * String containing the distributor's comments.
+	 */
+	protected String distributorsComment;
 	/**
 	 * Requested Date when the order was placed.
 	 */
@@ -179,6 +183,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	public void setComment(String comment)
 	{
 		this.comment = comment;
+	}
+	
+	public String getDistributorsComment() {
+		return distributorsComment;
+	}
+
+	public void setDistributorsComment(String distributorsComment) {
+		this.distributorsComment = distributorsComment;
 	}
 
 	/**

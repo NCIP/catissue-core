@@ -17,6 +17,7 @@ public class OrderSubmissionDTO {
 	private String disptributionProtocolName;
 	private String requestorEmail;
 	private String requestorName;
+	private String distributorsComment;
 	
 	public Long getId() {
 		return id;
@@ -72,6 +73,12 @@ public class OrderSubmissionDTO {
 	}
 	public void setDisptributionProtocolName(String disptributionProtocolName) {
 		this.disptributionProtocolName = disptributionProtocolName;
+	}
+	public String getDistributorsComment() {
+		return distributorsComment;
+	}
+	public void setDistributorsComment(String distributorsComment) {
+		this.distributorsComment = distributorsComment;
 	}
 		
 }

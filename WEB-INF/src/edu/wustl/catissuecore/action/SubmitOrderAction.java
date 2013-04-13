@@ -13,6 +13,7 @@
 
 package edu.wustl.catissuecore.action;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +98,7 @@ public class SubmitOrderAction extends BaseAction
 			}
 			else
 			{	
+				dao.rollback();
 				String json = gson.toJson(orderStatusDTO);
 				response.getWriter().write(json);
 			}
@@ -104,6 +106,7 @@ public class SubmitOrderAction extends BaseAction
 		}
 		catch(Exception exception)
 		{
+			dao.rollback();
 			response.getWriter().write(errors.toString());	
 		}
 		finally

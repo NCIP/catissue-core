@@ -1036,11 +1036,12 @@ public final class OrderingSystemUtil
 			List<String> cells=rowDTO.getCells();
 			OrderItemSubmissionDTO orderItemSubmissionDTO=new OrderItemSubmissionDTO();
 			orderItemSubmissionDTO.setSpecimenLabel(cells.get(0));
-			orderItemSubmissionDTO.setDistQty(Double.parseDouble(cells.get(4)));
-			orderItemSubmissionDTO.setOrderitemId(Long.parseLong(cells.get(7)));
-			orderItemSubmissionDTO.setSpecimenId(Long.parseLong(cells.get(8)));
-			orderItemSubmissionDTO.setStatus(cells.get(5));
-			orderItemSubmissionDTO.setComments(cells.get(6));
+			orderItemSubmissionDTO.setRequestedQty(Double.parseDouble(cells.get(4)));
+			orderItemSubmissionDTO.setDistQty(Double.parseDouble(cells.get(5)));
+			orderItemSubmissionDTO.setOrderitemId(Long.parseLong(cells.get(8)));
+			orderItemSubmissionDTO.setSpecimenId(Long.parseLong(cells.get(9)));
+			orderItemSubmissionDTO.setStatus(cells.get(6));
+			orderItemSubmissionDTO.setComments(cells.get(7));
 			orderItemSubmissionDTOs.add(orderItemSubmissionDTO);	
 		}
 		

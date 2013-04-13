@@ -12,6 +12,7 @@ public class OrderItemDTO {
 	String specimenClass;
     Double availableQuantity;
     Double requestedQuantity;
+    Double distributedQuantity=null;
     String status;
     String description;
     Long OrderItemId;
@@ -69,6 +70,12 @@ public class OrderItemDTO {
 	}
 	public void setSpecimenId(Long specimenId) {
 		this.specimenId = specimenId;
+	}
+	public Double getDistributedQuantity() {
+		return distributedQuantity;
+	}
+	public void setDistributedQuantity(Double distributedQuantity) {
+		this.distributedQuantity = distributedQuantity;
 	}
 	
 }

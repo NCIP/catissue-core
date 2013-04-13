@@ -35,6 +35,7 @@ public class DisplayOrderDTO
 	
 	private String site="--select--";
 	
+	private String distributorsComment;
 	/**
 	 * @param distributionProtocol String contains the distribution protocol
 	 */
@@ -105,6 +106,14 @@ public class DisplayOrderDTO
 
 	public void setSite(String site) {
 		this.site = site;
+	}
+
+	public String getDistributorsComment() {
+		return distributorsComment;
+	}
+
+	public void setDistributorsComment(String distributorsComment) {
+		this.distributorsComment = distributorsComment;
 	}
 	
 }

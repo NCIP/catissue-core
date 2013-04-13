@@ -39,6 +39,11 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 * Integer containing the amount of requested quantity of ordered specimens.
 	 */
 	protected Double requestedQuantity;
+	
+	/**
+	 * 
+	 */
+	protected Double distribtedQuantity;
 	/**
 	 * String containing the status of order.
 	 */
@@ -127,6 +132,14 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	public void setRequestedQuantity(Double requestedQuantity)
 	{
 		this.requestedQuantity = requestedQuantity;
+	}
+    
+	public Double getDistribtedQuantity() {
+		return distribtedQuantity;
+	}
+
+	public void setDistribtedQuantity(Double distribtedQuantity) {
+		this.distribtedQuantity = distribtedQuantity;
 	}
 
 	/**

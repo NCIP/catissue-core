@@ -6282,16 +6282,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		
 		if(specimenDetails.isEmpty())
 		{
-			return ApplicationProperties.getValue("orderdistribution.specimen.closed.unavailable");
+			return ApplicationProperties.getValue("specimen.closed.unavailable");
 		}
 		Double previousQuantity=Double.parseDouble(specimenDetails.get(0).toString());
-		Double 	remainingQuantity = quantityReducedBy - previousQuantity.doubleValue();
+		Double 	remainingQuantity = previousQuantity.doubleValue()-quantityReducedBy;
 		params.put("0", new NamedQueryParam(DBTypes.DOUBLE, remainingQuantity));
 		
 		int remainingQuantityMoreThenZero=remainingQuantity.compareTo(0D);
 		if(remainingQuantityMoreThenZero == -1)
 		{
-			return ApplicationProperties.getValue("orderdistribution.requested.quantity.exceeds");
+			return ApplicationProperties.getValue("requested.quantity.exceeds");
 		}
 		else if (remainingQuantity.compareTo(0D) == 0)
 		{

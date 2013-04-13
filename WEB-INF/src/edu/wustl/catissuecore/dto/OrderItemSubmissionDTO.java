@@ -9,6 +9,7 @@ public class OrderItemSubmissionDTO {
 	
 	String specimenLabel;
 	Long specId;
+	Double requestedQty;
 	Double distQty;
 	String status;
 	String comments;
@@ -49,6 +50,12 @@ public class OrderItemSubmissionDTO {
 	}
 	public void setSpecimenLabel(String specimenLabel) {
 		this.specimenLabel = specimenLabel;
+	}
+	public Double getRequestedQty() {
+		return requestedQty;
+	}
+	public void setRequestedQty(Double requestedQty) {
+		this.requestedQty = requestedQty;
 	}
 	
 }

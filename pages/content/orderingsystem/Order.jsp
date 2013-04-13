@@ -34,6 +34,7 @@ var tabbar;
 var mygrid;
 var ifAnyDistributed='false';
 var distributionProtocolNameCombo;
+
 function processData(obj)
 {
 	tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
@@ -71,7 +72,8 @@ function submitOrderNew(consentVerifiedValues)
 	     alert("Please verify the Consents for the specimen(s)");
 	     return;	
    	 }
-   	}	
+   	}
+	
 	tabDataJSON["gridXML"] = mygrid.serialize();
 	tabDataJSON["id"]=${requestScope.id};
 	tabDataJSON["orderName"]=document.getElementById('orderName').value;
@@ -79,8 +81,10 @@ function submitOrderNew(consentVerifiedValues)
 	tabDataJSON["disptributionProtocolName"]=distributionProtocolNameCombo.getComboText();
 	tabDataJSON["requestorEmail"]='<bean:write name="DisplayOrderDTO" property="requestorEmail" scope="request"/>';
 	tabDataJSON["requestorName"]='<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/>';
-	var loader=dhtmlxAjax.postSync("SubmitOrder.do","dataJSON="+JSON.stringify(tabDataJSON));
+	
 
+	var loader=dhtmlxAjax.postSync("SubmitOrder.do","dataJSON="+JSON.stringify(tabDataJSON));
+		
 	if(loader.xmlDoc.responseText != null)
 	{
 		if(loader.xmlDoc.responseText == "Success")
@@ -90,7 +94,8 @@ function submitOrderNew(consentVerifiedValues)
 		else
 		{
 			var numberOfcolumns=mygrid.getColumnsNum();		
-			mygrid.insertColumn(numberOfcolumns+1,'Error','ro',20,'na',null,null,null,null);
+			mygrid.setColumnHidden(numberOfcolumns-1,false);
+			
 			var obj=JSON.parse(loader.xmlDoc.responseText);
 			var orderErrorDTOs=obj['orderErrorDTOs'];
 			
@@ -101,8 +106,8 @@ function submitOrderNew(consentVerifiedValues)
 			   {
 				if(specimenlabel == mygrid.cellById(row+1,0).getValue())
 				{	
-				  mygrid.cellById(row+1,numberOfcolumns).setValue(orderErrorDTOs[i].error);
-				  mygrid.cellById(row+1,5).setValue(orderErrorDTOs[i].newStatus);	
+				  mygrid.cellById(row+1,numberOfcolumns-1).setValue(orderErrorDTOs[i].error);
+				  mygrid.cellById(row+1,6).setValue(orderErrorDTOs[i].newStatus);	
 				  mygrid.setRowColor(row+1,"#FF4400");
 				  
 				}
@@ -110,6 +115,7 @@ function submitOrderNew(consentVerifiedValues)
 			}
 			document.getElementById('error').style.display='block';
 			tabbar.setTabActive('SimpleViewTab');
+			mygrid.refreshFilters();
 
 		}
 	}
@@ -131,21 +137,21 @@ function submitOrderNew(consentVerifiedValues)
 			{
 			
 				var avlQty = Number(mygrid.cellById(row+1,3).getValue());
-				var reqQty = Number(mygrid.cellById(row+1,4).getValue());
+				var reqQty = Number(mygrid.cellById(row+1,5).getValue());
 				if(avlQty == reqQty)
 				{
-					mygrid.cellById(row+1,5).setValue("Distributed And Close");
+					mygrid.cellById(row+1,6).setValue("Distributed And Close");
 					assignStat.value="Distributed And Close";
 				}
 				else
 				{
-					mygrid.cellById(row+1,5).setValue("Distributed");
+					mygrid.cellById(row+1,6).setValue("Distributed");
 					
 				}
 			}
 			else
 			{
-				mygrid.cellById(row+1,5).setValue(id.value);
+				mygrid.cellById(row+1,6).setValue(id.value);
 				
 			}
 		
@@ -297,12 +303,13 @@ function switchToOlderView()
                 <td class="black_ar">&nbsp;<bean:write name="DisplayOrderDTO"  property="comments"  scope="request" /></td>
 				
               </tr>
-			  <tr>
+			    <tr>
 				<td class="black_ar align_right_style"><strong>
-							<bean:message key="requestdetails.header.label.Comments" />
+							<bean:message key="requestdetails.header.label.DistributorsComments" />
  					</strong></td>
 				<td class="black_ar_t">
-					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="45" rows="1" property="comments" onblur="processData(this)" />
+					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="90" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" />
+		 			</td>
 		 		</td>
 				<td class="black_ar"></td>
 				<td class="black_ar"></td>
@@ -446,17 +453,18 @@ function init_grid()
 
 	mygrid = new dhtmlXGridObject('gridbox');
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
-	mygrid.setHeader("Specimen Label,Specimen Class,Specimen Type,Available Qty,Requested Qty,Status,Comments,,");
-   	mygrid.setColumnHidden(7,true);
+	mygrid.setHeader("Specimen Label,Specimen Class,Specimen Type,Available Qty,Requested Qty,Distributed Qty,Status,Comments,,,Error");
    	mygrid.setColumnHidden(8,true);
-	mygrid.attachHeader("#text_filter,#select_filter,#select_filter,,,,,,,"); 
+   	mygrid.setColumnHidden(9,true);
+   	mygrid.setColumnHidden(10,true);
+	mygrid.attachHeader("#text_filter,#select_filter,#select_filter,,,,,,,,#select_filter"); 
 	mygrid.setEditable("true");
 	mygrid.enableAutoHeigth(false);
    	mygrid.enableRowsHover(true,'grid_hover')
-	mygrid.setInitWidthsP("20,10,10,10,10,10,*,0,0");
-	mygrid.setColTypes("ro,ro,ro,ro,ed,coro,ed,ro,ro");
+	mygrid.setInitWidthsP("20,7,7,5,5,5,15,*,0,0,20");
+	mygrid.setColTypes("ro,ro,ro,ro,ro,ed,coro,ed,ro,ro,ro");
 	mygrid.setSkin("dhx_skyblue");
-	mygrid.setColSorting("str,str,str,str,str,str,str,str,str");
+	mygrid.setColSorting("str,str,str,str,str,str,str,str,str,str,str");
 	mygrid.enableMultiselect(true);
 	mygrid.init();
 	mygrid.loadXML("OrderDetails.do?id="+${requestScope.id});
@@ -468,7 +476,7 @@ function init_grid()
 function setComboValues()
 {
 
-var combo = mygrid.getCombo(5);
+var combo = mygrid.getCombo(6);
 
 var status = ["Distributed","Distributed And Close"
 		,"Distributed And Close(Special)","New","Pending - For Distribution","Pending - Protocol Review","Specimen Preparation",
