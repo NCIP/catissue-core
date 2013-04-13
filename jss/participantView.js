@@ -178,7 +178,7 @@ if(scgId==null || scgId=="")
 else
 {
  var nodeId = "SpecimenCollectionGroup_"+scgId;
- var action = "DisplayScg.do?scgId="+scgId;
+ var action = "AnticipatorySpecimenView.do?scgId="+scgId;
  window.parent.frames[1].location=action;
  refreshTree(null,null,null,null,nodeId);
 }
