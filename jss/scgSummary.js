@@ -3,7 +3,7 @@ var hourTimeCombo,minutesTimeCombo,rhourTimeCombo,rminutesTimeCombo,siteCombo;
 function convertSelectToCombo()
 {
  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-dhtmlx.skin ='dhx_skyblue';	
+
 siteCombo = dhtmlXComboFromSelect("site");
 siteCombo.setSize("240");
 siteCombo.attachEvent("onSelectionChange",processComboChange);

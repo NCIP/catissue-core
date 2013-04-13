@@ -37,7 +37,7 @@ public class SCGDAO
 				+ "edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg, "
 				+ "edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where "
 				+ "scg.collectionProtocolEvent.id = cpe.id and scg.collectionProtocolRegistration.id = ? "
-				+ "and ascg.activityStatus = 'Active' and ascg.id=scg.id";
+				+ "and ascg.activityStatus = 'Active' and ascg.id=scg.id order by cpe.collectionPointLabel";
 		ColumnValueBean columnValueBean = new ColumnValueBean(regId);
 		List<ColumnValueBean> columnValueBeans = new ArrayList();
 		columnValueBeans.add(columnValueBean);

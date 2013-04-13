@@ -4,13 +4,13 @@
 
  function initComboForSpecimenLabels()
 	{
-	    dhtmlx.skin ='dhx_skyblue';
+	    
             specimenCombo = new dhtmlXCombo("specimenLabels", "specimenLabels1", 240);
 	}
 	
  /*function initComboForAddSpecimenEvents()
  {
-		dhtmlx.skin ='dhx_skyblue';
+		
 		var comboObject = new dhtmlXCombo("addSpecimenEvents", "addSpecimenEvents", 240);
 		comboObject.addOption([[1, 'Fixed'], [2, 'Check in Check Out'], [3, 'Fluid Specimen Review'], [4, 'Cell Specimen Review']]);
 		comboObject.enableFilteringMode(true);
@@ -68,6 +68,8 @@ function createAliquote()
 {
  var specimenId = specimenCombo.getSelectedValue();
  var label = specimenCombo.getSelectedText();
+ var noOfAliquotes = document.getElementById("noOfAliquots").value;
+ var quantity = document.getElementById("quantityPerAliquot").value;
  var isSubmit = true;
  var action = "";
 /*if((count==null ||count=="") || (quantity==null || quantity==""))
@@ -77,7 +79,8 @@ function createAliquote()
 }*/
 if(isSubmit)
 {
- action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+specimenId;
+ action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+
+   specimenId+"&noOfAliquotes="+noOfAliquotes+"&quantityperAliquote="+quantity;
 }
 
  window.parent.frames[1].location=action;
@@ -148,9 +151,8 @@ function getSpecimenLabelsforSCG(id)
 
 function populateSpecimenLabelsCombo(response)
  {
-    dhtmlx.skin ='dhx_skyblue';
-    
-    specimenCombo.clearAll(); 
+        specimenCombo.setComboText("");
+        specimenCombo.clearAll(); 
 	specimenCombo.addOption(eval(response)); 
 	specimenCombo.enableFilteringMode(true);
   }
@@ -200,7 +202,7 @@ function inputBlur(i){
 }
 function initComboForSCGEvents()
 {
- 		        dhtmlx.skin ='dhx_skyblue';
+ 		        
                 scgCombo = new dhtmlXCombo("addSCGEvents", "addSCGEven1", 240);
                 scgCombo.addOption(scgEvenData);    
 		        //scgCombo.enableFilteringMode(true)

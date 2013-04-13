@@ -32,7 +32,7 @@
 <table width="100%" border="0"  cellpadding="10" cellspacing="0" class="whitetable_bg">	
 	<tr class="tr_bg_blue1 blue_ar_b">
 			<td  class="heading_text_style">
-				<bean:message key="participant.view.profile.summary"/><bean:write name="participantDto" property="lastName" />,
+				<bean:message key="participant.view.profile.summary"/> <bean:write name="participantDto" property="lastName" />,
 				<bean:write name="participantDto" property="firstName" />
 				[<bean:write name="participantDto" property="cpId" />_<bean:write name="participantDto" property="participantId" />]
 				 
