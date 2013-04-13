@@ -637,7 +637,7 @@ function forwardToChildSpecimen() {
 		
 		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId; break;	
 		
-		case '4' :	action = 'DisplayScg.do?scgId='+scgId+'&specimenId='+specimenId; break;
+		case '4' :	action = 'AnticipatorySpecimenView.do?scgId='+scgId+'&specimenId='+specimenId; break;
 		
 		default :	action = "none";
 	}

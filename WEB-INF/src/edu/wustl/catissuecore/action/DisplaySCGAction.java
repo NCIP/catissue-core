@@ -62,6 +62,10 @@ public class DisplaySCGAction extends Action
 				identifier = Long.valueOf(request.getParameter("scgId"));
 				//request.getSession().setAttribute("scgId",identifier);
 			}
+			else
+			{
+				identifier = (Long) request.getSession().getAttribute("scgId");
+			}
 			SCGSummaryDTO scgSummaryDTO = scgdao.getScgSummary(dao, identifier);
 			request.getSession().setAttribute("scgSummaryDTO", scgSummaryDTO);
 			//setSiteList
