@@ -133,8 +133,8 @@
 		
 	</changeSet>
 	
-	<changeSet id="11" author="catissue" runOnChange="true">
-		<createIndex tableName="CATISSUE_DISTRI_EVENT_PARAM" indexName="DISTRIBUTION_EVENT_DISTRIBUTED_QUANTITY">
+	<changeSet id="11" author="catissue" runOnChange="true" failOnError="false">
+		<createIndex tableName="CATISSUE_DISTRI_EVENT_PARAM" indexName="DISTRIBUTED_QUANTITY">
     		<column name="DISTRIBUTED_QUANTITY"/>
 		</createIndex>
 	</changeSet>
