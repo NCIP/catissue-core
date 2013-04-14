@@ -5,6 +5,7 @@ function initSpecimenCombo()
 		tissueSiteCombo.setOptionWidth(202);
 		tissueSiteCombo.setSize(202);
 		tissueSiteCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		tissueSiteCombo.enableFilteringMode(true);
 
 		var tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
 		tissueSideCombo.setOptionWidth(203);
@@ -100,7 +101,7 @@ function addEditExtIdTag(buttonElement)
 
 function deleteTag(e)
 {
-	var agree=confirm("Are you sure you want to delete this tag?");
+	var agree=confirm("Are you sure you want to delete it?");
 	if(agree)
 	{
 		e.parentNode.parentNode.removeChild(e.parentNode);
@@ -366,4 +367,43 @@ function onSpecimenTypeChange(selectedElement)
 		default : typeCombo.addOption(-1,"-- Select --");
 	}
 	typeCombo.selectOption(0); 
+}
+
+function forwardToChildSpecimen() {
+    var radios = document.getElementsByName("specimenChild");
+	var checkedRadio;
+    for (var i = 0; i < radios.length; i++) {       
+        if (radios[i].checked) {
+            checkedRadio=radios[i].value;
+            break;
+        }
+    }
+	
+	var action;
+	var specimenLabel = document.getElementById('label').value;
+	var specimenId = document.getElementById("id").value;
+	var scgId = document.getElementById("scgId").value;
+	
+	switch(checkedRadio)
+	{
+		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
+		
+		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId;
+					
+					if(document.getElementById("numberOfSpecimens").value>1)
+					{
+						action = 'MultipleSpecimenFlexInitAction.do?operation=add&pageOf=pageOfMultipleSpWithoutMenu&parentType=Derived_Specimen&parentLabel='+specimenLabel;
+					}
+					break;	
+		
+		case '4' :	action = 'AnticipatorySpecimenView.do?scgId='+scgId+'&specimenId='+specimenId; break;
+		
+		default :	action = "none";
+	}
+	
+	if(action!="none")
+	{
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
 }
