@@ -1,4 +1,4 @@
-var hourTimeCombo,minutesTimeCombo,rhourTimeCombo,rminutesTimeCombo,siteCombo;
+var hourTimeCombo,minutesTimeCombo,rhourTimeCombo,rminutesTimeCombo,siteCombo,collectCombo,receiverCombo;
 
 function convertSelectToCombo()
 {
@@ -9,15 +9,17 @@ siteCombo.setSize("240");
 siteCombo.attachEvent("onSelectionChange",processComboChange);
 siteCombo.setName("site");
 
-var receiverCombo = dhtmlXComboFromSelect("receiver");
+receiverCombo = dhtmlXComboFromSelect("receiver");
 receiverCombo.setSize("240");
 receiverCombo.attachEvent("onSelectionChange",processComboChange);
 receiverCombo.setName("receiver");
+receiverCombo.enableFilteringMode(true);
 
-var collectCombo = dhtmlXComboFromSelect("collector");
+collectCombo = dhtmlXComboFromSelect("collector");
 collectCombo.setSize("240");
 collectCombo.attachEvent("onSelectionChange",processComboChange);
 collectCombo.setName("collector");
+collectCombo.enableFilteringMode(true);
 
 hourTimeCombo = dhtmlXComboFromSelect("hoursTime");
 hourTimeCombo.setSize("40");
@@ -56,6 +58,8 @@ function submitSCG() {
 			+ minutesTimeCombo.getSelectedText();
 	scgDataJSON["scgName"] = document.getElementById("scgName").value;
 	scgDataJSON["site"] = siteCombo.getSelectedValue();
+        scgDataJSON["receiver"] = receiverCombo.getSelectedValue();
+        scgDataJSON["collector"] = collectCombo.getSelectedValue();
 
 	var response = dhtmlxAjax.postSync("SaveScgAjaxAction.do", "dataJSON="
 			+ JSON.stringify(scgDataJSON));

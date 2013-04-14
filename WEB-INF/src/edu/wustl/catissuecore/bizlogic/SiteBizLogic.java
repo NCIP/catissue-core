@@ -810,7 +810,8 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		String hql = "select site.id,site.name from edu.wustl.catissuecore.domain.Site as site where site.activityStatus='Active'";
 		List siteList;
 		siteList = dao.executeQuery(hql);
-
+        NameValueBean defBean = new NameValueBean(Constants.SELECT_OPTION,Constants.SELECT_OPTION_VALUE);
+        siteNVBList.add(defBean);
 			for (Object site1 : siteList)
 			{
 				Object[] site = (Object[]) site1;

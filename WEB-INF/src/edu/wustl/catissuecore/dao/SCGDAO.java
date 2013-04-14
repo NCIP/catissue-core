@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -89,19 +90,35 @@ public class SCGDAO
 		}
 
 		List receivedEvent = dao.executeQuery(rercEventhql, columnValueBeans);
-		for (Object recEvent : receivedEvent)
+		final Calendar cal = Calendar.getInstance();
+		if (receivedEvent.isEmpty())
 		{
-			Object[] recEventData = (Object[]) recEvent;
-			scgSummDto.setReceivedDate((Date) recEventData[0]);
-			scgSummDto.setReceiver((Long) recEventData[1]);
+			scgSummDto.setReceivedDate(cal.getTime()); //set current date
+		}
+		else
+		{
+			for (Object recEvent : receivedEvent)
+			{
+				Object[] recEventData = (Object[]) recEvent;
+				scgSummDto.setReceivedDate((Date) recEventData[0]);
+				scgSummDto.setReceiver((Long) recEventData[1]);
+			}
 		}
 
 		List collectedEvent = dao.executeQuery(collectedEventhql, columnValueBeans);
-		for (Object colEvent : collectedEvent)
+		if (collectedEvent.isEmpty())
 		{
-			Object[] colEventData = (Object[]) colEvent;
-			scgSummDto.setCollectedDate((Date) colEventData[0]);
-			scgSummDto.setCollector((Long) colEventData[1]);
+			scgSummDto.setCollectedDate(cal.getTime()); //set current date
+		}
+		else
+		{
+
+			for (Object colEvent : collectedEvent)
+			{
+				Object[] colEventData = (Object[]) colEvent;
+				scgSummDto.setCollectedDate((Date) colEventData[0]);
+				scgSummDto.setCollector((Long) colEventData[1]);
+			}
 		}
 
 		return scgSummDto;
@@ -122,57 +139,81 @@ public class SCGDAO
 		if (object != null)
 		{
 			persistentSCG = (SpecimenCollectionGroup) object;
-		
 
-		if (summaryDto.getScgName() != null)
-		{//needToHandle error if empty
-			persistentSCG.setName(summaryDto.getScgName());
-		}
+			if (summaryDto.getScgName() != null)
+			{//needToHandle error if empty
+				persistentSCG.setName(summaryDto.getScgName());
+			}
 
-		if (summaryDto.getSite() != null)
-		{ //set Site
-			Site site = new Site();
-			site.setId(summaryDto.getSite());
-			persistentSCG.setSpecimenCollectionSite(site);
-		}
+			if (summaryDto.getSite() != null)
+			{ //set Site
+				Site site = new Site();
+				site.setId(summaryDto.getSite());
+				persistentSCG.setSpecimenCollectionSite(site);
+			}
 
-		Collection<SpecimenEventParameters> eventParams = persistentSCG
-				.getSpecimenEventParametersCollection();
+			Collection<SpecimenEventParameters> eventParams = persistentSCG
+					.getSpecimenEventParametersCollection();
 
-		for (SpecimenEventParameters eventParameter : eventParams)
-		{
-			if (eventParameter instanceof ReceivedEventParameters)
+			if (eventParams.isEmpty())
+			{
+				ReceivedEventParameters receiveEvent = new ReceivedEventParameters();
+				setReceivedEventParameter(summaryDto, receiveEvent);
+				receiveEvent.setSpecimenCollectionGroup(persistentSCG);
+				CollectionEventParameters collEvent = new CollectionEventParameters();
+				setCollectedEventParam(summaryDto, collEvent);
+				collEvent.setSpecimenCollectionGroup(persistentSCG);
+				persistentSCG.getSpecimenEventParametersCollection().add(receiveEvent);
+				persistentSCG.getSpecimenEventParametersCollection().add(collEvent);
+			}
+			else
 			{
 
-				if (summaryDto.getReceiver() != null)
+				for (SpecimenEventParameters eventParameter : eventParams)
 				{
-					User receiver = new User();
-					receiver.setId(summaryDto.getReceiver());
-					eventParameter.setUser(receiver);
-				}
-				if (summaryDto.getReceivedDate() != null)
-				{
-					eventParameter.setTimestamp(summaryDto.getReceivedDate());
-				}
-
-			}
-			if (eventParameter instanceof CollectionEventParameters)
-			{
-				if (summaryDto.getCollector() != null)
-				{
-					User collector = new User();
-					collector.setId(summaryDto.getCollector());
-					eventParameter.setUser(collector);
-				}
-				if (summaryDto.getCollectedDate() != null)
-				{
-					eventParameter.setTimestamp(summaryDto.getCollectedDate());
+					if (eventParameter instanceof ReceivedEventParameters)
+					{
+						setReceivedEventParameter(summaryDto, eventParameter);
+					}
+					if (eventParameter instanceof CollectionEventParameters)
+					{
+						setCollectedEventParam(summaryDto, eventParameter);
+					}
 				}
 			}
+			dao.update(persistentSCG);
 		}
-		dao.update(persistentSCG);
+
 	}
-		
+
+	private void setCollectedEventParam(SCGSummaryDTO summaryDto,
+			SpecimenEventParameters eventParameter)
+	{
+		if (summaryDto.getCollector() != null)
+		{
+			User collector = new User();
+			collector.setId(summaryDto.getCollector());
+			eventParameter.setUser(collector);
+		}
+		if (summaryDto.getCollectedDate() != null)
+		{
+			eventParameter.setTimestamp(summaryDto.getCollectedDate());
+		}
+	}
+
+	private void setReceivedEventParameter(SCGSummaryDTO summaryDto,
+			SpecimenEventParameters eventParameter)
+	{
+		if (summaryDto.getReceiver() != null)
+		{
+			User receiver = new User();
+			receiver.setId(summaryDto.getReceiver());
+			eventParameter.setUser(receiver);
+		}
+		if (summaryDto.getReceivedDate() != null)
+		{
+			eventParameter.setTimestamp(summaryDto.getReceivedDate());
+		}
 	}
 
 }
