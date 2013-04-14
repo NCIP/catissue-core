@@ -114,11 +114,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 				request.getSession().setAttribute("scgId", identifier);
 			}
 
-			DisplaySCGAction action = new DisplaySCGAction();
-			ActionForward forward = action.execute(mapping, form, request, response);
-			if (Constants.SUCCESS.equalsIgnoreCase(forward.getName()))
-			{
-
 				Long specimenId = null;
 				final SpecimenAutoStorageContainer autoStorageContainer = new SpecimenAutoStorageContainer();
 				final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
@@ -175,7 +170,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 
 				autoStorageContainer.fillAllocatedPositionSet(this.asignedPositonSet);
 				session.setAttribute("asignedPositonSet", this.asignedPositonSet);
-			}
+			
 		}
 		finally
 		{

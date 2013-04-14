@@ -100,6 +100,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			// Mandar : 5Aug08 ----------- start
 			//bug 13164 start
 			final String forwardToValue = request.getParameter(Constants.FORWARD_TO);
+			DisplaySCGAction action = new DisplaySCGAction();
+			ActionForward forward = action.execute(mapping, form, request, response);
+			if (Constants.SUCCESS.equalsIgnoreCase(forward.getName()))
+			{
 			if (forwardToValue != null)
 			{
 				if (Constants.CP_CHILD_SUBMIT.equals(forwardToValue))
@@ -268,6 +272,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			{
 				// request.setAttribute(Constants.PAGE_OF,pageOf);
 				return mapping.findForward(target);
+			}
 			}
 
 			return mapping.findForward(target);

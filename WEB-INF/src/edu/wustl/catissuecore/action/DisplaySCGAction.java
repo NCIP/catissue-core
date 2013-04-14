@@ -67,19 +67,19 @@ public class DisplaySCGAction extends Action
 				identifier = (Long) request.getSession().getAttribute("scgId");
 			}
 			SCGSummaryDTO scgSummaryDTO = scgdao.getScgSummary(dao, identifier);
-			request.getSession().setAttribute("scgSummaryDTO", scgSummaryDTO);
+			request.setAttribute("scgSummaryDTO", scgSummaryDTO);
 			//setSiteList
 			List<NameValueBean> sitelist = new SiteBizLogic().getSiteList(dao);
 
 			//setUserList
 			List<UserNameIdDTO> userList = new UserBizLogic().getUserList(dao);
 			List<NameValueBean> userNVBList = getUserNVBList(userList);
-			request.getSession().setAttribute("siteList", sitelist);
-			request.getSession().setAttribute("userList", userNVBList);
+			request.setAttribute("siteList", sitelist);
+			request.setAttribute("userList", userNVBList);
 			//sethoursList
-			request.getSession().setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+			request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 			//setMinList
-			request.getSession().setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+			request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 
 		}
 		finally
