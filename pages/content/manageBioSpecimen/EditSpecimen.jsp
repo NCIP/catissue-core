@@ -29,8 +29,6 @@
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
 <!----------------------------------------------------------------------->
-<body onload="initSpecimenCombo()"></body>
-
 <html:form action="NewSpecimenEdit.do">
 
 <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -168,7 +166,7 @@
 							<td width="30%" align="left" class="black_new">
 							<html:select property="type" name="specimenDTO" 
 							styleClass="formFieldSized" styleId="type" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenSubTypeChange(this)">
 							<html:options collection="specimenTypeList"
 								labelProperty="name" property="value" />
 							</html:select>
@@ -642,6 +640,7 @@ dhxWins.window("containerPositionPopUp").setModal(true);
 dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
 }
 
+initSpecimenCombo();
 initializeSpecimenPage(${biohazardTypeNameListJSON});
 prepareSpecimenTypeOptions(${cellTypeListJSON},${molecularTypeListJSON},${tissueTypeListJSON},${fluidTypeListJSON});
 </script>

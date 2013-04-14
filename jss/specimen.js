@@ -1,4 +1,5 @@
 var typeCombo;
+var classNameCombo;
 function initSpecimenCombo()
 {
 		var tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
@@ -17,7 +18,7 @@ function initSpecimenCombo()
 		pathologicalStatusCombo.setSize(203);
 		pathologicalStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 
-		var classNameCombo = dhtmlXComboFromSelect("className");
+		classNameCombo = dhtmlXComboFromSelect("className");
 		classNameCombo.setOptionWidth(203);
 		classNameCombo.setSize(203);
 		classNameCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
@@ -296,6 +297,8 @@ var biohazardNameListJSON;
 
 function initializeSpecimenPage(biohazardNameJSON)
 {
+	onSpecimenSubTypeChange();
+	
 	biohazardNameListJSON=biohazardNameJSON;
 	setDefaultText("extIdName",defaultTextForExtIdName);
 	setDefaultText("extIdValue",defaultTextForExtIdValue);
@@ -366,8 +369,10 @@ function onSpecimenTypeChange(selectedElement)
 		case 'Fluid' : typeCombo.addOption(fluidTypeOptions); break;
 		default : typeCombo.addOption(-1,"-- Select --");
 	}
-	typeCombo.selectOption(0); 
+	typeCombo.selectOption(0);
+	setQuantityUnitOnClassChange(selectedElement.getSelectedValue());
 }
+
 
 function forwardToChildSpecimen() {
     var radios = document.getElementsByName("specimenChild");
@@ -407,3 +412,104 @@ function forwardToChildSpecimen() {
 		document.forms[0].submit();
 	}
 }
+
+function giveCall(url,msg,msg1,id)
+{
+	document.getElementsByName('objCheckbox').value=id;
+	document.getElementsByName('objCheckbox').checked = true;
+	ajaxAssignTagFunctionCall(url,msg,msg1);
+}
+
+function setQuantityUnitOnClassChange(className)
+{
+	var unit = document.getElementById("unitSpan");
+	var unit1 = document.getElementById("unitSpan1");
+	var unitSpecimen = "";
+	document.forms[0].concentration.disabled = true;
+	
+	if(className == "Tissue")
+	{
+		unitSpecimen = "gm";
+	}
+	else if(className == 'Fluid')
+	{
+		unitSpecimen = "ml";
+	}
+	else if(className == "Cell")
+	{
+		unitSpecimen = "cell count";
+	}
+	else if(className == "Molecular")
+	{
+		unitSpecimen = "\u00B5" + "g";
+		document.forms[0].concentration.disabled = false;
+	}
+	if(unit!=null)
+	{
+		unit.innerHTML = unitSpecimen;
+	}
+	if(unit1!=null)
+	{
+		unit1.innerHTML = unitSpecimen;
+	}
+}
+
+function onSpecimenSubTypeChange()
+{
+	var subTypeData1 = "Frozen Tissue Slide";
+	var subTypeData2 = "Fixed Tissue Block";
+	var subTypeData3 = "Frozen Tissue Block";
+	var subTypeData4 = "Not Specified";
+	var subTypeData5 = "Microdissected";
+	var subTypeData6 = "Fixed Tissue Slide";
+	
+	var className = classNameCombo.getComboText();
+	var selectedOption = typeCombo.getComboText();
+	
+	
+		if(className != "Tissue")
+		{
+			setQuantityUnitOnClassChange(className);
+		}
+		else if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4 || selectedOption == subTypeData6))
+		{
+			document.getElementById("unitSpan").innerHTML = "count";
+			// added for Available quantity
+			var unit1= document.getElementById("unitSpan1");
+			if(unit1!=null)
+			{
+				unit1.innerHTML = "count";
+			}
+		}
+		else
+		{
+			if(className == "Tissue")
+			{
+				// added for Available quantity
+				var unit1= document.getElementById("unitSpan1");
+				if(selectedOption == subTypeData5)
+				{
+					document.getElementById("unitSpan").innerHTML = "cells";
+
+					if(unit1!=null)
+					{
+						unit1.innerHTML = "cells";
+					}
+				}
+				else
+				{
+					document.getElementById("unitSpan").innerHTML = "gm";
+					if(unit1!=null)
+					{
+						unit1.innerHTML = "gm";
+					}
+				}
+			}
+		}
+}
+
+function organizeTarget()
+{
+	ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem');
+}
+
