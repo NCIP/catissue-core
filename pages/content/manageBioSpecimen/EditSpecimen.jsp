@@ -617,44 +617,9 @@ function submitTabData()
 	}
 }
 
-function forwardToChildSpecimen() {
-    var radios = document.getElementsByName("specimenChild");
-	var checkedRadio;
-    for (var i = 0; i < radios.length; i++) {       
-        if (radios[i].checked) {
-            checkedRadio=radios[i].value;
-            break;
-        }
-    }
-	
-	var action;
-	var specimenLabel = document.getElementById('label').value;
-	var specimenId = document.getElementById("id").value;
-	var scgId = document.getElementById("scgId").value;
-	switch(checkedRadio)
-	{
-		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
-		
-		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId; break;	
-		
-		case '4' :	action = 'AnticipatorySpecimenView.do?scgId='+scgId+'&specimenId='+specimenId; break;
-		
-		default :	action = "none";
-	}
-	
-	if(action!="none")
-	{
-		document.forms[0].action = action;
-		document.forms[0].submit();
-	}
-}
-
 function updateHelpURL()
 {
 	var URL="";
-	
-		
-	
 	return URL;
 }
 
