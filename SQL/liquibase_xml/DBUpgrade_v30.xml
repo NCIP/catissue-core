@@ -134,7 +134,7 @@
 	</changeSet>
 	
 	<changeSet id="11" author="catissue" runOnChange="true" failOnError="false">
-		<createIndex tableName="CATISSUE_DISTRI_EVENT_PARAM" indexName="DISTRIBUTED_QUANTITY">
+		<createIndex tableName="CATISSUE_DISTRI_EVENT_PARAM" indexName="DISTRIBUTED_QTY_SEQ">
     		<column name="DISTRIBUTED_QUANTITY"/>
 		</createIndex>
 	</changeSet>
@@ -270,19 +270,19 @@
     		<column name="SPECIMEN_COLL_GROUP_ID"/>
 		</createIndex>
 	</changeSet>
-	<changeSet id="38" author="catissuecore" runOnChange="true">
+	<changeSet id="38" author="catissuecore" runOnChange="true" failOnError="false">
 		<addColumn tableName="CATISSUE_ORDER">
 			<column name="REQUESTER_ID" type="${int.type}" />
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
-	<changeSet id="39" author="catissuecore" runOnChange="true">
+	<changeSet id="39" author="catissuecore" runOnChange="true" failOnError="false">
 		<addColumn tableName="CATISSUE_ORDER">
 			<column name="DISTRIBUTORS_COMMENT" type="${text.type}(1000)" />
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
-	<changeSet id="40" author="catissuecore" runOnChange="true">
+	<changeSet id="40" author="catissuecore" runOnChange="true" failOnError="false">
 		<addColumn tableName="CATISSUE_ORDER_ITEM">
 			<column name="DISTRIBUTED_QUANTITY" type="${double.type}" />
 		</addColumn>
