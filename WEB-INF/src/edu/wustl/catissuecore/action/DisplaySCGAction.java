@@ -33,15 +33,6 @@ public class DisplaySCGAction extends Action
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		if (request.getParameter("scgId") != null && request.getParameter("specimenId") != null)
-		{
-			Map<String, Long> forwardToHashMap = new HashMap<String, Long>();
-			forwardToHashMap.put("specimenCollectionGroupId",
-					Long.valueOf(request.getParameter("scgId")));
-			forwardToHashMap.put("specimenId", Long.valueOf(request.getParameter("specimenId")));
-			request.setAttribute("forwardToHashMap", forwardToHashMap);
-		}
-
 		String target = "success";
 
 		DAO dao = null;
@@ -49,11 +40,6 @@ public class DisplaySCGAction extends Action
 				Constants.SESSION_DATA);
 		try
 		{
-			ActionErrors actionErrors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-			if (actionErrors == null)
-			{
-				actionErrors = new ActionErrors();
-			}
 			dao = AppUtility.openDAOSession(sessionData);
 			SCGDAO scgdao = new SCGDAO();
 			Long identifier = 0l;

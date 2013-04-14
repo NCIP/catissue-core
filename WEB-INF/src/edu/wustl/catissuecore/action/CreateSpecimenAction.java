@@ -480,6 +480,11 @@ public class CreateSpecimenAction extends CatissueBaseAction
 			{
 				parentSpecimenId = (Long) forwardToHashMap.get("parentSpecimenId");
 			}
+			if("participantView".equalsIgnoreCase(request.getParameter("requestFrom")))
+			{
+				parentSpecimenId = Long.valueOf(request
+						.getParameter("parentSpecimenId"));	
+			}
 			setFormData(createForm, map, parentSpecimenId);
 
 			// ************* ForwardTo implementation *************

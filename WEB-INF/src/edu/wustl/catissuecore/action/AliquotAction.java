@@ -101,6 +101,15 @@ public class AliquotAction extends SecureAction
 		{
 			request.setAttribute(Constants.CP_QUERY, "CPQuery");
 		}
+		
+		if("participantView".equals(request.getParameter("requestFrom")))
+		{
+			String noOfAliquotes = request.getParameter("noOfAliquotes");
+			String quantityperAliquote = request.getParameter("quantityperAliquote");
+			((AliquotForm) form).setNoOfAliquots(noOfAliquotes);
+			((AliquotForm) form).setQuantityPerAliquot(quantityperAliquote);
+		}
+	
 		String methodName = request.getParameter(Constants.METHOD_NAME);
 		if (methodName == null)
 		{

@@ -79,8 +79,8 @@ function createAliquote()
 }*/
 if(isSubmit)
 {
- action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+
-   specimenId+"&noOfAliquotes="+noOfAliquotes+"&quantityperAliquote="+quantity;
+	action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+specimenId+"&noOfAliquotes="+noOfAliquotes+
+	"&quantityperAliquote="+quantity+"&CPQuery=CPQuery";
 }
 
  window.parent.frames[1].location=action;
@@ -96,7 +96,7 @@ function createDerivative()
  var action = "";
  if(count=="1")
  {
-   action = "CPQueryCreateSpecimen.do?pageOf=pageOfCreateSpecimenCPQuery&parentSpecimenId="+specimenId+"&parentLabel="+label+"&scgId="+scgId+"&operation=add";
+  action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&requestFrom=participantView&parentLabel='+label+'&parentSpecimenId='+specimenId;
  }
  else //check if greater than 1
  {

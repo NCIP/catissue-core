@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -108,6 +109,15 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			final HttpSession session = request.getSession();
 			final String contName = request.getParameter(Constants.CONTAINER_NAME);
 			Long identifier = specimenCollectionGroupForm.getId();
+			if (request.getParameter("scgId") != null && request.getParameter("specimenId") != null)
+			{
+				Map<String, Long> forwardToHashMap = new HashMap<String, Long>();
+				forwardToHashMap.put("specimenCollectionGroupId",
+						Long.valueOf(request.getParameter("scgId")));
+				forwardToHashMap.put("specimenId", Long.valueOf(request.getParameter("specimenId")));
+				request.setAttribute("forwardToHashMap", forwardToHashMap);
+			}
+
 			if ((identifier == null || identifier == 0) && request.getParameter("scgId") != null)
 			{
 				identifier = Long.valueOf(request.getParameter("scgId"));
