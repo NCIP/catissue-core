@@ -98,7 +98,7 @@ public class ConsentTrackingBizLogic {
 		Long witnessId = 0l;
 		if (witness == null)
 		{
-			witnessName = Constants.HASHED_OUT;
+			witnessName = "";
 		
 		}
 		else

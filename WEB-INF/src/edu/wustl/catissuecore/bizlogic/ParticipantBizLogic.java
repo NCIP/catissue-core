@@ -1646,10 +1646,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			cprObj.setConsentSignatureDate( consentDto.getConsentDate());
 						
 			cprObj.setSignedConsentDocumentURL(consentDto.getConsentUrl());
+			if(consentDto.getWitnessId()!=null && consentDto.getWitnessId()!=-1){
+			
 			User witness = new User();
 			witness.setId(consentDto.getWitnessId());
 			cprObj.setConsentWitness(witness);
+			}
 			dao.update(cprObj);
+		
 			SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
 			Iterator<SpecimenCollectionGroup> scgIterator = cprObj.getSpecimenCollectionGroupCollection().iterator();
 			while(scgIterator.hasNext()){

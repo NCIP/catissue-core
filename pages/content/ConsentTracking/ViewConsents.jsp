@@ -132,7 +132,8 @@ var statusId = new Array();
 									</td>	
 									<td class="noneditable">
 										<logic:equal name="consentLevel" value="participant">
-												<input type="text" size="10"  class="black_ar"  value='<fmt:formatDate value="${consentsDto.consentDate}" pattern="${datePattern}" />' id="consentDate"  onclick="doInitCalendar('consentDate',false);" />
+												<input type="text" size="10" name = "consentDate" class="black_ar"  value='<fmt:formatDate value="${consentsDto.consentDate}" pattern="${datePattern}" />' id="consentDate"  onclick="doInitCalendar('consentDate',false,'${uiDatePattern}');" />
+												<span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 										</logic:equal>
 										<logic:notEqual name="consentLevel" value="participant">
 											<fmt:formatDate value="${consentsDto.consentDate}" pattern="${datePattern}" />

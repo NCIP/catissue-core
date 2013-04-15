@@ -3,8 +3,10 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,9 +23,17 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.json.JSONException;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
@@ -752,9 +762,23 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
 			IOException
 	{
-		Gson gson = new GsonBuilder().setDateFormat(ApplicationProperties.getValue("date.pattern"))
-				.create();
-		//Gson gson = new Gson();
+		JsonDeserializer dese = new JsonDeserializer<Date>() {
+	        DateFormat df =new SimpleDateFormat(ApplicationProperties.getValue("date.pattern"));
+	        @Override
+	        public Date deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+	                throws JsonParseException {
+	            try {
+	                return df.parse(json.getAsString());
+	            } catch (ParseException e) {
+	                return null;
+	            }
+	        }
+	    };
+		
+
+		GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Date.class, dese);
+		
+		Gson gson = gsonBuilder.create();
 		String consentTierListJSON = request.getParameter("dataJSON");
 		ConsentResponseDto consentsDto = gson.fromJson(request.getParameter("consentDto"),
 				ConsentResponseDto.class);
@@ -858,3 +882,5 @@ public class CatissueCommonAjaxAction extends DispatchAction
 	}
 
 }
+
+ 
