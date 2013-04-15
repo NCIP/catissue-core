@@ -556,5 +556,7 @@
         	/>
         </joined-subclass>
     </class>
-
+	<query name="getDistributionEvent">select distEventParam.comment,distEventParam.distributedQuantity,distEventParam.timestamp,user.firstName,user.lastName from DistributionEventParameters distEventParam left join distEventParam.user user where distEventParam.id = ?
+	</query>
+	
 </hibernate-mapping>

@@ -574,6 +574,10 @@
 	<definition name=".catissuecore.transferEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/TransferEventParameters.jsp" />
 	</definition>
+	
+	<definition name=".catissuecor.distributionEventParametersDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/DistributionEventParameters.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.transferEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />

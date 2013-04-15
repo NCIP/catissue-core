@@ -16,17 +16,23 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.DistributionEventParameters;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.DistributionEventDTO;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -40,11 +46,14 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.locator.CSMGroupLocator;
 
 /**
@@ -950,5 +959,25 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			this.closeDAOSession(dao);
 		}
 
+	}
+	
+	public DistributionEventDTO getDistributionEventDTO(Long id,DAO dao) throws DAOException{
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG,id));
+		
+		Collection eventDetail =((HibernateDAO)dao).executeNamedQuery("getDistributionEvent", substParams);
+		Iterator ite = eventDetail.iterator();
+		DistributionEventDTO distributionEventDTO = new DistributionEventDTO();
+		if(ite.hasNext()){
+			Object[] arr = (Object[])ite.next();
+			distributionEventDTO.setComment(String.valueOf(arr[0]));
+			distributionEventDTO.setEventDate( arr[2]!=null ? (Date) arr[2] : null);
+			distributionEventDTO.setDistributedQuantity(Double.parseDouble(String.valueOf(arr[1])));
+			String firstName = arr[3]==null? "" : String.valueOf(arr[3]);
+			String lastName = arr[4]==null? "" : String.valueOf(arr[4]);
+			distributionEventDTO.setUser((lastName+" "+firstName).trim());
+			distributionEventDTO.setId(id);
+		}
+		return distributionEventDTO;
 	}
 }

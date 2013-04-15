@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.DistributionEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
@@ -417,6 +418,10 @@ public final class EventsUtil
 		{
 			events[0] = "Transfer";
 			events[1] = "pageOfTransferEventParameters";
+		}
+		else if(eventParameters instanceof DistributionEventParameters){
+			events[0] = "Distribution Event";
+			events[1] = "pageOfDistributionEventParameters";
 		}
 
 		return events;

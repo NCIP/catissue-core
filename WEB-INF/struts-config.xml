@@ -3363,6 +3363,13 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.transferEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
+		
+		<action path="/DistributionEventParameters"
+			type="edu.wustl.catissuecore.action.DistributionEventParametersAction" validate="false" scope="request">
+			<forward name="pageOfDistributionEventParameters" path=".catissuecor.distributionEventParametersDef" />
+			<forward name="failure" path=".catissuecore.distributionEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
 
 		<action path="/TransferEventParametersAdd" type="edu.wustl.common.action.CommonAddEditAction"
 			name="transferEventParametersForm" validate="true"
@@ -3935,6 +3942,7 @@ PUBLIC
 			<forward name="failure"
 				path="/QueryParticipant.do?operation=view&amp;pageOf=query" />
 			<forward name="pageOfCollectionProtocolForTitli" path="/RetrieveCollectionProtocol.do" />
+			<forward name="pageOfDistributionEventParameters" path="/DistributionEventParameters.do" />
 		</action>
 
 		<action path="/SimpleSearchEdit"
