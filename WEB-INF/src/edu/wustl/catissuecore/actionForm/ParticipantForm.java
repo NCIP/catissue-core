@@ -137,8 +137,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	/**
 	 * The race to which the Participant belongs.
 	 */
-	protected String[] raceTypes = {(String) DefaultValueManager
-			.getDefaultValue(Constants.DEFAULT_RACE)};
+	protected String[] raceTypes = {/*(String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_RACE)*/};
 
 	/**
 	 * Participant's ethnicity status.
@@ -903,93 +903,21 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 				}
 				index++;
 			}
+			
+			if(this.registrationDate.equals("")){
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("participant.cpr.msg")));
+			
+			}else{
 
-			//validation for add more block for collection protocol registration
-			//(Abhishek Mehta)
-			final String collectionProtocolClassName = "CollectionProtocolRegistration:";
-			final String collectionProtocolId = "_CollectionProtocol_id";
-			final String collectionProtocolParticipantId = "_protocolParticipantIdentifier";
-			final String collectionProtocolRegistrationDate = "_registrationDate";
-			final String collectionProtocolIdentifier = "_id";
-			final String isConsentAvailable = "_isConsentAvailable";
-			final String isActive = "_activityStatus";
-			final String collectionProtocolTitle = "_CollectionProtocol_shortTitle";
-
-			index = 1;
-			int count = 0;
-			while (true)
-			{
-				final String keyOne = collectionProtocolClassName + index + collectionProtocolId;
-				final String keyTwo = collectionProtocolClassName + index
-						+ collectionProtocolParticipantId;
-				final String keyThree = collectionProtocolClassName + index
-						+ collectionProtocolRegistrationDate;
-				final String keyFour = collectionProtocolClassName + index
-						+ collectionProtocolIdentifier;
-				final String keyFive = collectionProtocolClassName + index + isConsentAvailable;
-				final String keySix = collectionProtocolClassName + index + isActive;
-				final String KeySeven = collectionProtocolClassName + index
-						+ collectionProtocolTitle;
-
-				final String value1 = (String) this.collectionProtocolRegistrationValues
-						.get(keyOne);
-				//String value2 = (String) collectionProtocolRegistrationValues.get(keyTwo);
-				final String value3 = (String) this.collectionProtocolRegistrationValues
-						.get(keyThree);
-				String value6 = (String) this.collectionProtocolRegistrationValues.get(keySix);
-
-				if (value6 == null)
-				{
-					value6 = Status.ACTIVITY_STATUS_ACTIVE.toString();
-				}
-				if (value6.equalsIgnoreCase(Constants.DISABLED))
-				{
-					this.setForwardTo("blankPage");
-					request.setAttribute(Constants.PAGE_OF, this.getPageOf());
-					request.setAttribute("participantId", new Long(this.getId()).toString());
-					request.setAttribute("cpId", value1);
-				}
-
-				final String errorKey = validator.validateDate(value3, true);
-				if (value1 == null)
-				{
-					break;
-				}
-				else if (!validator.isValidOption(value1))
-				{
-					this.collectionProtocolRegistrationValues.remove(keyOne);
-					this.collectionProtocolRegistrationValues.remove(keyTwo);
-					this.collectionProtocolRegistrationValues.remove(keyThree);
-					this.collectionProtocolRegistrationValues.remove(keyFour);
-					this.collectionProtocolRegistrationValues.remove(keyFive);
-					this.collectionProtocolRegistrationValues.remove(keySix);
-					this.collectionProtocolRegistrationValues.remove(KeySeven);
-					count++;
-				}
-
-				else if ((validator.isValidOption(value1) && !validator.isValidOption(value6))
-						|| (!validator.isValidOption(value1) && !validator.isValidOption(value6)))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"errors.participant.participantRegistration.missing",
-							ApplicationProperties.getValue("participant.msg")));
-					break;
-				}
-
+				final String errorKey = validator.validateDate(this.registrationDate, true);
+				
 				if (errorKey.trim().length() > 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
 							ApplicationProperties.getValue("participant.cpr.msg")));
-					break;
 				}
-
-				index++;
 			}
-
-			this.collectionProtocolRegistrationValueCounter = this.collectionProtocolRegistrationValueCounter
-					- count;
-
-			//Getting ConsentRegistrationBean from the  session and creating consent response map.
 			this.setConsentResponse(session);
 
 		}
