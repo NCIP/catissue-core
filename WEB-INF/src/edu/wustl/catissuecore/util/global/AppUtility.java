@@ -2339,18 +2339,21 @@ public class AppUtility {
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
 		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-		String dashboardLabelJsonValue = collectionProtocolBean.getDashboardLabelJsonValue();
-		JSONObject gridJson = new JSONObject(dashboardLabelJsonValue);
-		String deletedassocIds = gridJson.getString("deletedAssocIds");
-		if(!deletedassocIds.isEmpty())
+		String dashboardLabeldJsonValue = collectionProtocolBean.getDashboardLabelJsonValue();
+		if(dashboardLabeldJsonValue != null)
 		{
-		 String[] ids = deletedassocIds.split(",");
-		 List<Long> deletedAssocIds = new ArrayList<Long>();
-		 for(String id:ids)
-		{
-			 deletedAssocIds.add(Long.valueOf(id));
-		}
-		 collectionProtocolDTO.setDeletedAssocIds(deletedAssocIds);
+			JSONObject gridJson = new JSONObject(dashboardLabeldJsonValue);
+			String deletedassocIds = gridJson.getString("deletedAssocIds");
+			if (!deletedassocIds.isEmpty())
+			{
+				String[] ids = deletedassocIds.split(",");
+				List<Long> deletedAssocIds = new ArrayList<Long>();
+				for (String id : ids)
+				{
+					deletedAssocIds.add(Long.valueOf(id));
+				}
+				collectionProtocolDTO.setDeletedAssocIds(deletedAssocIds);
+			}
 		}
 		return collectionProtocolDTO;
 	}

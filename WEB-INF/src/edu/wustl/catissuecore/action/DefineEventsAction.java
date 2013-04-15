@@ -52,10 +52,13 @@ public class DefineEventsAction extends BaseAction
 
 		CollectionProtocolBean cpBean = (CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		
 		if (cpBean == null)
 		{
 			cpBean = new CollectionProtocolBean();
 		}
+		String dashboardJson = request.getParameter("dashboardLabelJsonValue");
+		request.getSession().setAttribute("dashboardLabelJsonValue",dashboardJson);
 		if (cpForm.getShortTitle() != null)
 		{
 			this.populateCollectionProtocolBean(cpForm, cpBean);

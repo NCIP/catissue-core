@@ -847,6 +847,11 @@ public class CollectionProtocolUtil
 		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) sessionCpList
 				.get(0);
 		collectionProtocolBean.setOperation("update");
+		String dashboardJson = (String) session.getAttribute("dashboardLabelJsonValue");
+		if(dashboardJson!=null) 
+		{
+		 collectionProtocolBean.setDashboardLabelJsonValue(dashboardJson);
+		}
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, sessionCpList.get(0));
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, sessionCpList.get(1));
 		String cptitle = collectionProtocolBean.getTitle();
