@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/multiSelectUsingCombo.tld" prefix="mCombo" %>
+<%@ page import="java.util.Map,java.util.List,java.util.ListIterator"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -11,6 +12,8 @@
 <script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
 <script type='text/JavaScript' src='jss/advQuery/scwcalendar.js'></script>
 <link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
 
 <script>
 function checkForValidation()
@@ -69,6 +72,14 @@ function setHeader(isSpecimenChecked)
 		popupmygrid.setColumnHidden(2,true);
 		document.getElementById("poupHeader").innerText ="Share the list(s) with user";
 	} 
+}
+
+function assignTargetCallFunc()
+{
+	if(document.getElementById('assignTargetCall')!=null)
+	{
+		eval(document.getElementById('assignTargetCall').value);
+	}
 }
 </script>
  
@@ -129,8 +140,8 @@ function setHeader(isSpecimenChecked)
 								<td>	
 									<p> 			
  										&nbsp&nbsp&nbsp
-										<input type="button" id="assignButton" value="ASSIGN" title="Assign" onclick="<%=assignTargetCall%> "
-												onkeydown="<%=assignTargetCall%> "  class="btn3">
+										<input type="button" id="assignButton" value="ASSIGN" title="Assign" onclick="assignTargetCallFunc()"
+												onkeydown="assignTargetCallFunc()"  class="btn3">
 				 
  										&nbsp&nbsp&nbsp
 										<input type="button"  id="shareButton" value="SHARE LIST" title="Share List (List will be visible to the users you choose)" onclick="checkForValidation()"

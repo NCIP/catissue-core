@@ -195,6 +195,13 @@ function giveCallToPopup(url,msg,msg1,id)
 	ajaxAssignTagFunctionCall(url,msg,msg1);
 }
 
+function giveCall(url,msg,msg1,id)
+{
+	document.getElementsByName('objCheckbox').value=id;
+	document.getElementsByName('objCheckbox').checked = true;
+	ajaxAssignTagFunctionCall(url,msg,msg1);
+}
+
 function logout()
 {
 	var request = newXMLHTTPReq();
@@ -1048,6 +1055,7 @@ String lbl = "Apply first to all";
 			</tr>
 		</table>
 	<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
+	<input type="hidden" id="assignTargetCall" name="assignTargetCall" value="giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString=${popUpSpecList}','Select at least one existing list or create a new list.','No specimen has been selected to assign.','${popUpSpecList}')"/>
 	<div id="divForHiddenChild"></div>
 </html:form>
 </body>
@@ -1056,8 +1064,4 @@ identifyDisabledCheckBox();
 displayPrinterTypeLocation();
 </script>
 </html>
-<%
-	String specId = (String)request.getAttribute("popUpSpecList");
-	String	assignTargetCall = "giveCallToPopup('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
-%>
 	  <%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>

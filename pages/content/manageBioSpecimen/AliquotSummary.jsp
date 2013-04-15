@@ -453,7 +453,9 @@ function giveCall(url,msg,msg1,id)
 				<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
 				</td>
 				</tr>
-    </table></td>
+    </table>
+	<input type="hidden" id="assignTargetCall" name="assignTargetCall" value="giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString=${popUpSpecList}','Select at least one existing list or create a new list.','No specimen has been selected to assign.','${popUpSpecList}')"/>
+	</td>
   </tr>
   <script>
 			
@@ -461,8 +463,4 @@ function giveCall(url,msg,msg1,id)
 </table>
 </html:form>
 <!----------------------------------------------------------------------------------------->
-<%
-	String specId = (String)request.getAttribute("popUpSpecList");
-	String	assignTargetCall = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
- %>
 <%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>

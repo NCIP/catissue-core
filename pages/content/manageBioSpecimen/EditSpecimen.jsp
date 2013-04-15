@@ -4,6 +4,7 @@
 
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="edu.wustl.catissuecore.dto.SpecimenDTO"%>
 
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
@@ -11,6 +12,17 @@
 <link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
 
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
@@ -24,11 +36,32 @@
 <script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+
 <script>
 	var imgsrc="images/";
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
 <!----------------------------------------------------------------------->
+
 <html:form action="NewSpecimenEdit.do">
 
 <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -514,31 +547,22 @@
 				<tr>
 					<td align="left" colspan="2" class="buttonbg">
 						<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
-						<tr>
-						<td class="buttonbg">
-					<!--<html:button
-					styleClass="blue_ar_b" property="submitButton"
-					title="Submit only"
-					value="Submit"
-					onclick="submit()">
-     				</html:button>
-			
-			 |&nbsp;<html:button
-				styleClass="blue_ar_c" property="moreButton"
-				title="Submit and add events"
-				value="Submit"
-				onclick="submitMore()">
-			 </html:button>
-			| -->
-				<input type="button" value="Submit"
-							onclick="submitTabData()" class="blue_ar_b"/>
-	
-		<!--<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>-->
-		              </td>
-	               </tr>
-				</table>
-							  		</td>
-							 	</tr>
+							<tr>
+								<td class="buttonbg">
+									<input type="button" value="Submit" onclick="submitTabData()" class="blue_ar_b"/>
+									<c:if test="${specimenDTO.collectionStatus=='Collected'}">
+										| <input type="button" value="Add To Specimen List"
+											onclick="organizeTarget()" class="blue_ar_b" />
+									</c:if>
+										
+									<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked="true"/>
+								</td>
+							</tr>
+						</table>
+						 <input type="hidden" id="assignTargetCall" name="assignTargetCall" value="giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString=${specimenDTO.id}','Select at least one existing list or create a new list.','No specimen has been selected to assign.','${specimenDTO.id}')"/>
+						<%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
+					</td>
+				</tr>
 
 <!-- NEW SPECIMEN REGISTRATION ends-->
 				</table>
@@ -554,7 +578,6 @@
 </html:form>
 
 <script>
-
 var nodeId= "Specimen_"+document.getElementById("id").value;
 refreshTree(null,null,null,null,nodeId);
 
@@ -588,6 +611,7 @@ function submitTabData()
 {
 	var extidJSON = createExtIdJSON();
 	var biohazardJSON = createBioHazardJSON();
+	
 	
 	var isVirtual = document.getElementById("isVirtual").value;
 	if(!isVirtual)
@@ -639,8 +663,8 @@ dhxWins.window("containerPositionPopUp").allowResize();
 dhxWins.window("containerPositionPopUp").setModal(true);
 dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
 }
-
 initSpecimenCombo();
 initializeSpecimenPage(${biohazardTypeNameListJSON});
 prepareSpecimenTypeOptions(${cellTypeListJSON},${molecularTypeListJSON},${tissueTypeListJSON},${fluidTypeListJSON});
+
 </script>
