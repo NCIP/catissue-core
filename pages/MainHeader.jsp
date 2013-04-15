@@ -5,9 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
 <script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
-
 <%@ page language="java" isELIgnored="false"%>
-
 
 <script src="jss/titli.js"></script>
 <script type="text/javascript">
@@ -43,7 +41,13 @@ function inputBlur(i){
 		shortcut.add("alt+c", function() {
 				var strLinkForDataEntry=strLinkWithoutSlash.concat("/CpBasedSearch.do");
 				window.location=strLinkForDataEntry;
-				});		
+				});
+		
+				shortcut.add("alt+b", function() {
+		var strLinkForBulkUpload=strLinkWithoutSlash.concat("/BulkOperation.do");
+		window.location=strLinkForBulkUpload;
+           });	
+				
 </script>
 
 
@@ -80,7 +84,7 @@ function inputBlur(i){
 					<a href="ShowQueryDashboardAction.do" class="white">
 						<img src="images/uIEnhancementImages/search_icon.png" alt="Summary"
 						 border="0" title="Queries,Press Alt + Q"/>
-						 <span title="Query,Press Alt + Q" style="vertical-align:top">
+						 <span style="vertical-align:top" title="Query,Press Alt + Q">
 							<bean:message key="app.queries" />
 						 </span>
 					</a>
@@ -94,8 +98,8 @@ function inputBlur(i){
 					
 					<a	href="BulkOperation.do?pageOf=pageOfBulkOperation" class="white">
 							<img src="images/uIEnhancementImages/bo.png" alt="Summary"
-								  border="0" title="Bulk Upload" />
-								  <span title="Bulk Upload" style="vertical-align:top"><bean:message key="app.bulkUplad" />  </span>
+								  border="0" title="Bulk Upload,,Press Alt + B" />
+								  <span title="Bulk Upload,Press Alt + B" style="vertical-align:top"><bean:message key="app.bulkUplad" />  </span>
 					</a>
 				</td>
 
