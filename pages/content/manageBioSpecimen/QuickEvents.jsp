@@ -191,7 +191,7 @@ session.setAttribute("EventOrigin", "QuickEvents");
 														else
 														{
 															%>
-																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);">
+																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);" disabled="true"	>
 																</html:textarea>
 															<%
 														}

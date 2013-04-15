@@ -56,12 +56,15 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.NotEqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
@@ -93,29 +96,40 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		final List specimenIds = new ArrayList();
-		if (obj instanceof List)
+		try
 		{
-			final List eventObjectsList = (List) obj;
-
-			for (int i = 0; i < eventObjectsList.size(); i++)
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			final List specimenIds = new ArrayList();
+			
+			if (obj instanceof List)
 			{
-				specimenIds.add(((SpecimenEventParameters) eventObjectsList.get(i)).getSpecimen()
-						.getId());
+				final List eventObjectsList = (List) obj;
+				checkStatusAndGetUserId((SpecimenEventParameters)eventObjectsList.get(0), dao);
+				for (int i = 0; i < eventObjectsList.size(); i++)
+				{
+					specimenIds.add(((SpecimenEventParameters) eventObjectsList.get(i)).getSpecimen()
+							.getId());
+				}
+	
+				for (int i = 0; i < eventObjectsList.size(); i++)
+				{
+					this.insertEvent(eventObjectsList.get(i), dao, sessionDataBean,
+							newSpecimenBizLogic, specimenIds);
+				}
 			}
-
-			for (int i = 0; i < eventObjectsList.size(); i++)
+			else
 			{
-				this.insertEvent(eventObjectsList.get(i), dao, sessionDataBean,
-						newSpecimenBizLogic, specimenIds);
+				checkStatusAndGetUserId((SpecimenEventParameters)obj, dao);
+				this.insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
 			}
 		}
-		else
+		catch (final DAOException daoExp)
 		{
-			this.insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
+			this.LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 	/**
@@ -138,6 +152,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		List<String> idList=AppUtility.getListOnCommaToken(specimenIdentifiers);
 		Iterator<String> specimenIdIt=idList.iterator();
 		final List<String> specimenIds = new ArrayList<String>();
+		//add user validation
+		dao = AppUtility.openDAOSession(sessionDataBean);
+		checkStatusAndGetUserId(obj, dao);
+		dao.closeSession();
 		while(specimenIdIt.hasNext())
 		{
 			try 
@@ -178,12 +196,12 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			SpecimenEventParameters specimenEvent = (SpecimenEventParameters) obj;
-			checkStatusAndGetUserId(specimenEvent, dao);
+//			checkStatusAndGetUserId(specimenEvent, dao);
 			//			Ashish - 6/6/07 - performance improvement
-			Object specimenObject = null;
-			specimenObject = retrieveSpecimenLabelName(dao, specimenEvent);
+			Specimen specimen = null;
+			specimen = (Specimen)retrieveSpecimenLabelName(dao, specimenEvent);
 
-			final Specimen specimen = (Specimen) specimenObject;
+//			final Specimen specimen = (Specimen)dao.retrieveById(Specimen.class.getName(),specimenObject.getId());
 			// check for closed Specimen
 
 			if (specimenEvent instanceof DisposalEventParameters)
@@ -205,6 +223,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				specimenEvent.setSpecimen(specimen);
 				if (specimenEvent instanceof TransferEventParameters)
 				{
+					specimen = (Specimen)dao.retrieveById(Specimen.class.getName(), specimen.getId());
 					final TransferEventParameters transferEvent = (TransferEventParameters) specimenEvent;
 					StorageContainer storageContainerObj = new StorageContainer();
 
@@ -358,6 +377,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			this.disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
 		}
 		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
+		specimen = (Specimen)dao.retrieveById(Specimen.class.getName(), specimen.getId());
 		specimen.setSpecimenPosition(null);
 		specimen.setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
@@ -376,6 +396,59 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException BizLogicException
 	 */
 	private Object retrieveSpecimenLabelName(DAO dao,
+			SpecimenEventParameters specimenEventParametersObject) throws DAOException,
+			BizLogicException
+	{
+		Object specimenObject = null;
+		Specimen specimen = new Specimen();
+		List list = null;
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		
+		if (specimenEventParametersObject.getSpecimen().getId() != null)
+		{
+				specimen.setId(specimenEventParametersObject.getSpecimen().getId());
+		}
+		else if (specimenEventParametersObject.getSpecimen().getLabel() != null
+				&& specimenEventParametersObject.getSpecimen().getLabel().length() > 0)
+		{
+			substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenEventParametersObject.getSpecimen().getLabel()));
+			substParams.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
+			list = ((HibernateDAO)dao).executeNamedQuery("getSpecimenIdByLabel", substParams);
+			if(list != null && !list.isEmpty())
+			{
+				Long  id = Long.valueOf(list.get(0).toString());
+				specimen.setId(id);
+				specimen.setLabel(specimenEventParametersObject.getSpecimen().getLabel());
+			}
+		}
+		else if (specimenEventParametersObject.getSpecimen() instanceof Specimen
+				&& ((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode() != null
+				&& ((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode().length() > 0)
+		{
+			substParams.put("0", new NamedQueryParam(DBTypes.STRING, ((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode()));
+			substParams.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
+			list = ((HibernateDAO)dao).executeNamedQuery("getSpecimenIdByBarcode", substParams);
+			if(list != null && !list.isEmpty())
+			{
+				Long  id = Long.valueOf(list.get(0).toString());
+				specimen.setId(id);
+				specimen.setBarcode(((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode());
+			}
+		}
+
+		return specimen;
+	}
+
+	
+	/**
+	 * Retrieve specimen by label name.
+	 * @param dao DAO
+	 * @param specimenEventParametersObject SpecimenEventParameters
+	 * @return Object
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private Object retrieveSpecimenByLabelName(DAO dao,
 			SpecimenEventParameters specimenEventParametersObject) throws DAOException,
 			BizLogicException
 	{
@@ -423,7 +496,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 		return specimenObject;
 	}
-
 	/**
 	 * Check Status And Get UserId.
 	 * @param specimenEventParameter SpecimenEventParameters
@@ -699,7 +771,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		Specimen specimen;
 		try
 		{
-			specimen = (Specimen)this.retrieveSpecimenLabelName(dao, eventParameter);
+			specimen = (Specimen)this.retrieveSpecimenByLabelName(dao, eventParameter);
 		//this.getSpecimenObject(dao, parameter);
 		Long fromContainerId = null;
 		Integer fromPos1 =  null;
