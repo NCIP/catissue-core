@@ -18,6 +18,8 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.MySQLDAOImpl;
+import edu.wustl.dao.OracleDAOImpl;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
@@ -195,14 +197,23 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic {
 	
 	public List<NameValueBean> getClinicalDiagnosisList(String query, int listSize,JDBCDAO dao) throws DAOException, BizLogicException{
 		List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
-		String selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) like ? limit  ?";
+		String selectCDQuery = "";
+		if(dao instanceof MySQLDAOImpl){
+			selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) like ? limit  ?";
+		}else if(dao instanceof OracleDAOImpl){
+			selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) like ? and ROWNUM <=  ?";
+		}
 		List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
 		parameters.add(new ColumnValueBean(query.toLowerCase()+"%"));
 		parameters.add(new ColumnValueBean(listSize));
 		List clinicalDiagnosisValues = dao.executeQuery(selectCDQuery, parameters);
 		getClinicalDiagnosisBean(clinicalDiagnosisList, clinicalDiagnosisValues,true);
 		if(clinicalDiagnosisValues.size()<listSize){
-			selectCDQuery =  "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) not like ? and lower(value) like ?  limit  ?";
+			if(dao instanceof MySQLDAOImpl){
+				selectCDQuery = "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) not like ? and lower(value) like ?  limit  ?";
+			}else if(dao instanceof OracleDAOImpl){
+				selectCDQuery = "select value from CATISSUE_PERMISSIBLE_VALUE where PUBLIC_ID = 'Clinical_Diagnosis_PID' and lower(value) not like ? and lower(value) like ?  and ROWNUM <=  ?";
+			}
 			parameters = new ArrayList<ColumnValueBean>(); 
 			parameters.add(new ColumnValueBean(query.toLowerCase()+"%"));
 			parameters.add(new ColumnValueBean("%"+query.toLowerCase()+"%"));
