@@ -131,6 +131,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				// eMPI integration initialization
 				initeMPI();
 			}
+			if (Constants.TRUE.equals(XMLPropertyHandler.getValue("Imaging.enabled")))
+			{
+				Variables.isImagingConfigurred = true;
+			}
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.init();
 			initializeParticipantConfig();

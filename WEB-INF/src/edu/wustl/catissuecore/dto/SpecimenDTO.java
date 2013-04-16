@@ -6,14 +6,14 @@ import java.util.Collection;
 public class SpecimenDTO 
 {
 	private String label;
-	private long id;
+	private Long id;
 	private String className;
 	private String type;
-	private boolean isVirtual;
+	private Boolean isVirtual;
 	private String generateLabel;
 	private String operation;
-	private long parentSpecimenId;
-	private long specimenCollectionGroupId;
+	private Long parentSpecimenId;
+	private Long specimenCollectionGroupId;
 	private String specimenCollectionGroupName;
 	private String parentSpecimenName;
 	private String lineage;
@@ -24,13 +24,13 @@ public class SpecimenDTO
 	private String createdDate;
 	private Double quantity;
 	private String concentration;
-	private boolean available;
+	private Boolean available;
 	private Double availableQuantity;
 	private String collectionStatus; 
 	private String activityStatus;
 	private String comments;
 	private String containerName;
-	private long containerId;
+	private Long containerId;
 	private String pos1;
 	private String pos2;
 	private Collection<ExternalIdentifierDTO> externalIdentifiers;
@@ -43,10 +43,10 @@ public class SpecimenDTO
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getClassName() {
@@ -61,10 +61,10 @@ public class SpecimenDTO
 	public void setType(String type) {
 		this.type = type;
 	}
-	public boolean getIsVirtual() {
+	public Boolean getIsVirtual() {
 		return isVirtual;
 	}
-	public void setIsVirtual(boolean isVirtual) {
+	public void setIsVirtual(Boolean isVirtual) {
 		this.isVirtual = isVirtual;
 	}
 	public String getGenerateLabel() {
@@ -79,16 +79,16 @@ public class SpecimenDTO
 	public void setOperation(String operation) {
 		this.operation = operation;
 	}
-	public long getParentSpecimenId() {
+	public Long getParentSpecimenId() {
 		return parentSpecimenId;
 	}
-	public void setParentSpecimenId(long parentSpecimenId) {
+	public void setParentSpecimenId(Long parentSpecimenId) {
 		this.parentSpecimenId = parentSpecimenId;
 	}
-	public long getSpecimenCollectionGroupId() {
+	public Long getSpecimenCollectionGroupId() {
 		return specimenCollectionGroupId;
 	}
-	public void setSpecimenCollectionGroupId(long specimenCollectionGroupId) {
+	public void setSpecimenCollectionGroupId(Long specimenCollectionGroupId) {
 		this.specimenCollectionGroupId = specimenCollectionGroupId;
 	}
 	public String getSpecimenCollectionGroupName() {
@@ -151,10 +151,10 @@ public class SpecimenDTO
 	public void setConcentration(String concentration) {
 		this.concentration = concentration;
 	}
-	public boolean isAvailable() {
+	public Boolean isAvailable() {
 		return available;
 	}
-	public void setAvailable(boolean available) {
+	public void setAvailable(Boolean available) {
 		this.available = available;
 	}
 	public Double getAvailableQuantity() {
@@ -187,10 +187,10 @@ public class SpecimenDTO
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
 	}
-	public long getContainerId() {
+	public Long getContainerId() {
 		return containerId;
 	}
-	public void setContainerId(long containerId) {
+	public void setContainerId(Long containerId) {
 		this.containerId = containerId;
 	}
 	public String getPos1() {

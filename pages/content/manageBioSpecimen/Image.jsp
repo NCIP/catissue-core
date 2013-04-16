@@ -807,7 +807,7 @@ function submitTabData()
 function isEmpty(obj) { for(var i in obj) { return false; } return true; }
 function getSelectedData(eqImageId)
 {
-    var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=getImageData&id="+eqImageId);
+    var loader = dhtmlxAjax.postSync("ImageAjaxAction.do","type=getImageData&id="+eqImageId);
     //alert(loader.xmlDoc.responseText);
     var resp = eval('( '+ loader.xmlDoc.responseText +')');
     var data = resp[0];
@@ -847,7 +847,7 @@ function getSelectedData(eqImageId)
 }
 function getEquipmentData(obj)
 {
-    var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=getEquipmentData&id="+obj.value);
+    var loader = dhtmlxAjax.postSync("ImageAjaxAction.do","type=getEquipmentData&id="+obj.value);
     //alert(loader.xmlDoc.responseText);
     var data = eval('( '+ loader.xmlDoc.responseText +')');
    

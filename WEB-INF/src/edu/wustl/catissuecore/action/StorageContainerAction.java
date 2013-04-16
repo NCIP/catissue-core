@@ -736,7 +736,7 @@ public class StorageContainerAction extends SecureAction
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 		final String parentContId = request.getParameter("parentContainerId");
-		if (parentContId != null)
+		if (parentContId != null && parentContId != "-1")
 		{
 			final Object object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(
 					parentContId));

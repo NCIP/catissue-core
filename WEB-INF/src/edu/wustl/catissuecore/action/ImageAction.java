@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,25 +23,37 @@ public class ImageAction extends CatissueBaseAction
 			HttpServletResponse response) throws Exception 
 	{
 		request.setAttribute("isImagingConfigurred", Variables.isImagingConfigurred);
-		String obj = request.getParameter(Constants.SYSTEM_IDENTIFIER);
-		request.setAttribute("specimenId", obj);
-		Long specimenEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-				AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
+		if(Variables.isImagingConfigurred)
 		{
-			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+			String action = "krishagni.catissueplus.imaging.action.ImageAction";
+			Class name = Class.forName(action);
+			Method method = name.getMethod("execute", new Class[]{ActionMapping.class,ActionForm.class,HttpServletRequest.class,HttpServletResponse.class});
+			Object result = method.invoke(name.newInstance(), new Object[]{mapping,form,request,response});
+			return (ActionForward)result;
+			
 		}
 		else
 		{
-			specimenEntityId = AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-			CatissueCoreCacheManager.getInstance().addObjectToCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+			String obj = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+			request.setAttribute("specimenId", obj);
+			Long specimenEntityId = null;
+			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
+			{
+				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+			}
+			else
+			{
+				specimenEntityId = AnnotationUtil
+						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+				CatissueCoreCacheManager.getInstance().addObjectToCache(
+						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+			}
+			request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+			request.setAttribute("entityName",AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+			return mapping.findForward(Constants.SUCCESS);
 		}
-		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
-		request.setAttribute("entityName",AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-		return mapping.findForward(Constants.SUCCESS);
 	}
 
 
