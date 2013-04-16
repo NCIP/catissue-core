@@ -191,8 +191,14 @@ session.setAttribute("EventOrigin", "QuickEvents");
 														else
 														{
 															%>
-																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);" disabled="true"	>
+																<c:if test="${requestScope['org.apache.struts.action.ERROR'] != null }">
+																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);"	>
 																</html:textarea>
+																</c:if>
+																<c:if test="${requestScope['org.apache.struts.action.ERROR'] == null }">
+																<html:textarea styleClass="black_ar" rows = "2" cols="28"  styleId ='labels' property="specimenLabel" style="width:40em;" onfocus="clearContents(this);" value="<%=defualtLabelText %>" onblur="showHelpText(this);" readonly="true"	>
+																</html:textarea>
+																</c:if>
 															<%
 														}
 													%>
