@@ -102,7 +102,7 @@ public class SpecimenBizlogic
 		//				CommonServiceLocator.getInstance().getDatePattern()));
 		oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
 		SpecimenPosition position = new SpecimenPosition();
-		if (specimenDTO.getIsVirtual())
+		if (specimenDTO.getIsVirtual() == null || specimenDTO.getIsVirtual())
 		{
 			position = null;
 		}
