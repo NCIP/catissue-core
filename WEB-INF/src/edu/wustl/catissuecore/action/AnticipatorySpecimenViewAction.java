@@ -121,8 +121,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			if ((identifier == null || identifier == 0) && request.getParameter("scgId") != null)
 			{
 				identifier = Long.valueOf(request.getParameter("scgId"));
-				request.getSession().setAttribute("scgId", identifier);
 			}
+			request.getSession().setAttribute("scgId", identifier);
 
 				Long specimenId = null;
 				final SpecimenAutoStorageContainer autoStorageContainer = new SpecimenAutoStorageContainer();
