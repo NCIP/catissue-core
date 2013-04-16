@@ -2188,7 +2188,7 @@
 
 
 	<!--Target for Application and Database Upgrade from Suite v1.2.3 to Suite 1.2.4-->
-	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from v1.2.3  to V1.2.4">
+	<target name="upgrade" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from v1.2.3  to V1.2.4">
 	</target>
 
 	<!--Target for Application and Database Upgrade from Suite 1.2 to Plus 2.1-->
