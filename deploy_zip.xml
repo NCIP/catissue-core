@@ -2301,40 +2301,45 @@
 			<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
 		</target-->
 	
-	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.4-->
-		<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
-		
-			<!--if>
-			<equals arg1="false" arg2="${empi.enabled}" />
-			<then>
-				<echo message="Upgrading Database v1.2.3 to v1.2.4" />
-				<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
-				<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
-			</then>		
-			</if-->
-
-			<antcall target="liquibase_upgrade_from_plusv1.0_to_plusv2.0"/>
-			<antcall target="liquibase_aqupgrade_target" />
-			<antcall target="upgrade_db_from_v1.0_to_v2.0"/>
-			<!--antcall target="add_labelsql_tables_for_cp_dashboard"/-->
-			<!--antcall target="insert_dashboard_queries"/-->
-			
-			<!--if>
-				<equals arg1="mysql" arg2="${database.type}" />
-				<then>
-					<antcall target="upgrade_db_for_empi_id__mysql" />
-				</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}" />
-					<then>
-						<antcall target="upgrade_db_for_empi_id_oracle" />
-					</then>
-				</elseif>
-				<else>
-					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-				</else>
-			</if-->
-		</target>
+	<target name="upgrade_db" description="Upgrading Database to plus 3.0">
+				<echo message="Upgrading Database from ${from.version} to plus3.0" />
+				<if>
+						<equals arg1="${plus1.0.version}" arg2="${from.version}"/>
+						<then>
+							<antcall target="liquibase_upgrade_from_plusv1.0_to_plusv2.0"/>
+							<antcall target="upgrade_db_from_v1.0_to_v2.0" />
+							<antcall target="upgrade_db_from_plusv20_plusv2.1" />
+							<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
+						</then>
+					<elseif>
+									<equals arg1="${plus2.0.version}" arg2="${from.version}"/>
+									<then>
+										<antcall target="upgrade_db_from_plusv20_plusv2.1" />
+										<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
+									</then>
+						</elseif>
+						<elseif>
+									<equals arg1="${plus2.1.1.version}" arg2="${from.version}"/>
+									<then>
+										<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
+									</then>
+							</elseif>
+							<elseif>
+									<equals arg1="${plus3.0.version}" arg2="${from.version}"/>
+									<then>
+									</then>
+								</elseif>
+								<elseif>
+												<equals arg1="${suite-1.2.version}" arg2="${from.version}"/>
+												<then>
+													<antcall target="upgrade_db_from_plusv1.2_to_plusv3.0" />
+												</then>
+									</elseif>
+									<else>
+										<fail message="Invalid version specified, supported versions are:${plus1.0.version}, ${plus2.0.version}, ${plus2.1.1.version}. You entered ${from.version}"/>
+									</else>
+										</if>
+			</target>
 	 
 	<target name="upgrade_db_v1.2.4 to v1.2.5" description="Upgrading Database v1.2.4 to v1.2.5">
 		<echo message="Upgrading Database v1.2.4 to v1.2.5" />
