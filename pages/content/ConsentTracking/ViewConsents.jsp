@@ -12,6 +12,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
+
 <head>
 <style>
 .active-column-1 {width:200px}
@@ -37,6 +38,7 @@
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
 
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<script src="jss/json2.js" type="text/javascript"></script>
 
 <script>
 var comboData = new Array();

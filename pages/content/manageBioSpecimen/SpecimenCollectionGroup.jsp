@@ -355,7 +355,7 @@ function updateHelpURL()
 	if(pageView != null && !("viewAnnotations").equals(pageView) && !(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT).equals(pageView))
 	{
 %>
-	<body onload="disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo();">
+	<body onload="disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo('${operation}');">
 <%
 	}else{
 %>

@@ -9,8 +9,14 @@ if(window.parent!=null)
 }
 var scgCombo={};
 
-function initializeSCGCombo()
+function initializeSCGCombo(operation)
 {
+		if(operation =='add'){
+			var collectionProtocolEventCombo = dhtmlXComboFromSelect("collectionProtocolEventId");
+			collectionProtocolEventCombo.setOptionWidth(165);
+			collectionProtocolEventCombo.setSize(165);
+		
+		}
 		scgCombo.clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
 		scgCombo.clinicalStatusCombo.setOptionWidth(165);
 		scgCombo.clinicalStatusCombo.setSize(165);
@@ -49,7 +55,7 @@ function initializeSCGCombo()
 		var collectionProtocolId = document.getElementsByName('collectionProtocolId')[0].value;
 		clinicalDiagnosisCombo.loadXML('ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId );
 		clinicalDiagnosisCombo.setComboText(clinicalDiagnosisValue);
-		//clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
+		clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
 		clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
 		
 		/*var collectionProtocolEventCombo = new dhtmlXCombo("collectionProtocolEventId","collectionProtocolEventId","100px");;

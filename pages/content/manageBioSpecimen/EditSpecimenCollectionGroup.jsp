@@ -122,7 +122,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="onSubmit"/>
 						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 						<html:hidden property="withdrawlButtonStatus"/>
-						<html:hidden property="collectionProtocolEventId"/>
+						<c:if  test="${operation eq 'edit'}">
+							<html:hidden property="collectionProtocolEventId"/>
+						</c:if>
 
 				<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
@@ -138,7 +140,22 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				    
 					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
 					<!-- Mandar : 434 : for tooltip -->
-					   ${CollectionEventPointLabel}
+						<c:choose>
+							<c:when  test="${operation eq 'edit'}">
+								${CollectionEventPointLabel}
+							</c:when>
+							<c:otherwise>
+								<html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" 
+								>
+								<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
+								</html:select>&nbsp;
+								
+								
+							</c:otherwise>
+						</c:choose>
+					  
+					   
+					    
 						
 		        	</td>
 						<td width="20%" align="right" class="black_ar">
