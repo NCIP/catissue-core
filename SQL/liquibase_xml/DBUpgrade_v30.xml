@@ -311,7 +311,7 @@
              END;
            </sql>
            <sql>call migrateDistriData();</sql>
-
+			<sql>commit;</sql>
 	</changeSet>
 
     <changeSet id="42" author="catissuecore" runOnChange="true" dbms="mysql" failOnError="false">
@@ -332,6 +332,7 @@
 			
 	   </sql>
 	   <sql>call migrateDistriData();</sql>
+	   <sql>commit;</sql>
    </changeSet>
    <changeSet id="43" author="catissue" runOnChange="true" failOnError="false">
 		<createIndex tableName="CATISSUE_DISTRI_EVENT_PARAM" indexName="DISTRI_PARAM_DISTRIBUTION">
