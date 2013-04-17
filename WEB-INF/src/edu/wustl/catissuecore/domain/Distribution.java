@@ -98,6 +98,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 
 	protected String comment;
 
+	protected Collection distributionEventCollection;
 	/**
 	 * @return the orderDetails
 	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.
@@ -310,6 +311,15 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	public void setTimestamp(Date timestamp)
 	{
 		this.timestamp = timestamp;
+	}
+
+	public Collection getDistributionEventCollection() {
+		return distributionEventCollection;
+	}
+
+	public void setDistributionEventCollection(
+			Collection distributionEventCollection) {
+		this.distributionEventCollection = distributionEventCollection;
 	}
 
 	/**

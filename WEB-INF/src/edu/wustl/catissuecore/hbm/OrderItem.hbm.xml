@@ -325,4 +325,6 @@
 	</query>
 	<query name="updateOrderItemSQL">UPDATE edu.wustl.catissuecore.domain.OrderItem SET distribtedQuantity = ?,status = ?,description =? WHERE id = ?
 	</query>
+	<query name="getOrderItemStatus">select specimenOrderItem.status from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem specimenOrderItem  where specimenOrderItem.id = ?
+	</query>
 </hibernate-mapping>

@@ -414,7 +414,7 @@ PUBLIC
 
 		<action path="/specToDistribute" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="OrderSpecimenForm" validate="false" scope="request">
-			<forward name="success" path="/DirectDistributeSpec.do?typeOf=specimen" />
+			<forward name="success" path="/Order.do" />
 			<!-- forward name="success" path="/MyListTab.do" /-->
 		</action>
 

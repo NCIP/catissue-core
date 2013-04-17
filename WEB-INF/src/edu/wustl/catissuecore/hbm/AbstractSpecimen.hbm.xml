@@ -402,6 +402,8 @@
 	</query>
 	<query name="updateSpecimenStatusToClose">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Closed' where specimen.label=?
 	</query>
+	<query name="getSpecimenId">Select specimen.id from edu.wustl.catissuecore.domain.Specimen specimen where specimen.label=?
+	</query>
 	<query name="getSpecimenIdByLabel">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.label = ? and spec.activityStatus= ? </query>
 	<query name="getSpecimenLabelById">select spec.label from edu.wustl.catissuecore.domain.Specimen spec where spec.id = ? and spec.activityStatus= ?</query>
 	

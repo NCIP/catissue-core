@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
@@ -1658,7 +1659,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	    }
 		return msg;
 	}
-	public void createDistributionEvent(Double distributedQuantity,String comments,Long specimenId,DAO dao,Long userId) throws BizLogicException, DAOException
+	public void createDistributionEvent(Double distributedQuantity,String comments,Long specimenId,Long distributionId,DAO dao,Long userId) throws BizLogicException, DAOException
 	{
 		AbstractSpecimen abstractSpecimen=new Specimen();
 		abstractSpecimen.setId(specimenId);
@@ -1666,25 +1667,46 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		distributionEventParameters.setDistributedQuantity(distributedQuantity);
 		distributionEventParameters.setComment(comments);
 		distributionEventParameters.setSpecimen(abstractSpecimen);
+		distributionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+		
 		User user=new User();
 		user.setId(userId);
 		distributionEventParameters.setUser(user);
+		
+		Distribution distribution=new Distribution();
+		distribution.setId(distributionId);
+		distributionEventParameters.setDistributionDetails(distribution);
+		
 		dao.insert(distributionEventParameters);
 	}
-	public void createDisposalEvent(String disposalReason,Long specimenId,DAO dao,Long userId) throws BizLogicException, DAOException
+	public void disposalEvent(String disposalReason,String specimenLabel,String activityStatus,HibernateDAO dao,Long userId) throws BizLogicException, DAOException
 	{
+		
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0",	new NamedQueryParam(DBTypes.STRING, specimenLabel));
+		List specimenIds = dao.executeNamedQuery("getSpecimenId", params);
+		String  specimenId = specimenIds.get(0).toString();
+		
 		final DisposalEventParameters disposalEvent = new DisposalEventParameters();
 		
 		AbstractSpecimen abstractSpecimen=new Specimen();
-		abstractSpecimen.setId(specimenId);
+		abstractSpecimen.setId(Long.parseLong(specimenId));
 		disposalEvent.setSpecimen(abstractSpecimen);
 		
 		disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
 		final User user = new User();
 		user.setId(userId);
 		disposalEvent.setUser(user);
-		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
+		disposalEvent.setActivityStatus(activityStatus);
 		disposalEvent.setReason(disposalReason);
 		dao.insert(disposalEvent);
+		
+		
+		NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic(); 
+		if(Status.ACTIVITY_STATUS_CLOSED.equals(activityStatus))
+		{	
+			specimenBizLogic.updateSpecimenStatusToClose(specimenLabel, dao);
+		}
+		
 	}
 }

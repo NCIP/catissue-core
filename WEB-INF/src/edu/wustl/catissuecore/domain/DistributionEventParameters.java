@@ -34,7 +34,7 @@ public class DistributionEventParameters extends SpecimenEventParameters
 
     private Double distributedQuantity=0D;
 	
-
+    private Distribution distributionDetails;
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
@@ -51,6 +51,15 @@ public class DistributionEventParameters extends SpecimenEventParameters
 
 	public void setDistributedQuantity(Double distributedQuantity) {
 		this.distributedQuantity = distributedQuantity;
+	}
+
+	public Distribution getDistributionDetails() {
+		return distributionDetails;
+	}
+
+
+	public void setDistributionDetails(Distribution distributionDetails) {
+		this.distributionDetails = distributionDetails;
 	}
 
 

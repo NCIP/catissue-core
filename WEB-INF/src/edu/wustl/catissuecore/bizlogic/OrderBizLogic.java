@@ -118,37 +118,38 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	public static final String[] DISTRIBUTE_STATUS_LIST = {
 			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
 			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
-			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL };
-	
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL};
+
 	public static final String[] CLOSED_STATUS_LIST = {
 			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
-			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL };
-	
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL};
+
 	public static final String[] PROCESSED_STATUS_LIST = {
 			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
 			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
 			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL,
 			Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,
 			Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,
-			Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE };
-	
+			Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE};
+
 	public static final String[] PENDING_STATUS_LIST = {
 			Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW,
 			Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION,
-			Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION };
-	
+			Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION};
+
 	public static final String[] REJECTED_STATUS_LIST = {
-		Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,
-		Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,
-		Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE };
-	
+			Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,
+			Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,
+			Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE};
+
 	public static final String[] DISTRIBUTED_STATUS_LIST = {
-		Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
-		Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
-		Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL};
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE,
+			Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE_SPECIAL};
 
 	/**
 	 * Saves the OrderDetails object in the database.
+	 * 
 	 * @param obj
 	 *            The OrderDetails Item object to be saved.
 	 * @param sessionDataBean
@@ -164,7 +165,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final OrderDetails order = (OrderDetails) obj;
-			User requestedUser=new User();
+			User requestedUser = new User();
 			requestedUser.setId(sessionDataBean.getUserId());
 			order.setRequestedBy(requestedUser);
 			dao.insert(order);
@@ -180,6 +181,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This function send mail to the Administrator and Scientist if items
 	 * ordered by scientist is placed successfully.
+	 * 
 	 * @param sessionDataBean
 	 *            object
 	 * @param order
@@ -194,7 +196,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
- 
+
 			boolean emailSent = false;
 			final List userList = dao.retrieve(User.class.getName(), "emailAddress",
 					sessionDataBean.getUserName());
@@ -202,13 +204,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				final User userObj = (User) userList.get(0);
 				final EmailHandler emailHandler = new EmailHandler();
-	 
+
 				emailSent = emailHandler.sendEmailForOrderPlacement(userObj, order);
- 
+
 				if (emailSent)
 				{
-					LOGGER
-							.debug(" In OrderBizLogic --> Email sent To Admin and Scientist successfully ");
+					LOGGER.debug(" In OrderBizLogic --> Email sent To Admin and Scientist successfully ");
 				}
 				else
 				{
@@ -226,6 +227,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Updates the persistent object in the database.
+	 * 
 	 * @param obj
 	 *            The object to be updated.
 	 * @param sessionDataBean
@@ -250,7 +252,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					.updateObject(orderImplObj, obj, dao, sessionDataBean);
 			orderNew.setOrderItemCollection(orderNew.getOrderItemCollection());
 			orderImplObj.setOrderItemCollection(orderNew.getOrderItemCollection());
-			dao.update(orderNew,orderImplObj);
+			dao.update(orderNew, orderImplObj);
 			this.disposeSpecimen(orderNew, sessionDataBean, dao);
 			// Sending Email only if atleast one order item is updated.
 			if (numberItemsUpdated > 0 && orderNew.getMailNotification())
@@ -355,7 +357,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					{
 						if (oldorderItem instanceof DerivedSpecimenOrderItem)
 						{
-//							final DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) oldorderItem;
+							// final DerivedSpecimenOrderItem
+							// derivedSpecimenOrderItem =
+							// (DerivedSpecimenOrderItem) oldorderItem;
 							if (oldorderItem.getDistributedItem() == null
 									&& orderItem.getDistributedItem().getSpecimen().getId() == null)
 							{
@@ -366,8 +370,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						}
 						else if (oldorderItem instanceof NewSpecimenArrayOrderItem)
 						{
-							final SpecimenArray specimenArray = this
-									.getSpecimenArray(oldorderItem.getId(), dao);
+							final SpecimenArray specimenArray = this.getSpecimenArray(
+									oldorderItem.getId(), dao);
 							final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) oldorderItem;
 							newSpecimenArrayOrderItem.setSpecimenArray(specimenArray);
 							if (newSpecimenArrayOrderItem.getSpecimenArray() == null)
@@ -434,7 +438,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 														pathologicalCaseOrderItem.getSpecimenType());
 									}
 									else
-									{ // "Block" . Specimen class = "Tissue" ,
+									{ // "Block" . Specimen class =
+										// "Tissue" ,
 										// Specimen Type = "Block".
 										finalChildrenSpecimenCollection = OrderingSystemUtil
 												.getChildrenSpecimenForClassAndType(
@@ -529,7 +534,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			final Collection newOrderItemSet = order.getOrderItemCollection();
 			// Adding items inside New Defined Array in oldOrderItemColl
 			final Collection tempNewOrderItemSet = new HashSet();
-//			final Iterator tempNewItemIter = newOrderItemSet.iterator();
+			// final Iterator tempNewItemIter = newOrderItemSet.iterator();
 			/*
 			 * while (tempNewItemIter.hasNext()) { OrderItem tempNewOrderItem =
 			 * (OrderItem) tempNewItemIter.next(); if (tempNewOrderItem
@@ -572,15 +577,18 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					// or description has been updated.
 					if ((oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0)
 							&& (oldOrderItem.getDistributedItem() == null)
-							&& (!oldOrderItem.getStatus().trim().equalsIgnoreCase(
-									newOrderItem.getStatus().trim()) || (oldOrderItem
+							&& (!oldOrderItem.getStatus().trim()
+									.equalsIgnoreCase(newOrderItem.getStatus().trim()) || (oldOrderItem
 									.getDescription() != null && !oldOrderItem.getDescription()
 									.equalsIgnoreCase(newOrderItem.getDescription()))))
 					{
-						if (newOrderItem.getStatus().trim().equalsIgnoreCase(
-								Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-								|| newOrderItem.getStatus().trim().equalsIgnoreCase(
-										Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
+						if (newOrderItem.getStatus().trim()
+								.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+								|| newOrderItem
+										.getStatus()
+										.trim()
+										.equalsIgnoreCase(
+												Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))
 						{
 							if (!isDistributionInserted)
 							{
@@ -704,17 +712,21 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param dao : dao
-	 * @param order : order
-	 * @param sessionDataBean : sessionDataBean
+	 * 
+	 * @param dao
+	 *            : dao
+	 * @param order
+	 *            : order
+	 * @param sessionDataBean
+	 *            : sessionDataBean
 	 */
 	private void sendEmailOnOrderUpdate(DAO dao, OrderDetails order, SessionDataBean sessionDataBean)
 	{
 		final EmailHandler emailHandler = new EmailHandler();
 		final String ccEmailAddress = order.getDistributionProtocol().getPrincipalInvestigator()
 				.getEmailAddress(); // cc
-		final String toEmailAddress = sessionDataBean.getUserName(); // to person
+		final String toEmailAddress = sessionDataBean.getUserName(); // to
+																		// person
 		// ordering
 		final String fromEmailAddress = XMLPropertyHandler
 				.getValue("email.administrative.emailAddress"); // from
@@ -727,37 +739,43 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		emailHandler.sendEmailForOrderDistribution(body, toEmailAddress, fromEmailAddress,
 				ccEmailAddress, bccEmailAddress, subject);
 	}
-	
-	public void sendOrderUpdateEmail(String requestorName,
-			String ccEmailAddress, String toEmailAddress, String orderName,
-			String updaterName, String orderStatus, String orderUrl,Map<String,Object> csvFileData) throws IOException {
-		
+
+	public void sendOrderUpdateEmail(String requestorName, String ccEmailAddress,
+			String toEmailAddress, String orderName, String updaterName, String orderStatus,
+			String orderUrl, Map<String, Object> csvFileData) throws IOException
+	{
+
 		final EmailHandler emailHandler = new EmailHandler();
 
 		final String bccEmailAddress = XMLPropertyHandler
 				.getValue("email.administrative.emailAddress");
 		List<File> attachmentOrderCsv = new ArrayList<File>();
 		File csvFile = null;
-		try{
+		try
+		{
 			csvFile = new File(csvFileData.get("fileName").toString());
 			csvFile.createNewFile();
-			 FileOutputStream out = new FileOutputStream(csvFile);
-			 out.write((byte[])csvFileData.get("fileData"));
-			 out.close();
-			 attachmentOrderCsv.add(csvFile);
-			emailHandler.sendOrderUpdateEmail(requestorName, toEmailAddress,
-					ccEmailAddress, bccEmailAddress, orderName, updaterName,
-					orderStatus, orderUrl,attachmentOrderCsv);
-			
-		}finally{
-			csvFile.delete();		
+			FileOutputStream out = new FileOutputStream(csvFile);
+			out.write((byte[]) csvFileData.get("fileData"));
+			out.close();
+			attachmentOrderCsv.add(csvFile);
+			emailHandler.sendOrderUpdateEmail(requestorName, toEmailAddress, ccEmailAddress,
+					bccEmailAddress, orderName, updaterName, orderStatus, orderUrl,
+					attachmentOrderCsv);
+
+		}
+		finally
+		{
+			csvFile.delete();
 		}
 	}
 
 	/**
-	 *
-	 * @param dao : dao
-	 * @param order : order
+	 * 
+	 * @param dao
+	 *            : dao
+	 * @param order
+	 *            : order
 	 * @return String
 	 */
 	private String makeEmailBodyForOrderUpdate(DAO dao, OrderDetails order)
@@ -856,26 +874,27 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			if (oldOrderItem.getStatus().trim()
 					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
 			{
-				//As oldOrderItem is instanceof NewSpecimenArrayOrderItem
-				//casting it in SpecimenOrderItem is giving java.lang.ClassCastException.
-				if(oldOrderItem instanceof SpecimenOrderItem)//Bug 14316
+				// As oldOrderItem is instanceof NewSpecimenArrayOrderItem
+				// casting it in SpecimenOrderItem is giving
+				// java.lang.ClassCastException.
+				if (oldOrderItem instanceof SpecimenOrderItem)// Bug 14316
 				{
-					if(((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
+					if (((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
 					{
-					  orderStatusNew++;
+						orderStatusNew++;
 					}
 				}
 
 			}// kalpana bug #5839 If the specimens inside the specimen Array and
-			// if it's status is
-			// ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION then mark it
-			// complete.
-			else if ((oldOrderItem.getStatus().trim().equalsIgnoreCase(
-					Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
-					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(
-							Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE) || oldOrderItem
-					.getStatus().trim().equalsIgnoreCase(
-							Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
+				// if it's status is
+				// ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION then mark it
+				// complete.
+			else if ((oldOrderItem.getStatus().trim()
+					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+					|| oldOrderItem.getStatus().trim()
+							.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE) || oldOrderItem
+					.getStatus().trim()
+					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
 			{
 				if ((oldOrderItem instanceof SpecimenArrayOrderItem)
 						|| ((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
@@ -883,21 +902,35 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					orderStatusCompleted++;
 				}
 			}
-			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(
-					Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION)
-					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(
-							Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW)
-					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(
-							Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION))
+			else if (oldOrderItem.getStatus().trim()
+					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION)
+					|| oldOrderItem
+							.getStatus()
+							.trim()
+							.equalsIgnoreCase(
+									Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW)
+					|| oldOrderItem
+							.getStatus()
+							.trim()
+							.equalsIgnoreCase(
+									Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION))
 			{
 				orderStatusPending++;
 			}
-			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(
-					Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST)
-					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(
-							Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)
-					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(
-							Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE))
+			else if (oldOrderItem
+					.getStatus()
+					.trim()
+					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST)
+					|| oldOrderItem
+							.getStatus()
+							.trim()
+							.equalsIgnoreCase(
+									Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)
+					|| oldOrderItem
+							.getStatus()
+							.trim()
+							.equalsIgnoreCase(
+									Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE))
 			{
 				if ((oldOrderItem instanceof SpecimenArrayOrderItem)
 						|| ((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
@@ -926,8 +959,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			orderNew.setStatus(Constants.ORDER_STATUS_REJECTED);
 		}
 		else if ((orderStatusCompleted == oldOrderItemSet.size())
-				|| ((orderStatusCompleted + orderStatusRejected) == oldOrderItemSet
-						.size()))
+				|| ((orderStatusCompleted + orderStatusRejected) == oldOrderItemSet.size()))
 		{
 			orderNew.setStatus(Constants.ORDER_STATUS_COMPLETED);
 		}
@@ -938,14 +970,16 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 		return orderNew;
 	}
- 
+
 	// Populates a List of RequestViewBean objects to display the request list
 	// on RequestListAdministratorView.jsp
 	/**
 	 * @param requestStatusSelected
 	 *            object
-	 * @param userName : userName
-	 * @param userId : userId
+	 * @param userName
+	 *            : userName
+	 * @param userId
+	 *            : userId
 	 * @return requestList List
 	 * @throws BizLogicException
 	 *             object
@@ -964,8 +998,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 
 			final User user = this.getUser(dao, userId);
-			final List siteIdsList = this.getUserSitesWithDistributionPrev(user,
-					privilegeCache);
+			final List siteIdsList = this.getUserSitesWithDistributionPrev(user, privilegeCache);
 
 			List orderListFromDB = null;
 			/*
@@ -974,29 +1007,30 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			 */
 			final String[] selectColName = null;
 
-				final List whereColValues = new ArrayList();
-				whereColValues.add(new String("New"));
-				whereColValues.add(new String("Pending"));
+			final List whereColValues = new ArrayList();
+			whereColValues.add(new String("New"));
+			whereColValues.add(new String("Pending"));
 
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(OrderDetails.class
-						.getName());
-				queryWhereClause.addCondition(new INClause("status", whereColValues.toArray()));
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(
+					OrderDetails.class.getName());
+			queryWhereClause.addCondition(new INClause("status", whereColValues.toArray()));
 
-				final Object[] whereColumnValues = {whereColValues.toArray()};
-				String hql= " from "+OrderDetails.class.getName()+" order where order.status in ('New','Pending') " +
-				" order by order.requestedDate desc";
-				orderListFromDB = dao.executeQuery(hql, null);
-//				orderListFromDB = dao.retrieve(OrderDetails.class.getName(), selectColName,
-//						queryWhereClause);
-				
+			final Object[] whereColumnValues = {whereColValues.toArray()};
+			String hql = " from " + OrderDetails.class.getName()
+					+ " order where order.status in ('New','Pending') "
+					+ " order by order.requestedDate desc";
+			orderListFromDB = dao.executeQuery(hql, null);
+			// orderListFromDB = dao.retrieve(OrderDetails.class.getName(),
+			// selectColName,
+			// queryWhereClause);
 
-//			}
+			// }
 
 			final Iterator orderListFromDBIterator = orderListFromDB.iterator();
 			while (orderListFromDBIterator.hasNext())
 			{
 				final OrderDetails orderDetails = (OrderDetails) orderListFromDBIterator.next();
-				if(this.isSuperAdmin(user))
+				if (this.isSuperAdmin(user))
 				{
 					orderList.add(orderDetails);
 				}
@@ -1007,8 +1041,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					final SessionDataBean sdb = new SessionDataBean();
 					sdb.setUserId(userId);
 					sdb.setUserName(userName);
-					final boolean hasDistributionPrivilegeOnCp = this.checkDistributionPrivilegeOnCP(
-							user, privilegeCache, orderDetails.getOrderItemCollection(), sdb);
+					final boolean hasDistributionPrivilegeOnCp = this
+							.checkDistributionPrivilegeOnCP(user, privilegeCache,
+									orderDetails.getOrderItemCollection(), sdb);
 					if (hasDributionPrivilegeOnSite || hasDistributionPrivilegeOnCp)
 					{
 						orderList.add(orderDetails);
@@ -1038,8 +1073,11 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Site of the order item should be one in the site list having distribution
 	 * privilege.
-	 * @param orderItemCollection : orderItemCollection
-	 * @param siteIdsList : siteIdsList
+	 * 
+	 * @param orderItemCollection
+	 *            : orderItemCollection
+	 * @param siteIdsList
+	 *            : siteIdsList
 	 * @return boolean
 	 */
 	private boolean isOrderItemValidTodistribute(Collection orderItemCollection, List siteIdsList)
@@ -1067,7 +1105,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 								.getSpecimenPosition().getStorageContainer().getSite().getId()))
 						{
 							isValidToDistribute = true;
-//							break;
+							// break;
 						}
 					}
 				}
@@ -1084,7 +1122,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					if (siteIdsList.contains(storageContainer.getSite().getId()))
 					{
 						isValidToDistribute = true;
-//						break;
+						// break;
 					}
 				}
 			}
@@ -1106,7 +1144,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						if (siteIdsList.contains(siteId))
 						{
 							isValidToDistribute = true;
-//							break;
+							// break;
 						}
 					}
 				}
@@ -1119,11 +1157,16 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Retrieve all the sites of the user having distribution privilege.
-	 * @param dao : dao
-	 * @param userId : userId
-	 * @param privilegeCache : privilegeCache
+	 * 
+	 * @param dao
+	 *            : dao
+	 * @param userId
+	 *            : userId
+	 * @param privilegeCache
+	 *            : privilegeCache
 	 * @return List
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public List getRelatedSiteIds(HibernateDAO dao, Long userId, PrivilegeCache privilegeCache)
 			throws BizLogicException
@@ -1145,6 +1188,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Method called to get all the site ids.
+	 * 
 	 * @param privilegeCache
 	 * @param user
 	 * @return
@@ -1183,13 +1227,18 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param user : user
-	 * @param privilegeCache : privilegeCache
-	 * @param orderItemCollection : orderItemCollection
-	 * @param sessionDataBean : sessionDataBean
+	 * 
+	 * @param user
+	 *            : user
+	 * @param privilegeCache
+	 *            : privilegeCache
+	 * @param orderItemCollection
+	 *            : orderItemCollection
+	 * @param sessionDataBean
+	 *            : sessionDataBean
 	 * @return boolean
-	 * @throws BizLogicException  :BizLogicException
+	 * @throws BizLogicException
+	 *             :BizLogicException
 	 */
 	public boolean checkDistributionPrivilegeOnCP(User user, PrivilegeCache privilegeCache,
 			Collection orderItemCollection, SessionDataBean sessionDataBean)
@@ -1233,7 +1282,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						if (isAuthorized)
 						{
 							hasDistributionPrivilege = true;
-//							break;
+							// break;
 						}
 					}
 				}
@@ -1250,10 +1299,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * It returns the user object
-	 * @param dao : dao
-	 * @param userId : userId
+	 * 
+	 * @param dao
+	 *            : dao
+	 * @param userId
+	 *            : userId
 	 * @return User
-	 * @throws DAOException : DAOException
+	 * @throws DAOException
+	 *             : DAOException
 	 */
 	private User getUser(DAO dao, Long userId) throws DAOException
 	{
@@ -1262,10 +1315,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Get the list of sites of user on which user have distribution privilege
-	 * @param user : user
-	 * @param privilegeCache : privilegeCache
+	 * 
+	 * @param user
+	 *            : user
+	 * @param privilegeCache
+	 *            : privilegeCache
 	 * @return List
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public List getUserSitesWithDistributionPrev(User user, PrivilegeCache privilegeCache)
 			throws BizLogicException
@@ -1280,7 +1337,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Check for superAdmin
-	 * @param user : user
+	 * 
+	 * @param user
+	 *            : user
 	 * @return boolean
 	 */
 	public boolean isSuperAdmin(User user)
@@ -1298,6 +1357,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * To populate the request view bean
+	 * 
 	 * @param orderListFromDB
 	 *            object
 	 * @return List object
@@ -1325,17 +1385,20 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param identifier : id
-	 * @param dao : dao
+	 * @param identifier
+	 *            : id
+	 * @param dao
+	 *            : dao
 	 * @return to retrieve the orderDetails object.
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public OrderDetails getOrderListFromDB(String identifier, DAO dao) throws BizLogicException
 	{
 		try
 		{
-			return (OrderDetails)dao
-			.retrieveById(OrderDetails.class.getName(), Long.parseLong(identifier));
+			return (OrderDetails) dao.retrieveById(OrderDetails.class.getName(),
+					Long.parseLong(identifier));
 		}
 		catch (final NumberFormatException e)
 		{
@@ -1350,8 +1413,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param distributionProtId : distributionProtId
+	 * 
+	 * @param distributionProtId
+	 *            : distributionProtId
 	 * @return DistributionProtocol
 	 */
 	public DistributionProtocol retrieveDistributionProtocol(String distributionProtId)
@@ -1360,8 +1424,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 			final DAO dao = this.openDAOSession(null);
 			final DistributionProtocol distributionProtocol = (DistributionProtocol) dao
-					.retrieveById(DistributionProtocol.class.getName(), Long
-							.parseLong(distributionProtId));
+					.retrieveById(DistributionProtocol.class.getName(),
+							Long.parseLong(distributionProtId));
 			dao.closeSession();
 			return distributionProtocol;
 		}
@@ -1376,7 +1440,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param request
 	 *            HttpServletRequest object
 	 * @return List specimen array objects
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public List getSpecimenArrayDataFromDatabase(HttpServletRequest request)
 			throws BizLogicException
@@ -1398,8 +1463,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				{
 					// List SpecimenArray = bizLogic.retrieve(sourceObjectName,
 					// columnName, (String)valueField.get(i));
-					final Object object = dao.retrieveById(sourceObjectName, Long
-							.parseLong((String) valueField.get(i)));
+					final Object object = dao.retrieveById(sourceObjectName,
+							Long.parseLong((String) valueField.get(i)));
 					final SpecimenArray specArray = (SpecimenArray) object;
 					specArray.getSpecimenArrayType();
 					specArray.getSpecimenArrayType().getSpecimenTypeCollection();
@@ -1408,8 +1473,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			}
 
 			final long endTime = System.currentTimeMillis();
-			LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "
-					+ (endTime - startTime));
+			LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : " + (endTime - startTime));
 			return specimenArrayList;
 		}
 		catch (final Exception e)
@@ -1426,10 +1490,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * function for getting data from database
+	 * 
 	 * @param request
 	 *            HttpServletRequest object
 	 * @return List of specimen objects
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public List getSpecimenDataFromDatabase(HttpServletRequest request) throws BizLogicException
 	{
@@ -1454,16 +1520,15 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 				for (int i = 0; i < valueField.size(); i++)
 				{
-					final Object object = dao.retrieveById(sourceObjectName, Long
-							.parseLong((String) valueField.get(i)));
+					final Object object = dao.retrieveById(sourceObjectName,
+							Long.parseLong((String) valueField.get(i)));
 					final Specimen spec = (Specimen) object;
 					specimenList.add(spec);
 				}
 
 			}
 			final long endTime = System.currentTimeMillis();
-			LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "
-					+ (endTime - startTime));
+			LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : " + (endTime - startTime));
 
 		}
 		catch (final DAOException e)
@@ -1482,7 +1547,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @param request
 	 *            HttpServletRequest object
 	 * @return List of Pathology Case objects
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public List getPathologyDataFromDatabase(HttpServletRequest request) throws BizLogicException
 	{
@@ -1520,8 +1586,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			}
 
 			final long endTime = System.currentTimeMillis();
-			LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "
-					+ (endTime - startTime));
+			LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : " + (endTime - startTime));
 
 		}
 		catch (final DAOException e)
@@ -1537,23 +1602,29 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param request : request
-	 * @param attr : attr
-	 * @param className : className
-	 * @param pathologicalCaseList : pathologicalCaseList
-	 * @param dao : dao
-	 * @throws DAOException : DAOException
+	 * 
+	 * @param request
+	 *            : request
+	 * @param attr
+	 *            : attr
+	 * @param className
+	 *            : className
+	 * @param pathologicalCaseList
+	 *            : pathologicalCaseList
+	 * @param dao
+	 *            : dao
+	 * @throws DAOException
+	 *             : DAOException
 	 */
 	private void getList(HttpServletRequest request, String attr, String className,
-			List pathologicalCaseList,  DAO dao) throws DAOException
+			List pathologicalCaseList, DAO dao) throws DAOException
 	{
 		final List idList = (List) request.getSession().getAttribute(attr);
 		final int size = idList.size();
 		for (int i = 0; i < idList.size(); i++)
 		{
-			final Object object = dao.retrieveById(className, Long
-					.parseLong((String) idList.get(i)));
+			final Object object = dao.retrieveById(className,
+					Long.parseLong((String) idList.get(i)));
 			final SurgicalPathologyReport surgicalPathologyReport = (SurgicalPathologyReport) object;
 			surgicalPathologyReport.getSpecimenCollectionGroup();
 			surgicalPathologyReport.getSpecimenCollectionGroup().getSpecimenCollection();
@@ -1563,10 +1634,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param request : request
+	 * 
+	 * @param request
+	 *            : request
 	 * @return List
-	 * @throws Exception : Exception
+	 * @throws Exception
+	 *             : Exception
 	 */
 	public List getDistributionProtocol(HttpServletRequest request) throws Exception
 	{
@@ -1585,10 +1658,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param orderNew : orderNew
-	 * @param sessionDataBean : sessionDataBean
-	 * @param dao : dao
-	 * @throws BizLogicException : BizLogicException
+	 * @param orderNew
+	 *            : orderNew
+	 * @param sessionDataBean
+	 *            : sessionDataBean
+	 * @param dao
+	 *            : dao
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private void disposeSpecimen(OrderDetails orderNew, SessionDataBean sessionDataBean, DAO dao)
 			throws BizLogicException
@@ -1661,30 +1738,37 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimenArray : specimenArray
-	 * @param dao ": dao
-	 * @param sessionDataBean : sessionDataBean
-	 * @throws BizLogicException : BizLogicException
-	 * @throws DAOException : DAOException
+	 * @param specimenArray
+	 *            : specimenArray
+	 * @param dao
+	 *            ": dao
+	 * @param sessionDataBean
+	 *            : sessionDataBean
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 * @throws DAOException
+	 *             : DAOException
 	 */
 	private void updateSpecimenArray(SpecimenArray specimenArray, DAO dao,
 			SessionDataBean sessionDataBean) throws DAOException, BizLogicException
 	{
 
 		final SpecimenArrayBizLogic specimenArrayBizLogic = new SpecimenArrayBizLogic();
-		final SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieveById(SpecimenArray.class
-				.getName(), specimenArray.getId());
+		final SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieveById(
+				SpecimenArray.class.getName(), specimenArray.getId());
 		final SpecimenArray newSpecimenArray = oldSpecimenArray;
 		newSpecimenArray.setActivityStatus("Closed");
-		specimenArrayBizLogic.update(dao,newSpecimenArray, oldSpecimenArray, sessionDataBean);
+		specimenArrayBizLogic.update(dao, newSpecimenArray, oldSpecimenArray, sessionDataBean);
 
 	}
 
 	/**
-	 *
-	 * @param specimenId : specimenId
+	 * 
+	 * @param specimenId
+	 *            : specimenId
 	 * @return Specimen
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public Specimen getSpecimenObject(Long specimenId) throws BizLogicException
 	{
@@ -1709,9 +1793,11 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param specimenId : specimenId
-	 * @param dao : dao
+	 * 
+	 * @param specimenId
+	 *            : specimenId
+	 * @param dao
+	 *            : dao
 	 * @return Specimen
 	 */
 	public Specimen getSpecimen(Long specimenId, DAO dao)
@@ -1731,9 +1817,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * It retrieves the SCG
-	 * @param scgId : scgId
+	 * 
+	 * @param scgId
+	 *            : scgId
 	 * @return SpecimenCollectionGroup
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public SpecimenCollectionGroup retrieveSCG(Long scgId) throws BizLogicException
 	{
@@ -1743,8 +1832,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 
 			dao = this.openDAOSession(null);
-			scg = (SpecimenCollectionGroup) dao.retrieveById(SpecimenCollectionGroup.class
-					.getName(), scgId);
+			scg = (SpecimenCollectionGroup) dao.retrieveById(
+					SpecimenCollectionGroup.class.getName(), scgId);
 		}
 		catch (final DAOException e)
 		{
@@ -1761,9 +1850,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * It retrieves the NewSpecimenArrayOrder Item
-	 * @param newSpecimenArrayId : newSpecimenArrayId
+	 * 
+	 * @param newSpecimenArrayId
+	 *            : newSpecimenArrayId
 	 * @return NewSpecimenArrayOrderItem
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public NewSpecimenArrayOrderItem retrieveNewSpecimenArrayOrderItem(Long newSpecimenArrayId)
 			throws BizLogicException
@@ -1795,9 +1887,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * It retrieves the SpecimenOrderItem
-	 * @param specimenOrderItemId : specimenOrderItemId
+	 * 
+	 * @param specimenOrderItemId
+	 *            : specimenOrderItemId
 	 * @return SpecimenOrderItem
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public SpecimenOrderItem retrieveSpecimenOrderItem(Long specimenOrderItemId)
 			throws BizLogicException
@@ -1807,8 +1902,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			dao = this.openDAOSession(null);
-			specimenOrderItem = (SpecimenOrderItem) dao.retrieveById(SpecimenOrderItem.class
-					.getName(), specimenOrderItemId);
+			specimenOrderItem = (SpecimenOrderItem) dao.retrieveById(
+					SpecimenOrderItem.class.getName(), specimenOrderItemId);
 			final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenOrderItem
 					.getNewSpecimenArrayOrderItem();
 			specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
@@ -1829,10 +1924,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * To retreive the specimenArray
-	 * @param orderItemId : orderItemId
-	 * @param dao : dao
+	 * 
+	 * @param orderItemId
+	 *            : orderItemId
+	 * @param dao
+	 *            : dao
 	 * @return SpecimenArray
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private SpecimenArray getSpecimenArray(Long orderItemId, DAO dao) throws BizLogicException
 	{
@@ -1843,7 +1942,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				final String hql = " select newSpecimenArrayOrderItem.specimenArray "
 						+ // ,elements(specimenArray.
-						// specimenArrayContentCollection)" +
+							// specimenArrayContentCollection)" +
 						" from edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem as newSpecimenArrayOrderItem "
 						+ " where newSpecimenArrayOrderItem.id = " + orderItemId;
 
@@ -1864,10 +1963,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param order : order
-	 * @param dao : dao
-	 * @throws BizLogicException : BizLogicException
+	 * 
+	 * @param order
+	 *            : order
+	 * @param dao
+	 *            : dao
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private void checkDistributionPtorocol(OrderDetails order, DAO dao) throws BizLogicException
 	{
@@ -1878,8 +1980,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			final String[] whereColConditions = {"="};
 			final Object[] whereColVal = {order.getId()};
 
-			final QueryWhereClause queryWhereClause = new QueryWhereClause(OrderDetails.class
-					.getName());
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(
+					OrderDetails.class.getName());
 			queryWhereClause.addCondition(new EqualClause(
 					edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER, order.getId()));
 
@@ -1905,15 +2007,21 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * 	 * This method loads the title as Name and id as value of distribution
-		 * protocol from database and return the namevalue bean of ditribution
-		 * protocol for a given PI.
-	 * @param piID : piID
-	 * @param roleName : roleName
-	 * @param sessionDataBean : sessionDataBean
+	 * * This method loads the title as Name and id as value of distribution
+	 * protocol from database and return the namevalue bean of ditribution
+	 * protocol for a given PI.
+	 * 
+	 * @param piID
+	 *            : piID
+	 * @param roleName
+	 *            : roleName
+	 * @param sessionDataBean
+	 *            : sessionDataBean
 	 * @return List : List
-	 * @throws DAOException : DAOException
-	 * @throws BizLogicException : BizLogicException
+	 * @throws DAOException
+	 *             : DAOException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	public List loadDistributionProtocol(final Long piID, String roleName,
 			SessionDataBean sessionDataBean) throws DAOException, BizLogicException
@@ -1970,8 +2078,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				// session = DBUtil.getCleanSession();
 				dao.openSession(null);
-				final User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
-						.getUserId());
+				final User user = (User) dao.retrieveById(User.class.getName(),
+						sessionDataBean.getUserId());
 				final Collection<Site> siteCollection = user.getSiteCollection();
 				final Collection<CollectionProtocol> cpCollection = user
 						.getAssignedProtocolCollection();
@@ -2015,10 +2123,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *
-	 * @param sessionDataBean : sessionDataBean
-	 * @param siteIds : siteIds
-	 * @param cpIds : cpIds
+	 * 
+	 * @param sessionDataBean
+	 *            : sessionDataBean
+	 * @param siteIds
+	 *            : siteIds
+	 * @param cpIds
+	 *            : cpIds
 	 * @return boolean : boolean
 	 */
 	private boolean checkDistributionPrivilege(SessionDataBean sessionDataBean,
@@ -2058,43 +2169,45 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		return hasDistributionPrivilege;
 	}
-	
+
 	public int getOrderCount(String status)
 	{
 		int count = 0;
 		try
 		{
-			String sql = "select count(*) from catissue_order where status like '"+status +"'";
+			String sql = "select count(*) from catissue_order where status like '" + status + "'";
 			List result = AppUtility.executeSQLQuery(sql);
-			if(result != null)
+			if (result != null)
 			{
-				List innnerResult = (List)result.get(0);
+				List innnerResult = (List) result.get(0);
 				count = Integer.valueOf(innnerResult.get(0).toString());
 			}
 
 		}
-		catch (ApplicationException e) 
+		catch (ApplicationException e)
 		{
 			e.printStackTrace();
-		} 
+		}
 		return count;
 	}
+
 	public void getOrderDetail(Long orderId) throws ApplicationException
 	{
-		final IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(CommonServiceLocator.getInstance().getAppName());
+		final IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
+				CommonServiceLocator.getInstance().getAppName());
 		JDBCDAO dao = AppUtility.openJDBCSession();
-		
-		//OrderingSystemUtil.getSpecItemDetails(orderId,dao);
-		
-		String sql ="select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY " +
-				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where " +
-				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
-				" cat.identifier=cot.identifier and order_id=? " +
-				" union "+
-				"select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY " +
-				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_derieved_sp_ord_item cat,catissue_order_item cot where " +
-				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
-				" cat.identifier=cot.identifier and order_id=? ";
+
+		// OrderingSystemUtil.getSpecItemDetails(orderId,dao);
+
+		String sql = "select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY "
+				+ " from catissue_abstract_specimen abs, catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where "
+				+ " spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and "
+				+ " cat.identifier=cot.identifier and order_id=? "
+				+ " union "
+				+ "select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY "
+				+ " from catissue_abstract_specimen abs, catissue_specimen spec, catissue_derieved_sp_ord_item cat,catissue_order_item cot where "
+				+ " spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and "
+				+ " cat.identifier=cot.identifier and order_id=? ";
 		ColumnValueBean bean = new ColumnValueBean(orderId);
 		List attrList = new ArrayList();
 		attrList.add(bean);
@@ -2102,35 +2215,41 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		// List list = dao.executeQuery(sql);
 		List list = dao.executeQuery(sql, attrList);
 	}
-	public Collection<ConsentDTO> getConsentDetails(List<String> specimenLabels,HibernateDAO dao) throws BizLogicException
+
+	public Collection<ConsentDTO> getConsentDetails(List<String> specimenLabels, HibernateDAO dao)
+			throws BizLogicException
 	{
 		Map<String, ConsentDTO> consentMap = new HashMap<String, ConsentDTO>();
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		for (String specimenLabel : specimenLabels) {
-			NewSpecimenBizLogic newSpecimenBizLogic=new NewSpecimenBizLogic();
-			Collection<ConsentTierDTO> consentTierDTOCollection = newSpecimenBizLogic.getConsentTireDTOs(specimenLabel,dao);
+		for (String specimenLabel : specimenLabels)
+		{
+			NewSpecimenBizLogic newSpecimenBizLogic = new NewSpecimenBizLogic();
+			Collection<ConsentTierDTO> consentTierDTOCollection = newSpecimenBizLogic
+					.getConsentTireDTOs(specimenLabel, dao);
 
-  		   //find the unique key
-		    String key = getUniqueKey((ArrayList<ConsentTierDTO>)consentTierDTOCollection);
-		    
-		    if (consentMap.containsKey(key)) 
-		    {
-		    	ConsentDTO existingConsentDTO=consentMap.get(key.toString());
-		    	existingConsentDTO.getSpecimenLabels().add(specimenLabel);
-		    }
-		    else
-		    {
-		    	ConsentDTO newConsentDTO=new ConsentDTO();
-		    	List<String> labels=new ArrayList<String>();
-		    	labels.add(specimenLabel);
-		    	newConsentDTO.setSpecimenLabels(labels);
-		    	newConsentDTO.setConsentTierDTOCollection(consentTierDTOCollection);
-		    	consentMap.put(key, newConsentDTO);
-		    }
+			// find the unique key
+			String key = getUniqueKey((ArrayList<ConsentTierDTO>) consentTierDTOCollection);
+			if (!consentTierDTOCollection.isEmpty())
+			{
+				if (consentMap.containsKey(key))
+				{
+					ConsentDTO existingConsentDTO = consentMap.get(key.toString());
+					existingConsentDTO.getSpecimenLabels().add(specimenLabel);
+				}
+				else
+				{
+					ConsentDTO newConsentDTO = new ConsentDTO();
+					List<String> labels = new ArrayList<String>();
+					labels.add(specimenLabel);
+					newConsentDTO.setSpecimenLabels(labels);
+					newConsentDTO.setConsentTierDTOCollection(consentTierDTOCollection);
+					consentMap.put(key, newConsentDTO);
+				}
+			}
 		}
 		return consentMap.values();
 	}
-	
+
 	private String getUniqueKey(ArrayList<ConsentTierDTO> consentTierDTOs)
 	{
 		StringBuilder consentkey = new StringBuilder(100);
@@ -2142,15 +2261,17 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		return consentkey.toString();
 	}
-	public List getOrderItemsDetail(Long orderId,HibernateDAO dao) throws Exception
+
+	public List getOrderItemsDetail(Long orderId, HibernateDAO dao) throws Exception
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
-		final List orderItemsDetails=dao.executeNamedQuery("getOrderItems", substParams);
-		List<OrderItemDTO> orderItemsDTOs=new ArrayList<OrderItemDTO>();	
-		for (Object object : orderItemsDetails) {
-			Object[] orderItemDetails=(Object[])object;
-			OrderItemDTO orderItemDTO=new OrderItemDTO();
+		final List orderItemsDetails = dao.executeNamedQuery("getOrderItems", substParams);
+		List<OrderItemDTO> orderItemsDTOs = new ArrayList<OrderItemDTO>();
+		for (Object object : orderItemsDetails)
+		{
+			Object[] orderItemDetails = (Object[]) object;
+			OrderItemDTO orderItemDTO = new OrderItemDTO();
 			orderItemDTO.setSpecLabel(orderItemDetails[0].toString());
 			orderItemDTO.setSpecimenClass(orderItemDetails[1].toString());
 			orderItemDTO.setSpecimenType(orderItemDetails[2].toString());
@@ -2160,134 +2281,209 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			orderItemDTO.setDescription(orderItemDetails[6].toString());
 			orderItemDTO.setOrderItemId(Long.parseLong(orderItemDetails[7].toString()));
 			orderItemDTO.setSpecimenId(Long.parseLong(orderItemDetails[8].toString()));
-			if(orderItemDetails[9]!=null)
+			if (orderItemDetails[9] != null)
 			{
-				orderItemDTO.setDistributedQuantity(Double.parseDouble(orderItemDetails[9].toString()));
+				orderItemDTO.setDistributedQuantity(Double.parseDouble(orderItemDetails[9]
+						.toString()));
 			}
-			
+
 			orderItemsDTOs.add(orderItemDTO);
 		}
-		
+
 		return orderItemsDTOs;
 	}
-	
-	public DisplayOrderDTO getOrderDetails(Long orderId,HibernateDAO dao) throws BizLogicException, DAOException
+
+	public DisplayOrderDTO getOrderDetails(Long orderId, HibernateDAO dao)
+			throws BizLogicException, DAOException
 	{
-			DisplayOrderDTO displayOrderDTO=new DisplayOrderDTO();
-			Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-			substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
-			final List orderDetails=dao.executeNamedQuery("getOrderDetails", substParams);
-			Object[] orderDetailObject= (Object[])orderDetails.get(0);
-			
-			if(orderDetailObject[0]!=null)
-			{
-				displayOrderDTO.setOrderName(orderDetailObject[0].toString());
-			}
-			else
-			{
-				displayOrderDTO.setOrderName("Order_"+orderId.toString());
-			}
-			if(orderDetailObject[2]!=null)
-			{
-				displayOrderDTO.setDistributionProtocolName(orderDetailObject[2].toString());
-			}
-			if(orderDetailObject[4]!=null && orderDetailObject[3]!=null)
-			{
-				displayOrderDTO.setRequestorName(orderDetailObject[4]+","+orderDetailObject[3]);
-			}
-			if(orderDetailObject[5]!=null)
-			{
-				displayOrderDTO.setRequestorEmail(orderDetailObject[5].toString());
-			}
-			displayOrderDTO.setRequestedDate(new java.sql.Date(((Timestamp)orderDetailObject[6]).getTime()));
-			if(orderDetailObject[7]!=null)
-			{
-				displayOrderDTO.setComments(orderDetailObject[7].toString());
-			}
-			if(orderDetailObject[8]!=null)
-			{
-				displayOrderDTO.setDistributorsComment(orderDetailObject[8].toString());
-			}
-			return displayOrderDTO;
+		DisplayOrderDTO displayOrderDTO = new DisplayOrderDTO();
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
+		final List orderDetails = dao.executeNamedQuery("getOrderDetails", substParams);
+		Object[] orderDetailObject = (Object[]) orderDetails.get(0);
+
+		if (orderDetailObject[0] != null)
+		{
+			displayOrderDTO.setOrderName(orderDetailObject[0].toString());
+		}
+		else
+		{
+			displayOrderDTO.setOrderName("Order_" + orderId.toString());
+		}
+		if (orderDetailObject[2] != null)
+		{
+			displayOrderDTO.setDistributionProtocolName(orderDetailObject[2].toString());
+		}
+		if (orderDetailObject[4] != null && orderDetailObject[3] != null)
+		{
+			displayOrderDTO.setRequestorName(orderDetailObject[4] + "," + orderDetailObject[3]);
+		}
+		if (orderDetailObject[5] != null)
+		{
+			displayOrderDTO.setRequestorEmail(orderDetailObject[5].toString());
+		}
+		displayOrderDTO.setRequestedDate(new java.sql.Date(((Timestamp) orderDetailObject[6])
+				.getTime()));
+		if (orderDetailObject[7] != null)
+		{
+			displayOrderDTO.setComments(orderDetailObject[7].toString());
+		}
+		if (orderDetailObject[8] != null)
+		{
+			displayOrderDTO.setDistributorsComment(orderDetailObject[8].toString());
+		}
+		return displayOrderDTO;
 	}
-	public OrderStatusDTO updateOrder(OrderSubmissionDTO orderSubmissionDTO,Long userId,HibernateDAO dao) throws BizLogicException
+
+	public OrderStatusDTO updateOrder(OrderSubmissionDTO orderSubmissionDTO, Long userId,
+			HibernateDAO dao) throws BizLogicException
 	{
-		OrderStatusDTO orderStatusDTO=new OrderStatusDTO();
+		OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
 		try
 		{
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-			boolean isOrderProcessed=true;
-			boolean isOrderNew=true;
-			boolean isOrderRejected=true;
-			for (OrderItemSubmissionDTO orderItemSubmissionDTO : orderSubmissionDTO.getOrderItemSubmissionDTOs())
-			{
-				params.put("0", new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getDistQty()));
-				params.put("1", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getStatus()));
-				params.put("2", new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getComments()));
-				params.put("3", new NamedQueryParam(DBTypes.LONG, orderItemSubmissionDTO.getOrderitemId()));
-				
-				dao.executeUpdateWithNamedQuery("updateOrderItemSQL",params);
+			boolean isOrderProcessed = true;
+			boolean isOrderNew = true;
+			boolean isOrderRejected = true;
+			Long distributionId = null;
 
-				SpecimenEventParametersBizLogic specimenEventParametersBizLogic=new SpecimenEventParametersBizLogic();
-				NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
-
-				if(isDistributed(orderItemSubmissionDTO.getStatus()))
-				{	
-					
-					String specimenAvailableStatus=specimenBizLogic.reduceQuantity(orderItemSubmissionDTO.getDistQty(), orderItemSubmissionDTO.getSpecimenLabel(), dao);
-					if(!Constants.SUCCESS.equals(specimenAvailableStatus))
-					{
-						OrderErrorDTO orderErrorDTO=new OrderErrorDTO();
-						orderErrorDTO.setSpecimenLabel(orderItemSubmissionDTO.getSpecimenLabel());
-						orderErrorDTO.setError(specimenAvailableStatus);
-						orderStatusDTO.getOrderErrorDTOs().add(orderErrorDTO);
-						if(ApplicationProperties.getValue("specimen.closed.unavailable").equals(specimenAvailableStatus))
-						{
-							orderErrorDTO.setNewStatus(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE);
-						}
-						else
-						{
-							orderErrorDTO.setNewStatus(Constants.ORDER_REQUEST_STATUS_NEW);
-						}
-					}
-					
-					specimenEventParametersBizLogic.createDistributionEvent(orderItemSubmissionDTO.getDistQty(),orderItemSubmissionDTO.getComments(),orderItemSubmissionDTO.getSpecimenId(), dao,userId);
-				}
-				if (isClosed(orderItemSubmissionDTO.getStatus()))
-				{
-					
-					List<String> disposeReason=new ArrayList<String>();
-					disposeReason.add(orderSubmissionDTO.getDisptributionProtocolName());
-					disposeReason.add(orderSubmissionDTO.getOrderName());
-					
-					specimenEventParametersBizLogic.createDisposalEvent(ApplicationProperties.getValue("orderdistribution.disposeReason", disposeReason),orderItemSubmissionDTO.getSpecimenId(), dao, userId);
-					specimenBizLogic.updateSpecimenStatusToClose(orderItemSubmissionDTO.getSpecimenLabel(),dao);
-				}
-				
-				isOrderProcessed=isOrderProcessed & isOrderItemProcessed(orderItemSubmissionDTO.getStatus());
-				isOrderNew=isOrderNew & isOrderItemNew(orderItemSubmissionDTO);
-				isOrderRejected=isOrderRejected & isOrderItemRejected(orderItemSubmissionDTO.getStatus());
-			}
-			
-			String orderStatus=Constants.ORDER_STATUS_PENDING;
-			if(isOrderProcessed)
-			{
-				orderStatus=Constants.ORDER_STATUS_COMPLETED;
-			}
-			else if(isOrderNew)
-			{
-				orderStatus=Constants.ORDER_STATUS_NEW;
-			}
-			else if(isOrderRejected)
-			{
-				orderStatus=Constants.ORDER_STATUS_REJECTED;
-			}
 			params = new HashMap<String, NamedQueryParam>();
-			
-			params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getSite()));
-			params.put("1", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
-			dao.executeUpdateWithNamedQuery("updateDistributionDetails",params);
-			
+			params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
+			List distributionDetails = dao.executeNamedQuery("getDistributionId", params);
+			if (distributionDetails.isEmpty())
+			{
+				DistributionBizLogic distributionBizLogic=new DistributionBizLogic();
+				Distribution distribution = distributionBizLogic.insertDistribution(orderSubmissionDTO.getId(), userId,
+						orderSubmissionDTO.getSite(),
+						orderSubmissionDTO.getDisptributionProtocolId(), dao);
+				distributionId = distribution.getId();
+			}
+			else
+			{
+				distributionId = Long.parseLong(distributionDetails.get(0).toString());
+				params = new HashMap<String, NamedQueryParam>();
+				params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getSite()));
+				params.put(
+						"1",
+						new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO
+								.getDisptributionProtocolId()));
+				params.put("2", new NamedQueryParam(DBTypes.LONG, distributionId));
+				dao.executeUpdateWithNamedQuery("updateDistributionDetails", params);
+
+			}
+
+			for (OrderItemSubmissionDTO orderItemSubmissionDTO : orderSubmissionDTO
+					.getOrderItemSubmissionDTOs())
+			{
+
+				params = new HashMap<String, NamedQueryParam>();
+				params.put("0",
+						new NamedQueryParam(DBTypes.LONG, orderItemSubmissionDTO.getOrderitemId()));
+				List orderItemStatuses = dao.executeNamedQuery("getOrderItemStatus", params);
+				String orderItemlOldStatus = orderItemStatuses.get(0).toString();
+
+				if (isUpdateAllowed(orderItemSubmissionDTO.getStatus(), orderItemlOldStatus))
+				{
+					params = new HashMap<String, NamedQueryParam>();
+					params.put(
+							"0",
+							new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getDistQty()));
+					params.put("1",
+							new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getStatus()));
+					params.put(
+							"2",
+							new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO
+									.getComments()));
+					params.put(
+							"3",
+							new NamedQueryParam(DBTypes.LONG, orderItemSubmissionDTO
+									.getOrderitemId()));
+
+					dao.executeUpdateWithNamedQuery("updateOrderItemSQL", params);
+
+					SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
+					NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+
+					if (isDistributed(orderItemSubmissionDTO.getStatus())
+							&& !isDistributed(orderItemlOldStatus))
+					{
+
+						String specimenUpdateStatus = specimenBizLogic.reduceQuantity(
+								orderItemSubmissionDTO.getDistQty(),
+								orderItemSubmissionDTO.getSpecimenLabel(), dao);
+						if (!Constants.SUCCESS.equals(specimenUpdateStatus))
+						{
+							OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+							orderErrorDTO.setSpecimenLabel(orderItemSubmissionDTO
+									.getSpecimenLabel());
+							orderErrorDTO.setError(specimenUpdateStatus);
+							orderStatusDTO.getOrderErrorDTOs().add(orderErrorDTO);
+							if (ApplicationProperties.getValue("specimen.closed.unavailable")
+									.equals(specimenUpdateStatus))
+							{
+								orderErrorDTO
+										.setNewStatus(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE);
+							}
+							else
+							{
+								orderErrorDTO.setNewStatus(Constants.ORDER_REQUEST_STATUS_NEW);
+							}
+						}
+
+						specimenEventParametersBizLogic
+								.createDistributionEvent(orderItemSubmissionDTO.getDistQty(),
+										orderItemSubmissionDTO.getComments(),
+										orderItemSubmissionDTO.getSpecimenId(), distributionId,
+										dao, userId);
+					}
+					if (isClosed(orderItemSubmissionDTO.getStatus())
+							&& !isClosed(orderItemlOldStatus))
+					{
+
+						List<String> disposeReason = new ArrayList<String>();
+						disposeReason.add(orderSubmissionDTO.getDisptributionProtocolName());
+						disposeReason.add(orderSubmissionDTO.getOrderName());
+
+						specimenEventParametersBizLogic.disposalEvent(ApplicationProperties
+								.getValue("orderdistribution.disposeReason", disposeReason),
+								orderItemSubmissionDTO.getSpecimenLabel(),Status.ACTIVITY_STATUS_CLOSED.toString(), dao, userId);
+					}
+
+					isOrderProcessed = isOrderProcessed
+							& isOrderItemProcessed(orderItemSubmissionDTO.getStatus());
+					isOrderNew = isOrderNew & isOrderItemNew(orderItemSubmissionDTO.getStatus());
+					isOrderRejected = isOrderRejected
+							& isOrderItemRejected(orderItemSubmissionDTO.getStatus());
+				}
+				else
+				{
+					List<String> parameters = new ArrayList<String>();
+					parameters.add(orderItemlOldStatus);
+					parameters.add(orderItemSubmissionDTO.getStatus());
+
+					OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+					orderErrorDTO.setSpecimenLabel(orderItemSubmissionDTO.getSpecimenLabel());
+					orderErrorDTO.setError(ApplicationProperties.getValue(
+							"orderItem.status.change.not.allow", parameters));
+					orderErrorDTO.setNewStatus(orderItemlOldStatus);
+					orderStatusDTO.getOrderErrorDTOs().add(orderErrorDTO);
+				}
+			}
+
+			String orderStatus = Constants.ORDER_STATUS_PENDING;
+			if (isOrderProcessed)
+			{
+				orderStatus = Constants.ORDER_STATUS_COMPLETED;
+			}
+			else if (isOrderNew)
+			{
+				orderStatus = Constants.ORDER_STATUS_NEW;
+			}
+			else if (isOrderRejected)
+			{
+				orderStatus = Constants.ORDER_STATUS_REJECTED;
+			}
+
 			params = new HashMap<String, NamedQueryParam>();
 			params.put("0", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getOrderName()));
 			params.put("1", new NamedQueryParam(DBTypes.STRING, orderStatus));
@@ -2299,57 +2495,42 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				params.put("2", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getDistributorsComment()));
 			}
-			params.put("3", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getDisptributionProtocolId()));
+			params.put(
+					"3",
+					new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO
+							.getDisptributionProtocolId()));
 			params.put("4", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
-			dao.executeUpdateWithNamedQuery("updateOrderDetails",params);
+			dao.executeUpdateWithNamedQuery("updateOrderDetails", params);
 
 			orderStatusDTO.setStatus(orderStatus);
 			orderStatusDTO.setOrderId(orderSubmissionDTO.getId());
-		}	
-		catch(DAOException daoException)
+		}
+		catch (DAOException daoException)
 		{
 			throw new BizLogicException(null, daoException, null);
 		}
 		return orderStatusDTO;
 	}
-	
-	private boolean isOrderItemNew(OrderItemSubmissionDTO orderItemSubmissionDTO) {
-		return Constants.ORDER_STATUS_NEW.equals(orderItemSubmissionDTO.getStatus());
-	}
-	
-	private boolean isOrderItemRejected(String orderStatus) {
-		for (String status : REJECTED_STATUS_LIST) {
-			if(status.equals(orderStatus))
-			{
-				return true;
-			}
+
+	private boolean isUpdateAllowed(String newStatus, String orderItemlOldStatus)
+	{
+		if (isDistributed(orderItemlOldStatus) && !isDistributed(newStatus))
+		{
+			return false;
 		}
-		return false;
+		return true;
 	}
-	
-	private boolean isOrderItemPending(String orderStatus) {
-		for (String status : PENDING_STATUS_LIST) {
-			if(status.equals(orderStatus))
-			{
-				return true;
-			}
-		}
-		return false;
+
+	private boolean isOrderItemNew(String orderStatus)
+	{
+		return Constants.ORDER_STATUS_NEW.equals(orderStatus);
 	}
-	
-	private boolean isOrderItemProcessed(String orderStatus) {
-		for (String status : PROCESSED_STATUS_LIST) {
-			if(status.equals(orderStatus))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean isClosed(String orderStatus) {
-		for (String status : CLOSED_STATUS_LIST) {
-			if(status.equals(orderStatus))
+
+	private boolean isOrderItemRejected(String orderStatus)
+	{
+		for (String status : REJECTED_STATUS_LIST)
+		{
+			if (status.equals(orderStatus))
 			{
 				return true;
 			}
@@ -2357,55 +2538,98 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		return false;
 	}
 
-	private boolean isDistributed(String orderStatus) {
-		for (String status : DISTRIBUTE_STATUS_LIST) {
-			if(status.equals(orderStatus))
+	private boolean isOrderItemPending(String orderStatus)
+	{
+		for (String status : PENDING_STATUS_LIST)
+		{
+			if (status.equals(orderStatus))
 			{
 				return true;
 			}
 		}
 		return false;
-	}	
-	
-	public String getGridXMLString(Long orderId,HibernateDAO dao) throws Exception
+	}
+
+	private boolean isOrderItemProcessed(String orderStatus)
+	{
+		for (String status : PROCESSED_STATUS_LIST)
+		{
+			if (status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isClosed(String orderStatus)
+	{
+		for (String status : CLOSED_STATUS_LIST)
+		{
+			if (status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isDistributed(String orderStatus)
+	{
+		for (String status : DISTRIBUTE_STATUS_LIST)
+		{
+			if (status.equals(orderStatus))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getGridXMLString(Long orderId, HibernateDAO dao) throws Exception
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
-		List orderItems=dao.executeNamedQuery("getOrderItems", substParams);
-		String gridXMLString = VelocityManager.getInstance().evaluate(orderItems,"orderGridTemplate.vm");
+		List orderItems = dao.executeNamedQuery("getOrderItems", substParams);
+		String gridXMLString = VelocityManager.getInstance().evaluate(orderItems,
+				"orderGridTemplate.vm");
 		return gridXMLString;
 	}
-	
-	public Map<String,Object> getOrderCsv(Long orderId,String exportedBy,HibernateDAO dao) throws Exception
+
+	public Map<String, Object> getOrderCsv(Long orderId, String exportedBy, HibernateDAO dao)
+			throws Exception
 	{
-		Map<String,Object> returnMap = new HashMap<String,Object>();
-		DisplayOrderDTO displayOrderDTO = getOrderDetails(orderId,dao);
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		DisplayOrderDTO displayOrderDTO = getOrderDetails(orderId, dao);
 		PrintWriter pw = null;
-		Map<String,Object> orderDetailMap = new HashMap<String,Object>();
-		try{
-			String currentDate = CommonUtilities.parseDateToString(
-					new Date(),  CommonServiceLocator.getInstance()
-					.getDatePattern());
-			String requestedDateStr =  CommonUtilities.parseDateToString(
-					displayOrderDTO.getRequestedDate(),  CommonServiceLocator.getInstance()
-					.getDatePattern());
-			orderDetailMap.put("orderDetailMap",displayOrderDTO);
+		Map<String, Object> orderDetailMap = new HashMap<String, Object>();
+		try
+		{
+			String currentDate = CommonUtilities.parseDateToString(new Date(), CommonServiceLocator
+					.getInstance().getDatePattern());
+			String requestedDateStr = CommonUtilities.parseDateToString(displayOrderDTO
+					.getRequestedDate(), CommonServiceLocator.getInstance().getDatePattern());
+			orderDetailMap.put("orderDetailMap", displayOrderDTO);
 			orderDetailMap.put("requestedDate", requestedDateStr);
-			orderDetailMap.put("exportedOn",currentDate);
-			orderDetailMap.put("exportedBy",exportedBy);
-			orderDetailMap.put("orderItemsDetail", getOrderItemsDetail(orderId,dao));
-			orderDetailMap.put("dateFormat", CommonServiceLocator.getInstance()
-					.getDatePattern());
-			String obj = VelocityManager.getInstance().evaluate(orderDetailMap,"orderGridCsvTemplate.vm");
-			returnMap.put("fileData",obj.getBytes());
-			returnMap.put("fileName",displayOrderDTO.getOrderName()+"_"+currentDate+Constants.CSV_FILE_EXTENTION);
-			
-		}finally{
-			//pw.close();
+			orderDetailMap.put("exportedOn", currentDate);
+			orderDetailMap.put("exportedBy", exportedBy);
+			orderDetailMap.put("orderItemsDetail", getOrderItemsDetail(orderId, dao));
+			orderDetailMap.put("dateFormat", CommonServiceLocator.getInstance().getDatePattern());
+			String obj = VelocityManager.getInstance().evaluate(orderDetailMap,
+					"orderGridCsvTemplate.vm");
+			returnMap.put("fileData", obj.getBytes());
+			returnMap.put("fileName", displayOrderDTO.getOrderName() + "_" + currentDate
+					+ Constants.CSV_FILE_EXTENTION);
+
 		}
-//		requestlist.dataTabel.OrderName.label
-		
+		finally
+		{
+			// pw.close();
+		}
+		// requestlist.dataTabel.OrderName.label
+
 		return returnMap;
-		
+
 	}
+
 }

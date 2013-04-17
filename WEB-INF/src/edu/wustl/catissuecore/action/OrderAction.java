@@ -84,14 +84,23 @@ public class OrderAction extends BaseAction
 		HibernateDAO dao=null;
 		try
 		{
+			Long orderId=null;
+			if(request.getParameter("id")==null || request.getParameter("id").isEmpty())
+			{
+				orderId=Long.parseLong(request.getAttribute("id").toString());
+			}
+			else
+			{
+				orderId=Long.parseLong(request.getParameter("id"));
+			}
 			SessionDataBean sessiondataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 			dao=(HibernateDAO)AppUtility.openDAOSession(sessiondataBean);
 			OrderBizLogic orderBizLogic=new OrderBizLogic();
-			DisplayOrderDTO displayOrderDTO=orderBizLogic.getOrderDetails(Long.parseLong(request.getParameter("id")),dao);
+			DisplayOrderDTO displayOrderDTO=orderBizLogic.getOrderDetails(orderId,dao);
 			request.setAttribute("DisplayOrderDTO", displayOrderDTO);
 			request.setAttribute("sites", sites);
 			request.setAttribute(Constants.ITEM_STATUS_LIST, requestedItemsStatusList);
-			request.setAttribute("id", request.getParameter("id"));
+			request.setAttribute("id", orderId);
 			request.setAttribute("status", Constants.STATUS_LIST);
 			request.setAttribute("datePattern", ApplicationProperties.getValue("date.pattern"));
 			request.setAttribute("distributeStatusList", orderBizLogic.DISTRIBUTE_STATUS_LIST);

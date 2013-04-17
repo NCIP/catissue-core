@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionEventParameters;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -980,4 +981,31 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		return distributionEventDTO;
 	}
+	public Distribution insertDistribution(Long orderDetailsId, Long userId, Long siteId,
+			Long distributionProtocolId, HibernateDAO dao) throws DAOException
+	{
+		final Distribution distribution = new Distribution();
+		OrderDetails orderDetails = new OrderDetails();
+		orderDetails.setId(orderDetailsId);
+		distribution.setOrderDetails(orderDetails);
+
+		final User user = new User();
+		user.setId(userId);
+
+		distribution.setDistributedBy(user);
+		distribution.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+
+		final Date date = new Date();
+		distribution.setTimestamp(date);
+
+		final Site site = new Site();
+		site.setId(siteId);
+
+		final DistributionProtocol distributionProtocol = new DistributionProtocol();
+		distributionProtocol.setId(distributionProtocolId);
+
+		dao.insert(distribution);
+		return distribution;
+	}
+
 }

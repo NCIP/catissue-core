@@ -6291,7 +6291,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		int remainingQuantityMoreThenZero=remainingQuantity.compareTo(0D);
 		if(remainingQuantityMoreThenZero == -1)
 		{
-			return ApplicationProperties.getValue("requested.quantity.exceeds");
+			List<String> parameters=new ArrayList<String>();
+			parameters.add(previousQuantity.toString());
+			return ApplicationProperties.getValue("requested.quantity.exceeds",parameters);
 		}
 		else if (remainingQuantity.compareTo(0D) == 0)
 		{
@@ -6311,6 +6313,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToClose", params);
+	}
+	public void updateSpecimenStatusToDisabled(String specimenLabel,HibernateDAO dao) throws DAOException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToDisabled", params);
 	}
 	public Long getAssociatedIdentifiedReportId(Long specimenId, DAO dao)
 			throws ApplicationException

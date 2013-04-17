@@ -554,6 +554,15 @@
 	            insert="true"
 	            column="DISTRIBUTED_QUANTITY"
         	/>
+        	<many-to-one
+	            name="distributionDetails"
+	            class="edu.wustl.catissuecore.domain.Distribution"
+	            cascade="none"
+	             
+	            update="true"
+	            insert="true"
+	            column="DISTRIBUTION_ID"
+        	/>
         </joined-subclass>
     </class>
 	<query name="getDistributionEvent">select distEventParam.comment,distEventParam.distributedQuantity,distEventParam.timestamp,user.firstName,user.lastName from DistributionEventParameters distEventParam left join distEventParam.user user where distEventParam.id = ?

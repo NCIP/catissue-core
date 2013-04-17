@@ -129,6 +129,8 @@
 			</column>
 			<column name="DISTRIBUTED_QUANTITY" type="${int.type}">				
 			</column>
+			<column name="DISTRIBUTION_ID" type="${double.type}">				
+			</column>
 		</createTable>
 		
 	</changeSet>
@@ -288,5 +290,47 @@
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
+	<changeSet id="41" author="catissuecore" runOnChange="true" dbms="oracle" failOnError="false">
+			<sql splitStatements="false" endDelimiter="$">
+			create or replace  PROCEDURE migrateDistriData
+			             IS
+			             dist_ids number;
+			             nextId number;
+			             cursor distri_ids IS select identifier from catissue_distributed_item where SPECIMEN_ID IS NOT NULL;
+			             BEGIN
+			             open distri_ids;
+			             LOOP
+			                 fetch distri_ids into dist_ids;
+			                   EXIT WHEN distri_ids%notfound;
+			                    nextId := CATISSUE_SPEC_EVENT_PARAM_SEQ.NEXTVAL;
+			INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(IDENTIFIER,SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) (SELECT nextId,cdi.SPECIMEN_ID,cd.EVENT_TIMESTAMP,cd.USER_ID,cd.COMMENTS from catissue_distributed_item cdi join catissue_distribution cd on cdi.DISTRIBUTION_ID=cd.identifier  where  cdi.identifier=dist_ids);
+			INSERT INTO CATISSUE_DISTRI_EVENT_PARAM (identifier,DISTRIBUTION_QUALITY,DISTRIBUTION_ID) (Select nextId,QUANTITY,DISTRIBUTION_ID from catissue_distributed_item where IDENTIFIER=dist_ids);
 
+             END LOOP;
+             CLOSE distri_ids;
+             END;
+           </sql>
+           <sql>call migrateDistriData();</sql>
+
+	</changeSet>
+
+    <changeSet id="42" author="catissuecore" runOnChange="true" dbms="mysql" failOnError="false">
+	     <sql>DROP PROCEDURE IF EXISTS  migrateDistriData;</sql>
+	     <sql splitStatements="false">
+			CREATE PROCEDURE migrateDistriData()
+			BEGIN
+			declare dist_ids bigint;
+			declare nextId bigint;
+			DECLARE distri_ids cursor for select identifier from catissue_distributed_item where SPECIMEN_ID IS NOT NULL;
+			open distri_ids;
+			fetch distri_ids into dist_ids;
+			SELECT max(IDENTIFIER)+1 INTO nextId from CATISSUE_SPECIMEN_EVENT_PARAM;
+			INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) (SELECT cdi.SPECIMEN_ID,cd.EVENT_TIMESTAMP,cd.USER_ID,cd.COMMENTS from catissue_distributed_item cdi join catissue_distribution cd on cdi.DISTRIBUTION_ID=cd.identifier  where  cdi.identifier=dist_ids);
+			INSERT INTO CATISSUE_DISTRI_EVENT_PARAM (identifier,DISTRIBUTION_QUALITY,DISTRIBUTION_ID) (Select nextId,QUANTITY,DISTRIBUTION_ID from catissue_distributed_item where IDENTIFIER=dist_ids);
+			CLOSE distri_ids;
+			END
+			
+	   </sql>
+	   <sql>call migrateDistriData();</sql>
+   </changeSet>
 </databaseChangeLog>         

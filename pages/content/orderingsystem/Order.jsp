@@ -52,20 +52,15 @@ function submitOrderNew(consentVerifiedValues)
 		alert("Please select distriution protocol.");
 		return;
 	}
-	var selectedSite=tabDataJSON['site'];
-	if(ifAnyDistributed=='false')
-	{
-	  tabDataJSON['site']=0;
-	}
 	
-	if(ifAnyDistributed)
+	var selectedSite=tabDataJSON['site'];
+
+	if(selectedSite == '' || selectedSite == '-1')
 	{
-		if(selectedSite == '' || selectedSite == '-1')
-		{
-			alert("Please select distriution site.");
-			return;
-		}
+		alert("Please select distriution site.");
+		return;
 	}
+
 	for (var i = 0; i < consentVerifiedValues.length; ++i) 
 	{
 	  if(!consentVerifiedValues[i].checked){
@@ -427,7 +422,7 @@ function gotoconsentTab()
 		ifAnyDistributed='false';
 		for(var row=1;row<mygrid.getRowsNum();row++)
 		{
-			var statusValue=mygrid.cellById(row,5).getValue();
+			var statusValue=mygrid.cellById(row,6).getValue();
 			if(statusValue == 'Distributed' || statusValue == 'Distributed And Close' || statusValue == 'Distributed And Close(Special)')
 			{
 			    ifAnyDistributed=true;
