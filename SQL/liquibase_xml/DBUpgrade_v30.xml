@@ -303,7 +303,7 @@
 			                 fetch distri_ids into dist_ids;
 			                   EXIT WHEN distri_ids%notfound;
 			                    nextId := CATISSUE_SPEC_EVENT_PARAM_SEQ.NEXTVAL;
-			INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(IDENTIFIER,SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) (SELECT nextId,cdi.SPECIMEN_ID,cd.EVENT_TIMESTAMP,cd.USER_ID,cd.COMMENTS from catissue_distributed_item cdi join catissue_distribution cd on cdi.DISTRIBUTION_ID=cd.identifier  where  cdi.identifier=dist_ids);
+			INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(IDENTIFIER,SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) (SELECT nextId,cdi.SPECIMEN_ID,cd.EVENT_TIMESTAMP,cd.USER_ID,cd.COMMENTS from catissue_distributed_item cdi join catissue_distribution cd on cdi.DISTRIBUTION_ID=cd.identifier left outer join catissue_order_item coi on cdi.identifier=coi.DISTRIBUTED_ITEM_ID where  cdi.identifier=dist_ids);
 			INSERT INTO CATISSUE_DISTRI_EVENT_PARAM (identifier,DISTRIBUTED_QUANTITY,DISTRIBUTION_ID) (Select nextId,QUANTITY,DISTRIBUTION_ID from catissue_distributed_item where IDENTIFIER=dist_ids);
 
              END LOOP;
@@ -325,7 +325,7 @@
 			open distri_ids;
 			fetch distri_ids into dist_ids;
 			SELECT max(IDENTIFIER)+1 INTO nextId from CATISSUE_SPECIMEN_EVENT_PARAM;
-			INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) (SELECT cdi.SPECIMEN_ID,cd.EVENT_TIMESTAMP,cd.USER_ID,cd.COMMENTS from catissue_distributed_item cdi join catissue_distribution cd on cdi.DISTRIBUTION_ID=cd.identifier  where  cdi.identifier=dist_ids);
+			INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) (SELECT cdi.SPECIMEN_ID,cd.EVENT_TIMESTAMP,cd.USER_ID,cd.COMMENTS from catissue_distributed_item cdi join catissue_distribution cd on cdi.DISTRIBUTION_ID=cd.identifier left outer join catissue_order_item coi on cdi.identifier=coi.DISTRIBUTED_ITEM_ID where  cdi.identifier=dist_ids);
 			INSERT INTO CATISSUE_DISTRI_EVENT_PARAM (identifier,DISTRIBUTED_QUANTITY,DISTRIBUTION_ID) (Select nextId,QUANTITY,DISTRIBUTION_ID from catissue_distributed_item where IDENTIFIER=dist_ids);
 			CLOSE distri_ids;
 			END
