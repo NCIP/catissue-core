@@ -129,16 +129,13 @@ function submitOrderNew(consentVerifiedValues)
 		document.getElementById("nextStatusId").value=id.value;
 		for(var row=0;row<mygrid.getRowsNum();row++)
 		{
-			var assignStat = document.getElementById('select_'+row);
 			if(id.value == ("Distributed And Close(Special)"))
 			{
-			
 				var avlQty = Number(mygrid.cellById(row+1,3).getValue());
 				var reqQty = Number(mygrid.cellById(row+1,5).getValue());
 				if(avlQty == reqQty)
 				{
 					mygrid.cellById(row+1,6).setValue("Distributed And Close");
-					assignStat.value="Distributed And Close";
 				}
 				else
 				{
