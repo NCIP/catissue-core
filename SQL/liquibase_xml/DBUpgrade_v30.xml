@@ -129,7 +129,7 @@
 			</column>
 			<column name="DISTRIBUTED_QUANTITY" type="${int.type}">				
 			</column>
-			<column name="DISTRIBUTION_ID" type="${double.type}">				
+			<column name="DISTRIBUTION_ID" type="${int.type}">				
 			</column>
 		</createTable>
 		
