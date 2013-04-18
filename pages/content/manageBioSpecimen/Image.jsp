@@ -17,8 +17,10 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
 </script>
+<script src="jss/json2.js" type="text/javascript"></script>
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxcombo_whp.js">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
 
 <script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
@@ -86,7 +88,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
 
 <!----------------------------------------------------------------------->
-
+<body >
     <html:form action="NewSpecimenEdit.do">
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
@@ -165,12 +167,12 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
             <div id="mainTable" style="display:none"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
                 <tr>
                   <td><div id="error" class="alert alert-error" style="display:none">
-    <strong>Oh snap!</strong> Change a few things up and try submitting again.
+				<strong>Error!</strong> <span id="errorMsg">Change a few things up and try submitting again.</span>
 </div>
 
 
 <div class="alert alert-success" id="success-div" style="display:none">
-    <strong>Well done!</strong> You successfully read this important alert message.
+					Changes Updated Successfully
 </div>
 </td>
                 </tr>
@@ -192,10 +194,10 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                     </td>
                   </logic:equal>
                   <logic:notEqual name="operation" value="add">
-                  <td class=" black_ar align_right_style">
+                  <td class="black_ar align_right_style">
                   <bean:message key="image.select.details"/>
                   </td>
-                  <td>
+                  <td class="black_new">
                     <span><html:select styleClass="formFieldSized" styleId="equipmentImageId" name="imageDTO" property="equipmentImageId" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
                         <html:options collection="imageList"
                                 labelProperty="name" property="value" />
@@ -291,7 +293,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                                
                             </label>
                           </td>
-                          <td width="34%" align="left" class="black_ar" >
+                          <td width="34%" align="left" class="black_new">
                                 <label for="displayName">
                                     <div id="equipTxt" style="display:block"/>
                                     <html:text styleClass="black_ar" size="30" maxlength="255"  styleId="displayName" name="equipmentDTO" property="displayName" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processEquipData(this)"/>
@@ -300,7 +302,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                                     <html:hidden property="equipmentId" styleId="equipmentId" name="equipmentDTO" />
                                 </label>
                                 <div id="equipSelect" style="display:none"/>
-                                <html:select styleClass="formFieldSized" styleId="displayName" name="equipmentDTO" property="displayName" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" onchange="getEquipmentData(this)">
+                                <html:select styleClass="formFieldSizedNew" size="1" styleId="displayName" name="equipmentDTO" property="displayName" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" onchange="getEquipmentData(this)">
                         <html:options collection="deviceList"
                                 labelProperty="name" property="value" />
                     </html:select>
@@ -311,6 +313,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                                 </div>
                                
                           </td>
+						  
                           <td colspan="3" align="right">
                            
                             <input type="button" name="edit" value="Edit" id='edit'/>
@@ -346,7 +349,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                                 <bean:message key="image.device.site"/>
                             </label>
                           </td>
-                          <td width="34%" align="left" class="black_ar">
+                          <td width="34%" align="left" class="black_new">
                             <label for="site">
                            
                         <html:select styleClass="formFieldSized" styleId="siteId" name="equipmentDTO" property="siteId" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
@@ -443,7 +446,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                                 <logic:equal name="operation" value="add">                   
                                     <div id="displayName_read" style="display:none">
                                     </div>
-                                <html:select styleClass="formFieldSized" styleId="displayName" name="equipmentDTO" property="displayName" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" onchange="getEquipmentData(this)">
+                                <html:select styleClass="formFieldSizedNew" styleId="displayName" name="equipmentDTO" property="displayName" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" onchange="getEquipmentData(this)">
                         <html:options collection="deviceList"
                                 labelProperty="name" property="value" />
                     </html:select>
@@ -630,7 +633,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                             </td>
                             <td align="left">
                                 <html:text styleClass="black_ar" size="30" maxlength="255"  styleId="scanDate" name="imageDTO" property="scanDate"
-                                onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" readonly="true" onclick="doInitCalendar('scanDate',false)"/>
+                                onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" readonly="true" onclick="doInitCalendar('scanDate',false,'${uiDatePattern}')"/>
                             </td>
 
                             <td align="center" class="black_ar">&nbsp;</td>
@@ -641,7 +644,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                                 <td width="34%" align="left" class="black_ar">
                                     <html:text name="imageDTO"
                                 styleClass="black_ar" maxlength="255" size="30"
-                                styleId="lastUpdateDate" property="lastUpdateDate" onblur="processData(this)" readonly="true" onclick="doInitCalendar('lastUpdateDate',false)"/>
+                                styleId="lastUpdateDate" property="lastUpdateDate" onblur="processData(this)" readonly="true" onclick="doInitCalendar('lastUpdateDate',false,'${uiDatePattern}')"/>
                                 </td>
                         </tr>
                        
@@ -743,6 +746,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
    </tr>
 </table>
 </html:form>
+</body>
 <script>
 <logic:equal name="imageAvl" value="false">
 document.getElementById('emptyPage').style.display="block";
@@ -765,8 +769,7 @@ function addImageInfo()
 }
 function submitTabData()
 {
-//    alert(isEmpty(imageDataJson) +'imageDataJson');
-    //alert(isEmpty(equipDataJson) +'equipDataJson');
+    
     if(isEmpty(equipDataJson) && isEmpty(imageDataJson))
     {
         alert("No changes to submit");
@@ -782,6 +785,7 @@ function submitTabData()
         {
             imageDataJson["equipmentId"] = document.getElementById("equipmentId").value;
         }
+        imageDataJson["specimenId"] = ${requestScope.specimenId};
     }
     if(!isEmpty(equipDataJson))
     {
@@ -790,7 +794,7 @@ function submitTabData()
             equipDataJson["id"] = document.getElementById("equipId").value;
         }
     }
-   
+	
     var loader = dhtmlxAjax.postSync("EditSpecimenImage.do","imageJSON="+JSON.stringify(imageDataJson)+"&equipJSON="+JSON.stringify(equipDataJson)+"&specimenId=${requestScope.specimenId}");
     if(loader.xmlDoc.responseText != null)
     {
@@ -832,7 +836,7 @@ function getSelectedData(eqImageId)
     if(key != 'siteId')
     {
         if(key =='id')
-            document.getElementById('equipmentId').value=data[key];
+            document.getElementById('equipId').value=data[key];
         else
         {
             document.getElementById(key+'_read').innerHTML=data[key];
@@ -859,12 +863,18 @@ function getEquipmentData(obj)
     {
         document.getElementById('equipmentId').value=data[key];
     }
+	if(key == 'siteId')
+	{
+		siteCombo.setComboValue(data[key]);
+		siteCombo.setComboText(data['siteName']);
+	}
     else
-    {
+    {//alert(key);
         document.getElementById(key).value=data[key];
+		 document.getElementById(key+'_read').innerHTML=data[key];
     }
     //alert(key);
-    document.getElementById(key+'_read').innerHTML=data[key];
+   
   }
    
         }
@@ -906,52 +916,49 @@ function addEquipment()
 }
  <logic:notEqual name="operation" value="add">
 var imageIdCombo = dhtmlXComboFromSelect("equipmentImageId");
+imageIdCombo.setSize(302);
 imageIdCombo.attachEvent("onChange",function()
-                       {//alert(imageIdCombo.name);
+                       {
                                //var activityValue=imageIdCombo.getSelectedValue();
                                getSelectedData(imageIdCombo.getSelectedValue());
                                return true;
                                //alert(activityValue);
                        });
-imageIdCombo.attachEvent("onBlur",function()
-                       {//alert(imageIdCombo.name);
-                               var activityValue=imageIdCombo.getSelectedValue();
-                          //     alert(activityValue);
-                       });
-            </logic:notEqual>       
+imageIdCombo.attachEvent("onBlur",function(){processComboData(this.name,this.getSelectedText());});
+            </logic:notEqual>
+
+			
 var siteCombo = dhtmlXComboFromSelect("siteId");
-siteCombo.attachEvent("onChange",function()
-                       {//alert(siteCombo.name);
-                               //var activityValue=siteCombo.getSelectedValue();
-                              // getSelectedData(siteCombo.getSelectedValue());
-                               //alert(activityValue);
-                       });
-siteCombo.attachEvent("onBlur",function()
-                       {//alert(siteCombo.name);
-                               var activityValue=siteCombo.getSelectedValue();
-                          //     alert(activityValue);
-                       });
+//siteCombo.setOptionWidth(102);
+siteCombo.setSize(202);
+siteCombo.attachEvent("onChange",function(){});
+siteCombo.attachEvent("onBlur",function(){processComboData(this.name,this.getSelectedValue());});
+
 
 function deviceEdit(key)
 {
     document.getElementById('editable').style.display="block";
     document.getElementById('readonly').style.display="none";
     document.getElementById('edit').disabled="disabled";
-}                      
+}
+function processComboData(objName,objValue)
+{
+	equipDataJson[objName] = objValue;
+}
 function processEquipData(obj)
 {
     equipDataJson[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
 }
 function viewImageLocally(imageURL)
 {//alert(imageURL);
-imageURL='http://localhost/imageserver/@32';
+//imageURL='http://localhost/imageserver/@32';
     var action = "OpenAperioImage.do?imageURL="+imageURL+"&operation=imageScope";
     mywindow=window.open(action,"Download","width=10,height=10");
     mywindow.moveTo(0,0);
 }
 function downloadImage(imageURL)
 {
-imageURL='http://localhost/imageserver/@32';
+//imageURL='http://localhost/imageserver/@32';
 //alert(imageURL);
     var loader = dhtmlxAjax.postSync("OpenAperioImage.do","imageURL="+imageURL+"&operation=download");
     if(loader.xmlDoc.responseText != null)
@@ -965,10 +972,13 @@ imageURL='http://localhost/imageserver/@32';
 }
 function viewInWebScope(imageURL)
 {
-imageURL='http://localhost/imageserver/@32';
+//imageURL='http://localhost/imageserver/@32';
 //alert(imageURL);
     
         window.open(imageURL);
     
 }
+
+
+
 </script>
