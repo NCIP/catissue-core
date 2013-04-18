@@ -83,11 +83,11 @@
 						<c:forEach var="consentTierDTO" items="${consentDTO.consentTierDTOCollection}">						
 							<tr>
 
-								<td class='${pageScope.style}'>
+								<td class='${pageScope.style}' width="3%">
 									${count}
 								</td>
 								<%-- Get Consents # --%>										
-								<td class='${pageScope.style}' width="31%">
+								<td class='${pageScope.style}' width="40%">
 									${consentTierDTO.consentStatment}
 								</td>
 								
@@ -97,19 +97,12 @@
 							</tr>
 							<c:set var="count" value='${pageScope.count+1}' scope="page" />
 							</c:forEach>
-							<tr>
-									<td>
-									</td>
-								
-										<td>
-											<input type="checkbox" name="verifyAllCheckBox"/>
-										</td>
-										<td class="black_ar " colspan="3">
-											<label><b><bean:message key="consent.verificationmessage"/><b></label>
-										</td>
-							</tr>
-					
-				
+							 <tr>
+                                 <td class="black_ar " colspan="3">
+                                     <input type="checkbox" name="verifyAllCheckBox"/>
+                                     <label><b><bean:message key="consent.verificationmessage"/><b></label>
+                                 </td>
+                             </tr>
 							
 						</table>	
 						<%-- Inner table that will show Consents--%>
