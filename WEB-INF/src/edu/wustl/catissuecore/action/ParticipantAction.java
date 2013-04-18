@@ -234,12 +234,12 @@ public class ParticipantAction extends CatissueBaseAction {
 			this.setParticipantMedicalNumberId(bizlogic, participantForm
 					.getId(), map);
 			// Updating Collection Protocol Registration
-			this.updateCollectionProtocolRegistrationCollection(bizlogic,
-					participantForm, count);
-			final int cprCount = this.updateCollectionProtocolRegistrationMap(
-					mapCPR, count);
-			participantForm
-					.setCollectionProtocolRegistrationValueCounter(cprCount);
+//			this.updateCollectionProtocolRegistrationCollection(bizlogic,
+//					participantForm, count);
+//			final int cprCount = this.updateCollectionProtocolRegistrationMap(
+//					mapCPR, count);
+//			participantForm
+//					.setCollectionProtocolRegistrationValueCounter(cprCount);
 		}
 
 		MapDataParser.deleteRow(cprKey, mapCPR, "true");
@@ -429,11 +429,12 @@ public class ParticipantAction extends CatissueBaseAction {
 					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
 					participantEntityId);
 		}
+		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		if (!participantForm.getOperation().equals(Constants.ADD)){ 
 			DAO dao=null;
 			try{
 			dao = AppUtility.openDAOSession(sessionDataBean);
-			CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+			
 			ParticipantDTO dto = cprBizLogic.fetchCprDetailForParticipant(participantForm.getCpId(), participantForm.getId(), dao);
 			participantForm.setPpId(dto.getPpid());
 			participantForm.setBarcode(dto.getBarcode());
@@ -445,7 +446,14 @@ public class ParticipantAction extends CatissueBaseAction {
 				AppUtility.closeDAOSession(dao);
 			}  
 		}
-		request.setAttribute("cprId",participantForm.getCprId() );
+		request.setAttribute("cprId",participantForm.getCprId());
+		String collectionProtocolId = cpid == null?  request.getParameter("cpId") : cpid;
+		
+		if(collectionProtocolId!=null){
+			request.setAttribute("ppIdFormat",cprBizLogic.getPPIdformat(Long.parseLong(collectionProtocolId)));
+		}else{
+			request.setAttribute("ppIdFormat","");
+		}
 		
 		request.setAttribute(
 				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,

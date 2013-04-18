@@ -2219,7 +2219,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 * @throws ApplicationException
 	 * @throws DAOException
 	 */
-	private String getPPIdformat(Long cpid) throws ApplicationException, DAOException {
+	public String getPPIdformat(Long cpid) throws ApplicationException, DAOException {
 		final String hql1 = "select cp.ppidFormat"
 				+ " from edu.wustl.catissuecore.domain.CollectionProtocol as cp where "
 				+ "cp.id= ?";

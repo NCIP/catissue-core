@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -262,6 +263,8 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	{
 		final Object object = bizLogic.retrieve(objectName, new Long(request
 				.getParameter("participantId")));
+		SessionDataBean sessionDataBean = (SessionDataBean) request
+				.getSession().getAttribute(Constants.SESSION_DATA);
 		AbstractDomainObject abstractDomain = (AbstractDomainObject) object;
 		final Participant participant = (Participant) abstractDomain;
 
@@ -281,7 +284,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		//Gets the collection Protocol Registration map from Database
 		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
-				participantForm,null);
+				participantForm,sessionDataBean);
 
 		final Map mapCollectionProtocolRegistrationOld = participantForm
 				.getCollectionProtocolRegistrationValues();

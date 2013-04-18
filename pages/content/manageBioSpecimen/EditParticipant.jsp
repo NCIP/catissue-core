@@ -606,21 +606,37 @@ function newConsentTab(levelId)
 						<tr class="${tr_grey_color}">
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
-						<td valign="middle" class="black_ar align_right_style1" align="right" height="100%" width="18%">
-							&nbsp; <b> <bean:message key="participant.collectionProtocolReg.participantProtocolID" /> </b>
-						</td>
-
-						<td valign="middle"  class="black_ar align_left_style" height="100%" width="18%"> 
-							<html:text property="ppId" styleClass="black_ar" styleId="ppId" size="27" />			
-						</td>
-						
 						<td valign="middle"   class="black_ar align_right_style" align="right" height="100%" width="18%"><b>
 								<bean:message key="participant.collectionProtocolReg.barcode" /> </b>
 						</td>
 
-						<td valign="middle" class="black_ar" height="100%"> 
+						<td valign="middle" class="black_ar" height="100%" > 
 							<html:text property="barcode" styleClass="black_ar"  styleId="barcode" size="27" />			
 						</td>
+						<td valign="middle" class="black_ar align_right_style1" align="right" height="100%" width="18%">
+							<c:if test="${(empty ppIdFormat && operation eq 'add' ) or operation eq 'edit'}">
+								&nbsp; <b> <bean:message key="participant.collectionProtocolReg.participantProtocolID" /> </b>
+							</c:if>
+							
+						</td>
+
+						<td valign="middle"  class="black_ar align_left_style" height="100%"> 
+						<c:choose>
+							<c:when  test="${(empty ppIdFormat && operation eq 'add' ) or (operation eq 'edit' && empty ppIdFormat)}">
+								<html:text property="ppId" styleClass="black_ar" styleId="ppId" size="27" />			
+							</c:when>
+							<c:otherwise>
+								<c:if test="${operation eq 'edit' && not empty ppIdFormat}">
+									<html:text property="ppId" styleClass="black_ar" styleId="ppId" size="27"  disabled="true"/>	
+									<html:hidden property="ppId"/>
+						
+								</c:if>
+    						</c:otherwise>
+						</c:choose>
+								
+						</td>
+						
+						
 					   </tr>
 					
 					<c:if test="${i%2 == 0}">
@@ -644,12 +660,15 @@ function newConsentTab(levelId)
 						</td>
 						
 						<td valign="middle" height="100%"  class="black_ar align_right_style" align="right">
+							<logic:equal name="operation" value="edit">
 							<label for="activityStatus"	class="black_ar">
 								<b><bean:message
 								key="participant.activityStatus" /> </b></label>
+								</logic:equal>
 						</td>
 								
 						<td  valign="middle" height="100%">
+						<logic:equal name="operation" value="edit">
 						<table width="84%">
 						 <logic:iterate name="activityStatusList" id="listStatusId">
 							<c:if test="${listStatusId != '-- Select --'}">
@@ -661,7 +680,8 @@ function newConsentTab(levelId)
 							</td>	
 						   </c:if>
 						 </logic:iterate>
-						 </table>	
+						 </table>
+						</logic:equal>						 
 						</td>
 					 </tr>
 				</table>
