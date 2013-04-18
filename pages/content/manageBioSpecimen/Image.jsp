@@ -225,7 +225,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           </td>
                          
                           <td width="17%" align="left" class="black_ar " >
-                                    <a href="#" class="view" onclick="viewInWebScope('ffffff')"><span title="Download Image" style="vertical-align:top">View in WebScope(Web-Based Application)</span></a></td>
+                                    <a href="#" class="view" onclick="viewInWebScope('${imageDTO.physicalLocationUrl}')"><span title="Download Image" style="vertical-align:top">View in WebScope(Web-Based Application)</span></a></td>
                                 </td>
                             <td width="34%"/>
                                 <td width="1%" align="center" class="black_ar">
@@ -260,7 +260,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           </td>
                          
                           <td width="17%" align="left" class="black_ar " >
-                                    <a href="#" class="view" onclick="downloadImage('${imageDTO.physicalLocationUrl}')"><span title="Download Image" style="vertical-align:top">Download Image</span><img name="download image" src="images/uIEnhancementImages/down.png" width="16" height="16" valign="bottom"/></a></td>
+                                    <a href="#" class="view" onclick="downloadImage('${imageDTO.physicalLocationUrl}')"><span title="Download Image" style="vertical-align:top">Download Image</span></a></td>
                                 </td>
                             <td width="34%"/>
                                 <td width="1%" align="center" class="black_ar">
