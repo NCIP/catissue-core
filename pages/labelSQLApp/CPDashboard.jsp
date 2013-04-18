@@ -218,16 +218,14 @@ boolean isWhite = false;
 					<td class="black_new">Duration:</td>
 					<td>
 						<html:text property="fromDate" styleId="fromDate1" styleClass="black_new" style="width: 100px"/>
-						<img width="24" vspace="0" hspace="0" height="22" src="images/calendar.gif" alt="Calendar">
-						
+						<span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>
 					</td>
-					<td align="left" class="black_new" width="10%">
+					<td align="center"  class="black_new" width="10%">
 							To:
 					</td>
 					<td width="65%">
 						<html:text property="toDate" styleId="toDate1" styleClass="black_new" style="width: 100px"/>
-						<img width="24" vspace="0" hspace="0" height="22" src="images/calendar.gif" alt="Calendar">
-						
+						<span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>
 					</td>
 				</tr>
 				<tr><td></td></tr>				
@@ -271,8 +269,6 @@ function initCalendarUI()
 {
 	toDate= doInitCalendar("toDate1",false,'${uiDatePattern}');
 	fromDate= doInitCalendar("fromDate1",false,'${uiDatePattern}');	
-	document.getElementById("toDate1").value="MM-DD-YYYY";
-	document.getElementById("fromDate1").value="MM-DD-YYYY";
 }
 
 function downloadReport()
