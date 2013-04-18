@@ -84,6 +84,7 @@ function submitOrderNew(consentVerifiedValues)
 	{
 		if(loader.xmlDoc.responseText == "Success")
 		{
+			document.getElementById('error').style.display='none';
 			document.getElementById('success').style.display='block';
 		}
 		else
@@ -108,6 +109,7 @@ function submitOrderNew(consentVerifiedValues)
 				}
 			   }
 			}
+			document.getElementById('success').style.display='none';
 			document.getElementById('error').style.display='block';
 			tabbar.setTabActive('SimpleViewTab');
 			mygrid.refreshFilters();
@@ -280,8 +282,7 @@ function switchToOlderView()
 
 					<script>
 								  tabDataJSON['site']="";
-								  //common init code
-								  dhtmlx.skin ='dhx_skyblue';
+								  //common init code								 
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 								  var site_combo = new dhtmlXComboFromSelect("site","site","100px");
 								  site_combo.enableFilteringMode(true);
