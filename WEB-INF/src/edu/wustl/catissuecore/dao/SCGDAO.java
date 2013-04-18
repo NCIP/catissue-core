@@ -64,8 +64,8 @@ public class SCGDAO
 	{
 		SCGSummaryDTO scgSummDto = new SCGSummaryDTO();
 
-		String hql = "select scg.name ,scg.specimenCollectionSite.id "
-				+ "from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup as ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup "
+		String hql = "select scg.name ,scg.specimenCollectionSite.id,scg.collectionStatus"
+				+ " from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup as ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup "
 				+ "as scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?";
 
 		String rercEventhql = "select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters as sep,"
@@ -87,6 +87,7 @@ public class SCGDAO
 			scgSummDto.setScgName((String) scgData[0]);
 			scgSummDto.setSite((Long) scgData[1]);
 			scgSummDto.setScgId(scgId);
+			scgSummDto.setCollectionStatus((String)scgData[2]);
 		}
 
 		List receivedEvent = dao.executeQuery(rercEventhql, columnValueBeans);
@@ -112,7 +113,6 @@ public class SCGDAO
 		}
 		else
 		{
-
 			for (Object colEvent : collectedEvent)
 			{
 				Object[] colEventData = (Object[]) colEvent;
@@ -150,6 +150,11 @@ public class SCGDAO
 				Site site = new Site();
 				site.setId(summaryDto.getSite());
 				persistentSCG.setSpecimenCollectionSite(site);
+			}
+			
+			if(summaryDto.getCollectionStatus() != null)
+			{
+				persistentSCG.setCollectionStatus(summaryDto.getCollectionStatus());
 			}
 
 			Collection<SpecimenEventParameters> eventParams = persistentSCG

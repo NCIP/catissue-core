@@ -1,4 +1,4 @@
-var hourTimeCombo,minutesTimeCombo,rhourTimeCombo,rminutesTimeCombo,siteCombo,collectCombo,receiverCombo;
+var hourTimeCombo,minutesTimeCombo,rhourTimeCombo,rminutesTimeCombo,siteCombo,collectCombo,receiverCombo,collectionStatusCombo;
 
 function convertSelectToCombo()
 {
@@ -20,6 +20,12 @@ collectCombo.setSize("240");
 collectCombo.attachEvent("onSelectionChange",processComboChange);
 collectCombo.setName("collector");
 collectCombo.enableFilteringMode(true);
+
+collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
+collectionStatusCombo.setSize("240");
+collectionStatusCombo.attachEvent("onSelectionChange",processComboChange);
+collectionStatusCombo.setName("collectionStatus");
+
 
 hourTimeCombo = dhtmlXComboFromSelect("hoursTime");
 hourTimeCombo.setSize("40");

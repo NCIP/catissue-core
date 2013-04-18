@@ -46,26 +46,29 @@ public class DisplaySCGAction extends Action
 			if (request.getParameter("scgId") != null)
 			{
 				identifier = Long.valueOf(request.getParameter("scgId"));
-				//request.getSession().setAttribute("scgId",identifier);
+				//request.getSession().setAttribute("scgId", identifier);
 			}
 			else
 			{
 				identifier = (Long) request.getSession().getAttribute("scgId");
 			}
-			SCGSummaryDTO scgSummaryDTO = scgdao.getScgSummary(dao, identifier);
-			request.setAttribute("scgSummaryDTO", scgSummaryDTO);
-			//setSiteList
-			List<NameValueBean> sitelist = new SiteBizLogic().getSiteList(dao);
 
-			//setUserList
-			List<UserNameIdDTO> userList = new UserBizLogic().getUserList(dao);
-			List<NameValueBean> userNVBList = getUserNVBList(userList);
-			request.setAttribute("siteList", sitelist);
-			request.setAttribute("userList", userNVBList);
-			//sethoursList
-			request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
-			//setMinList
-			request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+				SCGSummaryDTO scgSummaryDTO = scgdao.getScgSummary(dao, identifier);
+				request.setAttribute("scgSummaryDTO", scgSummaryDTO);
+				//setSiteList
+				List<NameValueBean> sitelist = new SiteBizLogic().getSiteList(dao);
+
+				//setUserList
+				List<UserNameIdDTO> userList = new UserBizLogic().getUserList(dao);
+				List<NameValueBean> userNVBList = getUserNVBList(userList);
+				request.setAttribute("siteList", sitelist);
+				request.setAttribute("userList", userNVBList);
+				//sethoursList
+				request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+				//setMinList
+				request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+				request.setAttribute(Constants.COLLECTIONSTATUSLIST,
+						Constants.SCG_COLLECTION_STATUS_VALUES);
 
 		}
 		finally

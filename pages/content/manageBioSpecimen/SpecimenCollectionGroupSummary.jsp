@@ -9,7 +9,6 @@
 <script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
 
-
 <script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
@@ -39,7 +38,7 @@
 	<tr>
 		<td class="black_new padding_right_style black_ar" align="right" width="27%">
 		<b><bean:message key="specimenCollectionGroup.groupName"/></b></td>
-		<td colspan="3" width="25%"><html:text property="scgName" styleId="scgName" name="scgSummaryDTO" size="29" onblur="processData(this)"/> </td>
+		<td colspan="3" width="25%" class="black_new"><html:text property="scgName" styleId="scgName" name="scgSummaryDTO" size="29" onblur="processData(this)"/> </td>
 		<td class="black_new padding_right_style black_ar" align="right" width="25%">
 		 <b>  <bean:message key="specimenCollectionGroup.site"/> </b>
 		</td>
@@ -88,7 +87,7 @@
 	<td align="left" class="black_new date_text_field" >
 						<input type="text" name="collectedDate" class="black_ar date_text_field"  onblur="processData(this)"
 					id="collectedDate" size="10" value="${collectedformatedDate}"
-							 onclick="doInitCalendar('collectedDate',false);" /> </td>
+							 onclick="doInitCalendar('collectedDate',false,'${uiDatePattern}');" /> </td>
         
             <td align="left" style="padding-left:4px">
             
@@ -126,7 +125,7 @@
         
 						<input type="text" class="black_ar date_text_field"  name="receivedDate" onblur="processData(this)"
 							id="receivedDate" size="10" value="${receivedformatedDate}" 
-							 onclick="doInitCalendar('receivedDate',false);" />
+							 onclick="doInitCalendar('receivedDate',false,'${uiDatePattern}');" />
 	</td>
          <td align="left" style="padding-left:4px">
                  <select  class="frmFieldSized"  size="1" id="receivehoursTime" name="receiveHrTime"
@@ -157,8 +156,17 @@
 <td></td>
 </tr></table></td>
  	</tr>
+<tr class="tr_alternate_color_lightGrey"><td class="black_new padding_right_style black_ar" align="right">
+		 <b> <bean:message key="specimenCollectionGroup.collectionStatus"/> </b>
+		</td>
+<td align="left" class="black_new padding_right_style" colspan="7">
+<html:select property="collectionStatus" styleClass="black_ar" name="scgSummaryDTO" styleId="collectionStatus" size="1">
+								   <logic:iterate name="collectionStatusList" id="collectionStatusId">
+										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
+							       </logic:iterate>
+</html:select> </td>
     
- <tr> <td class="bottomtd" colspan="6"></td></tr>
+<tr> <td class="bottomtd" colspan="6"></td></tr>
 </table>
 </fieldset>
 </div>

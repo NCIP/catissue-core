@@ -226,7 +226,20 @@ function openClinportalPage(dataString)
 </script>
 
 <script language="JavaScript" type="text/javascript">
- var isPrintChecked = false;
+
+      function submitClicked()
+     {
+        if(isSCGPresent)
+        {
+              submitSCG();
+        }
+         else
+       {
+          pageSubmit();
+
+       }
+     }
+         var isPrintChecked = false;
 	//window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 	function ApplyToAll(object,type)
 		{
@@ -431,16 +444,16 @@ function pageSubmit() {
 		 <% }
 		 %>
 		//bug 12656
-		<% if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
+		<% if(request.getAttribute(Constants.PAGE_OF) != null && (request.getAttribute(Constants.PAGE_OF).equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU) || request.getAttribute(Constants.PAGE_OF).equals("pageOfMultipleSpWithMenu")))
 		{
 		  if(isSCGSubmit!=null)
 		  {%>
-                   url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
+                   url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=<%=request.getAttribute(Constants.PAGE_OF)%>&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
                 		
 <%}
 		  else
 		  {%>
-                     url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
+                     url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=<%=request.getAttribute(Constants.PAGE_OF)%>';
 		 <% }
 		 }%>
  url = url +"&IsToShowButton=true";
@@ -478,6 +491,12 @@ function pageSubmit() {
 	} */
 	function onParentRadioBtnClick() {
 		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=false&pageOf=specimenSummaryPage';
+                var pageOf1 = "${pageOf}";
+               if(pageOf1!=null && ((pageOf1=="pageOfMultipleSpWithoutMenu") || (pageOf1=="pageOfMultipleSpWithMenu")))
+               {
+                   url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=false&pageOf='+pageOf1;
+               }
+
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>&isSubmitRequest=false';
 			<%}%>
@@ -759,7 +778,17 @@ function setContainerValues()
 String lbl = "Apply first to all";
 %>
 <%@ include file="/pages/content/common/ActionErrors.jsp"%>
+<script>
+</script>
+<script>
+var isSCGPresent = false;
+</script>
+<logic:notEmpty name="scgSummaryDTO">
+<script>
+isSCGPresent = true;
+</script>
 <%@ include file="/pages/content/manageBioSpecimen/SpecimenCollectionGroupSummary.jsp"%>
+</logic:notEmpty>
 <logic:notEmpty name="messageKey">
 	<html:messages id="messageKey" message="true" header="messages.header"
 		footer="messages.footer">
@@ -1042,7 +1071,7 @@ String lbl = "Apply first to all";
 				<table border="0">
 					<tr>
 						<td><input class="blue_ar_b" type="button" value="Submit"
-							onclick="submitSCG()" /></td>
+							onclick="submitClicked()" /></td>
 						<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
  %>

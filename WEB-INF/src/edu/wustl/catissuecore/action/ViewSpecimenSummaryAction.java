@@ -100,10 +100,13 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			// Mandar : 5Aug08 ----------- start
 			//bug 13164 start
 			final String forwardToValue = request.getParameter(Constants.FORWARD_TO);
-			DisplaySCGAction action = new DisplaySCGAction();
-			ActionForward forward = action.execute(mapping, form, request, response);
-			if (Constants.SUCCESS.equalsIgnoreCase(forward.getName()))
+			final String pageOf = request.getParameter(Constants.PAGE_OF);
+			if(!(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU.equalsIgnoreCase(pageOf) || "pageOfMultipleSpWithMenu".equalsIgnoreCase(pageOf)))
 			{
+			 DisplaySCGAction action = new DisplaySCGAction();
+			 ActionForward forward = action.execute(mapping, form, request, response);
+			}
+			
 			if (forwardToValue != null)
 			{
 				if (Constants.CP_CHILD_SUBMIT.equals(forwardToValue))
@@ -247,7 +250,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 					summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 				}
 			}
-			final String pageOf = request.getParameter(Constants.PAGE_OF);
+			//final String pageOf = request.getParameter(Constants.PAGE_OF);
 			request.setAttribute(Constants.PAGE_OF, pageOf);
 
 			// Mandar: 16May2008 : For specimenDetails customtag --- start ---
@@ -273,7 +276,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				// request.setAttribute(Constants.PAGE_OF,pageOf);
 				return mapping.findForward(target);
 			}
-			}
+			
 
 			return mapping.findForward(target);
 		}

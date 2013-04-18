@@ -2538,8 +2538,17 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		  			label =defaultLabel.toString();
 		  		 }
 		  	 }
+		  	 else //add requirement title to label
+		  	 {
+		  		if(requirementTiltle!=null && !requirementTiltle.isEmpty())
+		  		{
+		  		  StringBuffer newLabel = new StringBuffer();
+		  		  newLabel = newLabel.append(label).append("(").append(requirementTiltle).append(")");
+		  		  label = newLabel.toString();
+		  		}
+		  	 }
 		  	
-		  		specimen.setLabel(label);
+		  	specimen.setLabel(label);
 		  	
 			specimen.setActivityStatus((String) obj[3]);
 			specimen.setSpecimenType((String) obj[4]);

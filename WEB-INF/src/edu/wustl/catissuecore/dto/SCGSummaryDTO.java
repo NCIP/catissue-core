@@ -16,6 +16,7 @@ public class SCGSummaryDTO
 	Long  receiver;
 	Date collectedDate;
 	Long collector;
+	String collectionStatus;
 			
 	public String getScgName()
 	{
@@ -86,6 +87,17 @@ public class SCGSummaryDTO
 	public void setScgId(Long scgId)
 	{
 		this.scgId = scgId;
+	}
+
+	
+	public String getCollectionStatus()
+	{
+		return collectionStatus;
+	}
+
+	public void setCollectionStatus(String collectionStatus)
+	{
+		this.collectionStatus = collectionStatus;
 	}
 
 }
