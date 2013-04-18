@@ -7,7 +7,7 @@
 "Exported On:","$exportedOn"
 "Exported By:","$exportedBy"
 "Order Items Detail:"
-"Specimen Label","Specimen Type","Specimen Class","Available Quantity","Requested Quantity","Status","Description","OrderItemId","SpecimenId"
+"Specimen Label","Specimen Type","Specimen Class","Available Quantity","Requested Quantity","Status","Description"
 #foreach( $gridData in $orderItemsDetail )
-"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${gridData.status}","${gridData.description}","${gridData.OrderItemId}","${gridData.specimenId}"
+"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${gridData.status}","${gridData.description}"
 #end
