@@ -50,13 +50,8 @@
 												}
 												else
 												{
-													ConsentTierData consentForm =(ConsentTierData)form;
-													List consentTier=(List)consentForm.getConsentTiers();
 													String str=normalSubmit;
-													if(consentTier.size()>0)
-													{
-														str = "popupWindow('"+ consentTier.size() +"')";
-													}
+													
 												%>
 													<html:button styleClass="blue_ar_b"
 															property="submitPage"

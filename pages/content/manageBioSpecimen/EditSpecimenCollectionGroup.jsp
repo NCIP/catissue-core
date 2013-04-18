@@ -391,23 +391,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 
 
 
-	<!--  Consent Tracking Module Virender mehta	 -->
-	<%
-		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");
-		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
-		{
-	%>
-	<tr>
-		<td colspan="3">
-		<div>
-	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %>
-		</div>
-		</td>
-	</tr>
-	<%
-		}
-	%>
-	<!--  Consent Tracking Module Virender mehta -->
 		<tr>
 			<td colspan="3">
 				<div >
