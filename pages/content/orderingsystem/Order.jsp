@@ -397,7 +397,7 @@ function loadTab()
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
 	tabbar.addTab("SimpleViewTab", "Simple View", "100px");	
 	tabbar.addTab("ConsentViewTab", "Consents", "100px");
-	
+	tabbar.enableAutoSize(false,true);
 	tabbar.setContent("SimpleViewTab","SimpleViewDiv");
 	tabbar.setTabActive('SimpleViewTab');
 	
