@@ -24,14 +24,26 @@ function initializeSCGCombo(operation)
 		scgCombo.collectionEventCollectionProcedureCombo = dhtmlXComboFromSelect("collectionEventCollectionProcedure");  
 		scgCombo.collectionEventCollectionProcedureCombo.setOptionWidth(165);
 		scgCombo.collectionEventCollectionProcedureCombo.setSize(165);
+		if(scgCombo.collectionEventCollectionProcedureCombo.getSelectedValue()=="-1"){
+			scgCombo.collectionEventCollectionProcedureCombo.setComboValue("Use CP Defaults");
+			scgCombo.collectionEventCollectionProcedureCombo.setComboText("Use CP Defaults");
+		}
 		
 		scgCombo.collectionEventContainerCombo = dhtmlXComboFromSelect("collectionEventContainer");  
 		scgCombo.collectionEventContainerCombo.setOptionWidth(165);
 		scgCombo.collectionEventContainerCombo.setSize(165);
+		if(scgCombo.collectionEventContainerCombo.getSelectedValue()=="-1"){
+			scgCombo.collectionEventContainerCombo.setComboValue("Use CP Defaults");
+			scgCombo.collectionEventContainerCombo.setComboText("Use CP Defaults");
+		}
 		
 		scgCombo.receivedEventReceivedQualityCombo = dhtmlXComboFromSelect("receivedEventReceivedQuality");  
 		scgCombo.receivedEventReceivedQualityCombo.setOptionWidth(165);
 		scgCombo.receivedEventReceivedQualityCombo.setSize(165);
+		if(scgCombo.receivedEventReceivedQualityCombo.getSelectedValue()=="-1"){
+			scgCombo.receivedEventReceivedQualityCombo.setComboValue("Use CP Defaults");
+			scgCombo.receivedEventReceivedQualityCombo.setComboText("Use CP Defaults");
+		}
 
 		scgCombo.activityStatusCombo = dhtmlXComboFromSelect("activityStatus");  
 		scgCombo.activityStatusCombo.setOptionWidth(165);
