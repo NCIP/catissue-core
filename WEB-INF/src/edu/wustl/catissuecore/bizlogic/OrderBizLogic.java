@@ -2278,7 +2278,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			orderItemDTO.setAvailableQuantity(Double.parseDouble(orderItemDetails[3].toString()));
 			orderItemDTO.setRequestedQuantity((Double.parseDouble(orderItemDetails[4].toString())));
 			orderItemDTO.setStatus(orderItemDetails[5].toString());
-			orderItemDTO.setDescription(orderItemDetails[6].toString());
+			if(orderItemDetails[6]!=null)
+			{
+				orderItemDTO.setDescription(orderItemDetails[6].toString());
+			}
 			orderItemDTO.setOrderItemId(Long.parseLong(orderItemDetails[7].toString()));
 			orderItemDTO.setSpecimenId(Long.parseLong(orderItemDetails[8].toString()));
 			if (orderItemDetails[9] != null)
