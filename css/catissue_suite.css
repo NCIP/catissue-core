@@ -1094,3 +1094,14 @@ input.actionButton{ /* optional style for form and action buttons */
 	font-size:11px;
 	color:#808080;
 }
+
+.align_right_style_new{
+	padding-right: 22px;
+	text-align:right;
+}
+
+.align_radio_buttons
+{
+	vertical-align:2px; 
+	display:inline-block;
+}

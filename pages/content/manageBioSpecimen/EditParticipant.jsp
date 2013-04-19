@@ -388,11 +388,13 @@ function newConsentTab(levelId)
 							%>
 							<html:radio property="vitalStatus"
 								onclick="onVitalStatusRadioButtonClick(this)"
-								value="<%=nameValueBean.getValue()%>" style="vertical-align:bottom">
+								value="<%=nameValueBean.getValue()%>">
+								<span class="align_radio_buttons">
 								<%=nameValueBean.getName()%>
+								</span>	
 							</html:radio>&nbsp;&nbsp;&nbsp;
 								</logic:iterate></td>
-					</tr>
+					 </tr>
 					<c:if test="${i%2 == 0}">
 						<tr class="${tr_white_color}">
 					</c:if>
@@ -440,8 +442,10 @@ function newConsentTab(levelId)
 								NameValueBean nameValueBean = (NameValueBean) nvb;
 							%>
 							<html:radio property="gender"
-								value="<%=nameValueBean.getValue()%>" style="vertical-align:bottom">
-								<%=nameValueBean.getName()%>
+								value="<%=nameValueBean.getValue()%>">
+									<span class="align_radio_buttons">
+										<%=nameValueBean.getName()%>
+									</span>	
 							</html:radio>&nbsp; &nbsp;
 								</logic:iterate>
 						</td>
@@ -539,8 +543,8 @@ function newConsentTab(levelId)
 						<c:forEach var="eth" items="${ethnicityList}" varStatus="loop">
 							 <c:if test="${eth.name != '-- Select --'}">
 								<td width="25%" class="black_ar">
-								<html:radio styleId="ethnicity" property="ethnicity" value="${eth.value}" style="vertical-align:bottom">
-										${eth.value} 
+								<html:radio styleId="ethnicity" property="ethnicity" value="${eth.value}">
+									<span class="align_radio_buttons">${eth.value} </span> 
 								</html:radio>
 								</td>
 							  </c:if>
@@ -577,9 +581,11 @@ function newConsentTab(levelId)
 							 	<c:if test="${listStatusId != '-- Select --'}">
 								<td width="25%" class="black_ar">	
 									<html:radio property="activityStatus" onclick="checkNewActivityStatus(this,'/QueryManageBioSpecimen.do')"
-								                value="${listStatusId}" style="vertical-align:bottom">
-																<bean:write name='listStatusId'/>
-									</html:radio>
+								                value="${listStatusId}">
+													<span class="align_radio_buttons">
+														<bean:write name='listStatusId'/>
+													</span>
+ 									</html:radio>
 								</td>	
 							   </c:if>
 							 </logic:iterate>
@@ -591,12 +597,15 @@ function newConsentTab(levelId)
 					</table>
 					</td>
 			</tr>
+			
 			<tr>
 			<td colspan="2" align="left"  class="showhide" height="100%">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" height="120%">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" height="80px">
 					<tr>
 						<td colspan="4" align="left" class="tr_bg_blue1">
-							<span class="blue_ar_b">&nbsp;<bean:message key="participant.collectionProtocolRegDetails" /> </span>
+							<span class="blue_ar_b">&nbsp;
+								<bean:message key="participant.collectionProtocolRegDetails" /> 
+							</span>
 						</td>
 					</tr>
 					<c:if test="${i%2 == 0}">
@@ -606,21 +615,22 @@ function newConsentTab(levelId)
 						<tr class="${tr_grey_color}">
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
-						<td valign="middle"   class="black_ar align_right_style" align="right" height="100%" width="18%"><b>
+						<td valign="middle"   class="black_ar align_right_style_new"  height="100%" width="19%"><b>
 								<bean:message key="participant.collectionProtocolReg.barcode" /> </b>
 						</td>
 
-						<td valign="middle" class="black_ar" height="100%" > 
+						<td valign="middle" class="black_ar"> 
 							<html:text property="barcode" styleClass="black_ar"  styleId="barcode" size="27" />			
 						</td>
-						<td valign="middle" class="black_ar align_right_style1" align="right" height="100%" width="18%">
+						
+						<td valign="middle" class="black_ar align_right_style_new">
 							<c:if test="${(empty ppIdFormat && operation eq 'add' ) or operation eq 'edit'}">
 								&nbsp; <b> <bean:message key="participant.collectionProtocolReg.participantProtocolID" /> </b>
 							</c:if>
 							
 						</td>
 
-						<td valign="middle"  class="black_ar align_left_style" height="100%"> 
+						<td valign="middle"  class="black_ar"> 
 						<c:choose>
 							<c:when  test="${(empty ppIdFormat && operation eq 'add' ) or (operation eq 'edit' && empty ppIdFormat)}">
 								<html:text property="ppId" styleClass="black_ar" styleId="ppId" size="27" />			
@@ -635,9 +645,7 @@ function newConsentTab(levelId)
 						</c:choose>
 								
 						</td>
-						
-						
-					   </tr>
+					</tr>
 					
 					<c:if test="${i%2 == 0}">
 						<tr class="${tr_white_color}">
@@ -646,20 +654,20 @@ function newConsentTab(levelId)
 						 <tr class="${tr_grey_color}">
 					</c:if>
 					<c:set var="i" value="${i+1}" scope="request" />
-						<td valign="middle" class="black_ar align_right_style1"  align="right" height="100%">
+						<td valign="middle" class="black_ar align_right_style_new">
 							<span class="blue_ar_b">
 							&nbsp;
 								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
 							 <b>	<bean:message key="participant.collectionProtocolReg.participantRegistrationDate" /> </b>
 						</td>
 
-						<td valign="middle" class="black_ar align_left_style" height="100%"> 
+						<td valign="middle" class="black_ar"> 
 							<html:text property="registrationDate" styleClass="black_ar"
 							   styleId="registrationDate" size="10" onclick="doInitCalendar('registrationDate',false,'${uiDatePattern}');"/>	
 							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 						</td>
 						
-						<td valign="middle" height="100%"  class="black_ar align_right_style" align="right">
+						<td valign="middle" class="black_ar align_right_style_new"> 
 							<logic:equal name="operation" value="edit">
 							<label for="activityStatus"	class="black_ar">
 								<b><bean:message
@@ -667,15 +675,16 @@ function newConsentTab(levelId)
 								</logic:equal>
 						</td>
 								
-						<td  valign="middle" height="100%">
+						<td  valign="middle">
 						<logic:equal name="operation" value="edit">
 						<table width="84%">
 						 <logic:iterate name="activityStatusList" id="listStatusId">
 							<c:if test="${listStatusId != '-- Select --'}">
 							<td  valign="middle" width="25%" class="black_ar">	
-								<html:radio property="cprActivityStatus" value="${listStatusId}" style="vertical-align:bottom">
+								<html:radio property="cprActivityStatus" value="${listStatusId}">
+											<span class="align_radio_buttons">	
 												<bean:write name='listStatusId'/>
-											
+											</span>	
 								</html:radio>
 							</td>	
 						   </c:if>

@@ -290,23 +290,7 @@ Ext.onReady(function(){
                 href:'CpBasedSearch.do'
 
             },
-			{
-                text: 'Participant',
-				tooltip:'Add Participant',
-				href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'Add',
-                            href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true'
-                        }, {
-                            text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant'
-                        }
-                    ]
-                }
-            },
+
               {
                 text: 'Specimen',
 				tooltip:'Edit Specimen',

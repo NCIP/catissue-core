@@ -130,12 +130,12 @@
 			<td width="35%">
 				<div id="addSCGEvents"> </div>
 			</td>
-			<td width="25%">	
+			<td width="35%">	
 			 <span style="vertical-align:bottom">
 				<a href="#" title="Add" style="padding-right:7px;"><img src="images/Action-add.png" alt="Create SCG" onclick="addNewScg()"></a>
 				<a href="#" title="Edit" style="padding-right:7px;"> <img src="images/Action-edit.png" alt="Edit" onclick="editScg()"></a>
-                                <html:button styleClass="blue_ar_b" property="collectSpecimenPerCP"	title="Collect Specimens  As Per CP" value="Collect Specimens" onclick="collectSpecimen();">
-				 </html:button>
+					<html:button styleClass="blue_ar_b" property="collectSpecimenPerCP"	title="Collect Specimens  As Per CP" value="Collect Specimens" onclick="collectSpecimen();">
+				    </html:button>
 				<!-- <a href="#" title="View"> <img src="images/Action-view.png" alt="View" onclick="scgOperation('view')"></a> &nbsp;
 				<a href="#" title="Delete"><img src="images/Action-close.png" alt="Delete" onclick="scgOperation('delete')"></a> &nbsp;
 				<a href="#" title="Print"><img src="images/Action-print.png" alt="Print" onclick="scgOperation('print')"></a> -->

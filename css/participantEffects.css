@@ -1,4 +1,8 @@
   /* Added By Ankush */
+  
+a, img {
+    border:none;
+} 
 
 .align_right_style{
 		padding-right: 25px;	
