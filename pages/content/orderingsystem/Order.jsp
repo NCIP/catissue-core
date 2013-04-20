@@ -418,7 +418,7 @@ function gotoconsentTab()
 		var specimenLabels = new Array();
 		var arrayCount=0;
 		ifAnyDistributed='false';
-		for(var row=1;row<mygrid.getRowsNum();row++)
+		for(var row=1;row<=mygrid.getRowsNum();row++)
 		{
 			var statusValue=mygrid.cellById(row,6).getValue();
 			if(statusValue == 'Distributed' || statusValue == 'Distributed And Close' || statusValue == 'Distributed And Close(Special)')
