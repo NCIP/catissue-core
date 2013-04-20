@@ -1005,20 +1005,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			 * String[] whereColumnName = {"status"}; String[]
 			 * whereColumnCondition = {"in"};
 			 */
-			final String[] selectColName = null;
 
-			final List whereColValues = new ArrayList();
-			whereColValues.add(new String("New"));
-			whereColValues.add(new String("Pending"));
-
-			final QueryWhereClause queryWhereClause = new QueryWhereClause(
-					OrderDetails.class.getName());
-			queryWhereClause.addCondition(new INClause("status", whereColValues.toArray()));
-
-			final Object[] whereColumnValues = {whereColValues.toArray()};
 			String hql = " from " + OrderDetails.class.getName()
-					+ " order where order.status in ('New','Pending') "
-					+ " order by order.requestedDate desc";
+					+ " order order by order.requestedDate desc";
 			orderListFromDB = dao.executeQuery(hql, null);
 			// orderListFromDB = dao.retrieve(OrderDetails.class.getName(),
 			// selectColName,
