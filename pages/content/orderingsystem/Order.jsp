@@ -208,7 +208,7 @@ function switchToOlderView()
 						</strong>
 					</td>
 
-	                <td width="33%" class="black_ar">
+	                <td width="23%" class="black_ar">
 	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="30" name="DisplayOrderDTO" onblur="processData(this)"/>
 					</td>
 			
@@ -217,14 +217,14 @@ function switchToOlderView()
 						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
 						</strong>
 					</td>
- 					<td width="33%" class="black_ar">
+ 					<td width="43%" class="black_ar">
 						<html:select property="distributionProtocolName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="distributionProtocolName" size="1" onblur="processData(this)">
 							<html:options collection="distributionProtocolList" labelProperty="name" property="value" />
 					       </html:select>
 					</td>
 					<script>
 						distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
-						distributionProtocolNameCombo.setSize(200);
+						distributionProtocolNameCombo.setSize(350);
 						if(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}')==null)
 						{
 						  distributionProtocolNameCombo.setComboValue("-1");		
@@ -238,7 +238,7 @@ function switchToOlderView()
 
 				<tr class="${tr_white_color}">
 						
-						<td width="17%" class="black_ar align_right_style"><strong>
+						<td class="black_ar align_right_style"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
 							</strong>
 						</td>
