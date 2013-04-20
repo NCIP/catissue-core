@@ -2595,7 +2595,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			orderDetailMap.put("exportedOn", currentDate);
 			orderDetailMap.put("exportedBy", exportedBy);
 			orderDetailMap.put("orderItemsDetail", getOrderItemsDetail(orderId, dao));
-			orderDetailMap.put("dateFormat", CommonServiceLocator.getInstance().getDatePattern());
 			String obj = VelocityManager.getInstance().evaluate(orderDetailMap,
 					"orderGridCsvTemplate.vm");
 			returnMap.put("fileData", obj.getBytes());

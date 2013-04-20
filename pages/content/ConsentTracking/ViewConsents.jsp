@@ -43,6 +43,22 @@
 <script>
 var comboData = new Array();
 var statusId = new Array();
+
+function checkDisable(){
+	var hideCheck = true;
+	for(var cnt = 0;cnt<comboData.length;cnt++){
+		var selectedField = comboData[cnt];
+		if(selectedField.getSelectedValue()=='Withdrawn'){
+			//alert('Withdrawn');
+			document.getElementById("disableConsentCheckboxDiv").style.display = "block";
+			hideCheck = false;
+		}
+	}
+	if(hideCheck){
+		document.getElementById("disableConsentCheckboxDiv").style.display = "none";
+		document.getElementsByName("disableConsentCheckbox")[0].checked  = false;
+	}
+}
 </script>
 
 
@@ -54,7 +70,7 @@ var statusId = new Array();
 			<tr>
 				<td>
 					<div id="error" class="alert alert-error" style="display:none">
-						<strong>Error!</strong> Change a few things up and try submitting again.
+						<strong>Error!</strong><span id="errorMsg"></span>
 					</div>
 					<div class="alert alert-success" id="success" style="display:none">
 					   Consents updated Sucessfully.
@@ -204,6 +220,7 @@ var statusId = new Array();
 										  //response_combo.enableFilteringMode(true);
 										  response_combo.setSize(200);
 										  response_combo.setComboValue('${consentTierDTO.participantResponses}');
+										  response_combo.attachEvent("onChange",checkDisable);
 										  comboData.push(response_combo);
 										  statusId.push("${consentTierDTO.id}");
 										</script>
@@ -222,12 +239,14 @@ var statusId = new Array();
 									</select>
 									<script>
 										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-										  var response_combo = new dhtmlXCombo("${consentTierDTO.id}","${consentTierDTO.id}","100px");
+										  var response_combo1 = new dhtmlXCombo("${consentTierDTO.id}","${consentTierDTO.id}","100px");
 										  //response_combo.enableFilteringMode(true);
-										  response_combo.setSize(200);
-										  response_combo.setComboValue('${consentTierDTO.status}');
-										  comboData.push(response_combo);
+										  response_combo1.setSize(200);
+										  response_combo1.setComboValue('${consentTierDTO.status}');
+										  response_combo1.attachEvent("onChange",checkDisable);
+										  comboData.push(response_combo1);
 										  statusId.push("${consentTierDTO.id}");
+										  
 									</script>
 									
 									</td>
@@ -239,7 +258,12 @@ var statusId = new Array();
 					</td>
 				</tr>			
 
-				
+				<tr>
+					<td align="left" colspan="2" class="buttonbg">
+						<div style="display:none;" id="disableConsentCheckboxDiv"><input type='checkbox' name="disableConsentCheckbox"  style="vertical-align: middle" ><span style="vertical-align:middle" class="black_ar">Disable specimens?</span>
+						</div>
+					</td>
+				</tr>
 				<tr>
 					<td align="left" colspan="2" class="buttonbg">
 						<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
@@ -247,7 +271,6 @@ var statusId = new Array();
 							<td class="buttonbg">
 							<input type="button" value="Submit"
 							onclick="onSubmit()" class="blue_ar_b">
-							<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
 							</td>
 							</tr>
 						</table>
@@ -256,6 +279,7 @@ var statusId = new Array();
 			 </table>
 			
 		<script>
+			
 			
 			function onSubmit(){
 				var consentDto = {};
@@ -280,7 +304,8 @@ var statusId = new Array();
 				consentDto.consentLevelId = document.getElementById("consentLevelId").value;
 				var consentLevel = document.getElementById("consentLevel").value;
 				var consentLevelId = document.getElementById("consentLevelId").value;
-				var lodder = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateConsentTierStatus&consentLevel="+consentLevel+"&consentLevelId="+consentLevelId+"&dataJSON="+JSON.stringify(tabDataJSON)+"&consentDto="+JSON.stringify(consentDto));
+				var disposeSpecimen = document.getElementsByName("disableConsentCheckbox")[0].checked ;
+				var lodder = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateConsentTierStatus&consentLevel="+consentLevel+"&consentLevelId="+consentLevelId+"&dataJSON="+JSON.stringify(tabDataJSON)+"&disposeSpecimen="+disposeSpecimen+"&consentDto="+JSON.stringify(consentDto));
 				if(lodder.xmlDoc.responseText != null)
 				{
 					var response = eval('('+lodder.xmlDoc.responseText+')')
@@ -291,8 +316,9 @@ var statusId = new Array();
 					else
 					{
 						document.getElementById('error').style.display='block';
+						document.getElementById('errorMsg').innerHTML=response.msg;
 					}
 				}
-				}
+		}
 		</script>
 	

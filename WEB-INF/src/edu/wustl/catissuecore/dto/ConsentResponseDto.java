@@ -12,7 +12,14 @@ public class ConsentResponseDto {
 	List<ConsentTierDTO> consentTierList;
 	String consentLevel; // It could be Participant,SCG or specimen Level
 	Long consentLevelId;
+	boolean disposeSpecimen;
 	
+	public boolean isDisposeSpecimen() {
+		return disposeSpecimen;
+	}
+	public void setDisposeSpecimen(boolean disposeSpecimen) {
+		this.disposeSpecimen = disposeSpecimen;
+	}
 	public List<ConsentTierDTO> getConsentTierList() {
 		return consentTierList;
 	}

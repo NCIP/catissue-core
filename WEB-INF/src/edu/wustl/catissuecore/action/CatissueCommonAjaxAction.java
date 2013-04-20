@@ -786,6 +786,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		{
 		}.getType();
 		List<ConsentTierDTO> ConsentTierDtoList = gson.fromJson(consentTierListJSON, listType);
+		boolean disposeSpecimen = Constants.TRUE.equals(request.getParameter("disposeSpecimen"))? true : false;
 		ConsentTrackingBizLogic consentTrackingBizLogic = new ConsentTrackingBizLogic();
 		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
@@ -797,7 +798,8 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		String successString = "success";
 		try
 		{
-			consentTrackingBizLogic.updateConsentTier(consentsDto, dao);
+			consentsDto.setDisposeSpecimen(disposeSpecimen);
+			consentTrackingBizLogic.updateConsentTier(consentsDto,dao,sessionDataBean);
 			returnMap.put("msg", "");
 			returnMap.put("success", "success");
 			dao.commit();
@@ -810,6 +812,9 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		catch (ApplicationException ex)
 		{
 			returnMap.put("msg", ex.getMsgValues());
+			returnMap.put("success", "failure");
+		}catch(Exception ex){
+			returnMap.put("msg", "Error occured at server side.");
 			returnMap.put("success", "failure");
 		}
 		finally

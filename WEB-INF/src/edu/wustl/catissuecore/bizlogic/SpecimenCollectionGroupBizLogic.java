@@ -87,6 +87,8 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -130,8 +132,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				if (siteObj != null)
 				{
 					// check for closed Site
-					this.checkStatus(dao, scg.getSpecimenCollectionSite(),
-							"Site");
+					this.checkStatus(dao, scg.getSpecimenCollectionSite(), "Site");
 					scg.setSpecimenCollectionSite((Site) siteObj);
 				}
 			}
@@ -139,8 +140,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			final String[] selectColumnName = {"activityStatus", "collectionProtocol.id",
 					"collectionProtocol.activityStatus"};
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause.addCondition(new EqualClause("id", scg
-					.getCollectionProtocolEvent().getId()));
+			queryWhereClause.addCondition(new EqualClause("id", scg.getCollectionProtocolEvent()
+					.getId()));
 
 			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 			CollectionProtocolEvent cpe = null;
@@ -151,8 +152,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				{
 					if (scg.getCollectionProtocolEvent() != null)
 					{
-						cpe = scg
-								.getCollectionProtocolEvent();
+						cpe = scg.getCollectionProtocolEvent();
 					}
 					else
 					{
@@ -192,8 +192,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				// Patch: 8533_6
 				if (scg.getIsCPBasedSpecimenEntryChecked())
 				{
-					specimenColl = this.getCollectionSpecimen(dao, scg,
-							cpe, userId);
+					specimenColl = this.getCollectionSpecimen(dao, scg, cpe, userId);
 				}
 			}
 
@@ -205,14 +204,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			// This check is added if empty values added by UI tnen shud add
 			// default values in parameters
-			this.checkSCGEvents(scg.getSpecimenEventParametersCollection(),
-					sessionDataBean);
+			this.checkSCGEvents(scg.getSpecimenEventParametersCollection(), sessionDataBean);
 			dao.insert(scg);
-			if (specimenColl != null && !reportLoaderFlag &&
-					scg.getIsToInsertAnticipatorySpecimens())
+			if (specimenColl != null && !reportLoaderFlag
+					&& scg.getIsToInsertAnticipatorySpecimens())
 			{
-				new NewSpecimenBizLogic().insertMultiple(specimenColl, dao,
-						sessionDataBean);
+				new NewSpecimenBizLogic().insertMultiple(specimenColl, dao, sessionDataBean);
 			}
 		}
 		catch (final DAOException daoExp)
@@ -300,8 +297,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		Specimen newSpecimen;
 		try
 		{
-			newSpecimen = (Specimen) new SpecimenObjectFactory().getDomainObject(reqSpecimen
-					.getClassName(), reqSpecimen);
+			newSpecimen = (Specimen) new SpecimenObjectFactory().getDomainObject(
+					reqSpecimen.getClassName(), reqSpecimen);
 		}
 		catch (final AssignDataException e1)
 		{
@@ -437,8 +434,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException exception)
 		{
 			LOGGER.error(exception.getMessage(), exception);
-			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
-					.getMsgValues());
+			throw this.getBizLogicException(exception, exception.getErrorKeyName(),
+					exception.getMsgValues());
 		}
 	}
 
@@ -484,22 +481,23 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			this.retrieveSpecimens(childSpecimenCollection);
 		}
 	}
-//removed unused method
-//	/**
-//	 *
-//	 * @param obj : obj
-//	 * @return Set
-//	 */
-//	private Set getProtectionObjects(AbstractDomainObject obj)
-//	{
-//		final Set protectionObjects = new HashSet();
-//
-//		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
-//		protectionObjects.add(specimenCollectionGroup);
-//
-//		this.LOGGER.debug(protectionObjects.toString());
-//		return protectionObjects;
-//	}
+
+	//removed unused method
+	//	/**
+	//	 *
+	//	 * @param obj : obj
+	//	 * @return Set
+	//	 */
+	//	private Set getProtectionObjects(AbstractDomainObject obj)
+	//	{
+	//		final Set protectionObjects = new HashSet();
+	//
+	//		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
+	//		protectionObjects.add(specimenCollectionGroup);
+	//
+	//		this.LOGGER.debug(protectionObjects.toString());
+	//		return protectionObjects;
+	//	}
 
 	/**
 	 * @param obj : obj
@@ -620,8 +618,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				{
 					// check for closed CollectionProtocol
 					final CollectionProtocolEvent cpe = (CollectionProtocolEvent) proxyObject;
-					if (!cpe.getCollectionProtocol().getId().equals(
-							oldspecimenCollectionGroup.getCollectionProtocolEvent()
+					if (!cpe.getCollectionProtocol()
+							.getId()
+							.equals(oldspecimenCollectionGroup.getCollectionProtocolEvent()
 									.getCollectionProtocol().getId()))
 					{
 						this.checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
@@ -676,14 +675,15 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				{
 					// updateOffset(offset, specimenCollectionGroup,
 					// sessionDataBean, dao);
-					this.getDetailsOfCPRForSCG(specimenCollectionGroup
-							.getCollectionProtocolRegistration(), dao);
+					this.getDetailsOfCPRForSCG(
+							specimenCollectionGroup.getCollectionProtocolRegistration(), dao);
 					final CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 					cprBizLogic.checkAndUpdateChildOffset(dao, sessionDataBean,
-							oldspecimenCollectionGroup.getCollectionProtocolRegistration(), offset
-									.intValue());
-					cprBizLogic.updateForOffset(dao, sessionDataBean, specimenCollectionGroup
-							.getCollectionProtocolRegistration(), offset.intValue());
+							oldspecimenCollectionGroup.getCollectionProtocolRegistration(),
+							offset.intValue());
+					cprBizLogic.updateForOffset(dao, sessionDataBean,
+							specimenCollectionGroup.getCollectionProtocolRegistration(),
+							offset.intValue());
 				}
 			}
 
@@ -702,14 +702,17 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			// change by pathik
 			if (!specimenCollectionGroup.getCollectionProtocolRegistration().getId().equals(0L)
-					&& !persistentSCG.getCollectionProtocolRegistration().getId().equals(
-							specimenCollectionGroup.getCollectionProtocolRegistration().getId()))
+					&& !persistentSCG
+							.getCollectionProtocolRegistration()
+							.getId()
+							.equals(specimenCollectionGroup.getCollectionProtocolRegistration()
+									.getId()))
 			{
 				persistentSCG.setCollectionProtocolRegistration(specimenCollectionGroup
 						.getCollectionProtocolRegistration());
 			}
 
-			dao.update(persistentSCG,oldspecimenCollectionGroup);
+			dao.update(persistentSCG, oldspecimenCollectionGroup);
 
 			/**
 			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741
@@ -719,8 +722,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// Populating Events in all specimens
 			if (specimenCollectionGroup.isApplyEventsToSpecimens())
 			{
-				this.updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup,
-						sessionDataBean);
+				this.updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup, sessionDataBean);
 			}
 
 			// Disable the related specimens to this specimen group
@@ -758,25 +760,30 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param persistentSCG
 	 * @throws BizLogicException
 	 */
-	private void setConsetTierStatus(
-			final SpecimenCollectionGroup specimenCollectionGroup,
-			SpecimenCollectionGroup persistentSCG) throws BizLogicException {
-			Collection<ConsentTierStatus> consentColl=specimenCollectionGroup.getConsentTierStatusCollection();
-			Collection<ConsentTierStatus> persistConsentTierStatusCollection=persistentSCG.getConsentTierStatusCollection();
-			if(consentColl!=null)
+	private void setConsetTierStatus(final SpecimenCollectionGroup specimenCollectionGroup,
+			SpecimenCollectionGroup persistentSCG) throws BizLogicException
+	{
+		Collection<ConsentTierStatus> consentColl = specimenCollectionGroup
+				.getConsentTierStatusCollection();
+		Collection<ConsentTierStatus> persistConsentTierStatusCollection = persistentSCG
+				.getConsentTierStatusCollection();
+		if (consentColl != null)
+		{
+			for (ConsentTierStatus consentTierStatus : consentColl)
 			{
-				for (ConsentTierStatus consentTierStatus : consentColl) {
-					if(persistConsentTierStatusCollection!=null)
-					{	
-						for (ConsentTierStatus persistConsentTierStatus : persistConsentTierStatusCollection) {
-							if(persistConsentTierStatus.getConsentTier().getId().equals(consentTierStatus.getConsentTier().getId()))
-							{
-								persistConsentTierStatus.setStatus(consentTierStatus.getStatus());
-							}
+				if (persistConsentTierStatusCollection != null)
+				{
+					for (ConsentTierStatus persistConsentTierStatus : persistConsentTierStatusCollection)
+					{
+						if (persistConsentTierStatus.getConsentTier().getId()
+								.equals(consentTierStatus.getConsentTier().getId()))
+						{
+							persistConsentTierStatus.setStatus(consentTierStatus.getStatus());
 						}
 					}
 				}
 			}
+		}
 	}
 
 	/**
@@ -913,25 +920,21 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				toChangeCEP.setUser(newCollectionEventParameters.getUser());
 			}
-			toChangeCEP.setTimestamp(newCollectionEventParameters
-					.getTimestamp());
+			toChangeCEP.setTimestamp(newCollectionEventParameters.getTimestamp());
 
 			if (!StringUtils.isBlank(collProcedure) && !collProcedure.equals(Constants.CP_DEFAULT))
 			{
-				toChangeCEP
-						.setCollectionProcedure(newCollectionEventParameters
-								.getCollectionProcedure());
+				toChangeCEP.setCollectionProcedure(newCollectionEventParameters
+						.getCollectionProcedure());
 			}
 			if (newCollectionEventParameters.getComment() != null
 					&& !newCollectionEventParameters.getComment().equals(""))
 			{
-				toChangeCEP.setComment(newCollectionEventParameters
-						.getComment());
+				toChangeCEP.setComment(newCollectionEventParameters.getComment());
 			}
 			if (!StringUtils.isBlank(collContainer) && !collContainer.equals(Constants.CP_DEFAULT))
 			{
-				toChangeCEP.setContainer(newCollectionEventParameters
-						.getContainer());
+				toChangeCEP.setContainer(newCollectionEventParameters.getContainer());
 			}
 
 			if (toChangeCEP.getUser() == null)
@@ -940,9 +943,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			if (toChangeCEP.getCollectionProcedure().equals(""))
 			{
-				toChangeCEP
-						.setCollectionProcedure((String) DefaultValueManager
-								.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+				toChangeCEP.setCollectionProcedure((String) DefaultValueManager
+						.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 			}
 			if (toChangeCEP.getContainer().equals(""))
 			{
@@ -958,16 +960,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			if (newreceivedEventParameters.getComment() != null
 					&& !newreceivedEventParameters.getComment().equals(""))
 			{
-				toChanageREP
-						.setComment(newreceivedEventParameters.getComment());
+				toChanageREP.setComment(newreceivedEventParameters.getComment());
 			}
 			if (!StringUtils.isBlank(recQty) && !recQty.equals(Constants.CP_DEFAULT))
 			{
-				toChanageREP.setReceivedQuality(newreceivedEventParameters
-						.getReceivedQuality());
+				toChanageREP.setReceivedQuality(newreceivedEventParameters.getReceivedQuality());
 			}
-			toChanageREP
-					.setTimestamp(newreceivedEventParameters.getTimestamp());
+			toChanageREP.setTimestamp(newreceivedEventParameters.getTimestamp());
 			if (newreceivedEventParameters.getUser() != null)
 			{
 				toChanageREP.setUser(newreceivedEventParameters.getUser());
@@ -1017,8 +1016,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private void updateEvents(Collection newEventColl,
-			SpecimenCollectionGroup oldspecimenCollectionGroup,
-			SessionDataBean sessionDataBean) throws BizLogicException
+			SpecimenCollectionGroup oldspecimenCollectionGroup, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		CollectionEventParameters scgCollectionEventParameters = null;
 		ReceivedEventParameters scgReceivedEventParameters = null;
@@ -1239,8 +1238,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	}
 
 	private void updateConsent(SpecimenCollectionGroup specimenCollectionGroup,
-			CollectionProtocolRegistration cpr) {
-		if(cpr.getConsentTierResponseCollection() != null && !cpr.getConsentTierResponseCollection().isEmpty() && (specimenCollectionGroup.getConsentTierStatusCollection() == null || specimenCollectionGroup.getConsentTierStatusCollection().isEmpty()))
+			CollectionProtocolRegistration cpr)
+	{
+		if (cpr.getConsentTierResponseCollection() != null
+				&& !cpr.getConsentTierResponseCollection().isEmpty()
+				&& (specimenCollectionGroup.getConsentTierStatusCollection() == null || specimenCollectionGroup
+						.getConsentTierStatusCollection().isEmpty()))
 		{
 			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(cpr);
 		}
@@ -1290,7 +1293,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause.addCondition(new EqualClause(whereColumnName[0], whereColumnValue[0])).andOpr();
+			queryWhereClause.addCondition(new EqualClause(whereColumnName[0], whereColumnValue[0]))
+					.andOpr();
 
 			if (cpr.getParticipant() != null)
 			{
@@ -1335,65 +1339,65 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		return list;
 	}
-/**
- * removed unused code
- */
-//	/**
-//	 * @param dao : dao
-//	 * @param specimenCollectionGroup : specimenCollectionGroup
-//	 * @param oldSpecimenCollectionGroup : oldSpecimenCollectionGroup
-//	 * @throws BizLogicException : BizLogicException
-//	 */
-//	private void setCollectionProtocolRegistrationOld(DAO dao,
-//			SpecimenCollectionGroup specimenCollectionGroup,
-//			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws BizLogicException
-//	{
-//		final List list = this.getCPRIdList(dao, specimenCollectionGroup,
-//				oldSpecimenCollectionGroup);
-//		if (!list.isEmpty())
-//		{
-//			// check for closed CollectionProtocolRegistration
-//			final CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-//
-//			/**
-//			 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of
-//			 * Api Search, previoulsy it was failing since there was default
-//			 * class level initialization on domain object. For example in User
-//			 * object, it was initialized as protected String lastName=""; So we
-//			 * removed default class level initialization on domain object and
-//			 * are initializing in method setAllValues() of domain object. But
-//			 * in case of Api Search, default values will not get set since
-//			 * setAllValues() method of domainObject will not get called. To
-//			 * avoid null pointer exception, we are setting the default values
-//			 * same as we were setting in setAllValues() method of domainObject.
-//			 */
-//			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtocolRegistration);
-//			// End:- Change for API Search
-//
-//			collectionProtocolRegistration.setId((Long) list.get(0));
-//			if (oldSpecimenCollectionGroup != null)
-//			{
-//				final CollectionProtocolRegistration collectionProtocolRegistrationOld = oldSpecimenCollectionGroup
-//						.getCollectionProtocolRegistration();
-//
-//				if (!collectionProtocolRegistration.getId().equals(
-//						collectionProtocolRegistrationOld.getId()))
-//				{
-//					this.checkStatus(dao, collectionProtocolRegistration,
-//							"Collection Protocol Registration");
-//				}
-//			}
-//			else
-//			{
-//				this.checkStatus(dao, collectionProtocolRegistration,
-//						"Collection Protocol Registration");
-//			}
-//
-//			specimenCollectionGroup
-//					.setCollectionProtocolRegistration(collectionProtocolRegistration);
-//		}
-//	}
 
+	/**
+	 * removed unused code
+	 */
+	//	/**
+	//	 * @param dao : dao
+	//	 * @param specimenCollectionGroup : specimenCollectionGroup
+	//	 * @param oldSpecimenCollectionGroup : oldSpecimenCollectionGroup
+	//	 * @throws BizLogicException : BizLogicException
+	//	 */
+	//	private void setCollectionProtocolRegistrationOld(DAO dao,
+	//			SpecimenCollectionGroup specimenCollectionGroup,
+	//			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws BizLogicException
+	//	{
+	//		final List list = this.getCPRIdList(dao, specimenCollectionGroup,
+	//				oldSpecimenCollectionGroup);
+	//		if (!list.isEmpty())
+	//		{
+	//			// check for closed CollectionProtocolRegistration
+	//			final CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+	//
+	//			/**
+	//			 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of
+	//			 * Api Search, previoulsy it was failing since there was default
+	//			 * class level initialization on domain object. For example in User
+	//			 * object, it was initialized as protected String lastName=""; So we
+	//			 * removed default class level initialization on domain object and
+	//			 * are initializing in method setAllValues() of domain object. But
+	//			 * in case of Api Search, default values will not get set since
+	//			 * setAllValues() method of domainObject will not get called. To
+	//			 * avoid null pointer exception, we are setting the default values
+	//			 * same as we were setting in setAllValues() method of domainObject.
+	//			 */
+	//			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtocolRegistration);
+	//			// End:- Change for API Search
+	//
+	//			collectionProtocolRegistration.setId((Long) list.get(0));
+	//			if (oldSpecimenCollectionGroup != null)
+	//			{
+	//				final CollectionProtocolRegistration collectionProtocolRegistrationOld = oldSpecimenCollectionGroup
+	//						.getCollectionProtocolRegistration();
+	//
+	//				if (!collectionProtocolRegistration.getId().equals(
+	//						collectionProtocolRegistrationOld.getId()))
+	//				{
+	//					this.checkStatus(dao, collectionProtocolRegistration,
+	//							"Collection Protocol Registration");
+	//				}
+	//			}
+	//			else
+	//			{
+	//				this.checkStatus(dao, collectionProtocolRegistration,
+	//						"Collection Protocol Registration");
+	//			}
+	//
+	//			specimenCollectionGroup
+	//					.setCollectionProtocolRegistration(collectionProtocolRegistration);
+	//		}
+	//	}
 
 	/**
 	 * @param dao : dao
@@ -1405,8 +1409,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final List listOfSubElement = this.getRelatedObjects(dao, SpecimenCollectionGroup.class,
 				"collectionProtocolRegistration", collProtRegIDArr);
 		this.disableRelatedObjects(dao, "CATISSUE_ABS_SPECI_COLL_GROUP",
-				Constants.SYSTEM_IDENTIFIER_COLUMN_NAME, edu.wustl.common.util.Utility
-						.toLongArray(listOfSubElement));
+				Constants.SYSTEM_IDENTIFIER_COLUMN_NAME,
+				edu.wustl.common.util.Utility.toLongArray(listOfSubElement));
 		//this.auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);
 		if (!listOfSubElement.isEmpty())
 		{
@@ -1468,17 +1472,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @return boolean
 	 * @throws BizLogicException : BizLogicException
 	 */
-	protected boolean isCollectedSpecimenExists(Object obj, DAO dao, Long scgId) throws BizLogicException
+	protected boolean isCollectedSpecimenExists(Object obj, DAO dao, Long scgId)
+			throws BizLogicException
 	{
 		boolean isCollectedSpecimenExists = false;
 		final String hql = " select" + " count(s.id) " + " from "
 				+ " edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg , "
 				+ " edu.wustl.catissuecore.domain.Specimen as s" + " where scg.id = " + scgId
 				+ " and" + " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and s.collectionStatus = '"+Constants.COLLECTION_STATUS_COLLECTED+"'";// elements(scg.specimenCollection)
+				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and s.collectionStatus = '"
+				+ Constants.COLLECTION_STATUS_COLLECTED + "'";// elements(scg.specimenCollection)
 
 		final List specimenList = this.executeHqlQuery(hql);
-		if ((specimenList != null) && specimenList.size() != 0 && !specimenList.get( 0 ).toString().equals( "0" ))
+		if ((specimenList != null) && specimenList.size() != 0
+				&& !specimenList.get(0).toString().equals("0"))
 		{
 			isCollectedSpecimenExists = true;
 		}
@@ -1525,43 +1532,49 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			if (group.getCollectionProtocolRegistration().getId() == null)
 			{
-				if(group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null)
+				if (group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null)
 				{
 					message = ApplicationProperties
-						.getValue("errors.specimenCollectionGroup.collectionprotocolregistration.ppid");
-						throw this.getBizLogicException(null, "errors.item.required", message);
+							.getValue("errors.specimenCollectionGroup.collectionprotocolregistration.ppid");
+					throw this.getBizLogicException(null, "errors.item.required", message);
 				}
-				
-				String ppid = group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
-				String cpShortTitle = group.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle();
-				
-				List cprList=null;
+
+				String ppid = group.getCollectionProtocolRegistration()
+						.getProtocolParticipantIdentifier();
+				String cpShortTitle = group.getCollectionProtocolRegistration()
+						.getCollectionProtocol().getShortTitle();
+
+				List cprList = null;
 				try
 				{
-					cprList = AppUtility.executeSQLQuery("select cpr.identifier from catissue_coll_prot_reg cpr, catissue_specimen_protocol sp " +
-							"where cpr.PROTOCOL_PARTICIPANT_ID='"+ppid+"' and cpr.COLLECTION_PROTOCOL_ID=sp.identifier and sp.SHORT_TITLE='"+cpShortTitle+"'");
+					cprList = AppUtility
+							.executeSQLQuery("select cpr.identifier from catissue_coll_prot_reg cpr, catissue_specimen_protocol sp "
+									+ "where cpr.PROTOCOL_PARTICIPANT_ID='"
+									+ ppid
+									+ "' and cpr.COLLECTION_PROTOCOL_ID=sp.identifier and sp.SHORT_TITLE='"
+									+ cpShortTitle + "'");
 				}
 				catch (ApplicationException e)
 				{
 					e.printStackTrace();
 					message = ApplicationProperties
-						       .getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
-							throw this.getBizLogicException(null, "errors.item.invalid", message);
+							.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
+					throw this.getBizLogicException(null, "errors.item.invalid", message);
 				}
 				/*List cprList = retrieve(
 						group.getCollectionProtocolRegistration().getClass().getName(),
 						"protocolParticipantIdentifier", group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());*/
-				if(cprList == null || cprList.isEmpty())
+				if (cprList == null || cprList.isEmpty())
 				{
-					    message = ApplicationProperties
-					       .getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
-						throw this.getBizLogicException(null, "errors.item.invalid", message);
+					message = ApplicationProperties
+							.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
+					throw this.getBizLogicException(null, "errors.item.invalid", message);
 				}
 				else
 				{
 					CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-					ArrayList arr= (ArrayList) cprList.get(0);
-					Long cprId=Long.valueOf((String) arr.get(0));
+					ArrayList arr = (ArrayList) cprList.get(0);
+					Long cprId = Long.valueOf((String) arr.get(0));
 					collectionProtocolRegistration.setId(cprId);
 					group.setCollectionProtocolRegistration(collectionProtocolRegistration);
 				}
@@ -1579,7 +1592,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final String sourceObjectName = Site.class.getName();
 				final String[] selectColumnName = {"name"};
 				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(new EqualClause("id", group.getSpecimenCollectionSite().getId()));
+				queryWhereClause.addCondition(new EqualClause("id", group
+						.getSpecimenCollectionSite().getId()));
 				final List list = dao
 						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 				if (list.isEmpty())
@@ -1598,10 +1612,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 
-
 			// Mandatory Field : Study Calendar event point
 			validateCpEvent(dao, group);
-
 
 			// Mandatory Field : clinical Diagnosis
 			if (validator.isEmpty(group.getClinicalDiagnosis()))
@@ -1627,13 +1639,15 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			 * while creating query.
 			 */
 			StringBuffer sqlBuff = new StringBuffer();
-			sqlBuff.append( "SELECT PermissibleValueImpl.value FROM "+PermissibleValueImpl.class.getName()+" PermissibleValueImpl" );
-			sqlBuff.append( " WHERE  PermissibleValueImpl.cde.publicId = ? AND PermissibleValueImpl.value = ?");
+			sqlBuff.append("SELECT PermissibleValueImpl.value FROM "
+					+ PermissibleValueImpl.class.getName() + " PermissibleValueImpl");
+			sqlBuff.append(" WHERE  PermissibleValueImpl.cde.publicId = ? AND PermissibleValueImpl.value = ?");
 			List<Object> columnValuesList = new ArrayList<Object>();
-            columnValuesList.add( "Clinical_Diagnosis_PID" );
-            columnValuesList.add( group.getClinicalDiagnosis() );
-            List list = ((HibernateDAO)dao).executeQuery( sqlBuff.toString(), null, null, columnValuesList );
-            //bug 15684 end
+			columnValuesList.add("Clinical_Diagnosis_PID");
+			columnValuesList.add(group.getClinicalDiagnosis());
+			List list = ((HibernateDAO) dao).executeQuery(sqlBuff.toString(), null, null,
+					columnValuesList);
+			//bug 15684 end
 			Iterator iterator = list.iterator();
 			if (!iterator.hasNext())
 			{
@@ -1643,7 +1657,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					Constants.CDE_NAME_CLINICAL_STATUS, null);
 			if (!Validator.isEnumeratedValue(clinicalStatusList, group.getClinicalStatus()))
 			{
-				throw this.getBizLogicException(null, "collectionProtocol.clinicalStatus.errMsg","");
+				throw this.getBizLogicException(null, "collectionProtocol.clinicalStatus.errMsg",
+						"");
 			}
 			if (operation.equals(Constants.ADD))
 			{
@@ -1654,16 +1669,16 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, group
-						.getActivityStatus()))
+				if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES,
+						group.getActivityStatus()))
 				{
 					throw this.getBizLogicException(null, "activityStatus.errMsg", "");
 				}
 			}
 
 			// Bug #7808
-			if (!Validator.isEnumeratedValue(Constants.SCG_COLLECTION_STATUS_VALUES, group
-					.getCollectionStatus()))
+			if (!Validator.isEnumeratedValue(Constants.SCG_COLLECTION_STATUS_VALUES,
+					group.getCollectionStatus()))
 			{
 				throw this.getBizLogicException(null,
 						"specimencollectiongroup.collectionStatus.errMsg", "");
@@ -1673,7 +1688,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// Specimen Collection Group
 			if (group.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 			{
-                //bug 14350
+				//bug 14350
 				final boolean isSpecimenExist = this.isCollectedSpecimenExists(obj, dao,
 						group.getId());
 				if (isSpecimenExist)
@@ -1713,7 +1728,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "error.specimenCollectionGroup.noevents", "");
 			}
 			//validation added for bug #15237
-//			validateCpEvent(dao, group);
+			//			validateCpEvent(dao, group);
 
 			return true;
 
@@ -1743,31 +1758,31 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	private void validateCpEvent(DAO dao, final SpecimenCollectionGroup group) throws DAOException,
 			BizLogicException
 	{
-		long cpId=0;
-		long cpEventId=0;
-		String cpEventLabel=group.getCollectionProtocolEvent().getCollectionPointLabel();
+		long cpId = 0;
+		long cpEventId = 0;
+		String cpEventLabel = group.getCollectionProtocolEvent().getCollectionPointLabel();
 		cpId = getCPId(dao, group, cpId);
 
-		if(group.getCollectionProtocolEvent().getId() !=null)
+		if (group.getCollectionProtocolEvent().getId() != null)
 		{
-			cpEventId= group.getCollectionProtocolEvent().getId();
+			cpEventId = group.getCollectionProtocolEvent().getId();
 		}
 
-		String equalCondition="";
-		Object equalValue=null;
+		String equalCondition = "";
+		Object equalValue = null;
 
-		if(cpEventId >= 1)
+		if (cpEventId >= 1)
 		{
-			equalCondition="id";
-			equalValue=cpEventId;
+			equalCondition = "id";
+			equalValue = cpEventId;
 
-			checkCPEvent(dao, cpId, equalCondition, equalValue,group);
+			checkCPEvent(dao, cpId, equalCondition, equalValue, group);
 		}
-		else if(!Validator.isEmpty(cpEventLabel))
+		else if (!Validator.isEmpty(cpEventLabel))
 		{
-			equalCondition="collectionPointLabel";
-			equalValue=cpEventLabel;
-			checkCPEvent(dao, cpId, equalCondition, equalValue,group);
+			equalCondition = "collectionPointLabel";
+			equalValue = cpEventLabel;
+			checkCPEvent(dao, cpId, equalCondition, equalValue, group);
 
 		}
 		else
@@ -1793,27 +1808,25 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	private long getCPId(DAO dao, final SpecimenCollectionGroup group, long cpId)
 			throws DAOException
 	{
-	    long newCPId=cpId;
-		if(group.getCollectionProtocolRegistration().getId()!=0)
+		long newCPId = cpId;
+		if (group.getCollectionProtocolRegistration().getId() != 0)
 		{
 			final String sourceObjectName = CollectionProtocolRegistration.class.getName();
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			final String[] selectColumnName = {"collectionProtocol.id"};
 
+			queryWhereClause.addCondition(new EqualClause("id", group
+					.getCollectionProtocolRegistration().getId()));
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 
-			queryWhereClause.addCondition(new EqualClause("id", group.getCollectionProtocolRegistration().getId()));
-			final List list = dao
-					.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-
-
-			if(!list.isEmpty())
+			if (!list.isEmpty())
 			{
-			    newCPId=Long.valueOf(list.get(0).toString());
+				newCPId = Long.valueOf(list.get(0).toString());
 			}
 		}
-		else if(group.getCollectionProtocolRegistration().getCollectionProtocol()!=null)
+		else if (group.getCollectionProtocolRegistration().getCollectionProtocol() != null)
 		{
-		    newCPId=group.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+			newCPId = group.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 		}
 		return newCPId;
 	}
@@ -1827,42 +1840,46 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException
 	 * @throws BizLogicException
 	 */
-	private void checkCPEvent(DAO dao, long cpId, String equalCondition, Object equalValue, SpecimenCollectionGroup group)
-			throws DAOException, BizLogicException
+	private void checkCPEvent(DAO dao, long cpId, String equalCondition, Object equalValue,
+			SpecimenCollectionGroup group) throws DAOException, BizLogicException
 	{
-		CollectionProtocol collectionProtocol=group.getCollectionProtocolRegistration().getCollectionProtocol();
+		CollectionProtocol collectionProtocol = group.getCollectionProtocolRegistration()
+				.getCollectionProtocol();
 
-		 String sourceObjectName1 = null;
-		 QueryWhereClause queryWhereClause1 =null;
-		 String selectedColumnName=null;
-		 String[] selectColumnName1 = {selectedColumnName};
+		String sourceObjectName1 = null;
+		QueryWhereClause queryWhereClause1 = null;
+		String selectedColumnName = null;
+		String[] selectColumnName1 = {selectedColumnName};
 
-		if(collectionProtocol!=null)
+		if (collectionProtocol != null)
 		{
-			selectColumnName1[0]="collectionProtocol";
+			selectColumnName1[0] = "collectionProtocol";
 			sourceObjectName1 = CollectionProtocolEvent.class.getName();
-			queryWhereClause1= new QueryWhereClause(sourceObjectName1);
+			queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
 			queryWhereClause1.addCondition(new EqualClause(equalCondition, equalValue));
 			queryWhereClause1.andOpr();
-			queryWhereClause1.addCondition(new EqualClause("collectionProtocol.id", collectionProtocol.getId()));
+			queryWhereClause1.addCondition(new EqualClause("collectionProtocol.id",
+					collectionProtocol.getId()));
 		}
-		else if(group.getCollectionProtocolRegistration()!=null && group.getCollectionProtocolRegistration().getId()!=null){
+		else if (group.getCollectionProtocolRegistration() != null
+				&& group.getCollectionProtocolRegistration().getId() != null)
+		{
 			selectColumnName1[0] = "collectionProtocol";
 			sourceObjectName1 = CollectionProtocolRegistration.class.getName();
-			queryWhereClause1= new QueryWhereClause(sourceObjectName1);
-			queryWhereClause1.addCondition(new EqualClause("id", group.getCollectionProtocolRegistration().getId()));
+			queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
+			queryWhereClause1.addCondition(new EqualClause("id", group
+					.getCollectionProtocolRegistration().getId()));
 		}
-		final List list = dao
-				.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
-		if(list.size()>0)
+		final List list = dao.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
+		if (list.size() > 0)
 		{
-			CollectionProtocol actualCp=(CollectionProtocol) (list.get(0));
+			CollectionProtocol actualCp = (CollectionProtocol) (list.get(0));
 
-			Long actualCpId=actualCp.getId();
-			if(actualCpId==null ||( actualCpId != 0 && cpId != 0 && actualCpId != cpId))
+			Long actualCpId = actualCp.getId();
+			if (actualCpId == null || (actualCpId != 0 && cpId != 0 && actualCpId != cpId))
 			{
 				String message = ApplicationProperties
-				.getValue("specimenCollectionGroup.studyCalenderEventPointAndPPID");
+						.getValue("specimenCollectionGroup.studyCalenderEventPointAndPPID");
 				throw this.getBizLogicException(null, "", message);
 			}
 			Long cpEventId = getCPEventID(group, actualCp);
@@ -1871,9 +1888,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			String message = ApplicationProperties
-			.getValue("specimenCollectionGroup.studyCalendarEventPoint");
-			throw this.getBizLogicException(null, "errors.item.invalid",
-					message);
+					.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+			throw this.getBizLogicException(null, "errors.item.invalid", message);
 		}
 
 	}
@@ -1884,27 +1900,31 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param actualCp
 	 * @return
 	 */
-	private Long getCPEventID(SpecimenCollectionGroup group,
-			CollectionProtocol actualCp) {
-		Collection<CollectionProtocolEvent>  cpEventColl=actualCp.getCollectionProtocolEventCollection();
-		CollectionProtocolEvent cpEvent=null;
-		String eventLabel=group.getCollectionProtocolEvent().getCollectionPointLabel();
-		Long eventId=group.getCollectionProtocolEvent().getId();
-		if(eventLabel!=null)
+	private Long getCPEventID(SpecimenCollectionGroup group, CollectionProtocol actualCp)
+	{
+		Collection<CollectionProtocolEvent> cpEventColl = actualCp
+				.getCollectionProtocolEventCollection();
+		CollectionProtocolEvent cpEvent = null;
+		String eventLabel = group.getCollectionProtocolEvent().getCollectionPointLabel();
+		Long eventId = group.getCollectionProtocolEvent().getId();
+		if (eventLabel != null)
 		{
-			for (CollectionProtocolEvent event  : cpEventColl) {
-				if(event.getCollectionPointLabel().equals(eventLabel))
+			for (CollectionProtocolEvent event : cpEventColl)
+			{
+				if (event.getCollectionPointLabel().equals(eventLabel))
 				{
-					cpEvent=event;
+					cpEvent = event;
 					break;
 				}
 			}
 		}
-		else if(eventId!=null){
-			for (CollectionProtocolEvent event  : cpEventColl) {
-				if(event.getId().equals(eventId))
+		else if (eventId != null)
+		{
+			for (CollectionProtocolEvent event : cpEventColl)
+			{
+				if (event.getId().equals(eventId))
 				{
-					cpEvent=event;
+					cpEvent = event;
 					break;
 				}
 			}
@@ -2014,9 +2034,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		this.childCPtree(xmlString, cpId, participantId, regDate, offsetForCPOrEvent);
 		xmlString.append("</node>");
 		final long endTime = System.currentTimeMillis();
-		LOGGER
-				.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : "
-						+ (endTime - startTime));
+		LOGGER.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : "
+				+ (endTime - startTime));
 		return xmlString.toString();
 
 	}
@@ -2190,15 +2209,16 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		{
 			final CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventsItr
 					.next();
-			final List scgList = new ArrayList<SpecimenCollectionGroup>(collectionProtocolEvent
-					.getSpecimenCollectionGroupCollection());
+			final List scgList = new ArrayList<SpecimenCollectionGroup>(
+					collectionProtocolEvent.getSpecimenCollectionGroupCollection());
 			final DomainBeanIdentifierComparator idComparator = new DomainBeanIdentifierComparator();
 			Collections.sort(scgList, idComparator);
 			if (scgList != null && !scgList.isEmpty())
 			{
-				eventLastDate = this.createTreeNodeForExistngSCG(xmlString, collectionProtocolEvent
-						.getStudyCalendarEventPoint(), collectionProtocolEvent
-						.getCollectionPointLabel(), scgList, regDate, parentOffset);
+				eventLastDate = this.createTreeNodeForExistngSCG(xmlString,
+						collectionProtocolEvent.getStudyCalendarEventPoint(),
+						collectionProtocolEvent.getCollectionPointLabel(), scgList, regDate,
+						parentOffset);
 			}
 		}
 		return eventLastDate;
@@ -2499,14 +2519,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 * specimens
 		 */
 		final TreeMap<Long, List<Specimen>> specimenChildrenMap = new TreeMap<Long, List<Specimen>>();
-		
+
 		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, spr.specimenRequirementLabel from "
 				+ Specimen.class.getName()
 				+ " as sp left outer join sp.specimenRequirement as spr where sp.specimenCollectionGroup.id = "
 				+ specimenCollectionGroup.getId()
 				+ " and sp.activityStatus <> '"
 				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by sp.id";
-	
+
 		final List list = this.executeQuery(hql);
 
 		/**
@@ -2515,41 +2535,44 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 * SpecimenObject which is child of Parentkey IF specimen has no parent
 		 * then parent key is store as Long(0)
 		 */
-		for  (int i = 0; i < list.size(); i++)
+		for (int i = 0; i < list.size(); i++)
 		{
 			final Object[] obj = (Object[]) list.get(i);
 			final Specimen specimen = new Specimen();
 			specimen.setId((Long) obj[0]);
-		  	String specimenLabel = (String) obj[1];
-		  	String requirementTiltle = (String) obj[7];
-		   	String collectionStatus = (String) obj[6];
-		  	String label = specimenLabel;
-		  	StringBuffer defaultLabel = new StringBuffer();
-		  	 
-		  	 if((specimenLabel==null || specimenLabel.isEmpty()))
-		  	 {
-		  		 if(requirementTiltle!=null && !requirementTiltle.isEmpty())
-		  		 {
-		  		  label = requirementTiltle;
-		  		 }
-		  		 else
-		  		 {
-		  			defaultLabel.append((String) obj[5]).append(" (").append((String) obj[4]).append(")");
-		  			label =defaultLabel.toString();
-		  		 }
-		  	 }
-		  	 else //add requirement title to label
-		  	 {
-		  		if(requirementTiltle!=null && !requirementTiltle.isEmpty())
-		  		{
-		  		  StringBuffer newLabel = new StringBuffer();
-		  		  newLabel = newLabel.append(label).append("(").append(requirementTiltle).append(")");
-		  		  label = newLabel.toString();
-		  		}
-		  	 }
-		  	
-		  	specimen.setLabel(label);
-		  	
+			String specimenLabel = (String) obj[1];
+			String requirementTiltle = (String) obj[7];
+			String collectionStatus = (String) obj[6];
+			String label = specimenLabel;
+			StringBuffer defaultLabel = new StringBuffer();
+
+			if ((specimenLabel == null || specimenLabel.isEmpty()))
+			{
+				if (requirementTiltle != null && !requirementTiltle.isEmpty())
+				{
+					label = requirementTiltle;
+				}
+				else
+				{
+					defaultLabel.append((String) obj[5]).append(" (").append((String) obj[4])
+							.append(")");
+					label = defaultLabel.toString();
+				}
+			}
+			else
+			//add requirement title to label
+			{
+				if (requirementTiltle != null && !requirementTiltle.isEmpty())
+				{
+					StringBuffer newLabel = new StringBuffer();
+					newLabel = newLabel.append(label).append("(").append(requirementTiltle)
+							.append(")");
+					label = newLabel.toString();
+				}
+			}
+
+			specimen.setLabel(label);
+
 			specimen.setActivityStatus((String) obj[3]);
 			specimen.setSpecimenType((String) obj[4]);
 			specimen.setCollectionStatus(collectionStatus);
@@ -2642,46 +2665,47 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		xmlString.append("</node>");
 	}
-//removed unused method
-//	/**
-//	 * kalpana Bug #5906 Reviewer : vaishali Update the children specimen count
-//	 * of all the parent specimens accept the immediate parent.
-//	 * @param finalList : finalList
-//	 * @param parentSpecimen : parentSpecimen
-//	 * @param countOfChildSpecimenMap : countOfChildSpecimenMap
-//	 * @param countOfChildSpecimen : countOfChildSpecimen
-//	 */
-//	private void updateChildSpecimenCount(List finalList, Specimen parentSpecimen,
-//			Map countOfChildSpecimenMap, Integer countOfChildSpecimen)
-//	{
-//
-//		for (int j = 0; j < finalList.size(); j++)
-//		{
-//			final Specimen specimen = (Specimen) finalList.get(j);
-//			final Long specimenId = (Long) specimen.getId();
-//
-//			if (specimen.getParentSpecimen() != null)
-//			{
-//
-//				if (specimenId != null && parentSpecimen != null
-//						&& specimenId.equals(parentSpecimen.getId()))
-//				{
-//					if (countOfChildSpecimenMap.containsKey(specimenId))
-//					{
-//						Integer newChildCount = (Integer) countOfChildSpecimenMap.get(specimenId);
-//						newChildCount = newChildCount + 1;
-//						countOfChildSpecimenMap.put(specimenId, newChildCount);
-//
-//						this
-//								.updateChildSpecimenCount(finalList, (Specimen) specimen
-//										.getParentSpecimen(), countOfChildSpecimenMap,
-//										countOfChildSpecimen);
-//						return;
-//					}
-//				}
-//			}
-//		}
-//	}
+
+	//removed unused method
+	//	/**
+	//	 * kalpana Bug #5906 Reviewer : vaishali Update the children specimen count
+	//	 * of all the parent specimens accept the immediate parent.
+	//	 * @param finalList : finalList
+	//	 * @param parentSpecimen : parentSpecimen
+	//	 * @param countOfChildSpecimenMap : countOfChildSpecimenMap
+	//	 * @param countOfChildSpecimen : countOfChildSpecimen
+	//	 */
+	//	private void updateChildSpecimenCount(List finalList, Specimen parentSpecimen,
+	//			Map countOfChildSpecimenMap, Integer countOfChildSpecimen)
+	//	{
+	//
+	//		for (int j = 0; j < finalList.size(); j++)
+	//		{
+	//			final Specimen specimen = (Specimen) finalList.get(j);
+	//			final Long specimenId = (Long) specimen.getId();
+	//
+	//			if (specimen.getParentSpecimen() != null)
+	//			{
+	//
+	//				if (specimenId != null && parentSpecimen != null
+	//						&& specimenId.equals(parentSpecimen.getId()))
+	//				{
+	//					if (countOfChildSpecimenMap.containsKey(specimenId))
+	//					{
+	//						Integer newChildCount = (Integer) countOfChildSpecimenMap.get(specimenId);
+	//						newChildCount = newChildCount + 1;
+	//						countOfChildSpecimenMap.put(specimenId, newChildCount);
+	//
+	//						this
+	//								.updateChildSpecimenCount(finalList, (Specimen) specimen
+	//										.getParentSpecimen(), countOfChildSpecimenMap,
+	//										countOfChildSpecimen);
+	//						return;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
 
 	/**
 	 * @param offsetToAdd : offsetToAdd
@@ -2701,28 +2725,28 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-/**
- * removed unused method
- */
-//	/**
-//	 * @param offset : offset
-//	 * @param offsetForCPOrEvent : offsetForCPOrEvent
-//	 * @return int
-//	 */
-//	private int getNoOfDaysAccordingToOffset(Integer offset, Integer offsetForCPOrEvent)
-//	{
-//		int noOfDays = 0;
-//		if (offsetForCPOrEvent != null && offset != null
-//				&& offsetForCPOrEvent.intValue() > offset.intValue())
-//		{
-//			noOfDays = offsetForCPOrEvent.intValue() - offset.intValue();
-//		}
-//		if (offsetForCPOrEvent != null && offset == null)
-//		{
-//			noOfDays = offsetForCPOrEvent.intValue();
-//		}
-//		return noOfDays;
-//	}
+	/**
+	 * removed unused method
+	 */
+	//	/**
+	//	 * @param offset : offset
+	//	 * @param offsetForCPOrEvent : offsetForCPOrEvent
+	//	 * @return int
+	//	 */
+	//	private int getNoOfDaysAccordingToOffset(Integer offset, Integer offsetForCPOrEvent)
+	//	{
+	//		int noOfDays = 0;
+	//		if (offsetForCPOrEvent != null && offset != null
+	//				&& offsetForCPOrEvent.intValue() > offset.intValue())
+	//		{
+	//			noOfDays = offsetForCPOrEvent.intValue() - offset.intValue();
+	//		}
+	//		if (offsetForCPOrEvent != null && offset == null)
+	//		{
+	//			noOfDays = offsetForCPOrEvent.intValue();
+	//		}
+	//		return noOfDays;
+	//	}
 
 	/**
 	 * @param dao : dao
@@ -2990,10 +3014,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				queryWhereClause.addCondition(new EqualClause("name", scg.getGroupName()));
 			}
 			final List dataList = this.getSCGFromDB(queryWhereClause, dao);
-			if(dataList != null && !dataList.isEmpty() && Status.ACTIVITY_STATUS_DISABLED.toString().equals(((Object[])dataList.get(0))[1]))
+			if (dataList != null
+					&& !dataList.isEmpty()
+					&& Status.ACTIVITY_STATUS_DISABLED.toString().equals(
+							((Object[]) dataList.get(0))[1]))
 			{
 				throw this.getBizLogicException(null, "error.object.disabled",
-				"Specimen Collection Group");
+						"Specimen Collection Group");
 			}
 			absScg = this.initSCG(dataList, dao, scg);
 			return absScg;
@@ -3049,22 +3076,22 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final String activityStatus = (String) valArr[1];
 				final CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
 				registration.setId((Long) valArr[2]);
-				if(valArr[3] != null)
+				if (valArr[3] != null)
 				{
 					registration.setProtocolParticipantIdentifier(valArr[3].toString());
 				}
 				CollectionProtocol collectionProtocol = new CollectionProtocol();
 				collectionProtocol.setId((Long) valArr[4]);
 				collectionProtocol.setActivityStatus((String) valArr[5]);
-				if(valArr[6] != null)
+				if (valArr[6] != null)
 				{
 					collectionProtocol.setSpecimenLabelFormat(valArr[6].toString());
 				}
-				if(valArr[7] != null)
+				if (valArr[7] != null)
 				{
 					collectionProtocol.setDerivativeLabelFormat(valArr[7].toString());
 				}
-				if(valArr[8] != null)
+				if (valArr[8] != null)
 				{
 					collectionProtocol.setAliquotLabelFormat(valArr[8].toString());
 				}
@@ -3088,14 +3115,16 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					try
 					{
 						// This is to handle API test cases. While running from API test cases, this collection is prepopulated
-						if((absScg.getConsentTierStatusCollection()!=null)&&(!absScg.getConsentTierStatusCollection().isEmpty()))
+						if ((absScg.getConsentTierStatusCollection() != null)
+								&& (!absScg.getConsentTierStatusCollection().isEmpty()))
 						{
-							absScg.setConsentTierStatusCollection(absScg.getConsentTierStatusCollection());
+							absScg.setConsentTierStatusCollection(absScg
+									.getConsentTierStatusCollection());
 						}
 					}
-					catch(LazyInitializationException e)
+					catch (LazyInitializationException e)
 					{
-//						this.LOGGER.error(e.getMessage(),e) ;
+						//						this.LOGGER.error(e.getMessage(),e) ;
 						absScg.setConsentTierStatusCollection(consentTierStatusCollection);
 					}
 				}
@@ -3116,23 +3145,23 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param collectionProtocol
 	 * @throws BizLogicException
 	 */
-	private String retrieveCpShortTitle(final Object cpId)
-			throws BizLogicException
+	private String retrieveCpShortTitle(final Object cpId) throws BizLogicException
 	{
-		String hql = "select cp.shortTitle from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.id="+cpId;
-		String shortTitle= "";
+		String hql = "select cp.shortTitle from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.id="
+				+ cpId;
+		String shortTitle = "";
 		try
 		{
 
 			List cpList = AppUtility.executeQuery(hql);
-			if(cpList!=null && !cpList.isEmpty())
+			if (cpList != null && !cpList.isEmpty())
 			{
-				shortTitle = cpList.get(0).toString() ;
+				shortTitle = cpList.get(0).toString();
 			}
 		}
-		catch(ApplicationException exp)
+		catch (ApplicationException exp)
 		{
-			LOGGER.error(exp.getMessage(),exp) ;
+			LOGGER.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return shortTitle;
@@ -3192,38 +3221,39 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		if (domainObject instanceof SpecimenCollectionGroup)
 		{
 			final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) domainObject;
-			Long cpId =null;
+			Long cpId = null;
 			final CollectionProtocolRegistration cpr = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
-			if( cpr.getCollectionProtocol()!=null&&  cpr.getCollectionProtocol().getId()!=null)
+			if (cpr.getCollectionProtocol() != null && cpr.getCollectionProtocol().getId() != null)
 			{
-				cpId= cpr.getCollectionProtocol().getId();
+				cpId = cpr.getCollectionProtocol().getId();
 			}
 			else
 			{
-				cpId=retreiveCPId(dao,specimenCollectionGroup);
+				cpId = retreiveCPId(dao, specimenCollectionGroup);
 			}
-			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" +cpId;
+			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
 		}
 		return objectId;
 	}
+
 	/**
 	 * generated query to retrieve the CPR id.
 	 * @param scg
 	 * @return
 	 * @throws BizLogicException
 	 */
-	private Long retreiveCPId(DAO dao,final SpecimenCollectionGroup scg) throws BizLogicException {
+	private Long retreiveCPId(DAO dao, final SpecimenCollectionGroup scg) throws BizLogicException
+	{
 
 		final String query = generateQueryToRetrieveCPId(scg);
-		Long cpId  = executeQuery(dao, query);
-		if(cpId==null)
+		Long cpId = executeQuery(dao, query);
+		if (cpId == null)
 		{
 			String message = ApplicationProperties
-			.getValue("specimenCollectionGroup.studyCalenderEventPointAndPPID");
+					.getValue("specimenCollectionGroup.studyCalenderEventPointAndPPID");
 			throw this.getBizLogicException(new Exception(message), "", message);
 		}
-
 
 		return cpId;
 	}
@@ -3234,11 +3264,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param scg
 	 * @return
 	 */
-	private String generateQueryToRetrieveCPId(
-			final SpecimenCollectionGroup scg) {
+	private String generateQueryToRetrieveCPId(final SpecimenCollectionGroup scg)
+	{
 
-		StringBuffer query = new StringBuffer("select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "
-		);
+		StringBuffer query = new StringBuffer(
+				"select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where ");
 		modifyQueryForCPE(scg, query);
 		modifyQueryForCPR(scg, query);
 		return query.toString();
@@ -3250,16 +3280,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param scg
 	 * @param query
 	 */
-	private void modifyQueryForCPR(final SpecimenCollectionGroup scg,
-			StringBuffer query) {
-		if( scg.getCollectionProtocolRegistration().getId() != null )
+	private void modifyQueryForCPR(final SpecimenCollectionGroup scg, StringBuffer query)
+	{
+		if (scg.getCollectionProtocolRegistration().getId() != null)
 		{
-			query.append(" and specimenCollectionGroup.collectionProtocolRegistration.id = " ).append(scg.getCollectionProtocolRegistration().getId());
+			query.append(" and specimenCollectionGroup.collectionProtocolRegistration.id = ")
+					.append(scg.getCollectionProtocolRegistration().getId());
 		}
 		else
 		{
 
-			query.append("   and specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier = '" ).append(scg.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() ).append("'");
+			query.append(
+					"   and specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier = '")
+					.append(scg.getCollectionProtocolRegistration()
+							.getProtocolParticipantIdentifier()).append("'");
 		}
 	}
 
@@ -3269,22 +3303,25 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param scg
 	 * @param query
 	 */
-	private void modifyQueryForCPE(final SpecimenCollectionGroup scg,
-			StringBuffer query) {
-		if( scg.getCollectionProtocolEvent().getId() != null )
+	private void modifyQueryForCPE(final SpecimenCollectionGroup scg, StringBuffer query)
+	{
+		if (scg.getCollectionProtocolEvent().getId() != null)
 		{
-			query.append("specimenCollectionGroup.collectionProtocolEvent.id = " ).append(scg.getCollectionProtocolEvent().getId());
+			query.append("specimenCollectionGroup.collectionProtocolEvent.id = ").append(
+					scg.getCollectionProtocolEvent().getId());
 		}
-		else if(scg.getCollectionProtocolEvent().getCollectionPointLabel()!=null)
+		else if (scg.getCollectionProtocolEvent().getCollectionPointLabel() != null)
 		{
-			query.append("specimenCollectionGroup.collectionProtocolEvent.collectionPointLabel = '" ).append(scg.getCollectionProtocolEvent().getCollectionPointLabel()).append("'");
+			query.append("specimenCollectionGroup.collectionProtocolEvent.collectionPointLabel = '")
+					.append(scg.getCollectionProtocolEvent().getCollectionPointLabel()).append("'");
 		}
 	}
 
-	private Long executeQuery(DAO dao, final String query)
-			throws BizLogicException {
-		Long cpId=null;
-		try {
+	private Long executeQuery(DAO dao, final String query) throws BizLogicException
+	{
+		Long cpId = null;
+		try
+		{
 			List<Long> list = null;
 
 			list = dao.executeQuery(query);
@@ -3293,11 +3330,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				cpId = itr.next();
 			}
-		} catch (DAOException e) {
+		}
+		catch (DAOException e)
+		{
 			throw new BizLogicException(e);
 		}
 		return cpId;
 	}
+
 	/**
 	 * To get PrivilegeName for authorization check from.
 	 * 'PermissionMapDetails.xml' (non-Javadoc)
@@ -3395,8 +3435,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	public boolean hasPrivilegeToView(String objName, Long identifier,
 			SessionDataBean sessionDataBean)
 	{
-		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
-				.getReadDeniedPrivilegeName()) || AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, Permissions.SPECIMEN_PROCESSING);
+		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean,
+				this.getReadDeniedPrivilegeName())
+				|| AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean,
+						Permissions.SPECIMEN_PROCESSING);
 	}
 
 	/**
@@ -3408,24 +3450,21 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	public Long getScgIdFromName(String scgName) throws ApplicationException
 	{
 		Long scgId = null;
-		if(scgName!=null)
+		if (scgName != null)
 		{
-			final String hql = "select scg.id from "
-					+ SpecimenCollectionGroup.class.getName()
+			final String hql = "select scg.id from " + SpecimenCollectionGroup.class.getName()
 					+ " as scg where scg.name = ? and scg.activityStatus <> '"
-					+ Status.ACTIVITY_STATUS_DISABLED.toString()
-					+ "' ";
+					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
 
 			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
-			columnValueBean.add(new ColumnValueBean("name",scgName));
-			final List<Long> list = this.executeQuery(hql,columnValueBean);
-			if(list==null || list.isEmpty())
+			columnValueBean.add(new ColumnValueBean("name", scgName));
+			final List<Long> list = this.executeQuery(hql, columnValueBean);
+			if (list == null || list.isEmpty())
 			{
-				throw new BizLogicException(ErrorKey.getErrorKey("invalid.name.scg"), null,
-						scgName);
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.name.scg"), null, scgName);
 
 			}
-			scgId=list.get(0);
+			scgId = list.get(0);
 		}
 		return scgId;
 	}
@@ -3438,26 +3477,24 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 */
 	public Long getScgIdFromBarcode(String barcode) throws ApplicationException
 	{
-		Long scgId =null;
-		if(barcode!=null)
+		Long scgId = null;
+		if (barcode != null)
 		{
-		final String hql = "select scg.id from "
-					+ SpecimenCollectionGroup.class.getName()
+			final String hql = "select scg.id from " + SpecimenCollectionGroup.class.getName()
 					+ " as scg where scg.barcode = ? and scg.activityStatus <> '"
-					+ Status.ACTIVITY_STATUS_DISABLED.toString()
-					+ "' ";
+					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
 			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
-			columnValueBean.add(new ColumnValueBean("barcode",barcode));
-			final List<Long> list = this.executeQuery(hql,columnValueBean);
-			if(list==null || list.isEmpty())
+			columnValueBean.add(new ColumnValueBean("barcode", barcode));
+			final List<Long> list = this.executeQuery(hql, columnValueBean);
+			if (list == null || list.isEmpty())
 			{
 				throw new BizLogicException(ErrorKey.getErrorKey("invalid.barcode.scg"), null,
 						barcode);
 
 			}
-			scgId=list.get(0);
+			scgId = list.get(0);
 		}
-			return scgId;
+		return scgId;
 	}
 
 	/**
@@ -3468,22 +3505,18 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 */
 	public boolean isSCGExists(String scgId) throws BizLogicException
 	{
-		final String hql = "select scg.id from "
-			+ SpecimenCollectionGroup.class.getName()
-			+ " as scg where scg.id = "
-			+ scgId
-			+" and scg.activityStatus <> '"
-			+ Status.ACTIVITY_STATUS_DISABLED.toString()
-			+ "' ";
+		final String hql = "select scg.id from " + SpecimenCollectionGroup.class.getName()
+				+ " as scg where scg.id = " + scgId + " and scg.activityStatus <> '"
+				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
 
 		final List<Long> list = this.executeQuery(hql);
-		if(list==null || list.isEmpty())
+		if (list == null || list.isEmpty())
 		{
-			 throw new BizLogicException(ErrorKey.getErrorKey("invalid.id.scg"), null,
-					 scgId);
+			throw new BizLogicException(ErrorKey.getErrorKey("invalid.id.scg"), null, scgId);
 		}
 		return true;
 	}
+
 	/**
 	 * This method will update aal the SCGs of the given CPRs based on CP.This method will check whether any SPR is missin or not and if
 	 * any SPR is missing that it will add that SPR to SCG.
@@ -3496,24 +3529,29 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException
 	 * @throws BizLogicException
 	 */
-	public void updateSCGs(
-			CollectionProtocolRegistration protocolRegistration,
-			SessionDataBean sessionDataBean,DAO dao) throws DAOException, BizLogicException {
-		
-		Collection<CollectionProtocolEvent> collectionProtocolEvents=protocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
-		Collection<SpecimenCollectionGroup> specimenCollectionGroups=protocolRegistration.getSpecimenCollectionGroupCollection();
+	public void updateSCGs(CollectionProtocolRegistration protocolRegistration,
+			SessionDataBean sessionDataBean, DAO dao) throws DAOException, BizLogicException
+	{
+
+		Collection<CollectionProtocolEvent> collectionProtocolEvents = protocolRegistration
+				.getCollectionProtocol().getCollectionProtocolEventCollection();
+		Collection<SpecimenCollectionGroup> specimenCollectionGroups = protocolRegistration
+				.getSpecimenCollectionGroupCollection();
 		//Iterate over each SCG of CPRs.
-		for (SpecimenCollectionGroup specimenCollectionGroup : specimenCollectionGroups) {
-			 if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimenCollectionGroup.getActivityStatus()))  
-			 {
-				 updateChildspecimenCollection(specimenCollectionGroup,sessionDataBean,dao);
-			 }
-			 //Removing event from events as they already exist for CPR, do not need to create again.
-			 collectionProtocolEvents.remove(specimenCollectionGroup.getCollectionProtocolEvent());
+		for (SpecimenCollectionGroup specimenCollectionGroup : specimenCollectionGroups)
+		{
+			if (Constants.ACTIVITY_STATUS_ACTIVE
+					.equals(specimenCollectionGroup.getActivityStatus()))
+			{
+				updateChildspecimenCollection(specimenCollectionGroup, sessionDataBean, dao);
+			}
+			//Removing event from events as they already exist for CPR, do not need to create again.
+			collectionProtocolEvents.remove(specimenCollectionGroup.getCollectionProtocolEvent());
 		}
 		//creating SCGs for the evenets which are not present in CPR.
-		createSCGsForCPEs(protocolRegistration,dao,sessionDataBean,collectionProtocolEvents,0);
+		createSCGsForCPEs(protocolRegistration, dao, sessionDataBean, collectionProtocolEvents, 0);
 	}
+
 	/**
 	 * This method will create an SCGs for given CollectionProtocolEvents and given CPR. 
 	 * @param collectionProtocolEvents 
@@ -3523,33 +3561,34 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean
 	 * @param dao
 	 * @throws BizLogicException
-	 *//*
+	 */
+	/*
 	public void createSpecimencollectionGroups(Collection<CollectionProtocolEvent> collectionProtocolEvents,CollectionProtocolRegistration collectionProtocolRegistration,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
 	{
-		SpecimenCollectionGroupBizLogic collectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
-		for (CollectionProtocolEvent collectionProtocolEvent : collectionProtocolEvents) {
-			SpecimenCollectionGroup specimenCollectionGroup=new SpecimenCollectionGroup();
-			specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocolEvent);
-			CollectionProtocolRegistration newCollectionProtocolRegistration=new CollectionProtocolRegistration();
-			newCollectionProtocolRegistration.setId(collectionProtocolRegistration.getId());
-			newCollectionProtocolRegistration.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
-			specimenCollectionGroup.setCollectionProtocolRegistration(newCollectionProtocolRegistration);
-			specimenCollectionGroup.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
-			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-			specimenCollectionGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-			specimenCollectionGroup.setIsCPBasedSpecimenEntryChecked(true);
-			//setChildSpecimenCollection(specimenCollectionGroup,collectionProtocolEvent,sessionDataBean);
-			collectionGroupBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
-		}
-		
+	SpecimenCollectionGroupBizLogic collectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
+	for (CollectionProtocolEvent collectionProtocolEvent : collectionProtocolEvents) {
+		SpecimenCollectionGroup specimenCollectionGroup=new SpecimenCollectionGroup();
+		specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocolEvent);
+		CollectionProtocolRegistration newCollectionProtocolRegistration=new CollectionProtocolRegistration();
+		newCollectionProtocolRegistration.setId(collectionProtocolRegistration.getId());
+		newCollectionProtocolRegistration.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
+		specimenCollectionGroup.setCollectionProtocolRegistration(newCollectionProtocolRegistration);
+		specimenCollectionGroup.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+		specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+		specimenCollectionGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimenCollectionGroup.setIsCPBasedSpecimenEntryChecked(true);
+		//setChildSpecimenCollection(specimenCollectionGroup,collectionProtocolEvent,sessionDataBean);
+		collectionGroupBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
+	}
+	
 	}*/
 
-	public Collection<SpecimenCollectionGroup>  createSCGsForCPEs(
-			CollectionProtocolRegistration collectionProtocolRegistration,
-			DAO dao,
+	public Collection<SpecimenCollectionGroup> createSCGsForCPEs(
+			CollectionProtocolRegistration collectionProtocolRegistration, DAO dao,
 			SessionDataBean sessionDataBean,
-			final Collection<CollectionProtocolEvent> collectionProtocolEventCollection,int cntOfStudyCalEventPnt)
-			throws BizLogicException {
+			final Collection<CollectionProtocolEvent> collectionProtocolEventCollection,
+			int cntOfStudyCalEventPnt) throws BizLogicException
+	{
 		final SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
 		final Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = collectionProtocolEventCollection
 				.iterator();
@@ -3591,6 +3630,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		return scgCollection;
 	}
+
 	/**
 	 * This method will check whether any SPR is missing for the given SCG and if missing then it will add the respeected specimen to SCG.  
 	 * @param specimenCollectionGroup 
@@ -3599,71 +3639,89 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param dao
 	 * @throws BizLogicException
 	 */
-	public void updateChildspecimenCollection(SpecimenCollectionGroup specimenCollectionGroup,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
+	public void updateChildspecimenCollection(SpecimenCollectionGroup specimenCollectionGroup,
+			SessionDataBean sessionDataBean, DAO dao) throws BizLogicException
 	{
-		CollectionProtocolEvent collectionProtocolEvent=specimenCollectionGroup.getCollectionProtocolEvent();
-		Collection<SpecimenRequirement> specimenRequirements=collectionProtocolEvent.getSpecimenRequirementCollection();
-		Collection<Specimen> specimens=specimenCollectionGroup.getSpecimenCollection();
+		CollectionProtocolEvent collectionProtocolEvent = specimenCollectionGroup
+				.getCollectionProtocolEvent();
+		Collection<SpecimenRequirement> specimenRequirements = collectionProtocolEvent
+				.getSpecimenRequirementCollection();
+		Collection<Specimen> specimens = specimenCollectionGroup.getSpecimenCollection();
 		//This map contains SPR and respective specimen presnet in SCGs.This will require while creating specimen to get parent of that specimen.
-		Map<SpecimenRequirement, Specimen> sprToSpecimenMap=new HashMap<SpecimenRequirement, Specimen>();
+		Map<SpecimenRequirement, Specimen> sprToSpecimenMap = new HashMap<SpecimenRequirement, Specimen>();
 		//Iterating over each specimen of SCG and remove from the SPR collection.Remaining SPRs are the one for which specimens are not
 		//present in SCG.  
-		for (Specimen specimen : specimens){
+		for (Specimen specimen : specimens)
+		{
 			//specimenRequirements.remove(specimen.getSpecimenRequirement());
 			sprToSpecimenMap.put(specimen.getSpecimenRequirement(), specimen);
 		}
 		for (SpecimenRequirement specimenRequirement : specimenRequirements)
 		{
-			if("new".equalsIgnoreCase(specimenRequirement.getLineage()))
+			if ("new".equalsIgnoreCase(specimenRequirement.getLineage()))
 			{
-			   if(sprToSpecimenMap.get(specimenRequirement)==null)
-			   {
-				   createSpecimenFromSPR(specimenRequirement, specimenCollectionGroup, null, sessionDataBean, dao);
-			   }
-			   else
-			   {
-				   processParent(specimenRequirement,sprToSpecimenMap.get(specimenRequirement),specimenCollectionGroup,dao,sessionDataBean,sprToSpecimenMap);
-			   }
+				if (sprToSpecimenMap.get(specimenRequirement) == null)
+				{
+					createSpecimenFromSPR(specimenRequirement, specimenCollectionGroup, null,
+							sessionDataBean, dao);
+				}
+				else
+				{
+					processParent(specimenRequirement, sprToSpecimenMap.get(specimenRequirement),
+							specimenCollectionGroup, dao, sessionDataBean, sprToSpecimenMap);
+				}
 			}
 		}
 	}
 
-	private void processParent(SpecimenRequirement specimenRequirement,Specimen specimen,SpecimenCollectionGroup specimenCollectionGroup,DAO dao,SessionDataBean sessionDataBean,Map<SpecimenRequirement, Specimen> sprToSpecimenMap) throws BizLogicException
+	private void processParent(SpecimenRequirement specimenRequirement, Specimen specimen,
+			SpecimenCollectionGroup specimenCollectionGroup, DAO dao,
+			SessionDataBean sessionDataBean, Map<SpecimenRequirement, Specimen> sprToSpecimenMap)
+			throws BizLogicException
 	{
-		boolean isSPRExist=false;
-		if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
-		{	
-			Collection<AbstractSpecimen> childSpecimenRequirements=specimenRequirement.getChildSpecimenCollection();
-			Collection<AbstractSpecimen> childSpecimens=specimen.getChildSpecimenCollection();
-			NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
+		boolean isSPRExist = false;
+		if (Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+		{
+			Collection<AbstractSpecimen> childSpecimenRequirements = specimenRequirement
+					.getChildSpecimenCollection();
+			Collection<AbstractSpecimen> childSpecimens = specimen.getChildSpecimenCollection();
+			NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
 			for (AbstractSpecimen childSpecimenRequirement : childSpecimenRequirements)
 			{
-				isSPRExist=false;
-				for (AbstractSpecimen childSpecimen : childSpecimens) {
-					if(childSpecimenRequirement.equals(((Specimen)childSpecimen).getSpecimenRequirement()))
+				isSPRExist = false;
+				for (AbstractSpecimen childSpecimen : childSpecimens)
+				{
+					if (childSpecimenRequirement.equals(((Specimen) childSpecimen)
+							.getSpecimenRequirement()))
 					{
-						isSPRExist=true;
-						processParent((SpecimenRequirement)childSpecimenRequirement,(Specimen)childSpecimen,specimenCollectionGroup,dao,sessionDataBean,sprToSpecimenMap);
+						isSPRExist = true;
+						processParent((SpecimenRequirement) childSpecimenRequirement,
+								(Specimen) childSpecimen, specimenCollectionGroup, dao,
+								sessionDataBean, sprToSpecimenMap);
 						break;
 					}
 				}
-				if(!isSPRExist)
+				if (!isSPRExist)
 				{
-					SpecimenRequirement requirement=(SpecimenRequirement)childSpecimenRequirement;
-					createSpecimenFromSPR(requirement, specimenCollectionGroup, sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
+					SpecimenRequirement requirement = (SpecimenRequirement) childSpecimenRequirement;
+					createSpecimenFromSPR(requirement, specimenCollectionGroup,
+							sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
 				}
 			}
-		}	
+		}
 	}
-	private void createSpecimenFromSPR(SpecimenRequirement specimenRequirement,SpecimenCollectionGroup specimenCollectionGroup,AbstractSpecimen parentSpecimen,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
+
+	private void createSpecimenFromSPR(SpecimenRequirement specimenRequirement,
+			SpecimenCollectionGroup specimenCollectionGroup, AbstractSpecimen parentSpecimen,
+			SessionDataBean sessionDataBean, DAO dao) throws BizLogicException
 	{
-		 NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
-		 Specimen specimenToBcreated = getCloneSpecimen(specimenRequirement,
-					(Specimen)parentSpecimen,	specimenCollectionGroup,sessionDataBean.getUserId());
-			specimenToBcreated.setSpecimenCollectionGroup(specimenCollectionGroup);
-			specimenBizLogic.insert(specimenToBcreated, dao, sessionDataBean);
+		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+		Specimen specimenToBcreated = getCloneSpecimen(specimenRequirement,
+				(Specimen) parentSpecimen, specimenCollectionGroup, sessionDataBean.getUserId());
+		specimenToBcreated.setSpecimenCollectionGroup(specimenCollectionGroup);
+		specimenBizLogic.insert(specimenToBcreated, dao, sessionDataBean);
 	}
-	
+
 	/** This method generates the json of scg event  point to populate the event point drop down
 	 *  on new Participant page.
 	 * @param regId
@@ -3672,42 +3730,46 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException 
 	 * @throws JSONException 
 	 */
-	public List<SCGEventPointDTO> getscgeventPoint(DAO dao,Long regId) throws  BizLogicException {
-		
+	public List<SCGEventPointDTO> getscgeventPoint(DAO dao, Long regId) throws BizLogicException
+	{
+
 		SCGDAO scgdao = new SCGDAO();
 		List<SCGEventPointDTO> scgEventDtolist;
-	    try{	
-	    	scgEventDtolist = scgdao.getScgEventPoint(dao,regId);
-	    	
-	}catch (final DAOException daoExp)
-	{
-		LOGGER.error(daoExp.getMessage(), daoExp);
-		throw this
-				.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-	}
+		try
+		{
+			scgEventDtolist = scgdao.getScgEventPoint(dao, regId);
+
+		}
+		catch (final DAOException daoExp)
+		{
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
 		return scgEventDtolist;
 	}
 
-	public void saveScgSummary(DAO dao, SCGSummaryDTO scgDTO,List<String> errorList) throws DAOException
+	public void saveScgSummary(DAO dao, SCGSummaryDTO scgDTO, List<String> errorList)
+			throws DAOException
 	{
 		//String response = "success";
-		if(isValid(scgDTO,errorList))
+		if (isValid(scgDTO, errorList))
 		{
-		 SCGDAO scgdao = new SCGDAO();
-         scgdao.saveSCGSummary(dao, scgDTO);
+			SCGDAO scgdao = new SCGDAO();
+			scgdao.saveSCGSummary(dao, scgDTO);
 		}
-		
+
 	}
 
 	private boolean isValid(SCGSummaryDTO scgDTO, List<String> errorList)
 	{
 		boolean isValid = true;
-		if(!isValidScgName(scgDTO.getScgName()))
+		if (!isValidScgName(scgDTO.getScgName()))
 		{
 			errorList.add(ApplicationProperties.getValue("error.scgName"));
-		//	errorList.add("SCG name is required");
+			//	errorList.add("SCG name is required");
 		}
-		if(!isValidSite(scgDTO.getSite()))
+		if (!isValidSite(scgDTO.getSite()))
 		{
 			errorList.add(ApplicationProperties.getValue("error.siteName"));
 			//errorList.add("Site is required");
@@ -3718,79 +3780,107 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	private boolean isValidSite(Long site)
 	{
 		boolean isvalid = true;
-		if(site==null || site<=0)
+		if (site == null || site <= 0)
 		{
 			isvalid = false;
 		}
-			return isvalid;
+		return isvalid;
 	}
 
 	private boolean isValidScgName(String scgName)
 	{
 		boolean isvalid = true;
-		if(scgName==null || scgName.isEmpty())
+		if (scgName == null || scgName.isEmpty())
 		{
 			isvalid = false;
 		}
-			return isvalid;
+		return isvalid;
 	}
-	
-	public  void updateScgConsentStatus(Long scgId,List<ConsentTierDTO> consentTierDtoList, DAO dao) throws BizLogicException
+
+	/**
+	 * @param scgId
+	 * @param consentTierDtoList
+	 * @param disposeSpecimen
+	 * @param dao
+	 * @param sessionDataBean
+	 * @throws BizLogicException
+	 * Update Scg's and specimen under scgs Consent Tier Status.  
+	 */
+	public void updateScgConsentStatus(Long scgId, List<ConsentTierDTO> consentTierDtoList,
+			boolean disposeSpecimen, DAO dao, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
-		try {
-			 final String SELECT_CONSENT_RESPONSE =  "select  consentTierStatus " +
-						" from SpecimenCollectionGroup scg join scg.consentTierStatusCollection consentTierStatus " +
-						" join consentTierStatus.consentTier consentTier" +
-						" where scg.id = ? and consentTier.id = ?" ;
-			
+		try
+		{
+			//In below look updated ConsentTierStatus with new status. 
 			Iterator<ConsentTierDTO> consentTierDtoIte = consentTierDtoList.iterator();
-			while(consentTierDtoIte.hasNext()){
-				ConsentTierDTO consentTierDto= consentTierDtoIte.next();
-				
-				List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
-				parameters.add(new ColumnValueBean(scgId));
-				parameters.add(new ColumnValueBean(consentTierDto.getId()));
-				Collection consentStatus = dao.executeQuery(SELECT_CONSENT_RESPONSE,parameters);
-				Iterator ite =  consentStatus.iterator();
-				if(ite.hasNext()){
+			Map<String, NamedQueryParam> params;
+			while (consentTierDtoIte.hasNext())
+			{
+				ConsentTierDTO consentTierDto = consentTierDtoIte.next();
+
+				params = new HashMap<String, NamedQueryParam>();
+				params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
+				params.put("1", new NamedQueryParam(DBTypes.LONG, consentTierDto.getId()));
+				Collection consentStatus = ((HibernateDAO) dao).executeNamedQuery(
+						"selectScgConsentStatus", params);
+				Iterator ite = consentStatus.iterator();
+				if (ite.hasNext())
+				{
 					ConsentTierStatus statusObj = (ConsentTierStatus) ite.next();
 					statusObj.setStatus(consentTierDto.getStatus());
 					dao.update(statusObj);
 				}
-				
+
 			}
-		
-			List<Long> speciemnIdList = getSpecimenIdList(scgId,dao);
-			Iterator<Long> specimenIdItr = speciemnIdList.iterator();  
-			NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
-			while(specimenIdItr.hasNext() )
+			//All specimen under scg are disabled if dispose specimen is selected from ui with consent status as Withdrawn
+			//Eles consent tier of specimens under scg are updated with new consent status.
+			if (disposeSpecimen)
 			{
-				specimenBizLogic.updateSpecimenConsentStatus(specimenIdItr.next(),consentTierDtoList  , dao);
+				params = new HashMap<String, NamedQueryParam>();
+				params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
+				((HibernateDAO) dao).executeUpdateWithNamedQuery(
+						"updateAllSpecimenFromSCGToDisable", params);
 			}
-			
-		} catch (DAOException e) {
-			throw this.getBizLogicException(e,e.getErrorKeyAsString(), e.getFormattedMessage());
+			else
+			{
+				List<Long> speciemnIdList = getSpecimenIdList(scgId, dao);
+				Iterator<Long> specimenIdItr = speciemnIdList.iterator();
+				NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+				while (specimenIdItr.hasNext())
+				{
+					specimenBizLogic.updateSpecimenConsentStatus(specimenIdItr.next(),
+							consentTierDtoList, disposeSpecimen, dao, sessionDataBean);
+				}
+			}
+
+		}
+		catch (DAOException e)
+		{
+			throw this.getBizLogicException(e, e.getErrorKeyAsString(), e.getFormattedMessage());
 		}
 	}
 
-	public String getCollectionPointEventLabel(Long eventId,DAO dao) throws DAOException{
+	public String getCollectionPointEventLabel(Long eventId, DAO dao) throws DAOException
+	{
 		String label = "";
-		CollectionProtocolEvent event = (CollectionProtocolEvent)dao.retrieveById( CollectionProtocolEvent.class.getName(),eventId);
+		CollectionProtocolEvent event = (CollectionProtocolEvent) dao.retrieveById(
+				CollectionProtocolEvent.class.getName(), eventId);
 		event.getCollectionPointLabel();
 		event.getStudyCalendarEventPoint();
-		label = event.getCollectionPointLabel() + " ("+event.getStudyCalendarEventPoint() +")";
+		label = event.getCollectionPointLabel() + " (" + event.getStudyCalendarEventPoint() + ")";
 		return label;
 	}
 
-	private List<Long> getSpecimenIdList(Long scgId,DAO dao) throws DAOException{
-		 final String SELECT_SPECIMEN_ID =  "select  specimen.id " +
-				" from Specimen specimen join specimen.specimenCollectionGroup scg " +
-				" where scg.id = ?" ;
-		 List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
-		 parameters.add(new ColumnValueBean(scgId));
-		 List<Long> specimenIdList   = dao.executeQuery(SELECT_SPECIMEN_ID,parameters);
-		  return specimenIdList;
-		 
+	private List<Long> getSpecimenIdList(Long scgId, DAO dao) throws DAOException
+	{
+		final String SELECT_SPECIMEN_ID = "select  specimen.id "
+				+ " from Specimen specimen join specimen.specimenCollectionGroup scg "
+				+ " where scg.id = ? and specimen.activityStatus='Active' ";
+		List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>();
+		parameters.add(new ColumnValueBean(scgId));
+		List<Long> specimenIdList = dao.executeQuery(SELECT_SPECIMEN_ID, parameters);
+		return specimenIdList;
+
 	}
 }
-

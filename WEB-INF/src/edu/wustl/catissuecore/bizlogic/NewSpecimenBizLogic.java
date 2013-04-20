@@ -112,11 +112,14 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * NewSpecimenHDAO is used to add new specimen information into the database
  * using hibernate.
+ */
+/**
+ * @author mosin
+ *
  */
 public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 {
@@ -5013,7 +5016,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
-	
+
 	/**
 	 * return the specimen object.
 	 *
@@ -5028,7 +5031,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final Object object = dao.retrieveById(Specimen.class.getName(),specimenID);// new
+			final Object object = dao.retrieveById(Specimen.class.getName(), specimenID);// new
 			if (object == null)
 			{
 				throw this.getBizLogicException(null, "no.spec.returned", "");
@@ -6062,53 +6065,101 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return list;
 	}
-		
-		public  void updateSpecimenConsentStatus(Long specimenId,List<ConsentTierDTO> consentTierDtoList, DAO dao) throws BizLogicException
+
+	/**
+	 * @param specimenId
+	 * @param consentTierDtoList
+	 * @param disposeSpecimen
+	 * @param dao
+	 * @param sessionDataBean
+	 * @throws BizLogicException
+	 * Update Consent Tier status at specimen level
+	 */
+	public void updateSpecimenConsentStatus(Long specimenId,
+			List<ConsentTierDTO> consentTierDtoList, boolean disposeSpecimen, DAO dao,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		try
 		{
-			try {
-				 final String SELECT_CONSENT_RESPONSE =  "select  consentTierStatus " +
-							" from Specimen specimen join specimen.consentTierStatusCollection consentTierStatus " +
-							" join consentTierStatus.consentTier consentTier" +
-							" where specimen.id = ? and consentTier.id = ?" ;
-				
+			//Specimen are disabled when disposeSpecimen is selected from UI.
+			if (disposeSpecimen)
+			{
+				Specimen specimenObj = (Specimen) dao.retrieveById(Specimen.class.getName(),
+						specimenId);
+				specimenObj.setActivityStatus(Constants.DISABLED);
+				dao.update(specimenObj);
+			}
+			else
+			{
+				//updated Specimen's ConsentTier status with new status
+
 				Iterator<ConsentTierDTO> consentTierDtoIte = consentTierDtoList.iterator();
-				while(consentTierDtoIte.hasNext()){
-					ConsentTierDTO consentTierDto= consentTierDtoIte.next();
-					
-					List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
-					parameters.add(new ColumnValueBean(specimenId));
-					parameters.add(new ColumnValueBean(consentTierDto.getId()));
-					Collection consentStatus = dao.executeQuery(SELECT_CONSENT_RESPONSE,parameters);
-					Iterator ite =  consentStatus.iterator();
-					if(ite.hasNext()){
+				Map<String, NamedQueryParam> params;
+
+				while (consentTierDtoIte.hasNext())
+				{
+					ConsentTierDTO consentTierDto = consentTierDtoIte.next();
+
+					params = new HashMap<String, NamedQueryParam>();
+					params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+					params.put("1", new NamedQueryParam(DBTypes.LONG, consentTierDto.getId()));
+					Collection consentStatus = ((HibernateDAO) dao).executeNamedQuery(
+							"selectSpecimenConsentStatus", params);
+					Iterator ite = consentStatus.iterator();
+					if (ite.hasNext())
+					{
 						ConsentTierStatus statusObj = (ConsentTierStatus) ite.next();
 						statusObj.setStatus(consentTierDto.getStatus());
 						dao.update(statusObj);
+
 					}
-					
+
 				}
-			
-				List<Long> childSpecimensId = getChildSpecimenIdLis(specimenId.longValue(),dao);
-				Iterator<Long> childSpeciemnIdItr = childSpecimensId.iterator();  
-				while(childSpeciemnIdItr.hasNext() )
-				{
-					
-					updateSpecimenConsentStatus(childSpeciemnIdItr.next() ,consentTierDtoList  , dao);
-				}
-				
-			} catch (DAOException e) {
-				throw this.getBizLogicException(e,e.getErrorKeyAsString(), e.getFormattedMessage());
 			}
+
+			//Below code is to update consent tier status of child specimen.
+
+			List<Long> childSpecimensId = getChildSpecimenIdLis(specimenId.longValue(), dao);
+			Iterator<Long> childSpeciemnIdItr = childSpecimensId.iterator();
+			while (childSpeciemnIdItr.hasNext())
+			{
+
+				updateSpecimenConsentStatus(childSpeciemnIdItr.next(), consentTierDtoList,
+						disposeSpecimen, dao, sessionDataBean);
+			}
+
 		}
-		
-		public List<Long> getChildSpecimenIdLis(Long specimenId,DAO dao) throws DAOException{
-			String SELECT_CHILD_SPECIMEN_ID = "select specimen.id from Specimen specimen where specimen.parentSpecimen.id = ?";
-			 List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
-			 parameters.add(new ColumnValueBean(specimenId));
-			 List<Long> specimenIdList   = dao.executeQuery(SELECT_CHILD_SPECIMEN_ID,parameters);
-			 return specimenIdList;
-			 
+		catch (DAOException e)
+		{
+			throw this.getBizLogicException(e, e.getErrorKeyAsString(), e.getFormattedMessage());
 		}
+	}
+
+	public void updateSpecimenStatusToDisable(String specimenLabel, HibernateDAO dao)
+			throws DAOException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToDisable", params);
+	}
+
+	public String getSpecimenLabel(Long specimenId, DAO dao) throws DAOException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+		List<String> labelList = ((HibernateDAO) dao).executeNamedQuery("getSpecimenLabel", params);
+		return labelList.get(0);
+	}
+
+	public List<Long> getChildSpecimenIdLis(Long specimenId, DAO dao) throws DAOException
+	{
+		String SELECT_CHILD_SPECIMEN_ID = "select specimen.id from Specimen specimen where specimen.parentSpecimen.id = ?";
+		List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>();
+		parameters.add(new ColumnValueBean(specimenId));
+		List<Long> specimenIdList = dao.executeQuery(SELECT_CHILD_SPECIMEN_ID, parameters);
+		return specimenIdList;
+
+	}
 
 	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier)
 	{
@@ -6226,7 +6277,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		return biohazardDTOs;
 	}
-	
+
 	/** This method returns a NameValueBeanList of specimen label and its id.
 	 * @param scgId
 	 * @return
@@ -6234,14 +6285,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws JSONException 
 	 * @throws BizLogicException 
 	 */
-	public List<NameValueBean> getSpecimeLables(DAO dao,Long scgId) throws BizLogicException {
-		
-		SpecimenDAO specDao= new SpecimenDAO();
+	public List<NameValueBean> getSpecimeLables(DAO dao, Long scgId) throws BizLogicException
+	{
+
+		SpecimenDAO specDao = new SpecimenDAO();
 		List<NameValueBean> speicmens;
-		
-		try{
-		  speicmens =  specDao.getSpecimenLableAndId(dao,scgId);
-		}catch (final DAOException daoExp)
+
+		try
+		{
+			speicmens = specDao.getSpecimenLableAndId(dao, scgId);
+		}
+		catch (final DAOException daoExp)
 		{
 			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
@@ -6249,51 +6303,57 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return speicmens;
 	}
-	public Collection<ConsentTierDTO> getConsentTireDTOs(String specimenLabel,HibernateDAO dao) throws BizLogicException
+
+	public Collection<ConsentTierDTO> getConsentTireDTOs(String specimenLabel, HibernateDAO dao)
+			throws BizLogicException
 	{
-		Collection<ConsentTierDTO> consentTierDTOs=new ArrayList<ConsentTierDTO>();
+		Collection<ConsentTierDTO> consentTierDTOs = new ArrayList<ConsentTierDTO>();
 		try
 		{
 			Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-			substParams.put("0", new NamedQueryParam(DBTypes.STRING,specimenLabel));
-			List<ConsentTierStatus> consentResponses=dao.executeNamedQuery("getConsentResponseCollection", substParams);
+			substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+			List<ConsentTierStatus> consentResponses = dao.executeNamedQuery(
+					"getConsentResponseCollection", substParams);
 			for (ConsentTierStatus consentTierStatus : consentResponses)
 			{
-				ConsentTierDTO consentTierDTO=new ConsentTierDTO();
-				consentTierDTO.setConsentStatment(consentTierStatus.getConsentTier().getStatement());
+				ConsentTierDTO consentTierDTO = new ConsentTierDTO();
+				consentTierDTO
+						.setConsentStatment(consentTierStatus.getConsentTier().getStatement());
 				consentTierDTO.setStatus(consentTierStatus.getStatus());
 				consentTierDTO.setId(consentTierStatus.getConsentTier().getId());
 				consentTierDTOs.add(consentTierDTO);
 			}
 		}
-		catch(ApplicationException applicationException)
+		catch (ApplicationException applicationException)
 		{
-			throw new BizLogicException(null,applicationException,null);
+			throw new BizLogicException(null, applicationException, null);
 		}
-		return  consentTierDTOs;
+		return consentTierDTOs;
 	}
-	public String reduceQuantity(Double quantityReducedBy,String specimenLabel,HibernateDAO dao) throws BizLogicException, DAOException
+
+	public String reduceQuantity(Double quantityReducedBy, String specimenLabel, HibernateDAO dao)
+			throws BizLogicException, DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, true));
-		
-		final List specimenDetails=dao.executeNamedQuery("getQuantityAndAvailability", params);
-		
-		if(specimenDetails.isEmpty())
+
+		final List specimenDetails = dao.executeNamedQuery("getQuantityAndAvailability", params);
+
+		if (specimenDetails.isEmpty())
 		{
 			return ApplicationProperties.getValue("specimen.closed.unavailable");
 		}
-		Double previousQuantity=Double.parseDouble(specimenDetails.get(0).toString());
-		Double 	remainingQuantity = previousQuantity.doubleValue()-quantityReducedBy;
+		Double previousQuantity = Double.parseDouble(specimenDetails.get(0).toString());
+		Double remainingQuantity = previousQuantity.doubleValue() - quantityReducedBy;
 		params.put("0", new NamedQueryParam(DBTypes.DOUBLE, remainingQuantity));
-		
-		int remainingQuantityMoreThenZero=remainingQuantity.compareTo(0D);
-		if(remainingQuantityMoreThenZero == -1)
+
+		int remainingQuantityMoreThenZero = remainingQuantity.compareTo(0D);
+		if (remainingQuantityMoreThenZero == -1)
 		{
-			List<String> parameters=new ArrayList<String>();
+			List<String> parameters = new ArrayList<String>();
 			parameters.add(previousQuantity.toString());
-			return ApplicationProperties.getValue("requested.quantity.exceeds",parameters);
+			return ApplicationProperties.getValue("requested.quantity.exceeds", parameters);
 		}
 		else if (remainingQuantity.compareTo(0D) == 0)
 		{
@@ -6305,21 +6365,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		params.put("2", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateQuantityAndAvailability", params);
-		
+
 		return Constants.SUCCESS;
 	}
-	public void updateSpecimenStatusToClose(String specimenLabel,HibernateDAO dao) throws DAOException
+
+	public void updateSpecimenStatusToClose(String specimenLabel, HibernateDAO dao)
+			throws DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToClose", params);
 	}
-	public void updateSpecimenStatusToDisabled(String specimenLabel,HibernateDAO dao) throws DAOException
+
+	public void updateSpecimenStatusToDisabled(String specimenLabel, HibernateDAO dao)
+			throws DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToDisabled", params);
 	}
+
 	public Long getAssociatedIdentifiedReportId(Long specimenId, DAO dao)
 			throws ApplicationException
 	{
@@ -6336,5 +6401,4 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		return valueToReturn;
 	}
 
-	
 }
