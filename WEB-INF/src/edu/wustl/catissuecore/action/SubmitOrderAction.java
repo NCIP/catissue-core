@@ -13,8 +13,6 @@
 
 package edu.wustl.catissuecore.action;
 
-
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,64 +58,76 @@ public class SubmitOrderAction extends BaseAction
 	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-			{
-		
+	{
+
 		String dataJSON = request.getParameter("dataJSON");
 		Gson gson = new Gson();
-		
-		OrderSubmissionDTO orderSubmissionDTO=gson.fromJson(dataJSON, OrderSubmissionDTO.class);
-	
-		JSONObject jsonObject=new JSONObject(dataJSON);
-	    orderSubmissionDTO.setOrderItemSubmissionDTOs(OrderingSystemUtil.getOrderItemDTOs(jsonObject.get("gridXML").toString()));
-	    
-		OrderBizLogic orderBizLogic=new OrderBizLogic();
-		
-		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-		Long userId=sessionDataBean.getUserId();
-		HibernateDAO dao=null;
-		StringBuilder errors=new StringBuilder();
+
+		OrderSubmissionDTO orderSubmissionDTO = gson.fromJson(dataJSON, OrderSubmissionDTO.class);
+
+		JSONObject jsonObject = new JSONObject(dataJSON);
+		orderSubmissionDTO.setOrderItemSubmissionDTOs(OrderingSystemUtil
+				.getOrderItemDTOs(jsonObject.get("gridXML").toString()));
+
+		OrderBizLogic orderBizLogic = new OrderBizLogic();
+
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
+		Long userId = sessionDataBean.getUserId();
+		HibernateDAO dao = null;
+		StringBuilder errors = new StringBuilder();
 		try
 		{
-			dao=(HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
-			OrderStatusDTO orderStatusDTO=orderBizLogic.updateOrder(orderSubmissionDTO,userId,dao);
-			
-			if(orderStatusDTO.getOrderErrorDTOs().isEmpty())
+
+			dao = (HibernateDAO) AppUtility.openDAOSession(sessionDataBean);
+			OrderStatusDTO orderStatusDTO = orderBizLogic.updateOrder(orderSubmissionDTO, userId,
+					dao);
+
+			if (orderStatusDTO.getOrderErrorDTOs().isEmpty())
 			{
-				Map<String,Object> csvFileData =  orderBizLogic.getOrderCsv(orderStatusDTO.getOrderId(), getExportedName(sessionDataBean), dao);
-				
+				Map<String, Object> csvFileData = orderBizLogic.getOrderCsv(
+						orderStatusDTO.getOrderId(), getExportedName(sessionDataBean), dao);
+
 				dao.commit();
-				orderBizLogic.sendOrderUpdateEmail(
-						orderSubmissionDTO.getRequestorName(),
-						orderSubmissionDTO.getRequestorEmail(),
-						sessionDataBean.getUserName(),
-						orderSubmissionDTO.getOrderName(),
-						sessionDataBean.getLastName()+","+ sessionDataBean.getFirstName(),
-						orderStatusDTO.getStatus(), request.getRequestURL()	+ "?id=" + orderStatusDTO.getOrderId(),csvFileData);
+				orderBizLogic
+						.sendOrderUpdateEmail(
+								orderSubmissionDTO.getRequestorName(),
+								orderSubmissionDTO.getRequestorEmail(),
+								sessionDataBean.getUserName(),
+								orderSubmissionDTO.getOrderName(),
+								sessionDataBean.getLastName() + ","
+										+ sessionDataBean.getFirstName(),
+								orderStatusDTO.getStatus(), request.getRequestURL() + "?id="
+										+ orderStatusDTO.getOrderId(), csvFileData);
 				response.getWriter().write("Success");
 
 			}
 			else
-			{	
+			{
 				dao.rollback();
 				String json = gson.toJson(orderStatusDTO);
 				response.getWriter().write(json);
 			}
-				
+
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 			dao.rollback();
-			response.getWriter().write(errors.toString());	
+			response.getWriter().write(errors.toString());
 		}
 		finally
 		{
 			AppUtility.closeDAOSession(dao);
 		}
 		return null;
- }
-	private String getExportedName(SessionDataBean sessionDataBean){
-		String firstName = sessionDataBean.getFirstName()==null? "" : sessionDataBean.getFirstName();
-		String lastName = sessionDataBean.getLastName() == null ? "" : sessionDataBean.getLastName();
-		return (lastName+" "+firstName).trim();
 	}
-}	
+
+	private String getExportedName(SessionDataBean sessionDataBean)
+	{
+		String firstName = sessionDataBean.getFirstName() == null ? "" : sessionDataBean
+				.getFirstName();
+		String lastName = sessionDataBean.getLastName() == null ? "" : sessionDataBean
+				.getLastName();
+		return (lastName + " " + firstName).trim();
+	}
+}

@@ -484,7 +484,7 @@ for(var row=0;row<status.length;row++)
 }
 function qtyChange(stage,rId,cInd,nValue,oValue)
 {
-	if(cInd == 4 && stage == 2)
+	if(cInd == 5 && stage == 2)
 	{
 	
 		var avlQty = Number(mygrid.cellById(rId,3).getValue());

@@ -2379,30 +2379,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					.getOrderItemSubmissionDTOs())
 			{
 
-				params = new HashMap<String, NamedQueryParam>();
-				params.put("0",
-						new NamedQueryParam(DBTypes.LONG, orderItemSubmissionDTO.getOrderitemId()));
-				List orderItemStatuses = dao.executeNamedQuery("getOrderItemStatus", params);
-				String orderItemlOldStatus = orderItemStatuses.get(0).toString();
-
+				ColumnValueBean columnValueBean=new ColumnValueBean(orderItemSubmissionDTO
+						.getOrderitemId());
+				columnValueBean.setColumnName("id");
+				List orderItems=dao.retrieve(OrderItem.class.getName(),columnValueBean);
+				OrderItem orderItem=(OrderItem) orderItems.get(0);
+				String orderItemlOldStatus=orderItem.getStatus();
 				if (isUpdateAllowed(orderItemSubmissionDTO.getStatus(), orderItemlOldStatus))
 				{
-					params = new HashMap<String, NamedQueryParam>();
-					params.put(
-							"0",
-							new NamedQueryParam(DBTypes.DOUBLE, orderItemSubmissionDTO.getDistQty()));
-					params.put("1",
-							new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO.getStatus()));
-					params.put(
-							"2",
-							new NamedQueryParam(DBTypes.STRING, orderItemSubmissionDTO
-									.getComments()));
-					params.put(
-							"3",
-							new NamedQueryParam(DBTypes.LONG, orderItemSubmissionDTO
-									.getOrderitemId()));
-
-					dao.executeUpdateWithNamedQuery("updateOrderItemSQL", params);
 
 					SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 					NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
@@ -2431,6 +2415,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 							{
 								orderErrorDTO.setNewStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 							}
+							continue;
 						}
 
 						specimenEventParametersBizLogic
@@ -2451,7 +2436,11 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 								.getValue("orderdistribution.disposeReason", disposeReason),
 								orderItemSubmissionDTO.getSpecimenLabel(),Status.ACTIVITY_STATUS_CLOSED.toString(), dao, userId);
 					}
-
+					
+					orderItem.setDistribtedQuantity(orderItemSubmissionDTO.getDistQty());
+					orderItem.setStatus(orderItemSubmissionDTO.getStatus());
+					orderItem.setDescription(orderItemSubmissionDTO.getComments());
+					dao.update(orderItem);
 					isOrderProcessed = isOrderProcessed
 							& isOrderItemProcessed(orderItemSubmissionDTO.getStatus());
 					isOrderNew = isOrderNew & isOrderItemNew(orderItemSubmissionDTO.getStatus());
