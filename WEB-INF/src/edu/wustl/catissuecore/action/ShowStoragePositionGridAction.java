@@ -76,8 +76,10 @@ public class ShowStoragePositionGridAction extends BaseAction
 //		request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT, storageContainerGridObject);
 		request.getSession().removeAttribute(Constants.POS1);
 		request.getSession().removeAttribute(Constants.POS2);
+		request.getSession().removeAttribute(Constants.PAGEOF);
 		request.getSession().setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
-		request.getSession().setAttribute(Constants.POS2,request.getParameter(Constants.POS2)); 
+		request.getSession().setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
+		request.getSession().setAttribute(Constants.PAGEOF,request.getParameter(Constants.PAGEOF));
 		request.setAttribute("collStatus", request.getParameter("collStatus"));
 		request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, request.getParameter(Constants.COLLECTION_PROTOCOL_ID));
 		request.setAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS, request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS));
@@ -85,6 +87,8 @@ public class ShowStoragePositionGridAction extends BaseAction
 		request.setAttribute(Constants.CONTAINER_NAME, request.getParameter(Constants.CONTAINER_NAME));
 		request.setAttribute("controlName", request.getParameter("controlName"));
 		request.setAttribute("isVirtual", request.getParameter("isVirtual"));
+		request.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
+		request.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
 		return mapping.findForward(target);
 			}
 

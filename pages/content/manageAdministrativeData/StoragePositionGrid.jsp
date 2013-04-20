@@ -166,10 +166,10 @@ function getActionToDoURL()
 	</script>
 	
 			&nbsp;<td class="black_ar_md"  style="padding-left:15px;" >
-				<input type="text" class="black_ar_md"  size="1" id="pos11" name="pos11" value="${sessionScope.pos1}"disabled= "false"/>
+				<input type="text" class="black_ar_md"  size="1" id="pos11" name="pos11" value="${sessionScope.pos1Val}"disabled= "false"/>
 			</td>
 			<td class="black_ar_md" align="left">
-				<input type="text" class="black_ar_md"  size="1" id="pos22" name="pos22" value="${sessionScope.pos2}" disabled= "false"/>
+				<input type="text" class="black_ar_md"  size="1" id="pos22" name="pos22" value="${sessionScope.pos2Val}" disabled= "false"/>
 				<input type="hidden" id="pos1" name="pos1" />
 				<input type="hidden" id="pos2" name="pos2" />
 			</td>
@@ -181,7 +181,7 @@ function getActionToDoURL()
 			</table>
 		</div>
 			<div id="storageContainerNameDiv" style="display:block">
-			<%=storageContainerName%>
+			
 			</div>
 		</td>
 	</tr>
@@ -210,12 +210,23 @@ var fromStoragePosition1=parent.window.document.getElementById('storageContainer
 	var storagePositions1=fromStoragePosition1.substring(fromStoragePosition1.lastIndexOf('(')+1,fromStoragePosition1.lastIndexOf(')')).split(",");
 	document.getElementById('pos1').value=storagePositions1[0];
 	document.getElementById('pos2').value=storagePositions1[1];
-function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2)
-{
-	var id1 = document.getElementById(elementId1);	
+function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageOf)
+{//alert(pageOf);
+	if(pageOf == 'pageOfSpecimen')
+	{
+		var id1 = document.getElementById("pos1");	
+	id1.value = elementValue1;
+	var id2 = document.getElementById("pos2");	
+	id2.value = elementValue2;
+	}
+	else
+	{
+		var id1 = document.getElementById(elementId1);	
 	id1.value = elementValue1;
 	var id2 = document.getElementById(elementId2);	
 	id2.value = elementValue2;
+	}
+	
 	var speCollStat = '${requestScope.collStatus}';
 	//alert(speCollStat);
 	//alert(dhtmlxCombo.getActualValue());
@@ -304,7 +315,9 @@ function updateSpecimenValues(responseText)
 		var container = parent.window.document.getElementById('containerName');
 		var position1= parent.window.document.getElementById('pos1');
 		var position2= parent.window.document.getElementById('pos2');
-		
+		//alert(container.value);
+		//alert(position2.value);
+		//alert(position1.value);
 		container.value = containerName;
 		position1.value = pos1;
 		position2.value= pos2;
@@ -408,6 +421,7 @@ function onContainerDetailDisplay(controlName)
 function createPositionGrid(responseString)
 {
 	var obj = eval('( '+ responseString +')');
+	
 	var htmlString = "";
 	var posx = obj.posx;
 	var posy = obj.posy;
@@ -417,6 +431,7 @@ function createPositionGrid(responseString)
 	var dimensionTwoLabel = obj.dimensionTwoLabel;
 	var pos1ControlName = obj.pos1ControlName;
 	var pos2ControlName = obj.pos2ControlName;
+	var pageOf = obj.pageOf;
 	var oneDimensionCapacity = obj.dimensionOneCapacity;
 	var twoDimensionCapacity = obj.dimensionTwoCapacity;
 	var occupiedPositon = obj.occupiedPositions;
@@ -469,7 +484,7 @@ function createPositionGrid(responseString)
 				var position=title.split(",");
 				if(containerMap[i][j-1][k])
 				{
-					html=html+" style='min-width:20px;cursor:pointer;' onMouseOver=\"this.bgColor='##83F2B9'\" onMouseOut=\"this.bgColor='#008000'\" title='"+title+"' bgColor=#008000 onclick=\""+functionName+"('"+pos1ControlName+"','"+position[0]+"','"+pos2ControlName+"','"+position[1]+"');\">";
+					html=html+" style='min-width:20px;cursor:pointer;' onMouseOver=\"this.bgColor='##83F2B9'\" onMouseOut=\"this.bgColor='#008000'\" title='"+title+"' bgColor=#008000 onclick=\""+functionName+"('"+pos1ControlName+"','"+position[0]+"','"+pos2ControlName+"','"+position[1]+"','"+pageOf+"');\">";
 				}			
 				else
 				{
@@ -508,7 +523,7 @@ function showContainerGrid()
 }
 
 function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValue2)
-{
+{//alert("elementId1:  "+elementId1+"  elementValue1:  "+elementValue1+"  elementId2:   "+elementId2+"elementValue2:   "+elementValue2);
 	var id1 = parent.window.document.getElementById(elementId1);	
 	id1.value = elementValue1;
 	var id2 = parent.window.document.getElementById(elementId2);	
@@ -532,6 +547,8 @@ function checkSpecimenStatus()
 		var storagePositions=fromStoragePosition.substring(fromStoragePosition.lastIndexOf('(')+1,fromStoragePosition.lastIndexOf(')')).split(",");
 		var fromPos1=storagePositions[0];
 		var fromPos2=storagePositions[1];
+		//alert(fromPos1 +" cder");
+		//alert(fromPos2 +" cder");
 		document.getElementById("pos11").value=fromPos1;
 		document.getElementById("pos22").value=fromPos2;
 	}

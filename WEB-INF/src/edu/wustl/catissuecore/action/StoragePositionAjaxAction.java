@@ -106,8 +106,10 @@ public class StoragePositionAjaxAction extends SecureAction
 			returnedJObject.put("dimensionTwoCapacity", storageContainerGridObject.getTwoDimensionCapacity());
 			returnedJObject.put("pos1ControlName",dimensionOne.toString());
 			returnedJObject.put("pos2ControlName",dimensionTwo.toString());
-			returnedJObject.put("pos1ControlName",Constants.POS1);
-			returnedJObject.put("pos2ControlName",Constants.POS2);
+			
+			returnedJObject.put("pos1ControlName",request.getSession().getAttribute(Constants.POS1));
+			returnedJObject.put("pos2ControlName",request.getSession().getAttribute(Constants.POS2));
+			returnedJObject.put("pageOf",request.getSession().getAttribute(Constants.PAGEOF));
 			response.setContentType("application/json");
 			
 			response.getWriter().write(returnedJObject.toString());

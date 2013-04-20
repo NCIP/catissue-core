@@ -226,6 +226,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				{
 					specimen = (Specimen)dao.retrieveById(Specimen.class.getName(), specimen.getId());
 					final TransferEventParameters transferEvent = (TransferEventParameters) specimenEvent;
+					transferEvent.setSpecimen(specimen);
 					StorageContainer storageContainerObj = new StorageContainer();
 
 					List stNamelist = null;
