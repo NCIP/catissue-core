@@ -122,8 +122,18 @@ public class CpAndParticipentsBean implements Externalizable,Comparable<CpAndPar
 
 	@Override
 	public int compareTo(CpAndParticipentsBean cpBean) {
-		// TODO Auto-generated method stub
 		
-		return this.compareTo(cpBean);
+			int result = 0;
+			if (this.getClass().getName().equals(cpBean.getClass().getName()))
+			{
+				final CpAndParticipentsBean cpbean = (CpAndParticipentsBean) cpBean;
+				result = String.CASE_INSENSITIVE_ORDER.compare(this.getName(),cpbean.getName());
+		        if (result == 0) {
+		        	result = this.getName().compareTo(cpbean.getName());
+		        }
+				
+			}
+			return result;
+		
 	}
 }

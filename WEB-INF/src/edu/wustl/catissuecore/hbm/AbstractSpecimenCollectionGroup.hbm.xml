@@ -336,6 +336,7 @@
 	        />
 		</joined-subclass>
     </class>
-
+<query name="getDefaultSite">select cpe.defaultSite.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.id=?
+</query>
 </hibernate-mapping>
 

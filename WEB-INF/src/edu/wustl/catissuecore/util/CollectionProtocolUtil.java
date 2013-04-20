@@ -1766,6 +1766,7 @@ public class CollectionProtocolUtil
 				.getStorageContainerForAliquotSpecimem());
 		specimenRequirementBean.setNoOfDeriveSpecimen(oldBean.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(oldBean.getDeriveSpecimen());
+		specimenRequirementBean.setSpecimenRequirementLabel(oldBean.getSpecimenRequirementLabel());
 		return specimenRequirementBean;
 	}
 

@@ -1484,3 +1484,13 @@ function getHyperlinkLable(link)
 	}
 	return link;
 }
+
+function onComboClick()
+{
+  this.enableFilteringMode(false);
+}
+
+function onComboKeyPress()
+{
+  this.enableFilteringMode(true);
+}

@@ -598,6 +598,10 @@ div.autocomplete {
 	  font-size:11px;
 	width:19em;
 	}
+        .formFieldSizedText22{ /* for the autocomplete tag */
+	 width:22em;
+         height: 22px;
+        }
 
 	.formFieldSizedTime{ /* for the form elements themselves and with a constant width (on elements) */
 	font-family:verdana;
@@ -1094,7 +1098,6 @@ input.actionButton{ /* optional style for form and action buttons */
 	font-size:11px;
 	color:#808080;
 }
-
 .align_right_style_new{
 	padding-right: 22px;
 	text-align:right;

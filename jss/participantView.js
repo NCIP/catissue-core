@@ -70,6 +70,10 @@ function createAliquote()
  var label = specimenCombo.getSelectedText();
  var noOfAliquotes = document.getElementById("noOfAliquots").value;
  var quantity = document.getElementById("quantityPerAliquot").value;
+ if(isNaN(quantity))
+ {
+  quantity = "";
+ }
  var isSubmit = true;
  var action = "";
 /*if((count==null ||count=="") || (quantity==null || quantity==""))
@@ -151,10 +155,12 @@ function getSpecimenLabelsforSCG(id)
 
 function populateSpecimenLabelsCombo(response)
  {
-        specimenCombo.setComboText("");
-        specimenCombo.clearAll(); 
+    specimenCombo.setComboText("");
+    specimenCombo.clearAll(); 
 	specimenCombo.addOption(eval(response)); 
 	specimenCombo.enableFilteringMode(true);
+    specimenCombo.attachEvent("onOpen",onComboClick);
+    specimenCombo.attachEvent("onKeyPressed",onComboKeyPress); 
   }
 
 //Shoe participant Edit page

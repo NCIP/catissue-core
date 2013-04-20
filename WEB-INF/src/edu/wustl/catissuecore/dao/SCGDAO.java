@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -17,8 +19,11 @@ import edu.wustl.catissuecore.dto.SCGEventPointDTO;
 import edu.wustl.catissuecore.dto.SCGSummaryDTO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 
 public class SCGDAO
 {
@@ -63,8 +68,8 @@ public class SCGDAO
 	public SCGSummaryDTO getScgSummary(DAO dao, Long scgId) throws DAOException
 	{
 		SCGSummaryDTO scgSummDto = new SCGSummaryDTO();
-
-		String hql = "select scg.name ,scg.specimenCollectionSite.id,scg.collectionStatus"
+		
+		String hql = "select scg.name ,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id"
 				+ " from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup as ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup "
 				+ "as scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?";
 
@@ -80,12 +85,24 @@ public class SCGDAO
 		List<ColumnValueBean> columnValueBeans = new ArrayList();
 		columnValueBeans.add(columnValueBean);
 
-		List scgs = dao.executeQuery(hql, columnValueBeans);
+		List scgs = dao.executeQuery(hql, columnValueBeans); 
+		
+//		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+//		params.put("0", new NamedQueryParam(DBTypes.LONG,scgId));
+//		List scgs =((HibernateDAOImpl) dao).executeNamedQuery("receiveEventParam", params);
+		
 		for (Object scg : scgs)
 		{
 			Object[] scgData = (Object[]) scg;
 			scgSummDto.setScgName((String) scgData[0]);
-			scgSummDto.setSite((Long) scgData[1]);
+			if((Long) scgData[1]==null)
+			{
+				scgSummDto.setSite(getEventDefaultSite((Long)scgData[3],(HibernateDAO)dao));
+			}
+			else
+			{
+				scgSummDto.setSite((Long) scgData[1]);	
+			}
 			scgSummDto.setScgId(scgId);
 			scgSummDto.setCollectionStatus((String)scgData[2]);
 		}
@@ -122,6 +139,20 @@ public class SCGDAO
 		}
 
 		return scgSummDto;
+	}
+
+	private Long getEventDefaultSite(Long eventId,HibernateDAO dao) throws DAOException
+	{
+		Long defSite= null;
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG,eventId));
+		List site = dao.executeNamedQuery("getDefaultSite", params);
+		
+		for(Object siteId :site)
+		{
+			defSite = (Long)siteId;
+		}
+		return defSite;
 	}
 
 	/** This method updates the scg field submitted from anticipatory specimen page.

@@ -14,12 +14,17 @@ receiverCombo.setSize("240");
 receiverCombo.attachEvent("onSelectionChange",processComboChange);
 receiverCombo.setName("receiver");
 receiverCombo.enableFilteringMode(true);
+receiverCombo.attachEvent("onOpen",onComboClick);
+receiverCombo.attachEvent("onKeyPressed",onComboKeyPress); 
+
 
 collectCombo = dhtmlXComboFromSelect("collector");
 collectCombo.setSize("240");
 collectCombo.attachEvent("onSelectionChange",processComboChange);
 collectCombo.setName("collector");
 collectCombo.enableFilteringMode(true);
+collectCombo.attachEvent("onOpen",onComboClick);
+collectCombo.attachEvent("onKeyPressed",onComboKeyPress); 
 
 collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
 collectionStatusCombo.setSize("240");

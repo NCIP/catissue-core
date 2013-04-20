@@ -17,6 +17,7 @@
 <LINK type=text/css rel=stylesheet href="css/participantEffects.css" />
 
 <script src="jss/scgSummary.js"></script>
+<script src="jss/json2.js" type="text/javascript"></script>
 <fmt:formatDate type="time" value="${scgSummaryDTO.collectedDate}" pattern="H" var="collectedTimeinHr"/>
 <fmt:formatDate type="time" value="${scgSummaryDTO.collectedDate}" pattern="m" var="collectedTimeinmin"/>
 <fmt:formatDate type="time" value="${scgSummaryDTO.receivedDate}" pattern="H"  var="receivedTimeinHr"/>
@@ -38,9 +39,9 @@
 	<tr>
 		<td class="black_new padding_right_style black_ar" align="right" width="27%">
 		<b><bean:message key="specimenCollectionGroup.groupName"/></b></td>
-		<td colspan="3" width="25%" class="black_new"><html:text property="scgName" styleId="scgName" name="scgSummaryDTO" size="29" onblur="processData(this)"/> </td>
+		<td colspan="3" width="25%"><html:text property="scgName" styleId="scgName" name="scgSummaryDTO" styleClass="formFieldSizedText22 black_ar" onblur="processData(this)"/> </td>
 		<td class="black_new padding_right_style black_ar" align="right" width="25%">
-		 <b>  <bean:message key="specimenCollectionGroup.site"/> </b>
+		 <b><bean:message key="specimenCollectionGroup.site"/> </b>
 		</td>
 		<td align="left" class="black_new padding_right_style" colspan="3" width="25%">
 							<html:select property="site" name="scgSummaryDTO" 

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.Collections;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
@@ -1592,6 +1593,7 @@ public class FlexInterface
 					.getAttribute(Constants.SESSION_DATA);
 			final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 			cpColl = cpBizLogic.getCollectionProtocolCollection(sessionDataBean);
+			Collections.sort(cpColl);
 		
 		}
 		catch (final ApplicationException e)
@@ -1625,6 +1627,7 @@ public class FlexInterface
 		final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 		
 		participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long.parseLong(cpId),isPHIView);
+		Collections.sort(participantsList);
 
     	return participantsList;
 	}
