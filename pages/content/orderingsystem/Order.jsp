@@ -24,6 +24,7 @@
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_mcol.js"></script>
+<script src="jss/json2.js" type="text/javascript"></script>
 <c:set var="tr_white_color" value="tr_alternate_color_white" />
 <c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
 <head>
@@ -191,7 +192,7 @@ function switchToOlderView()
 				
     	<tr>
 		          <td><div id="error" class="alert alert-error" style="display:none">
-    Distribution could not be completed, please check the highlighted specimens for errors. Specimens not eligible(not available, quantity lesser than zero, virtual specimens, pending specimens) for distribution have been marked as rejected. Please correct the errors for the rest and distribute.
+    Encountered errors with some of the specimens in the order. Please check the below table for specific error.
 </div>
 <div class="alert alert-success" id="success" style="display:none">
    Order Submitted Sucessfully.
@@ -289,7 +290,7 @@ function switchToOlderView()
 
     					</script>	
                 <td class="black_ar align_right_style"><strong>
-								<bean:message key='requestdetails.header.label.Comments'/> 
+								<bean:message key='requestdetails.requestor.Comments'/> 
 								
 							</strong></td>
                 <td class="black_ar">&nbsp;<bean:write name="DisplayOrderDTO"  property="comments"  scope="request" /></td>
@@ -329,7 +330,7 @@ function switchToOlderView()
 		<tr>
 			<td>&nbsp;&nbsp;
 				<span class="black_ar_b messagetextwarning">
-					Note: Click on the 'Requested Qty', 'Status' or 'Comments' column to change the value.
+					Note: Click on the 'Distributed Qty', 'Status' or 'Comments' column to change the value.
 				</span>
 			</td>
 			<td align="right">
@@ -392,7 +393,7 @@ function loadTab()
 	tabbar.setHrefMode("iframes-on-demand");	
 	tabbar.setSkin('dhx_skyblue');
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
-	tabbar.addTab("SimpleViewTab", "Simple View", "100px");	
+	tabbar.addTab("SimpleViewTab", "Specimens", "100px");	
 	tabbar.addTab("ConsentViewTab", "Consents", "100px");
 	tabbar.enableAutoSize(false,true);
 	tabbar.setContent("SimpleViewTab","SimpleViewDiv");
