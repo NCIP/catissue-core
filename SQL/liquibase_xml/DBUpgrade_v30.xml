@@ -339,4 +339,9 @@
     		<column name="DISTRIBUTION_ID"/>
 		</createIndex>
 	</changeSet>
+	<changeSet id="44" author="catissue" runOnChange="true" failOnError="false">
+		<createIndex tableName="CATISSUE_ORDER" indexName="CATISSUE_ORDER_STATUS">
+    		<column name="STATUS"/>
+		</createIndex>
+	</changeSet>
 </databaseChangeLog>         
