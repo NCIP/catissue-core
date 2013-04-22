@@ -922,7 +922,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			toChangeCEP.setTimestamp(newCollectionEventParameters.getTimestamp());
 
-			if (!StringUtils.isBlank(collProcedure) && !collProcedure.equals(Constants.CP_DEFAULT))
+			if (!StringUtils.isBlank(collProcedure)/* && !collProcedure.equals(Constants.CP_DEFAULT)*/)
 			{
 				toChangeCEP.setCollectionProcedure(newCollectionEventParameters
 						.getCollectionProcedure());
@@ -932,7 +932,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				toChangeCEP.setComment(newCollectionEventParameters.getComment());
 			}
-			if (!StringUtils.isBlank(collContainer) && !collContainer.equals(Constants.CP_DEFAULT))
+			if (!StringUtils.isBlank(collContainer) /*&& !collContainer.equals(Constants.CP_DEFAULT)*/)
 			{
 				toChangeCEP.setContainer(newCollectionEventParameters.getContainer());
 			}
@@ -941,7 +941,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				toChangeCEP.setUser(user);
 			}
-			if (toChangeCEP.getCollectionProcedure().equals(""))
+			if ( toChangeCEP.getCollectionProcedure().equals(""))
 			{
 				toChangeCEP.setCollectionProcedure((String) DefaultValueManager
 						.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
@@ -962,7 +962,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				toChanageREP.setComment(newreceivedEventParameters.getComment());
 			}
-			if (!StringUtils.isBlank(recQty) && !recQty.equals(Constants.CP_DEFAULT))
+			if (!StringUtils.isBlank(recQty) /*&& !recQty.equals(Constants.CP_DEFAULT)*/)
 			{
 				toChanageREP.setReceivedQuality(newreceivedEventParameters.getReceivedQuality());
 			}
@@ -976,7 +976,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				toChanageREP.setUser(user);
 			}
-			if (toChanageREP.getReceivedQuality().equals(""))
+			if (toChanageREP.getReceivedQuality() == null|| toChanageREP.getReceivedQuality().equals(""))
 			{
 				toChanageREP.setReceivedQuality((String) DefaultValueManager
 						.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
