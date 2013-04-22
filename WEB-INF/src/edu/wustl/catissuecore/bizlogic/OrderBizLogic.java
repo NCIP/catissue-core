@@ -1007,7 +1007,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			 */
 
 			String hql = " from " + OrderDetails.class.getName()
-					+ " order order by order.requestedDate desc";
+					+ " order where order.status in ('New','Pending') "
+					+ " order by order.requestedDate desc";
 			orderListFromDB = dao.executeQuery(hql, null);
 			// orderListFromDB = dao.retrieve(OrderDetails.class.getName(),
 			// selectColName,
