@@ -2262,8 +2262,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			Object[] orderItemDetails = (Object[]) object;
 			OrderItemDTO orderItemDTO = new OrderItemDTO();
 			orderItemDTO.setSpecLabel(orderItemDetails[0].toString());
-			orderItemDTO.setSpecimenClass(orderItemDetails[1].toString());
-			orderItemDTO.setSpecimenType(orderItemDetails[2].toString());
+			orderItemDTO.setSpecimenType(orderItemDetails[1].toString());
+			orderItemDTO.setSpecimenClass(orderItemDetails[2].toString());			
 			orderItemDTO.setAvailableQuantity(Double.parseDouble(orderItemDetails[3].toString()));
 			orderItemDTO.setRequestedQuantity((Double.parseDouble(orderItemDetails[4].toString())));
 			orderItemDTO.setStatus(orderItemDetails[5].toString());
@@ -2386,7 +2386,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 						String specimenUpdateStatus = specimenBizLogic.reduceQuantity(
 								orderItemSubmissionDTO.getDistQty(),
-								orderItemSubmissionDTO.getSpecimenLabel(), dao);
+								orderItemSubmissionDTO.getSpecimenId(), dao);
 						if (!Constants.SUCCESS.equals(specimenUpdateStatus))
 						{
 							OrderErrorDTO orderErrorDTO = new OrderErrorDTO();

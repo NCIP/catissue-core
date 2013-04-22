@@ -6331,22 +6331,27 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		return consentTierDTOs;
 	}
 
-	public String reduceQuantity(Double quantityReducedBy, String specimenLabel, HibernateDAO dao)
+	public String reduceQuantity(Double quantityReducedBy, Long specimenId, HibernateDAO dao)
 			throws BizLogicException, DAOException
 	{
-		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, true));
 
-		final List specimenDetails = dao.executeNamedQuery("getQuantityAndAvailability", params);
+		ColumnValueBean columnValueBean = new ColumnValueBean(specimenId);
+		columnValueBean.setColumnName("id");
+		List specimens = dao.retrieve(Specimen.class.getName(), columnValueBean);
 
-		if (specimenDetails.isEmpty())
+		if (specimens.isEmpty())
 		{
 			return ApplicationProperties.getValue("specimen.closed.unavailable");
 		}
-		Double previousQuantity = Double.parseDouble(specimenDetails.get(0).toString());
+
+		Specimen specimen = (Specimen) specimens.get(0);
+		if (!Constants.ACTIVITY_STATUS_ACTIVE.equalsIgnoreCase(specimen.getActivityStatus()))
+		{
+			return ApplicationProperties.getValue("specimen.closed.unavailable");
+		}
+		Double previousQuantity = specimen.getAvailableQuantity();
 		Double remainingQuantity = previousQuantity.doubleValue() - quantityReducedBy;
-		params.put("0", new NamedQueryParam(DBTypes.DOUBLE, remainingQuantity));
+		specimen.setAvailableQuantity(remainingQuantity);
 
 		int remainingQuantityMoreThenZero = remainingQuantity.compareTo(0D);
 		if (remainingQuantityMoreThenZero == -1)
@@ -6357,26 +6362,27 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else if (remainingQuantity.compareTo(0D) == 0)
 		{
-			params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, false));
+			specimen.setIsAvailable(false);
 		}
 		else
 		{
-			params.put("1", new NamedQueryParam(DBTypes.BOOLEAN, true));
+			specimen.setIsAvailable(true);
 		}
-		params.put("2", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		dao.executeUpdateWithNamedQuery("updateQuantityAndAvailability", params);
 
+		dao.update(specimen);
 		return Constants.SUCCESS;
 	}
 
 	public void updateSpecimenStatusToClose(String specimenLabel, HibernateDAO dao)
 			throws DAOException
 	{
-		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToClose", params);
+		ColumnValueBean columnValueBean = new ColumnValueBean(specimenLabel);
+		columnValueBean.setColumnName("label");
+		List specimens = dao.retrieve(Specimen.class.getName(), columnValueBean);
+		Specimen specimen = (Specimen) specimens.get(0);
+		specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
+		dao.update(specimen);
 	}
-
 	public void updateSpecimenStatusToDisabled(String specimenLabel, HibernateDAO dao)
 			throws DAOException
 	{

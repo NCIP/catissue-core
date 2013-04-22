@@ -33,7 +33,7 @@ public class DisplayOrderDTO
 	
 	private String requestorEmail;
 	
-	private String site="--select--";
+	private String site;
 	
 	private String distributorsComment;
 	/**
