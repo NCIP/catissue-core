@@ -48,6 +48,8 @@ function initializeSCGCombo(operation)
 		scgCombo.activityStatusCombo = dhtmlXComboFromSelect("activityStatus");  
 		scgCombo.activityStatusCombo.setOptionWidth(165);
 		scgCombo.activityStatusCombo.setSize(165);
+		scgCombo.activityStatusCombo.deleteOption('-- Select --');
+		scgCombo.activityStatusCombo.readonly(true,false);
 		
 		scgCombo.activityStatusCombo.attachEvent("onChange", 
 			function()
