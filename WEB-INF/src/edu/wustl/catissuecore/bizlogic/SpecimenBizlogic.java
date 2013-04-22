@@ -57,12 +57,12 @@ public class SpecimenBizlogic
 			Specimen oldSpecimenObj = (Specimen) dao.retrieveById(Specimen.class.getName(),
 					specimenDTO.getId());
 			//updating the object with DTO
-			getUpdatedSpecimen(oldSpecimenObj, specimenDTO,dao);
-			if(Variables.isSpecimenLabelGeneratorAvl)
+			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, dao);
+			if (Variables.isSpecimenLabelGeneratorAvl)
 			{
 				generateLabel(oldSpecimenObj);
 			}
-			if(Variables.isSpecimenBarcodeGeneratorAvl)
+			if (Variables.isSpecimenBarcodeGeneratorAvl)
 			{
 				generateBarCode(oldSpecimenObj);
 			}
@@ -100,6 +100,7 @@ public class SpecimenBizlogic
 		return specimen.getCollectionStatus() != null
 				&& specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED);
 	}
+
 	/**
 	 * Generate label.
 	 *
@@ -118,7 +119,8 @@ public class SpecimenBizlogic
 			try
 			{
 				final LabelGenerator spLblGenerator;
-				spLblGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+				spLblGenerator = LabelGeneratorFactory
+						.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 				if (spLblGenerator != null)
 				{
 					spLblGenerator.setLabel(specimen);
@@ -167,6 +169,7 @@ public class SpecimenBizlogic
 			}
 		}
 	}
+
 	/**
 	 * Populating the retrieved specimen with DTO values
 	 * @param oldSpecimenObj
@@ -174,43 +177,81 @@ public class SpecimenBizlogic
 	 * @throws ParseException 
 	 * @throws ApplicationException 
 	 */
-	private void getUpdatedSpecimen(Specimen oldSpecimenObj, SpecimenDTO specimenDTO,DAO dao)
+	private void getUpdatedSpecimen(Specimen oldSpecimenObj, SpecimenDTO specimenDTO, DAO dao)
 			throws ParseException, ApplicationException
 	{
 		if (specimenDTO.getActivityStatus() != null)
 			oldSpecimenObj.setActivityStatus(specimenDTO.getActivityStatus());
+
 		if (specimenDTO.getLabel() != null)
 			oldSpecimenObj.setLabel(specimenDTO.getLabel());
+
 		if (specimenDTO.getBarcode() != null)
 			oldSpecimenObj.setBarcode(specimenDTO.getBarcode());
+
 		if (specimenDTO.getClassName() != null)
 			oldSpecimenObj.setSpecimenClass(specimenDTO.getClassName());
+
 		if (specimenDTO.getType() != null)
 			oldSpecimenObj.setSpecimenType(specimenDTO.getType());
+
 		if (specimenDTO.getPathologicalStatus() != null)
 			oldSpecimenObj.setPathologicalStatus(specimenDTO.getPathologicalStatus());
+
 		if (specimenDTO.getTissueSide() != null)
 			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
+
 		if (specimenDTO.getTissueSite() != null)
 			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
-		if (specimenDTO.getAvailableQuantity() != null)
-			oldSpecimenObj.setAvailableQuantity(specimenDTO.getAvailableQuantity());
+
 		if (specimenDTO.getQuantity() != null)
 			oldSpecimenObj.setInitialQuantity(specimenDTO.getQuantity());
+
 		if (specimenDTO.getComments() != null)
 			oldSpecimenObj.setComment(specimenDTO.getComments());
-		if (specimenDTO.getCollectionStatus() != null)
+
+		if (specimenDTO.getCollectionStatus() != null
+				&& specimenDTO.getCollectionStatus().equalsIgnoreCase(
+						Constants.COLLECTION_STATUS_COLLECTED)
+				&& oldSpecimenObj.getCollectionStatus().equalsIgnoreCase(
+						Constants.COLLECTION_STATUS_PENDING))
+		{
 			oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
-		oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
+			oldSpecimenObj.setIsAvailable(true);
+
+			if (specimenDTO.getQuantity() != null)
+			{
+				oldSpecimenObj.setAvailableQuantity(specimenDTO.getQuantity());
+			}
+			else
+			{
+				oldSpecimenObj.setAvailableQuantity(oldSpecimenObj.getInitialQuantity());
+			}
+
+		}
+		else
+		{
+			if (specimenDTO.getCollectionStatus() != null)
+				oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
+
+			if (specimenDTO.getAvailableQuantity() != null)
+				oldSpecimenObj.setAvailableQuantity(specimenDTO.getAvailableQuantity());
+
+			if (specimenDTO.isAvailable() != null)
+				oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
+		}
+
 		SpecimenPosition position = new SpecimenPosition();
 		if (specimenDTO.getIsVirtual() == null || specimenDTO.getIsVirtual())
 		{
 			position = null;
 		}
-		else if(oldSpecimenObj.getSpecimenPosition() == null && Constants.COLLECTION_STATUS_COLLECTED.equals(oldSpecimenObj.getCollectionStatus()))
+		else if (oldSpecimenObj.getSpecimenPosition() == null
+				&& Constants.COLLECTION_STATUS_COLLECTED.equals(oldSpecimenObj
+						.getCollectionStatus()))
 		{
-			if (specimenDTO.getPos1() != null && !"".equals(specimenDTO.getPos1().trim()) && specimenDTO.getPos2() != null
-					&& !"".equals(specimenDTO.getPos2().trim()))
+			if (specimenDTO.getPos1() != null && !"".equals(specimenDTO.getPos1().trim())
+					&& specimenDTO.getPos2() != null && !"".equals(specimenDTO.getPos2().trim()))
 			{
 				int toPos1Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
 						specimenDTO.getContainerName(), 1, specimenDTO.getPos1());
@@ -222,24 +263,27 @@ public class SpecimenBizlogic
 				position.setPositionDimensionTwoString(specimenDTO.getPos2());
 				StorageContainer container = new StorageContainer();
 				Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-				substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenDTO.getContainerName()));
-				
-				final List list=((HibernateDAO)dao).executeNamedQuery("getStorageContainerIdByContainerName", substParams);
-				
+				substParams.put("0",
+						new NamedQueryParam(DBTypes.STRING, specimenDTO.getContainerName()));
+
+				final List list = ((HibernateDAO) dao).executeNamedQuery(
+						"getStorageContainerIdByContainerName", substParams);
+
 				if (!list.isEmpty())
 				{
 					container.setId((Long) list.get(0));
 				}
 				else
 				{
-					throw this.getBizLogicException(null, "errors.invalid", ApplicationProperties.getValue("array.positionInStorageContainer"));
+					throw this.getBizLogicException(null, "errors.invalid",
+							ApplicationProperties.getValue("array.positionInStorageContainer"));
 				}
 				container.setName(specimenDTO.getContainerName());
 				position.setStorageContainer(container);
 				position.setSpecimen(oldSpecimenObj);
 				oldSpecimenObj.setSpecimenPosition(position);
 			}
-			
+
 		}
 		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(oldSpecimenObj,
 				specimenDTO));
