@@ -49,13 +49,13 @@
 	<table width="100%" border="0"  cellpadding="5px" cellspacing="0"	class="whitetable_bg">
 		<tr>
 			<td  align="right" class="black_ar  padding_right_style" width="20%">
-				<bean:message key="participant.view.birth.date"/> 
+				<b><bean:message key="participant.view.birth.date"/></b> 
 			</td>
 			<td class="black_ar" width="20%">
 				<fmt:formatDate value="${participantDto.dob}" pattern="${datePattern}" />
 			</td>
 			<td align="right" class="black_ar padding_right_style" width="30%"> 
-				<bean:message key="participant.view.MRN"/></td>
+				<b><bean:message key="participant.view.MRN"/></td></b>
 			<td class="black_ar" width="30%"> 
                   <logic:iterate id="partMrn" name="participantDto"  property="mrns" indexId="indx">
 <c:if test="${indx > 0}">
@@ -67,13 +67,13 @@
 	   
 	   <tr class="tr_alternate_color_lightGrey">
 		 <td  align="right" class="black_ar bottomtd  padding_right_style" width="20%"> 
-			<bean:message key="participant.view.registration.date"/>
+			<b><bean:message key="participant.view.registration.date"/></b>
 		 </td> 
 		 <td class="black_ar bottomtd" width="20%">
 				<fmt:formatDate value="${participantDto.registrationDate}" pattern="${datePattern}" />
 		</td>
 		<td  align="right" class="black_ar bottomtd  padding_right_style" width="30%"> 
-			<bean:message key="participant.view.isConsented"/>
+                         <b><bean:message key="participant.view.isConsented"/></b>
 		</td>
 		<td class="black_ar bottomtd" width="30%"> 
 			<bean:write name="participantDto" property="isConsented" />
@@ -82,10 +82,10 @@
 	
 	<tr>
 		<td  width="20%" align="right" class="black_ar padding_right_style">
-			<bean:message key="participant.gender"/>
+			<b><bean:message key="participant.gender"/></b>
 		</td>
 		<td  width="20%" class="black_ar"> <bean:write name="participantDto" property="gender" /></td>
-		<td  width="30%" align="right" class="black_ar padding_right_style"><bean:message key="participant.race"/></td>
+		<td  width="30%" align="right" class="black_ar padding_right_style"><b><bean:message key="participant.race"/></b></td>
 		<td  width="30%" class="black_ar" > <logic:iterate id="prace" name="participantDto"  property="race" indexId="indx">
 <c:if test="${indx > 0}">
                       ,
@@ -120,12 +120,12 @@
 	
 		<tr class="tr_bg_blue1 blue_ar_b">
 			<td  class="heading_text_style">
-			    <bean:message key="participant.view.scg.actions"/>
+			   <b><bean:message key="participant.view.scg.actions"/></b>
 			</td> <td colspan="3"/>
 	  </tr>	
 	    	<tr>	
 			<td align="right" width="20%" class="black_ar padding_right_style"> 
-				<bean:message key="participant.view.select.event.point"/>
+				<b><bean:message key="participant.view.select.event.point"/></b>
 		        </td>
 			<td width="35%">
 				<div id="addSCGEvents"> </div>
@@ -134,8 +134,8 @@
 			 <span style="vertical-align:bottom">
 				<a href="#" title="Add" style="padding-right:7px;"><img src="images/Action-add.png" alt="Create SCG" onclick="addNewScg()"></a>
 				<a href="#" title="Edit" style="padding-right:7px;"> <img src="images/Action-edit.png" alt="Edit" onclick="editScg()"></a>
-					<html:button styleClass="blue_ar_b" property="collectSpecimenPerCP"	title="Collect Specimens  As Per CP" value="Collect Specimens" onclick="collectSpecimen();">
-				    </html:button>
+                 <html:button styleClass="blue_ar_b" property="collectSpecimenPerCP"	title="Collect Specimens  As Per CP" value="Collect Specimens" onclick="collectSpecimen();">
+				 </html:button>
 				<!-- <a href="#" title="View"> <img src="images/Action-view.png" alt="View" onclick="scgOperation('view')"></a> &nbsp;
 				<a href="#" title="Delete"><img src="images/Action-close.png" alt="Delete" onclick="scgOperation('delete')"></a> &nbsp;
 				<a href="#" title="Print"><img src="images/Action-print.png" alt="Print" onclick="scgOperation('print')"></a> -->
@@ -149,7 +149,7 @@
 			</td> -->
  <!--	<tr height="33px" class="tr_alternate_color_lightGrey">
 		<td width="25%" class="black_ar  padding_right_style" align="right">
-					<bean:message key="participant.view.add.specimen"/>
+					<b><bean:message key="participant.view.add.specimen"/></b>
 		</td>
 		<td width="25%">
 			<input type="text" name="createSpecimen" id="createSpecimen" size ="20" value="Count" class="text_box_style"/>
@@ -163,12 +163,12 @@
 <tr> <td colspan="4"> </td> </tr>
 	<tr class="tr_bg_blue1 blue_ar_b">
 		<td  class="heading_text_style" width="30%">
-			     <bean:message key="participant.view.specimen.actions"/>
+			    <bean:message key="participant.view.specimen.actions"/>
 			</td> <td colspan="3"/>
 	 </tr>		
 	<tr>	
 		<td class="black_ar  padding_right_style" width="20%" align="right"> 
-					 <bean:message key="participant.view.select.specimen"/>
+					 <b><bean:message key="participant.view.select.specimen"/></b>
 		</td>
 		<td width="35%">
 				<div id="specimenLabels"></div>
@@ -185,7 +185,7 @@
 
 	<tr width="100%" class="tr_alternate_color_lightGrey">
 		<td width="20%"  align="right" class="black_ar  padding_right_style">
-					 <bean:message key="participant.view.create.aliquot"/>
+					<b><bean:message key="participant.view.create.aliquot"/></b>
 		</td>
 		<td width="25%" >
 			<input type="text" name="noOfAliquots" id="noOfAliquots" size ="5" value="Count"  class="text_box_style" onfocus="inputFocus(this)" onblur="inputBlur(this)"/>
@@ -201,7 +201,7 @@
 
 	<tr>
 		<td width="20%"  class="black_ar padding_right_style" align="right" >
-					 <bean:message key="participant.view.create.derivative"/>
+					<b><bean:message key="participant.view.create.derivative"/></b>
 		</td>
 		<td width="25%">
 		     <input type="text" name="count" id="derivative_count" size ="5" value="Count" class="text_box_style" onfocus="inputFocus(this)" onblur="inputBlur(this)"/>
