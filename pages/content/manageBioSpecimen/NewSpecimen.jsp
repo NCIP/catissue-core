@@ -244,12 +244,31 @@ var scGridVisible = false;
 	dhxWins.window("containerPositionPopUp").setModal(true);
 	dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
 }
+	function loadDHTMLXWindowForNewSpecimen()
+{
+	var w =700;
+	var h =450;
+	var x = (screen.width / 3) - (w / 2);
+	var y = 0;
+	var className = document.getElementById('className').value;
+	var spType = document.getElementById('type').value;
+	var selectedContName = document.getElementById('storageContainerDropDown').value;
+	//alert(className +' , '+spType+' , '+selectedContName);
+	
+	dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&holdSpecimenClass="+className+"&holdSpecimenType="+spType+"&containerName="+selectedContName+"&collectionProtocolId=<%=collectionProtocolId%>";
+	dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+	dhxWins.window("containerPositionPopUp").button("park").hide();
+	dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+	dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
+}
 function showPopUp() 
 {
 	var storageContainer =document.getElementById("storageContainerDropDown").value;
     if(storageContainer!="")
 	{
-		loadDHTMLXWindow();
+		loadDHTMLXWindowForNewSpecimen();
 	}
 	else
 	{

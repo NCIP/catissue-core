@@ -23,7 +23,9 @@ import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
@@ -38,7 +40,8 @@ public class SpecimenEditAction extends CatissueBaseAction
 		Gson gson = new Gson();
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String obj = null;
-
+		request.setAttribute("isSpecimenLabelGeneratorAvl", Variables.isSpecimenLabelGeneratorAvl);
+		request.setAttribute("isSpecimenBarcodeGeneratorAvl",Variables.isSpecimenBarcodeGeneratorAvl);
 		if (request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
 		{
 			obj = request.getAttribute(Constants.SYSTEM_IDENTIFIER).toString();
@@ -54,11 +57,15 @@ public class SpecimenEditAction extends CatissueBaseAction
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 			specimenDTO = bizLogic.getDTO(identifier);
 			request.setAttribute("specimenDTO", specimenDTO);
+			SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+			List<Object> list = bizLogic.getcpIdandPartId(sessionDataBean, obj);
+			Object[] objArr = (Object[])list.get(0);
+			Long cpId = Long.valueOf(objArr[0].toString());
+			request.setAttribute("cpId", cpId);
 			DAO dao = AppUtility.openDAOSession(null);
 			try
 			{
-				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(),
-						AppUtility.openDAOSession(null));
+				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(),dao);
 				if (reportId == null)
 				{
 					reportId = -1l;

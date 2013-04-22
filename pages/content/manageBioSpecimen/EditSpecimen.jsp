@@ -69,6 +69,8 @@
 <html:hidden name="specimenDTO" property="parentSpecimenId"/>
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
+<html:hidden name="specimenDTO" property="label" styleId="label"/>
+<html:hidden name="specimenDTO" property="barcode" styleId="barcode"/>
 								
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
@@ -150,32 +152,92 @@
 							</label>
 						  </td>
 					</tr>
-				
-						<tr class="tr_alternate_color_white">
-							<td width="20%" class="black_ar align_right_style">
-								<label for="label">
-									<bean:message key="specimen.label"/>
-								</label>
-							</td>
-							<td align="left" width="30%">
-								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
-							</td>
+						<c:choose>
+							<c:when test="${isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='false'}">
+								<tr class="tr_alternate_color_white">
+									<td width="20%" class="black_ar align_right_style">
+										<label for="label">
+											<bean:message key="specimen.label"/>
+										</label>
+									</td>
+									<td align="left" width="30%">
+										<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
+									</td>
 
-							<td width="20%" class="black_ar align_right_style">
-								<label for="barcode">
-									<bean:message key="specimen.barcode"/>
-								</label>
-							</td>
-						
-							<td width="30%" align="left" class="black_ar">
-								<label for="barcode">
-									<html:text name="specimenDTO" 
-											   styleClass="black_ar" maxlength="255" size="30"
-											   styleId="barcode" property="barcode" onblur="processData(this)"/>
-								</label>
-							</td>
-						</tr>
-				
+									<td width="20%" class="black_ar align_right_style">
+										<label for="barcode">
+											<bean:message key="specimen.barcode"/>
+										</label>
+									</td>
+								
+									<td width="30%" align="left" class="black_ar">
+										<label for="barcode">
+											<html:text name="specimenDTO" 
+													   styleClass="black_ar" maxlength="255" size="30"
+													   styleId="barcode" property="barcode" onblur="processData(this)"/>
+										</label>
+									</td>
+								</tr>
+							</c:when>
+							<c:otherwise>
+							<c:if test="${isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='true' && specimenDTO.collectionStatus=='Collected'}">
+								<tr class="tr_alternate_color_white">
+									<td width="20%" class="black_ar align_right_style">
+										<label for="label">
+											<bean:message key="specimen.label"/>
+										</label>
+									</td>
+									<td align="left" width="30%">
+										<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
+									</td>
+
+									<td width="20%" class="black_ar align_right_style">
+										<label for="barcode">
+											<bean:message key="specimen.barcode"/>
+										</label>
+									</td>
+								
+									<td width="30%" align="left" class="black_ar">
+										<label for="barcode">
+											<html:text name="specimenDTO" 
+													   styleClass="black_ar" maxlength="255" size="30"
+													   styleId="barcode" property="barcode" onblur="processData(this)"/>
+										</label>
+									</td>
+								</tr>
+							</c:if>
+								<c:if test="${isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='true' && specimenDTO.collectionStatus!='Collected'}">
+									<tr class="tr_alternate_color_white">
+										<td width="20%" class="black_ar align_right_style">
+											<label for="label">
+												<bean:message key="specimen.label"/>
+											</label>
+										</td>
+										<td align="left" width="30%">
+											<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
+										</td>
+									</tr>
+								</c:if>
+								<c:if test="${isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='false' && specimenDTO.collectionStatus!='Collected'}">
+									<tr class="tr_alternate_color_white">
+										<td></td><td></td>
+										<td width="20%" class="black_ar align_right_style">
+											<label for="barcode">
+												<bean:message key="specimen.barcode"/>
+											</label>
+										</td>
+										<td width="30%" align="left" class="black_ar">
+											<label for="barcode">
+												<html:text name="specimenDTO" 
+														   styleClass="black_ar" maxlength="255" size="30"
+														   styleId="barcode" property="barcode" onblur="processData(this)"/>
+											</label>
+										</td>
+									</tr>
+								</c:if>
+								
+							</c:otherwise>
+						</c:choose>
 						<tr class="tr_alternate_color_lightGrey">
 							<td  width="20%" class="black_ar align_right_style">
 								<label for="className">
@@ -597,7 +659,7 @@ function initialize(startDateObj,endDateObj)
 function processData(obj)
 {//alert(obj.value);
 tabDataJSON["id"] = document.getElementById("id").value; 
-	tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
+tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
 }
 
 function processComboData(objName,objValue)
@@ -609,17 +671,21 @@ function processComboData(objName,objValue)
 //submits changed data
 function submitTabData()
 {
+	
+	
 	var extidJSON = createExtIdJSON();
 	var biohazardJSON = createBioHazardJSON();
 	
 	
 	var isVirtual = document.getElementById("isVirtual").value;
-	if(!isVirtual)
+	
+	if(isVirtual == 'false')
 	{
 		tabDataJSON["containerName"]= document.getElementById("containerName").value;
 		tabDataJSON["pos1"]= document.getElementById("pos1").value;
 		tabDataJSON["pos2"]= document.getElementById("pos2").value;
 	}
+	tabDataJSON["isVirtual"] = isVirtual; 
 	
 	var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON));
 	
@@ -655,7 +721,7 @@ var x = (screen.width / 3) - (w / 2);
 var y = 0;
 dhxWins = new dhtmlXWindows(); 
 dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=<bean:write name='specimenDTO' property='pos1' scope='request'/>&pos2=<bean:write name='specimenDTO' property='pos2' scope='request'/>&holdSpecimenClass=<bean:write name='specimenDTO' property='className' scope='request'/>&holdSpecimenType=<bean:write name='specimenDTO' property='type' scope='request'/>&containerName=<bean:write name='specimenDTO' property='containerName' scope='request'/>&collectionProtocolId=&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>&isVirtual=<bean:write name='specimenDTO' property='isVirtual' scope='request'/>";
+var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=<bean:write name='specimenDTO' property='pos1' scope='request'/>&pos2=<bean:write name='specimenDTO' property='pos2' scope='request'/>&holdSpecimenClass=<bean:write name='specimenDTO' property='className' scope='request'/>&holdSpecimenType=<bean:write name='specimenDTO' property='type' scope='request'/>&containerName=<bean:write name='specimenDTO' property='containerName' scope='request'/>&collectionProtocolId=${requestScope.cpId}&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>&isVirtual=<bean:write name='specimenDTO' property='isVirtual' scope='request'/>";
 dhxWins.window("containerPositionPopUp").attachURL(url);                     
 //url : either an action class or you can specify jsp page path directly here
 dhxWins.window("containerPositionPopUp").button("park").hide();

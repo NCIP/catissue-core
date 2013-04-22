@@ -91,15 +91,17 @@ var scGridVisible = false;
 
 function showPopUp() 
 {
+	var className=document.getElementById("className").value;
+	var sptype=document.getElementById("type").value;
 	var storageContainer =document.getElementById("storageContainerDropDown").value;
     if(storageContainer!="")
 	{
-		loadDHTMLXWindow();
+		//loadDHTMLXWindow();
+		loadDHTMLXWindowForMultipleSpecimen('storageContainerDropDown','pos1','pos2',className,sptype,'<%=collectionProtocolId%>')
 	}
 	else
 	{
-		var className=document.getElementById("className").value;
-		var sptype=document.getElementById("type").value;
+		
 		var parentSpecimenLabel=document.getElementById("parentSpecimenLabel").value;
 		var parentSpecimenBarcode=document.getElementById("parentSpecimenBarcode").value;
 		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"

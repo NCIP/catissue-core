@@ -90,12 +90,12 @@ function getActionToDoURL()
 	//alert(className);
 	var sptype="${requestScope.holdSpecimenType}";
 	var collectionProtocolId="<%=collectionProtocolId%>";
-	var containerName="";
+	var containerName="${requestScope.containerName}";
 	if(dhtmlxCombo!=null)
 	{
 		containerName=dhtmlxCombo.getComboText();//dhtmlxCombo.getActualValue();
 	}
-	var url="CatissueCommonAjaxAction.do?type=getStorageContainerListForDHTMLXcombo&specimenClass="+className+"&specimenType="+sptype+ "&holdCollectionProtocol=" + collectionProtocolId;
+	var url="CatissueCommonAjaxAction.do?type=getStorageContainerListForDHTMLXcombo&holdSpecimenClass="+className+"&specimenType="+sptype+ "&holdCollectionProtocol=" + collectionProtocolId+"&selectedContainerName=${requestScope.containerName}";
 	if(reloadGrid!=null && reloadGrid)
 	{
 		url=url+"&containerName="+containerName;
@@ -105,7 +105,7 @@ function getActionToDoURL()
 		//alert(populateValueInCombo);
 		url=url+"&populateValueInCombo="+populateValueInCombo;
 	}
-	//alert(url);
+	
 	return url;
 }
 </script>
@@ -262,6 +262,13 @@ function updatePosition()
 		container.value = containerName;
 		position1.value = pos1;
 		position2.value= pos2;
+		var isVirtual = parent.window.document.getElementById('isVirtual');
+		
+		if(isVirtual != null)
+		{
+			isVirtual.value="false";
+			
+		}
 		parent.window.dhxWins.window("containerPositionPopUp").close();
 }
 

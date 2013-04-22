@@ -299,6 +299,7 @@ function giveCall(url,msg,msg1,id)
 					onClickSpecimenFunction = "CPQueryAliquot('QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id=" + specimenId + "')";
 				}
 				specimenLabelsWithComma = specimenLabelsWithComma + specimenLabel + ",";
+				
 			%>
 			
 	
@@ -352,6 +353,7 @@ function giveCall(url,msg,msg1,id)
 						String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
 						String addMoreSubmitFunctionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";	
 						String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
+						String openEventPage = "openEventPage("+specimenLabelsWithComma+")";
 					%>						
 
 				<html:button
@@ -372,6 +374,13 @@ function giveCall(url,msg,msg1,id)
 							onclick="<%=organizeTarget%>">
 						</html:button>
 					</logic:equal>
+					&nbsp;|&nbsp;
+					<html:button
+							styleClass="blue_ar_b" property="Add Events"
+							title="Add Events"
+							value="Add Events"
+							onclick="openEventPage('rty')">
+						</html:button>
 				<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
 				</td>
 				</tr>
@@ -386,3 +395,12 @@ function giveCall(url,msg,msg1,id)
 </html:form>
 <!----------------------------------------------------------------------------------------->
 <%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
+<script>
+function openEventPage(specId)
+{
+	var action = 'QuickEvents.do?specimenLabel=<%=specimenLabelsWithComma%>';
+	
+	document.forms[0].action = action;
+		document.forms[0].submit();
+}
+</script>

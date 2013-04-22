@@ -128,15 +128,15 @@ public class CatissueCommonAjaxAction extends DispatchAction
 	 * @param stringValue
 	 * @param name name of the container
 	 * @param populateValueInCombo attribute to set default selected value.
+	 * @param selContMatched 
 	 * @return
 	 */
 	private String addRowToResponseXMLForDHTMLXcombo(String stringValue, String name,
-			String populateValueInCombo)
+			String populateValueInCombo,boolean selContMatched)
 	{
 		String selected = " selected=\"1\" ";
-
 		StringBuffer responseString = new StringBuffer("<option value=\"" + name + "\"");
-		if ("1".equals(stringValue) && "true".equals(populateValueInCombo))
+		if ("true".equals(populateValueInCombo) && selContMatched)
 		{
 			responseString.append(selected);
 		}
@@ -323,6 +323,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 	{
 		List<NameValueBean> containerList = new ArrayList<NameValueBean>();
 		String contName = request.getParameter(Constants.CONTAINER_NAME);
+		String selectedContName = request.getParameter(Constants.SELECTED_CONTAINER_NAME);
 		String populateValueInCombo = request.getParameter("populateValueInCombo");
 		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
@@ -347,17 +348,34 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		responseString.append("<complete>");
 		NameValueBean virtualBean = new NameValueBean("Virtual", Long.valueOf(-1));
 		String tranferEventId = (String) request.getParameter("transferEventParametersId");
+		boolean selContMatched = Boolean.FALSE;
 		if (tranferEventId == null || "0".equals(tranferEventId))
 		{
+			
 			Integer i = 1;
 			for (NameValueBean nvb : containerList)
 			{
-				responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-						nvb.getName(), populateValueInCombo));
+				if(nvb.getName().equals(selectedContName))
+				{
+					selContMatched = Boolean.TRUE;
+					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
+						nvb.getName(), populateValueInCombo,selContMatched));
+				}
+				else
+				{
+					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
+							nvb.getName(), populateValueInCombo,false));
+				}
 				i = i + 1;
 			}
+			selContMatched = (selContMatched)?false:true;
 			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-					virtualBean.getName(), populateValueInCombo));
+					virtualBean.getName(), populateValueInCombo,selContMatched));
+			if(!selContMatched)
+			{
+				responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
+						selectedContName, populateValueInCombo,true));
+			}
 		}
 		responseString.append("</complete>");
 		response.setContentType(Constants.CONTENT_TYPE_XML);

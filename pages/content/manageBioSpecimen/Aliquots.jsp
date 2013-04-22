@@ -17,7 +17,10 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page language="java" isELIgnored="false" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
-<% AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");%>
+<% AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
+
+
+%>
 <head>
 <script src="jss/ajax.js"></script>
 <script src="jss/script.js"></script>
@@ -92,7 +95,7 @@ function showPopUp(storageContainerDropDown,selectedContainerName,positionDimens
 	var storageContainer =document.getElementById(storageContainerDropDown).value;
 			if(storageContainer!="")
 			{
-				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
+				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId);
 			}
 			else
 			{
@@ -611,8 +614,11 @@ function setContainerValues()
 							</td>
 							<td class="groupelements"><html:text styleClass="black_ar"  size="1" styleId="${aliquotBean.pos2Style}" property="${aliquotBean.pos2FromMapKey}" />&nbsp;
 							</td>
+							<script>
+							
+							</script>
 							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" 
-							onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','<%=form.getClassName()%>','<%=form.getType()%>','<%=form.getColProtId()%>','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >
+							onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','${aliquotForm.className}','${aliquotForm.type}','${aliquotForm.colProtId}','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >
 									<bean:message key="buttons.map"/>
 									</html:button>
 							</td>

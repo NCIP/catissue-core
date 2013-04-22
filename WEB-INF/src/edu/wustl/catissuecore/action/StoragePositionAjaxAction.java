@@ -95,6 +95,7 @@ public class StoragePositionAjaxAction extends SecureAction
 			dimensionTwoCapacity.put("dimensionTwoCapacity", storageContainerGridObject.getTwoDimensionCapacity());
 			
 			JSONObject returnedJObject= new JSONObject();
+			
 		
 			returnedJObject.put("dimensionOne",dimensionOne.toString());
 			returnedJObject.put("dimensionTwo",dimensionTwo.toString());
