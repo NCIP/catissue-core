@@ -282,7 +282,6 @@ function switchToOlderView()
 								  //common init code								 
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 								  var site_combo = new dhtmlXComboFromSelect("site","site","100px");
-								  site_combo.enableFilteringMode(true);
 								  site_combo.setSize(200);
 								  site_combo.attachEvent("onBlur", function(){
 							       tabDataJSON[site_combo.name] = site_combo.getSelectedValue();
