@@ -119,9 +119,9 @@
 	<table width="100%" border="0"  cellpadding="5px" cellspacing="0" class="whitetable_bg">
 	
 		<tr class="tr_bg_blue1 blue_ar_b">
-			<td  class="heading_text_style">
+			<td  class="heading_text_style" colspan="4">
 			   <b><bean:message key="participant.view.scg.actions"/></b>
-			</td> <td colspan="3"/>
+			</td>
 	  </tr>	
 	    	<tr>	
 			<td align="right" width="20%" class="black_ar padding_right_style"> 
