@@ -801,7 +801,8 @@ isSCGPresent = true;
 	<!-- Mandar : New Table design starts -->
 <div id="scgDetails" class="align_left_style">
 <fieldset class="field_set"> 
-  <legend class="blue_ar_b legend_font_size"> SPECIMEN SUMMARY</legend>
+  <legend class="blue_ar_b legend_font_size"><bean:message
+						key="specimen.summary" /></legend>
 	<TABLE width="100%" cellspacing="0" cellpadding="0" border="0">
 		<TR>
 			<TD align="left" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
