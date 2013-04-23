@@ -2,16 +2,13 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -26,6 +23,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 
 public class DisplaySCGAction extends Action
 {
@@ -54,6 +52,21 @@ public class DisplaySCGAction extends Action
 			}
 
 				SCGSummaryDTO scgSummaryDTO = scgdao.getScgSummary(dao, identifier);
+				
+				if(scgSummaryDTO.getSite() == null)
+				{
+					scgSummaryDTO.setSite(scgdao.getEventDefaultSite(scgSummaryDTO.getEventId(),(HibernateDAO)dao));
+				}
+				final Calendar cal = Calendar.getInstance();
+				if(scgSummaryDTO.getReceivedDate() == null)
+				{   
+				    scgSummaryDTO.setReceivedDate(cal.getTime());
+				}
+				if(scgSummaryDTO.getCollectedDate() == null)
+				{   
+					scgSummaryDTO.setCollectedDate(cal.getTime());
+					scgSummaryDTO.setCollectionStatus(Constants.COMPLETE); // default collection status
+				}
 				request.setAttribute("scgSummaryDTO", scgSummaryDTO);
 				//setSiteList
 				List<NameValueBean> sitelist = new SiteBizLogic().getSiteList(dao);

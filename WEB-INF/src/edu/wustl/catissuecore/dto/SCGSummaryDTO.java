@@ -17,7 +17,20 @@ public class SCGSummaryDTO
 	Date collectedDate;
 	Long collector;
 	String collectionStatus;
+	Long eventId;
 			
+	
+	public Long getEventId()
+	{
+		return eventId;
+	}
+
+	
+	public void setEventId(Long eventId)
+	{
+		this.eventId = eventId;
+	}
+
 	public String getScgName()
 	{
 		return scgName;

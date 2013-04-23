@@ -338,5 +338,12 @@
     </class>
 <query name="getDefaultSite">select cpe.defaultSite.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.id=?
 </query>
+<query name="getScgSummary">select scg.name,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?</query>
+ 
+<query name="receiveEventParam">select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters sep,edu.wustl.catissuecore.domain.ReceivedEventParameters rep where sep.id=rep.id and sep.specimenCollectionGroup.id = ?
+</query>
+<query name="collectEventParam">select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters sep,
+edu.wustl.catissuecore.domain.CollectionEventParameters cep where sep.id=cep.id and sep.specimenCollectionGroup.id = ?
+</query>
 </hibernate-mapping>
 

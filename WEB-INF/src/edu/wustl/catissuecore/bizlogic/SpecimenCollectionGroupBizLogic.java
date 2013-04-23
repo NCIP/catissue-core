@@ -2565,7 +2565,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				if (requirementTiltle != null && !requirementTiltle.isEmpty())
 				{
 					StringBuffer newLabel = new StringBuffer();
-					newLabel = newLabel.append(label).append("(").append(requirementTiltle)
+					newLabel = newLabel.append(label).append(" (").append(requirementTiltle)
 							.append(")");
 					label = newLabel.toString();
 				}

@@ -68,53 +68,26 @@ public class SCGDAO
 	public SCGSummaryDTO getScgSummary(DAO dao, Long scgId) throws DAOException
 	{
 		SCGSummaryDTO scgSummDto = new SCGSummaryDTO();
-		
-		String hql = "select scg.name ,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id"
-				+ " from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup as ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup "
-				+ "as scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?";
-
-		String rercEventhql = "select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters as sep,"
-				+ "edu.wustl.catissuecore.domain.ReceivedEventParameters rep where sep.id=rep.id and sep.specimenCollectionGroup.id = ?";
-
-		String collectedEventhql = "select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters as sep,"
-				+ "edu.wustl.catissuecore.domain.CollectionEventParameters cep where sep.id=cep.id and sep.specimenCollectionGroup.id = ?";
-
-		//  String receivedEvntHql = 
-
-		ColumnValueBean columnValueBean = new ColumnValueBean(scgId);
-		List<ColumnValueBean> columnValueBeans = new ArrayList();
-		columnValueBeans.add(columnValueBean);
-
-		List scgs = dao.executeQuery(hql, columnValueBeans); 
-		
-//		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-//		params.put("0", new NamedQueryParam(DBTypes.LONG,scgId));
-//		List scgs =((HibernateDAOImpl) dao).executeNamedQuery("receiveEventParam", params);
+				
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG,scgId));
+		List scgs =((HibernateDAO) dao).executeNamedQuery("getScgSummary", params);
 		
 		for (Object scg : scgs)
 		{
 			Object[] scgData = (Object[]) scg;
 			scgSummDto.setScgName((String) scgData[0]);
-			if((Long) scgData[1]==null)
-			{
-				scgSummDto.setSite(getEventDefaultSite((Long)scgData[3],(HibernateDAO)dao));
-			}
-			else
-			{
-				scgSummDto.setSite((Long) scgData[1]);	
-			}
+			scgSummDto.setSite((Long) scgData[1]);	
 			scgSummDto.setScgId(scgId);
 			scgSummDto.setCollectionStatus((String)scgData[2]);
+			scgSummDto.setEventId((Long)scgData[3]);
 		}
 
-		List receivedEvent = dao.executeQuery(rercEventhql, columnValueBeans);
+		List receivedEvent = ((HibernateDAO) dao).executeNamedQuery("receiveEventParam", params);
 		final Calendar cal = Calendar.getInstance();
-		if (receivedEvent.isEmpty())
+		if (!receivedEvent.isEmpty())
 		{
-			scgSummDto.setReceivedDate(cal.getTime()); //set current date
-		}
-		else
-		{
+
 			for (Object recEvent : receivedEvent)
 			{
 				Object[] recEventData = (Object[]) recEvent;
@@ -123,12 +96,8 @@ public class SCGDAO
 			}
 		}
 
-		List collectedEvent = dao.executeQuery(collectedEventhql, columnValueBeans);
-		if (collectedEvent.isEmpty())
-		{
-			scgSummDto.setCollectedDate(cal.getTime()); //set current date
-		}
-		else
+		List collectedEvent = ((HibernateDAO) dao).executeNamedQuery("collectEventParam", params);
+		if (!collectedEvent.isEmpty())
 		{
 			for (Object colEvent : collectedEvent)
 			{
@@ -141,7 +110,7 @@ public class SCGDAO
 		return scgSummDto;
 	}
 
-	private Long getEventDefaultSite(Long eventId,HibernateDAO dao) throws DAOException
+	public Long getEventDefaultSite(Long eventId,HibernateDAO dao) throws DAOException
 	{
 		Long defSite= null;
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
