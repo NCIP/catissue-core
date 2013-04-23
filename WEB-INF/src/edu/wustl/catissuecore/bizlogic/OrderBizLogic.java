@@ -742,7 +742,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 	public void sendOrderUpdateEmail(String requestorName, String ccEmailAddress,
 			String toEmailAddress, String orderName, String updaterName, String orderStatus,
-			String orderUrl, Map<String, Object> csvFileData) throws IOException
+			Long orderId, Map<String, Object> csvFileData) throws IOException
 	{
 
 		final EmailHandler emailHandler = new EmailHandler();
@@ -760,7 +760,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			out.close();
 			attachmentOrderCsv.add(csvFile);
 			emailHandler.sendOrderUpdateEmail(requestorName, toEmailAddress, ccEmailAddress,
-					bccEmailAddress, orderName, updaterName, orderStatus, orderUrl,
+					bccEmailAddress, orderName, updaterName, orderStatus, orderId,
 					attachmentOrderCsv);
 
 		}

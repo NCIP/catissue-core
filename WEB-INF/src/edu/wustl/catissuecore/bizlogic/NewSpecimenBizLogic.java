@@ -6345,6 +6345,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 
 		Specimen specimen = (Specimen) specimens.get(0);
+		if(specimen.getSpecimenPosition() ==null)
+		{
+			return ApplicationProperties.getValue("specimen.virtualLocation");
+		}
 		if (!Constants.ACTIVITY_STATUS_ACTIVE.equalsIgnoreCase(specimen.getActivityStatus()))
 		{
 			return ApplicationProperties.getValue("specimen.closed.unavailable");

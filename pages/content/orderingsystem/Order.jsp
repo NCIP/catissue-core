@@ -33,7 +33,7 @@
 var tabDataJSON = {};
 var tabbar;
 var mygrid;
-var ifAnyDistributed='false';
+var site_combo;
 var distributionProtocolNameCombo;
 
 function processData(obj)
@@ -48,15 +48,13 @@ function submitOrderNew(consentVerifiedValues)
 		alert("Please specify Order Name.");
 		return;	
 	}	
-	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getSelectedText()=="-1")
+	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getActualValue()=="-1")
 	{
 		alert("Please select distriution protocol.");
 		return;
 	}
 	
-	var selectedSite=tabDataJSON['site'];
-
-	if(selectedSite == '' || selectedSite == '-1')
+	if(site_combo.getActualValue()=="" || site_combo.getActualValue()=="-1")
 	{
 		alert("Please select distriution site.");
 		return;
@@ -75,6 +73,7 @@ function submitOrderNew(consentVerifiedValues)
 	tabDataJSON["orderName"]=document.getElementById('orderName').value;
 	tabDataJSON["disptributionProtocolId"]=distributionProtocolNameCombo.getActualValue();
 	tabDataJSON["disptributionProtocolName"]=distributionProtocolNameCombo.getComboText();
+	tabDataJSON["site"]=site_combo.getActualValue();
 	tabDataJSON["requestorEmail"]='<bean:write name="DisplayOrderDTO" property="requestorEmail" scope="request"/>';
 	tabDataJSON["requestorName"]='<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/>';
 	
@@ -112,7 +111,7 @@ function submitOrderNew(consentVerifiedValues)
 			}
 			document.getElementById('success').style.display='none';
 			document.getElementById('error').style.display='block';
-			tabbar.setTabActive('SimpleViewTab');
+			tabbar.setTabActive('SimpleViewDiv');
 			mygrid.refreshFilters();
 
 		}
@@ -269,25 +268,26 @@ function switchToOlderView()
  					</strong></td>
 					<td class="black_ar" style="background-color:#f6f6f6;" >
 							<div  class="dhtmlx-combo-margin">
-							<select  tabindex="13" name="site"  id="site" class="form-text-field" >
-								<logic:iterate id="s" name="sites">
-									<option value="<bean:write name="s" property="value"/>"><bean:write name="s" property="name"/></option>
-								</logic:iterate>
-							</select>
+							 <html:select property="site" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="site" size="1" onblur="processData(this)">
+							 <html:options collection="sites" labelProperty="name" property="value" />
+					       </html:select>
+					       
 							</div>
 						 		
 					</td>
 
 					<script>
-								  tabDataJSON['site']="";
-								  //common init code								 
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-								  var site_combo = new dhtmlXComboFromSelect("site","site","100px");
+								  site_combo = new dhtmlXComboFromSelect("site","site","100px");
 								  site_combo.setSize(200);
-								  site_combo.attachEvent("onBlur", function(){
-							       tabDataJSON[site_combo.name] = site_combo.getSelectedValue();
-						       	  });
-
+ 							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.site}')==null)
+								  {
+ 							  		site_combo.setComboValue("-1");		
+								  }
+								  else
+								  {
+									  site_combo.setComboValue(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.site}').value);
+								  }
     					</script>	
                 <td class="black_ar align_right_style"><strong>
 								<bean:message key='requestdetails.requestor.Comments'/> 
@@ -318,14 +318,9 @@ function switchToOlderView()
 		<tr>
 			<td><input type="hidden" id="gridStatus" name="gridStatus"/>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-					<td width="100%" >
-					<table border="0" width="100%"><tr><td>
+			<tr><td>
 						<div id="tabbar_div" align="left" style="width:auto;height:310px;">
-						
-						<table width="100%">
-						<tr><td>
-						<div id="SimpleViewDiv" style="width:auto;height:310px;">
+						<div id="SimpleViewDiv" style="width:auto;height:310px;">						
 						<table width="100%" cellpadding="3" cellspacing="0" border="0"	>
 		<tr>
 			<td>&nbsp;&nbsp;
@@ -366,9 +361,9 @@ function switchToOlderView()
 		</tr>
 </table>
 
+			</div>
+			<div id="ConsentViewDiv" style="width:auto;height:310px;">
 			</div>	
-			</td>
-						</tr></table>
 			</div>
 			</td></tr>		
 			</table>
@@ -393,14 +388,15 @@ function loadTab()
 	tabbar.setHrefMode("iframes-on-demand");	
 	tabbar.setSkin('dhx_skyblue');
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
-	tabbar.addTab("SimpleViewTab", "Specimens", "100px");	
-	tabbar.addTab("ConsentViewTab", "Consents", "100px");
+	tabbar.addTab("SimpleViewDiv", "Specimens", "100px");	
+	tabbar.addTab("ConsentViewDiv", "Consents", "100px");
 	tabbar.enableAutoSize(false,true);
-	tabbar.setContent("SimpleViewTab","SimpleViewDiv");
-	tabbar.setTabActive('SimpleViewTab');
+	tabbar.setContent("SimpleViewDiv","SimpleViewDiv");
+	tabbar.setContent("ConsentViewDiv","ConsentViewDiv");
+	tabbar.setTabActive('SimpleViewDiv');
 	
 	tabbar.attachEvent("onSelect", function(id,last_id) {
-	if(id == 'ConsentViewTab')
+	if(id == 'ConsentViewDiv')
 	{
 		gotoconsentTab();	
 		return true;	
@@ -417,27 +413,26 @@ function gotoconsentTab()
 {
 		var specimenLabels = new Array();
 		var arrayCount=0;
-		ifAnyDistributed='false';
+		
 		for(var row=1;row<=mygrid.getRowsNum();row++)
 		{
 			var statusValue=mygrid.cellById(row,6).getValue();
 			if(statusValue == 'Distributed' || statusValue == 'Distributed And Close' || statusValue == 'Distributed And Close(Special)')
 			{
-			    ifAnyDistributed=true;
-			    specimenLabels[arrayCount] = mygrid.cellById(row,0).getValue();
+			   	specimenLabels[arrayCount] = mygrid.cellById(row,0).getValue();
 			    arrayCount++;	
 			}
 						
 		}	
-	
 
 		var loader=dhtmlxAjax.postSync("OrderConsents.do","specimenLabels="+specimenLabels);
-		tabbar.setContentHTML('ConsentViewTab',loader.xmlDoc.responseText);
+		document.getElementById('ConsentViewDiv').innerHTML=loader.xmlDoc.responseText;
 
 }
 function goToConsentTabFromNext()
 {
-	tabbar.setTabActive('ConsentViewTab');
+	gotoconsentTab();
+	tabbar.setTabActive('ConsentViewDiv');
 }
 function init_grid()
 {		
@@ -491,7 +486,7 @@ function qtyChange(stage,rId,cInd,nValue,oValue)
 		var reqQty = Number(nValue);
 		if(reqQty > avlQty)
 		{
-			alert('Requested quantity cannot be greater than available quantity');
+			alert('Distributed quantity cannot be greater than available quantity');
 			return false;
 		}
 		else

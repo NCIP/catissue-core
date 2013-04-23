@@ -239,7 +239,7 @@ public class EmailHandler
 
 	public boolean sendOrderUpdateEmail(String requestorName,
 			String toEmailAddress, String ccEmailAddress,String bccEmailAddress,
-			String orderName, String updaterName,String orderStatus, String orderUrl,List<File> attachmentOrderCsv)
+			String orderName, String updaterName,String orderStatus, Long orderId,List<File> attachmentOrderCsv)
     {
     	Map<String, Object> contextMap = new HashMap<String, Object>();
     	contextMap.put("requestor", requestorName);
@@ -247,7 +247,8 @@ public class EmailHandler
     	contextMap.put("updater", updaterName);
     	contextMap.put("date", new Date().toString());
     	contextMap.put("status", orderStatus);
-    	contextMap.put("link", orderUrl);
+    	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
+    	contextMap.put("orderId",orderId.toString());
     	
 		boolean emailStatus = EmailClient.getInstance().sendEmailWithAttachment(
 				 Constants.ORDER_DISTRIBTION_EMAIL_TMPL,

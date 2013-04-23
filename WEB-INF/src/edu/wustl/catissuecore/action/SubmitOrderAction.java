@@ -97,8 +97,7 @@ public class SubmitOrderAction extends BaseAction
 								orderSubmissionDTO.getOrderName(),
 								sessionDataBean.getLastName() + ","
 										+ sessionDataBean.getFirstName(),
-								orderStatusDTO.getStatus(), request.getRequestURL() + "?id="
-										+ orderStatusDTO.getOrderId(), csvFileData);
+								orderStatusDTO.getStatus(), orderStatusDTO.getOrderId(), csvFileData);
 				response.getWriter().write("Success");
 
 			}
