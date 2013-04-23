@@ -35,12 +35,7 @@
 									<bean:message key="consent.barcodelable"/></span>
 								</td>
 								<td class="noneditable" >
-									<label>
-
-									<c:forEach var="specimenLabel" items="${consentDTO.specimenLabels}">						
-																${specimenLabel},
-									</c:forEach>
-									</label>
+									<textarea disabled cols="130" rows="2"><c:forEach var="specimenLabel" items="${consentDTO.specimenLabels}">${specimenLabel},</c:forEach></textarea>
 							   </td>
 							</tr>
 							

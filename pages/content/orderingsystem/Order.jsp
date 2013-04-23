@@ -208,16 +208,33 @@ function switchToOlderView()
 						</strong>
 					</td>
 
-	                <td width="23%" class="black_ar">
+	                <td width="43%" class="black_ar">
 	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="30" name="DisplayOrderDTO" onblur="processData(this)"/>
 					</td>
-			
-					<td width="17%" class="black_ar align_right_style">
+					<td width="17%" class="black_ar align_right_style"><strong>
+								<bean:message key='requestdetails.header.label.RequestorName'/>
+							</strong>
+						</td>
+								
+			            <td width="23%"> 
+  
+				           <span class="link">
+								<a class="view" href='mailto:<bean:write name='DisplayOrderDTO'  property='requestorEmail' scope='request' />' >
+									<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/> 
+								</a>
+							</span>
+
+						</td>
+						
+				</tr>
+
+				<tr class="${tr_white_color}">
+					<td class="black_ar align_right_style">
                 		<strong>
 						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
 						</strong>
 					</td>
- 					<td width="43%" class="black_ar">
+ 					<td class="black_ar">
 						<html:select property="distributionProtocolName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="distributionProtocolName" size="1" onblur="processData(this)">
 							<html:options collection="distributionProtocolList" labelProperty="name" property="value" />
 					       </html:select>
@@ -233,25 +250,7 @@ function switchToOlderView()
 						{
 						 distributionProtocolNameCombo.setComboValue(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}').value);
 						}
-    					</script>	
-				</tr>
-
-				<tr class="${tr_white_color}">
-						
-						<td class="black_ar align_right_style"><strong>
-								<bean:message key='requestdetails.header.label.RequestorName'/>
-							</strong>
-						</td>
-								
-			            <td> 
-  
-				           <span class="link">
-								<a class="view" href='mailto:<bean:write name='DisplayOrderDTO'  property='requestorEmail' scope='request' />' >
-									<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/> 
-								</a>
-							</span>
-
-						</td>
+    					</script>						
               
                 <td class="black_ar align_right_style"><strong>
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
@@ -342,7 +341,7 @@ function switchToOlderView()
 		<tr>
 			<td colspan="2" width="100%">
 				<script>	
-						document.write("<div id='gridbox' width='100%' height='200px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+						document.write("<div id='gridbox' width='100%' height='220px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 						document.write("<div id='csPagingArea'></div>");
 						document.write("<div id='csInfoArea'></div>");    
 				</script>
