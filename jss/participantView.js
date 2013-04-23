@@ -155,12 +155,13 @@ function getSpecimenLabelsforSCG(id)
 
 function populateSpecimenLabelsCombo(response)
  {
-    specimenCombo.setComboText("");
-    specimenCombo.clearAll(); 
+        specimenCombo.setComboText("");
+        specimenCombo.clearAll(); 
 	specimenCombo.addOption(eval(response)); 
 	specimenCombo.enableFilteringMode(true);
-    specimenCombo.attachEvent("onOpen",onComboClick);
-    specimenCombo.attachEvent("onKeyPressed",onComboKeyPress); 
+        specimenCombo.attachEvent("onOpen",onComboClick);
+        specimenCombo.attachEvent("onKeyPressed",onComboKeyPress); 
+           
   }
 
 //Shoe participant Edit page
@@ -211,8 +212,11 @@ function initComboForSCGEvents()
  		        
                 scgCombo = new dhtmlXCombo("addSCGEvents", "addSCGEven1", 240);
                 scgCombo.addOption(scgEvenData);    
-		        //scgCombo.enableFilteringMode(true)
-                scgCombo.attachEvent("onSelectionChange",onScgSelect);
-              //  scgCombo.attachEvent("onClick",onScgClick); 
-                initComboForSpecimenLabels();
+		        scgCombo.attachEvent("onSelectionChange",onScgSelect);
+                var count = scgCombo.optionsArr.length;
+                if(count==1) //select if only one item pesent
+               {
+                 scgCombo.selectOption(0);
+               }
+               initComboForSpecimenLabels();
 }
