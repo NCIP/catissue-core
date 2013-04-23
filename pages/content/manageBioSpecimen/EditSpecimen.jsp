@@ -98,9 +98,16 @@
 						<div id="error" class="alert alert-error" style="display:none">
 							<strong>Error!</strong> <span id="errorMsg">Change a few things up and try submitting again.</span>
 						</div>
+						<div id="print-error" class="alert alert-error" style="display:none">
+							Change a few things up and try submitting again.
+						</div>
 						<div class="alert alert-success" id="success" style="display:none">
 						   Specimen Updated Sucessfully.
 						</div>
+						<div class="alert alert-success" id="print-success" style="display:none">
+						   Specimen Label Printed successfully.
+						</div>
+						
 					</td>
 				</tr>
 				<tr>
@@ -605,6 +612,27 @@
 
 					</td>
 				</tr>
+				 <tr>
+								<td class="dividerline" colspan="3"><span class="black_ar"></td>
+								</tr>
+								<tr>
+								
+
+											<td colspan="1" valign="center">
+													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true">
+														<span class="black_ar">
+															<bean:message key="print.checkboxLabel"/>
+														</span>
+														</html:checkbox>
+											</td>
+
+								
+	<!--  Added for displaying  printer type and location -->
+								  <td>
+					   			     
+			 				        </td>
+
+			 				</tr>
 				     							
 				<tr>
 					<td align="left" colspan="2" class="buttonbg">
@@ -686,21 +714,48 @@ function submitTabData()
 		tabDataJSON["pos2"]= document.getElementById("pos2").value;
 	}
 	tabDataJSON["isVirtual"] = isVirtual; 
+	var printFlag = false;
+	if(document.getElementById('printCheckbox').checked == true)
+	{
+		printFlag=true;
+	}
 	
-	var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON));
+	var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
 	
 	if(loader.xmlDoc.responseText != null)
 	{
 		var response = eval('('+loader.xmlDoc.responseText+')')
 		if(response.success == "success")
 		{
+			document.getElementById('print-error').style.display='none';
+			document.getElementById('print-success').style.display='none';
+			document.getElementById('error').style.display='none';
 			document.getElementById('success').style.display='block';
 			forwardToChildSpecimen();
 		}
 		else
 		{
+			document.getElementById('print-error').style.display='none';
+			document.getElementById('print-success').style.display='none';
+			document.getElementById('success').style.display='none';
 			document.getElementById('errorMsg').innerHTML = response.msg;
 			document.getElementById('error').style.display='block';
+		}
+		if(printFlag)
+		{
+			if(response.printLabel == "success")
+			{
+				document.getElementById('print-error').style.display='none';
+			document.getElementById('print-success').innerHTML = response.printLabelSuccess;
+			document.getElementById('print-success').style.display='block';
+				
+			}
+			else
+			{
+					document.getElementById('print-success').style.display='none';
+			document.getElementById('print-error').innerHTML = response.printLabelError;
+			document.getElementById('print-error').style.display='block';
+			}
 		}
 	}
 }

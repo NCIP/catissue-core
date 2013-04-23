@@ -134,7 +134,6 @@ public class SpecimenBizlogic
 			catch (LabelGenException e)
 			{
 				LOGGER.info(e);
-				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 			catch (final NameGeneratorException e)
 			{

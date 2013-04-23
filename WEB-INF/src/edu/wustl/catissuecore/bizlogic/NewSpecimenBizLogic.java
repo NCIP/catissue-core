@@ -3775,7 +3775,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		final Set<AbstractDomainObject> deriveEventCollection = new HashSet<AbstractDomainObject>();
 		final Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
 				.getSpecimenEventCollection();
-		SpecimenEventParameters specimenEventParameters = null;
 		SpecimenEventParameters deriveSpecimenEventParameters = null;
 		try
 		{
@@ -3785,8 +3784,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				for (final SpecimenEventParameters specimenEventParameters2 : parentSpecimeneventCollection)
 				{
-					specimenEventParameters = (SpecimenEventParameters) specimenEventParameters2;
-					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters
+					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters2
 							.clone();
 					deriveSpecimenEventParameters.setId(null);
 					deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
@@ -6161,12 +6159,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	}
 
-	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier)
+	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier,DAO dao) throws BizLogicException
 	{
 		edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = new edu.wustl.catissuecore.dto.SpecimenDTO();
 		try
 		{
-			DAO dao = AppUtility.openDAOSession(null);
 			Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), identifier);
 			specimenDTO.setId(specimen.getId());
 			specimenDTO.setLabel(specimen.getLabel());
@@ -6221,8 +6218,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (ApplicationException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e);
+			throw new BizLogicException(e.getErrorKey(),e,null);
+			
 		}
 
 		return specimenDTO;

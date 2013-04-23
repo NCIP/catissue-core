@@ -56,6 +56,7 @@ import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
 import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.PrintUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -132,7 +133,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 	 * @return
 	 */
 	private String addRowToResponseXMLForDHTMLXcombo(String stringValue, String name,
-			String populateValueInCombo,boolean selContMatched)
+			String populateValueInCombo, boolean selContMatched)
 	{
 		String selected = " selected=\"1\" ";
 		StringBuffer responseString = new StringBuffer("<option value=\"" + name + "\"");
@@ -351,30 +352,30 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		boolean selContMatched = Boolean.FALSE;
 		if (tranferEventId == null || "0".equals(tranferEventId))
 		{
-			
+
 			Integer i = 1;
 			for (NameValueBean nvb : containerList)
 			{
-				if(nvb.getName().equals(selectedContName))
+				if (nvb.getName().equals(selectedContName))
 				{
 					selContMatched = Boolean.TRUE;
 					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-						nvb.getName(), populateValueInCombo,selContMatched));
+							nvb.getName(), populateValueInCombo, selContMatched));
 				}
 				else
 				{
 					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-							nvb.getName(), populateValueInCombo,false));
+							nvb.getName(), populateValueInCombo, false));
 				}
 				i = i + 1;
 			}
-			selContMatched = (selContMatched)?false:true;
+			selContMatched = (selContMatched) ? false : true;
 			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-					virtualBean.getName(), populateValueInCombo,selContMatched));
-			if(!selContMatched)
+					virtualBean.getName(), populateValueInCombo, selContMatched));
+			if (!selContMatched)
 			{
 				responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-						selectedContName, populateValueInCombo,true));
+						selectedContName, populateValueInCombo, true));
 			}
 		}
 		responseString.append("</complete>");
@@ -780,22 +781,28 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
 			IOException
 	{
-		JsonDeserializer dese = new JsonDeserializer<Date>() {
-	        DateFormat df =new SimpleDateFormat(ApplicationProperties.getValue("date.pattern"));
-	        @Override
-	        public Date deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
-	                throws JsonParseException {
-	            try {
-	                return df.parse(json.getAsString());
-	            } catch (ParseException e) {
-	                return null;
-	            }
-	        }
-	    };
-		
+		JsonDeserializer dese = new JsonDeserializer<Date>()
+		{
+
+			DateFormat df = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern"));
+
+			@Override
+			public Date deserialize(final JsonElement json, final Type typeOfT,
+					final JsonDeserializationContext context) throws JsonParseException
+			{
+				try
+				{
+					return df.parse(json.getAsString());
+				}
+				catch (ParseException e)
+				{
+					return null;
+				}
+			}
+		};
 
 		GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Date.class, dese);
-		
+
 		Gson gson = gsonBuilder.create();
 		String consentTierListJSON = request.getParameter("dataJSON");
 		ConsentResponseDto consentsDto = gson.fromJson(request.getParameter("consentDto"),
@@ -804,7 +811,9 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		{
 		}.getType();
 		List<ConsentTierDTO> ConsentTierDtoList = gson.fromJson(consentTierListJSON, listType);
-		boolean disposeSpecimen = Constants.TRUE.equals(request.getParameter("disposeSpecimen"))? true : false;
+		boolean disposeSpecimen = Constants.TRUE.equals(request.getParameter("disposeSpecimen"))
+				? true
+				: false;
 		ConsentTrackingBizLogic consentTrackingBizLogic = new ConsentTrackingBizLogic();
 		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
@@ -817,7 +826,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		try
 		{
 			consentsDto.setDisposeSpecimen(disposeSpecimen);
-			consentTrackingBizLogic.updateConsentTier(consentsDto,dao,sessionDataBean);
+			consentTrackingBizLogic.updateConsentTier(consentsDto, dao, sessionDataBean);
 			returnMap.put("msg", "");
 			returnMap.put("success", "success");
 			dao.commit();
@@ -831,7 +840,9 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		{
 			returnMap.put("msg", ex.getMsgValues());
 			returnMap.put("success", "failure");
-		}catch(Exception ex){
+		}
+		catch (Exception ex)
+		{
 			returnMap.put("msg", "Error occured at server side.");
 			returnMap.put("success", "failure");
 		}
@@ -883,10 +894,24 @@ public class CatissueCommonAjaxAction extends DispatchAction
 				dao = AppUtility.openDAOSession(sessionDataBean);
 				bizlogic.updateSpecimen(dao, specDTO, sessionDataBean);
 
+				dao.commit();
 				returnMap.put("msg", "");
 				returnMap.put("success", "success");
-
-				dao.commit();
+				boolean isToPrintLabel = Boolean.valueOf(request.getParameter("printLabel"));
+				if (isToPrintLabel)
+				{
+					boolean printStatus = PrintUtil.printSpecimenLabel(" ", " ", request,
+							specDTO.getId());
+					if (printStatus)
+					{
+						returnMap.put("printLabelSuccess",
+								ApplicationProperties.getValue("specimen.label.print.success"));
+						returnMap.put("printLabel", "success.");
+					}
+					else
+						returnMap.put("printLabelError",
+								ApplicationProperties.getValue("specimen.label.print.fail"));
+				}
 			}
 		}
 		catch (DAOException ex)
@@ -905,5 +930,3 @@ public class CatissueCommonAjaxAction extends DispatchAction
 	}
 
 }
-
- 
