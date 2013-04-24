@@ -2,6 +2,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" isELIgnored="false"%>
 <script src="jss/ajax.js"></script>	   
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
@@ -84,6 +85,8 @@ function submitOrderNew(consentVerifiedValues)
 	{
 		if(loader.xmlDoc.responseText == "Success")
 		{
+			var numberOfcolumns=mygrid.getColumnsNum();	
+			mygrid.setColumnHidden(numberOfcolumns-1,true);
 			document.getElementById('error').style.display='none';
 			document.getElementById('success').style.display='block';
 		}
@@ -104,8 +107,6 @@ function submitOrderNew(consentVerifiedValues)
 				{	
 				  mygrid.cellById(row+1,numberOfcolumns-1).setValue(orderErrorDTOs[i].error);
 				  mygrid.cellById(row+1,6).setValue(orderErrorDTOs[i].newStatus);	
-				  mygrid.setRowColor(row+1,"#FF4400");
-				  
 				}
 			   }
 			}
@@ -209,7 +210,7 @@ function switchToOlderView()
 					</td>
 
 	                <td width="43%" class="black_ar">
-	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="30" name="DisplayOrderDTO" onblur="processData(this)"/>
+	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="49" name="DisplayOrderDTO" onblur="processData(this)"/>
 					</td>
 					<td width="17%" class="black_ar align_right_style"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
@@ -241,7 +242,7 @@ function switchToOlderView()
 					</td>
 					<script>
 						distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
-						distributionProtocolNameCombo.setSize(350);
+						distributionProtocolNameCombo.setSize(301);
 						if(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}')==null)
 						{
 						  distributionProtocolNameCombo.setComboValue("-1");		
@@ -256,8 +257,8 @@ function switchToOlderView()
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
 							</strong></td>
                 <td class="black_ar"> 
-							<bean:write name="DisplayOrderDTO" property="requestedDate" scope="request"/>
-						</td>
+					<fmt:formatDate value="${DisplayOrderDTO.requestedDate}" pattern="${datePattern}" />					
+						</td>					
               </tr>
             
 			<tr class="${tr_grey_color}">
@@ -278,7 +279,7 @@ function switchToOlderView()
 					<script>
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 								  site_combo = new dhtmlXComboFromSelect("site","site","100px");
-								  site_combo.setSize(200);
+								  site_combo.setSize(301);
  							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.site}')==null)
 								  {
  							  		site_combo.setComboValue("-1");		
@@ -300,7 +301,7 @@ function switchToOlderView()
 							<bean:message key="requestdetails.header.label.DistributorsComments" />
  					</strong></td>
 				<td class="black_ar_t">
-					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="90" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" />
+					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" />
 		 			</td>
 		 		</td>
 				<td class="black_ar"></td>

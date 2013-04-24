@@ -23,19 +23,24 @@
 		<!--	<div width="600px" style="oveflow:auto;display:block" id="consent">-->
 			
 			<table width="100%" border="0" cellpadding="3" cellspacing="0" id="table4" >
-				
+				<c:set var="consentExist" value='false' scope="page"/>
 				<c:forEach var="consentDTO" items="${requestScope.ConsentDTOs}">
+				<c:set var="consentExist" value='true' scope="page"/>
 				<tr>
 					<td class="showhide">
 						<table cellpadding="3" cellspacing="0" border="0" width="100%" id="table5">
 							
 							<tr>
-								<td class="noneditable" width="35%">
-									&nbsp;&nbsp;&nbsp;<span style="word-wrap: break-word;" >
-									<bean:message key="consent.barcodelable"/></span>
+								<td>
 								</td>
-								<td class="noneditable" >
-									<textarea disabled cols="130" rows="2"><c:forEach var="specimenLabel" items="${consentDTO.specimenLabels}">${specimenLabel},</c:forEach></textarea>
+								<td width="7%" class="black_ar align_right_style" width="35%" style="padding:10px;">
+									<strong>
+									<bean:message key="orderDistribution.consent.barcodelable"/></strong>
+								</td>
+								<td width="1%">
+								</td>
+								<td class="black_ar" >
+									&nbsp;&nbsp;<textarea disabled cols="130" rows="2"><c:forEach var="specimenLabel" items="${consentDTO.specimenLabels}">${specimenLabel}  </c:forEach></textarea>
 							   </td>
 							</tr>
 							
@@ -106,6 +111,14 @@
 				<%-- action button --%>	
 				  </tr>
 				</c:forEach>
+					<tr>
+				     <c:if test="${consentExist=='false'}">						
+				      <td class="black_ar ">
+					 <label><b><bean:message key="orderDistribution.consent.does.not.exists"/><b></label>
+				      </td>		
+				     </c:if>
+				   </tr>		
+				   
 				   <tr>
           <td class="buttonbg" style="padding:6px;">
 					<input type="button" class="blue_ar_b" value="Submit" onclick="window.parent.submitOrderNew(document.getElementsByName('verifyAllCheckBox'))" accesskey="Enter">
