@@ -2231,8 +2231,7 @@ public class Constants
 			"Overdue", "Collected", "Not Collected"};
 
 	/** The Constant SPECIMEN_ACTIVITY_STATUS_VALUES. */
-	public static final String[] SPECIMEN_ACTIVITY_STATUS_VALUES = {SELECT_OPTION, "Active",
-			"Closed"};
+	public static final String[] SPECIMEN_ACTIVITY_STATUS_VALUES = {"Active", "Closed"};
 
 	/** The Constant SITE_ACTIVITY_STATUS_VALUES. */
 	public static final String[] SITE_ACTIVITY_STATUS_VALUES = {SELECT_OPTION, "Active", "Closed"};
