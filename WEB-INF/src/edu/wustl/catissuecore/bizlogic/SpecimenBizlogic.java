@@ -4,12 +4,15 @@ package edu.wustl.catissuecore.bizlogic;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
@@ -26,6 +29,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -57,7 +61,7 @@ public class SpecimenBizlogic
 			Specimen oldSpecimenObj = (Specimen) dao.retrieveById(Specimen.class.getName(),
 					specimenDTO.getId());
 			//updating the object with DTO
-			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, dao);
+			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, sessionDataBean, dao);
 			if (Variables.isSpecimenLabelGeneratorAvl)
 			{
 				generateLabel(oldSpecimenObj);
@@ -85,6 +89,11 @@ public class SpecimenBizlogic
 		{
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		catch (CloneNotSupportedException e)
+		{
+			LOGGER.error(e.getMessage(), e);
+			throw this.getBizLogicException(e, null, null);
 		}
 	}
 
@@ -173,11 +182,14 @@ public class SpecimenBizlogic
 	 * Populating the retrieved specimen with DTO values
 	 * @param oldSpecimenObj
 	 * @param specimenDTO
+	 * @param sessionDataBean 
 	 * @throws ParseException 
 	 * @throws ApplicationException 
+	 * @throws CloneNotSupportedException 
 	 */
-	private void getUpdatedSpecimen(Specimen oldSpecimenObj, SpecimenDTO specimenDTO, DAO dao)
-			throws ParseException, ApplicationException
+	private void getUpdatedSpecimen(Specimen oldSpecimenObj, SpecimenDTO specimenDTO,
+			SessionDataBean sessionDataBean, DAO dao) throws ParseException, ApplicationException,
+			CloneNotSupportedException
 	{
 		if (specimenDTO.getActivityStatus() != null)
 			oldSpecimenObj.setActivityStatus(specimenDTO.getActivityStatus());
@@ -212,8 +224,8 @@ public class SpecimenBizlogic
 		if (specimenDTO.getCollectionStatus() != null
 				&& specimenDTO.getCollectionStatus().equalsIgnoreCase(
 						Constants.COLLECTION_STATUS_COLLECTED)
-				&& oldSpecimenObj.getCollectionStatus().equalsIgnoreCase(
-						Constants.COLLECTION_STATUS_PENDING))
+				&& !oldSpecimenObj.getCollectionStatus().equalsIgnoreCase(
+						Constants.COLLECTION_STATUS_COLLECTED))
 		{
 			oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
 			oldSpecimenObj.setIsAvailable(true);
@@ -227,6 +239,7 @@ public class SpecimenBizlogic
 				oldSpecimenObj.setAvailableQuantity(oldSpecimenObj.getInitialQuantity());
 			}
 
+			this.setSpecimenEvents(oldSpecimenObj, sessionDataBean);
 		}
 		else
 		{
@@ -287,6 +300,7 @@ public class SpecimenBizlogic
 		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(oldSpecimenObj,
 				specimenDTO));
 		oldSpecimenObj.setBiohazardCollection(getBiohazards(oldSpecimenObj, specimenDTO));
+
 	}
 
 	/**
@@ -386,6 +400,73 @@ public class SpecimenBizlogic
 		LOGGER.debug(logMessage);
 		ErrorKey errorKey = ErrorKey.getErrorKey(key);
 		return new BizLogicException(errorKey, exception, logMessage);
+	}
+
+	/**
+	 * Sets the specimen events.
+	 *
+	 * @param specimen : specimen
+	 * @param sessionDataBean  : sessionDataBean
+	 * @throws CloneNotSupportedException 
+	 */
+	private void setSpecimenEvents(Specimen specimen, SessionDataBean sessionDataBean)
+			throws CloneNotSupportedException
+	{
+		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+		if (specimen.getParentSpecimen() == null)
+		{
+			specimen.setPropogatingSpecimenEventCollection(specimen.getSpecimenRequirement()
+					.getSpecimenEventCollection(), sessionDataBean.getUserId(), specimen);
+		}
+		else
+		{
+			specimen.setSpecimenEventCollection(this.populateDeriveSpecimenEventCollection(
+					parentSpecimen, specimen));
+		}
+	}
+
+	/**
+	 * Sets the default events to specimen.
+	 *
+	 * @param specimen Set default events to specimens
+	 * @param sessionDataBean Session data bean This method sets the default events to
+	 * specimens if they are null
+	 */
+	private void setDefaultEventsToSpecimen(Specimen specimen, SessionDataBean sessionDataBean)
+	{
+		final Collection<SpecimenEventParameters> specimenEventColl = new HashSet<SpecimenEventParameters>();
+
+		specimen.setSpecimenEventCollection(specimenEventColl);
+	}
+
+	/**
+	 * Set event parameters from parent specimen to derived specimen.
+	 *
+	 * @param parentSpecimen specimen
+	 * @param deriveSpecimen Derived Specimen
+	 *
+	 * @return set
+	 * @throws CloneNotSupportedException 
+	 */
+	private Set<AbstractDomainObject> populateDeriveSpecimenEventCollection(
+			Specimen parentSpecimen, Specimen deriveSpecimen) throws CloneNotSupportedException
+	{
+		final Set<AbstractDomainObject> deriveEventCollection = new HashSet<AbstractDomainObject>();
+		final Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
+				.getSpecimenEventCollection();
+		SpecimenEventParameters deriveSpecimenEventParameters = null;
+		if (parentSpecimeneventCollection != null)
+		{
+			for (final SpecimenEventParameters specimenEventParameters : parentSpecimeneventCollection)
+			{
+				deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters
+						.clone();
+				deriveSpecimenEventParameters.setId(null);
+				deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
+				deriveEventCollection.add(deriveSpecimenEventParameters);
+			}
+		}
+		return deriveEventCollection;
 	}
 
 }
