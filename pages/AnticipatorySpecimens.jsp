@@ -798,6 +798,9 @@ isSCGPresent = true;
 
 
 <html:form action="${requestScope.formAction}">
+<logic:notEmpty name="scgSummaryDTO">
+ <input type="hidden" name="scgId" value="${scgSummaryDTO.scgId}" />
+</logic:notEmpty>
 	<!-- Mandar : New Table design starts -->
 <div id="scgDetails" class="align_left_style">
 <fieldset class="field_set"> 
