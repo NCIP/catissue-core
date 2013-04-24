@@ -32,6 +32,11 @@ function initSpecimenCombo()
 		collectionStatusCombo.setOptionWidth(203);
 		collectionStatusCombo.setSize(203);
 		collectionStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		
+		var activityStatusCombo = dhtmlXComboFromSelect("activityStatus");
+		activityStatusCombo.setOptionWidth(203);
+		activityStatusCombo.setSize(203);
+		activityStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
 }
 
 function showAddExternalIdDiv()
@@ -512,4 +517,3 @@ function organizeTarget()
 {
 	ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem');
 }
-
