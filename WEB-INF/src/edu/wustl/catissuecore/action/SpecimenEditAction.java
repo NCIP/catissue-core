@@ -115,6 +115,14 @@ public class SpecimenEditAction extends CatissueBaseAction
 			}
 			request.setAttribute(Constants.COLLECTIONSTATUSLIST, collectionStatusList);
 	
+			List<NameValueBean> activityStatusList = new ArrayList<NameValueBean>();
+			for (String status : Constants.SPECIMEN_ACTIVITY_STATUS_VALUES)
+			{
+				activityStatusList.add(new NameValueBean(status, status));
+			}
+
+			request.setAttribute(Constants.ACTIVITYSTATUSLIST, activityStatusList);
+
 			List<Biohazard> biohazardList = dao.retrieve(Biohazard.class.getName());
 	
 			ArrayList<BiohazardDTO> biohazardTypeNameList = new ArrayList<BiohazardDTO>();
