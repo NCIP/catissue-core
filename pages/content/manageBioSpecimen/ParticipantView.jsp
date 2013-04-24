@@ -34,7 +34,7 @@
 			<td  class="heading_text_style">
 				<bean:message key="participant.view.profile.summary"/> <bean:write name="participantDto" property="lastName" />,
 				<bean:write name="participantDto" property="firstName" />
-				[<bean:write name="participantDto" property="cpId" />_<bean:write name="participantDto" property="participantId" />]
+				[<bean:write name="participantDto" property="ppid" />]
 				 
 			</td>
 	</tr>
