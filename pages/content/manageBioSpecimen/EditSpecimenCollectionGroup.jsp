@@ -133,6 +133,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<tr class="${tr_grey_color}">
 				</c:if>
 				<c:set var="i" value="${i+1}" scope="request" />
+
 				 <td width="20%" align="right" valign="top" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
 						<b><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/> </b>
@@ -153,10 +154,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 								
 							</c:otherwise>
 						</c:choose>
-					  
-					   
-					    
-						
+		
 		        	</td>
 						<td width="20%" align="right" class="black_ar">
 					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
@@ -168,8 +166,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							    </logic:iterate>
 					</html:select>
 					</td>
-					
-				
 				</tr>
 				
 				<c:if test="${i%2 == 0}">
@@ -178,13 +174,13 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				<c:if test="${i%2 == 1}">
 					<tr class="${tr_grey_color}">
 				</c:if>
-				<c:set var="i" value="${i+1}" scope="request" />
+
 				
 				<%
 					if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || Constants.EDIT.equals(operation))
 						{
 				%>
-					
+					<c:set var="i" value="${i+1}" scope="request" />	
 					<td width="20%" align="right" valign="top" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" />	
 						<span class="black_ar"><label for="name">
@@ -192,7 +188,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</span>
 					</td>
 					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-						<html:text styleClass="formFieldSizedSC"   maxlength="255" styleId="name" property="name" />
+							<html:text  styleClass="formFieldSizedSC"   size="26"  maxlength="255" styleId="name" property="name" />
 					</td>
 
 				<%
@@ -227,13 +223,13 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</logic:equal>
 						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+								<html:text styleClass="formFieldSizedSCG"  size="26"  maxlength="255" styleId="barcode" property="barcode" />
 						    </td>
 						</logic:notEqual>
 					   </logic:equal>
 					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="barcode" property="barcode" />
+								<html:text styleClass="formFieldSizedSCG" size="26"  maxlength="255" styleId="barcode" property="barcode" />
 						</td>
 					  </logic:notEqual>
 					<%
@@ -293,11 +289,12 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				<c:set var="i" value="${i+1}" scope="request" />
 				  	 
 					 <td width="20%" align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.offset" /></b></td>
-					 <td width="30%" align="left" nowrap class="black_ar align_left_style1"><html:text styleClass="formFieldSizedSCG" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
+					 <td width="30%" align="left" nowrap class="black_ar align_left_style1">
+						<html:text styleClass="formFieldSizedSCG" size="26"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
 					 
 					<td  width="20%"align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></b></td>
 					<td  width="30%" align="left" nowrap class="black_ar align_left_style1">
-				     	<html:text styleClass="formFieldSizedSC" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSizedSC" size="26"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
 					     	<!-- This feature will be implemented in next release
 							&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">
@@ -363,8 +360,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			     * See also: 1_1 to 1_5
 				 * Description : Added <TR> for comment field .
 				-->
-				 <tr><td colspan="3" class="bottomtd"></td></tr>
-				
+				 				
 				<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
 				</c:if>
@@ -374,23 +370,18 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				<c:set var="i" value="${i+1}" scope="request" />
 				
 					<td width="20%" align="right" class="black_ar_t"><b><bean:message key="app.comments"/></b></td>
-					<td width="30%" colspan="4" align="left"  class="align_left_style1"><html:textarea styleClass="black_ar" rows="1"  cols="73" property="comment"/></td>
-					</tr>
-
-				 		<tr>
-				  		<td align="right" colspan="3">
+					<td width="30%" colspan="4" align="left"  class="align_left_style1">
+						<html:textarea styleClass="black_ar" style="width: 64%; height:40px;" property="comment"/>
+						
 							<%
-								String changeAction = "setFormAction('"+formName+"')";
+					 			String changeAction = "setFormAction('"+formName+"')";
 							%>
-
-				  		</td>
-				 	</tr>
+					</td>
+					</tr>
 			</table>
-		</td></tr>
+		</td>
+	</tr>
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
-
-
-
 		<tr>
 			<td colspan="3">
 				<div >
@@ -398,7 +389,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				</div>
 			</td>
 		</tr>
-		 <tr><td colspan="3" class="bottomtd"></td></tr>
+
 	<!--
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale

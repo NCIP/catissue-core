@@ -11,6 +11,9 @@
 <script src="jss/overlib_mini.js" type="text/javascript"></script>
 <script src="jss/calender.js" type="text/javascript"></script>
 
+<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
+
 </head>
 <body>
 

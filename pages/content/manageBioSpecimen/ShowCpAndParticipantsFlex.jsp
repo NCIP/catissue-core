@@ -23,6 +23,9 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
+
   <script language="JavaScript">
 
 	//Added By Baljeet For flex

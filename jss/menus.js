@@ -460,9 +460,9 @@ Ext.onReady(function(){
 			},
 			
 			{
-				text: 'Summary',
+				text: 'Data Summary',
 				href:'Summary.do', 
-				tooltip:'Summary'
+				tooltip:'Data Summary'
 			},
 			
 			{

@@ -1,5 +1,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
+
 <!-- action buttons begins -->
 							<div id="scgPageButtons">
 
@@ -11,28 +12,29 @@
 											<!-- Patch ID: Bug#3184_13 and Description: Added restrict checkbox
 											-->
 											 <tr>
-									          <td colspan="3" align="left" class="dividerline" ><span class="black_ar">
-													<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onclick="disableButtonsOnCheck(this)">
+									          <td colspan="2" width="30%" align="left" class="dividerline" >
+												<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onclick="disableButtonsOnCheck(this)">
+												<span class="black_ar" style="vertical-align:2px">	 			
 														<bean:message key="specimen.checkboxLabel"/>
+												 </span>
 													</html:checkbox>
-												</td>
-											</tr>
-											<tr>
-													<td colspan="1" valign="center" nowrap>
+											 </td>
+											 <td   width="70%"  align="center" class="dividerline" >
 													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
-														<span class="black_ar">
+														<span class="black_ar" style="vertical-align:2px">
 															<bean:message key="print.checkboxLabel"/>
 														</span>
 														</html:checkbox>
-											        </td>
+											 </td> 
+											</tr>
+											<tr>
+													
 												       <td>
 					   			                         <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
 			 				                          </td>
-														</tr>
-										<!--  End : Displaying   printer type and location -->
-											 <tr>
-												<td colspan="3" class="bottomtd"></td>
 											</tr>
+										<!--  End : Displaying   printer type and location -->
+											 
 											<tr>
 												<td colspan="3" align="left" class="buttonbg">
 												<%

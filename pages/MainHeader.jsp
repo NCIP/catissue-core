@@ -4,10 +4,12 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
-<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+
 <%@ page language="java" isELIgnored="false"%>
 
 <script src="jss/titli.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
 <script type="text/javascript">
 function inputFocus(i){
 	if(i.value==i.defaultValue)
@@ -24,31 +26,7 @@ function inputBlur(i){
 }
 </script>
 
-<script>
-		var strLInk=window.location.href;
-		var stringIndexValue=strLInk.lastIndexOf("/");
-		var strLinkWithoutSlash=strLInk.substring(0,stringIndexValue);
-		shortcut.add("alt+o", function() {
-		var strLinkForOrder=strLinkWithoutSlash.concat("/RequestListView.do");
-		window.location=strLinkForOrder;
-           });
-			
-		 shortcut.add("alt+q", function() {
-				var strLinkForQueries=strLinkWithoutSlash.concat("/ShowQueryDashboardAction.do");
-				window.location=strLinkForQueries;
-				});
-				
-		shortcut.add("alt+c", function() {
-				var strLinkForDataEntry=strLinkWithoutSlash.concat("/CpBasedSearch.do");
-				window.location=strLinkForDataEntry;
-				});
-		
-				shortcut.add("alt+b", function() {
-		var strLinkForBulkUpload=strLinkWithoutSlash.concat("/BulkOperation.do");
-		window.location=strLinkForBulkUpload;
-           });	
-				
-</script>
+
 
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -60,7 +38,7 @@ function inputBlur(i){
 			style="background-repeat:repeat-x;">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td width="86%" align="right" valign="top">
+				<td width="86%" align="right" valign="top" style="padding-right:10px">
 				<logic:notEmpty name="<%=Constants.SESSION_DATA%>">
 				<%
 				String searchString = request.getParameter("searchString");
@@ -99,7 +77,8 @@ function inputBlur(i){
 					<a	href="BulkOperation.do?pageOf=pageOfBulkOperation" class="white">
 							<img src="images/uIEnhancementImages/bo.png" alt="Summary"
 								  border="0" title="Bulk Upload,,Press Alt + B" />
-								  <span title="Bulk Upload,Press Alt + B" style="vertical-align:top"><bean:message key="app.bulkUplad" />  </span>
+								  <span title="Bulk Upload,Press Alt + B" style="vertical-align:top">
+									<bean:message key="app.bulkUplad" />  </span>
 					</a>
 				</td>
 

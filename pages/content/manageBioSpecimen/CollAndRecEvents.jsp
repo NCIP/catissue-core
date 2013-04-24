@@ -17,7 +17,7 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="collectionEvent">
 	<tr onclick="showHide('event')">
-	<td width="50%" align="left" class="tr_bg_blue1" ><span class="blue_ar_b">&nbsp;Collection and Received Events Details</span></td>
+	<td width="50%" align="left" class="tr_bg_blue1" ><span class="blue_ar_b">&nbsp;Collection and Received Events</span></td>
 	<td width="50%"align="right" class="tr_bg_blue1" ><a href="#" id="imgArrow_event" ><img src="images/uIEnhancementImages/up_arrow.gif" alt="Show Details" width="80" height="9" hspace="10" border="0"/></a></td>
 	</tr>
 	<tr>
@@ -25,13 +25,10 @@
 	   <div id="event" style="display:block" >
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
-
-    </tr>
-    <tr>
     <tr>
     <td width="50%" style="padding-top:2px">
 	<table width="100%" border="0" cellspacing="0" cellpadding="3">
-      <tr>
+      <tr class="tr_alternate_color_lightGrey">
         <html:hidden property="collectionEventId" />
 						<html:hidden property="collectionEventSpecimenId" />
 		<td class="black_ar" align="right" width="40%">
@@ -52,58 +49,41 @@
 					    </html:select>
 		</td>
       </tr>
-      <tr class="tr_alternate_color_lightGrey">
+      <tr>
          <td class="black_ar" align="right" width="40%">
 		 
 							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 							<label for="date">
-								<b><bean:message key="eventparameters.dateofevent"/></b>							
+								<b><bean:message key="scg.CollectionDate"/></b>							
 							</label>
 		</td>
         <td class="black_ar align_left_style1" align="left" width="60%">
+		<table style="border-collapse:collapse;">
+		<td>
 							<html:text property="collectionEventdateOfEvent" styleClass="black_ar"
 							     styleId="collectionEventdateOfEvent" size="10" value="<%=currentCollectionDate%>" 
-                               onclick="doInitCalendar('collectionEventdateOfEvent',false,'${uiDatePattern}');" />			
-							 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
-		 </td>
-      </tr>
-	  
-      <tr>
-        <td class="black_ar" align="right" width="40%">
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-							<label for="eventparameters.time">
-							<b>	<bean:message key="eventparameters.time"/> </b>
-							</label>
+                               onclick="doInitCalendar('collectionEventdateOfEvent',false,'${uiDatePattern}');" /> 
 		</td>
-        <td  class="black_ar align_left_style1" align="left" width="60%">
-		<table>
-		<td class="black_ar">
-					<html:select property="collectionEventTimeInHours" styleClass="black_ar" styleId="collectionEventTimeInHours" size="1">
+		<td  style="padding-left:4px">								
+						<html:select property="collectionEventTimeInHours" styleClass="black_ar" styleId="collectionEventTimeInHours" size="1">
 								<logic:iterate name="hourList" id="listhoursId">
 									<html:option  value="${listhoursId}"> ${listhoursId} </html:option>
 							    </logic:iterate>
-					</html:select>
-        </td>
-		<td class="black_ar">		<label for="eventparameters.timeinhours">
-						<bean:message key="eventparameters.timeinhours"/>
-					</label>
+						</html:select> 
 		</td>
-		<td>
-							<html:select property="collectionEventTimeInMinutes" styleClass="black_ar" styleId="collectionEventTimeInMinutes" size="1">
+		<td  style="padding-left:4px">
+						<html:select property="collectionEventTimeInMinutes" styleClass="black_ar" styleId="collectionEventTimeInMinutes" size="1">
 								<logic:iterate name="minutesList" id="listminutesId">
 									<html:option  value="${listminutesId}"> ${listminutesId} </html:option>
 							    </logic:iterate>
-					       </html:select>
-		</td>
-		<td class="black_ar">
-							<label for="eventparameters.timeinminutes">
-								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-							</label>
+					    </html:select> 
 		</td>
 		</table>
-		</td>
+
+		 </td>
       </tr>
-      <tr class="tr_alternate_color_lightGrey">
+	  
+       <tr class="tr_alternate_color_lightGrey">
          <td class="black_ar" align="right" width="40%">
 			<logic:equal name="showStar" value="false">
 				&nbsp;
@@ -149,12 +129,12 @@
 							</label>
 		</td>
 		<td class="black_ar align_left_style1"  align="left" width="60%">
-							<html:textarea styleClass="black_ar"  styleId="collectionEventComments" property="collectionEventComments" rows="1" cols="21"/>
+			<html:textarea styleClass="black_ar" style="width: 68%; height:40px;" styleId="collectionEventComments" property="collectionEventComments" />
 		</td>		
     </table></td>
     <td width="50%">
 		<table width="100%" border="0" cellspacing="0" cellpadding="3">
-		<tr>
+		<tr class="tr_alternate_color_lightGrey">
         <html:hidden property="receivedEventId" />
 						<html:hidden property="receivedEventSpecimenId" />
 	    <td width="40%" align="right" class="black_ar">
@@ -176,58 +156,41 @@
 				</html:select>		
 		</td>
       </tr>
-      <tr class="tr_alternate_color_lightGrey">
+      <tr>
         <td width="40%" align="right" class="black_ar">
 							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 							<label for="date">
-							<b>	<bean:message key="eventparameters.dateofevent"/> </b>
+							<b>	<bean:message key="scg.receiveDate"/> </b>
 							</label>
 		</td>
         <td  width="60%" class="black_ar align_left_style1">
+		<table style="border-collapse:collapse;">
+			<td>
 								
 						<html:text property="receivedEventDateOfEvent" styleClass="black_ar"
 							       styleId="receivedEventDateOfEvent" size="10"  value="<%=currentReceivedDate %>" 
                                    onclick="doInitCalendar('receivedEventDateOfEvent',false,'${uiDatePattern}');" />	
-					     <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
-		</td>
-      </tr>
-      <tr>
-         <td width="40%" align="right" class="black_ar">
-							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-							<label for="eventparameters.time">
-								<b><bean:message key="eventparameters.time"/> </b>
-							</label>
-		</td>
-        <td width="60%" class="black_ar align_left_style1">
-		<table class="black_ar">
-		<td>
-		
+			</td>
+			<td style="padding-left:4px">
 						<html:select property="receivedEventTimeInHours" styleClass="black_ar" styleId="receivedEventTimeInHours" size="1">
 								<logic:iterate name="hourList" id="listHoursId">
 									<html:option  value="${listHoursId}"> ${listHoursId} </html:option>
 							    </logic:iterate>
 					    </html:select>
-		</td>
-		<td>
-					<label for="eventparameters.timeinhours">
-								<bean:message key="eventparameters.timeinhours"/> 
-					</label>
-		</td>
-		<td>
-				<html:select property="receivedEventTimeInMinutes" styleClass="black_ar" styleId="receivedEventTimeInMinutes" size="1">
+		   </td>
+		   <td style="padding-left:4px">
+					   <html:select property="receivedEventTimeInMinutes" styleClass="black_ar" styleId="receivedEventTimeInMinutes" size="1">
 								<logic:iterate name="minutesList" id="listMinutesId">
 									<html:option  value="${listMinutesId}"> ${listMinutesId} </html:option>
 							    </logic:iterate>
-			    </html:select>
+						</html:select>
+			</td>
+		 </table>  
 		</td>
-		<td>
-				<label for="eventparameters.timeinminutes">
-						 &nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-				</label>
-		</td>
-		</table>
+			
 		</td>
       </tr>
+ 
       <tr class="tr_alternate_color_lightGrey">
           <td width="40%" align="right" class="black_ar" >
 			<logic:equal name="showStar" value="false">
@@ -257,7 +220,7 @@
 			</label>
 		</td>						
 		<td width="60%" class="black_ar align_left_style1">
-			<html:textarea styleClass="black_ar"  styleId="receivedEventComments" property="receivedEventComments"  rows="1" cols="21"/>
+			<html:textarea styleClass="black_ar" style="width: 68%; height:40px;"  styleId="receivedEventComments" property="receivedEventComments" />
 		</td>	
       </tr>
 	   <tr>

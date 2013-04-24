@@ -30,6 +30,9 @@
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
 <script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script  src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
 	</head>
 
 <script>

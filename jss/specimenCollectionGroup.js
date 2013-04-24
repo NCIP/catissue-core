@@ -13,43 +13,41 @@ function initializeSCGCombo(operation)
 {
 		if(operation =='add'){
 			var collectionProtocolEventCombo = dhtmlXComboFromSelect("collectionProtocolEventId");
-			collectionProtocolEventCombo.setOptionWidth(165);
-			collectionProtocolEventCombo.setSize(165);
+			collectionProtocolEventCombo.setOptionWidth(177);
+			collectionProtocolEventCombo.setSize(177);
 		
 		}
 		scgCombo.clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
-		scgCombo.clinicalStatusCombo.setOptionWidth(165);
-		scgCombo.clinicalStatusCombo.setSize(165);
+		scgCombo.clinicalStatusCombo.setOptionWidth(177);
+		scgCombo.clinicalStatusCombo.setSize(177);
 	
 		scgCombo.collectionEventCollectionProcedureCombo = dhtmlXComboFromSelect("collectionEventCollectionProcedure");  
-		scgCombo.collectionEventCollectionProcedureCombo.setOptionWidth(165);
-		scgCombo.collectionEventCollectionProcedureCombo.setSize(165);
+		scgCombo.collectionEventCollectionProcedureCombo.setOptionWidth(177);
+		scgCombo.collectionEventCollectionProcedureCombo.setSize(177);
 		if(scgCombo.collectionEventCollectionProcedureCombo.getSelectedValue()=="-1"){
 			scgCombo.collectionEventCollectionProcedureCombo.setComboValue("Use CP Defaults");
 			scgCombo.collectionEventCollectionProcedureCombo.setComboText("Use CP Defaults");
 		}
 		
 		scgCombo.collectionEventContainerCombo = dhtmlXComboFromSelect("collectionEventContainer");  
-		scgCombo.collectionEventContainerCombo.setOptionWidth(165);
-		scgCombo.collectionEventContainerCombo.setSize(165);
+		scgCombo.collectionEventContainerCombo.setOptionWidth(177);
+		scgCombo.collectionEventContainerCombo.setSize(177);
 		if(scgCombo.collectionEventContainerCombo.getSelectedValue()=="-1"){
 			scgCombo.collectionEventContainerCombo.setComboValue("Use CP Defaults");
 			scgCombo.collectionEventContainerCombo.setComboText("Use CP Defaults");
 		}
 		
 		scgCombo.receivedEventReceivedQualityCombo = dhtmlXComboFromSelect("receivedEventReceivedQuality");  
-		scgCombo.receivedEventReceivedQualityCombo.setOptionWidth(165);
-		scgCombo.receivedEventReceivedQualityCombo.setSize(165);
+		scgCombo.receivedEventReceivedQualityCombo.setOptionWidth(177);
+		scgCombo.receivedEventReceivedQualityCombo.setSize(177);
 		if(scgCombo.receivedEventReceivedQualityCombo.getSelectedValue()=="-1"){
 			scgCombo.receivedEventReceivedQualityCombo.setComboValue("Use CP Defaults");
 			scgCombo.receivedEventReceivedQualityCombo.setComboText("Use CP Defaults");
 		}
 
 		scgCombo.activityStatusCombo = dhtmlXComboFromSelect("activityStatus");  
-		scgCombo.activityStatusCombo.setOptionWidth(165);
-		scgCombo.activityStatusCombo.setSize(165);
-		scgCombo.activityStatusCombo.deleteOption('-- Select --');
-		scgCombo.activityStatusCombo.readonly(true,false);
+		scgCombo.activityStatusCombo.setOptionWidth(177);
+		scgCombo.activityStatusCombo.setSize(177);
 		
 		scgCombo.activityStatusCombo.attachEvent("onChange", 
 			function()
@@ -59,13 +57,13 @@ function initializeSCGCombo(operation)
 			});
 
 		scgCombo.collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");  
-		scgCombo.collectionStatusCombo.setOptionWidth(165);
-		scgCombo.collectionStatusCombo.setSize(165);
+		scgCombo.collectionStatusCombo.setOptionWidth(177);
+		scgCombo.collectionStatusCombo.setSize(177);
 		
 		
 		var clinicalDiagnosisCombo = new dhtmlXCombo("clinicalDiagnosis","clinicalDiagnosis","100px");;
-		clinicalDiagnosisCombo.setOptionWidth(165);
-		clinicalDiagnosisCombo.setSize(165);
+		clinicalDiagnosisCombo.setOptionWidth(177);
+		clinicalDiagnosisCombo.setSize(177);
 		var collectionProtocolId = document.getElementsByName('collectionProtocolId')[0].value;
 		clinicalDiagnosisCombo.loadXML('ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId );
 		clinicalDiagnosisCombo.setComboText(clinicalDiagnosisValue);
@@ -85,32 +83,32 @@ function initializeSCGCombo(operation)
 				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
 			});
 			scgCombo.collectionEventTimeInHoursCombo = dhtmlXComboFromSelect("collectionEventTimeInHours");  
-			scgCombo.collectionEventTimeInHoursCombo.setOptionWidth(50);
-			scgCombo.collectionEventTimeInHoursCombo.setSize(50);
+			scgCombo.collectionEventTimeInHoursCombo.setOptionWidth(40);
+			scgCombo.collectionEventTimeInHoursCombo.setSize(40);
 		
 			scgCombo.collectionEventTimeInMinutesCombo = dhtmlXComboFromSelect("collectionEventTimeInMinutes");  
-			scgCombo.collectionEventTimeInMinutesCombo.setOptionWidth(50);
-			scgCombo.collectionEventTimeInMinutesCombo.setSize(50);
+			scgCombo.collectionEventTimeInMinutesCombo.setOptionWidth(40);
+			scgCombo.collectionEventTimeInMinutesCombo.setSize(40);
 			
 			scgCombo.receivedEventTimeInHoursCombo = dhtmlXComboFromSelect("receivedEventTimeInHours");  
-			scgCombo.receivedEventTimeInHoursCombo.setOptionWidth(50);
-			scgCombo.receivedEventTimeInHoursCombo.setSize(50);
+			scgCombo.receivedEventTimeInHoursCombo.setOptionWidth(40);
+			scgCombo.receivedEventTimeInHoursCombo.setSize(40);
 			
 			scgCombo.receivedEventTimeInMinutesCombo = dhtmlXComboFromSelect("receivedEventTimeInMinutes");  
-			scgCombo.receivedEventTimeInMinutesCombo.setOptionWidth(50);
-			scgCombo.receivedEventTimeInMinutesCombo.setSize(50);
+			scgCombo.receivedEventTimeInMinutesCombo.setOptionWidth(40);
+			scgCombo.receivedEventTimeInMinutesCombo.setSize(40);
 			
 			scgCombo.collectionEventUserIdCombo = dhtmlXComboFromSelect("collectionEventUserId");  
-			scgCombo.collectionEventUserIdCombo.setOptionWidth(165);
-			scgCombo.collectionEventUserIdCombo.setSize(165);
+			scgCombo.collectionEventUserIdCombo.setOptionWidth(177);
+			scgCombo.collectionEventUserIdCombo.setSize(177);
 			
 			scgCombo.receivedEventUserIdCombo = dhtmlXComboFromSelect("receivedEventUserId");  
-			scgCombo.receivedEventUserIdCombo.setOptionWidth(165);
-			scgCombo.receivedEventUserIdCombo.setSize(165);
+			scgCombo.receivedEventUserIdCombo.setOptionWidth(177);
+			scgCombo.receivedEventUserIdCombo.setSize(177);
 			
 			scgCombo.siteIdCombo = dhtmlXComboFromSelect("siteId");  
-			scgCombo.siteIdCombo.setOptionWidth(165);
-			scgCombo.siteIdCombo.setSize(165);
+			scgCombo.siteIdCombo.setOptionWidth(177);
+			scgCombo.siteIdCombo.setSize(177);
 			
 			
 			
