@@ -204,11 +204,6 @@ function switchToOlderView()
         <tr>
           <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3" >
 				<tr class="${tr_grey_color}">
-					<td colspan="4" class="black_ar align_right_style">
-						<input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()">
-					</td>
-				</tr>
-				<tr class="${tr_white_color}">
 					<td width="17%" class="black_ar align_right_style">
 						<strong>
 						<bean:message key='requestlist.dataTabel.OrderName.label'/>
@@ -235,7 +230,7 @@ function switchToOlderView()
 						
 				</tr>
 
-				<tr class="${tr_grey_color}">
+				<tr class="${tr_white_color}">
 					<td class="black_ar align_right_style">
                 		<strong>
 						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
@@ -267,12 +262,12 @@ function switchToOlderView()
 						</td>					
               </tr>
             
-			<tr class="${tr_white_color}">
+			<tr class="${tr_grey_color}">
                 
 					<td class="black_ar align_right_style"><strong>
 							 <bean:message key='requestlist.dataTabel.label.Site'/> 
  					</strong></td>
-					<td class="black_ar">
+					<td class="black_ar" style="background-color:#f6f6f6;" >
 							<div  class="dhtmlx-combo-margin">
 							 <html:select property="site" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="site" size="1" onblur="processData(this)">
 							 <html:options collection="sites" labelProperty="name" property="value" />
@@ -302,7 +297,7 @@ function switchToOlderView()
                 <td class="black_ar">&nbsp;<bean:write name="DisplayOrderDTO"  property="comments"  scope="request" /></td>
 				
               </tr>
-			    <tr class="${tr_grey_color}">
+			    <tr>
 				<td class="black_ar align_right_style"><strong>
 							<bean:message key="requestdetails.header.label.DistributorsComments" />
  					</strong></td>
@@ -310,7 +305,9 @@ function switchToOlderView()
 					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" />
 		 			</td>
 		 		</td>
-				<td class="black_ar"></td>
+				<td class="black_ar align_right_style">
+						<input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()">
+					</td>
 				<td class="black_ar"></td>
          </tr>
           </table></td>
@@ -348,15 +345,13 @@ function switchToOlderView()
 		<tr>
 			<td colspan="2" width="100%">
 				<script>	
-						document.write("<div id='gridbox' width='100%' height='200px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+						document.write("<div id='gridbox' width='100%' height='220px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 						document.write("<div id='csPagingArea'></div>");
 						document.write("<div id='csInfoArea'></div>");    
 				</script>
 			</td>
 		</tr>
-		<tr>
-          <td class="bottomtd" colspan="2"></td>
-        </tr>
+		
  <tr>
           <td class="buttonbg" style="padding:6px;" colspan="2">
 					<input type="button" class="blue_ar_b" value="Next >>" onclick="goToConsentTabFromNext()" accesskey="Enter">
