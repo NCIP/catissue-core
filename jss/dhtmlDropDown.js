@@ -278,7 +278,7 @@ function loadDHTMLXWindow()
 	}
 }
 
-function loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId)
+function loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,pageOf)
 {
 	var storageContainer =document.getElementById(storageContainerDropDown).value;
 	//alert(storageContainer);
@@ -289,7 +289,7 @@ function loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDi
 		var x = (screen.width / 3) - (w / 2);
 		var y = 0;
 		dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-		var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&controlName="+storageContainerDropDown+"&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer+"&holdSpecimenClass="+specimenClassName+"&holdSpecimenType="+spType+"&collectionProtocolId="+cpId;
+		var url = "ShowStoragePositionGridView.do?pageOf="+pageOf+"&controlName="+storageContainerDropDown+"&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer+"&holdSpecimenClass="+specimenClassName+"&holdSpecimenType="+spType+"&collectionProtocolId="+cpId;
 		//alert(url);
 		dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
 		dhxWins.window("containerPositionPopUp").button("park").hide();
