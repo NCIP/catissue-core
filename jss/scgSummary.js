@@ -71,6 +71,7 @@ function submitSCG() {
 	scgDataJSON["site"] = siteCombo.getSelectedValue();
         scgDataJSON["receiver"] = receiverCombo.getSelectedValue();
         scgDataJSON["collector"] = collectCombo.getSelectedValue();
+        scgDataJSON["collectionStatus"] = collectionStatusCombo.getSelectedValue();
 
 	var response = dhtmlxAjax.postSync("SaveScgAjaxAction.do", "dataJSON="
 			+ JSON.stringify(scgDataJSON));
