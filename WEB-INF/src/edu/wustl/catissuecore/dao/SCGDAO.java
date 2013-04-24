@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.SCGEventPointDTO;
 import edu.wustl.catissuecore.dto.SCGSummaryDTO;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
@@ -87,7 +88,6 @@ public class SCGDAO
 		final Calendar cal = Calendar.getInstance();
 		if (!receivedEvent.isEmpty())
 		{
-
 			for (Object recEvent : receivedEvent)
 			{
 				Object[] recEventData = (Object[]) recEvent;
@@ -151,12 +151,11 @@ public class SCGDAO
 				site.setId(summaryDto.getSite());
 				persistentSCG.setSpecimenCollectionSite(site);
 			}
-			
 			if(summaryDto.getCollectionStatus() != null)
 			{
 				persistentSCG.setCollectionStatus(summaryDto.getCollectionStatus());
 			}
-
+		
 			Collection<SpecimenEventParameters> eventParams = persistentSCG
 					.getSpecimenEventParametersCollection();
 
@@ -178,21 +177,23 @@ public class SCGDAO
 				{
 					if (eventParameter instanceof ReceivedEventParameters)
 					{
-						setReceivedEventParameter(summaryDto, eventParameter);
+						setReceivedEventParameter(summaryDto,(ReceivedEventParameters) eventParameter);
 					}
 					if (eventParameter instanceof CollectionEventParameters)
 					{
-						setCollectedEventParam(summaryDto, eventParameter);
+						setCollectedEventParam(summaryDto, (CollectionEventParameters) eventParameter);
 					}
 				}
 			}
+		
+
 			dao.update(persistentSCG);
 		}
 
 	}
 
 	private void setCollectedEventParam(SCGSummaryDTO summaryDto,
-			SpecimenEventParameters eventParameter)
+			CollectionEventParameters eventParameter)
 	{
 		if (summaryDto.getCollector() != null)
 		{
@@ -204,10 +205,17 @@ public class SCGDAO
 		{
 			eventParameter.setTimestamp(summaryDto.getCollectedDate());
 		}
+		if(eventParameter.getCollectionProcedure() == null){
+			eventParameter.setCollectionProcedure(Constants.CP_DEFAULT);
+		}
+
+		if(eventParameter.getContainer() == null){
+			eventParameter.setContainer(Constants.CP_DEFAULT);
+		}
 	}
 
 	private void setReceivedEventParameter(SCGSummaryDTO summaryDto,
-			SpecimenEventParameters eventParameter)
+			ReceivedEventParameters eventParameter)
 	{
 		if (summaryDto.getReceiver() != null)
 		{
@@ -219,6 +227,10 @@ public class SCGDAO
 		{
 			eventParameter.setTimestamp(summaryDto.getReceivedDate());
 		}
+		if(eventParameter.getReceivedQuality()==null){
+			eventParameter.setReceivedQuality(Constants.CP_DEFAULT);
+		}
+		
 	}
 
 }
