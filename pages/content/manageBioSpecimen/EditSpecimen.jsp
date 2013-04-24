@@ -415,9 +415,21 @@
 									</label>
 								</td>
 								<td width="30%" align="left" class="black_ar">
-									<label for="activityStatus">
-										<bean:write name="specimenDTO" property="activityStatus" scope="request"/>
-									</label>
+									<c:choose>
+										<c:when test="${specimenDTO.activityStatus == 'Active'}">
+											<label for="activityStatus">
+												<bean:write name="specimenDTO" property="activityStatus" scope="request"/>
+											</label>
+										</c:when>
+										<c:otherwise>
+											<html:select property="activityStatus" name="specimenDTO" 
+													 styleClass="formFieldSized" styleId="activityStatus" size="1"
+													 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+											<html:options collection="activityStatusList"
+													  labelProperty="name" property="value" />
+											</html:select>
+										</c:otherwise>
+									</c:choose>
 									<html:hidden name="specimenDTO" property="activityStatus"/>
 								</td>
 							</tr>
@@ -668,9 +680,6 @@
 </html:form>
 
 <script>
-var nodeId= "Specimen_"+document.getElementById("id").value;
-refreshTree(null,null,null,null,nodeId);
-
 var tabDataJSON = {};
 tabDataJSON["id"] = document.getElementById("id").value; 
 //alert(tabDataJSON);
@@ -727,6 +736,8 @@ function submitTabData()
 		var response = eval('('+loader.xmlDoc.responseText+')')
 		if(response.success == "success")
 		{
+			var nodeId= "Specimen_"+document.getElementById("id").value;
+			refreshTree(null,null,null,null,nodeId);
 			document.getElementById('print-error').style.display='none';
 			document.getElementById('print-success').style.display='none';
 			document.getElementById('error').style.display='none';
