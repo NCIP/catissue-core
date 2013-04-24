@@ -92,10 +92,11 @@ var gridDivObject_<%=i%> ;
 
 function showPopUp(storageContainerDropDown,selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId,storageContainerIdFromMap) 
 {
+	//alert(document.getElementById('value(Specimen:1_StorageContainer_id_fromMap)').value);
 	var storageContainer =document.getElementById(storageContainerDropDown).value;
 			if(storageContainer!="")
 			{
-				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId);
+				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,"pageOfAliquot");
 			}
 			else
 			{
@@ -105,10 +106,11 @@ function showPopUp(storageContainerDropDown,selectedContainerName,positionDimens
 					"&pos2=" + positionDimensionTwo +
 					"&containerId=" +containerId +
 					"&StorageContainerIdFromMap=" + storageContainerIdFromMap +
-					"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
-					"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
-					"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId ;
+					"&holdSpecimenClass="+specimenClassName +
+					"&holdSpecimenType="+spType +
+					"&holdCollectionProtocol=" + cpId ;
 					frameUrl+="&storageContainerName="+storageContainer;
+					//alert(frameUrl);
 					openPopupWindow(frameUrl,'newSpecimenPage');
 			}
 }

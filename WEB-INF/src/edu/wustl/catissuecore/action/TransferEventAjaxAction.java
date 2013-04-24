@@ -27,6 +27,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -88,50 +89,74 @@ public class TransferEventAjaxAction extends SecureAction
 				StorageContainer toStorageContainer = new StorageContainer();
 				toStorageContainer.setName(toContainerName);
 				trfrEvent.setToStorageContainer(toStorageContainer);
-
-				Integer toPos1Int = null, toPos2Int = null;
-				if (toPos1 != null && !"".equals(toPos1.trim()) && toPos2 != null
-						&& !"".equals(toPos2.trim()))
+				if(Validator.isEmpty(toPos1) && Validator.isEmpty(toPos2) && Validator.isEmpty(toContainerName))
 				{
-					toPos1Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
-							toContainerName, 1, toPos1);
-					toPos2Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
-							toContainerName, 2, toPos2);
-					trfrEvent.setToPositionDimensionOne(toPos1Int);
-					trfrEvent.setToPositionDimensionTwo(toPos2Int);
+					trfrEvent.setToPositionDimensionOne(null);
+					trfrEvent.setToPositionDimensionTwo(null);
+					trfrEvent.setToStorageContainer(null);
 				}
 				else
 				{
-					List idList = AppUtility
-							.executeSQLQuery("select identifier from catissue_container cont where cont.name like '"
-									+ toContainerName + "'");
-					if(idList!=null && !idList.isEmpty())
+					Integer toPos1Int = null, toPos2Int = null;
+					if (toPos1 != null && !"".equals(toPos1.trim()) && toPos2 != null
+							&& !"".equals(toPos2.trim()))
 					{
-						ArrayList idArr = (ArrayList) idList.get(0);
-						toStorageContainer.setId(Long.valueOf((String) idArr.get(0)));
+						toPos1Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
+								toContainerName, 1, toPos1);
+						toPos2Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
+								toContainerName, 2, toPos2);
+						trfrEvent.setToPositionDimensionOne(toPos1Int);
+						trfrEvent.setToPositionDimensionTwo(toPos2Int);
 					}
 					else
 					{
-						throw new BizLogicException( ErrorKey.getErrorKey( "invalid.container.name" ) ,null , "" );
+						List idList = AppUtility
+								.executeSQLQuery("select identifier from catissue_container cont where cont.name like '"
+										+ toContainerName + "'");
+						if(idList!=null && !idList.isEmpty())
+						{
+							ArrayList idArr = (ArrayList) idList.get(0);
+							toStorageContainer.setId(Long.valueOf((String) idArr.get(0)));
+						}
+						else
+						{
+							throw new BizLogicException( ErrorKey.getErrorKey( "invalid.container.name" ) ,null , "" );
+						}
+						Position position = StorageContainerUtil.getFirstAvailablePositionsInContainer(
+								toStorageContainer, new HashSet(), dao, null, null);
+						trfrEvent.setToPositionDimensionOne(position.getXPos());
+						trfrEvent.setToPositionDimensionTwo(position.getYPos());
 					}
-					Position position = StorageContainerUtil.getFirstAvailablePositionsInContainer(
-							toStorageContainer, new HashSet(), dao, null, null);
-					trfrEvent.setToPositionDimensionOne(position.getXPos());
-					trfrEvent.setToPositionDimensionTwo(position.getYPos());
-				}
+	
+					final String sourceObjectName1 = StorageContainer.class.getName();
+					final String[] selectColumnName1 = {"id"};
+					final QueryWhereClause queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
+					queryWhereClause1.addCondition(new EqualClause("name", toContainerName));
+					final List list1 = dao.retrieve(sourceObjectName1, selectColumnName1,
+							queryWhereClause1);
+					if (list1.size() != 0)
+					{
+						toStorageContainer.setId((Long) list1.get(0));
+					}
+					
+					//dao=AppUtility.openDAOSession(sessionDataBean);
+					final String sourceObjectName3 = Specimen.class.getName();
+					final String[] selectColumnName3 = {"specimenPosition"};
+					final QueryWhereClause queryWhereClause3 = new QueryWhereClause(sourceObjectName3);
+					queryWhereClause3.addCondition(new EqualClause("id", Long.valueOf(specimenId)));
+					final List list3 = dao.retrieve(sourceObjectName3, selectColumnName3,
+							queryWhereClause3);
+					if (list3.size() != 0)
+					{
+						specPos = (SpecimenPosition) list3.get(0);
+					}
+					
+					specPos.setPositionDimensionOneString(toPos1);
+					specPos.setPositionDimensionTwoString(toPos2);
+					specPos.setPositionDimensionOne(toPos1Int);
+					specPos.setPositionDimensionTwo(toPos2Int);
 
-				final String sourceObjectName1 = StorageContainer.class.getName();
-				final String[] selectColumnName1 = {"id"};
-				final QueryWhereClause queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
-				queryWhereClause1.addCondition(new EqualClause("name", toContainerName));
-				final List list1 = dao.retrieve(sourceObjectName1, selectColumnName1,
-						queryWhereClause1);
-				if (list1.size() != 0)
-				{
-					toStorageContainer.setId((Long) list1.get(0));
 				}
-
-				
 				trfrEvent.setFromStorageContainer(fromStorageContainer);
 
 //				dao = AppUtility.openDAOSession(sessionDataBean);
@@ -149,22 +174,7 @@ public class TransferEventAjaxAction extends SecureAction
 				Specimen specimen = new Specimen();
 				specimen.setId(Long.valueOf(specimenId));
 
-				//dao=AppUtility.openDAOSession(sessionDataBean);
-				final String sourceObjectName3 = Specimen.class.getName();
-				final String[] selectColumnName3 = {"specimenPosition"};
-				final QueryWhereClause queryWhereClause3 = new QueryWhereClause(sourceObjectName3);
-				queryWhereClause3.addCondition(new EqualClause("id", Long.valueOf(specimenId)));
-				final List list3 = dao.retrieve(sourceObjectName3, selectColumnName3,
-						queryWhereClause3);
-				if (list3.size() != 0)
-				{
-					specPos = (SpecimenPosition) list3.get(0);
-				}
 				
-				specPos.setPositionDimensionOneString(toPos1);
-				specPos.setPositionDimensionTwoString(toPos2);
-				specPos.setPositionDimensionOne(toPos1Int);
-				specPos.setPositionDimensionTwo(toPos2Int);
 				trfrEvent.setSpecimen(specimen);
 
 				trfrEvent.setTimestamp(new Date());
@@ -179,11 +189,19 @@ public class TransferEventAjaxAction extends SecureAction
 				SpecimenPosition pos = ((Specimen) trfrEvent.getSpecimen()).getSpecimenPosition();;
 
 				StringBuffer sb = new StringBuffer();
-				sb.append(toContainerName);
-				sb.append("#");
-				sb.append(pos.getPositionDimensionOneString());
-				sb.append("#");
-				sb.append(pos.getPositionDimensionTwoString());
+				if(pos == null)
+				{
+					sb.append("virtual");
+				}
+				else
+				{
+					
+					sb.append(toContainerName);
+					sb.append("#");
+					sb.append(pos.getPositionDimensionOneString());
+					sb.append("#");
+					sb.append(pos.getPositionDimensionTwoString());
+				}
 				response.setContentType("text/html");
 				response.setHeader("Cache-Control", "no-cache");
 				final String msg = sb.toString();

@@ -293,7 +293,7 @@ function getElement(name)
 			var storageContainer =document.getElementById(storageContainerDropDown).value;
 			if(storageContainer!="")
 			{
-				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId);
+				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,"pageOfAntispec");
 			}
 			else
 			{

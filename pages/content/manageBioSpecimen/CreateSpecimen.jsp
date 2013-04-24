@@ -97,7 +97,7 @@ function showPopUp()
     if(storageContainer!="")
 	{
 		//loadDHTMLXWindow();
-		loadDHTMLXWindowForMultipleSpecimen('storageContainerDropDown','pos1','pos2',className,sptype,'<%=collectionProtocolId%>')
+		loadDHTMLXWindowForMultipleSpecimen('storageContainerDropDown','pos1','pos2',className,sptype,'<%=collectionProtocolId%>','pageOfderivative')
 	}
 	else
 	{

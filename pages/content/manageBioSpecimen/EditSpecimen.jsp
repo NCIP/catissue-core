@@ -449,7 +449,7 @@
 									<input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='Virtually Located' readonly style="border:0px;" id="storageContainerPosition" />
 								</logic:equal>
 								<logic:equal name="specimenDTO" property="isVirtual" value="false">
-								<input type="text" size="30" maxlength="255"  class="black_ar"  value='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)' readonly style="border:0px" id="storageContainerPosition" />
+								<input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)' readonly style="border:0px" id="storageContainerPosition" />
 									
 								</logic:equal>
 								<logic:equal name="specimenDTO" property="collectionStatus" value="Collected">
@@ -641,7 +641,6 @@
 								
 	<!--  Added for displaying  printer type and location -->
 								  <td>
-					   			     
 			 				        </td>
 
 			 				</tr>

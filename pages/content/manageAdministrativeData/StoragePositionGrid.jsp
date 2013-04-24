@@ -83,7 +83,10 @@ td {
 %>
 
 <script>
-//alert('ddd');
+var globalPageOf="";
+var globalContName="";
+var globalPos1="";
+var globalPos2="";
 function getActionToDoURL()
 {
 	var className="${requestScope.holdSpecimenClass}";//parent.window.document.getElementById('className').value;
@@ -112,12 +115,14 @@ function getActionToDoURL()
 <body onload="checkSpecimenStatus();showContainerGrid();">
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
-<tr><td class="black_ar" colspan="2">
+<tr><td class="black_ar" colspan="3" align="center"><b>Container Map</b>
+</td></tr>
+<tr><td class="black_ar" colspan="3">
 <div id="error" style="height:50%;width:100%;"></div></td></tr>
 <tr>
 	<td width="5%"></td>
-	<td align="left" class="black_ar" valign="center"><b>Name:  </b></td>
-	<td width="100%">
+	<td align="left" class="black_ar" valign="bottom"><b>Name:  </b></td>
+	<td width="90%">
 	<div id="storageContainerDiv" style="width:100%; height:15px;display:block;">
 	<table valign="center" cellpadding="0" cellspacing="0" border="0" >
 						<tr><td width="30%">
@@ -173,10 +178,10 @@ function getActionToDoURL()
 				<input type="hidden" id="pos1" name="pos1" />
 				<input type="hidden" id="pos2" name="pos2" />
 			</td>
-			<td class="black_ar_md">
-				<!--<input type="button" class="blue_ar_b" value="Submit" onclick="transferSpecimen()">-->
+			<td class="black_ar_md" width="10%">
+				<input type="radio" name="virtualCont" onClick="setVirtual()"/>Virtual
 			</td>
-			</td>
+			
 			</tr>
 			</table>
 		</div>
@@ -272,6 +277,37 @@ function updatePosition()
 		parent.window.dhxWins.window("containerPositionPopUp").close();
 }
 
+function transferVrtualSpecimen()
+{
+	var toPos1="";
+	var toPos2="";
+	var toContainerName="";//dhtmlxCombo.getComboText();//dhtmlxCombo.getActualValue();//document.getElementById('storageContainerDropDown').value;
+	var fromStoragePosition=parent.window.document.getElementById('storageContainerPosition').value;
+	//alert(fromStoragePosition);
+	var fromContainerName=fromStoragePosition.substring(0,fromStoragePosition.lastIndexOf('(')-1);
+	var storagePositions=fromStoragePosition.substring(fromStoragePosition.lastIndexOf('(')+1,fromStoragePosition.lastIndexOf(')')).split(",");
+	var fromPos1=storagePositions[0];
+	var fromPos2=storagePositions[1];
+	var specimenId=parent.window.document.getElementsByName('id')[0].value;
+	
+	var request = newXMLHTTPReq();
+	if(request == null)
+    {
+		alert ("Your browser does not support AJAX!");
+		return;
+	}
+	var handlerFunction = getReadyStateHandler(request,updateSpecimenValues,true);
+	
+    request.onreadystatechange = handlerFunction;
+	var param="fromContainerName="+fromContainerName+"&fromPos1="+fromPos1+"&fromPos2="+fromPos2+"&toPos1="+toPos1+"&toPos2="+toPos2+"&toContainerName="+toContainerName+"&isVirtual=${requestScope.isVirtual}&specimenId="+specimenId;
+
+    var url = "TransferEventAction.do";
+ 	request.open("POST",url,true);
+	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(param);
+	return false;
+}
 function transferSpecimen()
 {
 
@@ -328,6 +364,15 @@ function updateSpecimenValues(responseText)
 		container.value = containerName;
 		position1.value = pos1;
 		position2.value= pos2;
+		parent.window.dhxWins.window("containerPositionPopUp").close();
+	}
+	else if(msg == 'virtual')
+	{
+		var storagePosition=parent.window.document.getElementById('storageContainerPosition');
+		
+		storagePosition.value='Virtually Located';
+		var isVirtual=parent.window.document.getElementById('isVirtual');
+		isVirtual.value=true;
 		parent.window.dhxWins.window("containerPositionPopUp").close();
 	}
 	else
@@ -439,6 +484,12 @@ function createPositionGrid(responseString)
 	var pos1ControlName = obj.pos1ControlName;
 	var pos2ControlName = obj.pos2ControlName;
 	var pageOf = obj.pageOf;
+	var controlName = obj.controlName;
+	//alert("globalPageOf   "+globalPageOf);
+	globalPageOf=pageOf;
+	globalContName=controlName;
+	globalPos1 = pos1ControlName;
+	globalPos2 = pos2ControlName;
 	var oneDimensionCapacity = obj.dimensionOneCapacity;
 	var twoDimensionCapacity = obj.dimensionTwoCapacity;
 	var occupiedPositon = obj.occupiedPositions;
@@ -491,7 +542,7 @@ function createPositionGrid(responseString)
 				var position=title.split(",");
 				if(containerMap[i][j-1][k])
 				{
-					html=html+" style='min-width:20px;cursor:pointer;' onMouseOver=\"this.bgColor='##83F2B9'\" onMouseOut=\"this.bgColor='#008000'\" title='"+title+"' bgColor=#008000 onclick=\""+functionName+"('"+pos1ControlName+"','"+position[0]+"','"+pos2ControlName+"','"+position[1]+"','"+pageOf+"');\">";
+					html=html+" style='min-width:20px;cursor:pointer;' onMouseOver=\"this.bgColor='##83F2B9'\" onMouseOut=\"this.bgColor='#008000'\" title='"+title+"' bgColor=#008000 onclick=\""+functionName+"('"+pos1ControlName+"','"+position[0]+"','"+pos2ControlName+"','"+position[1]+"','"+pageOf+"','"+controlName+"');\">";
 				}			
 				else
 				{
@@ -528,13 +579,104 @@ function showContainerGrid()
 		onContainerDetailDisplay(controlName);
 	}
 }
+function setVirtual()
+{
+//alert(globalPageOf);
+//alert(globalContName);
 
-function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValue2)
+	if(globalPageOf == 'pageOfSpecimen')
+	{
+		transferVrtualSpecimen();
+	}
+	else
+	{
+		var id1 = parent.window.document.getElementById(globalPos1);	
+		id1.value = "";
+		var id2 = parent.window.document.getElementById(globalPos2);	
+		id2.value = "";
+		if(globalPageOf == 'pageOfAntispec')
+		{
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			//alert(rowIndex);
+			var contId = parent.window.document.getElementById("storageContainerDropDown_"+rowIndex);
+			contId.value='-1';
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
+		}
+		else if(globalPageOf == 'pageOfAliquot')
+		{
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById("value(Specimen:"+rowIndex+"_StorageContainer_id_fromMap)");
+			contId.value="-1";
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
+		}
+		else if(globalPageOf == 'pageOfSpecimen')
+		{
+		}
+		else if(globalPageOf == 'pageOfNewSpecimen')
+		{
+			var contId = parent.window.document.getElementById('containerId');
+			contId.value='-1';
+			var contName = parent.window.document.getElementById('storageContainerDropDown');
+			contName.value='Virtual';
+		}
+		else if(globalPageOf == 'pageOfderivative')
+		{
+			var contId = parent.window.document.getElementById('containerId');
+			contId.value='-1';
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
+		}
+		parent.window.dhxWins.window("containerPositionPopUp").close();
+	}
+	
+	
+}
+function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValue2,pageOf,controlName)
 {//alert("elementId1:  "+elementId1+"  elementValue1:  "+elementValue1+"  elementId2:   "+elementId2+"elementValue2:   "+elementValue2);
 	var id1 = parent.window.document.getElementById(elementId1);	
 	id1.value = elementValue1;
 	var id2 = parent.window.document.getElementById(elementId2);	
 	id2.value = elementValue2;
+	//alert(controlName);
+	//alert(dhtmlxCombo.getSelectedValue());
+	if(pageOf == 'pageOfAntispec')
+	{
+
+		var rowIndex = controlName.substring(controlName.indexOf('_')+1,controlName.length);
+		//alert(rowIndex);
+		var contId = parent.window.document.getElementById("storageContainerDropDown_"+rowIndex);
+		contId.value=dhtmlxCombo.getSelectedValue();
+		var contName = parent.window.document.getElementById(controlName);
+		contName.value=dhtmlxCombo.getSelectedText();
+	}
+	else if(pageOf == 'pageOfAliquot')
+	{
+		var rowIndex = controlName.substring(controlName.indexOf('_')+1,controlName.length);
+		var contId = parent.window.document.getElementById("value(Specimen:"+rowIndex+"_StorageContainer_id_fromMap)");
+		contId.value=dhtmlxCombo.getSelectedValue();
+		var contName = parent.window.document.getElementById(controlName);
+		contName.value=dhtmlxCombo.getSelectedText();
+	}
+	else if(pageOf == 'pageOfSpecimen')
+	{
+	}
+	else if(pageOf == 'pageOfNewSpecimen')
+	{
+		var contId = parent.window.document.getElementById('containerId');
+		contId.value=dhtmlxCombo.getSelectedValue();
+		var contName = parent.window.document.getElementById('storageContainerDropDown');
+		contName.value=dhtmlxCombo.getSelectedText();
+	}
+	else if(pageOf == 'pageOfderivative')
+	{
+		var contId = parent.window.document.getElementById('containerId');
+		contId.value=dhtmlxCombo.getSelectedValue();
+		var contName = parent.window.document.getElementById(controlName);
+		contName.value=dhtmlxCombo.getSelectedText();
+	}
+	
 	parent.window.dhxWins.window("containerPositionPopUp").close();
 }
 

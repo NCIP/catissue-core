@@ -70,9 +70,12 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 
 public class CatissueCommonAjaxAction extends DispatchAction
 {
@@ -136,7 +139,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			String populateValueInCombo, boolean selContMatched)
 	{
 		String selected = " selected=\"1\" ";
-		StringBuffer responseString = new StringBuffer("<option value=\"" + name + "\"");
+		StringBuffer responseString = new StringBuffer("<option value=\"" + stringValue + "\"");
 		if ("true".equals(populateValueInCombo) && selContMatched)
 		{
 			responseString.append(selected);
@@ -322,65 +325,93 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws ApplicationException, IOException
 	{
-		List<NameValueBean> containerList = new ArrayList<NameValueBean>();
-		String contName = request.getParameter(Constants.CONTAINER_NAME);
-		String selectedContName = request.getParameter(Constants.SELECTED_CONTAINER_NAME);
-		String populateValueInCombo = request.getParameter("populateValueInCombo");
-		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
-		DAO dao = AppUtility.openDAOSession(sessionData);
-		long cpId = 0;
-		if (!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL))
-				&& !"null".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
+		DAO dao = null;
+		try
 		{
-			cpId = Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
-		}
-		String spType = request.getParameter("specimenType");
-		String spClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
-		StorageContainerForSpecimenBizLogic bizLogic = new StorageContainerForSpecimenBizLogic();
-		LinkedHashMap treeMap = bizLogic.getAutoAllocatedContainerListForSpecimen(
-				AppUtility.setparameterList(cpId, spClass, 0, spType), sessionData, dao, contName);
-		if (treeMap != null)
-		{
-			containerList = AppUtility.convertMapToList(treeMap);
-		}
-		AppUtility.closeDAOSession(dao);
-		StringBuffer responseString = new StringBuffer(Constants.XML_START);
-		responseString.append("<complete>");
-		NameValueBean virtualBean = new NameValueBean("Virtual", Long.valueOf(-1));
-		String tranferEventId = (String) request.getParameter("transferEventParametersId");
-		boolean selContMatched = Boolean.FALSE;
-		if (tranferEventId == null || "0".equals(tranferEventId))
-		{
-
-			Integer i = 1;
-			for (NameValueBean nvb : containerList)
+			List<NameValueBean> containerList = new ArrayList<NameValueBean>();
+			String contName = request.getParameter(Constants.CONTAINER_NAME);
+			String selectedContName = request.getParameter(Constants.SELECTED_CONTAINER_NAME);
+			String populateValueInCombo = request.getParameter("populateValueInCombo");
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+					Constants.SESSION_DATA);
+			dao = AppUtility.openDAOSession(sessionData);
+			long cpId = 0;
+			if (!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL))
+					&& !"null".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
 			{
-				if (nvb.getName().equals(selectedContName))
-				{
-					selContMatched = Boolean.TRUE;
-					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-							nvb.getName(), populateValueInCombo, selContMatched));
-				}
-				else
-				{
-					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-							nvb.getName(), populateValueInCombo, false));
-				}
-				i = i + 1;
+				cpId = Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
 			}
-			selContMatched = (selContMatched) ? false : true;
-			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-					virtualBean.getName(), populateValueInCombo, selContMatched));
-			if (!selContMatched)
+			String spType = request.getParameter("specimenType");
+			String spClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
+			StorageContainerForSpecimenBizLogic bizLogic = new StorageContainerForSpecimenBizLogic();
+			LinkedHashMap treeMap = bizLogic.getAutoAllocatedContainerListForSpecimen(
+					AppUtility.setparameterList(cpId, spClass, 0, spType), sessionData, dao, contName);
+			if (treeMap != null)
 			{
-				responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-						selectedContName, populateValueInCombo, true));
+				containerList = AppUtility.convertMapToList(treeMap);
 			}
+			
+			StringBuffer responseString = new StringBuffer(Constants.XML_START);
+			responseString.append("<complete>");
+			NameValueBean virtualBean = new NameValueBean("Virtual", Long.valueOf(-1));
+			String tranferEventId = (String) request.getParameter("transferEventParametersId");
+			boolean selContMatched = Boolean.FALSE;
+			if (tranferEventId == null || "0".equals(tranferEventId))
+			{
+				String selectedContId = null;
+				for (NameValueBean nvb : containerList)
+				{
+					if (nvb.getName().equals(selectedContName))
+					{
+						selContMatched = Boolean.TRUE;
+						selectedContId = nvb.getValue();
+						break;
+					}
+				}
+				Integer i = 1;
+				for (NameValueBean nvb : containerList)
+				{
+					if (nvb.getName().equals(selectedContName))
+					{
+						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(nvb.getValue(),
+								nvb.getName(), populateValueInCombo, selContMatched));
+					}
+					else
+					{
+						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(nvb.getValue(),
+								nvb.getName(), populateValueInCombo, false));
+					}
+					i = i + 1;
+				}
+				if (!selContMatched)
+				{
+					Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+					substParams.put("0",
+							new NamedQueryParam(DBTypes.STRING, selectedContName));
+	
+					final List list = ((HibernateDAO) dao).executeNamedQuery(
+							"getStorageContainerIdByContainerName", substParams);
+	
+					if (!list.isEmpty())
+					{
+						selectedContId = list.get(0).toString();
+					}
+					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(selectedContId,
+							selectedContName, populateValueInCombo, true));
+				}
+	//			selContMatched = (selContMatched) ? false : true;
+	//			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
+	//					virtualBean.getName(), populateValueInCombo, selContMatched));
+				
+			}
+			responseString.append("</complete>");
+			response.setContentType(Constants.CONTENT_TYPE_XML);
+			response.getWriter().write(responseString.toString());
 		}
-		responseString.append("</complete>");
-		response.setContentType(Constants.CONTENT_TYPE_XML);
-		response.getWriter().write(responseString.toString());
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
 		return null;
 	}
 

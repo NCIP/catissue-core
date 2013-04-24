@@ -256,7 +256,7 @@ var scGridVisible = false;
 	//alert(className +' , '+spType+' , '+selectedContName);
 	
 	dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-	var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&holdSpecimenClass="+className+"&holdSpecimenType="+spType+"&containerName="+selectedContName+"&collectionProtocolId=<%=collectionProtocolId%>";
+	var url = "ShowStoragePositionGridView.do?pageOf=pageOfNewSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&holdSpecimenClass="+className+"&holdSpecimenType="+spType+"&containerName="+selectedContName+"&collectionProtocolId=<%=collectionProtocolId%>";
 	dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
 	dhxWins.window("containerPositionPopUp").button("park").hide();
 	dhxWins.window("containerPositionPopUp").allowResize();

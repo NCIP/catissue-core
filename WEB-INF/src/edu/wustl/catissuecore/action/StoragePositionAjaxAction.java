@@ -110,6 +110,7 @@ public class StoragePositionAjaxAction extends SecureAction
 			
 			returnedJObject.put("pos1ControlName",request.getSession().getAttribute(Constants.POS1));
 			returnedJObject.put("pos2ControlName",request.getSession().getAttribute(Constants.POS2));
+			returnedJObject.put("controlName",request.getSession().getAttribute("controlName"));
 			returnedJObject.put("pageOf",request.getSession().getAttribute(Constants.PAGEOF));
 			response.setContentType("application/json");
 			
