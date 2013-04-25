@@ -184,12 +184,12 @@ function switchToOlderView()
   <tr>
     <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+        <td width="90%" valign="bottom" >&nbsp;</td>
       </tr>
     </table>
-    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
     <tr>
-			<td><div id="mainTable"style="display:block;height:500px;"><table width="100%"  border="0" cellpadding="3" cellspacing="0" >
+			<td><div id="mainTable"style="display:block;"><table width="100%"  border="0" cellpadding="0" cellspacing="0" >
 				
     	<tr>
 		          <td><div id="error" class="alert alert-error" style="display:none">
@@ -210,24 +210,14 @@ function switchToOlderView()
 						</strong>
 					</td>
 
-	                <td width="43%" class="black_ar">
+	                <td width="37%" class="black_ar">
 	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="49" name="DisplayOrderDTO" onblur="processData(this)"/>
 					</td>
-					<td width="17%" class="black_ar align_right_style"><strong>
-								<bean:message key='requestdetails.header.label.RequestorName'/>
-							</strong>
-						</td>
+					<td width="17%" class="black_ar align_right_style">
+						<input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()">
+					</td>
+				<td width="29%" class="black_ar"></td>
 								
-			            <td width="23%"> 
-  
-				           <span class="link">
-								<a class="view" href='mailto:<bean:write name='DisplayOrderDTO'  property='requestorEmail' scope='request' />' >
-									<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/> 
-								</a>
-							</span>
-
-						</td>
-						
 				</tr>
 
 				<tr class="${tr_white_color}">
@@ -253,12 +243,19 @@ function switchToOlderView()
 						 distributionProtocolNameCombo.setComboValue(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}').value);
 						}
     					</script>						
-              
-                <td class="black_ar align_right_style"><strong>
-								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
-							</strong></td>
-                <td class="black_ar"> 
-					<fmt:formatDate value="${DisplayOrderDTO.requestedDate}" pattern="${datePattern}" />					
+					<td  class="black_ar align_right_style"><strong>
+								<bean:message key='requestdetails.header.label.RequestorName'/>
+							</strong>
+						</td>
+								
+			            	<td> 
+  
+				           <span class="link">
+								<a class="view" href='mailto:<bean:write name='DisplayOrderDTO'  property='requestorEmail' scope='request' />' >
+									<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/> 
+								</a>
+							</span>
+
 						</td>					
               </tr>
             
@@ -290,12 +287,12 @@ function switchToOlderView()
 									  site_combo.setComboValue(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.site}').value);
 								  }
     					</script>	
-                <td class="black_ar align_right_style"><strong>
-								<bean:message key='requestdetails.requestor.Comments'/> 
-								
+		<td class="black_ar align_right_style"><strong>
+								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
 							</strong></td>
-                <td class="black_ar">&nbsp;<bean:write name="DisplayOrderDTO"  property="comments"  scope="request" /></td>
-				
+                <td class="black_ar"> 
+					<fmt:formatDate value="${DisplayOrderDTO.requestedDate}" pattern="${datePattern}" />					
+						</td>			
               </tr>
 			    <tr>
 				<td class="black_ar align_right_style"><strong>
@@ -305,11 +302,12 @@ function switchToOlderView()
 					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" />
 		 			</td>
 		 		</td>
-				<td class="black_ar align_right_style">
-						<input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()">
-					</td>
-				<td class="black_ar"></td>
-         </tr>
+				 <td class="black_ar align_right_style"><strong>
+								<bean:message key='requestdetails.requestor.Comments'/> 
+								
+							</strong></td>
+                <td class="black_ar">&nbsp;<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="comments" property="comments" readonly="true"/></td>
+			   </tr>
           </table></td>
         </tr>
 		 </table>
