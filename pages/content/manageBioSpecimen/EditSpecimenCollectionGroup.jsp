@@ -188,7 +188,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</span>
 					</td>
 					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-							<html:text  styleClass="formFieldSizedSC"   size="26"  maxlength="255" styleId="name" property="name" />
+							<html:text  styleClass="newformFieldSizedSC"   size="26"  maxlength="255" styleId="name" property="name" />
 					</td>
 
 				<%
@@ -223,13 +223,13 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</logic:equal>
 						<logic:notEqual name ="specimenCollectionGroupForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 							<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG"  size="26"  maxlength="255" styleId="barcode" property="barcode" />
+								<html:text styleClass="newformFieldSizedSCG"  size="26"  maxlength="255" styleId="barcode" property="barcode" />
 						    </td>
 						</logic:notEqual>
 					   </logic:equal>
 					   <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 						 <td width="30%"  align="left" nowrap class="black_ar align_left_style1">
-								<html:text styleClass="formFieldSizedSCG" size="26"  maxlength="255" styleId="barcode" property="barcode" />
+								<html:text styleClass="newformFieldSizedSCG" size="26"  maxlength="255" styleId="barcode" property="barcode" />
 						</td>
 					  </logic:notEqual>
 					<%
@@ -290,11 +290,11 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				  	 
 					 <td width="20%" align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.offset" /></b></td>
 					 <td width="30%" align="left" nowrap class="black_ar align_left_style1">
-						<html:text styleClass="formFieldSizedSCG" size="26"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
+						<html:text styleClass="newformFieldSizedSCG" size="26"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
 					 
 					<td  width="20%"align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></b></td>
 					<td  width="30%" align="left" nowrap class="black_ar align_left_style1">
-				     	<html:text styleClass="formFieldSizedSC" size="26"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="newformFieldSizedSC" size="26"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
 					     	<!-- This feature will be implemented in next release
 							&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">

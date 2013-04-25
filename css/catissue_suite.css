@@ -659,6 +659,7 @@ color: #000000;
   	font-family: verdana;
 	font-size: 11px;
 	color: #000000;
+	width:15em;
 }
 .formFieldSizedSCG{
   	font-family: verdana;
@@ -666,6 +667,7 @@ color: #000000;
 	color: #171717;
 	vertical-align:middle;
 	margin:0px;
+	width:15em;
 
 	}
 .formFieldSizedAutoSCG{
@@ -1105,4 +1107,19 @@ input.actionButton{ /* optional style for form and action buttons */
 {
 	vertical-align:2px; 
 	display:inline-block;
+}
+
+
+.newformFieldSizedSC{
+  	font-family: verdana;
+	font-size: 11px;
+	color: #000000;
+}
+
+.newformFieldSizedSCG{
+  	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
 }
