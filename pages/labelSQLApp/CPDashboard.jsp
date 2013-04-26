@@ -16,6 +16,7 @@
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+<link rel="STYLESHEET" type="text/css" href="css/alretmessages.css">
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script src="jss/caTissueSuite.js"></script>
 <script src="jss/common.js"></script>
@@ -198,9 +199,11 @@ boolean isWhite = false;
 		<tr>
 			<td>
 				<c:if test="${empty reportNameList}" >
-							<div class="red_ar_b"><font style="color: black">No Reports configured</font></div>
-							
-				</c:if>
+					<div class="alert alert-info" id="success" style="display:block"><b><bean:message key="report.notification"
+                                                                                                           arg0="<a href='https://catissueplus.atlassian.net/wiki/x/DgA7' target='_NEW'>Click here</a>"/></b></div>
+                 </c:if>
+                                        
+										
 			</td>
 		</tr>
 		<tr>

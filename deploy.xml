@@ -65,6 +65,8 @@
 	
 	<property name="dashboard.csv.dir" value="${base.dir}/insert_dashboard_queries" />
 	<property name="dashboard.parameters.csv.file" value="dashboard_sqls.csv" />
+	<property name="custom-report.script.dir" value="${jboss.home.dir}/server/default/custom-reports/scripts" />
+	<property name="custom-report.report.dir" value="${jboss.home.dir}/server/default/custom-reports/reports" />
 
 	<property name="jboss.server.host.port" value="${jboss.server.host}:${jboss.server.port}" />
 	<if>
@@ -1800,14 +1802,20 @@
 			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
 			<replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
 			<replacefilter token="@@catissue-cdms-integration-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCdmsIntegration.properties" />
-			<replacefilter token="@@custom-report-dir@@" value="${jboss.home.dir}/server/default/custom-reports" />
+			<replacefilter token="@@custom-report-script-dir@@" value="${custom-report.script.dir}" />
+			<replacefilter token="@@custom-generated-report-dir@@" value="${custom-report.report.dir}" />
 		</replace>
 
+		
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="properties-service.xml" />
 			</fileset>
-		</copy>
+		</copy> 
+		
+		<mkdir dir="${custom-report.script.dir}"/>
+		<mkdir dir="${custom-report.report.dir}"/>
+		
 		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
@@ -1818,7 +1826,7 @@
 				</copy>
 			</then>
 		</if>-->
-		<delete file="${jboss.server.url}/lib/hibernate2.jar" />
+		<delete file="${jboss.server.url}/lib/hibernate2.jar" /> 
 	</target>
 
 	<!--Target for fresh Database Creation-->

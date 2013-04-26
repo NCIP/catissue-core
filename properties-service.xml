@@ -70,7 +70,8 @@
 		app.domainAuthFilePath=@@auth-properties-file@@
 		bulkoperator.appservice.class=@@bulk-operation-properties-file@@
 		catissue.cdms.integration.class=@@catissue-cdms-integration-properties-file@@
-		app.customReportsDirPath=@@custom-report-dir@@
+		app.customReportScriptDir=@@custom-report-script-dir@@
+		app.customGeneratedReportDir=@@custom-generated-report-dir@@
     </attribute>
 
   </mbean>
