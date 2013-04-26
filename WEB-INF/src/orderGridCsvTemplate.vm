@@ -28,10 +28,10 @@
 "Requested Date:","$requestedDate"
 "Distribution Site:","${site}"
 "Comment:","${comments}"
-"Distributor's Comment:"
+"Distributor's Comment:","${distributorsComment}"
 "Exported On:","$exportedOn"
 "Exported By:","$exportedBy"
-"Order Items Detail:","${distributorsComment}"
+"Order Items Detail:"
 "Specimen Label","Specimen Type","Specimen Class","Available Quantity","Requested Quantity","Distributed Quantity","Status","Description"
 #foreach( $gridData in $orderItemsDetail )
  #set ($description='')
