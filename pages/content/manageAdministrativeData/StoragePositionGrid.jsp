@@ -115,18 +115,18 @@ function getActionToDoURL()
 <body onload="checkSpecimenStatus();showContainerGrid();">
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
-<tr><td class="black_ar" colspan="3" align="center"><b>Container Map</b>
+<tr><td class="black_ar" colspan="4" align="center"><b>Container Map</b>
 </td></tr>
-<tr><td class="black_ar" colspan="3">
+<tr><td class="black_ar" colspan="4">
 <div id="error" style="height:50%;width:100%;"></div></td></tr>
 <tr>
 	<td width="5%"></td>
-	<td align="left" class="black_ar" valign="bottom"><b>Name:  </b></td>
-	<td width="90%">
-	<div id="storageContainerDiv" style="width:100%; height:15px;display:block;">
+	<td width="5%" align="left" class="black_ar_md" style="padding-top:5px"><b>Name:  </b></td>
+	<td >
+	
 	<table valign="center" cellpadding="0" cellspacing="0" border="0" >
 						<tr><td width="30%">
-		<div id="comboDiv" style="width:200px; height:30px;display:block;"></div>
+		<div id="comboDiv" style="width:200px;display:block;"></div>
 		<script>
 			var reloadGrid=true,populateValueInCombo=true;
 			var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",200);
@@ -171,29 +171,30 @@ function getActionToDoURL()
 	</script>
 	
 			&nbsp;<td class="black_ar_md"  style="padding-left:15px;" >
-				<input type="text" class="black_ar_md"  size="1" id="pos11" name="pos11" value="${sessionScope.pos1Val}"disabled= "false"/>
+				<input type="text" class="black_ar_md_new"  size="1" id="pos11" name="pos11" value="${sessionScope.pos1Val}"disabled= "false"/>
 			</td>
-			<td class="black_ar_md" align="left">
-				<input type="text" class="black_ar_md"  size="1" id="pos22" name="pos22" value="${sessionScope.pos2Val}" disabled= "false"/>
+			<td class="black_ar_md" align="left" style="padding-left:5px;">
+				<input type="text" class="black_ar_md_new"  size="1" id="pos22" name="pos22" value="${sessionScope.pos2Val}" disabled= "false"/>
 				<input type="hidden" id="pos1" name="pos1" />
 				<input type="hidden" id="pos2" name="pos2" />
 			</td>
-			<td class="black_ar_md" width="10%">
-				<input type="radio" name="virtualCont" onClick="setVirtual()"/>Virtual
+			<td class="black_ar_md" align="right" style="padding-top:2px">
+					<input type="radio" name="virtualCont" onClick="setVirtual()"/>&nbsp;</td><td class="black_ar_md" align="left" style="padding-top:5px">Virtual
 			</td>
 			
 			</tr>
 			</table>
-		</div>
+		
 			<div id="storageContainerNameDiv" style="display:block">
 			
 			</div>
 		</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td>
 		</td>
-		<td colspan="2">
+		<td colspan="3">
 			<div id="containerGrid" style="height:100%;width:100%;">
 			</div>
 		</td>
@@ -353,6 +354,7 @@ function updateSpecimenValues(responseText)
 		var storagePosition=parent.window.document.getElementById('storageContainerPosition');
 		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
 		storagePosition.value=newStoragePosition;
+		storagePosition.title=newStoragePosition;
 		var isVirtual=parent.window.document.getElementById('isVirtual');
 		isVirtual.value=false;
 		var container = parent.window.document.getElementById('containerName');
