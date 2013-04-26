@@ -184,7 +184,13 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic {
 		List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
 		if(cpId != null)
 		{
-			final String selectCDQuery = "select CLINICAL_DIAGNOSIS from  catissue_clinical_diagnosis where COLLECTION_PROTOCOL_ID = ? limit ?";
+			String selectCDQuery = "";
+			if(dao instanceof MySQLDAOImpl){
+				selectCDQuery =   "select CLINICAL_DIAGNOSIS from  catissue_clinical_diagnosis where COLLECTION_PROTOCOL_ID = ? limit ?";
+			}else if(dao instanceof OracleDAOImpl){
+				selectCDQuery =   "select CLINICAL_DIAGNOSIS from  catissue_clinical_diagnosis where COLLECTION_PROTOCOL_ID = ? and ROWNUM <=  ?";
+			}
+			
 			List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
 			parameters.add(new ColumnValueBean(cpId));
 			parameters.add(new ColumnValueBean(listSize));
