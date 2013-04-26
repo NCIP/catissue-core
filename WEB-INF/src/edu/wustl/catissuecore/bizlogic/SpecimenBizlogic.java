@@ -270,7 +270,7 @@ public class SpecimenBizlogic
 				int toPos2Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
 						specimenDTO.getContainerName(), 2, specimenDTO.getPos2());
 				position.setPositionDimensionOne(toPos1Int);
-				position.setPositionDimensionTwo(toPos1Int);
+				position.setPositionDimensionTwo(toPos2Int);
 				position.setPositionDimensionOneString(specimenDTO.getPos1());
 				position.setPositionDimensionTwoString(specimenDTO.getPos2());
 				StorageContainer container = new StorageContainer();

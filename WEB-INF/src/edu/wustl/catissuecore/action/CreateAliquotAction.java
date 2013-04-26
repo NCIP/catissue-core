@@ -459,6 +459,7 @@ public class CreateAliquotAction extends BaseAction
 						specPos.setPositionDimensionTwoString(posDim2);
 					}
 				}
+				sContainer.setId(storageContainerId);
 				sContainer.setName(containername);
 				specPos.setStorageContainer(sContainer);
 				specPos.setSpecimen(aliquotSpecimen);
