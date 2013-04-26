@@ -6084,7 +6084,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				Specimen specimenObj = (Specimen) dao.retrieveById(Specimen.class.getName(),
 						specimenId);
-				specimenObj.setActivityStatus(Constants.DISABLED);
+				specimenObj.setActivityStatus(Constants.DISABLE);
 				dao.update(specimenObj);
 			}
 			else
