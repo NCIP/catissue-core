@@ -342,7 +342,7 @@ login.forgot.password=Forgot password?
 					<tr>
 
 						<td align="left" width="70%">
-						<a href="http://www.cancer.gov/"><img height="80px"
+						<a href="http://www.cancer.gov/"  target="_blank"><img height="80px"
 							src="images/uIEnhancementImages/US-NIH-NCI-Logo.png"
 							alt="National Cancer Institute Logo"  
 							border="0" /></a>
@@ -350,11 +350,11 @@ login.forgot.password=Forgot password?
 							src="images/uIEnhancementImages/CaBIGLogo.JPG"
 							alt="National Institues of Health" 
 							border="0" /></a-->
-							<a  class="logo-margin"  href="http://krishagni.com">
+							<a  class="logo-margin"  href="http://krishagni.com"  target="_blank">
 							<img
 							src="images/uIEnhancementImages/krishagni_logo.png"
 							alt="" border="0"  /></a>
-							<a   class="logo-margin" id="instituteLink" href="" style="display:none;"><img
+							<a   class="logo-margin" id="instituteLink" href="" style="display:none;"  target="_blank"><img
 							src=""
 							alt="" order="0" id="InstituteLogo"/></a>
 							
@@ -404,9 +404,8 @@ function loadInstituteLogo(){
 			{
 				var responseString = request.responseText;
 				var myJsonResponse = eval('(' + responseString + ')');
-				       
 				document.getElementById("InstituteLogo").src = myJsonResponse.logo;
-				document.getElementById("instituteLink").link =  myJsonResponse.link;
+				document.getElementById("instituteLink").href =  myJsonResponse.link;
 				document.getElementById("instituteLink").style.display="";
 			}
 			
