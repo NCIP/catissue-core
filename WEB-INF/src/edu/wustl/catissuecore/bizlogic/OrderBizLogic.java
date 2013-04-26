@@ -2325,6 +2325,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 			displayOrderDTO.setDistributorsComment(orderDetailObject[8].toString());
 		}
+		substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
+		final List distributionSites = dao.executeNamedQuery("getDistributionSiteName", substParams);
+		if (!distributionSites.isEmpty())
+		{
+				displayOrderDTO.setSiteName(distributionSites.get(0).toString());
+		}
 		return displayOrderDTO;
 	}
 

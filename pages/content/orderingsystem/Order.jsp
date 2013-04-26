@@ -213,11 +213,8 @@ function switchToOlderView()
 	                <td width="37%" class="black_ar">
 	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="49" name="DisplayOrderDTO" onblur="processData(this)"/>
 					</td>
-					<td width="17%" class="black_ar align_right_style">
-						<input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()">
-					</td>
-				<td width="29%" class="black_ar"></td>
-								
+					<td width="17%" class="black_ar align_right_style"></td>
+				<td width="29%" class="black_ar align_right_style"><input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()"></td>
 				</tr>
 
 				<tr class="${tr_white_color}">
@@ -266,7 +263,7 @@ function switchToOlderView()
  					</strong></td>
 					<td class="black_ar" style="background-color:#f6f6f6;" >
 							<div  class="dhtmlx-combo-margin">
-							 <html:select property="site" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="site" size="1" onblur="processData(this)">
+							 <html:select property="siteName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="siteName" size="1" onblur="processData(this)">
 							 <html:options collection="sites" labelProperty="name" property="value" />
 					       </html:select>
 					       
@@ -276,15 +273,15 @@ function switchToOlderView()
 
 					<script>
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-								  site_combo = new dhtmlXComboFromSelect("site","site","100px");
+								  site_combo = new dhtmlXComboFromSelect("siteName","site","100px");
 								  site_combo.setSize(301);
- 							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.site}')==null)
+ 							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.siteName}')==null)
 								  {
  							  		site_combo.setComboValue("-1");		
 								  }
 								  else
 								  {
-									  site_combo.setComboValue(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.site}').value);
+									  site_combo.setComboValue(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.siteName}').value);
 								  }
     					</script>	
 		<td class="black_ar align_right_style"><strong>

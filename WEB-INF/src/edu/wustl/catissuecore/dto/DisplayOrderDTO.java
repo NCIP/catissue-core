@@ -33,7 +33,7 @@ public class DisplayOrderDTO
 	
 	private String requestorEmail;
 	
-	private String site;
+	private String siteName;
 	
 	private String distributorsComment;
 	/**
@@ -100,12 +100,12 @@ public class DisplayOrderDTO
 		this.requestorEmail = requestorEmail;
 	}
 
-	public String getSite() {
-		return site;
+	public String getSiteName() {
+		return siteName;
 	}
 
-	public void setSite(String site) {
-		this.site = site;
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 	public String getDistributorsComment() {
