@@ -147,6 +147,6 @@
 </query>
 <query name="getDistributionId">Select distribution.id from edu.wustl.catissuecore.domain.Distribution distribution WHERE distribution.orderDetails.id= ?
 </query>
-<query name="getDistributionSiteName">Select dp.toSite.name from edu.wustl.catissuecore.domain.OrderDetails orderDetails left outer join orderDetails.distributionCollection dp  WHERE distribution.orderDetails.id= ?
+<query name="getDistributionSiteName">Select dp.toSite.name from edu.wustl.catissuecore.domain.OrderDetails orderDetails left outer join orderDetails.distributionCollection dp  WHERE orderDetails.id= ?
 </query>
 </hibernate-mapping>
