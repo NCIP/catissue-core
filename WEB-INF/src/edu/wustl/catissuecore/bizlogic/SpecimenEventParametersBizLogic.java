@@ -1603,6 +1603,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				transferEventParameters.setFromPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
 				transferEventParameters.setFromPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
 				transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
+				transferEventParameters.setTimestamp(new Date());
 			}
 			List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(String.valueOf(storageContainerList.get(0).getId()));
 			String oneDimensionLabellingScheme=(String) labellingList.get(0);//((ArrayList)labellingList.get(0)).get(0);
