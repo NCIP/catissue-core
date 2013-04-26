@@ -273,7 +273,7 @@ function switchToOlderView()
 
 					<script>
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-								  site_combo = new dhtmlXComboFromSelect("siteName","site","100px");
+								  site_combo = new dhtmlXComboFromSelect("siteName","siteName","100px");
 								  site_combo.setSize(301);
  							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.siteName}')==null)
 								  {
