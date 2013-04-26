@@ -719,6 +719,14 @@ color: #000000;
 	margin:0px;
 }
 
+.black_ar_md_new{
+	font-family: verdana;
+	font-size: 13px;
+	color: #171717;
+	vertical-align:top;
+	margin:0px;
+}
+
 /* *********  Mandar : 5Dec08  For AntiSpecimen ******** */
 .tr_anti_bg_blue {
 	background-color: #eef5fb;
