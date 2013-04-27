@@ -1,42 +1,47 @@
 var typeCombo;
 var classNameCombo;
+var collectionStatusCombo;
 function initSpecimenCombo()
 {
 		var tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
 		tissueSiteCombo.setOptionWidth(202);
 		tissueSiteCombo.setSize(202);
-		tissueSiteCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		tissueSiteCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 		tissueSiteCombo.enableFilteringMode(true);
 
 		var tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
 		tissueSideCombo.setOptionWidth(203);
 		tissueSideCombo.setSize(203);
-		tissueSideCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		tissueSideCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 
 		var pathologicalStatusCombo = dhtmlXComboFromSelect("pathologicalStatus");
 		pathologicalStatusCombo.setOptionWidth(203);
 		pathologicalStatusCombo.setSize(203);
-		pathologicalStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		pathologicalStatusCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 
+		collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
+		collectionStatusCombo.setOptionWidth(203);
+		collectionStatusCombo.setSize(203);
+		collectionStatusCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+		
 		classNameCombo = dhtmlXComboFromSelect("className");
 		classNameCombo.setOptionWidth(203);
 		classNameCombo.setSize(203);
-		classNameCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		classNameCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 
 		typeCombo = dhtmlXComboFromSelect("type");
 		typeCombo.setOptionWidth(203);
 		typeCombo.setSize(203);
-		typeCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
-		
-		var collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
-		collectionStatusCombo.setOptionWidth(203);
-		collectionStatusCombo.setSize(203);
-		collectionStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
-		
-		var activityStatusCombo = dhtmlXComboFromSelect("activityStatus");
-		activityStatusCombo.setOptionWidth(203);
-		activityStatusCombo.setSize(203);
-		activityStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		typeCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+
+		if(document.getElementById('activityStatus')!=null)
+		{
+			var activityStatusCombo = dhtmlXComboFromSelect("activityStatus");
+			activityStatusCombo.setOptionWidth(203);
+			activityStatusCombo.setSize(203);
+			activityStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+		}
+
 }
 
 function showAddExternalIdDiv()
@@ -380,6 +385,7 @@ function onSpecimenTypeChange(selectedElement)
 
 
 function forwardToChildSpecimen() {
+
     var radios = document.getElementsByName("specimenChild");
 	var checkedRadio;
     for (var i = 0; i < radios.length; i++) {       
@@ -389,8 +395,14 @@ function forwardToChildSpecimen() {
         }
     }
 	
+	if(checkedRadio!="1" && !document.getElementById('available').checked)
+	{
+		showErrorMessage("Cannot create child specimen(s) since specimen is not available.");
+		return;
+	}
+	
 	var action;
-	var specimenLabel = document.getElementById('label').value;
+	var specimenLabel = document.getElementById('labelValue').value;
 	var specimenId = document.getElementById("id").value;
 	var scgId = document.getElementById("scgId").value;
 	
@@ -517,3 +529,325 @@ function organizeTarget()
 {
 	ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem');
 }
+
+function scrollToTop()
+{
+	document.body.scrollTop = document.documentElement.scrollTop = 0;
+}
+
+var labelSubmit = true;
+var quantitySubmit = true;
+var availableQuantitySubmit = true;
+var createdDateSubmit = true;
+//creates json string for the changed fields and will validate the fields too
+function processData(obj)
+{
+	if(obj.name=='label' && obj.value.trim()=="" && collectionStatusCombo.getComboText()=="Collected")
+	{
+		labelSubmit=false;
+		obj.className += " errorStyleOn";
+	}
+	else if(obj.name=='quantity' && (obj.value.trim()=="" || !isNumeric(obj.value.trim()) || Number(obj.value) < Number(document.getElementById('availableQuantity').value)))
+	{
+		quantitySubmit=false;
+		
+		var errorDiv = document.getElementById('quantityErrorMsg');
+		errorDiv.style.display ="none";
+		
+		if(availableQuantitySubmit)
+		{
+			var availableQuantityElement = document.getElementById('availableQuantity');
+			availableQuantityElement.className=availableQuantityElement.className.replace(/errorStyleOn/g,"");
+			
+			var avlErrorDiv = document.getElementById('avlQuantityErrorMsg');
+			avlErrorDiv.style.display ="none";
+		}
+		
+		if(obj.value.trim()=="")
+		{
+			obj.className += " errorStyleOn";
+		}
+		if(!isNumeric(obj.value.trim()))
+		{
+			obj.className += " errorStyleOn";
+			errorDiv.style.display ="block";
+			errorDiv.innerHTML = "(Enter a valid number)";
+		}
+		else if(obj.value.trim()!="" && Number(obj.value) < Number(availableQuantityElement.value))
+		{
+			availableQuantityElement.className += " errorStyleOn";
+			avlErrorDiv.style.display ="block";
+			avlErrorDiv.innerHTML = "(Cannot be greater than Initial Quantity)";
+			obj.className = obj.className.replace(/errorStyleOn/g,"");
+		}
+		
+	}
+	else if(obj.name=='availableQuantity' && (!isNumeric(obj.value.trim()) || Number(obj.value) > Number(document.getElementById('quantity').value)))
+	{
+		availableQuantitySubmit=false;
+		obj.className += " errorStyleOn";
+		var errorDiv = document.getElementById('avlQuantityErrorMsg');
+		errorDiv.style.display ="block";
+		if(!isNumeric(obj.value))
+			errorDiv.innerHTML = "(Enter a valid number)";
+		else
+			errorDiv.innerHTML = "(Cannot be greater than Initial Quantity)";
+		
+			
+	}
+	else if(obj.name=='createdDate' && !validateDate(obj))
+	{
+		createdDateSubmit=false;
+		obj.className += " errorStyleOn";
+	}
+	else
+	{	
+		if(obj.name=='availableQuantity')
+		{
+			if(obj.value==""){obj.value=0;}
+			document.getElementById('avlQuantityErrorMsg').style.display="none";
+		}
+		tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
+		obj.className = obj.className.replace(/errorStyleOn/g,"");
+		if(obj.name=='quantity')
+		{
+			if(availableQuantitySubmit)
+			{
+				var availableQuantityElement = document.getElementById('availableQuantity');
+				availableQuantityElement.className=availableQuantityElement.className.replace(/errorStyleOn/g,"");
+				document.getElementById('avlQuantityErrorMsg').style.display="none";
+			}
+			quantitySubmit = true;
+			document.getElementById('quantityErrorMsg').style.display="none";
+		}
+		else if(obj.name=='label'){labelSubmit = true;}
+		else if(obj.name=='availableQuantity'){availableQuantitySubmit = true;}
+		else if(obj.name=='createdDate'){createdDateSubmit = true;}
+	}
+}
+
+function isNumeric(value) {
+   return (value==Number(value))?true:false;
+}
+
+function processComboData(objName,objValue)
+{
+	tabDataJSON[objName] = objValue;
+}
+
+var submitCombo = true;
+function validateAndProcessComboData(obj)
+{
+
+	if(obj.getSelectedValue()=='-1' || obj.getSelectedText()=='-- Select --' || obj.getSelectedText().trim()=="")
+	{	
+		obj.DOMelem.className += " errorStyleOn";
+		submitCombo=false;
+	}
+	else
+	{
+		tabDataJSON[obj.name] = obj.getSelectedText();
+		
+		if(obj.name=='className' && typeCombo.getComboText()=='-- Select --')
+		{
+			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+			typeCombo.DOMelem.className += " errorStyleOn";
+			submitCombo=false;
+			return;
+		}
+		var index = obj.DOMelem.className.indexOf("errorStyleOn");
+		if(index != -1)
+		{
+			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+		}
+		
+		if(obj.name=="collectionStatus" && obj.getSelectedText()!="Collected" && !labelSubmit)
+		{
+			var lblElement = document.getElementById('label');
+			lblElement.className = lblElement.className.replace(/errorStyleOn/g,"");			
+			labelSubmit=true;
+		}
+		submitCombo=true;
+	}	
+}
+
+//submits changed data
+function submitTabData()
+{
+	var obj = document.getElementById('label');
+	if(obj!=null && obj.value.trim()=="" && collectionStatusCombo.getComboText()=="Collected")
+	{
+		labelSubmit=false;
+		obj.className += " errorStyleOn";
+	}
+	
+	if(labelSubmit && submitCombo && quantitySubmit && availableQuantitySubmit && createdDateSubmit)
+	{
+		var extidJSON = createExtIdJSON();
+		var biohazardJSON = createBioHazardJSON();
+		
+		
+		var isVirtual = document.getElementById("isVirtual").value;
+		
+		if(isVirtual == 'false')
+		{
+			tabDataJSON["containerName"]= document.getElementById("containerName").value;
+			tabDataJSON["pos1"]= document.getElementById("pos1").value;
+			tabDataJSON["pos2"]= document.getElementById("pos2").value;
+		}
+		tabDataJSON["isVirtual"] = isVirtual; 
+		var printFlag = false;
+		if(document.getElementById('printCheckbox').checked == true)
+		{
+			printFlag=true;
+		}
+		
+		var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
+		
+		if(loader.xmlDoc.responseText != null)
+		{
+			var response = eval('('+loader.xmlDoc.responseText+')')
+			if(response.success == "success")
+			{
+				var nodeId= "Specimen_"+document.getElementById("id").value;
+				refreshTree(null,null,null,null,nodeId);
+				document.getElementById('print-error').style.display='none';
+				document.getElementById('print-success').style.display='none';
+				document.getElementById('error').style.display='none';
+				document.getElementById('success').style.display='block';
+				forwardToChildSpecimen();
+			}
+			else
+			{
+				showErrorMessage(response.msg);
+			}
+			if(printFlag)
+			{
+				if(response.printLabel == "success")
+				{
+					document.getElementById('print-error').style.display='none';
+					document.getElementById('print-success').innerHTML = response.printLabelSuccess;
+					document.getElementById('print-success').style.display='block';
+					
+				}
+				else
+				{
+					document.getElementById('print-success').style.display='none';
+					document.getElementById('print-error').innerHTML = response.printLabelError;
+					document.getElementById('print-error').style.display='block';
+				}
+			}
+			scrollToTop();
+		}
+	}
+	else
+	{
+		showErrorMessage("Unable to submit. Please resolve higlighted issue(s).");
+		scrollToTop();
+	}
+}
+
+function showErrorMessage(msg)
+{
+	document.getElementById('print-error').style.display='none';
+	document.getElementById('print-success').style.display='none';
+	document.getElementById('success').style.display='none';
+	document.getElementById('errorMsg').innerHTML = msg;
+	document.getElementById('error').style.display='block';
+}
+
+function updateHelpURL()
+{
+	var URL="";
+	return URL;
+}
+
+
+// Declaring valid date character, minimum year and maximum year
+var dtCh= "-";
+var minYear=1900;
+var maxYear=2100;
+
+function isInteger(s){
+	var i;
+    for (i = 0; i < s.length; i++){   
+        // Check that current character is number.
+        var c = s.charAt(i);
+        if (((c < "0") || (c > "9"))) return false;
+    }
+    // All characters are numbers.
+    return true;
+}
+
+function stripCharsInBag(s, bag){
+	var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++){   
+        var c = s.charAt(i);
+        if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+}
+
+function daysInFebruary (year){
+	// February has 29 days in any year evenly divisible by four,
+    // EXCEPT for centurial years which are not also divisible by 400.
+    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+}
+function DaysArray(n) {
+	for (var i = 1; i <= n; i++) {
+		this[i] = 31
+		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30;}
+		if (i==2) {this[i] = 29;}
+   } 
+   return this;
+}
+
+function isDate(dtStr){
+	var daysInMonth = DaysArray(12);
+	var pos1=dtStr.indexOf(dtCh);
+	var pos2=dtStr.indexOf(dtCh,pos1+1);
+	var strMonth=dtStr.substring(0,pos1);
+	var strDay=dtStr.substring(pos1+1,pos2);
+	var strYear=dtStr.substring(pos2+1);
+	strYr=strYear;
+	if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1);
+	if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1);
+	for (var i = 1; i <= 3; i++) {
+		if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1);
+	}
+	month=parseInt(strMonth);
+	day=parseInt(strDay);
+	year=parseInt(strYr);
+	if (pos1==-1 || pos2==-1){
+		//alert("The date format should be : mm-dd-yyyy")
+		return false;
+	}
+	if (strMonth.length<1 || month<1 || month>12){
+		//alert("Please enter a valid month")
+		return false;
+	}
+	if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+		//alert("Please enter a valid day")
+		return false;
+	}
+	if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+		//alert("Please enter a valid 4 digit year between "+minYear+" and "+maxYear)
+		return false;
+	}
+	if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+		//alert("Please enter a valid date")
+		return false;
+	}
+return true;
+}
+
+function validateDate(dt){
+	if (isDate(dt.value)==false){
+		dt.focus();
+		return false;
+	}
+    return true;
+ }

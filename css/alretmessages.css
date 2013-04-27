@@ -28,3 +28,8 @@
   border-color: #bce8f1;
   color: #3a87ad;
 }
+
+/*class to highlight element with error*/
+.errorStyleOn{
+	border: 1px solid #FF0000;
+}

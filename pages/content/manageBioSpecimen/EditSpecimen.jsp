@@ -6,6 +6,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="edu.wustl.catissuecore.dto.SpecimenDTO"%>
 
+
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
@@ -16,17 +17,24 @@
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+
+
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
@@ -36,12 +44,6 @@
 <script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
-<script type="text/javascript" src="jss/tag-popup.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
@@ -55,7 +57,14 @@
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
 
+<style>
+.noEffect{
+	border:4px solid blue;
+	color:red;
+}
+</style>
 <script>
 	var imgsrc="images/";
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
@@ -69,7 +78,7 @@
 <html:hidden name="specimenDTO" property="parentSpecimenId"/>
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
-<html:hidden name="specimenDTO" property="label" styleId="label"/>
+<html:hidden name="specimenDTO" property="label" styleId="labelValue"/>
 <html:hidden name="specimenDTO" property="barcode" styleId="barcode"/>
 								
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
@@ -163,6 +172,7 @@
 							<c:when test="${isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='false'}">
 								<tr class="tr_alternate_color_white">
 									<td width="20%" class="black_ar align_right_style">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 										<label for="label">
 											<bean:message key="specimen.label"/>
 										</label>
@@ -190,6 +200,7 @@
 							<c:if test="${isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='true' && specimenDTO.collectionStatus=='Collected'}">
 								<tr class="tr_alternate_color_white">
 									<td width="20%" class="black_ar align_right_style">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 										<label for="label">
 											<bean:message key="specimen.label"/>
 										</label>
@@ -216,6 +227,7 @@
 								<c:if test="${isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='true' && specimenDTO.collectionStatus!='Collected'}">
 									<tr class="tr_alternate_color_white">
 										<td width="20%" class="black_ar align_right_style">
+											<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 											<label for="label">
 												<bean:message key="specimen.label"/>
 											</label>
@@ -247,13 +259,14 @@
 						</c:choose>
 						<tr class="tr_alternate_color_lightGrey">
 							<td  width="20%" class="black_ar align_right_style">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 								<label for="className">
 								    <bean:message key="specimen.type"/>
 						     	</label>
 							</td>
 							<td width="30%" align="left" class="black_new">
 							<html:select property="className" name="specimenDTO" 
-										 styleClass="formFieldSized" styleId="className" size="1"
+										 styleClass="formFieldSized19" styleId="className" size="1"
 										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenTypeChange(this)">
 								<html:options collection="specimenClassList"
 									labelProperty="name" property="value" />
@@ -261,13 +274,14 @@
 							</td>
 
 							<td width="20%" class="black_ar align_right_style">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 								<label for="type">
 								     <bean:message key="specimen.subType"/>
 						     	</label>
 							</td>
 							<td width="30%" align="left" class="black_new">
 							<html:select property="type" name="specimenDTO" 
-							styleClass="formFieldSized" styleId="type" size="1"
+							styleClass="formFieldSized19" styleId="type" size="1"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenSubTypeChange(this)">
 							<html:options collection="specimenTypeList"
 								labelProperty="name" property="value" />
@@ -278,6 +292,7 @@
 							
 							<tr class="tr_alternate_color_white">
 								<td width="20%" class="black_ar align_right_style">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 									<label for="tissueSite">
 										<bean:message key="specimen.tissueSite"/>
 									</label>
@@ -288,7 +303,7 @@
 									<tr>
 									<td>	
 									<html:select property="tissueSite" name="specimenDTO" 
-									styleClass="formFieldSized" styleId="tissueSite" size="1"
+									styleClass="formFieldSized19" styleId="tissueSite" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:options collection="tissueSiteList"
 										labelProperty="name" property="value" />
@@ -299,13 +314,14 @@
 								</td>
 
 								<td width="20%" class="black_ar align_right_style">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 									<label for="tissueSide">
 										<bean:message key="specimen.tissueSide"/>
 									</label>
 								</td>
 								<td width="30%" align="left" class="black_new">
 								<html:select property="tissueSide" name="specimenDTO" 
-							styleClass="formFieldSized" styleId="tissueSide" size="1"
+							styleClass="formFieldSized19" styleId="tissueSide" size="1"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 							<html:options collection="tissueSideList"
 								labelProperty="name" property="value" />
@@ -315,6 +331,7 @@
 							
 							<tr class="tr_alternate_color_lightGrey">
 								<td width="20%" class="black_ar align_right_style">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 									<label for="pathologicalStatus">
 										<bean:message key="specimen.pathologicalStatus"/>
 									</label>
@@ -322,7 +339,7 @@
 							
 								<td width="30%" align="left" class="black_new">
 								<html:select property="pathologicalStatus" name="specimenDTO" 
-							styleClass="formFieldSized" styleId="pathologicalStatus" size="1"
+							styleClass="formFieldSized19" styleId="pathologicalStatus" size="1"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 							<html:options collection="pathologicalStatusList"
 								labelProperty="name" property="value" />
@@ -336,13 +353,14 @@
 								</td>
 								<td width="30%" class="black_ar" >
 								<html:text property="createdDate" styleClass="black_ar"
-							       styleId="createdDate" size="10" name="specimenDTO" onblur="processData(this)"/>
+							       styleId="createdDate" size="10" name="specimenDTO" onblur="processData(this)" onclick="doInitCalendar('createdDate',false,'${uiDatePattern}');"/>
 							   	<span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 								</td>
 							</tr>
 							
 							<tr class="tr_alternate_color_white">
 								<td width="20%" class="black_ar align_right_style">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 									<label for="quantity">
 										<bean:message key="specimen.quantity"/>
 									</label>
@@ -353,6 +371,8 @@
 				
 									 </span>
 								     <html:hidden property="unit"/>
+									 <div id="quantityErrorMsg" style="display:none; color:red;">
+									 </div>
 								</td>
 				                <td width="20%" class="black_ar align_right_style">
 									<label for="concentration">
@@ -370,7 +390,7 @@
 								 <td width="20% class="black_ar">&nbsp;
 								 </td>
 								 <td width="30%" align="left" valign="top" >
-									<html:checkbox property="available" onblur="processData(this)">
+									<html:checkbox property="available" styleId="available" onblur="processData(this)">
 									</html:checkbox>
 									
 									<span class="black_ar" style="padding-bottom:7px">
@@ -386,9 +406,9 @@
 								</td>
 								<td width="30%" align="left" class="black_ar">
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="availableQuantity" property="availableQuantity"		name="specimenDTO" style="text-align:right" onblur="processData(this)"/>
-									<span id="unitSpan1">
-			
-									</span>
+									<span id="unitSpan1"></span>
+									<div id="avlQuantityErrorMsg" style="display:none; color:red;">
+									 </div>
 								</td>
 							</tr>
 						
@@ -402,7 +422,7 @@
 								</td>
 								<td width="30%" class="black_new">
 								<html:select property="collectionStatus" name="specimenDTO" 
-											 styleClass="formFieldSized" styleId="collectionStatus" size="1"
+											 styleClass="formFieldSized19" styleId="collectionStatus" size="1"
 											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="collectionStatusList"
 											  labelProperty="name" property="value" />
@@ -423,7 +443,7 @@
 										</c:when>
 										<c:otherwise>
 											<html:select property="activityStatus" name="specimenDTO" 
-													 styleClass="formFieldSized" styleId="activityStatus" size="1"
+													 styleClass="formFieldSized19" styleId="activityStatus" size="1"
 													 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											<html:options collection="activityStatusList"
 													  labelProperty="name" property="value" />
@@ -436,6 +456,7 @@
 						
 							<tr class="tr_alternate_color_lightGrey">
 								<td width="20%" class="black_ar align_right_style">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
 									<label for="className">
 									   	<bean:message key="specimen.positionInStorageContainer"/>
 								    </label>
@@ -474,7 +495,7 @@
 									</label>
 								</td>
 								<td align="left" valign="top" colspan="3">
-									<html:textarea styleClass="black_ar_s"  rows="3" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
+									<html:textarea styleClass="black_ar_s"  rows="1" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
 								</td>
 							</tr>
 								
@@ -681,7 +702,6 @@
 <script>
 var tabDataJSON = {};
 tabDataJSON["id"] = document.getElementById("id").value; 
-//alert(tabDataJSON);
 
 //initialization of clinicalstudytab page
 function initialize(startDateObj,endDateObj)
@@ -689,93 +709,6 @@ function initialize(startDateObj,endDateObj)
 	var startDate = calendar.init(startDateObj,"%m-%d-%Y");
 	var endDate = calendar.init(endDateObj,"%m-%d-%Y");
 }
-
-
-//creates json string for the changed fields and will validate the fields too
-function processData(obj)
-{//alert(obj.value);
-tabDataJSON["id"] = document.getElementById("id").value; 
-tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
-}
-
-function processComboData(objName,objValue)
-{
-	tabDataJSON[objName] = objValue;
-}
-
-
-//submits changed data
-function submitTabData()
-{
-	
-	
-	var extidJSON = createExtIdJSON();
-	var biohazardJSON = createBioHazardJSON();
-	
-	
-	var isVirtual = document.getElementById("isVirtual").value;
-	
-	if(isVirtual == 'false')
-	{
-		tabDataJSON["containerName"]= document.getElementById("containerName").value;
-		tabDataJSON["pos1"]= document.getElementById("pos1").value;
-		tabDataJSON["pos2"]= document.getElementById("pos2").value;
-	}
-	tabDataJSON["isVirtual"] = isVirtual; 
-	var printFlag = false;
-	if(document.getElementById('printCheckbox').checked == true)
-	{
-		printFlag=true;
-	}
-	
-	var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
-	
-	if(loader.xmlDoc.responseText != null)
-	{
-		var response = eval('('+loader.xmlDoc.responseText+')')
-		if(response.success == "success")
-		{
-			var nodeId= "Specimen_"+document.getElementById("id").value;
-			refreshTree(null,null,null,null,nodeId);
-			document.getElementById('print-error').style.display='none';
-			document.getElementById('print-success').style.display='none';
-			document.getElementById('error').style.display='none';
-			document.getElementById('success').style.display='block';
-			forwardToChildSpecimen();
-		}
-		else
-		{
-			document.getElementById('print-error').style.display='none';
-			document.getElementById('print-success').style.display='none';
-			document.getElementById('success').style.display='none';
-			document.getElementById('errorMsg').innerHTML = response.msg;
-			document.getElementById('error').style.display='block';
-		}
-		if(printFlag)
-		{
-			if(response.printLabel == "success")
-			{
-				document.getElementById('print-error').style.display='none';
-			document.getElementById('print-success').innerHTML = response.printLabelSuccess;
-			document.getElementById('print-success').style.display='block';
-				
-			}
-			else
-			{
-					document.getElementById('print-success').style.display='none';
-			document.getElementById('print-error').innerHTML = response.printLabelError;
-			document.getElementById('print-error').style.display='block';
-			}
-		}
-	}
-}
-
-function updateHelpURL()
-{
-	var URL="";
-	return URL;
-}
-
 
 function loadDHTMLXWindowForTransferEvent()
 {
@@ -797,5 +730,4 @@ dhxWins.window("containerPositionPopUp").setText("");    //it's the title for th
 initSpecimenCombo();
 initializeSpecimenPage(${biohazardTypeNameListJSON});
 prepareSpecimenTypeOptions(${cellTypeListJSON},${molecularTypeListJSON},${tissueTypeListJSON},${fluidTypeListJSON});
-
 </script>
