@@ -112,6 +112,7 @@ public class SpecimenEventParametersAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		request.getParameter(Constants.CP_QUERY);
 		saveToken(request);
 		this.setCommonRequestParameters(request);
 

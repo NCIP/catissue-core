@@ -24,6 +24,7 @@ public class FluidSpecimenReviewEventParametersAction extends SpecimenEventParam
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		//String operation = Constants.OPERATION;
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		String formName, specimenId = null;
 		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 
@@ -32,12 +33,12 @@ public class FluidSpecimenReviewEventParametersAction extends SpecimenEventParam
 		boolean readOnlyValue;
 		if (fluidSpecimenReviewEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 
 			readOnlyValue = false;
 		}

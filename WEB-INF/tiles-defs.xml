@@ -987,6 +987,10 @@
 	<definition name=".catissuecore.quickEventsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/QuickEvents.jsp" />
 	</definition>
+	<definition name=".cpQuery.catissuecore.quickEventsDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/QuickEvents.jsp" />
+	</definition>
+	
 
 	<!-- SIMILAR CONTAINERS -->
 	<definition name=".catissuecore.similarContainersDef" extends=".catissuecore.homePageDef">

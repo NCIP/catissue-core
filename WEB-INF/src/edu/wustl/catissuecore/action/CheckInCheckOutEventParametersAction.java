@@ -35,17 +35,18 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 			EventParametersForm eventParametersForm) throws Exception
 	{
 
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		String formName = null;
 		boolean readOnlyValue;
 		final CheckInCheckOutEventParametersForm checkInCheckOutEventParametersForm = (CheckInCheckOutEventParametersForm) eventParametersForm;
 		if (checkInCheckOutEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		final String changeAction = "setFormAction('" + formName + "');";

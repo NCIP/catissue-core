@@ -28,7 +28,7 @@ public class ProcedureEventParametersAction extends SpecimenEventParametersActio
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
-		// TODO Auto-generated method stub
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName;
 
@@ -37,12 +37,12 @@ public class ProcedureEventParametersAction extends SpecimenEventParametersActio
 			(ProcedureEventParametersForm) eventParametersForm;
 		if (procedureEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.PROCEDURE_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.PROCEDURE_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.PROCEDURE_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.PROCEDURE_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		final String changeAction = "setFormAction('" + formName + "');";

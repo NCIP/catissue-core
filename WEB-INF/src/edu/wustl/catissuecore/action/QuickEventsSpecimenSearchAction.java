@@ -73,7 +73,8 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 		final QuickEventsForm qEForm = (QuickEventsForm) form;
 		Logger.out.debug(qEForm.getSpecimenEventParameter());
 		String pageOf = Constants.SUCCESS;
-
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
+		request.setAttribute(Constants.CP_QUERY, cpQuery);
 		pageOf = this.validate(request, qEForm);
 
 		if (pageOf.equals(Constants.SUCCESS))
@@ -159,6 +160,10 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 
 				pageOf = Constants.FAILURE;
 			}
+		}
+		if(Constants.SUCCESS.equals(pageOf))
+		{
+			pageOf = Validator.isEmpty(cpQuery)?Constants.SUCCESS:"cpQuerySuccess";
 		}
 
 		return mapping.findForward(pageOf);

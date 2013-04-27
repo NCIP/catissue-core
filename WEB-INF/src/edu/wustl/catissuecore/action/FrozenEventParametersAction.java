@@ -35,7 +35,7 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
-
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName, specimenId = null;
 
@@ -43,12 +43,12 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		final FrozenEventParametersForm frozenEventParametersForm = (FrozenEventParametersForm) eventParametersForm;
 		if (frozenEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.FROZEN_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.FROZEN_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);

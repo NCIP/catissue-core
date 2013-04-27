@@ -37,6 +37,7 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 			EventParametersForm eventParametersForm) throws Exception
 	{
 
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName;
 
@@ -44,11 +45,11 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 			(ReceivedEventParametersForm) eventParametersForm;
 		if (receivedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.RECEIVED_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.RECEIVED_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 		}
 		else
 		{
-			formName = Constants.RECEIVED_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.RECEIVED_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 		}
 		// set the ReceivedQuality List.
 		final List qualityList = CDEManager.getCDEManager().getPermissibleValueList(

@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * Created : 03-July-2006.
@@ -54,7 +55,12 @@ public class QuickEventsAction extends BaseAction
 		 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList); */
 
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.QUICK_EVENT_PARAMETERS);
-
+		String pageOf = request.getParameter("pageOf");
+		if(Validator.isEmpty(pageOf))
+		{
+			pageOf = request.getParameter(Constants.CP_QUERY);
+		}
+		request.setAttribute(Constants.CP_QUERY, pageOf);
 		//add messages from session to request
 		final HttpSession session = request.getSession(true);
 		if (session != null)
@@ -66,14 +72,22 @@ public class QuickEventsAction extends BaseAction
 				session.removeAttribute("messages");
 			}
 		}
-
-		String pageOf = Constants.SUCCESS;
+		if(Validator.isEmpty(pageOf))
+		{
+			pageOf = Constants.SUCCESS;
+		}
+		else if(Constants.CP_QUERY.equals(pageOf))
+		{
+			pageOf = "cpQuery";
+//			pageOf = Constants.SUCCESS;
+		}
 		// populate particular EventForm on QuickEvent Page in the case of request come from specimenList Page 
 		if(request.getParameter("fromPage") !=null && request.getParameter("fromPage").toString().equals("SpecimenList"))
 		{
 			pageOf ="redirectEventPage";
 			request.setAttribute("fromPage", null);
 		}
+		
 
 		return mapping.findForward(pageOf);
 	}

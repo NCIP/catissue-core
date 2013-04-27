@@ -84,6 +84,7 @@
 	String formName = Constants.ALIQUOT_SUMMARY_ACTION;
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String CPQuery = (String)request.getAttribute(Constants.CP_QUERY);
+	
 	if(CPQuery != null)
 	{
 		formName = Constants.CP_QUERY_ALIQUOT_SUMMARY_ACTION;
@@ -353,7 +354,7 @@ function giveCall(url,msg,msg1,id)
 						String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
 						String addMoreSubmitFunctionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";	
 						String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
-						String openEventPage = "openEventPage("+specimenLabelsWithComma+")";
+						
 					%>						
 
 				<html:button
@@ -398,7 +399,7 @@ function giveCall(url,msg,msg1,id)
 <script>
 function openEventPage(specId)
 {
-	var action = 'QuickEvents.do?specimenLabel=<%=specimenLabelsWithComma%>';
+	var action = 'QuickEvents.do?specimenLabel=<%=specimenLabelsWithComma%>&pageOf=<%=CPQuery%>';
 	
 	document.forms[0].action = action;
 		document.forms[0].submit();

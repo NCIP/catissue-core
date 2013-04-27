@@ -63,6 +63,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		final TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm) eventParametersForm;
 
 		final List<NameValueBean> storagePositionListForTransferEvent = AppUtility
@@ -80,11 +81,11 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		String formName = null;
 		if (operation.equals(Constants.EDIT))
 		{
-			formName = Constants.TRANSFER_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.TRANSFER_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 		}
 		else
 		{
-			formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 		}
 		request.setAttribute("formName", formName);
 

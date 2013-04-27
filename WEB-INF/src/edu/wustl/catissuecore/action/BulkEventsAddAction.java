@@ -61,7 +61,7 @@ public class BulkEventsAddAction extends BaseAction{
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+		request.setAttribute(Constants.CP_QUERY, request.getParameter(Constants.CP_QUERY));
 		// capture Specimen Identifier From UI that may be comma separated and Single
 		String specimenIdFromUi="";
 		AbstractActionForm aActionForm=null;

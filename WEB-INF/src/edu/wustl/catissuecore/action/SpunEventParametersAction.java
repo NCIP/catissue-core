@@ -22,7 +22,8 @@ public class SpunEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
-		// TODO Auto-generated method stub
+		
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		final SpunEventParametersForm spunEventParametersForm = (SpunEventParametersForm) eventParametersForm;
 
 		// String operation = (String)
@@ -32,12 +33,12 @@ public class SpunEventParametersAction extends SpecimenEventParametersAction
 		boolean readOnlyValue;
 		if (spunEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.SPUN_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.SPUN_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.SPUN_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.SPUN_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		final String changeAction = "setFormAction('" + formName + "');";

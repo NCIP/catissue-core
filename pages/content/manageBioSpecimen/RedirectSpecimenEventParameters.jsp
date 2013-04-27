@@ -18,10 +18,10 @@
 		
 		String specimenEvent = (String)session.getAttribute("EventOrigin");		
 		
-		
+		String cpqueryVal = (String)request.getAttribute("CPQuery");
 		if((specimenEvent != null) && (specimenEvent.equals("QuickEvents")))
 		{
-			parentUrl = "window.parent.location.href='QuickEvents.do?operation=add&amp;menuSelected=15'";			
+			parentUrl = "window.parent.location.href='QuickEvents.do?operation=add&amp;menuSelected=15&amp;CPQuery="+cpqueryVal+"'";			
 			
 			ActionMessages messages = (ActionMessages)request.getAttribute(Globals.MESSAGE_KEY);
 			session.setAttribute("messages", messages);
@@ -57,9 +57,10 @@
 			}	
 		}	
 		
+		
 	%>
 	
-	
+
 	<body  onload="<%=parentUrl%>" />
 
 	

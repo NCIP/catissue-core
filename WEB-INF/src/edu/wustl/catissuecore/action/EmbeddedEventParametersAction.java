@@ -35,18 +35,19 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		String formName;
 		final EmbeddedEventParametersForm embeddedEventParametersForm =
 			(EmbeddedEventParametersForm) eventParametersForm;
 		boolean readOnlyValue;
 		if (embeddedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.EMBEDDED_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.EMBEDDED_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.EMBEDDED_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.EMBEDDED_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			//(String) request.getAttribute(Constants.SPECIMEN_ID);
 			readOnlyValue = false;
 		}

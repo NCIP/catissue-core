@@ -40,18 +40,18 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName;
-
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		boolean readOnlyValue;
 		final TissueSpecimenReviewEventParametersForm tissueSpecimenReviewEventParametersForm =
 			(TissueSpecimenReviewEventParametersForm) eventParametersForm;
 		if (tissueSpecimenReviewEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		final String changeAction = "setFormAction('" + formName + "');";

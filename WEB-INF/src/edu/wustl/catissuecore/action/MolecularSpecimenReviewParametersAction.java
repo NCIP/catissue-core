@@ -40,6 +40,7 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		String formName;
 		//String isRNA = null;
 
@@ -47,11 +48,11 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 			(MolecularSpecimenReviewParametersForm) eventParametersForm;
 		if (molecularSpecimenReviewParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
+			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 		}
 		else
 		{
-			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
+			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			//isRNA = (String) request.getAttribute(Constants.IS_RNA);
 		}
 		final String changeAction = "setFormAction('" + formName + "');";

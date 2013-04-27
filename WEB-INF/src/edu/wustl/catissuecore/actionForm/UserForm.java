@@ -1042,7 +1042,7 @@ public class UserForm extends AbstractActionForm
                     adminEdit(request, errors, validator);
                     // Mandar 10-apr-06 : bugid :353 end
                     // Bug- 1516:
-                    adminEdit(request, errors, validator);
+//                    adminEdit(request, errors, validator);
                     // Mandar 10-apr-06 : bugid :353 end
                 }
                // validateWashUEmailAddress(errors);

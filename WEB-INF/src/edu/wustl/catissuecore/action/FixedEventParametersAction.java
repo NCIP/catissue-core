@@ -35,18 +35,19 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		String formName = null;
 		boolean readOnlyValue;
 		final FixedEventParametersForm fixedEventParametersForm = (FixedEventParametersForm) eventParametersForm;
 
 		if (fixedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.FIXED_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.FIXED_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.FIXED_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.FIXED_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		//String changeAction = "setFormAction('" + formName + "');";

@@ -33,17 +33,18 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
+		String cpQuery = request.getParameter(Constants.CP_QUERY);
 		String formName = null;
 		boolean readOnlyValue;
 		final DisposalEventParametersForm disposalEventParametersForm = (DisposalEventParametersForm) eventParametersForm;
 		if (disposalEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
-			formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;
+			formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = true;
 		}
 		else
 		{
-			formName = Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION;
+			formName = Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION+"?"+Constants.CP_QUERY+"="+cpQuery;
 			readOnlyValue = false;
 		}
 		// String changeAction = "setFormAction('" + formName + "');";
