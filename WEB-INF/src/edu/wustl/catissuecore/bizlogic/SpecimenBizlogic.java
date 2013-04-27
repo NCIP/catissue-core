@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
@@ -34,9 +35,12 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.NamedQueryParam;
@@ -62,6 +66,7 @@ public class SpecimenBizlogic
 					specimenDTO.getId());
 			//updating the object with DTO
 			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, sessionDataBean, dao);
+
 			if (Variables.isSpecimenLabelGeneratorAvl)
 			{
 				generateLabel(oldSpecimenObj);
@@ -70,6 +75,7 @@ public class SpecimenBizlogic
 			{
 				generateBarCode(oldSpecimenObj);
 			}
+			validateSpecimen(oldSpecimenObj, dao);
 			//updating the specimen in database
 			dao.update(oldSpecimenObj);
 
@@ -197,29 +203,8 @@ public class SpecimenBizlogic
 		if (specimenDTO.getLabel() != null)
 			oldSpecimenObj.setLabel(specimenDTO.getLabel());
 
-		if (specimenDTO.getBarcode() != null)
-			oldSpecimenObj.setBarcode(specimenDTO.getBarcode());
-
-		if (specimenDTO.getClassName() != null)
-			oldSpecimenObj.setSpecimenClass(specimenDTO.getClassName());
-
-		if (specimenDTO.getType() != null)
-			oldSpecimenObj.setSpecimenType(specimenDTO.getType());
-
-		if (specimenDTO.getPathologicalStatus() != null)
-			oldSpecimenObj.setPathologicalStatus(specimenDTO.getPathologicalStatus());
-
-		if (specimenDTO.getTissueSide() != null)
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
-
-		if (specimenDTO.getTissueSite() != null)
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
-
 		if (specimenDTO.getQuantity() != null)
 			oldSpecimenObj.setInitialQuantity(specimenDTO.getQuantity());
-
-		if (specimenDTO.getComments() != null)
-			oldSpecimenObj.setComment(specimenDTO.getComments());
 
 		if (specimenDTO.getCollectionStatus() != null
 				&& specimenDTO.getCollectionStatus().equalsIgnoreCase(
@@ -252,6 +237,27 @@ public class SpecimenBizlogic
 			if (specimenDTO.isAvailable() != null)
 				oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
 		}
+
+		if (specimenDTO.getBarcode() != null)
+			oldSpecimenObj.setBarcode(specimenDTO.getBarcode());
+
+		if (specimenDTO.getClassName() != null)
+			oldSpecimenObj.setSpecimenClass(specimenDTO.getClassName());
+
+		if (specimenDTO.getType() != null)
+			oldSpecimenObj.setSpecimenType(specimenDTO.getType());
+
+		if (specimenDTO.getPathologicalStatus() != null)
+			oldSpecimenObj.setPathologicalStatus(specimenDTO.getPathologicalStatus());
+
+		if (specimenDTO.getTissueSide() != null)
+			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
+
+		if (specimenDTO.getTissueSite() != null)
+			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
+
+		if (specimenDTO.getComments() != null)
+			oldSpecimenObj.setComment(specimenDTO.getComments());
 
 		SpecimenPosition position = new SpecimenPosition();
 		if (specimenDTO.getIsVirtual() == null || specimenDTO.getIsVirtual())
@@ -467,6 +473,169 @@ public class SpecimenBizlogic
 			}
 		}
 		return deriveEventCollection;
+	}
+
+	/**
+	 * Validates the specimen DTO from UI.
+	 * @param specimenDTO
+	 * @throws BizLogicException
+	 */
+	/**
+	 * @param dao 
+	 * @param specimenDTO
+	 * @throws BizLogicException
+	 * @throws DAOException 
+	 */
+	private void validateSpecimen(Specimen specimen, DAO dao) throws BizLogicException,
+			DAOException
+	{
+		final List specimenClassList = AppUtility.getSpecimenClassList();
+		final String specimenClass = specimen.getClassName();
+		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+		{
+			throw this.getBizLogicException(null, "protocol.class.errMsg", "");
+		}
+
+		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),
+				specimen.getSpecimenType()))
+		{
+			throw this.getBizLogicException(null, "protocol.type.errMsg", "");
+		}
+
+		if (specimen.getCollectionStatus().equalsIgnoreCase(Constants.SPECIMEN_COLLECTED)
+				&& validateFieldValue(specimen.getLabel()))
+		{
+			final String message = ApplicationProperties.getValue("specimen.label");
+			throw this.getBizLogicException(null, "errors.item.required", message);
+		}
+		if (specimen.getAvailableQuantity().compareTo(specimen.getInitialQuantity()) > 0)
+		{
+			final String quantityString = ApplicationProperties
+					.getValue("specimen.availableQuantity");
+			throw this.getBizLogicException(null, "errors.availablequantity", quantityString);
+		}
+
+		if (specimen.getSpecimenPosition() != null)
+		{
+			new NewSpecimenBizLogic().chkContainerValidForSpecimen(specimen.getSpecimenPosition()
+					.getStorageContainer(), specimen, dao);
+
+			this.validateStorageContainer(specimen, dao);
+		}
+
+		checkDuplicateSpecimenFields(specimen, dao);
+	}
+
+	/**
+	 * Validates combobox value.
+	 * @param value
+	 * @return
+	 */
+	private boolean validateComboValue(String value)
+	{
+		return Validator.isEmpty(value) || value.equalsIgnoreCase(Constants.SELECT_OPTION)
+				|| value.equalsIgnoreCase(Constants.DEFAULT_CONDITION);
+	}
+
+	/**
+	 * Validates String value.
+	 * @param value
+	 * @return
+	 */
+	private boolean validateFieldValue(String value)
+	{
+		return Validator.isEmpty(value);
+	}
+
+	/**
+	 * Validate storage container.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param dao DAO object
+	 *
+	 * @throws BizLogicException Database related exception
+	 * @throws DAOException 
+	 */
+	private void validateStorageContainer(Specimen specimen, DAO dao) throws BizLogicException,
+			DAOException
+	{
+		if (specimen.getSpecimenPosition() != null
+				&& specimen.getSpecimenPosition().getStorageContainer() != null
+				&& (specimen.getSpecimenPosition().getStorageContainer().getId() == null && specimen
+						.getSpecimenPosition().getStorageContainer().getName() == null))
+		{
+			final String message = ApplicationProperties.getValue("specimen.storageContainer");
+			throw this.getBizLogicException(null, "errors.invalid", message);
+		}
+		if (specimen.getSpecimenPosition() != null
+				&& specimen.getSpecimenPosition().getStorageContainer() != null
+				&& specimen.getSpecimenPosition().getStorageContainer().getName() != null
+				&& specimen.getSpecimenPosition().getStorageContainer().getId() != null)
+		{
+			final StorageContainer storageContainerObj = specimen.getSpecimenPosition()
+					.getStorageContainer();
+			final String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = {"id"};
+			final String storageContainerName = specimen.getSpecimenPosition()
+					.getStorageContainer().getName();
+
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("name", storageContainerName));
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+			if (!list.isEmpty())
+			{
+				storageContainerObj.setId((Long) list.get(0));
+				specimen.getSpecimenPosition().setStorageContainer(storageContainerObj);
+			}
+			else
+			{
+				final String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw this.getBizLogicException(null, "errors.invalid", message);
+			}
+		}
+
+	}
+
+	/**
+	 * Checks duplicate specimen fields.
+	 *
+	 * @param specimen Specimen
+	 * @param dao DAO object
+	 * @throws DAOException 
+	 *
+	 * @throws BizLogicException Database exception
+	 */
+	private void checkDuplicateSpecimenFields(Specimen specimen, DAO dao) throws DAOException,
+			BizLogicException
+	{
+		List list = null;
+		if (specimen.getLabel() != null)
+		{
+			list = dao.retrieve(Specimen.class.getName(), "label", specimen.getLabel());
+			for (Object object : list)
+			{
+				final Specimen specimenObject = (Specimen) object;
+				if (!specimenObject.getId().equals(specimen.getId()))
+				{
+					throw this.getBizLogicException(null, "label.already.exits",
+							specimen.getLabel());
+				}
+			}
+		}
+		if (specimen.getBarcode() != null)
+		{
+			list = dao.retrieve(Specimen.class.getName(), "barcode", specimen.getBarcode());
+			for (Object object : list)
+			{
+				final Specimen specimenObject = (Specimen) object;
+				if (!specimenObject.getId().equals(specimen.getId()))
+				{
+					throw this.getBizLogicException(null, "barcode.already.exits",
+							specimen.getBarcode());
+				}
+			}
+		}
 	}
 
 }

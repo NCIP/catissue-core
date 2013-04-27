@@ -23,8 +23,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.json.JSONException;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -888,8 +886,8 @@ public class CatissueCommonAjaxAction extends DispatchAction
 	}
 
 	public ActionForward updateSpecimen(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ApplicationException
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
+			IOException
 	{
 		String dataJSON = request.getParameter("dataJSON");
 		DAO dao = null;
@@ -917,7 +915,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 
 				Collection<BiohazardDTO> biohazardDTOColl = gson.fromJson(biohazardJSON, listType1);
 				specDTO.setBioHazards(biohazardDTOColl);
-
+				
 				SpecimenBizlogic bizlogic = new SpecimenBizlogic();
 				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
@@ -945,9 +943,9 @@ public class CatissueCommonAjaxAction extends DispatchAction
 				}
 			}
 		}
-		catch (DAOException ex)
+		catch (Exception ex)
 		{
-			returnMap.put("msg", ex.getMsgValues());
+			returnMap.put("msg", ex.getMessage());
 			returnMap.put("success", "failure");
 		}
 		finally

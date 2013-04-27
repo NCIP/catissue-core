@@ -3492,12 +3492,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						.getStorageContainer();
 				final String sourceObjectName = StorageContainer.class.getName();
 				final String[] selectColumnName = {"id"};
-				// String[] whereColumnName = {"name"};
-				// String[] whereColumnCondition = {"="};
-				// Object[] whereColumnValue =
-				// {specimen.getSpecimenPosition().getStorageContainer
-				// ().getName()};
-				// String joinCondition = null;
 				final String storageContainerName = specimen.getSpecimenPosition()
 						.getStorageContainer().getName();
 
