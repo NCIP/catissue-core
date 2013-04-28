@@ -613,8 +613,13 @@ function setVirtual()
 			var contName = parent.window.document.getElementById(globalContName);
 			contName.value='Virtual';
 		}
-		else if(globalPageOf == 'pageOfSpecimen')
+		else if(globalPageOf == 'pageOfShipping')
 		{
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById("specimenDetails(selectedContainerName_"+rowIndex+")");
+			contId.value="-1";
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
 		}
 		else if(globalPageOf == 'pageOfNewSpecimen')
 		{
@@ -661,9 +666,14 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 		var contName = parent.window.document.getElementById(controlName);
 		contName.value=dhtmlxCombo.getSelectedText();
 	}
-	else if(pageOf == 'pageOfSpecimen')
-	{
-	}
+	else if(globalPageOf == 'pageOfShipping')
+		{
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById("specimenDetails(selectedContainerName_"+rowIndex+")");
+			contId.value=dhtmlxCombo.getSelectedValue();
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value=dhtmlxCombo.getSelectedText();
+		}
 	else if(pageOf == 'pageOfNewSpecimen')
 	{
 		var contId = parent.window.document.getElementById('containerId');

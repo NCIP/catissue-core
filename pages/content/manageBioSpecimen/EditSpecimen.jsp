@@ -721,7 +721,15 @@ var x = (screen.width / 3) - (w / 2);
 var y = 0;
 dhxWins = new dhtmlXWindows(); 
 dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=<bean:write name='specimenDTO' property='pos1' scope='request'/>&pos2=<bean:write name='specimenDTO' property='pos2' scope='request'/>&holdSpecimenClass=<bean:write name='specimenDTO' property='className' scope='request'/>&holdSpecimenType=<bean:write name='specimenDTO' property='type' scope='request'/>&containerName=<bean:write name='specimenDTO' property='containerName' scope='request'/>&collectionProtocolId=${requestScope.cpId}&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>&isVirtual=<bean:write name='specimenDTO' property='isVirtual' scope='request'/>";
+var pos1 = document.getElementById('pos1').value;
+var pos2 = document.getElementById('pos2').value;
+var className = classNameCombo.getSelectedText();
+var type = typeCombo.getSelectedText();
+var containerName = document.getElementById('containerName').value;
+var isVirtual = document.getElementById('isVirtual').value;
+
+var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+pos1+"&pos2="+pos2+"&holdSpecimenClass="+className+"&holdSpecimenType="+type+"&containerName="+containerName+"&collectionProtocolId=${requestScope.cpId}&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>&isVirtual="+isVirtual;
+
 dhxWins.window("containerPositionPopUp").attachURL(url);                     
 //url : either an action class or you can specify jsp page path directly here
 dhxWins.window("containerPositionPopUp").button("park").hide();

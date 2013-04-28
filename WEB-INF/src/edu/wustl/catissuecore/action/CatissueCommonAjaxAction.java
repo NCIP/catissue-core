@@ -369,10 +369,10 @@ public class CatissueCommonAjaxAction extends DispatchAction
 				Integer i = 1;
 				for (NameValueBean nvb : containerList)
 				{
-					if (nvb.getName().equals(selectedContName))
+					if (nvb.getName().equals(selectedContName) || Validator.isEmpty(selectedContName))
 					{
 						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(nvb.getValue(),
-								nvb.getName(), populateValueInCombo, selContMatched));
+								nvb.getName(), populateValueInCombo, true));
 					}
 					else
 					{
@@ -393,9 +393,10 @@ public class CatissueCommonAjaxAction extends DispatchAction
 					if (!list.isEmpty())
 					{
 						selectedContId = list.get(0).toString();
+						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(selectedContId,
+								selectedContName, populateValueInCombo, true));
 					}
-					responseString.append(this.addRowToResponseXMLForDHTMLXcombo(selectedContId,
-							selectedContName, populateValueInCombo, true));
+					
 				}
 	//			selContMatched = (selContMatched) ? false : true;
 	//			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),

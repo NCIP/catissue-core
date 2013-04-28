@@ -166,12 +166,12 @@ var gridDivObject_<%=specimenId%> ;
 
 <%}%>
 
-function showPopUp(specimenId,storageContainerDropDown,positionDimensionOne,positionDimensionTwo,collectionProtocolId,specimenClassName) 
+function showPopUp(specimenId,storageContainerDropDown,positionDimensionOne,positionDimensionTwo,collectionProtocolId,specimenClassName,cpId,spType,pageOf) 
 {
 	var storageContainer =document.getElementById(storageContainerDropDown).value;
 	if(storageContainer!="")
 	{
-		loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
+		loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,pageOf);
 	}
 	else
 	{
@@ -667,6 +667,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 														rowNumber=""+specimenCount;
 														dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 														%>
+														
 														<c:set var="Rulecounter" value="${Rulecounter+1}"/>
 									                  	<tr>
 																<td class="black_ar" width="2%">
@@ -830,7 +831,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																						<jsp:useBean id="stContainerId" type="java.lang.String"/>
 									
 																						<html:hidden styleId="<%=stContainerId%>" property="<%=stContainerName%>"/>
-																						<c:set var="functionCall">showPopUp('<bean:write name="specimenItem" property="id"/>','storageContainerDropDown_<bean:write name="specimenItem" property="id"/>','<c:out value="${pos1Id}"/>','<c:out value="${pos2Id}"/>','<c:out value="${stContainerId}"/>','<c:out value="${specimenItem.specimenClass}"/>','')</c:set>
+																						<c:set var="functionCall">showPopUp('<bean:write name="specimenItem" property="id"/>','storageContainerDropDown_<bean:write name="specimenItem" property="id"/>','<c:out value="${pos1Id}"/>','<c:out value="${pos2Id}"/>','<c:out value="${stContainerId}"/>','<c:out value="${specimenItem.specimenClass}"/>','<c:out value="${specimenItem.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id}"/>','<c:out value="${specimenItem.specimenType}"/>','pageOfShipping')</c:set>
 																						<jsp:useBean id="functionCall" type="java.lang.String"/>
 									
 																						<c:set var="buttonName">containerMap_<bean:write name="specimenItem" property="id"/></c:set>
