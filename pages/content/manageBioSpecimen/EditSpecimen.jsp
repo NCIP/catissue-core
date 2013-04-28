@@ -450,7 +450,6 @@
 											</html:select>
 										</c:otherwise>
 									</c:choose>
-									<html:hidden name="specimenDTO" property="activityStatus"/>
 								</td>
 							</tr>
 						
@@ -495,7 +494,7 @@
 									</label>
 								</td>
 								<td align="left" valign="top" colspan="3">
-									<html:textarea styleClass="black_ar_s"  rows="1" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
+									<html:textarea styleClass="black_ar_s"  rows="2" cols="90" name="specimenDTO" styleId="comments" property="comments" onblur="processData(this)"/>
 								</td>
 							</tr>
 								
@@ -700,6 +699,9 @@
 </html:form>
 
 <script>
+var nodeId= "Specimen_"+document.getElementById("id").value;
+refreshTree(null,null,null,null,nodeId);
+				
 var tabDataJSON = {};
 tabDataJSON["id"] = document.getElementById("id").value; 
 
