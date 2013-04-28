@@ -306,7 +306,6 @@ public class SpecimenBizlogic
 		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(oldSpecimenObj,
 				specimenDTO));
 		oldSpecimenObj.setBiohazardCollection(getBiohazards(oldSpecimenObj, specimenDTO));
-
 	}
 
 	/**
@@ -347,6 +346,12 @@ public class SpecimenBizlogic
 			}
 		}
 
+		if(externalIdentifierCollection.isEmpty())
+		{
+			ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+			
+			externalIdentifierCollection.add(externalIdentifier);
+		}
 		return externalIdentifierCollection;
 	}
 
