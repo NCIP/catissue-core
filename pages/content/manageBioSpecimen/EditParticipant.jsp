@@ -113,10 +113,32 @@ function newConsentTab(levelId)
 	}
 	else
 	{
+		alert("check activity");
 			checkActivityStatusForCPR();
 	}
 }
-	
+	 function checkActivityStatusForCPR()
+{
+	var isAllActive = true;
+	if(document.forms[0].cprActivityStatus!=undefined){
+		for(var num = 0;num < document.forms[0].cprActivityStatus.length;num++){
+			if(document.forms[0].cprActivityStatus[num].checked && document.forms[0].cprActivityStatus[num].value != "Active"){
+				isAllActive = false;
+			}
+		}
+	}
+
+	if(isAllActive==true)
+	{
+		document.forms[0].submit();
+	}else{
+		var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+		if (go==true)
+		{
+			document.forms[0].submit();
+		}
+	}
+} 
 
 <logic:equal name="participantForm" property="pHIView" value="false">
       <%  

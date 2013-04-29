@@ -807,11 +807,12 @@ public class Participant extends AbstractDomainObject
 				if(form.getCprId()!=null && !form.getCprId().equals("")){
 				cpr.setId(Long.parseLong(form.getCprId()));
 				
-				cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+				cpr.setActivityStatus(form.getCprActivityStatus());
 				}
 				if(!"".equals(form.getPpId())){
 					cpr.setProtocolParticipantIdentifier(form.getPpId());
 				}
+				cpr.setBarcode(form.getBarcode());
 				Set<CollectionProtocolRegistration> list = new HashSet<CollectionProtocolRegistration>();
 				list.add(cpr);
 				collectionProtocolRegistrationCollection = list;

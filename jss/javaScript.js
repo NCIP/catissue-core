@@ -13,7 +13,17 @@ function deleteObject(action,onSubmitAction)
 	 if (go==true)
 	 {
 		document.forms[0].onSubmit.value = onSubmitAction;
-		document.forms[0].activityStatus.value = "Disabled";
+		if(document.forms[0].activityStatus.value!=undefined){
+			document.forms[0].activityStatus.value = "Disabled";
+		}else{
+			for(var num = 0;num < document.forms[0].activityStatus.length;num++){
+				if(document.forms[0].activityStatus[num].value == "Disabled"){
+					document.forms[0].activityStatus[num].checked = true;
+				}else{
+					document.forms[0].activityStatus[num].checked = false;
+				}
+			}
+		}
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	 }

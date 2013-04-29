@@ -86,7 +86,8 @@ UploadHandlerXhr.prototype = {
 		
 		
             if (xhr.readyState == 4){
-               self.onComplete(xhr.responseText);;
+            	 response = eval("(" + xhr.responseText + ")");
+               self.onComplete(response);
             }
         };
 
