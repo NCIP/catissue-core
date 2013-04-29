@@ -10,9 +10,9 @@
 #if($orderDetailMap.requestorName)
        #set ($requestorName=$orderDetailMap.requestorName)
 #end
-#set ($site='')
-#if($orderDetailMap.site)
-   #set ($site=$orderDetailMap.site)
+#set ($siteName='')
+#if($orderDetailMap.siteName)
+   #set ($site=$orderDetailMap.siteName)
 #end
 #set ($comments='')
 #if($orderDetailMap.comments)
@@ -26,7 +26,7 @@
 "Distribution Protocol:","${distributionProtocolName}"
 "Requestor's Name:","${requestorName}"
 "Requested Date:","$requestedDate"
-"Distribution Site:","${site}"
+"Distribution Site:","${siteName}"
 "Comment:","${comments}"
 "Distributor's Comment:","${distributorsComment}"
 "Exported On:","$exportedOn"
