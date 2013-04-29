@@ -217,7 +217,26 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
  <legend class="blue_ar_b legend_font_size"> <b>  View Image </b></legend>
                        
                         <table width="100%" border="0" cellpadding="3" cellspacing="0" id="imageView">
-                        
+                        <logic:empty name="imageDTO" property="imageType">
+                        <tr>   
+                                <td width="1%" align="center" class="black_ar">
+                            <span class="blue_ar_b">
+                            </span>
+                          </td>
+                         
+                          <td width="17%" align="left" class="black_ar " >
+                                    <a href="#" class="view" onclick="downloadNormalImage('${imageDTO.physicalLocationUrl}')"><span title="Download Image" style="vertical-align:top">Download Image</span></a></td>
+                                </td>
+                            <td width="34%"/>
+                                <td width="1%" align="center" class="black_ar">
+                            <span class="blue_ar_b">
+                            </span>
+                          </td>
+                          <td width="17%"/>
+                            <td width="34%"/>   
+                            </tr>
+                           </logic:empty>
+                        <logic:equal name="imageDTO" property="imageType" value="aperio">
                             <tr>   
                                 <td width="1%" align="center" class="black_ar">
                             <span class="blue_ar_b">
@@ -225,7 +244,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           </td>
                          
                           <td width="17%" align="left" class="black_ar " >
-                                    <a href="#" class="view" onclick="viewInWebScope('${imageDTO.physicalLocationUrl}')"><span title="Download Image" style="vertical-align:top">View in WebScope(Web-Based Application)</span></a></td>
+                                    <a href="#" class="view" onclick="viewInWebScope('${imageDTO.physicalLocationUrl}')"><span title="View in webscope" style="vertical-align:top">View in WebScope(Web-Based Application)</span></a></td>
                                 </td>
                             <td width="34%"/>
                                 <td width="1%" align="center" class="black_ar">
@@ -242,7 +261,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           </td>
                          
                           <td width="17%" align="left" class="black_ar " >
-                                    <a href="#" onclick="viewImageLocally('${imageDTO.physicalLocationUrl}')" class="view"><span title="Download Image" style="vertical-align:top">View in ImageScope(Desktop Application)</span></a></td>
+                                    <a href="#" onclick="viewImageLocally('${imageDTO.physicalLocationUrl}')" class="view"><span title="View in imageScope" style="vertical-align:top">View in ImageScope(Desktop Application)</span></a></td>
                                 </td>
                             <td width="34%"/>
                                 <td width="1%" align="center" class="black_ar">
@@ -270,6 +289,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           <td width="17%"/>
                             <td width="34%"/>   
                             </tr>
+                            </logic:equal>
                         </table>
                         </fieldset>
                     </td>
@@ -589,6 +609,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                             <td align="left" colspan="4">
                                 <html:textarea rows="1" cols="40" styleClass="black_ar" styleId="description" name="imageDTO" property="description" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
                                 <html:hidden property="id" styleId="imageId" name="imageDTO" />
+                                <html:hidden property="imageType" styleId="imageType" name="imageDTO"/>
                             </td>
 
                         </tr>
@@ -956,6 +977,10 @@ function viewImageLocally(imageURL)
     mywindow=window.open(action,"Download","width=10,height=10");
     mywindow.moveTo(0,0);
 }
+function downloadNormalImage(imageURL)
+{
+	window.open(imageURL);
+}
 function downloadImage(imageURL)
 {
 //imageURL='http://localhost/imageserver/@32';
@@ -974,8 +999,8 @@ function viewInWebScope(imageURL)
 {
 //imageURL='http://localhost/imageserver/@32';
 //alert(imageURL);
-    
-        window.open(imageURL);
+    //dhtmlxAjax.postSync("OpenAperioImage.do","imageURL="+imageURL+"&operation=webScope");
+        window.open("OpenAperioImage.do?imageURL="+imageURL+"&operation=webScope");
     
 }
 

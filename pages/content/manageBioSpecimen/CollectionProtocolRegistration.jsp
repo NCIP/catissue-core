@@ -279,7 +279,7 @@
 					<td class="formField">
 <!-- 				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				           <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="registrationDate" property="registrationDate" />
-				           &nbsp;<bean:message key="page.dateFormat" />&nbsp;
+				           &nbsp;<bean:message key="date.pattern" />&nbsp;
 					       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
 						         <img src="images\calendar.gif" width=24 height=22 border=0></a>
 -->
