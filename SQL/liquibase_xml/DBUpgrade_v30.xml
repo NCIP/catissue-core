@@ -127,7 +127,7 @@
 			<column name="IDENTIFIER" type="${int.type}">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="DISTRIBUTED_QUANTITY" type="${int.type}">				
+			<column name="DISTRIBUTED_QUANTITY" type="${double.type}">				
 			</column>
 			<column name="DISTRIBUTION_ID" type="${int.type}">				
 			</column>
