@@ -351,14 +351,14 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		{
 			throw this.getBizLogicException(null, "type.errMsg", message);
 		}
-		if ((site.getAddress().getState() != null && site.getAddress().getState() != null && !"".equals( site.getAddress().getState() ))
+		/*if ((site.getAddress().getState() != null && site.getAddress().getState() != null && !"".equals( site.getAddress().getState() ))
 				&& edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 		{
 			if (!Validator.isEnumeratedValue(AppUtility.getStateList(), site.getAddress().getState()))
 			{
 				throw this.getBizLogicException(null, "state.errMsg", "");
 			}
-		}
+		}*/
 
 		if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COUNTRY_LIST, null), site.getAddress().getCountry()))

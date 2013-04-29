@@ -1628,7 +1628,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
 			// if condition added by Geeta for ECMC
-			if ((user.getAddress().getState() != "null" && user.getAddress().getState() != "")
+			/*if ((user.getAddress().getState() != "null" && user.getAddress().getState() != "")
 					&& edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 			{
 				if (!Validator.isEnumeratedValue(AppUtility.getStateList(), user.getAddress().getState()))
@@ -1636,7 +1636,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 					throw getBizLogicException(null, "state.errMsg", "");
 				}
-			}
+			}*/
 			if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_COUNTRY_LIST, null), user.getAddress().getCountry()))
 			{
