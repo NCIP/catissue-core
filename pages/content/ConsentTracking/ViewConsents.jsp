@@ -39,10 +39,12 @@
 
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script src="jss/json2.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 
 <script>
 var comboData = new Array();
 var statusId = new Array();
+var isConsentResponseWithdrawn = false;
 
 function checkDisable(){
 	var hideCheck = true;
@@ -223,6 +225,9 @@ function checkDisable(){
 										  response_combo.attachEvent("onChange",checkDisable);
 										  comboData.push(response_combo);
 										  statusId.push("${consentTierDTO.id}");
+										  if('${consentTierDTO.participantResponses}'=='Withdrawn'){
+											isConsentResponseWithdrawn = true;
+										  }
 										</script>
 									</logic:equal>
 									<logic:notEqual name="consentLevel" value="participant">
@@ -246,6 +251,9 @@ function checkDisable(){
 										  response_combo1.attachEvent("onChange",checkDisable);
 										  comboData.push(response_combo1);
 										  statusId.push("${consentTierDTO.id}");
+										   if('${consentTierDTO.status}'=='Withdrawn'){
+											isConsentResponseWithdrawn = true;
+										  }
 										  
 									</script>
 									
@@ -279,7 +287,9 @@ function checkDisable(){
 			 </table>
 			
 		<script>
-			
+			if(isConsentResponseWithdrawn){
+				document.getElementById("disableConsentCheckboxDiv").style.display = "block";
+			}
 			
 			function onSubmit(){
 				var consentDto = {};
@@ -312,6 +322,15 @@ function checkDisable(){
 					if(response.success == "success")
 					{
 						document.getElementById('success').style.display='block';
+						var nodeId= "";
+						if(consentLevel=="specimen"){
+							nodeId= "Specimen_"+consentLevelId;
+							refreshTree(null,null,null,null,nodeId);
+						}else if(consentLevel=="scg"){
+							nodeId= "SpecimenCollectionGroup_"+consentLevelId;
+							refreshTree(null,null,null,null,nodeId);
+						}
+						
 					}
 					else
 					{
