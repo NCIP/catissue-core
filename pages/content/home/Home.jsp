@@ -87,7 +87,7 @@ table#browserDetailsContainer {
 							<span><bean:message key="login.data.at.glance" /></span>
 						</div>
 						
-						<div class="help-summary" style="width:49%;float:left;">
+						<div class="help-summary" style="width:40%;float:left;">
 							<div  class="container-text container-text-top-margin">
 								<span><bean:message key="login.users" /></span>&nbsp<span class="theam-font-color-orange" id="userCount"></span>
 							</div>
@@ -113,7 +113,7 @@ login.detailed.summary=Detailed Summary
 login.forgot.password=Forgot password?
 							</ul-->
 						</div>
-						<div class="help-summary" style="width:50%; float: left;" >
+						<div class="help-summary" style="width:59%; float: left;" >
 							<div class="container-text container-text-top-margin">
 								<span><bean:message key="login.cell.specimens" /></span>&nbsp<span class="theam-font-color-orange" id="cellsCount"></span>
 							</div>
