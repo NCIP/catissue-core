@@ -45,7 +45,7 @@
              
             update="true"
             insert="true"
-            column="SITE_ID" lazy="proxy" 
+            column="SITE_ID" lazy="false" 
         />
 
         <many-to-one
