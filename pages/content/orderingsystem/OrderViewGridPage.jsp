@@ -53,6 +53,15 @@ function init_grid()
 
 	mygrid.setSizes();
 }
-
+function refreshGrid(dpName)
+{
+	mygrid.clearAll();
+	mygrid.load("RequestListView.do?requestFor=gridData&dpName="+dpName,"", "json");
+}
+function showPendingNewOrders()
+{
+	mygrid.clearAll();
+	mygrid.load("RequestListView.do?requestFor=gridData","", "json");
+}
 window.onload=init_grid;
 </script>

@@ -210,11 +210,13 @@ function switchToOlderView()
 						</strong>
 					</td>
 
-	                <td width="37%" class="black_ar">
-	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="49" name="DisplayOrderDTO" onblur="processData(this)"/>
+	                <td width="27%" class="black_ar">
+	                		<html:text property="orderName" styleClass="black_ar" styleId="orderName" size="49" name="DisplayOrderDTO" onblur="processData(this)" style="width:30em;"/>
 					</td>
+					<td width="10%" class="black_ar align_right_style"></td>
 					<td width="17%" class="black_ar align_right_style"></td>
-				<td width="29%" class="black_ar align_right_style"><input type="button" class="blue_ar_b" value="Switch To Older View" onclick="switchToOlderView()"></td>
+				<td width="29%" class="black_ar align_right_style"><html:link href="#" styleId="olderViewLink" styleClass="view"   onclick="switchToOlderView()">Switch To Older View</html:link>
+				</td>
 				</tr>
 
 				<tr class="${tr_white_color}">
@@ -224,13 +226,14 @@ function switchToOlderView()
 						</strong>
 					</td>
  					<td class="black_ar">
-						<html:select property="distributionProtocolName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="distributionProtocolName" size="1" onblur="processData(this)">
+						<html:select property="distributionProtocolName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="distributionProtocolName" size="100" onblur="processData(this)" style="width:30em;" >
 							<html:options collection="distributionProtocolList" labelProperty="name" property="value" />
 					       </html:select>
+						
 					</td>
 					<script>
 						distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
-						distributionProtocolNameCombo.setSize(301);
+						
 						if(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}')==null)
 						{
 						  distributionProtocolNameCombo.setComboValue("-1");		
@@ -239,7 +242,8 @@ function switchToOlderView()
 						{
 						 distributionProtocolNameCombo.setComboValue(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}').value);
 						}
-    					</script>						
+    					</script>
+					<td width="10%" class="black_ar align_right_style"></td>						
 					<td  class="black_ar align_right_style"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
 							</strong>
@@ -263,7 +267,7 @@ function switchToOlderView()
  					</strong></td>
 					<td class="black_ar" style="background-color:#f6f6f6;" >
 							<div  class="dhtmlx-combo-margin">
-							 <html:select property="siteName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="siteName" size="1" onblur="processData(this)">
+							 <html:select property="siteName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="siteName" size="100" onblur="processData(this)" style="width:30em;">
 							 <html:options collection="sites" labelProperty="name" property="value" />
 					       </html:select>
 					       
@@ -273,8 +277,8 @@ function switchToOlderView()
 
 					<script>
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-								  site_combo = new dhtmlXComboFromSelect("siteName","siteName","100px");
-								  site_combo.setSize(301);
+								  site_combo = new dhtmlXComboFromSelect("siteName");
+								  
  							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.siteName}')==null)
 								  {
  							  		site_combo.setComboValue("-1");		
@@ -284,6 +288,7 @@ function switchToOlderView()
 									  site_combo.setComboValue(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.siteName}').value);
 								  }
     					</script>	
+		<td width="10%" class="black_ar align_right_style"></td>
 		<td class="black_ar align_right_style"><strong>
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
 							</strong></td>
@@ -296,14 +301,14 @@ function switchToOlderView()
 							<bean:message key="requestdetails.header.label.DistributorsComments" />
  					</strong></td>
 				<td class="black_ar_t">
-					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" />
+					<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="distributorsComment" property="distributorsComment" onblur="processData(this)" style="width:30em;height:40px;"/>
 		 			</td>
-		 		</td>
-				 <td class="black_ar align_right_style"><strong>
+				<td width="10%" class="black_ar align_right_style"></td>
+		 		 <td class="black_ar align_right_style"><strong>
 								<bean:message key='requestdetails.requestor.Comments'/> 
 								
 							</strong></td>
-                <td class="black_ar">&nbsp;<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="comments" property="comments" readonly="true"/></td>
+                <td class="black_ar">&nbsp;<html:textarea name="DisplayOrderDTO" styleClass="black_ar" cols="47" rows="2" styleId="comments" property="comments" readonly="true" style="width:30em;height:40px;"/></td>
 			   </tr>
           </table></td>
         </tr>
@@ -374,7 +379,7 @@ function switchToOlderView()
    <!-- main table ends here -->
 </html:form>
 
-	<iframe id = "orderExportFrame" width = "0%" height = "0%" frameborder="0"></iframe>
+	<iframe id = "orderExportFrame" width = "0" height = "0" frameborder="0"></iframe>
 </body>
 
 <script>
