@@ -113,7 +113,7 @@ function newConsentTab(levelId)
 	}
 	else
 	{
-		alert("check activity");
+		
 			checkActivityStatusForCPR();
 	}
 }
