@@ -233,7 +233,7 @@ function switchToOlderView()
 					</td>
 					<script>
 						distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
-						
+						distributionProtocolNameCombo.setSize(330);
 						if(distributionProtocolNameCombo.getOptionByLabel('${requestScope.DisplayOrderDTO.distributionProtocolName}')==null)
 						{
 						  distributionProtocolNameCombo.setComboValue("-1");		
@@ -278,7 +278,7 @@ function switchToOlderView()
 					<script>
 								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 								  site_combo = new dhtmlXComboFromSelect("siteName");
-								  
+								  site_combo.setSize(330);
  							  	  if(site_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.siteName}')==null)
 								  {
  							  		site_combo.setComboValue("-1");		
