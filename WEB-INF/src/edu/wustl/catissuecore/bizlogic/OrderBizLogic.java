@@ -984,7 +984,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 *             object
 	 */
-	public List getRequestList(String requestStatusSelected, String userName, Long userId)
+	public List getRequestList(String requestStatusSelected, String userName, Long userId,String dpName)
 			throws BizLogicException
 	{
 
@@ -1005,10 +1005,19 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			 * String[] whereColumnName = {"status"}; String[]
 			 * whereColumnCondition = {"in"};
 			 */
-
-			String hql = " from " + OrderDetails.class.getName()
+			String hql=null;
+			if(dpName==null)
+			{	
+			   hql = " from " + OrderDetails.class.getName()
 					+ " order where order.status in ('New','Pending') "
 					+ " order by order.requestedDate desc";
+			}
+			else
+			{
+				hql = "select orderDetails from " + OrderDetails.class.getName()
+						+ " orderDetails left outer join orderDetails.distributionProtocol where orderDetails.status = 'Completed' and orderDetails.distributionProtocol.title='"+dpName
+						+ "' order by orderDetails.requestedDate desc";
+			}
 			orderListFromDB = dao.executeQuery(hql, null);
 			// orderListFromDB = dao.retrieve(OrderDetails.class.getName(),
 			// selectColName,

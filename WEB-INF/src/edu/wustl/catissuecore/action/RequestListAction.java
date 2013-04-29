@@ -37,6 +37,8 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.security.manager.SecurityManagerFactory;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * @author renuka_bajpai
@@ -67,14 +69,21 @@ public class RequestListAction extends SecureAction
 	{
 		final RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
 		String requestFor = request.getParameter(Constants.REQUEST_FOR);
-
+		
+		
 		if(!Validator.isEmpty(requestFor) && requestFor.equals(Constants.GRID_DATA))
 		{
-				setGridData(requestListForm, request, response);
+				String dpName=null;
+				if(request.getParameter("dpName")!=null)
+				{
+					dpName=request.getParameter("dpName").toString();
+				}
+				setGridData(requestListForm, request, response,dpName);
 				
 				return null;
 				
 		}
+		request.setAttribute("dpName", request.getParameter("dpName"));
 		List columnList = new ArrayList();
 		columnList.add("Order Name");
 		columnList.add("Distribution Protocol");
@@ -84,12 +93,22 @@ public class RequestListAction extends SecureAction
 		
 		request.setAttribute("columns", AppUtility.getcolumns(columnList));
 		setNumberOfRequests(requestListForm);
+		
+		final SessionDataBean sessionLoginInfo = this.getSessionData(request);
+		final Long loggedInUserID = sessionLoginInfo.getUserId();
+		final long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
+		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
+		OrderBizLogic orderBizLogic=new OrderBizLogic();
+		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
+				loggedInUserID, role.getName(), sessionLoginInfo);
+		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
+		
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
 
 	private void setGridData(RequestListFilterationForm requestListForm,
-			HttpServletRequest request, HttpServletResponse response) throws BizLogicException {
+			HttpServletRequest request, HttpServletResponse response,String dpName) throws BizLogicException {
 		List<RequestViewBean> requestViewBeanList;
 		final SessionDataBean sessionData = this.getSessionData(request);
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -97,7 +116,7 @@ public class RequestListAction extends SecureAction
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		requestViewBeanList = orderBizLogic.getRequestList(requestListForm
 				.getRequestStatusSelected(), sessionData.getUserName(), sessionData
-				.getUserId());
+				.getUserId(),dpName);
 		
 		try
 		{
