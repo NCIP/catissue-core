@@ -330,8 +330,8 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			String contName = request.getParameter(Constants.CONTAINER_NAME);
 			String selectedContName = request.getParameter(Constants.SELECTED_CONTAINER_NAME);
 			String populateValueInCombo = request.getParameter("populateValueInCombo");
-			final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
-					Constants.SESSION_DATA);
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
 			dao = AppUtility.openDAOSession(sessionData);
 			long cpId = 0;
 			if (!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL))
@@ -343,12 +343,13 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			String spClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
 			StorageContainerForSpecimenBizLogic bizLogic = new StorageContainerForSpecimenBizLogic();
 			LinkedHashMap treeMap = bizLogic.getAutoAllocatedContainerListForSpecimen(
-					AppUtility.setparameterList(cpId, spClass, 0, spType), sessionData, dao, contName);
+					AppUtility.setparameterList(cpId, spClass, 0, spType), sessionData, dao,
+					contName);
 			if (treeMap != null)
 			{
 				containerList = AppUtility.convertMapToList(treeMap);
 			}
-			
+
 			StringBuffer responseString = new StringBuffer(Constants.XML_START);
 			responseString.append("<complete>");
 			NameValueBean virtualBean = new NameValueBean("Virtual", Long.valueOf(-1));
@@ -369,39 +370,39 @@ public class CatissueCommonAjaxAction extends DispatchAction
 				Integer i = 1;
 				for (NameValueBean nvb : containerList)
 				{
-					if (nvb.getName().equals(selectedContName) || Validator.isEmpty(selectedContName))
+					if (nvb.getName().equals(selectedContName)
+							|| Validator.isEmpty(selectedContName))
 					{
-						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(nvb.getValue(),
-								nvb.getName(), populateValueInCombo, true));
+						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(
+								nvb.getValue(), nvb.getName(), populateValueInCombo, true));
 					}
 					else
 					{
-						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(nvb.getValue(),
-								nvb.getName(), populateValueInCombo, false));
+						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(
+								nvb.getValue(), nvb.getName(), populateValueInCombo, false));
 					}
 					i = i + 1;
 				}
 				if (!selContMatched)
 				{
 					Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-					substParams.put("0",
-							new NamedQueryParam(DBTypes.STRING, selectedContName));
-	
+					substParams.put("0", new NamedQueryParam(DBTypes.STRING, selectedContName));
+
 					final List list = ((HibernateDAO) dao).executeNamedQuery(
 							"getStorageContainerIdByContainerName", substParams);
-	
+
 					if (!list.isEmpty())
 					{
 						selectedContId = list.get(0).toString();
-						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(selectedContId,
-								selectedContName, populateValueInCombo, true));
+						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(
+								selectedContId, selectedContName, populateValueInCombo, true));
 					}
-					
+
 				}
-	//			selContMatched = (selContMatched) ? false : true;
-	//			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
-	//					virtualBean.getName(), populateValueInCombo, selContMatched));
-				
+				//			selContMatched = (selContMatched) ? false : true;
+				//			responseString.append(this.addRowToResponseXMLForDHTMLXcombo(i.toString(),
+				//					virtualBean.getName(), populateValueInCombo, selContMatched));
+
 			}
 			responseString.append("</complete>");
 			response.setContentType(Constants.CONTENT_TYPE_XML);
@@ -916,17 +917,21 @@ public class CatissueCommonAjaxAction extends DispatchAction
 
 				Collection<BiohazardDTO> biohazardDTOColl = gson.fromJson(biohazardJSON, listType1);
 				specDTO.setBioHazards(biohazardDTOColl);
-				
+
 				SpecimenBizlogic bizlogic = new SpecimenBizlogic();
 				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
 
 				dao = AppUtility.openDAOSession(sessionDataBean);
-				bizlogic.updateSpecimen(dao, specDTO, sessionDataBean);
+				SpecimenDTO updatedSpecimenDTO = bizlogic.updateSpecimen(dao, specDTO,
+						sessionDataBean);
 
 				dao.commit();
+
 				returnMap.put("msg", "");
 				returnMap.put("success", "success");
+				returnMap.put("updatedSpecimenDTO", gson.toJson(updatedSpecimenDTO));
+
 				boolean isToPrintLabel = Boolean.valueOf(request.getParameter("printLabel"));
 				if (isToPrintLabel)
 				{

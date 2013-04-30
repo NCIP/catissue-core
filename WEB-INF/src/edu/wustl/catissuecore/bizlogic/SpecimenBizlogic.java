@@ -34,7 +34,9 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -54,15 +56,17 @@ public class SpecimenBizlogic
 	 * This will update the specimen object in the database
 	 * @param specimenDTO
 	 * @param sessionDataBean
+	 * @return 
 	 * @throws BizLogicException
 	 */
-	public void updateSpecimen(DAO dao, SpecimenDTO specimenDTO, SessionDataBean sessionDataBean)
-			throws BizLogicException
+	public SpecimenDTO updateSpecimen(DAO dao, SpecimenDTO specimenDTO,
+			SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		Specimen oldSpecimenObj = null;
 		try
 		{
 			//object retrieval for auditing purpose
-			Specimen oldSpecimenObj = (Specimen) dao.retrieveById(Specimen.class.getName(),
+			oldSpecimenObj = (Specimen) dao.retrieveById(Specimen.class.getName(),
 					specimenDTO.getId());
 			//updating the object with DTO
 			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, sessionDataBean, dao);
@@ -101,6 +105,7 @@ public class SpecimenBizlogic
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, null, null);
 		}
+		return this.getDTO(oldSpecimenObj.getId(), dao);
 	}
 
 	/**
@@ -197,16 +202,16 @@ public class SpecimenBizlogic
 			SessionDataBean sessionDataBean, DAO dao) throws ParseException, ApplicationException,
 			CloneNotSupportedException
 	{
-		if (specimenDTO.getActivityStatus() != null)
+		if (!Validator.isEmpty(specimenDTO.getActivityStatus()))
 			oldSpecimenObj.setActivityStatus(specimenDTO.getActivityStatus());
 
-		if (specimenDTO.getLabel() != null)
+		if (!Validator.isEmpty(specimenDTO.getLabel()))
 			oldSpecimenObj.setLabel(specimenDTO.getLabel());
 
 		if (specimenDTO.getQuantity() != null)
 			oldSpecimenObj.setInitialQuantity(specimenDTO.getQuantity());
 
-		if (specimenDTO.getCollectionStatus() != null
+		if (!Validator.isEmpty(specimenDTO.getCollectionStatus())
 				&& specimenDTO.getCollectionStatus().equalsIgnoreCase(
 						Constants.COLLECTION_STATUS_COLLECTED)
 				&& !oldSpecimenObj.getCollectionStatus().equalsIgnoreCase(
@@ -228,7 +233,7 @@ public class SpecimenBizlogic
 		}
 		else
 		{
-			if (specimenDTO.getCollectionStatus() != null)
+			if (!Validator.isEmpty(specimenDTO.getCollectionStatus()))
 				oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
 
 			if (specimenDTO.getAvailableQuantity() != null)
@@ -238,25 +243,25 @@ public class SpecimenBizlogic
 				oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
 		}
 
-		if (specimenDTO.getBarcode() != null)
+		if (!Validator.isEmpty(specimenDTO.getBarcode()))
 			oldSpecimenObj.setBarcode(specimenDTO.getBarcode());
 
-		if (specimenDTO.getClassName() != null)
+		if (!Validator.isEmpty(specimenDTO.getClassName()))
 			oldSpecimenObj.setSpecimenClass(specimenDTO.getClassName());
 
-		if (specimenDTO.getType() != null)
+		if (!Validator.isEmpty(specimenDTO.getType()))
 			oldSpecimenObj.setSpecimenType(specimenDTO.getType());
 
-		if (specimenDTO.getPathologicalStatus() != null)
+		if (!Validator.isEmpty(specimenDTO.getPathologicalStatus()))
 			oldSpecimenObj.setPathologicalStatus(specimenDTO.getPathologicalStatus());
 
-		if (specimenDTO.getTissueSide() != null)
+		if (!Validator.isEmpty(specimenDTO.getTissueSide()))
 			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
 
-		if (specimenDTO.getTissueSite() != null)
+		if (!Validator.isEmpty(specimenDTO.getTissueSite()))
 			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
 
-		if (specimenDTO.getComments() != null)
+		if (!Validator.isEmpty(specimenDTO.getComments()))
 			oldSpecimenObj.setComment(specimenDTO.getComments());
 
 		SpecimenPosition position = new SpecimenPosition();
@@ -346,10 +351,10 @@ public class SpecimenBizlogic
 			}
 		}
 
-		if(externalIdentifierCollection.isEmpty())
+		if (externalIdentifierCollection.isEmpty())
 		{
 			ExternalIdentifier externalIdentifier = new ExternalIdentifier();
-			
+
 			externalIdentifierCollection.add(externalIdentifier);
 		}
 		return externalIdentifierCollection;
@@ -641,6 +646,124 @@ public class SpecimenBizlogic
 				}
 			}
 		}
+	}
+
+	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier, DAO dao)
+			throws BizLogicException
+	{
+		edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = new edu.wustl.catissuecore.dto.SpecimenDTO();
+		try
+		{
+			Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), identifier);
+			specimenDTO.setId(specimen.getId());
+			specimenDTO.setLabel(specimen.getLabel());
+			specimenDTO.setActivityStatus(specimen.getActivityStatus());
+			specimenDTO.setAvailable(specimen.getIsAvailable());
+			specimenDTO.setAvailableQuantity(specimen.getAvailableQuantity());
+			specimenDTO.setBarcode(specimen.getBarcode());
+			specimenDTO.setClassName(specimen.getClassName());
+			specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
+			specimenDTO.setComments(specimen.getComment());
+			//				specimenDTO.setConcentration(specimen.getc)
+			specimenDTO.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(),
+					CommonServiceLocator.getInstance().getDatePattern()));
+			specimenDTO.setLineage(specimen.getLineage());
+			if (specimen.getParentSpecimen() != null)
+			{
+				specimenDTO.setParentSpecimenId(specimen.getParentSpecimen().getId());
+				specimenDTO.setParentSpecimenName(specimen.getParentSpecimen().getLabel());
+			}
+			specimenDTO.setPathologicalStatus(specimen.getPathologicalStatus());
+			specimenDTO.setQuantity(specimen.getInitialQuantity());
+			if (specimen.getSpecimenCollectionGroup() != null)
+			{
+				specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup()
+						.getId());
+				specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup()
+						.getName());
+			}
+			specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
+			specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+			specimenDTO.setType(specimen.getSpecimenType());
+			if (specimen.getSpecimenPosition() != null)
+			{
+				specimenDTO.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
+				specimenDTO.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
+				specimenDTO.setContainerId(specimen.getSpecimenPosition().getStorageContainer()
+						.getId());
+				specimenDTO.setContainerName(specimen.getSpecimenPosition().getStorageContainer()
+						.getName());
+				specimenDTO.setIsVirtual(Boolean.FALSE);
+			}
+			else
+			{
+				specimenDTO.setIsVirtual(Boolean.TRUE);
+			}
+			//				if(specimen.getExternalIdentifierCollection() != null)
+			//				{
+			specimenDTO.setExternalIdentifiers(getExternalIdentifierDTOCollection(specimen));
+			specimenDTO.setBioHazards(getBiohazardDTOCollection(specimen));
+			//				}
+
+		}
+		catch (ApplicationException e)
+		{
+			LOGGER.error(e);
+			throw new BizLogicException(e.getErrorKey(), e, null);
+
+		}
+
+		return specimenDTO;
+	}
+
+	/**
+	 * Populate ExternalIdentifierDTOCollection from Specimen.
+	 * @param specimen
+	 * @return
+	 */
+	private Collection<ExternalIdentifierDTO> getExternalIdentifierDTOCollection(Specimen specimen)
+	{
+		Collection<ExternalIdentifier> externalIdentifiers = specimen
+				.getExternalIdentifierCollection();
+
+		Collection<ExternalIdentifierDTO> externalIdentifierDTOs = new HashSet<ExternalIdentifierDTO>();
+
+		for (ExternalIdentifier externalIdentifier : externalIdentifiers)
+		{
+			ExternalIdentifierDTO externalIdentifierDTO = new ExternalIdentifierDTO();
+
+			externalIdentifierDTO.setId(externalIdentifier.getId());
+			externalIdentifierDTO.setName(externalIdentifier.getName());
+			externalIdentifierDTO.setValue(externalIdentifier.getValue());
+
+			externalIdentifierDTOs.add(externalIdentifierDTO);
+		}
+		return externalIdentifierDTOs;
+	}
+
+	/**
+	 * Populate BiohazardDTOCollection from Specimen.
+	 * @param specimen
+	 * @return
+	 */
+	private Collection<BiohazardDTO> getBiohazardDTOCollection(Specimen specimen)
+	{
+		Collection<Biohazard> biohazards = specimen.getBiohazardCollection();
+
+		Collection<BiohazardDTO> biohazardDTOs = new HashSet<BiohazardDTO>();
+
+		for (Biohazard biohazard : biohazards)
+		{
+			BiohazardDTO biohazardDTO = new BiohazardDTO();
+
+			biohazardDTO.setId(biohazard.getId());
+			biohazardDTO.setName(biohazard.getName());
+			biohazardDTO.setType(biohazard.getType());
+
+			biohazardDTOs.add(biohazardDTO);
+		}
+
+		return biohazardDTOs;
 	}
 
 }
