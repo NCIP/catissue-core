@@ -344,10 +344,10 @@
     		<column name="STATUS"/>
 		</createIndex>
 	</changeSet>
-	<changeSet id="45" author="nitesh" failOnError="false">
+	<changeSet id="45" author="catissue" failOnError="false">
 		<renameColumn tableName="CSM_MIGRATE_USER" oldColumnName="MIGRATED_LOGIN_NAME" newColumnName="WUSTLKEY" columnDataType="${text.type}(100)"/>
 	</changeSet>
-	<changeSet id="45" author="nitesh" failOnError="false">
+	<changeSet id="46" author="catissue" failOnError="false">
 		<sql>update catissue_collection_protocol ccp set ccp.CP_TYPE='Parent' where CP_TYPE is null</sql>
 	</changeSet>
 </databaseChangeLog>         
