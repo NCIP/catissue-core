@@ -709,6 +709,10 @@ function submitTabData()
 			var response = eval('('+loader.xmlDoc.responseText+')')
 			if(response.success == "success")
 			{
+				var updatedSpecimenDTO = JSON.parse(response.updatedSpecimenDTO);
+				document.getElementById('available').checked = updatedSpecimenDTO.available;
+				document.getElementById('availableQuantity').value = updatedSpecimenDTO.availableQuantity;
+							
 				var nodeId= "Specimen_"+document.getElementById("id").value;
 				refreshTree(null,null,null,null,nodeId);
 				document.getElementById('print-error').style.display='none';
