@@ -51,13 +51,13 @@ function submitOrderNew(consentVerifiedValues)
 	}	
 	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getActualValue()=="-1")
 	{
-		alert("Please select distriution protocol.");
+		alert("Please select distribution protocol.");
 		return;
 	}
 	
 	if(site_combo.getActualValue()=="" || site_combo.getActualValue()=="-1")
 	{
-		alert("Please select distriution site.");
+		alert("Please select distribution site.");
 		return;
 	}
 
