@@ -8,7 +8,7 @@
  * Medicine, St. Louis.
  * @author Aniruddha Phadnis
  * @version 1.00 Created on Jul 21, 2005
- *//*
+ */
 
 package edu.wustl.catissuecore.bizlogic;
 
@@ -22,23 +22,23 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.simplequery.query.ShoppingCart;
 
-*//**
+/**
  * ShoppingCartBizLogic provides the shopping cart functionality.
  * @author aniruddha_phadnis
- *//*
+ */
 public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 {
 
-	*//**
+	/**
 	 * Logger object. 
-	 *//*
+	 */
 	private transient final Logger logger = Logger.getCommonLogger(ShoppingCartBizLogic.class);
 
-	*//**
+	/**
 	 * @param cart : cart 
 	 * @param obj : obj
 	 * @throws BizLogicException : BizLogicException
-	 *//*
+	 */
 	public void add(ShoppingCart cart, Object obj[]) throws BizLogicException
 	{
 		try
@@ -47,8 +47,8 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 			{
 				for (final Object element : obj)
 				{
-					final Object object = this.retrieve(Specimen.class.getName(), new Long(element
-							.toString()));
+					final Object object = this.retrieve(Specimen.class.getName(),
+							new Long(element.toString()));
 
 					if (object != null)
 					{
@@ -68,11 +68,11 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 
 	}
 
-	*//**
+	/**
 	 * @param cart : cart
 	 * @param obj : obj
 	 * @return ShoppingCart
-	 *//*
+	 */
 	public ShoppingCart delete(ShoppingCart cart, Object obj[])
 	{
 		if (cart != null && obj != null)
@@ -81,12 +81,12 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 			{
 				final String str = element.toString();
 				final int index = str.indexOf("_") + 1;
-				*//**
+				/**
 				 * Name: Vijay Pande Key was not generated properly to remove
 				 * object from map. Objects re stored in the map on the basis of
 				 * the objectId hence id is retrieved from from String and set
 				 * it as key.
-				 *//*
+				 */
 				final String key = (str.substring(index).trim());
 				cart.remove(key);
 			}
@@ -108,11 +108,11 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 	// Logger.out.error(e.getMessage(), e);
 	// }
 	// }
-	*//**
+	/**
 	 * @param cart : cart
 	 * @param fileName : fileName
 	 * @return List
-	 *//*
+	 */
 	public List export(ShoppingCart cart, Object obj[], String fileName)
 	{
 		List shoppingCartList = null;
@@ -175,4 +175,4 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 
 		return shoppingCartList;
 	}
-}*/
+}

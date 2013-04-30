@@ -9,7 +9,7 @@
  *
  * @author Aniruddha Phadnis
  * @version 1.00 Created on Jul 18, 2005
- *//*
+ */
 
 package edu.wustl.catissuecore.action;
 
@@ -47,19 +47,19 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.simplequery.query.ShoppingCart;
 
-*//**
+/**
  * @author renuka_bajpai
  *
- *//*
+ */
 public class ShoppingCartAction extends BaseAction
 {
 
-	*//**
+	/**
 	 * logger.
-	 *//*
+	 */
 	private transient final Logger logger = Logger.getCommonLogger(ShoppingCartAction.class);
 
-	*//**
+	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
 	 * @param mapping
@@ -73,7 +73,7 @@ public class ShoppingCartAction extends BaseAction
 	 * @throws Exception
 	 *             generic exception
 	 * @return ActionForward : ActionForward
-	 *//*
+	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -106,12 +106,12 @@ public class ShoppingCartAction extends BaseAction
 
 		if (operation == null)
 		{
-			
+			/*
 			 * List specimenList = bizLogic.retrieve(Specimen.class.getName());
 			 * Iterator it = specimenList.iterator(); while(it.hasNext()) {
 			 * Specimen specimen = (Specimen)it.next(); cart.add(specimen); }
 			 * session.setAttribute(Constants.SHOPPING_CART,cart);
-			 
+			 */
 
 			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, this.makeGridData(cart));
 		}
@@ -127,10 +127,10 @@ public class ShoppingCartAction extends BaseAction
 
 				if (pageOff != null && pageOff.equals(Constants.PAGE_OF_QUERY_MODULE))
 				{
-					
+					/*
 					 * List spreadsheetColumns = (List) session
 					 * .getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-					 
+					 */
 					System.out.println("");
 				}
 				// Get the column Ids from session
@@ -141,7 +141,7 @@ public class ShoppingCartAction extends BaseAction
 				final String[] selectedColumns = (String[]) session
 						.getAttribute(Constants.SELECT_COLUMN_LIST);
 
-				*//**
+				/**
 				 * Name: Deepti Description: Query performance issue. Instead of
 				 * saving complete query results in session, resultd will be
 				 * fetched for each result page navigation. object of class
@@ -150,7 +150,7 @@ public class ShoppingCartAction extends BaseAction
 				 * through query result pages. Here, as results are not stored
 				 * in session, the sql is executed again to form the shopping
 				 * cart list.
-				 *//*
+				 */
 				int recordsPerPage = new Integer(recordsPerPageStr);
 				int pageNum = new Integer(pageNo);
 				final QuerySessionData querySessionData = (QuerySessionData) session
@@ -266,10 +266,10 @@ public class ShoppingCartAction extends BaseAction
 				this.logger.debug("map of shopping form:" + map);
 				final Object[] obj = map.keySet().toArray();
 				this.logger.debug("cart in shopping cart action " + cart.getCart());
-				
+				/*
 				 * Deleting the selected rows from Shopping Cart object &
 				 * settingit again in the session
-				 
+				 */
 				session.setAttribute(Constants.SHOPPING_CART, bizLogic.delete(cart, obj));
 			}
 			else if (operation.equals(Constants.EXPORT))
@@ -340,11 +340,11 @@ public class ShoppingCartAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	*//**
+	/**
 	 * This function prepares the data in Grid Format.
 	 * @param cart : cart
 	 * @return List : list
-	 *//*
+	 */
 	private List makeGridData(ShoppingCart cart)
 	{
 		final List gridData = new ArrayList();
@@ -397,13 +397,13 @@ public class ShoppingCartAction extends BaseAction
 		return gridData;
 	}
 
-	*//**
+	/**
 	 *
 	 * @param advForm : advForm
 	 * @param request : request
 	 * @param cart : cart
 	 * @param session : session
-	 *//*
+	 */
 	private void addToOrderLiist(AdvanceSearchForm advForm, HttpServletRequest request,
 			ShoppingCart cart, HttpSession session)
 	{
@@ -432,4 +432,4 @@ public class ShoppingCartAction extends BaseAction
 			}
 		}
 	}
-}*/
+}

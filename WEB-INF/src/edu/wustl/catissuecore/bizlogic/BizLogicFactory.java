@@ -117,9 +117,9 @@ public class BizLogicFactory implements IFactory
 				bizLogic = new NewSpecimenBizLogic();
 				break;
 
-			/*case Constants.SHOPPING_CART_FORM_ID :
+			case Constants.SHOPPING_CART_FORM_ID :
 				bizLogic = new ShoppingCartBizLogic();
-				break;*/
+				break;
 
 			case Constants.DISTRIBUTION_FORM_ID :
 				bizLogic = new DistributionBizLogic();

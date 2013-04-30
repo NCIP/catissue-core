@@ -397,8 +397,7 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="specimen" path="/SpecDistribute.do?typeOf=specimen"
 				redirect="true" />
-			<forward name="specimenArray" path="/SpecArrayDistribute.do?typeOf=specimenArray"
-				redirect="true" />
+			<forward name="specimenArray" path="/SpecArrayDistribute.do?typeOf=specimenArray" />
 			<forward name="pathologyCase"
 				path="/PathologyCaseDistribute.do?typeOf=pathologyCase" redirect="true" />
 			<forward name="failure" path="/ShoppingCart.do" />
@@ -4137,17 +4136,12 @@ PUBLIC
 		<!--Specimen Object View Actions End-->
 
 		<!-- Shopping Cart Actions Begins -->
-		<!-- <action path="/ShoppingCart" type="edu.wustl.catissuecore.action.ShoppingCartAction"
+		 <action path="/ShoppingCart" type="edu.wustl.catissuecore.action.ShoppingCartAction"
 			name="advanceSearchForm" input="/ShoppingCart.do" validate="true"
 			scope="request">
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="success" path=".catissuecore.shoppingCartDef" />
 			<forward name="failure" path=".catissuecore.shoppingCartDef" />
-			
-				forward name="success" path="/pages/content/search/ShoppingCart.jsp"
-				/> <forward name="failure"
-				path="/pages/content/search/ShoppingCart.jsp" /
-			
 			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="requestToOrder" path="/RequestToOrder.do" />
 			<forward name="editMultipleSp"
@@ -4161,7 +4155,7 @@ PUBLIC
 			<forward name="shoppingCartDelete" path="/ShoppingCart.do" />
 			<forward name="shoppingCartExport" path=".catissuecore.searchAddSuccessDef" />
 			<forward name="failure" path="/ShoppingCart.do" />
-		</action> -->
+		</action>
 		
 		<!-- Shopping Cart Actions Ends -->
 

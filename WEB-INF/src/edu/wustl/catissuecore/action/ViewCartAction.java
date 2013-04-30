@@ -40,6 +40,7 @@ public class ViewCartAction extends QueryShoppingCartAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		saveToken(request);
 		// AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
 		final HttpSession session = request.getSession();
 		String target = null;
