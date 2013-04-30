@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.SpecimenDTO;
@@ -58,7 +59,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 			{
 				Long identifier = Long.valueOf(Utility.toLong(obj));
 				NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-				specimenDTO = bizLogic.getDTO(identifier,dao);
+				specimenDTO = new SpecimenBizlogic().getDTO(identifier, dao);
 				request.setAttribute("specimenDTO", specimenDTO);
 				SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 				List<Object> list = bizLogic.getcpIdandPartId(sessionDataBean, obj);
