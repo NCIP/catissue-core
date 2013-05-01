@@ -382,15 +382,6 @@ function getActionToDoURL()
 			{
 			document.forms[0].checkedButton.value=false;
 			document.forms[0].derivedClicked.value=false;
-			<%	ConsentTierData consentForm =(ConsentTierData)form;
-			List consentTier=(List)consentForm.getConsentTiers();
-
-			if(consentTier.size()>0)
-			{%>
-				popupWindow("<%=consentTier.size()%>");
-			<%}else{%>
-				onNormalSubmit();
-			<%}%>
 			}
 		}
 	}
@@ -622,12 +613,12 @@ function getActionToDoURL()
 <%
 if(showSpecList.equals("true"))
 						{%>
-<body onload="initWindow();doOnLoad();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsent('<%=tab%>','<%=form.getConsentTierCounter()%>');">
+<body onload="initWindow();doOnLoad();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');">
 <%
 }
 else
 {%>
-<body onload="initWindow();doOnLoad();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');showConsents('<%=tab%>','<%=form.getConsentTierCounter()%>');">
+<body onload="initWindow();doOnLoad();loadContainerValues('<%=form.isVirtuallyLocated()%>');setContainerValues('<%=containerName%>','<%=pos1%>','<%=pos2%>');">
 <%
 }		int exIdRows=1;
 		int bhRows=1;
@@ -711,7 +702,6 @@ else
 								<html:hidden property="withdrawlButtonStatus"/>
 								<html:hidden property="stringOfResponseKeys"/>
 								<html:hidden property="applyChangesTo"/>
-								<html:hidden property="consentTierCounter"/>
 								<html:hidden property="parentSpecimenId"/>
 								<html:hidden property="onSubmit"/>
 								<html:hidden property="id"/>
@@ -758,7 +748,7 @@ else
 					<td valign="bottom">
 					<a href="#">
 						<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="eventClicked('<%=pageOf%>');" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('${identifiedReportId}','${pageOf}');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a id="consentViewTab" href="#" onClick="consentTab('<%=form.getConsentTierCounter()%>')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
+							<a id="consentViewTab" href="#" onClick=""><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" >
 					</a>
 					</td>
 					<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
@@ -779,11 +769,7 @@ else
 					<img src="images/uIEnhancementImages/new_specimen_selected.gif" alt="Specimen Details"  width="115" height="22" border="0">
 				</a>
 			</td>
-			<td onClick="newConsentTab()" valign="bottom" >
-				<a id="newConsentTab" href="#" onClick="consentTab('<%=form.getConsentTierCounter()%>')">
-					<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" >
-				</a>
-			</td>
+			
 			<td width="90%" class="td_tab_bg" >&nbsp;</td>
 		</tr>
 	</table>
@@ -1547,20 +1533,7 @@ else
 							</div>
 							</td>
 							</tr>
-							<!--  Consent Tracking Module Virender mehta	 -->								<tr>
-							<td class="bottomtd"><div id="consentTable" style="display:none">
-								<%
-								List requestParticipantResponse = (List)request.getAttribute(Constants.SPECIMEN_RESPONSELIST);
-								if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
-								{
-								%>
-								    <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %>
-								<%
-								}
-								%>
-								</div></td>
-							<!--  Consent Tracking Module Virender mehta	 -->
-			 				</tr>
+							
 
         <tr>
           <td valign="middle" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="childSpecimen.label" /></span></td>

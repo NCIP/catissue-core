@@ -1064,7 +1064,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 
 			boolean isUnique = true;
-			if(!ppi.equals(oldPPI))
+			if(ppi!=null && !ppi.equals(oldPPI))
 			{
 				isUnique = this.checkUniqueConstraint(dao, objCollectionProtocol.getId(),ppi);
 			}
