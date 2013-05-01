@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -42,8 +43,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String obj = null;
 		DAO dao = null;
-		request.setAttribute("isSpecimenLabelGeneratorAvl", Variables.isSpecimenLabelGeneratorAvl);
-		request.setAttribute("isSpecimenBarcodeGeneratorAvl",Variables.isSpecimenBarcodeGeneratorAvl);
+
 		if (request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
 		{
 			obj = request.getAttribute(Constants.SYSTEM_IDENTIFIER).toString();
@@ -58,26 +58,35 @@ public class SpecimenEditAction extends CatissueBaseAction
 			if (!Validator.isEmpty(obj))
 			{
 				Long identifier = Long.valueOf(Utility.toLong(obj));
-				NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-				specimenDTO = new SpecimenBizlogic().getDTO(identifier, dao);
+				Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+						identifier);
+				specimenDTO = new SpecimenBizlogic().getDTO(specimen);
 				request.setAttribute("specimenDTO", specimenDTO);
-				SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+
+				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+						.getAttribute(Constants.SESSION_DATA);
+				NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 				List<Object> list = bizLogic.getcpIdandPartId(sessionDataBean, obj);
-				Object[] objArr = (Object[])list.get(0);
+				Object[] objArr = (Object[]) list.get(0);
 				Long cpId = Long.valueOf(objArr[0].toString());
 				request.setAttribute("cpId", cpId);
+
+				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(), dao);
+				if (reportId == null)
+				{
+					reportId = -1l;
+				}
+				else if (AppUtility.isQuarantined(reportId))
+				{
+					reportId = -2l;
+				}
+				final HttpSession session = request.getSession();
+				session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 				
-					Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(),dao);
-					if (reportId == null)
-					{
-						reportId = -1l;
-					}
-					else if (AppUtility.isQuarantined(reportId))
-					{
-						reportId = -2l;
-					}
-					final HttpSession session = request.getSession();
-					session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
+				request.setAttribute("isSpecimenLabelGeneratorAvl",
+						new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(identifier, dao));
+				request.setAttribute("isSpecimenBarcodeGeneratorAvl",
+						Variables.isSpecimenBarcodeGeneratorAvl);
 			}
 			List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
 			specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,
@@ -88,34 +97,34 @@ public class SpecimenEditAction extends CatissueBaseAction
 				specimenClassList.addAll(AppUtility.getSpecimenTypes(specimenDTO.getClassName()));
 			}
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenClassList);
-	
+
 			request.setAttribute(Constants.TISSUE_TYPE_LIST_JSON,
 					gson.toJson(AppUtility.getSpecimenTypes(Constants.TISSUE)));
-	
+
 			request.setAttribute(Constants.FLUID_TYPE_LIST_JSON,
 					gson.toJson(AppUtility.getSpecimenTypes(Constants.FLUID)));
-	
+
 			request.setAttribute(Constants.CELL_TYPE_LIST_JSON,
 					gson.toJson(AppUtility.getSpecimenTypes(Constants.CELL)));
-	
+
 			request.setAttribute(Constants.MOLECULAR_TYPE_LIST_JSON,
 					gson.toJson(AppUtility.getSpecimenTypes(Constants.MOLECULAR)));
-	
+
 			request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST,
 					AppUtility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
 			request.setAttribute(Constants.TISSUE_SITE_LIST, AppUtility.tissueSiteList());
 			request.setAttribute(Constants.TISSUE_SIDE_LIST,
 					AppUtility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
-	
+
 			request.setAttribute(Constants.SPECIMEN_CLASS_LIST, AppUtility.getSpecimenClassList());
-	
+
 			List<NameValueBean> collectionStatusList = new ArrayList<NameValueBean>();
 			for (String status : Constants.SPECIMEN_COLLECTION_STATUS_VALUES)
 			{
 				collectionStatusList.add(new NameValueBean(status, status));
 			}
 			request.setAttribute(Constants.COLLECTIONSTATUSLIST, collectionStatusList);
-	
+
 			List<NameValueBean> activityStatusList = new ArrayList<NameValueBean>();
 			for (String status : Constants.SPECIMEN_ACTIVITY_STATUS_VALUES)
 			{
@@ -125,7 +134,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 			request.setAttribute(Constants.ACTIVITYSTATUSLIST, activityStatusList);
 
 			List<Biohazard> biohazardList = dao.retrieve(Biohazard.class.getName());
-	
+
 			ArrayList<BiohazardDTO> biohazardTypeNameList = new ArrayList<BiohazardDTO>();
 			for (Biohazard biohazard : biohazardList)
 			{
@@ -133,20 +142,20 @@ public class SpecimenEditAction extends CatissueBaseAction
 				biohazardDTO.setId(biohazard.getId());
 				biohazardDTO.setName(biohazard.getName());
 				biohazardDTO.setType(biohazard.getType());
-	
+
 				biohazardTypeNameList.add(biohazardDTO);
 			}
-	
+
 			String biohazardTypeNameListJSON = gson.toJson(biohazardTypeNameList);
 			request.setAttribute(Constants.BIOHAZARD_TYPE_NAME_LIST_JSON, biohazardTypeNameListJSON);
-	
+
 			Long specimenEntityId = null;
-	
+
 			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
 					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
 			{
-				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance()
+						.getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
 			}
 			else
 			{
@@ -157,12 +166,13 @@ public class SpecimenEditAction extends CatissueBaseAction
 			}
 			request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
 			request.setAttribute("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+
 		}
 		finally
 		{
 			AppUtility.closeDAOSession(dao);
 		}
-		
+
 		return mapping.findForward(Constants.PAGE_OF_NEW_SPECIMEN);
 	}
 

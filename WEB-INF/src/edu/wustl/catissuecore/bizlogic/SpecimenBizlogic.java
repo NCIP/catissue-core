@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -25,6 +26,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -71,7 +73,7 @@ public class SpecimenBizlogic
 			//updating the object with DTO
 			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, sessionDataBean, dao);
 
-			if (Variables.isSpecimenLabelGeneratorAvl)
+			if (Variables.isSpecimenLabelGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl)
 			{
 				generateLabel(oldSpecimenObj);
 			}
@@ -105,7 +107,7 @@ public class SpecimenBizlogic
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, null, null);
 		}
-		return this.getDTO(oldSpecimenObj.getId(), dao);
+		return this.getDTO(oldSpecimenObj);
 	}
 
 	/**
@@ -648,70 +650,57 @@ public class SpecimenBizlogic
 		}
 	}
 
-	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Long identifier, DAO dao)
+	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Specimen specimen)
 			throws BizLogicException
 	{
 		edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = new edu.wustl.catissuecore.dto.SpecimenDTO();
-		try
+		//Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), identifier);
+		specimenDTO.setId(specimen.getId());
+		specimenDTO.setLabel(specimen.getLabel());
+		specimenDTO.setActivityStatus(specimen.getActivityStatus());
+		specimenDTO.setAvailable(specimen.getIsAvailable());
+		specimenDTO.setAvailableQuantity(specimen.getAvailableQuantity());
+		specimenDTO.setBarcode(specimen.getBarcode());
+		specimenDTO.setClassName(specimen.getClassName());
+		specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
+		specimenDTO.setComments(specimen.getComment());
+		//				specimenDTO.setConcentration(specimen.getc)
+		specimenDTO.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(),
+				CommonServiceLocator.getInstance().getDatePattern()));
+		specimenDTO.setLineage(specimen.getLineage());
+		if (specimen.getParentSpecimen() != null)
 		{
-			Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), identifier);
-			specimenDTO.setId(specimen.getId());
-			specimenDTO.setLabel(specimen.getLabel());
-			specimenDTO.setActivityStatus(specimen.getActivityStatus());
-			specimenDTO.setAvailable(specimen.getIsAvailable());
-			specimenDTO.setAvailableQuantity(specimen.getAvailableQuantity());
-			specimenDTO.setBarcode(specimen.getBarcode());
-			specimenDTO.setClassName(specimen.getClassName());
-			specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
-			specimenDTO.setComments(specimen.getComment());
-			//				specimenDTO.setConcentration(specimen.getc)
-			specimenDTO.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(),
-					CommonServiceLocator.getInstance().getDatePattern()));
-			specimenDTO.setLineage(specimen.getLineage());
-			if (specimen.getParentSpecimen() != null)
-			{
-				specimenDTO.setParentSpecimenId(specimen.getParentSpecimen().getId());
-				specimenDTO.setParentSpecimenName(specimen.getParentSpecimen().getLabel());
-			}
-			specimenDTO.setPathologicalStatus(specimen.getPathologicalStatus());
-			specimenDTO.setQuantity(specimen.getInitialQuantity());
-			if (specimen.getSpecimenCollectionGroup() != null)
-			{
-				specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup()
-						.getId());
-				specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup()
-						.getName());
-			}
-			specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
-			specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
-			specimenDTO.setType(specimen.getSpecimenType());
-			if (specimen.getSpecimenPosition() != null)
-			{
-				specimenDTO.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
-				specimenDTO.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
-				specimenDTO.setContainerId(specimen.getSpecimenPosition().getStorageContainer()
-						.getId());
-				specimenDTO.setContainerName(specimen.getSpecimenPosition().getStorageContainer()
-						.getName());
-				specimenDTO.setIsVirtual(Boolean.FALSE);
-			}
-			else
-			{
-				specimenDTO.setIsVirtual(Boolean.TRUE);
-			}
-			//				if(specimen.getExternalIdentifierCollection() != null)
-			//				{
-			specimenDTO.setExternalIdentifiers(getExternalIdentifierDTOCollection(specimen));
-			specimenDTO.setBioHazards(getBiohazardDTOCollection(specimen));
-			//				}
-
+			specimenDTO.setParentSpecimenId(specimen.getParentSpecimen().getId());
+			specimenDTO.setParentSpecimenName(specimen.getParentSpecimen().getLabel());
 		}
-		catch (ApplicationException e)
+		specimenDTO.setPathologicalStatus(specimen.getPathologicalStatus());
+		specimenDTO.setQuantity(specimen.getInitialQuantity());
+		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			LOGGER.error(e);
-			throw new BizLogicException(e.getErrorKey(), e, null);
-
+			specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
+			specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup()
+					.getName());
 		}
+		specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
+		specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+		specimenDTO.setType(specimen.getSpecimenType());
+		if (specimen.getSpecimenPosition() != null)
+		{
+			specimenDTO.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
+			specimenDTO.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
+			specimenDTO
+					.setContainerId(specimen.getSpecimenPosition().getStorageContainer().getId());
+			specimenDTO.setContainerName(specimen.getSpecimenPosition().getStorageContainer()
+					.getName());
+			specimenDTO.setIsVirtual(Boolean.FALSE);
+		}
+		else
+		{
+			specimenDTO.setIsVirtual(Boolean.TRUE);
+		}
+
+		specimenDTO.setExternalIdentifiers(getExternalIdentifierDTOCollection(specimen));
+		specimenDTO.setBioHazards(getBiohazardDTOCollection(specimen));
 
 		return specimenDTO;
 	}
@@ -764,6 +753,47 @@ public class SpecimenBizlogic
 		}
 
 		return biohazardDTOs;
+	}
+
+	public boolean isSpecimenLabelGeneratorAvl(Long identifier, DAO dao) throws BizLogicException
+	{
+		boolean generateLabel = Variables.isSpecimenLabelGeneratorAvl;
+
+		if (Variables.isTemplateBasedLblGeneratorAvl)
+		{
+			try
+			{
+				Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+						identifier);
+
+				final CollectionProtocolRegistration collectionProtocolRegistration = specimen
+						.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+
+				String parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol()
+						.getSpecimenLabelFormat();
+
+				String derivativeLabelFormat = collectionProtocolRegistration
+						.getCollectionProtocol().getDerivativeLabelFormat();
+
+				String aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol()
+						.getAliquotLabelFormat();
+
+				String lineage = specimen.getLineage();
+				if (lineage == null || "".equals(lineage))
+				{
+					lineage = Constants.NEW_SPECIMEN;
+				}
+
+				generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat,
+						derivativeLabelFormat, aliquotLabelFormat, lineage);
+			}
+			catch (DAOException e)
+			{
+				LOGGER.error(e.getMessage(), e);
+				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			}
+		}
+		return generateLabel;
 	}
 
 }
