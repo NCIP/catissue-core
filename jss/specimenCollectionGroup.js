@@ -67,10 +67,19 @@ function initializeSCGCombo(operation)
 		clinicalDiagnosisCombo.setOptionWidth(177);
 		clinicalDiagnosisCombo.setSize(177);
 		var collectionProtocolId = document.getElementsByName('collectionProtocolId')[0].value;
-		clinicalDiagnosisCombo.loadXML('ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId );
-		clinicalDiagnosisCombo.setComboText(clinicalDiagnosisValue);
-		clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
-		clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
+		clinicalDiagnosisCombo.loadXML('ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,function(){
+			clinicalDiagnosisCombo.setComboText(clinicalDiagnosisValue);
+			clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
+		
+		});
+		/*clinicalDiagnosisCombo.attachEvent("onOpen",function(){
+		clinicalDiagnosisCombo.enableFilteringMode(true);
+		});*/
+		clinicalDiagnosisCombo.attachEvent("onKeyPressed",function(){
+				clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
+		}); 
+		
+		
 		
 		/*var collectionProtocolEventCombo = new dhtmlXCombo("collectionProtocolEventId","collectionProtocolEventId","100px");;
 		collectionProtocolEventCombo.setOptionWidth(165);
