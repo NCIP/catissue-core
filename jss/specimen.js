@@ -675,7 +675,7 @@ function validateAndProcessComboData(obj)
 function submitTabData()
 {
 	var obj = document.getElementById('label');
-	if(obj!=null && obj.value.trim()=="" && collectionStatusCombo.getComboText()=="Collected")
+	if(obj!=null && obj.value.trim()=="" && collectionStatusCombo.getComboText()=="Collected" && !obj.disabled)
 	{
 		labelSubmit=false;
 		obj.className += " errorStyleOn";
@@ -712,7 +712,19 @@ function submitTabData()
 				var updatedSpecimenDTO = JSON.parse(response.updatedSpecimenDTO);
 				document.getElementById('available').checked = updatedSpecimenDTO.available;
 				document.getElementById('availableQuantity').value = updatedSpecimenDTO.availableQuantity;
-							
+				
+				var labelElement = document.getElementById('label');
+				if(labelElement!=null && updatedSpecimenDTO.label!=null && updatedSpecimenDTO.label!='undefined')
+				{
+					labelElement.value = updatedSpecimenDTO.label;
+				}
+				
+				var barcodeElement = document.getElementById('barcode');
+				if(barcodeElement!=null && updatedSpecimenDTO.barcode!=null && updatedSpecimenDTO.barcode!='undefined')
+				{
+					barcodeElement.value = updatedSpecimenDTO.barcode;
+				}
+				
 				var nodeId= "Specimen_"+document.getElementById("id").value;
 				refreshTree(null,null,null,null,nodeId);
 				document.getElementById('print-error').style.display='none';
