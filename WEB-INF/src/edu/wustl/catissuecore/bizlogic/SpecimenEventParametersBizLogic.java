@@ -154,31 +154,34 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		Iterator<String> specimenIdIt=idList.iterator();
 		final List<String> specimenIds = new ArrayList<String>();
 		//add user validation
-		dao = AppUtility.openDAOSession(sessionDataBean);
-		checkStatusAndGetUserId(obj, dao);
-		dao.closeSession();
-		while(specimenIdIt.hasNext())
+		try 
 		{
-			try 
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			checkStatusAndGetUserId(obj, dao);
+			while(specimenIdIt.hasNext())
 			{
-				dao = AppUtility.openDAOSession(sessionDataBean);
-				SpecimenEventParameters specimenEventParameters=(SpecimenEventParameters) obj.clone();
-				Specimen specimen=new Specimen();
-				specimen.setId(Long.valueOf(specimenIdIt.next()));
-				specimenEventParameters.setSpecimen(specimen);
-				insertEvent(specimenEventParameters, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
-				createdObjectId=specimenEventParameters.getId();
-				dao.commit();
-			}catch (final DAOException daoException) {
+			
+					SpecimenEventParameters specimenEventParameters=(SpecimenEventParameters) obj.clone();
+					Specimen specimen=new Specimen();
+					specimen.setId(Long.valueOf(specimenIdIt.next()));
+					specimenEventParameters.setSpecimen(specimen);
+					insertEvent(specimenEventParameters, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
+					createdObjectId=specimenEventParameters.getId();
+					
+			}
+			dao.commit();
+		}
+		catch (final DAOException daoException) {
 				LOGGER.error(daoException.getMessage(),daoException);
 				throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 						daoException.getMsgValues());	
 			}
+		
 			finally
 			{
 				AppUtility.closeDAOSession(dao);
 			}
-		}
+		
 		return createdObjectId;
 	}
 	
