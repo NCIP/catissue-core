@@ -976,6 +976,8 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			distributionEventDTO.setDistributedQuantity(Double.parseDouble(String.valueOf(arr[1])));
 			String firstName = arr[3]==null? "" : String.valueOf(arr[3]);
 			String lastName = arr[4]==null? "" : String.valueOf(arr[4]);
+			
+			distributionEventDTO.setSiteName(arr[5]!=null?String.valueOf(arr[5]):"");
 			distributionEventDTO.setUser((lastName+" "+firstName).trim());
 			distributionEventDTO.setId(id);
 		}

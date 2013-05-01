@@ -9,6 +9,17 @@ public class DistributionEventDTO {
 	private Double distributedQuantity;
 	private String comment;
 	private Long id;
+	private String siteName;
+	
+	public String getSiteName()
+	{
+		return siteName;
+	}
+	
+	public void setSiteName(String siteName)
+	{
+		this.siteName = siteName;
+	}
 	public String getUser() {
 		return user;
 	}

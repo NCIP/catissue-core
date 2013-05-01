@@ -59,7 +59,14 @@
 							${distEventDTO.comment}
 						</td>
 					</tr>
-					
+					<tr>
+						<td class="noneditable" width="30%">
+							<bean:message key="requestlist.dataTabel.label.Site"/>
+						</td>
+						<td class="noneditable">
+							${distEventDTO.siteName}
+						</td>
+					</tr>
 					
 					
 				</table>
