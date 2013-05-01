@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
       String access = (String)session.getAttribute("Access");
@@ -52,6 +54,42 @@
 </script>
 
 <script>
+
+<!-- Download Scheduled Report -->
+var pageOf="${param.pageOf}";
+var file = "${param.file}";
+var  downloadUrl= "";
+if(pageOf!=null && pageOf!='null'  && pageOf == "pageOfDownload")
+{
+ 
+if(file==null || file== "null") 
+{
+    file = '<%=request.getAttribute("file")%>'; 
+}
+downloadUrl="DownloadAction.do?file="+file;
+}
+
+ if(downloadUrl!="")
+ {
+   dhtmlxAjax.get(downloadUrl+"&message=true",downloadHandler);
+ }
+
+ function downloadHandler(loader)
+ {
+       var message =loader.xmlDoc.responseText;
+       if(message=="You are not authorized to download this file."|| message=="The file has already been deleted.")
+      {
+						alert(message);
+				}
+				else
+				{
+					  window.frames["downloadframe"].document.location.href = downloadUrl ;
+				}
+       }
+
+ 
+<!-- End Of Report Download -->
+
 //Set the alope for the IFrame
 if ( document.getElementById && !(document.all) )
 {
@@ -113,6 +151,7 @@ function hideCursor(){
 				Your Browser doesn't support IFrames.
 			</iframe>
 			</div>
+                        <iframe name="downloadframe" src="" style="display:none"></iframe>  
 			</TD>
 		</TR>
 		</TABLE>
@@ -121,5 +160,5 @@ function hideCursor(){
 			SearchResult.style.height = (document.body.clientHeight - 60) + 'px';
 			SearchResult2=document.getElementById('SearchLeftPart2');
 			SearchResult2.style.height = (document.body.clientHeight - 60) + 'px';
-		</script>
+        </script>
 </body>

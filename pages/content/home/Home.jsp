@@ -14,8 +14,13 @@ table#browserDetailsContainer {
 }
 </style>
 <script language="JavaScript">
-
-	function forgotId()
+   
+var pageOf="${param.pageOf}";
+var file = "${param.file}";
+var url="";
+var  downloadUrl= "";
+  
+    function forgotId()
 	{
 		var url= "https://connect.wustl.edu/login/wuforgotID.aspx";
 		window.open(url,'WustlLoginForm','height=630,width=800,scrollbars=1,resizable=1');
@@ -55,17 +60,17 @@ table#browserDetailsContainer {
 						</div>
 						
 						<div class="help-summary">
-							<div class="container-text container-text-top-margin">
+						    <div class="container-text container-text-top-margin">
 								<img height="14px" src="images/uIEnhancementImages/contact.png">
 								&nbsp&nbsp<bean:message key="login.contactnumber" />
-							</div>
+						    </div>
 							
-							<div class="container-text  container-text-top-margin" >
+						<div class="container-text  container-text-top-margin" >
 								<img  height="14px" src="images/uIEnhancementImages/ic_mail.gif">
 								&nbsp <a href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&amp;FILE_NAME_KEY=app.contactUs.file"><bean:message key="login.contact.us" /></a>
-							</div>
+						</div>
 							
-							<div class="container-text  container-text-top-margin">
+		<div class="container-text  container-text-top-margin">
 								<img  height="14px" src="images/uIEnhancementImages/help-book-open.png">
 								&nbsp&nbsp <a href="https://wiki.nci.nih.gov/display/caTissuedoc/1+-+Overview+for+User%27s+Guide+of+caTissue+Suite+v1.2"><bean:message key="login.usermanual" /></a>
 								
@@ -151,6 +156,27 @@ login.forgot.password=Forgot password?
 			<!--span class="signin">Sign in</span-->
 			<%@ include	file="/pages/content/common/ActionErrors.jsp"%>
 			<html:form styleId="form1" action="/Login.do">
+                             <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
+                              <script>
+                               if(pageOf!=null && pageOf!='null'  && pageOf == "pageOfDownload")
+                              {
+                                url = "Home.do?pageOf="+pageOf+"&file="+file;
+                                document.getElementById("form1").action = url;
+                                document.getElementById("form1").submit();
+                                
+                              }
+                             </script>
+                            </logic:notEmpty>
+                            <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+                             <script>  
+                              if(pageOf!=null && pageOf!='null'  && pageOf == "pageOfDownload")
+                              {
+                                url = "Login.do?pageOf="+pageOf+"&file="+file;
+                                document.getElementById("form1").action = url;                              
+                              }
+                             </script>
+                            </logic:empty>   
+
 				<%
 					String redirectTo =(String) request.getParameter("redirectTo"); 
 					if(redirectTo != null){	
@@ -447,4 +473,5 @@ function loadSummaryCount() {
 			request.send();
 			
     }
+
 </script>
