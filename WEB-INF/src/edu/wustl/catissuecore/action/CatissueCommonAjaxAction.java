@@ -797,6 +797,10 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			fileName = idx >= 0 ? fileName.substring(idx + 1) : fileName;
 			returnedJObject.put("logo", Constants.INSTITUTE_LOGO_WEB_PATH + fileName);
 			returnedJObject.put("link", XMLPropertyHandler.getValue(Constants.INSTITUTE_LINK));
+			returnedJObject.put("userManual", XMLPropertyHandler.getValue("user.manual"));
+			returnedJObject.put("contactNumber", XMLPropertyHandler.getValue("contact.number"));
+			returnedJObject.put("whatsNew", XMLPropertyHandler.getValue("whats.new"));
+			
 			response.setContentType("application/json");
 			response.getWriter().write(returnedJObject.toString());
 		}
