@@ -47,7 +47,7 @@ var  downloadUrl= "";
 					<div style="width:423px;">
 					<span class="black_ar version-header-font theam-font-color"><bean:message key="login.welcome.to" /> <bean:message key="display.app.name" /> <bean:message key="app.version" />
 					</span></br>
-					<a href="http://catissueplus.org/catissue-plus-feature-rich-faster-better-ui" style="text-decoration: none">
+					<a href="" id = "whatsNew" style="text-decoration: none"  target="_blank">
 					<span  class="black_ar theam-font-color-orange" style="font-size:10;float:right"><bean:message key="login.new.release" /></span></a>
 					</div></br>
 					</br>
@@ -62,7 +62,7 @@ var  downloadUrl= "";
 						<div class="help-summary">
 						    <div class="container-text container-text-top-margin">
 								<img height="14px" src="images/uIEnhancementImages/contact.png">
-								&nbsp&nbsp<bean:message key="login.contactnumber" />
+								&nbsp&nbsp<span id="contactNumber"></span>
 						    </div>
 							
 						<div class="container-text  container-text-top-margin" >
@@ -72,7 +72,7 @@ var  downloadUrl= "";
 							
 		<div class="container-text  container-text-top-margin">
 								<img  height="14px" src="images/uIEnhancementImages/help-book-open.png">
-								&nbsp&nbsp <a href="https://wiki.nci.nih.gov/display/caTissuedoc/1+-+Overview+for+User%27s+Guide+of+caTissue+Suite+v1.2"><bean:message key="login.usermanual" /></a>
+								&nbsp&nbsp <a id="userManual" href=""  target="_blank"><bean:message key="login.usermanual" /></a>
 								
 							</div>
 							<br>
@@ -433,6 +433,11 @@ function loadInstituteLogo(){
 				document.getElementById("InstituteLogo").src = myJsonResponse.logo;
 				document.getElementById("instituteLink").href =  myJsonResponse.link;
 				document.getElementById("instituteLink").style.display="";
+				document.getElementById("userManual").href =  myJsonResponse.userManual;
+				document.getElementById("contactNumber").innerHTML = myJsonResponse.contactNumber;
+				document.getElementById("whatsNew").href =  myJsonResponse.whatsNew;
+				
+				
 			}
 			
 			

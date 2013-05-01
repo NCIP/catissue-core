@@ -350,6 +350,19 @@
 		<name>institute.logo.hyperlink</name>
 		<value>@@institute.logo.hyperlink@@</value>
 	</property>
+	<property>
+		<name>user.manual</name>
+		<value>@@user.manual@@</value>
+	</property>
+	<property>
+		<name>contact.number</name>
+		<value>@@contact.number@@</value>
+	</property>
+	<property>
+		<name>whats.new</name>
+		<value>@@whats.new@@</value>
+	</property>
+	
 	
 	
 	 <!-- end -->

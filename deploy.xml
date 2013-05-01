@@ -438,7 +438,7 @@
 		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true" />
 		<if>
-			<not>
+		   <not>
 				<equals arg1="" arg2="${theam.css.path}" />
 			</not>
 			<then>
@@ -866,6 +866,11 @@
 				<replacefilter token="@@spr.dir.location@@" value="${spr.dir.location}" />
 				<replacefilter token="@@theam.css.path@@" value="${theam.css.path}" />
 				<replacefilter token="@@institute.logo.hyperlink@@" value="${institute.logo.hyperlink}" />
+				
+				<replacefilter token="@@user.manual@@" value="${user.manual}" />
+				<replacefilter token="@@contact.number@@" value="${contact.number}" />
+				<replacefilter token="@@whats.new@@" value="${whats.new}" />
+				
 			
 			
 			<!-- Scheduler config -->
