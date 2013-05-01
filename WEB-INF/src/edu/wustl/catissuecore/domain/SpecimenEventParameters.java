@@ -40,7 +40,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 * logger Logger - Generic logger.
 	 */
 	private static Logger logger = Logger.getCommonLogger(SpecimenEventParameters.class);
-
+	
 	/**
 	 * Serial Version ID.
 	 */
@@ -229,7 +229,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 		final SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		logger.debug("specimenEventParametersForm.getSpecimenId()"
 				+ "............................." + specimenEventParametersForm.getSpecimenId());
-		if (this.specimen != null && ! specimenEventParametersForm.getSpecimenId().contains(","))
+		if (this.specimen != null && specimenEventParametersForm.getSpecimenId() != null && ! specimenEventParametersForm.getSpecimenId().contains(","))
 		{
 			this.specimen.setId(Long.valueOf(specimenEventParametersForm.getSpecimenId()));
 		}
