@@ -1084,13 +1084,13 @@
 				<concat destfile="${temp.dir}/web1.xml" >
 					<filelist dir="${temp.dir}" files="web.xml"/>
 						<filterchain>
-							<headfilter lines="83"/>
+							<headfilter lines="98"/>
 						</filterchain>
 				</concat>
 				<concat destfile="${temp.dir}/web2.xml" >
 					<filelist dir="${temp.dir}" files="web.xml"/>
 						<filterchain>
-							<headfilter lines="27" skip="83"/>
+							<headfilter lines="27" skip="98"/>
 								<tokenfilter>
 								 	<replacestring from="-->" to=""/>
 								</tokenfilter>
