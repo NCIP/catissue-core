@@ -1094,11 +1094,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				{
 					final SpecimenPosition specimenPosition = existingSpecimenOrderItem
 							.getSpecimen().getSpecimenPosition();
-					if (specimenPosition != null
-							&& !(existingSpecimenOrderItem.getStatus().equals(
-									Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || existingSpecimenOrderItem
-									.getStatus().equals(
-											Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
+					if (specimenPosition != null)
 					{
 						if (siteIdsList.contains(existingSpecimenOrderItem.getSpecimen()
 								.getSpecimenPosition().getStorageContainer().getSite().getId()))
