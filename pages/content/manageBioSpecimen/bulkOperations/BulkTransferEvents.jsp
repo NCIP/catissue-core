@@ -30,12 +30,12 @@
 <script language="JavaScript" type="text/javascript">
 
 
-function showMap(selectedContainerId,positionDimensionOne,positionDimensionTwo,frameUrl)
+function showMap(selectedContainerId,positionDimensionOne,positionDimensionTwo,frameUrl,specimenClassName,spType,cpId,pageOf)
 		{
 			var storageContainer =document.getElementById(selectedContainerId).value;
 			if(storageContainer!="")
 			{
-				loadDHTMLXWindowForMultipleSpecimen(selectedContainerId,positionDimensionOne,positionDimensionTwo);
+				loadDHTMLXWindowForMultipleSpecimen(selectedContainerId,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,pageOf);
 			}
 			else
 			{
@@ -169,9 +169,11 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 					<!-- To Container Field starts -->
 
 					<%
+					String pageOf = "pageOfBulkEvent";
 					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId+"&amp;"+
 					Constants.CAN_HOLD_SPECIMEN_CLASS+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+ "&amp;" +Constants.CAN_HOLD_SPECIMEN_TYPE+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_SPECTYPE")+ "&amp;" +  Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" +bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID");
-					String buttonOnClicked = "showMap('"+selContainerId+"','"+pos1Id+"','"+pos2Id+"','"+url+"')";//"mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	
+					String buttonOnClicked = "showMap('"+selContainerId+"','"+pos1Id+"','"+pos2Id+"','"+url+"','"+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+"','"+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_SPECTYPE")+"','"+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID")+"','"+pageOf+"')";
+					
 					%>
 					<td class="black_ar"  colspan="2"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
 					<html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="true" /></logic:equal>

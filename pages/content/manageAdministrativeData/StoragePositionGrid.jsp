@@ -688,6 +688,15 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 		var contName = parent.window.document.getElementById(controlName);
 		contName.value=dhtmlxCombo.getSelectedText();
 	}
+	else if(globalPageOf == 'pageOfBulkEvent')
+		{
+		//alert(globalContName);
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById(globalContName);
+			contId.value=dhtmlxCombo.getSelectedValue();
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value=dhtmlxCombo.getSelectedText();
+		}
 	
 	parent.window.dhxWins.window("containerPositionPopUp").close();
 }

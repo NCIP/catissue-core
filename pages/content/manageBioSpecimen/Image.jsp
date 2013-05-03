@@ -796,8 +796,8 @@ function submitTabData()
         alert("No changes to submit");
         return false;
     }   
-    else if( !isEmpty(imageDataJson))
-    {
+    //else if( !isEmpty(imageDataJson))
+    //{
         if(document.getElementById("imageId").value != "")
         {
             imageDataJson["id"] = document.getElementById("imageId").value;
@@ -807,26 +807,34 @@ function submitTabData()
             imageDataJson["equipmentId"] = document.getElementById("equipmentId").value;
         }
         imageDataJson["specimenId"] = ${requestScope.specimenId};
-    }
-    if(!isEmpty(equipDataJson))
-    {
+    //}
+    //if(!isEmpty(equipDataJson))
+    //{
+	//alert(document.getElementById("equipId").value);
         if(document.getElementById("equipId").value != "")
         {
             equipDataJson["id"] = document.getElementById("equipId").value;
         }
-    }
+    //}
 	
     var loader = dhtmlxAjax.postSync("EditSpecimenImage.do","imageJSON="+JSON.stringify(imageDataJson)+"&equipJSON="+JSON.stringify(equipDataJson)+"&specimenId=${requestScope.specimenId}");
     if(loader.xmlDoc.responseText != null)
     {
-   
-    var resp = loader.xmlDoc.responseText;
-        if(resp == "success")
+			var response = eval('('+loader.xmlDoc.responseText+')')
+			if(response.success == "success")
         {
+			document.getElementById('error').style.display="none";
             document.getElementById('success-div').style.display="block";
+			var updatedImageDTO = JSON.parse(response.updatedImageDTO);
+			var updatedEquipDTO = JSON.parse(response.updatedEquipDTO);
+			document.getElementById('imageId').value=updatedImageDTO.id;
+			document.getElementById('equipId').value=updatedEquipDTO.id;
         }
         else
-        document.getElementById('error').style.display="block";
+		{
+			document.getElementById('success-div').style.display="none";
+			document.getElementById('error').style.display="block";
+		}
     }
 }
 function isEmpty(obj) { for(var i in obj) { return false; } return true; }
@@ -882,7 +890,7 @@ function getEquipmentData(obj)
     //alert(key + " -> " + data[key]);
     if(key == 'id')
     {
-        document.getElementById('equipmentId').value=data[key];
+        document.getElementById('equipId').value=data[key];
     }
 	if(key == 'siteId')
 	{
