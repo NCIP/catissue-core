@@ -117,7 +117,8 @@
 			deIdentifiedId : document.getElementsByName("deIdentifiedReportId")[0].value,
 			reportType :reportType
 		}
-		window.parent.downloadReport(reportType,options);
+		var termsConditionURL = "${termsConditionUrl}";
+		window.parent.downloadReport(reportType,options,termsConditionURL);
 		
 	}
 	function downloadSpr(reportType){

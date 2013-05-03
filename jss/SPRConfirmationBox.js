@@ -1,7 +1,7 @@
 var dhxWins;
 	var interVeil;
 	var optionObject;
-	function downloadReport(reportType,option){
+	function downloadReport(reportType,option,termsConditionURL){
 		optionObject = option;
 		interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
 		if(!interVeil||interVeil==null)
@@ -45,7 +45,7 @@ var dhxWins;
 			var div = document.createElement("div");
 		
 			div.id="popupDiv";
-			div.innerHTML = "<div style='padding-left:10px;padding-top:30px;' class='black_ar'><input type='checkbox' name='termCheckbox' id='termCheckbox' value='termCheckbox' onClick='enableAgree()'>I agree to the <a href='#'>Terms & Condiitons.</a></div>"
+			div.innerHTML = "<div style='padding-left:10px;padding-top:30px;' class='black_ar'><input type='checkbox' name='termCheckbox' id='termCheckbox' value='termCheckbox' onClick='enableAgree()'>I agree to the <a href='"+termsConditionURL+"' target='_blank'>Terms & Condiitons.</a></div>"
 			+"<div style='padding-left:10px;padding-top:30px;' class='black_ar'>"+
 			"<input type='button' name='I Agree' onClick='downloadSpr()' id='iAgreeButton' value='I Agree' style='margin-left:45px' disabled><input type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'></div>";
 			document.body.appendChild(div);

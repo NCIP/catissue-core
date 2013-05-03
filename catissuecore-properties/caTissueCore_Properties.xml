@@ -343,6 +343,10 @@
 	</property>
 
 	<property>
+	    <name>spr.dwd.terms.condiition.url</name>
+	    <value>@@spr.dwd.terms.condiition.url@@</value>
+	</property>
+	<property>
 		<name>theam.css.path</name>
 		<value>@@theam.css.path@@</value>
 	</property>

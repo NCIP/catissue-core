@@ -36,6 +36,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.global.Permissions;
@@ -203,6 +204,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		request.setAttribute("cpId",request.getParameter("cpId"));
 		request.setAttribute("cprId",request.getParameter("cprId"));
+		request.setAttribute("termsConditionUrl", XMLPropertyHandler.getValue("spr.dwd.terms.condiition.url"));
 		return mapping.findForward(pageOf);
 
 	}
