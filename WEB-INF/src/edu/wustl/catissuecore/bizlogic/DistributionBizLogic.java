@@ -1002,6 +1002,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 		final Site site = new Site();
 		site.setId(siteId);
+		distribution.setToSite(site);
 
 		final DistributionProtocol distributionProtocol = new DistributionProtocol();
 		distributionProtocol.setId(distributionProtocolId);
