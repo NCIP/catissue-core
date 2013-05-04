@@ -114,15 +114,11 @@ function getActionToDoURL()
 </script>
 <body onload="checkSpecimenStatus();showContainerGrid();">
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
-<tr><td class="black_ar" colspan="4" align="center"><b>Container Map</b>
-</td></tr>
-<tr><td class="black_ar" colspan="4">
-<div id="error" style="height:50%;width:100%;"></div></td></tr>
+<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" ><tr><td class="black_ar" align="right" style="padding-left:5px;padding-right:5px"><b>Container</b></td><td class="black_ar" align="left"><b>Map</b></td><td></td></tr><tr><td class="black_ar" colspan="3"><div id="error" style="height:50%;width:100%;"></div></td></tr>
 <tr>
-	<td width="5%"></td>
-	<td width="5%" align="left" class="black_ar_md" style="padding-top:5px"><b>Name:  </b></td>
-	<td >
+	
+	<td align="right" class="black_ar_md" style="padding-top:5px;padding-right:5px;padding-left:5px"><b>Name:</b></td>
+	<td align="left">
 	
 	<table valign="center" cellpadding="0" cellspacing="0" border="0" >
 						<tr><td width="30%">
@@ -192,8 +188,7 @@ function getActionToDoURL()
 		<td></td>
 	</tr>
 	<tr>
-		<td>
-		</td>
+		
 		<td colspan="3">
 			<div id="containerGrid" style="height:100%;width:100%;">
 			</div>
@@ -473,9 +468,9 @@ function onContainerDetailDisplay(controlName)
 }
 
 function createPositionGrid(responseString)
-{
+{//alert(responseString);
 	var obj = eval('( '+ responseString +')');
-	
+	//alert(obj);
 	var htmlString = "";
 	var posx = obj.posx;
 	var posy = obj.posy;
@@ -497,13 +492,14 @@ function createPositionGrid(responseString)
 	var occupiedPositon = obj.occupiedPositions;
 	var containerMap = eval('( '+ obj.containerMap +')');
 	var titleMap = eval('( '+ obj.titleMap +')');
-	var html="<table  style=\"table-layout: fixed;\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"  width=\"100%\" >";
+	
+	/*var html="<table  style=\"table-layout: fixed;\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"  width=\"100%\" >";
 	html=html+"<tr>";
 	html=html+"	<td style='width:4px;'/>";
 	html=html+"	<td style='width:*' class=\"black_ar_md\"></td>";
 	html=html+"	</tr>";
-	html=html+"<tr><td colspan=2>";
-	html=html+"<table style='table-layout: fixed;' cellspacing='1' cellpadding='0'>";
+	html=html+"<tr><td colspan=2>";*/
+	var html="<table style='table-layout: fixed;' cellspacing='1' cellpadding='0'>";
 	html=html+"<tr>";
 	var temp=parent.window.document.getElementById('storageContainerPosition');
 	var functionName="setTextBoxValueInParent"
