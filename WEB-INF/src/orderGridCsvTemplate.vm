@@ -12,7 +12,7 @@
 #end
 #set ($siteName='')
 #if($orderDetailMap.siteName)
-   #set ($site=$orderDetailMap.siteName)
+   #set ($siteName=$orderDetailMap.siteName)
 #end
 #set ($comments='')
 #if($orderDetailMap.comments)
