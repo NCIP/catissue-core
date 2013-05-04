@@ -1099,7 +1099,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
 			 
 			//persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration.getConsentTierResponseCollection());
-			setConsetResponseCollection(dao, collectionProtocolRegistration,
+			/*setConsetResponseCollection(dao, collectionProtocolRegistration,
 					persistentCPR);
 			this.updateConsentResponseForSCG(persistentCPR,oldCollectionProtocolRegistration, dao);
 			persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
@@ -1107,7 +1107,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					.getConsentSignatureDate());
 			persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration
 					.getSignedConsentDocumentURL());
-		
+		*/
 			persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration
 					.getProtocolParticipantIdentifier());
 			persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());

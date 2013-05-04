@@ -824,8 +824,9 @@ public class Participant extends AbstractDomainObject
 			}
 			logger.debug("ParticipantMedicalIdentifierCollection "
 					+ participantMedicalIdentifierCollection);
-			
+			if(form.getCprId().equals("")){
 			this.setConsentsResponseToCollectionProtocolRegistration(form);
+			}
 		}
 		catch (final Exception excp)
 		{
@@ -873,67 +874,19 @@ public class Participant extends AbstractDomainObject
 	private void setConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration,
 			Collection consentResponseBeanCollection) throws Exception
 	{
-		if (consentResponseBeanCollection != null && !consentResponseBeanCollection.isEmpty())
+		if (collectionProtocolRegistration.getCollectionProtocol() != null)
 		{
-			final Iterator itr = consentResponseBeanCollection.iterator();
-			while (itr.hasNext())
-			{
-				final ConsentResponseBean consentResponseBean = (ConsentResponseBean) itr.next();
-				final long cpIDcollectionProtocolRegistration = collectionProtocolRegistration
-						.getCollectionProtocol().getId().longValue();
-				final long cpIDconsentRegistrationBean = consentResponseBean
-						.getCollectionProtocolID();
-				if (cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean)
-				{
+			final String cpIDcollectionProtocolRegistration = collectionProtocolRegistration
+					.getCollectionProtocol().getId().toString();
+			final Collection consentTierCollection = this
+					.getConsentList(cpIDcollectionProtocolRegistration);
 
-					logger
-							.debug(":: collection protocol id :"
-									+ cpIDcollectionProtocolRegistration);
-					logger.debug(":: collection protocol Registration id  :"
-							+ collectionProtocolRegistration.getId());
-
-					final String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
-					final long witnessId = consentResponseBean.getWitnessId();
-					final String consentDate = consentResponseBean.getConsentDate();
-					final Collection consentTierResponseCollection = this
-							.prepareConsentTierResponseCollection(consentResponseBean
-									.getConsentResponse(), true);
-
-					collectionProtocolRegistration.setSignedConsentDocumentURL(signedConsentUrl);
-					if (witnessId > 0)
-					{
-						final User consentWitness = new User();
-						consentWitness.setId(Long.valueOf(witnessId));
-						collectionProtocolRegistration.setConsentWitness(consentWitness);
-					}
-
-					collectionProtocolRegistration.setConsentSignatureDate(CommonUtilities
-							.parseDate(consentDate));
-					collectionProtocolRegistration
-							.setConsentTierResponseCollection(consentTierResponseCollection);
-					collectionProtocolRegistration.setConsentWithdrawalOption(consentResponseBean
-							.getConsentWithdrawalOption());
-					break;
-				}
-			}
+			final Collection consentTierResponseCollection = this
+					.prepareConsentTierResponseCollection(consentTierCollection, false);
+			collectionProtocolRegistration
+					.setConsentTierResponseCollection(consentTierResponseCollection);
 		}
-		else
-		// Setting default response to collection protocol
-		{
-			if (collectionProtocolRegistration.getCollectionProtocol() != null)
-			{
-				final String cpIDcollectionProtocolRegistration = collectionProtocolRegistration
-						.getCollectionProtocol().getId().toString();
-				final Collection consentTierCollection = this
-						.getConsentList(cpIDcollectionProtocolRegistration);
-
-				final Collection consentTierResponseCollection = this
-						.prepareConsentTierResponseCollection(consentTierCollection, false);
-				collectionProtocolRegistration
-						.setConsentTierResponseCollection(consentTierResponseCollection);
-			}
-		}
-
+	
 	}
 
 	/**
