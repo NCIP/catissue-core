@@ -2421,7 +2421,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 							}
 							continue;
 						}
-
+						orderItem.setDistribtedQuantity(orderItemSubmissionDTO.getDistQty());	
 						specimenEventParametersBizLogic
 								.createDistributionEvent(orderItemSubmissionDTO.getDistQty(),
 										orderItemSubmissionDTO.getComments(),
@@ -2441,7 +2441,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 								orderItemSubmissionDTO.getSpecimenLabel(),Status.ACTIVITY_STATUS_CLOSED.toString(), dao, userId);
 					}
 					
-					orderItem.setDistribtedQuantity(orderItemSubmissionDTO.getDistQty());
 					orderItem.setStatus(orderItemSubmissionDTO.getStatus());
 					orderItem.setDescription(orderItemSubmissionDTO.getComments());
 					dao.update(orderItem);
