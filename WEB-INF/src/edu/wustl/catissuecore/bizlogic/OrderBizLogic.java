@@ -2408,7 +2408,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 							orderErrorDTO.setError(specimenUpdateStatus);
 							orderStatusDTO.getOrderErrorDTOs().add(orderErrorDTO);
 							if (ApplicationProperties.getValue("specimen.closed.unavailable")
-									.equals(specimenUpdateStatus))
+									.equals(specimenUpdateStatus)
+									|| ApplicationProperties.getValue("specimen.virtualLocation")
+											.equals(specimenUpdateStatus))
 							{
 								orderErrorDTO
 										.setNewStatus(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE);
