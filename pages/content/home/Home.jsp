@@ -179,7 +179,12 @@ login.forgot.password=Forgot password?
 
 				<%
 					String redirectTo =(String) request.getParameter("redirectTo"); 
-					if(redirectTo != null){	
+					String pageOf=null;
+					if(request.getParameter("pageOf")!=null)
+					{
+						pageOf=(String) request.getParameter("pageOf");
+					}
+					if(redirectTo != null && pageOf == "pageOfDownload"){	
 				%>
 						<input type='hidden' name='redirectTo' value='<%=redirectTo%>'/>
 				<% 
