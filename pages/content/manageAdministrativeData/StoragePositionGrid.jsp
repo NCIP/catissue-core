@@ -250,6 +250,7 @@ function updatePosition()
 	var storagePosition=parent.window.document.getElementById('storageContainerPosition');
 		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
 		storagePosition.value=newStoragePosition;
+		storagePosition.title=newStoragePosition;
 		var isVirtual=parent.window.document.getElementById('isVirtual');
 		isVirtual.value=false;
 		var container = parent.window.document.getElementById('containerName');
@@ -385,8 +386,9 @@ function updateSpecimenValues(responseText)
 	else if(msg == 'virtual')
 	{
 		var storagePosition=parent.window.document.getElementById('storageContainerPosition');
-		
+		//alert('ddd');
 		storagePosition.value='Virtually Located';
+		storagePosition.title='Virtually Located';
 		var isVirtual=parent.window.document.getElementById('isVirtual');
 		isVirtual.value=true;
 		parent.window.dhxWins.window("containerPositionPopUp").close();
@@ -602,10 +604,16 @@ function setVirtual()
 	}
 	else
 	{
-		var id1 = parent.window.document.getElementById(globalPos1);	
-		id1.value = "";
+		var id1 = parent.window.document.getElementById(globalPos1);
+		if(id1 != null)
+		{
+			id1.value = "";
+		}
 		var id2 = parent.window.document.getElementById(globalPos2);	
-		id2.value = "";
+		if(id2 != null)
+		{
+			id2.value = "";
+		}
 		if(globalPageOf == 'pageOfAntispec')
 		{
 			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
@@ -641,6 +649,14 @@ function setVirtual()
 		else if(globalPageOf == 'pageOfderivative')
 		{
 			var contId = parent.window.document.getElementById('containerId');
+			contId.value='-1';
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
+		}
+		else if(globalPageOf == 'pageOfBulkEvent')
+		{
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById(globalContName);
 			contId.value='-1';
 			var contName = parent.window.document.getElementById(globalContName);
 			contName.value='Virtual';
