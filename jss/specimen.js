@@ -402,7 +402,7 @@ function forwardToChildSpecimen() {
 	}
 	
 	var action;
-	var specimenLabel = document.getElementById('labelValue').value;
+	var specimenLabel = document.getElementById('label').value;
 	var specimenId = document.getElementById("id").value;
 	var scgId = document.getElementById("scgId").value;
 	
@@ -675,7 +675,8 @@ function validateAndProcessComboData(obj)
 function submitTabData()
 {
 	var obj = document.getElementById('label');
-	if(obj!=null && obj.value.trim()=="" && collectionStatusCombo.getComboText()=="Collected" && !obj.disabled)
+	
+	if(obj!=null && obj.value.trim()=="" && collectionStatusCombo.getComboText()=="Collected" && obj.disabled==false)
 	{
 		labelSubmit=false;
 		obj.className += " errorStyleOn";
@@ -717,12 +718,14 @@ function submitTabData()
 				if(labelElement!=null && updatedSpecimenDTO.label!=null && updatedSpecimenDTO.label!='undefined')
 				{
 					labelElement.value = updatedSpecimenDTO.label;
+					document.getElementById('label').disabled = false;
 				}
 				
 				var barcodeElement = document.getElementById('barcode');
 				if(barcodeElement!=null && updatedSpecimenDTO.barcode!=null && updatedSpecimenDTO.barcode!='undefined')
 				{
 					barcodeElement.value = updatedSpecimenDTO.barcode;
+					document.getElementById('barcode').disabled = false;
 				}
 				
 				var nodeId= "Specimen_"+document.getElementById("id").value;
@@ -867,3 +870,20 @@ function validateDate(dt){
 	}
     return true;
  }
+
+function setLabelBarcodeVisibility(isSpecimenLabelGeneratorAvl,isSpecimenBarcodeGeneratorAvl,collectionStatus)
+{
+	if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='true' && collectionStatus!='Collected')
+	{
+		document.getElementById('label').setAttribute('disabled',true);
+		document.getElementById('barcode').setAttribute('disabled',true);
+	}
+	else if(isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='true' && collectionStatus!='Collected')
+	{
+		document.getElementById('barcode').setAttribute('disabled',true);
+	}
+	else if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='false' && collectionStatus!='Collected')
+	{
+		document.getElementById('label').setAttribute('disabled',true);
+	}
+}

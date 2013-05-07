@@ -78,8 +78,6 @@
 <html:hidden name="specimenDTO" property="parentSpecimenId"/>
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
-<html:hidden name="specimenDTO" property="label" styleId="labelValue"/>
-<html:hidden name="specimenDTO" property="barcode" styleId="barcode"/>
 								
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
@@ -168,115 +166,31 @@
 							</label>
 						  </td>
 					</tr>
-						<c:choose>
-							<c:when test="${isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='false' || specimenDTO.collectionStatus=='Collected'}">
-								<tr class="tr_alternate_color_white">
-									<td width="20%" class="black_ar align_right_style">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-										<label for="label">
-											<bean:message key="specimen.label"/>
-										</label>
-									</td>
-									<td align="left" width="30%">
-										<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
-									</td>
+						<tr class="tr_alternate_color_white">
+							<td width="20%" class="black_ar align_right_style">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+								<label for="label">
+									<bean:message key="specimen.label"/>
+								</label>
+							</td>
+							<td align="left" width="30%">
+								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" disabled="false" />
+							</td>
 
-									<td width="20%" class="black_ar align_right_style">
-										<label for="barcode">
-											<bean:message key="specimen.barcode"/>
-										</label>
-									</td>
-								
-									<td width="30%" align="left" class="black_ar">
-										<label for="barcode">
-											<html:text name="specimenDTO" 
-													   styleClass="black_ar" maxlength="255" size="30"
-													   styleId="barcode" property="barcode" onblur="processData(this)"/>
-										</label>
-									</td>
-								</tr>
-							</c:when>
-							<c:otherwise>
-								<c:if test="${isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='true' && specimenDTO.collectionStatus!='Collected'}">
-									<tr class="tr_alternate_color_white">
-										<td width="20%" class="black_ar align_right_style">
-											<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-											<label for="label">
-												<bean:message key="specimen.label"/>
-											</label>
-										</td>
-										<td align="left" width="30%">
-											<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" disabled="true"/>
-										</td>
-
-										<td width="20%" class="black_ar align_right_style">
-											<label for="barcode">
-												<bean:message key="specimen.barcode"/>
-											</label>
-										</td>
-									
-										<td width="30%" align="left" class="black_ar">
-											<label for="barcode">
-												<html:text name="specimenDTO" 
-														   styleClass="black_ar" maxlength="255" size="30"
-														   styleId="barcode" property="barcode" onblur="processData(this)" disabled="true"/>
-											</label>
-										</td>
-									</tr>
-								</c:if>
-								<c:if test="${isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='true' && specimenDTO.collectionStatus!='Collected'}">
-									<tr class="tr_alternate_color_white">
-										<td width="20%" class="black_ar align_right_style">
-											<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
-											<label for="label">
-												<bean:message key="specimen.label"/>
-											</label>
-										</td>
-										<td align="left" width="30%">
-											<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)"/>
-										</td>
-										<td width="20%" class="black_ar align_right_style">
-											<label for="barcode">
-												<bean:message key="specimen.barcode"/>
-											</label>
-										</td>
-										<td width="30%" align="left" class="black_ar">
-											<label for="barcode">
-												<html:text name="specimenDTO" 
-														   styleClass="black_ar" maxlength="255" size="30"
-														   styleId="barcode" property="barcode" onblur="processData(this)" disabled="true"/>
-											</label>
-										</td>
-									</tr>
-								</c:if>
-								<c:if test="${isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='false' && specimenDTO.collectionStatus!='Collected'}">
-									<tr class="tr_alternate_color_white">
-										<td width="20%" class="black_ar align_right_style">
-											<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-											<label for="label">
-												<bean:message key="specimen.label"/>
-											</label>
-										</td>
-										<td align="left" width="30%">
-											<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" name="specimenDTO" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onblur="processData(this)" disabled="true"/>
-										</td>
-										<td width="20%" class="black_ar align_right_style">
-											<label for="barcode">
-												<bean:message key="specimen.barcode"/>
-											</label>
-										</td>
-										<td width="30%" align="left" class="black_ar">
-											<label for="barcode">
-												<html:text name="specimenDTO" 
-														   styleClass="black_ar" maxlength="255" size="30"
-														   styleId="barcode" property="barcode" onblur="processData(this)"/>
-											</label>
-										</td>
-									</tr>
-								</c:if>
-								
-							</c:otherwise>
-						</c:choose>
+							<td width="20%" class="black_ar align_right_style">
+								<label for="barcode">
+									<bean:message key="specimen.barcode"/>
+								</label>
+							</td>
+						
+							<td width="30%" align="left" class="black_ar">
+								<label for="barcode">
+									<html:text name="specimenDTO" 
+											   styleClass="black_ar" maxlength="255" size="30"
+											   styleId="barcode" property="barcode" onblur="processData(this)" disabled="false"/>
+								</label>
+							</td>
+						</tr>
 						<tr class="tr_alternate_color_lightGrey">
 							<td  width="20%" class="black_ar align_right_style">
 								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />	
@@ -719,6 +633,8 @@
 </html:form>
 
 <script>
+setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}');
+
 var nodeId= "Specimen_"+document.getElementById("id").value;
 refreshTree(null,null,null,null,nodeId);
 				
