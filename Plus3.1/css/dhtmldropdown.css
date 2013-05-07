@@ -1,0 +1,82 @@
+/* drop down skin ------------------------------------------------------*/
+div.gridbox_drop{
+    border:1px solid lightgrey;
+}
+div.gridbox_drop .dhx_sub_row
+{
+    background-color:solid;
+}
+div.gridbox_drop .xhdr{
+    display:none;
+}
+div.gridbox_drop .xhdr_last{
+    border:0px;
+    border-left: 1px solid lightgrey;
+}
+div.gridbox_drop table.hdr td {
+   /* color:#616161;*/
+    border:0px;
+	height:0px;
+    border-left: 1px solid lightgrey;
+    text-align: center;
+    margin:0px;
+    /*background-image:url('imgs/header_bg.gif');*/
+    padding: 0px 0px 0px 0px;
+    -moz-user-select:none;
+    -moz-user-select:-moz-none;   
+    overflow:hidden;
+	
+    }
+div.gridbox_drop table.hdr td div.hdrcell{
+    
+    white-space : nowrap;
+    font-family:Verdana;
+    font-size:12px;
+}
+div.gridbox_drop table.obj td {
+    border:0px;
+   	color:#555572;
+    border-right: 0px solid lightgrey;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    -moz-user-select:none;
+    -moz-user-select:-moz-none;   
+    overflow:hidden;
+    padding-top:5px;
+	padding-left:5px;
+    padding-bottom:5px;
+    }
+div.gridbox_drop table.obj tr.rowselected td{
+    background-color:#B2E1FF;
+    color:black;
+    }
+div.gridbox_drop table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
+    background-color:#B2E1FF;
+    }
+div.gridbox_drop table.row20px tr  td{
+    height:22px;
+    white-space: nowrap;
+    padding:1px;
+}
+
+/*------------------------------------------------------------*/
+
+.textStyle
+{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size:12;
+	color:#555572;
+}
+
+.buttonStyle{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size:11;
+	height:35px;
+	width:95%;
+}
+
+.gridHover{
+	background-color:#B2E1FF;
+}

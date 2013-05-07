@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata batchSize="5" templateName="CAT_Onco_Office_Visit">
+<BulkOperationClass  className="MedOnc_Oncology_Appt 2.1"   maxNoOfRecords="1">
+     <hookingInformation>
+    	<attribute name="scgName"  csvColumnName="SCG Name" updateBasedOn="false" />
+     </hookingInformation>
+    
+</BulkOperationClass>
+</BulkOperationMetadata>

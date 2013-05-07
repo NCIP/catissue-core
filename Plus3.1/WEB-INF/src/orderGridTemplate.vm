@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<rows>
+	
+	#foreach( $gridData in $gridPopulateObjectList )
+	 #set ($distributedQuantity=$gridData.requestedQuantity)
+	 #if($gridData.distributedQuantity)
+	   #set ($distributedQuantity=$gridData.distributedQuantity)		
+	 #end
+	 #set ($description='')
+         #if($gridData.description)
+           #set ($description=$gridData.description)
+      #end
+	 <row>
+		<cell><![CDATA[${gridData.specLabel}]]></cell>
+		<cell><![CDATA[${gridData.specimenClass}]]></cell>
+		<cell><![CDATA[${gridData.specimenType}]]></cell>	
+		<cell><![CDATA[${gridData.availableQuantity}]]></cell>
+		<cell><![CDATA[${gridData.requestedQuantity}]]></cell>
+		<cell><![CDATA[${distributedQuantity}]]></cell>
+		<cell><![CDATA[${gridData.status}]]></cell>	
+		<cell><![CDATA[${description}]]></cell>
+		<cell><![CDATA[${gridData.OrderItemId}]]></cell>
+		<cell><![CDATA[${gridData.specimenId}]]></cell>		
+	 </row>
+	#end
+</rows>

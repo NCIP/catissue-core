@@ -1,0 +1,9 @@
+Hello $sharedUser.lastName, $sharedUser.firstName<br>
+<br>
+#if($sharedTags.size() == 1)
+Specimen list by title '<a href=$appUrl/ViewSpecimenList.do?tagId=$sharedTags.get(0).identifier&operation=view >$sharedTags.get(0).label</a> ' has been shared to you by $user.lastName, $user.firstName. You can now access the list after you login to caTissue.
+#else 
+Specimen lists by title #foreach($tag in $sharedTags) #if($velocityCount == $sharedTags.size())'<a href=$appUrl/ViewSpecimenList.do?tagId=$tag.identifier&operation=view >$tag.label</a> '#{else}'<a href=$appUrl/ViewSpecimenList.do?tagId=$tag.identifier&operation=view >$tag.label</a> ',#end #end has been shared to you by $user.lastName, $user.firstName. You can now access the lists after you login to caTissue. 
+#end <br>
+<br>
+$footer

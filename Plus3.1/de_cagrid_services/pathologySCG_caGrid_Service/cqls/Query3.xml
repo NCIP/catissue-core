@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_scg.BaseSolidTissuePathologyAnnotation">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+
+
+			<Association roleName="PathologicalStaging" name="pathology_scg.PathologicalStaging">
+				<Group logicRelation="AND">
+					<Attribute name="id" predicate="IS_NOT_NULL" />
+					<Association roleName="PrimaryTumorStage" name="pathology_scg.PrimaryTumorStage">
+						<Group logicRelation="AND">
+							<Attribute name="primaryTumorStage"
+								value="pT1a - Melanoma 1.0mm or less in thickness and level II or III and no ulceration"
+								predicate="EQUAL_TO" />
+						</Group>
+					</Association>
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>

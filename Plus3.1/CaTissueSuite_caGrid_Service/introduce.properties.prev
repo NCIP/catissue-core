@@ -1,0 +1,11 @@
+#Introduce Properties
+#Mon Nov 15 16:51:17 GMT+05:30 2010
+introduce.skeleton.services.list=CaTissueSuite
+introduce.skeleton.extensions=cagrid_metadata,data
+introduce.skeleton.timestamp=1289820057678
+introduce.skeleton.service.name=CaTissueSuite
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=C\:\\Documents and Settings\\pavan_kalantri\\CaTissueSuite
+introduce.skeleton.namespace.domain=http\://catissuecore.wustl.edu/CaTissueSuite
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x http\://gov.nih.nci.cagrid.data/DataServiceExceptions -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common
+introduce.soap.binding.excludes=\ gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain

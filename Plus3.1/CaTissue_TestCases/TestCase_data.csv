@@ -1,0 +1,11 @@
+TestId,TestCaseName,Values
+1,testApplicationInitialization,
+2,testFirstTimeLogin,admin@admin.com|Test123|Login123
+3,testSuccessfulLogin,admin@admin.com|Login123
+4,testInstitutionAdd,Inst_123
+5,testInstitutionAddWithSameName,Inst_123
+6,testDepartmentAdd,Dept_123
+7,testDepartmentAddWithSameName,Dept_123
+8,testCancerResearchGroupAdd,CRG_123
+9,testCancerResearchGroupAddWithSameName,CRG_123
+10,testLogout,

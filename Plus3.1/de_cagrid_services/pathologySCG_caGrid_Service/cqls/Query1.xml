@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_scg.BaseHaematologyPathologyAnnotation">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+			<Association roleName="immunoPhenotyping" name="pathology_scg.ImmunoPhenotyping">
+				<Group logicRelation="AND">
+					<Attribute name="id" predicate="IS_NOT_NULL" />
+					<Attribute name="methodUsed" predicate="IS_NOT_NULL" />
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>

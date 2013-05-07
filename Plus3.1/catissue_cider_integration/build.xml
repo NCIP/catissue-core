@@ -1,0 +1,84 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for Common package-->
+<project name="CiderIntegration" default="compile">
+	<!--define require dir and Properties -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	<!--define require dir and Properties -->
+	<property name="base.dir" value="." />
+	<property name="src.dir" value="${base.dir}/src" />
+	<property name="target.dir" value="${base.dir}/classes" />	
+	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="build.dir" value="${base.dir}/build" />
+	<!--<loadfile property="dist.revision" srcFile="./.svn/entries">  
+				<filterchain>  
+					<headfilter lines="1" skip="4"/>
+				</filterchain>  
+		</loadfile>-->
+	
+	<path id="app.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	
+	<!-- sub tasks -->
+	<target name="init">
+		<!-- Create the build directory structure used by compile -->
+		<delete dir="${target.dir}" failonerror="false"/>
+		<mkdir dir="${target.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<!-- Compile all files -->
+	<target name="compile" depends="init">
+		<javac destdir="${target.dir}" includes="**/*.*" debug="on" includeAntRuntime="false" target="1.5">
+			<src path="${src.dir}" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>		
+		<copy todir="${target.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+				
+			</fileset>			
+		</copy>				
+	</target>
+	
+		<!--Create zip file of common package source files.-->
+	<target name="build_code_zip" depends="compile">
+		<delete>
+			<fileset dir="${build.dir}" includes="**/*" />
+		</delete>
+		<zip destfile="${build.dir}/ciderIntegration-src.zip">
+			<fileset dir="${src.dir}" includes="**/*" />
+		</zip>
+	</target>
+
+	<target name="build_jar" depends="build_code_zip,compile">		
+		<tstamp />
+		<jar taskname="build_jar" jarfile="${build.dir}/ciderIntegration.jar">
+			<fileset dir="${target.dir}">
+				<include name="**/*" />
+				
+			</fileset>
+			
+			<manifest>
+				<section name="Cider Integration">
+				    <attribute name="Version" value="1.1"/>
+					<attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+			   	   	<attribute name="SVN-URL" value="${dist.revision}" />
+			   	</section>   	   					
+			</manifest>
+		</jar>
+	</target>
+	
+</project>

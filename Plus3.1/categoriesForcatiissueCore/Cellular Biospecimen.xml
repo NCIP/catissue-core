@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Category name="Cellular Biospecimen" description="Cellular biospecimen information includes the tissue site, the participant's diagnosis and clinical status, and review parameters such as the percent of viable cells and percent neoplastic cells.">
+  <CategorialClass name="edu.wustl.catissuecore.domain.Specimen" IdOfPathFromParentToThis="-1"> <!-- root -->
+    <Attribute name = "pathologicalStatus" displayName = "Pathological Status"/>
+    <Attribute name = "label" displayName = "Specimen Label"/>    
+    <Attribute name = "type" displayName = "Specimen Type"/>
+    <Attribute name = "comments" displayName = "Specimen Comments"/>
+     <Attribute name = "barcode" displayName = "Barcode"/>
+    
+      <CategorialClass name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" IdOfPathFromParentToThis="1642">
+         <Attribute name = "clinicalDiagnosis" displayName = "Clinical Diagnosis"/>
+          <Attribute name = "clinicalStatus" displayName = "Clinical Status"/>
+      </CategorialClass>    
+      
+      <CategorialClass name="edu.wustl.catissuecore.domain.SpecimenCharacteristics" IdOfPathFromParentToThis="1234"> 
+          <Attribute name = "tissueSide" displayName = "Tissue Side"/>
+          <Attribute name = "tissueSite" displayName = "Tissue Site"/>          
+      </CategorialClass>
+      
+      <CategorialClass name="edu.wustl.catissuecore.domain.SpecimenEventParameters" IdOfPathFromParentToThis="1231"> 
+          <Attribute name = "timestamp" displayName = "Timestamp"/>
+          <Attribute name = "comments" displayName = "SpecimenEventParameters Comments"/>
+      </CategorialClass>
+      
+      <CategorialClass name="edu.wustl.catissuecore.domain.ExternalIdentifier" IdOfPathFromParentToThis="1774"> 
+          <Attribute name = "name" displayName = "Name"/>
+          <Attribute name = "value" displayName = "Value"/>
+      </CategorialClass>
+      
+       <CategorialClass name="edu.wustl.catissuecore.domain.Quantity" IdOfPathFromParentToThis="1561"> 
+          <Attribute name = "value" displayName = "Available Quantity"/>
+      </CategorialClass>
+      
+       <CategorialClass name="edu.wustl.catissuecore.domain.Quantity" IdOfPathFromParentToThis="1562"> 
+          <Attribute name = "value" displayName = "Quantity"/>
+      </CategorialClass>        
+  </CategorialClass>
+</Category>
+    
+    
+    
+    
+    
+
+
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+	
+	<changeSet id="1" author="catissue">
+
+
+		<!-- CREATE TABLE LABELSQL -->
+		<createTable tableName="LABELSQL">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="LABEL" type="${text.type}(255)">
+				<constraints unique="true" nullable="true" />
+			</column>
+			<column name="QUERY" type="${text.type}(1024)">
+			</column>
+		</createTable>
+		
+		
+	
+		<!-- CREATE TABLE LABELSQLASSOC -->
+		<createTable tableName="LABELSQLASSOC">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="CPID" type="${int.type}"/>
+			<column name="LABELSQLID" type="${int.type}"/>
+			<column name="USER_DEFINED_LABEL" type="${text.type}(255)"/>
+			<column name="SEQ_ORDER" type="${smallint.type}"/>	
+		</createTable>
+		
+		
+		
+		<!-- FOREIGN KEY FOR CPID-->
+		<addForeignKeyConstraint constraintName="FK_CP"
+			baseTableName="LABELSQLASSOC" baseColumnNames="CPID"
+			referencedTableName="CATISSUE_COLLECTION_PROTOCOL" referencedColumnNames="IDENTIFIER" />
+		
+		<!-- FOREIGN KEY LABELSQLID-->
+		<addForeignKeyConstraint constraintName="FK_LABELSQL"
+			baseTableName="LABELSQLASSOC" baseColumnNames="LABELSQLID"
+			referencedTableName="LABELSQL" referencedColumnNames="IDENTIFIER" />
+
+		
+			
+	</changeSet>
+	
+	<changeSet id="2" author="catissue" dbms="mysql">
+		<addAutoIncrement tableName="LABELSQL" columnName="IDENTIFIER" columnDataType="${int.type}"/>
+		<addAutoIncrement tableName="LABELSQLASSOC" columnName="IDENTIFIER" columnDataType="${int.type}"/>
+	</changeSet>
+	
+	<changeSet id="3" author="catissue" dbms="oracle">
+		<!-- CREATE SEQUENCE FOR LABELSQL_IDENTIFIER_SEQ -->
+		<createSequence sequenceName="LABELSQL_IDENTIFIER_SEQ"
+			startValue="1" incrementBy="1" minValue="1" ordered="true" />
+
+		<!-- CREATE SEQUENCE FOR labelsqlassoc_identifier_seq -->
+		<createSequence sequenceName="LABELSQLASSOC_IDENTIFIER_SEQ"
+			startValue="1" incrementBy="1" minValue="1" ordered="true" />
+		
+	</changeSet>
+	
+</databaseChangeLog>         

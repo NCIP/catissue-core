@@ -1,0 +1,24 @@
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_scg.KidneyBiopsyBasedPathologyAnnotation">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+
+			<Association roleName="HistologicType" name="pathology_scg.HistologicType">
+				<Group logicRelation="AND">
+					<Attribute name="type" value="Acinar Cell Carcinoma"
+						predicate="EQUAL_TO" />
+
+					<Association roleName="HistologicVariantType"
+						name="pathology_scg.HistologicVariantType">
+						<Group logicRelation="AND">
+
+							<Attribute name="otherHistologicType" value="Acinar Cell Carcinoma"
+								predicate="EQUAL_TO" />
+
+						</Group>
+					</Association>
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>

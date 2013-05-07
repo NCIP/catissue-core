@@ -1,0 +1,1278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://www.castor.org/mapping.dtd">
+
+<mapping>
+  <class name="pathology_scg.ExcisionalBiopsyColorectalLateralOrMucosalMargin" identity="id">
+    <map-to xml="ExcisionalBiopsyColorectalLateralOrMucosalMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="excisionalBiopsyBasedColorectalPathologyAnnotation" type="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation">
+      <bind-xml name="ExcisionalBiopsyBasedColorectalPathologyAnnotation" type="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation" location="excisionalBiopsyBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.PolypConfiguration" identity="id">
+    <map-to xml="PolypConfiguration" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="stalkLength" type="double">
+      <bind-xml name="stalkLength" node="attribute" />
+    </field>
+    <field name="configuration" type="string">
+      <bind-xml name="configuration" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.DistanceFromAnalVerge" identity="id">
+    <map-to xml="DistanceFromAnalVerge" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="lengthInCentimeters" type="long">
+      <bind-xml name="lengthInCentimeters" node="attribute" />
+    </field>
+    <field name="distanceKnown" type="boolean">
+      <bind-xml name="distanceKnown" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.PancreasMarginUninvolvedByInvasiveCarcinoma" identity="id">
+    <map-to xml="PancreasMarginUninvolvedByInvasiveCarcinoma" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+    <field name="CarcinomaInSituStatus" type="pathology_scg.CarcinomaInSituStatus" collection="collection">
+      <bind-xml name="CarcinomaInSituStatus" type="pathology_scg.CarcinomaInSituStatus" location="CarcinomaInSituStatus" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.PancreasMargin" identity="id">
+    <map-to xml="PancreasMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="PancreasMarginInvolvedByInvasiveCarcinoma" type="pathology_scg.PancreasMarginInvolvedByInvasiveCarcinoma" collection="collection">
+      <bind-xml name="PancreasMarginInvolvedByInvasiveCarcinoma" type="pathology_scg.PancreasMarginInvolvedByInvasiveCarcinoma" location="PancreasMarginInvolvedByInvasiveCarcinoma" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ExcionalBiopsyMarginUninvolved" identity="id">
+    <map-to xml="ExcionalBiopsyMarginUninvolved" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.ExcisionalBiopsyColorectalDeepMargin" identity="id">
+    <map-to xml="ExcisionalBiopsyColorectalDeepMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="excisionalBiopsyBasedColorectalPathologyAnnotation" type="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation">
+      <bind-xml name="ExcisionalBiopsyBasedColorectalPathologyAnnotation" type="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation" location="excisionalBiopsyBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.SatelliteNodule" identity="id">
+    <map-to xml="SatelliteNodule" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="site" type="string">
+      <bind-xml name="site" node="attribute" />
+    </field>
+    <field name="MelanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation">
+      <bind-xml name="MelanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation" location="MelanomaPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.DeepMelanomaMargin" identity="id">
+    <map-to xml="DeepMelanomaMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="melanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation">
+      <bind-xml name="MelanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation" location="melanomaPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.Cytogenetics" identity="id">
+    <map-to xml="Cytogenetics" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="result" type="string">
+      <bind-xml name="result" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.ImmunoPhenotyping" identity="id">
+    <map-to xml="ImmunoPhenotyping" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+    <field name="result" type="string">
+      <bind-xml name="result" node="attribute" />
+    </field>
+    <field name="methodUsed" type="string">
+      <bind-xml name="methodUsed" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.MacroscopicExtentOfTumor" identity="id">
+    <map-to xml="MacroscopicExtentOfTumor" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="extentOfTumor" type="string">
+      <bind-xml name="extentOfTumor" node="attribute" />
+    </field>
+    <field name="KidneyNephrectomyBasedPathologyAnnotation" type="pathology_scg.KidneyNephrectomyBasedPathologyAnnotation">
+      <bind-xml name="KidneyNephrectomyBasedPathologyAnnotation" type="pathology_scg.KidneyNephrectomyBasedPathologyAnnotation" location="KidneyNephrectomyBasedPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.KidneyMarginLocation" identity="id">
+    <map-to xml="KidneyMarginLocation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherLocation" type="string">
+      <bind-xml name="otherLocation" node="attribute" />
+    </field>
+    <field name="location" type="string">
+      <bind-xml name="location" node="attribute" />
+    </field>
+    <field name="KidneyNephrectomyMargin" type="pathology_scg.KidneyNephrectomyMargin">
+      <bind-xml name="KidneyNephrectomyMargin" type="pathology_scg.KidneyNephrectomyMargin" location="KidneyNephrectomyMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.KidneyNephrectomyMargin" identity="id">
+    <map-to xml="KidneyNephrectomyMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="KidneyMarginLocation" type="pathology_scg.KidneyMarginLocation" collection="collection">
+      <bind-xml name="KidneyMarginLocation" type="pathology_scg.KidneyMarginLocation" location="KidneyMarginLocation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.PancreasMarginInvolvedByInvasiveCarcinoma" identity="id">
+    <map-to xml="PancreasMarginInvolvedByInvasiveCarcinoma" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherMarginLocation" type="string">
+      <bind-xml name="otherMarginLocation" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="PancreasMargin" type="pathology_scg.PancreasMargin">
+      <bind-xml name="PancreasMargin" type="pathology_scg.PancreasMargin" location="PancreasMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.UninvolvedMelanomaMargin" identity="id">
+    <map-to xml="UninvolvedMelanomaMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.GleasonScore" identity="id">
+    <map-to xml="GleasonScore" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="tertiaryPatternScore" type="string">
+      <bind-xml name="tertiaryPatternScore" node="attribute" />
+    </field>
+    <field name="secondaryPatternScore" type="string">
+      <bind-xml name="secondaryPatternScore" node="attribute" />
+    </field>
+    <field name="primaryPatternScore" type="string">
+      <bind-xml name="primaryPatternScore" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.DistantMetastasis" identity="id">
+    <map-to xml="DistantMetastasis" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="metastasisStage" type="string">
+      <bind-xml name="metastasisStage" node="attribute" />
+    </field>
+    <field name="MetastasisTissueSite" type="pathology_scg.MetastasisTissueSite" collection="collection">
+      <bind-xml name="MetastasisTissueSite" type="pathology_scg.MetastasisTissueSite" location="MetastasisTissueSite" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.RegionalLymphNode" identity="id">
+    <map-to xml="RegionalLymphNode" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="mattedNodes" type="string">
+      <bind-xml name="mattedNodes" node="attribute" />
+    </field>
+    <field name="numberPositiveMicroscopically" type="long">
+      <bind-xml name="numberPositiveMicroscopically" node="attribute" />
+    </field>
+    <field name="numberPositiveMacroscopically" type="long">
+      <bind-xml name="numberPositiveMacroscopically" node="attribute" />
+    </field>
+    <field name="numberInvolved" type="long">
+      <bind-xml name="numberInvolved" node="attribute" />
+    </field>
+    <field name="numberExamined" type="long">
+      <bind-xml name="numberExamined" node="attribute" />
+    </field>
+    <field name="lymphNodeStage" type="string">
+      <bind-xml name="lymphNodeStage" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.PathologicalStaging" identity="id">
+    <map-to xml="PathologicalStaging" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.HistologicGrade" identity="id">
+    <map-to xml="HistologicGrade" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="grade" type="string">
+      <bind-xml name="grade" node="attribute" />
+    </field>
+    <field name="otherGradingSystemName" type="string">
+      <bind-xml name="otherGradingSystemName" node="attribute" />
+    </field>
+    <field name="gradingSystemName" type="string">
+      <bind-xml name="gradingSystemName" node="attribute" />
+    </field>
+    <field name="BaseSolidTissuePathologyAnnotation" type="pathology_scg.BaseSolidTissuePathologyAnnotation">
+      <bind-xml name="BaseSolidTissuePathologyAnnotation" type="pathology_scg.BaseSolidTissuePathologyAnnotation" location="BaseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.TumorSize" identity="id">
+    <map-to xml="TumorSize" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="greatestDimension" type="double">
+      <bind-xml name="greatestDimension" node="attribute" />
+    </field>
+    <field name="additionalDimensionTwo" type="double">
+      <bind-xml name="additionalDimensionTwo" node="attribute" />
+    </field>
+    <field name="additionalDimensionOne" type="double">
+      <bind-xml name="additionalDimensionOne" node="attribute" />
+    </field>
+    <field name="cannotBeDetermined" type="boolean">
+      <bind-xml name="cannotBeDetermined" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.Invasion" identity="id">
+    <map-to xml="Invasion" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="perineuralInvasion" type="string">
+      <bind-xml name="perineuralInvasion" node="attribute" />
+    </field>
+    <field name="venousInvasion" type="string">
+      <bind-xml name="venousInvasion" node="attribute" />
+    </field>
+    <field name="lymphaticInvasion" type="string">
+      <bind-xml name="lymphaticInvasion" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.Details" identity="id">
+    <map-to xml="Details" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="detail" type="string">
+      <bind-xml name="detail" node="attribute" />
+    </field>
+    <field name="AdditionalFinding" type="pathology_scg.AdditionalFinding">
+      <bind-xml name="AdditionalFinding" type="pathology_scg.AdditionalFinding" location="AdditionalFinding" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.AdditionalFinding" identity="id">
+    <map-to xml="AdditionalFinding" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="pathologicFinding" type="string">
+      <bind-xml name="pathologicFinding" node="attribute" />
+    </field>
+    <field name="Details" type="pathology_scg.Details" collection="collection">
+      <bind-xml name="Details" type="pathology_scg.Details" location="Details" node="element" />
+    </field>
+    <field name="BasePathologyAnnotation" type="pathology_scg.BasePathologyAnnotation">
+      <bind-xml name="BasePathologyAnnotation" type="pathology_scg.BasePathologyAnnotation" location="BasePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.HistologicVariantType" identity="id">
+    <map-to xml="HistologicVariantType" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherHistologicType" type="string">
+      <bind-xml name="otherHistologicType" node="attribute" />
+    </field>
+    <field name="HistologicType" type="pathology_scg.HistologicType">
+      <bind-xml name="HistologicType" type="pathology_scg.HistologicType" location="HistologicType" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.HistologicType" identity="id">
+    <map-to xml="HistologicType" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="type" type="string">
+      <bind-xml name="type" node="attribute" />
+    </field>
+    <field name="BasePathologyAnnotation" type="pathology_scg.BasePathologyAnnotation">
+      <bind-xml name="BasePathologyAnnotation" type="pathology_scg.BasePathologyAnnotation" location="BasePathologyAnnotation" node="element" />
+    </field>
+    <field name="HistologicVariantType" type="pathology_scg.HistologicVariantType" collection="collection">
+      <bind-xml name="HistologicVariantType" type="pathology_scg.HistologicVariantType" location="HistologicVariantType" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.BasePathologyAnnotation" identity="id">
+    <map-to xml="BasePathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="otherSpecimenProcedure" type="string">
+      <bind-xml name="otherSpecimenProcedure" node="attribute" />
+    </field>
+    <field name="specimenProcedure" type="string">
+      <bind-xml name="specimenProcedure" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_BasePathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_BasePathologyAnnotation" node="element" />
+    </field>
+    <field name="HistologicType" type="pathology_scg.HistologicType" collection="collection">
+      <bind-xml name="HistologicType" type="pathology_scg.HistologicType" location="HistologicType" node="element" />
+    </field>
+    <field name="additionalFinding" type="pathology_scg.AdditionalFinding" collection="collection">
+      <bind-xml name="AdditionalFinding" type="pathology_scg.AdditionalFinding" location="additionalFinding" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.CarcinomaInSituStatus" identity="id">
+    <map-to xml="CarcinomaInSituStatus" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+    <field name="PancreasMarginUninvolvedByInvasiveCarcinoma" type="pathology_scg.PancreasMarginUninvolvedByInvasiveCarcinoma">
+      <bind-xml name="PancreasMarginUninvolvedByInvasiveCarcinoma" type="pathology_scg.PancreasMarginUninvolvedByInvasiveCarcinoma" location="PancreasMarginUninvolvedByInvasiveCarcinoma" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.MetastasisTissueSite" identity="id">
+    <map-to xml="MetastasisTissueSite" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherTissueSite" type="string">
+      <bind-xml name="otherTissueSite" node="attribute" />
+    </field>
+    <field name="tissueSite" type="string">
+      <bind-xml name="tissueSite" node="attribute" />
+    </field>
+    <field name="distantMetastasis" type="pathology_scg.DistantMetastasis">
+      <bind-xml name="DistantMetastasis" type="pathology_scg.DistantMetastasis" location="distantMetastasis" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.PrimaryTumorStage" identity="id">
+    <map-to xml="PrimaryTumorStage" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="primaryTumorStage" type="string">
+      <bind-xml name="primaryTumorStage" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.TumorTissueSite" identity="id">
+    <map-to xml="TumorTissueSite" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherSite" type="string">
+      <bind-xml name="otherSite" node="attribute" />
+    </field>
+    <field name="site" type="string">
+      <bind-xml name="site" node="attribute" />
+    </field>
+    <field name="TissueSide" type="pathology_scg.TissueSide" collection="collection">
+      <bind-xml name="TissueSide" type="pathology_scg.TissueSide" location="TissueSide" node="element" />
+    </field>
+    <field name="baseSolidTissuePathologyAnnotation" type="pathology_scg.BaseSolidTissuePathologyAnnotation">
+      <bind-xml name="BaseSolidTissuePathologyAnnotation" type="pathology_scg.BaseSolidTissuePathologyAnnotation" location="baseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.TissueSide" identity="id">
+    <map-to xml="TissueSide" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="side" type="string">
+      <bind-xml name="side" node="attribute" />
+    </field>
+    <field name="TumorTissueSite" type="pathology_scg.TumorTissueSite">
+      <bind-xml name="TumorTissueSite" type="pathology_scg.TumorTissueSite" location="TumorTissueSite" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.DirectExtensionOfTumor" identity="id">
+    <map-to xml="DirectExtensionOfTumor" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="extensionOfTumor" type="string">
+      <bind-xml name="extensionOfTumor" node="attribute" />
+    </field>
+    <field name="LungResectionBasedPathologyAnnotation" type="pathology_scg.LungResectionBasedPathologyAnnotation">
+      <bind-xml name="LungResectionBasedPathologyAnnotation" type="pathology_scg.LungResectionBasedPathologyAnnotation" location="LungResectionBasedPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LungResectionMargin" identity="id">
+    <map-to xml="LungResectionMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherLocation" type="string">
+      <bind-xml name="otherLocation" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="LungResectionBasedPathologyAnnotation" type="pathology_scg.LungResectionBasedPathologyAnnotation">
+      <bind-xml name="LungResectionBasedPathologyAnnotation" type="pathology_scg.LungResectionBasedPathologyAnnotation" location="LungResectionBasedPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LungResectionMarginsUninvolved" identity="id">
+    <map-to xml="LungResectionMarginsUninvolved" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.SpecimenIntegrity" identity="id">
+    <map-to xml="SpecimenIntegrity" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="numberOfPieces" type="long">
+      <bind-xml name="numberOfPieces" node="attribute" />
+    </field>
+    <field name="type" type="string">
+      <bind-xml name="type" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.BreastMarginInvolved" identity="id">
+    <map-to xml="BreastMarginInvolved" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherExtentOfInvolvement" type="string">
+      <bind-xml name="otherExtentOfInvolvement" node="attribute" />
+    </field>
+    <field name="extentOfInvolvement" type="string">
+      <bind-xml name="extentOfInvolvement" node="attribute" />
+    </field>
+    <field name="breastMargin" type="pathology_scg.BreastMargin">
+      <bind-xml name="BreastMargin" type="pathology_scg.BreastMargin" location="breastMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ProstateMarginLocation" identity="id">
+    <map-to xml="ProstateMarginLocation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="involvedMarginLocation" type="string">
+      <bind-xml name="involvedMarginLocation" node="attribute" />
+    </field>
+    <field name="otherLocation" type="string">
+      <bind-xml name="otherLocation" node="attribute" />
+    </field>
+    <field name="radicalProstatectomyMargin" type="pathology_scg.RadicalProstatectomyMargin">
+      <bind-xml name="RadicalProstatectomyMargin" type="pathology_scg.RadicalProstatectomyMargin" location="radicalProstatectomyMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.BreastMargin" identity="id">
+    <map-to xml="BreastMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="breastPathologyAnnotation" type="pathology_scg.BreastPathologyAnnotation">
+      <bind-xml name="BreastPathologyAnnotation" type="pathology_scg.BreastPathologyAnnotation" location="breastPathologyAnnotation" node="element" />
+    </field>
+    <field name="involvedMarginCollection" type="pathology_scg.BreastMarginInvolved" collection="collection">
+      <bind-xml name="BreastMarginInvolved" type="pathology_scg.BreastMarginInvolved" location="involvedMarginCollection" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.BreastMarginUninvolved" identity="id">
+    <map-to xml="BreastMarginUninvolved" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.RadicalProstatectomyMargin" identity="id">
+    <map-to xml="RadicalProstatectomyMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="focalityOfInvolvedMargin" type="string">
+      <bind-xml name="focalityOfInvolvedMargin" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="ProstateMarginLocation" type="pathology_scg.ProstateMarginLocation" collection="collection">
+      <bind-xml name="ProstateMarginLocation" type="pathology_scg.ProstateMarginLocation" location="ProstateMarginLocation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ExtraprostaticExtension" identity="id">
+    <map-to xml="ExtraprostaticExtension" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="isFocal" type="boolean">
+      <bind-xml name="isFocal" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+    <field name="ExtraprostaticExtensionTissueSites" type="pathology_scg.ExtraprostaticExtensionTissueSites" collection="collection">
+      <bind-xml name="ExtraprostaticExtensionTissueSites" type="pathology_scg.ExtraprostaticExtensionTissueSites" location="ExtraprostaticExtensionTissueSites" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ExtraprostaticExtensionTissueSites" identity="id">
+    <map-to xml="ExtraprostaticExtensionTissueSites" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="tissueSite" type="string">
+      <bind-xml name="tissueSite" node="attribute" />
+    </field>
+    <field name="ExtraprostaticExtension" type="pathology_scg.ExtraprostaticExtension">
+      <bind-xml name="ExtraprostaticExtension" type="pathology_scg.ExtraprostaticExtension" location="ExtraprostaticExtension" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ResectionColorectalMesentricMargin" identity="id">
+    <map-to xml="ResectionColorectalMesentricMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation">
+      <bind-xml name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation" location="ResectionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ColorectalResectedMarginUninvolved" identity="id">
+    <map-to xml="ColorectalResectedMarginUninvolved" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.OtherResectedOrgans" identity="id">
+    <map-to xml="OtherResectedOrgans" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherOtherOrgansResected" type="string">
+      <bind-xml name="otherOtherOrgansResected" node="attribute" />
+    </field>
+    <field name="otherOrgansResected" type="string">
+      <bind-xml name="otherOrgansResected" node="attribute" />
+    </field>
+    <field name="pancreasePathologyAnnotation" type="pathology_scg.PancreasPathologyAnnotation">
+      <bind-xml name="PancreasPathologyAnnotation" type="pathology_scg.PancreasPathologyAnnotation" location="pancreasePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.NottinghamHistologicScore" identity="id">
+    <map-to xml="NottinghamHistologicScore" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="totalNottinghamScore" type="long">
+      <bind-xml name="totalNottinghamScore" node="attribute" />
+    </field>
+    <field name="mitoticCountScore" type="string">
+      <bind-xml name="mitoticCountScore" node="attribute" />
+    </field>
+    <field name="nuclearPleomorphismScore" type="string">
+      <bind-xml name="nuclearPleomorphismScore" node="attribute" />
+    </field>
+    <field name="tubuleFormationScore" type="string">
+      <bind-xml name="tubuleFormationScore" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.ResectionColorectalProximalMargin" identity="id">
+    <map-to xml="ResectionColorectalProximalMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="resectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation">
+      <bind-xml name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation" location="resectionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ResectionColorectalDistalMargin" identity="id">
+    <map-to xml="ResectionColorectalDistalMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="resectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation">
+      <bind-xml name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation" location="resectionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ResectionColorectalRadialMargin" identity="id">
+    <map-to xml="ResectionColorectalRadialMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation">
+      <bind-xml name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation" location="ResectionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LateralMelanomaMargin" identity="id">
+    <map-to xml="LateralMelanomaMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="melanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation">
+      <bind-xml name="MelanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation" location="melanomaPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.Microcalcification" identity="id">
+    <map-to xml="Microcalcification" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="value" type="string">
+      <bind-xml name="value" node="attribute" />
+    </field>
+    <field name="BreastPathologyAnnotation" type="pathology_scg.BreastPathologyAnnotation">
+      <bind-xml name="BreastPathologyAnnotation" type="pathology_scg.BreastPathologyAnnotation" location="BreastPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LocalExcisionColorectalLateralMargin" identity="id">
+    <map-to xml="LocalExcisionColorectalLateralMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="localExcisionBasedColorectalPathologyAnnotation" type="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation">
+      <bind-xml name="LocalExcisionBasedColorectalPathologyAnnotation" type="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation" location="localExcisionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ColorectalLocalExcisionMarginUninvolved" identity="id">
+    <map-to xml="ColorectalLocalExcisionMarginUninvolved" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="closestDistanceToTumor" type="double">
+      <bind-xml name="closestDistanceToTumor" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.CNSMargin" identity="id">
+    <map-to xml="CNSMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="CNSMarginLocation" type="pathology_scg.CNSMarginLocation" collection="collection">
+      <bind-xml name="CNSMarginLocation" type="pathology_scg.CNSMarginLocation" location="CNSMarginLocation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.CNSMarginLocation" identity="id">
+    <map-to xml="CNSMarginLocation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginLocation" type="string">
+      <bind-xml name="marginLocation" node="attribute" />
+    </field>
+    <field name="CNSMargin" type="pathology_scg.CNSMargin">
+      <bind-xml name="CNSMargin" type="pathology_scg.CNSMargin" location="CNSMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LocalExcisionColorectalDeepMargin" identity="id">
+    <map-to xml="LocalExcisionColorectalDeepMargin" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="marginStatus" type="string">
+      <bind-xml name="marginStatus" node="attribute" />
+    </field>
+    <field name="localExcisionBasedColorectalPathologyAnnotation" type="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation">
+      <bind-xml name="LocalExcisionBasedColorectalPathologyAnnotation" type="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation" location="localExcisionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.SpecimenSize" identity="id">
+    <map-to xml="SpecimenSize" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="cannotBeDetermined" type="boolean">
+      <bind-xml name="cannotBeDetermined" node="attribute" />
+    </field>
+    <field name="additionalDimensionTwo" type="double">
+      <bind-xml name="additionalDimensionTwo" node="attribute" />
+    </field>
+    <field name="additionalDimensionOne" type="double">
+      <bind-xml name="additionalDimensionOne" node="attribute" />
+    </field>
+    <field name="greatestDimension" type="double">
+      <bind-xml name="greatestDimension" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.SCGRecordEntry" identity="id">
+    <map-to xml="SCGRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ColorectalPathologyAnnotationCollection" type="pathology_scg.ColorectalPathologyAnnotation" collection="collection">
+      <bind-xml name="ColorectalPathologyAnnotation" type="pathology_scg.ColorectalPathologyAnnotation" location="ColorectalPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="ExcisionalBiopsyBasedColorectalPathologyAnnotationCollection" type="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation" collection="collection">
+      <bind-xml name="ExcisionalBiopsyBasedColorectalPathologyAnnotation" type="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation" location="ExcisionalBiopsyBasedColorectalPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="LungResectionBasedPathologyAnnotationCollection" type="pathology_scg.LungResectionBasedPathologyAnnotation" collection="collection">
+      <bind-xml name="LungResectionBasedPathologyAnnotation" type="pathology_scg.LungResectionBasedPathologyAnnotation" location="LungResectionBasedPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="KidneyBiopsyBasedPathologyAnnotationCollection" type="pathology_scg.KidneyBiopsyBasedPathologyAnnotation" collection="collection">
+      <bind-xml name="KidneyBiopsyBasedPathologyAnnotation" type="pathology_scg.KidneyBiopsyBasedPathologyAnnotation" location="KidneyBiopsyBasedPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="LocalExcisionBasedColorectalPathologyAnnotationCollection" type="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation" collection="collection">
+      <bind-xml name="LocalExcisionBasedColorectalPathologyAnnotation" type="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation" location="LocalExcisionBasedColorectalPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="LungBiopsyPathologyAnnotationCollection" type="pathology_scg.LungBiopsyPathologyAnnotation" collection="collection">
+      <bind-xml name="LungBiopsyPathologyAnnotation" type="pathology_scg.LungBiopsyPathologyAnnotation" location="LungBiopsyPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="RetropubicEnucleationPathologyAnnotationCollection" type="pathology_scg.RetropubicEnucleationPathologyAnnotation" collection="collection">
+      <bind-xml name="RetropubicEnucleationPathologyAnnotation" type="pathology_scg.RetropubicEnucleationPathologyAnnotation" location="RetropubicEnucleationPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="BreastPathologyAnnotationCollection" type="pathology_scg.BreastPathologyAnnotation" collection="collection">
+      <bind-xml name="BreastPathologyAnnotation" type="pathology_scg.BreastPathologyAnnotation" location="BreastPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="ProstatePathologyAnnotationCollection" type="pathology_scg.ProstatePathologyAnnotation" collection="collection">
+      <bind-xml name="ProstatePathologyAnnotation" type="pathology_scg.ProstatePathologyAnnotation" location="ProstatePathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="MelanomaPathologyAnnotationCollection" type="pathology_scg.MelanomaPathologyAnnotation" collection="collection">
+      <bind-xml name="MelanomaPathologyAnnotation" type="pathology_scg.MelanomaPathologyAnnotation" location="MelanomaPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="BaseHaematologyPathologyAnnotationCollection" type="pathology_scg.BaseHaematologyPathologyAnnotation" collection="collection">
+      <bind-xml name="BaseHaematologyPathologyAnnotation" type="pathology_scg.BaseHaematologyPathologyAnnotation" location="BaseHaematologyPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="ResectionBasedColorectalPathologyAnnotationCollection" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation" collection="collection">
+      <bind-xml name="ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.ResectionBasedColorectalPathologyAnnotation" location="ResectionBasedColorectalPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="NeedleBiopsyProstatePathologyAnnotationCollection" type="pathology_scg.NeedleBiopsyProstatePathologyAnnotation" collection="collection">
+      <bind-xml name="NeedleBiopsyProstatePathologyAnnotation" type="pathology_scg.NeedleBiopsyProstatePathologyAnnotation" location="NeedleBiopsyProstatePathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="RadicalProstatectomyPathologyAnnotationCollection" type="pathology_scg.RadicalProstatectomyPathologyAnnotation" collection="collection">
+      <bind-xml name="RadicalProstatectomyPathologyAnnotation" type="pathology_scg.RadicalProstatectomyPathologyAnnotation" location="RadicalProstatectomyPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="BasePathologyAnnotationCollection" type="pathology_scg.BasePathologyAnnotation" collection="collection">
+      <bind-xml name="BasePathologyAnnotation" type="pathology_scg.BasePathologyAnnotation" location="BasePathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="LungPathologyAnnotationCollection" type="pathology_scg.LungPathologyAnnotation" collection="collection">
+      <bind-xml name="LungPathologyAnnotation" type="pathology_scg.LungPathologyAnnotation" location="LungPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="KidneyPathologyAnnotationCollection" type="pathology_scg.KidneyPathologyAnnotation" collection="collection">
+      <bind-xml name="KidneyPathologyAnnotation" type="pathology_scg.KidneyPathologyAnnotation" location="KidneyPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="TransurethralProstaticResectionPathologyAnnotationCollection" type="pathology_scg.TransurethralProstaticResectionPathologyAnnotation" collection="collection">
+      <bind-xml name="TransurethralProstaticResectionPathologyAnnotation" type="pathology_scg.TransurethralProstaticResectionPathologyAnnotation" location="TransurethralProstaticResectionPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="BaseSolidTissuePathologyAnnotationCollection" type="pathology_scg.BaseSolidTissuePathologyAnnotation" collection="collection">
+      <bind-xml name="BaseSolidTissuePathologyAnnotation" type="pathology_scg.BaseSolidTissuePathologyAnnotation" location="BaseSolidTissuePathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="KidneyNephrectomyBasedPathologyAnnotationCollection" type="pathology_scg.KidneyNephrectomyBasedPathologyAnnotation" collection="collection">
+      <bind-xml name="KidneyNephrectomyBasedPathologyAnnotation" type="pathology_scg.KidneyNephrectomyBasedPathologyAnnotation" location="KidneyNephrectomyBasedPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="CNSPathologyAnnotationCollection" type="pathology_scg.CNSPathologyAnnotation" collection="collection">
+      <bind-xml name="CNSPathologyAnnotation" type="pathology_scg.CNSPathologyAnnotation" location="CNSPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="PancreasPathologyAnnotationCollection" type="pathology_scg.PancreasPathologyAnnotation" collection="collection">
+      <bind-xml name="PancreasPathologyAnnotation" type="pathology_scg.PancreasPathologyAnnotation" location="PancreasPathologyAnnotationCollection" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.BaseHaematologyPathologyAnnotation" identity="id" extends="pathology_scg.BasePathologyAnnotation">
+    <map-to xml="BaseHaematologyPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="adequacyOfSpecimen" type="string">
+      <bind-xml name="adequacyOfSpecimen" node="attribute" />
+    </field>
+    <field name="otherBiopsyOrAspirateSite" type="string">
+      <bind-xml name="otherBiopsyOrAspirateSite" node="attribute" />
+    </field>
+    <field name="biopsyOrAspirateSite" type="string">
+      <bind-xml name="biopsyOrAspirateSite" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_BaseHaematologyPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_BaseHaematologyPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.BaseSolidTissuePathologyAnnotation" identity="id" extends="pathology_scg.BasePathologyAnnotation">
+    <map-to xml="BaseSolidTissuePathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="tumorTissueSite" type="pathology_scg.TumorTissueSite" collection="collection">
+      <bind-xml name="TumorTissueSite" type="pathology_scg.TumorTissueSite" location="tumorTissueSite" node="element" />
+    </field>
+    <field name="HistologicGrade" type="pathology_scg.HistologicGrade" collection="collection">
+      <bind-xml name="HistologicGrade" type="pathology_scg.HistologicGrade" location="HistologicGrade" node="element" />
+    </field>
+    <field name="SCGRecordEntry_BaseSolidTissuePathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_BaseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.SizeOfInvasiveCarcinoma" identity="id" extends="pathology_scg.TumorSize">
+    <map-to xml="SizeOfInvasiveCarcinoma" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.SizeOfSpecimen" identity="id" extends="pathology_scg.TumorSize">
+    <map-to xml="SizeOfSpecimen" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.PolypSize" identity="id" extends="pathology_scg.TumorSize">
+    <map-to xml="PolypSize" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.DistanceOfAdenoma" identity="id" extends="pathology_scg.DistanceFromAnalVerge">
+    <map-to xml="DistanceOfAdenoma" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.DistanceOfInvasiveCarcinoma" identity="id" extends="pathology_scg.DistanceFromAnalVerge">
+    <map-to xml="DistanceOfInvasiveCarcinoma" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_scg.ColorectalPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="ColorectalPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="intratumoralPeritumoralLymphocyticResponse" type="string">
+      <bind-xml name="intratumoralPeritumoralLymphocyticResponse" node="attribute" />
+    </field>
+    <field name="tumorBorderConfiguration" type="string">
+      <bind-xml name="tumorBorderConfiguration" node="attribute" />
+    </field>
+    <field name="otherTumorConfiguration" type="string">
+      <bind-xml name="otherTumorConfiguration" node="attribute" />
+    </field>
+    <field name="tumorConfiguration" type="string">
+      <bind-xml name="tumorConfiguration" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_ColorectalPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_ColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ProstatePathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="ProstatePathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="periprostaticFatInvasion" type="string">
+      <bind-xml name="periprostaticFatInvasion" node="attribute" />
+    </field>
+    <field name="seminalVesicleInvasion" type="string">
+      <bind-xml name="seminalVesicleInvasion" node="attribute" />
+    </field>
+    <field name="proportionOrPercentOfProstaticTissueInvolvedByTumor" type="double">
+      <bind-xml name="proportionOrPercentOfProstaticTissueInvolvedByTumor" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_ProstatePathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_ProstatePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LungPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="LungPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_LungPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_LungPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.KidneyPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="KidneyPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="percentOfSarcomatoidElement" type="double">
+      <bind-xml name="percentOfSarcomatoidElement" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_KidneyPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_KidneyPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.PancreasPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="PancreasPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherResectedOrgans" type="pathology_scg.OtherResectedOrgans" collection="collection">
+      <bind-xml name="OtherResectedOrgans" type="pathology_scg.OtherResectedOrgans" location="otherResectedOrgans" node="element" />
+    </field>
+    <field name="SCGRecordEntry_PancreasPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_PancreasPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.MelanomaPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="MelanomaPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="satelliteNoduleStatus" type="string">
+      <bind-xml name="satelliteNoduleStatus" node="attribute" />
+    </field>
+    <field name="mitoticIndex" type="string">
+      <bind-xml name="mitoticIndex" node="attribute" />
+    </field>
+    <field name="tumorRegression" type="string">
+      <bind-xml name="tumorRegression" node="attribute" />
+    </field>
+    <field name="tumorInfiltratingLymphocytes" type="string">
+      <bind-xml name="tumorInfiltratingLymphocytes" node="attribute" />
+    </field>
+    <field name="depthOfInvasionCannotBeDetermined" type="boolean">
+      <bind-xml name="depthOfInvasionCannotBeDetermined" node="attribute" />
+    </field>
+    <field name="depthOfInvasion" type="double">
+      <bind-xml name="depthOfInvasion" node="attribute" />
+    </field>
+    <field name="ulceration" type="string">
+      <bind-xml name="ulceration" node="attribute" />
+    </field>
+    <field name="pigmentation" type="string">
+      <bind-xml name="pigmentation" node="attribute" />
+    </field>
+    <field name="macroscopicTumor" type="string">
+      <bind-xml name="macroscopicTumor" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_MelanomaPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_MelanomaPathologyAnnotation" node="element" />
+    </field>
+    <field name="lateralMarginCollection" type="pathology_scg.LateralMelanomaMargin" collection="collection">
+      <bind-xml name="LateralMelanomaMargin" type="pathology_scg.LateralMelanomaMargin" location="lateralMarginCollection" node="element" />
+    </field>
+    <field name="SatelliteNodule" type="pathology_scg.SatelliteNodule" collection="collection">
+      <bind-xml name="SatelliteNodule" type="pathology_scg.SatelliteNodule" location="SatelliteNodule" node="element" />
+    </field>
+    <field name="deepMarginCollection" type="pathology_scg.DeepMelanomaMargin" collection="collection">
+      <bind-xml name="DeepMelanomaMargin" type="pathology_scg.DeepMelanomaMargin" location="deepMarginCollection" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.BreastPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="BreastPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="mitoticCountIfOtherGradingSystemUsed" type="integer">
+      <bind-xml name="mitoticCountIfOtherGradingSystemUsed" node="attribute" />
+    </field>
+    <field name="lymphNodeSampling" type="string">
+      <bind-xml name="lymphNodeSampling" node="attribute" />
+    </field>
+    <field name="Microcalcification" type="pathology_scg.Microcalcification" collection="collection">
+      <bind-xml name="Microcalcification" type="pathology_scg.Microcalcification" location="Microcalcification" node="element" />
+    </field>
+    <field name="breastMarginCollection" type="pathology_scg.BreastMargin" collection="collection">
+      <bind-xml name="BreastMargin" type="pathology_scg.BreastMargin" location="breastMarginCollection" node="element" />
+    </field>
+    <field name="SCGRecordEntry_BreastPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_BreastPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.CNSPathologyAnnotation" identity="id" extends="pathology_scg.BaseSolidTissuePathologyAnnotation">
+    <map-to xml="CNSPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_CNSPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_CNSPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.NeedleBiopsyProstatePathologyAnnotation" identity="id" extends="pathology_scg.ProstatePathologyAnnotation">
+    <map-to xml="NeedleBiopsyProstatePathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="totalNumberOfCores" type="long">
+      <bind-xml name="totalNumberOfCores" node="attribute" />
+    </field>
+    <field name="numberOfPositiveCores" type="long">
+      <bind-xml name="numberOfPositiveCores" node="attribute" />
+    </field>
+    <field name="otherQuantitiation" type="string">
+      <bind-xml name="otherQuantitiation" node="attribute" />
+    </field>
+    <field name="coreLengthInMillimeter" type="double">
+      <bind-xml name="coreLengthInMillimeter" node="attribute" />
+    </field>
+    <field name="totalLinearCarcinomaInMillimeter" type="double">
+      <bind-xml name="totalLinearCarcinomaInMillimeter" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_NeedleBiopsyProstatePathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_NeedleBiopsyProstatePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ExcisionalBiopsyBasedColorectalPathologyAnnotation" identity="id" extends="pathology_scg.ColorectalPathologyAnnotation">
+    <map-to xml="ExcisionalBiopsyBasedColorectalPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="typeOfPolypInWhichInvasiveCarcinomaArose" type="string">
+      <bind-xml name="typeOfPolypInWhichInvasiveCarcinomaArose" node="attribute" />
+    </field>
+    <field name="extentOfInvasion" type="string">
+      <bind-xml name="extentOfInvasion" node="attribute" />
+    </field>
+    <field name="lateralOrMucosalMarginCollection" type="pathology_scg.ExcisionalBiopsyColorectalLateralOrMucosalMargin" collection="collection">
+      <bind-xml name="ExcisionalBiopsyColorectalLateralOrMucosalMargin" type="pathology_scg.ExcisionalBiopsyColorectalLateralOrMucosalMargin" location="lateralOrMucosalMarginCollection" node="element" />
+    </field>
+    <field name="SCGRecordEntry_ExcisionalBiopsyBasedColorectalPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_ExcisionalBiopsyBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+    <field name="deepMarginCollection" type="pathology_scg.ExcisionalBiopsyColorectalDeepMargin" collection="collection">
+      <bind-xml name="ExcisionalBiopsyColorectalDeepMargin" type="pathology_scg.ExcisionalBiopsyColorectalDeepMargin" location="deepMarginCollection" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.TransurethralProstaticResectionPathologyAnnotation" identity="id" extends="pathology_scg.ProstatePathologyAnnotation">
+    <map-to xml="TransurethralProstaticResectionPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="totalNumberOfChips" type="long">
+      <bind-xml name="totalNumberOfChips" node="attribute" />
+    </field>
+    <field name="numberOfPositiveChips" type="long">
+      <bind-xml name="numberOfPositiveChips" node="attribute" />
+    </field>
+    <field name="isTumorIncidentalHistologicFindingAbove5Percent" type="boolean">
+      <bind-xml name="isTumorIncidentalHistologicFindingAbove5Percent" node="attribute" />
+    </field>
+    <field name="specimenWeight" type="double">
+      <bind-xml name="specimenWeight" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_TransurethralProstaticResectionPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_TransurethralProstaticResectionPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LungBiopsyPathologyAnnotation" identity="id" extends="pathology_scg.LungPathologyAnnotation">
+    <map-to xml="LungBiopsyPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="visceralPleuraInvasion" type="string">
+      <bind-xml name="visceralPleuraInvasion" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_LungBiopsyPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_LungBiopsyPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LungResectionBasedPathologyAnnotation" identity="id" extends="pathology_scg.LungPathologyAnnotation">
+    <map-to xml="LungResectionBasedPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="arterialInvasion" type="string">
+      <bind-xml name="arterialInvasion" node="attribute" />
+    </field>
+    <field name="otherTumorExtensions" type="string">
+      <bind-xml name="otherTumorExtensions" node="attribute" />
+    </field>
+    <field name="DirectExtensionOfTumor" type="pathology_scg.DirectExtensionOfTumor" collection="collection">
+      <bind-xml name="DirectExtensionOfTumor" type="pathology_scg.DirectExtensionOfTumor" location="DirectExtensionOfTumor" node="element" />
+    </field>
+    <field name="SCGRecordEntry_LungResectionBasedPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_LungResectionBasedPathologyAnnotation" node="element" />
+    </field>
+    <field name="LungResectionMargin" type="pathology_scg.LungResectionMargin" collection="collection">
+      <bind-xml name="LungResectionMargin" type="pathology_scg.LungResectionMargin" location="LungResectionMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.KidneyBiopsyBasedPathologyAnnotation" identity="id" extends="pathology_scg.KidneyPathologyAnnotation">
+    <map-to xml="KidneyBiopsyBasedPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_KidneyBiopsyBasedPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_KidneyBiopsyBasedPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.RadicalProstatectomyPathologyAnnotation" identity="id" extends="pathology_scg.ProstatePathologyAnnotation">
+    <map-to xml="RadicalProstatectomyPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_RadicalProstatectomyPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_RadicalProstatectomyPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.ResectionBasedColorectalPathologyAnnotation" identity="id" extends="pathology_scg.ColorectalPathologyAnnotation">
+    <map-to xml="ResectionBasedColorectalPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="intactnessOfMesorectum" type="string">
+      <bind-xml name="intactnessOfMesorectum" node="attribute" />
+    </field>
+    <field name="specimenLength" type="double">
+      <bind-xml name="specimenLength" node="attribute" />
+    </field>
+    <field name="ResectionColorectalRadialMargin" type="pathology_scg.ResectionColorectalRadialMargin" collection="collection">
+      <bind-xml name="ResectionColorectalRadialMargin" type="pathology_scg.ResectionColorectalRadialMargin" location="ResectionColorectalRadialMargin" node="element" />
+    </field>
+    <field name="distalMarginCollection" type="pathology_scg.ResectionColorectalDistalMargin" collection="collection">
+      <bind-xml name="ResectionColorectalDistalMargin" type="pathology_scg.ResectionColorectalDistalMargin" location="distalMarginCollection" node="element" />
+    </field>
+    <field name="ResectionColorectalMesentricMargin" type="pathology_scg.ResectionColorectalMesentricMargin" collection="collection">
+      <bind-xml name="ResectionColorectalMesentricMargin" type="pathology_scg.ResectionColorectalMesentricMargin" location="ResectionColorectalMesentricMargin" node="element" />
+    </field>
+    <field name="proximalMarginCollection" type="pathology_scg.ResectionColorectalProximalMargin" collection="collection">
+      <bind-xml name="ResectionColorectalProximalMargin" type="pathology_scg.ResectionColorectalProximalMargin" location="proximalMarginCollection" node="element" />
+    </field>
+    <field name="SCGRecordEntry_ResectionBasedColorectalPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_ResectionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.LocalExcisionBasedColorectalPathologyAnnotation" identity="id" extends="pathology_scg.ColorectalPathologyAnnotation">
+    <map-to xml="LocalExcisionBasedColorectalPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_LocalExcisionBasedColorectalPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_LocalExcisionBasedColorectalPathologyAnnotation" node="element" />
+    </field>
+    <field name="localExcisionColorectalDeepMargin" type="pathology_scg.LocalExcisionColorectalDeepMargin" collection="collection">
+      <bind-xml name="LocalExcisionColorectalDeepMargin" type="pathology_scg.LocalExcisionColorectalDeepMargin" location="localExcisionColorectalDeepMargin" node="element" />
+    </field>
+    <field name="LocalExcisionColorectalLateralMargin" type="pathology_scg.LocalExcisionColorectalLateralMargin" collection="collection">
+      <bind-xml name="LocalExcisionColorectalLateralMargin" type="pathology_scg.LocalExcisionColorectalLateralMargin" location="LocalExcisionColorectalLateralMargin" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.RetropubicEnucleationPathologyAnnotation" identity="id" extends="pathology_scg.ProstatePathologyAnnotation">
+    <map-to xml="RetropubicEnucleationPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="specimenWeight" type="double">
+      <bind-xml name="specimenWeight" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_RetropubicEnucleationPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_RetropubicEnucleationPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_scg.KidneyNephrectomyBasedPathologyAnnotation" identity="id" extends="pathology_scg.KidneyPathologyAnnotation">
+    <map-to xml="KidneyNephrectomyBasedPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_scg" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="adrenalGlandStage" type="string">
+      <bind-xml name="adrenalGlandStage" node="attribute" />
+    </field>
+    <field name="focality" type="string">
+      <bind-xml name="focality" node="attribute" />
+    </field>
+    <field name="SCGRecordEntry_KidneyNephrectomyBasedPathologyAnnotation" type="pathology_scg.SCGRecordEntry">
+      <bind-xml name="SCGRecordEntry" type="pathology_scg.SCGRecordEntry" location="SCGRecordEntry_KidneyNephrectomyBasedPathologyAnnotation" node="element" />
+    </field>
+    <field name="MacroscopicExtentOfTumor" type="pathology_scg.MacroscopicExtentOfTumor" collection="collection">
+      <bind-xml name="MacroscopicExtentOfTumor" type="pathology_scg.MacroscopicExtentOfTumor" location="MacroscopicExtentOfTumor" node="element" />
+    </field>
+  </class>
+</mapping>
+

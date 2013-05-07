@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping
+>
+    <class
+        name="edu.wustl.catissuecore.domain.SpecimenCiderMessage"
+        table="CATISSUE_SPECIMEN_MESSAGE_LOG"
+          dynamic-update="false"
+        dynamic-insert="false"
+	 >
+     <cache usage="read-write" />
+     <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPEC_CIDER_MSG_SEQ</param>
+            </generator>
+        </id>
+  
+  
+       
+        <property
+            name="sentDate"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="SENT_DATE"
+        />
+
+     
+        <property
+            name="eventType"
+            type="string"
+            update="true"
+            insert="true"
+            column="EVENT_TYPE"
+            length="100"
+        />
+        
+           <property
+            name="specimenIdentifier"
+            type="long"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+            length="30"
+        />
+        
+    </class>
+
+</hibernate-mapping>

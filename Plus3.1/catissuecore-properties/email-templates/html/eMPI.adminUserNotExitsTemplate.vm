@@ -1,0 +1,7 @@
+Dear  Administrator,<br>
+<br>
+eMPI admin user specified in the property file doesn't exists in the application.
+<br>
+For performing eMPI id generation related activities,specified eMPI admin user must exists in the application.So please add specified eMPI admin user.<br>
+<br>
+$footer

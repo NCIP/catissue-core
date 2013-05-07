@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-project version="5" guid="catissuecore_10499967c68_cc72e8306076f55b">
+	<web-app guid="._10499967c68_a0c1711b5b167dec">
+		<root-path-uri>./</root-path-uri>
+		<web-app-type>com.m7.webapp.java</web-app-type>
+	</web-app>
+	<properties>
+		<property name="validation.compile" value="true"/>
+		<property name="validation.missingFile" value="true"/>
+		<property name="validation.unresolvedVar" value="false"/>
+		<property name="validation" value="true"/>
+		<property name="validation.unresolvedType" value="false"/>
+		<property name="validation.compile.jspQuotation" value="false"/>
+	</properties>
+</web-project>

@@ -1,0 +1,16 @@
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_scg.AdditionalFinding">
+		<Group logicRelation="AND">
+			<Attribute name="pathologicFinding" value="Adenoma(s)"
+				predicate="EQUAL_TO" />
+
+			<Association roleName="Details" name="pathology_scg.Details">
+
+				<Group logicRelation="AND">
+					<Attribute name="id" predicate="IS_NOT_NULL" />
+				</Group>
+			</Association>
+
+		</Group>
+	</Target>
+</CQLQuery>

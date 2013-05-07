@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_specimen.ProstateSpecimenGleasonScore">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+			<Attribute name="primaryPatternScore" value="2" predicate="GREATER_THAN" />
+
+
+		</Group>
+
+	</Target>
+</CQLQuery>

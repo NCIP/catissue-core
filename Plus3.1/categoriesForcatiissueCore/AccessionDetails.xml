@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Category name="Accession Details" description="Biospecimens collected under a collection protocol are accessioned at different points in time.  Each accession corresponds to a surgical pathology number and the participant's diagnosis and clinical status (e.g. remission, new diagnosis, and relapse).">
+  <CategorialClass name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" IdOfPathFromParentToThis="-1"> <!-- root -->
+    <Attribute name = "clinicalDiagnosis" displayName = "Clinical Diagnosis"/>
+    <Attribute name = "clinicalStatus" displayName = "Clinical Status"/>
+    <Attribute name = "activityStatus" displayName = "Activity Status"/>
+    <CategorialClass name="edu.wustl.catissuecore.domain.ClinicalReport" IdOfPathFromParentToThis="4">
+      <Attribute name = "surgicalPathologyNumber" displayName = "Surgical Pathology Number"/>    
+      <CategorialClass name="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier" IdOfPathFromParentToThis="2952">
+         <Attribute name = "medicalRecordNumber" displayName = "Medical Record Number"/>
+      </CategorialClass>
+    </CategorialClass>
+            
+    <CategorialClass name="edu.wustl.catissuecore.domain.Site" IdOfPathFromParentToThis="2873"> 
+         <Attribute name = "name" displayName = "Name"/>
+    </CategorialClass>
+        
+  </CategorialClass>
+</Category>
+    
+    
+    
+    
+    
+
+
+

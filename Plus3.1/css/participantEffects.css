@@ -1,0 +1,136 @@
+  /* Added By Ankush */
+  
+a, img {
+    border:none;
+} 
+
+.align_right_style{
+		padding-right: 25px;	
+}
+
+.tr_alternate_color_white
+{
+	background-color: FFFFFF;    
+}
+
+.tr_alternate_color_lightGrey
+{
+	background-color: #F5F5F5;
+}
+
+
+
+.whitetable_bg {
+	background-color:#FFFFFF;
+}
+
+.black_new{
+	font-family: verdana;
+	font-size: 11px;
+	vertical-align:bottom;
+}
+
+.tr_bg_blue1 {
+	background-color:#BFDCF3;
+	height:25px;
+	vertical-align:middle;
+	font-size: 15px;
+}
+
+.blue_ar_b {
+	font-family: verdana;
+	font-size: 12px;
+	color: #074180;
+	font-weight: bold;
+}
+
+.grey_ar_s {
+	font-family: verdana;
+	font-size: 9px;
+	color: #999999;
+}
+
+.bottomtd {
+	height:14px;
+}
+
+.bottomHeightForRow {
+	height:8px;
+}
+
+.black_ar {
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+}
+
+.field_set{
+		border:1px solid B0C4DE;
+		width:91%;
+		position: relative;
+		margin-bottom: 6px;
+}	  
+
+.align_left_style{
+		padding-left: 30px;	
+}
+
+.legend_font_size{
+	font-size: 12px;
+}
+
+.padding_right_style{
+	padding-right:22px;
+}
+
+.text_box_style{
+	font-size:11px;
+	color:Silver;
+}
+
+.heading_text_style{
+	font-size:14px; 
+	padding-left:35px;
+}
+
+.combo_style_height{
+		height:25px;
+}
+
+.fieldset_New_border{
+	 border-radius:25px;
+	 -moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+}
+
+A.view:link{
+	font-family: verdana;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
+}
+
+A.view:visited{
+	font-family: verdana;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
+}
+A.view:active{
+	font-family: verdana;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration:underline;
+}
+A.view:hover{
+	font-family: verdana;
+	font-size: 11px;
+	color: #054a8f;
+	text-decoration: none;
+}
+.date_text_field{
+		height:22px;
+}
+

@@ -1,0 +1,436 @@
+<ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+ <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="duration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="hexBinary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ID" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREF" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREFS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./PathologySCGTypes.xsd" namespace="http://pathology_scg/PathologySCG/types" packageName="pathology_scg.stubs.types" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="PathologySCGReference" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureConversation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./pathology_scg.xsd" namespace="gme://caCORE.caCORE/3.2/pathology_scg" packageName="pathology_scg" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AdditionalFinding" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="AdditionalFinding" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BaseHaematologyPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BaseHaematologyPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BasePathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BasePathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BaseSolidTissuePathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BaseSolidTissuePathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BreastMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BreastMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BreastMarginInvolved" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BreastMarginInvolved" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BreastMarginUninvolved" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BreastMarginUninvolved" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="BreastPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BreastPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CarcinomaInSituStatus" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CarcinomaInSituStatus" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CNSMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CNSMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CNSMarginLocation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CNSMarginLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CNSPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CNSPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ColorectalLocalExcisionMarginUninvolved" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ColorectalLocalExcisionMarginUninvolved" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ColorectalPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ColorectalPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ColorectalResectedMarginUninvolved" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ColorectalResectedMarginUninvolved" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Cytogenetics" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Cytogenetics" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DeepMelanomaMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DeepMelanomaMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Details" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Details" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DirectExtensionOfTumor" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DirectExtensionOfTumor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistanceFromAnalVerge" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistanceFromAnalVerge" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistanceOfAdenoma" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistanceOfAdenoma" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistanceOfInvasiveCarcinoma" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistanceOfInvasiveCarcinoma" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistantMetastasis" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistantMetastasis" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExcionalBiopsyMarginUninvolved" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExcionalBiopsyMarginUninvolved" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExcisionalBiopsyBasedColorectalPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExcisionalBiopsyBasedColorectalPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExcisionalBiopsyColorectalDeepMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExcisionalBiopsyColorectalDeepMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExcisionalBiopsyColorectalLateralOrMucosalMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExcisionalBiopsyColorectalLateralOrMucosalMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExtraprostaticExtension" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExtraprostaticExtension" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExtraprostaticExtensionTissueSites" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExtraprostaticExtensionTissueSites" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="GleasonScore" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="GleasonScore" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="HistologicGrade" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="HistologicGrade" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="HistologicType" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="HistologicType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="HistologicVariantType" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="HistologicVariantType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ImmunoPhenotyping" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ImmunoPhenotyping" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Invasion" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Invasion" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="KidneyBiopsyBasedPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="KidneyBiopsyBasedPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="KidneyMarginLocation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="KidneyMarginLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="KidneyNephrectomyBasedPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="KidneyNephrectomyBasedPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="KidneyNephrectomyMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="KidneyNephrectomyMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="KidneyPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="KidneyPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LateralMelanomaMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LateralMelanomaMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LocalExcisionBasedColorectalPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LocalExcisionBasedColorectalPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LocalExcisionColorectalDeepMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LocalExcisionColorectalDeepMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LocalExcisionColorectalLateralMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LocalExcisionColorectalLateralMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LungBiopsyPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LungBiopsyPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LungPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LungPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LungResectionBasedPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LungResectionBasedPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LungResectionMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LungResectionMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LungResectionMarginsUninvolved" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LungResectionMarginsUninvolved" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MacroscopicExtentOfTumor" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="MacroscopicExtentOfTumor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MelanomaPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="MelanomaPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MetastasisTissueSite" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="MetastasisTissueSite" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Microcalcification" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Microcalcification" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NeedleBiopsyProstatePathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="NeedleBiopsyProstatePathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NottinghamHistologicScore" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="NottinghamHistologicScore" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="OtherResectedOrgans" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="OtherResectedOrgans" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PancreasMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PancreasMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PancreasMarginInvolvedByInvasiveCarcinoma" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PancreasMarginInvolvedByInvasiveCarcinoma" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PancreasMarginUninvolvedByInvasiveCarcinoma" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PancreasMarginUninvolvedByInvasiveCarcinoma" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PancreasPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PancreasPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PathologicalStaging" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PathologicalStaging" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PolypConfiguration" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PolypConfiguration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PolypSize" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PolypSize" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PrimaryTumorStage" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PrimaryTumorStage" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ProstateMarginLocation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ProstateMarginLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ProstatePathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ProstatePathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RadicalProstatectomyMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RadicalProstatectomyMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RadicalProstatectomyPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RadicalProstatectomyPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RegionalLymphNode" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RegionalLymphNode" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ResectionBasedColorectalPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ResectionBasedColorectalPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ResectionColorectalDistalMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ResectionColorectalDistalMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ResectionColorectalMesentricMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ResectionColorectalMesentricMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ResectionColorectalProximalMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ResectionColorectalProximalMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ResectionColorectalRadialMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ResectionColorectalRadialMargin" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RetropubicEnucleationPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RetropubicEnucleationPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SatelliteNodule" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SatelliteNodule" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SCGRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SizeOfInvasiveCarcinoma" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SizeOfInvasiveCarcinoma" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SizeOfSpecimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SizeOfSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenIntegrity" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenIntegrity" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenSize" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenSize" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TissueSide" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TissueSide" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TransurethralProstaticResectionPathologyAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TransurethralProstaticResectionPathologyAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TumorSize" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TumorSize" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TumorTissueSite" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TumorTissueSite" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="UninvolvedMelanomaMargin" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="UninvolvedMelanomaMargin" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQuery" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQueryResultCollection" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./PathologySCG_CQLResultTypes.xsd" namespace="http://pathology_scg/PathologySCG/CQLResultTypes" packageName="pathology_scg.cqlresulttypes" xsi:type="ns2:NamespaceType"/>
+  <ns2:Namespace location="./xsd/cagrid/types/data/data.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" packageName="gov.nih.nci.cagrid.metadata.dataservice" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DomainModel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociationEdge" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClass" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClassReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLGeneralization" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./DataServiceExceptions.xsd" namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" packageName="gov.nih.nci.cagrid.data.faults" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MalformedQueryException" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QueryProcessingException" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+ </ns2:Namespaces>
+ <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Service name="PathologySCG" namespace="http://pathology_scg/PathologySCG" packageName="pathology_scg" xsi:type="ns3:ServiceType">
+   <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns5:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns5:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns5="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns6:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns6:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns6="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns7:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns7:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns7="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
+     <ns4:Output qName="ns8:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns9:MethodSecurity xsi:type="ns9:MethodSecurity" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns9:SecuritySetting xsi:type="ns9:SecuritySetting">None</ns9:SecuritySetting>
+      <ns9:MethodAuthorization xsi:type="ns9:MethodAuthorization">
+       <ns9:NoAuthorization xsi:type="ns9:NoAuthorization"/>
+      </ns9:MethodAuthorization>
+     </ns9:MethodSecurity>
+     <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns4:Method>
+    <ns4:Method description="The standard caGrid Data Service query method." isImported="true" isProvided="true" name="query" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns10:CQLQuery" description="The CQL query to be executed against the data source." isArray="false" name="cqlQuery" xmlns:ns10="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns11:CQLQueryResultCollection" description="The result of executing the CQL query against the data source." isArray="false" xmlns:ns11="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="Thrown when an error occurs in processing a CQL query" name="QueryProcessingException" qname="ns12:QueryProcessingException" xmlns:ns12="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception description="Thrown when a query is found to be improperly formed" name="MalformedQueryException" qname="ns13:MalformedQueryException" xmlns:ns13="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+     </ns4:Exceptions>
+     <ns4:ImportInformation inputMessage="ns14:QueryRequest" namespace="http://gov.nih.nci.cagrid.data/DataService" outputMessage="ns14:QueryResponse" packageName="gov.nih.nci.cagrid.data" portTypeName="DataServicePortType" wsdlFile="DataService.wsdl" xmlns:ns14="http://gov.nih.nci.cagrid.data/DataService"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl"/>
+    </ns4:Method>
+   </ns4:Methods>
+   <ns15:ResourcePropertiesList xsi:type="ns15:ResourcePropertiesListType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns15:ResourceProperty qName="ns16:DomainModel" fileLocation="fixed_pathology_scg_new.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+    <ns15:ResourceProperty qName="ns17:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns15:ResourcePropertiesList>
+   <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
+    <ns3:Main xsi:type="ns3:Main"/>
+    <ns3:Singleton xsi:type="ns3:Singleton"/>
+    <ns3:Identifiable xsi:type="ns3:Identifiable"/>
+    <ns3:ResourcePropertyManagement xsi:type="ns3:ResourcePropertyManagement"/>
+   </ns3:ResourceFrameworkOptions>
+  </ns3:Service>
+ </ns3:Services>
+ <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns18:Extension name="cagrid_metadata" version="1.2" xsi:type="ns18:ExtensionType"/>
+  <ns18:Extension name="data" version="1.2" xsi:type="ns18:ExtensionType">
+   <ns18:ExtensionData>
+    <ns19:Data xsi:type="ns19:Data" xmlns:ns19="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
+         <ns19:AdditionalLibraries xsi:type="ns19:AdditionalLibraries">
+          <ns19:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caGrid-sdkQuery32-core-1.2.jar</ns19:JarName>
+
+     </ns19:AdditionalLibraries>
+
+         <ns19:CadsrInformation noDomainModel="false" projectVersion="1.2" serviceUrl="http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService" useSuppliedModel="true" xsi:type="ns19:CadsrInformation">
+          <ns19:Packages mappedNamespace="gme://caCORE.caCORE/3.2/pathology_scg" name="pathology_scg" xsi:type="ns19:CadsrPackage">
+           <ns19:CadsrClass className="DistantMetastasis" elementName="DistantMetastasis" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LungResectionBasedPathologyAnnotation" elementName="LungResectionBasedPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="Details" elementName="Details" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LungPathologyAnnotation" elementName="LungPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DirectExtensionOfTumor" elementName="DirectExtensionOfTumor" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="KidneyNephrectomyMargin" elementName="KidneyNephrectomyMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ResectionBasedColorectalPathologyAnnotation" elementName="ResectionBasedColorectalPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RadicalProstatectomyPathologyAnnotation" elementName="RadicalProstatectomyPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PancreasMargin" elementName="PancreasMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="AdditionalFinding" elementName="AdditionalFinding" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="CarcinomaInSituStatus" elementName="CarcinomaInSituStatus" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ResectionColorectalDistalMargin" elementName="ResectionColorectalDistalMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SCGRecordEntry" elementName="SCGRecordEntry" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="CNSMarginLocation" elementName="CNSMarginLocation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TransurethralProstaticResectionPathologyAnnotation" elementName="TransurethralProstaticResectionPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="KidneyMarginLocation" elementName="KidneyMarginLocation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PrimaryTumorStage" elementName="PrimaryTumorStage" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LungResectionMargin" elementName="LungResectionMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="MacroscopicExtentOfTumor" elementName="MacroscopicExtentOfTumor" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LungResectionMarginsUninvolved" elementName="LungResectionMarginsUninvolved" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="KidneyPathologyAnnotation" elementName="KidneyPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LateralMelanomaMargin" elementName="LateralMelanomaMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LocalExcisionColorectalDeepMargin" elementName="LocalExcisionColorectalDeepMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="UninvolvedMelanomaMargin" elementName="UninvolvedMelanomaMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ExtraprostaticExtension" elementName="ExtraprostaticExtension" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="CNSMargin" elementName="CNSMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="NeedleBiopsyProstatePathologyAnnotation" elementName="NeedleBiopsyProstatePathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BreastMargin" elementName="BreastMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DistanceFromAnalVerge" elementName="DistanceFromAnalVerge" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RetropubicEnucleationPathologyAnnotation" elementName="RetropubicEnucleationPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="HistologicGrade" elementName="HistologicGrade" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SizeOfInvasiveCarcinoma" elementName="SizeOfInvasiveCarcinoma" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SpecimenIntegrity" elementName="SpecimenIntegrity" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PancreasMarginUninvolvedByInvasiveCarcinoma" elementName="PancreasMarginUninvolvedByInvasiveCarcinoma" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ExcionalBiopsyMarginUninvolved" elementName="ExcionalBiopsyMarginUninvolved" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DistanceOfAdenoma" elementName="DistanceOfAdenoma" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ExcisionalBiopsyColorectalLateralOrMucosalMargin" elementName="ExcisionalBiopsyColorectalLateralOrMucosalMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="Invasion" elementName="Invasion" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="MetastasisTissueSite" elementName="MetastasisTissueSite" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TumorTissueSite" elementName="TumorTissueSite" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BreastPathologyAnnotation" elementName="BreastPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="KidneyNephrectomyBasedPathologyAnnotation" elementName="KidneyNephrectomyBasedPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ColorectalLocalExcisionMarginUninvolved" elementName="ColorectalLocalExcisionMarginUninvolved" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PancreasMarginInvolvedByInvasiveCarcinoma" elementName="PancreasMarginInvolvedByInvasiveCarcinoma" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="GleasonScore" elementName="GleasonScore" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="CNSPathologyAnnotation" elementName="CNSPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SpecimenSize" elementName="SpecimenSize" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ResectionColorectalRadialMargin" elementName="ResectionColorectalRadialMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TissueSide" elementName="TissueSide" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="HistologicVariantType" elementName="HistologicVariantType" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ResectionColorectalMesentricMargin" elementName="ResectionColorectalMesentricMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RegionalLymphNode" elementName="RegionalLymphNode" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PathologicalStaging" elementName="PathologicalStaging" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ExcisionalBiopsyBasedColorectalPathologyAnnotation" elementName="ExcisionalBiopsyBasedColorectalPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DeepMelanomaMargin" elementName="DeepMelanomaMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SatelliteNodule" elementName="SatelliteNodule" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ExtraprostaticExtensionTissueSites" elementName="ExtraprostaticExtensionTissueSites" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ImmunoPhenotyping" elementName="ImmunoPhenotyping" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="Cytogenetics" elementName="Cytogenetics" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="Microcalcification" elementName="Microcalcification" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TumorSize" elementName="TumorSize" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ResectionColorectalProximalMargin" elementName="ResectionColorectalProximalMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BreastMarginUninvolved" elementName="BreastMarginUninvolved" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SizeOfSpecimen" elementName="SizeOfSpecimen" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="OtherResectedOrgans" elementName="OtherResectedOrgans" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LungBiopsyPathologyAnnotation" elementName="LungBiopsyPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ProstatePathologyAnnotation" elementName="ProstatePathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="KidneyBiopsyBasedPathologyAnnotation" elementName="KidneyBiopsyBasedPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BreastMarginInvolved" elementName="BreastMarginInvolved" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ProstateMarginLocation" elementName="ProstateMarginLocation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PolypSize" elementName="PolypSize" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ColorectalPathologyAnnotation" elementName="ColorectalPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="HistologicType" elementName="HistologicType" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BaseHaematologyPathologyAnnotation" elementName="BaseHaematologyPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ExcisionalBiopsyColorectalDeepMargin" elementName="ExcisionalBiopsyColorectalDeepMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DistanceOfInvasiveCarcinoma" elementName="DistanceOfInvasiveCarcinoma" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="NottinghamHistologicScore" elementName="NottinghamHistologicScore" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="MelanomaPathologyAnnotation" elementName="MelanomaPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BasePathologyAnnotation" elementName="BasePathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PancreasPathologyAnnotation" elementName="PancreasPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LocalExcisionBasedColorectalPathologyAnnotation" elementName="LocalExcisionBasedColorectalPathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ColorectalResectedMarginUninvolved" elementName="ColorectalResectedMarginUninvolved" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="PolypConfiguration" elementName="PolypConfiguration" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LocalExcisionColorectalLateralMargin" elementName="LocalExcisionColorectalLateralMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="BaseSolidTissuePathologyAnnotation" elementName="BaseSolidTissuePathologyAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RadicalProstatectomyMargin" elementName="RadicalProstatectomyMargin" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+      </ns19:Packages>
+
+     </ns19:CadsrInformation>
+
+         <ns19:ServiceFeatures serviceStyle="caCORE SDK v 3.2(.1)" useBdt="false" useGridIdeitifiers="false" useWsEnumeration="false" xsi:type="ns19:ServiceFeatures"/>
+
+    </ns19:Data>
+   </ns18:ExtensionData>
+  </ns18:Extension>
+ </ns18:Extensions>
+ <ns19:ServiceProperties xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns19:Property description="" isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor"/>
+  <ns19:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http://10.88.199.50:28080/pathologySCG/http/remoteService"/>
+  <ns19:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
+  <ns19:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
+  <ns19:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
+  <ns19:Property description="A flag to indicate that CQL should be validated for structural correctness" isFromETC="false" key="dataService_validateCqlFlag" value="false"/>
+  <ns19:Property description="A flag to indicate that CQL should be validated for correctness against the domain model" isFromETC="false" key="dataService_validateDomainModelFlag" value="false"/>
+  <ns19:Property description="The name of the file containing the class name to QName mapping" isFromETC="true" key="dataService_classMappingsFilename" value="classToQname.xml"/>
+ </ns19:ServiceProperties>
+</ns1:ServiceDescription>

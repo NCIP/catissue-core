@@ -1,0 +1,117 @@
+
+package edu.wustl.catissuecore.domain;
+
+import java.io.Serializable;
+
+import edu.wustl.common.domain.AbstractDomainObject;
+
+/**
+ * @author ashish_gupta
+ *@hibernate.class table="CATISSUE_ABSTRACT_POSITION"
+ */
+public abstract class AbstractPosition extends AbstractDomainObject implements Serializable
+{
+
+	/**
+	 * This is the serial version ID generated for the class.
+	 */
+	private static final long serialVersionUID = -9049547804972340176L;
+	/**
+	 * It is the dimension one of the storage container.
+	 */
+	protected Integer positionDimensionOne;
+	/**
+	 * It is the dimension two of the storage container.
+	 */
+	protected Integer positionDimensionTwo;
+	/**
+	 * It is the dimension one of the storage container to store values in string.
+	 */
+	protected String positionDimensionOneString;
+	/**
+	 * It is the dimension two of the storage container to store values in string.
+	 */
+	protected String positionDimensionTwoString;
+	/**
+	 * It is the identifier of the storage container.
+	 */
+	protected Long id;
+	
+	public String getPositionDimensionOneString()
+	{
+		return positionDimensionOneString;
+	}
+
+	
+	public void setPositionDimensionOneString(String positionDimensionOneString)
+	{
+		this.positionDimensionOneString = positionDimensionOneString;
+	}
+
+	
+	public String getPositionDimensionTwoString()
+	{
+		return positionDimensionTwoString;
+	}
+
+	
+	public void setPositionDimensionTwoString(String positionDimensionTwoString)
+	{
+		this.positionDimensionTwoString = positionDimensionTwoString;
+	}
+
+	/**
+	 * @return the id
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_ABS_POSITION_SEQ"
+	 */
+	@Override
+	public Long getId()
+	{
+		return this.id;
+	}
+
+	/**
+	 * @param identifier the id to set
+	 */
+	@Override
+	public void setId(Long identifier)
+	{
+		this.id = identifier;
+	}
+
+	/**
+	 * @return the positionDimensionOne
+	 * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"
+	 */
+	public Integer getPositionDimensionOne()
+	{
+		return this.positionDimensionOne;
+	}
+
+	/**
+	 * @param positionDimensionOne the positionDimensionOne to set
+	 */
+	public void setPositionDimensionOne(Integer positionDimensionOne)
+	{
+		this.positionDimensionOne = positionDimensionOne;
+	}
+
+	/**
+	 * @return the positionDimensionTwo
+	 * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="30
+	 */
+	public Integer getPositionDimensionTwo()
+	{
+		return this.positionDimensionTwo;
+	}
+
+	/**
+	 * @param positionDimensionTwo the positionDimensionTwo to set
+	 */
+	public void setPositionDimensionTwo(Integer positionDimensionTwo)
+	{
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
+}

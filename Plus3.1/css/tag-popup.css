@@ -1,0 +1,179 @@
+@charset "UTF-8";
+
+body {
+	font-family: verdana;
+	background: white;
+}
+
+#wrapper {
+	 
+}
+#left { -moz-position:relative;
+	float: left;
+	top: 25%;
+	left: 0;
+	width: 181px;
+	background-color: #ffffff;
+	BORDER-right: #d8d8d8 1px solid;
+	BORDER-left: #d8d8d8 1px groove;
+	 
+	height: 100%;
+}
+#right {
+	-webkit-position:relative;
+	-moz-position:relative;
+	-ms-box-position:fixed;
+ 	top: 22%;
+ 
+	width:auto; 
+	height: 100%;
+	background-color: #ffffff;
+	overflow :auto;
+}
+input.btn {
+	display: inline-block;
+	width: 88px;
+	height: 27px;
+	float: right;
+	color: #ffffff;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	background: #B80000;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-box-border-radius: 7px;
+	-ms-box-border-radius: 10px;
+	border-radius: 7px;
+	cursor: pointer;
+	margin-left: 2px;
+}
+input.btn2 {
+	display: inline-block;
+	width: 155px;
+	height: 27px;
+	float: right;
+	color: #ffffff;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	background: #B80000;
+	cursor: pointer;
+	 
+	-webkit-border-radius: 7px; /*safari and Chrome*/
+	-moz-border-radius: 7px; /*Mozilla*/
+	-o-box-border-radius: 7px; /*Opera*/
+	-ms-box-border-radius: 10px; /*Ms IE*/
+	border-radius: 5px; /*W3C*/
+}
+input.btn3 {
+	display: inline-block;
+	width: 88px;
+	height: 20px;
+	float: left;
+	color: #ffffff;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:bold;
+	padding-bottom: 1px;
+	padding-top: 1px;
+	background: #B80000;
+	BORDER-right: #ffffff 0px solid;
+	BORDER-left: #ffffff 0px solid;
+	BORDER-bottom: #ffffff 0px solid;
+	BORDER-TOP: #ffffff 0px solid;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-box-border-radius: 3px;
+	-ms-box-border-radius: 3px;
+	border-radius: 3px;
+	cursor: pointer;
+	margin-left: 20px;
+}
+
+.btn1:hover {
+	display: inline-block;
+	width: 175px;
+	height: 27px;
+	background: #d5e8ff;
+}
+
+.btn1:active {
+	display: inline-block;
+	width: 175px;
+	height: 27px;
+	background: #d5e8ff;
+}
+
+input.btn1 {
+	width: 176px;
+	height: 27px;
+	background-color: transparent;
+	font-size: 13px;
+	text-align: left;
+	padding-left: 10px;
+	cursor: pointer;
+	font-family: Arial, Helvetica, sans-serif;
+	background: #eaeaea;
+	BORDER-right: #A4BED4 1px solid;
+	BORDER-left: #A4BED4 1px solid;
+	BORDER-bottom: #A4BED4 1px solid;
+	BORDER-TOP: #A4BED4 1px solid;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+
+#treegridbox {
+	margin: 25 auto;
+	width: 90%;
+	background-color: white;
+	height: 250px;
+	margin-bottom: 30px;
+	margin-left: 35px;
+	margin-right: 30px;
+	margin-top: 30px;
+	width: 540px;
+	 
+}
+
+ 
+
+img {border:1px}
+
+
+
+
+/*LINKS*/
+
+#mainContent a:link, #mainContent a:visited {color:#EBEBEB; text-decoration:none; font-size:18px; background:; padding:4px; -webkit-border-radius:10px;
+-moz-border-radius:10px}
+#mainContent a:hover, #mainContent a:active {color:#EBEBEB; text-decoration:none; font-size:18px; background:; padding:4px; -webkit-border-radius:10px;
+-moz-border-radius:10px}
+
+
+
+
+
+/*STYLES FOR CSS POPUP*/
+
+
+#blanket {
+   background-color:#EBEBEB;
+   opacity: 0.65;
+   *background:none;
+   position:absolute;
+   z-index: 9001;
+   top:-230px;
+   left:0px;
+   width:100%;
+  height:147%;
+}
+#popUpDiv {
+        position:absolute;
+	background:#ffffff;
+	width:600px;
+	height:450px;
+	border:2px solid #6E81A6;
+	z-index: 9002;
+}
+
+#popUpDiv a {position:relative;   top:20px; left:20px}

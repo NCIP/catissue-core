@@ -1,0 +1,101 @@
+<properties>
+	<property>
+		<name>1270</name>
+		<value>Female Gender</value>
+	</property>
+	<property>
+		<name>1987</name>
+		<value>Male Gender</value>
+	</property>
+	<property>
+		<name>08</name>
+		<value>Alton Memorial Hospital</value>
+	</property>
+	<property>
+		<name>01</name>
+		<value>Barnes-Jewish Hospital</value>
+	</property>
+	
+	<property>
+		<name>03</name>
+		<value>Barnes-Jewish St. Peters Hospital</value>
+	</property>
+	<property>
+		<name>04</name>
+		<value>Barnes-Jewish West County Hospital</value>
+	</property>
+	<property>
+		<name>09</name>
+		<value>Boone Hospital Center</value>
+	</property>
+	
+	<property>
+		<name>62</name>
+		<value>Christian Hospital</value>
+	</property>
+	
+	<property>
+		<name>0F</name>
+		<value>Missouri Baptist Hospital - Sullivan</value>
+	</property>
+	
+	<property>
+		<name>10</name>
+		<value>Missouri Baptist Medical Center</value>
+	</property>
+	
+	<property>
+		<name>11</name>
+		<value>Parkland Health Center</value>
+	</property>
+	
+	<property>
+		<name>14</name>
+		<value>Progress West</value>
+	</property>
+	
+	<property>
+		<name>61</name>
+		<value>St. Louis Childrens Hospital</value>
+	</property>
+
+	<property>
+		<name>63</name>
+		<value>Washington University School of Medicine</value>
+	</property>
+
+	<property>
+		<name>5040</name>
+		<value>Unknown</value>
+	</property>
+	
+	<property>
+		<name>5528</name>
+		<value>Asian</value>
+	</property>
+	<property>
+		<name>3223</name>
+		<value>American Indian or Alaska native</value>
+	</property>
+	
+	<property>
+		<name>3326</name>
+		<value>Black or African American</value>
+	</property>
+
+	<property>
+		<name>3452</name>
+		<value>White</value>
+	</property>
+	
+	<property>
+		<name>6036</name>
+		<value>Unknown</value>
+	</property>
+	
+	<property>
+		<name>2916</name>
+		<value>Unknown</value>
+	</property>
+	
+</properties>

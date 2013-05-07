@@ -1,0 +1,10 @@
+Hello $sharedUser.lastName, $sharedUser.firstName<br>
+<br>
+#if($sharedTags.size() == 1)
+	Query folder by title '<a href=$appUrl/ShowQueryDashboardAction.do?tagId=$sharedTags.get(0).identifier >$sharedTags.get(0).label</a> ' has been shared to you by $user.lastName, $user.firstName. You can now access the folder after you login to caTissue.
+#else 
+	Query folders by title #foreach($tag in $sharedTags) #if($velocityCount == $sharedTags.size())'<a href=$appUrl/ShowQueryDashboardAction.do?tagId=$tag.identifier >$tag.label</a> ' #{else}'<a href=$appUrl/ShowQueryDashboardAction.do?tagId=$tag.identifier >$tag.label</a> ' ,#end #end has been shared to you by $user.lastName, $user.firstName. You can now access the folders after you login to caTissue. 
+#end <br>
+<br>
+$footer	
+	 

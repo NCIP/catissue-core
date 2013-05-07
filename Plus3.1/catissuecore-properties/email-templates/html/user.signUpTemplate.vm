@@ -1,0 +1,49 @@
+Dear $user.lastName, $user.firstName<br>
+<br>
+Your registration is now pending for approval by the System Administrators. Your registration details are as follows:<br>
+<table> 
+	<tr>
+		<td> Login Name  </td> <td>: $user.loginName </td>
+	</tr>
+	<tr>	
+		<td>Last Name </td> <td> : $user.lastName </td>
+	</tr>
+	<tr>
+		<td>First Name </td><td> : $user.firstName</td>
+	</tr>
+	<tr>
+		<td>Street </td><td> : $user.address.street</td>
+	</tr>
+	<tr>
+		<td>City </td><td> : $user.address.city</td>
+	</tr>
+	<tr>
+		<td>Zip Code </td><td> : $user.address.zipCode</td>
+	</tr>
+	<tr>
+		<td>State </td><td> : $user.address.state</td>
+	</tr>
+	<tr>
+		<td>Country </td><td> : $user.address.country</td>
+	</tr>
+	<tr>
+		<td>Phone Number </td><td> : $user.address.phoneNumber</td>
+	</tr>
+	<tr>
+		<td>Fax Number </td><td> : $user.address.faxNumber</td>
+	</tr>
+	<tr>
+		<td>Email Address </td><td> : $user.emailAddress</td>
+	</tr>
+	<tr>
+		<td>Institution </td><td> : $user.institution.name</td>
+	</tr>
+	<tr>
+		<td>Department </td><td> : $user.department.name</td>
+	</tr>
+	<tr>
+		<td>Cancer Research Group </td><td> : $user.cancerResearchGroup.name</td>
+	</tr>
+</table>
+<br>
+$footer

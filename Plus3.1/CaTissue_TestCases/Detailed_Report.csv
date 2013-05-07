@@ -1,0 +1,9 @@
+Test Id,Test Summary,Test Execution Status,Time Taken (sec),Report Verification,Database Verification,Audit Event Verification,Log
+1,testFirstTimeLogin,Failure,,,,,received error 400 : Invalid path /Login was requeste
+2,testSuccessfulLogin,Failure,,,,,received error 400 : Invalid path /Login was requeste
+3,testInstitutionAdd,Failure,,,,,java.lang.reflect.InvocationTargetExceptio
+4,testInstitutionAddWithSameName,Failure,,,,,java.lang.reflect.InvocationTargetExceptio
+5,testDepartmentAdd,Failure,,,,,java.lang.reflect.InvocationTargetExceptio
+6,testDepartmentAddWithSameName,Failure,,,,,java.lang.reflect.InvocationTargetExceptio
+7,testCancerResearchGroupAdd,Failure,,,,,java.lang.reflect.InvocationTargetExceptio
+8,testCancerResearchGroupAddWithSameName,Failure,,,,,java.lang.reflect.InvocationTargetExceptio

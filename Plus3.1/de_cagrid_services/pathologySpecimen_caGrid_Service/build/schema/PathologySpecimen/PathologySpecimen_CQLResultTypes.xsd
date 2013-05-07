@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://pathology_specimen/PathologySpecimen/CQLResultTypes" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <!-- Exposed Objects' schemas are imported here -->
+	<xs:import namespace="gme://caCORE.caCORE/3.2/pathology_specimen" schemaLocation="./pathology_specimen.xsd"/>
+
+
+
+    <xs:group name="PermissibleCQLObjectResults">
+        <xs:choice>        
+        <!-- element references to exposed objects -->
+		<xs:element ref="ns0:SpecimenHistologicType" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:MelanomaSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:ColorectalSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenGleasonScore" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenHistologicGrade" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenBaseSolidTissuePathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenDetails1" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenHistologicVariantType" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:LungSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenAdditionalFinding" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:ProstateSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:KidneySpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:ProstateSpecimenGleasonScore" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:BreastSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenInvasion" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenNottinghamHistologicScore" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:SpecimenDetails" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:PancreasSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:BreastSpecimenNottinghamHistologicScore" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:AdditionalPathologicFinding" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+		<xs:element ref="ns0:CNSSpecimenPathologyAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/pathology_specimen"/>
+ 
+        </xs:choice>
+    </xs:group>
+</xs:schema>

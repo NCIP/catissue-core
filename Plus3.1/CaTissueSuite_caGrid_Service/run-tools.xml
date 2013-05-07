@@ -1,0 +1,135 @@
+<project name="run-tools file" basedir="." default="runClient">
+     <property name="service.url" value="https://host:port/wsrf/services/cagrid/CaTissueSuite" />
+
+<target name="runAll" depends="runQuery1,runQuery2,runQuery3,runQuery4,runQuery5,runQuery6,runQuery7,runQuery8,runQuery9,runQuery10,runQuery11,runQuery12" description="Run the sample Client">
+</target>
+<target name="runQuery1" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+    <property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+    <java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+        <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+        <arg value="-url" />
+		<arg value="${service.url}" />
+        <arg value="./cqls/Query1.xml" />
+  </java>
+</target>
+<target name="runQuery2" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query2.xml" />
+	</java>
+</target>
+<target name="runQuery3" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query3.xml" />
+	  </java>
+</target>
+
+<target name="runQuery4" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query4.xml" />
+  </java>
+</target>
+
+<target name="runQuery5" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query5.xml" />
+  </java>
+</target>
+
+<target name="runQuery6" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query6.xml" />
+  </java>
+</target>
+
+<target name="runQuery7" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query7.xml" />
+  </java>
+</target>
+
+<target name="runQuery8" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query8.xml" />
+  </java>
+</target>
+
+<target name="runQuery9" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query9.xml" />
+  </java>
+</target>
+
+<target name="runQuery10" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+	<property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+	<java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+		<arg value="-url" />
+		<arg value="${service.url}" />
+		<arg value="./cqls/Query10.xml" />
+  </java>
+</target>
+
+<target name="runQuery11" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+    <property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+    <java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+        <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+        <arg value="-url" />
+		<arg value="${service.url}" />
+        <arg value="./cqls/Query11.xml" />
+  </java>
+</target>
+
+<target name="runQuery12" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
+    <property name="runclasspath" refid="run.classpath"/>
+	<echo message="Connecting to service: ${service.url}" />
+    <java failonerror="true" classname="edu.wustl.catissuecore.client.CaTissueSuiteClient" classpathref="run.classpath" fork="yes">
+        <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+        <arg value="-url" />
+		<arg value="${service.url}" />
+        <arg value="./cqls/Query12.xml" />
+  </java>
+</target>
+</project>

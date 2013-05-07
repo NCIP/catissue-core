@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
+	<property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+	<!-- ALTER TABLE CATISSUE_USER -->
+	<changeSet id="1" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_USER">
+			<column name="FORGOT_PASSWORD_TOKEN" type="${text.type}(255)" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="2" author="catissue" runOnChange="true">
+
+		<createTable tableName="catissue_specimenlist_tags">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="TAG_LABEL" type="${text.type}(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+
+
+
+		<createTable tableName="catissue_spec_tag_items">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="TAG_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJ_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+<addForeignKeyConstraint constraintName="FK_SPECLIST_TAGITEM_TAG_ID"
+			baseTableName="catissue_spec_tag_items" baseColumnNames="TAG_ID"
+			referencedTableName="catissue_specimenlist_tags" referencedColumnNames="IDENTIFIER" />
+
+		<addForeignKeyConstraint constraintName="FK_SPECLIST_USER_ID"
+			baseTableName="catissue_specimenlist_tags" baseColumnNames="USER_ID" 					referencedTableName="CATISSUE_USER"
+			referencedColumnNames="IDENTIFIER" />
+
+	        <addForeignKeyConstraint constraintName="FK_SPECLIST_OBJ_ID"
+			baseTableName="catissue_spec_tag_items" baseColumnNames="OBJ_ID" 					referencedTableName="catissue_abstract_specimen"
+			referencedColumnNames="IDENTIFIER" />
+
+		<addUniqueConstraint constraintName="SPECLIST_TAGID_UNIQUE_KEY"
+			tableName="catissue_spec_tag_items" columnNames="TAG_ID,OBJ_ID" />
+
+		<addUniqueConstraint constraintName="SPECLIST_TAGLABEL_UNIQUE_KEY"
+			tableName="catissue_specimenlist_tags" columnNames="TAG_LABEL,USER_ID" />
+			
+	</changeSet>
+	
+	<changeSet id="3" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+			<column name="SPEC_REQ_LABEL" type="${text.type}(255)"/>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="4" author="catissuecore" runOnChange="true">
+	<!-- PPI column from cpr is added to be displayed as hyperlink in simple query result view.-->
+	<insert tableName="CATISSUE_QUERY_EDITLINK_COLS">
+     <column name="TABLE_ID" valueNumeric="27"/>
+     <column name="COL_ID" value="60"/>
+     </insert>
+	</changeSet>
+	
+	<changeSet id="5" author="catissuecore" runOnChange="true">
+	<createTable tableName="catissue_synch_cp_audit">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="true" >
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="CP_ID" type="${int.type}(20)">
+				<constraints nullable="false" />
+			</column>			
+			<column name="PROCESS_STATUS" type="${text.type}(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="PROCESSED_CPR_COUNT" type="${int.type}(20)">
+			</column>
+			<column name="START_DATE" type="${date.type}"></column>
+			<column name="END_DATE" type="${date.type}"></column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+	</createTable>
+	<createSequence sequenceName="synch_cp_id"/>
+	</changeSet>	
+	
+	<!-- Darpan's changes for queryfolder -->
+	<changeSet id="6" author="catissue" runOnChange="true">
+
+		<createTable tableName="QUERY_TAGS">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="TAG_LABEL" type="${text.type}(255)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="QUERY_TAG_ITEMS">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="TAG_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJ_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			 
+		</createTable>
+
+
+		<addForeignKeyConstraint constraintName="FK_TAGITEM_TAG_ID"
+			baseTableName="QUERY_TAG_ITEMS" baseColumnNames="TAG_ID"
+			referencedTableName="QUERY_TAGS" referencedColumnNames="IDENTIFIER" />
+
+		<addForeignKeyConstraint constraintName="FK_QUERYTAG_USER_ID"
+			baseTableName="QUERY_TAGS" baseColumnNames="USER_ID" 					referencedTableName="CATISSUE_USER"
+			referencedColumnNames="IDENTIFIER" />
+
+	        <addForeignKeyConstraint constraintName="FK_QUERYTAG_OBJ_ID"
+			baseTableName="QUERY_TAG_ITEMS" baseColumnNames="OBJ_ID" 					referencedTableName="QUERY_PARAMETERIZED_QUERY"
+			referencedColumnNames="IDENTIFIER" />
+
+		<addUniqueConstraint constraintName="S_TAGID_UNIQUE_KEY"
+			tableName="QUERY_TAG_ITEMS" columnNames="TAG_ID,OBJ_ID" />
+
+		<addUniqueConstraint constraintName="USRID_TAGLABEL_UNIQUE_KEY"
+			tableName="QUERY_TAGS" columnNames="TAG_LABEL,USER_ID" />
+	</changeSet> 	 
+</databaseChangeLog>         

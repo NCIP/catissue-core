@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_scg.MelanomaPathologyAnnotation">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+			<Association roleName="PathologicalStaging" name="pathology_scg.PathologicalStaging">
+				<Group logicRelation="AND">
+					<Attribute name="id" predicate="IS_NOT_NULL" />
+					<Association roleName="DistantMetastasis" name="pathology_scg.DistantMetastasis">
+						<Group logicRelation="AND">
+							<Attribute name="metastasisStage" value="pM1 - Distant metastasis"
+								predicate="EQUAL_TO" />
+							<Association roleName="MetastasisTissueSite"
+								name="pathology_scg.MetastasisTissueSite">
+								<Group logicRelation="AND">
+									<Attribute name="tissueSite" value="Bone Marrow"
+										predicate="EQUAL_TO" />
+
+
+								</Group>
+							</Association>
+						</Group>
+					</Association>
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>

@@ -1,0 +1,22 @@
+.theam-font-color{
+	color: #4D90FE;
+}
+.theam-font-color-orange{
+	color: #FF6600;
+}
+.td_orange_line {
+	background-color : #FF6600;
+	/*background-image: url(../images/uIEnhancementImages/or_dot.gif);*/
+}
+.footer-class{
+	background-color: #f8f8f8;/*#678F2D;*/
+	text-align:center;
+	border-top: 1px solid #000;
+    height: 50px;
+	position:absolute;bottom:0;left:0;
+	width:100%;
+	
+	/*border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 0 10px #999999;*/
+	border-top: 1px solid #FF6600;
+}

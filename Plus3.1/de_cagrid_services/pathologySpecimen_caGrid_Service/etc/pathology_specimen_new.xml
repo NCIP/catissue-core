@@ -1,0 +1,419 @@
+<ns1:DomainModel projectShortName="pathologySpecimen" projectVersion="1.2" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+ <ns1:exposedUMLAssociationCollection>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="HistologicVariantType">
+     <ns1:UMLClassReference refid="EAID_5581307E_6B5E_45b7_869E_D0C3A3059DCC"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="HistologicType">
+     <ns1:UMLClassReference refid="EAID_18EFC3C0_59E6_4465_B0B3_C7F0A38B0EAD"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="HistologicType">
+     <ns1:UMLClassReference refid="EAID_18EFC3C0_59E6_4465_B0B3_C7F0A38B0EAD"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenBaseSolidTissuePathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="MelanomaSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_1E273185_51F4_4b0f_877F_A67E02FA1826"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_MelanomaSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="ColorectalSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_20B5925D_1969_4b57_961E_EDB4AF3F0FF1"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_ColorectalSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="histologicGrade">
+     <ns1:UMLClassReference refid="EAID_4A8A2F0C_53F5_43d3_9E10_153029AE41E1"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="specimenBaseSolidTissuePathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="invasion">
+     <ns1:UMLClassReference refid="EAID_B58663EA_90CD_4482_92AE_E55CEE9994B2"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="specimenBaseSolidTissuePathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="additionalFinding">
+     <ns1:UMLClassReference refid="EAID_860515A5_1F89_4bb4_AC15_9A3D7814A7F1"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenBaseSolidTissuePathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenBaseSolidTissuePathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="detailsCollection">
+     <ns1:UMLClassReference refid="EAID_54BB13EA_4EE2_42ca_80EA_B3AC30063AB0"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="additionalPathologicFinding">
+     <ns1:UMLClassReference refid="EAID_EFB47FE3_DA27_46f3_8E07_3AA116C48BBB"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="LungSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_68ED473C_260C_441a_9DEA_2740FF66BD1B"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_LungSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="CNSSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_FC45420C_2EFC_49e3_B5BB_561ECC475D0F"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_CNSSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="ProstateSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_A7CC98E6_638B_44bb_B9B6_0071125B3678"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_ProstateSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="PancreasSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_E4CD58C2_EA93_4542_86E0_2EF0EDB0AFD8"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_PancreasSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="BreastSpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_B4F45C17_6FAC_40f9_9C6B_8484BA896829"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_BreastSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="KidneySpecimenPathologyAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_AFACF087_AC44_4d2f_AFA6_E0AD74562760"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="SpecimenRecordEntry_KidneySpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="Details">
+     <ns1:UMLClassReference refid="EAID_E1D0C7AC_D5E8_4c63_B277_55F1606E1E95"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="AdditionalFinding">
+     <ns1:UMLClassReference refid="EAID_860515A5_1F89_4bb4_AC15_9A3D7814A7F1"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="prostateSpecimenGleasonScore">
+     <ns1:UMLClassReference refid="EAID_B4C03A2F_6547_4422_BF2A_AA812AD9189A"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="prostateSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_A7CC98E6_638B_44bb_B9B6_0071125B3678"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="breastSpecimenNottinghamHistologicScore">
+     <ns1:UMLClassReference refid="EAID_E759AF48_79B8_4e4b_98E4_58A68DE351D6"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="0" minCardinality="0" roleName="breastSpecimenPathologyAnnotation">
+     <ns1:UMLClassReference refid="EAID_B4F45C17_6FAC_40f9_9C6B_8484BA896829"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+ </ns1:exposedUMLAssociationCollection>
+ <ns1:exposedUMLClassCollection>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenHistologicType" description="SpecimenHistologicType" id="EAID_18EFC3C0_59E6_4465_B0B3_C7F0A38B0EAD" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns2:umlAttributeCollection xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns2:UMLAttribute name="id" publicID="-276532167" version="1.0"/>
+    <ns2:UMLAttribute name="type" publicID="-276532166" version="1.0"/>
+   </ns2:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="MelanomaSpecimenPathologyAnnotation" description="MelanomaSpecimenPathologyAnnotation" id="EAID_1E273185_51F4_4b0f_877F_A67E02FA1826" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns3:umlAttributeCollection xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns3:UMLAttribute name="id" publicID="-392488638" version="1.0"/>
+    <ns3:UMLAttribute name="mitoticIndex" publicID="-392488637" version="1.0"/>
+    <ns3:UMLAttribute name="tumorRegression" publicID="-392488636" version="1.0"/>
+    <ns3:UMLAttribute name="tumorInfiltratingLymphocytes" publicID="-392488635" version="1.0"/>
+    <ns3:UMLAttribute name="depthOfInvasionCannotBeDetermined" publicID="-392488634" version="1.0"/>
+    <ns3:UMLAttribute name="depthOfInvasion" publicID="-392488633" version="1.0"/>
+    <ns3:UMLAttribute name="ulceration" publicID="-392488632" version="1.0"/>
+    <ns3:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns3:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns3:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="ColorectalSpecimenPathologyAnnotation" description="ColorectalSpecimenPathologyAnnotation" id="EAID_20B5925D_1969_4b57_961E_EDB4AF3F0FF1" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns4:UMLAttribute name="id" publicID="-2031315186" version="1.0"/>
+    <ns4:UMLAttribute name="intratumoralPeritumoralLymphocyticResponse" publicID="-2031315185" version="1.0"/>
+    <ns4:UMLAttribute name="tumorBorderConfiguration" publicID="-2031315184" version="1.0"/>
+    <ns4:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns4:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns4:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenGleasonScore" description="SpecimenGleasonScore" id="EAID_46DCBC35_0676_43d2_88A0_396CEE2794EE" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns5:UMLAttribute name="id" publicID="245747431" version="1.0"/>
+    <ns5:UMLAttribute name="tertiaryPatternScore" publicID="245747432" version="1.0"/>
+    <ns5:UMLAttribute name="secondaryPatternScore" publicID="245747433" version="1.0"/>
+    <ns5:UMLAttribute name="primaryPatternScore" publicID="245747434" version="1.0"/>
+   </ns5:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenHistologicGrade" description="SpecimenHistologicGrade" id="EAID_4A8A2F0C_53F5_43d3_9E10_153029AE41E1" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns6:umlAttributeCollection xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns6:UMLAttribute name="id" publicID="209439679" version="1.0"/>
+    <ns6:UMLAttribute name="grade" publicID="209439680" version="1.0"/>
+    <ns6:UMLAttribute name="otherGradingSystemName" publicID="209439681" version="1.0"/>
+    <ns6:UMLAttribute name="gradingSystemName" publicID="209439682" version="1.0"/>
+   </ns6:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenBaseSolidTissuePathologyAnnotation" description="SpecimenBaseSolidTissuePathologyAnnotation" id="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns7:umlAttributeCollection xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns7:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns7:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns7:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenDetails1" description="SpecimenDetails1" id="EAID_54BB13EA_4EE2_42ca_80EA_B3AC30063AB0" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns8:umlAttributeCollection xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns8:UMLAttribute name="id" publicID="1821477296" version="1.0"/>
+    <ns8:UMLAttribute name="detail" publicID="1821477297" version="1.0"/>
+   </ns8:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenHistologicVariantType" description="SpecimenHistologicVariantType" id="EAID_5581307E_6B5E_45b7_869E_D0C3A3059DCC" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns9:umlAttributeCollection xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns9:UMLAttribute name="id" publicID="1615890313" version="1.0"/>
+    <ns9:UMLAttribute name="otherHistologicType" publicID="1615890314" version="1.0"/>
+   </ns9:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="LungSpecimenPathologyAnnotation" description="LungSpecimenPathologyAnnotation" id="EAID_68ED473C_260C_441a_9DEA_2740FF66BD1B" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns10:umlAttributeCollection xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns10:UMLAttribute name="id" publicID="-1450380335" version="1.0"/>
+    <ns10:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns10:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns10:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenRecordEntry" description="SpecimenRecordEntry" id="EAID_6CB6E9EF_D6BB_4f22_8DB7_EFF283424E58" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns11:umlAttributeCollection xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns11:UMLAttribute name="id" publicID="-2066553754" version="1.0"/>
+   </ns11:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenAdditionalFinding" description="SpecimenAdditionalFinding" id="EAID_860515A5_1F89_4bb4_AC15_9A3D7814A7F1" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns12:umlAttributeCollection xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns12:UMLAttribute name="id" publicID="-321556812" version="1.0"/>
+    <ns12:UMLAttribute name="pathologicFinding" publicID="-321556811" version="1.0"/>
+   </ns12:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="ProstateSpecimenPathologyAnnotation" description="ProstateSpecimenPathologyAnnotation" id="EAID_A7CC98E6_638B_44bb_B9B6_0071125B3678" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns13:umlAttributeCollection xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns13:UMLAttribute name="id" publicID="-873456713" version="1.0"/>
+    <ns13:UMLAttribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" publicID="-873456712" version="1.0"/>
+    <ns13:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns13:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns13:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="KidneySpecimenPathologyAnnotation" description="KidneySpecimenPathologyAnnotation" id="EAID_AFACF087_AC44_4d2f_AFA6_E0AD74562760" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns14:umlAttributeCollection xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns14:UMLAttribute name="id" publicID="-1393320326" version="1.0"/>
+    <ns14:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns14:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns14:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="ProstateSpecimenGleasonScore" description="ProstateSpecimenGleasonScore" id="EAID_B4C03A2F_6547_4422_BF2A_AA812AD9189A" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns15:umlAttributeCollection xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns15:UMLAttribute name="id" publicID="-1960430705" version="1.0"/>
+    <ns15:UMLAttribute name="tertiaryPatternScore" publicID="-1960430704" version="1.0"/>
+    <ns15:UMLAttribute name="secondaryPatternScore" publicID="-1960430703" version="1.0"/>
+    <ns15:UMLAttribute name="primaryPatternScore" publicID="-1960430702" version="1.0"/>
+   </ns15:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="BreastSpecimenPathologyAnnotation" description="BreastSpecimenPathologyAnnotation" id="EAID_B4F45C17_6FAC_40f9_9C6B_8484BA896829" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns16:umlAttributeCollection xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns16:UMLAttribute name="id" publicID="-1955390349" version="1.0"/>
+    <ns16:UMLAttribute name="mitoticCountIfOtherGradingSystemUsed" publicID="-1955390348" version="1.0"/>
+    <ns16:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns16:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns16:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenInvasion" description="SpecimenInvasion" id="EAID_B58663EA_90CD_4482_92AE_E55CEE9994B2" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns17:umlAttributeCollection xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns17:UMLAttribute name="id" publicID="1576284495" version="1.0"/>
+    <ns17:UMLAttribute name="perineuralInvasion" publicID="1576284496" version="1.0"/>
+    <ns17:UMLAttribute name="venousInvasion" publicID="1576284497" version="1.0"/>
+    <ns17:UMLAttribute name="lymphaticInvasion" publicID="1576284498" version="1.0"/>
+   </ns17:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenNottinghamHistologicScore" description="SpecimenNottinghamHistologicScore" id="EAID_D247E743_054B_4bce_8CC4_9A14F33750E1" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns18:umlAttributeCollection xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns18:UMLAttribute name="id" publicID="1594035613" version="1.0"/>
+    <ns18:UMLAttribute name="totalNottinghamScore" publicID="1594035614" version="1.0"/>
+    <ns18:UMLAttribute name="mitoticCountScore" publicID="1594035615" version="1.0"/>
+    <ns18:UMLAttribute name="nuclearPleomorphismScore" publicID="1594035616" version="1.0"/>
+    <ns18:UMLAttribute name="tubuleFormationScore" publicID="1594035617" version="1.0"/>
+   </ns18:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SpecimenDetails" description="SpecimenDetails" id="EAID_E1D0C7AC_D5E8_4c63_B277_55F1606E1E95" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns19:umlAttributeCollection xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns19:UMLAttribute name="id" publicID="1382873409" version="1.0"/>
+    <ns19:UMLAttribute name="details" publicID="1382873410" version="1.0"/>
+   </ns19:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="PancreasSpecimenPathologyAnnotation" description="PancreasSpecimenPathologyAnnotation" id="EAID_E4CD58C2_EA93_4542_86E0_2EF0EDB0AFD8" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns20:umlAttributeCollection xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns20:UMLAttribute name="id" publicID="1979902076" version="1.0"/>
+    <ns20:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns20:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns20:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="BreastSpecimenNottinghamHistologicScore" description="BreastSpecimenNottinghamHistologicScore" id="EAID_E759AF48_79B8_4e4b_98E4_58A68DE351D6" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns21:umlAttributeCollection xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns21:UMLAttribute name="id" publicID="-1568439505" version="1.0"/>
+    <ns21:UMLAttribute name="totalNottinghamScore" publicID="-1568439504" version="1.0"/>
+    <ns21:UMLAttribute name="mitoticCountScore" publicID="-1568439503" version="1.0"/>
+    <ns21:UMLAttribute name="nuclearPleomorphismScore" publicID="-1568439502" version="1.0"/>
+    <ns21:UMLAttribute name="tubuleFormationScore" publicID="-1568439501" version="1.0"/>
+   </ns21:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="AdditionalPathologicFinding" description="AdditionalPathologicFinding" id="EAID_EFB47FE3_DA27_46f3_8E07_3AA116C48BBB" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns22:umlAttributeCollection xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns22:UMLAttribute name="id" publicID="1180222046" version="1.0"/>
+    <ns22:UMLAttribute name="comments" publicID="1180222047" version="1.0"/>
+   </ns22:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="CNSSpecimenPathologyAnnotation" description="CNSSpecimenPathologyAnnotation" id="EAID_FC45420C_2EFC_49e3_B5BB_561ECC475D0F" packageName="pathology_specimen" projectName="pathologySpecimen" projectVersion="1.2">
+   <ns23:umlAttributeCollection xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns23:UMLAttribute name="id" publicID="-87923789" version="1.0"/>
+    <ns23:UMLAttribute name="id" publicID="-642758811" version="1.0"/>
+    <ns23:UMLAttribute name="comments" publicID="-642758810" version="1.0"/>
+   </ns23:umlAttributeCollection>
+  </ns1:UMLClass>
+ </ns1:exposedUMLClassCollection>
+ <ns1:umlGeneralizationCollection>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_1E273185_51F4_4b0f_877F_A67E02FA1826"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_20B5925D_1969_4b57_961E_EDB4AF3F0FF1"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_A7CC98E6_638B_44bb_B9B6_0071125B3678"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_68ED473C_260C_441a_9DEA_2740FF66BD1B"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_FC45420C_2EFC_49e3_B5BB_561ECC475D0F"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_E4CD58C2_EA93_4542_86E0_2EF0EDB0AFD8"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_B4F45C17_6FAC_40f9_9C6B_8484BA896829"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_AFACF087_AC44_4d2f_AFA6_E0AD74562760"/>
+   <ns1:superClassReference refid="EAID_4C4F870C_9991_4f78_B699_ADDCB6953225"/>
+  </ns1:UMLGeneralization>
+ </ns1:umlGeneralizationCollection>
+</ns1:DomainModel>

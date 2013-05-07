@@ -1,0 +1,64 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:aggr="http://mds.globus.org/aggregator/types" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="defaultServerConfig">
+  <service name="SERVICE-INSTANCE-PREFIX/PathologySpecimen" provider="Handler" use="literal" style="document">
+    <parameter name="className" value="pathology_specimen.service.globus.PathologySpecimenProviderImpl" />
+    <wsdlFile>share/schema/PathologySpecimen/PathologySpecimen_service.wsdl</wsdlFile>
+    <parameter name="securityDescriptor" value="ETC-PATH/PathologySpecimen-security-desc.xml" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider" />
+    <parameter name="scope" value="Application" />
+    <parameter name="providers" value=" GetMRPProvider GetRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl" />
+    <parameter name="loadOnStartup" value="true" />
+    <parameter name="securityMetadata" value="ETC-PATH/PathologySpecimen-security-metadata.xml" />
+    <parameter name="castorMarshallerMapping" value="pathology_specimen/PathologySpecimen-edited-xml-mapping.xml" />
+    <parameter name="castorUnmarshallerMapping" value="pathology_specimen/PathologySpecimen-edited-unmarshaller-xml-mapping.xml" />
+    <parameter name="castorMapping" value="pathology_specimen/PathologySpecimen-xml-mapping.xml" />
+  </service>
+  <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
+  <!-- START INTRODUCE TYPEMAPPINGS -->
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.AdditionalPathologicFinding" qname="ns2:AdditionalPathologicFinding" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.BreastSpecimenNottinghamHistologicScore" qname="ns2:BreastSpecimenNottinghamHistologicScore" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.BreastSpecimenPathologyAnnotation" qname="ns2:BreastSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.CNSSpecimenPathologyAnnotation" qname="ns2:CNSSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.ColorectalSpecimenPathologyAnnotation" qname="ns2:ColorectalSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.KidneySpecimenPathologyAnnotation" qname="ns2:KidneySpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.LungSpecimenPathologyAnnotation" qname="ns2:LungSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.MelanomaSpecimenPathologyAnnotation" qname="ns2:MelanomaSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.PancreasSpecimenPathologyAnnotation" qname="ns2:PancreasSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.ProstateSpecimenGleasonScore" qname="ns2:ProstateSpecimenGleasonScore" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.ProstateSpecimenPathologyAnnotation" qname="ns2:ProstateSpecimenPathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenAdditionalFinding" qname="ns2:SpecimenAdditionalFinding" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" qname="ns2:SpecimenBaseSolidTissuePathologyAnnotation" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenDetails" qname="ns2:SpecimenDetails" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenDetails1" qname="ns2:SpecimenDetails1" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenGleasonScore" qname="ns2:SpecimenGleasonScore" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenHistologicGrade" qname="ns2:SpecimenHistologicGrade" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenHistologicType" qname="ns2:SpecimenHistologicType" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenHistologicVariantType" qname="ns2:SpecimenHistologicVariantType" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenInvasion" qname="ns2:SpecimenInvasion" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenNottinghamHistologicScore" qname="ns2:SpecimenNottinghamHistologicScore" />
+
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/pathology_specimen" encodingStyle="" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" type="ns1:pathology_specimen.SpecimenRecordEntry" qname="ns2:SpecimenRecordEntry" />
+
+
+<!-- END INTRODUCE TYPEMAPPINGS -->
+</deployment>

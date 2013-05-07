@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+  <service name="SERVICE-INSTANCE-PREFIX/CA">
+    <resource name="configuration" type="clinical_annotation.service.globus.resource.CAResourceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>performRegistration</name>
+          <!-- Set this to false to skip ServiceGroup registration -->
+          <value>PERFORM_REGISTRATION</value>
+        </parameter>
+        <parameter>
+          <name>registrationTemplateFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
+          <value>ETC-PATH/CA_registration.xml</value>
+        </parameter>
+        <parameter>
+          <name>domainModelFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the domainModel extract -->
+          <value>ETC-PATH/fixed_clinical_annotation_new.xml</value>
+        </parameter>
+        <parameter>
+          <name>serviceMetadataFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
+          <value>ETC-PATH/serviceMetadata.xml</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="serviceconfiguration" type="clinical_annotation.service.CAConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
+        </parameter>
+        <parameter>
+          <name>queryProcessorClass</name>
+          <value>@queryProcessorClass@</value>
+        </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_appserviceUrl</name>
+          <value>@cqlQueryProcessorConfig_appserviceUrl@</value>
+        </parameter>
+        <parameter>
+          <name>serverConfigLocation</name>
+          <value>ETC-PATH/@serverConfigLocation@</value>
+        </parameter>
+        <parameter>
+          <name>dataService_cqlValidatorClass</name>
+          <value>@dataService_cqlValidatorClass@</value>
+        </parameter>
+        <parameter>
+          <name>dataService_domainModelValidatorClass</name>
+          <value>@dataService_domainModelValidatorClass@</value>
+        </parameter>
+        <parameter>
+          <name>dataService_validateCqlFlag</name>
+          <value>@dataService_validateCqlFlag@</value>
+        </parameter>
+        <parameter>
+          <name>dataService_validateDomainModelFlag</name>
+          <value>@dataService_validateDomainModelFlag@</value>
+        </parameter>
+        <parameter>
+          <name>dataService_classMappingsFilename</name>
+          <value>ETC-PATH/@dataService_classMappingsFilename@</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="home" type="clinical_annotation.service.globus.resource.CAResourceHome">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+  </service>
+</jndiConfig>
+

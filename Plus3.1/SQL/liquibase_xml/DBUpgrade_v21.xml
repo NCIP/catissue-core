@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
+	<property name="timestamp.type" value="timestamp" dbms="oracle" />
+	
+	<property name="clob.type" value="longtext" dbms="mysql" />
+	<property name="clob.type" value="clob" dbms="oracle" />
+
+	<!-- DB changes for report and scheduling -->
+	<changeSet id="1" author="catissuecore">
+		<!-- CREATE TABLE SCHEDULE -->
+		<createTable tableName="SCHEDULE">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="START_DATE" type="date" />
+			<column name="END_DATE" type="date" />
+			<column name="INTERV" type="${text.type}(25)" />
+			<column name="NAME" type="${text.type}(255)" />
+			<column name="STATUS" type="${text.type}(8)" />
+		</createTable>
+
+		<!--CREATE TABLE BASE_SCHEDULE-->
+		<createTable tableName="BASE_SCHEDULE">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="COMMENTS" type="${text.type}(512)" />
+			<column name="USER_ID" type="${int.type}" />
+			<column name="INCLUDE_ME" type="${boolean.type}" />
+		</createTable>
+
+		<!--CREATE TABLE REPORT_SCHEDULE-->
+		<createTable tableName="REPORT_SCHEDULE">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="DURATION" type="${text.type}(255)" />
+		</createTable>
+
+		<!--CREATE TABLE SCHEDULED_ITEMS-->
+		<createTable tableName="SCHEDULED_ITEMS">
+			<column name="BASE_SCHEDULE_ID" type="${int.type}" />
+			<column name="ITEM_ID" type="${int.type}" />
+		</createTable>
+
+
+		<!-- CREATE TABLE REPORT_GENERATED_FILES -->
+		<createTable tableName="REPORT_GENERATED_FILES">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="SCHEDULE_ID" type="${int.type}" />
+			<column name="USER_ID" type="${int.type}" />
+			<column name="REPORT_ID" type="${int.type}" />
+			<column name="FILE_NAME" type="${text.type}(255)" />
+			<column name="DOWNLOAD_COUNT" type="${int.type}" />
+			<column name="CS_ID" type="${int.type}" />
+			<column name="EXEC_START" type="timestamp" />
+			<column name="EXEC_END" type="timestamp" />
+			<column name="EXEC_STATUS" type="${text.type}(20)" />
+			<column name="IS_EMAILED" type="${boolean.type}" />
+			<column name="ERROR_DESC" type="${text.type}(512)" />
+			<column name="START_DATE" type="date" />
+			<column name="END_DATE" type="date" />
+		</createTable>
+
+
+
+		<createTable tableName="REPORT_DETAILS">
+			<column name="IDENTIFIER" type="${int.type}">
+				<constraints primaryKey="true"/>
+			</column>
+			<column name="CS_ID" type="${int.type}">
+			</column>
+			<column name="REPORT_GENERATOR" type="${text.type}(100)">
+			<constraints nullable="false" />
+			</column>
+			<column name="REPORT_TYPE" type="${text.type}(20)">
+			<constraints nullable="false" />
+			</column>
+			<column name="REPORT_NAME" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column><column name="USER_ID" type="${int.type}" />
+		</createTable>
+
+
+		<!-- CREATE SEQUENCE FOR REPORT_DETAILS_SEQ -->
+		<createSequence sequenceName="REPORT_DETAILS_SEQ"
+			startValue="1" incrementBy="1" minValue="1" ordered="false" />
+       
+
+		<!-- FOREIGN KEY -->
+		<addForeignKeyConstraint constraintName="FK_REPTDETAILS_CS"
+			baseTableName="REPORT_DETAILS" baseColumnNames="CS_ID"
+			referencedTableName="CATISSUE_COLLECTION_PROTOCOL" referencedColumnNames="IDENTIFIER" />
+
+   <!--		<dropNotNullConstraint tableName="REPORT_DETAILS"
+			columnName="CP_ID" /> -->
+	</changeSet>
+
+
+	<changeSet id="2" author="catissuecore" dbms="oracle">
+		<!-- CREATE SEQUENCE FOR REPORT_GENERATED_FILES_IDENTIFIER_SEQ -->
+		<createSequence sequenceName="REPORT_FILES_ID_SEQ"
+			startValue="1" incrementBy="1" minValue="1" ordered="true" />
+	</changeSet>
+
+	<changeSet id="3" author="catissuecore" dbms="mysql">
+		<addAutoIncrement tableName="REPORT_GENERATED_FILES"
+			columnName="IDENTIFIER" columnDataType="${int.type}" />
+	</changeSet>
+
+	<changeSet id="4" author="catissuecore">
+		<createTable tableName="RECIPIENT_USERS">
+			<column name="USER_ID" type="${int.type}" />
+			<column name="BASE_SCHEDULE_ID" type="${int.type}" />
+		</createTable>
+	</changeSet>
+	<changeSet id="5" author="catissuecore">
+		<renameTable oldTableName="REPORT_GENERATED_FILES"
+			newTableName="REPORT_JOB_DETAILS" />
+
+	</changeSet>
+	
+	<!-- Change query column type to clob from text  -->
+	<changeSet id="6" author="catissuecore" runOnChange="true" dbms="mysql">
+	     <modifyDataType tableName="LABELSQL" columnName="QUERY" newDataType="${clob.type}"/>
+	</changeSet>
+	
+	<!-- Change query column type to clob from text  -->
+	<changeSet id="7" author="catissuecore" runOnChange="true" dbms="oracle">
+	     <addColumn tableName="LABELSQL">
+			<column name="QUERY_TEMP" type="${clob.type}"/>
+		</addColumn>
+		 <sql>update labelsql set query_temp=query,query=null</sql>
+		 <dropColumn tableName="LABELSQL" columnName="QUERY"/>
+		 <renameColumn tableName="LABELSQL"
+               oldColumnName="QUERY_TEMP" newColumnName="QUERY"/>	 
+	 </changeSet>
+	
+</databaseChangeLog>

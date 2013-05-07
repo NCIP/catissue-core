@@ -1,0 +1,1 @@
+alter table catissue_participant add column EMPI_ID varchar(50);

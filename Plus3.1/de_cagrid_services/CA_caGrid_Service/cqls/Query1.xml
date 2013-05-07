@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="clinical_annotation.FamilyHistoryAnnotation">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+			<Association roleName="GeneralHealthDiagnosis"
+				name="clinical_annotation.GeneralHealthDiagnosis">
+				<Group logicRelation="AND">
+					<Attribute name="id" predicate="IS_NOT_NULL" />
+					<Attribute name="clinicalDiagnosis" predicate="IS_NOT_NULL" />
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>

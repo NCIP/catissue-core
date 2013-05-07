@@ -1,0 +1,46 @@
+#set ($orderName='')
+#if($orderDetailMap.orderName)
+      #set ($orderName=$orderDetailMap.orderName)
+#end
+#set ($distributionProtocolName='')
+#if($orderDetailMap.distributionProtocolName)
+       #set ($distributionProtocolName=$orderDetailMap.distributionProtocolName)
+#end
+#set ($requestorName='')
+#if($orderDetailMap.requestorName)
+       #set ($requestorName=$orderDetailMap.requestorName)
+#end
+#set ($siteName='')
+#if($orderDetailMap.siteName)
+   #set ($siteName=$orderDetailMap.siteName)
+#end
+#set ($comments='')
+#if($orderDetailMap.comments)
+  #set ($comments=$orderDetailMap.comments)
+#end
+#set ($distributorsComment='')
+#if($orderDetailMap.distributorsComment)
+  #set ($distributorsComment=$orderDetailMap.distributorsComment)
+#end
+"Order Name:","${orderName}"
+"Distribution Protocol:","${distributionProtocolName}"
+"Requestor's Name:","${requestorName}"
+"Requested Date:","$requestedDate"
+"Distribution Site:","${siteName}"
+"Comment:","${comments}"
+"Distributor's Comment:","${distributorsComment}"
+"Exported On:","$exportedOn"
+"Exported By:","$exportedBy"
+"Order Items Detail:"
+"Specimen Label","Specimen Type","Specimen Class","Available Quantity","Requested Quantity","Distributed Quantity","Status","Description"
+#foreach( $gridData in $orderItemsDetail )
+ #set ($description='')
+ #if($gridData.description)
+    #set ($description=$gridData.description)
+ #end
+ #set ($distributedQuantity='')
+   #if($gridData.distributedQuantity)
+      #set ($distributedQuantity=$gridData.distributedQuantity)
+ #end
+"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${distributedQuantity}","${gridData.status}","${description}"
+#end

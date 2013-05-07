@@ -1,0 +1,70 @@
+<project name="run-tools file" basedir="." default="runQuery1">
+
+	<property name="service.url"
+		value="https://host:port/wsrf/services/cagrid/PathologySpecimen" />
+	<target name="runQuery1" depends="checkGlobus, defineClasspaths"
+		description="Run the sample Client">
+		<property name="runclasspath" refid="run.classpath" />
+		<echo message="Connecting to service: ${service.url}" />
+		<java failonerror="true"
+			classname="pathology_specimen.client.PathologySpecimenClient"
+			classpathref="run.classpath" fork="yes">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<arg value="-url" />
+			<arg value="${service.url}" />
+			<arg value="./cqls/Query1.xml" />
+		</java>
+	</target>
+	<target name="runQuery2" depends="checkGlobus, defineClasspaths"
+		description="Run the sample Client">
+		<property name="runclasspath" refid="run.classpath" />
+		<echo message="Connecting to service: ${service.url}" />
+		<java failonerror="true"
+			classname="pathology_specimen.client.PathologySpecimenClient"
+			classpathref="run.classpath" fork="yes">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<arg value="-url" />
+			<arg value="${service.url}" />
+			<arg value="./cqls/Query2.xml" />
+		</java>
+	</target>
+	<target name="runQuery3" depends="checkGlobus, defineClasspaths"
+		description="Run the sample Client">
+		<property name="runclasspath" refid="run.classpath" />
+		<echo message="Connecting to service: ${service.url}" />
+		<java failonerror="true"
+			classname="pathology_specimen.client.PathologySpecimenClient"
+			classpathref="run.classpath" fork="yes">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<arg value="-url" />
+			<arg value="${service.url}" />
+			<arg value="./cqls/Query3.xml" />
+		</java>
+	</target>
+	<target name="runQuery4" depends="checkGlobus, defineClasspaths"
+		description="Run the sample Client">
+		<property name="runclasspath" refid="run.classpath" />
+		<echo message="Connecting to service: ${service.url}" />
+		<java failonerror="true"
+			classname="pathology_specimen.client.PathologySpecimenClient"
+			classpathref="run.classpath" fork="yes">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<arg value="-url" />
+			<arg value="${service.url}" />
+			<arg value="./cqls/Query4.xml" />
+		</java>
+	</target>
+	<target name="runQuery5" depends="checkGlobus, defineClasspaths"
+		description="Run the sample Client">
+		<property name="runclasspath" refid="run.classpath" />
+		<echo message="Connecting to service: ${service.url}" />
+		<java failonerror="true"
+			classname="pathology_specimen.client.PathologySpecimenClient"
+			classpathref="run.classpath" fork="yes">
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<arg value="-url" />
+			<arg value="${service.url}" />
+			<arg value="./cqls/Query5.xml" />
+		</java>
+	</target>
+</project>

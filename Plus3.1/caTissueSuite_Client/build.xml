@@ -1,0 +1,93 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for running the caTissue caCORE API programs -->
+
+<project name="caTissueSuite Client" default="compile_junit_TestCases" >
+	<property file="./caTissueInstall.properties"/>
+	<!--define require dir and Properties -->
+	<property name="base.dir" value="."/>
+	<property name="target.dir" value="./classes" />
+	<property name="conf.dir" value="conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="." />
+	<property name="test.src.dir" value="${base.dir}/src" />
+	<property name="test.class.dir" value="${base.dir}/classes/edu/wustl/catissuecore/api/test" />
+	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
+	<property name="report.dir" value="." />
+	<property name="project.src" value="../WEB-INF/classes/"/>
+	<property name="project.src.domain" value="../WEB-INF/src/edu/wustl/catissuecore/domain/"/>
+
+	<path id="cp">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+	</path>
+
+	<path id="app.classpath">
+		<fileset dir="${base.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- =================================================================== -->
+	<!-- Junit TestCases for Nightly Build  -->
+	<!-- =================================================================== -->
+	<property name="test.classes.dir" value="${base.dir}/classes" />
+	<target name="compile_junit_TestCases">
+		<delete dir="${test.classes.dir}"/>
+		<mkdir dir="${test.classes.dir}" />
+		<javac destdir="${test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
+			<src path="${test.src.dir}"/>
+			<classpath>
+			  <fileset dir="${lib.dir}">
+					<include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<copy todir="${test.classes.dir}">
+			<fileset dir="${base.dir}/conf">
+				<include name="ApplicationResources.properties" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="runJunitTestCases" depends="compile_junit_TestCases">
+		<mkdir dir="${report.dir}/Nightly_Build_Report" />
+		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
+
+		<junit printsummary="yes" fork="yes" haltonfailure="no" maxmemory="1024m">
+			<formatter type="xml" />
+			<sysproperty key="net.sourceforge.cobertura.datafile"
+				file="${jboss.home.dir}/bin/cobertura.ser" />
+			<classpath>
+				<pathelement path="${base.dir}/conf" />
+				<fileset dir="./lib">
+					<exclude name="./lib/catissuecore.jar" />
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+
+			<classpath>
+				<pathelement path="${cobertura.dir}" />
+				<pathelement path="${test.src.dir}" />
+				<pathelement path= "${test.classes.dir}" />
+			</classpath>
+
+			<batchtest todir="${report.dir}/Nightly_Build_Report">
+				<fileset dir="${test.src.dir}">
+					<include name="**/CaTissueTestSuite.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="runNightlyBuild" depends="runJunitTestCases">
+		<junitreport todir="${report.dir}/Nightly_Build_Report">
+			<fileset dir="${report.dir}/Nightly_Build_Report">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${report.dir}/Nightly_Build_Report/Html_reports" />
+		</junitreport>
+	</target>
+</project>

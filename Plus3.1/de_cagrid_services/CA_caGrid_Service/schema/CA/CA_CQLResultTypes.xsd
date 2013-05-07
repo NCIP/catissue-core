@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://clinical_annotation/CA/CQLResultTypes" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <!-- Exposed Objects' schemas are imported here -->
+	<xs:import namespace="gme://caCORE.caCORE/3.2/clinical_annotation" schemaLocation="./clinical_annotation.xsd"/>
+
+
+
+    <xs:group name="PermissibleCQLObjectResults">
+        <xs:choice>        
+        <!-- element references to exposed objects -->
+		<xs:element ref="ns0:FamilyHistoryAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:DeprecatedAnnotation2" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:NoEvidentDiseaseHealthAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:GeneralHealthDiagnosis" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:LocalRecurrenceHealthExaminationAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:RadRXAnnotationSet" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:TreatmentRegimen" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:TreatmentAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:ChemoRXAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:Duration" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:DistantRecurrenceHealthExaminationAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:TreatmentOrder" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:SmokingHealthAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:Chemotherapy" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:RecurrenceHealthExaminationAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:NewDiagnosisHealthAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:DeprecatedAnnotation1" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:LabAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:HealthExaminationAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:AlcoholHealthAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:ParticipantRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:RadRXAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+		<xs:element ref="ns0:EnvironmentalExposuresHealthAnnotation" xmlns:ns0="gme://caCORE.caCORE/3.2/clinical_annotation"/>
+ 
+        </xs:choice>
+    </xs:group>
+</xs:schema>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="edu.wustl.common.tags.domain.Tag" table="caTissue_specimenList_tags" entity-name="SpecimenListTag">
+		<id name="identifier" type="java.lang.Long" column="identifier">
+			<generator class="increment"/>
+		</id>
+		<property name="label" type="java.lang.String" column="tag_label"/>
+ 		<set name="tagItem"  table="caTissue_specimenList_tag_items"  cascade="save-update,all-delete-orphan" inverse="true" lazy="true" fetch="select">
+   			<key>
+        	       		<column name="tag_id" not-null="true" />
+          	 	</key>            
+ 			<one-to-many  entity-name="SpecimenListTagItem"/>
+ 		</set>
+ 			
+ 		<set name="sharedUserIds" table="shared_specimenList_tags" cascade="save-update,all-delete-orphan" lazy="true">
+        		<key column="TAG_ID"/>
+        		<element column="USER_ID" type="long"/>
+        	</set>  
+ 		<property name="userId" type="java.lang.Long" column="user_id"/>   
+	</class>
+</hibernate-mapping>

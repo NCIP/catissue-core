@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping
+>
+    <class
+        name="edu.wustl.catissuecore.domain.CpSyncAudit"
+        table="catissue_synch_cp_audit"
+		lazy="false" 
+    >
+    
+    <cache usage="read-write" />
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">synch_cp_id</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Address.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="cpId"
+            type="long"
+            update="true"
+            insert="true"
+            column="CP_ID"
+            length="50"
+        />
+
+        <property
+            name="status"
+            type="string"
+            update="true"
+            insert="true"
+            column="PROCESS_STATUS"
+            length="50"
+        />
+		
+		<property
+            name="processedCPRCount"
+            type="long"
+            update="true"
+            insert="true"
+            column="PROCESSED_CPR_COUNT"
+            length="30"
+        />
+        <property
+            name="userId"
+            type="long"
+            update="true"
+            insert="true"
+            column="USER_ID"
+            length="30"
+        />
+        <property
+            name="startedDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="START_DATE"
+        />
+        <property
+            name="endDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="END_DATE"
+        />
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Address.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

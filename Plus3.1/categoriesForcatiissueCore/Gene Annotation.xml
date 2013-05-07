@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Category name="Gene Annotation" description="Gene annotation includes information about a gene such as its symbol, gene name(s), cytogenetic position, polymorphisms (SNP), sequence tagged sites (STS), links to genomic databases (e.g. Entrez Gene, UniGene, and GenBank), and its functional characterization as determined by Gene Ontology.">
+    <CategorialClass name="edu.wustl.fe.Gene" IdOfPathFromParentToThis="-1"> <!-- root -->
+        <Attribute name = "id" displayName = "Entrez Gene ID"/>
+        <Attribute name = "symbol" displayName = "Gene Symbol"/>
+        <Attribute name = "name" displayName = "Gene Name"/>
+        <Attribute name = "summary" displayName = "Gene Summary"/>
+        <Attribute name = "chromosomeMap" displayName = "Cytogenetic Position"/>
+        <Attribute name = "pubmedCount" displayName = "Number of PubMed Articles"/>
+        
+        <CategorialClass name="edu.wustl.fe.STS" IdOfPathFromParentToThis = "343">
+            <Attribute name = "id" displayName = "STS ID" />
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.SNP" IdOfPathFromParentToThis = "354">
+            <Attribute name = "id" displayName = "dbSNP ID" />
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.PhenoType" IdOfPathFromParentToThis = "341">
+            <Attribute name = "description" displayName = "Phenotype" />
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.OMIM" IdOfPathFromParentToThis = "336">
+            <Attribute name = "id" displayName = "OMIM Identifier" />
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.Unigene" IdOfPathFromParentToThis = "347">
+            <Attribute name = "clusterId" displayName = "UniGene Cluster ID" />
+            <CategorialClass name="edu.wustl.fe.GenBankAccession" IdOfPathFromParentToThis = "385">
+                <Attribute name = "number" displayName = "GenBank Accession Number" />
+            </CategorialClass>
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.Organism" IdOfPathFromParentToThis = "337">
+            <Attribute name = "ncbiTaxonomyID" displayName = "Taxonomy ID" />
+            <Attribute name = "name" displayName = "Scientific Name" />            
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.Chromosome" IdOfPathFromParentToThis = "335">
+            <Attribute name = "name" displayName = "Chromosome" />
+        </CategorialClass>
+        
+        <CategorialClass name="edu.wustl.fe.GeneOntology" IdOfPathFromParentToThis = "342">
+            <Attribute name = "id" displayName = "Gene Ontology ID" />
+            <Attribute name = "term" displayName = "Gene Ontology Term" />
+        </CategorialClass>
+    </CategorialClass>
+</Category>

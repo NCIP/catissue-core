@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+
+	<!-- ALTER TABLE CATISSUE_COLL_PROT_EVENT -->
+	<changeSet id="1" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+			<column name="DEFAULT_SITE_ID" type="${int.type}" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+	<!-- ALTER TABLE CATISSUE_ABSTRACT_POSITION -->
+	<changeSet id="2" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_ABSTRACT_POSITION">
+			<column name="POSITION_DIMENSION_ONE_STRING" type="${text.type}(50)" />
+			<column name="POSITION_DIMENSION_TWO_STRING" type="${text.type}(50)" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
+
+<!-- ALTER TABLE CATISSUE_STORAGE_CONTAINER -->
+	<changeSet id="3" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_STORAGE_CONTAINER">
+			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
+			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="4" author="catissuecore" runOnChange="true">
+		<update tableName="CATISSUE_ABSTRACT_POSITION">
+		<column name="POSITION_DIMENSION_ONE_STRING" valueComputed="POSITION_DIMENSION_ONE"/>
+		<column name="POSITION_DIMENSION_TWO_STRING" valueComputed="POSITION_DIMENSION_TWO"/>
+		</update>
+		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="5" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_CONTAINER_TYPE">
+			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
+			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+</databaseChangeLog>         

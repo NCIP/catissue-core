@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.OrderDetails"
+        table="CATISSUE_ORDER"
+        dynamic-update="false"
+        dynamic-insert="false"
+        lazy="true"
+    >
+    
+    <cache usage="read-write" />
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_ORDER_SEQ</param>
+            </generator>
+        </id>
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="1000"
+        />
+
+        <property
+            name="distributorsComment"
+            type="string"
+            update="true"
+            insert="true"
+            column="DISTRIBUTORS_COMMENT"
+            length="1000"
+        />
+
+        <many-to-one
+            name="distributionProtocol"
+            class="edu.wustl.catissuecore.domain.DistributionProtocol"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="DISTRIBUTION_PROTOCOL_ID"
+        />
+		<many-to-one
+            name="requestedBy"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="REQUESTER_ID" lazy="false" 
+        />	
+        <property
+            name="name"
+            type="string"
+            update="true"
+            insert="true"
+            column="NAME"
+            length="500"
+        />
+
+        
+
+      <set
+            name="orderItemCollection"
+            table="CATISSUE_ORDER_ITEM"
+            lazy="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+              <key
+                  column="ORDER_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.OrderItem"
+              />
+        </set>
+        
+        <set
+            name="distributionCollection"
+            table="CATISSUE_DISTRIBUTION"
+            lazy="true"            
+            cascade="save-update"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+              <key
+                  column="ORDER_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Distribution"
+              />
+        </set>
+
+        <property
+            name="requestedDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="REQUESTED_DATE"
+        />
+
+        <property
+            name="status"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATUS"
+            length="50"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Order.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+<query name="getOrderDetails">select orderDetails.name,orderDetails.distributionProtocol.id,orderDetails.distributionProtocol.title,orderDetails.requestedBy.firstName,orderDetails.requestedBy.lastName,orderDetails.requestedBy.emailAddress,orderDetails.requestedDate,orderDetails.comment,orderDetails.distributorsComment from edu.wustl.catissuecore.domain.OrderDetails orderDetails left outer join orderDetails.distributionProtocol left outer join orderDetails.requestedBy  where orderDetails.id=?
+</query>
+<query name="updateOrderDetails">update edu.wustl.catissuecore.domain.OrderDetails orderDetails SET  orderDetails.name=?,orderDetails.status=?,orderDetails.distributorsComment=?,orderDetails.distributionProtocol=?  where orderDetails.id=?
+</query>
+
+</hibernate-mapping>

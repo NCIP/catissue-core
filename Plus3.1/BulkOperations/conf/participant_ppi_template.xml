@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata batchSize="5" templateName="CAT_Onco_Office_Visit">
+<BulkOperationClass  className="MedOnc_Oncology_Appt 2.1"   maxNoOfRecords="1">
+     <hookingInformation>
+     <attribute name="collectionProtocol" csvColumnName="Collection protocol Name" updateBasedOn="false" />
+			<attribute name="ppi" dataType="java.lang.String" csvColumnName="ppi" updateBasedOn="false" />
+                        
+        </hookingInformation>
+    
+    
+</BulkOperationClass>
+</BulkOperationMetadata>

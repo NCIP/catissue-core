@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Category name="Participant Protocol Registration Information" description="Details of a participant's registration to a biospecimen collection protocol such as the registration date and demographic information as well as collection protocol specifics (e.g. Institutional Review Board [IRB] identifier and title) are encapsulated.">
+  <CategorialClass name="edu.wustl.catissuecore.domain.Participant" IdOfPathFromParentToThis="-1"> <!-- root -->
+    <Attribute name = "firstName" displayName = "First Name"/>
+    <Attribute name = "middleName" displayName = "Middle Name"/>
+    <Attribute name = "lastName" displayName = "Last Name"/>
+      <CategorialClass name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" IdOfPathFromParentToThis="2469">
+         <Attribute name = "registrationDate" displayName = "Registration Date"/>          
+      </CategorialClass>       
+  </CategorialClass>
+</Category>
+    
+    
+    
+    
+    
+
+
+

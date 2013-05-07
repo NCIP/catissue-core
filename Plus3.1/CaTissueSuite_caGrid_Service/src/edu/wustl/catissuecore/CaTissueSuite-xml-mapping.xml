@@ -1,0 +1,1157 @@
+<mapping>
+  <class name="edu.wustl.catissuecore.domain.OrderItem" identity="id">
+    <map-to xml="OrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="description" type="string">
+      <bind-xml name="description" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="requestedQuantity" type="double">
+      <bind-xml name="requestedQuantity" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Site" identity="id">
+    <map-to xml="Site" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="emailAddress" type="string">
+      <bind-xml name="emailAddress" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="type" type="string">
+      <bind-xml name="type" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.StudyFormContext" identity="id">
+    <map-to xml="StudyFormContext" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="noOfEntries" type="integer">
+      <bind-xml name="noOfEntries" node="attribute" />
+    </field>
+    <field name="formLabel" type="string">
+      <bind-xml name="formLabel" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="hideForm" type="boolean">
+      <bind-xml name="hideForm" node="attribute" />
+    </field>
+    <field name="containerId" type="long">
+      <bind-xml name="containerId" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.AbstractSpecimen" identity="id">
+    <map-to xml="AbstractSpecimen" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="initialQuantity" type="double">
+      <bind-xml name="initialQuantity" node="attribute" />
+    </field>
+    <field name="lineage" type="string">
+      <bind-xml name="lineage" node="attribute" />
+    </field>
+    <field name="pathologicalStatus" type="string">
+      <bind-xml name="pathologicalStatus" node="attribute" />
+    </field>
+    <field name="specimenClass" type="string">
+      <bind-xml name="specimenClass" node="attribute" />
+    </field>
+    <field name="specimenType" type="string">
+      <bind-xml name="specimenType" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Capacity" identity="id">
+    <map-to xml="Capacity" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="oneDimensionCapacity" type="integer">
+      <bind-xml name="oneDimensionCapacity" node="attribute" />
+    </field>
+    <field name="twoDimensionCapacity" type="integer">
+      <bind-xml name="twoDimensionCapacity" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.AbstractPosition" identity="id">
+    <map-to xml="AbstractPosition" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="positionDimensionOne" type="integer">
+      <bind-xml name="positionDimensionOne" node="attribute" />
+    </field>
+    <field name="positionDimensionTwo" type="integer">
+      <bind-xml name="positionDimensionTwo" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenEventParameters" identity="id">
+    <map-to xml="SpecimenEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="timestamp" type="date">
+      <bind-xml name="timestamp" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ConsentTierResponse" identity="id">
+    <map-to xml="ConsentTierResponse" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="response" type="string">
+      <bind-xml name="response" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Distribution" identity="id">
+    <map-to xml="Distribution" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="timestamp" type="date">
+      <bind-xml name="timestamp" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" identity="id">
+    <map-to xml="CollectionProtocolRegistration" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="barcode" type="string">
+      <bind-xml name="barcode" node="attribute" />
+    </field>
+    <field name="consentSignatureDate" type="date">
+      <bind-xml name="consentSignatureDate" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="offset" type="integer">
+      <bind-xml name="offset" node="attribute" />
+    </field>
+    <field name="protocolParticipantIdentifier" type="string">
+      <bind-xml name="protocolParticipantIdentifier" node="attribute" />
+    </field>
+    <field name="registrationDate" type="date">
+      <bind-xml name="registrationDate" node="attribute" />
+    </field>
+    <field name="signedConsentDocumentURL" type="string">
+      <bind-xml name="signedConsentDocumentURL" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Race" identity="id">
+    <map-to xml="Race" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="raceName" type="string">
+      <bind-xml name="raceName" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ClinicalDiagnosis" identity="id">
+    <map-to xml="ClinicalDiagnosis" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup" identity="id">
+    <map-to xml="AbstractSpecimenCollectionGroup" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="clinicalDiagnosis" type="string">
+      <bind-xml name="clinicalDiagnosis" node="attribute" />
+    </field>
+    <field name="clinicalStatus" type="string">
+      <bind-xml name="clinicalStatus" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenArrayContent" identity="id">
+    <map-to xml="SpecimenArrayContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="concentrationInMicrogramPerMicroliter" type="double">
+      <bind-xml name="concentrationInMicrogramPerMicroliter" node="attribute" />
+    </field>
+    <field name="initialQuantity" type="double">
+      <bind-xml name="initialQuantity" node="attribute" />
+    </field>
+    <field name="positionDimensionOne" type="integer">
+      <bind-xml name="positionDimensionOne" node="attribute" />
+    </field>
+    <field name="positionDimensionTwo" type="integer">
+      <bind-xml name="positionDimensionTwo" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier" identity="id">
+    <map-to xml="ParticipantMedicalIdentifier" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="medicalRecordNumber" type="string">
+      <bind-xml name="medicalRecordNumber" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ConsentTier" identity="id">
+    <map-to xml="ConsentTier" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="statement" type="string">
+      <bind-xml name="statement" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.OrderDetails" identity="id">
+    <map-to xml="OrderDetails" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="requestedDate" type="date">
+      <bind-xml name="requestedDate" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ReportedProblem" identity="id">
+    <map-to xml="ReportedProblem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="affiliation" type="string">
+      <bind-xml name="affiliation" node="attribute" />
+    </field>
+    <field name="comments" type="string">
+      <bind-xml name="comments" node="attribute" />
+    </field>
+    <field name="from" type="string">
+      <bind-xml name="from" node="attribute" />
+    </field>
+    <field name="messageBody" type="string">
+      <bind-xml name="messageBody" node="attribute" />
+    </field>
+    <field name="nameOfReporter" type="string">
+      <bind-xml name="nameOfReporter" node="attribute" />
+    </field>
+    <field name="reportedDate" type="date">
+      <bind-xml name="reportedDate" node="attribute" />
+    </field>
+    <field name="subject" type="string">
+      <bind-xml name="subject" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Address" identity="id">
+    <map-to xml="Address" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="city" type="string">
+      <bind-xml name="city" node="attribute" />
+    </field>
+    <field name="country" type="string">
+      <bind-xml name="country" node="attribute" />
+    </field>
+    <field name="faxNumber" type="string">
+      <bind-xml name="faxNumber" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="phoneNumber" type="string">
+      <bind-xml name="phoneNumber" node="attribute" />
+    </field>
+    <field name="state" type="string">
+      <bind-xml name="state" node="attribute" />
+    </field>
+    <field name="street" type="string">
+      <bind-xml name="street" node="attribute" />
+    </field>
+    <field name="zipCode" type="string">
+      <bind-xml name="zipCode" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Department" identity="id">
+    <map-to xml="Department" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.DistributionSpecimenRequirement" identity="id">
+    <map-to xml="DistributionSpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="pathologyStatus" type="string">
+      <bind-xml name="pathologyStatus" node="attribute" />
+    </field>
+    <field name="quantity" type="double">
+      <bind-xml name="quantity" node="attribute" />
+    </field>
+    <field name="specimenClass" type="string">
+      <bind-xml name="specimenClass" node="attribute" />
+    </field>
+    <field name="specimenType" type="string">
+      <bind-xml name="specimenType" node="attribute" />
+    </field>
+    <field name="tissueSite" type="string">
+      <bind-xml name="tissueSite" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Container" identity="id">
+    <map-to xml="Container" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="barcode" type="string">
+      <bind-xml name="barcode" node="attribute" />
+    </field>
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="full" type="boolean">
+      <bind-xml name="full" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.DistributedItem" identity="id">
+    <map-to xml="DistributedItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="quantity" type="double">
+      <bind-xml name="quantity" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ContainerType" identity="id">
+    <map-to xml="ContainerType" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="oneDimensionLabel" type="string">
+      <bind-xml name="oneDimensionLabel" node="attribute" />
+    </field>
+    <field name="twoDimensionLabel" type="string">
+      <bind-xml name="twoDimensionLabel" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Participant" identity="id">
+    <map-to xml="Participant" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="birthDate" type="date">
+      <bind-xml name="birthDate" node="attribute" />
+    </field>
+    <field name="deathDate" type="date">
+      <bind-xml name="deathDate" node="attribute" />
+    </field>
+    <field name="ethnicity" type="string">
+      <bind-xml name="ethnicity" node="attribute" />
+    </field>
+    <field name="firstName" type="string">
+      <bind-xml name="firstName" node="attribute" />
+    </field>
+    <field name="gender" type="string">
+      <bind-xml name="gender" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="lastName" type="string">
+      <bind-xml name="lastName" node="attribute" />
+    </field>
+    <field name="middleName" type="string">
+      <bind-xml name="middleName" node="attribute" />
+    </field>
+    <field name="sexGenotype" type="string">
+      <bind-xml name="sexGenotype" node="attribute" />
+    </field>
+    <field name="socialSecurityNumber" type="string">
+      <bind-xml name="socialSecurityNumber" node="attribute" />
+    </field>
+    <field name="vitalStatus" type="string">
+      <bind-xml name="vitalStatus" node="attribute" />
+    </field>
+    <field name="metaPhoneCode" type="string">
+      <bind-xml name="metaPhoneCode" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenProtocol" identity="id">
+    <map-to xml="SpecimenProtocol" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="descriptionURL" type="string">
+      <bind-xml name="descriptionURL" node="attribute" />
+    </field>
+    <field name="endDate" type="date">
+      <bind-xml name="endDate" node="attribute" />
+    </field>
+    <field name="enrollment" type="integer">
+      <bind-xml name="enrollment" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="irbIdentifier" type="string">
+      <bind-xml name="irbIdentifier" node="attribute" />
+    </field>
+    <field name="shortTitle" type="string">
+      <bind-xml name="shortTitle" node="attribute" />
+    </field>
+    <field name="startDate" type="date">
+      <bind-xml name="startDate" node="attribute" />
+    </field>
+    <field name="title" type="string">
+      <bind-xml name="title" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.User" identity="id">
+    <map-to xml="User" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="comments" type="string">
+      <bind-xml name="comments" node="attribute" />
+    </field>
+    <field name="csmUserId" type="long">
+      <bind-xml name="csmUserId" node="attribute" />
+    </field>
+    <field name="emailAddress" type="string">
+      <bind-xml name="emailAddress" node="attribute" />
+    </field>
+    <field name="firstName" type="string">
+      <bind-xml name="firstName" node="attribute" />
+    </field>
+    <field name="lastName" type="string">
+      <bind-xml name="lastName" node="attribute" />
+    </field>
+    <field name="loginName" type="string">
+      <bind-xml name="loginName" node="attribute" />
+    </field>
+    <field name="startDate" type="date">
+      <bind-xml name="startDate" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CancerResearchGroup" identity="id">
+    <map-to xml="CancerResearchGroup" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenCharacteristics" identity="id">
+    <map-to xml="SpecimenCharacteristics" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="tissueSide" type="string">
+      <bind-xml name="tissueSide" node="attribute" />
+    </field>
+    <field name="tissueSite" type="string">
+      <bind-xml name="tissueSite" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Password" identity="id">
+    <map-to xml="Password" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="password" type="string">
+      <bind-xml name="password" node="attribute" />
+    </field>
+    <field name="updateDate" type="date">
+      <bind-xml name="updateDate" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ConsentTierStatus" identity="id">
+    <map-to xml="ConsentTierStatus" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Institution" identity="id">
+    <map-to xml="Institution" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ExternalIdentifier" identity="id">
+    <map-to xml="ExternalIdentifier" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="value" type="string">
+      <bind-xml name="value" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Biohazard" identity="id">
+    <map-to xml="Biohazard" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="type" type="string">
+      <bind-xml name="type" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry" identity="id">
+    <map-to xml="SCGRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="modifiedDate" type="date">
+      <bind-xml name="modifiedDate" node="attribute" />
+    </field>
+    <field name="modifiedBy" type="string">
+      <bind-xml name="modifiedBy" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry" identity="id">
+    <map-to xml="ParticipantRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="modifiedDate" type="date">
+      <bind-xml name="modifiedDate" node="attribute" />
+    </field>
+    <field name="modifiedBy" type="string">
+      <bind-xml name="modifiedBy" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry" identity="id">
+    <map-to xml="SpecimenRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="modifiedDate" type="date">
+      <bind-xml name="modifiedDate" node="attribute" />
+    </field>
+    <field name="modifiedBy" type="string">
+      <bind-xml name="modifiedBy" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.ConceptReferent" identity="id">
+    <map-to xml="ConceptReferent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="endOffset" type="long">
+      <bind-xml name="endOffset" node="attribute" />
+    </field>
+    <field name="isModifier" type="boolean">
+      <bind-xml name="isModifier" node="attribute" />
+    </field>
+    <field name="isNegated" type="boolean">
+      <bind-xml name="isNegated" node="attribute" />
+    </field>
+    <field name="startOffset" type="long">
+      <bind-xml name="startOffset" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter" identity="id">
+    <map-to xml="PathologyReportReviewParameter" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="reviewerRole" type="string">
+      <bind-xml name="reviewerRole" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+    <field name="timestamp" type="date">
+      <bind-xml name="timestamp" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter" identity="id">
+    <map-to xml="QuarantineEventParameter" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="quarantineStatus" type="boolean">
+      <bind-xml name="quarantineStatus" node="attribute" />
+    </field>
+    <field name="status" type="string">
+      <bind-xml name="status" node="attribute" />
+    </field>
+    <field name="timestamp" type="date">
+      <bind-xml name="timestamp" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.ReportSection" identity="id">
+    <map-to xml="ReportSection" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="documentFragment" type="string">
+      <bind-xml name="documentFragment" node="attribute" />
+    </field>
+    <field name="endOffSet" type="integer">
+      <bind-xml name="endOffSet" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="startOffSet" type="integer">
+      <bind-xml name="startOffSet" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.Concept" identity="id">
+    <map-to xml="Concept" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="conceptUniqueIdentifier" type="string">
+      <bind-xml name="conceptUniqueIdentifier" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.SemanticType" identity="id">
+    <map-to xml="SemanticType" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="label" type="string">
+      <bind-xml name="label" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.ReportContent" identity="id">
+    <map-to xml="ReportContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="data" type="string">
+      <bind-xml name="data" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport" identity="id">
+    <map-to xml="SurgicalPathologyReport" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="collectionDateTime" type="date">
+      <bind-xml name="collectionDateTime" node="attribute" />
+    </field>
+    <field name="isFlagForReview" type="boolean">
+      <bind-xml name="isFlagForReview" node="attribute" />
+    </field>
+    <field name="reportStatus" type="string">
+      <bind-xml name="reportStatus" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification" identity="id">
+    <map-to xml="ConceptReferentClassification" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.shippingtracking.BaseShipment" identity="id">
+    <map-to xml="BaseShipment" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" />
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="createdDate" type="date">
+      <bind-xml name="createdDate" node="attribute" />
+    </field>
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="label" type="string">
+      <bind-xml name="label" node="attribute" />
+    </field>
+    <field name="receiverComments" type="string">
+      <bind-xml name="receiverComments" node="attribute" />
+    </field>
+    <field name="sendDate" type="date">
+      <bind-xml name="sendDate" node="attribute" />
+    </field>
+    <field name="senderComments" type="string">
+      <bind-xml name="senderComments" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.StorageContainer" identity="id" extends="edu.wustl.catissuecore.domain.Container">
+    <map-to xml="StorageContainer" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="holdsSpecimenClassCollection" type="string" collection="collection">
+      <bind-xml xmlns:collection="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" name="collection:holdsSpecimenClassCollection" collection:QName-prefix="collection" node="attribute" />
+    </field>
+    <field name="tempratureInCentigrade" type="double">
+      <bind-xml name="tempratureInCentigrade" node="attribute" />
+    </field>
+    <field name="holdsSpecimenTypeCollection" type="string" collection="collection">
+      <bind-xml xmlns:collection="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" name="collection:holdsSpecimenTypeCollection" collection:QName-prefix="collection" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.TransferEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="TransferEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="fromPositionDimensionOne" type="integer">
+      <bind-xml name="fromPositionDimensionOne" node="attribute" />
+    </field>
+    <field name="fromPositionDimensionTwo" type="integer">
+      <bind-xml name="fromPositionDimensionTwo" node="attribute" />
+    </field>
+    <field name="toPositionDimensionOne" type="integer">
+      <bind-xml name="toPositionDimensionOne" node="attribute" />
+    </field>
+    <field name="toPositionDimensionTwo" type="integer">
+      <bind-xml name="toPositionDimensionTwo" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.DisposalEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="DisposalEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="reason" type="string">
+      <bind-xml name="reason" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ReturnEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="ReturnEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="CheckInCheckOutEventParameter" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="storageStatus" type="string">
+      <bind-xml name="storageStatus" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.FrozenEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="FrozenEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="method" type="string">
+      <bind-xml name="method" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ReviewEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="ReviewEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.Specimen" identity="id" extends="edu.wustl.catissuecore.domain.AbstractSpecimen">
+    <map-to xml="Specimen" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="label" type="string">
+      <bind-xml name="label" node="attribute" />
+    </field>
+    <field name="barcode" type="string">
+      <bind-xml name="barcode" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="isAvailable" type="boolean">
+      <bind-xml name="isAvailable" node="attribute" />
+    </field>
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="createdOn" type="date">
+      <bind-xml name="createdOn" node="attribute" />
+    </field>
+    <field name="collectionStatus" type="string">
+      <bind-xml name="collectionStatus" node="attribute" />
+    </field>
+    <field name="availableQuantity" type="double">
+      <bind-xml name="availableQuantity" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.StorageType" identity="id" extends="edu.wustl.catissuecore.domain.ContainerType">
+    <map-to xml="StorageType" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="defaultTempratureInCentigrade" type="double">
+      <bind-xml name="defaultTempratureInCentigrade" node="attribute" />
+    </field>
+    <field name="holdsSpecimenClassCollection" type="string" collection="collection">
+      <bind-xml xmlns:collection="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" name="collection:holdsSpecimenClassCollection" collection:QName-prefix="collection" node="attribute" />
+    </field>
+    <field name="holdsSpecimenTypeCollection" type="string" collection="collection">
+      <bind-xml xmlns:collection="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" name="collection:holdsSpecimenTypeCollection" collection:QName-prefix="collection" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ReceivedEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="ReceivedEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="receivedQuality" type="string">
+      <bind-xml name="receivedQuality" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenPosition" identity="id" extends="edu.wustl.catissuecore.domain.AbstractPosition">
+    <map-to xml="SpecimenPosition" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CollectionEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="CollectionEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="collectionProcedure" type="string">
+      <bind-xml name="collectionProcedure" node="attribute" />
+    </field>
+    <field name="container" type="string">
+      <bind-xml name="container" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ContainerPosition" identity="id" extends="edu.wustl.catissuecore.domain.AbstractPosition">
+    <map-to xml="ContainerPosition" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ProcedureEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="ProcedureEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="url" type="string">
+      <bind-xml name="url" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CollectionProtocolEvent" identity="id" extends="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup">
+    <map-to xml="CollectionProtocolEvent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="studyCalendarEventPoint" type="double">
+      <bind-xml name="studyCalendarEventPoint" node="attribute" />
+    </field>
+    <field name="collectionPointLabel" type="string">
+      <bind-xml name="collectionPointLabel" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CollectionProtocol" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenProtocol">
+    <map-to xml="CollectionProtocol" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="aliquotInSameContainer" type="boolean">
+      <bind-xml name="aliquotInSameContainer" node="attribute" />
+    </field>
+    <field name="consentsWaived" type="boolean">
+      <bind-xml name="consentsWaived" node="attribute" />
+    </field>
+    <field name="sequenceNumber" type="integer">
+      <bind-xml name="sequenceNumber" node="attribute" />
+    </field>
+    <field name="studyCalendarEventPoint" type="double">
+      <bind-xml name="studyCalendarEventPoint" node="attribute" />
+    </field>
+    <field name="type" type="string">
+      <bind-xml name="type" node="attribute" />
+    </field>
+    <field name="unsignedConsentDocumentURL" type="string">
+      <bind-xml name="unsignedConsentDocumentURL" node="attribute" />
+    </field>
+    <field name="aliquotLabelFormat" type="string">
+      <bind-xml name="aliquotLabelFormat" node="attribute" />
+    </field>
+    <field name="derivativeLabelFormat" type="string">
+      <bind-xml name="derivativeLabelFormat" node="attribute" />
+    </field>
+    <field name="specimenLabelFormat" type="string">
+      <bind-xml name="specimenLabelFormat" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenArrayOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.OrderItem">
+    <map-to xml="SpecimenArrayOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.OrderItem">
+    <map-to xml="SpecimenOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" identity="id" extends="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup">
+    <map-to xml="SpecimenCollectionGroup" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="collectionStatus" type="string">
+      <bind-xml name="collectionStatus" node="attribute" />
+    </field>
+    <field name="comment" type="string">
+      <bind-xml name="comment" node="attribute" />
+    </field>
+    <field name="encounterTimestamp" type="date">
+      <bind-xml name="encounterTimestamp" node="attribute" />
+    </field>
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+    <field name="offset" type="integer">
+      <bind-xml name="offset" node="attribute" />
+    </field>
+    <field name="surgicalPathologyNumber" type="string">
+      <bind-xml name="surgicalPathologyNumber" node="attribute" />
+    </field>
+    <field name="barcode" type="string">
+      <bind-xml name="barcode" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.EmbeddedEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="EmbeddedEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="embeddingMedium" type="string">
+      <bind-xml name="embeddingMedium" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ThawEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="ThawEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.DistributionProtocol" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenProtocol">
+    <map-to xml="DistributionProtocol" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.FixedEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="FixedEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="durationInMinutes" type="integer">
+      <bind-xml name="durationInMinutes" node="attribute" />
+    </field>
+    <field name="fixationType" type="string">
+      <bind-xml name="fixationType" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpunEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
+    <map-to xml="SpunEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="durationInMinutes" type="integer">
+      <bind-xml name="durationInMinutes" node="attribute" />
+    </field>
+    <field name="gravityForce" type="double">
+      <bind-xml name="gravityForce" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.AbstractSpecimen">
+    <map-to xml="SpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="storageType" type="string">
+      <bind-xml name="storageType" node="attribute" />
+    </field>
+    <field name="labelFormat" type="string">
+      <bind-xml name="labelFormat" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenArrayType" identity="id" extends="edu.wustl.catissuecore.domain.ContainerType">
+    <map-to xml="SpecimenArrayType" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="specimenClass" type="string">
+      <bind-xml name="specimenClass" node="attribute" />
+    </field>
+    <field name="specimenTypeCollection" type="string" collection="collection">
+      <bind-xml xmlns:collection="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" name="collection:specimenTypeCollection" collection:QName-prefix="collection" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.SpecimenArray" identity="id" extends="edu.wustl.catissuecore.domain.Container">
+    <map-to xml="SpecimenArray" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="available" type="boolean">
+      <bind-xml name="available" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.BinaryContent" identity="id" extends="edu.wustl.catissuecore.domain.pathology.ReportContent">
+    <map-to xml="BinaryContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport" identity="id" extends="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport">
+    <map-to xml="IdentifiedSurgicalPathologyReport" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" identity="id" extends="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport">
+    <map-to xml="DeidentifiedSurgicalPathologyReport" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+    <field name="isQuarantined" type="string">
+      <bind-xml name="isQuarantined" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.XMLContent" identity="id" extends="edu.wustl.catissuecore.domain.pathology.ReportContent">
+    <map-to xml="XMLContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.pathology.TextContent" identity="id" extends="edu.wustl.catissuecore.domain.pathology.ReportContent">
+    <map-to xml="TextContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.shippingtracking.Shipment" identity="id" extends="edu.wustl.catissuecore.domain.shippingtracking.BaseShipment">
+    <map-to xml="Shipment" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" />
+    <field name="barcode" type="string">
+      <bind-xml name="barcode" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest" identity="id" extends="edu.wustl.catissuecore.domain.shippingtracking.BaseShipment">
+    <map-to xml="ShipmentRequest" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenOrderItem">
+    <map-to xml="ExistingSpecimenOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.ReviewEventParameters">
+    <map-to xml="FluidSpecimenReviewEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="cellCount" type="double">
+      <bind-xml name="cellCount" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters" identity="id" extends="edu.wustl.catissuecore.domain.ReviewEventParameters">
+    <map-to xml="CellSpecimenReviewParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="neoplasticCellularityPercentage" type="double">
+      <bind-xml name="neoplasticCellularityPercentage" node="attribute" />
+    </field>
+    <field name="viableCellPercentage" type="double">
+      <bind-xml name="viableCellPercentage" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters" identity="id" extends="edu.wustl.catissuecore.domain.ReviewEventParameters">
+    <map-to xml="MolecularSpecimenReviewParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="absorbanceAt260" type="double">
+      <bind-xml name="absorbanceAt260" node="attribute" />
+    </field>
+    <field name="absorbanceAt280" type="double">
+      <bind-xml name="absorbanceAt280" node="attribute" />
+    </field>
+    <field name="gelImageURL" type="string">
+      <bind-xml name="gelImageURL" node="attribute" />
+    </field>
+    <field name="gelNumber" type="integer">
+      <bind-xml name="gelNumber" node="attribute" />
+    </field>
+    <field name="laneNumber" type="string">
+      <bind-xml name="laneNumber" node="attribute" />
+    </field>
+    <field name="qualityIndex" type="string">
+      <bind-xml name="qualityIndex" node="attribute" />
+    </field>
+    <field name="ratio28STo18S" type="double">
+      <bind-xml name="ratio28STo18S" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CellSpecimen" identity="id" extends="edu.wustl.catissuecore.domain.Specimen">
+    <map-to xml="CellSpecimen" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.ReviewEventParameters">
+    <map-to xml="TissueSpecimenReviewEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="histologicalQuality" type="string">
+      <bind-xml name="histologicalQuality" node="attribute" />
+    </field>
+    <field name="lymphocyticPercentage" type="double">
+      <bind-xml name="lymphocyticPercentage" node="attribute" />
+    </field>
+    <field name="necrosisPercentage" type="double">
+      <bind-xml name="necrosisPercentage" node="attribute" />
+    </field>
+    <field name="neoplasticCellularityPercentage" type="double">
+      <bind-xml name="neoplasticCellularityPercentage" node="attribute" />
+    </field>
+    <field name="totalCellularityPercentage" type="double">
+      <bind-xml name="totalCellularityPercentage" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenArrayOrderItem">
+    <map-to xml="NewSpecimenArrayOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="name" type="string">
+      <bind-xml name="name" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenRequirement">
+    <map-to xml="MolecularSpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="concentrationInMicrogramPerMicroliter" type="double">
+      <bind-xml name="concentrationInMicrogramPerMicroliter" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.FluidSpecimen" identity="id" extends="edu.wustl.catissuecore.domain.Specimen">
+    <map-to xml="FluidSpecimen" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenRequirement">
+    <map-to xml="FluidSpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.MolecularSpecimen" identity="id" extends="edu.wustl.catissuecore.domain.Specimen">
+    <map-to xml="MolecularSpecimen" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="concentrationInMicrogramPerMicroliter" type="double">
+      <bind-xml name="concentrationInMicrogramPerMicroliter" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenRequirement">
+    <map-to xml="TissueSpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.CellSpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenRequirement">
+    <map-to xml="CellSpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.NewSpecimenOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenOrderItem">
+    <map-to xml="NewSpecimenOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="specimenType" type="string">
+      <bind-xml name="specimenType" node="attribute" />
+    </field>
+    <field name="specimenClass" type="string">
+      <bind-xml name="specimenClass" node="attribute" />
+    </field>
+  </class>
+  <class name="edu.wustl.catissuecore.domain.TissueSpecimen" identity="id" extends="edu.wustl.catissuecore.domain.Specimen">
+    <map-to xml="TissueSpecimen" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenArrayOrderItem">
+    <map-to xml="ExistingSpecimenArrayOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.NewSpecimenOrderItem">
+    <map-to xml="DerivedSpecimenOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+  </class>
+  <class name="edu.wustl.catissuecore.domain.PathologicalCaseOrderItem" identity="id" extends="edu.wustl.catissuecore.domain.NewSpecimenOrderItem">
+    <map-to xml="PathologicalCaseOrderItem" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+    <field name="pathologicalStatus" type="string">
+      <bind-xml name="pathologicalStatus" node="attribute" />
+    </field>
+    <field name="tissueSite" type="string">
+      <bind-xml name="tissueSite" node="attribute" />
+    </field>
+  </class>
+</mapping>

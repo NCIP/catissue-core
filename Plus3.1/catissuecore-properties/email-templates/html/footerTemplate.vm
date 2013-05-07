@@ -1,0 +1,20 @@
+Thanks,<br>
+caTissue Administration Team<br> 
+<table>
+<tr>
+	<td>
+		URL		         
+	<td>
+	<td>
+		: $appUrl  
+	</td> 
+<tr>       
+<tr>
+	<td>
+		Helpdesk Phone		         
+	<td>
+	<td>
+		: $helpDeskPhone
+	</td> 
+<tr>         
+</table> 

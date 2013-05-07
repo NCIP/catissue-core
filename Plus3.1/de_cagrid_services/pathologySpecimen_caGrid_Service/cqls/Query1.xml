@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_specimen.BreastSpecimenNottinghamHistologicScore">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+			<Attribute name="totalNottinghamScore" value="5" predicate="EQUAL_TO" />
+
+
+		</Group>
+
+	</Target>
+</CQLQuery>
