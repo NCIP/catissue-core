@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
-	<mx:Label text="#" />
-	<mx:Label text="Name"/>
-	<mx:Label text="Value"/>
-	<mx:Label text="         "/>
-</mx:HBox>

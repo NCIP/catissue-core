@@ -1,9 +1,0 @@
-8.0
-7
-1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
-2 SQLCHAR 0 0 "\",\"" 1 IDENTIFIER Latin1_General_CI_AS
-3 SQLCHAR 0 0 "\",\"" 2 CONCEPT_CODE Latin1_General_CI_AS
-4 SQLCHAR 0 0 "\",\"" 3 DEFINITION Latin1_General_CI_AS
-5 SQLCHAR 0 0 "\",\"" 4 PARENT_IDENTIFIER Latin1_General_CI_AS
-6 SQLCHAR 0 0 "\",\"" 5 VALUE Latin1_General_CI_AS
-7 SQLCHAR 0 0 "\"\n" 6 PUBLIC_ID Latin1_General_CI_AS
