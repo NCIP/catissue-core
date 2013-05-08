@@ -132,6 +132,7 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 	containerDropDownInfo_<%=i%> = {gridObj:"storageContainerGrid_<%=i%>", gridDiv:"storageContainer_<%=i%>", dropDownId:"storageContainerDropDown_<%=i%>", pagingArea:"storageContainerPagingArea_<%=i%>", infoArea:"storageContainerInfoArea_<%=i%>", onOptionSelect:
 	function (id,ind)
 		{
+		
 			var containerName=document.getElementById("storageContainerDropDown_<%=i%>").value;
 			document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = id;
 			document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(id,ind).getValue();
@@ -141,7 +142,9 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 			document.getElementsByName('value(Specimen:<%=i%>_positionDimensionTwo_fromMap)')[0].value = "";
 		}
 		, actionToDo:url, callBackAction:
-		function(){}
+		function(){
+		document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = "";
+		}
 			, visibilityStatusVariable:scGridVisible_<%=i%>, propertyId:'selectedContainerName_<%=i%>'};
 	// initialising grid
 	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>,false); 
