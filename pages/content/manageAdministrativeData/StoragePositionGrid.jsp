@@ -208,7 +208,7 @@ var fromStoragePosition1=parent.window.document.getElementById('storageContainer
 	document.getElementById('pos1').value=storagePositions1[0];
 	document.getElementById('pos2').value=storagePositions1[1];
 function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageOf)
-{//alert(pageOf);
+{
 	if(pageOf == 'pageOfSpecimen')
 	{
 		var id1 = document.getElementById("pos1");	
@@ -661,6 +661,14 @@ function setVirtual()
 			var contName = parent.window.document.getElementById(globalContName);
 			contName.value='Virtual';
 		}
+		else if(globalPageOf == 'pageOfTransfer')
+		{
+			
+			var contId = parent.window.document.getElementById('containerId');
+			contId.value='-1';
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
+		}
 		parent.window.dhxWins.window("containerPositionPopUp").close();
 	}
 	
@@ -672,7 +680,7 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 	id1.value = elementValue1;
 	var id2 = parent.window.document.getElementById(elementId2);	
 	id2.value = elementValue2;
-	//alert(controlName);
+	
 	//alert(dhtmlxCombo.getSelectedValue());
 	if(pageOf == 'pageOfAntispec')
 	{
@@ -719,6 +727,15 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 		//alert(globalContName);
 			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
 			var contId = parent.window.document.getElementById(globalContName);
+			contId.value=dhtmlxCombo.getSelectedValue();
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value=dhtmlxCombo.getSelectedText();
+		}
+	else if(globalPageOf == 'pageOfTransfer')
+		{
+		//alert(globalContName);
+			
+			var contId = parent.window.document.getElementById('containerId');
 			contId.value=dhtmlxCombo.getSelectedValue();
 			var contName = parent.window.document.getElementById(globalContName);
 			contName.value=dhtmlxCombo.getSelectedText();

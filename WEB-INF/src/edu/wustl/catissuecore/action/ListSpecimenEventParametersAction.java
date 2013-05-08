@@ -279,7 +279,16 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
 			}
 			// Remove Transfer Event Parameters From Event Drop - Down List
-			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.QUICK_EVENT_PARAMETERS);
+			String[] eventList = new String[16];//.QUICK_EVENT_PARAMETERS;
+			int i =0;
+			for (String eventName : Constants.QUICK_EVENT_PARAMETERS)
+			{
+				eventList[i] = Constants.QUICK_EVENT_PARAMETERS[i];
+				i++;
+			}
+//			eventList = Constants.QUICK_EVENT_PARAMETERS;
+			eventList[i] = "Transfer";
+			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, eventList);
 		}
 		catch (final Exception e)
 		{

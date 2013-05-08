@@ -111,7 +111,8 @@ function showPopUp()
 	var storageContainer =document.getElementById("storageContainerDropDown").value;
     if(storageContainer!="")
 	{
-		loadDHTMLXWindow();
+		loadDHTMLXWindowForMultipleSpecimen('storageContainerDropDown','pos1','pos2','<%=className%>','<%=sptype%>','<%=collectionProtocolId%>','pageOfTransfer')
+		
 	}
 	else
 	{
