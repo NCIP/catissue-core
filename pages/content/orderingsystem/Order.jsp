@@ -202,7 +202,7 @@ function switchToOlderView()
 		        </tr>
 	
         <tr>
-          <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3" >
+          <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="2" >
 				<tr class="${tr_grey_color}">
 					<td width="17%" class="black_ar align_right_style">
 						<strong>
@@ -322,9 +322,9 @@ function switchToOlderView()
 			<td><input type="hidden" id="gridStatus" name="gridStatus"/>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr><td>
-						<div id="tabbar_div" align="left" style="width:auto;height:310px;">
-						<div id="SimpleViewDiv" style="width:auto;height:310px;">						
-						<table width="100%" cellpadding="3" cellspacing="0" border="0"	>
+						<div id="tabbar_div" align="left" style="width:auto;height:300px;">
+						<div id="SimpleViewDiv" style="width:auto;height:300px;">						
+						<table width="100%" cellpadding="0" cellspacing="0" border="0"	>
 		<tr>
 			<td>&nbsp;&nbsp;
 				<span class="black_ar_b messagetextwarning">
@@ -345,7 +345,7 @@ function switchToOlderView()
 		<tr>
 			<td colspan="2" width="100%">
 				<script>	
-						document.write("<div id='gridbox' width='100%' height='220px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+						document.write("<div id='gridbox' width='100%' height='240px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 						document.write("<div id='csPagingArea'></div>");
 						document.write("<div id='csInfoArea'></div>");    
 				</script>
@@ -353,7 +353,7 @@ function switchToOlderView()
 		</tr>
 		
  <tr>
-          <td class="buttonbg" style="padding:6px;" colspan="2">
+          <td class="buttonbg" colspan="2">
 					<input type="button" class="blue_ar_b" value="Next >>" onclick="goToConsentTabFromNext()" accesskey="Enter">
 					<input type="button" class="blue_ar_b" value="Export Order" onclick="exportOrder('${requestScope.id}')" accesskey="Enter">
 				
@@ -363,7 +363,7 @@ function switchToOlderView()
 </table>
 
 			</div>
-			<div id="ConsentViewDiv" style="width:auto;height:310px;">
+			<div id="ConsentViewDiv" style="width:auto;height:300px;">
 			</div>	
 			</div>
 			</td></tr>		
