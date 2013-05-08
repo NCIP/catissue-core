@@ -393,6 +393,7 @@ public class UserAction extends SecureAction
         request.setAttribute("pageOf", pageOf);
         request.setAttribute("operation", operation);
         request.setAttribute("openInCPFrame", openInCPFrame);
+        request.setAttribute("defaultCountry", Constants.DEFAULT_COUNTRY_NAME);
         // ------------- add new
         logger.debug("USerAction redirect :---------- " + reqPath);
         if (openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))

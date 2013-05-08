@@ -263,9 +263,22 @@ function disableIdpDetails(disableStatus)
 							  country_combo.enableFilteringMode(true);
 							  country_combo.setSize(200);
 							  country_combo.setComboValue('${userForm.country}');
-							  
-							 
-							  
+							  country_combo.attachEvent("onChange", stateChange); 
+							  if('${userForm.country}'!='${defaultCountry}'){
+								state_combo.disable(true);
+							  }
+							 function stateChange(obj){
+								var defaultCntr = '${defaultCountry}'
+								   
+									if(country_combo.getSelectedValue() ==defaultCntr){
+										state_combo.disable(false);
+									}else{
+										state_combo.setComboText("");
+										state_combo.setComboValue("");
+										state_combo.disable(true);
+									}
+								}
+								  
 							  </script>
 							
 							
