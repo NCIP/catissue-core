@@ -325,7 +325,8 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 
 			}
 			String sprReportPath = XMLPropertyHandler.getValue(Constants.SPR_DIR_LOACTION);
-			File file = new File(sprReportPath + "\\" + fileName);
+			//Replaced '\\' with '/' as '\\' not working on linux machine.
+			File file = new File(sprReportPath + "/" + fileName);
 			FileInputStream fin = new FileInputStream(file);
 			byteArr = IOUtils.toByteArray(fin);
 			fileName = fileName.substring(fileName.indexOf("_") + 1,

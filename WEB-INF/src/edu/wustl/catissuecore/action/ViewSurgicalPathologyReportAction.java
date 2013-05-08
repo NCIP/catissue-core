@@ -239,8 +239,9 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 
 			viewSPR.setReportIdList(getReportIdList(scgList));
 		}
-
-		if (reportId != null)
+		//There is one use case when report id comes as -1 and
+		//code with in the if condition throws exception when report id is -1.
+		if (reportId != null && reportId !=-1)
 		{
 			final IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
 					.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());

@@ -69,8 +69,9 @@ public class ExportSprAction extends SecureAction {
 						sessionDataBean);
 				response.setContentType("application/download");
 				// Get the directory and iterate them to get file by file...
+				//Added " when there was problem when file name is having empty space in it. 
 				response.setHeader("Content-Disposition", "attachment;"
-						+ "filename=" + retList.get(0));
+						+ "filename=\"" + retList.get(0)+"\"");
 				byteArr = (byte[])retList.get(1);
 				
 			}

@@ -545,7 +545,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			if(ispr.getFileContent()!=null){
 				this.hasUploadedReport = true;
 				this.identifiedReportTextContent = Constants.UPLOADED_REPORT_MSG;
-				uploadedFileName = ispr.getFileContent().getData().split("_")[1];
+				//There was issue when file name comes with '_' with in it.
+				//When we store file name in db we appent spr number with '_'
+				uploadedFileName = ispr.getFileContent().getData().substring(ispr.getFileContent().getData().indexOf("_") + 1,
+						ispr.getFileContent().getData().length());
+						
 			}
 			
 		}
