@@ -64,6 +64,8 @@
 	<property name="oracle.dao.datasource.prop.filename" value="OracleDataSourceDAOProperties.xml"/>
 	<property name="mysql.dao.datasource.prop.filename" value="MysqlDataSourceDAOProperties.xml"/>
 	<property name="db2.driver.string" value="com.ibm.db2.jcc.DB2Driver" />
+	<property name="custom-report.script.dir" value="${jboss.home.dir}/server/default/custom-reports/scripts" />
+	<property name="custom-report.report.dir" value="${jboss.home.dir}/server/default/custom-reports/reports" />
 	
 	<var name="databaseurl" value="" />
 	<import file="./modules/dynamic_extensions/conf/DEDeploy.xml" />
@@ -1758,7 +1760,8 @@
 			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
 			<replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
 			<replacefilter token="@@catissue-cdms-integration-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCdmsIntegration.properties" />
-			<replacefilter token="@@custom-report-dir@@" value="${jboss.home.dir}/server/default/custom-reports" />
+			<replacefilter token="@@custom-report-script-dir@@" value="${custom-report.script.dir}" />
+			<replacefilter token="@@custom-generated-report-dir@@" value="${custom-report.report.dir}" />
 		</replace>
 
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
@@ -1766,6 +1769,9 @@
 				<include name="properties-service.xml" />
 			</fileset>
 		</copy>
+		
+		<mkdir dir="${custom-report.script.dir}"/>
+		<mkdir dir="${custom-report.report.dir}"/>
 		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
