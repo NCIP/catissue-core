@@ -163,7 +163,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 		}
 		if(Constants.SUCCESS.equals(pageOf))
 		{
-			pageOf = Validator.isEmpty(cpQuery)?Constants.SUCCESS:"cpQuerySuccess";
+			pageOf = (Validator.isEmpty(cpQuery)||"null".equals(cpQuery))?Constants.SUCCESS:"cpQuerySuccess";
 		}
 
 		return mapping.findForward(pageOf);

@@ -72,7 +72,7 @@ public class QuickEventsAction extends BaseAction
 				session.removeAttribute("messages");
 			}
 		}
-		if(Validator.isEmpty(pageOf))
+		if(Validator.isEmpty(pageOf) || "null".equals(pageOf))
 		{
 			pageOf = Constants.SUCCESS;
 		}
