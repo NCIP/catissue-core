@@ -201,7 +201,7 @@
 							<td width="30%" align="left" class="black_new">
 							<html:select property="className" name="specimenDTO" 
 										 styleClass="formFieldSized19" styleId="className" size="1"
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenTypeChange(this)">
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="specimenClassList"
 									labelProperty="name" property="value" />
 						   </html:select>
@@ -216,7 +216,7 @@
 							<td width="30%" align="left" class="black_new">
 							<html:select property="type" name="specimenDTO" 
 							styleClass="formFieldSized19" styleId="type" size="1"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenSubTypeChange(this)">
+							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="specimenTypeList"
 								labelProperty="name" property="value" />
 							</html:select>
@@ -674,6 +674,6 @@ dhxWins.window("containerPositionPopUp").setModal(true);
 dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
 }
 initSpecimenCombo();
-initializeSpecimenPage(${biohazardTypeNameListJSON});
-prepareSpecimenTypeOptions(${cellTypeListJSON},${molecularTypeListJSON},${tissueTypeListJSON},${fluidTypeListJSON});
+initializeSpecimenPage('${biohazardTypeNameListJSON}');
+prepareSpecimenTypeOptions('${cellTypeListJSON}','${molecularTypeListJSON}','${tissueTypeListJSON}','${fluidTypeListJSON}');
 </script>

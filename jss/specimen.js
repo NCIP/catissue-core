@@ -27,12 +27,12 @@ function initSpecimenCombo()
 		classNameCombo = dhtmlXComboFromSelect("className");
 		classNameCombo.setOptionWidth(203);
 		classNameCombo.setSize(203);
-		classNameCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+		classNameCombo.attachEvent("onChange", function(){onSpecimenTypeChange(this); validateAndProcessComboData(this);});
 
 		typeCombo = dhtmlXComboFromSelect("type");
 		typeCombo.setOptionWidth(203);
 		typeCombo.setSize(203);
-		typeCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+		typeCombo.attachEvent("onChange", function(){onSpecimenSubTypeChange(); validateAndProcessComboData(this);});
 
 		if(document.getElementById('activityStatus')!=null)
 		{
@@ -138,16 +138,13 @@ function editTag(e)
 
 function populateBiohazardTypeOptions()
 {
-	var myData=biohazardNameListJSON;
-	
+	var myData= new Array();
+	myData = JSON.parse(biohazardNameListJSON);
 	var typeList = new Array();
-	
 	for(var i=0;i<myData.length;i++) {
 		typeList.push(myData[i].type);
 	}
-	
 	typeList= getSortedUniqueArrayElements(typeList);
-	
 	for(var i=0;i<typeList.length;i++) {
 		biohazardTypeCombo.addOption(typeList[i],typeList[i]);
 	}
@@ -157,7 +154,7 @@ function onBiohazardTypeSelected()
 {
 	biohazardCombo.clearAll();
 	biohazardCombo.setComboText(defaultTextForBioName);
-	var myData=biohazardNameListJSON;
+	var myData=JSON.parse(biohazardNameListJSON);
 	for(var i=0;i<myData.length;i++) {
 		if(biohazardTypeCombo.getSelectedValue()==myData[i].type || biohazardTypeCombo.getComboText()==myData[i].type)
 			biohazardCombo.addOption(myData[i].id+"_"+myData[i].type,myData[i].name);
@@ -308,14 +305,11 @@ var biohazardNameListJSON;
 function initializeSpecimenPage(biohazardNameJSON)
 {
 	onSpecimenSubTypeChange();
-	
 	biohazardNameListJSON=biohazardNameJSON;
 	setDefaultText("extIdName",defaultTextForExtIdName);
 	setDefaultText("extIdValue",defaultTextForExtIdValue);
-	
 	biohazardCombo=new dhtmlXCombo("biohazardSelect","biohazardSelectBox",165);
 	biohazardCombo.setComboText(defaultTextForBioName);
-	
 	biohazardTypeCombo=new dhtmlXCombo({
 	parent	: "biohazardTypeSelect",
 	name	: "biohazardTypeSelectBox",
@@ -325,7 +319,6 @@ function initializeSpecimenPage(biohazardNameJSON)
 		}
 	});
 	biohazardTypeCombo.setComboText(defaultTextForBioType);
-	
 	populateBiohazardTypeOptions();
 }
 
@@ -350,10 +343,10 @@ function prepareSpecimenTypeOptions(cellTypeJSON,molecularTypeJSON,tissueTypeJSO
 {
 	var typeLists= new Array();
 	typeLists.push(
-		[cellTypeJSON,cellTypeOptions],
-		[molecularTypeJSON,molecularTypeOptions],
-		[tissueTypeJSON,tissueTypeOptions],
-		[fluidTypeJSON,fluidTypeOptions]
+		[JSON.parse(cellTypeJSON),cellTypeOptions],
+		[JSON.parse(molecularTypeJSON),molecularTypeOptions],
+		[JSON.parse(tissueTypeJSON),tissueTypeOptions],
+		[JSON.parse(fluidTypeJSON),fluidTypeOptions]
 	)
 	for(var i=0;i<typeLists.length;i++) {
 		createTypeOptionsFromJSON(typeLists[i][0],typeLists[i][1]);
