@@ -140,6 +140,9 @@ function populateBiohazardTypeOptions()
 {
 	var myData= new Array();
 	myData = JSON.parse(biohazardNameListJSON);
+	if(myData.length==0)
+		return;
+	
 	var typeList = new Array();
 	for(var i=0;i<myData.length;i++) {
 		typeList.push(myData[i].type);
