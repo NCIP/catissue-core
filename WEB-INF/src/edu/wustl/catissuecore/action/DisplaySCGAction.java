@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 
@@ -82,6 +83,9 @@ public class DisplaySCGAction extends Action
 				request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 				request.setAttribute(Constants.COLLECTIONSTATUSLIST,
 						Constants.SCG_COLLECTION_STATUS_VALUES);
+			//set the date format as per the locale
+			request.setAttribute(Constants.DATEFORMAT, CommonServiceLocator.getInstance()
+					.getDatePattern());
 
 		}
 		finally
