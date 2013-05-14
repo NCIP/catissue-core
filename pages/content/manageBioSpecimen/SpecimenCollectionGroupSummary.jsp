@@ -22,8 +22,8 @@
 <fmt:formatDate type="time" value="${scgSummaryDTO.collectedDate}" pattern="m" var="collectedTimeinmin"/>
 <fmt:formatDate type="time" value="${scgSummaryDTO.receivedDate}" pattern="H"  var="receivedTimeinHr"/>
 <fmt:formatDate type="time" value="${scgSummaryDTO.receivedDate}" pattern="m"  var="receivedTimeinMin"/>
-<fmt:formatDate value="${scgSummaryDTO.receivedDate}" pattern="MM-dd-yyyy" var="receivedformatedDate"/>
-<fmt:formatDate value="${scgSummaryDTO.collectedDate}" pattern="MM-dd-yyyy" var="collectedformatedDate"/>
+<fmt:formatDate value="${scgSummaryDTO.receivedDate}" pattern="${dateFormat}" var="receivedformatedDate"/>
+<fmt:formatDate value="${scgSummaryDTO.collectedDate}" pattern="${dateFormat}" var="collectedformatedDate"/>
 
 
 <div id="errorDiv" class="messagetexterror" style="padding-left:30px;display:none;">
