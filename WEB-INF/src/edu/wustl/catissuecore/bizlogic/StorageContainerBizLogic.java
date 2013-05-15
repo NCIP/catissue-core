@@ -133,8 +133,27 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 						getStorageContainerFullStatus(dao, parentContainer,children);
 						posDimOne = cntPos.getPositionDimensionOne().intValue();
 						posDimTwo = cntPos.getPositionDimensionTwo().intValue();
-						posDimOneString=cntPos.getPositionDimensionOneString();
-						posDimTwoString=cntPos.getPositionDimensionTwoString();
+						if(Validator.isEmpty(cntPos.getPositionDimensionOneString()))
+						{
+							posDimOneString = StorageContainerUtil
+									.convertSpecimenPositionsToString(parentContainer.getName(), 1,
+											cntPos.getPositionDimensionOne());
+						}
+						else
+						{
+							posDimOneString=cntPos.getPositionDimensionOneString();
+						}
+						if(Validator.isEmpty(cntPos.getPositionDimensionTwoString()))
+						{
+							posDimTwoString = StorageContainerUtil
+									.convertSpecimenPositionsToString(parentContainer.getName(), 1,
+											cntPos.getPositionDimensionTwo());
+						}
+						else
+						{
+							posDimTwoString=cntPos.getPositionDimensionTwoString();
+						}
+						
 						container.setLocatedAtPosition(cntPos);
 					}
 				}
