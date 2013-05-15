@@ -945,7 +945,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 					{
 						returnMap.put("printLabelSuccess",
 								ApplicationProperties.getValue("specimen.label.print.success"));
-						returnMap.put("printLabel", "success.");
+						returnMap.put("printLabel", "success");
 					}
 					else
 						returnMap.put("printLabelError",
