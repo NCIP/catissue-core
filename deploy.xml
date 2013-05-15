@@ -684,6 +684,7 @@
 								<exclude name="**/WEB-INF/lib/namespace.jar" />
 								<exclude name="**/WEB-INF/lib/${mysql.lib}" />
 								<exclude name="**/WEB-INF/lib/${oracle.lib}" />
+								<exclude name="**/WEB-INF/lib/serializer.jar" />
 			</fileset>
 		</war>
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
