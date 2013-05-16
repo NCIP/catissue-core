@@ -161,7 +161,7 @@ function showEvent()
 			</tr>
 			
 			<tr>
-				<td  colspan="7" >
+				<td  colspan="8" >
 					<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>				
 				</td>
 			</tr>

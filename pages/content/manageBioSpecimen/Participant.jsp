@@ -413,28 +413,28 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	if(pageView.equals("viewAnnotations"))
 	{
 		%><!-- Mandar : 24Nov08 -->
-		<table width="100%" border="0" cellpadding="0" cellspacing="0"  style="height:100%" class="maintable">
-		  <tr height="1%">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+		  <!--tr height="1%">
 		    <td class="td_color_bfdcf3"></td>
-		  </tr>
-		  <tr height="99%">
+		  </tr-->
+		  <tr>
 			<td class="tablepadding">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
 		        <td valign="bottom" ><a href="#" onClick="setTarget('<%=pageOf%>');editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
 		        <td valign="bottom"><a href="#" onClick="viewSPR('<%=reportId%>','<%=pageOf%>','${cpId}','${cprId}')" id="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_annotation1.gif" border="0" alt="View Annotation" width="116" height="22"></td>
-     	        <td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="consentTab('${participantId}')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a>
+     	        <td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="consentTab('${participantId}')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a></td>
 		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 				</tr>
 				<tr>
-				<td colspan="5" height="*">
+				<td colspan="6">
 				<jsp:include page="DisplayAnnotationDataEntryPage.jsp" />
 				</td>
 				</tr>
-			</table>
-		</td>
+				</table>
+			</td>
 	   </tr>
 	  </table>
             
