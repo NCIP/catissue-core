@@ -10,7 +10,6 @@
 <script language="JavaScript" type="text/javascript" src="javascripts/de/scr.js"></script>
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
-<script type='text/JavaScript' src='jss/advQuery/scwcalendar.js'></script>
 <link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
 <script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
