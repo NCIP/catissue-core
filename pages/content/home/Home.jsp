@@ -192,11 +192,11 @@ login.forgot.password=Forgot password?
 				%>		
 				<div class="login-inner-div">
 				<span class="login-label"><bean:message key="app.UserID" /></span>
-				<html:text styleClass="black_ar text-field-login" property="loginName" size="32" />
+				<html:text styleClass="black_ar text-field-login" property="loginName"/>
 				</div>
 				<div class="login-inner-div">
 				<span class="login-label"><bean:message key="app.password" /></span>
-				<html:password styleClass="black_ar text-field-login" property="password" size="32" />
+				<html:password styleClass="black_ar text-field-login" property="password"/>
 				</div>
 				<div class="login-inner-div" style="overflow:auto;">
 					<div style="width:60px;float:left">
