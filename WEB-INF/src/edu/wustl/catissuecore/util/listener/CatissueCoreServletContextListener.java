@@ -64,6 +64,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.ParseException;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.participant.utility.RaceGenderCodesProperyHandler;
+import edu.wustl.common.scheduler.bizLogic.ScheduleBizLogic;
 import edu.wustl.common.util.CVSTagReader;
 import edu.wustl.common.util.EmailClient;
 import edu.wustl.common.util.Utility;
@@ -254,10 +255,26 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		this.initTitliIndex();
 		this.initCDEManager();
 		this.initDashboardCache();
+		this.initReportScheduler();
 		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "PrintServiceImplementor.properties";
 		Variables.setPrinterInfo(absolutePath);
 		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
+	}
+
+	private void initReportScheduler()
+	{
+		ScheduleBizLogic scheduleBizLogic = new ScheduleBizLogic();
+		try
+		{
+			scheduleBizLogic.scheduleOnStartUp();
+		}
+		catch (Exception e)
+		{
+			CatissueCoreServletContextListener.logger.error("Exception occured while initialising "
+					+ "Report Scheduler" + e.getMessage(), e);
+			throw new RuntimeException(e.getLocalizedMessage(), e);
+		}
 	}
 
 	/**
