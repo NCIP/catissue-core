@@ -852,8 +852,10 @@
 		<name>scheduler.mail.end</name>
 	<value>
 Please note that the report(s) will be available for download until ? after which it/they will be deleted from the server.
+
 Thank You,
-ClinPortal</value>
+caTissue Administration Team, 
+Helpdesk Phone : @@contact.Number@@</value>
 	</property>
 	<property>
 		<name>host.mail.alias</name>
