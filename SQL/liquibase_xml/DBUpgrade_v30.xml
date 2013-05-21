@@ -102,7 +102,7 @@
 	
 	<changeSet id="6" author="catissue" runOnChange="true">
 		<addColumn tableName="catissue_abstract_specimen">
-			<column name="CONCENTRATION" type="${int.type}(20,4)" />
+			<column name="CONCENTRATION" type="${double.type}" />
 		</addColumn>
 		<sql>update catissue_abstract_specimen set concentration = (select concentration from catissue_molecular_specimen where catissue_molecular_specimen.identifier = catissue_abstract_specimen.identifier) where catissue_abstract_specimen.identifier in (select identifier from catissue_molecular_specimen)</sql>
 	</changeSet>
