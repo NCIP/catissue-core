@@ -5,7 +5,7 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="edu.wustl.catissuecore.dto.SpecimenDTO"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
@@ -286,8 +286,8 @@
 									</label>
 								</td>
 								<td width="30%" class="black_ar" >
-								<html:text property="createdDate" styleClass="black_ar"
-							       styleId="createdDate" size="10" name="specimenDTO" onblur="processData(this)" onclick="doInitCalendar('createdDate',false,'${uiDatePattern}');"/>
+								<input type="text" name="createdDate" class="black_ar"
+							       id="createdDate" size="10" onblur="processData(this)" onclick="doInitCalendar('createdDate',false,'${uiDatePattern}');" value='<fmt:formatDate value="${specimenDTO.createdDate}" pattern="${datePattern}" />'/>
 							   	<span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 								</td>
 							</tr>
@@ -317,6 +317,8 @@
 										<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right" name="specimenDTO" onblur="processData(this)"
 							     		 disabled="false"/>
 										<bean:message key="specimen.concentrationUnit"/>
+										<div id="concentrationErrorMsg" style="display:none; color:red;">
+									 </div>
 								</td>
 							</tr>
 			

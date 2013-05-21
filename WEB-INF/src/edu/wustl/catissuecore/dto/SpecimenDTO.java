@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.dto;
 
 import java.util.Collection;
+import java.util.Date;
 
 
 public class SpecimenDTO 
@@ -21,9 +22,9 @@ public class SpecimenDTO
 	private String tissueSite;
 	private String tissueSide;
 	private String pathologicalStatus;
-	private String createdDate;
+	private Date createdDate;
 	private Double quantity;
-	private String concentration;
+	private Double concentration;
 	private Boolean available;
 	private Double availableQuantity;
 	private String collectionStatus; 
@@ -133,10 +134,10 @@ public class SpecimenDTO
 	public void setPathologicalStatus(String pathologicalStatus) {
 		this.pathologicalStatus = pathologicalStatus;
 	}
-	public String getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(String createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 	public Double getQuantity() {
@@ -145,10 +146,10 @@ public class SpecimenDTO
 	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
-	public String getConcentration() {
+	public Double getConcentration() {
 		return concentration;
 	}
-	public void setConcentration(String concentration) {
+	public void setConcentration(Double concentration) {
 		this.concentration = concentration;
 	}
 	public Boolean isAvailable() {

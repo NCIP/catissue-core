@@ -207,6 +207,8 @@ public class SpecimenBizlogic
 		if (!Validator.isEmpty(specimenDTO.getActivityStatus()))
 			oldSpecimenObj.setActivityStatus(specimenDTO.getActivityStatus());
 
+		if(specimenDTO.getCreatedDate() != null)
+			oldSpecimenObj.setCreatedOn(specimenDTO.getCreatedDate());
 		if (!Validator.isEmpty(specimenDTO.getLabel()))
 			oldSpecimenObj.setLabel(specimenDTO.getLabel());
 
@@ -309,6 +311,10 @@ public class SpecimenBizlogic
 				oldSpecimenObj.setSpecimenPosition(position);
 			}
 
+		}
+		if(Constants.MOLECULAR.equals(oldSpecimenObj.getClassName()) && specimenDTO.getConcentration() != null)
+		{
+			oldSpecimenObj.setConcentrationInMicrogramPerMicroliter(specimenDTO.getConcentration());
 		}
 		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(oldSpecimenObj,
 				specimenDTO));
@@ -665,8 +671,7 @@ public class SpecimenBizlogic
 		specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
 		specimenDTO.setComments(specimen.getComment());
 		//				specimenDTO.setConcentration(specimen.getc)
-		specimenDTO.setCreatedDate(Utility.parseDateToString(specimen.getCreatedOn(),
-				CommonServiceLocator.getInstance().getDatePattern()));
+		specimenDTO.setCreatedDate(specimen.getCreatedOn());
 		specimenDTO.setLineage(specimen.getLineage());
 		if (specimen.getParentSpecimen() != null)
 		{
@@ -698,7 +703,7 @@ public class SpecimenBizlogic
 		{
 			specimenDTO.setIsVirtual(Boolean.TRUE);
 		}
-
+		specimenDTO.setConcentration(specimen.getConcentrationInMicrogramPerMicroliter());
 		specimenDTO.setExternalIdentifiers(getExternalIdentifierDTOCollection(specimen));
 		specimenDTO.setBioHazards(getBiohazardDTOCollection(specimen));
 

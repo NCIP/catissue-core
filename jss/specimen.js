@@ -534,6 +534,7 @@ function scrollToTop()
 var labelSubmit = true;
 var quantitySubmit = true;
 var availableQuantitySubmit = true;
+var concentrationSubmit = true;
 var createdDateSubmit = true;
 //creates json string for the changed fields and will validate the fields too
 function processData(obj)
@@ -591,6 +592,15 @@ function processData(obj)
 		
 			
 	}
+	if(obj.name=='concentration' && !isNumeric(obj.value.trim()))
+	{
+		concentrationSubmit=false;
+		obj.className += " errorStyleOn";
+		var errorDiv = document.getElementById('concentrationErrorMsg');
+		errorDiv.style.display ="block";
+		if(!isNumeric(obj.value))
+			errorDiv.innerHTML = "(Enter a valid number)";
+	}
 	else if(obj.name=='createdDate' && !validateDate(obj))
 	{
 		createdDateSubmit=false;
@@ -619,6 +629,7 @@ function processData(obj)
 		else if(obj.name=='label'){labelSubmit = true;}
 		else if(obj.name=='availableQuantity'){availableQuantitySubmit = true;}
 		else if(obj.name=='createdDate'){createdDateSubmit = true;}
+		else if(obj.name=='concentration'){concentrationSubmit = true;document.getElementById('concentrationErrorMsg').style.display="none";}
 	}
 }
 
@@ -678,7 +689,7 @@ function submitTabData()
 		obj.className += " errorStyleOn";
 	}
 	
-	if(labelSubmit && submitCombo && quantitySubmit && availableQuantitySubmit && createdDateSubmit)
+	if(labelSubmit && submitCombo && quantitySubmit && availableQuantitySubmit && createdDateSubmit && concentrationSubmit)
 	{
 		var extidJSON = createExtIdJSON();
 		var biohazardJSON = createBioHazardJSON();
