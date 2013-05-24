@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <COLLECTION_PROTOCOL_PARTICIPANT_CONFIG>
 <ATTRIBUTE>
+        <attributeName>Social Security Number</attributeName> <!-- Specify attribute Name  -->
+</ATTRIBUTE>
+<ATTRIBUTE>
 	<attributeName>Race</attributeName>
 </ATTRIBUTE>
 <ATTRIBUTE>

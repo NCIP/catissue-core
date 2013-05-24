@@ -303,10 +303,9 @@ function newConsentTab(levelId)
 					<c:set var="i" value="${i+1}" scope="request" />
 								
 							<td width="1%" align="center" class="black_ar">&nbsp;</td>
-							<td width="17%"><label for="socialSecurityNumber"
-								class="black_ar"> <bean:message
-								key="participant.socialSecurityNumber" /> <br />
-							</label></td>
+							<td width="17%" class="black_ar align_right_style">
+							<b><bean:message key="participant.socialSecurityNumber" /></b>
+							</td>
 							<td width="82%"><html:text styleClass="black_ar" size="3"
 								maxlength="3" styleId="socialSecurityNumberPartA"
 								property="socialSecurityNumberPartA"
