@@ -35,7 +35,7 @@
 				<attribute name="comment" csvColumnName="Collected Comments"    />								
 				<attribute name="collectionProcedure" csvColumnName="Procedure"   />
 				<attribute name="container" csvColumnName="Container"   />
-				<attribute name="timestamp" csvColumnName="Collected Date (MM/DD/YYYY HH:MM)"   />
+				<attribute name="timestamp" csvColumnName="Collected Date"   />
 		</containmentAssociation>
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
@@ -47,7 +47,7 @@
 				</referenceAssociation>
 				<attribute name="comment" csvColumnName="Received Comments"   />								
 				<attribute name="receivedQuality" csvColumnName="Quality"   />				
-				<attribute name="timestamp" csvColumnName="Received Date (MM/DD/YYYY HH:MM)"   />
+				<attribute name="timestamp" csvColumnName="Received Date"   />
 		</containmentAssociation>
 		<attribute name="barcode" csvColumnName="Barcode"   />
 		<attribute name="createdOn" csvColumnName="Created On"   />

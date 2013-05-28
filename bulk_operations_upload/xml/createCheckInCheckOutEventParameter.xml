@@ -16,7 +16,7 @@
 			  roleName="specimen"   parentRoleName="FluidSpecimenReviewEventParameters" >
 			<attribute name="label" csvColumnName="Specimen label"   />	
 		</containmentAssociation>
-		<attribute name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)"   />
+		<attribute name="timestamp" csvColumnName="Date"   />
 		<attribute name="comment" csvColumnName="Comments"   />
 		<attribute name="storageStatus" csvColumnName="Storage status"   />
 	</BulkOperationClass>
