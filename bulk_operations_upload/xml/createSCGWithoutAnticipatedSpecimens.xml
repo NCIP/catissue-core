@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="createSCGWithoutAnticipatedSpecimens" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+		 	    >
+		<referenceAssociation
+			className="edu.wustl.catissuecore.domain.Site"
+			  roleName="specimenCollectionSite"
+			    >
+				<attribute name="id" csvColumnName="Site ID"   />
+		</referenceAssociation>
+		
+		<referenceAssociation
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			  roleName="collectionProtocolRegistration"
+			   >
+				<attribute name="protocolParticipantIdentifier" csvColumnName="PPID"   />
+				<referenceAssociation
+				className="edu.wustl.catissuecore.domain.CollectionProtocol"
+				   roleName="collectionProtocol"   >
+				<attribute name="shortTitle" csvColumnName="CP Title"   />
+			</referenceAssociation>
+		</referenceAssociation>
+		<!--<referenceAssociation
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			  roleName="collectionProtocolRegistration"
+			   >
+				<attribute name="id" csvColumnName="RegistrationIdentifier"   />
+		</referenceAssociation>-->
+		<referenceAssociation
+			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+			  roleName="collectionProtocolEvent"
+			   >
+			<attribute name="collectionPointLabel" csvColumnName="CollectionPointLabel"   />
+        </referenceAssociation>
+			<containmentAssociation
+			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
+			   cardinality="*" roleName="specimenEventParametersCollection"  parentRoleName="specimenCollectionGroup" >
+				<referenceAssociation
+				className="edu.wustl.catissuecore.domain.User"
+				   roleName="user"   >
+					<attribute name="id" csvColumnName="Collected User ID"   />
+				</referenceAssociation>
+				<!--<attribute name="comment" csvColumnName="Collected Comments"   />								-->
+				<attribute name="collectionProcedure" csvColumnName="Procedure"   />
+				<attribute name="container" csvColumnName="Container"   />
+				<attribute name="timestamp" csvColumnName="Collected Date (MM/DD/YYYY)"   />
+		</containmentAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
+			   parentRoleName="specimenCollectionGroup" 
+			cardinality="*" roleName="specimenEventParametersCollection">
+				<referenceAssociation
+				className="edu.wustl.catissuecore.domain.User"
+				  	 roleName="user"   >
+					<attribute name="id" csvColumnName="Received User ID"   />
+				</referenceAssociation>
+				<!-- <attribute name="comment" csvColumnName="Received Comments"   />								-->
+				<attribute name="receivedQuality" csvColumnName="Quality"   />				
+				<attribute name="timestamp" csvColumnName="Received Date (MM/DD/YYYY)"   />
+
+		</containmentAssociation>
+		<attribute name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis"   />
+		<attribute name="clinicalStatus" csvColumnName="Clinical Status"   />
+		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="isToInsertAnticipatorySpecimens" csvColumnName="Create Anticipated Specimen"   />
+		<attribute name="surgicalPathologyNumber" csvColumnName="SPR Name"   />
+		<attribute name="name" csvColumnName="SCG Name"   />
+	</BulkOperationClass>
+</BulkOperationMetadata>

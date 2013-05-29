@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="createLabAnnotation" batchSize="10000">
+
+		<BulkOperationClass className="LabAnnotation" entityGroupName="clinical_annotation" type="DEEntity">
+			<attribute name="labTestName" csvColumnName="Lab Test Name" />
+			<attribute name="testDate" csvColumnName="Test Date" />
+			<attribute name="resultUnits" csvColumnName="Result Units" />
+			<attribute name="result" csvColumnName="Result" />
+			<attribute name="otherLabTestName" csvColumnName="Other Lab Test Name"/>
+
+			<hookingInformation>
+				<attribute name="collectionProtocol"  csvColumnName="Collection Protocol Title"    />
+				<attribute name="ppi"  csvColumnName="Participant Protcol ID"    />		
+			</hookingInformation>		
+		</BulkOperationClass>	
+	
+</BulkOperationMetadata>

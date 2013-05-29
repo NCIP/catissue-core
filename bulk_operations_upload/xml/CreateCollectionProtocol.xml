@@ -1,220 +1,93 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<BulkOperationMetadata templateName="CreateCP" batchSize="5">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><BulkOperationMetadata batchSize="5" templateName="CreateCollectionProtocol">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.CollectionProtocol">
 
-		<referenceAssociation
-			className="edu.wustl.catissuecore.domain.User"
-			  roleName="principalInvestigator" >
-				<attribute name="loginName" csvColumnName="Principal Investigator"   />
+		<referenceAssociation className="edu.wustl.catissuecore.domain.User" roleName="principalInvestigator">
+				<attribute csvColumnName="PrincipalInvestigator" name="loginName"/>
 		</referenceAssociation>
 
-		<referenceAssociation
-			className="edu.wustl.catissuecore.domain.User"
-			 cardinality="*" roleName="coordinatorCollection" maxNoOfRecords="4"
-			    >
-				<attribute name="loginName" csvColumnName="Principal cordinator"   />
+		<referenceAssociation cardinality="*" className="edu.wustl.catissuecore.domain.User" roleName="coordinatorCollection">
+				<attribute csvColumnName="Principalcordinator" name="loginName"/>
 		</referenceAssociation>
 		
-		<containmentAssociation
-			className="edu.wustl.catissuecore.domain.ConsentTier"
-			 cardinality="*" roleName="consentTierCollection"
-			  maxNoOfRecords="4"  >
-				<attribute name="statement" csvColumnName="Statements"   />
+		<containmentAssociation cardinality="*" className="edu.wustl.catissuecore.domain.ConsentTier" maxNoOfRecords="4" roleName="consentTierCollection">
+				<attribute csvColumnName="Consent" name="statement"/>
 		</containmentAssociation>
 
-		<containmentAssociation
-			className="edu.wustl.catissuecore.domain.ClinicalDiagnosis"
-			   cardinality="*" roleName="clinicalDiagnosisCollection"  parentRoleName="collectionProtocol" maxNoOfRecords="4">
-				<attribute name="name" csvColumnName="Clinical Diagnosis"   />	
+		<containmentAssociation cardinality="*" className="edu.wustl.catissuecore.domain.ClinicalDiagnosis" parentRoleName="collectionProtocol" roleName="clinicalDiagnosisCollection">
+				<attribute csvColumnName="ClinicalDiagnosis" name="name"/>	
 		</containmentAssociation>
 		
-		<containmentAssociation
-			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-			   cardinality="*" roleName="collectionProtocolEventCollection" maxNoOfRecords="10" parentRoleName="collectionProtocol" >
+		<referenceAssociation cardinality="*" className="edu.wustl.catissuecore.domain.Site" roleName="siteCollection">
+				<attribute csvColumnName="SiteID" name="id"/>
+		</referenceAssociation>
 
-			<attribute name="studyCalendarEventPoint" csvColumnName="Study Calender Event Point"   />								
-			<attribute name="collectionPointLabel" csvColumnName="Collection Point Label"   />
+		<containmentAssociation cardinality="*" className="edu.wustl.catissuecore.domain.CollectionProtocolEvent" maxNoOfRecords="2" parentRoleName="collectionProtocol" roleName="collectionProtocolEventCollection">
 
-			<attribute name="clinicalStatus" csvColumnName="Clinical Status"   />		
-			<attribute name="activityStatus" csvColumnName="ActivityStatus"   />
-			<attribute name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis For Event"   />
+			<attribute csvColumnName="Study Calender Event Point" name="studyCalendarEventPoint"/>								
+			<attribute csvColumnName="CollectionPointLabel" name="collectionPointLabel"/>
 
-			<referenceAssociation className="edu.wustl.catissuecore.domain.Site" roleName="defaultSite">
-				<attribute name="name" csvColumnName="Site"   />
-			</referenceAssociation>
-			
-			<containmentAssociation
-				className="edu.wustl.catissuecore.domain.SpecimenRequirement"
-				   cardinality="*" roleName="specimenRequirementCollection" maxNoOfRecords="10" parentRoleName="collectionProtocolEvent" >
+			<attribute csvColumnName="Clinical Status" name="clinicalStatus"/>		
+			<attribute csvColumnName="ActivityStatus" name="activityStatus"/>
 
-				<attribute name="specimenClass" csvColumnName="Specimen Class"    >
 
-					<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
+			<containmentAssociation cardinality="*" className="edu.wustl.catissuecore.domain.SpecimenRequirement" maxNoOfRecords="2" parentRoleName="collectionProtocolEvent" roleName="specimenRequirementCollection">
+
+				<attribute csvColumnName="Specimen Class" name="specimenClass">
+
+					<!-- <discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
 					<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"/>
 					<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"/>
-					<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"/>
+					<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"/> -->
 
 				</attribute>
-				<attribute name="specimenRequirementLabel" csvColumnName="Specimen Requirement Title"   />
-				<attribute name="specimenType" csvColumnName="Specimen Type"   />
-				<attribute name="storageType" csvColumnName="Storage Location"   />
-				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
-				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
-				<attribute name="lineage" csvColumnName="Lineage"   />
-				<attribute name="labelFormat" csvColumnName="Label Format"   />
 
-				<referenceAssociation
-					className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-					      roleName="specimenCharacteristics">
-						<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-						<attribute name="tissueSide" csvColumnName="Tissue Side"   />
+				<attribute csvColumnName="Specimen Type" name="specimenType"/>
+				<attribute csvColumnName="Storage Location" name="storageType"/>
+				<attribute csvColumnName="Pathological Status" name="pathologicalStatus"/>
+				<attribute csvColumnName="Initial Quantity" name="initialQuantity"/>
+				<attribute csvColumnName="Lineage" name="lineage"/>
+				<attribute csvColumnName="LabelFormat" name="labelFormat"/>
+
+				<referenceAssociation className="edu.wustl.catissuecore.domain.SpecimenCharacteristics" roleName="specimenCharacteristics">
+						<attribute csvColumnName="Tissue Site" name="tissueSite"/>
+						<attribute csvColumnName="Tissue Side" name="tissueSide"/>
 				</referenceAssociation>
 
-				<containmentAssociation
-					className="edu.wustl.catissuecore.domain.CollectionEventParameters"
-					   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
-						<referenceAssociation
-						className="edu.wustl.catissuecore.domain.User"
-						      roleName="user">
-							<attribute name="id" csvColumnName="Collector"   />
+				<containmentAssociation cardinality="*" className="edu.wustl.catissuecore.domain.CollectionEventParameters" parentRoleName="specimen" roleName="specimenEventCollection">
+						<referenceAssociation className="edu.wustl.catissuecore.domain.User" roleName="user">
+							<attribute csvColumnName="CUserID" name="id"/>
 						</referenceAssociation>
-						<attribute name="collectionProcedure" csvColumnName="Collection Procedure"   />
-						<attribute name="container" csvColumnName="Collection Container"   />						
+						<attribute csvColumnName="CComments" name="comment"/>								
+						<attribute csvColumnName="Procedure" name="collectionProcedure"/>
+						<attribute csvColumnName="Container" name="container"/>
+						<attribute csvColumnName="CollectedDate(MM/DD/YYYY)" name="timestamp"/>
 				</containmentAssociation>
 
-				<containmentAssociation
-					className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
-					   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
-						<referenceAssociation
-						className="edu.wustl.catissuecore.domain.User"
-						      roleName="user">
-							<attribute name="id" csvColumnName="Receiver"   />
+				<containmentAssociation cardinality="*" className="edu.wustl.catissuecore.domain.ReceivedEventParameters" parentRoleName="specimen" roleName="specimenEventCollection">
+						<referenceAssociation className="edu.wustl.catissuecore.domain.User" roleName="user">
+							<attribute csvColumnName="RUserID" name="id"/>
 						</referenceAssociation>
-						<attribute name="receivedQuality" csvColumnName="Received Quality"   />				
-						
-				</containmentAssociation>
-
-			
-			<containmentAssociation
-				className="edu.wustl.catissuecore.domain.SpecimenRequirement"
-				   cardinality="*" roleName="childSpecimenCollection" maxNoOfRecords="10" parentRoleName="parentSpecimen" >
-
-				<attribute name="specimenClass" csvColumnName="Specimen Class"    >
-
-					<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
-					<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"/>
-					<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"/>
-					<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"/>
-
-				</attribute>
-				<attribute name="specimenRequirementLabel" csvColumnName="Specimen Requirement Title"   />
-
-				<attribute name="specimenType" csvColumnName="Specimen Type"   />
-				<attribute name="storageType" csvColumnName="Storage Location"   />
-				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
-				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
-				<attribute name="lineage" csvColumnName="Lineage"   />
-				<attribute name="labelFormat" csvColumnName="Label Format"   />
-
-				<referenceAssociation
-					className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-					      roleName="specimenCharacteristics">
-						<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-						<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-				</referenceAssociation>
-
-				<containmentAssociation
-					className="edu.wustl.catissuecore.domain.CollectionEventParameters"
-					   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
-						<referenceAssociation
-						className="edu.wustl.catissuecore.domain.User"
-						      roleName="user">
-							<attribute name="id" csvColumnName="Collector"   />
-						</referenceAssociation>
-						<attribute name="collectionProcedure" csvColumnName="Collection Procedure"   />
-						<attribute name="container" csvColumnName="Collection Container"   />						
-				</containmentAssociation>
-
-				<containmentAssociation
-					className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
-					   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
-						<referenceAssociation
-						className="edu.wustl.catissuecore.domain.User"
-						      roleName="user">
-							<attribute name="id" csvColumnName="Receiver"   />
-						</referenceAssociation>
-						<attribute name="receivedQuality" csvColumnName="Received Quality"   />				
-						
-				</containmentAssociation>
-					<containmentAssociation
-				className="edu.wustl.catissuecore.domain.SpecimenRequirement"
-				   cardinality="*" roleName="childSpecimenCollection" maxNoOfRecords="5" parentRoleName="parentSpecimen" >
-
-				<attribute name="specimenClass" csvColumnName="Specimen Class"    >
-
-					<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
-					<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"/>
-					<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"/>
-					<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"/>
-
-				</attribute>
-				<attribute name="specimenRequirementLabel" csvColumnName="Specimen Requirement Title"   />
-
-				<attribute name="specimenType" csvColumnName="Specimen Type"   />
-				<attribute name="storageType" csvColumnName="Storage Location"   />
-				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
-				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
-				<attribute name="lineage" csvColumnName="Lineage"   />
-				<attribute name="labelFormat" csvColumnName="Label Format"   />
-
-				<referenceAssociation
-					className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-					      roleName="specimenCharacteristics">
-						<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-						<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-				</referenceAssociation>
-
-				<containmentAssociation
-					className="edu.wustl.catissuecore.domain.CollectionEventParameters"
-					   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
-						<referenceAssociation
-						className="edu.wustl.catissuecore.domain.User"
-						      roleName="user">
-							<attribute name="id" csvColumnName="Collector"   />
-						</referenceAssociation>
-						<attribute name="collectionProcedure" csvColumnName="Collection Procedure"   />
-						<attribute name="container" csvColumnName="Collection Container"   />						
-				</containmentAssociation>
-
-				<containmentAssociation
-					className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
-					   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
-						<referenceAssociation
-						className="edu.wustl.catissuecore.domain.User"
-						      roleName="user">
-							<attribute name="id" csvColumnName="Receiver"   />
-						</referenceAssociation>
-						<attribute name="receivedQuality" csvColumnName="Received Quality"   />				
-						
+						<attribute csvColumnName="RComments" name="comment"/>								
+						<attribute csvColumnName="Quality" name="receivedQuality"/>				
+						<attribute csvColumnName="ReceivedDate(MM/DD/YYYY)" name="timestamp"/>
 				</containmentAssociation>
 
 			</containmentAssociation>
-			</containmentAssociation>
-		    </containmentAssociation>
+
 		</containmentAssociation>
 
-		<attribute name="title" csvColumnName="Title"   />
-		<attribute name="shortTitle" csvColumnName="Short Title"   />
-		<attribute name="irbIdentifier" csvColumnName="IRB"   />
-		<attribute name="startDate" csvColumnName="Date"   />
-		<attribute name="descriptionURL" csvColumnName="URL"   />
-		<attribute name="activityStatus" csvColumnName="Activity Status"   />
-		<attribute name="consentsWaived" csvColumnName="Waived"   />
-		<attribute name="aliquotInSameContainer" csvColumnName="Aliquot In Same Container"   />
-		<attribute name="enrollment" csvColumnName="Enrollment"   />
-		<attribute name="aliquotLabelFormat" csvColumnName="Aliquot Specimen Label Format"   />
-		<attribute name="derivativeLabelFormat" csvColumnName="Derivative Specimen Label Format"   />
-		<attribute name="specimenLabelFormat" csvColumnName="Parent Specimen Label Format"   />
+		<attribute csvColumnName="Title" name="title"/>
+		<attribute csvColumnName="ShortTitle" name="shortTitle"/>
+		<attribute csvColumnName="IRB" name="irbIdentifier"/>
+		<attribute csvColumnName="Date" name="startDate"/>
+		<attribute csvColumnName="URL" name="descriptionURL"/>
+		<attribute csvColumnName="Activity Status" name="activityStatus"/>
+		<attribute csvColumnName="Waived" name="consentsWaived"/>
+		<attribute csvColumnName="Aliquot In Same Container" name="aliquotInSameContainer"/>
+		<attribute csvColumnName="Enrollment" name="enrollment"/>
+
+		<attribute csvColumnName="AliquotLabelFormat" name="aliquotLabelFormat"/>
+		<attribute csvColumnName="DerivativeLabelFormat" name="derivativeLabelFormat"/>
+		<attribute csvColumnName="SpecimenLabelFormat" name="specimenLabelFormat"/>
 	</BulkOperationClass>
 </BulkOperationMetadata>

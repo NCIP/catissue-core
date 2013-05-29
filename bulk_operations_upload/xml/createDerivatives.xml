@@ -1,30 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="EditSpecimen" batchSize="5">
+<BulkOperationMetadata templateName="createDerivatives" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
 		     
 		 >
-			
-		 <containmentAssociation
+		<!--<referenceAssociation
+			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+			      roleName="specimenCollectionGroup" >
+				<attribute name="name" csvColumnName="SCG name"   />
+		</referenceAssociation>-->
+		<referenceAssociation
+					className="edu.wustl.catissuecore.domain.Specimen" 
+					roleName="parentSpecimen"  parentRoleName="specimen" >
+					<attribute name="label" csvColumnName="Parent Specimen Label"   />
+		</referenceAssociation>
+		
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
 			      roleName="specimenCharacteristics">
 				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
 				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 		</containmentAssociation>
 		
+			<containmentAssociation
+			className="edu.wustl.catissuecore.domain.ExternalIdentifier" cardinality="*"
+			      roleName="externalIdentifierCollection" parentRoleName="specimen">
+				<attribute name="name" csvColumnName="External ID Name"   />
+				<attribute name="value" csvColumnName="External ID Value"   />
+		</containmentAssociation>
+
+		
+		
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"
 			  
 			 roleName="specimenPosition"   >
-				<attribute name="positionDimensionOne" csvColumnName="Position one"   />
-				<attribute name="positionDimensionTwo" csvColumnName="Position two"   />
+				<attribute name="positionDimensionOne" csvColumnName="Position One"   />
+				<attribute name="positionDimensionTwo" csvColumnName="Position Two"   />
 				<referenceAssociation
 				className="edu.wustl.catissuecore.domain.StorageContainer"
 				  
 				 roleName="storageContainer"    >
-					<attribute name="name" csvColumnName="Container name"   />
+					<attribute name="name" csvColumnName="Container Name"   />
 				</referenceAssociation>			
 		</containmentAssociation>
-		<containmentAssociation
+		<!--<containmentAssociation
 			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
 			   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
 				<referenceAssociation
@@ -35,7 +54,7 @@
 				<attribute name="comment" csvColumnName="Collected Comments"    />								
 				<attribute name="collectionProcedure" csvColumnName="Procedure"   />
 				<attribute name="container" csvColumnName="Container"   />
-				<attribute name="timestamp" csvColumnName="Collected Date"   />
+				<attribute name="timestamp" csvColumnName="Collected Date (MM/DD/YYYY)"   />
 		</containmentAssociation>
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
@@ -47,8 +66,9 @@
 				</referenceAssociation>
 				<attribute name="comment" csvColumnName="Received Comments"   />								
 				<attribute name="receivedQuality" csvColumnName="Quality"   />				
-				<attribute name="timestamp" csvColumnName="Received Date"   />
-		</containmentAssociation>
+				<attribute name="timestamp" csvColumnName="Received Date (MM/DD/YYYY)"   />
+		</containmentAssociation>-->
+		<attribute name="label" csvColumnName="Label"   />
 		<attribute name="barcode" csvColumnName="Barcode"   />
 		<attribute name="createdOn" csvColumnName="Created On"   />
 		<attribute name="activityStatus" csvColumnName="Activity Status"   />
@@ -57,19 +77,13 @@
 		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
 		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
 
-			<!-- <discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
-			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
-			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
-			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/> -->
-
 		</attribute>
-              <attribute name="specimenClass" csvColumnName="Type"   />
 		<attribute name="specimenType" csvColumnName="Type"   />
 		<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />
 		<attribute name="lineage" csvColumnName="Lineage"   />
 		<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
-    	<attribute name="label" csvColumnName="Label" updateBasedOn="true"  />
-		
+		<attribute name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration"   />
+
 	</BulkOperationClass>
 </BulkOperationMetadata>
