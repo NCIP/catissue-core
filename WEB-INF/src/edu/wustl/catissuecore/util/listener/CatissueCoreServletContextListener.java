@@ -47,6 +47,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
+import edu.wustl.catissuecore.scheduler.TitliIndexerJob;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
@@ -140,6 +141,13 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			executerImpl.init();
 			initializeParticipantConfig();
 			initEmailclient();
+
+			/** Bug Id: PLUS-25
+			 * 	Details: Scheduler for titli keyword search indexing.
+			 *  Added By: Ashraf
+			 */
+			TitliIndexerJob.scheduleTitliIndexerJob();
+
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)

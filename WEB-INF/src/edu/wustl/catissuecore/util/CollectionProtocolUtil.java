@@ -353,7 +353,7 @@ public class CollectionProtocolUtil
 		eventBean.setLabelFormat(collectionProtocolEvent.getLabelFormat());
 		if (collectionProtocolEvent.getDefaultSite() != null)
 			eventBean.setDefaultSiteId(collectionProtocolEvent.getDefaultSite().getId());
-
+		eventBean.setActivityStatus(collectionProtocolEvent.getActivityStatus());
 		return eventBean;
 	}
 
@@ -464,10 +464,13 @@ public class CollectionProtocolUtil
 			SpecimenRequirement childReqSpecimen = iterator.next();
 			if (Constants.ALIQUOT.equals(childReqSpecimen.getLineage()))
 			{
+			   if(!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childReqSpecimen.getActivityStatus()))
+			   {   
 				SpecimenRequirementBean specimenBean = getSpecimenBean(childReqSpecimen,
 						parentName, parentuniqueId, aliqCtr++);
 				aliquotMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
+		}
 		}
 		return aliquotMap;
 	}
@@ -495,9 +498,12 @@ public class CollectionProtocolUtil
 			SpecimenRequirement childReqSpecimen = iterator.next();
 			if (Constants.DERIVED_SPECIMEN.equals(childReqSpecimen.getLineage()))
 			{
+				if(!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childReqSpecimen.getActivityStatus()))
+				{	
 				SpecimenRequirementBean specimenBean = getSpecimenBean(childReqSpecimen,
 						parentName, parentuniqueId, deriveCtr++);
 				derivedMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
+				}	
 			}
 		}
 
@@ -576,6 +582,7 @@ public class CollectionProtocolUtil
 
 		setAliquotAndDerivedColl(reqSpecimen, parentName, speRequirementBean);
 		speRequirementBean.setLabelFormat(reqSpecimen.getLabelFormat());
+		speRequirementBean.setActivityStatus(reqSpecimen.getActivityStatus());
 		return speRequirementBean;
 	}
 
@@ -1153,7 +1160,14 @@ public class CollectionProtocolUtil
 		collectionProtocolEvent.setCollectionPointLabel(cpEventBean.getCollectionPointLabel());
 		collectionProtocolEvent
 				.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
+		if(cpEventBean.getActivityStatus()!=null)
+		{
+			collectionProtocolEvent.setActivityStatus(cpEventBean.getActivityStatus());
+		}
+		else
+		{
 		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+		}
 		collectionProtocolEvent.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 		if (cpEventBean.getId() == -1)
 		{
@@ -1370,7 +1384,14 @@ public class CollectionProtocolUtil
 		{
 			reqSpecimen.setId(Long.valueOf(specimenRequirementBean.getId()));
 		}
+		if(specimenRequirementBean.getActivityStatus()==null)
+		{
 		reqSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+		}
+		else
+		{
+			reqSpecimen.setActivityStatus(specimenRequirementBean.getActivityStatus());
+		}
 		reqSpecimen.setInitialQuantity(new Double(specimenRequirementBean.getQuantity()));
 		reqSpecimen.setLineage(specimenRequirementBean.getLineage());
 		reqSpecimen.setPathologicalStatus(specimenRequirementBean.getPathologicalStatus());

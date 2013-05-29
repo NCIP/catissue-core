@@ -119,7 +119,7 @@
                                <td align="left" class="black_ar"><bean:message key="cpbasedentry.storagelocation"/></td>
                                 <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="storageLocationForSpecimen"
-									  optionsList = "<%=request.getAttribute("storageContainerList")%>"
+									  optionsList = "${requestScope.storageContainerList}"
 									  initialValue="<%=form.getStorageLocationForSpecimen()%>"
 									  styleClass="black_ar"
 									  size="20"
@@ -459,7 +459,7 @@
 		                            <td class="black_ar">
 
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
-											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
+											    optionsList = "${requestScope.storageContainerList}"
 												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
 												styleClass="black_ar"
 												size="20"
@@ -504,7 +504,7 @@
 		                            <td class="black_ar">
 
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
-											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
+											    optionsList = "${requestScope.storageContainerList}"
 												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
 												styleClass="black_ar"
 												size="20"

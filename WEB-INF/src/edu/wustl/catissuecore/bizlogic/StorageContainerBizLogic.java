@@ -60,6 +60,8 @@ import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
+import edu.wustl.dao.query.generator.ColumnValueBean;
+
 /**
  * StorageContainerHDAO is used to add Storage Container information into the
  * database using Hibernate.
@@ -1989,98 +1991,171 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		return sql;
 	}
 	
-	public String updateStorageContainerPosition(
-			SessionDataBean sessionDataBean, String containerName,
+		
+	public void updateStorageContainerPosition(
+			DAO dao, String containerName,
 			String parentContainerName, String pos1, String pos2)
 			throws ApplicationException {
-		DAO dao = null;
-		String msg = "";
-		try {
-
-			dao = AppUtility.openDAOSession(sessionDataBean);
-
 			StorageContainer sc = getStorageContainerFromName(dao,
 					containerName);
 			ContainerPosition pos = null;
-			if ("".equals(pos1) && "".equals(pos2)) {
+		
+		StorageContainer parentContainer = getStorageContainerFromName(dao,
+				parentContainerName);
+		
+		List labellingList = StorageContainerUtil
+				.getLabellingSchemeByContainerId(parentContainer.getId().toString(),dao);
+		String oneDimensionLabellingScheme = (String) labellingList
+				.get(0);// ((ArrayList)labellingList.get(0)).get(0);
+		String twoDimensionLabellingScheme = (String) labellingList
+				.get(1);// ((ArrayList)labellingList.get(0)).get(1);
+		Integer pos1Integer = AppUtility.getPositionValueInInteger(
+				oneDimensionLabellingScheme, pos1);
+		Integer pos2Integer = AppUtility.getPositionValueInInteger(
+				twoDimensionLabellingScheme, pos2);
+		pos = (ContainerPosition) sc.getLocatedAtPosition();
+		pos.setPositionDimensionOne(pos1Integer);
+		pos.setPositionDimensionTwo(pos2Integer);
+		pos.setPositionDimensionOneString(pos1);
+		pos.setPositionDimensionTwoString(pos2);
+		dao.update(pos);
+		
+	}
+	
+	public void updateStorageContainerPosition(String containerName,
+			String parentContainerName,HibernateDAO dao)
+			throws ApplicationException {
+		
+			StorageContainer sc = getStorageContainerFromName(dao,
+					containerName);
+			//Storage container is null when user trying to move site node from tree.
+			//When container is null we are throwing site can not be transfered exception.
+			if(sc!=null){
+				ContainerPosition pos = null;
 				StorageContainer parentSc = getStorageContainerFromName(dao,
 						parentContainerName);
+				//parentSc is null when user trying to move container from one site to another site.
+				//and it is not null when ueser trying to move container from one container to another.
 				if (parentSc != null) {
+					Long typeId = sc.getStorageType().getId();
+					StorageTypeBizLogic stBiz = new StorageTypeBizLogic();
+					boolean canHold = stBiz.canHoldContainerType(typeId.intValue(), parentSc);
+					//Container type check is added to check restriction.
+					if(!canHold){
+						throw new BizLogicException(null,null,parentContainerName+ Constants.CONTAINER_INVALID_MESSAGE+sc.getStorageType().getName());
+					}
+					List labellingList = StorageContainerUtil
+							.getLabellingSchemeByContainerId(parentSc.getId().toString(),dao);
+					String oneDimensionLabellingScheme = (String) labellingList
+							.get(0);// ((ArrayList)labellingList.get(0)).get(0);
+					String twoDimensionLabellingScheme = (String) labellingList
+							.get(1);// ((ArrayList)labellingList.get(0)).get(1);
 					Position position = StorageContainerUtil
 							.getFirstAvailablePositionsInContainer(parentSc,
 									new HashSet<String>(), dao, null, null);
+					//Container Located position is null when container is moved from site to another container.
+					//In above case we create new ContainerPosition object with new position details.
+					//If its not null we update existing ContainerPosition object.
 					if( sc.getLocatedAtPosition()!=null ){
 						pos = (ContainerPosition) sc.getLocatedAtPosition();
-						pos.setParentContainer(parentSc);
-						pos.setPositionDimensionOne(position.getXPos());
-						pos.setPositionDimensionTwo(position.getYPos());
-						dao.update(pos);
-						dao.commit();
 					}else{
 						pos = new ContainerPosition();
+					}
 						pos.setParentContainer(parentSc);
 						pos.setPositionDimensionOne(position.getXPos());
 						pos.setPositionDimensionTwo(position.getYPos());
+					pos.setPositionDimensionOneString(AppUtility.getPositionValue(oneDimensionLabellingScheme, position.getXPos()));
+					pos.setPositionDimensionTwoString(AppUtility.getPositionValue(twoDimensionLabellingScheme, position.getYPos()));
 						pos.setOccupiedContainer(sc);
 						sc.setLocatedAtPosition(pos);
-						SiteBizLogic siteBizLogic = new SiteBizLogic();
-						sc.setSite(siteBizLogic.getSite(dao,parentSc.getId()));
-						dao.insert(pos);
-						dao.update(sc);
-						dao.commit();
-					}
+					sc.setSite(parentSc.getSite());
+					
 					
 				}else{
+					//This else block is getting executed when container is moved to site.
 					SiteBizLogic sitBizLogic= new SiteBizLogic();
 					Long id = sitBizLogic.retriveSiteIdByName(dao, parentContainerName);
 					Site site = new Site();
 					site.setId(id);
 					sc.setSite(site);
 					pos = (ContainerPosition) sc.getLocatedAtPosition();
+					if(pos!=null){
+						pos.setParentContainer(null);
 					pos.setOccupiedContainer(null);
 					sc.setLocatedAtPosition(null);
+					}
 					
-					dao.update(sc);
-					dao.update(pos);
-					dao.commit();
 				}
+					dao.update(sc);
+				
+				//updateChildContainerSite is called to update child container under transfered container.
+				updateChildContainerSite(sc.getName(),dao,sc.getSite());
+				
 
-			} else {
-
-				List labellingList = StorageContainerUtil
-						.getLabellingSchemeByContainerId(sc.getId().toString());
-				String oneDimensionLabellingScheme = (String) labellingList
-						.get(0);// ((ArrayList)labellingList.get(0)).get(0);
-				String twoDimensionLabellingScheme = (String) labellingList
-						.get(1);// ((ArrayList)labellingList.get(0)).get(1);
-				Integer pos1Integer = AppUtility.getPositionValueInInteger(
-						oneDimensionLabellingScheme, pos1);
-				Integer pos2Integer = AppUtility.getPositionValueInInteger(
-						twoDimensionLabellingScheme, pos2);
-				pos = (ContainerPosition) sc.getLocatedAtPosition();
-				pos.setPositionDimensionOne(pos1Integer);
-				pos.setPositionDimensionTwo(pos2Integer);
-				dao.update(pos);
-				dao.commit();
+		}else{
+			throw new BizLogicException(null,null,Constants.SITE_NOT_TRANSFRED_MESSAGE);
+			
 			}
 
-		} catch (final ApplicationException exp) {
-			String msgString = "";
-			if (exp.getErrorKey() != null) {
-				msgString = exp.getErrorKey().getMessageWithValues();
-			} else {
-				msgString = exp.getMsgValues();
 			}
-
-			throw new BizLogicException(exp.getErrorKey(), exp, msgString);
-		} finally {
-			if (dao != null) {
-				AppUtility.closeDAOSession(dao);
-			}
-		}
-		return msg;
-	}
 	
+	//This function gets called recursively to update site for all child container of transfered container
+	public static void updateChildContainerSite(String parentName,HibernateDAO dao,Site site)  throws ApplicationException{
+		Collection<String> childrenCollection  = getContainerChildren(parentName,dao);
+		Iterator<String> childContIterator = childrenCollection.iterator();
+		Map<String, NamedQueryParam> params;
+		
+		while(childContIterator.hasNext()){
+			String childName = childContIterator.next();
+			params = new HashMap<String, NamedQueryParam>();
+			params.put("0", new NamedQueryParam(DBTypes.LONG, site.getId()));
+			params.put("1", new NamedQueryParam(DBTypes.STRING, childName));
+			dao.executeUpdateWithNamedQuery("updateSiteOfChildContainer", params);
+			updateChildContainerSite(childName,dao,site);
+			}
+	
+		}
+	
+	
+	/**
+	 * @param containerId - containerId.
+	 * @return collection of container childrens
+	 * @throws BizLogicException
+	 */
+	public static Collection getContainerChildren(String containerName,DAO dao) throws ApplicationException
+	{
+		Collection<String> children = null;
+		try
+		{
+			children = new StorageContainerBizLogic().getChildrenName(dao, containerName);
+	}
+		catch (final ApplicationException e)
+		{
+			logger.error(e.getMessage(), e);
+			ErrorKey errorKey = ErrorKey.getErrorKey(e.getErrorKeyName());
+			throw new ApplicationException(errorKey, e, e.getMsgValues());
+		}
+		return children;
+	}
+
+	
+	
+	/**
+	* @param children Children Collection
+	* @param dao DAO object
+	* @param containerId container identifier
+	* @throws ApplicationException ApplicationException
+	* @return childrenColl
+	*/
+	public Collection getChildrenName(DAO dao, String containerName) throws ApplicationException
+	{
+		final String hql = "select cntPos.occupiedContainer.name from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.name ="
+				+"'"+ containerName+"'";
+		List childrenColl = new ArrayList();
+		childrenColl = dao.executeQuery(hql);
+		return childrenColl;
+	}
+
 
 	
 	

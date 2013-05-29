@@ -17,7 +17,7 @@
 				});
 		
 		shortcut.add("alt+b", function() {
-			var strLinkForBulkUpload=strLinkWithoutSlash.concat("/BulkOperation.do");
+			var strLinkForBulkUpload=strLinkWithoutSlash.concat("/BulkOperation.do?pageOf=pageOfBulkOperation");
 				window.top.location.href =strLinkForBulkUpload; 
            });
 	

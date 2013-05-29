@@ -180,6 +180,10 @@
 						<html:button styleClass="blue_ar_b" property="submitPage" onclick="createDuplicateEvent()">
 							<bean:message key="cpbasedentry.createduplicateevent"/>
 						</html:button>
+						&nbsp;|
+							<html:button styleClass="blue_ar_b" property="submitPage" onclick="deleteEvent()">
+									<bean:message key="buttons.delete"/>
+							</html:button>
 						</td>				
 				</tr>
             </table>

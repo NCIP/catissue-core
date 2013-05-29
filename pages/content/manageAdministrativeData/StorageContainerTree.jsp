@@ -268,7 +268,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 											z.selectItem(newID);
 										}
 										else{
-											alert("can't move");
+											alert(myJsonResponse.msg);
 										}
 									}
 									try{}

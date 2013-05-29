@@ -177,7 +177,7 @@
   							   <logic:notEqual name="isPersistent" value="true">
 								<td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="storageLocationForSpecimen"
-									  optionsList = "<%=request.getAttribute("storageContainerList")%>"
+									  optionsList = "${requestScope.storageContainerList}"
 									  initialValue="<%=form.getStorageLocationForSpecimen()%>"
 									  styleClass="black_ar"
 									  size="20"
@@ -662,7 +662,7 @@
 		                            <td class="black_ar">
 
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
-											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
+											    optionsList = "${requestScope.storageContainerList}"
 												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
 												styleClass="black_ar"
 												size="20"
@@ -703,6 +703,10 @@
 									<% } else	{%>
 									&nbsp;
 									<% } %>
+									&nbsp;|
+									<html:button styleClass="blue_ar_b" property="submitPage" onclick="deleteEvent()">
+											<bean:message key="buttons.delete"/>
+									</html:button>	
 								</logic:equal>
 								<logic:notEqual name="isPersistent" value="true">
 									<logic:equal name="operation" value="edit">

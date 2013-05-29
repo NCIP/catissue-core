@@ -19,6 +19,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Validator;
 
 //import edu.wustl.common.action.SecureAction;
 
@@ -72,6 +73,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		String parentName = this.getParentName(request, parentType);
 		if(parentName.isEmpty())
 		{
+			if(!Validator.isEmpty(request.getParameter("parentLabel")))
 			parentName = request.getParameter("parentLabel");
 		}
 

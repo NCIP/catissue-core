@@ -135,8 +135,9 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	/** The generate label. */
 	private boolean generateLabel = false;
 
+	private String activityStatus;
 
-
+	
 	/** The label format for aliquot. */
 	private String labelFormatForAliquot;
 	 
@@ -1133,6 +1134,16 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getActivityStatus()
+	{
+		return this.activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
 	}
 
 }

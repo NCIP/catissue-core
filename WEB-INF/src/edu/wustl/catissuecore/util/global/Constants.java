@@ -5968,4 +5968,22 @@ public class Constants
 	/** Constant for MOLECULAR_TYPE_LIST_JSON **/
 	public static final String MOLECULAR_TYPE_LIST_JSON = "molecularTypeListJSON";
 
+	/** Constant for KEYWORD_SEARCH_INDEXER_SCHEDULER_MINUTES **/
+	public static final String KEYWORD_SEARCH_INDEXER_SCHEDULER_MINUTES = "keyword.search.indexer.scheduler.minutes";
+
+	/** Constant for KEYWORD_SEARCH_INDEXER_SCHEDULER_HOURS_OF_DAY **/
+	public static final String KEYWORD_SEARCH_INDEXER_SCHEDULER_HOURS_OF_DAY = "keyword.search.indexer.scheduler.hours.of.day";
+
+	/** Constant for DEFAULT_SCHEDULER_RUN_TIME_MINUTES **/
+	public static final Integer DEFAULT_SCHEDULER_RUN_TIME_MINUTES = 0;
+
+	/** Constant for DEFAULT_SCHEDULER_RUN_TIME_HOURS **/
+	public static final Integer DEFAULT_SCHEDULER_RUN_TIME_HOURS = 22;
+	
+		
+	public static final String CONTAINER_INVALID_MESSAGE = " container can not hold container of type ";
+	
+	public static final String SITE_NOT_TRANSFRED_MESSAGE ="Site can not be transfred.";
+
+
 }

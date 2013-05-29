@@ -432,7 +432,7 @@ div#d999 {
 								addButtonOnClick="moveOptions('pcoordinatorIds','coordinatorIds', 'add')"
 								removeButtonOnClick="moveOptions('coordinatorIds','pcoordinatorIds', 'edit')"
 								selectIdentifier="coordinatorIds"
-								collection="<%=(List)request.getAttribute("selectedCPCoordinatorIds")%>"
+								collection="${requestScope.selectedCPCoordinatorIds}"
 								numRows="4" />
 							</td>
 							<td><label><html:link href="#" styleId="newUser" styleClass="view"	onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
@@ -590,7 +590,7 @@ div#d999 {
 						<td align="left" class="black_ar"><bean:message
 							key="site.activityStatus" /></td>
 						<td align="left" class="black_ar" >
-						<logic:iterate id="activityStatusValue" collection="<%=request.getAttribute("activityStatusList")%>" offset="1">								
+						<logic:iterate id="activityStatusValue" collection="${requestScope.activityStatusList}" offset="1">								
 							<c:if test="${collectionProtocolForm.activityStatus == activityStatusValue}">
 								<div style="float:left;"><input type="radio" value="${activityStatusValue}" valign="middle" onclick='${strCheckStatus}' name="activityStatus"  checked="true">&nbsp;<bean:write name="activityStatusValue"/>&nbsp;</input></div>
 							</c:if>
@@ -630,7 +630,7 @@ div#d999 {
 						addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')"
 						removeButtonOnClick="moveOptions('protocolCoordinatorIds','coord', 'edit')"
 						selectIdentifier="protocolCoordinatorIds"
-						collection="<%=(List)request.getAttribute("selectedCoordinators")%>"
+						collection="${requestScope.selectedCoordinators}"
 						numRows="4" /></td>
 
 				</tr>

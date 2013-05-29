@@ -7,6 +7,7 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
@@ -173,11 +174,14 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 			oldSpReq = iterator.next();
 			if ("New".equals(oldSpReq.getLineage()))
 			{
+				if(newReqSpecimenCollection!=null)
+				{	
 				newSpReq = (SpecimenRequirement) this.getCorrespondingOldObject(
 						newReqSpecimenCollection, oldSpReq.getId());
+				}	
 				if (newSpReq == null)
 				{
-					this.deleteRequirementSpecimen(dao, oldSpReq);
+					this.disabledRequirementSpecimen(dao, oldSpReq);
 				}
 				else
 				{
@@ -212,7 +216,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 					newReqSpecimenCollection, oldSpReq.getId());
 			if (newSpReq == null)
 			{
-				this.deleteRequirementSpecimen(dao, oldSpReq);
+				this.disabledRequirementSpecimen(dao, oldSpReq);
 			}
 			else
 			{
@@ -231,22 +235,20 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 *             Database related exception
 	 */
-	public void deleteRequirementSpecimen(DAO dao, SpecimenRequirement spReq)
+	public void disabledRequirementSpecimen(DAO dao, SpecimenRequirement spReq)
 			throws BizLogicException
 	{
 		try
 		{
 			final SpecimenRequirement reqSp = (SpecimenRequirement) dao.retrieveById(
 					SpecimenRequirement.class.getName(), spReq.getId());
-			if (reqSp.getParentSpecimen() != null)
+				final Iterator<AbstractSpecimen> iterator = reqSp.getChildSpecimenCollection().iterator();
+				while (iterator.hasNext())
 			{
-				final Collection<AbstractSpecimen> childCollection = reqSp.getParentSpecimen()
-						.getChildSpecimenCollection();
-				childCollection.remove(reqSp);
-				reqSp.setSpecimenCharacteristics(null);
-				reqSp.setParentSpecimen(null);
+					SpecimenRequirement childSpReq = (SpecimenRequirement)iterator.next();
+					disabledRequirementSpecimen(dao, childSpReq);
 			}
-			dao.delete(reqSp);
+			reqSp.setActivityStatus(Constants.DISABLED);
 		}
 		catch (final DAOException daoExp)
 		{

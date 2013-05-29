@@ -554,7 +554,11 @@ element.innerHTML= '<div class="lightbox_overlay" style="background-color: #FFFF
 window.parent.document.body.appendChild(element);
 var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
 }
-
+if(typeof String.prototype.trim !== 'function') {
+  String.prototype.trim = function() {
+    return this.replace(/^\s+|\s+$/g, ''); 
+  }
+}
 function loadGrid()
 {
 //var grid = new dhtmlXGridObject("containerGrid");
@@ -612,19 +616,20 @@ menu.addNewChild("export", 0, "pdf", "Pdf", false, "");
 
 grid.enableAlterCss("even","uneven");
 grid.init();
+grid._drag_validate = true;
 grid.enableDragAndDrop(true);
 grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 	a= grid.cells(sId,sInd).getValue();
 	b= grid.cells(tId,tInd).getValue();
-	var isImg = a.search('<img ');
-	var isImgB = b.search('<img ');
+	var isImg = a.match(/<img /i);
+	var isImgB = b.match(/<img /i);
 	if(sInd!=0&&tInd!=0){
-		if(isImg==-1 && isImgB != -1){
+		if(!isImg && isImgB ){
 			hasContainer = false;
 			if(a.indexOf("containerChanged()")!=-1){
 				hasContainer = true
 			}
-			var parameter='hasContainer='+hasContainer+'&sId='+grid.hdrLabels[sId]+'&tId='+grid.hdrLabels[tId]+'&sInd='+grid.cells(sInd,0).getValue()+'&tInd='+grid.cells(tInd,0).getValue()+'&containerName=<%=request.getAttribute("containerName")%>&specimenLabel='+ReplaceTags(a).trim();
+			var parameter='hasContainer='+hasContainer+'&sId='+grid.cells(sId,0).getValue()+'&tId='+grid.cells(tId,0).getValue()+'&sInd='+grid.hdrLabels[sInd]+'&tInd='+grid.hdrLabels[tInd]+'&containerName=<%=request.getAttribute("containerName")%>&specimenLabel='+ReplaceTags(a).trim();
 			var request = newXMLHTTPReq();
 			request.onreadystatechange=function(){
 				if(request.readyState == 4)

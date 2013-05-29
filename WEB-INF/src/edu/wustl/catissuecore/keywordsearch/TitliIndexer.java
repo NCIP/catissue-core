@@ -1,3 +1,6 @@
+
+package edu.wustl.catissuecore.keywordsearch;
+
 import java.io.File;
 
 import titli.controller.Name;

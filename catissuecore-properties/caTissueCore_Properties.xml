@@ -920,7 +920,13 @@ Helpdesk Phone : @@contact.Number@@</value>
 	<property>
 		<name>dashboard.items.file</name>
 		<value>@@dashboard.items.file@@</value>
-</property>
-
-
+	</property>
+	<property>
+		<name>keyword.search.indexer.scheduler.hours.of.day</name>
+		<value>@@keyword.search.indexer.scheduler.hours.of.day@@</value>
+	</property>
+	<property>
+		<name>keyword.search.indexer.scheduler.minutes</name>
+		<value>@@keyword.search.indexer.scheduler.minutes@@</value>
+	</property>
 </properties>

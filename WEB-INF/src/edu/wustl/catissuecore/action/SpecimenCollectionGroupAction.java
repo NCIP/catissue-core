@@ -1420,12 +1420,12 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 		final String sourceObjectName = CollectionProtocolEvent.class.getName();
 		final String[] displayEventFields = {"studyCalendarEventPoint", "collectionPointLabel"};
 		final String valueField = "id";
-		final String[] whereColumnName = {"collectionProtocol." + Constants.SYSTEM_IDENTIFIER};
-		final String[] whereColumnCondition = {"="};
-		final Object[] whereColumnValue = {protocolID};
+		final String[] whereColumnName = {"collectionProtocol." + Constants.SYSTEM_IDENTIFIER,"activityStatus"};
+		final String[] whereColumnCondition = {"=","!="};
+		final Object[] whereColumnValue = {protocolID,Status.ACTIVITY_STATUS_DISABLED.toString()};
 		final String joinCondition = Constants.AND_JOIN_CONDITION;
 		final String separatorBetweenFields = ",";
-
+	
 		final List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField,
 				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
 				separatorBetweenFields);

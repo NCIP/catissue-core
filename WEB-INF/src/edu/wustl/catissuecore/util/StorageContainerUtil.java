@@ -3355,6 +3355,16 @@ public final class StorageContainerUtil
 		return extractLabellingSchemes(labellingSchemesList);
 	}
 
+		public static List<String> getLabellingSchemeByContainerId(String containerId,DAO dao)
+	throws ApplicationException
+	{
+		List labellingSchemesList=null;
+		// Create a map of substitution parameters.
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerId));
+		labellingSchemesList=((HibernateDAO) dao).executeNamedQuery("getStorageContainerLabellingSchemesById", substParams);
+		return extractLabellingSchemes(labellingSchemesList);
+	}
 	private static List<String> extractLabellingSchemes(List labellingSchemesList)
 	{
 		List labellingList=null;

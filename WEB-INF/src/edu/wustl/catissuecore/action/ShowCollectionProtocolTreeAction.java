@@ -86,6 +86,9 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			{
 				final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
 						.next();
+				if(!Constants.DISABLED.equals(collectionProtocolEventBean.getActivityStatus()))
+				{	
+				
 				final String objectName = collectionProtocolEventBean.getCollectionPointLabel()
 						+ Constants.CLASS;
 				// if(operation!=null &&
@@ -102,7 +105,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				nodeId = objectName + "_" + identifier;
 				final Map SpecimenRequirementMap = collectionProtocolEventBean
 						.getSpecimenRequirementbeanMap();
-
+	
 				if (SpecimenRequirementMap != null)
 				{
 					final Collection specimenRequirementBeanCollection = SpecimenRequirementMap
@@ -113,10 +116,14 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 					{
 						final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
 								.next();
+							if(!Constants.DISABLED.equals(specimenRequirementBean.getActivityStatus()))
+							{	
 						AppUtility.createSpecimenNode(objectName, identifier, specimenRequirementBean,
 								treeData, operation);
+							}	
 					}
 				}
+				}	
 				iEventCount++;
 			}
 		}

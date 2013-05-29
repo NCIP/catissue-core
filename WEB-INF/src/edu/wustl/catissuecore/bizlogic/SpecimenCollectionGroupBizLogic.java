@@ -257,7 +257,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				while (itReqSpecimenCollection.hasNext())
 				{
 					final SpecimenRequirement specimenRequirement = itReqSpecimenCollection.next();
-					if (Constants.NEW_SPECIMEN.equals(specimenRequirement.getLineage()))
+					if (Constants.NEW_SPECIMEN.equals(specimenRequirement.getLineage()) && !Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(specimenRequirement.getActivityStatus()))
 					{
 						final Specimen cloneSpecimen = this.getCloneSpecimen(specimenRequirement,
 								null, specimenCollectionGroup, userId);
@@ -340,9 +340,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			while (iterator.hasNext())
 			{
 				final SpecimenRequirement childSpecimen = iterator.next();
+				if(!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childSpecimen.getActivityStatus()))
+				{	
 				final Specimen newchildSpecimen = this.getCloneSpecimen(childSpecimen, newSpecimen,
 						specimenCollectionGroup, userId);
 				childrenSpecimen.add(newchildSpecimen);
+				}	
 			}
 			newSpecimen.setChildSpecimenCollection(childrenSpecimen);
 		}
@@ -3597,7 +3600,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		{
 			final CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator
 					.next();
-
+			if(Status.ACTIVITY_STATUS_ACTIVE.toString().equalsIgnoreCase(collectionProtocolEvent.getActivityStatus()))
+			{	
 			final int tmpCntOfStudyCalEventPnt = collectionProtocolEvent
 					.getStudyCalendarEventPoint().intValue();
 			if (cntOfStudyCalEventPnt != 0)
@@ -3611,7 +3615,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
 			}
-
+	
 			/**
 			 * Here countOfStudyCalendarEventPoint for previous
 			 * CollectionProtocol which is registered is incremented as per
@@ -3623,10 +3627,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					.setCollectionProtocolRegistration(collectionProtocolRegistration);
 			specimenCollectionGroup
 					.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-
-			specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
-
+	
+				specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);	
 			scgCollection.add(specimenCollectionGroup);
+		}
 		}
 		return scgCollection;
 	}

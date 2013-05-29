@@ -807,7 +807,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
             final Object cpe = getCorrespondingOldObject(cpEventCollection, oldCpEvent.getId());
             if (cpe == null)
             {
-                deleteEvent(dao, oldCpEvent, reqSpBiz);
+                disabledEvent(dao, oldCpEvent, reqSpBiz);
             }
         }
     }
@@ -824,7 +824,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
      * @throws BizLogicException
      *             Database related exception
      */
-    private void deleteEvent(final DAO dao, final CollectionProtocolEvent oldCpEvent,
+    private void disabledEvent(final DAO dao, final CollectionProtocolEvent oldCpEvent,
             final RequirementSpecimenBizLogic reqSpBiz) throws BizLogicException
     {
         try
@@ -839,10 +839,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
                 oldSpReq = spReqItr.next();
                 if (Constants.NEW_SPECIMEN.equals(oldSpReq.getLineage()))
                 {
-                    reqSpBiz.deleteRequirementSpecimen(dao, oldSpReq);
+                    reqSpBiz.disabledRequirementSpecimen(dao, oldSpReq);
                 }
             }
-            dao.delete(cpEvent);
+            cpEvent.setActivityStatus(Constants.DISABLED);
         }
         catch (final DAOException daoExp)
         {

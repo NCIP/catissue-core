@@ -490,18 +490,24 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 									.getPositionDimensionOne().toString(), specimenPosition
 									.getPositionDimensionTwo().toString() );
 					// Storage Location is either Auto or Manual.
+					boolean isPositionValid = StorageContainerUtil.validatePosition(container, specimenPosition.getPositionDimensionOne().toString(), specimenPosition.getPositionDimensionTwo().toString());
 					this.closeJDBCSession( jdbcdao );
-					if (isAvailable)
+					if (isAvailable && isPositionValid)
 					{
 						this.setPositionDataToSpecimen( specimenPosition.getPositionDimensionOne(),
 								specimenPosition.getPositionDimensionTwo(), container, specimen );
 					}
-					else
+					else if(!isAvailable)
 					{
 						throw this.getBizLogicException( null, "shipment.samePositionForSpecimens",
 								null );
 					}
+					else
+					{
+						throw this.getBizLogicException( null, "errors.storageContainer.dimensionOverflow",
+								null );
 				}
+			}
 			}
 				finally
 				{

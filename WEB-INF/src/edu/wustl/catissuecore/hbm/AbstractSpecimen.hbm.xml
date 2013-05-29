@@ -389,7 +389,14 @@
 	            column="COLLECTION_PROTOCOL_EVENT_ID"
 	        />
 
-	 
+		   <property
+	            name="activityStatus"
+	            type="string"
+	            update="true"
+	            insert="true"
+	            column="ACTIVITY_STATUS"
+	            length="50"
+	        />
 
 	</joined-subclass>
   </class>

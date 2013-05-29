@@ -73,6 +73,7 @@ public class CollectionProtocolEventBean implements Serializable
 	 */
 	private long specimenCollRequirementGroupId = -1;
 
+	private String activityStatus;
 	/**
 	 * @return - studyCalenderEventPoint
 	 */
@@ -335,5 +336,15 @@ public class CollectionProtocolEventBean implements Serializable
 
 	public void setDefaultSiteId(long defaultSiteId) {
 		this.defaultSiteId = defaultSiteId ;
+	}
+	
+	public String getActivityStatus()
+	{
+		return this.activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
 	}
 }

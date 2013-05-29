@@ -153,18 +153,26 @@ public class DeleteNodeFromCPAction extends BaseAction
 		if (specimenType == 'A')
 		{
 			childMap = this.removeAliquot(collectionProtocolEventKey, spReqBean);
+				if(childMap!=null)
+				{
+					spReqBean.setNoOfAliquots(String.valueOf(childMap.size()));
 		}
+			}
 		else
 		{
 			childMap = this.removeDerive(collectionProtocolEventKey, spReqBean);
+				if(childMap!=null)
+				{
+					spReqBean.setNoOfDeriveSpecimen(childMap.size());
+				}	
 		}
-		if (childMap != null)
+			if(childMap!=null && !childMap.isEmpty())
 		{
 			parentReqMapKey = parentReqMapKey + "_" + st.nextToken();
 			this.removeChildSpecimen(childMap, parentReqMapKey, collectionProtocolEventKey, st,
 					specimenType);
+			}	
 		}
-	}
 
 	/**
 	 * @param specimenKey
@@ -219,7 +227,6 @@ public class DeleteNodeFromCPAction extends BaseAction
 		if (driveMap.containsKey(collectionProtocolEventKey))
 		{
 			driveMap.remove(collectionProtocolEventKey);
-			driveMap = null;
 		}
 		return driveMap;
 	}

@@ -136,7 +136,7 @@
                 </tr>
                 <tr>
                   <td colspan="3" align="right" class="buttonbg">
-						<html:submit styleClass="blue_ar_b" title="<%=ApplicationProperties.getValue("orderingsystem.tooltip.button.submit")%>">
+						<html:submit styleClass="blue_ar_b" title='<%=ApplicationProperties.getValue("orderingsystem.tooltip.button.submit")%>'>
 											<bean:message  key="orderingsystem.button.submit"/>
 										</html:submit>
 					&nbsp;</td>

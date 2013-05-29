@@ -593,7 +593,7 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		return null;
 	}
 
-	public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm form,
+public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
 			IOException
 	{
@@ -610,14 +610,17 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
 		SpecimenEventParametersBizLogic bizLogic = new SpecimenEventParametersBizLogic();
-		String msg;
+		String msg="";
+		DAO dao = null;
 		try
 		{
 			if (Constants.TRUE.equals(hasContainer))
 			{
+				dao = AppUtility.openDAOSession(sessionData);
 				StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-				msg = scBizLogic.updateStorageContainerPosition(sessionData, specimenLabel,
+				scBizLogic.updateStorageContainerPosition(dao, specimenLabel,
 						containerName, tId, tInd);
+				dao.commit();
 			}
 			else
 			{
@@ -629,6 +632,9 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		catch (final ApplicationException exp)
 		{
 			msg = "{'success':false,'msg':'" + exp.getMessage() + "'}";
+		}
+		finally{
+			AppUtility.closeDAOSession(dao);
 		}
 
 		response.getWriter().write(msg);
@@ -645,18 +651,26 @@ public class CatissueCommonAjaxAction extends DispatchAction
 		String targetText = request.getParameter("targetText");
 		StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 		String responseString = "";
+		DAO dao = null;
 		try
 		{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
 					.getAttribute(Constants.SESSION_DATA);
+			dao = AppUtility.openDAOSession(sessionData);
+			
 
-			String msg = scBizLogic.updateStorageContainerPosition(sessionData, sourceText,
-					targetText, "", "");
-			responseString = "{'success':true,'msg':'" + msg + "'}";
+			scBizLogic.updateStorageContainerPosition(sourceText,
+					targetText,(HibernateDAO)dao);
+			responseString = "{'success':true}";
+			dao.commit();
+			
 		}
 		catch (final ApplicationException exp)
 		{
-			responseString = "{'success':false,'msg':'" + exp.getMessage() + "'}";
+			responseString = "{'success':false,'msg':'" + exp.getMsgValues() + "'}";
+		}
+		finally{
+			AppUtility.closeDAOSession(dao);
 		}
 
 		response.getWriter().write(responseString.toString());

@@ -5,6 +5,7 @@
 <%@ page import="java.util.*"%>
  
 <head>
+
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css"/>
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css"/>
@@ -21,6 +22,7 @@
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css"/>
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
 <style>
 body { overflow:auto; }
 td {
@@ -68,7 +70,6 @@ td {
 
 <script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-
 <%
 	String collectionProtocolId="";
 		if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
@@ -128,7 +129,6 @@ function getActionToDoURL()
 			var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",200);
 			var url=getActionToDoURL();
 			dhtmlxCombo.loadXML(url,function(){showContainerGrid();});
-			dhtmlxCombo.enableFilteringMode(true);
 			dhtmlxCombo.attachEvent("onOpen", 
 			function(){
 				reloadGrid=false;
@@ -139,8 +139,6 @@ function getActionToDoURL()
 			function()
 			{
 				reloadGrid=true;
-				//document.getElementById("pos1").value="";
-				//document.getElementById("pos2").value="";
 				document.getElementById('containerGrid').innerHTML="";
 				showContainerGrid();
 			});
@@ -157,7 +155,7 @@ function getActionToDoURL()
 				if(keyCode != 13 && keyCode != 39 && keyCode != 37 )
 				{	
 							populateValueInCombo=false;
-							dhtmlxCombo.loadXML(getActionToDoURL());
+							dhtmlxCombo.enableFilteringMode(true,getActionToDoURL(),false);
 				}
 			});
 	</script>

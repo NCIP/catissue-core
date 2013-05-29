@@ -473,7 +473,7 @@ function checkAll(element)
 		 	   <div id="eventlist1" style="display:none">
 			
 			   <autocomplete:AutoCompleteTag  property="specimenEventParameter" 
-						  optionsList = "<%=request.getAttribute("eventArray")%>" styleClass="black_ar" size="27"
+						  optionsList = "${requestScope.eventArray}" styleClass="black_ar" size="27"
 						  initialValue="Transfer"/>
 				 </div> 
 		     

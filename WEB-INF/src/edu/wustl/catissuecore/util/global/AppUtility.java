@@ -4145,8 +4145,11 @@ public class AppUtility {
 				}
 				
 				//displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
+				if(!Constants.DISABLED.equals(specimenRequirementBean1.getActivityStatus()))
+				{
 				createSpecimenNode(parentObjectname, parentIdentifier,
 						specimenRequirementBean1, treeData, operation);
+				}	
 			}
 		}
 		if (specimenRequirementBean.getDeriveSpecimenCollection() != null
@@ -4161,7 +4164,6 @@ public class AppUtility {
 				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
-
 				if(specimenRequirementBean1.getSpecimenRequirementLabel()!=null && !specimenRequirementBean1.getSpecimenRequirementLabel().isEmpty()) 
 				{
 					displayName = specimenRequirementBean1.getSpecimenRequirementLabel();
@@ -4174,9 +4176,11 @@ public class AppUtility {
 				//displayName =  specimenRequirementBean1.getSpecimenRequirementLabel();
 				//displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
 				//Constants.DERIVED_SPECIMEN+ specimenRequirementBean1.getUniqueIdentifier();
+				if(!Constants.DISABLED.equals(specimenRequirementBean1.getActivityStatus()))
+				{
 				createSpecimenNode(parentObjectname, parentIdentifier,
 						specimenRequirementBean1, treeData, operation);
-
+				}	
 			}
 		}
 		return "New_" + identifier;
