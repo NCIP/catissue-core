@@ -133,7 +133,7 @@ function disableIdpDetails(disableStatus)
 								<span class="form-label"><bean:message key="idp.selection.text"/></span> </br>
 								<div class="dhtmlx-combo-margin"><select name="targetIdp"  id="target_combo">
 										<logic:iterate id="idpDetails" name="idpsList">
-											<option value="<bean:write name='idpDetails' property='name'/>"><bean:write name="idpDetails" property="name"/></option>
+											<option value="<bean:write name='idpDetails' property='value'/>"><bean:write name="idpDetails" property="name"/></option>
 										</logic:iterate>
 								</select></div>
 								<script>
