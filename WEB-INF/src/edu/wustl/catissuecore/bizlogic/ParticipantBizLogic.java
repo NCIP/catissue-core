@@ -1782,8 +1782,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				for (Object consentResponse : consentResponses)
 				{
 					//(ArrayList<String>)consentResponse.get
-					if (Constants.YES.equals(((ConsentTierResponse) consentResponse).getResponse())
-							|| "No".equals(((ConsentTierResponse) consentResponse).getResponse()))
+					if (Constants.YES.equalsIgnoreCase(((ConsentTierResponse) consentResponse).getResponse())
+							|| Constants.NO.equalsIgnoreCase(((ConsentTierResponse) consentResponse).getResponse()))
 					{
 						participantDTO.setIsConsented(Constants.YES);
 						break;
