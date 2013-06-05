@@ -855,7 +855,7 @@ Please note that the report(s) will be available for download until ? after whic
 
 Thank You,
 caTissue Administration Team, 
-Helpdesk Phone : @@contact.Number@@</value>
+Helpdesk Phone : @@contact.number@@</value>
 	</property>
 	<property>
 		<name>host.mail.alias</name>
