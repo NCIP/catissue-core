@@ -15,6 +15,7 @@
 	<import file="dbunit_temp.xml"/>
 
 	<property name="base.dir" value="." />
+	<property name="mail.file.dir" value="${base.dir}" />
 	<property name="temp.dir" value="./deploytempCatissuecore" />
 	<property name="camodel.dir" value="${base.dir}/ca_model" />
 	<property name="csm.dir" value="${temp.dir}/tempcsm" />
@@ -789,6 +790,14 @@
 			</fileset>
 			<fileset file="${dashboard.items.file}" />
 		</copy>
+		<property name="help.desk.number" value="${contact.number}" />
+		<if>
+				<equals arg1="" arg2="${contact.number}" />
+				<then>
+					<var name="help.desk.number" unset="true"/>
+					<property name="help.desk.number" value="" />
+				</then>
+			</if>
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
 
 			<replacefilter token="@@Forgot-Password-Enabled@@" value="${forgot.password.enabled}" />
@@ -870,7 +879,7 @@
 				<replacefilter token="@@institute.logo.hyperlink@@" value="${institute.logo.hyperlink}" />
 				
 				<replacefilter token="@@user.manual@@" value="${user.manual}" />
-				<replacefilter token="@@contact.number@@" value="${contact.number}" />
+				<replacefilter token="@@contact.number@@" value="${help.desk.number}" />
 				<replacefilter token="@@whats.new@@" value="${whats.new}" />
 				
 			
@@ -3254,30 +3263,21 @@
 		<echo message="jboss.container.secure property is set to: ${jboss.container.secure} protocol set to: ${protocol}" />
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
-		<mail mailhost="${email.mailServer}" subject="caTissue Plus v2.1 Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" 
-			password="${email.sendEmailFrom.emailPassword}"  encoding="mime" mailPort="${email.mailServer.port}" failonerror="false">
-			<from address="${email.sendEmailFrom.emailAddress}" />
-			<to address="${email.administrative.emailAddress}" />
-			<message>
-Dear caTissue Plus Administrator,
-
-	This is to validate that caTissue Plus application has been installed at
-the following location: ${jboss.home.dir}
-
-	To complete the deployment, you have to now perform the post installation
-steps described in section "Post Installation Configuration" in the deployment
-guide.
-
-	Once you have completed deployment, you should be able to login with the following
-details:
-URL: ${protocol}://${jbossServerHost}:${jboss.server.port}/catissuecore
-Username:${first.admin.emailAddress}
-Password:${first.admin.password}
-
-Thanking You,
--caTissue Plus
-			</message>
-		</mail>
+		<if>
+						<equals arg1="" arg2="${email.sendEmailFrom.emailPassword}" />
+						<then>
+							<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus v2.1 Successfully Deployed" encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
+										<from address="${email.sendEmailFrom.emailAddress}" />
+										<to address="${email.administrative.emailAddress}" />
+											</mail>
+						</then>
+					<else>
+						<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus v2.1 Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" password="${email.sendEmailFrom.emailPassword}"  encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
+														<from address="${email.sendEmailFrom.emailAddress}" />
+														<to address="${email.administrative.emailAddress}" />
+															</mail>
+					</else>
+				</if>
 		<echo>
 			Please check the Email of ${first.admin.emailAddress}.
 			If the Deployment mail is not received please check your

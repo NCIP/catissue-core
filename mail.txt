@@ -1,0 +1,17 @@
+Dear caTissue Plus Administrator,
+
+								This is to validate that caTissue Plus application has been installed at
+							the following location: ${jboss.home.dir}
+
+								To complete the deployment, you have to now perform the post installation
+							steps described in section "Post Installation Configuration" in the deployment
+							guide.
+
+								Once you have completed deployment, you should be able to login with the following
+							details:
+							URL: ${protocol}://${jbossServerHost}:${jboss.server.port}/catissuecore
+							Username:${first.admin.emailAddress}
+							Password:${first.admin.password}
+
+							Thanking You,
+							-caTissue Plus
