@@ -1783,7 +1783,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				{
 					//(ArrayList<String>)consentResponse.get
 					if (Constants.YES.equalsIgnoreCase(((ConsentTierResponse) consentResponse).getResponse())
-							|| Constants.NO.equalsIgnoreCase(((ConsentTierResponse) consentResponse).getResponse()))
+							|| Constants.BOOLEAN_NO.equalsIgnoreCase(((ConsentTierResponse) consentResponse).getResponse()))
 					{
 						participantDTO.setIsConsented(Constants.YES);
 						break;
