@@ -145,7 +145,14 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
             <logic:equal name="isImagingConfigurred" value="true">
             <div id="emptyPage" style="display:none">
                 <table width="100%"  border="0" cellpadding="3" cellspacing="0" >
-                    <tr>
+                    <logic:equal name="displayMsg" value="true">
+					<tr>
+                        <td class="alert alert-success">
+                            <bean:write name="deleteSuccMsg"/>
+                        </td>
+                    </tr>
+					</logic:equal>
+					<tr>
                         <td class="black_ar">
                             <b>There is no image associated with this specimen. Click below to manually enter image information. </b>
                         </td>
@@ -176,6 +183,13 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </div>
 </td>
                 </tr>
+				<logic:equal name="displayMsg" value="true">
+					<tr>
+                        <td class="alert alert-success">
+                            <bean:write name="deleteSuccMsg"/>
+                        </td>
+                    </tr>
+					</logic:equal>
                 <tr>
                   <td align="justify">
                  
@@ -736,10 +750,18 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
                             <tr>
                             <td width="100%" class="bottomtd">
-
+						<table><tr><td>
         <input type="button" value="Save Image"
                             onclick="submitTabData()" class="blue_ar_b">
-
+							</td>
+							<td>
+							<div id="deleteButtonDiv" style="display:none">
+							|
+							<input type="button" value="Delete Image"
+                            onclick="deleteImage()" class="blue_ar_b">
+							</div>
+						</td>
+						</tr></table>
    
        
                             </td></tr>
@@ -775,6 +797,20 @@ document.getElementById('emptyPage').style.display="block";
 <logic:equal name="imageAvl" value="true">
 document.getElementById('mainTable').style.display="block";
 </logic:equal>
+function showDeleteButton()
+{
+	var imageId = document.getElementById('imageId').value;
+	if(isNumeric(imageId))
+	{
+		document.getElementById('deleteButtonDiv').style.display="block";
+	}
+}
+function isNumeric(value) {
+if(value!="" && value==Number(value))
+return true;
+else
+return false;
+}
 function processData(obj)
 {
     imageDataJson[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
@@ -836,6 +872,7 @@ function submitTabData()
 			document.getElementById('error').style.display="block";
 		}
     }
+	showDeleteButton();
 }
 function isEmpty(obj) { for(var i in obj) { return false; } return true; }
 function getSelectedData(eqImageId)
@@ -876,6 +913,7 @@ function getSelectedData(eqImageId)
   }
             //alert("attrName:   "+attrName+"   attrValue:    "+attrValue);
         }
+		showDeleteButton();
     return true;
 }
 function getEquipmentData(obj)
@@ -1012,6 +1050,26 @@ function viewInWebScope(imageURL)
     
 }
 
-
-
+function deleteImage()
+{
+	if(confirm('Are you sure you want to delete this image?'))
+	{
+		var imageId = document.getElementById("imageId").value;
+		var loader = dhtmlxAjax.postSync("ImageAjaxAction.do","type=deleteImage&id="+imageId);
+		//alert(loader.xmlDoc.responseText);
+		if(loader.xmlDoc.responseText == 'success')
+		{
+			/*document.getElementById('emptyPage').style.display="block"
+			document.getElementById('mainTable').style.display="none";
+			document.getElementById('equipTxt').style.display="block";
+			document.getElementById('equipSelect').style.display="none";*/
+			var specId = '${specimenId}';
+			specId+='&showMsg=true';
+			newImageTab(specId);
+		}
+	}
+	
+	//viewSpecimen('${specimenId}');
+}
+showDeleteButton();
 </script>
