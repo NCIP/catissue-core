@@ -81,28 +81,6 @@
 <head>
 <script language="javascript">
 
-function showEvents()
-{
-   
-	 var autoDiv1 = document.getElementById("eventlist1");
-     var autoDiv2 = document.getElementById("eventlist2");
-
-	 var chkbox=  document.getElementById("ch1");
-
-	 if(chkbox.checked== true)
-	{
-		   
-		   autoDiv1.style.display  = 'block';
-		   autoDiv2.style.display  = 'none';
-	}
-    else
-   {
-       
-		autoDiv2.style.display  = 'block';
-		autoDiv1.style.display  = 'none';
-		 
-   }
-}
 function showHideComponents()
 {
    showEvents();
@@ -117,49 +95,25 @@ function gotoAdvanceQuery()
 
 function onSubmit(orderedString)
 {
-	if(document.forms[0].chkName[2].checked == true)
-	{
-		if(document.getElementById('specimenEventParameter').value == "Transfer")
-		{
-		    dobulkTransferOperations(orderedString);
-		}
-		else if(document.getElementById('specimenEventParameter').value == "Disposal")
-		{
-			
-			dobulkDisposals();
-		}
-		else
-		{
-			alert("Only Transfer and Disposal bulk functionality is available in this version");
-		}
-	}
-	else if(document.forms[0].chkName[1].checked == true)
-	{
-		editMultipleSp();
-	}
-	else if(document.forms[0].chkName[0].checked == true)
+	if(document.forms[0].chkName[0].checked == true)
 	{
 		addToOrderList(orderedString);
 	}
-	else if(document.forms[0].chkName[3].checked == true)
+	else if(document.forms[0].chkName[1].checked == true)
 	{
 		//create Shipment Request
 		createShipmentRequest();
 	}
-	else if(document.forms[0].chkName[4].checked == true)
+	else if(document.forms[0].chkName[2].checked == true)
 	{
 		//create Shipment
 		createShipment();
 	}
-	else if(document.forms[0].chkName[5].checked == true)
+	else if(document.forms[0].chkName[3].checked == true)
 	{
 		//distribute Order
 		distributeOrder();
-	}
-	else if(document.forms[0].chkName[6].checked == true)
-	{
-		printSpecimensLabels(orderedString);
-	}
+	}	
 }
 
 function setCheckBoxState()
@@ -216,39 +170,6 @@ function onExport()
 			}
 		}
 		
-function dobulkTransferOperations(orderedString)
-		{
-			orderedString.value = mygrid.getCheckedRows(0);
-			var isChecked = updateHiddenFields();
-		    
-		    if(isChecked == "true")
-		    {		
-				var action = "BulkCart.do?operation=bulkTransfers&requestFromPage=myListView";
-				document.forms[0].action = action;
-				document.forms[0].submit();
-			}
-			else
-			{
-				alert("Please select at least one checkbox");
-			}
-		}
-		
-function dobulkDisposals()
-		{
-			var isChecked = updateHiddenFields();
-		    
-		    if(isChecked == "true")
-		    {
-				var action = "BulkCart.do?operation=bulkDisposals&requestFromPage=myListView";
-				document.forms[0].action = action;
-				document.forms[0].submit();
-			}
-			else
-			{
-				alert("Please select at least one checkbox");
-			}
-		}
-
 function addToOrderList(orderedString)
 		{
 			orderedString.value = mygrid.getCheckedRows(0);
@@ -320,23 +241,6 @@ function distributeOrder()
 	if(isChecked == "true")
 	{
 		var action = "BulkCart.do?operation=requestToDistribute&requestFromPage=myListView";
-		document.forms[0].action = action;
-		document.forms[0].submit();
-	}
-	else
-	{
-		alert("Please select at least one checkbox");
-	}
-	
-}
-function printSpecimensLabels(orderedString)
-{
-   orderedString.value = mygrid.getCheckedRows(0);
-	var isChecked = updateHiddenFields();
-	   
-	if(isChecked == "true")
-	{
-		var action = "BulkCart.do?operation=printLabels&requestFromPage=myListView";
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
@@ -457,47 +361,20 @@ function checkAll(element)
 	<tr>
         <td colspan="2" class="black_ar">
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
-          <tr>
-			 <td class="black_ar" width="2%"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showHideComponents()" checked=true <%=disabledOrder%> ></td>
-             <td class="black_ar" width="23%" ><bean:message key="mylist.label.orderBioSpecimen"/></td>
-			 <td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName' onclick="showHideComponents()" value="Specimenpage" <%=disabled%> ></td>
-			 <td class="black_ar" width="23%" ><bean:message key="mylist.label.multipleSpecimenPage"/>
-               </td>
-			<td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showHideComponents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
-            
-			<td class="black_ar" width="15%" ><bean:message key="mylist.label.specimenEvent"/> </td>
-			 
-		
-			
-		   <td class="black_ar" width="33%">
-		 	   <div id="eventlist1" style="display:none">
-			
-			   <autocomplete:AutoCompleteTag  property="specimenEventParameter" 
-						  optionsList = "${requestScope.eventArray}" styleClass="black_ar" size="27"
-						  initialValue="Transfer"/>
-				 </div> 
-		     
-			   <div id="eventlist2" style="display:block"><input type="text" styleClass="black_ar" size="25" id="specimenEventParameter1" name="specimenEventParameter" value="Transfer" readonly="true"/></div>
-             </td>
+         <tr>
+	    <td class="black_ar" width="2%"><input type="radio" name="chkName"value="OrderSpecimen" onclick="showHideComponents()" checked=true <%=disabledOrder%> ></td>
+            <td class="black_ar" width="23%"><bean:message key="mylist.label.orderBioSpecimen"/></td>
+	    <td class="black_ar" width="2%"><input type="radio" name="chkName" onclick="showHideComponents()" value="requestShipment" <%=disabledShipping%> ></td>
+            <td class="black_ar" width="23%"><bean:message key="shipment.request"/></td>			
+	    <td class="black_ar" width="2%"><input type="radio" name="chkName"  value="createShipment" onclick="showHideComponents()" <%=disabledShipping%> ></td>
+            <td class="black_ar" width="23%"><bean:message key="shipment.create"/></td>
+	    <td class="black_ar" width="2%"><input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> ></td>
+            <td class="black_ar" width="23%">Distribute</td>		 
 		  </tr>
 		
-          <tr>
-			<td class="black_ar"><input type="radio" name="chkName" onclick="showHideComponents()" value="requestShipment" <%=disabledShipping%> ></td>
-            <td class="black_ar" ><bean:message key="shipment.request"/></td>			
-			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showHideComponents()" <%=disabledShipping%> ></td>
-            <td class="black_ar" ><bean:message key="shipment.create"/></td>
-            
-            
-            		<td class="black_ar"><input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> ></td>
-            <td class="black_ar" >Distribute</td>
-            
-			<td class="black_ar"><input type="radio" name="chkName"
-								value="printLabels" id="printCheckbox"
-								onclick="showHideComponents()"><bean:message
-								key="mylist.label.printLabels" /></td>
-							<td>
-		  </tr>
-        </table>          
+         
+        </table>     
+	</td>     
       </tr>
 <tr>
 			<td class="bottomtd"></td></tr>
