@@ -678,7 +678,6 @@
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="paths.txt" todir="${zip.dir}" overwrite="true" />
-		<!--<copy file="cas.war" todir="${zip.dir}" overwrite="true" />-->
 
 		<copy todir="${zip.dir}/custom_impl_lib" overwrite="true">
 			<fileset file="Default_label_barcode_gen.jar" />
@@ -848,7 +847,6 @@
 			<fileset file="${base.dir}/Default_cp_And_System_dashboard.csv" />
 		</copy>
 		
-		<!--<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />-->
 
 		<copy file="gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/caTIES/conf" overwrite="true">

@@ -610,12 +610,6 @@
 	<target name="clean_server" description="deletes the WAR file and cache from server, clean-up the server ">
 		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
 		<delete file="${jboss.server.url}/deploy/cas.war" quiet="true"/>
-		<!--<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				
-			</then>
-		</if>-->
 		<delete file="${jboss.server.url}/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.server.url}/deploy/caTissuePrintWebService.war" />
 		<delete file="${jboss.server.url}/deploy/pathologySCG.war" />
@@ -686,6 +680,7 @@
 								<exclude name="**/WEB-INF/lib/${mysql.lib}" />
 								<exclude name="**/WEB-INF/lib/${oracle.lib}" />
 								<exclude name="**/WEB-INF/lib/serializer.jar" />
+				<exclude name="**/WEB-INF/lib/j2ee-1.0.jar" />
 			</fileset>
 		</war>
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
@@ -1837,16 +1832,6 @@
 		<mkdir dir="${custom-report.script.dir}"/>
 		<mkdir dir="${custom-report.report.dir}"/>
 		
-		<!--<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<copy todir="${jboss.server.url}/deploy" overwrite="true">
-					<fileset dir="${basedir}">
-						<include name="cas.war" />
-					</fileset>
-				</copy>
-			</then>
-		</if>-->
 		<delete file="${jboss.server.url}/lib/hibernate2.jar" /> 
 	</target>
 
@@ -4861,126 +4846,6 @@
 			<antcall target="upgrade_db_maincontainer_data_fixes"/>
 		</target>
 
-	<!--<target name="deploy_cas" description="Target to integrate cas with the application">
-		<echo message="Deploy CAS with the application...." />
-
-		<unwar src="${base.dir}/cas.war" dest="${temp.dir}/cas" />
-		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml"
-			todir="${temp.dir}/cas/WEB-INF/classes/" overwrite="true" />
-		<war destfile="${temp.dir}/cas.war" webxml="${temp.dir}/cas/WEB-INF/web.xml" manifest="${temp.dir}/cas/META-INF/MANIFEST.MF">
-			<fileset dir="${temp.dir}/cas" includes="**/*"/>
-		</war>
-
-		<copy file="${temp.dir}/cas.war" todir="${basedir}/" overwrite="true" />
-	</target>
-
-	<target name="integrate_cas" description="Target to integrate cas with the application">
-		<echo message="Integrating CAS with the application...." />
-
-		<if>
-			<not>
-				<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			</not>
-			<then>
-				<property name="jboss.cas.server.host.port" value="${cas.jboss.server.host}:${cas.jboss.port}" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${jboss.container.secure}" />
-					<then>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="https://${jboss.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="http://${jboss.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</then>
-			<else>
-				<if>
-					<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-					<then>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="https://${jboss.cas.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="http://${jboss.cas.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</else>
-		</if>
-		<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${jboss.container.secure}" />
-					<then>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="https://${jboss.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="http://${jboss.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</then>
-			<else>
-				<if>
-					<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-					<then>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="https://${jboss.cas.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="http://${jboss.cas.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</else>
-		</if>
-		<!<if>
-			<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-			<then>
-				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-login@@" value="https://${jboss.cas.server.host.port}" />
-				</replace>
-			</then>
-			<else>
-				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-login@@" value="http://${jboss.cas.server.host.port}" />
-				</replace>
-			</else>
-		</if>
-		<if>
-			<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-			<then>
-				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-validateUrl@@" value="https://${jboss.cas.server.host.port}" />
-				</replace>
-			</then>
-			<else>
-				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-validateUrl@@" value="http://${jboss.cas.server.host.port}" />
-				</replace>
-			</else>
-		</if>-->
-		<!--<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
-		</replace>
-	</target>-->
 
 	<!--Target call for both fresh deployment of caTissue-->
 	<target name="deploy_app" depends="deploy_app_catissue">
