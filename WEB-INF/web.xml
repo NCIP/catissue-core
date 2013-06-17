@@ -326,6 +326,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		</init-param>
 		<load-on-startup>10</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>ImportQuery</servlet-name>
+		<servlet-class>edu.wustl.query.action.ImportQueryServlet</servlet-class>
+	</servlet>
 	@@servlet@@
 <!-- servlet configuration ends -->
 <!-- servlet mapping starts -->
@@ -441,6 +445,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	<servlet-mapping>
 		<servlet-name>FlexInternalServlet</servlet-name>
 		<url-pattern>/flex-internal/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImportQuery</servlet-name>
+		<url-pattern>/ImportQuery</url-pattern>
 	</servlet-mapping>
 	@@servlet-mapping@@
 <!-- servlet mapping ends -->
