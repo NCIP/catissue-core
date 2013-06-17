@@ -3961,6 +3961,7 @@
 
 		<!-- Indexing tables for Keyword Search - start-->
 
+	<!-- Removing it since it is done by the scheduler now. Bug Id: PLUS-25
 	<target name="runKeywordSearchIndexer" description="Indexing tables for Keyword Search">
 		<property name="mysql.driver" value="com.mysql.jdbc.Driver" ></property>
 		<echo message="Indexing tables for Keyword Search....." />
@@ -3972,7 +3973,7 @@
 			<param name="mysqlDriver" value="${mysql.driver}" />
 		</antcall>
 
-		<java classname="TitliIndexer"  fork="true" maxmemory="512m">
+		<java classname="edu.wustl.catissuecore.keywordsearch.TitliIndexer"  fork="true" maxmemory="512m">
 				<classpath>
 					<pathelement location="${tempKeywordSearch}/WEB-INF/classes"/>
 					<fileset dir="${tempKeywordSearch}/WEB-INF/lib">
@@ -3982,7 +3983,7 @@
 		</java>
 		<delete dir="${tempKeywordSearch}"></delete>
 	</target>
-
+	-->
 	<!-- Indexing tables for Keyword Search - end-->
 
 
