@@ -1131,3 +1131,11 @@ input.actionButton{ /* optional style for form and action buttons */
 	vertical-align:middle;
 	margin:0px;
 }
+
+.black_ar_vlabel {
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:top;
+	margin:0px;
+}
