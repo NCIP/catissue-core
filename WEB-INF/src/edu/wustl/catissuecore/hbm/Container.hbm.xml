@@ -388,8 +388,12 @@ SELECT oneDimensionLabellingScheme,twoDimensionLabellingScheme FROM edu.wustl.ca
 <query name="getStorageContainerIdByContainerName">Select ST.id from edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
 </query>
 
-<query name="updateSiteOfChildContainer">UPDATE edu.wustl.catissuecore.domain.StorageContainer container SET container.site = ? WHERE container.name = ?
+<query name="getStorageContainerDetailsByContainerName">SELECT STCONT.id, STCONT.oneDimensionLabellingScheme, STCONT.twoDimensionLabellingScheme, 
+STCONT.storageType.oneDimensionLabel, STCONT.storageType.twoDimensionLabel, STCONT.capacity.oneDimensionCapacity, STCONT.capacity.twoDimensionCapacity 
+FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 </query>
 
+<query name="updateSiteOfChildContainer">UPDATE edu.wustl.catissuecore.domain.StorageContainer container SET container.site = ? WHERE container.name = ?
+</query>
 
 </hibernate-mapping>

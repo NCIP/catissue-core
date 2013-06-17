@@ -126,4 +126,10 @@
         
         
         </class>
+        <query name="getSpecimenPositionDetailsByContainerId">select pos.positionDimensionOne, pos.positionDimensionTwo, pos.specimen.label from edu.wustl.catissuecore.domain.SpecimenPosition pos where pos.storageContainer.id = ?
+		</query>
+		
+		<query name="getContainerPositionDetailsByContainerId">select pos.positionDimensionOne, pos.positionDimensionTwo, pos.occupiedContainer.name from edu.wustl.catissuecore.domain.ContainerPosition pos where pos.parentContainer.id = ?
+		</query>
+        
 </hibernate-mapping>

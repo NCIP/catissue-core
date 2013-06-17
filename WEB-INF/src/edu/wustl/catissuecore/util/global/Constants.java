@@ -5985,5 +5985,21 @@ public class Constants
 	
 	public static final String SITE_NOT_TRANSFRED_MESSAGE ="Site can not be transfred.";
 
+	/** Constant for controlName **/
+	public static final String CONTROL_NAME = "controlName";
 
+	/** Constant for pos1ControlName **/
+	public static final String POS1_CONTROL_NAME = "pos1ControlName";
+
+	/** Constant for pos2ControlName **/
+	public static final String POS2_CONTROL_NAME = "pos2ControlName";
+
+	/** Constant for dimensionOneLabels **/
+	public static final String DIMENSION_ONE_LABELS = "dimensionOneLabels";
+
+	/** Constant for dimensionTwoLabels **/
+	public static final String DIMENSION_TWO_LABELS = "dimensionTwoLabels";
+
+	/** Constant for containerDTO **/
+	public static final String CONTAINER_DTO = "containerDTO";
 }
