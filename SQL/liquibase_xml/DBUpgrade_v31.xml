@@ -10,7 +10,7 @@
 
 	<changeSet id="1" author="catissue" runOnChange="true">
 		<addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-			<column name="ACTIVITY_STATUS" type="${text.type}" />
+			<column name="ACTIVITY_STATUS" type="${text.type}(20)" />
 		</addColumn>
 	</changeSet>
 	

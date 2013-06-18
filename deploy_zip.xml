@@ -1840,6 +1840,7 @@
 		<antcall target="upgrade_db_from_plusv20_plusv2.1"/>
 		<antcall target="update_protection_element" />
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0"/>
+		<antcall target="upgrade_db_plusv3.1" />
 		<antcall target="addEMPIMetadata"></antcall>
 		<antcall target="deleteFiles"/>
 
@@ -2338,6 +2339,7 @@
 							<elseif>
 									<equals arg1="${plus3.0.version}" arg2="${from.version}"/>
 									<then>
+										<antcall target="upgrade_db_plusv3.1" />
 									</then>
 								</elseif>
 								<elseif>

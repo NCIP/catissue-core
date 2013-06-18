@@ -1043,7 +1043,10 @@
 		<antcall target="upgrade_db_to_plus_v10"/>
 		<antcall target="upgrade_db_to_plus_v20"/>
 	</target>
-	
+	<target name="upgrade_db_plusv3.1">
+		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v31.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
 			<echo message="Upgrading DB using Liquibase Targets"/>
 			<antcall target="upgrade_db_to_plus_v20"/>
@@ -1888,7 +1891,7 @@
 		<antcall target="upgrade_db_from_plusv20_plusv2.1"/>
 		<antcall target="update_protection_element" />
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
-
+		<antcall target="upgrade_db_plusv3.1" />
 		<antcall target="addEMPIMetadata" />
 
 	</target>
@@ -2357,6 +2360,7 @@
 						<elseif>
 								<equals arg1="${plus3.0.version}" arg2="${from.version}"/>
 								<then>
+									<antcall target="upgrade_db_plusv3.1" />
 								</then>
 							</elseif>
 							<elseif>
@@ -5415,6 +5419,5 @@
 			<echo message="Inserting dashboard queries finished..." />
 			<echo message="---------------------------------------" />
 		</target>
-	
 		
 </project>
