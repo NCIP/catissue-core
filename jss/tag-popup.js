@@ -124,29 +124,6 @@ function showPopup() {
 	{
 	}
 }
-
-//function called for AllQueries,SharedQueries,MyQueries
-function submitTheForm(url,btn) {
-  	ajaxQueryGridInitCall(url);
-    	if (btn == "myQueries")
-	{
-		document.getElementById('myQueries').className='activebtn';
-		document.getElementById('allQueries').className='btn1';
-		document.getElementById('sharedQueries').className='btn1';
-	}
-	else if (btn == "allQueries")
-	{
-		document.getElementById('myQueries').className='btn1';
-		document.getElementById('allQueries').className='activebtn';
-		document.getElementById('sharedQueries').className='btn1';
-	}
-	else
-	{
-		document.getElementById('myQueries').className='btn1';
-		document.getElementById('allQueries').className='btn1';
-		document.getElementById('sharedQueries').className='activebtn';
-	}	
-}
  
 //Ajax Function for Assign Query to folder (Assign Button on Pop up) 
 function ajaxAssignTagFunctionCall(url,msg,msg1) 
