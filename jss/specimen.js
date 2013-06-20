@@ -990,3 +990,207 @@ function processDeriveData(obj)
 		else if(obj.name=='concentration'){deriveConcentration = true;document.getElementById('concentrationErrorMsg').style.display="none";}
 	}
 }
+function onRadioButtonClick(element)
+{
+	if(element.value == 1)
+	{
+		
+		document.forms[0].parentSpecimenLabel.disabled = false;
+		document.forms[0].parentSpecimenBarcode.className = document.forms[0].parentSpecimenBarcode.className.replace(/errorStyleOn/g,"");
+		document.forms[0].parentSpecimenBarcode.value='';
+		document.forms[0].parentSpecimenBarcode.disabled = true;
+	}
+	else
+	{
+		
+		document.forms[0].parentSpecimenBarcode.disabled = false;
+		document.forms[0].parentSpecimenLabel.className = document.forms[0].parentSpecimenLabel.className.replace(/errorStyleOn/g,"");
+		document.forms[0].parentSpecimenLabel.value='';
+		document.forms[0].parentSpecimenLabel.disabled = true;
+	}
+}
+function submitDeriveData()
+{
+	var obj = document.getElementById('parentSpecimenLabel');
+	
+	if(obj!=null && obj.value.trim()=="" && obj.disabled==false)
+	{
+		deriveLabelSubmit=false;
+		deriveBarcodeSubmit=false;
+		obj.className += " errorStyleOn";
+	}
+	var derLabel = document.getElementById('derLabel');
+	
+	if(derLabel.value != null && derLabel.value.trim()=="" && derLabel.disabled==false)
+	{
+		derLabelSubmit=false;
+		derLabel.className += " errorStyleOn";
+	}
+	
+	if(submitDeriveCombo && deriveLabelSubmit && deriveBarcodeSubmit && deriveCreatedOnSubmit && deriveQtySubmit && derLabelSubmit)
+	{
+		var deriveExtidJSON = createExtIdJSON();
+		//alert(deriveExtidJSON);
+		document.getElementById('errorMsg').style.display='none';
+		document.getElementById('errorMsg').innerHTML = '';
+		var contName = document.getElementById("storageContainerPosition").value;
+		//alert(contName);
+		if(contName != 'Virtually Located')
+		{
+			deriveDataJSON["containerName"]= document.getElementById("containerName").value;
+			deriveDataJSON["pos1"]= document.getElementById("pos1").value;
+			deriveDataJSON["pos2"]= document.getElementById("pos2").value;
+			deriveDataJSON["containerId"]= document.getElementById("containerId").value;
+		}
+		deriveDataJSON["className"]= classNameCombo.getSelectedText();
+		deriveDataJSON["type"]= typeCombo.getSelectedText();
+		deriveDataJSON["createdOn"]= document.getElementById('createdOn').value;
+		deriveDataJSON["initialQuantity"]= document.getElementById('initialQuantity').value;
+		
+		
+		var loader = dhtmlxAjax.postSync("CreateDeriveAction.do","dataJSON="+JSON.stringify(deriveDataJSON)+"&extidJSON="+JSON.stringify(deriveExtidJSON));
+		if(loader.xmlDoc.responseText != null)
+		{
+			//alert(loader.xmlDoc.responseText);
+			var response = eval('('+loader.xmlDoc.responseText+')')
+			var errMsgDiv = document.getElementById('errorMsg');
+			if(response.success == "success")
+			{
+				errMsgDiv.style.display='block';
+				errMsgDiv.className='alert-success';
+				errMsgDiv.innerHTML=response.msg;
+				var specimenDto = JSON.parse(response.specimenDto);
+				document.getElementById('derLabel').value=specimenDto.label;
+				document.getElementById('derBarcode').value=specimenDto.barcode;
+				document.getElementById('derSubmitButton').disabled=true;
+				var nodeId= "Specimen_"+specimenDto.id;
+				if(pageOf != "pageOfDeriveSpecimen")
+				{
+					refreshTree(null,null,null,null,nodeId);
+				}
+
+				var addTospecListURL = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specimenDto.id+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specimenDto.id+"')";
+				
+				document.getElementById('assignTargetCall').value=addTospecListURL;
+				document.getElementById('eventdiv').style.display="block";
+				deriveId = specimenDto.label;
+				document.getElementById('createDiv').style.display="none";
+			}
+			else
+			{
+				errMsgDiv.style.display='block';
+				errMsgDiv.className='alert-error';
+				errMsgDiv.innerHTML=response.msg;
+			}
+		}
+	}
+	else
+	{
+		var msg="Unable to submit. Please resolve higlighted issue(s).";
+		document.getElementById('errorMsg').style.display='block';
+	document.getElementById('errorMsg').innerHTML = msg;
+	document.getElementById('errorMsg').className = 'alert-error';
+		//scrollToTop();
+	}
+}
+
+function validateAndProcessDeriveComboData(obj)
+{
+obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+	if(obj.getSelectedValue()=='-1' || obj.getSelectedText()=='-- Select --' || obj.getSelectedText().trim()=="")
+	{
+		obj.DOMelem.className += " errorStyleOn";
+		submitDeriveCombo=false;
+	}
+	else
+	{
+		deriveDataJSON[obj.name] = obj.getSelectedText();
+		if(obj.name=='className' && typeCombo.getComboText()=='-- Select --')
+		{
+			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+			typeCombo.DOMelem.className += " errorStyleOn";
+			submitDeriveCombo=false;
+			return;
+		}
+		var index = obj.DOMelem.className.indexOf("errorStyleOn");
+		if(index != -1)
+		{
+			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+		}
+		submitDeriveCombo=true;
+	}
+	enableMapButton();
+}
+function enableMapButton()
+{
+	if(submitDeriveCombo && deriveLabelSubmit && deriveBarcodeSubmit)
+	{
+		document.getElementById('mapButton').disabled=false;
+	}
+}
+function validateLabelBarcode(label)
+{
+	var barcode = document.getElementById('parentSpecimenBarcode').value;
+	var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=getParentDetails&label="+label.value+"&barcode="+barcode);
+	if(loader.xmlDoc.responseText != null && loader.xmlDoc.responseText != '')
+	{
+		var response = eval('('+loader.xmlDoc.responseText+')')
+		if(response.msg == 'success')
+		{
+			deriveLabelSubmit=true;
+			deriveBarcodeSubmit=true;
+			deriveDataJSON[label.name] = label.value;
+			deriveDataJSON['parentSpecimenId'] = response.parentId;
+			deriveDataJSON['specimenCollGroupId'] = response.scgId;
+			deriveDataJSON['cpId'] = response.cpId;
+			selectedCPID = response.cpId;
+			enableMapButton();
+			label.className = label.className.replace(/errorStyleOn/g,"");
+		}
+		else
+		{
+			deriveLabelSubmit = false;
+			deriveBarcodeSubmit = false;
+			label.className += " errorStyleOn";
+		}
+	}
+	else
+	{
+		deriveLabelSubmit = false;
+		deriveBarcodeSubmit = false;
+		label.className += " errorStyleOn";
+	}
+}
+function openEventPage()
+{
+var action = 'QuickEvents.do?specimenLabel='+deriveId+'&pageOf=';
+	if(pageOf != "pageOfDeriveSpecimen")
+	{
+		action = 'QuickEvents.do?specimenLabel='+deriveId+'&pageOf=CPQuery';
+	}
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+function giveCall(url,msg,msg1,id)
+{
+    document.getElementsByName('objCheckbox').value=id;
+    document.getElementsByName('objCheckbox').checked = true;
+    ajaxAssignTagFunctionCall(url,msg,msg1);
+}
+function loadDHTMLXWindowForDeriveSpecimen()
+{
+var w =700;
+var h =450;
+var x = (screen.width / 3) - (w / 2);
+var y = 0;
+dhxWins = new dhtmlXWindows(); 
+dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+var className = classNameCombo.getSelectedText();
+var type = typeCombo.getSelectedText();
+var url = "ShowStoragePositionGridView.do?pageOf=pageOfderivative&forwardTo=gridView&holdSpecimenClass="+className+"&holdSpecimenType="+type+"&collectionProtocolId="+selectedCPID+"&pos1=&pos2=";
+dhxWins.window("containerPositionPopUp").attachURL(url);                     
+dhxWins.window("containerPositionPopUp").button("park").hide();
+dhxWins.window("containerPositionPopUp").allowResize();
+dhxWins.window("containerPositionPopUp").setModal(true);
+dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
+}

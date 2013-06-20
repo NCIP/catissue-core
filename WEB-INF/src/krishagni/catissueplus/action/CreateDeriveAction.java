@@ -56,7 +56,7 @@ public class CreateDeriveAction extends CatissueBaseAction
 
 					Collection<ExternalIdentifierDTO> externalIdentifierDTOColl = gson.fromJson(
 							extidJSON, listType);
-					deriveDTO.setExternalIdentifiers(externalIdentifierDTOColl==null?new HashSet<ExternalIdentifierDTO>():externalIdentifierDTOColl);
+					deriveDTO.setExternalIdentifiers(externalIdentifierDTOColl);
 
 					SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 							.getAttribute(Constants.SESSION_DATA);

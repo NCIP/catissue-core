@@ -910,6 +910,10 @@ public class SpecimenBizLogic
 		{
 			collection.add(getExternalIdentifierDomainObjFromDTO(specimen, externalIdentifierDTO));
 		}
+		if(collection.isEmpty())
+		{
+			collection.add(new ExternalIdentifier());
+		}
 		return collection;
 	}
 

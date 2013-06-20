@@ -7,30 +7,39 @@
 <%@ page import="edu.wustl.catissuecore.dto.SpecimenDTO"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <head>
-	<script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
-	<script src="jss/script.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
-
-	
-	<script>
-      window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-	  var pageOf = '${requestScope.pageOf}';
-	  var isLabelGenAvl = '${requestScope.isSpecimenLabelGeneratorAvl}';
-	  var selectedCPID='';
-    </script>
-
-
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="STYLESHEET" type="text/css" href="css/catissue_suite.css">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
-
-
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="jss/ajax.js" type="text/javascript"></script>
 
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
 
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
@@ -41,22 +50,24 @@
 <script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
-
-<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-
 <script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
-
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+
+	<script>
+      window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+	  var pageOf = '${requestScope.pageOf}';
+	  var isLabelGenAvl = '${requestScope.isSpecimenLabelGeneratorAvl}';
+	  var selectedCPID='';
+	  var deriveLabel='';
+    </script>
+
 </head>
 <script>
 function initPrepareSpecimenType()
 {
 	prepareSpecimenTypeOptions('${cellTypeListJSON}','${molecularTypeListJSON}','${tissueTypeListJSON}','${fluidTypeListJSON}');
-
 }
 </script>
 
@@ -343,7 +354,6 @@ function initPrepareSpecimenType()
 							<span class="black_ar">
 						</td>
 				   </tr>
-				  
 				  <tr>
 					   <td colspan="4" valign="middle">
 						<table>
@@ -366,92 +376,33 @@ function initPrepareSpecimenType()
 					</tr>
 					<tr>
 						<td colspan="4" align="left" class="buttonbg">
-							<html:button styleClass="blue_ar_b" styleId="derSubmitButton" property="submitButton" onclick="submitDeriveData()">
+							<div id="createDiv" style="display:block"><html:button styleClass="blue_ar_b" styleId="derSubmitButton" property="submitButton" onclick="submitDeriveData()">
 								<bean:message key="buttons.create"/>
 							</html:button>&nbsp;
-							
-						
-						<html:button
+							</div>
+						<div id="eventdiv" style="display:none">
+						<html:button styleId="eventButton"
 							styleClass="blue_ar_b" property="Add Events"
 							title="Add Events"
-							value="Add Events"
-							onclick="openEventPage('rty')">
+							value="Add Events" onclick="openEventPage()">
+							Add events
+						</html:button>&nbsp;|&nbsp;
+						<html:button
+							styleClass="blue_ar_b" property="Add To Specimen List"
+							title="Add To Specimen List"
+							value="Add To Specimen List"
+							onclick="ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')">
 						</html:button>
+						</div>
+						<input type="hidden" id="assignTargetCall" name="assignTargetCall" value=""/>
+<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
+<%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
 						</td>
 					</tr>
 				</table>
 			</html:form>	
 </body>
 <script>
-function loadDHTMLXWindowForDeriveSpecimen()
-{
-
-//alert(document.getElementById('barcode'));
-var w =700;
-var h =450;
-var x = (screen.width / 3) - (w / 2);
-var y = 0;
-dhxWins = new dhtmlXWindows(); 
-dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-//var pos1 = document.getElementById('pos1').value;
-//var pos2 = document.getElementById('pos2').value;
-var className = classNameCombo.getSelectedText();
-var type = typeCombo.getSelectedText();
-//var containerName = document.getElementById('containerName').value;
-//var isVirtual = document.getElementById('isVirtual').value;
-
-var url = "ShowStoragePositionGridView.do?pageOf=pageOfderivative&forwardTo=gridView&holdSpecimenClass="+className+"&holdSpecimenType="+type+"&collectionProtocolId="+selectedCPID+"&pos1=&pos2=";
-
-dhxWins.window("containerPositionPopUp").attachURL(url);                     
-//url : either an action class or you can specify jsp page path directly here
-dhxWins.window("containerPositionPopUp").button("park").hide();
-dhxWins.window("containerPositionPopUp").allowResize();
-dhxWins.window("containerPositionPopUp").setModal(true);
-dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
-}
-
-function validateLabelBarcode(label)
-{
-	//alert(label.name);
-	var barcode = document.getElementById('parentSpecimenBarcode').value;
-	var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=getParentDetails&label="+label.value+"&barcode="+barcode);
-	if(loader.xmlDoc.responseText != null && loader.xmlDoc.responseText != '')
-	{
-		var response = eval('('+loader.xmlDoc.responseText+')')
-		//alert(loader.xmlDoc.responseText);
-		if(response.msg == 'success')
-		{
-			deriveLabelSubmit=true;
-			deriveBarcodeSubmit=true;
-			deriveDataJSON[label.name] = label.value;
-			deriveDataJSON['parentSpecimenId'] = response.parentId;
-			deriveDataJSON['specimenCollGroupId'] = response.scgId;
-			deriveDataJSON['cpId'] = response.cpId;
-			selectedCPID = response.cpId;
-			enableMapButton();
-			label.className = label.className.replace(/errorStyleOn/g,"");
-		}
-		else
-		{
-			deriveLabelSubmit = false;
-			deriveBarcodeSubmit = false;
-			label.className += " errorStyleOn";
-		}
-	}
-	else
-	{
-		deriveLabelSubmit = false;
-		deriveBarcodeSubmit = false;
-		label.className += " errorStyleOn";
-	}
-}
-function enableMapButton()
-{
-	if(submitDeriveCombo && deriveLabelSubmit && deriveBarcodeSubmit)
-	{
-		document.getElementById('mapButton').disabled=false;
-	}
-}
 var deriveDataJSON = {};
 var deriveLabelSubmit=false;
 var deriveBarcodeSubmit=false;
@@ -461,154 +412,7 @@ var deriveConcentration=true;
 var derLabelSubmit=true;
 var cpId=0;
 var submitDeriveCombo = true;
-
-function validateAndProcessDeriveComboData(obj)
-{
-//deriveDataJSON[obj.name] = obj.getSelectedText();
-obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
-	if(obj.getSelectedValue()=='-1' || obj.getSelectedText()=='-- Select --' || obj.getSelectedText().trim()=="")
-	{
-		obj.DOMelem.className += " errorStyleOn";
-		//alert(obj.DOMelem.className);
-		submitDeriveCombo=false;
-	}
-	else
-	{
-		deriveDataJSON[obj.name] = obj.getSelectedText();
-		
-		if(obj.name=='className' && typeCombo.getComboText()=='-- Select --')
-		{
-			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
-			typeCombo.DOMelem.className += " errorStyleOn";
-			submitDeriveCombo=false;
-			return;
-		}
-		var index = obj.DOMelem.className.indexOf("errorStyleOn");
-		if(index != -1)
-		{
-			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
-		}
-		submitDeriveCombo=true;
-		
-	}
-	enableMapButton();
-	
-}
-function submitDeriveData()
-{
-	var obj = document.getElementById('parentSpecimenLabel');
-	
-	if(obj!=null && obj.value.trim()=="" && obj.disabled==false)
-	{
-		deriveLabelSubmit=false;
-		deriveBarcodeSubmit=false;
-		obj.className += " errorStyleOn";
-	}
-	var derLabel = document.getElementById('derLabel');
-	
-	if(derLabel.value != null && derLabel.value.trim()=="" && derLabel.disabled==false)
-	{
-		derLabelSubmit=false;
-		derLabel.className += " errorStyleOn";
-	}
-	
-	if(submitDeriveCombo && deriveLabelSubmit && deriveBarcodeSubmit && deriveCreatedOnSubmit && deriveQtySubmit && derLabelSubmit)
-	{
-		var deriveExtidJSON = createExtIdJSON();
-		//alert(deriveExtidJSON);
-		document.getElementById('errorMsg').style.display='none';
-		document.getElementById('errorMsg').innerHTML = '';
-		var contName = document.getElementById("storageContainerPosition").value;
-		//alert(contName);
-		if(contName != 'Virtually Located')
-		{
-			deriveDataJSON["containerName"]= document.getElementById("containerName").value;
-			deriveDataJSON["pos1"]= document.getElementById("pos1").value;
-			deriveDataJSON["pos2"]= document.getElementById("pos2").value;
-			deriveDataJSON["containerId"]= document.getElementById("containerId").value;
-		}
-		deriveDataJSON["className"]= classNameCombo.getSelectedText();
-		deriveDataJSON["type"]= typeCombo.getSelectedText();
-		deriveDataJSON["createdOn"]= document.getElementById('createdOn').value;
-		deriveDataJSON["initialQuantity"]= document.getElementById('initialQuantity').value;
-		
-		
-		var loader = dhtmlxAjax.postSync("CreateDeriveAction.do","dataJSON="+JSON.stringify(deriveDataJSON)+"&extidJSON="+JSON.stringify(deriveExtidJSON));
-		if(loader.xmlDoc.responseText != null)
-		{
-			//alert(loader.xmlDoc.responseText);
-			var response = eval('('+loader.xmlDoc.responseText+')')
-			var errMsgDiv = document.getElementById('errorMsg');
-			if(response.success == "success")
-			{
-				errMsgDiv.style.display='block';
-				errMsgDiv.className='alert-success';
-				errMsgDiv.innerHTML=response.msg;
-				var specimenDto = JSON.parse(response.specimenDto);
-				document.getElementById('derLabel').value=specimenDto.label;
-				document.getElementById('derBarcode').value=specimenDto.barcode;
-				document.getElementById('derSubmitButton').disabled=true;
-				var nodeId= "Specimen_"+specimenDto.id;
-				if(pageOf != "pageOfDeriveSpecimen")
-				{
-					refreshTree(null,null,null,null,nodeId);
-				}
-
-				//alert(specimenDto.id);
-				//redirectTo(specimenDto.id);
-				//window.location.href = "SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+specimenDto.id;
-				//window.parent.frames[1].location = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+specimenDto.id+"&refresh=false&cpSearchParticipantId=&cpSearchCpId=";
-			}
-			else
-			{
-				errMsgDiv.style.display='block';
-				errMsgDiv.className='alert-error';
-				errMsgDiv.innerHTML=response.msg;
-			}
-			//alert(response);
-		}
-	}
-	else
-	{
-		var msg="Unable to submit. Please resolve higlighted issue(s).";
-		document.getElementById('errorMsg').style.display='block';
-	document.getElementById('errorMsg').innerHTML = msg;
-	document.getElementById('errorMsg').className = 'alert-error';
-		//scrollToTop();
-	}
-}
-function redirectTo(id)
-{
-	if(pageOf=="pageOfDeriveSpecimen")
-	{
-		window.location.href = "SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+id;
-	}
-	else
-	{
-		window.parent.frames[1].location = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+id+"&refresh=false&cpSearchParticipantId=&cpSearchCpId=";
-	}
-}
-function onRadioButtonClick(element)
-		{
-     		if(element.value == 1)
-			{
-				
-				document.forms[0].parentSpecimenLabel.disabled = false;
-				document.forms[0].parentSpecimenBarcode.className = document.forms[0].parentSpecimenBarcode.className.replace(/errorStyleOn/g,"");
-				document.forms[0].parentSpecimenBarcode.value='';
-				document.forms[0].parentSpecimenBarcode.disabled = true;
-			}
-			else
-			{
-				
-				document.forms[0].parentSpecimenBarcode.disabled = false;
-				document.forms[0].parentSpecimenLabel.className = document.forms[0].parentSpecimenLabel.className.replace(/errorStyleOn/g,"");
-				document.forms[0].parentSpecimenLabel.value='';
-				document.forms[0].parentSpecimenLabel.disabled = true;
-			}
-		}
 var labelDoc = document.getElementById('parentSpecimenLabel');
-
 	if(pageOf=="pageOfDeriveSpecimen")
 	{
 	}
@@ -616,7 +420,6 @@ var labelDoc = document.getElementById('parentSpecimenLabel');
 	{
 		validateLabelBarcode(labelDoc);
 	}
-
 document.forms[0].parentSpecimenBarcode.disabled = true;
 document.getElementById('checkedButton').checked=true;
 <logic:equal name="isSpecimenLabelGeneratorAvl" value="true">
@@ -627,5 +430,4 @@ document.getElementById('derLabel').value="AutoGenerated";
 document.getElementById('derBarcode').disabled = true;
 document.getElementById('derBarcode').value="AutoGenerated";
 </logic:equal>
-
 </script>
