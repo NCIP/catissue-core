@@ -155,6 +155,14 @@ function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageO
 		var id2 = document.getElementById("pos2");	
 		id2.value = elementValue2;
 	}
+	else if(pageOf == 'pageOfderivative')
+	{//alert('${requestScope.collStatus}');
+	var id1 = document.getElementById("pos1");	
+		id1.value = elementValue1;
+		var id2 = document.getElementById("pos2");	
+		id2.value = elementValue2;
+		updatePosition();
+	}
 	else
 	{
 		var id1 = document.getElementById(elementId1);	
@@ -162,7 +170,6 @@ function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageO
 		var id2 = document.getElementById(elementId2);	
 		id2.value = elementValue2;
 	}
-	
 	var speCollStat = '${requestScope.collStatus}';
 	if(speCollStat != null && speCollStat != "" )
 	{
@@ -175,7 +182,6 @@ function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageO
 			updatePosition();
 		}
 	}
-	
 }
 
 function updatePosition()
@@ -183,28 +189,28 @@ function updatePosition()
 	var pos1=document.getElementById('pos1').value;
 	var pos2=document.getElementById('pos2').value;
 	var containerName=dhtmlxCombo.getComboText();
-	
+	var containerId = dhtmlxCombo.getSelectedValue();
 	var storagePosition=parent.window.document.getElementById('storageContainerPosition');
-	var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
-	storagePosition.value=newStoragePosition;
-	storagePosition.title=newStoragePosition;
-	var isVirtual=parent.window.document.getElementById('isVirtual');
-	isVirtual.value=false;
-	var container = parent.window.document.getElementById('containerName');
-	var position1= parent.window.document.getElementById('pos1');
-	var position2= parent.window.document.getElementById('pos2');
-	
-	container.value = containerName;
-	position1.value = pos1;
-	position2.value= pos2;
-	var isVirtual = parent.window.document.getElementById('isVirtual');
-	
-	if(isVirtual != null)
-	{
-		isVirtual.value="false";
+		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
+		storagePosition.value=newStoragePosition;
+		storagePosition.title=newStoragePosition;
+		//var isVirtual=parent.window.document.getElementById('isVirtual');
+		//isVirtual.value=false;
+		var container = parent.window.document.getElementById('containerName');
+		var position1= parent.window.document.getElementById('pos1');
+		var position2= parent.window.document.getElementById('pos2');
+		parent.window.document.getElementById('containerId').value=containerId;
+		container.value = containerName;
+		position1.value = pos1;
+		position2.value= pos2;
+		var isVirtual = parent.window.document.getElementById('isVirtual');
 		
-	}
-	parent.window.dhxWins.window("containerPositionPopUp").close();
+		if(isVirtual != null)
+		{
+			isVirtual.value="false";
+			
+		}
+		parent.window.dhxWins.window("containerPositionPopUp").close();
 }
 
 function transferVrtualSpecimen()
@@ -482,10 +488,16 @@ function setVirtual()
 	}
 	else
 	{
-		var id1 = parent.window.document.getElementById(globalPos1);	
-		id1.value = "";
+		var id1 = parent.window.document.getElementById(globalPos1);
+				if(id1 != null)
+		{
+			id1.value = "";
+		}
 		var id2 = parent.window.document.getElementById(globalPos2);	
-		id2.value = "";
+		if(id2 != null)
+		{
+			id2.value = "";
+		}
 		if(globalPageOf == 'pageOfAntispec')
 		{
 			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
@@ -520,6 +532,26 @@ function setVirtual()
 		}
 		else if(globalPageOf == 'pageOfderivative')
 		{
+			var contId = parent.window.document.getElementById('containerId');
+			contId.value='-1';
+			var contName = parent.window.document.getElementById('containerName');
+			contName.value='Virtual';
+			parent.window.document.getElementById('pos1').value='';
+			parent.window.document.getElementById('pos2').value='';
+			parent.window.document.getElementById('storageContainerPosition').value='Virtually Located';
+			parent.window.document.getElementById('storageContainerPosition').title='Virtually Located';
+		}
+		else if(globalPageOf == 'pageOfBulkEvent')
+		{
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById(globalContName);
+			contId.value='-1';
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value='Virtual';
+		}
+		else if(globalPageOf == 'pageOfTransfer')
+		{
+			
 			var contId = parent.window.document.getElementById('containerId');
 			contId.value='-1';
 			var contName = parent.window.document.getElementById(globalContName);
@@ -570,19 +602,30 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 	}
 	else if(pageOf == 'pageOfderivative')
 	{
-		var contId = parent.window.document.getElementById('containerId');
+		updatePosition();
+		/*var contId = parent.window.document.getElementById('containerId');
 		contId.value=dhtmlxCombo.getSelectedValue();
 		var contName = parent.window.document.getElementById(controlName);
-		contName.value=dhtmlxCombo.getSelectedText();
+		contName.value=dhtmlxCombo.getSelectedText();*/
 	}
 	else if(globalPageOf == 'pageOfBulkEvent')
-	{
-		var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
-		var contId = parent.window.document.getElementById(globalContName);
-		contId.value=dhtmlxCombo.getSelectedValue();
-		var contName = parent.window.document.getElementById(globalContName);
-		contName.value=dhtmlxCombo.getSelectedText();
-	}
+		{
+		//alert(globalContName);
+			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
+			var contId = parent.window.document.getElementById(globalContName);
+			contId.value=dhtmlxCombo.getSelectedValue();
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value=dhtmlxCombo.getSelectedText();
+		}
+	else if(globalPageOf == 'pageOfTransfer')
+		{
+		//alert(globalContName);
+			
+			var contId = parent.window.document.getElementById('containerId');
+			contId.value=dhtmlxCombo.getSelectedValue();
+			var contName = parent.window.document.getElementById(globalContName);
+			contName.value=dhtmlxCombo.getSelectedText();
+		}
 	
 	parent.window.dhxWins.window("containerPositionPopUp").close();
 }

@@ -2,17 +2,22 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.json.JSONObject;
-
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.dto.BiohazardDTO;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 
 /**
  * @author rinku
@@ -57,4 +62,55 @@ public class SpecimenDAO
 		}
 		return nvBeanList;
 	}
+	public static Long getcpId(Long specimenId, HibernateDAO dao)
+			throws ApplicationException, DAOException
+	{
+
+		List<Object> list = null;
+		Long cpID = 0l;
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+			substParams.put("0",new NamedQueryParam(DBTypes.LONG, specimenId));
+			list = dao.executeNamedQuery("getCPID", substParams);
+			if(list != null && list.size()>0)
+			{
+				cpID = Long.valueOf(list.get(0).toString());
+			}
+		return cpID;
+	}
+
+	public static Long getAssociatedIdentifiedReportId(Long specimenId, HibernateDAO dao)
+			throws ApplicationException
+	{
+		Long reportId = -1l;
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0",new NamedQueryParam(DBTypes.LONG, specimenId));
+		final List reportIDList = dao.executeNamedQuery("getAssociatedReportId", substParams);
+		if (reportIDList != null && !reportIDList.isEmpty())
+		{
+			reportId = ((Long) reportIDList.get(0));
+		}
+		else if (AppUtility.isQuarantined(reportId))
+		{
+			reportId = -2l;
+		}
+		return reportId;
+	}
+	
+	public static ArrayList<BiohazardDTO> getBiohazardList(DAO dao) throws DAOException
+	{
+		List<Biohazard> biohazardList = dao.retrieve(Biohazard.class.getName());
+
+		ArrayList<BiohazardDTO> biohazardTypeNameList = new ArrayList<BiohazardDTO>();
+		for (Biohazard biohazard : biohazardList)
+		{
+			BiohazardDTO biohazardDTO = new BiohazardDTO();
+			biohazardDTO.setId(biohazard.getId());
+			biohazardDTO.setName(biohazard.getName());
+			biohazardDTO.setType(biohazard.getType());
+
+			biohazardTypeNameList.add(biohazardDTO);
+		}
+		return biohazardTypeNameList;
+	}
+
 }

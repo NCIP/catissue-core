@@ -13,7 +13,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +49,12 @@ import org.apache.struts.action.ActionForm;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.Category;
@@ -4297,5 +4305,23 @@ public class AppUtility {
 		dao.closeSession();
 	 }
 		
+	}
+	
+	public static GsonBuilder initGSONBuilder()
+	{
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+	        DateFormat df = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern"));
+	        @Override
+	        public Date deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+	                throws JsonParseException {
+	            try {
+	            	return df.parse(json.getAsString());
+	            } catch (ParseException e) {
+	            	return null;
+	            }
+	        }
+	    });
+		return gsonBuilder;
 	}
 }

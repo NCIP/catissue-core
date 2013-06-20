@@ -1,6 +1,24 @@
 var typeCombo;
 var classNameCombo;
 var collectionStatusCombo;
+function initCombo()
+{
+	    classNameCombo = dhtmlXComboFromSelect("className");
+		//classNameCombo.setOptionWidth(203);
+		classNameCombo.setSize(203);
+		classNameCombo.attachEvent("onChange", function(){onSpecimenTypeChange(this);validateAndProcessDeriveComboData(this);});
+	//	classNameCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+
+		
+		typeCombo = dhtmlXComboFromSelect("type");
+		//typeCombo.setOptionWidth(203);
+		typeCombo.setSize(203);
+		typeCombo.attachEvent("onChange", function(){validateAndProcessDeriveComboData(this);});
+		setDefaultText("extIdName",defaultTextForExtIdName);
+	    setDefaultText("extIdValue",defaultTextForExtIdValue);
+
+	//	typeCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+}
 function initSpecimenCombo()
 {
 		var tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
@@ -406,7 +424,7 @@ function forwardToChildSpecimen() {
 	{
 		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
 		
-		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId;
+		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId+'&specClassName='+classNameCombo.getSelectedText()+'&specType='+typeCombo.getSelectedText();
 					
 					if(document.getElementById("numberOfSpecimens").value>1)
 					{
@@ -647,7 +665,7 @@ function validateAndProcessComboData(obj)
 {
 
 	if(obj.getSelectedValue()=='-1' || obj.getSelectedText()=='-- Select --' || obj.getSelectedText().trim()=="")
-	{	
+	{
 		obj.DOMelem.className += " errorStyleOn";
 		submitCombo=false;
 	}
@@ -709,8 +727,11 @@ function submitTabData()
 		{
 			printFlag=true;
 		}
-		
-		var loader = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
+		if(obj!=null && obj.value.trim()!="" && obj.disabled==false)
+		{
+			tabDataJSON['label']=obj.value;
+		}
+		var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
 		
 		if(loader.xmlDoc.responseText != null)
 		{
@@ -877,6 +898,14 @@ function validateDate(dt){
 	}
     return true;
  }
+ 
+function validateDateDerive(dt){
+	if (isDate(dt.value)==false){
+		dt.focus();
+		return false;
+	}
+    return true;
+ }
 
 function setLabelBarcodeVisibility(isSpecimenLabelGeneratorAvl,isSpecimenBarcodeGeneratorAvl,collectionStatus)
 {
@@ -892,5 +921,72 @@ function setLabelBarcodeVisibility(isSpecimenLabelGeneratorAvl,isSpecimenBarcode
 	else if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='false' && collectionStatus!='Collected')
 	{
 		document.getElementById('label').setAttribute('disabled',true);
+	}
+}
+
+function processDeriveData(obj)
+{
+	if(obj.name=='initialQuantity' && (obj.value.trim()=="" || !isNumeric(obj.value.trim())))
+	{
+		deriveQtySubmit=false;
+		
+		var errorDiv = document.getElementById('quantityErrorMsg');
+		errorDiv.style.display ="none";
+		
+		if(obj.value.trim()=="")
+		{
+			obj.className += " errorStyleOn";
+		}
+		if(!isNumeric(obj.value.trim()))
+		{
+			obj.className += " errorStyleOn";
+			errorDiv.style.display ="block";
+			errorDiv.innerHTML = "(Enter a valid number)";
+		}
+	}
+	
+	else if(obj.name=='concentration' && !isNumeric(obj.value.trim()))
+	{
+		deriveConcentration=false;
+		obj.className += " errorStyleOn";
+		var errorDiv = document.getElementById('concentrationErrorMsg');
+		errorDiv.style.display ="block";
+		if(!isNumeric(obj.value))
+			errorDiv.innerHTML = "(Enter a valid number)";
+	}
+	else if(obj.name=='createdOn' && !validateDateDerive(obj))
+	{
+		deriveCreatedOnSubmit=false;
+		obj.className += " errorStyleOn";
+	}
+	else if(obj.name=='label' && isLabelGenAvl && obj.value.trim()=="")
+	{
+		derLabelSubmit=false;
+		obj.className += " errorStyleOn";
+	}
+	else
+	{	
+		if(obj.name=='initialQuantity')
+		{
+			if(obj.value==""){obj.value=0;}
+			document.getElementById('quantityErrorMsg').style.display="none";
+		}
+		deriveDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
+		obj.className = obj.className.replace(/errorStyleOn/g,"");
+		if(obj.name=='initialQuantity')
+		{
+			if(deriveQtySubmit)
+			{
+				var availableQuantityElement = document.getElementById('initialQuantity');
+				availableQuantityElement.className=availableQuantityElement.className.replace(/errorStyleOn/g,"");
+				document.getElementById('quantityErrorMsg').style.display="none";
+			}
+			deriveQtySubmit = true;
+			document.getElementById('quantityErrorMsg').style.display="none";
+		}
+		else if(obj.name=='label'){derLabelSubmit = true;}
+		else if(obj.name=='initialQuantity'){deriveQtySubmit = true;}
+		else if(obj.name=='createdOn'){deriveCreatedOnSubmit = true;}
+		else if(obj.name=='concentration'){deriveConcentration = true;document.getElementById('concentrationErrorMsg').style.display="none";}
 	}
 }

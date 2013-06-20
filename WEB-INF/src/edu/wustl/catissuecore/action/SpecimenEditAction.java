@@ -31,6 +31,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 
 public class SpecimenEditAction extends CatissueBaseAction
 {
@@ -42,7 +43,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 		Gson gson = new Gson();
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String obj = null;
-		DAO dao = null;
+		HibernateDAO hibernateDao = null;
 
 		if (request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
 		{
@@ -54,11 +55,11 @@ public class SpecimenEditAction extends CatissueBaseAction
 		}
 		try
 		{
-			dao = AppUtility.openDAOSession(null);
+			hibernateDao = (HibernateDAO)AppUtility.openDAOSession(null);
 			if (!Validator.isEmpty(obj))
 			{
 				Long identifier = Long.valueOf(Utility.toLong(obj));
-				Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+				Specimen specimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(),
 						identifier);
 				specimenDTO = new SpecimenBizlogic().getDTO(specimen);
 				request.setAttribute("specimenDTO", specimenDTO);
@@ -71,7 +72,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 				Long cpId = Long.valueOf(objArr[0].toString());
 				request.setAttribute("cpId", cpId);
 
-				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(), dao);
+				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(), hibernateDao);
 				if (reportId == null)
 				{
 					reportId = -1l;
@@ -84,7 +85,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 				session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 				
 				request.setAttribute("isSpecimenLabelGeneratorAvl",
-						new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(identifier, dao));
+						new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(identifier, hibernateDao));
 				request.setAttribute("isSpecimenBarcodeGeneratorAvl",
 						Variables.isSpecimenBarcodeGeneratorAvl);
 			}
@@ -133,7 +134,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 
 			request.setAttribute(Constants.ACTIVITYSTATUSLIST, activityStatusList);
 
-			List<Biohazard> biohazardList = dao.retrieve(Biohazard.class.getName());
+			List<Biohazard> biohazardList = hibernateDao.retrieve(Biohazard.class.getName());
 
 			ArrayList<BiohazardDTO> biohazardTypeNameList = new ArrayList<BiohazardDTO>();
 			for (Biohazard biohazard : biohazardList)
@@ -170,7 +171,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 		}
 		finally
 		{
-			AppUtility.closeDAOSession(dao);
+			AppUtility.closeDAOSession(hibernateDao);
 		}
 
 		return mapping.findForward(Constants.PAGE_OF_NEW_SPECIMEN);

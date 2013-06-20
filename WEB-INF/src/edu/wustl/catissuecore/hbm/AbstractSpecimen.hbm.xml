@@ -419,7 +419,10 @@
 	<query name="getSpecimenLabelById">select spec.label from edu.wustl.catissuecore.domain.Specimen spec where spec.id = ? and spec.activityStatus= ?</query>
 	<query name="getSpecimenLabel">select spec.label from edu.wustl.catissuecore.domain.Specimen spec where spec.id = ? </query>
 	<query name="updateAllSpecimenFromSCGToDisable">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Disabled' where specimen.specimenCollectionGroup.id=?</query>
-	
-	
-	
+	<query name="getCPID">select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id=?</query>
+	<query name="getAssociatedReportId">select scg.identifiedSurgicalPathologyReport.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id = ? and specimen.id in elements(scg.specimenCollection)</query>
+	<query name="getSpecimenIdByLorB">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where (spec.label = ? or spec.barcode = ?) and spec.activityStatus= ? </query>	
+	<query name="getSCGnCPIDByLorB">select specimen.id, specimen.specimenCollectionGroup.id, specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus= ? </query>
+	<query name="getSiteIdFromContainer">select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen specimen where (specimen.id=? or specimen.label=? ) and specimen.activityStatus=?</query>
+	<query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>
 </hibernate-mapping>

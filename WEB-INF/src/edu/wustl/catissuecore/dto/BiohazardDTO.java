@@ -71,6 +71,10 @@ public class BiohazardDTO
 	{
 		return status;
 	}
+	public void setStatus(String status)
+	{
+		this.status = status;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

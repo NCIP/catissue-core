@@ -1467,7 +1467,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException Database related exception
 	 * @throws DAOException : DAOException
 	 */
-	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen,
+	public void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen,
 			DAO dao) throws BizLogicException, DAOException
 	{
 		Collection holdsSpecimenClassColl = this.containerHoldsSpecimenClasses.get(container
@@ -6269,7 +6269,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToDisabled", params);
 	}
 
-	public Long getAssociatedIdentifiedReportId(Long specimenId, DAO dao)
+	public Long getAssociatedIdentifiedReportId(Long specimenId, HibernateDAO hibernateDao)
 			throws ApplicationException
 	{
 		Long valueToReturn = null;
@@ -6277,12 +6277,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, "
 				+ " edu.wustl.catissuecore.domain.Specimen as specimen" + " where specimen.id = "
 				+ specimenId + " and specimen.id in elements(scg.specimenCollection)";
-		final List reportIDList = dao.executeQuery(hqlString);
+		final List reportIDList = hibernateDao.executeQuery(hqlString);
 		if (reportIDList != null && !reportIDList.isEmpty())
 		{
 			valueToReturn = ((Long) reportIDList.get(0));
 		}
 		return valueToReturn;
 	}
+	
+	
 
 }
