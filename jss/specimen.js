@@ -1057,7 +1057,7 @@ function submitDeriveData()
 			if(response.success == "success")
 			{
 				errMsgDiv.style.display='block';
-				errMsgDiv.className='alert-success';
+				errMsgDiv.className='alert alert-success';
 				errMsgDiv.innerHTML=response.msg;
 				var specimenDto = JSON.parse(response.specimenDto);
 				document.getElementById('derLabel').value=specimenDto.label;
@@ -1079,7 +1079,7 @@ function submitDeriveData()
 			else
 			{
 				errMsgDiv.style.display='block';
-				errMsgDiv.className='alert-error';
+				errMsgDiv.className='alert alert-error';
 				errMsgDiv.innerHTML=response.msg;
 			}
 		}
