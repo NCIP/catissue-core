@@ -128,7 +128,7 @@ function initPrepareSpecimenType()
 											
 											<span class="black_ar">
 												<bean:message key="specimen.label"/>&nbsp;
-												<html:text styleClass="black_ar"  name="deriveDTO" maxlength="50"  size="20" styleId="parentSpecimenLabel"
+												<html:text styleClass="black_ar"  name="deriveDTO" maxlength="50"  size="21" styleId="parentSpecimenLabel"
 														   property="parentSpecimenLabel" disabled="false" onblur="validateLabelBarcode(this)"/>
 												&nbsp;&nbsp;
 											</span>
@@ -338,20 +338,25 @@ function initPrepareSpecimenType()
 							</table>
 						</td>
 					</tr>
-					
 					<tr>
-						<td colspan="4" class="formLabelNoBackGround" width="40%">
+						<td colspan="4" align="left" class="dividerline">
+							<span class="black_ar">
+						</td>
+				   </tr>
+				   <tr>
+						<td colspan="2" class="formLabelNoBackGround" width="40%">
 							<span class="black_ar">
 							<html:checkbox name="deriveDTO" property="disposeParentSpecimen">
 							&nbsp;<bean:message key="aliquots.disposeParentSpecimen" />
 							</html:checkbox>
 							</span>
 						</td>
-				   </tr>
-				  
-				   <tr>
-						<td colspan="4" align="left" class="dividerline">
-							<span class="black_ar">
+						<td colspan="2">
+							<html:checkbox name="deriveDTO" styleId="isToPrintLabel" property="isToPrintLabel" value="true" onclick="showPriterTypeLocation()">
+										<span class="black_ar">
+											<bean:message key="print.checkboxLabel"/>
+										</span>
+										</html:checkbox>
 						</td>
 				   </tr>
 				  <tr>
@@ -359,11 +364,7 @@ function initPrepareSpecimenType()
 						<table>
 							<tr>
 								 <td  nowrap  width="20%" colspan="1">
-									 <html:checkbox name="deriveDTO" styleId="isToPrintLabel" property="isToPrintLabel" value="true" onclick="showPriterTypeLocation()">
-										<span class="black_ar">
-											<bean:message key="print.checkboxLabel"/>
-										</span>
-										</html:checkbox>
+									 
 								  </td>
 
 							  </tr>
