@@ -488,16 +488,16 @@ function setVirtual()
 	}
 	else
 	{
-		var id1 = parent.window.document.getElementById(globalPos1);
-				if(id1 != null)
-		{
+		var id1 = parent.window.document.getElementById(globalPos1);	
+		if(id1 != null || id1 != undefined){
 			id1.value = "";
 		}
+		
 		var id2 = parent.window.document.getElementById(globalPos2);	
-		if(id2 != null)
-		{
+		if(id2 != null || id2 != undefined){
 			id2.value = "";
 		}
+		
 		if(globalPageOf == 'pageOfAntispec')
 		{
 			var rowIndex = globalContName.substring(globalContName.indexOf('_')+1,globalContName.length);
@@ -514,6 +514,10 @@ function setVirtual()
 			contId.value="-1";
 			var contName = parent.window.document.getElementById(globalContName);
 			contName.value='Virtual';
+		}
+		else if(globalPageOf == 'pageOfNewAliquot'){
+			var contName = dhtmlxCombo.getSelectedText();
+			parent.setNewStoragePositionForAliquot(globalContName,"Virtual","","");
 		}
 		else if(globalPageOf == 'pageOfShipping')
 		{
@@ -566,9 +570,13 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 {
 	//alert("elementId1:  "+elementId1+"  elementValue1:  "+elementValue1+"  elementId2:   "+elementId2+"elementValue2:   "+elementValue2);
 	var id1 = parent.window.document.getElementById(elementId1);	
-	id1.value = elementValue1;
+	if(id1 != null || id1 != undefined){
+		id1.value = elementValue1;
+	}
 	var id2 = parent.window.document.getElementById(elementId2);	
-	id2.value = elementValue2;
+	if(id2 != null || id2 != undefined){
+		id2.value = elementValue2;
+	}
 	if(pageOf == 'pageOfAntispec')
 	{
 		var rowIndex = controlName.substring(controlName.indexOf('_')+1,controlName.length);
@@ -576,6 +584,10 @@ function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValu
 		contId.value=dhtmlxCombo.getSelectedValue();
 		var contName = parent.window.document.getElementById(controlName);
 		contName.value=dhtmlxCombo.getSelectedText();
+	}
+	else if(pageOf == 'pageOfNewAliquot'){
+		var contName = dhtmlxCombo.getSelectedText();
+		parent.setNewStoragePositionForAliquot(controlName,contName,elementValue1,elementValue2);
 	}
 	else if(pageOf == 'pageOfAliquot')
 	{

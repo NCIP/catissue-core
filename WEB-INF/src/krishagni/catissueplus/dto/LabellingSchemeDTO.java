@@ -4,17 +4,17 @@ package krishagni.catissueplus.dto;
 public class LabellingSchemeDTO
 {
 
-	String dimentionOne;
+	String dimensionOne;
 	String dimensionTwo;
 
-	public String getDimentionOne()
+	public String getDimensionOne()
 	{
-		return dimentionOne;
+		return dimensionOne;
 	}
 
-	public void setDimentionOne(String dimentionOne)
+	public void setDimensionOne(String dimensionOne)
 	{
-		this.dimentionOne = dimentionOne;
+		this.dimensionOne = dimensionOne;
 	}
 
 	public String getDimensionTwo()

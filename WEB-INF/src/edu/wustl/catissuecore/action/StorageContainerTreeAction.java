@@ -80,7 +80,8 @@ public class StorageContainerTreeAction extends BaseAction
 			if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
 					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
-					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
+					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT)
+					||  pageOf.equals(Constants.PAGE_OF_NEW_ALIQUOT))
 			{
 				final TreeDataBizLogic treeBizLogic = new TreeDataBizLogic();
 				dataList = treeBizLogic.getSiteWithDummyContainer(sessionData.getUserId());

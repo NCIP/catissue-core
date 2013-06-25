@@ -300,6 +300,8 @@ public class Constants
 
 	/** The Constant STORAGE_TYPE_POSITION_VIRTUAL. */
 	public static final String STORAGE_TYPE_POSITION_VIRTUAL = "Virtual";
+	
+	public static final String DIGESTER_RULES_XML = "OrderItemRule.xml";
 
 	/** The Constant STORAGE_TYPE_POSITION_VIRTUAL_VALUE. */
 	public static final int STORAGE_TYPE_POSITION_VIRTUAL_VALUE = 1;
@@ -1587,6 +1589,10 @@ public class Constants
 	//Constants related to Aliquots functionality
 	/** The Constant PAGE_OF_ALIQUOT. */
 	public static final String PAGE_OF_ALIQUOT = "pageOfAliquot";
+	
+	//Constants related to Aliquots functionality
+		/** The Constant PAGE_OF_ALIQUOT. */
+		public static final String PAGE_OF_NEW_ALIQUOT = "pageOfNewAliquot";
 
 	/** The Constant PAGE_OF_CREATE_ALIQUOT. */
 	public static final String PAGE_OF_CREATE_ALIQUOT = "pageOfCreateAliquot";
@@ -5378,6 +5384,16 @@ public class Constants
 	/** The Constant CONTAINER_ERROR_MSG. */
 	public static final String CONTAINER_ERROR_MSG = "The specimen {0} cannot be placed in container {1} since the position {2},{3} is not free";
 
+	/** The Constant CONTAINER_ERROR_MSG. */
+	public static final String POSITION_NOT_AVAILABLE_ERROR_MSG = "Container {1} since the position {2},{3} is not free";
+	
+	public static final String INVALID_STORAGE_CONTAINER_NAME = "Please enter valid container name.";
+	
+	/** The Constant CONTAINER_ERROR_MSG. */
+	public static final String CONTAINER_ERROR_MSG_FOR_ALIQUOT = "Aliquot cannot be placed in container %s since the position %s,%s is not free";
+
+	
+
 	// COnstant for API
 	/** The Constant API_FILTERED_OBJECT_LIMIT. */
 	public static final String API_FILTERED_OBJECT_LIMIT = "apiFilteredObjectLimit";
@@ -5887,7 +5903,7 @@ public class Constants
 	 //Error message String For Mobile
 	 
 	 public static final String INVALID_ALIQUOT_QUANTITY = "Invalid aliquot quantity.";
-	 public static final String INSUFFICIENT_AVAILABLE_QUANTITY = "The system cannot distribute available quantity among the aliquots due to insufficient amount. ";
+	 public static final String INSUFFICIENT_AVAILABLE_QUANTITY = "Total quantity of all aliquots cannot be greater than available quantity of parent specimen.";
 	 public static final String INSUFFICIEN_STORAGE_LOCATION = "The system cannot store all the aliquots in the same container due to insufficient number of storage locations.";
 	 public static final String SUCCESS_MSG_ALIQUOT_CREATION = "Aliquots created successfully.";
 	 public static final String INVALID_LABEL_BARCODE = "Invalid specimen label or barcode.";
@@ -5967,6 +5983,10 @@ public class Constants
 
 	/** Constant for MOLECULAR_TYPE_LIST_JSON **/
 	public static final String MOLECULAR_TYPE_LIST_JSON = "molecularTypeListJSON";
+	
+	public static final String CONTAINER_INVALID_MESSAGE = " container can not hold container of type ";
+	
+	public static final String SITE_NOT_TRANSFRED_MESSAGE ="Site can not be transfred.";
 
 	/** Constant for KEYWORD_SEARCH_INDEXER_SCHEDULER_MINUTES **/
 	public static final String KEYWORD_SEARCH_INDEXER_SCHEDULER_MINUTES = "keyword.search.indexer.scheduler.minutes";
@@ -5981,9 +6001,11 @@ public class Constants
 	public static final Integer DEFAULT_SCHEDULER_RUN_TIME_HOURS = 22;
 	
 		
-	public static final String CONTAINER_INVALID_MESSAGE = " container can not hold container of type ";
+	public static final String ALIQUOTS_CREATION_SUCCESS_MSG = "Aliquots created succesfully.";
 	
-	public static final String SITE_NOT_TRANSFRED_MESSAGE ="Site can not be transfred.";
+	public static final String ALIQUOT_COUNT_ERROR = "Please enter aliquot count.";
+	
+	public static final String VALID_ALIQUOT_COUNT_ERROR= "Please enter valid aliquot count or quantity per aliquot.";
 
 	/** Constant for controlName **/
 	public static final String CONTROL_NAME = "controlName";

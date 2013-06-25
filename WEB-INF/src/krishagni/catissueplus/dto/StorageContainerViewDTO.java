@@ -1,7 +1,6 @@
 
 package krishagni.catissueplus.dto;
 
-
 public class StorageContainerViewDTO
 {
 

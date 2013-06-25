@@ -29,6 +29,7 @@ String oneDimLabellingScheme = (String)request.getAttribute("oneDimLabellingSche
 String twoDimLabellingScheme = (String)request.getAttribute("twoDimLabellingScheme");
 String storageContainerIdentifier = (String) request.getAttribute("storageContainerIdentifier");
 %>
+
 function setParentWindowValue(elementName,elementValue)
 {
 	for (var i=0;i < top.opener.document.forms[0].elements.length;i++)
@@ -54,11 +55,14 @@ function setCustomListBoxValue(elementId,elementValue)
 		parent.opener.onCustomListBoxChange(id);
 	}
 }
-
-function setTextBoxValueForContainer(elementId,elementValue)
+function setTextBoxValueForNewAliquot(elementId,elementValue,pos1,pos2){
+		parent.opener.setNewStoragePositionForAliquot(elementId,elementValue.replace('+',' '),pos1,pos2);
+}
+function setTextBoxValueForContainer(elementId,elementValue,pos1,pos2)
 {
 	var id = parent.opener.document.getElementById(elementId);	
 	id.value = elementValue;
+
 }
 
 function setTextBoxValueForContainerPage(elementId,elementValue)

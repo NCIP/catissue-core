@@ -422,7 +422,14 @@ function forwardToChildSpecimen() {
 	
 	switch(checkedRadio)
 	{
-		case '2' : 	action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
+		case '2' : 	
+		
+		 var aliquotCount = document.getElementById("noOfAliquots").value;
+		 var quantityPerAliquot = document.getElementById("quantityPerAliquot").value;
+			//action = 'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&buttonClicked=submit&parentSpecimenId=-1&CPQuery=CPQuery&nextForwardTo=""&specimenLabel='+specimenLabel; break;
+			action = 'GetAliquotDetails.do?pageOf=fromSpecimen&parentSpecimentLabel='+specimenLabel+"&aliquotCount="+aliquotCount+"&quantityPerAliquot="+quantityPerAliquot+"&searchBasedOn=label";
+			break;
+			
 		
 		case '3' :	action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&forwardFromPage=editSpecimenPage&parentLabel='+specimenLabel+'&parentSpecimenId='+specimenId+'&specClassName='+classNameCombo.getSelectedText()+'&specType='+typeCombo.getSelectedText();
 					

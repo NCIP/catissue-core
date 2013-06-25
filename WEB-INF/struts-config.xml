@@ -617,7 +617,16 @@ PUBLIC
 				path="/CreateAliquots.do?operation=add&amp;pageOf=pageOfAliquot&amp;menuSelected=15&amp;virtualLocated=true" />
 
 		</action>
-
+		<action path="/GetAliquotDetails"
+			type="krishagni.catissueplus.action.GetAliquotDetailsAction"  validate="false" scope="request">
+			<forward name="fromSpecimen" path=".catissuecore.CreateAliquots" />
+			<forward name="fromMenu" path=".catissuecore.CreateAliquotsFromMenu" />
+		</action>
+		<action path="/CreateAliquotsFromSpecimen"
+			type="krishagni.catissueplus.action.CreateAliquotsAction"  validate="false"  scope="request">
+		</action>
+		<action path="/GetAliquotInfoAjax" type="krishagni.catissueplus.action.GetAliquotInfoAjaxAction"  validate="false"  scope="request">
+		</action>
 		<!-- AddNew Actions Ends -->
 		<action path="/SubmitOrder" type="edu.wustl.catissuecore.action.SubmitOrderAction"
 			name="requestDetailsForm" validate="false" scope="request" input="/RequestDetails.do">
@@ -3861,6 +3870,8 @@ PUBLIC
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsDef" />
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfAliquot" path=".catissuecore.storageLocationViewDef" />
+			<forward name="pageOfNewAliquot" path=".catissuecore.storageLocationViewDef" />
+			
 			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfMultipleSpecimen" path=".catissuecore.storageLocationViewDef" />
 			<!--
@@ -4422,7 +4433,7 @@ PUBLIC
 		<!-- Aliquots Action -->
 		<action path="/Aliquots" type="edu.wustl.catissuecore.action.AliquotAction"
 			name="aliquotForm" validate="false" scope="request">
-			<forward name="pageOfAliquot" path=".catissuecore.aliquotDef" />
+			<forward name="pageOfAliquot" path=".catissuecore.newAliquotDef" />
 			<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef" />
 			<forward name="pageOfAliquotSummary" path=".catissuecore.aliquotSummaryDef" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
@@ -5220,6 +5231,7 @@ PUBLIC
 			name="aliquotForm" validate="false" scope="request">
 			<forward name="pageOfAliquot" path=".catissuecore.aliquotCPQueryDef" />
 			<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotCPQueryDef" />
+			<forward name="pageOfCreateAliquots" path=".catissuecore.aliquotCPPage" />
 			<forward name="pageOfAliquotSummary" path=".catissuecore.aliquotSummaryCpQueryDef" />
 			<forward name="failure" path=".catissuecore.aliquotCPQueryDef" />
 			<forward name="access_denied" path="/QueryManageBioSpecimen.do" />

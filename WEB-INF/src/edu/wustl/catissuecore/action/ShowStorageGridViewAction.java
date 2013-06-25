@@ -459,6 +459,18 @@ public class ShowStorageGridViewAction extends BaseAction
 									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 
 							}
+							else if(Constants.PAGE_OF_NEW_ALIQUOT.equals(pageOf))
+							{
+								if(enablePage)
+								{
+									value=hyperLinkTag;
+									onClickEvent="onclick=\\\\\"setTextBoxValueForNewAliquot(\\\'"+containerStyle+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ " 
+										+"closeFramedWindow()\\\\\"";
+								}
+								value = value+"<img  "+onClickEvent
+									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+							}
 							else
 							{
 								if(enablePage)

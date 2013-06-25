@@ -425,4 +425,32 @@
 	<query name="getSCGnCPIDByLorB">select specimen.id, specimen.specimenCollectionGroup.id, specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus= ? </query>
 	<query name="getSiteIdFromContainer">select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen specimen where (specimen.id=? or specimen.label=? ) and specimen.activityStatus=?</query>
 	<query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>
+	<query name="selectParentSpecimenDetailsForAliquot">
+	    		select specimen.activityStatus,scg.id, specimen.id, specimen.label,
+				specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
+				specimenCharacteristics.tissueSite, specimen.specimenCharacteristics.tissueSide,
+				specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+				left join specimen.specimenCharacteristics specimenCharacteristics where specimen.label=?
+	</query>
+	<query name="getCpIdFromSpecimenId">
+	    select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
+		specimen.id = ?
+	</query>
+	<query name="getCpIdFromSpecimenLabel">
+	 select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
+		specimen.label = ?
+	</query>
+	<query name="selectParentSpecimenDetailsForAliquotByBarcode">
+	    		select specimen.activityStatus,scg.id, specimen.id, specimen.label,
+				specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
+				specimenCharacteristics.tissueSite, specimen.specimenCharacteristics.tissueSide,
+				specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity  from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+				left join specimen.specimenCharacteristics specimenCharacteristics where specimen.barcode=?
+	    
+	</query>
+	<query name="getAvailabelSpecimenLabel">
+	    select specimen.label,specimen.barcode from  edu.wustl.catissuecore.domain.Specimen as specimen  where specimen.label = ? or specimen.barcode = ?
+	</query>
+	
+	
 </hibernate-mapping>

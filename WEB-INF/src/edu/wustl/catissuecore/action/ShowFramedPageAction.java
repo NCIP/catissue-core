@@ -89,7 +89,7 @@ public class ShowFramedPageAction extends XSSSupportedAction
 		session.removeAttribute("parentSpecimenBarcode");
 
 		if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
-				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
+				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER)||pageOf.equals("pageOfNewAliquot"))
 		{
 			final String storageType = request.getParameter("storageType");
 			final String isStorageContainer = request.getParameter("storageContainer");

@@ -235,7 +235,7 @@ function vieMapTabSelected(){
 <!-- These tabs are visible in case of specimen page--->
 		 <logic:equal name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">
 			<td valign="bottom"><html:link page="/CreateSpecimen.do?operation=add&amp;pageOf=&virtualLocated=true">	<img src="images/uIEnhancementImages/tab_derive2.gif" alt="Derive" width="56" height="22" border="0"/>	</html:link></td>
-			<td valign="bottom"><html:link page="/Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" border="0" >		</html:link></td>
+			<!--td valign="bottom"><html:link page="/Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" border="0" >		</html:link></td-->
 			<td valign="bottom"><html:link page="/QuickEvents.do?operation=add"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" border="0" />		</html:link></td>
 			<td valign="bottom"><html:link page="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" border="0" />	</html:link></td>
 		</logic:equal>

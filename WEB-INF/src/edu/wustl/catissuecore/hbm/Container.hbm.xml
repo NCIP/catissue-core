@@ -415,4 +415,5 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 <query name="getAllocatedContainerPosition">
     SELECT positionDimensionOne,positionDimensionTwo from edu.wustl.catissuecore.domain.ContainerPosition where parentContainer.name=?
 </query>
+
 </hibernate-mapping>

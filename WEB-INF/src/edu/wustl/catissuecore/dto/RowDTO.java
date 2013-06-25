@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RowDTO {
+public class RowDTO  implements Comparable<RowDTO> {
 	
 	private List<String> cells;
 	private String id;
@@ -34,4 +34,7 @@ public class RowDTO {
 		this.id = id;
 	}
 
+	public int compareTo(RowDTO other) {
+        return id.compareTo(other.getId());
+    }
 }

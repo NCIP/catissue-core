@@ -306,7 +306,7 @@ Ext.onReady(function(){
                             href:'CreateSpecimen.do?operation=add&pageOf=pageOfDeriveSpecimen&virtualLocated=true'
                         }, {
                             text: 'Aliquot',
-                            href:'Aliquots.do?pageOf=pageOfAliquot'
+                            href:'GetAliquotDetails.do?pageOf=fromMenu&parentSpecimentLabel=&aliquotCount=&quantityPerAliquot=&searchBasedOn=label'
                         }, {
                             text: 'Events',
                             href:'QuickEvents.do?operation=add'

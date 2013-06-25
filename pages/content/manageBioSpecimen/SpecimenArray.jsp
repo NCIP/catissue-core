@@ -105,7 +105,7 @@ function checkStotagePosition()
 		<td valign="bottom"><html:link page="/SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add Specimen Array" width="57" height="22" /></html:link></td>
 		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit Specimen Array" width="59" height="22" border="0" /></td>
 </logic:equal>
-		<td valign="bottom"><html:link page="/SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot Specimen Array" width="66" height="22" /></html:link></td>
+		<!--td valign="bottom"><html:link page="/SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot Specimen Array" width="66" height="22" /></html:link></td-->
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
