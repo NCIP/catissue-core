@@ -967,6 +967,14 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
 	</definition>
 
+	
+	 <definition name=".catissuecore.CreateAliquotsFromMenu" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CreateAliquots.jsp" />
+	</definition>
+		<definition name=".catissuecore.CreateAliquots" path="/pages/content/manageBioSpecimen/CreateAliquots.jsp">
+		</definition>
+	
+	
 
 	<!-- ALIQUOT SUMMARY -->
 	<definition name=".catissuecore.aliquotSummaryDef" extends=".catissuecore.homePageDef">
@@ -1039,6 +1047,10 @@
 	<definition name=".catissuecore.aliquotCPQueryDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
 	</definition>
+	<definition name=".catissuecore.aliquotCPPage" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CreateAliquots.jsp" />
+	</definition>
+	
 
 	<definition name=".catissuecore.aliquotSummaryCpQueryDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/AliquotSummary.jsp" />
