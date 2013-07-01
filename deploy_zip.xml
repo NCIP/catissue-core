@@ -2322,18 +2322,21 @@
 							<antcall target="upgrade_db_from_v1.0_to_v2.0" />
 							<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 							<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
+							<antcall target="upgrade_db_plusv3.1" />
 						</then>
 					<elseif>
 									<equals arg1="${plus2.0.version}" arg2="${from.version}"/>
 									<then>
 										<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 										<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
+										<antcall target="upgrade_db_plusv3.1" />
 									</then>
 						</elseif>
 						<elseif>
 									<equals arg1="${plus2.1.1.version}" arg2="${from.version}"/>
 									<then>
 										<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
+										<antcall target="upgrade_db_plusv3.1" />
 									</then>
 							</elseif>
 							<elseif>
@@ -2346,6 +2349,7 @@
 												<equals arg1="${suite-1.2.version}" arg2="${from.version}"/>
 												<then>
 													<antcall target="upgrade_db_from_plusv1.2_to_plusv3.0" />
+													<antcall target="upgrade_db_plusv3.1" />
 												</then>
 									</elseif>
 									<else>
@@ -3221,13 +3225,13 @@
 		<if>
 				<equals arg1="" arg2="${email.sendEmailFrom.emailPassword}" />
 				<then>
-					<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus v2.1 Successfully Deployed" encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
+					<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus v3.1 Successfully Deployed" encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
 								<from address="${email.sendEmailFrom.emailAddress}" />
 								<to address="${email.administrative.emailAddress}" />
 									</mail>
 				</then>
 			<else>
-				<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus v2.1 Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" password="${email.sendEmailFrom.emailPassword}"  encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
+				<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus v3.1 Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" password="${email.sendEmailFrom.emailPassword}"  encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
 												<from address="${email.sendEmailFrom.emailAddress}" />
 												<to address="${email.administrative.emailAddress}" />
 													</mail>
