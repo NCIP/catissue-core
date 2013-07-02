@@ -48,39 +48,21 @@
 	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/ext/dhtmlxtree_dragin.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
+	<style>
+		body
+		{
+			padding: 0 1 0 0;
+			margin: 1 1 3 1;
+		}
+	</style>
 </head>
 
 <body>
 <script language="javascript">
 
-if ( document.getElementById && !(document.all) ) 
-{
-	var slope=10;
-}
-else
-{
-	var slope=-10;
-}
-
-window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);}
-window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 
 </script>
-<table border="0" cellpadding="0" cellspacing="0" width = "100%" height = "100%">
-			<tr>	
-				<td class="formLabelAllBorder" colspan="2" width="95%">
-				</td>
-			</tr>	
-			<tr>
-				<td align="left" colspan="2" width="100%">
-					<div id="treeboxbox_tree" style="width: 95%; height: 100%; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" width="170">
-				</td>
-			</tr>		
-	</table>
+	<div id="treeboxbox_tree" style="width:100%;height:100%;background-color: #ffffff;overflow:auto;border:1px solid #B6CBDD;"/>
 
 	<script language="javascript">
 	 window.parent.tabSelected("viewMapTab");
@@ -185,7 +167,9 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 				window.parent.setActivityStatus(activityStatus);
 				if( parentId != "0")
 				{	
-					window.parent.frames['StorageContainerView'].location="SearchObject.do?pageOf=pageOfTreeSC&operation=search&id="+nodeId;
+					window.parent.idForSCTab = nodeId;
+					
+					window.parent.frames['StorageContainerView'].location="StorageContainerTabLoader.do";
 					//window.parent.frames['StorageContainerView'].location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.STORAGE_CONTAINER_TYPE%>=<%=storageContainerType%>&<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Status.ACTIVITY_STATUS.toString()%>="+activityStatus;
 				}
 				else

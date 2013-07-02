@@ -52,6 +52,13 @@ function inputBlur(i){
 						size="50"  onfocus="inputFocus(this)" onblur="inputBlur(this)" />
 						<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value"></a>
 				</logic:notEmpty>
+					<a href="OpenStorageContainer.do?operation=showMap" class="white"> 
+						<img src="images/uIEnhancementImages/container_icon.png"  title="Containers,Press Alt + Shift + C">
+						<span title="Containers, Press Alt + Shift + C" style="vertical-align:top"> 
+							<bean:message key="app.containers" />
+						</span> 
+					</a>
+					&nbsp;
 					<a href="RequestListView.do" class="white"> 
 						<img src="images/uIEnhancementImages/order_icon.png"  title="Orders,Press Alt + O">
 						<span title="Orders, Press Alt + O" style="vertical-align:top"> 

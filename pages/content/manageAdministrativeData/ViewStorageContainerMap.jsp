@@ -18,6 +18,7 @@
 	<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script> 
 	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
 	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
+	
 </head>
 <%
 	String siteName = (String) request.getAttribute("siteName");   
@@ -249,7 +250,7 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 
 
 <!-- target of anchor to skip menus -->
-<table summary="" id="containerGridTable" cellpadding="0" cellspacing="0" border="0"  width="100%">
+<table summary="" id="containerGridTable" cellpadding="0" cellspacing="0" border="0"  width="99%">
 <%
 	//System.out.println("CP No. : " +collectionProtocolList.size());
 	//System.out.println("SC No. : " +specimenClassList.size());
@@ -257,7 +258,7 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 //int rowSpan = (int)((collectionProtocolList.size()%3)== 0 ? collectionProtocolList.size()/3 : (collectionProtocolList.size()/3)+1 );
 %>
 
-		<tr>
+		<!--<tr>
 		 <td width="5" valign="bottom" >&nbsp;</td>
            <td >
 		     <table  border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -268,16 +269,17 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
                    </tr>
               </table>
 			 </td>
-          </tr>
+          </tr>-->
 		  
 		
 	
 	<tr>
-	 <td width="5" valign="bottom">&nbsp;</td>
-		<td class="cp_tabtable" width="100%">
-		 <table  border="0" cellpadding="3" cellspacing="0" width="100%"> 
-					 <tr>		
-                <td align="left" colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+	 <!--<td width="5" valign="bottom">&nbsp;</td>-->
+		<td width="100%" colspan="2">
+		 <table  border="0" cellpadding="0" cellspacing="0" width="100%"> 
+			<tr>		
+            <td align="left" colspan="2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
  <%
 		int colspanForCPLabel;
 	if(collectionProtocolList.size()>specimenClassList.size())
@@ -285,232 +287,127 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
     else 
 	    colspanForCPLabel = specimenClassList.size();
 %>         
-	<tr>
-          <td  align="left" class="tr_bg_blue1">
-		  <!--input type="button" value="Export To PDF" class = "black_ar" onclick="exportContainer('pdf')"/-->
-		  <input type="button" value="Export To CSV" class = "black_ar" onclick="exportContainer('csv')"/>
-		  </td>
-          </tr>        
-		<tr>
-          <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Storage Container Restrictions</span></td>
-          </tr>
-                  <tr>
-					<td>
-					  <table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
-						   	<td width="150">
-								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
-									<tr>
-							<td  width="150" class="tabletd1">Collection Protocol</td>
-							</tr>
-								</table>
-							</td>
-							 <td>
-								<table  border="0" cellspacing="2"  cellpadding="3" > 
-									<tr>
+			<!--<tr>
+				<td  align="left">
+				<input type="button" value="Export To PDF" class = "black_ar" onclick="exportContainer('pdf')"/>
+				<input type="button" value="Export To CSV" class = "black_ar" onclick="exportContainer('csv')"/>
+				</td>
+			</tr>-->
+			<tr>
+				<td  align="left" class="tr_bg_blue1" style="padding:5 5 5 5;"><span class="blue_ar_b">Storage Container Restrictions</span><span style="float:right;"><input type="button" value="Export To CSV" class = "black_ar primaryButton" onclick="exportContainer('csv')"/></span></td>
+			</tr>
+            <tr class="tr_alternate_color_white">
+				<td style="padding:5px 0 0 0;">
+					<table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
+						<tr>
+						<td width="150" style="vertical-align:top;" class="align_right_style">
+							<div><span class="black_ar">Collection Protocol</span></div>
+						</td>
+						<td>
+							<div class="scrollContentDiv black_ar">
 <%	
 			for(int colcnt=0;colcnt<collectionProtocolList.size();colcnt++)
 			{
 				String data =(String) collectionProtocolList.get(colcnt );
+				if(colcnt!=collectionProtocolList.size()-1)
+				{
+					data = data + ",";
+				}
 				
 %>
-                    <td  class="tabletd1"><%=data %></td>
+                    <%=data %>
 <%
 			}
 %>			
-							</tr>
-								</table>
+							</div>
+						</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+            <tr class="tr_alternate_color_lightGrey">
+				<td style="padding:5px 0 0 0;">
+					<table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
+						<tr>
+							<td width="150" style="vertical-align:top;" class="align_right_style">
+								<div><span class="black_ar">Specimen Class</span></div>
 							</td>
-							</tr>
-						</table>
-					</td>
-                  </tr>
-                  <tr>
-				    <td>
-						 <table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
-						   <tr>
-							<td width="150">
-								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
-									<tr>
-											<td width="150" class="tabletd1">Specimen Class</td>
-									</tr>
-								</table>
-							</td>
-							 <td>
-								<table  border="0" cellspacing="2"  cellpadding="3"> 
-									<tr>
+							<td style="vertical-align:top;">
+								<div class="scrollContentDiv black_ar">
 <%	
 			for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
 			{
 				String data =(String) specimenClassList.get(colcnt );
+				if(colcnt!=specimenClassList.size()-1)
+				{
+					data = data + ",";
+				}
 				
 %>
-								<td  class="tabletd1" ><%=data %></td>
+								<%=data %>
 <%
 			}
 %>
-								</tr>
-								</table>
+								</div>
 							</td>
-							</tr>
-						</table>
-						</td>
-                  </tr>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="tr_alternate_color_white">
+				<td style="padding:5px 0 0 0">
+					<table  border="0" cellspacing="0" cellpadding="0" width="100%">
+						<tr>
+							<td width="150" style="vertical-align:top;" class="align_right_style">
+								<div><span class="black_ar">Specimen Type</span></div>
+							</td>
+							<td>
+									<div class="scrollContentDiv black_ar">
+										<%	
+										for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
+										{
+											String data =(String) specimenTypeList.get(colcnt );
+											if(colcnt!=specimenTypeList.size()-1)
+											{
+												data = data + ",";
+											}
 
-				  <tr>
-					<td>
-					  <table  border="0" cellspacing="0" cellpadding="0">
-						 <tr>
-							<td>
-								<table  border="0" cellspacing="2"  cellpadding="3"> 
-									<tr>
-											<td width="140" class="tabletd1">Specimen Type</td>
-												<%	
-													for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
-													{
-														String data =(String) specimenTypeList.get(colcnt );
-														
-												%>
-														<td  class="tabletd1" ><%=data %></td>
-												<%
-														if(colcnt >=10)
-														{
-															break;
-														}
-													}
-												%>
-								    </tr>
-								</table>
-							 </td>
-						</tr>
-				
-						<tr>
-							<td>
-								<table  border="0" cellspacing="2"  cellpadding="3"> 
-									<tr>
-										<%	
-													for(int colcnt=11;colcnt<specimenTypeList.size();colcnt++)
-													{
-														String data =(String) specimenTypeList.get(colcnt );
-														
 										%>
-														<td  class="tabletd1" ><%=data %></td>
+										<%=data %>
 										<%
-														if(colcnt >=20)
-														{
-															break;
-														}			
-													}
+										}
 										%>
-								  </tr>
-								</table>
-							</td>
-					   </tr>
-					   <tr>
-						   <td>
-								<table  border="0" cellspacing="2"  cellpadding="3"> 
-									<tr>
-											<%	
-														for(int colcnt=21;colcnt<specimenTypeList.size();colcnt++)
-														{
-															String data =(String) specimenTypeList.get(colcnt );
-											%>
-															<td  class="tabletd1" ><%=data %></td>
-											<%
-															if(colcnt >=30)
-															{
-																break;
-															}			
-														}
-											%>
-					
-								</tr>
-								</table>
+									</div>
 							</td>
 						</tr>
-						<tr>
-						   <td>
-								<table  border="0" cellspacing="2"  cellpadding="3"> 
-									<tr>
-										<%	
-													for(int colcnt=31;colcnt<specimenTypeList.size();colcnt++)
-													{
-														String data =(String) specimenTypeList.get(colcnt );
-										%>
-														<td  class="tabletd1" ><%=data %></td>
-										<%
-														if(colcnt >=40)
-														{
-															break;
-														}			
-													}
-										%>
-					
-								</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-						   <td>
-								<table  border="0" cellspacing="2"  cellpadding="3"> 
-									<tr>
-										<%	
-													for(int colcnt=41;colcnt<specimenTypeList.size();colcnt++)
-													{
-														String data =(String) specimenTypeList.get(colcnt );
-														
-										%>
-														<td  class="tabletd1" ><%=data %></td>
-										<%
-														if(colcnt >=50)
-														{
-															break;
-														}			
-													}
-										%>
-					
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</tr>
-				
-					
-				</tr>
+					</table>
+				</td>
+			</tr>
 			</table>
-						</td>
-                </table></td>
-              </tr>
-			   <tr>
-                <td class="bottomtd" colspan="2"></td>
-              </tr>
-			  <tr>
-			  
-				  
-				  
-				  
-		
-		<td  width="5"class="black_ar_t" >&nbsp;</td>
-		<td class="black_ar" ><b>&nbsp;<%=verTempTwo%>&rarr;</b></td>
-		 
-	</tr>
-				<tr>
-					<td width="5" class="black_ar_t" align="center"><b><%=verTempOne%>&darr;<b></td>
-					<td width="100%" height="100%" >
+			</td>
+            </tr>
+			</table>
+			
+			</td>
+            </tr>
+			<tr>
+				<td class="bottomtd" colspan="2"></td>
+			</tr>
+			<tr>
+				<td  width="5" class="black_ar_t" >&nbsp;</td>
+				<td class="black_ar" style="padding:5 0 5 0;"><b>&nbsp;<%=verTempTwo%>&rarr;</b></td>
+		 	</tr>
+			<tr>
+				<td width="5" class="black_ar_t" align="center" style="padding:0 5 0 5;"><b><%=verTempOne%>&darr;<b></td>
+				<td width="100%" height="100%" >
 					<div class="holder black_ar" id="successMessageStrip" style="margin-top:50px;padding: 1em 2.5em 1em 1em;display:none; border-radius: 7px;border-color:#9EB6D4;background:#F9EDBE;padding: 6px; position: absolute; margin-left: 40%;z-index:1; ">
 							<span>Transfered Successfully</span>
-						</div>
-					<div style="width:100%;height:100%;">
-						<div id="containerGrid"></div>
 					</div>
-			</td>
-				</tr>
-		<tr>
-			
-		</tr>		
+					
+					<div id="containerGrid" style="width:99%; height:100%;"></div>
+				</td>
+			</tr>
 		</table>
-		</td>
-	</tr>
-</table>
 <iframe id = "containerExportFrame" width = "0%" height = "0%" frameborder="0">
 	</iframe>
 <script>
@@ -575,11 +472,15 @@ var widthString = "";
 var alignString = "";
 var colType = "";
 var colSorting = "na";
+
+var styleArray = new Array();
+
 for(var cnt= 0 ;cnt< headerStringArray.length;cnt++){
 	widthString += columnWidth;
 	alignString += "center";
 	colType += "ro";
 	colSorting += "no";
+	styleArray.push("text-align:center;");
 	if(cnt<headerStringArray.length-1){
 		widthString += ",";
 		alignString += ",";
@@ -587,14 +488,15 @@ for(var cnt= 0 ;cnt< headerStringArray.length;cnt++){
 		colSorting += ",";
 	}
 }
-
+ //["text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;"];
+ 
 //grid.setImagePath("dhtml_comp/imgs/"); 
-grid.setHeader(headerString); 
-if(headerStringArray.length>10){
+grid.setHeader(headerString,null,styleArray); 
+/*if(headerStringArray.length>10){
 grid.setInitWidths(widthString);
 }else{
 grid.setInitWidthsP(widthString);
-} 
+}*/
 
 grid.setColAlign(alignString);
 //grid.setAwaitedRowHeight(25);
@@ -605,6 +507,11 @@ grid.enableAlterCss("even","uneven");
 grid.enableRowsHover(true,'grid_hover');
 grid.enableAutoHeight(true);
 grid.attachEvent("onXLE", function(grid_obj,count){});
+
+grid.enableAutoWidth(true,820,100);
+grid.enableColumnAutoSize(true);
+
+//grid.enableMultiline(true);
 //grid.setOnRowDblClickedHandler(selectLabel);
 var myObject = eval('( <%=(StringBuffer) request.getAttribute("gridJson")%> )');
 
@@ -672,7 +579,15 @@ grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 });
 
 grid.parse(myObject,"json");
+
+for(var cnt= 0 ;cnt< headerStringArray.length;cnt++)
+{
+	grid.adjustColumnSize(cnt);
 }
+
+}
+
+
 window.onload = function(){
 loadGrid();
       //alert("LOADED!");
@@ -686,7 +601,10 @@ function ReplaceTags(xStr)
   return xStr;
 }
 
-
+function forwardToPage(url)
+{
+	window.parent.parent.frames['StorageContainerView'].location=url;
+}
 </script>
 <%!
 // method to return the rowspan value for the cell.

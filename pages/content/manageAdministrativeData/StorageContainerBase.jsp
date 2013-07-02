@@ -7,11 +7,14 @@
 <script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script>
+
+var idForSCTab;//global variable set for loading dhtmlxtabbar used in ContainerTab.jsp set in StorageContainerTree
+
 var selectedTabName="infoTabSelected";
 var selectedNodeId=null;
 var activityStatus=null;
 var isConatinerChanged='no';
-function selectTab(operation)
+function selectTab(operation,pageOf)
 {
 	var treeFrame = document.getElementById('SCTreeView');
 	var addEditTabRow = document.getElementById('addEditTabRow');
@@ -47,7 +50,18 @@ function selectTab(operation)
     var addCell= "<td width=90% valign=bottom class=td_tab_bg>&nbsp;</td>";
 	var endRow = "</tr>";
 	var endTable = "</table>";
-	tableDiv.innerHTML=addTable+addRow+cellSpace+cellAddImage+cellEditImage+cellViewImage+addCell+endRow+endTable;
+	
+	if(pageOf == "pageOfTreeSCLink")
+    {
+		var cellViewImage="<td valign=bottom><a href=# onclick=switchToViewMapTab()><img src=images/uIEnhancementImages/view_map.gif alt=View Map width=76 height=22 border=0 /></a></td>";
+		alert("hello");
+		//tableDiv.innerHTML=addTable+addRow+cellSpace+cellViewImage+addCell+endRow+endTable;
+		tableDiv.innerHTML="";
+	}
+	else
+	{
+		tableDiv.innerHTML=addTable+addRow+cellSpace+cellAddImage+cellEditImage+cellViewImage+addCell+endRow+endTable;
+	}
 }
 function switchToAddTab()
 {
@@ -124,7 +138,12 @@ else
 <div id="tableDiv">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr id="addEditTabRow">
-        <td  width="4%"class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
+		<logic:notEqual parameter="operation"	value='showMap'>
+		<td  width="4%"class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
+		</logic:notEqual>
+		<logic:equal parameter="operation"	value='showMap'>
+			<td  width="4%"><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
+		</logic:equal>
 		<logic:equal parameter="operation"	value='add'>
         <td valign="bottom" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /><a href="#"></a></td>
         <td valign="bottom"><a href="#" onclick="switchToEditTab()"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0"/></a></td>
@@ -140,28 +159,31 @@ else
         <td valign="bottom"><a href="#" onclick="switchToEditTab()"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></a></td>
 		<td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/view_map.gif" alt="View Map" width="76" height="22" border="0" /></a></td>
 		</logic:equal>
+		<logic:notEqual parameter="operation"	value='showMap'>
 		<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+		</logic:notEqual>
+		<logic:equal parameter="operation"	value='showMap'>
+		<td width="90%" valign="bottom">&nbsp;</td>
+		</logic:equal>
+		
       </tr>
 </table>
 </div>
 
-	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
         <tr>
-          <td colspan="2" align="left" width="100%" class="bottomtd"></td>
-        </tr>
-        <tr>
-							<logic:equal parameter="operation"	value='showEditAPageAndMap'>
-							<td width="25%"  valign="top">
+							<c:if test="${operation=='showEditAPageAndMap' || operation=='showMap'}">
+							<td width="25%">
 								<iframe id="SCTreeView" src="ShowFramedPage.do?pageOf=pageOfStorageContainer&storageType=-1&operation=${requestScope.operation}" scrolling="no" frameborder="0" width="100%" name="SCTreeView" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>
 							 <td width="75%" valign="top">
-							 </logic:equal>
+							 </c:if>
 
-							 <logic:notEqual parameter="operation"	value='showEditAPageAndMap'>
+							 <c:if test="${operation!='showEditAPageAndMap' && operation!='showMap'}">
 							 <td width="100%" valign="top">
-							 </logic:notEqual>
+							 </c:if>
 								<logic:equal parameter="operation"	value='add'>
 							 	<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
@@ -177,7 +199,7 @@ else
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
-								<logic:equal parameter="operation"	value='showEditAPageAndMap'>
+								<c:if test="${operation=='showEditAPageAndMap' || operation=='showMap'}">
 								<SCRIPT LANGUAGE="JavaScript">
 								<!--
 								pcnt=pcnt+5;
@@ -186,7 +208,7 @@ else
 								 <iframe name="StorageContainerView"	id="StorageContainerView" src="storageContainerEditMessageScreen.do" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
-								</logic:equal>
+								</c:if>
 							 </td>
 						</tr>
           </table>

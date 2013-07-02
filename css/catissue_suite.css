@@ -1139,3 +1139,19 @@ input.actionButton{ /* optional style for form and action buttons */
 	vertical-align:top;
 	margin:0px;
 }
+
+.primaryButton {
+padding: 3px 6px 3px 6px;
+background-color: #4D90FE;
+background-image: -moz-linear-gradient(center top, #4D90FE, #4787ED);
+border: 1px solid #3079ED;
+color: #FFFFFF !important;
+margin: 0;
+font: bold 11px sans-serif;
+}
+
+.scrollContentDiv{
+	height:35px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
