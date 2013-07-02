@@ -384,13 +384,31 @@ public class ShowStorageGridViewAction extends BaseAction
 								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN))
 								{
 
-									value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+"	</a>";
+									value = "<a  class=\\\\\"view\\\\\" href=\\\\\"javascript:forwardToPage(\\\'QuerySpecimenSearch.do?"
+											+ Constants.PAGE_OF
+											+ "=pageOfNewSpecimenCPQuery&"
+											+ Constants.SYSTEM_IDENTIFIER
+											+ "="
+											+ childContainerIds[i][j]
+											+ "\\\')\\\\\" onmouseover=\\\\\"Tip(\\\'"
+											+ childContainerType[i][j]
+											+ "\\\')\\\\\" >"
+											+ containerName + "	</a>";
 									//value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+"	</a>";
 									//value = containerName;
 								}
 								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN_ARRAY))
 								{
-									value = "<a class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenArraySearch.do?"+Constants.PAGE_OF+"=pageOfSpecimenArray&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+" \\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+" </a>";
+									value = "<a class=\\\\\"view\\\\\" href=\\\\\"javascript:forwardToPage(\\\'QuerySpecimenArraySearch.do?"
+											+ Constants.PAGE_OF
+											+ "=pageOfSpecimenArray&"
+											+ Constants.SYSTEM_IDENTIFIER
+											+ "="
+											+ childContainerIds[i][j]
+											+ "\\\')\\\\\" onmouseover=\\\\\"Tip(\\\'"
+											+ childContainerType[i][j]
+											+ "\\\')\\\\\" >"
+											+ containerName + " </a>";
 									//value = "<a class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenArraySearch.do?"+Constants.PAGE_OF+"=pageOfSpecimenArray&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+" \\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen_array.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+" </a>";
 									//value = containerName;
 								}
@@ -420,7 +438,7 @@ public class ShowStorageGridViewAction extends BaseAction
 									+"closeFramedWindow()\\\\\"";
 								}
 								value = value+"<img  " +onClickEvent
-										+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+										+ "src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" align=\\\\\"middle\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
 							else if (Constants.PAGE_OF_SPECIMEN.equals(pageOf))
 							{
@@ -443,7 +461,7 @@ public class ShowStorageGridViewAction extends BaseAction
 									value=value +"setTextBoxValue(\\\'"+storageContainerIdFromMap+"\\\',\\\'"+id+"\\\');\\ ";
 								}*/
 								value=value+"closeFramedWindow()\\\\\" "
-									  +"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+										+ "src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" align=\\\\\"middle\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
 							else if(Constants.PAGE_OF_ALIQUOT.equals(pageOf))
 							{
@@ -453,6 +471,42 @@ public class ShowStorageGridViewAction extends BaseAction
 									onClickEvent="onclick=\\\\\"setTextBoxValueForContainer(\\\'"+containerStyle+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\');\\ " 
 										+"setTextBoxValue(\\\'"+xDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
 										+"setTextBoxValue(\\\'"+yDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
+										+"closeFramedWindow()\\\\\"";
+								}
+								value = value+"<img  "+onClickEvent
+										+ "src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" align=\\\\\"middle\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+							}
+							else if(Constants.PAGE_OF_NEW_ALIQUOT.equals(pageOf))
+							{
+								if(enablePage)
+								{
+									value=hyperLinkTag;
+									onClickEvent="onclick=\\\\\"setTextBoxValueForNewAliquot(\\\'"+containerStyle+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ " 
+										+"closeFramedWindow()\\\\\"";
+								}
+								value = value+"<img  "+onClickEvent
+									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+							}
+							else if(Constants.PAGE_OF_NEW_ALIQUOT.equals(pageOf))
+							{
+								if(enablePage)
+								{
+									value=hyperLinkTag;
+									onClickEvent="onclick=\\\\\"setTextBoxValueForNewAliquot(\\\'"+containerStyle+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ " 
+										+"closeFramedWindow()\\\\\"";
+								}
+								value = value+"<img  "+onClickEvent
+									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+							}
+							else if(Constants.PAGE_OF_NEW_ALIQUOT.equals(pageOf))
+							{
+								if(enablePage)
+								{
+									value=hyperLinkTag;
+									onClickEvent="onclick=\\\\\"setTextBoxValueForNewAliquot(\\\'"+containerStyle+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ " 
 										+"closeFramedWindow()\\\\\"";
 								}
 								value = value+"<img  "+onClickEvent
@@ -482,7 +536,7 @@ public class ShowStorageGridViewAction extends BaseAction
 										+"closeFramedWindow()\\\\\" ";
 								}
 								value = "<img "+onClickEvent
-									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+										+ "src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" align=\\\\\"middle\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
 
 

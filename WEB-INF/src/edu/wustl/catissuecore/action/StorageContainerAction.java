@@ -107,6 +107,7 @@ public class StorageContainerAction extends SecureAction
 					.getAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 			final String exceedingMaxLimit = "false";
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
+			request.setAttribute(Constants.PAGE_OF, pageOf);
 			final String containerId = request.getParameter("containerIdentifier");
 			final String isPageFromStorageType = (String) session
 					.getAttribute("isPageFromStorageType");
