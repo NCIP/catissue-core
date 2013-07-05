@@ -501,6 +501,7 @@ function disableTabs()
  }
 }
 
+
 function doInitCalendar(objName, defaultDate,format) {
 	var date = document.getElementById(objName).value;
 	cal = new dhtmlxCalendarObject(objName, true, {
@@ -515,6 +516,9 @@ function doInitCalendar(objName, defaultDate,format) {
 	}
 	else if (defaultDate)
 	{
-	cal.setDate (new Date());
+		cal.setDate (new Date());
 	}
+	cal.show();
 }
+
+

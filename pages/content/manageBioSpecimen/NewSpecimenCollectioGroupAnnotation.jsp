@@ -87,84 +87,12 @@ function updateHelpURL()
 			}
 
 %>
-<script>
-		//View SPR Vijay pande
-		function viewSPR()
-		{
-			<% Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID); %>
-			var reportId='<%=reportId%>';
-			if(reportId==null || reportId==-1)
-			{
-				alert("There is no associate report in the system!");
-			}
-			else if(reportId==null || reportId==-2)
-			{
-				alert("Associated report is under quarantined request! Please contact administrator for further details.");
-			}
-			else
-			{
-		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&reportId="+reportId;
-				document.forms[0].action=action;
-				document.forms[0].submit();
-			}
-		}
-
-
-function editSCG()
-		{
-			var tempId='<%=request.getParameter("id")%>';
-			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId;
-			if('<%=pageOf%>'=='<%=Constants.PAGE_OF_SCG_CP_QUERY%>')
-			{
-				action="QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=search&id="+tempId;
-			}
-			document.forms[0].action=action;
-			document.forms[0].submit();
-		}
-
-		function setTarget()
-		{
-			var fwdPage="<%=pageOf%>";
-			if(!fwdPage=="pageOfSpecimenCollectionGroupCPQuery")
-				document.forms[0].target = '_top';
-		}
-
-		function goToConsentPage()
-		{
-			/*var tempId=document.forms[0].id.value;
-			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId+"&tab=consent";
-			document.forms[0].action=action;
-			document.forms[0].submit();*/
-			var consentLevelId = '<%=request.getParameter("id")%>';
-			var action="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId=${entityId}&staticEntityName=${staticEntityName}";
-			document.forms[0].action=action;
-			document.forms[0].submit();
-		//switchToNewTab("newConsentTab");
-		}
-</script>
 
 <html:form action="<%=formName%>">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
  <tr>
-    <td class="tablepadding">
+    <td>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td class="td_tab_bg" >
-					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1" border="0"></td>
-				<td valign="bottom">
-					<html:link styleId="specimenCollectionGroupTab" href="#" onclick="setTarget(); editSCG()">
-					<img src="images/uIEnhancementImages/tab_edit_collection2.gif" alt="Edit SpecimenCollection Group" width="216" height="22" border="0"></html:link></td>
-				<td valign="bottom"><html:link href="#" onclick="viewSPR()">
-					<img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
-				<td valign="bottom">
-					<html:link href="#">
-					<img src="images/uIEnhancementImages/tab_view_annotation1.gif" alt="View Annotation" width="116" height="22" border="0" ></html:link></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3" >
-					<html:link styleId="consentViewTab" href="#" onclick="goToConsentPage()">
-					<img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></html:link></td>
-				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
-					</td>
-			</tr>
 			<tr>
 				<td colspan="6">
 					<%@   include file="DisplayAnnotationDataEntryPage.jsp" %>

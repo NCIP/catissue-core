@@ -17,17 +17,6 @@
 	}
 %>
 <script language="JavaScript">
-function newConsentTab(levelId)
-{
-
-	var cprId = document.getElementsByName("cprId")[0].value;
-	var cpId = document.getElementsByName("cpId")[0].value;
-	var action="FetchConsents.do?consentLevelId="+cprId+"&consentLevel=participant&reportId=<%=reportId%>&pageof=<%=pageOf%>&participantEntityId=${particiapntRecordEntryEntityId}&participantId=${participantId}&cpId="+cpId;
-	document.forms[0].action=action;
-	document.forms[0].submit();
-	//switchToNewTab("newConsentTab");
-}
-
 		function setSubmittedForParticipanteMPIGenerate(submittedFor,forwardTo){
 			var noOfreg = '<%=noOrRowsCollectionProtocolRegistration%>';
             var vbirthDate = document.getElementById('birthDate');
@@ -222,15 +211,10 @@ function newConsentTab(levelId)
 		<!--for Edit-->
 			<logic:equal name="operation" value="edit">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td class="td_tab_bg"><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
-					<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_participant2.gif" alt="Edit Participant" width="116" height="22" border="0"></td>
-					<td valign="bottom"><a href="#" onClick="viewSPR('<%=reportId%>','<%=pageOf%>','<%=form.getCpId()%>','<%=form.getCprId()%>')" id="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
-					<td valign="bottom" ><a href="#" onclick="showAnnotations('<%=form.getCpId()%>','<%=form.getCprId()%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
-					<td valign="bottom"><a id="consentViewTab" href="#" onClick="newConsentTab('${participantId}')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a></td>
-					<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-					</tr></table>
+				<div id="participant_tabbar" style="width:955px; height:650px;"/>
+			</table>
 			</logic:equal>
+		<div id='showParticipantDiv'>	
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
 				class="whitetable_bg" >
 			<tr>
@@ -919,6 +903,22 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 				<!-- action buttons end --></td>
 			</tr>
 		</table>
+		</div>
 		</td>
 	</tr>
 </table>
+
+<script>
+	var fwdPage='${requestScope.pageOf}';
+	var reportId1='${sessionScope.identifiedReportId}';
+	var cprId = document.getElementsByName("cprId")[0].value;
+	var cpId = document.getElementsByName("cpId")[0].value;
+	
+	var showSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+fwdPage+"&reportId="+reportId1+"&cpId="+cpId+"&cprId="+cprId;
+	
+	var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations&cpId="+cpId+"&cprId="+cprId;
+	
+	var showConsentsTab="FetchConsents.do?consentLevelId="+cprId+"&consentLevel=participant&reportId=<%=reportId%>&pageof=<%=pageOf%>&participantEntityId=${particiapntRecordEntryEntityId}&participantId=${participantId}&cpId="+cpId;
+	
+	loadParticipantTabbar();
+</script>

@@ -93,42 +93,6 @@ function newSpecimenTab()
 	switchToNewTab("newSpecimenTab");
 }
 
-
-function viewSpecimenAnnotation(entityId,specimenId,staticEntityName){
-
-	var action="DisplayAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
-	document.location=action;
-
-}
-
-	function showEvent(specimenId)
-{
-		var formName = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
-		document.location=formName;
-		
-}
-
-
-function newConsentTab(specimenId,ideReportId,entityid,entityname)
-{
-
-	var action="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+ideReportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityid+"&staticEntityName="+entityname;
-	document.forms[0].action=action;
-	document.forms[0].submit();
-	//switchToNewTab("newConsentTab");
-}
-function viewSpecimen(specimenId)
-{
-		action = "QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenId ;
-		document.location=action;
-}
-function newImageTab(specimenId)
-{
-	var action="EditSpecimenImage.do?id="+specimenId;
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
-
 function showConsents(tab,ConsentTierCounter)
 {
 	var showConsents = tab;
@@ -139,28 +103,6 @@ function showConsents(tab,ConsentTierCounter)
 	else
 	{
 		consentPage(ConsentTierCounter);
-	}
-}
-
-// Consent Tracking Module Virender mehta
-//View SPR Vijay pande
-function viewSPR(reportIdValue,pageOf,specimenId)
-{
-	var reportId=reportIdValue;
-	if(reportId==null || reportId==-1)
-	{
-		alert("There is no associate report in the system!");
-	}
-	else if(reportId==null || reportId==-2)
-	{
-		alert("Associated report is under quarantined request! Please contact administrator for further details.");
-	}
-	else
-	{
-		var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOf+"&reportId="+reportId+"&id="+specimenId;
-		document.location=action;
-	
-		//document.forms[0].submit();
 	}
 }
 
@@ -321,4 +263,29 @@ function giveCall(url,msg,msg1,id)
 	document.getElementById('objCheckbox').checked=true;
 	document.getElementById('objCheckbox').value=id;
 	ajaxAssignTagFunctionCall(url,msg,msg1);
+}
+
+function loadSpecimenTabbar()
+{
+	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
+	specimenTabbar.setSkin('default');
+	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
+	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
+	
+	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
+	specimenTabbar.addTab("eventsTab",'<span style="font-size:13px"> Events </span>', "150px");
+	specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
+	
+	specimenTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+	specimenTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+	specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
+	
+	specimenTabbar.setHrefMode("iframes-on-demand");
+	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
+	specimenTabbar.setContentHref("eventsTab", showEventsTab);
+	specimenTabbar.setContentHref("reportsTab", showViewSPRTab);  
+	specimenTabbar.setContentHref("annotationTab", showAnnotationTab); 
+	specimenTabbar.setContentHref("consentsTab", showConsentsTab);  
+	specimenTabbar.setContentHref("imagesTab", showImagesTab);
+	specimenTabbar.setTabActive("specimenDetailsTab");
 }

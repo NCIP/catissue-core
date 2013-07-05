@@ -18,21 +18,26 @@
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css"/>
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+
 <script>
       window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 </script>
 
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
-<SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
-<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet"/>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="jss/specimenCollectionGroup.js"></script>
 
-<script	src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_whp.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css"/>
+
 <%
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	Long reportIdVal=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);
@@ -169,14 +174,6 @@ function updateHelpURL()
 		var disablePHIView = !isPHIVIEW;	
      </script>
 	<script language="JavaScript">
-	function newConsentTab()
-	{
-		var consentLevelId = document.getElementById("id").value;
-		var action="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId=<%=scgEntityId%>&staticEntityName=<%=staticEntityName%>";
-		document.forms[0].action=action;
-		document.forms[0].submit();
-		//switchToNewTab("newConsentTab");
-	}
 	function makeClinPortalUrl()
 	{
 		var submitButton = document.getElementById("submitOnly");
@@ -306,36 +303,8 @@ function updateHelpURL()
 		}
 		//var collectionTab=document.getElementById('specimenCollectionGroupTab');
 		var consentTab=document.getElementById('consentTab');
-		var SCGImg = document.getElementById('SCGImage');
-		var consetsImg = document.getElementById('consentsImage');
 
-		if(selectedTab=="specimenCollectionGroupTab")
-		{
-			if('${requestScope.operation}' == "edit")
-			{
-				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection.gif  alt=Add Specimen  Collection group  width=216 height=22 border=0>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=newConsentTab()>"
-			}
-			else if('${requestScope.operation}' == "add")
-			{
-				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_add_scg.gif  alt=Add Specimen  Collection group  width=222 height=22 border=0>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=newConsentTab()>"
-			}
-		}
-		else
-		{
-			if('${requestScope.operation}' == "edit")
-			{
-				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection2.gif  alt=Edit Specimen  Collection group  width=216 height=22 border=0 onclick=specimencollgroup()>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=Consents width=76 height=22 border=0>"
-			}
-			else if('${requestScope.operation}' == "add")
-			{
-				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_add_scg2.gif  alt=Add Specimen  Collection group  width=222 height=22 border=0 onclick=specimencollgroup()>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=Consents width=76 height=22 border=0>"
-			}
-		}
-	}
+  }
 	
 		function editSCG()
 		{
@@ -399,15 +368,11 @@ function updateHelpURL()
 		%>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 	  <tr>
-		<td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
-				<td valign="bottom" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_edit_collection.gif" alt="Edit Specimen Collection Group" width="216" height="22"  border="0" onclick="specimencollgroup()"></a></td>
-				<td valign="bottom"><a href="#" onClick="viewSPR('<%=reportIdVal%>','<%=pageOf%>')" id="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
-				<td valign="bottom"><a href="#" onClick="showAnnotations('<%=scgEntityId%>','<%=id%>','<%=staticEntityName%>','<%=pageOf%>')" id="showAnnotation"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="newConsentTab()" id="viewConsent" ></a></td>
-				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
-			</tr></table>
+		<td class="tablepadding">
+		 <table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<div id="SCG_tabbar" style="width:950px; height:585px;"/>
+		 </table>
+		<div id='SCGDiv'>
 			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
 				<tr>
 					<td>
@@ -416,6 +381,7 @@ function updateHelpURL()
 				</tr>
 		   </table><!-- Mandar 31Oct08 -->
 				<%@ include file="EditSpecimenCollectionGroup.jsp" %>
+		</div>		
 	<%
 	}
 	%>
@@ -478,10 +444,29 @@ function updateHelpURL()
 	<input type="hidden" id="isClinicalDataEntry" name="isClinicalDataEntry" value="false"/>
 </html:form>
 <script language="JavaScript" type="text/javascript">
+initializeSCGCombo('${operation}');
+
+var reportId='${sessionScope.identifiedReportId}';
+var pageOfValue='${requestScope.pageOf}';
+var scgEntityIdValue='${requestScope.scgRecordEntryEntityId}';
+
+var idValue='<%=id%>';
+
+var staticEntityNameValue='<%=staticEntityName%>'; 
+
+var consentLevelId = document.getElementById("id").value;
+
+var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
+
+var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+scgEntityIdValue+"&entityRecordId="+idValue+"&staticEntityName="+staticEntityNameValue+"&pageOf="+pageOfValue+"&operation=viewAnnotations";
+
+var showConsentsTab="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId="+scgEntityIdValue+"&staticEntityName="+staticEntityNameValue;
+
 showPriterTypeLocation();
 if(disablePHIView)
 {
   disableTabs();
 }
+loadSCGTabbar();
 </script>
 </body>

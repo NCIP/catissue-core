@@ -40,7 +40,8 @@ window.onresize = function() {  mdFrmResizer("dynamicExtensionsFrame",pcnt); }
 
 	String url = "LoadAnnotationDataEntryPage.do?pageOf="+pageOf1+"&id="+id1+"&entityId="+participantEntityId1+"&entityRecordId="+entityRecordId+"&staticEntityName="+staticEntityName1;
 
-	%><table height="100%" width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg"><tr height="100%"><td height="100%"><!-- Mandar : 24Nov08 adjusted height -->
+	%><table height="100%" width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+		<tr height="100%"><td height="100%"><!-- Mandar : 24Nov08 adjusted height -->
 	<iframe src = "<%=url%>" scrolling="no" height = "100%" width = "99%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0" marginheight="0" marginwidth="0">
 	</iframe>
 	<html:hidden property="id" /><html:hidden property="pageOf"/>

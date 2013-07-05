@@ -409,3 +409,23 @@ function showAnnotations(scgEntityIdValue,idValue,staticEntityNameValue,pageOfVa
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
+
+function loadSCGTabbar()
+{
+	var scgTabbar = new dhtmlXTabBar("SCG_tabbar", "top",25);
+	scgTabbar.setSkin('default');
+	scgTabbar.setImagePath("dhtmlx_suite/imgs/");
+	scgTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
+	
+	scgTabbar.addTab("editSCGtab",'<span style="font-size:13px"> Edit SCG </span>', "150px");
+	scgTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
+	scgTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+	scgTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+
+	scgTabbar.setHrefMode("iframes-on-demand");
+	scgTabbar.setContent("editSCGtab", "SCGDiv");
+	scgTabbar.setContentHref("reportsTab",showViewSPRTab);
+	scgTabbar.setContentHref("annotationTab",showAnnotationTab);
+	scgTabbar.setContentHref("consentsTab",showConsentsTab); 
+	scgTabbar.setTabActive("editSCGtab");
+}

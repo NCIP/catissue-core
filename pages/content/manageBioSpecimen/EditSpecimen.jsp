@@ -7,57 +7,63 @@
 <%@ page import="edu.wustl.catissuecore.dto.SpecimenDTO"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<script>
+	var imgsrc="images/";
+	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+</script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
+
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
+
+<link href="css/catissue_suite.css" type="text/css" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
-<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxToolbar/codebase/skins/dhtmlxtoolbar_dhx_blue.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css"/>
+
+
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_whp.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxAccordion/codebase/dhtmlxcontainer.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/ext/dhtmlxtree_li.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTreeGrid/codebase/dhtmlxtreegrid.js"></script>
+<script language="JavaScript"type="text/javascript" src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxToolbar/codebase/dhtmlxtoolbar.js"></script>
 
 
 <script type="text/javascript" src="jss/tag-popup.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
-
 <script language="JavaScript" type="text/javascript" src="jss/newSpecimen.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
 <script src="jss/json2.js" type="text/javascript"></script>
-<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/specimen.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxLayout/codebase/dhtmlxcontainer.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxcontainer.js"></script>
+
 
 <style>
 .noEffect{
@@ -70,7 +76,6 @@
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
 <!----------------------------------------------------------------------->
-
 <html:form action="NewSpecimenEdit.do">
 
 <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -82,20 +87,13 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
 	<tr>
-		<td class="tablepadding">
+		<td  class="tablepadding">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<tr>
-				<td class="td_tab_bg" >
-					<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
-				</td>
-				<td valign="bottom"><a onclick="newspecimenPage()" id="specimenDetailsTab" href="#"><img src="images/uIEnhancementImages/tab_specimen_details1.gif" alt="Specimen Details"  width="126" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent('${specimenDTO.id}');" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('${identifiedReportId}','pageOfNewSpecimenCPQuery','${specimenDTO.id}');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewSpecimenAnnotation('${specimenRecordEntryEntityId}','${specimenDTO.id}','${entityName}')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="consentViewTab" href="#" onClick="newConsentTab('${specimenDTO.id}','${identifiedReportId}','${specimenRecordEntryEntityId}','${entityName}')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22" ></a></td><td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="imageViewTab" href="#" onClick="newImageTab('${specimenDTO.id}')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="110" border="0" height="22" ></a></td>
-				
-				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
-				</td>
-				</tr>
-		    </table>
-	
-		    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+					<div id="specimen_tabbar" style="width:955px; height:630px;"/>
+			</table>
+			
+			<div id='specimenDetailsDiv'>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 			<tr>
 			<td>
 				<div id="mainTable"style="display:block">
@@ -629,12 +627,31 @@
 			<td height="*">&nbsp;</td>
 		</tr>
 		</table>
+		</div>
 	 </td>
    </tr>
 </table>
 </html:form>
 
 <script>
+var specimenId='${specimenDTO.id}';
+var reportId='${identifiedReportId}';
+var entityId='${specimenRecordEntryEntityId}';
+var staticEntityName='${entityName}';
+
+var showEventsTab = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
+
+
+var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfNewSpecimenCPQuery&reportId="+reportId+"&id="+specimenId;
+
+var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
+
+var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
+
+var showImagesTab="EditSpecimenImage.do?id="+specimenId;
+
+// alert(showViewSPRTab);
+
 setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}');
 
 var nodeId= "Specimen_"+document.getElementById("id").value;
@@ -678,4 +695,5 @@ dhxWins.window("containerPositionPopUp").setText("");    //it's the title for th
 initSpecimenCombo();
 initializeSpecimenPage('${biohazardTypeNameListJSON}');
 prepareSpecimenTypeOptions('${cellTypeListJSON}','${molecularTypeListJSON}','${tissueTypeListJSON}','${fluidTypeListJSON}');
+loadSpecimenTabbar();
 </script>

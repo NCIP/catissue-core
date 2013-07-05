@@ -152,28 +152,8 @@ function onParameterChange(element)
 		iFrame.src = "blankScreenAction.do";
 	}
 }
-//View SPR Vijay pande
-function viewSPR()
-{
-<% Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID); %>
-var reportId='<%=reportId%>';
-if(reportId==null || reportId==-1)
-{
-	alert("There is no associate report in the system!");
-}
-else if(reportId==null || reportId==-2)
-{
-	alert("Associated report is under quarantined request! Please contact administrator for further details.");
-}
-else
-{
-	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&reportId="+reportId;
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
-}
 
-if ( document.getElementById && !(document.all) )
+if( document.getElementById && !(document.all) )
 {
 var slope=-37;
 }
@@ -191,19 +171,6 @@ function mdResDetector()
 	document.getElementById("newEventFrame").height=frmHt+" px"	;
 }
 
-function newConsentTab(levelId)
-{
-	var ideReportId = '${identifiedReportId}';;
-	var action="FetchConsents.do?consentLevelId="+levelId+"&consentLevel=specimen&reportId="+ideReportId+"&pageof=pageOfNewSpecimenCPQuery&entityId=<%=specimenEntityId%>&staticEntityName=<%=staticEntityName%>&pageof=<%=pageOf%>";
-	document.location=action;
-	//switchToNewTab("newConsentTab");
-}
-
-function viewSpecimen(){
-		action = "QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id=<%=specimenIdentifier%>" ;
-		document.location=action;
-	}
-
 window.onresize = function() { mdResDetector(); }
 //window.onload = function() { adjFrmHt('test', .1,slope);}
 //window.onresize = function() { adjFrmHt('test', .1,slope); }
@@ -216,32 +183,8 @@ window.onresize = function() { mdResDetector(); }
 <!-- Mandar 05-July-06 Code for tabs start -->
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 		<tr>
-			<td class="tablepadding">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td class="td_tab_bg" >
-							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
-						</td>
-						<td valign="bottom">
-							<a href="#" onclick="viewSpecimen(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details" width="126" height="22" border="0"></a>
-						</td>
-						<td valign="bottom">
-							<img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22">
-						</td>
-						<td valign="bottom">
-							<a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a>
-						</td>
-						<td valign="bottom">
-							<a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0"></a>
-						</td>
-						<td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a href="#" onClick="newConsentTab('<%=specimenIdentifier%>')" id="consentTab"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0"></a>
-						</td>
-						<td align="left" valign="bottom" class="td_color_bfdcf3" ><a id="imageViewTab" href="#" onClick="newImageTab('<%=specimenIdentifier%>')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="110" border="0" height="22" ></a>
-				</td>
-						<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
-					</tr>
-				</table>
+			<td>
+				
 				<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 					<tr>
 						<td colspan="3" align="left" >

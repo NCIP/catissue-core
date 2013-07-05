@@ -48,58 +48,13 @@
 
 
 %>
-<script>
 
-function showEvent()
-{
-		var id = <%=specimenIdentifier%>;
-
-		<%
-		String formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
-		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-		{
-			formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
-		}%>
-		var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";
-		document.forms[0].action=formName;
-		document.forms[0].submit();
-}
-
-function newConsentTab(levelId)
-{
-	var ideReportId = document.getElementsByName("identifiedReportId")[0].value;
-	var action="FetchConsents.do?consentLevelId="+levelId+"&consentLevel=specimen&reportId="+ideReportId+"&pageof=pageOfNewSpecimenCPQuery&entityId=<%=specimenEntityId%>&staticEntityName=<%=staticEntityName%>&pageof=<%=pageOf%>";
-	document.location=action;
-	
-	//switchToNewTab("newConsentTab");
-}
-
-
-</script>
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <html:form action="<%=formAction%>">
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-		
-	  
-		  <tr>
-			<td class="tablepadding">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<tr>
-				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
-		        <td valign="bottom" ><a href="#" onclick="addNewAction(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" border="0" alt="Specimen Details" width="126" height="22" border="0"></a></td>
-		        <td valign="bottom"><a href="#" onclick="showEvent()"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Show Events" border="0" width="56" height="22"></a></td>
-		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" border="0" alt="View Annotation" width="216" height="22"></td>
-				<td valign="bottom"><a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>,'<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="Consents" width="116" height="22"></a></td>
-				<td valign="bottom"><a href="#" onClick="newConsentTab('${id}')" id="consentTab">
-					<img src="images/uIEnhancementImages/tab_consents2.gif" border="0" alt="Consents" width="76" height="22"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a id="imageViewTab" href="#" onClick="newImageTab('${id}')"><img src="images/uIEnhancementImages/tab_image2.gif" alt="Images" width="126" border="0" height="22" >
-					</a>
-				</td>
-		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-		</tr>
-		</table>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td colspan="0">

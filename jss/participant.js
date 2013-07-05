@@ -172,13 +172,6 @@
 				document.forms[0].deathDate.disabled = true;
 			}
 		}
-		
-		function setTarget(pageOf)
-		{
-			var fwdPage=pageOf;
-			if(!fwdPage=="pageOfParticipantCPQuery")
-				document.forms[0].target = '_top';
-		}
 			
 		// function from EditParticipant.jsp File
 		function checkActivityStatusForCPR()
@@ -224,23 +217,23 @@
 		  }
 		}
 		
-		//View SPR Vijay pande
-		function viewSPR(reportId1,pageOf,cpId,cprId)
-		{
-			var reportId=reportId1;
-			if(reportId==null || reportId==-1)
+			function loadParticipantTabbar()
 			{
-				alert("There is no associate report in the system!");
+				participantTabbar = new dhtmlXTabBar("participant_tabbar", "top",25);
+				participantTabbar.setSkin('default');
+				participantTabbar.setImagePath("dhtmlx_suite/imgs/");
+				participantTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
+
+				participantTabbar.addTab("editParticipantTab",'<span style="font-size:13px"> Edit Participant </span>', "150px");
+				participantTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
+				participantTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+				participantTabbar.addTab("consentsTab",'<span style="font-size:13px"> Consents  </span>',"150px");
+
+				participantTabbar.setHrefMode("iframes-on-demand");
+				participantTabbar.setContent("editParticipantTab", "showParticipantDiv");
+				participantTabbar.setContentHref("reportsTab",showSPRTab);
+				participantTabbar.setContentHref("annotationTab", showAnnotationTab);  
+				participantTabbar.setContentHref("consentsTab", showConsentsTab); 
+				participantTabbar.setTabActive("editParticipantTab");
 			}
-			else if(reportId==null || reportId==-2)
-			{
-				alert("Associated report is under quarantined request! Please contact administrator for further details.");
-			}
-			else
-			{
-				//var cpId = document.getElementsByName("cpId")[0].value;
-				var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOf+"&reportId="+reportId+"&cpId="+cpId+"&cprId="+cprId;
-				document.forms[0].action=action;
-				document.forms[0].submit();
-			}
-		}
+			

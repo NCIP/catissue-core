@@ -93,34 +93,8 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
-<tr>
-        <td class="td_color_bfdcf3">
-            <table border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td class="td_table_head">
-                    <span class="wh_ar_b">
-                        <bean:message key="app.newSpecimen" />
-                    </span>
-                </td>
-                <td>
-                    <img src="images/uIEnhancementImages/table_title_corner2.gif" alt="Page Title - Specimen" width="31" height="24" hspace="0" vspace="0" />
-                </td>
-              </tr>
-            </table>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="tablepadding">
-   
-            <table width="100%" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td class="td_tab_bg">
-                    <img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td><td valign="bottom"><a onclick="viewSpecimen('${specimenId}')" id="specimenDetailsTab" href="#"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" alt="Specimen Details"  width="126" height="22" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent('${specimenId}');" border="0"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0" onclick="viewSPR('${identifiedReportId}','pageOfNewSpecimenCPQuery','${specimenId}');"></a></td><td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22" border="0" onClick="viewSpecimenAnnotation('${specimenRecordEntryEntityId}','${specimenId}','${entityName}')"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3"><a id="consentViewTab" href="#" onClick="newConsentTab('${specimenId}','${identifiedReportId}','${specimenRecordEntryEntityId}','${entityName}')"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" border="0" height="22"></a></td><td align="left" valign="bottom" class="td_color_bfdcf3"><a id="consentViewTab" ><img src="images/uIEnhancementImages/tab_image1.gif" alt="Images" width="110" border="0" height="22"></a></td>
-                    <td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;
-                    </td>
-                </tr>
-            </table>
+	<tr>
+        <td>
    
             <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
             <tr>
