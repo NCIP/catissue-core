@@ -528,10 +528,10 @@ grid.enableDragAndDrop(true);
 grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 	a= grid.cells(sId,sInd).getValue();
 	b= grid.cells(tId,tInd).getValue();
-	var isImg = a.match(/<img /i);
-	var isImgB = b.match(/<img /i);
+	var isImg = a.toLowerCase().indexOf("<img");
+	var isImgB = b.toLowerCase().indexOf("<img");
 	if(sInd!=0&&tInd!=0){
-		if(!isImg && isImgB ){
+		if(isImg && isImgB==0 ){
 			hasContainer = false;
 			if(a.indexOf("containerChanged()")!=-1){
 				hasContainer = true
