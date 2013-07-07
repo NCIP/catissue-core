@@ -14,4 +14,8 @@
 		</addColumn>
 	</changeSet>
 	
+	<changeSet id="46" author="catissue" failOnError="false">
+		<sql>delete from CATISSUE_QUERY_EDITLINK_COLS where TABLE_ID = (select Table_ID from CATISSUE_QUERY_TABLE_DATA where DISPLAY_NAME = 'Participant')</sql>
+	</changeSet>
+	
 </databaseChangeLog>         
