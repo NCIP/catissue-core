@@ -54,6 +54,7 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
@@ -520,7 +521,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.setDashboardLabelJsonValue(CollectionProtocolUtil.populateDashboardLabelJsonValue(labelSQLAssociations));
 		request.setAttribute("isDefaultDashBoard", isDefaultDashboard);
 		collectionProtocolForm.setPpidFormat(collectionProtocolBean.getPpidFormat());
-		if(collectionProtocolBean.getPpidFormat()!=null && !"".equals(collectionProtocolBean.getPpidFormat())){
+		if(!Validator.isEmpty(collectionProtocolBean.getPpidFormat())){
 			formPidFormat(collectionProtocolForm,collectionProtocolBean.getPpidFormat());
 		}
 		return mapping.findForward(pageOf);
