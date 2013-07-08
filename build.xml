@@ -424,6 +424,7 @@
 				<include name="dhtml_comp/**" />
 				<include name="newDhtmlx/**" />
 				<include name="dhtmlx_suite/**" />
+				<include name="dhtmlxSuite_v35/**" />
 				<include name="pages/**" />
 				<include name="flexclient/**" />
 				<include name="runtime/**" />
