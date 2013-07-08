@@ -296,7 +296,23 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 			<tr>
 				<td  align="left" class="tr_bg_blue1" style="padding:5 5 5 5;"><span class="blue_ar_b">Storage Container Restrictions</span><span style="float:right;"><input type="button" value="Export To CSV" class = "black_ar primaryButton" onclick="exportContainer('csv')"/></span></td>
 			</tr>
-            <tr class="tr_alternate_color_white">
+			<tr class="tr_alternate_color_white">
+				<td style="padding:5px 0 0 0;">
+					<table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
+						<tr>
+						<td width="150" style="vertical-align:top;" class="align_right_style">
+							<div><span class="black_ar">Utilization</span></div>
+						</td>
+						<td>
+							<div class="scrollContentDiv black_ar">${requestScope.percentage}% (${requestScope.count}/${requestScope.capacity})
+							</div>
+						</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+            <tr class="tr_alternate_color_lightGrey">
 				<td style="padding:5px 0 0 0;">
 					<table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
 						<tr>
@@ -325,7 +341,7 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 					</table>
 				</td>
 			</tr>
-            <tr class="tr_alternate_color_lightGrey">
+            <tr class="tr_alternate_color_white">
 				<td style="padding:5px 0 0 0;">
 					<table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
 						<tr>
@@ -354,7 +370,7 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 					</table>
 				</td>
 			</tr>
-			<tr class="tr_alternate_color_white">
+			<tr class="tr_alternate_color_lightGrey">
 				<td style="padding:5px 0 0 0">
 					<table  border="0" cellspacing="0" cellpadding="0" width="100%">
 						<tr>
