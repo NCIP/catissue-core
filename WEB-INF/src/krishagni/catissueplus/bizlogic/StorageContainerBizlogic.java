@@ -4,13 +4,14 @@ package krishagni.catissueplus.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import krishagni.catissueplus.dao.StorageContainerDAO;
 import krishagni.catissueplus.dto.AliquotContainerDetailsDTO;
 import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
 import krishagni.catissueplus.dto.LabellingSchemeDTO;
+import krishagni.catissueplus.dto.StorageContainerUtilizationDTO;
 import krishagni.catissueplus.dto.StorageContainerViewDTO;
 import krishagni.catissueplus.dto.StoragePositionDTO;
 import edu.wustl.catissuecore.domain.Capacity;
@@ -18,7 +19,6 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -38,8 +38,9 @@ public class StorageContainerBizlogic
 	private static final boolean IS_SPCLASS_NONUNQ = false;
 	private static final boolean IS_SPTYPE_UNQ = true;
 	private static final boolean IS_SPTYPE_NONUNQ = false;
-	private static final int CONTAINERS_MAX_LIMIT = Integer.parseInt(XMLPropertyHandler
-			.getValue(Constants.CONTAINERS_MAX_LIMIT));
+	private static final int CONTAINERS_MAX_LIMIT = Integer
+			.parseInt(XMLPropertyHandler
+					.getValue(Constants.CONTAINERS_MAX_LIMIT));
 
 	/**
 	 * Gives container details DTO for given container name.
@@ -48,14 +49,15 @@ public class StorageContainerBizlogic
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public StorageContainerViewDTO getContainerDetailsForDataView(String containerName,
-			HibernateDAO dao) throws ApplicationException
+	public StorageContainerViewDTO getContainerDetailsForDataView(
+			String containerName, HibernateDAO dao) throws ApplicationException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
 
 		//Step1: sql to get label schemes, dimensions labels,capacity id by joining type and container
-		List list = dao.executeNamedQuery("getStorageContainerDetailsByContainerName", params);
+		List list = dao.executeNamedQuery(
+				"getStorageContainerDetailsByContainerName", params);
 
 		//Step2: populate storageContainerViewDTO from the retrieved data 
 		StorageContainerViewDTO storageContainerViewDTO = null;
@@ -64,27 +66,35 @@ public class StorageContainerBizlogic
 		{
 			//retrieve data from list
 			Long containerId = (Long) ((Object[]) list.get(0))[0];
-			String oneDimensionLabellingScheme = (String) ((Object[]) list.get(0))[1];
-			String twoDimensionLabellingScheme = (String) ((Object[]) list.get(0))[2];
+			String oneDimensionLabellingScheme = (String) ((Object[]) list
+					.get(0))[1];
+			String twoDimensionLabellingScheme = (String) ((Object[]) list
+					.get(0))[2];
 			String oneDimensionLabel = (String) ((Object[]) list.get(0))[3];
 			String twoDimensionLabel = (String) ((Object[]) list.get(0))[4];
 			Integer oneDimensionCapacity = (Integer) ((Object[]) list.get(0))[5];
 			Integer twoDimensionCapacity = (Integer) ((Object[]) list.get(0))[6];
 
 			//get storage position details
-			StoragePositionDTO[][] availablePositions = getStoragePositionDetails(containerId,
-					oneDimensionCapacity + 1, twoDimensionCapacity + 1, dao);
+			StoragePositionDTO[][] availablePositions = getStoragePositionDetails(
+					containerId, oneDimensionCapacity + 1,
+					twoDimensionCapacity + 1, dao);
 
 			//set DTO fields
 			storageContainerViewDTO = new StorageContainerViewDTO();
 			storageContainerViewDTO.setContainerId(containerId);
-			storageContainerViewDTO.setOneDimensionLabellingScheme(oneDimensionLabellingScheme);
-			storageContainerViewDTO.setTwoDimensionLabellingScheme(twoDimensionLabellingScheme);
+			storageContainerViewDTO
+					.setOneDimensionLabellingScheme(oneDimensionLabellingScheme);
+			storageContainerViewDTO
+					.setTwoDimensionLabellingScheme(twoDimensionLabellingScheme);
 			storageContainerViewDTO.setOneDimensionLabel(oneDimensionLabel);
 			storageContainerViewDTO.setTwoDimensionLabel(twoDimensionLabel);
-			storageContainerViewDTO.setOneDimensionCapacity(oneDimensionCapacity);
-			storageContainerViewDTO.setTwoDimensionCapacity(twoDimensionCapacity);
-			storageContainerViewDTO.setStoragePositionDTOCollection(availablePositions);
+			storageContainerViewDTO
+					.setOneDimensionCapacity(oneDimensionCapacity);
+			storageContainerViewDTO
+					.setTwoDimensionCapacity(twoDimensionCapacity);
+			storageContainerViewDTO
+					.setStoragePositionDTOCollection(availablePositions);
 		}
 
 		return storageContainerViewDTO;
@@ -100,8 +110,9 @@ public class StorageContainerBizlogic
 	 * @throws BizLogicException
 	 * @throws DAOException 
 	 */
-	public static StoragePositionDTO[][] getStoragePositionDetails(Long containerId, int dimX,
-			int dimY, HibernateDAO dao) throws BizLogicException, DAOException
+	public static StoragePositionDTO[][] getStoragePositionDetails(
+			Long containerId, int dimX, int dimY, HibernateDAO dao)
+			throws BizLogicException, DAOException
 	{
 		final StoragePositionDTO[][] positions = new StoragePositionDTO[dimX][dimY];
 
@@ -111,7 +122,8 @@ public class StorageContainerBizlogic
 		params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
 
 		//get stored specimen details
-		List list = dao.executeNamedQuery("getSpecimenPositionDetailsByContainerId", params);
+		List list = dao.executeNamedQuery(
+				"getSpecimenPositionDetailsByContainerId", params);
 
 		if (list != null)
 		{
@@ -119,7 +131,8 @@ public class StorageContainerBizlogic
 		}
 
 		//get stored child container details
-		List list2 = dao.executeNamedQuery("getContainerPositionDetailsByContainerId", params);
+		List list2 = dao.executeNamedQuery(
+				"getContainerPositionDetailsByContainerId", params);
 
 		if (list2 != null)
 		{
@@ -135,7 +148,8 @@ public class StorageContainerBizlogic
 	 * @param resultSet
 	 * @param isListOfSpecimen
 	 */
-	private static void setPositionDTO(StoragePositionDTO[][] positions, List resultSet)
+	private static void setPositionDTO(StoragePositionDTO[][] positions,
+			List resultSet)
 	{
 		int countX, countY;
 		for (int i = 0; i < resultSet.size(); i++)
@@ -154,8 +168,9 @@ public class StorageContainerBizlogic
 	}
 
 	public List<AliquotContainerDetailsDTO> getStorageContainerList(
-			ContainerInputDetailsDTO containerInputDetails, final String storageType,
-			HibernateDAO hibernateDao, int numOfContainers) throws ApplicationException
+			ContainerInputDetailsDTO containerInputDetails,
+			final String storageType, HibernateDAO hibernateDao,
+			int numOfContainers) throws ApplicationException
 	{
 		List<AliquotContainerDetailsDTO> containers = new ArrayList<AliquotContainerDetailsDTO>();
 		JDBCDAO jdbcDao = null;
@@ -168,8 +183,9 @@ public class StorageContainerBizlogic
 
 			for (int i = 0; i < queries.length; i++)
 			{
-				List<AliquotContainerDetailsDTO> resultList = getContainerListByQuery(storageType,
-						jdbcDao, queries[i], (containers.size() - numOfContainers));
+				List<AliquotContainerDetailsDTO> resultList = getContainerListByQuery(
+						storageType, jdbcDao, queries[i],
+						(containers.size() - numOfContainers));
 				//dao.executeQuery(queries[i]);
 				if (resultList == null || resultList.size() == 0)
 				{
@@ -178,9 +194,11 @@ public class StorageContainerBizlogic
 
 				int cnt = 0;
 
-				while (containers.size() < numOfContainers && resultList.size() > cnt)
+				while (containers.size() < numOfContainers
+						&& resultList.size() > cnt)
 				{
-					AliquotContainerDetailsDTO aliquotContainerDetailsDTO = resultList.get(cnt);
+					AliquotContainerDetailsDTO aliquotContainerDetailsDTO = resultList
+							.get(cnt);
 					if (!containers.contains(resultList.get(cnt))
 							&& aliquotContainerDetailsDTO.emptyPositionCount >= containerInputDetails.aliquotCount)
 					{
@@ -203,8 +221,9 @@ public class StorageContainerBizlogic
 		return containers;
 	}
 
-	private List<AliquotContainerDetailsDTO> getContainerListByQuery(String storageType,
-			final JDBCDAO dao, final String query, int maxRecords) throws DAOException
+	private List<AliquotContainerDetailsDTO> getContainerListByQuery(
+			String storageType, final JDBCDAO dao, final String query,
+			int maxRecords) throws DAOException
 	{
 		List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = new ArrayList<AliquotContainerDetailsDTO>();
 		final List resultList;
@@ -221,12 +240,15 @@ public class StorageContainerBizlogic
 		{
 			AliquotContainerDetailsDTO aliquotContainerDetailsDTO = new AliquotContainerDetailsDTO();
 			List retList = (List) resultList.get(cnt);
-			aliquotContainerDetailsDTO.containerId = Long.parseLong(retList.get(0).toString());
+			aliquotContainerDetailsDTO.containerId = Long.parseLong(retList
+					.get(0).toString());
 			aliquotContainerDetailsDTO.containerName = (String) retList.get(1);
-			aliquotContainerDetailsDTO.dimension1 = Integer.parseInt(retList.get(2).toString());
-			aliquotContainerDetailsDTO.dimension2 = Integer.parseInt(retList.get(3).toString());
-			aliquotContainerDetailsDTO.emptyPositionCount = Long.parseLong(retList.get(4)
-					.toString());
+			aliquotContainerDetailsDTO.dimension1 = Integer.parseInt(retList
+					.get(2).toString());
+			aliquotContainerDetailsDTO.dimension2 = Integer.parseInt(retList
+					.get(3).toString());
+			aliquotContainerDetailsDTO.emptyPositionCount = Long
+					.parseLong(retList.get(4).toString());
 			aliquotContainerDetailsDTOList.add(aliquotContainerDetailsDTO);
 
 		}
@@ -238,42 +260,47 @@ public class StorageContainerBizlogic
 			ContainerInputDetailsDTO containerInputDetails, String contName)
 	{
 		// Containers allowing Only this CP, Only this Specimen Class and only this Specimen Type
-		final String query0 = this.createSCQuery(containerInputDetails, IS_CP_UNQ, IS_SPCLASS_UNQ,
-				IS_SPTYPE_UNQ, contName);
+		final String query0 = this.createSCQuery(containerInputDetails,
+				IS_CP_UNQ, IS_SPCLASS_UNQ, IS_SPTYPE_UNQ, contName);
 		// Containers only this CP restriction and just this Specimen Class and any specimen type
-		final String query1 = this.createSCQuery(containerInputDetails, IS_CP_UNQ, IS_SPCLASS_UNQ,
-				IS_SPTYPE_NONUNQ, contName);
+		final String query1 = this.createSCQuery(containerInputDetails,
+				IS_CP_UNQ, IS_SPCLASS_UNQ, IS_SPTYPE_NONUNQ, contName);
 		// Containers allowing Only this CP but other Specimen Classes and SpecimenType also
-		final String query2 = this.createSCQuery(containerInputDetails, IS_CP_UNQ,
-				IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ, contName);
+		final String query2 = this.createSCQuery(containerInputDetails,
+				IS_CP_UNQ, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ, contName);
 		// Containers allowing Other CPs also but just this Specimen Class and Specimen Type
-		final String query3 = this.createSCQuery(containerInputDetails, IS_CP_NONUNQ,
-				IS_SPCLASS_UNQ, IS_SPTYPE_UNQ, contName);
+		final String query3 = this.createSCQuery(containerInputDetails,
+				IS_CP_NONUNQ, IS_SPCLASS_UNQ, IS_SPTYPE_UNQ, contName);
 		// Containers allowing any CP just this Specimen Class and any specimen type
-		final String query4 = this.createSCQuery(containerInputDetails, IS_CP_NONUNQ,
-				IS_SPCLASS_UNQ, IS_SPTYPE_NONUNQ, contName);
+		final String query4 = this.createSCQuery(containerInputDetails,
+				IS_CP_NONUNQ, IS_SPCLASS_UNQ, IS_SPTYPE_NONUNQ, contName);
 		// Containers allowing Others CPs also, other Specimen Classes and Specimen Type too
-		final String query5 = this.createSCQuery(containerInputDetails, IS_CP_NONUNQ,
-				IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ, contName);
+		final String query5 = this.createSCQuery(containerInputDetails,
+				IS_CP_NONUNQ, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ, contName);
 		// Containers no CP restriction and just this Specimen Class and Specimen Type
-		final String query6 = this.getNoCPRestrictionQuery(containerInputDetails, null,
-				IS_SPCLASS_UNQ, IS_SPTYPE_UNQ, contName);
+		final String query6 = this.getNoCPRestrictionQuery(
+				containerInputDetails, null, IS_SPCLASS_UNQ, IS_SPTYPE_UNQ,
+				contName);
 		// Containers no CP restriction and just this Specimen Class and any specimen type
-		final String query7 = this.getNoCPRestrictionQuery(containerInputDetails, null,
-				IS_SPCLASS_UNQ, IS_SPTYPE_NONUNQ, contName);
+		final String query7 = this.getNoCPRestrictionQuery(
+				containerInputDetails, null, IS_SPCLASS_UNQ, IS_SPTYPE_NONUNQ,
+				contName);
 		//Containers with no CP restrictions, other Specimen Classes and Specimen Type too
-		final String query8 = this.getNoCPRestrictionQuery(containerInputDetails, null,
-				IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ, contName);
+		final String query8 = this.getNoCPRestrictionQuery(
+				containerInputDetails, null, IS_SPCLASS_NONUNQ,
+				IS_SPTYPE_NONUNQ, contName);
 		//Containers allowing any CP,any Specimen Class and any Specimen Type
-		final String query9 = this.createSCQuery(containerInputDetails, null, null, null, contName);
+		final String query9 = this.createSCQuery(containerInputDetails, null,
+				null, null, contName);
 
-		return new String[]{query0, query1, query2, query3, query4, query5, query6, query7, query8,
-				query9};
+		return new String[]{query0, query1, query2, query3, query4, query5,
+				query6, query7, query8, query9};
 	}
 
-	private String getNoCPRestrictionQuery(ContainerInputDetailsDTO containerInputDetails,
-			final Boolean isCPUnique, final Boolean isSPClassUnique, final Boolean isSPTypeUnique,
-			String contName)
+	private String getNoCPRestrictionQuery(
+			ContainerInputDetailsDTO containerInputDetails,
+			final Boolean isCPUnique, final Boolean isSPClassUnique,
+			final Boolean isSPTypeUnique, String contName)
 	{
 		final long cpId = containerInputDetails.cpId;
 		final String spClass = containerInputDetails.specimenClass;
@@ -345,9 +372,10 @@ public class StorageContainerBizlogic
 
 	}
 
-	private String createSCQuery(ContainerInputDetailsDTO containerInputDetails,
-			final Boolean isCPUnique, final Boolean isSPClassUnique, final Boolean isSPTypeUnique,
-			String contName)
+	private String createSCQuery(
+			ContainerInputDetailsDTO containerInputDetails,
+			final Boolean isCPUnique, final Boolean isSPClassUnique,
+			final Boolean isSPTypeUnique, String contName)
 	{
 		final long cpId = containerInputDetails.cpId;
 		final String spClass = containerInputDetails.specimenClass;
@@ -444,19 +472,22 @@ public class StorageContainerBizlogic
 			scSPQuery.append(" ( ");
 			scSPQuery.append(" SELECT COUNT(*) FROM ");
 			scSPQuery.append(SC_SP_TABLE_NAME);
-			scSPQuery.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
+			scSPQuery
+					.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
 			scSPQuery.append(" ) ");
 			scSPQuery.append(" =4 "); //No restriction on specimen class means it can store any of the 4 specimen classes
 			scCPClass = scSPQuery.toString();
 		}
 		else
 		{
-			scCPClass = this.getSCBaseRestrictionQuery("CATISSUE_STOR_CONT_SPEC_CLASS", isUnique);
+			scCPClass = this.getSCBaseRestrictionQuery(
+					"CATISSUE_STOR_CONT_SPEC_CLASS", isUnique);
 		}
 		return scCPClass;
 	}
 
-	private String getSCBaseRestrictionQuery(final String tableName, final boolean isUnique)
+	private String getSCBaseRestrictionQuery(final String tableName,
+			final boolean isUnique)
 	{
 		final StringBuilder scBaseRestQuery = new StringBuilder();
 		scBaseRestQuery.append(" AND  ");
@@ -464,7 +495,8 @@ public class StorageContainerBizlogic
 		scBaseRestQuery.append(" SELECT COUNT(*) ");
 		scBaseRestQuery.append(" FROM ");
 		scBaseRestQuery.append(tableName);
-		scBaseRestQuery.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER )");
+		scBaseRestQuery
+				.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER )");
 		if (isUnique)
 		{
 			scBaseRestQuery.append(" = 1 ");
@@ -488,14 +520,16 @@ public class StorageContainerBizlogic
 			sbSPQuery.append(" ( ");
 			sbSPQuery.append(" SELECT COUNT(*) FROM ");
 			sbSPQuery.append(SC_SPCLS_TABLE_NAME);
-			sbSPQuery.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
+			sbSPQuery
+					.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
 			sbSPQuery.append(" ) ");
 			sbSPQuery.append(" >1 ");//No restriction on specimen type means it can store any of the 46 specimen types
 			scCPType = sbSPQuery.toString();
 		}
 		else
 		{
-			scCPType = this.getSCBaseRestrictionQuery("CATISSUE_STOR_CONT_SPEC_TYPE", isUnique);
+			scCPType = this.getSCBaseRestrictionQuery(
+					"CATISSUE_STOR_CONT_SPEC_TYPE", isUnique);
 		}
 		return scCPType;
 	}
@@ -509,21 +543,23 @@ public class StorageContainerBizlogic
 			final StringBuilder scCPQuery = new StringBuilder();
 			scCPQuery.append(" AND VIEW1.IDENTIFIER NOT IN ");
 			scCPQuery.append(" ( ");
-			scCPQuery.append(" SELECT t2.STORAGE_CONTAINER_ID FROM " + SC_CP_TABLE_NAME + " t2 ");
+			scCPQuery.append(" SELECT t2.STORAGE_CONTAINER_ID FROM "
+					+ SC_CP_TABLE_NAME + " t2 ");
 			scCPQuery.append(" ) ");
 			scCpQuery = scCPQuery.toString();
 		}
 		else
 		{
-			scCpQuery = this.getSCBaseRestrictionQuery(SC_CP_TABLE_NAME, isUnique);
+			scCpQuery = this.getSCBaseRestrictionQuery(SC_CP_TABLE_NAME,
+					isUnique);
 		}
 		return scCpQuery;
 	}
 
 	public void setAvailablePositionsForContainer(
-			AliquotContainerDetailsDTO aliquotContainerDetailsDTO, String startPosX,
-			String startPosY, int emptyPosCount, HibernateDAO hibernateDao)
-			throws ApplicationException
+			AliquotContainerDetailsDTO aliquotContainerDetailsDTO,
+			String startPosX, String startPosY, int emptyPosCount,
+			HibernateDAO hibernateDao) throws ApplicationException
 	{
 		int dimX = aliquotContainerDetailsDTO.dimension1 + 1;
 		int dimY = aliquotContainerDetailsDTO.dimension2 + 1;
@@ -545,15 +581,17 @@ public class StorageContainerBizlogic
 			List allocatedPositionList = hibernateDao.executeNamedQuery(
 					"getAllocatedSpecimenPosition", substParams);
 			setPositions(positions, allocatedPositionList);
-			allocatedPositionList = hibernateDao.executeNamedQuery("getAllocatedContainerPosition",
-					substParams);
+			allocatedPositionList = hibernateDao.executeNamedQuery(
+					"getAllocatedContainerPosition", substParams);
 			setPositions(positions, allocatedPositionList);
 			LabellingSchemeDTO labellingSchemeDTO = getLabellingSchemeByContainerName(
 					aliquotContainerDetailsDTO.containerName, hibernateDao);
 			int startPosxNum = Validator.isEmpty(startPosX) ? 0 : AppUtility
-					.getPositionValueInInteger(labellingSchemeDTO.getDimensionOne(), startPosX);
+					.getPositionValueInInteger(
+							labellingSchemeDTO.getDimensionOne(), startPosX);
 			int startPosyNum = Validator.isEmpty(startPosY) ? 0 : AppUtility
-					.getPositionValueInInteger(labellingSchemeDTO.getDimensionOne(), startPosY);
+					.getPositionValueInInteger(
+							labellingSchemeDTO.getDimensionOne(), startPosY);
 			System.out.println("");
 			for (int i = startPosxNum; i < dimX; i++)
 			{
@@ -561,10 +599,12 @@ public class StorageContainerBizlogic
 				{
 					if (positions[i][j])
 					{
-						aliquotContainerDetailsDTO.position1.add(AppUtility.getPositionValue(
-								labellingSchemeDTO.getDimensionOne(), i));
-						aliquotContainerDetailsDTO.position2.add(AppUtility.getPositionValue(
-								labellingSchemeDTO.getDimensionTwo(), j));
+						aliquotContainerDetailsDTO.position1
+								.add(AppUtility.getPositionValue(
+										labellingSchemeDTO.getDimensionOne(), i));
+						aliquotContainerDetailsDTO.position2
+								.add(AppUtility.getPositionValue(
+										labellingSchemeDTO.getDimensionTwo(), j));
 						if (aliquotContainerDetailsDTO.position2.size() == emptyPosCount)
 						{
 							return;
@@ -602,18 +642,19 @@ public class StorageContainerBizlogic
 		}
 	}
 
-	public SpecimenPosition getPositionIfAvailableFromContainer(String containerName, String pos1,
-			String pos2, HibernateDAO hibernateDao) throws ApplicationException
+	public SpecimenPosition getPositionIfAvailableFromContainer(
+			String containerName, String pos1, String pos2,
+			HibernateDAO hibernateDao) throws ApplicationException
 	{
 		SpecimenPosition specimenPosition;
 		Long containerId = getContainerIdFromName(containerName, hibernateDao);
 
-		LabellingSchemeDTO labellingSchemeDTO = getLabellingSchemeByContainerName(containerName,
-				hibernateDao);
+		LabellingSchemeDTO labellingSchemeDTO = getLabellingSchemeByContainerName(
+				containerName, hibernateDao);
 		if (Validator.isEmpty(pos1) || Validator.isEmpty(pos2))
 		{
-			specimenPosition = getFirstAvailablePositionInContainer(containerName,
-					labellingSchemeDTO, hibernateDao);
+			specimenPosition = getFirstAvailablePositionInContainer(
+					containerName, labellingSchemeDTO, hibernateDao);
 		}
 		else
 		{
@@ -621,10 +662,12 @@ public class StorageContainerBizlogic
 					labellingSchemeDTO.getDimensionOne(), pos1);
 			int pos2Integer = AppUtility.getPositionValueInInteger(
 					labellingSchemeDTO.getDimensionTwo(), pos2);
-			if (!isPositionAvailable(containerName, pos1Integer, pos2Integer, hibernateDao))
+			if (!isPositionAvailable(containerName, pos1Integer, pos2Integer,
+					hibernateDao))
 			{
 				throw new ApplicationException(null, null, String.format(
-						Constants.CONTAINER_ERROR_MSG_FOR_ALIQUOT, containerName, pos1, pos2));
+						Constants.CONTAINER_ERROR_MSG_FOR_ALIQUOT,
+						containerName, pos1, pos2));
 			}
 
 			specimenPosition = new SpecimenPosition();
@@ -650,34 +693,41 @@ public class StorageContainerBizlogic
 	 * @return Boolean
 	 * @throws ApplicationException
 	 */
-	public boolean isPositionAvailable(String containerName, int pos1, int pos2,
-			HibernateDAO hibernateDao) throws ApplicationException
+	public boolean isPositionAvailable(String containerName, int pos1,
+			int pos2, HibernateDAO hibernateDao) throws ApplicationException
 	{
-		Capacity capacity = getCapacityFromContainerName(containerName, hibernateDao);
-		if (capacity.getOneDimensionCapacity() < pos1 || capacity.getTwoDimensionCapacity() < pos2
-				|| pos1 == 0 || pos1 == -1 || pos2 == 0 || pos2 == -1)
+		Capacity capacity = getCapacityFromContainerName(containerName,
+				hibernateDao);
+		if (capacity.getOneDimensionCapacity() < pos1
+				|| capacity.getTwoDimensionCapacity() < pos2 || pos1 == 0
+				|| pos1 == -1 || pos2 == 0 || pos2 == -1)
 		{
-			throw new ApplicationException(null, null, "Please enter valid storage position.");
+			throw new ApplicationException(null, null,
+					"Please enter valid storage position.");
 		}
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
 		params.put("1", new NamedQueryParam(DBTypes.LONG, pos1));
 		params.put("2", new NamedQueryParam(DBTypes.LONG, pos2));
 
-		Collection positionList = hibernateDao.executeNamedQuery("isPositionAvailable", params);
+		Collection positionList = hibernateDao.executeNamedQuery(
+				"isPositionAvailable", params);
 		if (positionList.isEmpty())
 		{
-			positionList = hibernateDao.executeNamedQuery("isPositionAvailableContainer", params);
+			positionList = hibernateDao.executeNamedQuery(
+					"isPositionAvailableContainer", params);
 
 		}
 		return positionList.isEmpty();
 	}
 
-	public static LabellingSchemeDTO getLabellingSchemeByContainerName(String containerName,
-			HibernateDAO hibernateDao) throws ApplicationException
+	public static LabellingSchemeDTO getLabellingSchemeByContainerName(
+			String containerName, HibernateDAO hibernateDao)
+			throws ApplicationException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
+		substParams
+				.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
 		LabellingSchemeDTO labellingSchemeDTO = new LabellingSchemeDTO();
 		List labellingSchemeList = hibernateDao.executeNamedQuery(
 				"getStorageContainerLabellingSchemesByName", substParams);
@@ -690,7 +740,8 @@ public class StorageContainerBizlogic
 		return labellingSchemeDTO;
 	}
 
-	private static List<String> extractLabellingSchemes(List labellingSchemesList)
+	private static List<String> extractLabellingSchemes(
+			List labellingSchemesList)
 	{
 		List<String> labellingList = new ArrayList<String>();
 		if (labellingSchemesList != null && !labellingSchemesList.isEmpty())
@@ -702,12 +753,14 @@ public class StorageContainerBizlogic
 		return labellingList;
 	}
 
-	public Long getContainerIdFromName(String containerName, HibernateDAO hibernateDao)
-			throws ApplicationException
+	public Long getContainerIdFromName(String containerName,
+			HibernateDAO hibernateDao) throws ApplicationException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
-		List idList = hibernateDao.executeNamedQuery("getStorageContainerIdByName", substParams);
+		substParams
+				.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
+		List idList = hibernateDao.executeNamedQuery(
+				"getStorageContainerIdByName", substParams);
 		if (idList.isEmpty())
 		{
 			throw new ApplicationException(null, null, String.format(
@@ -716,15 +769,18 @@ public class StorageContainerBizlogic
 		return (Long) idList.get(0);
 	}
 
-	public Capacity getCapacityFromContainerName(String containerName, HibernateDAO hibernateDao)
-			throws ApplicationException
+	public Capacity getCapacityFromContainerName(String containerName,
+			HibernateDAO hibernateDao) throws ApplicationException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
-		List idList = hibernateDao.executeNamedQuery("getCapacityByName", substParams);
+		substParams
+				.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
+		List idList = hibernateDao.executeNamedQuery("getCapacityByName",
+				substParams);
 		if (idList.isEmpty())
 		{
-			throw new ApplicationException(null, null, Constants.INVALID_STORAGE_CONTAINER_NAME);
+			throw new ApplicationException(null, null,
+					Constants.INVALID_STORAGE_CONTAINER_NAME);
 		}
 		return (Capacity) idList.get(0);
 	}
@@ -736,22 +792,26 @@ public class StorageContainerBizlogic
 	 * @return Position
 	 * @throws ApplicationException 
 	 */
-	public SpecimenPosition getFirstAvailablePositionInContainer(String containerName,
-			LabellingSchemeDTO labellingSchemeDTO, HibernateDAO hibernateDao)
-			throws ApplicationException
+	public SpecimenPosition getFirstAvailablePositionInContainer(
+			String containerName, LabellingSchemeDTO labellingSchemeDTO,
+			HibernateDAO hibernateDao) throws ApplicationException
 	{
 		SpecimenPosition position = null;
 		try
 		{
 			Integer xPos;
 			Integer yPos;
-			final Capacity scCapacity = getCapacityFromContainerName(containerName, hibernateDao);
+			final Capacity scCapacity = getCapacityFromContainerName(
+					containerName, hibernateDao);
 			AliquotContainerDetailsDTO aliquotContainerDetailsDTO = new AliquotContainerDetailsDTO();
 			aliquotContainerDetailsDTO.containerName = containerName;
-			aliquotContainerDetailsDTO.dimension1 = scCapacity.getOneDimensionCapacity();
-			aliquotContainerDetailsDTO.dimension2 = scCapacity.getTwoDimensionCapacity();
+			aliquotContainerDetailsDTO.dimension1 = scCapacity
+					.getOneDimensionCapacity();
+			aliquotContainerDetailsDTO.dimension2 = scCapacity
+					.getTwoDimensionCapacity();
 			aliquotContainerDetailsDTO.emptyPositionCount = 1l;
-			setAvailablePositionsForContainer(aliquotContainerDetailsDTO, "", "", 1, hibernateDao);
+			setAvailablePositionsForContainer(aliquotContainerDetailsDTO, "",
+					"", 1, hibernateDao);
 
 			if (!aliquotContainerDetailsDTO.position1.isEmpty())
 			{
@@ -760,10 +820,12 @@ public class StorageContainerBizlogic
 				position = new SpecimenPosition();
 				position.setPositionDimensionOneString(pos1);
 				position.setPositionDimensionTwoString(pos2);
-				position.setPositionDimensionOne(AppUtility.getPositionValueInInteger(
-						labellingSchemeDTO.getDimensionOne(), pos1));
-				position.setPositionDimensionTwo(AppUtility.getPositionValueInInteger(
-						labellingSchemeDTO.getDimensionTwo(), pos2));
+				position.setPositionDimensionOne(AppUtility
+						.getPositionValueInInteger(
+								labellingSchemeDTO.getDimensionOne(), pos1));
+				position.setPositionDimensionTwo(AppUtility
+						.getPositionValueInInteger(
+								labellingSchemeDTO.getDimensionTwo(), pos2));
 
 			}
 
@@ -773,6 +835,71 @@ public class StorageContainerBizlogic
 			throw new BizLogicException(daoEx);
 		}
 		return position;
+	}
+
+	//global variable to keep count of stored specimens
+	private Integer totalCount = new Integer(0);
+	//global variable to keep count of container capacity
+	private Integer totalCapacity = new Integer(0);
+
+	/**
+	 * Recursively gets all children of container and sets count of specimens and capacity
+	 * @param containerId
+	 * @param dao
+	 * @return
+	 * @throws ApplicationException
+	 */
+	private List<Long> getChildrenOfStorageContainerAndUpdateCounts(
+			Long containerId, HibernateDAO dao) throws ApplicationException
+	{
+		Integer specCount = new StorageContainerDAO()
+				.getNumberOfSpecimensAssigned(containerId, dao);
+		if (specCount != null)
+		{
+			totalCount += specCount;
+		}
+
+		Integer capacity = new StorageContainerDAO()
+				.getStorageTypeCapacityCountFromContainerId(containerId, dao);
+		if (capacity != null)
+		{
+			totalCapacity += capacity;
+		}
+
+		List<Long> childContainerList = new StorageContainerDAO()
+				.getListOfChildContainerId(containerId, dao);
+
+		ArrayList<Long> containerList = new ArrayList<Long>();
+
+		for (Long childId : childContainerList)
+		{
+			containerList.addAll(getChildrenOfStorageContainerAndUpdateCounts(
+					childId, dao));//recursive call to find children of child container
+		}
+		childContainerList.addAll(containerList);
+
+		return childContainerList;
+	}
+
+	/**
+	 * Returns map containing specimen counts, capacity and percentage of utilization of a container
+	 * @param containerId
+	 * @param dao
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public StorageContainerUtilizationDTO getStorageContainerUtilizationDTO(
+			Long containerId, HibernateDAO dao) throws ApplicationException
+	{
+		//recursive call to find all children and set specimen count and total capacity count
+		getChildrenOfStorageContainerAndUpdateCounts(containerId, dao);
+
+		StorageContainerUtilizationDTO dto = new StorageContainerUtilizationDTO();
+		dto.setContainerId(containerId);
+		dto.setNumberOfSpecimensAssigned(totalCount);
+		dto.setTotalStorageCapacity(totalCapacity);
+
+		return dto;
 	}
 
 }

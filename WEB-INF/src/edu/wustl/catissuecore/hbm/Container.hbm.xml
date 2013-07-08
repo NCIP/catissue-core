@@ -415,5 +415,13 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 <query name="getAllocatedContainerPosition">
     SELECT positionDimensionOne,positionDimensionTwo from edu.wustl.catissuecore.domain.ContainerPosition where parentContainer.name=?
 </query>
-
+<query name="getAssignedSpecimenCount">
+	select count(*) from SpecimenPosition specPos where specPos.storageContainer.id=?
+</query>
+<query name="getStorageTypeCapacityFromContainerId">
+	select st.capacity from StorageContainer cont, StorageType st where size(st.holdsSpecimenClassCollection)>0 and size(st.holdsSpecimenTypeCollection)>0 and cont.storageType.id=st.id and cont.id=?
+</query>
+<query name="getChildContainerIds">
+	select cntPos.occupiedContainer.id from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id=?
+</query>
 </hibernate-mapping>
