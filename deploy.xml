@@ -1892,7 +1892,6 @@
 		<antcall target="update_protection_element" />
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 		<antcall target="upgrade_db_plusv3.1" />
-		<antcall target="addEMPIMetadata" />
 
 	</target>
 
@@ -2395,7 +2394,6 @@
 	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.1-->
 	<target name="upgrade_db_v1.2.4 to v1.2.5" description="Upgrading Database v1.2.4 to v1.2.5">
 		<echo message="Upgrading Database v1.2.4 to v1.2.5" />
-		<antcall target="addEMPIMetadata"/>
 	</target>
 	
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
@@ -5204,51 +5202,6 @@
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 	
-	<target name="addEMPIMetadata" description="Add EMPI meatadata">
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-		<antcall target="replacecfgfiles"></antcall>
-		<property name="db.driver.class" value="" />
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<var name="db.driver.class" unset="true"/>
-				<property name="db.driver.class" value="${mysql.driver.string}" />
-				<echo message="Updating eMPI Metadata for mysql....." />
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<var name="db.driver.class" unset="true"/>
-					<property name="db.driver.class" value="${oracle.driver.string}" />
-					<echo message="Updating eMPI Metadata for oracle...." />
-				</then>
-			</elseif>
-			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
-		</if>
-		<echo message="Database Driver class : ${db.driver.class}"></echo>
-		
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddEMPIMetaData" fork="true" maxmemory="1024M" failonerror="true">
-			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${db.driver.class}"/>
-		</java>
-				
-		<!--delete dir="${temp.dir}" /-->
-	</target>
 	
 	<!--Ashraf: CS dashboard configuration script-->
 			
