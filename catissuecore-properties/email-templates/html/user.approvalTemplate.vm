@@ -50,4 +50,8 @@ Congratulations! You are now a member of caTissue. Your registration details are
 Congratulations, you have successfully been migrated to your institution's user account. Please use the same to log into caTissue from now on.<br>
 #end
 <br>
+Please click the below link to set your password:
+<br>
+$url/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken=$user.forgotPasswordToken<br>
+<br>
 $footer

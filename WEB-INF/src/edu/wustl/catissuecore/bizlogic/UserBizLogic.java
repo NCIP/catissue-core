@@ -1961,14 +1961,14 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	public String checkFirstLoginAndExpiry(final User user)
 	{
 		final List passwordList = new ArrayList(user.getPasswordCollection());
-
-		final boolean firstTimeLogin = getFirstLogin(user);
-		// If user has logged in for the first time, return key of Change
-		// password on first login
-		if (firstTimeLogin)
-		{
-			return "errors.changePassword.changeFirstLogin";
-		}
+/*Commented below code as we are sending set password link in approval mail */
+//		final boolean firstTimeLogin = getFirstLogin(user);
+//		// If user has logged in for the first time, return key of Change
+//		// password on first login
+//		if (firstTimeLogin)
+//		{
+//			return "errors.changePassword.changeFirstLogin";
+//		}
 
 		Collections.sort(passwordList);
 		final Password lastPassword = (Password) passwordList.get(0);

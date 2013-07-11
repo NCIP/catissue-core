@@ -37,6 +37,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.UniqueIDGenerator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -201,6 +202,8 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
         SecurityManagerFactory.getSecurityManager().createUser(csmUser);
         decideRole(csmUser, user);
         user.setCsmUserId(csmUser.getUserId());
+        String userToken=UniqueIDGenerator.getUniqueID();
+		user.setForgotPasswordToken(userToken);
         final Password password = new Password(PasswordManager.encrypt(generatedPassword), user);
         user.getPasswordCollection().add(password);
         logger.debug("password stored in passwore table");

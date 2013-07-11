@@ -50,6 +50,7 @@ public class EmailHandler
     {
     	Map<String, Object> contextMap = new HashMap<String, Object>();
 		contextMap.put("user", user);
+		contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
 		
 		boolean emailStatus = EmailClient.getInstance().sendEmail(
 				Constants.USER_APPROVAL_EMAIL_TMPL,
