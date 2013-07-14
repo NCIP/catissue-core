@@ -1,5 +1,4 @@
-
-package edu.wustl.catissuecore.action;
+package krishagni.catissueplus.action;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import krishagni.catissueplus.dto.BiohazardDTO;
+import krishagni.catissueplus.dto.SpecimenDTO;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -15,13 +17,12 @@ import org.apache.struts.action.ActionMapping;
 import com.google.gson.Gson;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
+import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.dto.BiohazardDTO;
-import edu.wustl.catissuecore.dto.SpecimenDTO;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -32,13 +33,18 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
 
-public class SpecimenEditAction extends CatissueBaseAction
+
+public class SpecimenAddAction extends CatissueBaseAction
 {
 
 	@Override
-	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeCatissueAction(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception
 	{
+		String pageOf="pageOfNewSpecimen";
+		String pageOf1 = "pageOfCreateSpecimenCPQuery";
+		String pageOf2 = "pageOfNewSpecimenCPQuery";
 		Gson gson = new Gson();
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String obj = null;
@@ -58,18 +64,24 @@ public class SpecimenEditAction extends CatissueBaseAction
 			if (!Validator.isEmpty(obj))
 			{
 				Long identifier = Long.valueOf(Utility.toLong(obj));
-				Specimen specimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(),
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(),
 						identifier);
-				specimenDTO = new SpecimenBizlogic().getDTO(specimen);
+				specimenDTO = new krishagni.catissueplus.dto.SpecimenDTO();
+				specimenDTO.setSpecimenCollectionGroupId(scg.getId());
+				specimenDTO.setSpecimenCollectionGroupName(scg.getName());
+				specimenDTO.setLineage(Constants.NEW_SPECIMEN);
+				specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
+				specimenDTO.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				specimenDTO.setAvailable(Boolean.FALSE);
+				specimenDTO.setIsVirtual(Boolean.TRUE);
 				request.setAttribute("specimenDTO", specimenDTO);
-
 				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
 				NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-				List<Object> list = bizLogic.getcpIdandPartId(sessionDataBean, obj);
-				Object[] objArr = (Object[]) list.get(0);
-				Long cpId = Long.valueOf(objArr[0].toString());
-				request.setAttribute("cpId", cpId);
+//				List<Object> list = bizLogic.getcpIdandPartId(sessionDataBean, obj);
+//				Object[] objArr = (Object[]) list.get(0);
+//				Long cpId = Long.valueOf(objArr[0].toString());
+				request.setAttribute("cpId", scg.getCollectionProtocolRegistration().getCollectionProtocol().getId());
 
 				Long reportId = bizLogic.getAssociatedIdentifiedReportId(specimenDTO.getId(), hibernateDao);
 				if (reportId == null)
@@ -91,11 +103,6 @@ public class SpecimenEditAction extends CatissueBaseAction
 			List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
 			specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,
 					Constants.SELECT_OPTION_VALUE));
-			if (!specimenDTO.getClassName().equals(Constants.SELECT_OPTION))
-			{
-				specimenClassList.clear();
-				specimenClassList.addAll(AppUtility.getSpecimenTypes(specimenDTO.getClassName()));
-			}
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenClassList);
 
 			request.setAttribute(Constants.TISSUE_TYPE_LIST_JSON,
@@ -166,7 +173,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 			}
 			request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
 			request.setAttribute("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-			request.setAttribute(Constants.OPERATION, Constants.EDIT);
+			request.setAttribute(Constants.OPERATION, Constants.ADD);
 
 		}
 		finally
@@ -174,7 +181,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 			AppUtility.closeDAOSession(hibernateDao);
 		}
 
-		return mapping.findForward(Constants.PAGE_OF_NEW_SPECIMEN);
+		return mapping.findForward(pageOf2);
 	}
 
 }

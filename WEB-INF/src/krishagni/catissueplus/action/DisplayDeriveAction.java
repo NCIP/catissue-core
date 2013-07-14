@@ -29,40 +29,51 @@ import edu.wustl.dao.exception.DAOException;
 
 public class DisplayDeriveAction extends CatissueBaseAction
 {
-
+	    
 	@Override
-	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeCatissueAction(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception
 	{
-		
+
 		HibernateDAO hibernateDao = null;
 		try
 		{
-			SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
-					Constants.SESSION_DATA);
-			hibernateDao = (HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
-			Long parentId = 0l; 
-			
+			SessionDataBean sessionDataBean = (SessionDataBean) request
+					.getSession().getAttribute(Constants.SESSION_DATA);
+			hibernateDao = (HibernateDAO) AppUtility
+					.openDAOSession(sessionDataBean);
+			Long parentId = 0l;
+
 			DerivedDTO derivedDTO = new DerivedDTO();
-			if(Validator.isEmpty(request.getParameter("parentSpecimenId")))
+			if (Validator.isEmpty(request.getParameter("parentSpecimenId")))
 			{
 				derivedDTO.setClassName(Constants.CELL);
 				derivedDTO.setType(Constants.NOT_SPECIFIED);
 			}
-			else 
+			else
 			{
 				derivedDTO.setParentSpecimenId(parentId);
-				derivedDTO.setParentSpecimenLabel(request.getParameter("parentLabel"));
+				derivedDTO.setParentSpecimenLabel(request
+						.getParameter("parentLabel"));
 				derivedDTO.setType(request.getParameter("specType"));
 				derivedDTO.setClassName(request.getParameter("specClassName"));
-				parentId = Long.valueOf(request.getParameter("parentSpecimenId"));
-				request.setAttribute("cpId", SpecimenDAO.getcpId(parentId,  hibernateDao));
+				parentId = Long.valueOf(request
+						.getParameter("parentSpecimenId"));
+				//				request.setAttribute("cpId", SpecimenDAO.getcpId(parentId,  hibernateDao));
 			}
-			
-			request.setAttribute("isSpecimenLabelGeneratorAvl",parentId==0?false:new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(parentId, hibernateDao));
-			request.setAttribute("isBarcodeGeneratorAvl", Variables.isSpecimenBarcodeGeneratorAvl);
+
+			request.setAttribute(
+					"isSpecimenLabelGeneratorAvl",
+					parentId == 0
+							? false
+							: new SpecimenBizlogic()
+									.isSpecimenLabelGeneratorAvl(parentId,
+											hibernateDao));
+			request.setAttribute("isBarcodeGeneratorAvl",
+					Variables.isSpecimenBarcodeGeneratorAvl);
 			derivedDTO.setCreatedOn(new Date());
-			
+
 			derivedDTO.setInitialQuantity(0.0);
 			request.setAttribute("pageOf", request.getParameter("pageOf"));
 			request.setAttribute("deriveDTO", derivedDTO);
@@ -75,8 +86,9 @@ public class DisplayDeriveAction extends CatissueBaseAction
 		return mapping.findForward("success");
 	}
 
-	private void setSpecimenCharsInRequest(HttpServletRequest request) throws BizLogicException,
-			DAOException, DynamicExtensionsSystemException
+	private void setSpecimenCharsInRequest(HttpServletRequest request)
+			throws BizLogicException, DAOException,
+			DynamicExtensionsSystemException
 	{
 		Gson gson = new Gson();
 		request.setAttribute(Constants.TISSUE_TYPE_LIST_JSON,
@@ -90,10 +102,15 @@ public class DisplayDeriveAction extends CatissueBaseAction
 
 		request.setAttribute(Constants.MOLECULAR_TYPE_LIST_JSON,
 				gson.toJson(AppUtility.getSpecimenTypes(Constants.MOLECULAR)));
-		String className =  request.getParameter("specClassName");
-		request.setAttribute("cellType", AppUtility.getSpecimenTypes(className==null?Constants.CELL:className));
-		request.setAttribute("isSpecimenBarcodeGeneratorAvl",Variables.isSpecimenBarcodeGeneratorAvl);
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, AppUtility.getSpecimenClassList());
+		String className = request.getParameter("specClassName");
+		request.setAttribute("cellType", AppUtility
+				.getSpecimenTypes(className == null
+						? Constants.CELL
+						: className));
+		request.setAttribute("isSpecimenBarcodeGeneratorAvl",
+				Variables.isSpecimenBarcodeGeneratorAvl);
+		request.setAttribute(Constants.SPECIMEN_CLASS_LIST,
+				AppUtility.getSpecimenClassList());
 	}
 
 }

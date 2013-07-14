@@ -83,30 +83,36 @@ public class UpdateMetadata
 			stmt = connection.createStatement();
 			UpdateMetadataUtil.isExecuteStatement = true;
 			dbSpecifiecCompareOperator = UpdateMetadataUtil.getDBCompareModifier();
-			if (isUpgrade.equals("true"))
-			{
-				if (buildVersion != null && buildVersion.equals("p2top4"))
-				{
-					updateFromP2toP4();
-				}
-				else if (buildVersion != null && buildVersion.equals("1.1_to_p2"))
-				{
-					updateRc4ToP2();
-				}
-			}
-			else
-			{
-				deleteMetadata();
-				final List<String> updateSQL = updateSQLForDistributionProtocol();
-				UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
-				addMetadata();
-				updateMetadata();
-				addCurratedPath();
-				deletePermissibleValue();
-				addPermissibleValue();
-				cleanUpMetadata();
-				updateFromRC4toP4();
-			}
+			final AddImageMetadata addImageMetadata = new AddImageMetadata(connection);
+			addImageMetadata.addImageMetadata();
+			AddEquipMetadata addEquipMetadata = new AddEquipMetadata(connection);
+			addEquipMetadata.addEquipMetadata();
+//			addMetadata();
+			
+//			if (isUpgrade.equals("true"))
+//			{
+//				if (buildVersion != null && buildVersion.equals("p2top4"))
+//				{
+//					updateFromP2toP4();
+//				}
+//				else if (buildVersion != null && buildVersion.equals("1.1_to_p2"))
+//				{
+//					updateRc4ToP2();
+//				}
+//			}
+//			else
+//			{
+//				deleteMetadata();
+//				final List<String> updateSQL = updateSQLForDistributionProtocol();
+//				UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
+//				addMetadata();
+//				updateMetadata();
+//				addCurratedPath();
+//				deletePermissibleValue();
+//				addPermissibleValue();
+//				cleanUpMetadata();
+//				updateFromRC4toP4();
+//			}
 		}
 		finally
 		{

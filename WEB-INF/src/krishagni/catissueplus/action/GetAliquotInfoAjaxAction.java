@@ -11,6 +11,7 @@ import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.dto.AliquotContainerDetailsDTO;
 import krishagni.catissueplus.dto.AliquotDetailsDTO;
 import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
+import krishagni.catissueplus.dto.SpecimenDTO;
 import krishagni.catissueplus.util.CatissuePlusCommonUtil;
 
 import org.apache.struts.action.ActionForm;
@@ -22,7 +23,6 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;

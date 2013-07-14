@@ -23,12 +23,9 @@ public class PrintUtil
 	private static final Logger logger = Logger.getCommonLogger(PrintUtil.class);
 
 	public static boolean printSpecimenLabel(String printerType, String printerLocation,
-			HttpServletRequest request, Long specimenId)
+			SessionDataBean dataBean, Long specimenId)
 	{
-		String strIpAddress = request.getRemoteAddr();
-		SessionDataBean dataBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
-
+		String strIpAddress = dataBean.getIpAddress();
 		boolean printStauts = false;
 		DAO dao = null;
 		try

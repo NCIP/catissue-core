@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import krishagni.catissueplus.bizlogic.SpecimenBizLogic;
+import krishagni.catissueplus.dto.BiohazardDTO;
+import krishagni.catissueplus.dto.ExternalIdentifierDTO;
+import krishagni.catissueplus.dto.SpecimenDTO;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -28,9 +31,6 @@ import com.google.gson.JsonParseException;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 
-import edu.wustl.catissuecore.dto.BiohazardDTO;
-import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
-import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.PrintUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -144,7 +144,7 @@ public class SpecimenAjaxAction extends DispatchAction
 				boolean isToPrintLabel = Boolean.valueOf(request.getParameter("printLabel"));
 				if (isToPrintLabel)
 				{
-					boolean printStatus = PrintUtil.printSpecimenLabel(" ", " ", request,
+					boolean printStatus = PrintUtil.printSpecimenLabel(" ", " ", sessionDataBean,
 							specDTO.getId());
 					if (printStatus)
 					{

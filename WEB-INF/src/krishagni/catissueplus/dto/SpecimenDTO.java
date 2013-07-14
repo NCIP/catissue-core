@@ -1,8 +1,7 @@
-package edu.wustl.catissuecore.dto;
+package krishagni.catissueplus.dto;
 
 import java.util.Collection;
 import java.util.Date;
-
 
 public class SpecimenDTO 
 {
@@ -11,7 +10,7 @@ public class SpecimenDTO
 	private String className;
 	private String type;
 	private Boolean isVirtual;
-	private String generateLabel;
+	private String generateLabel; 
 	private String operation;
 	private Long parentSpecimenId;
 	private Long specimenCollectionGroupId;
@@ -37,7 +36,7 @@ public class SpecimenDTO
 	private Collection<ExternalIdentifierDTO> externalIdentifiers;
 	private Collection<BiohazardDTO> bioHazards;
 	private String biohazardType;
-	private boolean isToPrintLabel;
+private boolean isToPrintLabel;
 	
 	
 	public boolean isToPrintLabel()

@@ -424,7 +424,6 @@
 	<query name="getSpecimenIdByLorB">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where (spec.label = ? or spec.barcode = ?) and spec.activityStatus= ? </query>	
 	<query name="getSCGnCPIDByLorB">select specimen.id, specimen.specimenCollectionGroup.id, specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus= ? </query>
 	<query name="getSiteIdFromContainer">select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen specimen where (specimen.id=? or specimen.label=? ) and specimen.activityStatus=?</query>
-	<query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>
 	<query name="selectParentSpecimenDetailsForAliquot">
 	    		select specimen.activityStatus,scg.id, specimen.id, specimen.label,
 				specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
@@ -453,4 +452,5 @@
 	</query>
 	
 	
+	<query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>
 </hibernate-mapping>

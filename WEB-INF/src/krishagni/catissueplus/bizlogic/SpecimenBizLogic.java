@@ -1,7 +1,6 @@
 
 package krishagni.catissueplus.bizlogic;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +11,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import krishagni.catissueplus.Exception.CatissueException;
+import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
+import krishagni.catissueplus.dto.BiohazardDTO;
+import krishagni.catissueplus.dto.ExternalIdentifierDTO;
+import krishagni.catissueplus.dto.SpecimenDTO;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -27,9 +32,6 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.dto.BiohazardDTO;
-import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
-import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelException;
@@ -65,12 +67,12 @@ import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
-import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenBizLogic
 {
 
-	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenBizLogic.class);
+	private static final Logger LOGGER = Logger
+			.getCommonLogger(SpecimenBizLogic.class);
 
 	/**
 	 * This will update the specimen object in the database
@@ -79,24 +81,29 @@ public class SpecimenBizLogic
 	 * @return 
 	 * @throws BizLogicException
 	 */
-	public SpecimenDTO updateSpecimen(HibernateDAO hibernateDao, SpecimenDTO specimenDTO,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	public SpecimenDTO updateSpecimen(HibernateDAO hibernateDao,
+			SpecimenDTO specimenDTO, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		Specimen oldSpecimenObj = null;
 		try
 		{
 			//object retrieval for auditing purpose
-			oldSpecimenObj = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(),
-					specimenDTO.getId());
-			if (!isAuthorizedForSpecimenProcessing(hibernateDao, specimenDTO, sessionDataBean))
+			oldSpecimenObj = (Specimen) hibernateDao.retrieveById(
+					Specimen.class.getName(), specimenDTO.getId());
+			if (!isAuthorizedForSpecimenProcessing(hibernateDao, specimenDTO,
+					sessionDataBean))
 			{
-				throw AppUtility.getUserNotAuthorizedException("SPECIMEN_PROCESSING", "",
-						oldSpecimenObj.getClass().getSimpleName());
+				throw AppUtility.getUserNotAuthorizedException(
+						"SPECIMEN_PROCESSING", "", oldSpecimenObj.getClass()
+								.getSimpleName());
 			}
 			//updating the object with DTO
-			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, sessionDataBean, hibernateDao);
+			getUpdatedSpecimen(oldSpecimenObj, specimenDTO, sessionDataBean,
+					hibernateDao);
 
-			if (Variables.isSpecimenLabelGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl)
+			if (Variables.isSpecimenLabelGeneratorAvl
+					|| Variables.isTemplateBasedLblGeneratorAvl)
 			{
 				generateLabel(oldSpecimenObj);
 			}
@@ -112,8 +119,8 @@ public class SpecimenBizLogic
 		catch (final DAOException daoExp)
 		{
 			LOGGER.error(daoExp.getMessage(), daoExp);
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
+					daoExp.getMsgValues());
 		}
 		catch (ParseException e)
 		{
@@ -123,7 +130,8 @@ public class SpecimenBizLogic
 		catch (ApplicationException e)
 		{
 			LOGGER.error(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			throw this.getBizLogicException(e, e.getErrorKeyName(),
+					e.getMsgValues());
 		}
 		catch (CloneNotSupportedException e)
 		{
@@ -143,7 +151,8 @@ public class SpecimenBizLogic
 	private boolean isStatusCollected(Specimen specimen)
 	{
 		return specimen.getCollectionStatus() != null
-				&& specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED);
+				&& specimen.getCollectionStatus().equals(
+						Constants.COLLECTION_STATUS_COLLECTED);
 	}
 
 	/**
@@ -175,7 +184,8 @@ public class SpecimenBizLogic
 			catch (LabelException e)
 			{
 				LOGGER.error(e.getMessage(), e);
-				throw this.getBizLogicException(e, "errors.item", e.getMessage());
+				throw this.getBizLogicException(e, "errors.item",
+						e.getMessage());
 			}
 			catch (LabelGenException e)
 			{
@@ -199,7 +209,8 @@ public class SpecimenBizLogic
 	private void generateBarCode(Specimen specimen) throws BizLogicException
 	{
 		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl
-				&& (specimen.getBarcode() == null || "".equals(specimen.getBarcode())))
+				&& (specimen.getBarcode() == null || "".equals(specimen
+						.getBarcode())))
 		{
 			try
 			{
@@ -224,8 +235,9 @@ public class SpecimenBizLogic
 	 * @throws ApplicationException 
 	 * @throws CloneNotSupportedException 
 	 */
-	private void getUpdatedSpecimen(Specimen oldSpecimenObj, SpecimenDTO specimenDTO,
-			SessionDataBean sessionDataBean, DAO dao) throws ParseException, ApplicationException,
+	private void getUpdatedSpecimen(Specimen oldSpecimenObj,
+			SpecimenDTO specimenDTO, SessionDataBean sessionDataBean, DAO dao)
+			throws ParseException, ApplicationException,
 			CloneNotSupportedException
 	{
 		if (!Validator.isEmpty(specimenDTO.getActivityStatus()))
@@ -245,7 +257,8 @@ public class SpecimenBizLogic
 				&& !oldSpecimenObj.getCollectionStatus().equalsIgnoreCase(
 						Constants.COLLECTION_STATUS_COLLECTED))
 		{
-			oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
+			oldSpecimenObj.setCollectionStatus(specimenDTO
+					.getCollectionStatus());
 			oldSpecimenObj.setIsAvailable(true);
 
 			if (specimenDTO.getQuantity() != null)
@@ -254,7 +267,8 @@ public class SpecimenBizLogic
 			}
 			else
 			{
-				oldSpecimenObj.setAvailableQuantity(oldSpecimenObj.getInitialQuantity());
+				oldSpecimenObj.setAvailableQuantity(oldSpecimenObj
+						.getInitialQuantity());
 			}
 
 			this.setSpecimenEvents(oldSpecimenObj, sessionDataBean);
@@ -262,10 +276,12 @@ public class SpecimenBizLogic
 		else
 		{
 			if (!Validator.isEmpty(specimenDTO.getCollectionStatus()))
-				oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
+				oldSpecimenObj.setCollectionStatus(specimenDTO
+						.getCollectionStatus());
 
 			if (specimenDTO.getAvailableQuantity() != null)
-				oldSpecimenObj.setAvailableQuantity(specimenDTO.getAvailableQuantity());
+				oldSpecimenObj.setAvailableQuantity(specimenDTO
+						.getAvailableQuantity());
 
 			if (specimenDTO.isAvailable() != null)
 				oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
@@ -281,13 +297,16 @@ public class SpecimenBizLogic
 			oldSpecimenObj.setSpecimenType(specimenDTO.getType());
 
 		if (!Validator.isEmpty(specimenDTO.getPathologicalStatus()))
-			oldSpecimenObj.setPathologicalStatus(specimenDTO.getPathologicalStatus());
+			oldSpecimenObj.setPathologicalStatus(specimenDTO
+					.getPathologicalStatus());
 
 		if (!Validator.isEmpty(specimenDTO.getTissueSide()))
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
+			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(
+					specimenDTO.getTissueSide());
 
 		if (!Validator.isEmpty(specimenDTO.getTissueSite()))
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
+			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(
+					specimenDTO.getTissueSite());
 
 		if (!Validator.isEmpty(specimenDTO.getComments()))
 			oldSpecimenObj.setComment(specimenDTO.getComments());
@@ -301,21 +320,27 @@ public class SpecimenBizLogic
 				&& Constants.COLLECTION_STATUS_COLLECTED.equals(oldSpecimenObj
 						.getCollectionStatus()))
 		{
-			if (specimenDTO.getPos1() != null && !"".equals(specimenDTO.getPos1().trim())
-					&& specimenDTO.getPos2() != null && !"".equals(specimenDTO.getPos2().trim()))
+			if (specimenDTO.getPos1() != null
+					&& !"".equals(specimenDTO.getPos1().trim())
+					&& specimenDTO.getPos2() != null
+					&& !"".equals(specimenDTO.getPos2().trim()))
 			{
-				int toPos1Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
-						specimenDTO.getContainerName(), 1, specimenDTO.getPos1());
-				int toPos2Int = StorageContainerUtil.convertSpecimenPositionsToInteger(
-						specimenDTO.getContainerName(), 2, specimenDTO.getPos2());
+				int toPos1Int = StorageContainerUtil
+						.convertSpecimenPositionsToInteger(
+								specimenDTO.getContainerName(), 1,
+								specimenDTO.getPos1());
+				int toPos2Int = StorageContainerUtil
+						.convertSpecimenPositionsToInteger(
+								specimenDTO.getContainerName(), 2,
+								specimenDTO.getPos2());
 				position.setPositionDimensionOne(toPos1Int);
 				position.setPositionDimensionTwo(toPos2Int);
 				position.setPositionDimensionOneString(specimenDTO.getPos1());
 				position.setPositionDimensionTwoString(specimenDTO.getPos2());
 				StorageContainer container = new StorageContainer();
 				Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-				substParams.put("0",
-						new NamedQueryParam(DBTypes.STRING, specimenDTO.getContainerName()));
+				substParams.put("0", new NamedQueryParam(DBTypes.STRING,
+						specimenDTO.getContainerName()));
 
 				final List list = ((HibernateDAO) dao).executeNamedQuery(
 						"getStorageContainerIdByContainerName", substParams);
@@ -326,8 +351,12 @@ public class SpecimenBizLogic
 				}
 				else
 				{
-					throw this.getBizLogicException(null, "errors.invalid",
-							ApplicationProperties.getValue("array.positionInStorageContainer"));
+					throw this
+							.getBizLogicException(
+									null,
+									"errors.invalid",
+									ApplicationProperties
+											.getValue("array.positionInStorageContainer"));
 				}
 				container.setName(specimenDTO.getContainerName());
 				position.setStorageContainer(container);
@@ -339,11 +368,13 @@ public class SpecimenBizLogic
 		if (Constants.MOLECULAR.equals(oldSpecimenObj.getClassName())
 				&& specimenDTO.getConcentration() != null)
 		{
-			oldSpecimenObj.setConcentrationInMicrogramPerMicroliter(specimenDTO.getConcentration());
+			oldSpecimenObj.setConcentrationInMicrogramPerMicroliter(specimenDTO
+					.getConcentration());
 		}
-		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(oldSpecimenObj,
+		oldSpecimenObj.setExternalIdentifierCollection(getExternalIdentifiers(
+				oldSpecimenObj, specimenDTO));
+		oldSpecimenObj.setBiohazardCollection(getBiohazards(oldSpecimenObj,
 				specimenDTO));
-		oldSpecimenObj.setBiohazardCollection(getBiohazards(oldSpecimenObj, specimenDTO));
 	}
 
 	/**
@@ -352,8 +383,8 @@ public class SpecimenBizLogic
 	 * @param specimenDTO
 	 * @return
 	 */
-	private Collection<ExternalIdentifier> getExternalIdentifiers(Specimen oldSpecimenObj,
-			SpecimenDTO specimenDTO)
+	private Collection<ExternalIdentifier> getExternalIdentifiers(
+			Specimen oldSpecimenObj, SpecimenDTO specimenDTO)
 	{
 		Collection<ExternalIdentifier> externalIdentifierCollection = oldSpecimenObj
 				.getExternalIdentifierCollection();
@@ -367,8 +398,9 @@ public class SpecimenBizLogic
 		{
 			if (externalIdentifierDTO.getStatus().equalsIgnoreCase("ADD"))
 			{
-				externalIdentifierCollection.add(getExternalIdentifierDomainObjFromDTO(
-						oldSpecimenObj, externalIdentifierDTO));
+				externalIdentifierCollection
+						.add(getExternalIdentifierDomainObjFromDTO(
+								oldSpecimenObj, externalIdentifierDTO));
 			}
 			else if (externalIdentifierDTO.getStatus().equalsIgnoreCase("EDIT"))
 			{
@@ -376,8 +408,10 @@ public class SpecimenBizLogic
 				{
 					if (externalIdentifier.equals(externalIdentifierDTO))
 					{
-						externalIdentifier.setName(externalIdentifierDTO.getName());
-						externalIdentifier.setValue(externalIdentifierDTO.getValue());
+						externalIdentifier.setName(externalIdentifierDTO
+								.getName());
+						externalIdentifier.setValue(externalIdentifierDTO
+								.getValue());
 						break;
 					}
 				}
@@ -398,8 +432,8 @@ public class SpecimenBizLogic
 	 * @param externalIdentifierDTO
 	 * @return
 	 */
-	private ExternalIdentifier getExternalIdentifierDomainObjFromDTO(Specimen oldSpecimenObj,
-			ExternalIdentifierDTO externalIdentifierDTO)
+	private ExternalIdentifier getExternalIdentifierDomainObjFromDTO(
+			Specimen oldSpecimenObj, ExternalIdentifierDTO externalIdentifierDTO)
 	{
 		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
 		externalIdentifier.setName(externalIdentifierDTO.getName());
@@ -415,17 +449,21 @@ public class SpecimenBizLogic
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	private Collection<Biohazard> getBiohazards(Specimen oldSpecimenObj, SpecimenDTO specimenDTO)
+	private Collection<Biohazard> getBiohazards(Specimen oldSpecimenObj,
+			SpecimenDTO specimenDTO)
 	{
-		Collection<Biohazard> biohazardCollection = oldSpecimenObj.getBiohazardCollection();
+		Collection<Biohazard> biohazardCollection = oldSpecimenObj
+				.getBiohazardCollection();
 
-		Collection<BiohazardDTO> biohazardDTOCollection = specimenDTO.getBioHazards();
+		Collection<BiohazardDTO> biohazardDTOCollection = specimenDTO
+				.getBioHazards();
 
 		for (BiohazardDTO biohazardDTO : biohazardDTOCollection)
 		{
 			if (!biohazardCollection.contains(biohazardDTO))
 			{
-				biohazardCollection.add(getBiohazardDomainObjFromDTO(biohazardDTO));
+				biohazardCollection
+						.add(getBiohazardDomainObjFromDTO(biohazardDTO));
 			}
 		}
 
@@ -443,8 +481,8 @@ public class SpecimenBizLogic
 		return biohazard;
 	}
 
-	private BizLogicException getBizLogicException(Exception exception, String key,
-			String logMessage)
+	private BizLogicException getBizLogicException(Exception exception,
+			String key, String logMessage)
 	{
 		LOGGER.debug(logMessage);
 		ErrorKey errorKey = ErrorKey.getErrorKey(key);
@@ -458,19 +496,30 @@ public class SpecimenBizLogic
 	 * @param sessionDataBean  : sessionDataBean
 	 * @throws CloneNotSupportedException 
 	 */
-	private void setSpecimenEvents(Specimen specimen, SessionDataBean sessionDataBean)
-			throws CloneNotSupportedException
+	private void setSpecimenEvents(Specimen specimen,
+			SessionDataBean sessionDataBean) throws CloneNotSupportedException
 	{
 		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		if (specimen.getParentSpecimen() == null)
 		{
-			specimen.setPropogatingSpecimenEventCollection(specimen.getSpecimenRequirement()
-					.getSpecimenEventCollection(), sessionDataBean.getUserId(), specimen);
+			if(specimen.getId() == null)
+			{
+				specimen.setPropogatingSpecimenEventCollection(specimen
+						.getSpecimenCollectionGroup().getSpecimenEventParametersCollection(),
+						sessionDataBean.getUserId(), specimen);
+			}
+			else
+			{
+				specimen.setPropogatingSpecimenEventCollection(specimen
+					.getSpecimenRequirement().getSpecimenEventCollection(),
+					sessionDataBean.getUserId(), specimen);
+			}
 		}
 		else
 		{
-			specimen.setSpecimenEventCollection(this.populateDeriveSpecimenEventCollection(
-					parentSpecimen, specimen));
+			specimen.setSpecimenEventCollection(this
+					.populateDeriveSpecimenEventCollection(parentSpecimen,
+							specimen));
 		}
 	}
 
@@ -484,7 +533,8 @@ public class SpecimenBizLogic
 	 * @throws CloneNotSupportedException 
 	 */
 	private Set<AbstractDomainObject> populateDeriveSpecimenEventCollection(
-			Specimen parentSpecimen, Specimen deriveSpecimen) throws CloneNotSupportedException
+			Specimen parentSpecimen, Specimen deriveSpecimen)
+			throws CloneNotSupportedException
 	{
 		final Set<AbstractDomainObject> deriveEventCollection = new HashSet<AbstractDomainObject>();
 		final Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
@@ -525,22 +575,28 @@ public class SpecimenBizLogic
 			throw this.getBizLogicException(null, "protocol.class.errMsg", "");
 		}
 
-		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),
+		if (!Validator.isEnumeratedValue(
+				AppUtility.getSpecimenTypes(specimenClass),
 				specimen.getSpecimenType()))
 		{
 			throw this.getBizLogicException(null, "protocol.type.errMsg", "");
 		}
-		if (specimen.getCollectionStatus().equalsIgnoreCase(Constants.SPECIMEN_COLLECTED)
+		if (specimen.getCollectionStatus().equalsIgnoreCase(
+				Constants.SPECIMEN_COLLECTED)
 				&& validateFieldValue(specimen.getLabel()))
 		{
-			final String message = ApplicationProperties.getValue("specimen.label");
-			throw this.getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties
+					.getValue("specimen.label");
+			throw this.getBizLogicException(null, "errors.item.required",
+					message);
 		}
-		if (specimen.getAvailableQuantity().compareTo(specimen.getInitialQuantity()) > 0)
+		if (specimen.getAvailableQuantity().compareTo(
+				specimen.getInitialQuantity()) > 0)
 		{
 			final String quantityString = ApplicationProperties
 					.getValue("specimen.availableQuantity");
-			throw this.getBizLogicException(null, "errors.availablequantity", quantityString);
+			throw this.getBizLogicException(null, "errors.availablequantity",
+					quantityString);
 		}
 
 		if (specimen.getSpecimenPosition() != null)
@@ -550,12 +606,14 @@ public class SpecimenBizLogic
 			if (specimen.getId() == null
 					|| (oldSpecimenObj != null && Constants.COLLECTION_STATUS_PENDING
 							.equals(oldSpecimenObj.getCollectionStatus())))
-				if (!containerForSpecimenBizLogic.isPositionAvailable(specimenPosition
-						.getStorageContainer().getName(), specimenPosition
-						.getPositionDimensionOne(), specimenPosition.getPositionDimensionTwo(),
+				if (!containerForSpecimenBizLogic.isPositionAvailable(
+						specimenPosition.getStorageContainer().getName(),
+						specimenPosition.getPositionDimensionOne(),
+						specimenPosition.getPositionDimensionTwo(),
 						hibernateDao))
 				{
-					throw this.getBizLogicException(null, "shipment.samePositionForSpecimens", "");
+					throw this.getBizLogicException(null,
+							"shipment.samePositionForSpecimens", "");
 				}
 		}
 
@@ -581,43 +639,43 @@ public class SpecimenBizLogic
 	 *
 	 * @throws BizLogicException Database exception
 	 */
-	private void checkDuplicateSpecimenFields(Specimen specimen, HibernateDAO hibernateDao)
-			throws DAOException, BizLogicException
+	private void checkDuplicateSpecimenFields(Specimen specimen,
+			HibernateDAO hibernateDao) throws DAOException, BizLogicException
 	{
 		List list = null;
 		if (specimen.getLabel() != null)
 		{
-			list = hibernateDao.retrieve(Specimen.class.getName(), "label", specimen.getLabel());
+			list = hibernateDao.retrieve(Specimen.class.getName(), "label",
+					specimen.getLabel());
 			for (Object object : list)
 			{
 				final Specimen specimenObject = (Specimen) object;
 				if (!specimenObject.getId().equals(specimen.getId()))
 				{
-					throw this.getBizLogicException(null, "label.already.exits",
-							specimen.getLabel());
+					throw this.getBizLogicException(null,
+							"label.already.exits", specimen.getLabel());
 				}
 			}
 		}
 		if (specimen.getBarcode() != null)
 		{
-			list = hibernateDao
-					.retrieve(Specimen.class.getName(), "barcode", specimen.getBarcode());
+			list = hibernateDao.retrieve(Specimen.class.getName(), "barcode",
+					specimen.getBarcode());
 			for (Object object : list)
 			{
 				final Specimen specimenObject = (Specimen) object;
 				if (!specimenObject.getId().equals(specimen.getId()))
 				{
-					throw this.getBizLogicException(null, "barcode.already.exits",
-							specimen.getBarcode());
+					throw this.getBizLogicException(null,
+							"barcode.already.exits", specimen.getBarcode());
 				}
 			}
 		}
 	}
 
-	public edu.wustl.catissuecore.dto.SpecimenDTO getDTO(Specimen specimen)
-			throws BizLogicException
+	public SpecimenDTO getDTO(Specimen specimen) throws BizLogicException
 	{
-		edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = new edu.wustl.catissuecore.dto.SpecimenDTO();
+		SpecimenDTO specimenDTO = new SpecimenDTO();
 		specimenDTO.setId(specimen.getId());
 		specimenDTO.setLabel(specimen.getLabel());
 		specimenDTO.setActivityStatus(specimen.getActivityStatus());
@@ -627,41 +685,51 @@ public class SpecimenBizLogic
 		specimenDTO.setClassName(specimen.getClassName());
 		specimenDTO.setCollectionStatus(specimen.getCollectionStatus());
 		specimenDTO.setComments(specimen.getComment());
-		specimenDTO.setConcentration(specimen.getConcentrationInMicrogramPerMicroliter());
+		specimenDTO.setConcentration(specimen
+				.getConcentrationInMicrogramPerMicroliter());
 		specimenDTO.setCreatedDate(specimen.getCreatedOn());
 		specimenDTO.setLineage(specimen.getLineage());
 		if (specimen.getParentSpecimen() != null)
 		{
-			specimenDTO.setParentSpecimenId(specimen.getParentSpecimen().getId());
-			specimenDTO.setParentSpecimenName(specimen.getParentSpecimen().getLabel());
+			specimenDTO.setParentSpecimenId(specimen.getParentSpecimen()
+					.getId());
+			specimenDTO.setParentSpecimenName(specimen.getParentSpecimen()
+					.getLabel());
 		}
 		specimenDTO.setPathologicalStatus(specimen.getPathologicalStatus());
 		specimenDTO.setQuantity(specimen.getInitialQuantity());
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
-			specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup()
-					.getName());
+			specimenDTO.setSpecimenCollectionGroupId(specimen
+					.getSpecimenCollectionGroup().getId());
+			specimenDTO.setSpecimenCollectionGroupName(specimen
+					.getSpecimenCollectionGroup().getName());
 		}
-		specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
-		specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+		specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics()
+				.getTissueSide());
+		specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics()
+				.getTissueSite());
 		specimenDTO.setType(specimen.getSpecimenType());
 		if (specimen.getSpecimenPosition() != null)
 		{
-			specimenDTO.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
-			specimenDTO.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
-			specimenDTO
-					.setContainerId(specimen.getSpecimenPosition().getStorageContainer().getId());
-			specimenDTO.setContainerName(specimen.getSpecimenPosition().getStorageContainer()
-					.getName());
+			specimenDTO.setPos1(specimen.getSpecimenPosition()
+					.getPositionDimensionOneString());
+			specimenDTO.setPos2(specimen.getSpecimenPosition()
+					.getPositionDimensionTwoString());
+			specimenDTO.setContainerId(specimen.getSpecimenPosition()
+					.getStorageContainer().getId());
+			specimenDTO.setContainerName(specimen.getSpecimenPosition()
+					.getStorageContainer().getName());
 			specimenDTO.setIsVirtual(Boolean.FALSE);
 		}
 		else
 		{
 			specimenDTO.setIsVirtual(Boolean.TRUE);
 		}
-		specimenDTO.setConcentration(specimen.getConcentrationInMicrogramPerMicroliter());
-		specimenDTO.setExternalIdentifiers(getExternalIdentifierDTOCollection(specimen));
+		specimenDTO.setConcentration(specimen
+				.getConcentrationInMicrogramPerMicroliter());
+		specimenDTO
+				.setExternalIdentifiers(getExternalIdentifierDTOCollection(specimen));
 		specimenDTO.setBioHazards(getBiohazardDTOCollection(specimen));
 
 		return specimenDTO;
@@ -672,7 +740,8 @@ public class SpecimenBizLogic
 	 * @param specimen
 	 * @return
 	 */
-	private Collection<ExternalIdentifierDTO> getExternalIdentifierDTOCollection(Specimen specimen)
+	private Collection<ExternalIdentifierDTO> getExternalIdentifierDTOCollection(
+			Specimen specimen)
 	{
 		Collection<ExternalIdentifier> externalIdentifiers = specimen
 				.getExternalIdentifierCollection();
@@ -708,8 +777,8 @@ public class SpecimenBizLogic
 		return biohazardDTOs;
 	}
 
-	public boolean isSpecimenLabelGeneratorAvl(Long identifier, HibernateDAO hibernateDao)
-			throws BizLogicException
+	public boolean isSpecimenLabelGeneratorAvl(Long identifier,
+			HibernateDAO hibernateDao) throws BizLogicException
 	{
 		boolean generateLabel = Variables.isSpecimenLabelGeneratorAvl;
 
@@ -717,20 +786,21 @@ public class SpecimenBizLogic
 		{
 			try
 			{
-				Specimen specimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(),
-						identifier);
+				Specimen specimen = (Specimen) hibernateDao.retrieveById(
+						Specimen.class.getName(), identifier);
 
 				final CollectionProtocolRegistration collectionProtocolRegistration = specimen
-						.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+						.getSpecimenCollectionGroup()
+						.getCollectionProtocolRegistration();
 
-				String parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol()
-						.getSpecimenLabelFormat();
+				String parentLabelFormat = collectionProtocolRegistration
+						.getCollectionProtocol().getSpecimenLabelFormat();
 
 				String derivativeLabelFormat = collectionProtocolRegistration
 						.getCollectionProtocol().getDerivativeLabelFormat();
 
-				String aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol()
-						.getAliquotLabelFormat();
+				String aliquotLabelFormat = collectionProtocolRegistration
+						.getCollectionProtocol().getAliquotLabelFormat();
 
 				String lineage = specimen.getLineage();
 				if (lineage == null || "".equals(lineage))
@@ -744,37 +814,43 @@ public class SpecimenBizLogic
 			catch (DAOException e)
 			{
 				LOGGER.error(e.getMessage(), e);
-				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+				throw this.getBizLogicException(e, e.getErrorKeyName(),
+						e.getMsgValues());
 			}
 		}
 		return generateLabel;
 	}
 
-	public List<SpecimenDTO> insert(List<SpecimenDTO> specimenDTOList, HibernateDAO hibernateDao,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	public List<SpecimenDTO> insert(List<SpecimenDTO> specimenDTOList,
+			HibernateDAO hibernateDao, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		List<SpecimenDTO> specimenDTOs = new ArrayList<SpecimenDTO>();
 		try
 		{
 			Specimen parentSpecimen = null;
 			if (Constants.ALIQUOT.equals(specimenDTOList.get(0).getLineage())
-					|| Constants.DERIVED_SPECIMEN.equals(specimenDTOList.get(0).getLineage()))
+					|| Constants.DERIVED_SPECIMEN.equals(specimenDTOList.get(0)
+							.getLineage()))
 			{
-				parentSpecimen = getParent(specimenDTOList.get(0).getParentSpecimenId(),
-						hibernateDao);
+				parentSpecimen = getParent(specimenDTOList.get(0)
+						.getParentSpecimenName(), hibernateDao);
 			}
 			for (SpecimenDTO specimenDTO : specimenDTOList)
 			{
-				if (!isAuthorizedForSpecimenProcessing(hibernateDao, specimenDTO, sessionDataBean))
+				if (!isAuthorizedForSpecimenProcessing(hibernateDao,
+						specimenDTO, sessionDataBean))
 				{
-					throw AppUtility.getUserNotAuthorizedException("SPECIMEN_PROCESSING", "",
+					throw AppUtility.getUserNotAuthorizedException(
+							"SPECIMEN_PROCESSING", "",
 							Specimen.class.getSimpleName());
 				}
-				Specimen specimen = getSpecimen(specimenDTO, hibernateDao, sessionDataBean,
-						parentSpecimen);
+				Specimen specimen = getSpecimen(specimenDTO, hibernateDao,
+						sessionDataBean, parentSpecimen);
 				insertSpecimen(hibernateDao, specimen);
 				if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
-						|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
+						|| Constants.DERIVED_SPECIMEN.equals(specimenDTO
+								.getLineage()))
 				{
 					parentSpecimen.getChildSpecimenCollection().add(specimen);
 				}
@@ -784,7 +860,8 @@ public class SpecimenBizLogic
 		catch (ApplicationException e)
 		{
 			LOGGER.error(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			throw this.getBizLogicException(e, e.getErrorKeyName(),
+					e.getMsgValues());
 		}
 		catch (CloneNotSupportedException e)
 		{
@@ -794,25 +871,30 @@ public class SpecimenBizLogic
 		return specimenDTOs;
 	}
 
-	public SpecimenDTO insert(SpecimenDTO specimenDTO, HibernateDAO hibernateDao,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	public SpecimenDTO insert(SpecimenDTO specimenDTO,
+			HibernateDAO hibernateDao, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		Specimen specimen = new Specimen();
 		try
 		{
-			if (!isAuthorizedForSpecimenProcessing(hibernateDao, specimenDTO, sessionDataBean))
+			if (!isAuthorizedForSpecimenProcessing(hibernateDao, specimenDTO,
+					sessionDataBean))
 			{
-				throw AppUtility.getUserNotAuthorizedException("SPECIMEN_PROCESSING", "", specimen
-						.getClass().getSimpleName());
+				throw AppUtility.getUserNotAuthorizedException(
+						"SPECIMEN_PROCESSING", "", specimen.getClass()
+								.getSimpleName());
 			}
-			Specimen parentSpecimen = getParent(specimenDTO.getParentSpecimenId(), hibernateDao);
-			specimen = getSpecimen(specimenDTO, hibernateDao, sessionDataBean, parentSpecimen);
+			//			Specimen parentSpecimen = getParent(specimenDTO.getParentSpecimenName(), hibernateDao);
+			specimen = getSpecimen(specimenDTO, hibernateDao, sessionDataBean,
+					null);
 			insertSpecimen(hibernateDao, specimen);
 		}
 		catch (ApplicationException e)
 		{
 			LOGGER.error(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			throw this.getBizLogicException(e, e.getErrorKeyName(),
+					e.getMsgValues());
 		}
 		catch (CloneNotSupportedException e)
 		{
@@ -822,29 +904,52 @@ public class SpecimenBizLogic
 		return getDTO(specimen);
 	}
 
-	private Specimen getParent(Long parentSpecimenId, HibernateDAO hibernateDao)
-			throws DAOException
+	public Specimen getParent(String parentSpecimenLabel,
+			HibernateDAO hibernateDao) throws DAOException, BizLogicException
 	{
-		Specimen parentspecimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(),
-				parentSpecimenId);
-		return parentspecimen;
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING,
+				parentSpecimenLabel));
+
+		List specimenIdList = hibernateDao.executeNamedQuery("getSpecimenId",
+				substParams);
+		if (specimenIdList != null && specimenIdList.size() > 0)
+		{
+			return (Specimen) hibernateDao.retrieveById(
+					Specimen.class.getName(),
+					Long.valueOf(specimenIdList.get(0).toString()));
+		}
+		else
+		{
+			LOGGER.error("");
+			throw new CatissueException(
+					SpecimenErrorCodeEnum.NOT_FOUND.getDescription(),
+					SpecimenErrorCodeEnum.NOT_FOUND.getCode());
+		}
+
 	}
 
-	private Collection<ConsentTierStatus> setConsentTierStatus(Specimen specimen,
+	private Collection<ConsentTierStatus> setConsentTierStatus(
+			Specimen specimen,
 			Collection<ConsentTierStatus> consentTierStatusCollection)
 	{
 		Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = null;
 		if (consentTierStatusCollection != null)
 		{
 			consentTierStatusCollectionForSpecimen = new HashSet<ConsentTierStatus>();
-			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
+			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection
+					.iterator();
 			while (itr.hasNext())
 			{
-				final ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
+				final ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr
+						.next();
 				final ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
-				consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
-				consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
-				consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
+				consentTierStatusForSpecimen.setStatus(conentTierStatus
+						.getStatus());
+				consentTierStatusForSpecimen.setConsentTier(conentTierStatus
+						.getConsentTier());
+				consentTierStatusCollectionForSpecimen
+						.add(consentTierStatusForSpecimen);
 			}
 		}
 		return consentTierStatusCollectionForSpecimen;
@@ -859,9 +964,9 @@ public class SpecimenBizLogic
 		hibernateDao.insert(specimen);
 	}
 
-	private boolean isAuthorizedForSpecimenProcessing(HibernateDAO hibernateDao,
-			SpecimenDTO specimenDTO, SessionDataBean sessionDataBean) throws DAOException,
-			SMException
+	private boolean isAuthorizedForSpecimenProcessing(
+			HibernateDAO hibernateDao, SpecimenDTO specimenDTO,
+			SessionDataBean sessionDataBean) throws DAOException, SMException
 	{
 		boolean isAuthorize = sessionDataBean.isAdmin();
 		if (!isAuthorize)
@@ -869,7 +974,8 @@ public class SpecimenBizLogic
 			String specimenName;
 			Long specimenId;
 			if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
-					|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
+					|| Constants.DERIVED_SPECIMEN.equals(specimenDTO
+							.getLineage()))
 			{
 				specimenName = specimenDTO.getParentSpecimenName();
 				specimenId = specimenDTO.getParentSpecimenId();
@@ -879,18 +985,21 @@ public class SpecimenBizLogic
 				specimenName = specimenDTO.getLabel();
 				specimenId = specimenDTO.getId();
 			}
-			Long siteId = getAssociatedSiteId(hibernateDao, specimenName, specimenId);
+			Long siteId = getAssociatedSiteId(hibernateDao, specimenName,
+					specimenId);
 			Long cpId = getCPId(hibernateDao, specimenName, specimenId);
-			isAuthorize = chkAuthorizationForCPnSite(siteId, cpId, sessionDataBean.getUserName());
+			isAuthorize = chkAuthorizationForCPnSite(siteId, cpId,
+					sessionDataBean.getUserName());
 		}
 		return isAuthorize;
 	}
 
-	private Long getCPId(HibernateDAO hibernateDao, String parentSpecimenName, Long parentSpecimenId)
-			throws DAOException
+	private Long getCPId(HibernateDAO hibernateDao, String parentSpecimenName,
+			Long parentSpecimenId) throws DAOException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		substParams.put("0", new NamedQueryParam(DBTypes.LONG, parentSpecimenId));
+		substParams.put("0",
+				new NamedQueryParam(DBTypes.LONG, parentSpecimenId));
 
 		List siteList = hibernateDao.executeNamedQuery("getCPID", substParams);
 		if (siteList != null && siteList.size() > 0)
@@ -900,32 +1009,35 @@ public class SpecimenBizLogic
 		return null;
 	}
 
-	private Boolean chkAuthorizationForCPnSite(Long siteId, Long cpId, String userName)
-			throws SMException
+	private Boolean chkAuthorizationForCPnSite(Long siteId, Long cpId,
+			String userName) throws SMException
 	{
-		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
-				userName);
+		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance()
+				.getPrivilegeCache(userName);
 		boolean isAuthorized = Boolean.FALSE;
 		if (siteId != null)
 		{
 			String siteProtectionEleName = "SITE_" + siteId + "_All_CP";
-			isAuthorized = privilegeCache
-					.hasPrivilege(siteProtectionEleName, "SPECIMEN_PROCESSING");
+			isAuthorized = privilegeCache.hasPrivilege(siteProtectionEleName,
+					"SPECIMEN_PROCESSING");
 		}
 		if (!isAuthorized)
 		{
-			String cpProtectionEleName = CollectionProtocol.class.getName() + "_" + cpId;
+			String cpProtectionEleName = CollectionProtocol.class.getName()
+					+ "_" + cpId;
 
 			// Checking whether the logged in user has the required
 			// privilege on the given protection element
-			isAuthorized = privilegeCache.hasPrivilege(cpProtectionEleName, "SPECIMEN_PROCESSING");
+			isAuthorized = privilegeCache.hasPrivilege(cpProtectionEleName,
+					"SPECIMEN_PROCESSING");
 		}
 		return isAuthorized;
 	}
 
-	private Specimen getSpecimen(SpecimenDTO specimenDTO, HibernateDAO hibernateDao,
-			SessionDataBean sessionDataBean, Specimen parentSpecimen) throws BizLogicException,
-			DAOException, CloneNotSupportedException
+	private Specimen getSpecimen(SpecimenDTO specimenDTO,
+			HibernateDAO hibernateDao, SessionDataBean sessionDataBean,
+			Specimen parentSpecimen) throws BizLogicException, DAOException,
+			CloneNotSupportedException
 	{
 		Specimen specimen = new Specimen();
 		specimen.setActivityStatus(specimenDTO.getActivityStatus());
@@ -935,40 +1047,62 @@ public class SpecimenBizLogic
 				specimenDTO.getExternalIdentifiers(), specimen));
 		specimen.setCollectionStatus(specimenDTO.getCollectionStatus());
 		specimen.setComment(specimenDTO.getComments());
-		specimen.setConcentrationInMicrogramPerMicroliter(specimenDTO.getConcentration());
+		specimen.setConcentrationInMicrogramPerMicroliter(specimenDTO
+				.getConcentration());
 		specimen.setCreatedOn(specimenDTO.getCreatedDate());
 		specimen.setInitialQuantity(specimenDTO.getQuantity());
-		specimen.setIsAvailable(specimenDTO.isAvailable());
+		specimen.setIsAvailable(Boolean.TRUE);
 		specimen.setLabel(specimenDTO.getLabel());
-		specimen.setLineage(specimenDTO.getLineage());
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
 				|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
 		{
-			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
-			specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+			specimen.setLineage(specimenDTO.getLineage());
+			parentSpecimen = parentSpecimen == null
+					? getParent(specimenDTO.getParentSpecimenName(),
+							hibernateDao) : parentSpecimen;
+			if (parentSpecimen == null)
+			{
+				throw this.getBizLogicException(null,
+						"errors.specimen.parentspecimen", "");
+			}
+			specimen.setSpecimenCharacteristics(parentSpecimen
+					.getSpecimenCharacteristics());
+			specimen.setPathologicalStatus(parentSpecimen
+					.getPathologicalStatus());
 			Collection<Biohazard> biohazards = new HashSet<Biohazard>();
 			for (Biohazard biohazard : parentSpecimen.getBiohazardCollection())
 			{
 				biohazards.add(biohazard);
 			}
 			specimen.setBiohazardCollection(biohazards);
-			setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
+			setConsentTierStatus(specimen,
+					parentSpecimen.getConsentTierStatusCollection());
 			//specimen.setChildSpecimenCollection(parentSpecimen.getChildSpecimenCollection());
 			specimen.setParentSpecimen(parentSpecimen);
+			specimen.setSpecimenCollectionGroup(parentSpecimen
+					.getSpecimenCollectionGroup());
 			setSpecimenEvents(specimen, sessionDataBean);
 			SpecimenCollectionGroup collectionGroup = new SpecimenCollectionGroup();
-			collectionGroup.setId(parentSpecimen.getSpecimenCollectionGroup().getId());
+			collectionGroup.setId(parentSpecimen.getSpecimenCollectionGroup()
+					.getId());
 			specimen.setSpecimenCollectionGroup(collectionGroup);
 
 		}
 		else
 		{
+
+			specimen.setLineage(Constants.NEW_SPECIMEN);
+			SpecimenCollectionGroup collectionGroup = getSCG(
+					specimenDTO.getSpecimenCollectionGroupId(), hibernateDao);
+			specimen.setSpecimenCollectionGroup(collectionGroup);
 			specimen.setPathologicalStatus(specimenDTO.getPathologicalStatus());
 			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 			specimenCharacteristics.setTissueSide(specimenDTO.getTissueSide());
 			specimenCharacteristics.setTissueSite(specimenDTO.getTissueSite());
 			specimen.setSpecimenCharacteristics(specimenCharacteristics);
-			specimen.setBiohazardCollection(getBiohazardCollection(specimenDTO.getBioHazards()));
+			specimen.setBiohazardCollection(getBiohazardCollection(specimenDTO
+					.getBioHazards()));
 		}
 		specimen.setSpecimenClass(specimenDTO.getClassName());
 		specimen.setSpecimenType(specimenDTO.getType());
@@ -984,16 +1118,19 @@ public class SpecimenBizLogic
 			try
 			{
 				position.setPositionDimensionOne((StorageContainerUtil
-						.convertPositionsToIntegerUsingContId(specimenDTO.getContainerId()
-								.toString(), 1, specimenDTO.getPos1())));
+						.convertPositionsToIntegerUsingContId(specimenDTO
+								.getContainerId().toString(), 1, specimenDTO
+								.getPos1())));
 				position.setPositionDimensionTwo((StorageContainerUtil
-						.convertPositionsToIntegerUsingContId(specimenDTO.getContainerId()
-								.toString(), 2, specimenDTO.getPos2())));
+						.convertPositionsToIntegerUsingContId(specimenDTO
+								.getContainerId().toString(), 2, specimenDTO
+								.getPos2())));
 			}
 			catch (ApplicationException e)
 			{
 				LOGGER.error(e.getMessage(), e);
-				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+				throw this.getBizLogicException(e, e.getErrorKeyName(),
+						e.getMsgValues());
 			}
 			StorageContainer container = new StorageContainer();
 			container.setId(specimenDTO.getContainerId());
@@ -1002,20 +1139,39 @@ public class SpecimenBizLogic
 			position.setSpecimen(specimen);
 			specimen.setSpecimenPosition(position);
 		}
-		SpecimenCollectionGroup collectionGroup = new SpecimenCollectionGroup();
-		collectionGroup.setId(specimenDTO.getSpecimenCollectionGroupId());
-		specimen.setSpecimenCollectionGroup(collectionGroup);
+		//		SpecimenCollectionGroup collectionGroup = new SpecimenCollectionGroup();
+		//		collectionGroup.setId(specimenDTO.getSpecimenCollectionGroupId());
+		//		specimen.setSpecimenCollectionGroup(collectionGroup);
 		setSpecimenEvents(specimen, sessionDataBean);
 		return specimen;
 	}
 
+	private SpecimenCollectionGroup getSCG(Long specimenCollectionGroupId,
+			HibernateDAO hibernateDao) throws DAOException
+	{
+		SpecimenCollectionGroup collectionGroup = new SpecimenCollectionGroup();
+		Object obj = hibernateDao.retrieveById(
+				SpecimenCollectionGroup.class.getName(),
+				specimenCollectionGroupId);
+		if (obj == null)
+		{
+			throw new CatissueException(SpecimenErrorCodeEnum.NOT_FOUND.getDescription(),SpecimenErrorCodeEnum.NOT_FOUND.getCode());
+		}
+		return (SpecimenCollectionGroup) obj;
+	}
+
 	private Collection getExterIdentifierColl(
-			Collection<ExternalIdentifierDTO> externalIdentifiers, Specimen specimen)
+			Collection<ExternalIdentifierDTO> externalIdentifiers,
+			Specimen specimen)
 	{
 		Collection<ExternalIdentifier> collection = new HashSet<ExternalIdentifier>();
-		for (ExternalIdentifierDTO externalIdentifierDTO : externalIdentifiers)
+		if (externalIdentifiers != null)
 		{
-			collection.add(getExternalIdentifierDomainObjFromDTO(specimen, externalIdentifierDTO));
+			for (ExternalIdentifierDTO externalIdentifierDTO : externalIdentifiers)
+			{
+				collection.add(getExternalIdentifierDomainObjFromDTO(specimen,
+						externalIdentifierDTO));
+			}
 		}
 		if (collection.isEmpty())
 		{
@@ -1024,7 +1180,8 @@ public class SpecimenBizLogic
 		return collection;
 	}
 
-	private Collection<Biohazard> getBiohazardCollection(Collection<BiohazardDTO> bioHazards)
+	private Collection<Biohazard> getBiohazardCollection(
+			Collection<BiohazardDTO> bioHazards)
 	{
 		Collection<Biohazard> collection = new HashSet<Biohazard>();
 		for (BiohazardDTO biohazardDTO : bioHazards)
@@ -1035,15 +1192,18 @@ public class SpecimenBizLogic
 		return collection;
 	}
 
-	private Long getAssociatedSiteId(HibernateDAO hibernateDAO, String specimenLabel,
-			Long specimenId) throws DAOException
+	private Long getAssociatedSiteId(HibernateDAO hibernateDAO,
+			String specimenLabel, Long specimenId) throws DAOException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 		substParams.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
-		substParams.put("1", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		substParams.put("2", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
+		substParams
+				.put("1", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+		substParams.put("2", new NamedQueryParam(DBTypes.STRING,
+				Constants.ACTIVITY_STATUS_ACTIVE));
 
-		List siteList = hibernateDAO.executeNamedQuery("getSiteIdFromContainer", substParams);
+		List siteList = hibernateDAO.executeNamedQuery(
+				"getSiteIdFromContainer", substParams);
 		if (siteList != null && siteList.size() > 0)
 		{
 			return Long.valueOf(siteList.get(0).toString());
@@ -1051,47 +1211,54 @@ public class SpecimenBizLogic
 		return null;
 	}
 
-	public HashMap<String, String> getParentDetails(String parentLabel, String barcode,
-			HibernateDAO hibernateDao) throws DAOException
+	public HashMap<String, String> getParentDetails(String parentLabel,
+			String barcode, HibernateDAO hibernateDao) throws DAOException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 		substParams.put("0", new NamedQueryParam(DBTypes.STRING, parentLabel));
 		substParams.put("1", new NamedQueryParam(DBTypes.STRING, barcode));
-		substParams.put("2", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
-		final List result = hibernateDao.executeNamedQuery("getSCGnCPIDByLorB", substParams);
-		HashMap<String, String> returnMap = new HashMap<String, String>();
+		substParams.put("2", new NamedQueryParam(DBTypes.STRING,
+				Constants.ACTIVITY_STATUS_ACTIVE));
+		final List result = hibernateDao.executeNamedQuery("getSCGnCPIDByLorB",
+				substParams);
+		SpecimenDTO specimenDTO = new SpecimenDTO();
 		if (result != null && !result.isEmpty())
 		{
 			Object[] obj = (Object[]) result.get(0);
-			returnMap.put("parentId", obj[0].toString());
-			returnMap.put("scgId", obj[1].toString());
-			returnMap.put("cpId", obj[2].toString());
-			returnMap.put("msg", "success");
+			specimenDTO.setLabel(parentLabel);
+			specimenDTO.setId(Long.valueOf(obj[0].toString()));
+			specimenDTO.setSpecimenCollectionGroupId(Long.valueOf(obj[1]
+					.toString()));
 		}
-		return returnMap;
+		return null;
 	}
 
-	public String reduceQuantity(Double quantityReducedBy, Long specimenId, HibernateDAO dao)
-			throws BizLogicException, DAOException
+	public String reduceQuantity(Double quantityReducedBy, Long specimenId,
+			HibernateDAO dao) throws BizLogicException, DAOException
 	{
 
 		ColumnValueBean columnValueBean = new ColumnValueBean(specimenId);
 		columnValueBean.setColumnName("id");
-		List specimens = dao.retrieve(Specimen.class.getName(), columnValueBean);
+		List specimens = dao
+				.retrieve(Specimen.class.getName(), columnValueBean);
 
 		if (specimens.isEmpty())
 		{
-			return ApplicationProperties.getValue("specimen.closed.unavailable");
+			return ApplicationProperties
+					.getValue("specimen.closed.unavailable");
 		}
 
 		Specimen specimen = (Specimen) specimens.get(0);
 
-		if (!Constants.ACTIVITY_STATUS_ACTIVE.equalsIgnoreCase(specimen.getActivityStatus()))
+		if (!Constants.ACTIVITY_STATUS_ACTIVE.equalsIgnoreCase(specimen
+				.getActivityStatus()))
 		{
-			return ApplicationProperties.getValue("specimen.closed.unavailable");
+			return ApplicationProperties
+					.getValue("specimen.closed.unavailable");
 		}
 		Double previousQuantity = specimen.getAvailableQuantity();
-		Double remainingQuantity = previousQuantity.doubleValue() - quantityReducedBy;
+		Double remainingQuantity = previousQuantity.doubleValue()
+				- quantityReducedBy;
 		specimen.setAvailableQuantity(remainingQuantity);
 
 		int remainingQuantityMoreThenZero = remainingQuantity.compareTo(0D);
@@ -1099,7 +1266,8 @@ public class SpecimenBizLogic
 		{
 			List<String> parameters = new ArrayList<String>();
 			parameters.add(previousQuantity.toString());
-			return ApplicationProperties.getValue("requested.quantity.exceeds", parameters);
+			return ApplicationProperties.getValue("requested.quantity.exceeds",
+					parameters);
 		}
 		else if (remainingQuantity.compareTo(0D) == 0)
 		{
@@ -1114,20 +1282,23 @@ public class SpecimenBizLogic
 		return Constants.SUCCESS;
 	}
 
-	public void disposeSpecimen(HibernateDAO hibernateDao, SessionDataBean sessionDataBean,
-			Specimen specimen, String specimenDisposalReason) throws DAOException,
+	public void disposeSpecimen(HibernateDAO hibernateDao,
+			SessionDataBean sessionDataBean, Specimen specimen,
+			String specimenDisposalReason) throws DAOException,
 			BizLogicException
 	{
-		final DisposalEventParameters disposalEvent = this.createDisposeEvent(sessionDataBean,
-				specimen, specimenDisposalReason);
+		final DisposalEventParameters disposalEvent = this.createDisposeEvent(
+				sessionDataBean, specimen, specimenDisposalReason);
 		checkStatusAndGetUserId(disposalEvent, hibernateDao);
-		disposeEvent((DisposalEventParameters) disposalEvent, specimen, hibernateDao);
+		disposeEvent((DisposalEventParameters) disposalEvent, specimen,
+				hibernateDao);
 		specimen.getSpecimenEventCollection().add(disposalEvent);
 		hibernateDao.insert(disposalEvent);
 
 	}
 
-	private void checkStatusAndGetUserId(SpecimenEventParameters specimenEventParameter,
+	private void checkStatusAndGetUserId(
+			SpecimenEventParameters specimenEventParameter,
 			HibernateDAO hibernateDao) throws DAOException, BizLogicException
 	{
 		List list = null;
@@ -1136,8 +1307,8 @@ public class SpecimenBizLogic
 		{
 
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-			params.put("0", new NamedQueryParam(DBTypes.LONG, specimenEventParameter.getUser()
-					.getId()));
+			params.put("0", new NamedQueryParam(DBTypes.LONG,
+					specimenEventParameter.getUser().getId()));
 
 			list = hibernateDao.executeNamedQuery("eventUserListById", params);
 			message = ApplicationProperties.getValue("app.UserID");
@@ -1146,8 +1317,8 @@ public class SpecimenBizLogic
 				|| specimenEventParameter.getUser().getLoginName().length() > 0)
 		{
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-			params.put("0", new NamedQueryParam(DBTypes.LONG, specimenEventParameter.getUser()
-					.getLoginName()));
+			params.put("0", new NamedQueryParam(DBTypes.LONG,
+					specimenEventParameter.getUser().getLoginName()));
 
 			list = hibernateDao.executeNamedQuery("eventUserListById", params);
 
@@ -1165,21 +1336,24 @@ public class SpecimenBizLogic
 		}
 		else
 		{
-			throw this.getBizLogicException(null, "errors.item.forboformat", message);
+			throw this.getBizLogicException(null, "errors.item.forboformat",
+					message);
 		}
 
 	}
 
-	private void disposeEvent(DisposalEventParameters disposalEventParameters, Specimen specimen,
-			HibernateDAO hibernateDao) throws BizLogicException, DAOException
+	private void disposeEvent(DisposalEventParameters disposalEventParameters,
+			Specimen specimen, HibernateDAO hibernateDao)
+			throws BizLogicException, DAOException
 	{
 		if (disposalEventParameters.getActivityStatus().equals(
 				Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 		{
 			this.disableSubSpecimens(hibernateDao, specimen.getId().toString());
 		}
-		
-		specimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(), specimen.getId());
+
+		specimen = (Specimen) hibernateDao.retrieveById(
+				Specimen.class.getName(), specimen.getId());
 		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 		specimen.setSpecimenPosition(null);
 		specimen.setIsAvailable(Boolean.FALSE);
@@ -1194,23 +1368,25 @@ public class SpecimenBizLogic
 	{
 		final String sourceObjectName = Specimen.class.getName();
 		final String[] selectColumnName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
-		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		final QueryWhereClause queryWhereClause = new QueryWhereClause(
+				sourceObjectName);
 		queryWhereClause
-				.addCondition(new EqualClause("parentSpecimen.id", Long.valueOf(speID)))
+				.addCondition(
+						new EqualClause("parentSpecimen.id", Long
+								.valueOf(speID)))
 				.andOpr()
 				.addCondition(
 						new NotEqualClause(Status.ACTIVITY_STATUS.toString(),
 								Status.ACTIVITY_STATUS_DISABLED.toString()));
 
-		List listOfSpecimenIDs = hibernateDao.retrieve(sourceObjectName, selectColumnName,
-				queryWhereClause);
+		List listOfSpecimenIDs = hibernateDao.retrieve(sourceObjectName,
+				selectColumnName, queryWhereClause);
 		listOfSpecimenIDs = CommonUtilities.removeNull(listOfSpecimenIDs);
-	
 
 	}
 
-	protected void checkStatus(HibernateDAO hibernateDao, IActivityStatus ado, String errorName)
-			throws BizLogicException
+	protected void checkStatus(HibernateDAO hibernateDao, IActivityStatus ado,
+			String errorName) throws BizLogicException
 	{
 		if (ado != null)
 		{
@@ -1221,32 +1397,39 @@ public class SpecimenBizLogic
 				String activityStatus = ado.getActivityStatus();
 				if (activityStatus == null)
 				{
-					activityStatus = getActivityStatus(hibernateDao, className, identifier);
+					activityStatus = getActivityStatus(hibernateDao, className,
+							identifier);
 				}
-				if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
+				if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED
+						.toString()))
 				{
-					throw getBizLogicException(null, "error.object.closed", errorName);
+					throw getBizLogicException(null, "error.object.closed",
+							errorName);
 				}
 			}
 		}
 	}
 
-	public String getActivityStatus(HibernateDAO hibernateDao, String sourceObjectName,
-			Long indetifier) throws BizLogicException
+	public String getActivityStatus(HibernateDAO hibernateDao,
+			String sourceObjectName, Long indetifier) throws BizLogicException
 	{
 		String[] selectColumnName = {Status.ACTIVITY_STATUS.getStatus()};
-		QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		QueryWhereClause queryWhereClause = new QueryWhereClause(
+				sourceObjectName);
 		List<Object> list;
 		try
 		{
-			queryWhereClause.addCondition(new EqualClause(Constants.SYSTEM_IDENTIFIER, indetifier
-					.toString(), sourceObjectName));
-			list = hibernateDao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			queryWhereClause.addCondition(new EqualClause(
+					Constants.SYSTEM_IDENTIFIER, indetifier.toString(),
+					sourceObjectName));
+			list = hibernateDao.retrieve(sourceObjectName, selectColumnName,
+					queryWhereClause);
 		}
 		catch (DAOException daoEx)
 		{
 			LOGGER.debug(daoEx.getMessage(), daoEx);
-			throw getBizLogicException(daoEx, daoEx.getErrorKeyName(), daoEx.getMsgValues());
+			throw getBizLogicException(daoEx, daoEx.getErrorKeyName(),
+					daoEx.getMsgValues());
 		}
 		String activityStatus = "";
 		if (!list.isEmpty())
@@ -1259,8 +1442,9 @@ public class SpecimenBizLogic
 		return activityStatus;
 	}
 
-	private DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean,
-			AbstractSpecimen specimen, String disposalReason)
+	private DisposalEventParameters createDisposeEvent(
+			SessionDataBean sessionDataBean, AbstractSpecimen specimen,
+			String disposalReason)
 	{
 		final DisposalEventParameters disposalEvent = new DisposalEventParameters();
 		disposalEvent.setSpecimen(specimen);
@@ -1269,7 +1453,8 @@ public class SpecimenBizLogic
 		final User user = new User();
 		user.setId(sessionDataBean.getUserId());
 		disposalEvent.setUser(user);
-		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
+		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED
+				.toString());
 		return disposalEvent;
 	}
 

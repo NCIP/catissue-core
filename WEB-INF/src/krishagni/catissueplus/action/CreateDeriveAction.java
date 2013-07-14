@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import krishagni.catissueplus.bizlogic.DeriveBizLogic;
 import krishagni.catissueplus.dto.DerivedDTO;
+import krishagni.catissueplus.dto.ExternalIdentifierDTO;
+import krishagni.catissueplus.dto.SpecimenDTO;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,8 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wustl.catissuecore.action.CatissueBaseAction;
-import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
-import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.PrintUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -73,7 +73,7 @@ public class CreateDeriveAction extends CatissueBaseAction
 					boolean isToPrintLabel = deriveDTO.getIsToPrintLabel();
 					if (isToPrintLabel)
 					{
-						boolean printStatus = PrintUtil.printSpecimenLabel(" ", " ", request,
+						boolean printStatus = PrintUtil.printSpecimenLabel(" ", " ", sessionDataBean,
 								specimenDTO.getId());
 						if (printStatus)
 						{

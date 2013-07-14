@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import krishagni.catissueplus.dto.BiohazardDTO;
 import krishagni.catissueplus.dto.DerivedDTO;
+import krishagni.catissueplus.dto.SpecimenDTO;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.dto.BiohazardDTO;
-import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
@@ -26,7 +26,7 @@ import edu.wustl.dao.util.NamedQueryParam;
 public class DeriveBizLogic
 {
 	private static final Logger LOGGER = Logger.getCommonLogger(DeriveBizLogic.class);
-	public SpecimenDTO getSpecimenDTO(DerivedDTO derivedDTO, HibernateDAO hibernateDao) throws BizLogicException
+	public SpecimenDTO getSpecimenDTO(DerivedDTO derivedDTO) throws BizLogicException
 	{
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		specimenDTO.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
@@ -112,7 +112,7 @@ public class DeriveBizLogic
 
 	public SpecimenDTO insertDeriveSpecimen(HibernateDAO hibernateDao, DerivedDTO deriveDTO, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		SpecimenDTO specimenDTO = getSpecimenDTO(deriveDTO,hibernateDao);
+		SpecimenDTO specimenDTO = getSpecimenDTO(deriveDTO);
 		SpecimenBizLogic specimenBizlogic = new SpecimenBizLogic();
 		specimenDTO = specimenBizlogic.insert(specimenDTO,hibernateDao,sessionDataBean);
 		if(deriveDTO.isDisposeParentSpecimen())

@@ -112,6 +112,8 @@ public class AddAttribute extends BaseMetadata
 			IOException
 	{
 		String dataType = getDataTypeOfAttribute(attr, attributeDatatypeMap);
+		System.out.println("attr   :   "+ attr);
+		System.out.println("dataType   :   "+ dataType);
 		dataType = dataType.trim();
 		String sql = null;
 		//In case of long,integer & double , the entry should be made in two tables

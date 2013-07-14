@@ -4,7 +4,6 @@ package krishagni.catissueplus.dto;
 import java.util.Collection;
 import java.util.Date;
 
-import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
 
 public class DerivedDTO
 {

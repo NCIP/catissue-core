@@ -54,7 +54,7 @@ public class AddAssociations
 	 * Constructor.
 	 * @param connection Connection object.
 	 */
-	AddAssociations(final Connection connection)
+	public AddAssociations(final Connection connection)
 	{
 		this.connection = connection;
 	}

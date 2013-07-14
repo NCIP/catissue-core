@@ -26,7 +26,7 @@ public class AddEntity
 	 * Constructor.
 	 * @param connection Connection object
 	 */
-	AddEntity(Connection connection)
+	public AddEntity(Connection connection)
 	{
 		this.connection = connection;
 	}
