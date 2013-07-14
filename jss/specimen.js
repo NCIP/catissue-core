@@ -683,6 +683,7 @@ function validateAndProcessComboData(obj)
 		if(obj.name=='className' && typeCombo.getComboText()=='-- Select --')
 		{
 			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+			typeCombo.DOMelem.className = typeCombo.DOMelem.className.replace(/errorStyleOn/g,"");
 			typeCombo.DOMelem.className += " errorStyleOn";
 			submitCombo=false;
 			return;
@@ -704,7 +705,7 @@ function validateAndProcessComboData(obj)
 }
 
 //submits changed data
-function submitTabData()
+function submitTabData(operation)
 {
 	var obj = document.getElementById('label');
 	
@@ -738,14 +739,53 @@ function submitTabData()
 		{
 			tabDataJSON['label']=obj.value;
 		}
-		var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
-		
-		if(loader.xmlDoc.responseText != null)
+		//var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
+		tabDataJSON["externalIdentifiers"]=extidJSON;
+		tabDataJSON["bioHazards"]=biohazardJSON;
+		tabDataJSON["isToPrintLabel"]=printFlag;
+		tabDataJSON["lineage"]=document.getElementById("lineage").value;
+		tabDataJSON["collectionStatus"]=collectionStatusCombo.getSelectedText();
+		var spId = document.getElementById("id").value;
+		if(spId != null && spId != "")
 		{
-			var response = eval('('+loader.xmlDoc.responseText+')')
-			if(response.success == "success")
-			{
-				var updatedSpecimenDTO = JSON.parse(response.updatedSpecimenDTO);
+			operation="edit";
+			tabDataJSON["id"] = document.getElementById("id").value; 
+		}
+		var scgId = document.getElementById("scgId").value;
+		if(scgId != null && scgId != "")
+		{
+			tabDataJSON["specimenCollectionGroupId"] = document.getElementById("scgId").value; 
+		}
+	
+		createRESTSpec(tabDataJSON,printFlag,operation);
+		
+	}
+	else
+	{
+		showErrorMessage("Unable to submit. Please resolve higlighted issue(s).");
+		scrollToTop();
+	}
+}
+
+function createRESTSpec(specimenData,printFlag,operation)
+{
+var req = createRequest(); // defined above
+// Create the callback:
+req.onreadystatechange = function() {
+  if (req.readyState != 4) return; // Not there yet
+  if (req.status != 201) {
+    // Handle request failure here...
+	var errorMsg=req.getResponseHeader("errorMsg");
+	showErrorMessage(errorMsg);
+    return;
+  }
+  // Request successful, read the response
+  var resp = req.responseText;
+  
+	
+			var updatedSpecimenDTO = eval('('+resp+')')
+			
+				document.getElementById('available').disabled = false;
 				document.getElementById('available').checked = updatedSpecimenDTO.available;
 				document.getElementById('availableQuantity').value = updatedSpecimenDTO.availableQuantity;
 				
@@ -762,6 +802,10 @@ function submitTabData()
 					barcodeElement.value = updatedSpecimenDTO.barcode;
 					document.getElementById('barcode').disabled = false;
 				}
+				var specimenIdElem = document.getElementById('id');
+				
+					specimenIdElem.value = updatedSpecimenDTO.id;
+					
 				
 				var nodeId= "Specimen_"+document.getElementById("id").value;
 				refreshTree(null,null,null,null,nodeId);
@@ -770,37 +814,37 @@ function submitTabData()
 				document.getElementById('error').style.display='none';
 				document.getElementById('success').style.display='block';
 				forwardToChildSpecimen();
-			}
-			else
-			{
-				showErrorMessage(response.msg);
-			}
+			
 			if(printFlag)
 			{
-				if(response.printLabel == "success")
+				if(updatedSpecimenDTO.isToPrintLabel)
 				{
 					document.getElementById('print-error').style.display='none';
-					document.getElementById('print-success').innerHTML = response.printLabelSuccess;
+					document.getElementById('print-success').innerHTML = 'Label Printed Successfully.';
 					document.getElementById('print-success').style.display='block';
 					
 				}
 				else
 				{
 					document.getElementById('print-success').style.display='none';
-					document.getElementById('print-error').innerHTML = response.printLabelError;
+					document.getElementById('print-error').innerHTML = 'Printer configuration not found.';
 					document.getElementById('print-error').style.display='block';
 				}
 			}
 			scrollToTop();
 		}
-	}
-	else
-	{
-		showErrorMessage("Unable to submit. Please resolve higlighted issue(s).");
-		scrollToTop();
-	}
+		if(operation == 'edit')
+		{
+			req.open("PUT", "rest/specimens/", false);
+		}
+		else if(operation == 'add')
+		{
+			req.open("POST", "rest/specimens/", false);
+		}
+req.setRequestHeader("Content-Type",
+                     "application/json");
+req.send(JSON.stringify(specimenData));
 }
-
 function showErrorMessage(msg)
 {
 	document.getElementById('print-error').style.display='none';
@@ -1053,20 +1097,52 @@ function submitDeriveData()
 		deriveDataJSON["type"]= typeCombo.getSelectedText();
 		deriveDataJSON["createdOn"]= document.getElementById('createdOn').value;
 		deriveDataJSON["initialQuantity"]= document.getElementById('initialQuantity').value;
+		deriveDataJSON["externalIdentifiers"] = deriveExtidJSON;
+		
+//		var loader1 =""; dhtmlxAjax.postSync("rest/specimen/createDerive/",JSON.stringify(deriveDataJSON));
+		var loader = testREST(deriveDataJSON);
 		
 		
-		var loader = dhtmlxAjax.postSync("CreateDeriveAction.do","dataJSON="+JSON.stringify(deriveDataJSON)+"&extidJSON="+JSON.stringify(deriveExtidJSON));
-		if(loader.xmlDoc.responseText != null)
+	}
+	else
+	{
+		var msg="Unable to submit. Please resolve higlighted issue(s).";
+		document.getElementById('errorMsg').style.display='block';
+	document.getElementById('errorMsg').innerHTML = msg;
+	document.getElementById('errorMsg').className = 'alert alert-error';
+		//scrollToTop();
+	}
+}
+function testREST(dataderive)
+{
+	var req = createRequest(); // defined above
+// Create the callback:
+req.onreadystatechange = function() {
+  if (req.readyState != 4) return; // Not there yet
+  if (req.status != 201) {
+    // Handle request failure here...
+	var errorMsg=req.getResponseHeader("errorMsg");
+	var errMsgDiv = document.getElementById('errorMsg');
+	errMsgDiv.style.display='block';
+				errMsgDiv.className='alert alert-error';
+				errMsgDiv.innerHTML=errorMsg;
+    return;
+  }
+  // Request successful, read the response
+  var resp = req.responseText;
+  if(resp != null)
 		{
 			//alert(loader.xmlDoc.responseText);
-			var response = eval('('+loader.xmlDoc.responseText+')')
+			//alert(loader.xmlDoc.responseText);
+			var specimenDto = eval('('+resp+')');
+			
 			var errMsgDiv = document.getElementById('errorMsg');
-			if(response.success == "success")
-			{
+			//if(response.success == "success")
+			//{//
 				errMsgDiv.style.display='block';
 				errMsgDiv.className='alert alert-success';
-				errMsgDiv.innerHTML=response.msg;
-				var specimenDto = JSON.parse(response.specimenDto);
+				errMsgDiv.innerHTML='Specimen created successfully.';
+				
 				document.getElementById('derLabel').value=specimenDto.label;
 				document.getElementById('derBarcode').value=specimenDto.barcode;
 				document.getElementById('derSubmitButton').disabled=true;
@@ -1082,23 +1158,74 @@ function submitDeriveData()
 				document.getElementById('eventdiv').style.display="block";
 				deriveId = specimenDto.label;
 				document.getElementById('createDiv').style.display="none";
-			}
+			/*}
 			else
 			{
 				errMsgDiv.style.display='block';
 				errMsgDiv.className='alert alert-error';
 				errMsgDiv.innerHTML=response.msg;
-			}
+			}*/
 		}
-	}
-	else
-	{
-		var msg="Unable to submit. Please resolve higlighted issue(s).";
-		document.getElementById('errorMsg').style.display='block';
-	document.getElementById('errorMsg').innerHTML = msg;
-	document.getElementById('errorMsg').className = 'alert-error';
-		//scrollToTop();
-	}
+  // ... and use it as needed by your app.
+}//alert(dataderive[parentSpecimenLabel]);
+
+req.open("POST", "rest/specimens/"+dataderive.parentSpecimenLabel+"/derivatives/", false);
+req.setRequestHeader("Content-Type",
+                     "application/json");
+req.send(JSON.stringify(dataderive));
+}
+
+function validateLabelRequest(label)
+{
+var req = createRequest(); // defined above
+// Create the callback:
+req.onreadystatechange = function() {
+
+
+  if (req.readyState != 4) return; // Not there yet
+  if (req.status != 200) {
+	var errorMsg=req.getResponseHeader("errorMsg")
+			deriveLabelSubmit = false;
+			deriveBarcodeSubmit = false;
+			label.className += " errorStyleOn";
+    return;
+  }
+  // Request successful, read the response
+  var resp = req.responseText;
+  
+  
+			deriveLabelSubmit=true;
+			deriveBarcodeSubmit=true;
+			enableMapButton();
+			deriveDataJSON[label.name] = label.value;
+			label.className = label.className.replace(/errorStyleOn/g,"");
+			//alert(response);
+			//alert(response.label);
+			//alert(response.barcode);
+			
+	
+  // ... and use it as needed by your app.
+}
+req.open("HEAD", "rest/specimens/"+label.value, false);
+req.setRequestHeader("Content-Type",
+                     "application/json");
+req.send();
+}
+function createRequest() {
+  var result = null;
+  if (window.XMLHttpRequest) {
+    // FireFox, Safari, etc.
+    result = new XMLHttpRequest();
+   
+  }
+  else if (window.ActiveXObject) {
+    // MSIE
+    result = new ActiveXObject("Microsoft.XMLHTTP");
+  } 
+  else {
+    // No known mechanism -- consider aborting the application
+  }
+  return result;
 }
 
 function validateAndProcessDeriveComboData(obj)
@@ -1138,8 +1265,10 @@ function enableMapButton()
 function validateLabelBarcode(label)
 {
 	var barcode = document.getElementById('parentSpecimenBarcode').value;
-	var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=getParentDetails&label="+label.value+"&barcode="+barcode);
-	if(loader.xmlDoc.responseText != null && loader.xmlDoc.responseText != '')
+	//var loader = dhtmlxAjax.getSync("rest/specimens/getParentDetails/"+label.value);
+	validateLabelRequest(label);
+	deriveDataJSON[label.name] = label.value;
+	/*if(loader.xmlDoc.responseText != null && loader.xmlDoc.responseText != '')
 	{
 		var response = eval('('+loader.xmlDoc.responseText+')')
 		if(response.msg == 'success')
@@ -1166,7 +1295,7 @@ function validateLabelBarcode(label)
 		deriveLabelSubmit = false;
 		deriveBarcodeSubmit = false;
 		label.className += " errorStyleOn";
-	}
+	}*/
 }
 function openEventPage()
 {

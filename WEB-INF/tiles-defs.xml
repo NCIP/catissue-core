@@ -390,7 +390,7 @@
 
 	<!-- NEW SPECIMEN -->
 	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/EditSpecimen.jsp" />
 	</definition>
 	<definition name=".catissuecore.editNewSpecimenDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/EditSpecimen.jsp" />
@@ -809,7 +809,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.querySpecimenViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/EditSpecimen.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.searchHomeDef">
@@ -852,7 +852,7 @@
 	</definition>
 
 	<definition name=".catissuecore.specimenEditDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/EditSpecimen.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.createCPSpecimenDef" extends=".catissuecore.queryDataViewDef">

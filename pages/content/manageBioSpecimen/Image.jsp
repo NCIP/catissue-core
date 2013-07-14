@@ -128,7 +128,8 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 					</logic:equal>
 					<tr>
                         <td class="black_ar">
-                            <b>There is no image associated with this specimen. Click below to manually enter image information. </b>
+                            <b>There is no image associated with this specimen. <logic:equal name="hasCPPrivliges" value="true">
+						Click below to manually enter image information. </b>
                         </td>
                     </tr>
                     <tr>
@@ -139,7 +140,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                 value="Enter ImageInformation"
                 onclick="addImageInfo()">
             </html:button>
-                           
+                           </logic:equal>
                         </td>
                     </tr>
                 </table>
@@ -199,6 +200,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                   </td>
                 </tr>
                 <logic:equal name="operation" value="edit">
+				<logic:equal name="hasCPPrivliges" value="true">
                 <tr>
                     <td align="left" class="showhide">
                         <fieldset class="field_set fieldset_New_border">
@@ -282,6 +284,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                         </fieldset>
                     </td>
                 </tr>
+				</logic:equal>
                 </logic:equal>
                 <tr>
                     <td align="left" class="showhide">
@@ -323,9 +326,9 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           </td>
 						  
                           <td colspan="3" align="right">
-                           
+                           <logic:equal name="hasCPPrivliges" value="true">
                             <input type="button" name="edit" value="Edit" id='edit'/>
-                       
+						   </logic:equal>
                             </td>
                
                          
@@ -468,9 +471,9 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
                           </td>
                
                           <td colspan="3" align="right">
-                           
+                           <logic:equal name="hasCPPrivliges" value="true">
                             <input type="button" name="edit" value="Edit" id='edit' onclick="deviceEdit('read')"/>
-                       
+							</logic:equal>
                             </td>
                          
                
@@ -724,6 +727,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
                             <tr>
                             <td width="100%" class="bottomtd">
+							<logic:equal name="hasCPPrivliges" value="true">
 						<table><tr><td>
         <input type="button" value="Save Image"
                             onclick="submitTabData()" class="blue_ar_b">
@@ -736,7 +740,7 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 							</div>
 						</td>
 						</tr></table>
-   
+   </logic:equal>
        
                             </td></tr>
 

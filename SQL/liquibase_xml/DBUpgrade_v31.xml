@@ -13,9 +13,13 @@
 			<column name="ACTIVITY_STATUS" type="${text.type}(20)" />
 		</addColumn>
 	</changeSet>
-	
-	<changeSet id="46" author="catissue" failOnError="false">
+	<changeSet id="2" author="catissue" runOnChange="true" failOnError="false">
+		<addUniqueConstraint constraintName="CATISSUE_SPEC_POS_UNIQUE_KEY"
+			tableName="catissue_specimen_position" columnNames="SPECIMEN_ID" />
+	</changeSet>
+	<changeSet id="3" author="catissue" failOnError="false">
 		<sql>delete from CATISSUE_QUERY_EDITLINK_COLS where TABLE_ID = (select Table_ID from CATISSUE_QUERY_TABLE_DATA where DISPLAY_NAME = 'Participant')</sql>
 	</changeSet>
+	
 	
 </databaseChangeLog>         

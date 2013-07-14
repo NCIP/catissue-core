@@ -11,6 +11,12 @@
 	var imgsrc="images/";
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
+<style>
+.errorStyleOn{
+	border: 1px solid #FF0000;
+}
+</style>
+
 <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
 <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
 
@@ -89,7 +95,9 @@
 	<tr>
 		<td  class="tablepadding">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			
 					<div id="specimen_tabbar" style="width:955px; height:630px;"/>
+			
 			</table>
 			
 			<div id='specimenDetailsDiv'>
@@ -160,7 +168,7 @@
 						  <td width="30%" align="left" class="black_ar">
 							<label for="lineage">
 								<bean:write name="specimenDTO" property="lineage" scope="request"/>
-								<html:hidden name="specimenDTO" property="lineage"/>
+								<html:hidden name="specimenDTO" property="lineage" styleId="lineage"/>
 							</label>
 						  </td>
 					</tr>
@@ -324,8 +332,13 @@
 								 <td width="20% class="black_ar">&nbsp;
 								 </td>
 								 <td width="30%" align="left" valign="top" >
-									<html:checkbox property="available" styleId="available" onblur="processData(this)">
+								 <logic:equal name="operation" value="add">
+									<input type="checkbox" name="available" id="available" onblur="processData(this)" disabled checked="checked"/>
+								</logic:equal>
+								<logic:equal name="operation" value="edit">
+										<html:checkbox property="available" styleId="available" onblur="processData(this)" >
 									</html:checkbox>
+								</logic:equal>
 									
 									<span class="black_ar" style="padding-bottom:7px">
 										<label for="available">
@@ -355,12 +368,22 @@
 									</label>
 								</td>
 								<td width="30%" class="black_new">
+								<logic:equal name="operation" value="edit">
+								<div id="" style="display:block"/>
+								</logic:equal>
+								<logic:equal name="operation" value="add">
+								
+									<bean:write name="specimenDTO" property="collectionStatus"/>												
+									<div id="" style="display:none"/>
+								</logic:equal>
 								<html:select property="collectionStatus" name="specimenDTO" 
 											 styleClass="formFieldSized19" styleId="collectionStatus" size="1"
 											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="collectionStatusList"
 											  labelProperty="name" property="value" />
 								</html:select>
+								</div>
+								
 								</td>
 
 							    <td width="20%" class="black_ar align_right_style">
@@ -406,8 +429,13 @@
 								<input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)' readonly style="border:0px" id="storageContainerPosition" title='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)'/>
 									
 								</logic:equal>
+								<logic:equal name="operation" value="add">
+									<input type="button" class="blue_ar_b" value="Select Container" onclick="loadDHTMLXWindowForTransferEvent()" />
+								</logic:equal>
+								<logic:equal name="operation" value="edit">
 								<logic:equal name="specimenDTO" property="collectionStatus" value="Collected">
 									<input type="button" class="blue_ar_b" value="Edit" onclick="loadDHTMLXWindowForTransferEvent()" />
+								</logic:equal>
 								</logic:equal>
 								<logic:equal name="specimenDTO" property="collectionStatus" value="Pending">
 									<input type="button" class="blue_ar_b" value="Select Container" onclick="loadDHTMLXWindowForTransferEvent()" />
@@ -417,7 +445,7 @@
 								<html:hidden name="specimenDTO" property="containerName" styleId="containerName"/>
 								<html:hidden name="specimenDTO" property="pos1" styleId="pos1"/>
 								<html:hidden name="specimenDTO" property="pos2" styleId="pos2"/>
-								<html:hidden name="specimenDTO" property="containerId" />
+								<html:hidden name="specimenDTO" property="containerId" styleId="containerId" />
 								</td>
 							</tr>
 
@@ -604,8 +632,8 @@
 						<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
 							<tr>
 								<td class="buttonbg">
-									<input type="button" value="Submit" onclick="submitTabData()" class="blue_ar_b"/>
-									<c:if test="${specimenDTO.collectionStatus=='Collected'}">
+									<input type="button" value="Submit" onclick="submitTabData('${requestScope.operation}')" class="blue_ar_b"/>
+									<c:if test="${specimenDTO.collectionStatus=='Collected' and operation=='edit'}">	
 										| <input type="button" value="Add To Specimen List"
 											onclick="organizeTarget()" class="blue_ar_b" />
 									</c:if>
@@ -658,7 +686,14 @@ var nodeId= "Specimen_"+document.getElementById("id").value;
 refreshTree(null,null,null,null,nodeId);
 				
 var tabDataJSON = {};
-tabDataJSON["id"] = document.getElementById("id").value; 
+var spId = document.getElementById("id").value;
+if(spId != null && spId != "")
+{
+	tabDataJSON["id"] = document.getElementById("id").value; 
+}
+
+tabDataJSON["specimenCollectionGroupId"] = document.getElementById("scgId").value; 
+
 
 //initialization of clinicalstudytab page
 function initialize(startDateObj,endDateObj)
@@ -682,8 +717,14 @@ var className = classNameCombo.getSelectedText();
 var type = typeCombo.getSelectedText();
 var containerName = document.getElementById('containerName').value;
 var isVirtual = document.getElementById('isVirtual').value;
+<logic:equal name="operation" value="edit">
+var collStatus="<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>";
+</logic:equal>
+<logic:equal name="operation" value="add">
+var collStatus="Pending";
+</logic:equal>
 
-var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+pos1+"&pos2="+pos2+"&holdSpecimenClass="+className+"&holdSpecimenType="+type+"&containerName="+containerName+"&collectionProtocolId=${requestScope.cpId}&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>&isVirtual="+isVirtual;
+var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+pos1+"&pos2="+pos2+"&holdSpecimenClass="+className+"&holdSpecimenType="+type+"&containerName="+containerName+"&collectionProtocolId=${requestScope.cpId}&collStatus="+collStatus+"&isVirtual="+isVirtual;
 
 dhxWins.window("containerPositionPopUp").attachURL(url);                     
 //url : either an action class or you can specify jsp page path directly here
@@ -695,5 +736,25 @@ dhxWins.window("containerPositionPopUp").setText("");    //it's the title for th
 initSpecimenCombo();
 initializeSpecimenPage('${biohazardTypeNameListJSON}');
 prepareSpecimenTypeOptions('${cellTypeListJSON}','${molecularTypeListJSON}','${tissueTypeListJSON}','${fluidTypeListJSON}');
+<logic:equal name="operation" value="edit">
 loadSpecimenTabbar();
+</logic:equal>
+<logic:equal name="operation" value="add">
+loadSpecimenTabbar1();
+</logic:equal>
+function loadSpecimenTabbar1()
+{
+	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
+	specimenTabbar.setSkin('default');
+	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
+	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
+	
+	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> New Specimen </span>', "150px");
+	
+	
+	specimenTabbar.setHrefMode("iframes-on-demand");
+	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
+	
+	specimenTabbar.setTabActive("specimenDetailsTab");
+}
 </script>
