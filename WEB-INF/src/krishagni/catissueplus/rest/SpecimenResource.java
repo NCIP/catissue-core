@@ -180,7 +180,7 @@ public class SpecimenResource
 				.getErrorCode());
 		int responseCode = getCorrespondingHTTPResponse(e.getErrorCode());
 		Response response = Response.status(responseCode)
-				.entity(e.getErrorCode() + ":" + errorCodeEnum.getDescription())
+				.entity(e.getErrorCode() + ":" + errorCodeEnum.getDescription()).header("errorMsg", errorCodeEnum.getDescription())
 				.type(MediaType.APPLICATION_JSON).build();
 		return response;
 	}
@@ -189,22 +189,33 @@ public class SpecimenResource
 	{
 		SpecimenErrorCodeEnum.INVALID_CLASS.getCode();
 		int httpCode;
-		final int  number = 4;//SpecimenErrorCodeEnum.INVALID_CLASS.getCode();
 		switch (errorCode)
 		{
-			case number:
-				httpCode = Status.NOT_FOUND.getStatusCode();
-				break;
-			case 1002:
-				httpCode = Status.FORBIDDEN.getStatusCode();
-				break;
-			case 12:
-			case 1006:
-			case 1007:
-				httpCode = Status.BAD_REQUEST.getStatusCode();
-			default :
-				httpCode = Status.INTERNAL_SERVER_ERROR.getStatusCode();
-				break;
+            case 1004 :
+                httpCode = Status.FORBIDDEN.getStatusCode();
+                break;
+            case 1003 :    
+            case 1011 :
+            case 1013 :
+            case 1014 :
+            case 1015 :
+            case 1016 :
+                httpCode = Status.NOT_FOUND.getStatusCode();
+                break;
+
+            case 1005 :
+            case 1006 :
+            case 1007 :
+            case 1008 :
+            case 1009 :
+            case 1010 :
+            case 1012 :
+            case 1040 :
+                httpCode = Status.BAD_REQUEST.getStatusCode();
+                break;
+            default :
+                httpCode = Status.INTERNAL_SERVER_ERROR.getStatusCode();
+                break;
 		}
 
 		return httpCode;

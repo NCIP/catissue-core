@@ -42,9 +42,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception
 	{
-		String pageOf="pageOfNewSpecimen";
-		String pageOf1 = "pageOfCreateSpecimenCPQuery";
-		String pageOf2 = "pageOfNewSpecimenCPQuery";
+		String pageOf = "pageOfNewSpecimenCPQuery";
 		Gson gson = new Gson();
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String obj = null;
@@ -74,6 +72,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 				specimenDTO.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 				specimenDTO.setAvailable(Boolean.FALSE);
 				specimenDTO.setIsVirtual(Boolean.TRUE);
+				specimenDTO.setAvailableQuantity(0.0);
 				request.setAttribute("specimenDTO", specimenDTO);
 				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
@@ -181,7 +180,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 			AppUtility.closeDAOSession(hibernateDao);
 		}
 
-		return mapping.findForward(pageOf2);
+		return mapping.findForward(pageOf);
 	}
 
 }

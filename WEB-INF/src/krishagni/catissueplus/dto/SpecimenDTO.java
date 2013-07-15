@@ -16,6 +16,7 @@ public class SpecimenDTO
 	private Long specimenCollectionGroupId;
 	private String specimenCollectionGroupName;
 	private String parentSpecimenName;
+	private String parentSpecimenBarcode;
 	private String lineage;
 	private String barcode;
 	private String tissueSite;
@@ -39,6 +40,18 @@ public class SpecimenDTO
 private boolean isToPrintLabel;
 	
 	
+	
+public String getParentSpecimenBarcode()
+{
+	return parentSpecimenBarcode;
+}
+
+
+public void setParentSpecimenBarcode(String parentSpecimenBarcode)
+{
+	this.parentSpecimenBarcode = parentSpecimenBarcode;
+}
+
 	public boolean isToPrintLabel()
 	{
 		return isToPrintLabel;

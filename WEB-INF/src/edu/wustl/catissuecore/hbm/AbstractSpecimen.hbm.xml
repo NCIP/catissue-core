@@ -451,6 +451,7 @@
 	    select specimen.label,specimen.barcode from  edu.wustl.catissuecore.domain.Specimen as specimen  where specimen.label = ? or specimen.barcode = ?
 	</query>
 	
-	
+	<query name="getSpecimenBylabel">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label = ? and specimen.activityStatus= ? </query>
+	<query name="getSpecimenByBarcode">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.barcode = ? and specimen.activityStatus= ? </query>
 	<query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>
 </hibernate-mapping>

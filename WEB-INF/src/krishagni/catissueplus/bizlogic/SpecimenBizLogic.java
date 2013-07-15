@@ -17,7 +17,6 @@ import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.dto.BiohazardDTO;
 import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -138,7 +137,7 @@ public class SpecimenBizLogic
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, null, null);
 		}
-		return this.getDTO(oldSpecimenObj);
+		return this.getSpecimenDTO(oldSpecimenObj);
 	}
 
 	/**
@@ -572,14 +571,16 @@ public class SpecimenBizLogic
 		final String specimenClass = specimen.getClassName();
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
-			throw this.getBizLogicException(null, "protocol.class.errMsg", "");
+			LOGGER.error(ApplicationProperties.getValue("protocol.class.errMsg"));
+			throw new CatissueException(ApplicationProperties.getValue("protocol.class.errMsg"), SpecimenErrorCodeEnum.INVALID_CLASS.getCode());
 		}
 
 		if (!Validator.isEnumeratedValue(
 				AppUtility.getSpecimenTypes(specimenClass),
 				specimen.getSpecimenType()))
 		{
-			throw this.getBizLogicException(null, "protocol.type.errMsg", "");
+			LOGGER.error(ApplicationProperties.getValue("protocol.type.errMsg"));
+			throw new CatissueException(ApplicationProperties.getValue("protocol.type.errMsg"), SpecimenErrorCodeEnum.INVALID_TYPE.getCode());
 		}
 		if (specimen.getCollectionStatus().equalsIgnoreCase(
 				Constants.SPECIMEN_COLLECTED)
@@ -612,8 +613,8 @@ public class SpecimenBizLogic
 						specimenPosition.getPositionDimensionTwo(),
 						hibernateDao))
 				{
-					throw this.getBizLogicException(null,
-							"shipment.samePositionForSpecimens", "");
+					LOGGER.error(ApplicationProperties.getValue("shipment.samePositionForSpecimens"));
+					throw new CatissueException(ApplicationProperties.getValue("shipment.samePositionForSpecimens"), SpecimenErrorCodeEnum.POSITION_ALREADY_OCCUPIED.getCode());
 				}
 		}
 
@@ -673,7 +674,7 @@ public class SpecimenBizLogic
 		}
 	}
 
-	public SpecimenDTO getDTO(Specimen specimen) throws BizLogicException
+	public SpecimenDTO getSpecimenDTO(Specimen specimen) throws BizLogicException
 	{
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		specimenDTO.setId(specimen.getId());
@@ -854,7 +855,7 @@ public class SpecimenBizLogic
 				{
 					parentSpecimen.getChildSpecimenCollection().add(specimen);
 				}
-				specimenDTOs.add(getDTO(specimen));
+				specimenDTOs.add(getSpecimenDTO(specimen));
 			}
 		}
 		catch (ApplicationException e)
@@ -901,9 +902,84 @@ public class SpecimenBizLogic
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, null, null);
 		}
-		return getDTO(specimen);
+		return getSpecimenDTO(specimen);
 	}
 
+	
+	public Specimen getParentByLabel(String parentSpecimenLabel,
+			HibernateDAO hibernateDao)
+	{
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING,
+				parentSpecimenLabel));
+		substParams.put("1", new NamedQueryParam(DBTypes.STRING,
+				Constants.ACTIVITY_STATUS_ACTIVE));
+
+		List<Specimen> specimenList;
+		try
+		{
+			specimenList = hibernateDao.executeNamedQuery("getSpecimenBylabel",
+					substParams);
+		
+		if (specimenList != null && specimenList.size() > 0)
+		{
+			return specimenList.get(0);
+		}
+		else
+		{
+			LOGGER.error("Error: Specimen object not found with the given label.");
+			throw new CatissueException(
+					SpecimenErrorCodeEnum.NOT_FOUND.getDescription(),
+					SpecimenErrorCodeEnum.NOT_FOUND.getCode());
+		}
+		}
+		catch (DAOException e)
+		{
+			LOGGER.error("Error while retereiving Specimen object with the given label");
+			LOGGER.error(e);
+			throw new CatissueException(
+					SpecimenErrorCodeEnum.NOT_FOUND.getDescription(),
+					SpecimenErrorCodeEnum.NOT_FOUND.getCode());
+		}
+
+	}
+	public Specimen getParentByBarcode(String parentSpecimenBarcode,
+			HibernateDAO hibernateDao) 
+	{
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING,
+				parentSpecimenBarcode));
+		substParams.put("1", new NamedQueryParam(DBTypes.STRING,
+				Constants.ACTIVITY_STATUS_ACTIVE));
+
+		List<Specimen> specimenList;
+		try
+		{
+			specimenList = hibernateDao.executeNamedQuery("getSpecimenByBarcode",
+					substParams);
+		
+		if (specimenList != null && specimenList.size() > 0)
+		{
+			return specimenList.get(0);
+		}
+		else
+		{
+			LOGGER.error("Specimen object not found with the given barcode.");
+			throw new CatissueException(
+					SpecimenErrorCodeEnum.NOT_FOUND.getDescription(),
+					SpecimenErrorCodeEnum.NOT_FOUND.getCode());
+		}
+		}
+		catch (DAOException e)
+		{
+			LOGGER.error("Error while retereiving Specimen object with the given barcode");
+			LOGGER.error(e);
+			throw new CatissueException(
+					SpecimenErrorCodeEnum.NOT_FOUND.getDescription(),
+					SpecimenErrorCodeEnum.NOT_FOUND.getCode());
+		}
+
+	}
 	public Specimen getParent(String parentSpecimenLabel,
 			HibernateDAO hibernateDao) throws DAOException, BizLogicException
 	{
@@ -1054,12 +1130,14 @@ public class SpecimenBizLogic
 		specimen.setIsAvailable(Boolean.TRUE);
 		specimen.setLabel(specimenDTO.getLabel());
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setAvailableQuantity(specimenDTO.getQuantity());
 		if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
 				|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
 		{
 			specimen.setLineage(specimenDTO.getLineage());
+			if(parentSpecimen == null)
 			parentSpecimen = parentSpecimen == null
-					? getParent(specimenDTO.getParentSpecimenName(),
+					? getParentSpcimen(specimenDTO,
 							hibernateDao) : parentSpecimen;
 			if (parentSpecimen == null)
 			{
@@ -1143,6 +1221,21 @@ public class SpecimenBizLogic
 		//		collectionGroup.setId(specimenDTO.getSpecimenCollectionGroupId());
 		//		specimen.setSpecimenCollectionGroup(collectionGroup);
 		setSpecimenEvents(specimen, sessionDataBean);
+		return specimen;
+	}
+
+	private Specimen getParentSpcimen(SpecimenDTO specimenDTO,
+			HibernateDAO hibernateDao)
+	{
+		Specimen specimen = null;
+		if(Validator.isEmpty(specimenDTO.getParentSpecimenBarcode()))
+		{
+			specimen = getParentByLabel(specimenDTO.getParentSpecimenName(), hibernateDao);
+		}
+		else if(Validator.isEmpty(specimenDTO.getParentSpecimenName()))
+		{
+			specimen = getParentByBarcode(specimenDTO.getParentSpecimenBarcode(), hibernateDao);
+		}
 		return specimen;
 	}
 

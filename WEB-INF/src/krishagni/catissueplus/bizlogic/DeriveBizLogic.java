@@ -46,6 +46,7 @@ public class DeriveBizLogic
 		specimenDTO.setLineage(Constants.DERIVED_SPECIMEN);
 		specimenDTO.setParentSpecimenId(derivedDTO.getParentSpecimenId());
 		specimenDTO.setParentSpecimenName(derivedDTO.getParentSpecimenLabel());
+		specimenDTO.setParentSpecimenBarcode(derivedDTO.getParentSpecimenBarcode());
 		specimenDTO.setPos1(derivedDTO.getPos1());
 		specimenDTO.setPos2(derivedDTO.getPos2());
 		specimenDTO.setQuantity(derivedDTO.getInitialQuantity());

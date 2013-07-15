@@ -34,7 +34,7 @@ public class SpecimenHandler
 		}
 		finally
 		{
-			AppUtility.closeDAOSession(hibernateDao);
+   			AppUtility.closeDAOSession(hibernateDao);
 		}
 
 		return specimenDTO;
@@ -115,9 +115,17 @@ public class SpecimenHandler
 			hibernateDao = (HibernateDAO) AppUtility
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
-			specimenDTO = specimenBizLogic.getDTO(specimenBizLogic.getParent(
-					label, hibernateDao));
-			hibernateDao.commit();
+			String[] arr = label.split("=");
+			if("label".equals(arr[0]))
+			{
+				specimenDTO = specimenBizLogic.getSpecimenDTO(specimenBizLogic.getParentByLabel(
+					arr[1], hibernateDao));
+			}
+			else if("barcode".equals(arr[0]))
+			{
+				specimenDTO = specimenBizLogic.getSpecimenDTO(specimenBizLogic.getParentByBarcode(
+						arr[1], hibernateDao));
+			}
 		}
 		finally
 		{
