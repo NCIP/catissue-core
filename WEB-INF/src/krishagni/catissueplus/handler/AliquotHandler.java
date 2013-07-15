@@ -32,10 +32,8 @@ import edu.wustl.dao.HibernateDAO;
 public class AliquotHandler
 {
 
-    public static final String ALIQUOT_GRID_VM_TEMPLATE = "aliquotGridTemplate.vm";
-    public static final String AVAILABEL_CONTAINER_NAME = "availabelContainerName";
-    public static final String ALIQUOT_GRID_XML = "aliquotGridXml";
-    public static final String ALIQUOTS_DETAILS_DTO = "aliquotDetailsDTO";
+    private static final String AVAILABEL_CONTAINER_NAME = "availabelContainerName";
+    private static final String ALIQUOTS_DETAILS_DTO = "aliquotDetailsDTO";
 
     public String getAliquotDetails(SessionDataBean sessionDataBean, String lable, String aliquotJson) throws Exception
     {
@@ -156,7 +154,6 @@ public class AliquotHandler
         try
         {
             Gson gson = CatissuePlusCommonUtil.getGson();
-            JSONObject jsonObject = new JSONObject(aliquotJson);
             hibernateDao = (HibernateDAO) AppUtility.openDAOSession(sessionDataBean);
 
             AliquotDetailsDTO aliquotDetailsDTO = gson.fromJson(aliquotJson, AliquotDetailsDTO.class);
