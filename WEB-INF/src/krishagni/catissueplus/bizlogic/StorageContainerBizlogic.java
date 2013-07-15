@@ -546,7 +546,6 @@ public class StorageContainerBizlogic
                     labellingSchemeDTO.getDimensionOne(), startPosX);
             int startPosyNum = Validator.isEmpty(startPosY) ? 0 : AppUtility.getPositionValueInInteger(
                     labellingSchemeDTO.getDimensionOne(), startPosY);
-            System.out.println("");
             for (int i = startPosxNum; i < dimX; i++)
             {
                 for (int j = startPosyNum; j < dimY; j++)
@@ -564,7 +563,8 @@ public class StorageContainerBizlogic
                     }
                 }
             }
-
+        
+            
         }
         catch (final DAOException daoEx)
         {

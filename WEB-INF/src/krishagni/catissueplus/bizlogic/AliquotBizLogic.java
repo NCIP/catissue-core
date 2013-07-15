@@ -224,9 +224,18 @@ public class AliquotBizLogic
             singleAliquotDetailsDTO.setAliqoutLabel("");
             singleAliquotDetailsDTO.setBarCode("");
             singleAliquotDetailsDTO.setStoragecontainer(aliquotContainerDetails.containerName);
-
-            singleAliquotDetailsDTO.setPos1(aliquotContainerDetails.position1.get(i));
-            singleAliquotDetailsDTO.setPos2(aliquotContainerDetails.position2.get(i));
+            /*
+             * Added below if condition because there is one legacy bug in getAliquotContainerDetails api
+             * while returning empty position it ignores the occupied child containers
+             * */
+            if(aliquotContainerDetails.position1.size()>i){
+                singleAliquotDetailsDTO.setPos1(aliquotContainerDetails.position1.get(i));
+                singleAliquotDetailsDTO.setPos2(aliquotContainerDetails.position2.get(i));
+            }else{
+                singleAliquotDetailsDTO.setPos1("");
+                singleAliquotDetailsDTO.setPos2("");
+               
+            }
             singleAliquotDetailsDTOList.add(singleAliquotDetailsDTO);
 
         }
