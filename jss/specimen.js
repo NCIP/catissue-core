@@ -1167,6 +1167,22 @@ req.onreadystatechange = function() {
 				document.getElementById('eventdiv').style.display="block";
 				deriveId = specimenDto.label;
 				document.getElementById('createDiv').style.display="none";
+				var aliqChkBox = document.getElementById('aliquotChk');
+				if(aliqChkBox.checked)
+				{
+					var aliquotCount = document.getElementById("noOfAliquots").value;
+					var quantityPerAliquot = document.getElementById("quantityPerAliquot").value;
+					if(pageOf == "pageOfDeriveSpecimen")
+					{
+						action = 'GetAliquotDetails.do?pageOf=fromMenu&parentSpecimentLabel='+specimenDto.label+"&aliquotCount="+aliquotCount+"&quantityPerAliquot="+quantityPerAliquot+"&searchBasedOn=label";
+					}
+					else
+					{
+						action = 'GetAliquotDetails.do?pageOf=fromSpecimen&parentSpecimentLabel='+specimenDto.label+"&aliquotCount="+aliquotCount+"&quantityPerAliquot="+quantityPerAliquot+"&searchBasedOn=label";
+					}
+					document.forms[0].action = action;
+					document.forms[0].submit();
+				}
 			/*}
 			else
 			{
@@ -1318,10 +1334,14 @@ var action = 'QuickEvents.do?specimenLabel='+deriveId+'&pageOf=';
 }
 function giveCall(url,msg,msg1,id)
 {
-	id=document.getElementById('id').value;
+	if(id != null && id.trim()=="")
+	{
+		id=document.getElementById('id').value;
+		url=url+id;
+	}
     document.getElementsByName('objCheckbox').value=id;
     document.getElementsByName('objCheckbox').checked = true;
-	url=url+id;
+	
     ajaxAssignTagFunctionCall(url,msg,msg1);
 }
 function loadDHTMLXWindowForDeriveSpecimen()
