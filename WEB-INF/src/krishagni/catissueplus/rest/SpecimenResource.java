@@ -184,11 +184,8 @@ public class SpecimenResource
         Response response = null;
         try
         {
-            SessionDataBean sessionDataBean = (SessionDataBean) httpServletRequest.getSession().getAttribute(
-                    edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
-
             AliquotHandler aliquotHandler = new AliquotHandler();
-            aliquotDetailJOSNString = aliquotHandler.getAliquotDetails(sessionDataBean, label, paramJson);
+            aliquotDetailJOSNString = aliquotHandler.getAliquotDetails(getSessionDataBean(), label, paramJson);
             response = Response.status(Status.CREATED.getStatusCode()).entity(aliquotDetailJOSNString)
                     .type(MediaType.APPLICATION_JSON).build();
         }
@@ -217,11 +214,8 @@ public class SpecimenResource
         Response response = null;
         try
         {
-            SessionDataBean sessionDataBean = (SessionDataBean) httpServletRequest.getSession().getAttribute(
-                    edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
-
             AliquotHandler aliquotHandler = new AliquotHandler();
-            responseString = aliquotHandler.createAliquot(sessionDataBean, aliquotJson);
+            responseString = aliquotHandler.createAliquot(getSessionDataBean(), aliquotJson);
             response = Response.status(Status.CREATED.getStatusCode()).entity(responseString)
                     .type(MediaType.APPLICATION_JSON).build();
         }
@@ -254,45 +248,28 @@ public class SpecimenResource
 
 	private int getCorrespondingHTTPResponse(int errorCode)
 	{
-		SpecimenErrorCodeEnum.INVALID_CLASS.getCode();
 		int httpCode;
 		switch (errorCode)
 		{
             case 1004 :
                 httpCode = Status.FORBIDDEN.getStatusCode();
                 break;
-			case 1008 :
-                httpCode = Status.BAD_REQUEST.getStatusCode();
-                break;
-            case 1009 :
-                httpCode = Status.BAD_REQUEST.getStatusCode();
-                break;
-            case 1010 :
-                httpCode = Status.BAD_REQUEST.getStatusCode();
-                break;
+            case 1003 :    
             case 1011 :
-                httpCode = Status.NOT_FOUND.getStatusCode();
-                break;
-            case 1012 :
-                httpCode = Status.BAD_REQUEST.getStatusCode();
-                break;
             case 1013 :
-                httpCode = Status.NOT_FOUND.getStatusCode();
-                break;
             case 1014 :
-                httpCode = Status.NOT_FOUND.getStatusCode();
-                break;
             case 1015 :
-                httpCode = Status.NOT_FOUND.getStatusCode();
-                break;
             case 1016 :
                 httpCode = Status.NOT_FOUND.getStatusCode();
                 break;
 
-            case 1003 :    
             case 1005 :
             case 1006 :
             case 1007 :
+            case 1008 :
+            case 1009 :
+            case 1010 :
+            case 1012 :
             case 1040 :
                 httpCode = Status.BAD_REQUEST.getStatusCode();
                 break;
