@@ -728,6 +728,7 @@ function submitTabData(operation)
 			tabDataJSON["containerName"]= document.getElementById("containerName").value;
 			tabDataJSON["pos1"]= document.getElementById("pos1").value;
 			tabDataJSON["pos2"]= document.getElementById("pos2").value;
+			tabDataJSON["containerId"]= document.getElementById("containerId").value;
 		}
 		tabDataJSON["isVirtual"] = isVirtual; 
 		var printFlag = false;
@@ -830,6 +831,13 @@ req.onreadystatechange = function() {
 					document.getElementById('print-error').innerHTML = 'Printer configuration not found.';
 					document.getElementById('print-error').style.display='block';
 				}
+			}
+			var divStyle = document.getElementById('specListDiv').style.display;
+			
+			if(divStyle == 'none')
+			{
+				divStyle='block';
+				document.getElementById('specListDiv').style.display='block';
 			}
 			scrollToTop();
 		}
@@ -958,18 +966,18 @@ function validateDateDerive(dt){
     return true;
  }
 
-function setLabelBarcodeVisibility(isSpecimenLabelGeneratorAvl,isSpecimenBarcodeGeneratorAvl,collectionStatus)
+function setLabelBarcodeVisibility(isSpecimenLabelGeneratorAvl,isSpecimenBarcodeGeneratorAvl,collectionStatus,operation)
 {
-	if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='true' && collectionStatus!='Collected')
+	if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='true' && (collectionStatus!='Collected'||operation=='add'))
 	{
 		document.getElementById('label').setAttribute('disabled',true);
 		document.getElementById('barcode').setAttribute('disabled',true);
 	}
-	else if(isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='true' && collectionStatus!='Collected')
+	else if(isSpecimenLabelGeneratorAvl=='false' && isSpecimenBarcodeGeneratorAvl=='true' && (collectionStatus!='Collected'||operation=='add'))
 	{
 		document.getElementById('barcode').setAttribute('disabled',true);
 	}
-	else if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='false' && collectionStatus!='Collected')
+	else if(isSpecimenLabelGeneratorAvl=='true' && isSpecimenBarcodeGeneratorAvl=='false' && (collectionStatus!='Collected'||operation=='add'))
 	{
 		document.getElementById('label').setAttribute('disabled',true);
 	}
@@ -1122,6 +1130,7 @@ req.onreadystatechange = function() {
   if (req.status != 201) {
     // Handle request failure here...
 	var errorMsg=req.getResponseHeader("errorMsg");
+	
 	var errMsgDiv = document.getElementById('errorMsg');
 	errMsgDiv.style.display='block';
 				errMsgDiv.className='alert alert-error';
@@ -1175,7 +1184,7 @@ req.setRequestHeader("Content-Type",
 req.send(JSON.stringify(dataderive));
 }
 
-function validateLabelRequest(label)
+function validateLabelRequest(label,caption)
 {
 var req = createRequest(); // defined above
 // Create the callback:
@@ -1206,7 +1215,7 @@ req.onreadystatechange = function() {
 	
   // ... and use it as needed by your app.
 }
-req.open("HEAD", "rest/specimens/"+label.value, false);
+req.open("HEAD", "rest/specimens/"+caption+"="+label.value, false);
 req.setRequestHeader("Content-Type",
                      "application/json");
 req.send();
@@ -1262,11 +1271,11 @@ function enableMapButton()
 		document.getElementById('mapButton').disabled=false;
 	}
 }
-function validateLabelBarcode(label)
+function validateLabelBarcode(label,caption)
 {
 	var barcode = document.getElementById('parentSpecimenBarcode').value;
 	//var loader = dhtmlxAjax.getSync("rest/specimens/getParentDetails/"+label.value);
-	validateLabelRequest(label);
+	validateLabelRequest(label,caption);
 	deriveDataJSON[label.name] = label.value;
 	/*if(loader.xmlDoc.responseText != null && loader.xmlDoc.responseText != '')
 	{
@@ -1309,8 +1318,10 @@ var action = 'QuickEvents.do?specimenLabel='+deriveId+'&pageOf=';
 }
 function giveCall(url,msg,msg1,id)
 {
+	id=document.getElementById('id').value;
     document.getElementsByName('objCheckbox').value=id;
     document.getElementsByName('objCheckbox').checked = true;
+	url=url+id;
     ajaxAssignTagFunctionCall(url,msg,msg1);
 }
 function loadDHTMLXWindowForDeriveSpecimen()

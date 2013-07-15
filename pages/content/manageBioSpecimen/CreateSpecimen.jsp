@@ -129,7 +129,7 @@ function initPrepareSpecimenType()
 											<span class="black_ar">
 												<bean:message key="specimen.label"/>&nbsp;
 												<html:text styleClass="black_ar"  name="deriveDTO" maxlength="50"  size="21" styleId="parentSpecimenLabel"
-														   property="parentSpecimenLabel" disabled="false" onblur="validateLabelBarcode(this)"/>
+														   property="parentSpecimenLabel" disabled="false" onblur="validateLabelBarcode(this,'label')"/>
 												&nbsp;&nbsp;
 											</span>
 										</td>
@@ -139,7 +139,7 @@ function initPrepareSpecimenType()
 											<span class="black_ar">
 											<bean:message key="storageContainer.barcode"/>&nbsp;
 											<html:text name="deriveDTO" styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode"
-													   property="parentSpecimenBarcode" disabled="false" onblur="validateLabelBarcode(this)"/>
+													   property="parentSpecimenBarcode" disabled="false" onblur="validateLabelBarcode(this,'barcode')"/>
 											</span>
 										</td>
 									</tr>
@@ -419,7 +419,7 @@ var labelDoc = document.getElementById('parentSpecimenLabel');
 	}
 	else
 	{
-		validateLabelBarcode(labelDoc);
+		validateLabelBarcode(labelDoc,'label');
 	}
 document.forms[0].parentSpecimenBarcode.disabled = true;
 document.getElementById('checkedButton').checked=true;

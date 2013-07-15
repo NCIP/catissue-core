@@ -352,7 +352,12 @@
 									</label>
 								</td>
 								<td width="30%" align="left" class="black_ar">
+								<logic:equal name="operation" value="add">
+									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="availableQuantity" readonly="true" property="availableQuantity"		name="specimenDTO" style="text-align:right" onblur="processData(this)"/>
+								</logic:equal>
+								<logic:equal name="operation" value="edit">
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="availableQuantity" property="availableQuantity"		name="specimenDTO" style="text-align:right" onblur="processData(this)"/>
+								</logic:equal>
 									<span id="unitSpan1"></span>
 									<div id="avlQuantityErrorMsg" style="display:none; color:red;">
 									 </div>
@@ -632,17 +637,20 @@
 						<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
 							<tr>
 								<td class="buttonbg">
+								<table><tr><td>
 									<input type="button" value="Submit" onclick="submitTabData('${requestScope.operation}')" class="blue_ar_b"/>
-									<c:if test="${specimenDTO.collectionStatus=='Collected' and operation=='edit'}">	
-										| <input type="button" value="Add To Specimen List"
+									</td><td>
+									<div id="specListDiv" style="display:none">
+									| <input type="button" value="Add To Specimen List"
 											onclick="organizeTarget()" class="blue_ar_b" />
-									</c:if>
-										
+									
+									</div>
+									</td></tr></table>
 									<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked="true"/>
 								</td>
 							</tr>
 						</table>
-						 <input type="hidden" id="assignTargetCall" name="assignTargetCall" value="giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString=${specimenDTO.id}','Select at least one existing list or create a new list.','No specimen has been selected to assign.','${specimenDTO.id}')"/>
+						 <input type="hidden" id="assignTargetCall" name="assignTargetCall" value="giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString=','Select at least one existing list or create a new list.','No specimen has been selected to assign.','${specimenDTO.id}')"/>
 						<%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
 					</td>
 				</tr>
@@ -680,7 +688,7 @@ var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 
 // alert(showViewSPRTab);
 
-setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}');
+setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}','${requestScope.operation}');
 
 var nodeId= "Specimen_"+document.getElementById("id").value;
 refreshTree(null,null,null,null,nodeId);
@@ -757,4 +765,9 @@ function loadSpecimenTabbar1()
 	
 	specimenTabbar.setTabActive("specimenDetailsTab");
 }
+<c:if test="${specimenDTO.collectionStatus=='Collected' and operation=='edit'}">
+{
+	document.getElementById('specListDiv').style.display='block';
+}
+</c:if>
 </script>
