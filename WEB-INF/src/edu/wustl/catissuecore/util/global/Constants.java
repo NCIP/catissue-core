@@ -5984,7 +5984,7 @@ public class Constants
 	/** Constant for MOLECULAR_TYPE_LIST_JSON **/
 	public static final String MOLECULAR_TYPE_LIST_JSON = "molecularTypeListJSON";
 	
-	public static final String CONTAINER_INVALID_MESSAGE = " container can not hold container of type ";
+	public static final String CONTAINER_INVALID_MESSAGE = " container cannot hold container of type ";
 	
 	public static final String SITE_NOT_TRANSFRED_MESSAGE ="Site can not be transfred.";
 

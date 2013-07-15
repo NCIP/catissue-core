@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import krishagni.catissueplus.bizlogic.AliquotBizLogic;
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
+import krishagni.catissueplus.dao.SpecimenDAO;
 import krishagni.catissueplus.dto.AliquotContainerDetailsDTO;
 import krishagni.catissueplus.dto.AliquotDetailsDTO;
 import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
@@ -114,15 +115,17 @@ public class GetAliquotInfoAjaxAction extends BaseAction
 					quantityPerAliquot = Double.parseDouble(request
 							.getParameter(QUANTITY_PER_ALIQUOT));
 				}
-				String parentSpecimenLabel = request.getParameter(PARENT_SPECIMEN_LABEL);
+				//PARENT_SPECIMEN_LABEL will be either specimen label or its barcode.
+				String parentSpecimenLabelOrBarcode = request.getParameter(PARENT_SPECIMEN_LABEL);
 
 				AliquotDetailsDTO aliquotDetailsDTO = aliquotBizLogic.getAliquotDetailsDTO(
-						parentSpecimenLabel, aliquotCount, quantityPerAliquot, hibernateDAO,
-						sessionDataBean);
+						parentSpecimenLabelOrBarcode, aliquotCount, quantityPerAliquot,
+						hibernateDAO, sessionDataBean);
 
 				ContainerInputDetailsDTO containerInputDetails = new ContainerInputDetailsDTO();
 				containerInputDetails.aliquotCount = aliquotCount;
-				containerInputDetails.cpId = aliquotBizLogic.getCpIdFromSpecimenLabel(
+				SpecimenDAO specimenDAO = new SpecimenDAO();
+				containerInputDetails.cpId = specimenDAO.getCpIdFromSpecimenLabel(
 						aliquotDetailsDTO.getParentLabel(), hibernateDAO);
 				containerInputDetails.isAdmin = sessionDataBean.isAdmin();
 				containerInputDetails.userId = sessionDataBean.getUserId();
@@ -132,7 +135,7 @@ public class GetAliquotInfoAjaxAction extends BaseAction
 				List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = storageContainerBizlogic
 						.getStorageContainerList(containerInputDetails, null, hibernateDAO, 5);
 
-				String xmlString = VelocityManager.getInstance().evaluate(
+				String aliquotsInfoXmlString = VelocityManager.getInstance().evaluate(
 						aliquotDetailsDTO.getPerAliquotDetailsCollection(),
 						ALIQUOT_GRID_VM_TEMPLATE);
 
@@ -145,11 +148,11 @@ public class GetAliquotInfoAjaxAction extends BaseAction
 				containerNameStr.append(Constants.STORAGE_TYPE_POSITION_VIRTUAL);
 
 				jsonObject.put(AVAILABEL_CONTAINER_NAME, containerNameStr.toString());
-				jsonObject.put(ALIQUOT_GRID_XML, xmlString.trim().replaceAll("\n", ""));
+				jsonObject.put(ALIQUOT_GRID_XML, aliquotsInfoXmlString.trim().replaceAll("\n", ""));
 				Gson gson = CatissuePlusCommonUtil.getGson();
 
 				jsonObject.put(ALIQUOTS_DETAILS_DTO, gson.toJson(aliquotDetailsDTO));
-				jsonObject.put(Constants.CP_ID, aliquotBizLogic.getCpIdFromSpecimenId(
+				jsonObject.put(Constants.CP_ID, specimenDAO.getCpIdFromSpecimenId(
 						aliquotDetailsDTO.getParentId(), hibernateDAO));
 				boolean isLabelGenerationOn = false;
 				if ((Variables.isSpecimenLabelGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl))

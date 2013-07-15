@@ -7,6 +7,8 @@
 		<cell><![CDATA[${gridData.storagecontainer}]]></cell>	
 		<cell><![CDATA[${gridData.pos1}]]></cell>
 		<cell><![CDATA[${gridData.pos2}]]></cell>
+		<cell></cell>
+		<cell><![CDATA[${gridData.aliquotId}]]></cell>
 	 </row>
 	#end
 </rows>

@@ -5,12 +5,13 @@ import java.util.Map;
 
 public enum SpecimenErrorCodeEnum
 {
-	NOT_FOUND(1003, "Specimen with given label doesn't exist."),
-    NOT_AUTHORIZED(1004,  "User doesn't have specimen processing privileges on this specimen."),
-    INVALID_CLASS(1005, "Specimen Class is invalid."),
-    INVALID_TYPE(1006, "Specimen Type is invalid."),
-    INVALID_TISSUE_SITE(1007, "Tissue Site is invalid."),
-    
+    NOT_FOUND(1003, "Specimen with given label doesn't exist."),
+	NOT_AUTHORIZED(1004,  "User doesn't have specimen processing privileges on this specimen."),
+	INVALID_CLASS(1005, "Specimen Class is invalid."),
+	INVALID_TYPE(1006, "Specimen Type is invalid."),
+	INVALID_TISSUE_SITE(1007, "Tissue Site is invalid."),
+	
+	
     INVALID_ALIQUOT_COUNT(1008,"Please enter valid aliquot count or quantity per aliquot."),
     INSUFFICIENT_AVAILABLE_QUANTITY(1009,"Total quantity of all aliquots cannot be greater than available quantity of parent specimen."),
     INSUFFICIEN_STORAGE_LOCATION (1010,"The system cannot store all the aliquots in the same container due to insufficient number of storage locations."),

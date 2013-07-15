@@ -18,6 +18,7 @@ import krishagni.catissueplus.Exception.CatissueException;
 import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.dto.DerivedDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import krishagni.catissueplus.handler.AliquotHandler;
 import krishagni.catissueplus.handler.SpecimenHandler;
 
 import com.google.gson.Gson;
@@ -173,6 +174,72 @@ public class SpecimenResource
 		}
 		return response;
 	}
+	
+	    @Path("{label}/aliquots/{paramJson}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAliquotsDetails(@PathParam("label") String label, @PathParam("paramJson") String paramJson)
+    {
+        String aliquotDetailJOSNString = null;
+        Response response = null;
+        try
+        {
+            SessionDataBean sessionDataBean = (SessionDataBean) httpServletRequest.getSession().getAttribute(
+                    edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
+
+            AliquotHandler aliquotHandler = new AliquotHandler();
+            aliquotDetailJOSNString = aliquotHandler.getAliquotDetails(sessionDataBean, label, paramJson);
+            response = Response.status(Status.CREATED.getStatusCode()).entity(aliquotDetailJOSNString)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+        catch (CatissueException e)
+        {
+            LOGGER.error(e);
+            response = getResponse(e);
+        }
+        catch (Exception e)
+        {
+            LOGGER.error(e);
+            response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage())
+                    .header("errorMsg", e.getMessage()).type(MediaType.APPLICATION_JSON).build();
+        }
+        return response;
+    }
+
+    @Path("{label}/aliquots")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response createAliquot(String aliquotJson)
+    {
+
+        String responseString = null;
+        Response response = null;
+        try
+        {
+            SessionDataBean sessionDataBean = (SessionDataBean) httpServletRequest.getSession().getAttribute(
+                    edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
+
+            AliquotHandler aliquotHandler = new AliquotHandler();
+            responseString = aliquotHandler.createAliquot(sessionDataBean, aliquotJson);
+            response = Response.status(Status.CREATED.getStatusCode()).entity(responseString)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+        catch (CatissueException e)
+        {
+            LOGGER.error(e);
+            response = getResponse(e);
+        }
+        catch (Exception e)
+        {
+            LOGGER.error(e);
+            response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage())
+                    .header("errorMsg", e.getMessage()).type(MediaType.APPLICATION_JSON).build();
+        }
+        return response;
+
+    }
+
 
 	private Response getResponse(CatissueException e)
 	{
@@ -194,22 +261,38 @@ public class SpecimenResource
             case 1004 :
                 httpCode = Status.FORBIDDEN.getStatusCode();
                 break;
-            case 1003 :    
+			case 1008 :
+                httpCode = Status.BAD_REQUEST.getStatusCode();
+                break;
+            case 1009 :
+                httpCode = Status.BAD_REQUEST.getStatusCode();
+                break;
+            case 1010 :
+                httpCode = Status.BAD_REQUEST.getStatusCode();
+                break;
             case 1011 :
+                httpCode = Status.NOT_FOUND.getStatusCode();
+                break;
+            case 1012 :
+                httpCode = Status.BAD_REQUEST.getStatusCode();
+                break;
             case 1013 :
+                httpCode = Status.NOT_FOUND.getStatusCode();
+                break;
             case 1014 :
+                httpCode = Status.NOT_FOUND.getStatusCode();
+                break;
             case 1015 :
+                httpCode = Status.NOT_FOUND.getStatusCode();
+                break;
             case 1016 :
                 httpCode = Status.NOT_FOUND.getStatusCode();
                 break;
 
+            case 1003 :    
             case 1005 :
             case 1006 :
             case 1007 :
-            case 1008 :
-            case 1009 :
-            case 1010 :
-            case 1012 :
             case 1040 :
                 httpCode = Status.BAD_REQUEST.getStatusCode();
                 break;

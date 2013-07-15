@@ -1,6 +1,7 @@
 
 package krishagni.catissueplus.bizlogic;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1031,7 +1032,7 @@ public class SpecimenBizLogic
 		return consentTierStatusCollectionForSpecimen;
 	}
 
-	private void insertSpecimen(HibernateDAO hibernateDao, Specimen specimen)
+	public void insertSpecimen(HibernateDAO hibernateDao, Specimen specimen)
 			throws BizLogicException, ApplicationException, DAOException
 	{
 		generateLabel(specimen);
@@ -1110,10 +1111,9 @@ public class SpecimenBizLogic
 		return isAuthorized;
 	}
 
-	private Specimen getSpecimen(SpecimenDTO specimenDTO,
-			HibernateDAO hibernateDao, SessionDataBean sessionDataBean,
-			Specimen parentSpecimen) throws BizLogicException, DAOException,
-			CloneNotSupportedException
+	public Specimen getSpecimen(SpecimenDTO specimenDTO, HibernateDAO hibernateDao,
+			SessionDataBean sessionDataBean, Specimen parentSpecimen) throws BizLogicException,
+			DAOException, CloneNotSupportedException
 	{
 		Specimen specimen = new Specimen();
 		specimen.setActivityStatus(specimenDTO.getActivityStatus());
@@ -1352,6 +1352,8 @@ public class SpecimenBizLogic
 		Double previousQuantity = specimen.getAvailableQuantity();
 		Double remainingQuantity = previousQuantity.doubleValue()
 				- quantityReducedBy;
+		final DecimalFormat dFormat = new DecimalFormat("#.000");
+		remainingQuantity = Double.parseDouble(dFormat.format(remainingQuantity));
 		specimen.setAvailableQuantity(remainingQuantity);
 
 		int remainingQuantityMoreThenZero = remainingQuantity.compareTo(0D);

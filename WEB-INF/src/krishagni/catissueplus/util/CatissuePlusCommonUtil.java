@@ -34,11 +34,12 @@ public class CatissuePlusCommonUtil
 				Date retObj = null;
 				try
 				{
-					
-					if(!Validator.isEmpty(json.getAsString())){
+
+					if (!Validator.isEmpty(json.getAsString()))
+					{
 						retObj = df.parse(json.getAsString());
 					}
-					
+
 				}
 				catch (ParseException e)
 				{
@@ -48,7 +49,8 @@ public class CatissuePlusCommonUtil
 			}
 		};
 		GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Date.class, dese);
-		Gson gson = gsonBuilder.setDateFormat(ApplicationProperties.getValue("date.pattern")).create();
+		Gson gson = gsonBuilder.setDateFormat(ApplicationProperties.getValue("date.pattern"))
+				.create();
 		return gson;
 
 	}
