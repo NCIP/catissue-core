@@ -48,8 +48,9 @@
 	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
 	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
 
+	
 	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
-	<property name="jboss.bin.run.jar" value="${jboss.home.dir}/bin/run.jar"/>
+	<property name="jboss.bin.run.jar" value="${rel.jboss.home}/bin/run.jar"/>
 	<property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
 
 	<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
@@ -66,9 +67,16 @@
 	
 	<property name="dashboard.csv.dir" value="${base.dir}/insert_dashboard_queries" />
 	<property name="dashboard.parameters.csv.file" value="dashboard_sqls.csv" />
-	<property name="custom-report.script.dir" value="${jboss.home.dir}/server/default/custom-reports/scripts" />
-	<property name="custom-report.report.dir" value="${jboss.home.dir}/server/default/custom-reports/reports" />
-
+	<property name="custom-report.script.dir" value="${rel.jboss.home}/server/default/custom-reports/scripts" />
+	<property name="custom-report.report.dir" value="${rel.jboss.home}/server/default/custom-reports/reports" />
+	
+	<property name="csm.database.type" value="${database.type}"/>
+	<property name="csm.database.host" value="${database.host}"/>
+	<property name="csm.database.port" value="${database.port}"/>
+	<property name="csm.database.name" value="${database.name}"/>
+	<property name="csm.database.username" value="${database.username}"/>
+	<property name="csm.database.password" value="${database.password}"/>
+	
 	<property name="jboss.server.host.port" value="${jboss.server.host}:${jboss.server.port}" />
 	<if>
 		<equals arg1="" arg2="${jboss.server.port}" />
@@ -76,32 +84,6 @@
 			<var name="jboss.server.host.port" unset="true"/>
 			<property name="jboss.server.host.port" value="${jboss.server.host}" />
 		</then>
-	</if>
-	<property name="jboss.cas.server.host.port" value="${jboss.server.host}:${jboss.server.port}" />
-	<if>
-		<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-		<then>
-			<if>
-				<equals arg1="" arg2="${jboss.server.port}" />
-				<then>
-					<var name="jboss.cas.server.host.port" unset="true"/>
-					<property name="jboss.cas.server.host.port" value="${jboss.server.host}" />
-				</then>
-			</if>
-		</then>
-		<else>
-			<if>
-				<equals arg1="" arg2="${cas.jboss.port}" />
-				<then>
-					<var name="jboss.cas.server.host.port" unset="true"/>
-					<property name="jboss.cas.server.host.port" value="${cas.jboss.server.host}" />
-				</then>
-				<else>
-					<var name="jboss.cas.server.host.port" unset="true"/>
-					<property name="jboss.cas.server.host.port" value="${cas.jboss.server.host}:${cas.jboss.port}" />
-				</else>
-			</if>
-		</else>
 	</if>
 	
 	<echo message="Setting Global DRIVER and URL Property" />
@@ -817,8 +799,6 @@
 			<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
 
-			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
-
 		<!-- added by Amol .For eMPI integration -->
 			<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
 			<replacefilter token="@@empiDBUserName@@" value="${empi.database.username}" />
@@ -858,7 +838,6 @@
 				<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
 				<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
 				<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
-				<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
 				<replacefilter token="@@CiderWMQEnabled@@" value="${cider.integration.enabled}" />
 				<replacefilter token="@@CiderWMQServerName@@" value="${cider.wmq.server.name}" />
 				<replacefilter token="@@CiderWMQMGRName@@" value="${cider.wmq.mgr.name}" />
@@ -927,40 +906,6 @@
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
 		</replace>
-		<!-- CAS logout url-->
-		<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${jboss.container.secure}" />
-					<then>
-					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="https://${jboss.cas.server.host.port}" />
-					</replace>
-					</then>
-					<else>
-					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="http://${jboss.cas.server.host.port}" />
-					</replace>
-					</else>
-				</if>
-			</then>
-			<else>
-				<if>
-					<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-					<then>
-					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="https://${jboss.cas.server.host.port}" />
-					</replace>
-					</then>
-					<else>
-					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="http://${jboss.cas.server.host.port}" />
-					</replace>
-					</else>
-				</if>
-			</else>
-		</if>
 		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
@@ -976,7 +921,7 @@
 			</fileset>
 		</copy>
 
-		<copy file="performance.properties" todir="${jboss.home.dir}/server/default/conf" overwrite="true"/>
+		<copy file="performance.properties" todir="${rel.jboss.home}/server/default/conf" overwrite="true"/>
 
 		<replace dir="${jboss.server.url}/catissuecore-properties">
 			<include name="ApplicationSecurityConfig.xml" />
@@ -994,15 +939,15 @@
 						</then>
 		</if>
 		
-		<copy todir="${jboss.home.dir}/bin" overwrite="true">
+		<copy todir="${rel.jboss.home}/bin" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="DAOConfig.xml" />
 			</fileset>
 		</copy>
 		<delete file="${jboss.server.url}/lib/oracleDriver.jar" casesensitive="false"/>
 		<!-- added for printwebservice -->
-		<copy todir="${jboss.home.dir}/server/default/lib" overwrite="true">
-		   <fileset dir="${jboss.home.dir}/client">
+		<copy todir="${rel.jboss.home}/server/default/lib" overwrite="true">
+		   <fileset dir="${rel.jboss.home}/client">
 				<include name="policy.jar" />
 				<include name="jbossws-client.jar" />
 				<include name="wsdl4j.jar" />
@@ -1092,7 +1037,7 @@
 
 	<!--Target for checking server security -->
 		<target name="server_security" description="Target for checking server security">
-			<copy file="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/web.xml"
+			<copy file="${rel.jboss.home}/server/default/deploy/jmx-console.war/WEB-INF/web.xml"
 						tofile="${temp.dir}/web.xml" >
 			</copy>
 				<concat destfile="${temp.dir}/web1.xml" >
@@ -1118,9 +1063,9 @@
 				 </concat>
 			<copy file="${temp.dir}/web1.xml" tofile="${temp.dir}/web.xml" overwrite="true"/>
 			<copy file="${temp.dir}/web.xml"
-						tofile="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/web.xml" overwrite="true"/>
+						tofile="${rel.jboss.home}/server/default/deploy/jmx-console.war/WEB-INF/web.xml" overwrite="true"/>
 
-			<copy file="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml"
+			<copy file="${rel.jboss.home}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml"
 						tofile="${temp.dir}/jboss-web.xml" >
 			</copy>
 				<concat destfile="${temp.dir}/web3.xml" >
@@ -1137,7 +1082,7 @@
 				</concat>
 			<copy file="${temp.dir}/web3.xml" tofile="${temp.dir}/jboss-web.xml" overwrite="true"/>
 			<copy file="${temp.dir}/jboss-web.xml"
-						tofile="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml" overwrite="true"/>
+						tofile="${rel.jboss.home}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml" overwrite="true"/>
 		</target>
 
 	<target name="pre_initialization" description="initialisation prior to deploying application">
@@ -1424,13 +1369,6 @@
 			</tstamp>
 			<echo>after cacore: ${after_cacore}</echo>
 			<antcall target="de_integrate_app" />
-			<!--<if>
-				<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-				<then>
-					<antcall target="deploy_cas" />
-				</then>
-			</if>
-			<antcall target="integrate_cas" />-->
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
 			<antcall target="copyMailjar"/>
@@ -1460,26 +1398,35 @@
          ================================= -->
 	<target name="generate.cacore.for.xmi" depends="" description="description">
 
-		<delete dir="${tempcacore.dir}" />
-		<mkdir dir="${tempcacore.dir}" />
+		<if>
+			<equals arg1="true" arg2="${enable.de}" />
+			<then>
+				<delete dir="${tempcacore.dir}" />
+				<mkdir dir="${tempcacore.dir}" />
 
-		<delete dir="${export.dir}" />
-		<mkdir dir="${export.dir}" />
+				<delete dir="${export.dir}" />
+				<mkdir dir="${export.dir}" />
 
-		<!-- <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" /> -->
-		<!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
+				<!-- <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" /> -->
+				<!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
 
-		<!-- <mkdir dir="${cacaore.deployables}" />  -->
+				<!-- <mkdir dir="${cacaore.deployables}" />  -->
 
-		<ant antfile="DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
-			<property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
-			<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
-			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
-			<property name="import.xmi" value="False" />
-		</ant>
+				<ant antfile="DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
+					<property name="de.zip.location" value="${temp.dir}/dynamicextensions" /> 
+					<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
+					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+					<property name="import.xmi" value="False" />
+				</ant>
 
-		<delete file="${base.dir}/log4j.properties" />
-		<delete dir="${tempcacore.dir}" />
+				<delete file="${base.dir}/log4j.properties" />
+				<delete dir="${tempcacore.dir}" />
+			</then>
+			<else>
+				<echo message="Skipping cacore generation as 'enable.de' property set to false"/>
+			</else>
+		</if>
+		
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -
@@ -5376,5 +5323,4 @@
 			<echo message="Inserting dashboard queries finished..." />
 			<echo message="---------------------------------------" />
 		</target>
-		
 </project>

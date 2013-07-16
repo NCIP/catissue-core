@@ -769,15 +769,6 @@
 		<value></value>
 	</property>
 
-	<!-- CAS keystore path -->
-	<property>
-		<name>cas.keystorePath</name>
-		<value>@@CasKeystorePath@@</value>
-	</property>
-	<property>
-		<name>cas.logout.url</name>
-		<value>@@cas.logout.url@@/cas/logout</value>
-	</property>
 	
 	<property>
 		<name>CiderWmqEnabled</name>
