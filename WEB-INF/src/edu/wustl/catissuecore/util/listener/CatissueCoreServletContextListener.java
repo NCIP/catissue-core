@@ -140,8 +140,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.init();
 			initializeParticipantConfig();
-			initEmailclient();
-
 			/** Bug Id: PLUS-25
 			 * 	Details: Scheduler for titli keyword search indexing.
 			 *  Added By: Ashraf
@@ -157,21 +155,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
-
-	private void initEmailclient() {
-		EmailServerProperties emailServerProps = new EmailServerProperties();
-		emailServerProps.setFromAddr(XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress"));
-		emailServerProps.setFromPassword(XMLPropertyHandler.getValue("email.sendEmailFrom.emailPassword"));
-		emailServerProps.setIsSMTPAuthEnabled(XMLPropertyHandler.getValue("email.smtp.auth.enabled"));
-		emailServerProps.setServerHost(XMLPropertyHandler.getValue("email.mailServer"));
-		emailServerProps.setServerPort(XMLPropertyHandler.getValue("email.mailServer.port"));
-		emailServerProps.setIsStartTLSEnabled(XMLPropertyHandler.getValue("email.smtp.starttls.enabled"));
 	
-		String subPropFile = "/email-templates/emailSubjects.properties";
-		String tmplPropFile = "/email-templates/emailTemplates.properties";
-		EmailClient.initialize(emailServerProps, subPropFile, tmplPropFile);
-	}
-
 	private void initCiderIntegration()
 	{
 		if (XMLPropertyHandler.getValue("CiderWmqEnabled").equalsIgnoreCase("true"))
