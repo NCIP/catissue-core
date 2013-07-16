@@ -848,10 +848,10 @@
 									<replacefilter token="@@database.userName@@" value="${database.username}" />
 									<replacefilter token="@@database.password@@" value="${database.password}" />
 			<replacefilter token="@@dashboard.items.file@@" value="${dashboard.items.file}" />
-			<!-- Keyword Search Indexing Job Config -->
-				<replacefilter token="@@keyword.search.indexer.scheduler.hours.of.day@@" value="${keyword.search.indexer.scheduler.hours.of.day}" />
-				<replacefilter token="@@keyword.search.indexer.scheduler.minutes@@" value="${keyword.search.indexer.scheduler.minutes}" />
-			<!-- Keyword Search Indexing Job Config End -->
+			<!-- Nightly Cron Job Config -->
+				<replacefilter token="@@nightly.cron.job.execution.time.hrs@@" value="${nightly.cron.job.execution.time.hrs}" />
+				<replacefilter token="@@nightly.cron.job.execution.time.min@@" value="${nightly.cron.job.execution.time.min}" />
+			<!-- Nightly Cron Job Config End -->
 		</replace>
 		<!-- Add values to properties if EMPI feature is enabled-->
 		<if>
