@@ -20,6 +20,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
 import net.sf.ehcache.CacheException;
 
 import org.apache.commons.io.FilenameUtils;
@@ -47,7 +48,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
-import edu.wustl.catissuecore.scheduler.TitliIndexerJob;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
@@ -138,11 +138,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.init();
 			initializeParticipantConfig();
-			/** Bug Id: PLUS-25
-			 * 	Details: Scheduler for titli keyword search indexing.
-			 *  Added By: Ashraf
-			 */
-			TitliIndexerJob.scheduleTitliIndexerJob();
+            /** 
+             * 	Details: Quartz Scheduler for executing nightly cron jobs
+             *  Added By: Ashraf
+             */
+            QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
 
 			logger.info("Initialization complete");
 		}

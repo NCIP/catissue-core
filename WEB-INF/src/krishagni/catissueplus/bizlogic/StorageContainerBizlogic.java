@@ -1,6 +1,7 @@
 
 package krishagni.catissueplus.bizlogic;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -771,9 +772,9 @@ public class StorageContainerBizlogic
     }
 
     //global variable to keep count of stored specimens
-    private Integer totalCount = new Integer(0);
+    private static Integer totalCount = new Integer(0);
     //global variable to keep count of container capacity
-    private Integer totalCapacity = new Integer(0);
+    private static Integer totalCapacity = new Integer(0);
 
     /**
      * Recursively gets all children of container and sets count of specimens and capacity
@@ -811,15 +812,17 @@ public class StorageContainerBizlogic
     }
 
     /**
-     * Returns map containing specimen counts, capacity and percentage of utilization of a container
-     * @param containerId
-     * @param dao
-     * @return
-     * @throws ApplicationException
-     */
+    * Returns map containing specimen counts, capacity and percentage of utilization of a container
+    * @param containerId
+    * @param dao
+    * @return
+    * @throws ApplicationException 
+    */
     public StorageContainerUtilizationDTO getStorageContainerUtilizationDTO(Long containerId, HibernateDAO dao)
             throws ApplicationException
     {
+        totalCount = 0;
+        totalCapacity = 0;
         //recursive call to find all children and set specimen count and total capacity count
         getChildrenOfStorageContainerAndUpdateCounts(containerId, dao);
 
@@ -829,6 +832,29 @@ public class StorageContainerBizlogic
         dto.setTotalStorageCapacity(totalCapacity);
 
         return dto;
+    }
+
+    /**
+     * Inserts number of specimens in top most parent container to catissue_stor_cont_spec_counts table.
+     * @param hibernateDAO
+     * @throws DAOException
+     * @throws ApplicationException
+     * @throws SQLException 
+     */
+    public void saveSpecimenCountsOfParentContainer(HibernateDAO hibernateDAO) throws DAOException,
+            ApplicationException,
+            SQLException
+    {
+        StorageContainerDAO storageContainerDAO = new StorageContainerDAO();
+        //get id list of all top most parent storage containers
+        List<Long> parentStorageContainerIdList = storageContainerDAO.getIdOfAllParentStorageContainers(hibernateDAO);
+
+        for (Long containerId : parentStorageContainerIdList)
+        {
+            //get utilization DTO for the container
+            StorageContainerUtilizationDTO dto = getStorageContainerUtilizationDTO(containerId, hibernateDAO);
+            storageContainerDAO.insertIntoStorContSpecCountsTable(dto, hibernateDAO);
+        }
     }
 
 }

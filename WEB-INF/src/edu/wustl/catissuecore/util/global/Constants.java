@@ -5986,20 +5986,7 @@ public class Constants
 	
 	public static final String CONTAINER_INVALID_MESSAGE = " container cannot hold container of type ";
 	
-	public static final String SITE_NOT_TRANSFRED_MESSAGE ="Site can not be transfred.";
-
-	/** Constant for KEYWORD_SEARCH_INDEXER_SCHEDULER_MINUTES **/
-	public static final String KEYWORD_SEARCH_INDEXER_SCHEDULER_MINUTES = "keyword.search.indexer.scheduler.minutes";
-
-	/** Constant for KEYWORD_SEARCH_INDEXER_SCHEDULER_HOURS_OF_DAY **/
-	public static final String KEYWORD_SEARCH_INDEXER_SCHEDULER_HOURS_OF_DAY = "keyword.search.indexer.scheduler.hours.of.day";
-
-	/** Constant for DEFAULT_SCHEDULER_RUN_TIME_MINUTES **/
-	public static final Integer DEFAULT_SCHEDULER_RUN_TIME_MINUTES = 0;
-
-	/** Constant for DEFAULT_SCHEDULER_RUN_TIME_HOURS **/
-	public static final Integer DEFAULT_SCHEDULER_RUN_TIME_HOURS = 22;
-	
+    public static final String SITE_NOT_TRANSFRED_MESSAGE = "Site can not be transfred.";
 		
 	public static final String ALIQUOTS_CREATION_SUCCESS_MSG = "Aliquots created succesfully.";
 	
@@ -6024,4 +6011,20 @@ public class Constants
 
 	/** Constant for containerDTO **/
 	public static final String CONTAINER_DTO = "containerDTO";
+
+    /** Constant for NIGHTLY_CRON_JOB_EXECUTION_TIME_HOURS **/
+    public static final String NIGHTLY_CRON_JOB_EXECUTION_TIME_HOURS = "nightly.cron.job.execution.time.hrs";
+
+    /** Constant for NIGHTLY_CRON_JOB_EXECUTION_TIME_MINUTES **/
+    public static final String NIGHTLY_CRON_JOB_EXECUTION_TIME_MINUTES = "nightly.cron.job.execution.time.min";
+
+    /** Constant for DEFAULT_NIGHTLY_CRON_JOB_EXECUTION_TIME_HOURS **/
+    public static final Integer DEFAULT_NIGHTLY_CRON_JOB_EXECUTION_TIME_HOURS = 22;
+
+    /** Constant for DEFAULT_NIGHTLY_CRON_JOB_EXECUTION_TIME_MINUTES **/
+    public static final Integer DEFAULT_NIGHTLY_CRON_JOB_EXECUTION_TIME_MINUTES = 0;
+
+	/** Constant for number of milliseconds in a day **/
+	public static final Long DAILY_INTERVAL_MILLISECONDS = 86400000L;
+
 }

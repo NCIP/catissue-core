@@ -424,4 +424,11 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 <query name="getChildContainerIds">
 	select cntPos.occupiedContainer.id from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id=?
 </query>
+<query name="getIdOfParentStorageContainers">
+	select cont.id from Container cont where cont.activityStatus!='Disabled' and not exists (select cntPos.occupiedContainer.id from ContainerPosition cntPos where cont.id = cntPos.occupiedContainer.id) 
+</query>
+<sql-query name="insertIntoStorContSpecCountsTable">
+	INSERT INTO catissue_stor_cont_spec_counts(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, DATE) VALUES(?,?,?) 
+</sql-query>
+
 </hibernate-mapping>
