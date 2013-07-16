@@ -8,6 +8,12 @@
 	<property name="text.type" value="varchar" dbms="mysql" />
 	<property name="text.type" value="varchar2" dbms="oracle" />
 
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
+	
 	<changeSet id="1" author="catissue" runOnChange="true">
 		<addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
 			<column name="ACTIVITY_STATUS" type="${text.type}(20)" />
@@ -22,4 +28,26 @@
 	</changeSet>
 	
 	
+	<changeSet id="4" author="catissue" runOnChange="true">
+
+		<createTable tableName="CATISSUE_STOR_CONT_SPEC_COUNTS">
+			<column name="STORAGE_CONTAINER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="STORED_SPECIMEN_COUNT" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="DATE" type="${date.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<addForeignKeyConstraint constraintName="FK_STORAGE_CONTAINER_ID"
+			baseTableName="CATISSUE_STOR_CONT_SPEC_COUNTS" baseColumnNames="STORAGE_CONTAINER_ID"
+			referencedTableName="CATISSUE_STORAGE_CONTAINER" referencedColumnNames="IDENTIFIER" /> 
+	
+		<createIndex tableName="CATISSUE_STOR_CONT_SPEC_COUNTS" indexName="CATISSUE_STOR_CONT_SPEC_COUNTS_CONT_ID">
+    		<column name="STORAGE_CONTAINER_ID"/>
+		</createIndex>
+	</changeSet>
 </databaseChangeLog>         
