@@ -922,11 +922,11 @@ Helpdesk Phone : @@contact.number@@</value>
 		<value>@@dashboard.items.file@@</value>
 	</property>
 	<property>
-		<name>keyword.search.indexer.scheduler.hours.of.day</name>
-		<value>@@keyword.search.indexer.scheduler.hours.of.day@@</value>
+		<name>nightly.cron.job.execution.time.hrs</name>
+		<value>@@nightly.cron.job.execution.time.hrs@@</value>
 	</property>
 	<property>
-		<name>keyword.search.indexer.scheduler.minutes</name>
-		<value>@@keyword.search.indexer.scheduler.minutes@@</value>
+		<name>nightly.cron.job.execution.time.min</name>
+		<value>@@nightly.cron.job.execution.time.min@@</value>
 	</property>
 </properties>
