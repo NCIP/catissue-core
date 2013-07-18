@@ -131,11 +131,17 @@ public class ShowStorageGridViewAction extends BaseAction
 
 		AppUtility.closeDAOSession(dao);
 
-		request.setAttribute("count", dto.getNumberOfSpecimensAssigned());
-		request.setAttribute("capacity", dto.getTotalStorageCapacity());
-		request.setAttribute("percentage", Math.round(((dto
-				.getNumberOfSpecimensAssigned().doubleValue() / dto
-				.getTotalStorageCapacity().doubleValue()) * 100)));
+        request.setAttribute(Constants.SPEC_COUNT, dto.getNumberOfSpecimensAssigned());
+        request.setAttribute(Constants.CAPACITY, dto.getTotalStorageCapacity());
+        final Long utilizationPercentage = Math.round(((dto.getNumberOfSpecimensAssigned().doubleValue() / dto
+                .getTotalStorageCapacity().doubleValue()) * 100));
+        request.setAttribute(Constants.PERCENTAGE, utilizationPercentage);
+
+        request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, false);
+        if (utilizationPercentage >= 90)
+        {
+            request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, true);
+        }
 
 		String contentOfContainer = null;
 		final String pageOf = request.getParameter(Constants.PAGE_OF);

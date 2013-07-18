@@ -6027,4 +6027,16 @@ public class Constants
 	/** Constant for number of milliseconds in a day **/
 	public static final Long DAILY_INTERVAL_MILLISECONDS = 86400000L;
 
+    /** Constant for count **/
+    public static final String SPEC_COUNT = "count";
+
+    /** Constant for capacity **/
+    public static final String CAPACITY = "capacity";
+
+    /** Constant for percentage **/
+    public static final String PERCENTAGE = "percentage";
+
+    /** Constant for showUtilizationAlert **/
+    public static final String SHOW_UTILIZATION_ALERT = "showUtilizationAlert";
+
 }
