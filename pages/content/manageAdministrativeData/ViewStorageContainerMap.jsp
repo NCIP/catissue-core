@@ -301,10 +301,16 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 					<table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
 						<tr>
 						<td width="150" style="vertical-align:top;" class="align_right_style">
-							<div><span class="black_ar">Utilization</span></div>
+							<div>
+								<span class="black_ar">Estimated Utilization<img src="images/uIEnhancementImages/help_icon.png" title="<bean:message key='storageContainer.utilization.help'/>" />
+								</span>
+							</div>
 						</td>
 						<td>
-							<div class="scrollContentDiv black_ar">${requestScope.percentage}% (${requestScope.count}/${requestScope.capacity})
+							<div class="scrollContentDiv black_ar"><span style="vertical-align:top;">${percentage}%&nbsp(${count}/${capacity})</span>&nbsp&nbsp
+							<c:if test="${showUtilizationAlert}">
+								<img src="images/uIEnhancementImages/mini_alert.png" title="<bean:message key='storageContainer.utilization.alert' />"/>
+							</c:if>
 							</div>
 						</td>
 						</tr>
