@@ -14,8 +14,9 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import krishagni.catissueplus.dto.BiohazardDTO;
+
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
-import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;

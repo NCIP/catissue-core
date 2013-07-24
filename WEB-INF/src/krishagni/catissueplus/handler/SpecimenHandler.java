@@ -3,6 +3,7 @@ package krishagni.catissueplus.handler;
 
 import krishagni.catissueplus.bizlogic.DeriveBizLogic;
 import krishagni.catissueplus.bizlogic.SpecimenBizLogic;
+import krishagni.catissueplus.dao.SpecimenDAO;
 import krishagni.catissueplus.dto.DerivedDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.PrintUtil;
@@ -115,15 +116,15 @@ public class SpecimenHandler
 			hibernateDao = (HibernateDAO) AppUtility
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
+			SpecimenDAO specimenDAO = new SpecimenDAO();
 			String[] arr = label.split("=");
 			if("label".equals(arr[0]))
 			{
-				specimenDTO = specimenBizLogic.getSpecimenDTO(specimenBizLogic.getParentByLabel(
-					arr[1], hibernateDao));
+				specimenDTO = specimenBizLogic.getSpecimenDTOFromSpecimen(specimenDAO.getSpecimenByLabelOrBarcode(arr[1], null, hibernateDao));
 			}
 			else if("barcode".equals(arr[0]))
 			{
-				specimenDTO = specimenBizLogic.getSpecimenDTO(specimenBizLogic.getParentByBarcode(
+				specimenDTO = specimenBizLogic.getSpecimenDTOFromSpecimen(specimenDAO.getSpecimenByLabelOrBarcode(null,
 						arr[1], hibernateDao));
 			}
 		}

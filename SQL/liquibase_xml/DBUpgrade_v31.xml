@@ -39,7 +39,7 @@
 	</changeSet>
 	
 	
-	<changeSet id="4" author="catissue" runOnChange="true">
+	<changeSet id="5" author="catissue" runOnChange="true">
 
 		<createTable tableName="CATISSUE_STOR_CONT_SPEC_COUNTS">
 			<column name="STORAGE_CONTAINER_ID" type="${int.type}">
@@ -60,5 +60,10 @@
 		<createIndex tableName="CATISSUE_STOR_CONT_SPEC_COUNTS" indexName="CATISSUE_STOR_CONT_SPEC_COUNTS_CONT_ID">
     		<column name="STORAGE_CONTAINER_ID"/>
 		</createIndex>
+	</changeSet>
+	<changeSet id="6" author="catissue" runOnChange="true" failOnError="false">
+		<sql>update catissue_address set country ='United States' where country is null;</sql>
+		<sql>update catissue_address set city ='Not Specified' where city is null;</sql>
+		<sql>commit;</sql>
 	</changeSet>
 </databaseChangeLog>         

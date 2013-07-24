@@ -10,7 +10,7 @@
 
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.catissuecore.dto.ExternalIdentifierDTO;
+import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;

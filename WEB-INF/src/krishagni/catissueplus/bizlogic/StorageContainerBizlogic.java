@@ -157,9 +157,9 @@ public class StorageContainerBizlogic
     }
 
     public List<AliquotContainerDetailsDTO> getStorageContainerList(ContainerInputDetailsDTO containerInputDetails,
-            final String storageType, HibernateDAO hibernateDao, int numOfContainers) throws ApplicationException
+            final String storageType, HibernateDAO hibernateDao, int numOfContainers, List<AliquotContainerDetailsDTO> containers) throws ApplicationException
     {
-        List<AliquotContainerDetailsDTO> containers = new ArrayList<AliquotContainerDetailsDTO>();
+//        List<AliquotContainerDetailsDTO> containers = new ArrayList<AliquotContainerDetailsDTO>();
         JDBCDAO jdbcDao = null;
         try
         {
@@ -631,6 +631,7 @@ public class StorageContainerBizlogic
 
         StorageContainer sContainer = new StorageContainer();
         sContainer.setId(containerId);
+        sContainer.setName(containerName);
         specimenPosition.setStorageContainer(sContainer);
 
         return specimenPosition;

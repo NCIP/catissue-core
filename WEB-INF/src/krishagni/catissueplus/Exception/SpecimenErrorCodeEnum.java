@@ -22,7 +22,10 @@ public enum SpecimenErrorCodeEnum
     PARSE_ERROR (1015,"Error occured while parsing aliquot details."),
     INVALID_STORAGE_POSITION(1016,"Please enter valid storage position."),
 
-	POSITION_ALREADY_OCCUPIED(1040,"Storage position is already occupied by other specimen.");
+	POSITION_ALREADY_OCCUPIED(1040,"Storage position is already occupied by other specimen."),
+	INVALID_USER(1041,"Please provide valid user information"),
+    INTERNAL_SERVER_ERROR(1050,"Error while performing update operation");
+    
     private int code;
     private String description;
  

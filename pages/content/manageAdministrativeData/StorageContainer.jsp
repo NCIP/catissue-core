@@ -1119,8 +1119,7 @@ function calltest()
 														width="6" height="6" hspace="0" vspace="3" /></td>
 													<td align="left" valign="top" class="black_ar"><label
 														for="Dimension One labelling scheme"
-														onmouseover="Tip('Dimension One labelling scheme')">Dimension
-															One labelling scheme</label>
+														onmouseover="Tip('<bean:message key="storageContainer.d1.labeling"/>')"><bean:message key="storageContainer.d1.labeling"/></label>
 													<td><html:select styleClass="formFieldSizedNew"
 															property="oneDimensionLabellingScheme" size="1"
 															style="width:145px">
@@ -1131,8 +1130,7 @@ function calltest()
 														src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 														width="6" height="6" hspace="0" vspace="3" /> <label
 														for="Dimension Two labelling scheme"
-														onmouseover="Tip('Dimension Two labelling scheme')">Dimension
-															Two labelling scheme</label>
+														onmouseover="Tip('<bean:message key="storageContainer.d2.labeling"/>')"><bean:message key="storageContainer.d2.labeling"/></label>
 													<td><html:select styleClass="formFieldSizedNew"
 															property="twoDimensionLabellingScheme" size="1"
 															style="width:145px">

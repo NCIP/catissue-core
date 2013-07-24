@@ -1,16 +1,15 @@
 
 package krishagni.catissueplus.handler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import krishagni.catissueplus.Exception.CatissueException;
 import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.bizlogic.AliquotBizLogic;
-import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.dao.SpecimenDAO;
 import krishagni.catissueplus.dto.AliquotContainerDetailsDTO;
 import krishagni.catissueplus.dto.AliquotDetailsDTO;
-import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
 import krishagni.catissueplus.util.CatissuePlusCommonUtil;
 
@@ -83,21 +82,26 @@ public class AliquotHandler
                 {
                     quantityPerAliquot = Double.parseDouble(jsonObject.get("quantity").toString());
                 }
+//                ContainerInputDetailsDTO containerInputDetails = new ContainerInputDetailsDTO();
+//                containerInputDetails.aliquotCount = aliquotCount;
+//                SpecimenDAO specimenDAO = new SpecimenDAO();
+//                containerInputDetails.cpId = specimenDAO.getCpIdFromSpecimenLabel(lable,
+//                        hibernateDAO);
+//                containerInputDetails.isAdmin = sessionDataBean.isAdmin();
+//                containerInputDetails.userId = sessionDataBean.getUserId();
+//                containerInputDetails.specimenClass = aliquotDetailsDTO.getSpecimenClass();
+//                containerInputDetails.specimenType = aliquotDetailsDTO.getType();
+//                StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
+                List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = new ArrayList<AliquotContainerDetailsDTO>(); 
+//                		storageContainerBizlogic
+//                        .getStorageContainerList(containerInputDetails, null, hibernateDAO, 5);
                 AliquotDetailsDTO aliquotDetailsDTO = aliquotBizLogic.getAliquotDetailsDTO(lable, aliquotCount,
-                        quantityPerAliquot, hibernateDAO, sessionDataBean);
+                        quantityPerAliquot, hibernateDAO, sessionDataBean,aliquotContainerDetailsDTOList);
 
-                ContainerInputDetailsDTO containerInputDetails = new ContainerInputDetailsDTO();
-                containerInputDetails.aliquotCount = aliquotCount;
-                SpecimenDAO specimenDAO = new SpecimenDAO();
-                containerInputDetails.cpId = specimenDAO.getCpIdFromSpecimenLabel(aliquotDetailsDTO.getParentLabel(),
-                        hibernateDAO);
-                containerInputDetails.isAdmin = sessionDataBean.isAdmin();
-                containerInputDetails.userId = sessionDataBean.getUserId();
-                containerInputDetails.specimenClass = aliquotDetailsDTO.getSpecimenClass();
-                containerInputDetails.specimenType = aliquotDetailsDTO.getType();
-                StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
-                List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = storageContainerBizlogic
-                        .getStorageContainerList(containerInputDetails, null, hibernateDAO, 5);
+                
+                
+//                List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = storageContainerBizlogic
+//                        .getStorageContainerList(containerInputDetails, null, hibernateDAO, 5);
 
                 StringBuffer containerNameStr = new StringBuffer();
                 for (int i = 0; i < aliquotContainerDetailsDTOList.size(); i++)
@@ -108,7 +112,7 @@ public class AliquotHandler
 
                 returnJsonObject.put(AVAILABEL_CONTAINER_NAME, containerNameStr.toString());
                 Gson gson = CatissuePlusCommonUtil.getGson();
-
+                SpecimenDAO specimenDAO = new SpecimenDAO();
                 returnJsonObject.put(ALIQUOTS_DETAILS_DTO, gson.toJson(aliquotDetailsDTO));
                 returnJsonObject.put(Constants.CP_ID,
                         specimenDAO.getCpIdFromSpecimenId(aliquotDetailsDTO.getParentId(), hibernateDAO));

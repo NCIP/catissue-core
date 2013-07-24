@@ -4124,10 +4124,6 @@ PUBLIC
 			type="krishagni.catissueplus.imaging.action.ImageAjaxAction"
 			validate="false" scope="request" parameter="type">
 		</action>
-		<action path="/SpecimenAjaxAction"
-			type="krishagni.catissueplus.action.SpecimenAjaxAction"
-			validate="false" scope="request" parameter="type">
-		</action>
 		<action path="/CreateDeriveAction"
 			type="krishagni.catissueplus.action.CreateDeriveAction"
 			validate="false" scope="request" parameter="type">

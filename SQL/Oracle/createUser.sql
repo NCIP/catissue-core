@@ -1,7 +1,7 @@
 insert into catissue_department values(CATISSUE_DEPARTMENT_SEQ.nextval,'@@first.admin.department@@');
 insert into catissue_institution  values(CATISSUE_INSTITUTION_SEQ.nextval,'@@first.admin.institution@@');
 insert into catissue_cancer_research_group  values(CATISSUE_CANCER_RES_GRP_SEQ.nextval,'@@first.admin.cancerresearchgroup@@');
-insert into catissue_address (identifier,state,country,zipcode) values(CATISSUE_ADDRESS_SEQ.nextVal,null,null,null);
+insert into catissue_address (identifier,city,state,country,zipcode) values(CATISSUE_ADDRESS_SEQ.nextVal,'Not Specified',null,'United States',null);
 
 UPDATE CSM_USER SET LOGIN_NAME='@@first.admin.emailAddress@@',
 					DEPARTMENT=1,

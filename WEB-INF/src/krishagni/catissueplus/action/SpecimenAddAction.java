@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import krishagni.catissueplus.dto.BiohazardDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import krishagni.catissueplus.util.SpecimenUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -95,7 +96,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 				session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 				
 				request.setAttribute("isSpecimenLabelGeneratorAvl",
-						new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(identifier, hibernateDao));
+						SpecimenUtil.isSpecimenLabelGeneratorAvl(identifier, hibernateDao));
 				request.setAttribute("isSpecimenBarcodeGeneratorAvl",
 						Variables.isSpecimenBarcodeGeneratorAvl);
 			}

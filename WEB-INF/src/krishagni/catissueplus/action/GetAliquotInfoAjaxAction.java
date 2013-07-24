@@ -1,6 +1,7 @@
 
 package krishagni.catissueplus.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -117,10 +119,10 @@ public class GetAliquotInfoAjaxAction extends BaseAction
 				}
 				//PARENT_SPECIMEN_LABEL will be either specimen label or its barcode.
 				String parentSpecimenLabelOrBarcode = request.getParameter(PARENT_SPECIMEN_LABEL);
-
+List<AliquotContainerDetailsDTO> containerDetailsDTOs = new ArrayList<AliquotContainerDetailsDTO>();
 				AliquotDetailsDTO aliquotDetailsDTO = aliquotBizLogic.getAliquotDetailsDTO(
 						parentSpecimenLabelOrBarcode, aliquotCount, quantityPerAliquot,
-						hibernateDAO, sessionDataBean);
+						hibernateDAO, sessionDataBean,containerDetailsDTOs);
 
 				ContainerInputDetailsDTO containerInputDetails = new ContainerInputDetailsDTO();
 				containerInputDetails.aliquotCount = aliquotCount;
@@ -132,8 +134,9 @@ public class GetAliquotInfoAjaxAction extends BaseAction
 				containerInputDetails.specimenClass = aliquotDetailsDTO.getSpecimenClass();
 				containerInputDetails.specimenType = aliquotDetailsDTO.getType();
 				StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
-				List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = storageContainerBizlogic
-						.getStorageContainerList(containerInputDetails, null, hibernateDAO, 5);
+				List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = new ArrayList<AliquotContainerDetailsDTO>(); 
+				aliquotContainerDetailsDTOList = storageContainerBizlogic
+						.getStorageContainerList(containerInputDetails, null, hibernateDAO, 5,aliquotContainerDetailsDTOList);
 
 				String aliquotsInfoXmlString = VelocityManager.getInstance().evaluate(
 						aliquotDetailsDTO.getPerAliquotDetailsCollection(),

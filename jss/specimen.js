@@ -638,7 +638,14 @@ function processData(obj)
 			if(obj.value==""){obj.value=0;}
 			document.getElementById('avlQuantityErrorMsg').style.display="none";
 		}
-		tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
+		if(obj.name=='available' && obj.checked == true)
+		{
+			tabDataJSON[obj.name] = 'true';
+		}
+		else
+		{
+			tabDataJSON[obj.name] = obj.value; //after rendering struts html tag the 'property' attribute becomes 'name' attribute.
+		}
 		obj.className = obj.className.replace(/errorStyleOn/g,"");
 		if(obj.name=='quantity')
 		{
@@ -1217,12 +1224,13 @@ req.onreadystatechange = function() {
   }
   // Request successful, read the response
   var resp = req.responseText;
-  
+  var specimenDto = eval('('+resp+')');
   
 			deriveLabelSubmit=true;
 			deriveBarcodeSubmit=true;
 			enableMapButton();
 			deriveDataJSON[label.name] = label.value;
+			deriveDataJSON['parentSpecimenId'] = specimenDto.id;
 			label.className = label.className.replace(/errorStyleOn/g,"");
 			//alert(response);
 			//alert(response.label);
@@ -1231,7 +1239,7 @@ req.onreadystatechange = function() {
 	
   // ... and use it as needed by your app.
 }
-req.open("HEAD", "rest/specimens/"+caption+"="+label.value, false);
+req.open("GET", "rest/specimens/"+caption+"="+label.value, false);
 req.setRequestHeader("Content-Type",
                      "application/json");
 req.send();
