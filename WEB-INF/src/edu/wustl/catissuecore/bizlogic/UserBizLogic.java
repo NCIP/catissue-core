@@ -2244,15 +2244,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	{
 		DAO dao = null;
 		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
-		Collection<CollectionProtocol> userColl;
+		Collection<CollectionProtocol> userColl = null;
 		List<CpAndParticipentsBean> cpIds = new ArrayList<CpAndParticipentsBean>();
 
 		try
 		{
 			dao = getHibernateDao(getAppName(), null);
 			final User user = (User) dao.retrieveById(User.class.getName(), userId);
-			userColl = user.getCollectionProtocolCollection();
-			userCpCollection = user.getAssignedProtocolCollection();
 
 			if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
@@ -2266,6 +2264,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
+				userColl = user.getCollectionProtocolCollection();
+				userCpCollection = user.getAssignedProtocolCollection();
 					final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 					final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
 									
@@ -2285,10 +2285,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						}
 					}
 				}
+			if(userColl != null)
+			{
 				for (final CollectionProtocol cp : userColl)
 				{
 					cpIds.add(new CpAndParticipentsBean(cp.getShortTitle(), cp.getId().toString(), true));
 				}
+			}
 		}
 		catch (final DAOException e)
 		{
