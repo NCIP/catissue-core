@@ -973,6 +973,10 @@ public class Constants
 
 	/** The Constant CLINICAL_STATUS_LIST. */
 	public static final String CLINICAL_STATUS_LIST = "cinicalStatusList";
+	
+	/** The Constant CDE_NAME_COLLECTION_STATUS. */
+	public static final String CDE_NAME_COLLECTION_STATUS = "Collection Status";
+
 
 	/** The Constant SPECIMEN_CLASS_LIST. */
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";

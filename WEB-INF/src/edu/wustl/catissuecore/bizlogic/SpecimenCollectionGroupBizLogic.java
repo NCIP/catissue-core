@@ -1680,7 +1680,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 
 			// Bug #7808
-			if (!Validator.isEnumeratedValue(Constants.SCG_COLLECTION_STATUS_VALUES,
+			List collectSitatusList = CDEManager.getCDEManager().getPermissibleValueList(
+                    Constants.CDE_NAME_COLLECTION_STATUS, null);
+			if (!Validator.isEnumeratedValue(collectSitatusList,
 					group.getCollectionStatus()))
 			{
 				throw this.getBizLogicException(null,

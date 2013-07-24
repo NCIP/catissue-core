@@ -442,7 +442,8 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			// Sets the collectionStatusList attribute to be used in the Site
 			// Add/Edit Page.
 			request.setAttribute(Constants.COLLECTIONSTATUSLIST,
-					Constants.SCG_COLLECTION_STATUS_VALUES);
+                    CDEManager.getCDEManager().getPermissibleValueList(
+                            Constants.CDE_NAME_COLLECTION_STATUS, null));
 			// fix for bug no.7390
 			if (specimenCollectionGroupForm.getCollectionStatus() == null)
 			{

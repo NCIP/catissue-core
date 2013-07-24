@@ -161,11 +161,11 @@
 		 <b> <bean:message key="specimenCollectionGroup.collectionStatus"/> </b>
 		</td>
 <td align="left" class="black_new padding_right_style" colspan="7">
-<html:select property="collectionStatus" styleClass="black_ar" name="scgSummaryDTO" styleId="collectionStatus" size="1">
-								   <logic:iterate name="collectionStatusList" id="collectionStatusId">
-										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
-							       </logic:iterate>
-</html:select> </td>
+ 	<html:select property="collectionStatus"
+							             styleClass="black_ar"  name="scgSummaryDTO"  styleId="collectionStatus" size="1">
+							       <html:options collection="collectionStatusList" labelProperty="name" property="value" />
+					        </html:select>	
+</td>
     
 <tr> <td class="bottomtd" colspan="6"></td></tr>
 </table>

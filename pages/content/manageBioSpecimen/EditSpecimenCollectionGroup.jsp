@@ -271,12 +271,11 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
 					<b>	<bean:message key="specimenCollectionGroup.collectionStatus" /> </b></td>
 					<td  width="30%" align="left" class="black_ar align_left_style1"> 
-					<html:select property="collectionStatus" styleClass="black_ar" styleId="collectionStatus" size="1">
-								   <logic:iterate name="collectionStatusList" id="collectionStatusId">
-										 <html:option  value="${collectionStatusId}" > ${collectionStatusId} </html:option>
-							       </logic:iterate>
-					</html:select>
 					
+					       	<html:select property="collectionStatus"
+							             styleClass="black_ar" styleId="collectionStatus" size="1">
+							       <html:options collection="collectionStatusList" labelProperty="name" property="value" />
+					        </html:select>	
 					</td>
 				</tr>
 				
