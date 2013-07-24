@@ -44,11 +44,11 @@ var  downloadUrl= "";
 		<table width="95%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td  valign="top">
-					<div style="width:423px;">
+					<div style="width:500px;">
 					<span class="black_ar version-header-font theam-font-color"><bean:message key="login.welcome.to" /> <bean:message key="display.app.name" /> <bean:message key="app.version" />
 					</span></br>
 					<a href="" id = "whatsNew" style="text-decoration: none"  target="_blank">
-					<span  class="black_ar theam-font-color-orange" style="font-size:10;float:right"><bean:message key="login.new.release" /></span></a>
+					<span  class="black_ar theam-font-color-orange" style="font-size:10;margin-left:250;float:left"><bean:message key="login.new.release" /></span></a>
 					</div></br>
 					</br>
 					</br>
