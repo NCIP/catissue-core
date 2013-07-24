@@ -167,6 +167,6 @@
 	</property>
 	<property>
 		<name>helpHomePage</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/caTissue+Suite+1.2+User%27s+Guide</value>
+		<value>@@usermanual@@</value>
 	</property>
 </properties>

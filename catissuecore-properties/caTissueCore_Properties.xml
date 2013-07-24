@@ -558,7 +558,7 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>https://gforge.nci.nih.gov/docman/view.php/689/23167/caTissue_Suite_User_Manual.doc</value>
+		<value>@@usermanual@@</value>
 	</property>
 
 	<property>
