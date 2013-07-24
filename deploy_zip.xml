@@ -42,7 +42,19 @@
 	
 	<!--Vivek:define require dir and properties for inserting dashboard queries-->
 	<property name="dashboard.csv.dir" value="${base.dir}/modules/insert_dashboard_queries" />
-	<property name="dashboard.parameters.csv.file" value="dashboard_sqls.csv" />
+	<if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<property name="dashboard.parameters.csv.file" value="dashboard_sqls_mysql.csv" />
+				</then>
+
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<property name="dashboard.parameters.csv.file" value="dashboard_sqls_oracle.csv" />
+					</then>
+				</elseif>
+			</if>
 	
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
@@ -830,7 +842,9 @@
 				<replacefilter token="@@nightly.cron.job.execution.time.hrs@@" value="${nightly.cron.job.execution.time.hrs}" />
 				<replacefilter token="@@nightly.cron.job.execution.time.min@@" value="${nightly.cron.job.execution.time.min}" />
 			<!-- Nightly Cron Job Config End -->
-		</replace>
+			<replacefilter token="@@usermanual@@" value="${user.manual}" />
+					</replace>
+					<replace file="${temp.dir}/catissuecore-properties/help_links.xml" token="@@usermanual@@" value="${user.manual}" />
 		<!-- Add values to properties if EMPI feature is enabled-->
 		<if>
 			<equals arg1="true" arg2="${empi.enabled}" />
@@ -980,7 +994,6 @@
 						    </tstamp>
 						    <echo>after deploy_app: ${time_deploy_app_after}</echo>
 		<antcall target="load_bulk_operator_templates" />		
-		<antcall target="insert_dashboard_queries" />
 	
 		<antcall target="server_security" />
 
@@ -1209,6 +1222,9 @@
 			<param name="tempPath" value="${temp.dir}/catissuecore/WEB-INF/classes"/>
 			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
 		</antcall>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties">
+									<replacefilter token="@@app.version@@" value="${app.version}" />
+								</replace>
 	</target>
 
 	<!--Start of Integrating the Bulk Operation Module  -->
@@ -4978,6 +4994,7 @@
 		</then>
 		</elseif>
 		</if>
+		<antcall target="insert_dashboard_queries" />
 	 	<antcall target="jboss_configuration" />
 		<antcall target="deleteFiles" />
 	</target>
