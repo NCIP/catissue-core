@@ -1347,10 +1347,6 @@ public class Constants
 	/** The Constant SPECIMEN_EVENT_PARAMETERS_ACTION. */
 	public static final String SPECIMEN_EVENT_PARAMETERS_ACTION = "ListSpecimenEventParameters.do";
 
-	//Create Specimen Data Actions.
-	/** The Constant CREATE_SPECIMEN_ADD_ACTION. */
-	public static final String CREATE_SPECIMEN_ADD_ACTION = "AddSpecimen.do";
-
 	/** The Constant CREATE_SPECIMEN_EDIT_ACTION. */
 	public static final String CREATE_SPECIMEN_EDIT_ACTION = "CreateSpecimenEdit.do";
 
@@ -3720,9 +3716,6 @@ public class Constants
 
 	/** The Constant CP_QUERY_ALIQUOT_SUMMARY_ACTION. */
 	public static final String CP_QUERY_ALIQUOT_SUMMARY_ACTION = "CPQueryAliquotSummary.do";
-
-	/** The Constant CP_QUERY_CREATE_SPECIMEN_ADD_ACTION. */
-	public static final String CP_QUERY_CREATE_SPECIMEN_ADD_ACTION = "CPQueryAddSpecimen.do";
 
 	/** The Constant PAGE_OF_DISTRIBUTION_CP_QUERY. */
 	public static final String PAGE_OF_DISTRIBUTION_CP_QUERY = "pageOfDistributionCPQuery";

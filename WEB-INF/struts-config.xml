@@ -2686,14 +2686,6 @@ PUBLIC
 		</action>
 
 		<!--Create Specimen Actions Begin-->
-		<action path="/AddSpecimen" type="edu.wustl.catissuecore.action.AddSpecimenAction"
-			name="createSpecimenForm" validate="false" scope="request">
-			<forward name="success" path="/CreateSpecimenAdd.do" />
-			<forward name="pageOfCreateSpecimenCPQuery" path="/CPQueryCreateSpecimenAdd.do" />
-			<forward name="failure" path="/CreateSpecimen.do" />
-			<forward name="access_denied" path="/ManageBioSpecimenAccessDenied.do" />
-		</action>
-
 		<action path="/CreateSpecimenAdd" type="edu.wustl.common.action.CommonAddEditAction"
 			name="createSpecimenForm" validate="true"
 			input="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15"
@@ -4955,12 +4947,6 @@ PUBLIC
 			<forward name="addSpecimenToCart"
 				path="/AddDeriveSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />
 			<forward name="orderDetails" path="/RequestDetails.do" />
-		</action>
-
-		<action path="/CPQueryAddSpecimen" type="edu.wustl.catissuecore.action.AddSpecimenAction"
-			name="createSpecimenForm" validate="false" scope="request">
-			<forward name="success" path="/CPQueryCreateSpecimenAdd.do" />
-			<forward name="failure" path="/CPQueryCreateSpecimen.do" />
 		</action>
 
 		<action path="/QueryParticipant" type="edu.wustl.catissuecore.action.ParticipantAction"
