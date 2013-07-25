@@ -174,7 +174,8 @@
 				}
 				else
 				{
-					window.parent.frames['StorageContainerView'].location="storageContainerEditMessageScreen.do";
+					var siteName = tree.getUserData(id,'nodeName');
+					window.parent.frames['StorageContainerView'].location="storageContainerEditMessageScreen.do?siteName="+siteName;
 				}
 
 			};	
