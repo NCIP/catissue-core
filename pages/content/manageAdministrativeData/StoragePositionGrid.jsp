@@ -388,9 +388,28 @@ function createPositionGrid(responseString)
 		functionName="setTextBoxValue";
 	}
 	
-	document.getElementById('dimensionOneLabel').innerHTML=getDimensionLabel(obj.oneDimensionLabel)+' &darr;';
-	document.getElementById('dimensionTwoLabel').innerHTML=getDimensionLabel(obj.twoDimensionLabel)+' &rarr;';
 	
+	if(obj1.result == 'failure')
+	{
+		document.getElementById('error').innerHTML="<font color='red'>"+ obj1.message+"</font>";
+		view = new dhtmlXDataView({
+		container:"data_container",
+		type:{
+				padding:0,
+				template:function(obj1){
+										
+									},
+				width:25,
+				height:25
+			},
+		x_count:0,
+		y_count:0
+	});
+		return;
+	}
+	document.getElementById('error').innerHTML="";
+document.getElementById('dimensionOneLabel').innerHTML=getDimensionLabel(obj.oneDimensionLabel)+' &darr;';
+	document.getElementById('dimensionTwoLabel').innerHTML=getDimensionLabel(obj.twoDimensionLabel)+' &rarr;';
 	view = new dhtmlXDataView({
 		container:"data_container",
 		type:{

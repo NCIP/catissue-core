@@ -26,11 +26,13 @@ import com.google.gson.Gson;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 
 public class StorageContainerAjaxAction extends DispatchAction
 {
-
+	private static final Logger LOGGER = Logger.getCommonLogger(StorageContainerAjaxAction.class);
     /**
      * Method returns container details DTO to be populated in dhtmlxDataView
      * @param mapping
@@ -58,6 +60,9 @@ public class StorageContainerAjaxAction extends DispatchAction
 
         StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
 
+        JSONObject returnedJObject = new JSONObject();
+		try
+		{
         storageContainerViewDTO = storageContainerBizlogic.getContainerDetailsForDataView(containerName, dao);//get the container details DTO
 
         AppUtility.closeDAOSession(dao);
@@ -79,7 +84,6 @@ public class StorageContainerAjaxAction extends DispatchAction
                     AppUtility.getPositionValue(storageContainerViewDTO.getTwoDimensionLabellingScheme(), i + 1));
         }
 
-        JSONObject returnedJObject = new JSONObject();
         returnedJObject.put(Constants.POS1_CONTROL_NAME, request.getSession().getAttribute(Constants.POS1));
         returnedJObject.put(Constants.POS2_CONTROL_NAME, request.getSession().getAttribute(Constants.POS2));
         returnedJObject.put(Constants.CONTROL_NAME, request.getSession().getAttribute(Constants.CONTROL_NAME));
@@ -87,7 +91,18 @@ public class StorageContainerAjaxAction extends DispatchAction
         returnedJObject.put(Constants.DIMENSION_ONE_LABELS, dimensionOneLabels.toString());
         returnedJObject.put(Constants.DIMENSION_TWO_LABELS, dimensionTwoLabels.toString());
         returnedJObject.put(Constants.CONTAINER_DTO, gson.toJson(storageContainerViewDTO));
-
+        returnedJObject.put("result", "success");
+	}
+	catch(BizLogicException e)
+	{
+		LOGGER.error(e);
+		returnedJObject.put("message", e.getMessage());
+		returnedJObject.put("result", "failure");
+	}
+	finally
+	{
+		AppUtility.closeDAOSession(dao);
+	}
         response.setContentType("application/json");
         response.getWriter().write(returnedJObject.toString());
 

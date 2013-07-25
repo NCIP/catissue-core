@@ -305,9 +305,10 @@ ul li ul li a span {
 			
 		}
 function loadaliquotDetail(){
-	init_grid();
+	init_grid();alert('${pageOf}');
 	if('${pageOf}'!='fromMenu'){
-		onResubmit();
+		//onResubmit();
+		onResubmit(true,document.getElementById("parentSpecimentLabel").value)
 	}else{
 		document.getElementById("resubmitButton").value = "Submit";
 	}
@@ -668,18 +669,9 @@ function giveCall(url,msg,msg1,id)
 </div>
 <input type="hidden" id="assignTargetCall" name="assignTargetCall" value="giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString=${popUpSpecList}','Select at least one existing list or create a new list.','No specimen has been selected to assign.','${popUpSpecList}')"/>
 <input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
-				
-
-
-
 
 </td>
 </tr>
 <table>
 <%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
 </body>
-
-	
-
-	
-

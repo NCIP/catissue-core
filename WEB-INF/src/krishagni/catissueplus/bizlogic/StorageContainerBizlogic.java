@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
@@ -93,6 +94,11 @@ public class StorageContainerBizlogic
             storageContainerViewDTO.setOneDimensionCapacity(oneDimensionCapacity);
             storageContainerViewDTO.setTwoDimensionCapacity(twoDimensionCapacity);
             storageContainerViewDTO.setStoragePositionDTOCollection(availablePositions);
+        }
+        else
+        {
+        	ErrorKey errorKey = ErrorKey.getErrorKey("invalid.container.name");
+        	throw new BizLogicException(errorKey,null,"");
         }
 
         return storageContainerViewDTO;

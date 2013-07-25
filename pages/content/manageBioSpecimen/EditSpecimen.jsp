@@ -320,7 +320,7 @@
 									</label>
 								</td>
 								<td  width="30%" align="left" class="black_ar">
-										<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right" name="specimenDTO" onblur="processData(this)"
+										<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right" name="specimenDTO" onblur="chkeEmptyNumber(this);processData(this)"
 							     		 disabled="false"/>
 										<bean:message key="specimen.concentrationUnit"/>
 										<div id="concentrationErrorMsg" style="display:none; color:red;">
@@ -770,4 +770,11 @@ function loadSpecimenTabbar1()
 	document.getElementById('specListDiv').style.display='block';
 }
 </c:if>
+function chkeEmptyNumber(obj)
+{
+	if(obj.value.trim()=="" || obj.value == null)
+	{
+		obj.value=0;
+	}
+}
 </script>
