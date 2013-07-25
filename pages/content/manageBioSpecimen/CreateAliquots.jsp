@@ -305,7 +305,7 @@ ul li ul li a span {
 			
 		}
 function loadaliquotDetail(){
-	init_grid();alert('${pageOf}');
+	init_grid();
 	if('${pageOf}'!='fromMenu'){
 		//onResubmit();
 		onResubmit(true,document.getElementById("parentSpecimentLabel").value)
