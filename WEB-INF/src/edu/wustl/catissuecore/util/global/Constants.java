@@ -976,8 +976,8 @@ public class Constants
 	
 	/** The Constant CDE_NAME_COLLECTION_STATUS. */
 	public static final String CDE_NAME_COLLECTION_STATUS = "Collection Status";
-
-
+	
+	
 	/** The Constant SPECIMEN_CLASS_LIST. */
 	public static final String SPECIMEN_CLASS_LIST = "specimenClassList";
 
@@ -6035,5 +6035,11 @@ public class Constants
 
     /** Constant for showUtilizationAlert **/
     public static final String SHOW_UTILIZATION_ALERT = "showUtilizationAlert";
+
+    /** Constant for name **/
+    public static final String CHART_SERIES_NAME = "name";
+
+    /** Constant for data **/
+    public static final String CHART_SERIES_DATA = "data";
 
 }

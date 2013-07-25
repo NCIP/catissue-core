@@ -8,15 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import krishagni.catissueplus.Exception.CatissueException;
+import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.dao.StorageContainerDAO;
 import krishagni.catissueplus.dto.AliquotContainerDetailsDTO;
 import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
 import krishagni.catissueplus.dto.LabellingSchemeDTO;
+import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerUtilizationDTO;
+import krishagni.catissueplus.dto.StorageContainerUtilizationDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerViewDTO;
 import krishagni.catissueplus.dto.StoragePositionDTO;
-import krishagni.catissueplus.Exception.CatissueException;
-import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
+
+import org.json.JSONException;
+
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -564,8 +569,7 @@ public class StorageContainerBizlogic
                     }
                 }
             }
-        
-            
+
         }
         catch (final DAOException daoEx)
         {
@@ -843,8 +847,7 @@ public class StorageContainerBizlogic
      * @throws SQLException 
      */
     public void saveSpecimenCountsOfParentContainer(HibernateDAO hibernateDAO) throws DAOException,
-            ApplicationException,
-            SQLException
+            ApplicationException, SQLException
     {
         StorageContainerDAO storageContainerDAO = new StorageContainerDAO();
         //get id list of all top most parent storage containers
@@ -856,6 +859,51 @@ public class StorageContainerBizlogic
             StorageContainerUtilizationDTO dto = getStorageContainerUtilizationDTO(containerId, hibernateDAO);
             storageContainerDAO.insertIntoStorContSpecCountsTable(dto, hibernateDAO);
         }
+    }
+
+    /**
+     * Returns list of StorageContainerUtilizationDetailsDTO
+     * @param hibernateDAO
+     * @param siteName 
+     * @return
+     * @throws DAOException
+     * @throws SQLException
+     * @throws JSONException 
+     */
+    public ArrayList<StorageContainerUtilizationDetailsDTO> getStorageContainerUtilizationDetailsDTOList(
+            HibernateDAO hibernateDAO, String siteName) throws DAOException, SQLException, JSONException
+    {
+        StorageContainerDAO storageContainerDAO = new StorageContainerDAO();
+
+        List<Long> parentContIdList = new ArrayList<Long>();
+        if (!siteName.equalsIgnoreCase(Constants.NULL))
+        {
+            //get id list of all top most parent containers for siteName
+            parentContIdList = storageContainerDAO.getIdOfAllParentStorageContainersBySiteName(hibernateDAO, siteName);
+        }
+        else
+        {
+            //get id list of all top most parent containers
+            parentContIdList = storageContainerDAO.getIdOfAllParentStorageContainers(hibernateDAO);
+        }
+        ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList = new ArrayList<StorageContainerUtilizationDetailsDTO>();
+
+        for (Long containerId : parentContIdList)
+        {
+            ArrayList<StorageContainerStoredSpecimenDetailsDTO> StorageContainerStoredSpecimenDetailsDTOList = storageContainerDAO
+                    .getStorageContainerStoredSpecimenDetailsDTOById(hibernateDAO, containerId);
+
+            //populate StorageContainerUtilizationDetailsDTO
+            StorageContainerUtilizationDetailsDTO storageContainerUtilizationDetailsDTO = new StorageContainerUtilizationDetailsDTO();
+
+            storageContainerUtilizationDetailsDTO.setContainerName(storageContainerDAO.getContainerNameById(
+                    hibernateDAO, containerId));
+            storageContainerUtilizationDetailsDTO
+                    .setStorageContainerStoredSpecimenDetailsDTOList(StorageContainerStoredSpecimenDetailsDTOList);
+            storageContainerUtilizationDetailsDTOList.add(storageContainerUtilizationDetailsDTO);
+        }
+
+        return storageContainerUtilizationDetailsDTOList;
     }
 
 }
