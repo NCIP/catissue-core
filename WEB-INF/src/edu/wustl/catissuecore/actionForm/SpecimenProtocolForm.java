@@ -505,7 +505,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 								ApplicationProperties.getValue("collectionprotocol.participants")));
 					}
 				}
-				if(!Validator.isEmpty(noOfDigitPid)){
+				if(!Validator.isEmpty(prefixPid) || !Validator.isEmpty(postfixPid)){
 					try
 					{
 						Integer.parseInt(noOfDigitPid);
