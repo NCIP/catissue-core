@@ -205,6 +205,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		request.setAttribute("cpId",request.getParameter("cpId"));
 		request.setAttribute("cprId",request.getParameter("cprId"));
 		request.setAttribute("termsConditionUrl", XMLPropertyHandler.getValue("spr.dwd.terms.condiition.url"));
+		request.setAttribute("scgId",request.getParameter("scgId"));
 		return mapping.findForward(pageOf);
 
 	}

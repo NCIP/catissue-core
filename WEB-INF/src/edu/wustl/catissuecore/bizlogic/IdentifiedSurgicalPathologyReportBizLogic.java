@@ -459,14 +459,14 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 				dto.setParticipantName(obj[2]!=null?obj[2].toString():"");
 				dto.setMrnString(obj[6].toString());
 				dto.setConceptReferentMap(getConceptReferentMap(deReportId));
-				dto.setPpid(obj[7].toString());
+				dto.setPpid(obj[7]!=null?obj[7].toString():"");
 				
 				dto.setAge(obj[1]!=null?getAge((Date)obj[1]):0);
 			}
 		} catch (ApplicationException ex) {
 			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
 			
-		} finally {
+ 		} finally {
 			if (dao != null)
 				AppUtility.closeDAOSession(dao);
 		}

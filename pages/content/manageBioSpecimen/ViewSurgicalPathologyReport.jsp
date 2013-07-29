@@ -118,7 +118,7 @@
 			reportType :reportType
 		}
 		var termsConditionURL = "${termsConditionUrl}";
-		window.parent.downloadReport(reportType,options,termsConditionURL);
+		window.parent.parent.downloadReport(reportType,options,termsConditionURL);
 		
 	}
 	function downloadSpr(reportType){
@@ -150,7 +150,7 @@
 					if(request.status == 200)
 					{
 						document.getElementsByName("identifiedReportId")[0].value="";
-						var action="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1";
+						var action="ViewSurgicalPathologyReport.do?scgId=${scgId}&operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1";
 						//ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfSpecimenCollectionGroupCPQuery&reportId=-1
 						document.forms[0].action=action;
 						document.forms[0].submit();

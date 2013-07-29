@@ -47,7 +47,7 @@ String id = request.getParameter("id");
 	var download = function(type){
 			alert(document.getElementsByName("identifiedReportId")[0].value);
 			var dwdIframe = document.getElementById("sprExportFrame");
-			dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>&reportId="+document.getElementsByName("identifiedReportId")[0].value+"&type="+type;
+			dwdIframe.src = "ExportSprAction.do?scgId=${scgId}&reportId="+document.getElementsByName("identifiedReportId")[0].value+"&type="+type;
 			
 		}
 </script>
@@ -65,10 +65,10 @@ String id = request.getParameter("id");
 						var uploader = new FileUploader({
 							element: document.getElementById('sprSCGReport'),
 							endpoint: 'UploadSprReport.do?type=getSpecimenIds',
-							params:{scgId:"<%=request.getParameter("id")%>"},
+							params:{scgId:"${scgId}"},
 							onComplete:function(response){
 								if(response.success = "true"){
-									var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&reportId="+response.reportId;
+									var action="<%=Constants.VIEW_SPR_ACTION%>?scgId=${scgId}&operation=viewSPR&pageOf=<%=pageOf%>&reportId="+response.reportId;
 									document.forms[0].action=action;
 									document.forms[0].submit();
 								}else{
