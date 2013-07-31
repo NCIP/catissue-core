@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.json.JSONArray;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
@@ -260,7 +261,15 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 			throws ApplicationException
 	{
 		String target;
-		final List<List<String>> dataList = this.getPaginationDataList(request);
+		List<List<String>> dataList = new ArrayList<List<String>>();
+		String jsonDataStr = request.getParameter("gridDataJson");
+		if(jsonDataStr == null){
+			dataList = this.getPaginationDataList(request);
+		} else {
+			dataList = parseJson(jsonDataStr);
+			request.setAttribute(Constants.PAGE_NUMBER, "1");
+		}
+	  
 		final HttpSession session = request.getSession();
 		final List<String> columnList = (List<String>) session
 				.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
@@ -474,6 +483,24 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
 		this.saveErrors(request, errors);
 		//String target = new String(Constants.DIFFERENT_VIEW_IN_CART);
+	}
+	
+	private List<List<String>> parseJson(String jsonDataStr)
+	{
+		List<List<String>> dataList = new ArrayList<List<String>>();
+		try{
+			
+			JSONArray jsonArray = new JSONArray(jsonDataStr);
+			for(int i = 0; i < jsonArray.length(); i++){ 
+				String row =  jsonArray.getString(i);
+				row = row.replace("[", "").replace("]", "");
+				String [] cols = row.split(",") ;
+				List<String> colList = new ArrayList<String>(Arrays.asList(cols));
+				dataList.add(colList);
+			}
+		}catch (Exception e){		 
+		}
+		return dataList;
 	}
 
 }
