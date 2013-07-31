@@ -404,6 +404,11 @@
 		<name>resultView.noOfRecordsPerPage</name>
 		<value>100</value>
 	</property>
+ 
+	<property>
+		<name>resultView.fetchRecordSize</name>
+		<value>10000</value>
+	</property>
 	<!-- This limit is for root node of the Tree on results view page -->
 	<property>
 		<name>resultView.maximumTreeNodeLimit</name>
