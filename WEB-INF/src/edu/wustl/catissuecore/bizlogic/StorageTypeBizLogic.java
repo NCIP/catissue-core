@@ -76,9 +76,10 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			StorageTypeBizLogic.logger.error(daoExp.getMessage(), daoExp);
-			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
+					daoExp.getMsgValues());
 		}
-		
+
 	}
 
 	/**
@@ -89,8 +90,8 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException throws  BizLogicException
 	 */
 	@Override
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
-			throws BizLogicException
+	protected void update(DAO dao, Object obj, Object oldObj,
+			SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		try
 		{
@@ -109,14 +110,15 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			//End:-  Change for API Search 
 
 			dao.update(type.getCapacity(), ((StorageType) oldObj).getCapacity());
-			dao.update(type,oldObj);
+			dao.update(type, oldObj);
 		}
 		catch (final DAOException daoExp)
 		{
 			StorageTypeBizLogic.logger.error(daoExp.getMessage(), daoExp);
-			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
+					daoExp.getMsgValues());
 		}
-	
+
 	}
 
 	//Added by Ashish
@@ -130,41 +132,47 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException throws  BizLogicException
 	 */
 	@Override
-	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
+	protected boolean validate(Object obj, DAO dao, String operation)
+			throws BizLogicException
 	{
 		if (obj == null)
 		{
-			throw this.getBizLogicException(null, "domain.object.null.err.msg", "");
+			throw this.getBizLogicException(null, "domain.object.null.err.msg",
+					"");
 		}
-		
+
 		final StorageType storageType = (StorageType) obj;
 		String message = "";
-		
 
 		//throw new DAOException("domain.object.null.err.msg", new String[]{"Storage Type"});
 		final Validator validator = new Validator();
 		if (Validator.isEmpty(storageType.getName()))
 		{
 
-			throw this.getBizLogicException(null, "errors.item.required", ApplicationProperties
-					.getValue("storageType.type"));
+			throw this.getBizLogicException(null, "errors.item.required",
+					ApplicationProperties.getValue("storageType.type"));
 		}
 		else
 		{
 			final String delimiter = new String("- _");
-			final String delimitedString = validator.delimiterExcludingGiven(delimiter);
-			if (validator.containsSpecialCharacters(storageType.getName(), delimitedString))
+			final String delimitedString = validator
+					.delimiterExcludingGiven(delimiter);
+			if (validator.containsSpecialCharacters(storageType.getName(),
+					delimitedString))
 			{
 
-				throw this.getBizLogicException(null, "errors.valid.data", ApplicationProperties
-						.getValue("storageType.type"));
+				throw this.getBizLogicException(null, "errors.valid.data",
+						ApplicationProperties.getValue("storageType.type"));
 			}
 
 		}
-		if (Validator.isEmpty(String.valueOf(storageType.getCapacity().getOneDimensionCapacity())))
+		if (Validator.isEmpty(String.valueOf(storageType.getCapacity()
+				.getOneDimensionCapacity())))
 		{
-			message = ApplicationProperties.getValue("storageType.oneDimensionCapacity");
-			throw this.getBizLogicException(null, "errors.item.required", message);
+			message = ApplicationProperties
+					.getValue("storageType.oneDimensionCapacity");
+			throw this.getBizLogicException(null, "errors.item.required",
+					message);
 
 		}
 		else
@@ -172,47 +180,62 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			if (!validator.isNumeric(String.valueOf(storageType.getCapacity()
 					.getOneDimensionCapacity())))
 			{
-				message = ApplicationProperties.getValue("storageType.oneDimensionCapacity");
-				throw this.getBizLogicException(null, "errors.item.format", message);
+				message = ApplicationProperties
+						.getValue("storageType.oneDimensionCapacity");
+				throw this.getBizLogicException(null, "errors.item.format",
+						message);
 
 			}
 		}
 
 		if (Validator.isEmpty(storageType.getOneDimensionLabel()))
 		{
-			message = ApplicationProperties.getValue("storageType.oneDimensionLabel");
-			throw this.getBizLogicException(null, "errors.item.required", message);
+			message = ApplicationProperties
+					.getValue("storageType.oneDimensionLabel");
+			throw this.getBizLogicException(null, "errors.item.required",
+					message);
 		}
-		if (Validator.isEmpty(String.valueOf(storageType.getCapacity().getTwoDimensionCapacity())))
+		if (Validator.isEmpty(String.valueOf(storageType.getCapacity()
+				.getTwoDimensionCapacity())))
 		{
-			message = ApplicationProperties.getValue("storageType.twoDimensionCapacity");
-			throw this.getBizLogicException(null, "errors.item.required", message);
+			message = ApplicationProperties
+					.getValue("storageType.twoDimensionCapacity");
+			throw this.getBizLogicException(null, "errors.item.required",
+					message);
 		}
 		else
 		{
 			if (!validator.isNumeric(String.valueOf(storageType.getCapacity()
 					.getTwoDimensionCapacity())))
 			{
-				message = ApplicationProperties.getValue("storageType.twoDimensionCapacity");
-				throw this.getBizLogicException(null, "errors.item.format", message);
+				message = ApplicationProperties
+						.getValue("storageType.twoDimensionCapacity");
+				throw this.getBizLogicException(null, "errors.item.format",
+						message);
 			}
 		}
 
 		if (Validator.isEmpty(storageType.getTwoDimensionLabel())
-				&& (storageType.getCapacity().getTwoDimensionCapacity().intValue() > 1))
+				&& (storageType.getCapacity().getTwoDimensionCapacity()
+						.intValue() > 1))
 		{
-			message = ApplicationProperties.getValue("storageType.twoDimensionLabel");
-			throw this.getBizLogicException(null, "errors.labelRequired", message);
+			message = ApplicationProperties
+					.getValue("storageType.twoDimensionLabel");
+			throw this.getBizLogicException(null, "errors.labelRequired",
+					message);
 
 		}
 
 		if (storageType.getDefaultTempratureInCentigrade() != null
-				&& !Validator.isEmpty(storageType.getDefaultTempratureInCentigrade().toString())
-				&& !validator.isDouble(storageType.getDefaultTempratureInCentigrade().toString(),
-						false))
+				&& !Validator.isEmpty(storageType
+						.getDefaultTempratureInCentigrade().toString())
+				&& !validator.isDouble(storageType
+						.getDefaultTempratureInCentigrade().toString(), false))
 		{
-			message = ApplicationProperties.getValue("storageType.defaultTemperature");
-			throw this.getBizLogicException(null, "errors.item.format", message);
+			message = ApplicationProperties
+					.getValue("storageType.defaultTemperature");
+			throw this
+					.getBizLogicException(null, "errors.item.format", message);
 
 		}
 		return true;
@@ -226,10 +249,12 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * @return The array of ids of StorageType that the given StorageType can hold.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public long[] getDefaultHoldStorageTypeList(StorageType type) throws BizLogicException
+	public long[] getDefaultHoldStorageTypeList(StorageType type)
+			throws BizLogicException
 	{
-		final Collection spcimenArrayTypeCollection = (Collection) this.retrieveAttribute(
-				StorageType.class.getName(), type.getId(), "elements(holdsStorageTypeCollection)");
+		final Collection spcimenArrayTypeCollection = (Collection) this
+				.retrieveAttribute(StorageType.class.getName(), type.getId(),
+						"elements(holdsStorageTypeCollection)");
 		return AppUtility.getobjectIds(spcimenArrayTypeCollection);
 	}
 
@@ -242,19 +267,23 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	public String[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
 	{
 		String[] holdsSpecimenClasses = null;
-		final Collection specimenClassTypeCollection = type.getHoldsSpecimenClassCollection();
+		final Collection specimenClassTypeCollection = type
+				.getHoldsSpecimenClassCollection();
 
 		if (specimenClassTypeCollection != null)
 		{
-			if (specimenClassTypeCollection.size() == AppUtility.getSpecimenClassTypes().size())
+			if (specimenClassTypeCollection.size() == AppUtility
+					.getSpecimenClassTypes().size())
 			{
 				holdsSpecimenClasses = new String[]{"-1"};
 			}
 			else
 			{
-				holdsSpecimenClasses = new String[specimenClassTypeCollection.size()];
+				holdsSpecimenClasses = new String[specimenClassTypeCollection
+						.size()];
 
-				final Iterator iterator = specimenClassTypeCollection.iterator();
+				final Iterator iterator = specimenClassTypeCollection
+						.iterator();
 				int index = 0;
 				while (iterator.hasNext())
 				{
@@ -266,6 +295,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		return holdsSpecimenClasses;
 	}
+
 	/**
 	 * To get the Specimen Class types that the given StorageType can hold.
 	 * @param type The reference to StorageType object.
@@ -273,10 +303,12 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * @throws ApplicationException  ApplicationException
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public String[] getDefaultHoldsSpecimenTypeList(StorageType type) throws ApplicationException
+	public String[] getDefaultHoldsSpecimenTypeList(StorageType type)
+			throws ApplicationException
 	{
 		String[] holdsSpType = null;
-		final Collection<String> spTypeColl = type.getHoldsSpecimenTypeCollection();
+		final Collection<String> spTypeColl = type
+				.getHoldsSpecimenTypeCollection();
 		final Collection<String> holdSpTypeColl = new HashSet<String>();
 		holdSpTypeColl.addAll(AppUtility.getAllSpType());
 		if (spTypeColl != null)
@@ -308,10 +340,12 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * @return The array of ids of SpecimenArrayType that the given StorageType can hold.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type) throws BizLogicException
+	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type)
+			throws BizLogicException
 	{
 		//Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
-		return AppUtility.getobjectIds(type.getHoldsSpecimenArrayTypeCollection());
+		return AppUtility.getobjectIds(type
+				.getHoldsSpecimenArrayTypeCollection());
 	}
 
 	/**
@@ -335,33 +369,40 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	{
 		return Constants.ADD_EDIT_STORAGE_TYPE;
 	}
+
 	/**
 	 * @param dao - DAO object.
 	 * @param container - StorageContainer object
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	protected void loadStorageType(DAO dao, StorageContainer container) throws BizLogicException
+	protected void loadStorageType(DAO dao, StorageContainer container)
+			throws BizLogicException
 	{
 		try
 		{
 			final StorageType storageType = container.getStorageType();
 			if (storageType != null)
 			{
-				final String[] selectColumnName ={};
+				final String[] selectColumnName = {};
 				final String sourceObjectName = StorageType.class.getName();
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(
+						sourceObjectName);
 				String errMsg = Constants.DOUBLE_QUOTES;
-				if(container.getStorageType().getName() != null && container.getStorageType().getName() != "")
+				if (container.getStorageType().getName() != null
+						&& container.getStorageType().getName() != "")
 				{
 					errMsg = "Storage Type Name";
-					queryWhereClause.addCondition(new EqualClause("name", storageType.getName()));
+					queryWhereClause.addCondition(new EqualClause("name",
+							storageType.getName()));
 				}
 				else
 				{
 					errMsg = "Storage Type Identifier";
-					queryWhereClause.addCondition(new EqualClause("id", storageType.getId()));
+					queryWhereClause.addCondition(new EqualClause("id",
+							storageType.getId()));
 				}
-				final List list = dao.retrieve(sourceObjectName, selectColumnName,	queryWhereClause);
+				final List list = dao.retrieve(sourceObjectName,
+						selectColumnName, queryWhereClause);
 
 				if (!list.isEmpty())
 				{
@@ -370,18 +411,22 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					this.logger.debug("Storage Type :"+storageType.getId()+ " or Storage Type name : "
-							  +storageType.getName()+" is invalid");
-					throw this.getBizLogicException(null,"errors.item.format",errMsg);
+					this.logger.debug("Storage Type :" + storageType.getId()
+							+ " or Storage Type name : "
+							+ storageType.getName() + " is invalid");
+					throw this.getBizLogicException(null, "errors.item.format",
+							errMsg);
 				}
 			}
 		}
 		catch (final DAOException daoExp)
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
-			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
+					daoExp.getMsgValues());
 		}
 	}
+
 	/**
 	 * To check weather the container to display can holds the given type of
 	 * container.
@@ -392,8 +437,8 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * @return true if the given container can hold the type.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public boolean canHoldContainerType(int typeId, StorageContainer storageContainer)
-			throws BizLogicException
+	public boolean canHoldContainerType(int typeId,
+			StorageContainer storageContainer) throws BizLogicException
 	{
 		if (!this.isValidContaierType(typeId))
 		{
@@ -401,9 +446,10 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 
 		final boolean canHold = false;
-		final Collection containerTypeCollection = (Collection) this.retrieveAttribute(
-				StorageContainer.class.getName(), storageContainer.getId(),
-				"elements(holdsStorageTypeCollection)");
+		final Collection containerTypeCollection = (Collection) this
+				.retrieveAttribute(StorageContainer.class.getName(),
+						storageContainer.getId(),
+						"elements(holdsStorageTypeCollection)");
 		if (!containerTypeCollection.isEmpty())
 		{
 			final Iterator itr = containerTypeCollection.iterator();
@@ -411,7 +457,8 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			{
 				final StorageType type = (StorageType) itr.next();
 				final long storagetypeId = type.getId().longValue();
-				if (storagetypeId == Constants.ALL_STORAGE_TYPE_ID || storagetypeId == typeId)
+				if (storagetypeId == Constants.ALL_STORAGE_TYPE_ID
+						|| storagetypeId == typeId)
 				{
 					return true;
 				}
@@ -419,6 +466,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		return canHold;
 	}
+
 	/**
 	 * Patch ID: 4598_2 Is container type one from the container types present
 	 * in the system.
@@ -430,8 +478,21 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 */
 	private boolean isValidContaierType(int typeID) throws BizLogicException
 	{
-		final Long longId = (Long) this.retrieveAttribute(StorageType.class.getName(), new Long(
-				typeID), "id");
+		final Long longId = (Long) this.retrieveAttribute(
+				StorageType.class.getName(), new Long(typeID), "id");
 		return !(longId == null);
+	}
+
+	public Long getContaierTypeId(String name) throws BizLogicException
+	{
+		Long containerTypeId = null;
+		final List containerType = (List) this.retrieve(
+				StorageType.class.getName(), "name", name);
+		if (!containerType.isEmpty())
+		{
+			containerTypeId = ((StorageType) containerType.get(0)).getId();
+		}
+
+		return containerTypeId;
 	}
 }
