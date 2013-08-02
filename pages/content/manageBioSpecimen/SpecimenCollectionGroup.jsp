@@ -324,7 +324,7 @@ function updateHelpURL()
 	if(pageView != null && !("viewAnnotations").equals(pageView) && !(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT).equals(pageView))
 	{
 %>
-	<body onload="disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo('${operation}');">
+	<body onload="loadSCGTabbar();disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo('${operation}');">
 <%
 	}else{
 %>
@@ -366,13 +366,12 @@ function updateHelpURL()
 	   if(("edit").equals(pageView))
 	  {
 		%>
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	  <tr>
-		<td class="tablepadding">
-		 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<div id="SCG_tabbar" style="width:950px; height:585px;"/>
-		 </table>
-		<div id='SCGDiv'>
+		<td>
+		<div id="SCG_tabbar" style="width:99%; height:98%;position:absolute;"/>
+			<div id='SCGDiv' style="overflow:auto;height:100%">	
+		
 			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
 				<tr>
 					<td>
@@ -381,7 +380,10 @@ function updateHelpURL()
 				</tr>
 		   </table><!-- Mandar 31Oct08 -->
 				<%@ include file="EditSpecimenCollectionGroup.jsp" %>
-		</div>		
+			</div>
+		</td>
+		</tr>
+	</table>
 	<%
 	}
 	%>
@@ -428,17 +430,6 @@ function updateHelpURL()
 	}
 	%>
 
-	<%
-	if(("edit").equals(pageView))
-	{
-	%>
-			</td>
-		</tr>
-	</table>
-	<%
-	}
-	%>
-
 	<html:hidden property="nextForwardTo" />
 	<input type="hidden" id="clinicalDataEntryURL" name="clinicalDataEntryURL" value=""/>
 	<input type="hidden" id="isClinicalDataEntry" name="isClinicalDataEntry" value="false"/>
@@ -467,6 +458,5 @@ if(disablePHIView)
 {
   disableTabs();
 }
-loadSCGTabbar();
 </script>
 </body>

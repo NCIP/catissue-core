@@ -334,7 +334,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		}
 	</script>
 </head>
-<body onload="initializeCombo()"></body>
+<body onload="loadParticipantTabbar();initializeCombo()"></body>
 
 <html:form action="<%=formName%>" style="height:100%,width=100%">
 <html:hidden property="cpId" />

@@ -138,8 +138,7 @@
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<table width="100%" border="0" cellpadding="0" cellspacing="0"
-	class="maintable" height="100%"><!-- Mandar 6Nov08 -->
+<table><!-- Mandar 6Nov08 -->
 	<tr>
 		<td><input type="hidden" name="participantId" value="<%=participantId%>" /> 
 			<input type="hidden" name="cpId" id="cpId" />
@@ -185,12 +184,12 @@
 		</tr>
 		</logic:notEqual>
 
-	<tr height="98%">
-		<td class="tablepadding" valign="top">
+	<tr>
+		<td>
 		<logic:equal name="operation" value="add">
 			<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<table>
 				<tr>
 					<td class="td_tab_bg"><img
 						src="images/uIEnhancementImages/spacer.gif" alt="spacer"
@@ -209,12 +208,16 @@
 				</logic:notEqual>
 		</logic:equal>
 		<!--for Edit-->
-			<logic:equal name="operation" value="edit">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<div id="participant_tabbar" style="width:955px; height:650px;"/>
-			</table>
-			</logic:equal>
-		<div id='showParticipantDiv'>	
+		</td>
+	</tr>
+</table>
+		
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+		<tr><td>
+		<logic:equal name="operation" value="edit">
+			<div id="participant_tabbar" style="width:100%; height:97%;position:absolute;"/>
+		</logic:equal>
+		<div id='showParticipantDiv' style="overflow:auto;height:100%">	
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
 				class="whitetable_bg" >
 			<tr>
@@ -903,11 +906,9 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 				<!-- action buttons end --></td>
 			</tr>
 		</table>
-		</div>
-		</td>
-	</tr>
-</table>
-
+		</div> 
+		</td></tr></table>
+		
 <script>
 	var fwdPage='${requestScope.pageOf}';
 	var reportId1='${sessionScope.identifiedReportId}';
@@ -919,6 +920,4 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations&cpId="+cpId+"&cprId="+cprId;
 	
 	var showConsentsTab="FetchConsents.do?consentLevelId="+cprId+"&consentLevel=participant&reportId=<%=reportId%>&pageof=<%=pageOf%>&participantEntityId=${particiapntRecordEntryEntityId}&participantId=${participantId}&cpId="+cpId;
-	
-	loadParticipantTabbar();
 </script>
