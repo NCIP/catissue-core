@@ -167,15 +167,7 @@
   							   </logic:notEqual>
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                <td align="left" class="black_ar"><bean:message key="cpbasedentry.storagelocation"/></td>
-                                <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.storageLocationForSpecimen}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-								<td align="left" class="black_ar">
+                                				<td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="storageLocationForSpecimen"
 									  optionsList = "${requestScope.storageContainerList}"
 									  initialValue="<%=form.getStorageLocationForSpecimen()%>"
@@ -183,42 +175,24 @@
 									  size="20"
 									/>
 								</td>
- 							   </logic:notEqual>
                               </tr>
                               <tr>
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                 <td align="left" class="black_ar"><bean:message key="specimen.quantity"/></td>
-                                 <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.quantity}
-										</label>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-								<td align="left" class="black_ar_s">
-									<html:text styleClass="black_ar" size="10" maxlength="10"styleId="quantity" property="quantity" style="text-align:right"/>
-								</logic:notEqual>
-								<span id="unitSpan">&nbsp;<%=unitSpecimen%></span><html:hidden property="unit"/></td>
+                                 	 <td width="28%" align="left" class="black_ar">
+					 <html:text styleClass="black_ar" size="10" maxlength="10"styleId="quantity" property="quantity" style="text-align:right"/>
+					<span id="unitSpan">&nbsp;<%=unitSpecimen%></span><html:hidden property="unit"/></td>
                                 <td align="center" class="black_ar">&nbsp;</td>
 
                                 <td align="left" class="black_ar"><bean:message key="specimen.concentration"/></td>
 
-							    <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.concentration}
-										</label>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-								<td align="left" class="black_ar_s">
+							  		<td align="left" class="black_ar_s">
 									<%
 										boolean concentrationDisabled = true;
 										if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 										concentrationDisabled = false;
 									%>
      									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>
-
-								</logic:notEqual>
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 								</td>
                               </tr>
@@ -227,15 +201,7 @@
 									<html:hidden property="collectionEventSpecimenId" />
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 								<td align="left" class="black_ar"><bean:message key="specimen.collectedevents.username"/></td>
-							     <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.collectionUserName}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-                                <td align="left" class="black_ar">
+							          <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="collectionEventUserId"
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 									  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
@@ -244,19 +210,10 @@
 									  size="20"
 									/>
 								</td>
-							   </logic:notEqual>
-								<html:hidden property="receivedEventId" />
+							  	<html:hidden property="receivedEventId" />
 									<html:hidden property="receivedEventSpecimenId" />
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                <td align="left" class="black_ar"><bean:message key="specimen.receivedevents.username"/></td>
-                                <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.receivedUserName}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
 								<td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="receivedEventUserId"
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
@@ -266,20 +223,11 @@
 									  size="20"
 									/>
 								</td>
- 							   </logic:notEqual>
                               </tr>
                               <tr>
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                               <td align="left" class="black_ar"><bean:message key="cpbasedentry.collectionprocedure"/></td>
-							   <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.collectionEventCollectionProcedure}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-                                <td align="left" class="black_ar">
+				                                <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
 									  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
 									  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
@@ -287,19 +235,9 @@
 									  size="20"
 									/>
 								</td>
-  							   </logic:notEqual>
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                 <td align="left" class="black_ar"><label for="institutionId"><bean:message key="cpbasedentry.receivedquality"/></label></td>
-								<!-- receivedeventparameters.receivedquality -->
-								<logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.receivedEventReceivedQuality}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-                                <td align="left" class="black_ar">
+				                                <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
 									  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
 									  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
@@ -307,21 +245,12 @@
 									  size="20"
 									/>
 								</td>
-  							   </logic:notEqual>
                               </tr>
                               <tr>
 							  <!-- CollectionEvent fields -->
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                 <td align="left" class="black_ar"><label for="departmentId"><bean:message key="cpbasedentry.collectioncontainer"/></label></td>
-								<logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.collectionEventContainer}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-                                <td align="left" class="black_ar">
+								<td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="collectionEventContainer"
 									  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
 									  initialValue="<%=form.getCollectionEventContainer()%>"
@@ -329,7 +258,7 @@
 									  size="20"
 								    />
 								</td>
-  							   </logic:notEqual>
+  							   
 							   <%
 								if(Variables.isTemplateBasedLblGeneratorAvl)
 								{
@@ -516,26 +445,14 @@
 								</td>
 
 								</logic:notEqual>
-
-
-								<logic:equal name="isPersistentValue" value="true">
-								<td class="black_ar">
-									<label>
-										<%=storageLocationValue%>
-	                                </label>
-								</td>
-								</logic:equal>
-  							    <logic:notEqual name="isPersistentValue" value="true">
-
 									<td class="black_ar" >
 										<html:select property="<%=storageLocation%>"
 										styleClass="formFieldSized8"
 										styleId="<%=storageLocation%>" size="1"
 										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options collection= "storageContainerList" labelProperty="name" property="value"/>
+									<html:options collection= "storageContainerList" labelProperty="name" property="value"/>
 										</html:select>
 									</td>
-								</logic:notEqual>
                                 <td class="black_ar">
 			<%
 
@@ -552,36 +469,18 @@
 					}
 
 				%>
-									<logic:equal name="isPersistentValue" value="true">
-										<label>
-											<%=qtyValue%>
-			                            </label>
-									</logic:equal>
-
-									 <logic:notEqual name="isPersistentValue" value="true">
 										<html:text styleClass="black_ar" size="3"  maxlength="10"
 										styleId="<%=quantity%>" property="<%=quantity%>"
 										value="<%=qtyValue%>" style="text-align:right"/>
-									</logic:notEqual>
 									<span id="<%=unit%>">
 										<%=strHiddenUnitValue%>
 									</span>
 
 								</td>
-
-								<logic:equal name="isPersistentValue" value="true">
-									<td class="black_ar">
-										<label>
-											<%=concValue%>
-										</label>
-								</logic:equal>
-  							    <logic:notEqual name="isPersistentValue" value="true">
-									<td class="black_ar">
+								<td class="black_ar">
 										<html:text styleClass="black_ar" size="3"  maxlength="10"
 											styleId="<%=concentration%>" property="<%=concentration%>"
 											disabled="<%=concReadOnly%>" value="<%=concValue%>" style="text-align:right"/>
-
-								</logic:notEqual>
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 
 								</td>

@@ -267,7 +267,7 @@ if(form != null)
 	function deleteEvent()
 	{
 		window.parent.frames['CPTreeView'].saveTreeState();
-		var answer = confirm ("Are you sure want to delete specimen?")
+		var answer = confirm ("Are you sure you want to delete the specimen requirement?")
 		if(answer)
 		{
 			//document.forms[0].target = '_top';
