@@ -46,8 +46,9 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeAction(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception
 	{
 		final HttpSession session = request.getSession();
 		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
@@ -55,10 +56,11 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		final String operation = request.getParameter(Constants.OPERATION);
-		request.setAttribute(Constants.ERROR_PAGE_FOR_CP, request.getParameter(Constants.ERROR_PAGE_FOR_CP));
-		
+		request.setAttribute(Constants.ERROR_PAGE_FOR_CP,
+				request.getParameter(Constants.ERROR_PAGE_FOR_CP));
+
 		final Vector<QueryTreeNodeData> treeData = new Vector<QueryTreeNodeData>();
-		
+
 		String cpName = null;
 		String displayName = null;
 		String parentIdentifier = null;
@@ -71,11 +73,13 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			displayName = collectionProtocolBean.getTitle();
 			parentIdentifier = Constants.ZERO_ID;
 			identifier = collectionProtocolBean.getTitle();
-			AppUtility.addNode(cpName, displayName, parentIdentifier, identifier, "", treeData,"");
+			AppUtility.addNode(cpName, displayName, parentIdentifier,
+					identifier, "", treeData, "");
 
 		}
 
-		if (collectionProtocolEventMap != null && collectionProtocolBean != null)
+		if (collectionProtocolEventMap != null
+				&& collectionProtocolBean != null)
 		{
 			Integer iEventCount = new Integer(1);
 			final Collection collectionProtocolEventBeanCollection = collectionProtocolEventMap
@@ -86,49 +90,59 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			{
 				final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
 						.next();
-				if(!Constants.DISABLED.equals(collectionProtocolEventBean.getActivityStatus()))
-				{	
-				
-				final String objectName = collectionProtocolEventBean.getCollectionPointLabel()
-						+ Constants.CLASS;
-				// if(operation!=null &&
-				// operation.equals(Constants.VIEW_SUMMARY))
-				// {
-				// objectName=Constants.VIEW_SUMMARY
-				// }
-				displayName = collectionProtocolEventBean.getCollectionPointLabel()
-						+ " (" + collectionProtocolEventBean.getStudyCalenderEventPoint().toString() +" days)";
-				parentIdentifier = collectionProtocolBean.getTitle();
-				identifier = collectionProtocolEventBean.getUniqueIdentifier();
-				AppUtility.addNode(objectName, displayName, parentIdentifier, identifier, cpName,
-						treeData, "");
-				nodeId = objectName + "_" + identifier;
-				final Map SpecimenRequirementMap = collectionProtocolEventBean
-						.getSpecimenRequirementbeanMap();
-	
-				if (SpecimenRequirementMap != null)
+				if (!Constants.DISABLE.equals(collectionProtocolEventBean
+						.getActivityStatus()))
 				{
-					final Collection specimenRequirementBeanCollection = SpecimenRequirementMap
-							.values();
-					final Iterator specimenRequirementBeanCollectionItr = specimenRequirementBeanCollection
-							.iterator();
-					while (specimenRequirementBeanCollectionItr.hasNext())
+
+					final String objectName = collectionProtocolEventBean
+							.getCollectionPointLabel() + Constants.CLASS;
+					// if(operation!=null &&
+					// operation.equals(Constants.VIEW_SUMMARY))
+					// {
+					// objectName=Constants.VIEW_SUMMARY
+					// }
+					displayName = collectionProtocolEventBean
+							.getCollectionPointLabel()
+							+ " ("
+							+ collectionProtocolEventBean
+									.getStudyCalenderEventPoint().toString()
+							+ " days)";
+					parentIdentifier = collectionProtocolBean.getTitle();
+					identifier = collectionProtocolEventBean
+							.getUniqueIdentifier();
+					AppUtility.addNode(objectName, displayName,
+							parentIdentifier, identifier, cpName, treeData, "");
+					nodeId = objectName + "_" + identifier;
+					final Map SpecimenRequirementMap = collectionProtocolEventBean
+							.getSpecimenRequirementbeanMap();
+
+					if (SpecimenRequirementMap != null)
 					{
-						final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
-								.next();
-							if(!Constants.DISABLED.equals(specimenRequirementBean.getActivityStatus()))
-							{	
-						AppUtility.createSpecimenNode(objectName, identifier, specimenRequirementBean,
-								treeData, operation);
-							}	
+						final Collection specimenRequirementBeanCollection = SpecimenRequirementMap
+								.values();
+						final Iterator specimenRequirementBeanCollectionItr = specimenRequirementBeanCollection
+								.iterator();
+						while (specimenRequirementBeanCollectionItr.hasNext())
+						{
+							final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
+									.next();
+							if (!Constants.DISABLE
+									.equals(specimenRequirementBean
+											.getActivityStatus()))
+							{
+								AppUtility.createSpecimenNode(objectName,
+										identifier, specimenRequirementBean,
+										treeData, operation);
+							}
+						}
 					}
 				}
-				}	
 				iEventCount++;
 			}
 		}
 
-		final String clickedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
+		final String clickedNode = (String) session
+				.getAttribute(Constants.TREE_NODE_ID);
 		request.setAttribute(Constants.OPERATION, operation);
 		request.setAttribute(Constants.TREE_DATA, treeData);
 		//request.getSession().setAttribute(Constants.TREE_NODE_ID, nodeId);
@@ -137,5 +151,4 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	
 }

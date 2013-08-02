@@ -50,7 +50,8 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 	 */
 	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws DAOException
+			HttpServletRequest request, HttpServletResponse response)
+			throws DAOException
 	{
 		final ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
 		final HttpSession session = request.getSession();
@@ -60,11 +61,11 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		final Vector<QueryTreeNodeData> treeData = new Vector<QueryTreeNodeData>();
 		//tree node attributes
 		String operation = null;
-		
-		
+
 		Map collectionProtocolEventMap = null;
 		CollectionProtocolEventBean collectionProtocolEventBean = null;
-		if (session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) != null)
+		if (session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) != null)
 		{
 			collectionProtocolEventMap = (LinkedHashMap) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
@@ -73,20 +74,24 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventMap = new LinkedHashMap();
 		}
-		final String  isCreateDuplicateEvent = request.getParameter(Constants.CREATE_DUPLICATE_EVENT);
-		String ollectionProtocolEventkey = protocolEventDetailsForm.getCollectionProtocolEventkey();
-		if(Constants.TRUE.equals(isCreateDuplicateEvent))
-		{	
-			protocolEventDetailsForm.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
+		final String isCreateDuplicateEvent = request
+				.getParameter(Constants.CREATE_DUPLICATE_EVENT);
+		String ollectionProtocolEventkey = protocolEventDetailsForm
+				.getCollectionProtocolEventkey();
+		if (Constants.TRUE.equals(isCreateDuplicateEvent))
+		{
+			protocolEventDetailsForm
+					.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
 			protocolEventDetailsForm.setCollectionPointLabel("");
 		}
-		if (protocolEventDetailsForm.getCollectionProtocolEventkey()
-				.equals(Constants.ADD_NEW_EVENT))
+		if (protocolEventDetailsForm.getCollectionProtocolEventkey().equals(
+				Constants.ADD_NEW_EVENT))
 		{
 			operation = Constants.ADD;
 			int eventmapSize = collectionProtocolEventMap.size();
-			while (collectionProtocolEventMap.containsKey(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS
-					+ (eventmapSize)))
+			while (collectionProtocolEventMap
+					.containsKey(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS
+							+ (eventmapSize)))
 			{
 				eventmapSize = eventmapSize + 1;
 			}
@@ -95,91 +100,121 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 			{
 				eventmapSize = eventmapSize + 1;
 			}
-			collectionProtocolEventBean.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS
-					+ (eventmapSize));
-			this.setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
-			if(Constants.TRUE.equals(isCreateDuplicateEvent))
+			collectionProtocolEventBean
+					.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS
+							+ (eventmapSize));
+			this.setCollectionProtocolBean(collectionProtocolEventBean,
+					protocolEventDetailsForm);
+			if (Constants.TRUE.equals(isCreateDuplicateEvent))
 			{
-				CollectionProtocolEventBean speBean = (CollectionProtocolEventBean) collectionProtocolEventMap.get(ollectionProtocolEventkey);
+				CollectionProtocolEventBean speBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+						.get(ollectionProtocolEventkey);
 				LinkedList<GenericSpecimen> specimenList = new LinkedList<GenericSpecimen>();
-				specimenList = (LinkedList<GenericSpecimen>) CollectionProtocolUtil.getSpecimenList(speBean.getSpecimenRequirementbeanMap().values());
-				
-				String uniqueIdentifier =collectionProtocolEventBean.getUniqueIdentifier();
-				collectionProtocolEventBean.setSpecimenRequirementbeanMap(CollectionProtocolUtil.getSpecimenRequirementMap(uniqueIdentifier,specimenList,0));
+				specimenList = (LinkedList<GenericSpecimen>) CollectionProtocolUtil
+						.getSpecimenList(speBean
+								.getSpecimenRequirementbeanMap().values());
+
+				String uniqueIdentifier = collectionProtocolEventBean
+						.getUniqueIdentifier();
+				collectionProtocolEventBean
+						.setSpecimenRequirementbeanMap(CollectionProtocolUtil
+								.getSpecimenRequirementMap(uniqueIdentifier,
+										specimenList, 0));
 			}
-			collectionProtocolEventMap.put(collectionProtocolEventBean.getUniqueIdentifier(),
+			collectionProtocolEventMap.put(
+					collectionProtocolEventBean.getUniqueIdentifier(),
 					collectionProtocolEventBean);
 		}
 		else
 		{
 			operation = Constants.EDIT;
 			collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-					.get(protocolEventDetailsForm.getCollectionProtocolEventkey());
-			this.setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
+					.get(protocolEventDetailsForm
+							.getCollectionProtocolEventkey());
+			this.setCollectionProtocolBean(collectionProtocolEventBean,
+					protocolEventDetailsForm);
 			collectionProtocolEventMap.put(
 					protocolEventDetailsForm.getCollectionProtocolEventkey(),
 					collectionProtocolEventBean);
 		}
-		
-		final String objectName = collectionProtocolEventBean.getCollectionPointLabel()+ Constants.CLASS;
-		final String displayName = collectionProtocolEventBean.getCollectionPointLabel()
-						+ " (" + collectionProtocolEventBean.getStudyCalenderEventPoint().toString() +" days)";
-		final String identifier = collectionProtocolEventBean.getUniqueIdentifier();
+
+		final String objectName = collectionProtocolEventBean
+				.getCollectionPointLabel() + Constants.CLASS;
+		final String displayName = collectionProtocolEventBean
+				.getCollectionPointLabel()
+				+ " ("
+				+ collectionProtocolEventBean.getStudyCalenderEventPoint()
+						.toString() + " days)";
+		final String identifier = collectionProtocolEventBean
+				.getUniqueIdentifier();
 		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
-		.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		String parentId = collectionProtocolBean.getTitle();
-		
-		if(protocolEventDetailsForm.getCollectionProtocolEventkey()
-				.equals(Constants.ADD_NEW_EVENT))
+
+		if (protocolEventDetailsForm.getCollectionProtocolEventkey().equals(
+				Constants.ADD_NEW_EVENT))
 		{
-			AppUtility.addNode(objectName, displayName, parentId, identifier,  Constants.OBJECTNAME_FOR_CP, treeData, "");
-			if(Constants.TRUE.equals(isCreateDuplicateEvent)){
+			AppUtility.addNode(objectName, displayName, parentId, identifier,
+					Constants.OBJECTNAME_FOR_CP, treeData, "");
+			if (Constants.TRUE.equals(isCreateDuplicateEvent))
+			{
 				addCPTreeChildNodes(request, treeData, operation,
 						collectionProtocolEventBean, objectName);
 			}
 			request.setAttribute("nodeAdded", treeData);
 		}
-		
-		if(nodeId!=null && !nodeId.equals(objectName+"_"+identifier) && !Constants.ADD.equals(operation))
+
+		if (nodeId != null && !nodeId.equals(objectName + "_" + identifier)
+				&& !Constants.ADD.equals(operation))
 		{
 			//delete old Event Tree node with its chield's
 			request.setAttribute("deleteNode", nodeId);
-			
+
 			//add new event node
-			AppUtility.addNode(objectName, displayName, parentId, identifier,  Constants.OBJECTNAME_FOR_CP, treeData, "");
-			
+			AppUtility.addNode(objectName, displayName, parentId, identifier,
+					Constants.OBJECTNAME_FOR_CP, treeData, "");
+
 			addCPTreeChildNodes(request, treeData, operation,
 					collectionProtocolEventBean, objectName);
 			request.setAttribute("nodeAdded", treeData);
 		}
-		
-		session.setAttribute(Constants.TREE_NODE_ID, protocolEventDetailsForm
-				.getCollectionPointLabel()
-				+ "class_" + collectionProtocolEventBean.getUniqueIdentifier());
-		final String listKey = collectionProtocolEventBean.getUniqueIdentifier();
+
+		session.setAttribute(Constants.TREE_NODE_ID,
+				protocolEventDetailsForm.getCollectionPointLabel() + "class_"
+						+ collectionProtocolEventBean.getUniqueIdentifier());
+		final String listKey = collectionProtocolEventBean
+				.getUniqueIdentifier();
 		session.setAttribute(Constants.NEW_EVENT_KEY, listKey);
 		// request.setAttribute("listKey", listKey);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				collectionProtocolEventMap);
-		request.setAttribute(Constants.OPERATION, request.getParameter(Constants.OPERATION));
+		request.setAttribute(Constants.OPERATION,
+				request.getParameter(Constants.OPERATION));
 		return mapping.findForward(pageOf);
 	}
 
 	private void addCPTreeChildNodes(HttpServletRequest request,
 			final Vector<QueryTreeNodeData> treeData, String operation,
 			CollectionProtocolEventBean collectionProtocolEventBean,
-			final String objectName) {
-		
+			final String objectName)
+	{
+
 		//add child node of event
-		Map<String, GenericSpecimen> specimenRequirementMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
+		Map<String, GenericSpecimen> specimenRequirementMap = collectionProtocolEventBean
+				.getSpecimenRequirementbeanMap();
 		Set<String> eventKeySet = specimenRequirementMap.keySet();
 		String parentId = collectionProtocolEventBean.getUniqueIdentifier();
 		Iterator<String> itrator = eventKeySet.iterator();
-		while(itrator.hasNext())
+		while (itrator.hasNext())
 		{
 			String key = (String) itrator.next();
-			SpecimenRequirementBean srBean =  (SpecimenRequirementBean) specimenRequirementMap.get(key);
-			AppUtility.createSpecimenNode(objectName, parentId, srBean,	treeData, operation);
+			SpecimenRequirementBean srBean = (SpecimenRequirementBean) specimenRequirementMap
+					.get(key);
+			if (!Constants.DISABLE.equalsIgnoreCase(srBean.getActivityStatus()))
+			{
+				AppUtility.createSpecimenNode(objectName, parentId, srBean,
+						treeData, operation);
+			}
 		}
 	}
 
@@ -188,30 +223,41 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 	 * @param collectionProtocolEventBean : collectionProtocolEventBean
 	 * @param protocolEventDetailsForm : protocolEventDetailsForm
 	 */
-	private void setCollectionProtocolBean(CollectionProtocolEventBean collectionProtocolEventBean,
+	private void setCollectionProtocolBean(
+			CollectionProtocolEventBean collectionProtocolEventBean,
 			ProtocolEventDetailsForm protocolEventDetailsForm)
 	{
-		collectionProtocolEventBean.setClinicalDiagnosis(protocolEventDetailsForm
-				.getClinicalDiagnosis());
-		collectionProtocolEventBean.setClinicalStatus(protocolEventDetailsForm.getClinicalStatus());
-		collectionProtocolEventBean.setCollectionPointLabel(protocolEventDetailsForm
-				.getCollectionPointLabel());
-		collectionProtocolEventBean.setStudyCalenderEventPoint(protocolEventDetailsForm
-				.getStudyCalendarEventPoint());
+		collectionProtocolEventBean
+				.setClinicalDiagnosis(protocolEventDetailsForm
+						.getClinicalDiagnosis());
+		collectionProtocolEventBean.setClinicalStatus(protocolEventDetailsForm
+				.getClinicalStatus());
+		collectionProtocolEventBean
+				.setCollectionPointLabel(protocolEventDetailsForm
+						.getCollectionPointLabel());
+		collectionProtocolEventBean
+				.setStudyCalenderEventPoint(protocolEventDetailsForm
+						.getStudyCalendarEventPoint());
 
-		collectionProtocolEventBean.setCollectedEventComments(protocolEventDetailsForm
-				.getCollectionEventComments());
-		collectionProtocolEventBean.setCollectionContainer(protocolEventDetailsForm
-				.getCollectionEventContainer());
-		collectionProtocolEventBean.setReceivedEventComments(protocolEventDetailsForm
-				.getReceivedEventComments());
+		collectionProtocolEventBean
+				.setCollectedEventComments(protocolEventDetailsForm
+						.getCollectionEventComments());
+		collectionProtocolEventBean
+				.setCollectionContainer(protocolEventDetailsForm
+						.getCollectionEventContainer());
+		collectionProtocolEventBean
+				.setReceivedEventComments(protocolEventDetailsForm
+						.getReceivedEventComments());
 		collectionProtocolEventBean.setReceivedQuality(protocolEventDetailsForm
 				.getReceivedEventReceivedQuality());
-		collectionProtocolEventBean.setCollectionProcedure(protocolEventDetailsForm
-				.getCollectionEventCollectionProcedure());
+		collectionProtocolEventBean
+				.setCollectionProcedure(protocolEventDetailsForm
+						.getCollectionEventCollectionProcedure());
 
-		collectionProtocolEventBean.setLabelFormat(protocolEventDetailsForm.getLabelFormat());
-		collectionProtocolEventBean.setDefaultSiteId(protocolEventDetailsForm.getDefaultSiteId());
+		collectionProtocolEventBean.setLabelFormat(protocolEventDetailsForm
+				.getLabelFormat());
+		collectionProtocolEventBean.setDefaultSiteId(protocolEventDetailsForm
+				.getDefaultSiteId());
 
 	}
 

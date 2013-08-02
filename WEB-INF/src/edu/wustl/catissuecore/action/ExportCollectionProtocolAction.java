@@ -24,28 +24,33 @@ public class ExportCollectionProtocolAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(ExportCollectionProtocolAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(ExportCollectionProtocolAction.class);
 
 	@Override
 	/**
 	 * Execute Secure Action.
 	 */
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeSecureAction(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception
 	{
 		String mappingForward = null;
-		try 
+		try
 		{
-			
-			ExportCollectionProtocolBizLogic exportCP=new ExportCollectionProtocolBizLogic();
-			StringBuffer downloadFile = exportCP.getCPXMLFile(request.getParameter("title"));
+
+			ExportCollectionProtocolBizLogic exportCP = new ExportCollectionProtocolBizLogic();
+			StringBuffer downloadFile = exportCP.getCPXMLFile(request
+					.getParameter("title"));
+			response.setContentType("application/download");
+			response.setHeader("Content-Disposition", "attachment;filename=\""
+					+ request.getParameter("shortTitle") + ".csv\"");
 			response.setBufferSize(downloadFile.length());
 			response.getWriter().append(downloadFile);
-			response.setContentType("application/download");
-            response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("shortTitle")+".csv\"");
 
-            
-		} catch (Exception exp) {
+		}
+		catch (Exception exp)
+		{
 			logger.error(exp.getMessage(), exp);
 		}
 		return mapping.findForward(mappingForward);
