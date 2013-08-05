@@ -402,7 +402,7 @@
 
 	<property>
 		<name>resultView.noOfRecordsPerPage</name>
-		<value>100</value>
+		<value>500</value>
 	</property>
  
 	<property>
