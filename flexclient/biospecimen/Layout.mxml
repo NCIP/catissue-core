@@ -50,11 +50,11 @@
                  private var plusIcon:Class;
 
      [Bindable]
-                [Embed(source='/images/SpecimenCollectionGroup.gif')]
+                [Embed(source='/images/SpecimenCollectionGroup.GIF')]
                 private var scgIcon:Class;
 
     [Bindable]
-         		[Embed(source='/images/Specimen.gif')]
+         		[Embed(source='/images/Specimen.GIF')]
          		public var spIcon:Class;
      [Bindable]
                 [Embed(source="/images/graydot.gif")]
@@ -95,7 +95,14 @@
      [Bindable]
                  [Embed(source='/images/Arm_blk.gif')]
                  private var pendingArmCPIcon:Class;
+	[Bindable]
+                 [Embed(source='/images/specimenNotCollected.gif')]
+                 private var specimenNotCollectedIcon:Class;
 
+	 [Bindable]
+                 [Embed(source='/images/specimenDistributedAndClosed.gif')]
+                 private var distriAndCloseSpecimenIcon:Class;  
+                 
     [Bindable]
   	       private var title:String = "Specimen Details";
   			// Store the specified node id to show as selected
@@ -807,14 +814,19 @@
 		if(nodeType.match("SpecimenCollectionGroup"))
 		{
 	    	var scgNodeId:String = xmlNode.@scgCollectionStatus;
-			if(scgNodeId.match("Pending") || scgNodeId.match("Not Collected"))
-       		{
-       			specimenTree.setItemIcon(xmlNode, pendingSCGIcon, pendingSCGIcon);
+			if(scgNodeId.match("Not Collected"))
+			{
+				specimenTree.setItemIcon(xmlNode, specimenNotCollectedIcon, specimenNotCollectedIcon);
+			}
+			else if(scgNodeId.match("Complete"))
+			{
+				specimenTree.setItemIcon(xmlNode, spIcon, spIcon);
 			}
 			else
-			{
-				specimenTree.setItemIcon(xmlNode, scgIcon, scgIcon);
+       		{
+       			specimenTree.setItemIcon(xmlNode, pendingSpecimenIcon, pendingSpecimenIcon);
 			}
+			
 		}
 		if(nodeType.match("Specimen"))
 		{
@@ -822,6 +834,14 @@
 			if(childNodeId.match("Pending"))
        	  	{
        	  		specimenTree.setItemIcon(xmlNode, pendingSpecimenIcon, pendingSpecimenIcon);
+       	  	}
+       	  	else if(childNodeId.match("Distributed And Close"))
+       	  	{
+       	  		specimenTree.setItemIcon(xmlNode, distriAndCloseSpecimenIcon, distriAndCloseSpecimenIcon);
+       	  	}
+       	  	else if(childNodeId.match("Not Collected"))
+       	  	{
+       	  		specimenTree.setItemIcon(xmlNode, specimenNotCollectedIcon, specimenNotCollectedIcon);
        	  	}
 
 		}
@@ -1190,9 +1210,9 @@
 
 		 <mx:VBox height="100%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="250" height="15" fontWeight="bold" />
-                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()"
-                   		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')"
-                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')"
+                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" verticalAlign="middle"
+                   		folderClosedIcon="@Embed(source='/images/Specimen.GIF')" folderOpenIcon="@Embed(source='/images/Specimen.GIF')"
+                   		 defaultLeafIcon="@Embed(source='/images/Specimen.GIF')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')"
                    		 disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true"
                    		  dataTipFunction="addToolTip" />
 				</mx:VBox>
@@ -1203,9 +1223,9 @@
 	<mx:Style>
 		Tree
 		{
-			folderClosedIcon:Embed(source='/images/Specimen.gif');
-			folderOpenIcon:Embed(source='/images/Specimen.gif');
-			defaultLeafIcon:Embed(source='/images/Specimen.gif');
+			folderClosedIcon:Embed(source='/images/Specimen.GIF');
+			folderOpenIcon:Embed(source='/images/Specimen.GIF');
+			defaultLeafIcon:Embed(source='/images/Specimen.GIF');
 			disclosureClosedIcon:Embed(source='/images/nolines_plus.gif');
 			disclosureOpenIcon:Embed(source='/images/nolines_minus.gif');
 		}
