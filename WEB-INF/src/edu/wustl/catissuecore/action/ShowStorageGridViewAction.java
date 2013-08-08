@@ -126,15 +126,21 @@ public class ShowStorageGridViewAction extends BaseAction
 		HibernateDAO dao = null;
 		dao = (HibernateDAO) AppUtility.openDAOSession(null);
 
-		StorageContainerUtilizationDTO dto = new StorageContainerBizlogic()
+        StorageContainerUtilizationDTO storageContainerUtilizationDTO = new StorageContainerBizlogic()
 				.getStorageContainerUtilizationDTO(Long.valueOf(id), dao);
 
 		AppUtility.closeDAOSession(dao);
 
-        request.setAttribute(Constants.SPEC_COUNT, dto.getNumberOfSpecimensAssigned());
-        request.setAttribute(Constants.CAPACITY, dto.getTotalStorageCapacity());
-        final Long utilizationPercentage = Math.round(((dto.getNumberOfSpecimensAssigned().doubleValue() / dto
-                .getTotalStorageCapacity().doubleValue()) * 100));
+        request.setAttribute(Constants.SPEC_COUNT, storageContainerUtilizationDTO.getNumberOfSpecimensAssigned());
+        request.setAttribute(Constants.CAPACITY, storageContainerUtilizationDTO.getTotalStorageCapacity());
+
+        Long utilizationPercentage = new Long(0);
+        if (storageContainerUtilizationDTO.getTotalStorageCapacity() > 0)
+        {
+            utilizationPercentage = Math.round(((storageContainerUtilizationDTO.getNumberOfSpecimensAssigned()
+                    .doubleValue() / storageContainerUtilizationDTO.getTotalStorageCapacity().doubleValue()) * 100));
+        }
+
         request.setAttribute(Constants.PERCENTAGE, utilizationPercentage);
 
         request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, false);

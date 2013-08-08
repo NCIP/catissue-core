@@ -435,10 +435,10 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 </query>
 
 <sql-query name="insertIntoStorContSpecCountsTable">
-	INSERT INTO catissue_stor_cont_spec_counts(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, DATE) VALUES(?,?,?) 
+	INSERT INTO catissue_stor_cont_spec_counts(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, DATE, UTILIZATION_PERCENTAGE) VALUES(?,?,?,?) 
 </sql-query>
 <sql-query name="getStorContSpecCountDataById">
-	select spec.DATE,spec.STORED_SPECIMEN_COUNT from catissue_stor_cont_spec_counts spec where spec.STORAGE_CONTAINER_ID=? order by spec.DATE  
+	select spec.DATE,spec.STORED_SPECIMEN_COUNT from catissue_stor_cont_spec_counts spec where spec.STORAGE_CONTAINER_ID=? order by spec.DATE, spec.STORAGE_CONTAINER_ID asc
 </sql-query>
 
 </hibernate-mapping>

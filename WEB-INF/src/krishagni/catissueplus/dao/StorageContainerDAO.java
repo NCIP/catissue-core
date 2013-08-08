@@ -99,18 +99,28 @@ public class StorageContainerDAO
 
     /**
      * Inserts into catissue_stor_cont_spec_counts table with named SQL query
-     * @param dto
+     * @param storageContainerUtilizationDTO
      * @param hibernateDAO
      * @throws DAOException
      * @throws SQLException
      */
-    public void insertIntoStorContSpecCountsTable(StorageContainerUtilizationDTO dto, HibernateDAO hibernateDAO)
-            throws DAOException, SQLException
+    public void insertIntoStorContSpecCountsTable(StorageContainerUtilizationDTO storageContainerUtilizationDTO,
+            HibernateDAO hibernateDAO) throws DAOException, SQLException
     {
         Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-        params.put("1", new NamedQueryParam(DBTypes.LONG, dto.getContainerId()));
-        params.put("2", new NamedQueryParam(DBTypes.INTEGER, dto.getNumberOfSpecimensAssigned()));
+        params.put("1", new NamedQueryParam(DBTypes.LONG, storageContainerUtilizationDTO.getContainerId()));
+        params.put("2",
+                new NamedQueryParam(DBTypes.INTEGER, storageContainerUtilizationDTO.getNumberOfSpecimensAssigned()));
         params.put("3", new NamedQueryParam(DBTypes.DATE, new java.sql.Date(new Date().getTime())));
+
+        Long utilizationPercentage = new Long(0);
+        if (storageContainerUtilizationDTO.getTotalStorageCapacity() > 0)
+        {
+            utilizationPercentage = Math.round(((storageContainerUtilizationDTO.getNumberOfSpecimensAssigned()
+                    .doubleValue() / storageContainerUtilizationDTO.getTotalStorageCapacity().doubleValue()) * 100));
+        }
+
+        params.put("4", new NamedQueryParam(DBTypes.INTEGER, utilizationPercentage));
 
         hibernateDAO.executeUpdateWithNamedSQLQuery("insertIntoStorContSpecCountsTable", params);
     }

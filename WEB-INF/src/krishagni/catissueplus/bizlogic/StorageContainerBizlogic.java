@@ -825,24 +825,24 @@ public class StorageContainerBizlogic
     /**
     * Returns map containing specimen counts, capacity and percentage of utilization of a container
     * @param containerId
-    * @param dao
+    * @param hibernateDAO
     * @return
     * @throws ApplicationException 
     */
-    public StorageContainerUtilizationDTO getStorageContainerUtilizationDTO(Long containerId, HibernateDAO dao)
+    public StorageContainerUtilizationDTO getStorageContainerUtilizationDTO(Long containerId, HibernateDAO hibernateDAO)
             throws ApplicationException
     {
         totalCount = 0;
         totalCapacity = 0;
         //recursive call to find all children and set specimen count and total capacity count
-        getChildrenOfStorageContainerAndUpdateCounts(containerId, dao);
+        getChildrenOfStorageContainerAndUpdateCounts(containerId, hibernateDAO);
 
-        StorageContainerUtilizationDTO dto = new StorageContainerUtilizationDTO();
-        dto.setContainerId(containerId);
-        dto.setNumberOfSpecimensAssigned(totalCount);
-        dto.setTotalStorageCapacity(totalCapacity);
+        StorageContainerUtilizationDTO storageContainerUtilizationDTO = new StorageContainerUtilizationDTO();
+        storageContainerUtilizationDTO.setContainerId(containerId);
+        storageContainerUtilizationDTO.setNumberOfSpecimensAssigned(totalCount);
+        storageContainerUtilizationDTO.setTotalStorageCapacity(totalCapacity);
 
-        return dto;
+        return storageContainerUtilizationDTO;
     }
 
     /**
@@ -862,8 +862,8 @@ public class StorageContainerBizlogic
         for (Long containerId : parentStorageContainerIdList)
         {
             //get utilization DTO for the container
-            StorageContainerUtilizationDTO dto = getStorageContainerUtilizationDTO(containerId, hibernateDAO);
-            storageContainerDAO.insertIntoStorContSpecCountsTable(dto, hibernateDAO);
+            StorageContainerUtilizationDTO storageContainerUtilizationDTO = getStorageContainerUtilizationDTO(containerId, hibernateDAO);
+            storageContainerDAO.insertIntoStorContSpecCountsTable(storageContainerUtilizationDTO, hibernateDAO);
         }
     }
 
