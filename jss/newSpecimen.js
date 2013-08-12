@@ -265,7 +265,16 @@ function giveCall(url,msg,msg1,id)
 	ajaxAssignTagFunctionCall(url,msg,msg1);
 }
 
-function loadSpecimenTabbar()
+
+function LoadSCGTabBar(oprationValue)
+{
+	if(oprationValue== "edit")
+		loadSpecimenTabbarForEdit();
+	else
+		loadSpecimenTabbarForAdd();
+}
+
+function loadSpecimenTabbarForEdit()
 {
 	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
 	specimenTabbar.setSkin('default');
@@ -289,3 +298,16 @@ function loadSpecimenTabbar()
 	specimenTabbar.setContentHref("imagesTab", showImagesTab);
 	specimenTabbar.setTabActive("specimenDetailsTab");
 }
+
+function loadSpecimenTabbarForAdd()
+{
+	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
+	specimenTabbar.setSkin('default');
+	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
+	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
+	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> New Specimen </span>', "150px");
+	specimenTabbar.setHrefMode("iframes-on-demand");
+	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
+	specimenTabbar.setTabActive("specimenDetailsTab");
+}
+

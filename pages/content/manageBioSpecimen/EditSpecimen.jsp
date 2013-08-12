@@ -82,6 +82,7 @@
 	window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 </script>
 <!----------------------------------------------------------------------->
+<body onload="LoadSCGTabBar('${requestScope.operation}');"> 
 <html:form action="NewSpecimenEdit.do">
 
 <html:hidden name="specimenDTO" property="generateLabel"/>
@@ -90,17 +91,11 @@
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
 								
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-
-	<tr>
-		<td  class="tablepadding">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-			
-					<div id="specimen_tabbar" style="width:955px; height:630px;"/>
-			
-			</table>
-			
-			<div id='specimenDetailsDiv'>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+	  <tr>
+		<td>
+			<div id="specimen_tabbar" style="width:99%; height:98%;position:absolute;">
+			<div id='specimenDetailsDiv' style="overflow:auto;height:100%">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 			<tr>
 			<td>
@@ -663,7 +658,7 @@
 			<td height="*">&nbsp;</td>
 		</tr>
 		</table>
-		</div>
+		</div> </div>
 	 </td>
    </tr>
 </table>
@@ -744,27 +739,7 @@ dhxWins.window("containerPositionPopUp").setText("");    //it's the title for th
 initSpecimenCombo();
 initializeSpecimenPage('${biohazardTypeNameListJSON}');
 prepareSpecimenTypeOptions('${cellTypeListJSON}','${molecularTypeListJSON}','${tissueTypeListJSON}','${fluidTypeListJSON}');
-<logic:equal name="operation" value="edit">
-loadSpecimenTabbar();
-</logic:equal>
-<logic:equal name="operation" value="add">
-loadSpecimenTabbar1();
-</logic:equal>
-function loadSpecimenTabbar1()
-{
-	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
-	specimenTabbar.setSkin('default');
-	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
-	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
-	
-	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> New Specimen </span>', "150px");
-	
-	
-	specimenTabbar.setHrefMode("iframes-on-demand");
-	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
-	
-	specimenTabbar.setTabActive("specimenDetailsTab");
-}
+
 <c:if test="${specimenDTO.collectionStatus=='Collected' and operation=='edit'}">
 {
 	document.getElementById('specListDiv').style.display='block';
@@ -778,3 +753,4 @@ function chkeEmptyNumber(obj)
 	}
 }
 </script>
+</body>

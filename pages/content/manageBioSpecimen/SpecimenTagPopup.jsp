@@ -87,7 +87,7 @@ function assignTargetCallFunc()
 <title>Insert title here</title>
 </head>
 <body>
-</table> 
+
 <!-- action buttons end -->
 	<div id="blanket" style="display: none;"></div>
 				<div id="popUpDiv" style="display: none; top: 100px; left: 210.5px;">
