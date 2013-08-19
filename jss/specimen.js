@@ -7,6 +7,8 @@ function initCombo()
 		//classNameCombo.setOptionWidth(203);
 		classNameCombo.setSize(203);
 		classNameCombo.attachEvent("onChange", function(){onSpecimenTypeChange(this);validateAndProcessDeriveComboData(this);});
+		classNameCombo.attachEvent("onOpen",onComboClick);
+		classNameCombo.attachEvent("onKeyPressed",onComboKeyPress);
 	//	classNameCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 
 		
@@ -14,6 +16,8 @@ function initCombo()
 		//typeCombo.setOptionWidth(203);
 		typeCombo.setSize(203);
 		typeCombo.attachEvent("onChange", function(){validateAndProcessDeriveComboData(this);});
+		typeCombo.attachEvent("onOpen",onComboClick);
+		typeCombo.attachEvent("onKeyPressed",onComboKeyPress);
 		setDefaultText("extIdName",defaultTextForExtIdName);
 	    setDefaultText("extIdValue",defaultTextForExtIdValue);
 
@@ -25,32 +29,44 @@ function initSpecimenCombo()
 		tissueSiteCombo.setOptionWidth(202);
 		tissueSiteCombo.setSize(202);
 		tissueSiteCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
-		tissueSiteCombo.enableFilteringMode(true);
+//		tissueSiteCombo.enableFilteringMode(true);
+		tissueSiteCombo.attachEvent("onOpen",onComboClick);
+		tissueSiteCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 		var tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
 		tissueSideCombo.setOptionWidth(203);
 		tissueSideCombo.setSize(203);
 		tissueSideCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+		tissueSideCombo.attachEvent("onOpen",onComboClick);
+		tissueSideCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 		var pathologicalStatusCombo = dhtmlXComboFromSelect("pathologicalStatus");
 		pathologicalStatusCombo.setOptionWidth(203);
 		pathologicalStatusCombo.setSize(203);
 		pathologicalStatusCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+		pathologicalStatusCombo.attachEvent("onOpen",onComboClick);
+		pathologicalStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 		collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
 		collectionStatusCombo.setOptionWidth(203);
 		collectionStatusCombo.setSize(203);
 		collectionStatusCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
+		collectionStatusCombo.attachEvent("onOpen",onComboClick);
+		collectionStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
 		
 		classNameCombo = dhtmlXComboFromSelect("className");
 		classNameCombo.setOptionWidth(203);
 		classNameCombo.setSize(203);
 		classNameCombo.attachEvent("onChange", function(){onSpecimenTypeChange(this); validateAndProcessComboData(this);});
+		classNameCombo.attachEvent("onOpen",onComboClick);
+		classNameCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 		typeCombo = dhtmlXComboFromSelect("type");
 		typeCombo.setOptionWidth(203);
 		typeCombo.setSize(203);
 		typeCombo.attachEvent("onChange", function(){onSpecimenSubTypeChange(); validateAndProcessComboData(this);});
+		typeCombo.attachEvent("onOpen",onComboClick);
+		typeCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 		if(document.getElementById('activityStatus')!=null)
 		{
@@ -58,6 +74,8 @@ function initSpecimenCombo()
 			activityStatusCombo.setOptionWidth(203);
 			activityStatusCombo.setSize(203);
 			activityStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});
+			activityStatusCombo.attachEvent("onOpen",onComboClick);
+			activityStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
 		}
 
 }
@@ -1292,7 +1310,7 @@ function enableMapButton()
 {
 	if(submitDeriveCombo && deriveLabelSubmit && deriveBarcodeSubmit)
 	{
-		document.getElementById('mapButton').disabled=false;
+//		document.getElementById('mapButton').disabled=false;
 	}
 }
 function validateLabelBarcode(label,caption)

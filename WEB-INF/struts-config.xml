@@ -3872,8 +3872,8 @@ PUBLIC
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfAliquot" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfNewAliquot" path=".catissuecore.storageLocationViewDef" />
-			
 			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef" />
+			<forward name="pageOfEditSpecimen" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfMultipleSpecimen" path=".catissuecore.storageLocationViewDef" />
 			<!--
 				<forward name="pageOfTissueSite"

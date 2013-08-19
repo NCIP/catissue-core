@@ -6041,5 +6041,7 @@ public class Constants
 
     /** Constant for data **/
     public static final String CHART_SERIES_DATA = "data";
+    
+    public static final String PAGE_OF_EDIT_SPECIMEN="pageOfEditSpecimen";
 
 }

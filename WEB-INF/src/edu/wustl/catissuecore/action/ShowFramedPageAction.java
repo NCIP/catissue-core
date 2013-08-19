@@ -87,9 +87,11 @@ public class ShowFramedPageAction extends XSSSupportedAction
 		session.removeAttribute(Constants.SPECIMEN_ID);
 		session.removeAttribute(Constants.PARENT_SPECIMEN_LABEL_KEY);
 		session.removeAttribute("parentSpecimenBarcode");
+		session.removeAttribute("specCollStatus");
+
 
 		if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
-				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER)||pageOf.equals("pageOfNewAliquot"))
+				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER) || pageOf.equals((Constants.PAGE_OF_EDIT_SPECIMEN)))
 		{
 			final String storageType = request.getParameter("storageType");
 			final String isStorageContainer = request.getParameter("storageContainer");
@@ -113,6 +115,7 @@ public class ShowFramedPageAction extends XSSSupportedAction
 			session.setAttribute(Constants.SPECIMEN_ID,specimenId);
 			session.setAttribute(Constants.PARENT_SPECIMEN_LABEL_KEY,parentSpecimenLabel);
 			session.setAttribute("parentSpecimenBarcode",parentSpecimenBarcode);
+			session.setAttribute("specCollStatus", request.getParameter("collStatus"));
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 		{

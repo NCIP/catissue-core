@@ -8,6 +8,8 @@ siteCombo = dhtmlXComboFromSelect("site");
 siteCombo.setSize("240");
 siteCombo.attachEvent("onSelectionChange",processComboChange);
 siteCombo.setName("site");
+siteCombo.attachEvent("onOpen",onComboClick);
+siteCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 receiverCombo = dhtmlXComboFromSelect("receiver");
 receiverCombo.setSize("240");
@@ -30,19 +32,28 @@ collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");
 collectionStatusCombo.setSize("240");
 collectionStatusCombo.attachEvent("onSelectionChange",processComboChange);
 collectionStatusCombo.setName("collectionStatus");
-
+collectionStatusCombo.attachEvent("onOpen",onComboClick);
+collectionStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 hourTimeCombo = dhtmlXComboFromSelect("hoursTime");
 hourTimeCombo.setSize("40");
+hourTimeCombo.attachEvent("onOpen",onComboClick);
+hourTimeCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 minutesTimeCombo = dhtmlXComboFromSelect("minuteTime");
 minutesTimeCombo.setSize("40");
+minutesTimeCombo.attachEvent("onOpen",onComboClick);
+minutesTimeCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 rhourTimeCombo = dhtmlXComboFromSelect("receivehoursTime");
 rhourTimeCombo.setSize("40");
+rhourTimeCombo.attachEvent("onOpen",onComboClick);
+rhourTimeCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 rminutesTimeCombo = dhtmlXComboFromSelect("receiveminuteTime");
 rminutesTimeCombo.setSize("40");
+rminutesTimeCombo.attachEvent("onOpen",onComboClick);
+rminutesTimeCombo.attachEvent("onKeyPressed",onComboKeyPress);
 }
 
 

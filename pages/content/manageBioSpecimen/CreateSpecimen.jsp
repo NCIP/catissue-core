@@ -248,7 +248,12 @@ function initPrepareSpecimenType()
 						<html:hidden name="deriveDTO" property="pos2" styleId="pos2"/>
 						<html:hidden name="deriveDTO" property="containerId" styleId="containerId"/>
 							<input type="text" size="30" maxlength="255"  class="black_ar"  value='Virtually Located' readonly style="border:0px;" id="storageContainerPosition" title="Virtually Located"/>
-							<input type="button" class="blue_ar_b" value="Select Container" id="mapButton" disabled="true" onclick="loadDHTMLXWindowForDeriveSpecimen()" />
+							<a href="#" onclick="javascript:loadDHTMLXWindowForDeriveSpecimen();return false">
+							<img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
+							
+							<a href="#" onclick="javascript:openViewMap();return false">
+			<img src="images/uIEnhancementImages/Tree.gif" style="vertical-align: middle" alt="Displays the containers in tree view" title="Displays the containers in tree view" width="16" height="16" border="0">
+		</a>
 						</td>
 						
 					</tr>
@@ -441,5 +446,17 @@ function onCheckboxButtonClick(chkbox)
 		document.getElementById('quantityPerAliquot').disabled = false;
 		
 	}
+}
+
+function openViewMap()
+{
+var className = classNameCombo.getSelectedText();
+var sptype = typeCombo.getSelectedText();
+	
+	var parentSpecimenLabel=document.getElementById("parentSpecimenLabel").value;
+		var parentSpecimenBarcode=document.getElementById("parentSpecimenBarcode").value;
+		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=containerName&pos1=pos1&pos2=pos2&containerId=containerId"
+						+ "&holdSpecimenClass="+className+"&parentSpecimenLabel="+parentSpecimenLabel+"&parentSpecimenBarcode="+parentSpecimenBarcode+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=" + selectedCPID;
+		mapButtonClickedOnSpecimen(frameUrl,'newSpecimenPage','containerName');
 }
 </script>

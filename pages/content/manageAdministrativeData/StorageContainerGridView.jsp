@@ -8,6 +8,8 @@
 <head>
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
+	<script language="JavaScript" type="text/javascript"
+	src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
@@ -55,6 +57,130 @@ function setCustomListBoxValue(elementId,elementValue)
 		parent.opener.onCustomListBoxChange(id);
 	}
 }
+
+function addTransferEvent(contName,pos1,pos2)
+{
+	var speCollStat = '${sessionScope.specCollStatus}';
+	
+	//alert(dhtmlxCombo.getActualValue());
+	if(speCollStat != null && speCollStat != "" )
+	{
+		if(speCollStat == 'Collected')
+		{
+			transferSpecimen(contName,pos1,pos2);
+		}
+		else
+		{
+			updatePosition(contName,pos1,pos2);
+		}
+	}
+}
+function transferSpecimen(contName,pos1,pos2)
+{
+
+	var toPos1=pos1;
+	var toPos2=pos2;
+	var toContainerName=contName;
+	var fromStoragePosition=parent.opener.document.getElementById('storageContainerPosition').value;
+	//alert(fromStoragePosition);
+	var fromContainerName=fromStoragePosition.substring(0,fromStoragePosition.lastIndexOf('(')-1);
+	var storagePositions=fromStoragePosition.substring(fromStoragePosition.lastIndexOf('(')+1,fromStoragePosition.lastIndexOf(')')).split(",");
+	var fromPos1=storagePositions[0];
+	var fromPos2=storagePositions[1];
+	var specimenId=parent.opener.document.getElementsByName('id')[0].value;
+	var isVirtual = parent.opener.document.getElementById('isVirtual').value;
+	
+	var request = newXMLHTTPReq();
+	if(request == null)
+    {
+		alert ("Your browser does not support AJAX!");
+		return;
+	}
+	var handlerFunction = getReadyStateHandler(request,updateSpecimenValues,true);
+	
+    request.onreadystatechange = handlerFunction;
+	var param="fromContainerName="+fromContainerName+"&fromPos1="+fromPos1+"&fromPos2="+fromPos2+"&toPos1="+toPos1+"&toPos2="+toPos2+"&toContainerName="+toContainerName+"&isVirtual="+isVirtual+"&specimenId="+specimenId;
+    var url = "TransferEventAction.do";
+ 	request.open("POST",url,true);
+	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(param);
+	return false;
+}
+
+function updateSpecimenValues(responseText)
+{
+	var msg =responseText;	
+	
+	if(msg.indexOf('#') != -1)
+	{
+		var tag=(msg).split("#");
+		var containerName=tag[0];
+		var pos1=tag[1];
+		var pos2=tag[2];
+		var storagePosition=parent.opener.document.getElementById('storageContainerPosition');
+		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
+		storagePosition.value=newStoragePosition;
+		storagePosition.title=newStoragePosition;
+		var isVirtual=parent.opener.document.getElementById('isVirtual');
+		isVirtual.value=false;
+		var container = parent.opener.document.getElementById('containerName');
+		var position1= parent.opener.document.getElementById('pos1');
+		var position2= parent.opener.document.getElementById('pos2');
+		//alert(container.value);
+		//alert(position2.value);
+		//alert(position1.value);
+		container.value = containerName;
+		position1.value = pos1;
+		position2.value= pos2;
+		//parent.window.dhxWins.window("containerPositionPopUp").close();
+		top.window.close();
+	}
+	else if(msg == 'virtual')
+	{
+		var storagePosition=parent.opener.document.getElementById('storageContainerPosition');
+		//alert('ddd');
+		storagePosition.value='Virtually Located';
+		storagePosition.title='Virtually Located';
+		var isVirtual=parent.opener.document.getElementById('isVirtual');
+		isVirtual.value=true;
+		//parent.window.dhxWins.window("containerPositionPopUp").close();
+		top.window.close();
+	}
+	else
+	{
+		document.getElementById('error').innerHTML="<font color='red'>"+ msg+"</font>";
+	}
+	
+}
+function updatePosition(containerName,pos1,pos2)
+{
+	/*var pos1=document.getElementById('pos1').value;
+	var pos2=document.getElementById('pos2').value;
+	var containerName=dhtmlxCombo.getComboText();*/
+	
+	var storagePosition=parent.opener.document.getElementById('storageContainerPosition');
+		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
+		storagePosition.value=newStoragePosition;
+		storagePosition.title=newStoragePosition;
+		var isVirtual=parent.opener.document.getElementById('isVirtual');
+		isVirtual.value=false;
+		var container = parent.opener.document.getElementById('containerName');
+		var position1= parent.opener.document.getElementById('pos1');
+		var position2= parent.opener.document.getElementById('pos2');
+		
+		container.value = containerName;
+		position1.value = pos1;
+		position2.value= pos2;
+		var isVirtual = parent.opener.document.getElementById('isVirtual');
+		
+		if(isVirtual != null)
+		{
+			isVirtual.value="false";
+			
+		}
+		top.window.close();
+}
 function setTextBoxValueForNewAliquot(elementId,elementValue,pos1,pos2){
 		parent.opener.setNewStoragePositionForAliquot(elementId,elementValue.replace('+',' '),pos1,pos2);
 }
@@ -80,7 +206,10 @@ function setTextBoxValue(elementId,elementValue)
 
 function closeFramedWindow()
 {
-	top.window.close();
+	if('<%=pageOf%>' != "pageOfEditSpecimen")
+	{
+		top.window.close();
+	}
 }
 
 function refresh_tree(nodeId)

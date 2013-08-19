@@ -83,10 +83,8 @@ function createAliquote()
 }*/
 if(isSubmit)
 {
-	/*action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+specimenId+"&noOfAliquotes="+noOfAliquotes+
-	"&quantityperAliquote="+quantity+"&CPQuery=CPQuery";*/
-	action = 'GetAliquotDetails.do?pageOf=fromSpecimen&parentSpecimentLabel='+label+"&aliquotCount="+noOfAliquotes+"&quantityPerAliquot="+quantity+"&searchBasedOn=label";
-			
+	action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+specimenId+"&noOfAliquotes="+noOfAliquotes+
+	"&quantityperAliquote="+quantity+"&CPQuery=CPQuery";
 }
 
  window.parent.frames[1].location=action;
@@ -215,6 +213,8 @@ function initComboForSCGEvents()
                 scgCombo = new dhtmlXCombo("addSCGEvents", "addSCGEven1", 240);
                 scgCombo.addOption(scgEvenData);    
 		        scgCombo.attachEvent("onSelectionChange",onScgSelect);
+				scgCombo.attachEvent("onOpen",onComboClick);
+scgCombo.attachEvent("onKeyPressed",onComboKeyPress);
                 var count = scgCombo.optionsArr.length;
                 if(count==1) //select if only one item pesent
                {

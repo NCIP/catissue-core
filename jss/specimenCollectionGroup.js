@@ -15,15 +15,24 @@ function initializeSCGCombo(operation)
 			var collectionProtocolEventCombo = dhtmlXComboFromSelect("collectionProtocolEventId");
 			collectionProtocolEventCombo.setOptionWidth(177);
 			collectionProtocolEventCombo.setSize(177);
+			collectionProtocolEventCombo.attachEvent("onOpen",onComboClick);
+			collectionProtocolEventCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			collectionProtocolEventCombo.attachEvent("onChange", function(){collectionProtocolEventCombo.DOMelem_input.focus();});
 		
 		}
 		scgCombo.clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
 		scgCombo.clinicalStatusCombo.setOptionWidth(177);
 		scgCombo.clinicalStatusCombo.setSize(177);
+		scgCombo.clinicalStatusCombo.attachEvent("onOpen",onComboClick);
+		scgCombo.clinicalStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
+		scgCombo.clinicalStatusCombo.attachEvent("onChange", function(){scgCombo.clinicalStatusCombo.DOMelem_input.focus();});
 	
 		scgCombo.collectionEventCollectionProcedureCombo = dhtmlXComboFromSelect("collectionEventCollectionProcedure");  
 		scgCombo.collectionEventCollectionProcedureCombo.setOptionWidth(177);
 		scgCombo.collectionEventCollectionProcedureCombo.setSize(177);
+		scgCombo.collectionEventCollectionProcedureCombo.attachEvent("onOpen",onComboClick);
+		scgCombo.collectionEventCollectionProcedureCombo.attachEvent("onKeyPressed",onComboKeyPress);
+		scgCombo.collectionEventCollectionProcedureCombo.attachEvent("onChange", function(){scgCombo.collectionEventCollectionProcedureCombo.DOMelem_input.focus();});
 		if(scgCombo.collectionEventCollectionProcedureCombo.getSelectedValue()=="-1"){
 			scgCombo.collectionEventCollectionProcedureCombo.setComboValue("Use CP Defaults");
 			scgCombo.collectionEventCollectionProcedureCombo.setComboText("Use CP Defaults");
@@ -32,6 +41,9 @@ function initializeSCGCombo(operation)
 		scgCombo.collectionEventContainerCombo = dhtmlXComboFromSelect("collectionEventContainer");  
 		scgCombo.collectionEventContainerCombo.setOptionWidth(177);
 		scgCombo.collectionEventContainerCombo.setSize(177);
+		scgCombo.collectionEventContainerCombo.attachEvent("onOpen",onComboClick);
+		scgCombo.collectionEventContainerCombo.attachEvent("onKeyPressed",onComboKeyPress);
+		scgCombo.collectionEventContainerCombo.attachEvent("onChange", function(){scgCombo.collectionEventContainerCombo.DOMelem_input.focus();});
 		if(scgCombo.collectionEventContainerCombo.getSelectedValue()=="-1"){
 			scgCombo.collectionEventContainerCombo.setComboValue("Use CP Defaults");
 			scgCombo.collectionEventContainerCombo.setComboText("Use CP Defaults");
@@ -40,6 +52,9 @@ function initializeSCGCombo(operation)
 		scgCombo.receivedEventReceivedQualityCombo = dhtmlXComboFromSelect("receivedEventReceivedQuality");  
 		scgCombo.receivedEventReceivedQualityCombo.setOptionWidth(177);
 		scgCombo.receivedEventReceivedQualityCombo.setSize(177);
+		scgCombo.receivedEventReceivedQualityCombo.attachEvent("onOpen",onComboClick);
+		scgCombo.receivedEventReceivedQualityCombo.attachEvent("onKeyPressed",onComboKeyPress);
+		scgCombo.receivedEventReceivedQualityCombo.attachEvent("onChange", function(){scgCombo.receivedEventReceivedQualityCombo.DOMelem_input.focus();});
 		if(scgCombo.receivedEventReceivedQualityCombo.getSelectedValue()=="-1"){
 			scgCombo.receivedEventReceivedQualityCombo.setComboValue("Use CP Defaults");
 			scgCombo.receivedEventReceivedQualityCombo.setComboText("Use CP Defaults");
@@ -49,18 +64,23 @@ function initializeSCGCombo(operation)
 		scgCombo.activityStatusCombo.setOptionWidth(177);
 		scgCombo.activityStatusCombo.setSize(177);
 		scgCombo.activityStatusCombo.deleteOption('-- Select --');
-		scgCombo.activityStatusCombo.readonly(true,false);
+		//scgCombo.activityStatusCombo.readonly(true,false);
+		scgCombo.activityStatusCombo.attachEvent("onOpen",onComboClick);
+		scgCombo.activityStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
 		
 		scgCombo.activityStatusCombo.attachEvent("onChange", 
 			function()
 			{
 				var activityValue=scgCombo.activityStatusCombo.getSelectedValue();
 				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
+				scgCombo.activityStatusCombo.attachEvent("onChange", function(){scgCombo.activityStatusCombo.DOMelem_input.focus();});
 			});
 
 		scgCombo.collectionStatusCombo = dhtmlXComboFromSelect("collectionStatus");  
 		scgCombo.collectionStatusCombo.setOptionWidth(177);
 		scgCombo.collectionStatusCombo.setSize(177);
+		scgCombo.collectionStatusCombo.attachEvent("onOpen",onComboClick);
+		scgCombo.collectionStatusCombo.attachEvent("onKeyPressed",onComboKeyPress);
 		
 		
 		var clinicalDiagnosisCombo = new dhtmlXCombo("clinicalDiagnosis","clinicalDiagnosis","100px");;
@@ -76,8 +96,12 @@ function initializeSCGCombo(operation)
 		clinicalDiagnosisCombo.enableFilteringMode(true);
 		});*/
 		clinicalDiagnosisCombo.attachEvent("onKeyPressed",function(){
-				clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
-		}); 
+			clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
+			clinicalDiagnosisCombo.attachEvent("onChange", function(){clinicalDiagnosisCombo.DOMelem_input.focus();});
+			});
+			clinicalDiagnosisCombo.attachEvent("onOpen",onComboClick);
+			clinicalDiagnosisCombo.attachEvent("onKeyPressed",onComboKeyPress);
+		
 		
 		
 		
@@ -92,34 +116,57 @@ function initializeSCGCombo(operation)
 			{
 				var activityValue=scgCombo.collectionStatusCombo.getSelectedValue();
 				checkNewActivityStatus(activityValue,'/QueryManageBioSpecimen.do');
+				scgCombo.collectionStatusCombo.attachEvent("onChange", function(){scgCombo.collectionStatusCombo.DOMelem_input.focus();});
 			});
 			scgCombo.collectionEventTimeInHoursCombo = dhtmlXComboFromSelect("collectionEventTimeInHours");  
 			scgCombo.collectionEventTimeInHoursCombo.setOptionWidth(40);
 			scgCombo.collectionEventTimeInHoursCombo.setSize(40);
+			scgCombo.collectionEventTimeInHoursCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.collectionEventTimeInHoursCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.collectionEventTimeInHoursCombo.attachEvent("onChange", function(){scgCombo.collectionEventTimeInHoursCombo.DOMelem_input.focus();});
 		
 			scgCombo.collectionEventTimeInMinutesCombo = dhtmlXComboFromSelect("collectionEventTimeInMinutes");  
 			scgCombo.collectionEventTimeInMinutesCombo.setOptionWidth(40);
 			scgCombo.collectionEventTimeInMinutesCombo.setSize(40);
+			scgCombo.collectionEventTimeInMinutesCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.collectionEventTimeInMinutesCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.collectionEventTimeInMinutesCombo.attachEvent("onChange", function(){scgCombo.collectionEventTimeInMinutesCombo.DOMelem_input.focus();});
 			
 			scgCombo.receivedEventTimeInHoursCombo = dhtmlXComboFromSelect("receivedEventTimeInHours");  
 			scgCombo.receivedEventTimeInHoursCombo.setOptionWidth(40);
 			scgCombo.receivedEventTimeInHoursCombo.setSize(40);
+			scgCombo.receivedEventTimeInHoursCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.receivedEventTimeInHoursCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.receivedEventTimeInHoursCombo.attachEvent("onChange", function(){scgCombo.receivedEventTimeInHoursCombo.DOMelem_input.focus();});
 			
 			scgCombo.receivedEventTimeInMinutesCombo = dhtmlXComboFromSelect("receivedEventTimeInMinutes");  
 			scgCombo.receivedEventTimeInMinutesCombo.setOptionWidth(40);
 			scgCombo.receivedEventTimeInMinutesCombo.setSize(40);
+			scgCombo.receivedEventTimeInMinutesCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.receivedEventTimeInMinutesCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.receivedEventTimeInMinutesCombo.attachEvent("onChange", function(){scgCombo.receivedEventTimeInMinutesCombo.DOMelem_input.focus();});
 			
 			scgCombo.collectionEventUserIdCombo = dhtmlXComboFromSelect("collectionEventUserId");  
 			scgCombo.collectionEventUserIdCombo.setOptionWidth(177);
 			scgCombo.collectionEventUserIdCombo.setSize(177);
+			scgCombo.collectionEventUserIdCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.collectionEventUserIdCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.collectionEventUserIdCombo.attachEvent("onChange", function(){scgCombo.collectionEventUserIdCombo.DOMelem_input.focus();});
 			
 			scgCombo.receivedEventUserIdCombo = dhtmlXComboFromSelect("receivedEventUserId");  
 			scgCombo.receivedEventUserIdCombo.setOptionWidth(177);
 			scgCombo.receivedEventUserIdCombo.setSize(177);
+			scgCombo.receivedEventUserIdCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.receivedEventUserIdCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.receivedEventUserIdCombo.attachEvent("onChange", function(){scgCombo.receivedEventUserIdCombo.DOMelem_input.focus();});
 			
 			scgCombo.siteIdCombo = dhtmlXComboFromSelect("siteId");  
 			scgCombo.siteIdCombo.setOptionWidth(177);
 			scgCombo.siteIdCombo.setSize(177);
+			scgCombo.siteIdCombo.attachEvent("onOpen",onComboClick);
+			scgCombo.siteIdCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			scgCombo.siteIdCombo.attachEvent("onChange", function(){scgCombo.siteIdCombo.DOMelem_input.focus();});
+			//scgCombo.siteIdCombo.enableFilteringMode('between');
 			
 			
 			

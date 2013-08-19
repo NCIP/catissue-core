@@ -691,7 +691,7 @@ var reloadGrid=true,populateValueInCombo=true;
 var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",200);
 var url=getActionToDoURL();
 dhtmlxCombo.loadXML(url);
-dhtmlxCombo.enableFilteringMode(true);
+//dhtmlxCombo.enableFilteringMode(true);
 dhtmlxCombo.attachEvent("onOpen", 
 function(){
 	reloadGrid=false;
