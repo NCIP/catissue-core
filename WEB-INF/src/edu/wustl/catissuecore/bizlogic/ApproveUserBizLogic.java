@@ -202,8 +202,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
         SecurityManagerFactory.getSecurityManager().createUser(csmUser);
         decideRole(csmUser, user);
         user.setCsmUserId(csmUser.getUserId());
-        String userToken=UniqueIDGenerator.getUniqueID();
-		user.setForgotPasswordToken(userToken);
+        
         final Password password = new Password(PasswordManager.encrypt(generatedPassword), user);
         user.getPasswordCollection().add(password);
         logger.debug("password stored in passwore table");

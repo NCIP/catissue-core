@@ -256,6 +256,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			 * First time login is always set to true when a new user is created
 			 */
 			user.setFirstTimeLogin(Boolean.TRUE);
+			String userToken=UniqueIDGenerator.getUniqueID();
+		    user.setForgotPasswordToken(userToken);
 
 			// Create address and the user in catissue tables.
 			dao.insert(user.getAddress());
