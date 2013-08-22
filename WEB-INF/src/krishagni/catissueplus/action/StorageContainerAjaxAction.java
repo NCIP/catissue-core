@@ -12,6 +12,7 @@ import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerUtilizationDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerViewDTO;
+import krishagni.catissueplus.scheduler.ContainerSpecimenCountJob;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -27,6 +28,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 
@@ -121,13 +123,14 @@ public class StorageContainerAjaxAction extends DispatchAction
      * @throws SQLException 
      * @throws JSONException 
      */
-    public ActionForward getStorageContainerSpecCountDataForGraph(ActionMapping mapping, ActionForm form,
+    public ActionForward getStorageContainerDataForGraph(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws IOException, ApplicationException,
             SQLException, JSONException
     {
         HibernateDAO hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
 
         String siteName = request.getParameter(Constants.SITE_NAME);
+        String type =  request.getParameter("graphType");
 
         ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList = new StorageContainerBizlogic()
                 .getStorageContainerUtilizationDetailsDTOList(hibernateDAO, siteName);
@@ -135,23 +138,27 @@ public class StorageContainerAjaxAction extends DispatchAction
         AppUtility.closeDAOSession(hibernateDAO);
 
         response.setContentType("application/json");
-        response.getWriter().write(
-                getJSONFromStorageContainerUtilizationDetailsDTOList(storageContainerUtilizationDetailsDTOList));
+        
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",  getJSONFromStorageContainerUtilizationDetailsDTOList(storageContainerUtilizationDetailsDTOList,type));
+        jsonObject.put("redLineValue", XMLPropertyHandler.getValue(Constants.RED_LINE_VALUE));
+        response.getWriter().write(jsonObject.toString());
 
         return null;
     }
-
-    /**
+    
+       /**
      * Returns JSON string for storageContainerUtilizationDetailsDTOList
      * @param storageContainerUtilizationDetailsDTOList
      * @return
      * @throws JSONException 
      */
     private String getJSONFromStorageContainerUtilizationDetailsDTOList(
-            ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList)
+            ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList,String type)
             throws JSONException
     {
         JSONArray storageContainerSpecCountGraphDataArray = new JSONArray();
+        
         for (StorageContainerUtilizationDetailsDTO storageContainerUtilizationDetailsDTO : storageContainerUtilizationDetailsDTOList)
         {
 
@@ -162,7 +169,7 @@ public class StorageContainerAjaxAction extends DispatchAction
             {
                 JSONArray jsonArrayForXYPoints = new JSONArray();
                 jsonArrayForXYPoints.put(storageContainerStoredSpecimenDetailsDTO.getDateOfSpecimenCount().getTime());
-                jsonArrayForXYPoints.put(storageContainerStoredSpecimenDetailsDTO.getSpecimenCount());
+                jsonArrayForXYPoints.put(type.equals("specimenCount")?storageContainerStoredSpecimenDetailsDTO.getSpecimenCount():storageContainerStoredSpecimenDetailsDTO.getPercentUtilization());
                 jsonArrayForData.put(jsonArrayForXYPoints);
             }
             JSONObject jsonObject = new JSONObject();
@@ -172,4 +179,5 @@ public class StorageContainerAjaxAction extends DispatchAction
         }
         return storageContainerSpecCountGraphDataArray.toString();
     }
+    
 }

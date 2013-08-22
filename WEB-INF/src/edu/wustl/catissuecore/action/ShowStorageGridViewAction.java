@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
+import krishagni.catissueplus.dao.StorageContainerDAO;
+import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerUtilizationDTO;
 
 import org.apache.struts.action.ActionError;
@@ -128,19 +130,14 @@ public class ShowStorageGridViewAction extends BaseAction
 
         StorageContainerUtilizationDTO storageContainerUtilizationDTO = new StorageContainerBizlogic()
 				.getStorageContainerUtilizationDTO(Long.valueOf(id), dao);
-
+        StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = (new StorageContainerDAO()).getUtilizationCountsOfContainerById(dao,Long.valueOf(id));
 		AppUtility.closeDAOSession(dao);
 
-        request.setAttribute(Constants.SPEC_COUNT, storageContainerUtilizationDTO.getNumberOfSpecimensAssigned());
+        request.setAttribute(Constants.SPEC_COUNT, storageContainerStoredSpecimenDetailsDTO.getSpecimenCount());
         request.setAttribute(Constants.CAPACITY, storageContainerUtilizationDTO.getTotalStorageCapacity());
 
-        Long utilizationPercentage = new Long(0);
-        if (storageContainerUtilizationDTO.getTotalStorageCapacity() > 0)
-        {
-            utilizationPercentage = Math.round(((storageContainerUtilizationDTO.getNumberOfSpecimensAssigned()
-                    .doubleValue() / storageContainerUtilizationDTO.getTotalStorageCapacity().doubleValue()) * 100));
-        }
-
+        Long utilizationPercentage =storageContainerStoredSpecimenDetailsDTO.getPercentUtilization();
+       
         request.setAttribute(Constants.PERCENTAGE, utilizationPercentage);
 
         request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, false);

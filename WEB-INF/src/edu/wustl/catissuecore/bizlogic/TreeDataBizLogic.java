@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -308,4 +310,40 @@ public class TreeDataBizLogic extends DefaultBizLogic
 		}
 		return resultList;
 	}
+	
+	/**
+     * This method will add all the node into the List that contains any
+     * container node and add a dummy container node to show [+] sign on the UI,
+     * so that on clicking expand sign ajax call will retrieve child container
+     * node under the site node.
+     * @param userId - user id
+     * @return List of sites with dummy container
+     * @throws ApplicationException
+     */
+    public boolean checkContainerCapacityAlert(Long containerId) throws ApplicationException
+    {
+        final String sql = "select spec.UTILIZATION_PERCENTAGE from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID= "+containerId+ 
+        		" and spec.DATE = (select MAX(DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID="+containerId+ ")";
+        boolean result = false;
+        try
+        {
+            final List resultList = AppUtility.executeSQLQuery(sql);
+            final Iterator iterator = resultList.iterator();
+            if(iterator.hasNext())
+            {
+                final List rowList = (List) iterator.next();
+                result =( Long.valueOf((String) rowList.get(0))> Long.valueOf(XMLPropertyHandler.getValue(Constants.RED_LINE_VALUE)));
+            }
+        }
+        catch (final DAOException daoExp)
+        {
+            this.logger.error(daoExp.getMessage(), daoExp);
+            daoExp.printStackTrace();
+            throw this
+                    .getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+        }
+        return result;
+    }
+
+	
 }

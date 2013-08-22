@@ -336,7 +336,12 @@
 		<name>SPRThreshold2</name>
 		<value>0</value>
 	</property>
-	
+
+	<property>
+		<name>graph.red.line.value</name>
+		<value>90</value>
+	</property>
+
 	<property>
 		<name>spr.dir.location</name>
 		<value>@@spr.dir.location@@</value>

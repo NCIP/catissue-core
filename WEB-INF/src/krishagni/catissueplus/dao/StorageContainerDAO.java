@@ -160,9 +160,10 @@ public class StorageContainerDAO
     {
         Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
         params.put("1", new NamedQueryParam(DBTypes.LONG, containerId));
-        ResultSet resultSet = hibernateDAO.executeNamedSQLQuery("getStorContSpecCountDataById", params);
 
         ArrayList<StorageContainerStoredSpecimenDetailsDTO> storageContainerStoredSpecimenDetailsDTOList = new ArrayList<StorageContainerStoredSpecimenDetailsDTO>();
+
+        ResultSet resultSet = hibernateDAO.executeNamedSQLQuery("getStorContSpecCountDataById", params);
 
         while (resultSet.next())
         {
@@ -170,9 +171,39 @@ public class StorageContainerDAO
             StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = new StorageContainerStoredSpecimenDetailsDTO();
             storageContainerStoredSpecimenDetailsDTO.setDateOfSpecimenCount(resultSet.getDate(1));
             storageContainerStoredSpecimenDetailsDTO.setSpecimenCount(resultSet.getInt(2));
+            storageContainerStoredSpecimenDetailsDTO.setPercentUtilization(resultSet.getInt(3));
             storageContainerStoredSpecimenDetailsDTOList.add(storageContainerStoredSpecimenDetailsDTO);
         }
         return storageContainerStoredSpecimenDetailsDTOList;
+
+    }
+
+    /**
+     * Returns StorageContainerStoredSpecimenDetailsDTOList by STORAGE_CONTAINER_ID
+     * @param hibernateDAO
+     * @param containerId
+     * @return
+     * @throws DAOException
+     * @throws SQLException
+     */
+    public StorageContainerStoredSpecimenDetailsDTO getUtilizationCountsOfContainerById(HibernateDAO hibernateDAO,
+            Long containerId) throws DAOException, SQLException
+    {
+        StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = new StorageContainerStoredSpecimenDetailsDTO();
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("1", new NamedQueryParam(DBTypes.LONG, containerId));
+        params.put("2", new NamedQueryParam(DBTypes.LONG, containerId));
+
+        ResultSet resultSet = hibernateDAO.executeNamedSQLQuery("getUtilizationCountsOfContainerById", params);
+
+        while (resultSet.next())
+        {
+            storageContainerStoredSpecimenDetailsDTO.setPercentUtilization(resultSet.getLong(1));
+            storageContainerStoredSpecimenDetailsDTO.setSpecimenCount(resultSet.getInt(2));
+
+        }
+
+        return storageContainerStoredSpecimenDetailsDTO;
 
     }
 

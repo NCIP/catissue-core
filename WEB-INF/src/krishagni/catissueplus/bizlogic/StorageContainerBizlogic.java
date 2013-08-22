@@ -638,7 +638,11 @@ public class StorageContainerBizlogic
             specimenPosition.setPositionDimensionTwo(pos2Integer);
 
         }
-
+        if(specimenPosition==null){
+            throw new CatissueException(String.format(
+                    SpecimenErrorCodeEnum.POSITION_ALREADY_OCCUPIED.getDescription(), containerName, pos1, pos2),
+                    SpecimenErrorCodeEnum.POSITION_ALREADY_OCCUPIED.getCode());
+        }
         StorageContainer sContainer = new StorageContainer();
         sContainer.setId(containerId);
         sContainer.setName(containerName);

@@ -138,7 +138,11 @@
 			if(childList[3] == "Closed") {
 				tree.insertNewChild(childList[2],childList[4],childList[4],0,"redbox.gif","redbox.gif","redbox.gif","");
 			} else {
+				if(childList[7]=="false"){
 				tree.insertNewChild(childList[2],childList[4],childList[4],0,"bluebox.gif","bluebox.gif","bluebox.gif","");
+				}else{
+				tree.insertNewChild(childList[2],childList[4],"<span title='This container is running out of space.'>"+childList[4]+"</span>",0,"alert.png","alert.png","alert.png","");
+				}
 			}
 			tree.setUserData(childList[4],'nodeId',childList[0]);	
 			tree.setUserData(childList[4],'activityStatus',childList[3]);

@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.tree.TreeNodeImpl;
 
 /**
@@ -79,11 +80,13 @@ public class ShowChildNodes extends BaseAction
 	 *            This is a string buffer and have all the information of the
 	 *            node that is to be transfered to jsp.
 	 * @return xmlData
+	 * @throws ApplicationException 
 	 */
 	private StringBuffer makeXMLData(List<StorageContainerTreeNode> childVector,
-			StringBuffer xmlData)
+			StringBuffer xmlData) throws ApplicationException
 	{
 		final Iterator<StorageContainerTreeNode> childItr = childVector.iterator();
+		TreeDataBizLogic treeDataBizLogic = new TreeDataBizLogic();
 		while (childItr.hasNext())
 		{
 			final StorageContainerTreeNode childNode = childItr.next();
@@ -98,7 +101,12 @@ public class ShowChildNodes extends BaseAction
 			xmlData.append(childNode.getValue());
 			xmlData.append("~");
 			xmlData.append(childNode.getChildNodes());
-			xmlData.append("#");
+			xmlData.append("~");
+			xmlData.append(childNode.getChildNodes());
+			xmlData.append("~");
+            xmlData.append(treeDataBizLogic.checkContainerCapacityAlert(childNode.getIdentifier()));
+			
+            xmlData.append("#");
 		}
 		return xmlData;
 	}
