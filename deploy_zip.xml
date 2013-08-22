@@ -4528,9 +4528,9 @@
 			  </if>
 			</sequential>
 		</for>
-		<copy todir="custom-report.script.dir" overwrite="true">
+		<copy todir="${custom-report.script.dir}" overwrite="true">
 			<fileset dir="${basedir}/modules/report_scripts">
-				<include name="**/*" />
+				<exclude name="load_reports.csv" />
 			</fileset>
 		</copy>
 	</target>	
