@@ -37,6 +37,7 @@
 	<!--Vivek:define require dir and properties for BO-->
 	<property name="bulkoperation.csv.dir" value="${base.dir}/modules/bulk_operations_upload" />
 	<property name="bulkoperation.parameters.csv.file" value="load_bulkoperations_list.csv" />
+	<property name="default.reports.parameter.file" value="${base.dir}/modules/report_scripts/load_reports.csv" />
 	<property name="bo.csv.dir" value="${base.dir}/modules/bulk_operations_upload/csv"/>
 	<property name="bo.xml.dir" value="${base.dir}/modules/bulk_operations_upload/xml"/>
 	
@@ -4455,7 +4456,84 @@
 		<echo message="---------------------------------------------------" />		
 
 	</target>
-	
+
+	<loadfile property="report_file" srcFile="${default.reports.parameter.file}"/> 
+	<target name="load_default_reports">	
+		<for param="line" list="${report_file}" delimiter="${line.separator}">
+			<sequential>
+				<propertyregex property="arg1"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
+					select="\1"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg2"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
+					select="\2"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg3"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
+					select="\3"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg4"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
+					select="\4"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg5"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?),(.*?),(.+)"
+					select="\5"
+					casesensitive="false" 
+					override = "true"/>
+				<if>	
+					<equals arg1="mysql" arg2="${database.type}" />
+						<then>
+							<echo message="${arg4}${arg5}" />
+							<sql driver="${mysql.driver.string}" 
+							url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
+							userid="${database.username}" 
+							password="${database.password}" onerror="continue">
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+							insert into report_details(CS_ID,REPORT_GENERATOR,REPORT_TYPE,REPORT_NAME,USER_ID) values(${arg1},'${arg2}','${arg3}','${arg4}',${arg5});
+							</sql>	
+						</then>
+						
+					<elseif >
+					<equals arg1="oracle" arg2="${database.type}" />
+						<then>					
+							<sql driver="${oracle.driver.string}"
+							url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+							userid="${database.username}"
+							password="${database.password}"
+							rdbms="oracle" onerror="continue">
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+							insert into labelsql values(REPORT_DETAILS_SEQ.NEXTVAL,${arg1},'${arg2}','${arg3}','${arg4}',${arg5});
+							</sql>
+						</then>
+					</elseif>
+			  </if>
+			</sequential>
+		</for>
+		<copy todir="custom-report.script.dir" overwrite="true">
+			<fileset dir="${basedir}/modules/report_scripts">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>	
 	<!--Vivek: target to insert dashboard queries-->
 	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}"/> 
 	<target name="insert_dashboard_queries">	
@@ -5560,6 +5638,7 @@
 	<target name="upgrade_db_plusv3.1">
 						<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 						<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v31.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+						<antcall target="load_default_reports" />
 	</target>
 	<target name="update_protection_element">
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
