@@ -1,4 +1,5 @@
 /**
+
  * <p>Title: CollectionProtocol Class</p>
  * <p>Description:  A set of written procedures that describe how a biospecimen is prospectively collected.</p>
  * Copyright:    Copyright (c) year
@@ -147,6 +148,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	protected Collection<LabelSQLAssociation> labelSQLAssociationCollection;
 
+	protected String defaultReportSendTo="PI_AND_COORDINATORS";
 	/**
 	 * @return the unsignedConsentDocumentURL
 	 * @hibernate.property name="unsignedConsentDocumentURL" type="string"
@@ -424,6 +426,7 @@ public class CollectionProtocol extends SpecimenProtocol
 				}
 			}
 			this.aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
+			this.defaultReportSendTo=cpForm.getDefaultReportSetTo();
 			final Map map = cpForm.getValues();
 
 			/**
@@ -833,4 +836,18 @@ public class CollectionProtocol extends SpecimenProtocol
 	{
 		this.labelSQLAssociationCollection = labelSQLAssociationCollection;
 	}
+
+	
+	public String getDefaultReportSetTo()
+	{
+		return defaultReportSendTo;
+	}
+
+	
+	public void setDefaultReportSetTo(String defaultReportSetTo)
+	{
+		this.defaultReportSendTo = defaultReportSetTo;
+	}
+	
+	
 }

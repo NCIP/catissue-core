@@ -85,7 +85,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	private String dashboardLabelJsonValue;
 
-
+	private String defaultReportSendTo="PI_AND_COORDINATORS";
 	/** Name: Amol Pujari */
 	/** empi  */
 
@@ -769,5 +769,17 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.dashboardLabelJsonValue = dashboardLabelJsonValue;
 	}
 
+	
+	public String getDefaultReportSetTo()
+	{
+		return defaultReportSendTo;
+	}
+
+	
+	public void setDefaultReportSetTo(String defaultReportSetTo)
+	{
+		this.defaultReportSendTo = defaultReportSetTo;
+	}
+	
 
 }

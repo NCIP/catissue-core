@@ -98,6 +98,7 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setDerivativeLabelFormat(cpForm.getDerivativeLabelFormat());
 		cpBean.setAliquotLabelFormat(cpForm.getAliquotLabelFormat());
 		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
+		cpBean.setDefaultReportSetTo(cpForm.getDefaultReportSetTo());
 		/** Name:Amol */
 		cpBean.setIsEMPIEnable(cpForm.getIsEMPIEnable());
 		//For Consent Tab

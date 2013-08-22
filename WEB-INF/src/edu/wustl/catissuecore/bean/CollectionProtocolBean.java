@@ -207,6 +207,7 @@ public class CollectionProtocolBean implements Serializable
 	/** operation. */
 	private String operation = "Add";
 
+	private String defaultReportSendTo="PI_AND_COORDINATORS";
 	/**
 	 * Gets the coordinator ids.
 	 *
@@ -735,4 +736,16 @@ public class CollectionProtocolBean implements Serializable
 		this.dashboardLabelJsonValue = dashboardLabelJsonValue;
 	}
 
+	
+	public String getDefaultReportSetTo()
+	{
+		return defaultReportSendTo;
+	}
+
+	
+	public void setDefaultReportSetTo(String defaultReportSetTo)
+	{
+		this.defaultReportSendTo = defaultReportSetTo;
+	}
+	
 }
