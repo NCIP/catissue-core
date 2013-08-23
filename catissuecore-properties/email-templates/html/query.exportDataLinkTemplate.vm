@@ -1,0 +1,17 @@
+Hello $user.lastName, $user.firstName<br>
+<br>
+Export details :
+<br>
+#foreach($subData in $queryInfo)
+#foreach($data in $subData)    
+$data<br>
+#end
+#end
+<br>
+Please click on below link to download exported data :	
+<br>
+<a href=$appUrl/ShowQueryDashboardAction.do?fileName=$fileName>$appUrl/ShowQueryDashboardAction.do?fileName=$fileName</a> 
+<br>
+<br>
+$footer	
+	 

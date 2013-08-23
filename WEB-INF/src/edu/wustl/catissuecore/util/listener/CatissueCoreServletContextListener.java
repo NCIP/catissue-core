@@ -74,6 +74,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.DAOUtility;
+import edu.wustl.query.bizlogic.QueryDataExportService;
 import edu.wustl.query.util.listener.QueryCoreServletContextListenerUtil;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
@@ -142,8 +143,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              * 	Details: Quartz Scheduler for executing nightly cron jobs
              *  Added By: Ashraf
              */
+			
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
-
+            QueryDataExportService.getInstance();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)

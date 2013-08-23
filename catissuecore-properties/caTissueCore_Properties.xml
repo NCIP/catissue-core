@@ -674,6 +674,11 @@
 		<value>10000</value>
 	</property>
 
+	<property>
+		<name>export.threadPool.size</name>
+		<value>5</value>
+	</property>
+
 <!--  Added for EMPI integration -->
 	<property>
 		<name>empi.Enabled</name>
