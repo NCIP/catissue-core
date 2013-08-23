@@ -58,11 +58,12 @@ function setCustomListBoxValue(elementId,elementValue)
 	}
 }
 
-function addTransferEvent(contName,pos1,pos2)
+function addTransferEvent(pagOf,contName,pos1,pos2)
 {
 	var speCollStat = '${sessionScope.specCollStatus}';
 	
-	//alert(dhtmlxCombo.getActualValue());
+	
+	
 	if(speCollStat != null && speCollStat != "" )
 	{
 		if(speCollStat == 'Collected')
@@ -73,6 +74,10 @@ function addTransferEvent(contName,pos1,pos2)
 		{
 			updatePosition(contName,pos1,pos2);
 		}
+	}
+	if("pageOfSpecimen" == pagOf)
+	{
+		updatePosition(contName,pos1,pos2);
 	}
 }
 function transferSpecimen(contName,pos1,pos2)
@@ -163,8 +168,7 @@ function updatePosition(containerName,pos1,pos2)
 		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
 		storagePosition.value=newStoragePosition;
 		storagePosition.title=newStoragePosition;
-		var isVirtual=parent.opener.document.getElementById('isVirtual');
-		isVirtual.value=false;
+		
 		var container = parent.opener.document.getElementById('containerName');
 		var position1= parent.opener.document.getElementById('pos1');
 		var position2= parent.opener.document.getElementById('pos2');
@@ -173,11 +177,9 @@ function updatePosition(containerName,pos1,pos2)
 		position1.value = pos1;
 		position2.value= pos2;
 		var isVirtual = parent.opener.document.getElementById('isVirtual');
-		
 		if(isVirtual != null)
 		{
 			isVirtual.value="false";
-			
 		}
 		top.window.close();
 }
