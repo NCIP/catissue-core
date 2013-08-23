@@ -430,17 +430,25 @@
 									
 								</logic:equal>
 								<logic:equal name="operation" value="add">
-									<input type="button" class="blue_ar_b" value="Select Container" onclick="loadDHTMLXWindowForTransferEvent()" />
+								<a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
+							<img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
+									
 								</logic:equal>
 								<logic:equal name="operation" value="edit">
 								<logic:equal name="specimenDTO" property="collectionStatus" value="Collected">
-									<input type="button" class="blue_ar_b" value="Edit" onclick="loadDHTMLXWindowForTransferEvent()" />
+									<a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
+							<img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
 								</logic:equal>
 								</logic:equal>
 								<logic:equal name="specimenDTO" property="collectionStatus" value="Pending">
-									<input type="button" class="blue_ar_b" value="Select Container" onclick="loadDHTMLXWindowForTransferEvent()" />
+									<a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
+							<img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
 								</logic:equal>
-								
+								<span style="left-padding:5px">
+								<a href="#" onclick="javascript:openViewMap();return false">
+			<img src="images/uIEnhancementImages/Tree.gif" border="0" width="16" height="16" style="vertical-align: bottom" title="select positions from hierarchical view"/>
+		</a>
+								</span>
 								<html:hidden name="specimenDTO" property="isVirtual" styleId="isVirtual"/>
 								<html:hidden name="specimenDTO" property="containerName" styleId="containerName"/>
 								<html:hidden name="specimenDTO" property="pos1" styleId="pos1"/>
@@ -751,6 +759,14 @@ function chkeEmptyNumber(obj)
 	{
 		obj.value=0;
 	}
+}
+function openViewMap()
+{
+var className=classNameCombo.getSelectedText();
+	var sptype=typeCombo.getSelectedText();
+	var frameUrl="ShowFramedPage.do?pageOf=pageOfEditSpecimen&selectedContainerName=containerName&pos1=pos1&pos2=pos2&containerId=containerId"
+						+ "&holdSpecimenClass="+className+ "&holdSpecimenType="+sptype	+ "&holdCollectionProtocol=${requestScope.cpId}&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>";
+		mapButtonClickedOnSpecimen(frameUrl,'SpecimenPage',"containerName");
 }
 </script>
 </body>
