@@ -83,8 +83,7 @@ function createAliquote()
 }*/
 if(isSubmit)
 {
-	action = "CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&specimenLabel="+label+"&requestFrom=participantView&parentSpecimenId="+specimenId+"&noOfAliquotes="+noOfAliquotes+
-	"&quantityperAliquote="+quantity+"&CPQuery=CPQuery";
+	action = 'GetAliquotDetails.do?pageOf=fromSpecimen&parentSpecimentLabel='+label+"&aliquotCount="+noOfAliquotes+"&quantityPerAliquot="+quantity+"&searchBasedOn=label";
 }
 
  window.parent.frames[1].location=action;
