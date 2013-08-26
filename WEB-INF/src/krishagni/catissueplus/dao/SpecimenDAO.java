@@ -182,8 +182,8 @@ public class SpecimenDAO
 			throws DAOException
 	{
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		substParams.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
-		substParams.put("1", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG, specimenId==null?0l:specimenId));
+		substParams.put("1", new NamedQueryParam(DBTypes.STRING, specimenLabel==null?"":specimenLabel));
 		substParams.put("2", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
 
 		List siteList = hibernateDAO.executeNamedQuery("getSiteIdFromContainer", substParams);

@@ -961,7 +961,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						.getCollectionProcedure();
 				final List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-				if (!Validator.isEnumeratedValue(procedureList, procedure))
+				if (!Validator.isEnumeratedValue(procedureList, procedure) && !Constants.CP_DEFAULT.equals(procedure))
 				{
 					throw this.getBizLogicException(null, "events.collectionProcedure.errMsg", "");
 				}
@@ -970,7 +970,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						.getContainer();
 				final List containerList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_CONTAINER, null);
-				if (!Validator.isEnumeratedOrNullValue(containerList, container))
+				if (!Validator.isEnumeratedOrNullValue(containerList, container) && !Constants.CP_DEFAULT.equals(container))
 				{
 					throw this.getBizLogicException(null, "events.container.errMsg", "");
 				}
@@ -1028,7 +1028,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						.getReceivedQuality();
 				final List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_RECEIVED_QUALITY, null);
-				if (!Validator.isEnumeratedValue(qualityList, quality))
+				if (!Validator.isEnumeratedValue(qualityList, quality) && !Constants.CP_DEFAULT.equals(quality))
 				{
 
 					throw this.getBizLogicException(null, "events.receivedQuality.errMsg", "");

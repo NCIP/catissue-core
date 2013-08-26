@@ -685,7 +685,7 @@ public class SpecimenBizLogic
 		return getSpecimenDTOFromSpecimen(specimen);
 	}
 
-	private Collection<ConsentTierStatus> setConsentTierStatus(Specimen specimen,
+	private void setConsentTierStatus(Specimen specimen,
 			Collection<ConsentTierStatus> consentTierStatusCollection)
 	{
 		Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = null;
@@ -701,8 +701,9 @@ public class SpecimenBizLogic
 				consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
 				consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
 			}
+			specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
 		}
-		return consentTierStatusCollectionForSpecimen;
+
 	}
 
 	private boolean isAuthorizedForSpecimenProcessing(HibernateDAO hibernateDao, SpecimenDTO specimenDTO,
@@ -828,6 +829,7 @@ public class SpecimenBizLogic
 			specimenCharacteristics.setTissueSite(specimenDTO.getTissueSite());
 			specimen.setSpecimenCharacteristics(specimenCharacteristics);
 			specimen.setBiohazardCollection(getBiohazardCollection(specimenDTO.getBioHazards()));
+			specimen.setConsentTierStatusCollectionFromSCG(collectionGroup);
 		}
 		specimen.setSpecimenClass(specimenDTO.getClassName());
 		specimen.setSpecimenType(specimenDTO.getType());
