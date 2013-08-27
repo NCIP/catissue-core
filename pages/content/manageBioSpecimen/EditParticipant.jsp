@@ -214,9 +214,7 @@
 		
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 		<tr><td>
-		<logic:equal name="operation" value="edit">
-			<div id="participant_tabbar" style="width:100%; height:97%;position:absolute;"/>
-		</logic:equal>
+		<div id="participant_tabbar" style="width:100%; height:97%;position:absolute;"/>
 		<div id='showParticipantDiv' style="overflow:auto;height:100%">	
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
 				class="whitetable_bg" >
