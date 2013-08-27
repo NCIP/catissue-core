@@ -233,7 +233,7 @@ function initPrepareSpecimenType()
 							<td align="left">
 							<input type="text" name="createdOn" class="black_ar"
 									   id="createdOn" size="10" onclick="doInitCalendar('createdOn',false,'${uiDatePattern}');" onblur="processDeriveData(this)" value='<fmt:formatDate value="${deriveDTO.createdOn}" pattern="${datePattern}" />'/>
-									 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+									 <span id="dateId" class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 							</td>
 							<td colspan="2"align="left">&nbsp;</td>
 					</tr>
