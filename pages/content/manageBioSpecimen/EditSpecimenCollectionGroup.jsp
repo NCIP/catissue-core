@@ -147,7 +147,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 								${CollectionEventPointLabel}
 							</c:when>
 							<c:otherwise>
-								<html:select property="collectionProtocolEventId" styleClass="formFieldSizedSCG" styleId="collectionProtocolEventId" size="1" 
+								<html:select property="collectionProtocolEventId" styleClass="black_ar" styleId="collectionProtocolEventId" size="1" 
 								>
 								<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
 								</html:select>&nbsp;
