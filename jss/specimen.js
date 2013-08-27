@@ -973,7 +973,31 @@ function isDate(dtStr){
 		return false;
 	}
 }
-
+function validateAliqDate(dt)
+{
+var datefmt = document.getElementById('dateId').innerHTML;
+if(datefmt.trim().toUpperCase() == '[dd-MM-yyyy]'.toUpperCase() || datefmt.trim().toUpperCase() == '[dd/MM/yyyy]'.toUpperCase())
+{
+	if (validateddmmyyyydate(dt)==false){
+		dt.focus();
+		dt.className += " errorStyleOn";
+		aliquotDateErr = true;
+		return false;
+	}
+}
+if(datefmt.trim().toUpperCase() == '[MM-DD-YYYY]'.toUpperCase() || datefmt.trim().toUpperCase() == '[MM/DD/YYYY]'.toUpperCase())
+{
+	if (validatemmddyyyydate(dt)==false){
+		dt.focus();
+		dt.className += " errorStyleOn";
+		aliquotDateErr = true;
+		return false;
+	}
+}
+aliquotDateErr = false;
+dt.className = dt.className.replace(/errorStyleOn/g,"");
+ //   return true;
+}
 function validateDate(dt){
 var datefmt = document.getElementById('dateId').innerHTML;
 if(datefmt.trim().toUpperCase() == '[dd-MM-yyyy]'.toUpperCase() || datefmt.trim().toUpperCase() == '[dd/MM/yyyy]'.toUpperCase())

@@ -37,6 +37,7 @@
 <script language="JavaScript" type="text/javascript"	src="jss/script.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/common.js"></script>
 <script type="text/javascript" src="jss/tag-popup.js"></script>
+<script type="text/javascript" src="jss/specimen.js"></script>
 
 
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
@@ -58,6 +59,7 @@ ul li ul li a span {
 -->
 </STYLE> 
 <script>
+		var aliquotDateErr = false;
 		var aliquotGrid;
 		var aliquotPopUpParam = {};
 		var aliquotNameSpace = {};
@@ -332,6 +334,15 @@ function getJsonFromGrid(){
 	return aliquotArray;
 }
 function onResubmit(validated,label){
+	if(aliquotDateErr)
+	{
+		var msg="Unable to submit. Please resolve higlighted issue(s).";
+		document.getElementById('errorMsg').innerHTML = msg;
+		document.getElementById('error').style.display="block";
+		return;
+	}
+	
+		document.getElementById('error').style.display="none";
 	var aliquotCount = document.getElementById("noOfAliquots").value;
 	var quantityPerAliquot = document.getElementById("quantityPerAliquot").value;
 	var specimenLabel = document.getElementById("parentSpecimentLabel").value;
@@ -537,8 +548,8 @@ function giveCall(url,msg,msg1,id)
 			<div  style="float:left;width:23%;">
 				<div  class="aliquot_details aliquot_details_spacing">
 					<div>
-					<input type="text" size="10" id="creationDate" name = "creationDate" class="black_ar"  value='<fmt:formatDate value="${creationDate}" pattern="${datePattern}" />' onclick="doInitCalendar('creationDate',false,'${uiDatePattern}');" />
-					<span class="capitalized  grey_ar_s" > [<bean:message key="date.pattern" />]</span>&nbsp;
+					<input type="text" size="10" id="creationDate" name = "creationDate" class="black_ar"  onblur="validateAliqDate(this)" value='<fmt:formatDate value="${creationDate}" pattern="${datePattern}" />' onclick="doInitCalendar('creationDate',false,'${uiDatePattern}');" />
+					<span id="dateId" class="capitalized  grey_ar_s" > [<bean:message key="date.pattern" />]</span>&nbsp;
 					</div>
 				</div>
 				<div  class="aliquot_details aliquot_details_spacing">
