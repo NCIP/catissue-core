@@ -217,8 +217,10 @@
 		  }
 		}
 		
-			function loadParticipantTabbar()
+			function loadParticipantTabbar(operation)
 			{
+			    if(operation=='edit')
+			    {	
 				participantTabbar = new dhtmlXTabBar("participant_tabbar", "top",25);
 				participantTabbar.setSkin('default');
 				participantTabbar.setImagePath("dhtmlx_suite/imgs/");
@@ -235,5 +237,6 @@
 				participantTabbar.setContentHref("annotationTab", showAnnotationTab);  
 				participantTabbar.setContentHref("consentsTab", showConsentsTab); 
 				participantTabbar.setTabActive("editParticipantTab");
+			     }	
 			}
 			
