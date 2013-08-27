@@ -414,14 +414,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 			specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot());
 
-		   if(deriveSpecimenBean.getRequirementLabel()!=null && !deriveSpecimenBean.getRequirementLabel().isEmpty())
-		   {	   
-			 specimenRequirementBean.setSpecimenRequirementLabel(deriveSpecimenBean.getRequirementLabel());
-		   }
-		   else
-		   {
-			 specimenRequirementBean.setSpecimenRequirementLabel(createSpecimenTemplateForm.getSpecimenReqTitle());
-		   }			
+ 		    specimenRequirementBean.setSpecimenRequirementLabel(deriveSpecimenBean.getRequirementLabel());
 			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
 					+ Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + deriveSpecimenCount);
 			specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
