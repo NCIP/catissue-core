@@ -60,7 +60,7 @@
 							  day='${requestScope.eventParametersDay}'
 							  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 							  value='${requestScope.currentEventParametersDate}'
-			  styleClass="black_ar" size="5" />
+			 				  styleClass="black_ar"/>
 </logic:notEmpty>
 <logic:empty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
