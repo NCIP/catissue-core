@@ -74,10 +74,8 @@ public class DisplaySCGAction extends Action
 				List<NameValueBean> sitelist = new SiteBizLogic().getSiteList(dao);
 
 				//setUserList
-				List<UserNameIdDTO> userList = new UserBizLogic().getUserList(dao);
-				List<NameValueBean> userNVBList = getUserNVBList(userList);
 				request.setAttribute("siteList", sitelist);
-				request.setAttribute("userList", userNVBList);
+				request.setAttribute("userList", new UserBizLogic().getUsers("edit"));
 				//sethoursList
 				request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 				//setMinList
@@ -101,19 +99,5 @@ public class DisplaySCGAction extends Action
 		return mapping.findForward(target);
 	}
 
-	private List<NameValueBean> getUserNVBList(List<UserNameIdDTO> userList)
-	{
-		List<NameValueBean> beanlist = new ArrayList<NameValueBean>();
-
-		for (UserNameIdDTO dto : userList)
-		{
-			NameValueBean nvBean = new NameValueBean();
-			StringBuffer name = new StringBuffer();
-			nvBean.setName(name.append(dto.getFirstName()).append(",").append(dto.getLastName()));
-			nvBean.setValue(dto.getUserId());
-			beanlist.add(nvBean);
-		}
-		return beanlist;
-	}
 
 }
