@@ -161,13 +161,8 @@ function doOnLoad()
 	
        siteDropDownInfo = {propertyId:'defaultSiteId',gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady,visibilityStatusVariable:dsGridVisible};
 	dsGrid = initDropDownGrid(siteDropDownInfo,true); //initialize DropDown control for Site List
-if('${requestScope.isPersistent}' != 'true')
-{
         clinicalStatusDropDownInfo = {propertyId:'clinicalStatus',gridObj:"clinicalStatusGrid", gridDiv:"clinicalStatusDiv", dropDownId:"clinicalStatusDropDown", pagingArea:"csPagingArea", infoArea:"csInfoArea", onOptionSelect:clinicalStatusOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getClinicalStatusList", callBackAction:onClinicalStatusListReady,visibilityStatusVariable:csGridVisible};
 	csGrid = initDropDownGrid(clinicalStatusDropDownInfo,true); //initialize DropDown control for Clinical Status List
-}
-
-	
 	//If user creating Duplicate event
 	if('${requestScope.setFocus}'=="true"){
 			document.getElementById("collectionPointLabel").focus();}

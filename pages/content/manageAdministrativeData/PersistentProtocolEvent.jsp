@@ -22,15 +22,7 @@
 				 <tr>
 					<td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" />
 					<td width="22%" align="left" class="black_ar"><bean:message key="collectionprotocol.studycalendartitle" />
-						<logic:equal name="isPersistent" value="true">
-							<td width="22%" align="left" class="black_ar">
-								<label>
-									${protocolEventDetailsForm.studyCalendarEventPoint}
-								</label>
-							</td>
-						</logic:equal>
-						<logic:notEqual name="isPersistent" value="true">
-							<td width="77%" align="left">
+						<td width="77%" align="left">
 								<label>
 									<html:text styleClass="black_ar_s" size="12" styleId="studyCalendarEventPoint"  maxlength="10" property="studyCalendarEventPoint" />&nbsp;
 									<span class="grey_ar">
@@ -38,54 +30,27 @@
 									</span>
 								</label>
 							</td>
-						</logic:notEqual>
 					</tr>
 					<tr>
 						<td align="center" class="black_ar">
 							<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 						<td align="left" class="black_ar"><bean:message key="collectionprotocol.collectionpointlabel" /></td>
-					
-							<logic:equal name="isPersistent" value="true">
-								<td width="22%" align="left" class="black_ar">
-									<label>
-										${protocolEventDetailsForm.collectionPointLabel}
-									</label>
-								</td>
-							</logic:equal>
-							<logic:notEqual name="isPersistent" value="true">
 								<td align="left"><html:text styleClass="black_ar" size="30" styleId="collectionPointLabel" maxlength="255"property="collectionPointLabel"/>
-							</logic:notEqual>
 		           </tr>
 			 
 				    <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
                         <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></td>
-							<logic:equal name="isPersistent" value="true">
-							<td width="22%" align="left" class="black_ar">									
-								<label>
-											${protocolEventDetailsForm.clinicalDiagnosis}
-									</label>
-								</td>
-							</logic:equal>
-							<logic:notEqual name="isPersistent" value="true">
 								<td align="left" class="black_ar">
 									<input property="clinicalDiagnosis" type="text" id="clinicaldiagnosis" name="clinicalDiagnosis" value="<%=request.getAttribute("clinicalDiagnosis")%>" onmouseover="showTip(this.id)"/>
 								</td>
-							</logic:notEqual>
+							
 					</tr>
 
                     <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.clinicalStatus"/></td>
-        					<logic:equal name="isPersistent" value="true">
-								<td width="22%" align="left" class="black_ar">
-									<label>
-											${protocolEventDetailsForm.clinicalStatus}
-									</label>
-								</td>
-							</logic:equal>
-							<logic:notEqual name="isPersistent" value="true">
-								<td align="left" class="black_ar">
+        							<td align="left" class="black_ar">
 								<html:hidden property="clinicalStatus"/>
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
@@ -120,7 +85,6 @@
 						</div>
 								
 								</td>
-							</logic:notEqual>
 		              </tr>
 					  
 				<tr>
