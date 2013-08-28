@@ -288,7 +288,7 @@
 								</td>
 								<td width="30%" class="black_ar" >
 								<input type="text" name="createdDate" class="black_ar"
-							       id="createdDate" size="10" onblur="processData(this)" onclick="doInitCalendar('createdDate',false,'${uiDatePattern}');" value='<fmt:formatDate value="${specimenDTO.createdDate}" pattern="${datePattern}" />'/>
+							       id="createdDate" size="10" onblur="processData(this)" value='<fmt:formatDate value="${specimenDTO.createdDate}" pattern="${datePattern}" />'/>
 							   	<span id="dateId" class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 								</td>
 							</tr>
@@ -692,7 +692,7 @@ var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 // alert(showViewSPRTab);
 
 setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}','${requestScope.operation}');
-
+doInitCal('createdDate',false,'${uiDatePattern}');
 var nodeId= "Specimen_"+document.getElementById("id").value;
 refreshTree(null,null,null,null,nodeId);
 				

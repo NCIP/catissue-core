@@ -367,7 +367,7 @@
 						<td>
 						<html:text property="birthDate" styleClass="black_ar"
 							styleId="birthDate" size="10"  
-							value="<%=currentBirthDate%>" onclick="doInitCalendar('birthDate',false,'${uiDatePattern}');" />
+							value="<%=currentBirthDate%>" />
 			
 			           <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 					</tr>
@@ -422,7 +422,7 @@
 													
 					    <html:text property="deathDate" styleClass="black_ar"
 							   styleId="deathDate" size="10" value="<%=currentDeathDate%>" 
-                               disabled="<%=deathDisable%>" onclick="doInitCalendar('deathDate',false,'${uiDatePattern}');" />								
+                               disabled="<%=deathDisable%>" />								
 					    <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
 					</tr>
 					</c:if>
@@ -669,7 +669,7 @@
 
 						<td valign="middle" class="black_ar"> 
 							<html:text property="registrationDate" styleClass="black_ar"
-							   styleId="registrationDate" size="10" onclick="doInitCalendar('registrationDate',false,'${uiDatePattern}');"/>	
+							   styleId="registrationDate" size="10"/>	
 							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
 						</td>
 						
@@ -918,4 +918,6 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations&cpId="+cpId+"&cprId="+cprId;
 	
 	var showConsentsTab="FetchConsents.do?consentLevelId="+cprId+"&consentLevel=participant&reportId=<%=reportId%>&pageof=<%=pageOf%>&participantEntityId=${particiapntRecordEntryEntityId}&participantId=${participantId}&cpId="+cpId;
+	doInitCal('birthDate',false,'${uiDatePattern}');doInitCal('deathDate',false,'${uiDatePattern}');
+	doInitCal('registrationDate',false,'${uiDatePattern}');
 </script>

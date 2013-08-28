@@ -570,7 +570,7 @@ public class ShowStorageGridViewAction extends BaseAction
 													storageContainerGridObject
 															.getTwoDimensionLabellingScheme(), j)
 											+ "\\\');\\ "
-									+"addTransferEvent(\\\'"+pageOf+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\";
+									+"addTransferEvent(\\\'"+pageOf+"\\\',\\\'"+storageContainerGridObject.getId()+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\";
 
 								}
 								value = value + "<img " + onClickEvent;
@@ -595,7 +595,7 @@ public class ShowStorageGridViewAction extends BaseAction
 									onClickEvent="onclick=\\\\\""+methodName+"(\\\'"+selectedContainerName+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
 											+"setTextBoxValue(\\\'"+pos1+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
 											+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
-											+"addTransferEvent(\\\'"+pageOf+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\";
+											+"addTransferEvent(\\\'"+pageOf+"\\\',\\\'"+storageContainerGridObject.getId()+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\";
 									
 								}
 								value = value+"<img " +onClickEvent;
