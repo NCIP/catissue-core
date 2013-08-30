@@ -85,4 +85,31 @@
 		<addAutoIncrement tableName="REPORT_DETAILS"
 			columnName="IDENTIFIER" columnDataType="${int.type}" />
 	</changeSet>
+	
+	
+
+<changeSet author="mosin" id="9">
+    <addNotNullConstraint 
+            columnDataType="${int.type}"
+            columnName="POSITION_DIMENSION_ONE"
+            defaultNullValue="0"
+            tableName="catissue_abstract_position"/>
+     <addNotNullConstraint 
+            columnDataType="${int.type}"
+            columnName="POSITION_DIMENSION_TWO"
+            defaultNullValue="0"
+            tableName="catissue_abstract_position"/>
+      <addNotNullConstraint 
+            columnDataType="${text.type}(20)"
+            columnName="POSITION_DIMENSION_ONE_STRING"
+            defaultNullValue=""
+            tableName="catissue_abstract_position"/>
+       <addNotNullConstraint 
+            columnDataType="${text.type}(20)"
+            columnName="POSITION_DIMENSION_TWO_STRING"
+            defaultNullValue=""
+            tableName="catissue_abstract_position"/>
+</changeSet>
+
+	
 </databaseChangeLog>         
