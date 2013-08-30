@@ -273,14 +273,18 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	{
 		final List<NameValueBean> reportIDList = new ArrayList<NameValueBean>();
 		Object[] obj = null;
+		String scgName;
+		NameValueBean nameValueBean ;
 		for (int i = 0; i < scgList.size(); i++)
 		{
 			obj = (Object[]) scgList.get(i);
 			if (obj[1] != null || (obj[1] != null && !((String) obj[1]).equals("")))
 			{
-				final NameValueBean nameValueBean = new NameValueBean(obj[1], ((Long) obj[2]).toString());
-				reportIDList.add(nameValueBean);
+				nameValueBean = new NameValueBean(obj[3]+" ("+obj[1]+")", ((Long) obj[2]).toString());
+			}else{
+			    nameValueBean = new NameValueBean(obj[3], ((Long) obj[2]).toString());
 			}
+			reportIDList.add(nameValueBean);
 		}
 		return reportIDList;
 	}
