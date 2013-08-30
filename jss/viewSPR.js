@@ -277,7 +277,8 @@ function ReplaceTags(xStr)
 		var actionURL;
 		var handlerFunction = getReadyStateHandler(request,setReport,true);	
 		request.onreadystatechange = handlerFunction;				
-		actionURL = "reportId="+document.getElementById('reportId').value;			
+		actionURL = "reportId="+document.getElementById('reportId').value;
+		document.getElementsByName("identifiedReportId")[0].value = document.getElementById('reportId').value;
 		var url = "FetchReport.do";
 		<!-- Open connection to servlet -->
 		request.open("POST",url,true);	

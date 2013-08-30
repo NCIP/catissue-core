@@ -87,7 +87,13 @@ public class SpecimenEditAction extends CatissueBaseAction
 						new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(identifier, hibernateDao));
 				request.setAttribute("isSpecimenBarcodeGeneratorAvl",
 						Variables.isSpecimenBarcodeGeneratorAvl);
+				boolean hasConsents = false;
+				if(specimen.getConsentTierStatusCollection()!=null && specimen.getConsentTierStatusCollection().size() >0){
+				    hasConsents = true;
+				}			
+				request.setAttribute("hasConsents", hasConsents);
 			}
+			
 			List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
 			specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,
 					Constants.SELECT_OPTION_VALUE));
@@ -167,6 +173,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 			request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
 			request.setAttribute("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
 			request.setAttribute(Constants.OPERATION, Constants.EDIT);
+			
 
 		}
 		finally

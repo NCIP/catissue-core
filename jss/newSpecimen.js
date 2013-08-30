@@ -276,6 +276,7 @@ function LoadSCGTabBar(oprationValue)
 
 function loadSpecimenTabbarForEdit()
 {
+	
 	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
 	specimenTabbar.setSkin('default');
 	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
@@ -283,18 +284,27 @@ function loadSpecimenTabbarForEdit()
 	
 	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
 	specimenTabbar.addTab("eventsTab",'<span style="font-size:13px"> Events </span>', "150px");
-	specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
-	
+	if(reportId != null && reportId != -1  && reportId != -2)
+	{
+		specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
+	}
 	specimenTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+	if(hasConsents){
 	specimenTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+	}
 	specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
 	
 	specimenTabbar.setHrefMode("iframes-on-demand");
 	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
 	specimenTabbar.setContentHref("eventsTab", showEventsTab);
-	specimenTabbar.setContentHref("reportsTab", showViewSPRTab);  
-	specimenTabbar.setContentHref("annotationTab", showAnnotationTab); 
+	if(reportId != null && reportId != -1  && reportId != -2)
+	{
+		specimenTabbar.setContentHref("reportsTab", showViewSPRTab);  
+	}
+	specimenTabbar.setContentHref("annotationTab", showAnnotationTab);
+if(hasConsents){	
 	specimenTabbar.setContentHref("consentsTab", showConsentsTab);  
+	}
 	specimenTabbar.setContentHref("imagesTab", showImagesTab);
 	specimenTabbar.setTabActive("specimenDetailsTab");
 }

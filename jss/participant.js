@@ -227,15 +227,26 @@
 				participantTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 
 				participantTabbar.addTab("editParticipantTab",'<span style="font-size:13px"> Edit Participant </span>', "150px");
-				participantTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
+				
+				if(reportId1 != null && reportId1 != -1  && reportId1 != -2)
+				{
+					participantTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
+				}
 				participantTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+				if(hasConsent){
 				participantTabbar.addTab("consentsTab",'<span style="font-size:13px"> Consents  </span>',"150px");
+				}
 
 				participantTabbar.setHrefMode("iframes-on-demand");
 				participantTabbar.setContent("editParticipantTab", "showParticipantDiv");
-				participantTabbar.setContentHref("reportsTab",showSPRTab);
+				if(reportId1 != null && reportId1 != -1  && reportId1 != -2)
+				{
+					participantTabbar.setContentHref("reportsTab",showSPRTab);
+				}
 				participantTabbar.setContentHref("annotationTab", showAnnotationTab);  
+				if(hasConsent){
 				participantTabbar.setContentHref("consentsTab", showConsentsTab); 
+				}
 				participantTabbar.setTabActive("editParticipantTab");
 			     }	
 			}

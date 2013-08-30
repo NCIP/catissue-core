@@ -467,12 +467,17 @@ function loadSCGTabbar()
 	scgTabbar.addTab("editSCGtab",'<span style="font-size:13px"> Edit SCG </span>', "150px");
 	scgTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
 	scgTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
-	scgTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+	if(hasConsents){
+		scgTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+	}
 
 	scgTabbar.setHrefMode("iframes-on-demand");
 	scgTabbar.setContent("editSCGtab", "SCGDiv");
 	scgTabbar.setContentHref("reportsTab",showViewSPRTab);
 	scgTabbar.setContentHref("annotationTab",showAnnotationTab);
-	scgTabbar.setContentHref("consentsTab",showConsentsTab); 
+	if(hasConsents){
+		scgTabbar.setContentHref("consentsTab",showConsentsTab); 
+	}
+
 	scgTabbar.setTabActive("editSCGtab");
 }

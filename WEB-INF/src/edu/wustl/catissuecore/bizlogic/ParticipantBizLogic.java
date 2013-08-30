@@ -960,7 +960,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final String scgHql = "select scg.id, scg.surgicalPathologyNumber,"
-					+ " scg.identifiedSurgicalPathologyReport.id "
+					+ " scg.identifiedSurgicalPathologyReport.id,scg.name "
 					+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, "
 					+ " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"
 					+ " edu.wustl.catissuecore.domain.Participant as p " + " where p.id = "

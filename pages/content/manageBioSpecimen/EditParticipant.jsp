@@ -912,6 +912,7 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	var reportId1='${sessionScope.identifiedReportId}';
 	var cprId = document.getElementsByName("cprId")[0].value;
 	var cpId = document.getElementsByName("cpId")[0].value;
+	var hasConsent = ${requestScope.hasConsents};
 	
 	var showSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+fwdPage+"&reportId="+reportId1+"&cpId="+cpId+"&cprId="+cprId;
 	

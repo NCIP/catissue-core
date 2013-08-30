@@ -464,6 +464,17 @@ public class ParticipantAction extends CatissueBaseAction {
 		setEMPStatus(request, participantForm, mapCPR, count);
 		LOGGER.debug("pageOf :---------- " + pageOf);
 		request.setAttribute("participantAttributeDisplaySetInfo", Variables.attributesTodisplay);
+		  boolean hasConsents = false;
+          if(participantForm.getConsentResponseBeanCollection()!=null){
+              Iterator<ConsentResponseBean> consentBeanItr = participantForm.getConsentResponseBeanCollection().iterator();
+              if(consentBeanItr.hasNext()){
+                  ConsentResponseBean obj = consentBeanItr.next();
+                  hasConsents =  !obj.getConsentResponse().isEmpty();
+              }
+              
+          }           
+          request.setAttribute("hasConsents", hasConsents);
+      
 		return mapping.findForward(pageOf);
 	}
 
@@ -1005,10 +1016,14 @@ public class ParticipantAction extends CatissueBaseAction {
 		// By Abhishek Mehta
 		Long value = null;
 		final List idList = participantBizlogic.getSCGList(participantId);
-		if (idList != null && !idList.isEmpty()) {
-			final Object[] obj = (Object[]) idList.get(0);
-			value = ((Long) obj[2]);
-		}
+		Object[] obj = null;
+        if(!idList.isEmpty())
+        {
+            obj = (Object[]) idList.get(0);
+            value = ((Long) obj[2]);
+           
+        }
+		
 		return value;
 	}
 

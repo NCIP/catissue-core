@@ -440,6 +440,7 @@ initializeSCGCombo('${operation}');
 var reportId='${sessionScope.identifiedReportId}';
 var pageOfValue='${requestScope.pageOf}';
 var scgEntityIdValue='${requestScope.scgRecordEntryEntityId}';
+var hasConsents = ${requestScope.hasConsents};
 
 var idValue='<%=id%>';
 
@@ -447,7 +448,7 @@ var staticEntityNameValue='<%=staticEntityName%>';
 
 var consentLevelId = document.getElementById("id").value;
 
-var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
+var showViewSPRTab="ViewSurgicalPathologyReport.do?scgId="+document.getElementById("id").value+"&operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
 
 var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+scgEntityIdValue+"&entityRecordId="+idValue+"&staticEntityName="+staticEntityNameValue+"&pageOf="+pageOfValue+"&operation=viewAnnotations";
 

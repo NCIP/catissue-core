@@ -898,6 +898,9 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
 			specimenCollectionGroupForm.setCollectionEventPointLabel(scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
 			request.setAttribute("CollectionEventPointLabel",scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
+			
+			boolean hasConsents = !specimenCollectionGroupForm.getConsentResponseForScgValues().isEmpty();
+			request.setAttribute("hasConsents", hasConsents);
 
 		}
 		finally
