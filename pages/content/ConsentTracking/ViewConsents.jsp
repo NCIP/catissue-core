@@ -191,6 +191,10 @@ function checkDisable(){
 									</div>	
 								</td>
 								<%--Title (Participant response) --%>	
+								<logic:equal name="consentLevel" value="participant">
+									<td class="tableheading"  width="31%">
+									</td>
+								</logic:equal>
 								<logic:notEqual name="consentLevel" value="participant">
 								<td class="tableheading">
 									<div align="left">
@@ -209,8 +213,9 @@ function checkDisable(){
 									<td class='black_ar' width="31%">
 									${consentTierDTO.consentStatment}
 									</td>
-									<td class='black_ar' width="31%">
+									
 									<logic:equal name="consentLevel" value="participant">
+										<td class='black_ar' width="31%">
 										<select name="participantResponse"  id="${consentTierDTO.id}">
 										<c:forEach items="${requestScope.specimenResponseList}" var="response" >
 											<option value="${response.value}">${response.name}</option>        
@@ -229,12 +234,14 @@ function checkDisable(){
 											isConsentResponseWithdrawn = true;
 										  }
 										</script>
+										</td>
+										<td align="left" class='black_ar'  width="31%"></td>
 									</logic:equal>
 									<logic:notEqual name="consentLevel" value="participant">
-									${consentTierDTO.participantResponses}
-									</logic:notEqual>
+									<td class='black_ar' width="31%">
+										${consentTierDTO.participantResponses}
+									
 									</td>
-									<logic:notEqual name="consentLevel" value="participant">
 									<td align="left" class='black_ar'>
 									
 									<select name="consentStatus"  id="${consentTierDTO.id}">
