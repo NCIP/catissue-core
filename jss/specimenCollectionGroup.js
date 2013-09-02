@@ -297,53 +297,34 @@ function confirmDisableForSCG(action,formField)
 	}
 }
 
-function disablebuttons()
+function disableButtonsOnCheck(selectedRadio)
 {
-	var enteredValue = document.getElementById("numberOfSpecimen").value;
-	var submitButton = document.getElementById("submitOnly");
-	var submitAndAddButton = document.getElementById("submitAndAdd");
-	// Patch ID: Bug#4245_4
-	// Description: User is allowed to click the Add Multiple Specimen irrespective of state of restric checkbox.
-	// Patch ID: Bug#3184_34
-	var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
+	var adhocSpCnt = document.getElementById('numberOfSpecimens');
 	var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
-	if(enteredValue > 1)
-	{
-		submitButton.disabled = true;
-		submitAndAddButton.disabled = true;
-		submitAndAddMultipleButton.disabled = false;
-	}
-	else if(restrictCheckbox.checked)
-	{
-		submitButton.disabled = true;
-		submitAndAddButton.disabled = false;
-		submitAndAddMultipleButton.disabled = false;
-	}
-	else
-	{
-		submitButton.disabled = true;
-		submitAndAddButton.disabled = false;
-		submitAndAddMultipleButton.disabled = false;
-	}
-}
-
-function disableButtonsOnCheck(restrictCheckbox)
-{
-	var submitButton = document.getElementById("submitOnly");
-	var addSpecimenButton = document.getElementById("submitAndAdd");
-	// Patch ID: Bug#3184_35
-	var submitAndAddMultipleButton = document.getElementById("submitAndAddMultiple");
-	if(restrictCheckbox.checked)
-	{
-		submitButton.disabled = false;
-		addSpecimenButton.disabled = true;
-		submitAndAddMultipleButton.disabled = true;
-	}
-	else
-	{
-		disablebuttons();
-		submitButton.disabled = true;
-	}
+	
+	if(selectedRadio.value==1)
+		{
+			adhocSpCnt.readOnly = true;
+			restrictCheckbox.checked == true;
+			adhocSelect = false;
+			cpSelect = true;
+			adhocSpCnt.value="";
+		}
+		else if(selectedRadio.value==2)
+		{
+			adhocSelect = true;
+			adhocSpCnt.readOnly = false;
+			restrictCheckbox.checked == false;
+			cpSelect = false;
+			adhocSpCnt.value="1";
+			adhocSpCnt.focus();
+		}
+		else
+		{
+			adhocSpCnt.readOnly = true;
+			restrictCheckbox.checked == false;
+			adhocSpCnt.value="";
+		}
 }
 
 function initializeSCGForm(formValue,getRestrictSCGCheckboxValue)

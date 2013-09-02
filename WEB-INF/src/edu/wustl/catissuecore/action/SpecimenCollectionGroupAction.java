@@ -153,6 +153,8 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			{
 				specimenCollectionGroupForm.setId(0);
 				LOGGER.debug("SCGA : set to 0 " + specimenCollectionGroupForm.getId());
+				specimenCollectionGroupForm
+				.setCollectionStatus(Constants.COMPLETE);
 			}
 
 			boolean isOnChange = false;

@@ -81,7 +81,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</filter>
 	
 <!--  filter definition ends  -->
-<!--  filter mapping starts--> 
+<!--  filter mapping starts --> 
 <filter-mapping>
 		<filter-name>RestApiAuthFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>

@@ -106,7 +106,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 
 			request.setAttribute(Constants.TISSUE_TYPE_LIST_JSON,
 					gson.toJson(AppUtility.getSpecimenTypes(Constants.TISSUE)));
-
+			request.setAttribute("isImageEnabled", Variables.isImagingConfigurred);
 			request.setAttribute(Constants.FLUID_TYPE_LIST_JSON,
 					gson.toJson(AppUtility.getSpecimenTypes(Constants.FLUID)));
 

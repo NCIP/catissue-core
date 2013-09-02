@@ -2,6 +2,8 @@
 function onCheckboxButtonClick(radioButton)
 {
 		var childSpecimenCount  = document.getElementById("noOfAliquots");
+		var deriveSpecimenCount  = document.getElementById("numberOfSpecimens");
+		
 		var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
 		var countForDerive=document.getElementById("derivedDiv");
 		var countForAliquot=document.getElementById("aliquotDiv");
@@ -11,28 +13,31 @@ function onCheckboxButtonClick(radioButton)
 			childSpecimenCount.disabled = true;
 			qtyPerAliquotTextBox.disabled = true;
 			countForDerive.style.display="none";
-			countForAliquot.style.display="block";
+			countForAliquot.style.display="none";
 		}
 		else if(radioButton.value==2)
 		{
 			childSpecimenCount.disabled = false;
+			
 			qtyPerAliquotTextBox.disabled = false;
 			countForDerive.style.display="none";
 			countForAliquot.style.display="block";
+			childSpecimenCount.focus();
 		}
 		else if(radioButton.value==3)
 		{
-			childSpecimenCount.disabled = false;
+			childSpecimenCount.disabled = true;
 			qtyPerAliquotTextBox.disabled = true;
 			countForDerive.style.display="block";
 			countForAliquot.style.display="none";
+			deriveSpecimenCount.focus();
 		}
 		else
 		{
 			childSpecimenCount.disabled = true;
 			qtyPerAliquotTextBox.disabled = true;
 			countForDerive.style.display="none";
-			countForAliquot.style.display="block";
+			countForAliquot.style.display="none";
 		}
 }
 // Consent Tracking Module Virender mehta
@@ -292,7 +297,10 @@ function loadSpecimenTabbarForEdit()
 	if(hasConsents){
 	specimenTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
 	}
-	specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
+	if(isImageEnabled)
+	{
+		specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
+	}
 	
 	specimenTabbar.setHrefMode("iframes-on-demand");
 	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
@@ -305,7 +313,10 @@ function loadSpecimenTabbarForEdit()
 if(hasConsents){	
 	specimenTabbar.setContentHref("consentsTab", showConsentsTab);  
 	}
-	specimenTabbar.setContentHref("imagesTab", showImagesTab);
+	if(isImageEnabled)
+	{
+		specimenTabbar.setContentHref("imagesTab", showImagesTab);
+	}
 	specimenTabbar.setTabActive("specimenDetailsTab");
 }
 

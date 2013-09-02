@@ -122,6 +122,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 			request.setAttribute(Constants.TISSUE_SITE_LIST, AppUtility.tissueSiteList());
 			request.setAttribute(Constants.TISSUE_SIDE_LIST,
 					AppUtility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
+			request.setAttribute("isImageEnabled", Variables.isImagingConfigurred);
 
 			request.setAttribute(Constants.SPECIMEN_CLASS_LIST, AppUtility.getSpecimenClassList());
 

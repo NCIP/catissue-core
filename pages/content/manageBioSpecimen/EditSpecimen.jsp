@@ -592,7 +592,7 @@
 								&nbsp;
 						<!-- 11706 S Desctiption : Remove equal check for Edit operation only....-->
 						<input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-								<bean:message key="create.CpChildSp"/>
+								<bean:message key="create.childAsperCP"/>
 						<!-- 11706 E -->
 					</td>
 				</tr>
@@ -600,19 +600,25 @@
 				<!--specimenPageButton-->
 				<tr><td colspan="2"></td></tr>
 				<tr>
-					<td class="black_ar" width="18%" nowrap>
+					<td class="black_ar" width="18%" nowrap colspan="2">
 							 <div style="display:none" id="derivedDiv">
-							 <bean:message key="summary.page.count" />&nbsp;
-							<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/></div>
-							<div style="display:block" id="aliquotDiv"><bean:message key="summary.page.count" />&nbsp;
-							<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/></div>
-							</td>
-							<td class="black_ar" width="75%">
+							 
+							 <bean:message key="derive.noOfSpecimens"/>&nbsp;
+							<html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/>
+						</div>
+						<div style="display:none" id="aliquotDiv">
+							
+							<bean:message key="aliquots.noOfAliquots" />&nbsp;
+							<html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" disabled="true" style="text-align:right"/>
+							&nbsp;
 							<bean:message key="aliquots.qtyPerAliquot"/>&nbsp;
 
 							<html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" disabled="true" style="text-align:right"/>
-
+							</div>
 					</td>
+					
+							
+							
 				</tr>
 				 <tr>
 								<td class="dividerline" colspan="3"><span class="black_ar"></td>
@@ -637,7 +643,7 @@
 				     							
 				<tr>
 					<td align="left" colspan="2" class="buttonbg">
-						<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
+						<table cellpadding="0" cellspacing="0" border="0" id="specimenPageButton" width="100%"> 
 							<tr>
 								<td class="buttonbg">
 								<table><tr><td>
@@ -678,6 +684,7 @@ var reportId='${identifiedReportId}';
 var entityId='${specimenRecordEntryEntityId}';
 var staticEntityName='${entityName}';
 var hasConsents = ${hasConsents};
+var isImageEnabled = ${isImageEnabled};
 
 
 var showEventsTab = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";

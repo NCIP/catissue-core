@@ -97,6 +97,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			var newReceivedDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalReceiveddate);
 			document.getElementById("receivedEventDateOfEvent").value=newReceivedDate;
 		 }
+		 var adhocSelect = false;
+		 var cpSelect = true;
+	
 	</script>
 	<div style="width:100%">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="">
@@ -402,20 +405,38 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<!-- For Multiple Specimen-----Ashish -->
 		<div id="multiplespecimenTable">
 		<tr>
-		<td colspan="3" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="multipleSpecimen.mainTitle" /> </span></td>
+		<td colspan="3" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="scg.submit.heading"/> </span></td>
 		</tr>
-		<tr>
+		
+		<tr style="margin-top:1px">
           <td colspan="3"><table width="100%" border="0" cellpadding="3" cellspacing="0">
             <tr>
-					 <td width="1%" align="left" class="black_ar">&nbsp;</td>
-					 <td width="34%" align="left" class="black_ar">&nbsp;<bean:message key="multipleSpecimen.numberOfSpecimen" /></td>
-					 <td width="65%" align="left" nowrap>
-						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text styleClass="black_ar" style="text-align:right" maxlength="50" size="20" styleId="numberOfSpecimen" property="numberOfSpecimens" />
-					</td>
+				<td class="black_ar">
+					 <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true"/>
+								<bean:message key="label.collect.perCP"/>
+								<span style="margin-left:40px;">
+						<input type="radio" value="2" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
+								<bean:message key="label.adhocSpecimen"/>
+								
+								&nbsp;
+						<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/></span>
+						&nbsp;
+						<span style="margin-left:30px;">
+						<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
+								<bean:message key="app.none"/>
+						</span>
+						</td>
+			</tr>
+			<tr>
+				<td colspan="3"class="black_ar">
+					 
+						
+					
+						</td>
 			</tr>
 			</table></td>
 			 </tr>
+		
 			<!-- Hidden fields for events
 			/**
  			* Name : Ashish Gupta
