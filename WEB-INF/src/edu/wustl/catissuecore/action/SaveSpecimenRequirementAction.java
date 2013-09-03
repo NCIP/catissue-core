@@ -497,6 +497,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			newAliquotSpecimenMap = new LinkedHashMap();
 		}
+		else
+		{
+			updateChildAliquotsLabel(specimenRequirementBean.getSpecimenRequirementLabel(),
+					newAliquotSpecimenMap);
+		}
 		for (int i = 0; i < totalNewAliquots; i++)
 		{
 			final int iCount = ++noOfBeanAliquots;
@@ -547,41 +552,43 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
 		final Object[] keyArr = deriveSpecimenMap.keySet().toArray();
 
-		if (totalNewDeriveSpecimen > 0)
-		{
-			for (int iCount = 0; iCount < noOfBeanDerive; iCount++)
-			{
-				deriveSpecimenMap.remove(keyArr[iCount]);
-			}
-			if (oldDeriveSpecimenMap == null)
-			{
-				oldDeriveSpecimenMap = new LinkedHashMap();
-			}
-			oldDeriveSpecimenMap.putAll(deriveSpecimenMap);
-			specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
-//			specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
-		}
-		else
-		{
 			final LinkedHashMap deriveMap = new LinkedHashMap();
 			for (final Object element : keyArr)
 			{
+				
 				final SpecimenRequirementBean newBean = (SpecimenRequirementBean) deriveSpecimenMap
 						.get(element);
-				final SpecimenRequirementBean oldBean = (SpecimenRequirementBean) oldDeriveSpecimenMap
-						.get(element);
 				deriveMap.put(element, deriveSpecimenMap.get(element));
-				newBean.setAliquotSpecimenCollection(oldBean.getAliquotSpecimenCollection());
-				newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
+
+				if(oldDeriveSpecimenMap.get(element)!=null)
+				{	
+					final SpecimenRequirementBean oldBean = (SpecimenRequirementBean) oldDeriveSpecimenMap
+							.get(element);
+					newBean.setAliquotSpecimenCollection(oldBean.getAliquotSpecimenCollection());
+					newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
+					LinkedHashMap aliquotSpecimenMap = newBean.getAliquotSpecimenCollection();
+					updateChildAliquotsLabel(newBean.getSpecimenRequirementLabel(), aliquotSpecimenMap);
+				}	
 			}
 			specimenRequirementBean.setDeriveSpecimenCollection(deriveMap);
 			if (oldDeriveSpecimenMap != null)
 			{
 				oldDeriveSpecimenMap.clear();
 			}
-		}
 		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
 				.getNoOfDeriveSpecimen());
+	}
+
+	private void updateChildAliquotsLabel(
+			final String parentLabel,
+			LinkedHashMap newAliquotSpecimenMap)
+	{
+		Collection<SpecimenRequirementBean> aiquotes=newAliquotSpecimenMap.values();
+		for (SpecimenRequirementBean aliquote : aiquotes)
+		{
+			aliquote.setSpecimenRequirementLabel(parentLabel);
+			updateChildAliquotsLabel(parentLabel, aliquote.getAliquotSpecimenCollection());
+		}
 	}
 
 	/**

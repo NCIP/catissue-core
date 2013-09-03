@@ -11,8 +11,8 @@
 		               <tr>
 		                 <td align="center" class="black_ar"><span class="blue_ar_b"></span></td>
                          <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
-                         <td align="left" class="black_ar">
-									<html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
+                         <td align="left" class="black_ar">%if(Constants.ALIQUOT.equalsIgnoreCase(form.getLineage())){%>${createSpecimenTemplateForm.specimenReqTitle}<%}else{%>
+                              <html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/><%}%>
 						  </td>
 						</tr> 
 		                <tr>
@@ -244,16 +244,17 @@
 								{
 							%>
 									<tr>
-                              <td width="5%" class="tableheading"><span class="black_ar_b">
+                              <td width="2%" class="tableheading"><span class="black_ar_b">
                                 <label for="delete" align="center"><bean:message key="addMore.delete" /></label>
                               </span></td>
-                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="collectionprotocol.specimenclass" /> </span></td>
+                              <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="collectionprotocol.specimenclass" /> </span></td>
                               <td width="12%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
-                              <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
+                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
+			       <td width="18%" class="tableheading"><span class="black_ar_b">Title</span></td>		 
 
-							   <td width="28%" class="tableheading"><span class="black_ar_b">Label Format</span></td>
+							   <td width="23%" class="tableheading"><span class="black_ar_b">Label Format</span></td>
                             </tr>
 							<%
 								}
@@ -268,7 +269,7 @@
                               <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
-
+			     <td width="10%" class="tableheading"><span class="black_ar_b">Title</span></td>	
 
                             </tr>
 							   <%}%>
@@ -294,7 +295,7 @@
 //					String labelType = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
 
 					String labelFormat = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
-
+					String SRTitle="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_requirementLabel)";
 					String MolecularConc = "DeriveSpecimenBean:" + rowno + "_concentration";
 					String chk = "checkBox_" + rowno;
 					String changeClass = "changeUnit('"+specimenClass+"','"+unit+"','"+concentration+"','"+specimenType+"')";
@@ -356,6 +357,7 @@
 
 					String qtyValue = (String)form.getDeriveSpecimenValue(quantityvalue);
 					String concValue = (String)form.getDeriveSpecimenValue(MolecularConc);
+					
 					String strHiddenUnitValue = "" + changeUnit(className,typeclassValue);
 					if(qtyValue == null || qtyValue.equals(""))
 					{
@@ -378,6 +380,9 @@
 										styleId="<%=concentration%>" property="<%=concentration%>"
 										disabled="<%=concReadOnly%>" value="<%=concValue%>" style="text-align:right"/>
 								</td>
+								<td class="black_ar">
+								<html:text styleClass="black_ar" maxlength="255" property="<%=SRTitle%>" styleId="<%=SRTitle%>"  size="20"/>
+								</td>
 
 						<%
 								if(Variables.isTemplateBasedLblGeneratorAvl)
@@ -386,7 +391,7 @@
 								 <td class="black_ar">
 
 
-								<html:text styleClass="black_ar" maxlength="255" property="<%=labelFormat%>" styleId="<%=labelFormat%>"  size="25"/>
+								<html:text styleClass="black_ar" maxlength="255" property="<%=labelFormat%>" styleId="<%=labelFormat%>"  size="20"/>
 
 
 

@@ -427,18 +427,28 @@ if(form != null)
 
 		spreqqty.innerHTML="" + sname;
 
+		var sprlabel=x.insertCell(6)
+		sprlabel.className="black_ar";
+		sname="";
+		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_requirementLabel)";
+
+		sname="<input type='text' name='" + objname + "' size='20'  maxlength='255' class='black_ar' id='" + objname + "'>"
+		sname = sname + "&nbsp;"
+
+		sprlabel.innerHTML="" + sname;
+
 
 						<%
 								if(Variables.isTemplateBasedLblGeneratorAvl)
 								{
 							%>
 		//Label Format
-		var spreqqty=x.insertCell(6)
+		var spreqqty=x.insertCell(7)
 		spreqqty.className="black_ar";
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
 
-		sname="<input type='text' name='" + objname + "' size='25'  maxlength='255' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' size='20'  maxlength='255' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;"
 
 		spreqqty.innerHTML="" + sname;
