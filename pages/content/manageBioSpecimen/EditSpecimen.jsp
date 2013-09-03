@@ -583,16 +583,23 @@
 		       <tr>
                   <td width="17%" align="left" nowrap class="black_ar" colspan="2">
 						<input type="radio" value="1" id="aliquotCheck" name="specimenChild" onclick="onCheckboxButtonClick(this)" checked="true"/>
+								<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="app.none" />&nbsp;
+								</span>
 						<input type="radio" value="2" id="aliquotChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+						<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="aliquots.title"/>
 								&nbsp;
+								</span>
 						<input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+								<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="specimen.derivative" />
-								&nbsp;
+								&nbsp;</span>
 						<!-- 11706 S Desctiption : Remove equal check for Edit operation only....-->
 						<input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
+						<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="create.childAsperCP"/>
+								</span>
 						<!-- 11706 E -->
 					</td>
 				</tr>
@@ -683,7 +690,7 @@ var specimenId='${specimenDTO.id}';
 var reportId='${identifiedReportId}';
 var entityId='${specimenRecordEntryEntityId}';
 var staticEntityName='${entityName}';
-var hasConsents = ${hasConsents};
+var hasConsents = '${hasConsents}';
 var isImageEnabled = ${isImageEnabled};
 
 

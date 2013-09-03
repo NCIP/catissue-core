@@ -18,7 +18,7 @@ function initializeSCGCombo(operation)
 			collectionProtocolEventCombo.attachEvent("onOpen",onComboClick);
 			collectionProtocolEventCombo.attachEvent("onKeyPressed",onComboKeyPress);
 			collectionProtocolEventCombo.attachEvent("onChange", function(){collectionProtocolEventCombo.DOMelem_input.focus();});
-		
+		collectionProtocolEventCombo.readonly(true,false);
 		}
 		scgCombo.clinicalStatusCombo = dhtmlXComboFromSelect("clinicalStatus");  
 		scgCombo.clinicalStatusCombo.setOptionWidth(177);
@@ -309,11 +309,15 @@ function disableButtonsOnCheck(selectedRadio)
 			adhocSelect = false;
 			cpSelect = true;
 			adhocSpCnt.value="";
+			adhocSpCnt.style.border="0px";
 		}
 		else if(selectedRadio.value==2)
 		{
 			adhocSelect = true;
 			adhocSpCnt.readOnly = false;
+			
+			adhocSpCnt.style.border="1px solid grey";
+			
 			restrictCheckbox.checked == false;
 			cpSelect = false;
 			adhocSpCnt.value="1";
@@ -321,9 +325,12 @@ function disableButtonsOnCheck(selectedRadio)
 		}
 		else
 		{
+			adhocSelect = false;
+			cpSelect = false;
 			adhocSpCnt.readOnly = true;
 			restrictCheckbox.checked == false;
 			adhocSpCnt.value="";
+			adhocSpCnt.style.border="0px";
 		}
 }
 
@@ -444,21 +451,31 @@ function loadSCGTabbar()
 	scgTabbar.setSkin('default');
 	scgTabbar.setImagePath("dhtmlx_suite/imgs/");
 	scgTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
-	
-	scgTabbar.addTab("editSCGtab",'<span style="font-size:13px"> Edit SCG </span>', "150px");
-	scgTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
-	scgTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
-	if(hasConsents){
-		scgTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
-	}
+	if("edit" == operation)
+	{
+		scgTabbar.addTab("editSCGtab",'<span style="font-size:13px"> Edit SCG </span>', "150px");
+		scgTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
+		scgTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+		if(hasConsents){
+			scgTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+		}
 
-	scgTabbar.setHrefMode("iframes-on-demand");
-	scgTabbar.setContent("editSCGtab", "SCGDiv");
-	scgTabbar.setContentHref("reportsTab",showViewSPRTab);
-	scgTabbar.setContentHref("annotationTab",showAnnotationTab);
-	if(hasConsents){
-		scgTabbar.setContentHref("consentsTab",showConsentsTab); 
-	}
+		scgTabbar.setHrefMode("iframes-on-demand");
+		scgTabbar.setContent("editSCGtab", "SCGDiv");
+		scgTabbar.setContentHref("reportsTab",showViewSPRTab);
+		scgTabbar.setContentHref("annotationTab",showAnnotationTab);
+		if(hasConsents){
+			scgTabbar.setContentHref("consentsTab",showConsentsTab); 
+		}
 
-	scgTabbar.setTabActive("editSCGtab");
+		scgTabbar.setTabActive("editSCGtab");
+	}
+	if("add" == operation)
+	{
+		scgTabbar.addTab("editSCGtab",'<span style="font-size:13px"> Add SCG </span>', "150px");
+		
+		scgTabbar.setHrefMode("iframes-on-demand");
+		scgTabbar.setContent("editSCGtab", "SCGDiv");
+		scgTabbar.setTabActive("editSCGtab");
+	}
 }

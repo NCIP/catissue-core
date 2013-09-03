@@ -16,7 +16,7 @@
 											 <td colspan="3"  align="left" class="dividerline" >
 											 <html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onclick="disableButtonsOnCheck(this)" style="display:none">
 												</html:checkbox>
-													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
+													&nbsp;<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 														<span class="black_ar" style="vertical-align:3px">
 															<bean:message key="print.checkboxLabel"/>
 														</span>
@@ -65,7 +65,7 @@
 function testFunction()
 	{
 		var collStatus = scgCombo.collectionStatusCombo.getSelectedValue();
-		//aler//t(document.getElementById('collectionStatus')+"  "+collStatus);
+		
 		
 		if(cpSelect)
 		{
@@ -97,6 +97,7 @@ function testFunction()
 		}
 		else
 		{
+			<%=forwardToJustSubmit%>;
 		}
 	}
 function isNumeric(number) {
@@ -111,4 +112,41 @@ else
 }
 }
 document.getElementById('numberOfSpecimens').value = "";
+var collectionStatus = document.getElementById('collectionStatus').value;
+if(operation == "add")
+{
+	var radios = document.getElementsByName('specimenChild');
+		for(i=0;i<radios.length; i++){
+		  if(radios[i].value == 1){
+			 radios[i].checked = true;
+			 adhocSelect = false;
+				cpSelect = true;
+			 }
+		}
+}
+else
+{
+	if(collectionStatus == "Pending")
+	{
+		var radios = document.getElementsByName('specimenChild');
+		for(i=0;i<radios.length; i++){
+		  if(radios[i].value == 1){
+			 radios[i].checked = true;
+			 adhocSelect = false;
+				cpSelect = true;
+			 }
+		}
+	}
+	else if(collectionStatus == "Complete")
+	{
+		var radios = document.getElementsByName('specimenChild');
+		for(i=0;i<radios.length; i++){
+		  if(radios[i].value == 3){
+			 radios[i].checked = true;
+			 adhocSelect = false;
+				cpSelect = false;
+			 }
+		}
+	}
+}
 </script>

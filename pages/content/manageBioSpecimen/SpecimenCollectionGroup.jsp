@@ -324,7 +324,7 @@ function updateHelpURL()
 	if(pageView != null && !("viewAnnotations").equals(pageView) && !(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT).equals(pageView))
 	{
 %>
-	<body onload="loadSCGTabbar();disablebuttons();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo('${operation}');">
+	<body onload="loadSCGTabbar();initializeSCGForm('<%=form%>','<%=form.getRestrictSCGCheckbox()%>');showConsents('<%=tab%>','<%=form%>','<%=form.getConsentTierCounter()%>');initializeSCGCombo('${operation}');">
 <%
 	}else{
 %>
@@ -333,39 +333,7 @@ function updateHelpURL()
  	}
  %>
 <html:form action="<%=formName%>">
-	<%
-		if(("add").equals(pageView))
-		{
-	%>
-		 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-	  <tr>
-		<td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
-				<td valign="bottom" class="td_color_bfdcf3" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_add_scg.gif" alt="Add Specimen  Collection group"  width="222" height="22" border="0"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="newConsentTab()"></a></td>
-				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
-			</tr></table>
-			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
-			<tr>
-				<td>
-					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
-				</td>
-			</tr>
-			</table>
-
-		<%@ include file="EditSpecimenCollectionGroup.jsp" %>
-		</td>
-				</tr>
-				</table>
-	<%
-		}
-	%>
-
-	<%
-	   if(("edit").equals(pageView))
-	  {
-		%>
+	
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	  <tr>
 		<td>
@@ -384,9 +352,7 @@ function updateHelpURL()
 		</td>
 		</tr>
 	</table>
-	<%
-	}
-	%>
+	
 
 <%
 	if(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT.equals(pageView))
@@ -441,6 +407,7 @@ var reportId='${sessionScope.identifiedReportId}';
 var pageOfValue='${requestScope.pageOf}';
 var scgEntityIdValue='${requestScope.scgRecordEntryEntityId}';
 var hasConsents = ${requestScope.hasConsents};
+var operation = '<%=pageView%>';
 
 var idValue='<%=id%>';
 

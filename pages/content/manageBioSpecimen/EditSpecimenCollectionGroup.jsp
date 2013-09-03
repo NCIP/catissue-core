@@ -25,6 +25,7 @@ else if(Constants.EDIT.equals(operation))
 }
 String normalSubmitFunctionName = "setSubmitted('" + submittedFor+ "','"+printaction+"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
 String forwardToSubmitFuctionName = "setSubmitted('ForwardTo','"+ printaction +"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";
+String forwardToJustSubmitFuctionName = "setSubmitted('ForwardTo','"+ printaction +"','justSubmit')";
 String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmitted('ForwardTo','"+printaction +"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";
 String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 	/**
@@ -48,12 +49,14 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	}
 	String normalSubmit = "";
 	String forwardToSubmit = "";
+	String forwardToJustSubmit = "";
 	String forwardToSubmitForMultipleSpecimen = "";
 	if(Constants.EDIT.equals(operation))
 	{
 		confirmDisableFuncName = "confirmDisableForSCG('" + formName +"',document.forms[0].activityStatus)";
 		normalSubmit = "checkForChanges(),"+normalSubmitFunctionName + ","+confirmDisableFuncName;
 		forwardToSubmit = "checkForChanges(),"+ forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+		forwardToJustSubmit = "checkForChanges(),"+ forwardToJustSubmitFuctionName + ","+confirmDisableFuncName;
 
 		if(Constants.PAGE_OF_SCG_CP_QUERY.equals(pageOf))
 		{
@@ -73,6 +76,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 		forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+		forwardToJustSubmit = forwardToJustSubmitFuctionName + ","+confirmDisableFuncName;
 	}
 %>
 	<%
@@ -145,15 +149,27 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				    
 					<td width="30%"  align="left" nowrap class="black_ar align_left_style1">
 					<!-- Mandar : 434 : for tooltip -->
+					
 						<c:choose>
 							<c:when  test="${operation eq 'edit'}">
 								${CollectionEventPointLabel}
 							</c:when>
 							<c:otherwise>
+							<logic:empty name="isSingleEvent">
 								<html:select property="collectionProtocolEventId" styleClass="black_ar" styleId="collectionProtocolEventId" size="1" 
-								>
-								<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
+								><html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
 								</html:select>&nbsp;
+							</logic:empty>
+							<logic:notEmpty name="isSingleEvent">
+							${CollectionEventPointLabel}
+								
+								<div style="display:none">
+								<html:select property="collectionProtocolEventId" styleClass="black_ar" styleId="collectionProtocolEventId" size="1" 
+								><html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>
+								</html:select>&nbsp;</div>
+							</logic:notEmpty>
+								
+								
 								
 								
 							</c:otherwise>
@@ -281,32 +297,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					        </html:select>	
 					</td>
 				</tr>
-				
-				
-				<c:if test="${i%2 == 0}">
-					<tr class="${tr_white_color}">
-				</c:if>
-				<c:if test="${i%2 == 1}">
-					<tr class="${tr_grey_color}">
-				</c:if>
-				<c:set var="i" value="${i+1}" scope="request" />
-				  	 
-					 <td width="20%" align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.offset" /></b></td>
-					 <td width="30%" align="left" nowrap class="black_ar align_left_style1">
-						<html:text styleClass="newformFieldSizedSCG" size="26"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/></td>
-					 
-					<td  width="20%"align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></b></td>
-					<td  width="30%" align="left" nowrap class="black_ar align_left_style1">
-				     	<html:text styleClass="newformFieldSizedSC" size="26"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
-					     	<!-- This feature will be implemented in next release
-							&nbsp;
-							<html:submit styleClass="actionButton" disabled="true">
-								<bean:message key="buttons.getPathologyReport"/>
-							</html:submit>
-							-->
-				    </td>
-				</tr>
-				
+
 				<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
 				</c:if>
@@ -338,11 +329,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					
 					</script>
 									<td>
-									<%
-										String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";
-									%>
-									<!-- // Patch ID: Bug#3090_22 -->
-									&nbsp;<!--  <a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false"><span class="black_ar"><img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='CLinical Diagnosis Selector'></span></a>--></td></tr></table>
+									</td></tr></table>
 								</td>
 				     <td width="20%" align="right" class="black_ar">
 					 <img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
@@ -354,15 +341,30 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					        </html:select>	
 					 </td>
 				 </tr>
-	
-				 <!--comments -->
-				 <!--
-				 * Name: Shital Lawhale
-			     * Bug ID: 3052
-			     * Patch ID: 3052_1_1
-			     * See also: 1_1 to 1_5
-				 * Description : Added <TR> for comment field .
-				-->
+<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+				</c:if>
+				<c:if test="${i%2 == 1}">
+					<tr class="${tr_grey_color}">
+				</c:if>
+				<c:set var="i" value="${i+1}" scope="request" />
+				  	 
+					 <td width="20%" align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/></b></td>
+					 <td width="30%" align="left" nowrap class="black_ar align_left_style1">
+					 <html:text styleClass="newformFieldSizedSC" size="26"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
+						</td>
+					 <logic:notEmpty name="cpParentAvl">
+					<td  width="20%"align="right" class="black_ar"><b><bean:message key="specimenCollectionGroup.offset" /></b></td>
+					<td  width="30%" align="left" nowrap class="black_ar align_left_style1">
+					<html:text styleClass="newformFieldSizedSCG" size="26"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/>
+				     	
+				    </td>
+					</logic:notEmpty>
+					<logic:empty name="cpParentAvl">
+					<td colspan="2"/>
+					</logic:empty>
+				</tr>	
+				 
 				 				
 				<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
@@ -413,17 +415,22 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
             <tr>
 				<td class="black_ar">
 					 <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true"/>
+								<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="label.collect.perCP"/>
+								</span>
 								<span style="margin-left:40px;">
 						<input type="radio" value="2" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
+								<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="label.adhocSpecimen"/>
 								
 								&nbsp;
-						<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/></span>
+						<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/></span></span>
 						&nbsp;
 						<span style="margin-left:30px;">
 						<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
-								<bean:message key="app.none"/>
+								<span class="black_ar" style="vertical-align:2px">
+								<bean:message key="label.justSubmit"/>
+								</span>
 						</span>
 						</td>
 			</tr>

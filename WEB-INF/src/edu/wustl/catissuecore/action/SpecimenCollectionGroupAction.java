@@ -149,12 +149,18 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			// Sets the operation attribute to be used in the Edit/View Specimen
 			// Collection Group Page in Advance Search Object View.
 			request.setAttribute(Constants.OPERATION, operation);
+			SpecimenCollectionGroup specimenCollectionGroup = null;
 			if (operation.equalsIgnoreCase(Constants.ADD))
 			{
 				specimenCollectionGroupForm.setId(0);
 				LOGGER.debug("SCGA : set to 0 " + specimenCollectionGroupForm.getId());
 				specimenCollectionGroupForm
 				.setCollectionStatus(Constants.COMPLETE);
+			}
+			else
+			{
+				specimenCollectionGroup = AppUtility.getSCGObj(
+						specimenCollectionGroupForm.getId(), dao);
 			}
 
 			boolean isOnChange = false;
@@ -306,8 +312,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				else
 				{
 					final String scgID = String.valueOf(specimenCollectionGroupForm.getId());
-					final SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSCGObj(
-							specimenCollectionGroupForm.getId(), dao);
+					
 					// List added for grid
 					final List specimenDetails = new ArrayList();
 					this.getSpecimenDetails(specimenCollectionGroup, specimenDetails, dao);
@@ -608,6 +613,18 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 					collectionProtocolId = Long.valueOf(request.getParameter("cpId"));
 				}
 
+				if(collectionProtocolId == null)
+				{
+					collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+				}
+				if(participantId == null)
+				{
+					participantId = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getId();
+				}
+//				if(participantProtocolId == null)
+//				{
+//					participantProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+//				}
 				specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId
 						.longValue());
 				specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
@@ -748,6 +765,10 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			{
 				final CollectionProtocol collectionProtocol = (CollectionProtocol) cPObject;
 				collectionProtocolTitle = collectionProtocol.getTitle();
+				if(collectionProtocol.getParentCollectionProtocol() != null)
+				{
+					request.setAttribute("cpParentAvl", Boolean.TRUE);
+				}
 				collectionProtocolName= collectionProtocol.getShortTitle();
 				specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
 				if(collectionProtocol.getCollectionProtocolEventCollection()!= null)
@@ -1437,10 +1458,13 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				separatorBetweenFields);
 
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
-		// Bug #8533
-		// Patch: 8533_5
+		if(list.size()==2)
+		{
+			request.setAttribute("isSingleEvent", true);
+		}
 		if (list.size() >= 2 && form.getCollectionProtocolEventId() <= 0)
 		{
+			
 			form.setCollectionProtocolEventId(Long
 					.valueOf(((NameValueBean) list.get(1)).getValue()));
 		}

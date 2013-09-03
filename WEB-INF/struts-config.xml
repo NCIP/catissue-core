@@ -5103,8 +5103,9 @@ PUBLIC
 			-->
 			<forward name="createMultipleSpecimen"
 				path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen" />
+			<forward name="justSubmit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>
 			<forward name="failure"
-				path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+				path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery" />
 			<forward name="CPQueryPrintSCGAdd" path="/CPQueryPrintSCGAdd.do" />
 		</action>
 
@@ -5200,6 +5201,7 @@ PUBLIC
 			input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"
 			scope="request">
 			<forward name="success" path="/AnticipatorySpecimenView.do" />
+			<forward name="justSubmit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>
 			<forward name="createNewSpecimen"
 				path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 			<!--
