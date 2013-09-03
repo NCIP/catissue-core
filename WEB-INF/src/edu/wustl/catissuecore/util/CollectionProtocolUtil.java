@@ -1790,6 +1790,7 @@ public class CollectionProtocolUtil
 		specimenRequirementBean.setNoOfDeriveSpecimen(oldBean.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(oldBean.getDeriveSpecimen());
 		specimenRequirementBean.setSpecimenRequirementLabel(oldBean.getSpecimenRequirementLabel());
+		specimenRequirementBean.setActivityStatus(oldBean.getActivityStatus());
 		return specimenRequirementBean;
 	}
 
