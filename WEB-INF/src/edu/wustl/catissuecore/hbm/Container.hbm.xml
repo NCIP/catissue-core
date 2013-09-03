@@ -435,14 +435,14 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 </query>
 
 <sql-query name="insertIntoStorContSpecCountsTable">
-	INSERT INTO catissue_stor_cont_utilization(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, DATE, UTILIZATION_PERCENTAGE) VALUES(?,?,?,?) 
+	INSERT INTO catissue_stor_cont_utilization(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, CONT_DATE, UTILIZATION_PERCENTAGE) VALUES(?,?,?,?) 
 </sql-query>
 <sql-query name="getStorContSpecCountDataById">
-	select spec.DATE,spec.STORED_SPECIMEN_COUNT,spec.UTILIZATION_PERCENTAGE from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? order by spec.DATE, spec.STORAGE_CONTAINER_ID asc
+	select spec.CONT_DATE,spec.STORED_SPECIMEN_COUNT,spec.UTILIZATION_PERCENTAGE from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? order by spec.CONT_DATE, spec.STORAGE_CONTAINER_ID asc
 </sql-query>
 
 <sql-query name="getUtilizationCountsOfContainerById">
-	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.DATE = (select MAX(DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)
+	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)
 </sql-query>
 
 </hibernate-mapping>

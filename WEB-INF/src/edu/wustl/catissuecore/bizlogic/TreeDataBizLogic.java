@@ -323,7 +323,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
     public boolean checkContainerCapacityAlert(Long containerId) throws ApplicationException
     {
         final String sql = "select spec.UTILIZATION_PERCENTAGE from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID= "+containerId+ 
-        		" and spec.DATE = (select MAX(DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID="+containerId+ ")";
+        		" and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID="+containerId+ ")";
         boolean result = false;
         try
         {
