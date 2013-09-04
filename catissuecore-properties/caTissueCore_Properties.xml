@@ -679,6 +679,11 @@
 		<value>5</value>
 	</property>
 
+	<property>
+		<name>queryExportDataFileRetainDays</name>
+		<value>30</value>
+	</property>
+
 <!--  Added for EMPI integration -->
 	<property>
 		<name>empi.Enabled</name>

@@ -145,7 +145,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              */
 			
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
-            QueryDataExportService.getInstance();
+            QueryDataExportService.initialize();
+            
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
