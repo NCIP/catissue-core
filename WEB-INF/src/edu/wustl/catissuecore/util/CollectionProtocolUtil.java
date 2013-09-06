@@ -744,6 +744,14 @@ public class CollectionProtocolUtil
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_requirementLabel");
 			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getSpecimenRequirementLabel());
+			
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_collectionEventId");
+			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen.getCollectionEventId()));
+			
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_receivedEventId");
+			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen.getReceivedEventId()));
 
 			deriveCtr++;
 		}
@@ -1256,6 +1264,10 @@ public class CollectionProtocolUtil
 				{
 					setSpecimenEvents(reqSpecimen, specimenRequirementBean);
 				}
+				else
+				{
+					updateSpecimenEvents(reqSpecimen, specimenRequirementBean);
+				}
 			}
 			else
 			{
@@ -1268,6 +1280,10 @@ public class CollectionProtocolUtil
 					if (reqSpecimen.getId() == null)
 					{
 						setSpecimenEvents(reqSpecimen, specimenRequirementBean);
+					}
+					else
+					{
+						updateSpecimenEvents(reqSpecimen, specimenRequirementBean);
 					}
 				}
 				else
@@ -1347,6 +1363,47 @@ public class CollectionProtocolUtil
 			receivedEventUser.setId(Long.valueOf(specimenRequirementBean.getReceivedEventUserId()));
 			receivedEvent.setUser(receivedEventUser);
 			receivedEvent.setSpecimen(reqSpecimen);
+			specimenEventCollection.add(receivedEvent);
+		}
+
+		reqSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+	}
+
+	
+	private static void updateSpecimenEvents(SpecimenRequirement reqSpecimen,
+			SpecimenRequirementBean specimenRequirementBean)
+	{
+		//seting collection event values
+		Collection<SpecimenEventParameters> specimenEventCollection = new LinkedHashSet<SpecimenEventParameters>();
+
+		if (specimenRequirementBean.getCollectionEventContainer() != null)
+		{
+			CollectionEventParameters collectionEvent = new CollectionEventParameters();
+			collectionEvent.setCollectionProcedure(specimenRequirementBean
+					.getCollectionEventCollectionProcedure());
+			collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
+			User collectionEventUser = new User();
+			collectionEventUser.setId(Long.valueOf(specimenRequirementBean
+					.getCollectionEventUserId()));
+			collectionEvent.setUser(collectionEventUser);
+			collectionEvent.setSpecimen(reqSpecimen);
+			collectionEvent.setId(specimenRequirementBean.getCollectionEventId());
+			specimenEventCollection.add(collectionEvent);
+		}
+
+		//setting received event values
+
+		if (specimenRequirementBean.getReceivedEventReceivedQuality() != null)
+		{
+			ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
+			receivedEvent.setReceivedQuality(specimenRequirementBean
+					.getReceivedEventReceivedQuality());
+			User receivedEventUser = new User();
+			receivedEventUser.setId(Long.valueOf(specimenRequirementBean.getReceivedEventUserId()));
+			receivedEvent.setUser(receivedEventUser);
+			receivedEvent.setSpecimen(reqSpecimen);
+			receivedEvent.setId(specimenRequirementBean.getReceivedEventId());
 			specimenEventCollection.add(receivedEvent);
 		}
 

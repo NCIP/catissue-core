@@ -447,6 +447,93 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					specimenRequirementBean.setId(deriveSpecimenBean.getId());
 				}
 			}
+			if(deriveSpecimenBean.getCollectionEventId()!=null)
+			{
+				specimenRequirementBean.setCollectionEventId(Long.parseLong(deriveSpecimenBean.getCollectionEventId()));
+			}
+			if(deriveSpecimenBean.getReceivedEventId()!=null)
+			{
+				specimenRequirementBean.setReceivedEventId(Long.parseLong(deriveSpecimenBean.getReceivedEventId()));
+			}
+			
+			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
+					specimenRequirementBean);
+			deriveSpecimenCount = deriveSpecimenCount + 1;
+		}
+
+		return deriveSpecimenMap;
+	}
+
+	/**
+	 * Get derive specimen.
+	 *
+	 * @param deriveSpecimenCollection : deriveSpecimenCollection
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param uniqueIdentifier : uniqueIdentifier
+	 *
+	 * @return Map : map
+	 */
+	private Map updatederiveSpecimen(Collection deriveSpecimenCollection,CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			SpecimenRequirementBean parentSpecimenRequirementBean, String uniqueIdentifier)
+	{
+		final Map deriveSpecimenMap = new LinkedHashMap();
+		final Iterator deriveSpecimenCollectionItr = deriveSpecimenCollection.iterator();
+		Integer deriveSpecimenCount = 1;
+		while (deriveSpecimenCollectionItr.hasNext())
+		{
+			final DeriveSpecimenBean deriveSpecimenBean = (DeriveSpecimenBean) deriveSpecimenCollectionItr
+					.next();
+			 
+			final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
+			specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
+			specimenRequirementBean.setClassName(deriveSpecimenBean.getSpecimenClass());
+			specimenRequirementBean.setType(deriveSpecimenBean.getSpecimenType());
+			specimenRequirementBean.setTissueSide(parentSpecimenRequirementBean.getTissueSide());
+			specimenRequirementBean.setTissueSite(parentSpecimenRequirementBean.getTissueSite());
+			specimenRequirementBean.setPathologicalStatus(parentSpecimenRequirementBean.getPathologicalStatus());
+			specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());
+			specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
+			specimenRequirementBean.setStorageContainerForSpecimen(deriveSpecimenBean.getStorageLocation());
+
+			// Collected and received events
+			specimenRequirementBean.setCollectionEventUserId(parentSpecimenRequirementBean
+					.getCollectionEventUserId());
+			specimenRequirementBean.setReceivedEventUserId(parentSpecimenRequirementBean
+					.getReceivedEventUserId());
+			specimenRequirementBean.setCollectionEventContainer(parentSpecimenRequirementBean
+					.getCollectionEventContainer());
+			specimenRequirementBean.setReceivedEventReceivedQuality(parentSpecimenRequirementBean
+					.getReceivedEventReceivedQuality());
+			specimenRequirementBean.setCollectionEventCollectionProcedure(parentSpecimenRequirementBean
+					.getCollectionEventCollectionProcedure());
+
+			specimenRequirementBean.setLabelFormat(deriveSpecimenBean.getLabelFormat());
+	    	specimenRequirementBean.setSpecimenRequirementLabel(deriveSpecimenBean.getRequirementLabel());
+			specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot());
+
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + deriveSpecimenCount);
+			specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
+					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_DERIVE
+					+ deriveSpecimenCount);
+			// Aliquot
+			specimenRequirementBean.setNoOfAliquots(null);
+			specimenRequirementBean.setQuantityPerAliquot(null);
+			specimenRequirementBean.setStorageContainerForAliquotSpecimem("");
+			// Derive
+			specimenRequirementBean.setDeriveSpecimen(null);
+			specimenRequirementBean.setNoOfDeriveSpecimen(0);
+			specimenRequirementBean.setId(deriveSpecimenBean.getId());
+			if(deriveSpecimenBean.getCollectionEventId()!=null)
+			{
+				specimenRequirementBean.setCollectionEventId(Long.parseLong(deriveSpecimenBean.getCollectionEventId()));
+			}
+			if(deriveSpecimenBean.getReceivedEventId()!=null)
+			{
+				specimenRequirementBean.setReceivedEventId(Long.parseLong(deriveSpecimenBean.getReceivedEventId()));
+			}
+			
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
 					specimenRequirementBean);
 			deriveSpecimenCount = deriveSpecimenCount + 1;
@@ -499,7 +586,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		else
 		{
-			updateChildAliquotsLabel(specimenRequirementBean.getSpecimenRequirementLabel(),
+			updateChildAliquots(specimenRequirementBean,
 					newAliquotSpecimenMap);
 		}
 		for (int i = 0; i < totalNewAliquots; i++)
@@ -545,8 +632,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			final IdComparator deriveSpBeanComp = new IdComparator();
 			final List deriveSpecimenList = new LinkedList(deriveSpecimenCollection);
 			Collections.sort(deriveSpecimenList, deriveSpBeanComp);
-			deriveSpecimenMap = this.getderiveSpecimen(deriveSpecimenList,
-					createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
+			deriveSpecimenMap = this.getderiveSpecimen(deriveSpecimenList,createSpecimenTemplateForm,
+									specimenRequirementBean.getUniqueIdentifier());
 		}
 
 		LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
@@ -566,8 +653,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 							.get(element);
 					newBean.setAliquotSpecimenCollection(oldBean.getAliquotSpecimenCollection());
 					newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
-					LinkedHashMap aliquotSpecimenMap = newBean.getAliquotSpecimenCollection();
-					updateChildAliquotsLabel(newBean.getSpecimenRequirementLabel(), aliquotSpecimenMap);
+					LinkedHashMap childAliquotSpecimenMap = newBean.getAliquotSpecimenCollection();
+					LinkedHashMap childDeriveSpecimenMap = newBean.getDeriveSpecimenCollection();
+					updateChildAliquots(newBean, childAliquotSpecimenMap);
+					updateChildDerives(newBean,childDeriveSpecimenMap);
 				}	
 			}
 			specimenRequirementBean.setDeriveSpecimenCollection(deriveMap);
@@ -579,15 +668,46 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				.getNoOfDeriveSpecimen());
 	}
 
-	private void updateChildAliquotsLabel(
-			final String parentLabel,
+	private void updateChildAliquots(
+			final SpecimenRequirementBean parent,
 			LinkedHashMap newAliquotSpecimenMap)
 	{
 		Collection<SpecimenRequirementBean> aiquotes=newAliquotSpecimenMap.values();
 		for (SpecimenRequirementBean aliquote : aiquotes)
 		{
-			aliquote.setSpecimenRequirementLabel(parentLabel);
-			updateChildAliquotsLabel(parentLabel, aliquote.getAliquotSpecimenCollection());
+			aliquote.setClassName(parent.getClassName());
+			aliquote.setType(parent.getType());
+			aliquote.setTissueSide(parent.getTissueSide());
+			aliquote.setTissueSite(parent.getTissueSite());
+			aliquote.setPathologicalStatus(parent.getPathologicalStatus());
+			aliquote.setCollectionEventUserId(parent.getCollectionEventUserId());
+			aliquote.setCollectionEventCollectionProcedure(parent.getCollectionEventCollectionProcedure());
+			aliquote.setReceivedEventReceivedQuality(parent.getReceivedEventReceivedQuality());
+			aliquote.setCollectionEventContainer(parent.getCollectionEventContainer());
+			aliquote.setReceivedEventUserId(parent.getReceivedEventUserId());
+			aliquote.setSpecimenRequirementLabel(parent.getSpecimenRequirementLabel());
+			updateChildAliquots(aliquote, aliquote.getAliquotSpecimenCollection());
+			updateChildDerives(aliquote,aliquote.getDeriveSpecimenCollection());
+		}
+	}
+
+	private void updateChildDerives(
+			final SpecimenRequirementBean parent,
+			LinkedHashMap deriveMap)
+	{
+		Collection<SpecimenRequirementBean> derives=deriveMap.values();
+		for (SpecimenRequirementBean derive : derives)
+		{
+			derive.setTissueSide(parent.getTissueSide());
+			derive.setTissueSite(parent.getTissueSite());
+			derive.setPathologicalStatus(parent.getPathologicalStatus());
+			derive.setCollectionEventUserId(parent.getCollectionEventUserId());
+			derive.setCollectionEventCollectionProcedure(parent.getCollectionEventCollectionProcedure());
+			derive.setReceivedEventReceivedQuality(parent.getReceivedEventReceivedQuality());
+			derive.setCollectionEventContainer(parent.getCollectionEventContainer());
+			derive.setReceivedEventUserId(parent.getReceivedEventUserId());
+			updateChildAliquots(derive, derive.getAliquotSpecimenCollection());
+			updateChildAliquots(derive, derive.getAliquotSpecimenCollection());
 		}
 	}
 

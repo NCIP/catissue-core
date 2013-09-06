@@ -239,75 +239,8 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 	<td>
 
       <table width="100%" border="0" cellpadding="1" cellspacing="1" class="whitetable_bg">
-	 	
         <tr>
           <td colspan="2" align="left" class="bottomtd">
-          <logic:equal name="isParticipantReg" value="true">
-			<span class="messagetexterror">
-			
-			<logic:equal name="displaySynchMessage" value="true">
-				<div>
-				   <table width="100%" cellpadding="0" cellspacing="0">
-					<td width="1%"></td>
-					<td align="left"  style="border:1px solid #ea6c15;vertical-align:text-top;" bgcolor="#FFF0F0" >
-					   <table width="100%" cellpadding="0" cellspacing="0">
-						<td width="1%"></td>					   	
-						<td width="2%"> <img src="images/uIEnhancementImages/Info.png" width="24" height="24"/></td>
-						<td width="1%"></td>
-					  <td>	
-					   <logic:notEqual name="isSyncOn" value="true">
-					    	
-						<div id="cpEditMsg" style="display:hidden;">
-						  <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
-							Only some fields are editable since participants already registered to this protocol.
-						  </span>
-						</div>
-					   </logic:notEqual>	
-					   <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;" >
-					 	${requestScope.synchMessage}
-					   </span>
-					   <div id="syncMsg" style="display:none">
-						<span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
-							Edit is disabled  since syncronization has started.
-						</span>
-				</div>	
-					</td>
-					</table>
-					</td>
-					<td width="20%"></td>
-				    </table>
-				</div>
-			</logic:equal>
-			<logic:notEqual name="displaySynchMessage" value="true">
-				<div>
-				   <table width="100%" cellpadding="0" cellspacing="0">
-					<td width="1%"></td>
-					<td align="left"  style="border:1px solid #ea6c15;vertical-align:text-top;" bgcolor="#FFF0F0" >
-					   <table width="100%" cellpadding="0" cellspacing="0">
-						<td width="1%"></td>					   	
-						<td width="2%"> <img src="images/uIEnhancementImages/Info.png" width="24" height="24"/></td>
-						<td width="1%"></td>
-					  <td>	
-					        <div id="cpEditMsg" style="display:hidden;">
-						  <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
-							Only some fields are editable since participants already registered to this protocol.
-						  </span>
-						</div>
-					   
-					   	<div id="syncMsg" style="display:none">
-						<span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
-							Edit is disabled since synchronization has started.
-						</span>
-						</div>	
-					  </td>
-					</table>
-					</td>
-					<td width="20%"></td>
-				    </table>
-				</div>
-			</logic:notEqual> 	
-			</span>
-		</logic:equal>
 				<!--<div id="labelFormatErrDiv" style="display:none">
 
 					<span class="messagetexterror">

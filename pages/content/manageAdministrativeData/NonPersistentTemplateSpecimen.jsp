@@ -11,7 +11,7 @@
 		               <tr>
 		                 <td align="center" class="black_ar"><span class="blue_ar_b"></span></td>
                          <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
-                         <td align="left" class="black_ar">%if(Constants.ALIQUOT.equalsIgnoreCase(form.getLineage())){%>${createSpecimenTemplateForm.specimenReqTitle}<%}else{%>
+                         <td align="left" class="black_ar"><%if(Constants.ALIQUOT.equalsIgnoreCase(form.getLineage())){%>${createSpecimenTemplateForm.specimenReqTitle}<%}else{%>
                               <html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/><%}%>
 						  </td>
 						</tr> 
@@ -49,7 +49,7 @@
 									<autocomplete:AutoCompleteTag property="className"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 										  initialValue="<%=form.getClassName()%>"
-										  readOnly="<%=readOnlyForSpecimen%>"
+										  readOnly="false"
 										  onChange="onTypeChange(this);clearTypeCombo()"
 										  styleClass="black_ar"
 										  size="20"
@@ -64,7 +64,7 @@
 									  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 									  initialValue="<%=form.getType()%>"
 									  onChange="<%=subTypeFunctionName%>"
-									  readOnly="<%=readOnlyForAliquot%>"
+									  readOnly="false"
 									  dependsOn="<%=form.getClassName()%>"
 									  styleClass="black_ar"
 									  size="20"
@@ -80,7 +80,7 @@
 									<autocomplete:AutoCompleteTag property="tissueSite"
 									  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 									  initialValue="<%=form.getTissueSite()%>"
-									  readOnly="<%=readOnlyForAliquot%>"
+									  readOnly="false"
 									  styleClass="black_ar"
 									  size="20"
 
@@ -97,7 +97,7 @@
 									<autocomplete:AutoCompleteTag property="tissueSide"
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
 									    initialValue="<%=form.getTissueSide()%>"
-									    readOnly="<%=readOnlyForAliquot%>"
+									    readOnly="false"
 										styleClass="black_ar"
 										size="20"
 								    />
@@ -110,7 +110,7 @@
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
 									  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 									  initialValue="<%=form.getPathologicalStatus()%>"
-									  readOnly="<%=readOnlyForAliquot%>"
+									  readOnly="false"
 									  styleClass="black_ar"
 									  size="20"
 									/>
@@ -138,7 +138,7 @@
 				if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 				concentrationDisabled = false;
 			%>
-     									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>&nbsp;<bean:message key="specimen.concentrationUnit" /></td>
+     									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="false" style="text-align:right"/>&nbsp;<bean:message key="specimen.concentrationUnit" /></td>
                               </tr>
                               <tr>
 									<html:hidden property="collectionEventId" />
@@ -281,6 +281,8 @@
 				for(int rowno=1;rowno<=noOfDeriveSpecimen;rowno++)
 				{
 					String id = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_id)";
+					String collectionEventKey = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_collectionEventId)";
+					String receivedEventKey = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_receivedEventId)";
 					String specimenClass = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenClass)";
 					String classKey = "DeriveSpecimenBean:" + rowno + "_specimenClass";
 					String unit = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_unit)";
@@ -306,7 +308,8 @@
 <tr>
 
 
-
+					<html:hidden property="<%=collectionEventKey%>" />
+					<html:hidden property="<%=receivedEventKey%>" />
 					<html:hidden property="<%=id%>" />
 
 			<%

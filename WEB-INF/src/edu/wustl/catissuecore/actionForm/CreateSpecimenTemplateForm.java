@@ -1281,7 +1281,13 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			final String requirementLabel = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, requirementLabel);
 			
+			key = "DeriveSpecimenBean:" + iCount + "_collectionEventId";
+			final String collectionEventId = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, collectionEventId);
 			
+			key = "DeriveSpecimenBean:" + iCount + "_receivedEventId";
+			final String receivedEventId = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, receivedEventId);
 
 		}
 		return deriveSpecimenMap;

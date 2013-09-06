@@ -10,7 +10,7 @@
 							<tr>
 		                      <td align="center" class="black_ar"><span class="blue_ar_b"></span></span></td>
                               <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
-                              <td align="left" class="black_ar">%if(Constants.ALIQUOT.equalsIgnoreCase(form.getLineage())){%>${createSpecimenTemplateForm.specimenReqTitle}<%}else{%>
+                              <td align="left" class="black_ar"><%if(Constants.ALIQUOT.equalsIgnoreCase(form.getLineage())){%>${createSpecimenTemplateForm.specimenReqTitle}<%}else{%>
                               <html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/><%}%>
 						          </td>
 						          
@@ -49,66 +49,40 @@
 									}
 
 								%>
-								<logic:equal name="isPersistent" value="true">
-										<label>
-												${createSpecimenTemplateForm.className}
-										</label>
-									</td>
-								</logic:equal>
-								<logic:notEqual name="isPersistent" value="true">
 										<autocomplete:AutoCompleteTag property="className"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 										  initialValue="<%=form.getClassName()%>"
-										  readOnly="<%=readOnlyForSpecimen%>"
+										  readOnly="false"
 										  onChange="onTypeChange(this);clearTypeCombo()"
 										  styleClass="black_ar"
 										  size="20"
 										/>
-									</td>
-								</logic:notEqual>
 
                                 <td width="1%" align="center"><span class="blue_ar_b">
 									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 							    <td width="15%" align="left"><label for="type" class="black_ar"><bean:message key="specimen.subType"/></label></td>
-   								<logic:equal name="isPersistent" value="true">
-								<td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.type}
-										</label>
-									</td>
-								</logic:equal>
-								<logic:notEqual name="isPersistent" value="true">
-									<td width="28%" align="left" class="black_ar">
+   									<td width="28%" align="left" class="black_ar">
 									<div id="specimenTypeId">
 										<autocomplete:AutoCompleteTag property="type"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 										  initialValue="<%=form.getType()%>"
 										  onChange="<%=subTypeFunctionName%>"
-										  readOnly="<%=readOnlyForAliquot%>"
+										  readOnly="false"
 										  dependsOn="<%=form.getClassName()%>"
 										  styleClass="black_ar"
 										  size="20"
 										/>
 										</div>
 									</td>
-								</logic:notEqual>
                         </tr>
                         <tr>
                            <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                            <td align="left" class="black_ar"><bean:message key="specimen.tissueSite"/></td>
-						   <logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.tissueSite}
-										</label>
-									</td>
-							</logic:equal>
-								<logic:notEqual name="isPersistent" value="true">
-								 <td width="30%" align="left" class="black_new" >
+						  		 <td width="30%" align="left" class="black_new" >
 									<autocomplete:AutoCompleteTag property="tissueSite"
 									  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 									  initialValue="<%=form.getTissueSite()%>"
-									  readOnly="<%=readOnlyForAliquot%>"
+									  readOnly="false"
 									  styleClass="black_ar"
 									  size="20"
 								/>
@@ -119,52 +93,34 @@
 				%>
 									<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis"></a></span></td>
-								</logic:notEqual>
 									<td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 
 
 						   <td align="left" class="black_ar"><bean:message key="specimen.tissueSide"/></td>
-                        		<logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.tissueSide}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
+                        		
 								<td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="tissueSide"
 										optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
 									    initialValue="<%=form.getTissueSide()%>"
-									    readOnly="<%=readOnlyForAliquot%>"
+									    readOnly="false"
 										styleClass="black_ar"
 										size="20"
 								    />
 								</td>
-								</logic:notEqual>
-                              </tr>
+				</tr>
 
                               <tr>
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                 <td align="left" class="black_ar"><bean:message key="specimen.pathologicalStatus"/> </td>
-								<logic:equal name="isPersistent" value="true">
-									 <td width="28%" align="left" class="black_ar">
-										<label>
-												${createSpecimenTemplateForm.pathologicalStatus}
-										</label>
-									</td>
-								</logic:equal>
-  							   <logic:notEqual name="isPersistent" value="true">
-                                <td width="30%" align="left" class="black_ar">
+				                                <td width="30%" align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
 									  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 									  initialValue="<%=form.getPathologicalStatus()%>"
-									  readOnly="<%=readOnlyForAliquot%>"
+									  readOnly="false"
 									  styleClass="black_ar"
 									  size="20"
 									/>
 								</td>
-  							   </logic:notEqual>
                                <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                <td align="left" class="black_ar"><bean:message key="cpbasedentry.storagelocation"/></td>
                                 				<td align="left" class="black_ar">
@@ -192,7 +148,7 @@
 										if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 										concentrationDisabled = false;
 									%>
-     									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>
+     									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="false" style="text-align:right"/>
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 								</td>
                               </tr>
@@ -326,6 +282,8 @@
 				for(int rowno=1;rowno<=noOfDeriveSpecimen;rowno++)
 				{
 					String id = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_id)";
+					String collectionEventKey = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_collectionEventId)";
+					String receivedEventKey = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_receivedEventId)";
 					String idKey = "DeriveSpecimenBean:" + rowno + "_id";
 					String specimenClass = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenClass)";
 					String classKey = "DeriveSpecimenBean:" + rowno + "_specimenClass";
@@ -353,8 +311,8 @@
 			%>
 <tr>
 
-
-
+					<html:hidden property="<%=collectionEventKey%>" />
+					<html:hidden property="<%=receivedEventKey%>" />
 					<html:hidden property="<%=id%>" />
 			<%
 					String requirementLabelValue = (String)form.getDeriveSpecimenValue(requirementLabelKey);

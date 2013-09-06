@@ -111,7 +111,9 @@ public class DeriveSpecimenBean implements Serializable
 	
 	private String requirementLabel;
 
-
+	private String collectionEventId;
+	
+	private String receivedEventId;
 	
 
 	public String getRequirementLabel() {
@@ -444,4 +446,28 @@ public class DeriveSpecimenBean implements Serializable
 	{
 		this.stContSelectionforDerive = stContSelectionforDerive;
 	}
+
+	
+	public String getCollectionEventId()
+	{
+		return collectionEventId;
+	}
+	
+	public void setCollectionEventId(String collectionEventId)
+	{
+		this.collectionEventId = collectionEventId;
+	}
+
+	
+	public String getReceivedEventId()
+	{
+		return receivedEventId;
+	}
+
+	
+	public void setReceivedEventId(String receivedEventId)
+	{
+		this.receivedEventId = receivedEventId;
+	}
+	
 }
