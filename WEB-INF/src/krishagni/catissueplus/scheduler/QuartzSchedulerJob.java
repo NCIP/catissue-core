@@ -1,8 +1,6 @@
 
 package krishagni.catissueplus.scheduler;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -32,25 +30,8 @@ public class QuartzSchedulerJob implements Job
         logger.info("End of execution of TitliIndexerJob");
 
         logger.info("Starting execution of ContainerSpecimenCountJob");
-        Class containerSpecimenCountJob;
-        try
-        {
-            containerSpecimenCountJob = Class.forName("krishagni.catissueplus.scheduler.ContainerSpecimenCountJob");
-            containerSpecimenCountJob.getClass().getDeclaredMethod("executeContainerSpecimenCountJob").invoke(null);
-            logger.info("End of execution of ContainerSpecimenCountJob");
-        
-        }
-        catch (ClassNotFoundException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        ContainerSpecimenCountJob.executeContainerSpecimenCountJob();//run ContainerSpecimenCountJob
+        logger.info("End of execution of ContainerSpecimenCountJob");
     }
 
 }

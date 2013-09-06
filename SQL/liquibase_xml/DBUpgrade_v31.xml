@@ -39,6 +39,32 @@
 	</changeSet>
 	
 	
+	<changeSet id="5" author="catissue" runOnChange="true">
+
+		<createTable tableName="CATISSUE_STOR_CONT_UTILIZATION">
+			<column name="STORAGE_CONTAINER_ID" type="${int.type}" autoIncrement="true" >
+			</column>
+			<column name="STORED_SPECIMEN_COUNT" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="CONT_DATE" type="${date.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="UTILIZATION_PERCENTAGE" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addPrimaryKey 
+            columnNames="STORAGE_CONTAINER_ID"
+            constraintName="PK_CATISSUE_STOR_CONT_UTIL"
+            tableName="CATISSUE_STOR_CONT_UTILIZATION"
+            />		
+		<addForeignKeyConstraint constraintName="FK_STORAGE_CONTAINER_ID"
+			baseTableName="CATISSUE_STOR_CONT_UTILIZATION" baseColumnNames="STORAGE_CONTAINER_ID"
+			referencedTableName="CATISSUE_STORAGE_CONTAINER" referencedColumnNames="IDENTIFIER" /> 
+	
+	</changeSet>
 	<changeSet id="6" author="catissue" runOnChange="true" failOnError="false">
 		<sql>update catissue_address set country ='United States' where country is null;</sql>
 		<sql>update catissue_address set city ='Not Specified' where city is null;</sql>
