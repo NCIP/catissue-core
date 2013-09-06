@@ -337,10 +337,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
         }
         catch (final DAOException daoExp)
         {
-            this.logger.error(daoExp.getMessage(), daoExp);
-            daoExp.printStackTrace();
-            throw this
-                    .getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+           
         }
         return result;
     }

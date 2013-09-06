@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
-import krishagni.catissueplus.dto.StorageContainerUtilizationDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerViewDTO;
-import krishagni.catissueplus.scheduler.ContainerSpecimenCountJob;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -111,73 +109,5 @@ public class StorageContainerAjaxAction extends DispatchAction
         return null;
     }
 
-    /**
-     * Method to get data for displaying storage container graph of specimen count
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException 
-     * @throws ApplicationException 
-     * @throws SQLException 
-     * @throws JSONException 
-     */
-    public ActionForward getStorageContainerDataForGraph(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws IOException, ApplicationException,
-            SQLException, JSONException
-    {
-        HibernateDAO hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
-
-        String siteName = request.getParameter(Constants.SITE_NAME);
-        String type =  request.getParameter("graphType");
-
-        ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList = new StorageContainerBizlogic()
-                .getStorageContainerUtilizationDetailsDTOList(hibernateDAO, siteName);
-
-        AppUtility.closeDAOSession(hibernateDAO);
-
-        response.setContentType("application/json");
-        
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data",  getJSONFromStorageContainerUtilizationDetailsDTOList(storageContainerUtilizationDetailsDTOList,type));
-        jsonObject.put("redLineValue", XMLPropertyHandler.getValue(Constants.RED_LINE_VALUE));
-        response.getWriter().write(jsonObject.toString());
-
-        return null;
-    }
-    
-       /**
-     * Returns JSON string for storageContainerUtilizationDetailsDTOList
-     * @param storageContainerUtilizationDetailsDTOList
-     * @return
-     * @throws JSONException 
-     */
-    private String getJSONFromStorageContainerUtilizationDetailsDTOList(
-            ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList,String type)
-            throws JSONException
-    {
-        JSONArray storageContainerSpecCountGraphDataArray = new JSONArray();
-        
-        for (StorageContainerUtilizationDetailsDTO storageContainerUtilizationDetailsDTO : storageContainerUtilizationDetailsDTOList)
-        {
-
-            ArrayList<StorageContainerStoredSpecimenDetailsDTO> storageContainerStoredSpecimenDetailsDTOList = storageContainerUtilizationDetailsDTO
-                    .getStorageContainerStoredSpecimenDetailsDTOList();
-            JSONArray jsonArrayForData = new JSONArray();
-            for (StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO : storageContainerStoredSpecimenDetailsDTOList)
-            {
-                JSONArray jsonArrayForXYPoints = new JSONArray();
-                jsonArrayForXYPoints.put(storageContainerStoredSpecimenDetailsDTO.getDateOfSpecimenCount().getTime());
-                jsonArrayForXYPoints.put(type.equals("specimenCount")?storageContainerStoredSpecimenDetailsDTO.getSpecimenCount():storageContainerStoredSpecimenDetailsDTO.getPercentUtilization());
-                jsonArrayForData.put(jsonArrayForXYPoints);
-            }
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Constants.CHART_SERIES_NAME, storageContainerUtilizationDetailsDTO.getContainerName());
-            jsonObject.put(Constants.CHART_SERIES_DATA, jsonArrayForData);
-            storageContainerSpecCountGraphDataArray.put(jsonObject);
-        }
-        return storageContainerSpecCountGraphDataArray.toString();
-    }
     
 }

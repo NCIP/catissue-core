@@ -27,7 +27,6 @@ import javax.servlet.http.HttpSession;
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.dao.StorageContainerDAO;
 import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
-import krishagni.catissueplus.dto.StorageContainerUtilizationDTO;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -61,6 +60,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
@@ -127,24 +127,28 @@ public class ShowStorageGridViewAction extends BaseAction
 
 		HibernateDAO dao = null;
 		dao = (HibernateDAO) AppUtility.openDAOSession(null);
+		 request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, false);
+		 request.setAttribute("showUtilization", false);
+		
+		try {
+		     Class graphBizLoic =  Class.forName("krishagni.catissueplus.bizlogic.StorageContainerGraphBizlogic");
+		     Object storageContainerUtilizationDTOObj = graphBizLoic.getMethod("getStorageContainerUtilizationDTO",Long.class,HibernateDAO.class).invoke(graphBizLoic.newInstance(),Long.valueOf(id), dao);
+		     Class graphDao =  Class.forName("krishagni.catissueplus.dao.StorageContainerGraphDAO");
+		     Object storageContainerStoredSpecimenDetailsDTO = graphDao.getMethod("getUtilizationCountsOfContainerById",HibernateDAO.class,Long.class).invoke(graphDao.newInstance(),dao,Long.valueOf(id));
+		     storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getSpecimenCount").invoke(storageContainerStoredSpecimenDetailsDTO);
+		     request.setAttribute(Constants.SPEC_COUNT,  storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getSpecimenCount").invoke(storageContainerStoredSpecimenDetailsDTO));
+		     request.setAttribute(Constants.CAPACITY,storageContainerUtilizationDTOObj.getClass().getDeclaredMethod("getTotalStorageCapacity").invoke(storageContainerUtilizationDTOObj));
+             Long utilizationPercentage = (Long) storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getPercentUtilization").invoke(storageContainerStoredSpecimenDetailsDTO);
 
-        StorageContainerUtilizationDTO storageContainerUtilizationDTO = new StorageContainerBizlogic()
-				.getStorageContainerUtilizationDTO(Long.valueOf(id), dao);
-        StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = (new StorageContainerDAO()).getUtilizationCountsOfContainerById(dao,Long.valueOf(id));
-		AppUtility.closeDAOSession(dao);
-
-        request.setAttribute(Constants.SPEC_COUNT, storageContainerStoredSpecimenDetailsDTO.getSpecimenCount());
-        request.setAttribute(Constants.CAPACITY, storageContainerUtilizationDTO.getTotalStorageCapacity());
-
-        Long utilizationPercentage =storageContainerStoredSpecimenDetailsDTO.getPercentUtilization();
-       
-        request.setAttribute(Constants.PERCENTAGE, utilizationPercentage);
-
-        request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, false);
-        if (utilizationPercentage >= 90)
-        {
-            request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, true);
-        }
+		     request.setAttribute(Constants.PERCENTAGE, utilizationPercentage);
+		     if (utilizationPercentage >= 90)
+		        {
+		            request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, true);
+		        }
+		     request.setAttribute("showUtilization", true);
+		   } catch(ClassNotFoundException e) {
+		   }
+              
 
 		String contentOfContainer = null;
 		final String pageOf = request.getParameter(Constants.PAGE_OF);

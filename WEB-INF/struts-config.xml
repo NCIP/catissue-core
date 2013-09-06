@@ -181,6 +181,10 @@ PUBLIC
 			type="krishagni.catissueplus.action.StorageContainerAjaxAction" 
 			validate="false" scope="request" parameter="type">
 		</action>
+		<action path="/NewStorageContainerGraphAjaxAction"
+			type="krishagni.catissueplus.action.StorageContainerGraphAjaxAction" 
+			validate="false" scope="request" parameter="type">
+		</action>
 		
 		<action path="/ExportAction"
 			type="edu.wustl.catissuecore.action.ExportAction"
