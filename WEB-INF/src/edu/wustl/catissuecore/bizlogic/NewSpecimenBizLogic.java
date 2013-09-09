@@ -6152,32 +6152,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	}
 
-	/** This method returns a NameValueBeanList of specimen label and its id.
-	 * @param scgId
-	 * @return
-	 * @throws DAOException
-	 * @throws JSONException 
-	 * @throws BizLogicException 
-	 */
-	public List<NameValueBean> getSpecimeLables(DAO dao, Long scgId) throws BizLogicException
-	{
-
-		SpecimenDAO specDao = new SpecimenDAO();
-		List<NameValueBean> speicmens;
-
-		try
-		{
-			speicmens = specDao.getSpecimenLableAndId(dao, scgId);
-		}
-		catch (final DAOException daoExp)
-		{
-			LOGGER.error(daoExp.getMessage(), daoExp);
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		return speicmens;
-	}
-
 	public Collection<ConsentTierDTO> getConsentTireDTOs(String specimenLabel, HibernateDAO dao)
 			throws BizLogicException
 	{

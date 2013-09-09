@@ -414,11 +414,17 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
           <td colspan="3"><table width="100%" border="0" cellpadding="3" cellspacing="0">
             <tr>
 				<td class="black_ar">
+				<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
+								<span class="black_ar" style="vertical-align:2px">
+								<bean:message key="label.justSubmit"/>
+								</span>
+								<span style="margin-left:30px;">
 					 <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true"/>
 								<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="label.collect.perCP"/>
 								</span>
-								<span style="margin-left:40px;">
+								</span>
+								<span style="margin-left:30px;">
 						<input type="radio" value="2" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
 								<span class="black_ar" style="vertical-align:2px">
 								<bean:message key="label.adhocSpecimen"/>
@@ -426,12 +432,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 								&nbsp;
 						<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/></span></span>
 						&nbsp;
-						<span style="margin-left:30px;">
-						<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
-								<span class="black_ar" style="vertical-align:2px">
-								<bean:message key="label.justSubmit"/>
-								</span>
-						</span>
+						
+						
+						
 						</td>
 			</tr>
 			<tr>

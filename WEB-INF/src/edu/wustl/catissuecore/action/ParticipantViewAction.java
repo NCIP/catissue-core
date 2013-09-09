@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -16,64 +15,81 @@ import org.json.JSONObject;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.dao.SCGDAO;
 import edu.wustl.catissuecore.dto.ParticipantDTO;
-import edu.wustl.catissuecore.dto.SCGEventPointDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.dao.DAO;
+import edu.wustl.common.util.global.Validator;
+import edu.wustl.dao.HibernateDAO;
 
-public class ParticipantViewAction  extends Action
+public class ParticipantViewAction  extends CatissueBaseAction
 {
 
-	public ActionForward execute(ActionMapping mapping,
+	public ActionForward executeCatissueAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 			
 		     SessionDataBean sessionData =  (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		     String pageOf = request.getParameter(Constants.PAGE_OF);
-		       DAO dao = null;
+		     if(Validator.isEmpty(pageOf))
+		     {
+		    	 pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+		     }
+		     String participantId = request.getParameter("id");
+		     if(Validator.isEmpty(participantId))
+		     {
+		    	 participantId = (String)request.getAttribute("id");
+		     }
+		     String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
+		     if(Validator.isEmpty(cpId))
+    		 {
+		    	 cpId = (String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
+    		 }
+		       HibernateDAO hibernateDao = null;
 		      try{ 
-		       dao = AppUtility.openDAOSession(sessionData);
+		       hibernateDao = (HibernateDAO)AppUtility.openDAOSession(sessionData);
 		       CollectionProtocolRegistrationBizLogic cprbizlogic = new CollectionProtocolRegistrationBizLogic();
-		       Long registrationId = cprbizlogic.getRegistrationId(dao,new Long(request.getParameter("id")),
-		    		   new Long(request.getParameter(Constants.CP_SEARCH_CP_ID)));
+		       Long registrationId = cprbizlogic.getRegistrationId(hibernateDao,new Long(participantId),
+		    		   new Long(cpId));
+		       request.setAttribute("cprId", registrationId);
 		       SpecimenCollectionGroupBizLogic scgBizlogic = new SpecimenCollectionGroupBizLogic();
-		       
-		        List<SCGEventPointDTO> scgEvents = scgBizlogic.getscgeventPoint(dao,registrationId);
-		        String eventPointData = getScgEventPointJson(scgEvents);
-		        request.setAttribute("eventPointData",eventPointData);		
+		       SCGDAO scgdao= new SCGDAO();
+		       List<NameValueBean> scgLabels = scgdao.getSCGNameList(hibernateDao,registrationId);
+		       String scgLabelString = getJsonArrayFromList(scgLabels); 
+		       List<NameValueBean> eventLabels = scgdao.getEventLabelsList(hibernateDao,new Long(cpId));
+		       String cpeLabelString = getJsonArrayFromList(eventLabels);
+		       List<NameValueBean> specimenLabels = scgdao.getspecimenLabelsList(hibernateDao,registrationId);
+		       String specLabelString = getJsonArrayFromList(specimenLabels);
+		       request.setAttribute("specLabelString", specLabelString);
+		        request.setAttribute("eventPointLabels",cpeLabelString);
+		        request.setAttribute("scgLabels",scgLabelString);
 		       	ParticipantBizLogic bizLogic=new ParticipantBizLogic();
-				ParticipantDTO participantDTO=bizLogic.getParticipantDTO(dao,new Long(request.getParameter("id")), 
-						new Long(request.getParameter(Constants.CP_SEARCH_CP_ID)));
+				ParticipantDTO participantDTO=bizLogic.getParticipantDTO(hibernateDao,new Long(participantId), 
+						new Long(cpId));
 				request.setAttribute("participantDto", participantDTO);
 				request.setAttribute("datePattern", CommonServiceLocator.getInstance().getDatePattern());
 			}
 			  finally
 			 {
-			    if(dao!=null)
+			    if(hibernateDao!=null)
 			    {
-				  dao.closeSession();	
+				  hibernateDao.closeSession();	
 			    }
 			 }
  				return mapping.findForward(pageOf);
  			}
 	
-	private String getScgEventPointJson(List<SCGEventPointDTO> eventPointList) throws JSONException
+	private String getJsonArrayFromList(List<NameValueBean> list) throws JSONException
 	{
 		  JSONArray innerDataArray = new JSONArray();
-		  for(SCGEventPointDTO scgEventDto:eventPointList)
+		  for(NameValueBean bean:list)
 		  {
 		    JSONObject innerJsonObject = new JSONObject();
-	        StringBuffer label = new StringBuffer();
-	        label.append(scgEventDto.getEventPointLabel()).append("(").append(scgEventDto.getStudyCalendarEventPoint()).append(")");
-	         if(!scgEventDto.getScgName().isEmpty() && !"null".equalsIgnoreCase(scgEventDto.getScgName()))
-	         {
-	        	 label.append("<br>").append("<div id=\"scg_").append(scgEventDto.getScgId()).append("\" style=\"color:#aaa\">").append(scgEventDto.getScgName()).append("</div>");
-	         }
-			innerJsonObject.put("text",label.toString());
-			innerJsonObject.put("value",scgEventDto.getScgId());
+			innerJsonObject.put("text",bean.getName());
+			innerJsonObject.put("value",bean.getValue());
 		    innerDataArray.put(innerJsonObject);
 		    innerDataArray.toString();
 		  }

@@ -121,6 +121,7 @@ if(operation == "add")
 			 radios[i].checked = true;
 			 adhocSelect = false;
 				cpSelect = true;
+
 			 }
 		}
 }

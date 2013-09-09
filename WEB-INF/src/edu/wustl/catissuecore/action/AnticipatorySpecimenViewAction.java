@@ -109,6 +109,10 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			final HttpSession session = request.getSession();
 			final String contName = request.getParameter(Constants.CONTAINER_NAME);
 			Long identifier = specimenCollectionGroupForm.getId();
+			if((identifier == null || identifier == 0)&& request.getParameter("scgId") == null && request.getAttribute("id") != null)
+			{
+				identifier = Long.valueOf(request.getAttribute("id").toString());
+			}
 			if (request.getParameter("scgId") != null && request.getParameter("specimenId") != null)
 			{
 				Map<String, Long> forwardToHashMap = new HashMap<String, Long>();

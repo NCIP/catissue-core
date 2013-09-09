@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script	src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script	src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
@@ -12,10 +12,12 @@
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/participantView.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script>
       window.dhx_globalImgPath="dhtmlx_suite/imgs/";
-     var scgEvenData = ${requestScope.eventPointData}; 
+     var eventPointLabels = ${requestScope.eventPointLabels}; 
+	 var scgLabels = ${requestScope.scgLabels}; 
+	 var specLabelString = ${requestScope.specLabelString};
 </script>
 <html>
 <head>
@@ -28,6 +30,8 @@
 <input type="hidden" name="CPQuery" value="CPQuery" />
 <input type="hidden" name="pId" id="pId" value="${participantDto.participantId}" />
 <input type="hidden" name="cpId" id="cpId" value="${participantDto.cpId}" />
+<input type="hidden" name="cprId" id="cprId" value="${requestScope.cprId}" />
+
 
 <table width="100%" border="0"  cellpadding="10" cellspacing="0" class="whitetable_bg">	
 	<tr class="tr_bg_blue1 blue_ar_b">
@@ -41,6 +45,9 @@
 	<tr>
 		<td class="bottomtd"></td>
 	</tr>
+	<tr>
+	<td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+	</tr>
 </table>
 
 <div id="participantDetails" class="align_left_style">
@@ -52,6 +59,9 @@
 				<b><bean:message key="participant.view.birth.date"/></b> 
 			</td>
 			<td class="black_ar" width="20%">
+				<c:if test="${empty participantDto.dob}">
+					<bean:message key="query.tree.label.NA"/>
+				 </c:if>
 				<fmt:formatDate value="${participantDto.dob}" pattern="${datePattern}" />
 			</td>
 			<td align="right" class="black_ar padding_right_style" width="30%"> 
@@ -63,6 +73,9 @@
                    </c:if>
                     <bean:write name="partMrn" property="mrn" /> ( <bean:write name="partMrn" property="siteName" /> )
                  </logic:iterate>  
+				 <c:if test="${empty participantDto.mrns}">
+					<bean:message key="query.tree.label.NA"/>
+				 </c:if>
 	   </tr>
 	   
 	   <tr class="tr_alternate_color_lightGrey">
@@ -71,6 +84,9 @@
 		 </td> 
 		 <td class="black_ar bottomtd" width="20%">
 				<fmt:formatDate value="${participantDto.registrationDate}" pattern="${datePattern}" />
+				<c:if test="${empty participantDto.registrationDate}">
+					<bean:message key="query.tree.label.NA"/>
+				 </c:if>
 		</td>
 		<td  align="right" class="black_ar bottomtd  padding_right_style" width="30%"> 
                          <b><bean:message key="participant.view.isConsented"/></b>
@@ -84,14 +100,21 @@
 		<td  width="20%" align="right" class="black_ar padding_right_style">
 			<b><bean:message key="participant.gender"/></b>
 		</td>
-		<td  width="20%" class="black_ar"> <bean:write name="participantDto" property="gender" /></td>
+		<td  width="20%" class="black_ar"> <bean:write name="participantDto" property="gender" />
+		<c:if test="${empty participantDto.gender}">
+					<bean:message key="query.tree.label.NA"/>
+				 </c:if>
+		</td>
 		<td  width="30%" align="right" class="black_ar padding_right_style"><b><bean:message key="participant.race"/></b></td>
 		<td  width="30%" class="black_ar" > <logic:iterate id="prace" name="participantDto"  property="race" indexId="indx">
 <c:if test="${indx > 0}">
                       ,
                    </c:if>
                     <bean:write name="prace" /> 
-                 </logic:iterate>   </td>
+                 </logic:iterate>   
+				 <c:if test="${empty participantDto.race}">
+					<bean:message key="query.tree.label.NA"/>
+				 </c:if></td>
 	</tr>
 	
 	<tr class="tr_alternate_color_lightGrey">
@@ -128,14 +151,13 @@
 				<b><bean:message key="participant.view.select.event.point"/></b>
 		        </td>
 			<td width="35%">
-				<div id="addSCGEvents"> </div>
+				<div id="eventsList"> </div>
 			</td>
-			<td width="35%">	
+			<td width="35%" class="black_ar">	
 			 <span style="vertical-align:bottom">
-				<a href="#" title="Add" style="padding-right:7px;"><img src="images/Action-add.png" alt="Create SCG" onclick="addNewScg()"></a>
-				<a href="#" title="Edit" style="padding-right:7px;"> <img src="images/Action-edit.png" alt="Edit" onclick="editScg()"></a>
-                 <html:button styleClass="blue_ar_b" property="collectSpecimenPerCP"	title="Collect Specimens  As Per CP" value="Collect Specimens" onclick="collectSpecimen();">
-				 </html:button>
+				<a href="javascript:addNewScg()" title="Add" style="padding-right:7px;"><bean:message key="label.addSCG"/></a>
+				
+                
 				<!-- <a href="#" title="View"> <img src="images/Action-view.png" alt="View" onclick="scgOperation('view')"></a> &nbsp;
 				<a href="#" title="Delete"><img src="images/Action-close.png" alt="Delete" onclick="scgOperation('delete')"></a> &nbsp;
 				<a href="#" title="Print"><img src="images/Action-print.png" alt="Print" onclick="scgOperation('print')"></a> -->
@@ -143,28 +165,63 @@
 			</td>
 </td> <td width="20%"></td>
 </tr>
-			<!-- <td align="left" width="*">
-				 <html:button styleClass="blue_ar_b"	property="collectSpecimenPerCP"	title="Collect Specimens  As Per CP" value="Collect Specimens" onclick="collectSpecimen();">
-				 </html:button>
-			</td> -->
- <!--	<tr height="33px" class="tr_alternate_color_lightGrey">
-		<td width="25%" class="black_ar  padding_right_style" align="right">
-					<b><bean:message key="participant.view.add.specimen"/></b>
-		</td>
-		<td width="25%">
-			<input type="text" name="createSpecimen" id="createSpecimen" size ="20" value="Count" class="text_box_style"/>
-		</td>	
-		<td width="25%">
-			 	<html:button styleClass="blue_ar_b"	property="createAdditionalSpecimen"	title="Create Additional Specimen" value="Go">
-				</html:button> 
-		</td> <td width="25%"></td>
-	</tr> -->
+<tr class="tr_alternate_color_lightGrey">	
+			<td width="20%" class="black_ar padding_right_style"> 
+				<span style="float:left" ><b>OR</b></span>
+				<span style="float:right">
+				<b><bean:message key="label.selectSCG"/> </b></span>
+		        </td>
+			<td width="35%">
+				<div id="scgList"> </div>
+			</td>
+			<td width="35%" class="black_ar">	
+			 <span style="vertical-align:bottom">
+				
+				<a href="javascript:editScg()" title="Edit" style="padding-right:7px;"><bean:message key="label.editSCG"/></a>
+                
+				
+			 </span>
+			</td>
+</td> <td width="20%"></td>
+</tr>
+			<!--          -->
+		<tr>
+          <td colspan="4" width="100%"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr>
+				<td class="black_ar" width="55%">
+				
+								<span style="margin-left:5px;">
+								<span class="black_ar" style="vertical-align:2px">
+								<b><bean:message key="label.collectSpecimen"/></b> &nbsp;&nbsp;</span>
+					 <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true"/>
+								<span class="black_ar" style="vertical-align:2px">
+								<b><bean:message key="label.collect.perCP"/></b>
+								</span>
+								</span>
+								<span style="margin-left:30px;">
+						<input type="radio" value="2" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
+								<span class="black_ar" style="vertical-align:2px">
+								<b><bean:message key="label.adhocSpecimen"/></b>
+								
+								&nbsp;
+								<input type="text" style="text-align:right;border:0px;" size="1" maxlength="2" id="numberOfSpecimens" name="numberOfSpecimens"  onblur="isNumeric(this)" readOnly="true"/>
+						</span></span>
+						</td>
+				<td style="vertical-align:1px">
+						<span align="left" style="vertical-align:1px">
+						<html:button  styleClass="blue_ar_b" property="aliquot" title="Aliqut" value=" Go " onclick="createNewSpecimens()">
+				</html:button>
+						</span>
+</td>
+			</tr></table></td>
+			</tr>
+			<!--          -->
 
-<tr> <td colspan="4"> </td> </tr>
+<tr> <td colspan="4"></td> </tr>
 	<tr class="tr_bg_blue1 blue_ar_b">
-		<td  class="heading_text_style" width="30%">
+		<td  class="heading_text_style" colspan="4">
 			    <bean:message key="participant.view.specimen.actions"/>
-			</td> <td colspan="3"/>
+			</td> 
 	 </tr>		
 	<tr>	
 		<td class="black_ar  padding_right_style" width="20%" align="right"> 
@@ -173,9 +230,9 @@
 		<td width="35%">
 				<div id="specimenLabels"></div>
 		</td>
-		<td width="25%">		
+		<td width="25%" class="black_ar">		
 			<span style="vertical-align:bottom">
-				<a href="#" title="Edit"> <img src="images/Action-edit.png" alt="Edit" onclick="editSpecimen()"></a>&nbsp;
+				<a href="javascript:editSpecimen()" title="Edit"><bean:message key="specimen.edit.title"/></a>&nbsp;
 				<!-- <a href="#" title="View"> <img src="images/Action-view.png" alt="View"></a> &nbsp;
 				<a href="#" title="Delete"><img src="images/Action-close.png" alt="Delete"></a> &nbsp;
 				<a href="#" title="Print"><img src="images/Action-print.png" alt="Print"></a> -->
@@ -209,6 +266,7 @@
 		<td width="25%">
 				<html:button  styleClass="blue_ar_b" property="derivative" title="derivative" onclick="createDerivative()" value=" Go ">
 				</html:button>
+				
 		</td>
 		<td width="25%" ></td>
 	</tr>
@@ -231,3 +289,32 @@
 </div>
 </body>
 </html>
+<script>
+function disableButtonsOnCheck(chkbox)
+{
+	if(chkbox.value == 1)
+	{
+		document.getElementById('numberOfSpecimens').readOnly = true;
+		document.getElementById('numberOfSpecimens').style.border="0px";
+	}
+	else if(chkbox.value == 2)
+	{
+		document.getElementById('numberOfSpecimens').readOnly = false;
+		document.getElementById('numberOfSpecimens').value=1;
+		document.getElementById('numberOfSpecimens').style.border="1px solid grey";
+		document.getElementById('numberOfSpecimens').focus();
+	}
+}
+
+function isNumeric(number) {
+value = number.value;
+if(value==Number(value))
+return true;
+else
+{
+	alert("Invalid Number, Please enter valid number.");
+	number.value="";
+	setTimeout(function(){number.focus();}, 1);
+}
+}
+</script>

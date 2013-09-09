@@ -1694,9 +1694,9 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		
 		final DisposalEventParameters disposalEvent = new DisposalEventParameters();
 		
-		AbstractSpecimen abstractSpecimen=new Specimen();
-		abstractSpecimen.setId(Long.parseLong(specimenId));
-		disposalEvent.setSpecimen(abstractSpecimen);
+		Specimen specimen=new Specimen();
+		specimen = (Specimen)dao.retrieveById(Specimen.class.getName(), Long.valueOf(specimenId));
+		disposalEvent.setSpecimen(specimen);
 		
 		disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
 		final User user = new User();
@@ -1704,14 +1704,26 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		disposalEvent.setUser(user);
 		disposalEvent.setActivityStatus(activityStatus);
 		disposalEvent.setReason(disposalReason);
+		
+		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
+		specimen.setIsAvailable(Boolean.FALSE);
+		specimen.setActivityStatus(activityStatus);
+		specimen.setSpecimenPosition(null);
+		
+		dao.update(specimen);
+		if (prevPosition != null)
+		{
+			dao.delete(prevPosition);
+		}
+		
 		dao.insert(disposalEvent);
 		
 		
-		NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic(); 
-		if(Status.ACTIVITY_STATUS_CLOSED.equals(activityStatus))
-		{	
-			specimenBizLogic.updateSpecimenStatusToClose(specimenLabel, dao);
-		}
+//		NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic(); 
+//		if(Status.ACTIVITY_STATUS_CLOSED.equals(activityStatus))
+//		{	
+//			specimenBizLogic.updateSpecimenStatusToClose(specimenLabel, dao);
+//		}
 		
 	}
 }

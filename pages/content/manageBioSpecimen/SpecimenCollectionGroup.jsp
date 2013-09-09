@@ -147,7 +147,9 @@ function updateHelpURL()
  		}
  %>
 <head>
-
+<script>
+		var operation = '<%=pageView%>';
+</script>
 	<%
 		String refreshTree = (String)request.getAttribute("refresh");
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
@@ -155,6 +157,7 @@ function updateHelpURL()
 		{
 	%>
 		<script language="javascript">
+
 		//Added by Falguni to refresh participant tree
 		var nodeid =  "<%=nodeId%>";
 	//	top.frames["cpAndParticipantView"].editParticipant(<%=participantId%>,nodeid);
@@ -407,7 +410,6 @@ var reportId='${sessionScope.identifiedReportId}';
 var pageOfValue='${requestScope.pageOf}';
 var scgEntityIdValue='${requestScope.scgRecordEntryEntityId}';
 var hasConsents = ${requestScope.hasConsents};
-var operation = '<%=pageView%>';
 
 var idValue='<%=id%>';
 

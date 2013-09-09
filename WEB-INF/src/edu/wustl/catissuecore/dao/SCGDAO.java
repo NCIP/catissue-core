@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -18,6 +19,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.SCGEventPointDTO;
 import edu.wustl.catissuecore.dto.SCGSummaryDTO;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
@@ -231,6 +233,109 @@ public class SCGDAO
 			eventParameter.setReceivedQuality(Constants.CP_DEFAULT);
 		}
 		
+	}
+	
+	public List<NameValueBean> getSCGNameList(HibernateDAO hibernateDao, Long registrationId) throws DAOException
+	{
+		List<NameValueBean> returnList = new ArrayList<NameValueBean>();
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+			params.put("0", new NamedQueryParam(DBTypes.LONG, registrationId));
+			
+			List result = hibernateDao.executeNamedQuery("getSCGNameIdPairList", params);
+			Object[] obj;
+			for (Object object : result)
+			{
+				obj = (Object[])object;
+				NameValueBean bean = new NameValueBean(obj[1],obj[0]);
+				returnList.add(bean);
+			}
+		return returnList;
+	}
+
+	public List<NameValueBean> getEventLabelsList(HibernateDAO hibernateDao, Long registrationId) throws DAOException
+	{
+		List<NameValueBean> returnList = new ArrayList<NameValueBean>();
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG, registrationId));
+		
+		List result = hibernateDao.executeNamedQuery("getCPENameIdPairList", params);
+		Object[] obj;
+		for (Object object : result)
+		{
+			obj = (Object[])object;
+			NameValueBean bean = new NameValueBean(obj[0]+"("+obj[1]+")",obj[2]);
+			returnList.add(bean);
+		}
+		return returnList;
+	}
+
+	public List<NameValueBean> getSGCFromCPE(HibernateDAO hibernateDAO, Long cpeId, Long cprId) throws DAOException
+	{
+		
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG, cpeId));
+		params.put("1", new NamedQueryParam(DBTypes.LONG, cprId));
+		
+		List result = hibernateDAO.executeNamedQuery("getSCGListFromCPE", params);
+		List<NameValueBean> beans = new ArrayList<NameValueBean>();
+		for (Object object : result)
+		{
+			Object[] res = (Object[])object;
+			beans.add(new NameValueBean(res[1].toString(),Long.valueOf(res[0].toString())));
+		}
+		// TODO Auto-generated method stub
+		return beans;
+	}
+
+	public Long getCPEIdFromSCGId(HibernateDAO hibernateDAO, Long scgId) throws DAOException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
+		List result = hibernateDAO.executeNamedQuery("getScgSummary", params);
+		if(result != null && result.size() != 0 )
+		{
+			Object[] obj = (Object[])result.get(0);
+			return Long.valueOf(obj[3].toString());
+		}
+		return null;
+	}
+
+	public List<NameValueBean> getspecimenLabelsList(HibernateDAO hibernateDao, Long registrationId) throws DAOException
+	{
+		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label";
+		ColumnValueBean bean = new ColumnValueBean(registrationId);
+		List list = hibernateDao.executeQuery(hql, Arrays.asList(bean));
+		List<NameValueBean> beans = new ArrayList<NameValueBean>();
+		if(list != null)
+		{
+			for (Object object : list)
+			{
+				Object[] obj = (Object[]) object;
+				beans.add(new NameValueBean(obj[1].toString(), Long.valueOf(obj[0].toString())));
+			}
+		}
+		// TODO Auto-generated method stub
+		return beans;
+	}
+
+	public List<NameValueBean> getSpecimenFromCPE(HibernateDAO hibernateDAO, Long cpId, Long registrationId) throws DAOException
+	{
+		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.specimenCollectionGroup.collectionProtocolEvent.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label";
+		List<ColumnValueBean> valueBeans = new ArrayList<ColumnValueBean>();
+		valueBeans.add(new ColumnValueBean(registrationId));
+		valueBeans.add(new ColumnValueBean(cpId));
+		List list = hibernateDAO.executeQuery(hql, valueBeans);
+		List<NameValueBean> beans = new ArrayList<NameValueBean>();
+		if(list != null)
+		{
+			for (Object object : list)
+			{
+				Object[] obj = (Object[]) object;
+				beans.add(new NameValueBean(obj[1].toString(), Long.valueOf(obj[0].toString())));
+			}
+		}
+		// TODO Auto-generated method stub
+		return beans;
 	}
 
 }

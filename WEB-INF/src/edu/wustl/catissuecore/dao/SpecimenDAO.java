@@ -31,20 +31,16 @@ public class SpecimenDAO
 	 * @return
 	 * @throws DAOException
 	 */
-	public List<NameValueBean> getSpecimenLableAndId(DAO dao, Long scgId) throws DAOException
+	public List<NameValueBean> getSpecimenLableAndId(HibernateDAO hibernateDAO, Long scgId) throws DAOException
 	{
 
-		List specimens = null;
 		List<NameValueBean> nvBeanList = new ArrayList<NameValueBean>();
 		try
 		{
-			final String applicationName = CommonServiceLocator.getInstance().getAppName();
-			String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where " +
-					"specimen.specimenCollectionGroup.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label";
-			ColumnValueBean columnValueBean = new ColumnValueBean(scgId);
-			List<ColumnValueBean> columnValueBeans = new ArrayList();
-			columnValueBeans.add(columnValueBean);
-			specimens = dao.executeQuery(hql, columnValueBeans);
+			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+			params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
+			
+			List specimens = hibernateDAO.executeNamedQuery("getSpecimenIdLabelPairForScg", params);
 
 			for (Object specimen : specimens)
 			{

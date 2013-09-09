@@ -4040,6 +4040,8 @@ PUBLIC
 				path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery"
 				path=".catissuecore.querySpecimenCollectionGroupViewDef" />
+			<forward name="successFrmPDash"
+				path="/CPQuerySpecimenCollectionGroupEdit.do?forwardTo=success" />
 			<forward name="failure"
 				path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
@@ -6094,6 +6096,16 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ParticipantViewAjaxAction"
 			validate="false" scope="request" parameter="method">
 			
+		</action>
+		
+		<action path="/QueryCollectSpecimenFromDashBoard" type="edu.wustl.catissuecore.action.ParticipantDashboardSCGAction"
+			    validate="false" scope="request">
+			 	<forward name="unplannedSpecimenAdd" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;virtualLocated=true"/>
+			 	<forward name="anticipatedSpecimenSumarryPage" path="/AnticipatorySpecimenView.do"/>
+			 	<forward name="unplannedMultipleSpecimenAdd" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
+			 	<forward name="addSCG" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;requestFrom=participantView"/>
+				<forward name="editSCG" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;requestFrom=participantView"/>
+			 	<forward name="failure" path="/QueryParticipantSearchForView.do?pageOf=newParticipantViewPage"/>
 		</action>
 
 		<action path="/DisplayScg"

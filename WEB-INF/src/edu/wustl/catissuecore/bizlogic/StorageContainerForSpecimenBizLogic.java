@@ -17,6 +17,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -235,6 +236,10 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 */
 	protected String[] getStorageContainerForSpecimenQuery(final List<Object> parameterList,String contName)
 	{
+		if(!Validator.isEmpty(contName))
+		{
+			contName = contName.toLowerCase();
+		}
 		// Containers allowing Only this CP, Only this Specimen Class and only this Specimen Type
 		final String query0 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ,contName);
 		// Containers only this CP restriction and just this Specimen Class and any specimen type
@@ -356,7 +361,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		if(contName!=null && !contName.equals(""))
 		{
 			scQuery.append(" AND ");
-			scQuery.append(" D.NAME Like '%");
+			scQuery.append(" lower(D.NAME) Like '%");
 			scQuery.append(contName);
 			scQuery.append("%' ");
 		}
@@ -531,7 +536,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		if(contName!=null && !contName.equals(""))
 		{
 			contNameQuery.append(" AND ");
-			contNameQuery.append(" d.NAME Like '%");
+			contNameQuery.append(" lower(d.NAME) Like '%");
 			contNameQuery.append(contName);
 			contNameQuery.append("%' ");
 		}

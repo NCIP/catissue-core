@@ -301,7 +301,7 @@ function disableButtonsOnCheck(selectedRadio)
 {
 	var adhocSpCnt = document.getElementById('numberOfSpecimens');
 	var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
-	
+
 	if(selectedRadio.value==1)
 		{
 			adhocSpCnt.readOnly = true;
@@ -323,7 +323,7 @@ function disableButtonsOnCheck(selectedRadio)
 			adhocSpCnt.value="1";
 			adhocSpCnt.focus();
 		}
-		else
+		else if(selectedRadio.value==3)
 		{
 			adhocSelect = false;
 			cpSelect = false;
@@ -332,6 +332,7 @@ function disableButtonsOnCheck(selectedRadio)
 			adhocSpCnt.value="";
 			adhocSpCnt.style.border="0px";
 		}
+		
 }
 
 function initializeSCGForm(formValue,getRestrictSCGCheckboxValue)

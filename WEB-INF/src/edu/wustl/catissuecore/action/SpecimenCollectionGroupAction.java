@@ -76,6 +76,7 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -112,7 +113,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			final HttpServletRequest request, final HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;
-		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 		try
 		{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
@@ -159,8 +160,16 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			}
 			else
 			{
+				Long scgId = specimenCollectionGroupForm.getId();
+				if(scgId == null || scgId == 0)
+				{
+					scgId = Long.valueOf(request.getAttribute("id").toString());
+				}
 				specimenCollectionGroup = AppUtility.getSCGObj(
-						specimenCollectionGroupForm.getId(), dao);
+						scgId, dao);
+				specimenCollectionGroupForm.setId(scgId);
+				specimenCollectionGroupForm.setName(specimenCollectionGroup.getName());
+				
 			}
 
 			boolean isOnChange = false;
@@ -603,6 +612,10 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			{
 				collectionProtocolId = Long.valueOf(request.getParameter("cpId"));
 				participantId = Long.valueOf(request.getParameter("pId"));
+				if(!Validator.isEmpty(request.getParameter("cpeId")))
+				{
+					cpeId = Long.valueOf(request.getParameter("cpeId"));
+				}
 			}
 				
 				final String collectionProtocolName = (String) request.getSession().getAttribute(
@@ -930,6 +943,16 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 		{
 			dao.closeSession();
 		}
+//		String forwardTo = request.getParameter("forwardTo");
+//		if(!Validator.isEmpty(forwardTo))
+//		{
+//			pageOf = forwardTo;
+//			request.setAttribute("org.apache.struts.taglib.html.TOKEN",request.getSession().getAttribute("org.apache.struts.action.TOKEN"));
+//		}
+//		session.getAttribute("org.apache.struts.action.TOKEN");
+		
+		
+//		response.sendRedirect("CPQuerySpecimenCollectionGroupEdit.do?forwardTo=success&operation="+Constants.EDIT);
 		return mapping.findForward(pageOf);
 	}
 

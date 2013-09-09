@@ -4228,4 +4228,15 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		return specimenIdList;
 
 	}
+	
+	public void updateSCG(SpecimenCollectionGroup collectionGroup, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		update(dao, collectionGroup, collectionGroup, sessionDataBean);
+	}
+	
+	public void insertSCG(SpecimenCollectionGroup collectionGroup, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		insert(collectionGroup, dao, sessionDataBean);
+	}
+
 }
