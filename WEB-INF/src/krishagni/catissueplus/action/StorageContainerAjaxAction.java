@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
+import krishagni.catissueplus.bizlogic.StorageContainerGraphBizlogic;
 import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerUtilizationDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerViewDTO;
-import krishagni.catissueplus.scheduler.ContainerSpecimenCountJob;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -110,7 +110,7 @@ public class StorageContainerAjaxAction extends DispatchAction
 
         return null;
     }
-
+    
     /**
      * Method to get data for displaying storage container graph of specimen count
      * @param mapping
@@ -132,7 +132,7 @@ public class StorageContainerAjaxAction extends DispatchAction
         String siteName = request.getParameter(Constants.SITE_NAME);
         String type =  request.getParameter("graphType");
 
-        ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList = new StorageContainerBizlogic()
+        ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList = new StorageContainerGraphBizlogic()
                 .getStorageContainerUtilizationDetailsDTOList(hibernateDAO, siteName);
 
         AppUtility.closeDAOSession(hibernateDAO);
@@ -179,5 +179,6 @@ public class StorageContainerAjaxAction extends DispatchAction
         }
         return storageContainerSpecCountGraphDataArray.toString();
     }
+
     
 }

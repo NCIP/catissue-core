@@ -182,6 +182,11 @@ PUBLIC
 			validate="false" scope="request" parameter="type">
 		</action>
 		
+		<action path="/NewStorageContainerGraphAjaxAction"
+			type="krishagni.catissueplus.action.StorageContainerGraphAjaxAction" 
+			scope="request">
+		</action>
+		
 		<action path="/ExportAction"
 			type="edu.wustl.catissuecore.action.ExportAction"
 			validate="false" scope="request" parameter="type">
