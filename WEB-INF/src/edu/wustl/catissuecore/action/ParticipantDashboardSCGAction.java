@@ -1,12 +1,10 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +22,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
@@ -59,6 +58,8 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 			request.setAttribute("cpSearchCpId",request.getParameter("cpSearchCpId"));
 			String cpId = request.getParameter("cpSearchCpId");
 			String paricipantId = request.getParameter("cpSearchParticipantId");
+			request.setAttribute("id", paricipantId);
+			request.setAttribute("cpSearchCpId",request.getParameter("cpSearchCpId"));
 			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 			if("addSCG".equals(operation))
 			{
@@ -79,13 +80,12 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 				Collection<CollectionProtocolRegistration> cprCollection = new HashSet<CollectionProtocolRegistration>();
 				cprCollection.add(cpr);
 				specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
+				setRequestAttr(request, cpId, paricipantId, specimenCollectionGroup);
 				if(collectionProtocolEvent.getDefaultSite() == null)
 				{
 					ActionErrors errors = new ActionErrors();
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Site"));
 					saveErrors(request, errors);
-					request.setAttribute("id", paricipantId);
-					request.setAttribute("cpSearchCpId",request.getParameter("cpSearchCpId"));
 					forwardTo = FORWARD_TO_ADD_SCG;
 				}
 				else if(collectionProtocolEvent.getDefaultSite() != null)
@@ -122,6 +122,7 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 						specimenCollectionGroup.setCollectionStatus(Constants.COMPLETE);
 						specimenCollectionGroup.setIsCPBasedSpecimenEntryChecked(isPlanned);
 					}
+					setRequestAttr(request, cpId, paricipantId, specimenCollectionGroup);
 					collectionGroupBizLogic.updateSCG(specimenCollectionGroup, hibernateDAO, sessionDataBean);
 				}
 //				forwardTo = getForwardTo(request, isPlanned);
@@ -137,26 +138,47 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.collectionStatus")));
 					saveErrors(request, errors);
-					request.setAttribute("id", paricipantId);
-					request.setAttribute("cpSearchCpId",request.getParameter("cpSearchCpId"));
 					forwardTo = Constants.FAILURE;
 				}
 			}
-			HashMap hashMap = new HashMap();
-			hashMap.put("specimenCollectionGroupName", specimenCollectionGroup.getName());
-			hashMap.put(Constants.COLLECTION_PROTOCOL_ID, Long.valueOf(cpId));
-			hashMap.put(Constants.PARTICIPANT_ID, Long.valueOf(paricipantId));
-			hashMap.put("specimenCollectionGroupId", specimenCollectionGroup.getId());
 			
-			request.setAttribute("forwardToHashMap", hashMap);
 			
 			hibernateDAO.commit();
+		}
+		catch(ApplicationException e)
+		{
+			ActionErrors errors = new ActionErrors();
+			ActionError actionError = new ActionError("errors.item",
+					e.getCause().getMessage());
+			errors.add(ActionErrors.GLOBAL_ERROR, actionError);
+			saveErrors(request, errors);
+			if("addSCG".equals(operation))
+			{
+				forwardTo = FORWARD_TO_ADD_SCG;
+			}
+			else if("editSCG".equals(operation))
+			{
+				forwardTo = FORWARD_TO_EDIT_SCG;
+			}
+			
 		}
 		finally
 		{
 			AppUtility.closeDAOSession(hibernateDAO);
 		}
 		return mapping.findForward(forwardTo);
+	}
+
+	private void setRequestAttr(HttpServletRequest request, String cpId, String paricipantId,
+			SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		HashMap hashMap = new HashMap();
+		hashMap.put("specimenCollectionGroupName", specimenCollectionGroup.getName());
+		hashMap.put(Constants.COLLECTION_PROTOCOL_ID, Long.valueOf(cpId));
+		hashMap.put(Constants.PARTICIPANT_ID, Long.valueOf(paricipantId));
+		hashMap.put("specimenCollectionGroupId", specimenCollectionGroup.getId());
+		
+		request.setAttribute("forwardToHashMap", hashMap);
 	}
 
 	private String getForwardTo(HttpServletRequest request, Boolean isPlanned)

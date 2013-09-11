@@ -4231,12 +4231,18 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	
 	public void updateSCG(SpecimenCollectionGroup collectionGroup, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		update(dao, collectionGroup, collectionGroup, sessionDataBean);
+		if(isAuthorized(dao, collectionGroup, sessionDataBean))
+		{
+			update(dao, collectionGroup, collectionGroup, sessionDataBean);
+		}
 	}
 	
 	public void insertSCG(SpecimenCollectionGroup collectionGroup, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		insert(collectionGroup, dao, sessionDataBean);
+		if(isAuthorized(dao, collectionGroup, sessionDataBean))
+		{
+			insert(collectionGroup, dao, sessionDataBean);
+		}
 	}
 
 }

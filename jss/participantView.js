@@ -22,6 +22,7 @@
                {
                  specimenCombo.selectOption(0);
                }
+			    specimenCombo.attachEvent("onSelectionChange",function(){specimenCombo.DOMelem_input.title=specimenCombo.getSelectedText();});
         specimenCombo.attachEvent("onOpen",onComboClick);
         specimenCombo.attachEvent("onKeyPressed",onComboKeyPress); 
 			}
@@ -147,6 +148,7 @@ function createDerivative()
 function onScgSelect()
 {
  var value = this.getSelectedValue();
+ scgCombo.DOMelem_input.title=scgCombo.getSelectedText();
  getSpecimenLabelsforSCG(value);
  //alert('v');
  //getCPEForSCG(value);
@@ -155,6 +157,7 @@ function onScgSelect()
 function onEventSelect()
 {
 	var value = this.getSelectedValue();
+	eventCombo.DOMelem_input.title=eventCombo.getSelectedText();
 	getSCGLabelsForCPE(value);
 	getSpecimenLabelsForCPE(value);
 }
@@ -308,15 +311,12 @@ function initComboForSCGEvents()
 {
  		        
                 eventCombo = new dhtmlXCombo("eventsList", "addSCGEven1", 240);
-                eventCombo.addOption(eventPointLabels);    
+                
 		        eventCombo.attachEvent("onSelectionChange",onEventSelect);
 				eventCombo.attachEvent("onOpen",onComboClick);
 eventCombo.attachEvent("onKeyPressed",onComboKeyPress);
-                var count = eventCombo.optionsArr.length;
-                if(count==1) //select if only one item pesent
-               {
-                 eventCombo.selectOption(0);
-               }
+
+				
                //initComboForSpecimenLabels();
 			   
 			   scgCombo = new dhtmlXCombo("scgList", "addSCGEven2", 240);
@@ -328,6 +328,12 @@ scgCombo.attachEvent("onKeyPressed",onComboKeyPress);
                 if(count==1) //select if only one item pesent
                {
                  scgCombo.selectOption(0);
+               }
+			   eventCombo.addOption(eventPointLabels);    
+                var count = eventCombo.optionsArr.length;
+                if(count==1) //select if only one item pesent
+               {
+                 eventCombo.selectOption(0);
                }
                initComboForSpecimenLabels();
 }

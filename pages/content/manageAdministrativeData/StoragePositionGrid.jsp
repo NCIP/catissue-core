@@ -688,9 +688,12 @@ function checkSpecimenStatus()
 }
 
 var reloadGrid=true,populateValueInCombo=true;
-var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",200);
+var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",250);
 var url=getActionToDoURL();
 dhtmlxCombo.loadXML(url);
+ dhtmlxCombo.attachEvent("onSelectionChange",function(){
+ dhtmlxCombo.DOMelem_input.title=dhtmlxCombo.getSelectedText();
+ });
 //dhtmlxCombo.enableFilteringMode(true);
 dhtmlxCombo.attachEvent("onOpen", 
 function(){

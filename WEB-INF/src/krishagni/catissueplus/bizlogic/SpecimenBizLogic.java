@@ -711,11 +711,11 @@ public class SpecimenBizLogic
 	{
 		boolean isAuthorize = sessionDataBean.isAdmin();
 		if (!isAuthorize)
-		{
+		{ 
 			String specimenName;
 			Long specimenId;
-			if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
-					|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
+			if ((Constants.ALIQUOT.equals(specimenDTO.getLineage())
+					|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage())) && specimenDTO.getId() == null)
 			{
 				specimenName = specimenDTO.getParentSpecimenName();
 				specimenId = specimenDTO.getParentSpecimenId();

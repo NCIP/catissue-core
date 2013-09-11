@@ -753,7 +753,10 @@ function submitTabData(operation)
 			tabDataJSON["containerName"]= document.getElementById("containerName").value;
 			tabDataJSON["pos1"]= document.getElementById("pos1").value;
 			tabDataJSON["pos2"]= document.getElementById("pos2").value;
-			tabDataJSON["containerId"]= document.getElementById("containerId").value;
+			if(document.getElementById("containerId").value)
+			{
+				tabDataJSON["containerId"]= document.getElementById("containerId").value;
+			}
 		}
 		tabDataJSON["isVirtual"] = isVirtual; 
 		var printFlag = false;
