@@ -2,23 +2,17 @@
 package krishagni.catissueplus.action;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
-import krishagni.catissueplus.bizlogic.StorageContainerGraphBizlogic;
-import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
-import krishagni.catissueplus.dto.StorageContainerUtilizationDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerViewDTO;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +22,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 
@@ -110,75 +103,5 @@ public class StorageContainerAjaxAction extends DispatchAction
 
         return null;
     }
-    
-    /**
-     * Method to get data for displaying storage container graph of specimen count
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException 
-     * @throws ApplicationException 
-     * @throws SQLException 
-     * @throws JSONException 
-     */
-    public ActionForward getStorageContainerDataForGraph(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws IOException, ApplicationException,
-            SQLException, JSONException
-    {
-        HibernateDAO hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
-
-        String siteName = request.getParameter(Constants.SITE_NAME);
-        String type =  request.getParameter("graphType");
-
-        ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList = new StorageContainerGraphBizlogic()
-                .getStorageContainerUtilizationDetailsDTOList(hibernateDAO, siteName);
-
-        AppUtility.closeDAOSession(hibernateDAO);
-
-        response.setContentType("application/json");
-        
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data",  getJSONFromStorageContainerUtilizationDetailsDTOList(storageContainerUtilizationDetailsDTOList,type));
-        jsonObject.put("redLineValue", XMLPropertyHandler.getValue(Constants.RED_LINE_VALUE));
-        response.getWriter().write(jsonObject.toString());
-
-        return null;
-    }
-    
-       /**
-     * Returns JSON string for storageContainerUtilizationDetailsDTOList
-     * @param storageContainerUtilizationDetailsDTOList
-     * @return
-     * @throws JSONException 
-     */
-    private String getJSONFromStorageContainerUtilizationDetailsDTOList(
-            ArrayList<StorageContainerUtilizationDetailsDTO> storageContainerUtilizationDetailsDTOList,String type)
-            throws JSONException
-    {
-        JSONArray storageContainerSpecCountGraphDataArray = new JSONArray();
-        
-        for (StorageContainerUtilizationDetailsDTO storageContainerUtilizationDetailsDTO : storageContainerUtilizationDetailsDTOList)
-        {
-
-            ArrayList<StorageContainerStoredSpecimenDetailsDTO> storageContainerStoredSpecimenDetailsDTOList = storageContainerUtilizationDetailsDTO
-                    .getStorageContainerStoredSpecimenDetailsDTOList();
-            JSONArray jsonArrayForData = new JSONArray();
-            for (StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO : storageContainerStoredSpecimenDetailsDTOList)
-            {
-                JSONArray jsonArrayForXYPoints = new JSONArray();
-                jsonArrayForXYPoints.put(storageContainerStoredSpecimenDetailsDTO.getDateOfSpecimenCount().getTime());
-                jsonArrayForXYPoints.put(type.equals("specimenCount")?storageContainerStoredSpecimenDetailsDTO.getSpecimenCount():storageContainerStoredSpecimenDetailsDTO.getPercentUtilization());
-                jsonArrayForData.put(jsonArrayForXYPoints);
-            }
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Constants.CHART_SERIES_NAME, storageContainerUtilizationDetailsDTO.getContainerName());
-            jsonObject.put(Constants.CHART_SERIES_DATA, jsonArrayForData);
-            storageContainerSpecCountGraphDataArray.put(jsonObject);
-        }
-        return storageContainerSpecCountGraphDataArray.toString();
-    }
-
-    
+       
 }
