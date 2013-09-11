@@ -43,7 +43,7 @@ public class OrderDistributeAction extends BaseAction
 
 		final OrderForm requestOrder = (OrderForm) form;
 		requestOrder.setOrderRequestName(null);
-
+		request.setAttribute("requestFromPage",request.getParameter("requestFromPage"));
 		final HttpSession session = request.getSession();
 
 		session.setAttribute("OrderForm", requestOrder);

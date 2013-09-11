@@ -93,6 +93,15 @@ public class DirectDistributeInitAction extends BaseAction
 			final OrderSpecimenForm orderSpecForm = (OrderSpecimenForm) form;
 			final List specimenCollection = (List) orderBizLogic
 					.getSpecimenDataFromDatabase(request);
+			
+			if(specimenCollection.isEmpty() && request.getAttribute("requestFromPage")!=null && "specimenListView".equalsIgnoreCase(request.getAttribute("requestFromPage").toString()))
+			{
+				final ActionErrors errors = new ActionErrors();
+				final ActionError error = new ActionError("errors.distribution.no.specimen.available");
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				this.saveErrors(request, errors);
+				return mapping.findForward("redirectToSpecimenList");
+			}
 			isValidTodistribute = this.isValidToDistributeSpecimenCheckPviOnSite(
 					specimenCollection, siteIdsList);
 			if (!isValidTodistribute)

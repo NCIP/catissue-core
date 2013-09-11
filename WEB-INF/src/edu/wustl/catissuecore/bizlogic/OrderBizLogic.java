@@ -1518,7 +1518,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					final Object object = dao.retrieveById(sourceObjectName,
 							Long.parseLong((String) valueField.get(i)));
 					final Specimen spec = (Specimen) object;
-					specimenList.add(spec);
+					if(checkIfAvailableForOrder(spec))
+					{
+						specimenList.add(spec);
+					}
 				}
 
 			}
@@ -1536,6 +1539,15 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			this.closeDAOSession(dao);
 		}
 		return specimenList;
+	}
+
+	private boolean checkIfAvailableForOrder(final Specimen spec)
+	{
+		return spec.getAvailableQuantity() > 0
+				&& spec.getIsAvailable()
+				&& spec.getSpecimenPosition() != null
+				&& Constants.ACTIVITY_STATUS_ACTIVE.equalsIgnoreCase(spec
+						.getActivityStatus());
 	}
 
 	/**

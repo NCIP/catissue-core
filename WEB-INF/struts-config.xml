@@ -405,8 +405,7 @@ PUBLIC
 		<action path="/RequestToDistribute"
 			type="edu.wustl.catissuecore.action.OrderDistributeAction" name="orderForm"
 			validate="false" scope="request">
-			<forward name="specimen" path="/SpecDistribute.do?typeOf=specimen"
-				redirect="true" />
+			<forward name="specimen" path="/SpecDistribute.do?typeOf=specimen" />
 			<forward name="specimenArray" path="/SpecArrayDistribute.do?typeOf=specimenArray" />
 			<forward name="pathologyCase"
 				path="/PathologyCaseDistribute.do?typeOf=pathologyCase" redirect="true" />
@@ -419,6 +418,7 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="success" path="/specToDistribute.do" />
 			<forward name="failure" path="/ShoppingCart.do" />
+			<forward name="redirectToSpecimenList" path="/ViewSpecimenList.do?operation=view" />
 		</action>
 
 		<action path="/specToDistribute" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
@@ -499,6 +499,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.orderingsystem.orderMain" />
 			<forward name="failure" path="/ShoppingCart.do" />
 			<forward name="orderlist" path="/AddToOrderList.do" />
+			<forward name="redirectToSpecimenList" path="/ViewSpecimenList.do?operation=view" />
 		</action>
 
 		<!--  Added action to create specimen array from ArrayRequests.jsp -->

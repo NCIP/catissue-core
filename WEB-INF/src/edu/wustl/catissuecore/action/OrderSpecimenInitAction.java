@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -66,7 +68,15 @@ public class OrderSpecimenInitAction extends BaseAction
 			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 			final Collection specimen = orderBizLogic.getSpecimenDataFromDatabase(request);
-
+			
+			if(specimen.isEmpty() && request.getAttribute("requestFromPage")!=null && "specimenListView".equalsIgnoreCase(request.getAttribute("requestFromPage").toString()))
+			{
+				final ActionErrors errors = new ActionErrors();
+				final ActionError error = new ActionError("errors.distribution.no.specimen.available");
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				this.saveErrors(request, errors);
+				return mapping.findForward("redirectToSpecimenList");
+			}
 			try
 			{
 				request.setAttribute("specimen", specimen);
