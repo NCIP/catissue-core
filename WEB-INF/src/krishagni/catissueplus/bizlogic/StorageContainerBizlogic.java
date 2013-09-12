@@ -89,7 +89,7 @@ public class StorageContainerBizlogic
         }
         else
         {
-        	ErrorKey errorKey = ErrorKey.getErrorKey("invalid.container.name");
+        	ErrorKey errorKey = ErrorKey.getErrorKey("invalid.container.name.message");
         	throw new BizLogicException(errorKey,null,"");
         }
 

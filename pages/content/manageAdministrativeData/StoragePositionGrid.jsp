@@ -49,11 +49,12 @@ var globalContName="";
 var globalPos1="";
 var globalPos2="";
 function getActionToDoURL()
-{
+{//alert('invalid.container.name.message');
 	var className="${requestScope.holdSpecimenClass}";
 	var sptype="${requestScope.holdSpecimenType}";
 	var collectionProtocolId="<%=collectionProtocolId%>";
 	var containerName="${requestScope.containerName}";
+	//alert(containerName);
 	if(dhtmlxCombo!=null)
 	{
 		containerName=dhtmlxCombo.getComboText();
@@ -67,7 +68,7 @@ function getActionToDoURL()
 	{
 		url=url+"&populateValueInCombo="+populateValueInCombo;
 	}
-	
+	//alert(url);
 	return url;
 }
 </script>
@@ -101,7 +102,7 @@ function getActionToDoURL()
 							<input type="hidden" id="pos2" name="pos2" />
 						</td>
 						<td class="black_ar" align="right" style="padding-top:2px">
-							<input type="radio" name="virtualCont" onClick="setVirtual()"/>&nbsp;
+							<input type="radio" id ="virtualCont" name="virtualCont" onClick="setVirtual()"/>&nbsp;
 						</td>
 						<td class="black_ar" align="left" style="padding-top:5px"> <b>Virtual</b>
 						</td>
@@ -690,7 +691,15 @@ function checkSpecimenStatus()
 var reloadGrid=true,populateValueInCombo=true;
 var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",250);
 var url=getActionToDoURL();
-dhtmlxCombo.loadXML(url);
+var containerName="${requestScope.containerName}";
+if(containerName)
+{
+	dhtmlxCombo.loadXML(url);
+}
+else
+{
+	document.getElementById('virtualCont').checked=true;
+}
  dhtmlxCombo.attachEvent("onSelectionChange",function(){
  dhtmlxCombo.DOMelem_input.title=dhtmlxCombo.getSelectedText();
  });

@@ -736,14 +736,24 @@ var w =700;
 var h =450;
 var x = (screen.width / 3) - (w / 2);
 var y = 0;
+var containerName = document.getElementById('containerName').value;
+var isVirtual = document.getElementById('isVirtual').value;
+
+
+if(isVirtual == 'true')
+{
+containerName='';
+}
+
 dhxWins = new dhtmlXWindows(); 
 dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
 var pos1 = document.getElementById('pos1').value;
 var pos2 = document.getElementById('pos2').value;
 var className = classNameCombo.getSelectedText();
 var type = typeCombo.getSelectedText();
-var containerName = document.getElementById('containerName').value;
-var isVirtual = document.getElementById('isVirtual').value;
+
+
+
 <logic:equal name="operation" value="edit">
 var collStatus="<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>";
 </logic:equal>
