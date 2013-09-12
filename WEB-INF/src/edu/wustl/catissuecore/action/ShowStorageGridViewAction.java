@@ -126,17 +126,18 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute("storageContainerIdentifier", id);
 
 		HibernateDAO dao = null;
-		dao = (HibernateDAO) AppUtility.openDAOSession(null);
+		
 		 request.setAttribute(Constants.SHOW_UTILIZATION_ALERT, false);
 		 request.setAttribute("showUtilization", false);
 		
 		try {
+		    dao = (HibernateDAO) AppUtility.openDAOSession(null);
 		     Class graphBizLoic =  Class.forName("krishagni.catissueplus.bizlogic.StorageContainerGraphBizlogic");
 		     Object storageContainerUtilizationDTOObj = graphBizLoic.getMethod("getStorageContainerUtilizationDTO",Long.class,HibernateDAO.class).invoke(graphBizLoic.newInstance(),Long.valueOf(id), dao);
 		     Class graphDao =  Class.forName("krishagni.catissueplus.dao.StorageContainerGraphDAO");
 		     Object storageContainerStoredSpecimenDetailsDTO = graphDao.getMethod("getUtilizationCountsOfContainerById",HibernateDAO.class,Long.class).invoke(graphDao.newInstance(),dao,Long.valueOf(id));
-		     storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getSpecimenCount").invoke(storageContainerStoredSpecimenDetailsDTO);
-		     request.setAttribute(Constants.SPEC_COUNT,  storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getSpecimenCount").invoke(storageContainerStoredSpecimenDetailsDTO));
+		     Object specimenCount = storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getSpecimenCount").invoke(storageContainerStoredSpecimenDetailsDTO);
+		     request.setAttribute(Constants.SPEC_COUNT, specimenCount==null?0:specimenCount);
 		     request.setAttribute(Constants.CAPACITY,storageContainerUtilizationDTOObj.getClass().getDeclaredMethod("getTotalStorageCapacity").invoke(storageContainerUtilizationDTOObj));
              Long utilizationPercentage = (Long) storageContainerStoredSpecimenDetailsDTO.getClass().getDeclaredMethod("getPercentUtilization").invoke(storageContainerStoredSpecimenDetailsDTO);
 
