@@ -2,9 +2,7 @@
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Suite" default="compile" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-<!--	<exec executable="svnversion" outputproperty="dist.revision">
-       <arg line="-n ."/>
-    </exec>-->
+  <import file="ivy-targets.xml"/>
 
 	<!--define require dir and Properties -->
 	<property name="root.dir" location="${base.dir}/../../.." />
@@ -223,9 +221,10 @@
 		<ivy:settings file="${ivy.settings.file}" />
 	</target>
 
-    <target name="retrieve-ivy-files" depends="ivy-settings" description="Updates the local ivy repository">
-        <echo message="Cleaning up existing Folder containing External Modules artifacts ..." />
-        <delete dir="${caTissue_lib.dir}/compile_lib" failonerror="false" verbose="true" />
+  <target name="retrieve-ivy-files" depends="ivy-settings" description="Updates the local ivy repository">
+    <echo message="Cleaning up existing Folder containing External Modules artifacts ..." />
+    <delete dir="${caTissue_lib.dir}/compile_lib" failonerror="false" verbose="true" />
+    
 		<antcall target="retrieve-limpopo-ivy-files" />
 		<antcall target="retrieve-subproject-jars-zips" />
 		<antcall target="retrieve-aq" />
@@ -242,13 +241,12 @@
 		<antcall target="retrieve-printWebService-ivy-files" />
 		<antcall target="retrieve-src-lib-ivy-files" />
 		<antcall target="retrieve-taskdef-lib-ivy-files" />
-		<!--<antcall target="retrieve-third-party-flex-lib-ivy-files" />
-		<antcall target="retrieve-third-party-lib-ivy-files" /> -->
 		<antcall target="retrieve-cacore-resources-lib-ivy-files" />
 		<antcall target="retrieve-flex-jar-ivy-files" />
 		<antcall target="retrieve-CaTissue-TestCases-lib-ivy-files" />
 		<antcall target="retrieve-cobertura-lib-ivy-files" />
 		<antcall target="retrieve-Applet-lib-ivy-files" />
+    
 		<antcall target="copy" />
 	</target>
 
@@ -292,14 +290,6 @@
 		<ivy:resolve refresh="true" conf="taskdef_lib" />
 		<ivy:retrieve pattern="${taskdef_lib.dir}/[artifact].[ext]" conf="taskdef_lib" />
 	</target>
-	<!--<target name="retrieve-third-party-lib-ivy-files" depends="ivy-settings">
-		<ivy:resolve refresh="true" conf="third_party_lib" />
-		<ivy:retrieve pattern="${third_party_lib.dir}/[artifact].[ext]" conf="third_party_lib" />
-	</target>
-	<target name="retrieve-third-party-flex-lib-ivy-files" depends="ivy-settings">
-		<ivy:resolve refresh="true" conf="third_party_flex_lib" />
-		<ivy:retrieve pattern="${third_party_flex_lib.dir}/[artifact].[ext]" conf="third_party_flex_lib" />
-	</target> -->
 	<target name="retrieve-src-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="src_lib" />
 		<ivy:retrieve pattern="${src_lib.dir}/[artifact].[ext]" conf="src_lib" />
@@ -729,14 +719,18 @@
 	</target>
 
 	<target name="createJavaDoc">
+    <!--
 		<javadoc destdir="${temp.dir}/${client.dir}/JavaDoc" author="true" version="true" use="true" windowtitle="JavaDoc">
 			<fileset dir="${project.src.domain}">
 				<include name="**/*.java" />
 			</fileset>
 		</javadoc>
+    -->
 	</target>
 
-
+<!--
+, ivy-notificationservice, ivy-dedataservice, ivy-staticdataservice, ivy-decodegen
+-->
 	<target name="create_zip" depends="createJavaDoc, installable_build_war">
 		<property name="zip.dir" value="${dist.dir}" />
 		<property name="zip.file" value="${target.dir}/dist/caTissue_Suite_v${application.version}_Installable.zip" />
@@ -807,18 +801,18 @@
 			</fileset>
 		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/lib" overwrite="true">
-			<fileset file="${extra_lib.dir}/ant-contrib.jar" />
+			<fileset file="${extra_lib.dir}/ant-contrib*.jar" />
 			<fileset file="${src_lib.dir}/dom4j-1.6.1.jar" />
-			<fileset file="${src_lib.dir}/j2ee.jar" />
-			<fileset file="${src_lib.dir}/log4j.jar" />
-			<fileset file="${common.lib.dir}/mysql-connector-java-5.0.8-bin.jar" />
+			<fileset file="${src_lib.dir}/j2ee*.jar" />
+			<fileset file="${src_lib.dir}/log4j*.jar" />
+			<fileset file="${common.lib.dir}/mysql-connector-java-5.0.8.jar" />
 			<fileset file="${common.lib.dir}/${oracle.ojdbc_driver.version}.jar" />
-			<fileset file="${extra_lib.dir}/puretls.jar" />
-			<fileset file="${extra_lib.dir}/cog-jglobus.jar" />
-			<fileset file="${extra_lib.dir}/cryptix32.jar" />
-			<fileset file="${extra_lib.dir}/cryptix-asn1.jar" />
-			<fileset file="${extra_lib.dir}/jce-jdk13-125.jar" />
-			<fileset file="${extra_lib.dir}/cryptix.jar" />
+			<fileset file="${extra_lib.dir}/puretls*.jar" />
+			<fileset file="${extra_lib.dir}/cog-jglobus*.jar" />
+			<fileset file="${extra_lib.dir}/cryptix32*.jar" />
+			<fileset file="${extra_lib.dir}/cryptix-asn1*.jar" />
+			<fileset file="${extra_lib.dir}/jce-jdk13-125*.jar" />
+			<fileset file="${extra_lib.dir}/cryptix*.jar" />
 			<fileset file="${bda-utils.dir}/xmltask-1.15.1.jar" />
 		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
@@ -838,8 +832,8 @@
 		<copy file="${conf.dir}/Sample-properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
-			<fileset file="${temp.dir}/Default_label_barcode_gen.jar" />
-			<fileset file="${temp.dir}/label_barcode_gen_client.jar" />
+			<fileset file="${temp.dir}/Default_label_barcode_gen*.jar" />
+			<fileset file="${temp.dir}/label_barcode_gen_client*.jar" />
 			<fileset file="${compile.lib.dir}/IDPAuthenticationManager*.jar" />
 			<fileset file="${web_inf_lib.dir}/casclient-2.1.1.jar" />
 		</copy>
@@ -1211,9 +1205,9 @@
 	</target>
 
 	<!-- unpack caCORE war into temp folder -->
-	<target name="unpack_cacore_war" depends="clean_temp_dir_csmwar">
+	<target name="unpack_cacore_war" depends="clean_temp_dir_csmwar, ivy-cacore_resources">
         <echo message="Using caCore WAR files..." />
-		<unwar src="${catissue.modules}/cacore_resources/conf/catissue_cacore.war" dest="${tempCatissuecore.dir}/catissue_cacore" />
+		<unwar src="${catissue.modules}/cacore_resources/conf/catissue_cacore-1.0.war" dest="${tempCatissuecore.dir}/catissue_cacore" />
 		<delete file="${tempCatissuecore.dir}/catissue_cacore/WEB-INF/lib/jboss-common-jdbc-wrapper.jar" />
 		<delete file="${tempCatissuecore.dir}/catissue_cacore/WEB-INF/lib/ojdbc14-10.2.0.3.0.jar" />
 		<delete file="${tempCatissuecore.dir}/catissue_cacore/WEB-INF/lib/castor-1.0.2.jar" />

@@ -1093,7 +1093,7 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 	<target name="retrieve:certs">
 		<ivy:settings file="${ivy.settings.dir}/cbiit-ivy-settings-with-cagrid13.xml" />
 		<echo>Retrieving Certificates ... </echo>
-		
+		<!--
 		<mkdir dir="${rc:dir}/certificates"/>
 		<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>
 		<for list="${TARGET_GRID_LIST}" param="param">
@@ -1103,6 +1103,7 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 				<ivy:retrieve pattern="${rc:dir}/certificates/[conf]/[artifact]-[revision].[ext]" conf="@{param}" />
 			</sequential>
 		</for>
+    -->
 	</target>
 	<target name="install:certs">
 		<copy todir="${jboss.home}/server/default/certificates">

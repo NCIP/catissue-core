@@ -1,0 +1,21 @@
+<ivy-module version="1.0">
+  <info organisation="ncicb"
+        module="catissue" />
+  <configurations>
+    <conf name="default" />
+    
+    <conf name="cacore_resources"/>    
+
+  </configurations>
+
+  <dependencies>
+
+    <dependency org="catissue_cacore"
+                name="catissue_cacore"
+                rev="1.0"
+                conf="cacore_resources->*"/>  
+ 
+                           
+  </dependencies>
+
+</ivy-module>

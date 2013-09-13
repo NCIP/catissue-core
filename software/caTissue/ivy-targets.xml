@@ -1,0 +1,48 @@
+<?xml version ="1.0"?>
+<project name="DynamicExtensions-ivy" 
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+            
+  <property name="ivy.install.version" value="2.2.0"/>
+  <property name="ivy.jar.dir" location="ivylib"/>
+  <property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar"/>
+  <property name="ivy.jar.url"
+            value="https://ncimvn.nci.nih.gov/nexus/content/groups/public/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"/>
+  
+  <path id="ivy.classpath">
+    <fileset dir="${ivy.jar.dir}">
+      <include name="ivy-*.jar" />
+    </fileset>
+  </path>
+
+  <target name="download-ivy" unless="skip.download">
+    <mkdir dir="${ivy.jar.dir}"/>
+    <echo message="Installing ivy..."/>
+    <get src="${ivy.jar.url}"
+         dest="${ivy.jar.file}" 
+         usetimestamp="true" 
+         verbose="true"/>
+  </target>
+
+  <target name="init-ivy" depends="download-ivy">
+    <path id="ivy.lib.path">
+      <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" 
+             uri="antlib:org.apache.ivy.ant" 
+             classpathref="ivy.classpath" />                         
+  </target>
+                 
+  <target name="ivy-settings" depends="init-ivy">
+    <ivy:settings file="ivysettings.xml"/>
+  </target>
+  
+  <target name="ivy-cacore_resources" depends="ivy-settings">
+    <ivy:resolve file="ivy.xml"
+                 conf="cacore_resources" />
+    <ivy:retrieve conf="cacore_resources"
+                  pattern="modules/cacore_resources/conf/[artifact]-[revision].[ext]" />
+  </target> 
+
+  
+   
+</project>  
