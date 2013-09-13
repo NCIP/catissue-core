@@ -5,7 +5,7 @@
     <conf name="default" />
     
     <conf name="cacore_resources"/>    
-
+    <conf name="caTissuePrintWebService"/>
   </configurations>
 
   <dependencies>
@@ -14,7 +14,10 @@
                 name="catissue_cacore"
                 rev="1.0"
                 conf="cacore_resources->*"/>  
- 
+    <dependency org="caTissuePrintWebService"
+                name="caTissuePrintWebService"
+                rev="1.0"
+                conf="caTissuePrintWebService->*"/>
                            
   </dependencies>
 

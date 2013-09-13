@@ -42,7 +42,10 @@
     <ivy:retrieve conf="cacore_resources"
                   pattern="modules/cacore_resources/conf/[artifact]-[revision].[ext]" />
   </target> 
-
-  
-   
+  <target name="ivy-caTissuePrintWebService" depends="ivy-settings">
+    <ivy:resolve file="ivy.xml"
+                 conf="caTissuePrintWebService" />
+    <ivy:retrieve conf="caTissuePrintWebService"
+                  pattern="modules/core/conf/[artifact]-[revision].[ext]" />
+  </target>   
 </project>  

@@ -731,7 +731,7 @@
 <!--
 , ivy-notificationservice, ivy-dedataservice, ivy-staticdataservice, ivy-decodegen
 -->
-	<target name="create_zip" depends="createJavaDoc, installable_build_war">
+  <target name="create_zip" depends="createJavaDoc, installable_build_war, ivy-caTissuePrintWebService">
 		<property name="zip.dir" value="${dist.dir}" />
 		<property name="zip.file" value="${target.dir}/dist/caTissue_Suite_v${application.version}_Installable.zip" />
 
@@ -862,10 +862,6 @@
         <echo message="Copying caCoreSDK files for dozer artifacts generation..." />
         <zip destfile="${zip.dir}/modules/dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" basedir="${catissue.modules}/caCORE-SDK-dozer-templates/caCoreSDK.4.2.dozer" />
 
-		<!--<copy file="CA.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="pathologySpecimen.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="pathologySCG.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />-->
-
 		<copy todir="${zip.dir}/modules/identity_provider_support/conf" overwrite="true">
 			<fileset dir="${conf.dir}/idp" />
 		</copy>
@@ -881,7 +877,7 @@
 		<copy file="${temp.dir}/printservice_module.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="${temp.dir}/printservice_client.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="${web_inf_lib.dir}/PrintCatissueCore_Client.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
-		<copy file="${conf.dir}/caTissuePrintWebService.war" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
+		<copy file="${conf.dir}/caTissuePrintWebService-1.0.war" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/private_public_migrator" overwrite="true">
 			<fileset dir="${catissue.modules}/private_public_migrator" />
