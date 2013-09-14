@@ -678,9 +678,10 @@ function setContainerValues()
 					gs2.setPositionDimensionTwo("");
 				}
 			%>
-				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
-				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()%>';
-				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()%>';
+			
+				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()==null?"":gs2.getSelectedContainerName()%>';
+				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()==null?"":gs2.getPositionDimensionOne()%>';
+				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()==null?"":gs2.getPositionDimensionTwo()%>';
 <%}}}%>	
 
 <%if(aliquotList!=null)
@@ -715,9 +716,11 @@ function setContainerValues()
 					gs2.setPositionDimensionTwo("");
 				}
 				%>
-				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
-				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()%>';
-				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()%>';
+				
+				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()==null?"":gs2.getSelectedContainerName()%>';
+				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()==null?"":gs2.getPositionDimensionOne()%>';
+				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()==null?"":gs2.getPositionDimensionTwo()%>';
+				
 <%}}}%>	
 
 <%if(derivedList!=null)
@@ -752,9 +755,12 @@ function setContainerValues()
 					gs2.setPositionDimensionTwo("");
 				}
 				%>
-				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
-				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()%>';
-				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()%>';
+				
+				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()==null?"":gs2.getSelectedContainerName()%>';
+				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()==null?"":gs2.getPositionDimensionOne()%>';
+				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()==null?"":gs2.getPositionDimensionTwo()%>';
+				
+				
 <%}}}%>	
 }
 
