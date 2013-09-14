@@ -74,7 +74,7 @@ public class RequestToOrderAction extends BaseAction
 		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 
 		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
-				loggedInUserID, role.getName(), sessionLoginInfo);
+				loggedInUserID, role.getName(), sessionLoginInfo,"title");
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 		request.setAttribute("requestFromPage",request.getParameter("requestFromPage"));
 		return mapping.findForward("requestOrderPage");

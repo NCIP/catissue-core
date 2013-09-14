@@ -2031,14 +2031,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 *             : BizLogicException
 	 */
 	public List loadDistributionProtocol(final Long piID, String roleName,
-			SessionDataBean sessionDataBean) throws DAOException, BizLogicException
+			SessionDataBean sessionDataBean,String attributeToDisplay) throws DAOException, BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List distributionProtocolList = new ArrayList();
 
 		final String sourceObjectName = DistributionProtocol.class.getName();
-		final String[] displayName = {"title"};
+		final String[] displayName = {attributeToDisplay};
 		final String valueFieldCol = Constants.ID;
 
 		final String[] whereColNames = {Status.ACTIVITY_STATUS.toString()};

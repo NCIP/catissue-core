@@ -108,7 +108,7 @@ public class OrderAction extends BaseAction
 			final long csmUserId = new Long(sessiondataBean.getCsmUserId()).longValue();
 			final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 			final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
-					sessiondataBean.getUserId(), role.getName(), sessiondataBean);
+					sessiondataBean.getUserId(), role.getName(), sessiondataBean,"shortTitle");
 			request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 		}
 		finally

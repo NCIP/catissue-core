@@ -245,7 +245,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 
 		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
-				loggedInUserID, role.getName(), sessionLoginInfo);
+				loggedInUserID, role.getName(), sessionLoginInfo,"title");
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 
 		return mapping.findForward("success");

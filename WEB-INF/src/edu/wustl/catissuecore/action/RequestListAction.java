@@ -100,7 +100,7 @@ public class RequestListAction extends SecureAction
 		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 		OrderBizLogic orderBizLogic=new OrderBizLogic();
 		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
-				loggedInUserID, role.getName(), sessionLoginInfo);
+				loggedInUserID, role.getName(), sessionLoginInfo,"title");
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 		
 		return mapping.findForward(Constants.SUCCESS);
