@@ -280,59 +280,59 @@
 	</target>
 	<target name="retrieve-de-integration-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="de-integration-client-lib" />
-		<ivy:retrieve pattern="${de_integration_client_lib.dir}/[artifact].[ext]" conf="de-integration-client-lib" />
+    <ivy:retrieve pattern="${de_integration_client_lib.dir}/[artifact]-[revision].[ext]" conf="de-integration-client-lib" />
 	</target>
 	<target name="retrieve-extra-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="extra_lib" />
-		<ivy:retrieve pattern="${extra_lib.dir}/[artifact].[ext]" conf="extra_lib" />
+    <ivy:retrieve pattern="${extra_lib.dir}/[artifact]-[revision].[ext]" conf="extra_lib" />
 	</target>
 	<target name="retrieve-taskdef-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="taskdef_lib" />
-		<ivy:retrieve pattern="${taskdef_lib.dir}/[artifact].[ext]" conf="taskdef_lib" />
+    <ivy:retrieve pattern="${taskdef_lib.dir}/[artifact]-[revision].[ext]" conf="taskdef_lib" />
 	</target>
 	<target name="retrieve-src-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="src_lib" />
-		<ivy:retrieve pattern="${src_lib.dir}/[artifact].[ext]" conf="src_lib" />
+    <ivy:retrieve pattern="${src_lib.dir}/[artifact]-[revision].[ext]" conf="src_lib" />
 	</target>
 	<target name="retrieve-client-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="src_lib" />
-		<ivy:retrieve pattern="${caTissueSuite_Client_lib.dir}/[artifact].[ext]" conf="caTissueSuite_Client_lib" />
+    <ivy:retrieve pattern="${caTissueSuite_Client_lib.dir}/[artifact]-[revision].[ext]" conf="caTissueSuite_Client_lib" />
 	</target>
 	<target name="retrieve-compile-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="web-inf" />
-		<ivy:retrieve pattern="${web_inf_lib.dir}/[artifact].[ext]" conf="web-inf" />
+    <ivy:retrieve pattern="${web_inf_lib.dir}/[artifact]-[revision].[ext]" conf="web-inf" />
 	</target>
 	<target name="retrieve-common-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="common_lib" />
-		<ivy:retrieve pattern="${common.lib.dir}/[artifact].[ext]" conf="common_lib" />
+    <ivy:retrieve pattern="${common.lib.dir}/[artifact]-[revision].[ext]" conf="common_lib" />
 	</target>
 	<target name="retrieve-ppm-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="private_public_migrator" />
-		<ivy:retrieve pattern="${private_public_migrator_lib.dir}/[artifact].[ext]" conf="private_public_migrator" />
+    <ivy:retrieve pattern="${private_public_migrator_lib.dir}/[artifact]-[revision].[ext]" conf="private_public_migrator" />
 	</target>
 	<target name="retrieve-printWebService-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="caTissuePrintWebService" />
-		<ivy:retrieve pattern="${caTissue_Print_Web_Service_lib.dir}/[artifact].[ext]" conf="caTissuePrintWebService" />
+    <ivy:retrieve pattern="${caTissue_Print_Web_Service_lib.dir}/[artifact]-[revision].[ext]" conf="caTissuePrintWebService" />
 	</target>
 	<target name="retrieve-cacore-resources-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="cacore_resources_lib" />
-		<ivy:retrieve pattern="${cacore_resources_lib.dir}/[artifact].[ext]" conf="cacore_resources_lib" />
+    <ivy:retrieve pattern="${cacore_resources_lib.dir}/[artifact]-[revision].[ext]" conf="cacore_resources_lib" />
 	</target>
 	<target name="retrieve-flex-jar-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="flex_jar" />
-		<ivy:retrieve pattern="${flex_jar.dir}/WEB-INF/flex/jars/[artifact].[ext]" conf="flex_jar" />
+    <ivy:retrieve pattern="${flex_jar.dir}/WEB-INF/flex/jars/[artifact]-[revision].[ext]" conf="flex_jar" />
 	</target>
 	<target name="retrieve-CaTissue-TestCases-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="CaTissue_TestCases_lib" />
-		<ivy:retrieve pattern="${CaTissue_TestCases_lib.dir}/[artifact].[ext]" conf="CaTissue_TestCases_lib" />
+    <ivy:retrieve pattern="${CaTissue_TestCases_lib.dir}/[artifact]-[revision].[ext]" conf="CaTissue_TestCases_lib" />
 	</target>
 	<target name="retrieve-cobertura-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="cobertura_lib" />
-		<ivy:retrieve pattern="${cobertura_lib.dir}/[artifact].[ext]" conf="cobertura_lib" />
+    <ivy:retrieve pattern="${cobertura_lib.dir}/[artifact]-[revision].[ext]" conf="cobertura_lib" />
 	</target>
 	<target name="retrieve-Applet-lib-ivy-files" depends="ivy-settings">
 		<ivy:resolve refresh="true" conf="Applet_lib" />
-		<ivy:retrieve pattern="${Applet_lib.dir}/Applet/[artifact].[ext]" conf="Applet_lib" />
+    <ivy:retrieve pattern="${Applet_lib.dir}/Applet/[artifact]-[revision].[ext]" conf="Applet_lib" />
 	</target>
 	<!-- IVY related targets end here -->
 
@@ -439,11 +439,15 @@
 
 		<copy todir="${web_inf_lib.dir}" overwrite="true">
 			<fileset dir="${temp.dir}">
+      <!--
 				<include name="Default_label_barcode_gen.jar" />
 				<include name="label_barcode_gen_client.jar" />
 				<include name="printservice_client.jar" />
+        -->
 				<include name="printservice_module.jar" />
+        <!--
 				<include name="caTissueCdmsIntegration.jar" />
+        -->
 			</fileset>
 			<fileset dir="${cacore_resources_lib.dir}">
 				<include name="jboss-client.jar" />
@@ -468,8 +472,8 @@
 		</antcall>
 		<antcall target="copydeletedjars">
 			<param name="deleteFromDir" value="${tempCatissuecore.dir}/catissue_cacore" />
-		</antcall>
-
+		</antcall> 
+    
 		<war destfile="${target.dir}/dist/catissuecore.war" webxml="${catissue.web}/WEB-INF/web.xml" duplicate="preserve" manifest="${temp.dir}/MANIFEST.MF">
 
 			<fileset dir="${temp.dir}/bulkoperation/src/web">
@@ -479,11 +483,11 @@
 				<exclude name="**/css/catissue_suite.css" />
 			</fileset>
 
-            <fileset dir="${temp.dir}/bulkoperation/src/java">
-                <include name="WEB-INF/struts-config.xml" />
-                <include name="WEB-INF/web.xml" />
-                <include name="WEB-INF/bulkoperation-struts-config.xml" />
-            </fileset>
+      <fileset dir="${temp.dir}/bulkoperation/src/java">
+        <include name="WEB-INF/struts-config.xml" />
+        <include name="WEB-INF/web.xml" />
+        <include name="WEB-INF/bulkoperation-struts-config.xml" />
+      </fileset>
 
 			<fileset dir="${catissue.web}">
 				<include name="css/**" />
@@ -493,17 +497,11 @@
 				<include name="pages/**" />
 				<include name="runtime/**" />
 				<include name="newDhtmlx/**" />
-                <include name="WEB-INF/**" />
-                <exclude name="**/WEB-INF/web.xml" />
-                <exclude name="**/WEB-INF/struts-config.xml" />
+        <include name="WEB-INF/**" />
+        <exclude name="**/WEB-INF/web.xml" />
+        <exclude name="**/WEB-INF/struts-config.xml" />
 			</fileset>
-<!--
-			<fileset dir="${catissue.java}">
-				<include name="WEB-INF/**" />
-				<exclude name="**/WEB-INF/web.xml" />
-				<exclude name="**/WEB-INF/struts-config.xml" />
-			</fileset>
--->
+
 			<fileset dir="${catissue.modules}">
 				<include name="flexclient/**" />
 			</fileset>
@@ -515,7 +513,10 @@
 			<fileset dir="${Applet_lib.dir}">
 				<include name="Applet/**" />
 			</fileset>
-
+      <fileset dir="${base.dir}/local.repo/gov.nih.nci.catissue/Applet_lib/2.0">
+        <include name="java.policy.applet"/>
+      </fileset>
+      
 			<lib dir="${web_inf_lib.dir}">
 				<exclude name="*.zip" />
 				<exclude name="ant*.jar" />
@@ -524,48 +525,47 @@
 				<exclude name="acegi-security-1.0.4.jar" />
 				<exclude name="addressing-1.0.jar" />
 				<exclude name="antlr-2.7.6.jar" />
-				<exclude name="axis-url.jar" />
-				<exclude name="axis.jar" />
-				<exclude name="caGrid-ServiceSecurityProvider-client-1.3.jar" />
-				<exclude name="caGrid-ServiceSecurityProvider-common-1.3.jar" />
-				<exclude name="caGrid-ServiceSecurityProvider-service-1.3.jar" />
-				<exclude name="caGrid-ServiceSecurityProvider-stubs-1.3.jar" />
-				<exclude name="caGrid-authentication-service-client-1.3.jar" />
-				<exclude name="caGrid-authentication-service-common-1.3.jar" />
-				<exclude name="caGrid-authentication-service-stubs-1.3.jar" />
-				<exclude name="caGrid-core-1.3.jar" />
-				<exclude name="caGrid-dorian-client-1.3.jar" />
-				<exclude name="caGrid-dorian-common-1.3.jar" />
-				<exclude name="caGrid-dorian-stubs-1.3.jar" />
-				<exclude name="caGrid-gaards-core-1.3.jar" />
-				<exclude name="caGrid-gts-client-1.3.jar" />
-				<exclude name="caGrid-gts-common-1.3.jar" />
-				<exclude name="caGrid-gts-stubs-1.3.jar" />
-				<exclude name="caGrid-metadata-common-1.3.jar" />
-				<exclude name="caGrid-metadata-security-1.3.jar" />
-				<exclude name="caGrid-opensaml-1.3.jar" />
-				<exclude name="caGrid-syncgts-client-1.3.jar" />
-				<exclude name="caGrid-syncgts-common-1.3.jar" />
-				<exclude name="caGrid-syncgts-stubs-1.3.jar" />
+				<exclude name="axis-*.jar" />
+				<exclude name="cagrid-ServiceSecurityProvider-client-1.3.jar" />
+        <exclude name="cagrid-ServiceSecurityProvider-common-1.3.jar" />
+        <exclude name="cagrid-ServiceSecurityProvider-service-1.3.jar" />
+        <exclude name="cagrid-ServiceSecurityProvider-stubs-1.3.jar" />
+        <exclude name="cagrid-authentication-service-client-1.3.jar" />
+        <exclude name="cagrid-authentication-service-common-1.3.jar" />
+        <exclude name="cagrid-authentication-service-stubs-1.3.jar" />
+        <exclude name="cagrid-core-1.3.jar" />
+        <exclude name="cagrid-dorian-client-1.3.jar" />
+        <exclude name="cagrid-dorian-common-1.3.jar" />
+        <exclude name="cagrid-dorian-stubs-1.3.jar" />
+        <exclude name="cagrid-gaards-core-1.3.jar" />
+        <exclude name="cagrid-gts-client-1.3.jar" />
+        <exclude name="cagrid-gts-common-1.3.jar" />
+        <exclude name="cagrid-gts-stubs-1.3.jar" />
+        <exclude name="cagrid-metadata-common-1.3.jar" />
+        <exclude name="cagrid-metadata-security-1.3.jar" />
+        <exclude name="cagrid-opensaml-1.3.jar" />
+        <exclude name="cagrid-syncgts-client-1.3.jar" />
+        <exclude name="cagrid-syncgts-common-1.3.jar" />
+        <exclude name="cagrid-syncgts-stubs-1.3.jar" />
 				<exclude name="casclient-2.1.1.jar" />
-				<exclude name="clm.jar" />
-				<exclude name="cog-axis.jar" />
-				<exclude name="cog-url.jar" />
+				<exclude name="clm*.jar" />
+				<exclude name="cog-axis*.jar" />
+				<exclude name="cog-url*.jar" />
 				<exclude name="commons-collections-3.2.jar" />
 				<exclude name="commons-discovery-0.2.jar" />
 				<exclude name="commons-httpclient-3.0.1.jar" />
 				<exclude name="ehcache-1.2.4.jar" />
 				<exclude name="globus_resolution_stubs_java.jar" />
 				<exclude name="globus_transfer_stubs_java.jar" />
-				<exclude name="hibernate3.jar" />
-				<exclude name="jaxrpc.jar" />
-				<exclude name="jboss-client.jar" />
+				<exclude name="hibernate-3*.jar" />
+				<exclude name="jaxrpc*.jar" />
+				<exclude name="jboss-client*.jar" />
 				<exclude name="jdom-1.1.jar" />
 				<exclude name="mobius_common_client-1.1.jar" />
 				<exclude name="mysql-connector-java-5.0.8-bin.jar" />
 				<exclude name="${oracle.ojdbc_driver.version}.jar" />
-				<exclude name="wsrf_core.jar" />
-				<exclude name="wsrf_core_stubs.jar" />
+				<exclude name="wsrf_core*.jar" />
+				<exclude name="wsrf_core_stubs*.jar" />
 			</lib>
 
 			<fileset dir="${temp.dir}">
@@ -729,9 +729,16 @@
 	</target>
 
 <!--
-, ivy-notificationservice, ivy-dedataservice, ivy-staticdataservice, ivy-decodegen
+, 
 -->
-  <target name="create_zip" depends="createJavaDoc, installable_build_war, ivy-caTissuePrintWebService">
+  <target name="create_zip" depends="createJavaDoc, 
+                                     installable_build_war, 
+                                     ivy-caTissuePrintWebService, 
+                                     ivy-minimaldatasharing, 
+                                     ivy-notificationservice, 
+                                     ivy-dedataservice, 
+                                     ivy-staticdataservice, 
+                                     ivy-decodegen">
 		<property name="zip.dir" value="${dist.dir}" />
 		<property name="zip.file" value="${target.dir}/dist/caTissue_Suite_v${application.version}_Installable.zip" />
 
@@ -748,13 +755,13 @@
 			<fileset dir="${catissue.modules}/BulkOperations/conf" />
 		</copy>
 
-        <echo message="Copying Grid Services from ${catissue.modules} => ${zip.dir}/modules/caGrid_service"/>
-        <copy todir="${zip.dir}/modules/caGrid_service" overwrite="true" verbose="true">
-            <fileset dir="${catissue.modules}/"><include name="caTissueDEDataService/**"/></fileset>
-            <fileset dir="${catissue.modules}/"><include name="caTissueStaticDataService/**"/></fileset>
-            <fileset dir="${catissue.modules}/"><include name="NotificationService/**"/></fileset>
-            <fileset dir="${catissue.modules}/"><include name="DECodeGen/**"/></fileset>
-        </copy>
+    <echo message="Copying Grid Services from ${catissue.modules} => ${zip.dir}/modules/caGrid_service"/>
+    <copy todir="${zip.dir}/modules/caGrid_service" overwrite="true" verbose="true">
+      <fileset dir="${catissue.modules}/"><include name="caTissueDEDataService/**"/></fileset>
+      <fileset dir="${catissue.modules}/"><include name="caTissueStaticDataService/**"/></fileset>
+      <fileset dir="${catissue.modules}/"><include name="NotificationService/**"/></fileset>
+      <fileset dir="${catissue.modules}/"><include name="DECodeGen/**"/></fileset>
+    </copy>
 
 
 		<copy file="${catissue.modules}/caTIES/conf/gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
@@ -806,12 +813,12 @@
 			<fileset file="${src_lib.dir}/j2ee*.jar" />
 			<fileset file="${src_lib.dir}/log4j*.jar" />
 			<fileset file="${common.lib.dir}/mysql-connector-java-5.0.8.jar" />
-			<fileset file="${common.lib.dir}/${oracle.ojdbc_driver.version}.jar" />
+      <fileset file="${common.lib.dir}/ojdbc14-10.2.0.4.0.jar" />
 			<fileset file="${extra_lib.dir}/puretls*.jar" />
 			<fileset file="${extra_lib.dir}/cog-jglobus*.jar" />
 			<fileset file="${extra_lib.dir}/cryptix32*.jar" />
 			<fileset file="${extra_lib.dir}/cryptix-asn1*.jar" />
-			<fileset file="${extra_lib.dir}/jce-jdk13-125*.jar" />
+      <fileset file="${extra_lib.dir}/jce-jdk-1.3_1.25nci.jar" />
 			<fileset file="${extra_lib.dir}/cryptix*.jar" />
 			<fileset file="${bda-utils.dir}/xmltask-1.15.1.jar" />
 		</copy>
@@ -847,20 +854,20 @@
 			<fileset dir="${catissue.modules}/DE/conf" />
 		</copy>
 
-        <!-- caCoreSDK 4.2 -->
-        <if>
-            <not>
-                <available file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
-            </not>
-            <then>
-                <get src="${cacore-sdk-4.2-src.url}" dest="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
-            </then>
-        </if>
-        <copy file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
+    <!-- caCoreSDK 4.2 -->
+    <if>
+      <not>
+        <available file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
+      </not>
+      <then>
+        <get src="${cacore-sdk-4.2-src.url}" dest="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
+      </then>
+    </if>
+    <copy file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 
-        <!--caCoreSDK files for dozer-->
-        <echo message="Copying caCoreSDK files for dozer artifacts generation..." />
-        <zip destfile="${zip.dir}/modules/dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" basedir="${catissue.modules}/caCORE-SDK-dozer-templates/caCoreSDK.4.2.dozer" />
+    <!--caCoreSDK files for dozer-->
+    <echo message="Copying caCoreSDK files for dozer artifacts generation..." />
+    <zip destfile="${zip.dir}/modules/dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" basedir="${catissue.modules}/caCORE-SDK-dozer-templates/caCoreSDK.4.2.dozer" />
 
 		<copy todir="${zip.dir}/modules/identity_provider_support/conf" overwrite="true">
 			<fileset dir="${conf.dir}/idp" />
@@ -876,7 +883,7 @@
 
 		<copy file="${temp.dir}/printservice_module.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="${temp.dir}/printservice_client.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
-		<copy file="${web_inf_lib.dir}/PrintCatissueCore_Client.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
+		<copy file="${web_inf_lib.dir}/printcatissuecore_client-1.0.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="${conf.dir}/caTissuePrintWebService-1.0.war" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/private_public_migrator" overwrite="true">
@@ -888,7 +895,6 @@
 
 		<copy file="${target.dir}/dist/AdvanceQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
 		<copy file="${conf.dir}/taggedvalues.xml" todir="${zip.dir}/modules/query/conf" overwrite="true" />
-		<!--<copy file="${conf.dir}/paths.txt" todir="${zip.dir}/modules/query/conf" overwrite="true" /> -->
 		<copy file="${conf.dir}/paths.txt" todir="${zip.dir}" overwrite="true" />
 
 		<antcall target="create_API_client_zip" />
@@ -933,29 +939,29 @@
 				<include name="sdk-security-client-4.2.jar" />
 				<include name="sdk-writable-api-client-4.2.jar" />
 				<include name="caGrid-CQL-cql.1.0-1.3.jar" />
-				<include name="catissue_cacore-beans.jar" />
+				<include name="catissue_cacore-beans*.jar" />
 				<include name="castor-0.9.9.jar" />
-				<include name="cog-jglobus.jar" />
-				<include name="log4j.jar" />
-				<include name="commons-lang.jar" />
-				<include name="xercesImpl.jar" />
-				<include name="caGrid-IdentifiersNAService-stubs-1.4-dev.jar" />
+				<include name="cog-jglobus*.jar" />
+				<include name="log4j*.jar" />
+				<include name="commons-lang*.jar" />
+				<include name="xercesImpl*.jar" />
+				<include name="cagrid-identifiersnaservice-stubs-1.4-dev.jar" />
 
-				<include name="AdvanceQuery.jar" />
-				<include name="bulkoperator.jar" />
+				<include name="AdvanceQuery*.jar" />
+				<include name="bulkoperator*.jar" />
 				<include name="commonpackage-1.2.w1.jar" />
 				<include name="DAO-1.1.9.5.jar" />
 				<include name="DynamicExtensions*.jar" />
-				<include name="ParticipantManager.jar" />
+				<include name="ParticipantManager*.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="washu-commons*.jar" />
 			</fileset>
 			<fileset dir="${common.lib.dir}">
-				<include name="wsrf_core_stubs.jar" />
+				<include name="wsrf_core_stubs*.jar" />
 			</fileset>
 			<fileset dir="${caTissueSuite_Client_lib.dir}">
 				<include name="catissuecore.jar" />
-				<include name="catissue_cacore-schema.jar" />
+				<include name="catissue_cacore-schema*.jar" />
 				<include name="jaxen-1.1.1.jar" />
 				<include name="sdk-security-client-4.2.jar" />
 				<include name="spring-2.5.6.jar" />
@@ -963,10 +969,10 @@
 			<fileset dir="${common.lib.dir}">
 				<include name="acegi-security-1.0.4.jar" />
 				<include name="antlr-2.7.6.jar" />
-				<include name="axis.jar" />
-				<include name="jaxrpc.jar" />
+				<include name="axis-1*.jar" />
+				<include name="jaxrpc*.jar" />
 				<include name="jdom-1.1.jar" />
-				<include name="hibernate3.jar" />
+				<include name="hibernate-*.jar" />
 			</fileset>
 		</copy>
 		<zip destfile="${APIclientzip.file}" basedir="${APIclientzip.dir}/caTissueSuite_Client" />
@@ -996,7 +1002,19 @@
 		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/extra_lib" overwrite="true" verbose="true">
 			<fileset dir="${caTissueSuite_Client_lib.dir}" />
 		</copy>
+    <copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/extra_lib" overwrite="true" verbose="true">
+      <fileset dir="${base.dir}/local.repo/gov.nih.nci.catissue/caTissueSuite_Client/2.0">
+        <include name="edu.wustl.catissuecore.domain.xsd"/>
+        <include name="edu.wustl.catissuecore.domain.shippingtracking.xsd"/>
+        <include name="edu.wustl.catissuecore.domain.pathology.xsd"/>
+        <include name="edu.wustl.catissuecore.domain.deintegration.xsd"/>
+        <include name="xml.properties"/>
+        <include name="ApplicationResources.properties"/>
+        <include name="mapping.dtd"/>
+      </fileset>
+    </copy>    
 
+    
 		<copy todir="${StrutsTestzip.dir}" overwrite="true" verbose="true">
 			<fileset dir="${catissue.test}/struts">
 				<include name="Struts_testcases_build.xml" />
@@ -1008,6 +1026,7 @@
 				<include name="Old_Struts_testcases_build.xml" />
 			</fileset>
 		</copy>
+
 
 		<zip destfile="${StrutsTestzip.file}" basedir="${StrutsTestzip.dir}" />
 	</target>
@@ -1498,23 +1517,7 @@
 	<!-- shippingtracking - end -->
 
 	<target name="dist" depends="create_zip" />
-	<!--<target name="copy:property:files">
-		<copy file="${conf.dir}/properties-service.xml" todir="${dist.dir}" overwrite="true" />
-		<copy file="${conf.dir}/allTokens.properties" todir="${dist.dir}" overwrite="true" />
-		<copy file="${conf.dir}/build-properties.xml" todir="${dist.dir}" overwrite="true" />
-		<copy file="${conf.dir}/caTissueCdmsIntegration.properties" todir="${dist.dir}" overwrite="true" />
-		<copy file="${conf.dir}/deploycaties.properties" todir="${dist.dir}" overwrite="true" />
-		<copy file="${conf.dir}/performance.properties" todir="${dist.dir}" overwrite="true" />
--->
-	<!--Copying bulkOperation.properties file-->
-	<!--<copy todir="${dist.dir}/catissuecore-properties" overwrite="true">
-			<fileset dir="${conf.dir}">
-				<include name="bulkOperation.properties" />
-			</fileset>
-		</copy>
-		<delete dir="${base.dir}/bulkoperation" />
-	</target>
--->
+
 	<!-- Added this target for new v20 zip restructing. Uncomment this when new zip is ready -->
 	<target name="copy:property:files">
 		<copy file="${conf.dir}/properties-service.xml" todir="${dist.dir}/modules/caTissue/conf" overwrite="true" />
