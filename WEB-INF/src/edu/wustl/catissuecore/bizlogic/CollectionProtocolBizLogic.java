@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -63,6 +64,8 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
@@ -2321,5 +2324,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic
 				.executeNVBHqlQuery(sql, colvaluebeanlist);
 
 		return ppincordinatorList;
+	}
+	
+	public boolean hasConsents(Long cpId,HibernateDAO dao) throws DAOException
+	{
+		boolean hasConsents=true;
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING, String.valueOf(cpId)));
+		List<ConsentTierStatus> consents = dao.executeNamedQuery(
+				"getconsentTierCollection", substParams);
+		if(consents.isEmpty())
+		{
+			hasConsents=false;
+		}
+		return hasConsents;
 	}
 }

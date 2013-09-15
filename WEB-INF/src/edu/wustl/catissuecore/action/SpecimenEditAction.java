@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -87,10 +88,9 @@ public class SpecimenEditAction extends CatissueBaseAction
 						new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(identifier, hibernateDao));
 				request.setAttribute("isSpecimenBarcodeGeneratorAvl",
 						Variables.isSpecimenBarcodeGeneratorAvl);
-				boolean hasConsents = false;
-				if(specimen.getConsentTierStatusCollection()!=null && specimen.getConsentTierStatusCollection().size() >0){
-				    hasConsents = true;
-				}			
+				
+				CollectionProtocolBizLogic collectionProtocolBizLogic=new CollectionProtocolBizLogic();
+				boolean hasConsents =collectionProtocolBizLogic.hasConsents(cpId, hibernateDao);
 				request.setAttribute("hasConsents", hasConsents);
 			}
 			

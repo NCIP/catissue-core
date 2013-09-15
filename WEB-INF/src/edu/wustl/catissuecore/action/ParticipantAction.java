@@ -70,6 +70,7 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -77,7 +78,8 @@ import edu.wustl.dao.exception.DAOException;
  *
  * @author gautam_shetty
  */
-public class ParticipantAction extends CatissueBaseAction {
+public class ParticipantAction extends CatissueBaseAction
+{
 
 	/** logger. */
 	private static final Logger LOGGER = Logger
@@ -104,10 +106,12 @@ public class ParticipantAction extends CatissueBaseAction {
 	@Override
 	protected ActionForward executeCatissueAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+			HttpServletResponse response) throws Exception
+	{
 
 		final String refPart = request.getParameter("refresh");
-		if (refPart != null) {
+		if (refPart != null)
+		{
 			request.setAttribute("refresh", refPart);
 
 		}
@@ -126,16 +130,19 @@ public class ParticipantAction extends CatissueBaseAction {
 				.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
 		if (request.getAttribute("participantSelect") != null
-				&& request.getAttribute("participantForm1") != null) {
+				&& request.getAttribute("participantForm1") != null)
+		{
 			participantForm = (ParticipantForm) request
 					.getAttribute("participantForm1");
 			request.setAttribute("participantForm", participantForm);
 		}
 
-		if (participantForm.getOperation().equals(Constants.ADD)) {
+		if (participantForm.getOperation().equals(Constants.ADD))
+		{
 			final String clrConsentSess = request
 					.getParameter("clearConsentSession");
-			if (clrConsentSess != null && clrConsentSess.equals("true")) {
+			if (clrConsentSess != null && clrConsentSess.equals("true"))
+			{
 				session.removeAttribute(Constants.CONSENT_RESPONSE);
 			}
 		}
@@ -144,18 +151,21 @@ public class ParticipantAction extends CatissueBaseAction {
 		 * is get reflected whi;le adding SCG
 		 */
 		final String cpid = request.getParameter(Constants.CP_SEARCH_CP_ID);
-		if (participantForm.getCpId() == -1 && cpid != null) {
+		if (participantForm.getCpId() == -1 && cpid != null)
+		{
 			participantForm.setCpId(Long.valueOf(cpid));
 		}
 
-		if (participantForm.getOperation().equals(Constants.EDIT)) {
-			request.setAttribute("participantId", String
-					.valueOf(participantForm.getId()));
+		if (participantForm.getOperation().equals(Constants.EDIT))
+		{
+			request.setAttribute("participantId",
+					String.valueOf(participantForm.getId()));
 			// Setting Consent Response Bean to Session
 			// Abhishek Mehta
 			final Map consentResponseHT = participantForm
 					.getConsentResponseHashTable();
-			if (consentResponseHT != null) {
+			if (consentResponseHT != null)
+			{
 				session.setAttribute(Constants.CONSENT_RESPONSE,
 						consentResponseHT);
 			}
@@ -164,9 +174,10 @@ public class ParticipantAction extends CatissueBaseAction {
 		 * Falguni Sachde bug id :8150 Set participantId as request attribute as
 		 * Its required in case of viewannotations view of Edit participant
 		 */
-		if (participantForm.getOperation().equals(Constants.VIEW_ANNOTATION)) {
-			request.setAttribute("participantId", String
-					.valueOf(participantForm.getId()));
+		if (participantForm.getOperation().equals(Constants.VIEW_ANNOTATION))
+		{
+			request.setAttribute("participantId",
+					String.valueOf(participantForm.getId()));
 
 		}
 		final List key = new ArrayList();
@@ -181,7 +192,8 @@ public class ParticipantAction extends CatissueBaseAction {
 				.getParameter("deleteRegistration");
 		final String status = request.getParameter("status");
 		if (delRegistration == null && status != null
-				&& status.equalsIgnoreCase("true")) {
+				&& status.equalsIgnoreCase("true"))
+		{
 			// Calling DeleteRow of BaseAction class
 			MapDataParser.deleteRow(key, map, request.getParameter("status"));
 		}
@@ -190,12 +202,9 @@ public class ParticipantAction extends CatissueBaseAction {
 		// Abhishek Mehta
 		final List cprKey = new ArrayList();
 
-		cprKey
-				.add("CollectionProtocolRegistration:outer_CollectionProtocol_id");
-		cprKey
-				.add("CollectionProtocolRegistration:outer_CollectionProtocol_shortTitle");
-		cprKey
-				.add("CollectionProtocolRegistration:outer_protocolParticipantIdentifier");
+		cprKey.add("CollectionProtocolRegistration:outer_CollectionProtocol_id");
+		cprKey.add("CollectionProtocolRegistration:outer_CollectionProtocol_shortTitle");
+		cprKey.add("CollectionProtocolRegistration:outer_protocolParticipantIdentifier");
 		cprKey.add("CollectionProtocolRegistration:outer_id");
 		cprKey.add("CollectionProtocolRegistration:outer_registrationDate");
 		cprKey.add("CollectionProtocolRegistration:outer_isConsentAvailable");
@@ -206,23 +215,29 @@ public class ParticipantAction extends CatissueBaseAction {
 
 		final String fromSubmitAction = request
 				.getParameter("fromSubmitAction");
-		if (fromSubmitAction == null) {
+		if (fromSubmitAction == null)
+		{
 
-			if (mapCPR != null && !mapCPR.isEmpty()) {
+			if (mapCPR != null && !mapCPR.isEmpty())
+			{
 				final int count = participantForm
 						.getCollectionProtocolRegistrationValueCounter();
-				for (int i = 1; i <= count; i++) {
+				for (int i = 1; i <= count; i++)
+				{
 					final String cprActStatusKey = "CollectionProtocolRegistration:"
 							+ i + "_activityStatus";
-					if (mapCPR.get(cprActStatusKey) == null) {
+					if (mapCPR.get(cprActStatusKey) == null)
+					{
 						participantForm.setCollectionProtocolRegistrationValue(
-								cprActStatusKey, Status.ACTIVITY_STATUS_ACTIVE
-										.toString());
+								cprActStatusKey,
+								Status.ACTIVITY_STATUS_ACTIVE.toString());
 					}
 				}
 			}
 
-		} else {
+		}
+		else
+		{
 
 			/**
 			 * Name: Vijay Pande Reviewer Name: Aarti Sharma Following method
@@ -231,29 +246,31 @@ public class ParticipantAction extends CatissueBaseAction {
 			 */
 			final int count = participantForm
 					.getCollectionProtocolRegistrationValueCounter();
-			this.setParticipantMedicalNumberId(bizlogic, participantForm
-					.getId(), map);
+			this.setParticipantMedicalNumberId(bizlogic,
+					participantForm.getId(), map);
 			// Updating Collection Protocol Registration
-//			this.updateCollectionProtocolRegistrationCollection(bizlogic,
-//					participantForm, count);
-//			final int cprCount = this.updateCollectionProtocolRegistrationMap(
-//					mapCPR, count);
-//			participantForm
-//					.setCollectionProtocolRegistrationValueCounter(cprCount);
+			//			this.updateCollectionProtocolRegistrationCollection(bizlogic,
+			//					participantForm, count);
+			//			final int cprCount = this.updateCollectionProtocolRegistrationMap(
+			//					mapCPR, count);
+			//			participantForm
+			//					.setCollectionProtocolRegistrationValueCounter(cprCount);
 		}
 
 		MapDataParser.deleteRow(cprKey, mapCPR, "true");
 
 		// Sets the collection Protocol if page is opened from collection
 		// protocol registration
-		
-		
-		if (participantForm.getOperation().equals(Constants.ADD)) {
+
+		if (participantForm.getOperation().equals(Constants.ADD))
+		{
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
-			if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY)) {
+			if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{
 				final String collProtId = request
 						.getParameter(Constants.CP_SEARCH_CP_ID);
-				if (collProtId != null) {
+				if (collProtId != null)
+				{
 					String cpIdKey = "CollectionProtocolRegistration:1_CollectionProtocol_id";
 					String isConsentAvailKey = "CollectionProtocolRegistration:1_isConsentAvailable";
 					String cprActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
@@ -264,18 +281,21 @@ public class ParticipantAction extends CatissueBaseAction {
 
 					final Collection consentList = this.getConsentList(
 							bizlogic, collProtId);
-					if (consentList != null && consentList.isEmpty()) {
+					if (consentList != null && consentList.isEmpty())
+					{
 						participantForm.setCollectionProtocolRegistrationValue(
 								isConsentAvailKey,
 								Constants.NO_CONSENTS_DEFINED);
-					} else if (consentList != null && !consentList.isEmpty()) {
+					}
+					else if (consentList != null && !consentList.isEmpty())
+					{
 						participantForm.setCollectionProtocolRegistrationValue(
 								isConsentAvailKey,
 								Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 					participantForm.setCollectionProtocolRegistrationValue(
-							cprActivityStausKey, Status.ACTIVITY_STATUS_ACTIVE
-									.toString());
+							cprActivityStausKey,
+							Status.ACTIVITY_STATUS_ACTIVE.toString());
 					final String cprDateValue = CommonUtilities
 							.parseDateToString(
 									Calendar.getInstance().getTime(),
@@ -295,7 +315,8 @@ public class ParticipantAction extends CatissueBaseAction {
 		if (mapCPR != null
 				&& mapCPR.isEmpty()
 				|| participantForm
-						.getCollectionProtocolRegistrationValueCounter() == 0) {
+						.getCollectionProtocolRegistrationValueCounter() == 0)
+		{
 			String collProtRegDateKey = "CollectionProtocolRegistration:1_registrationDate";
 			String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
 			String collProtRegDatVal = CommonUtilities.parseDateToString(
@@ -345,9 +366,9 @@ public class ParticipantAction extends CatissueBaseAction {
 		// Page.
 		final List raceList = CDEManager.getCDEManager()
 				.getPermissibleValueList(Constants.CDE_NAME_RACE, null);
-		
+
 		raceList.remove(0);
-		
+
 		request.setAttribute(Constants.RACELIST, raceList);
 
 		// Sets the vitalStatus attribute to be used in the Add/Edit Participant
@@ -370,21 +391,24 @@ public class ParticipantAction extends CatissueBaseAction {
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		List siteList = new ArrayList();
 		final String sourceObjectName = Site.class.getName();
-		final String[] displayNameFields = { "name" };
+		final String[] displayNameFields = {"name"};
 		final String valueField = Constants.SYSTEM_IDENTIFIER;
 		siteList = partBiz.getList(sourceObjectName, displayNameFields,
 				valueField, true);
 		request.setAttribute(Constants.SITELIST, siteList);
 
 		List list = new ArrayList();
-		if (sessionDataBean != null && sessionDataBean.isAdmin()) {
+		if (sessionDataBean != null && sessionDataBean.isAdmin())
+		{
 			// Set the collection protocol title list
 			final String cpSrcObjName = CollectionProtocol.class.getName();
-			final String[] cpDisplayNameFields = { "shortTitle" };
+			final String[] cpDisplayNameFields = {"shortTitle"};
 			final String cpValueField = Constants.SYSTEM_IDENTIFIER;
 			list = partBiz.getList(cpSrcObjName, cpDisplayNameFields,
 					cpValueField, true);
-		} else {
+		}
+		else
+		{
 			final CollectionProtocolBizLogic cpBizLogic = (CollectionProtocolBizLogic) factory
 					.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 			final String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
@@ -394,7 +418,8 @@ public class ParticipantAction extends CatissueBaseAction {
 			// This is done when participant is added in cp based view.
 			// Adding the CP selected in the cp based view to the list of CPs
 			// used in CPR section
-			if (cpId != null && list.size() == 1) {
+			if (cpId != null && list.size() == 1)
+			{
 				final String shortTitle = cpBizLogic.getShortTitle(Long
 						.valueOf(cpId));
 				final NameValueBean nvb = new NameValueBean(shortTitle, cpId);
@@ -408,53 +433,79 @@ public class ParticipantAction extends CatissueBaseAction {
 		// set associated identified report id
 		Long reportId = this.getAssociatedIdentifiedReportId(partBiz,
 				participantForm.getId());
-		if (reportId == null) {
+		if (reportId == null)
+		{
 			reportId = Long.valueOf(-1);
-		} else if (AppUtility.isQuarantined(reportId)) {
+		}
+		else if (AppUtility.isQuarantined(reportId))
+		{
 			reportId = Long.valueOf(-2);
 		}
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		// Falguni:Performance Enhancement.
 		Long participantEntityId = null;
 		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null) {
+				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
+		{
 			participantEntityId = (Long) CatissueCoreCacheManager
 					.getInstance()
 					.getObjectFromCache(
 							AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
-		} else {
+		}
+		else
+		{
 			participantEntityId = AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
 			CatissueCoreCacheManager.getInstance().addObjectToCache(
 					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
 					participantEntityId);
 		}
+		boolean hasConsents = false;
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
-		if (!participantForm.getOperation().equals(Constants.ADD)){ 
-			DAO dao=null;
-			try{
-			dao = AppUtility.openDAOSession(sessionDataBean);
-			
-			ParticipantDTO dto = cprBizLogic.fetchCprDetailForParticipant(participantForm.getCpId(), participantForm.getId(), dao);
-			participantForm.setPpId(dto.getPpid());
-			participantForm.setBarcode(dto.getBarcode());
-			participantForm.setRegistrationDate(CommonUtilities.parseDateToString(dto.getRegistrationDate(),
-									CommonServiceLocator.getInstance().getDatePattern()));
-			participantForm.setCprId(String.valueOf(dto.getCprId()));
-			participantForm.setCprActivityStatus(dto.getActivityStatus());
-			}finally{
+		CollectionProtocolBizLogic collectionProtocolBizLogic = new CollectionProtocolBizLogic();
+
+		if (!participantForm.getOperation().equals(Constants.ADD))
+		{
+			DAO dao = null;
+			try
+			{
+				dao = AppUtility.openDAOSession(sessionDataBean);
+
+				ParticipantDTO dto = cprBizLogic
+						.fetchCprDetailForParticipant(
+								participantForm.getCpId(),
+								participantForm.getId(), dao);
+				participantForm.setPpId(dto.getPpid());
+				participantForm.setBarcode(dto.getBarcode());
+				participantForm.setRegistrationDate(CommonUtilities
+						.parseDateToString(dto.getRegistrationDate(),
+								CommonServiceLocator.getInstance()
+										.getDatePattern()));
+				participantForm.setCprId(String.valueOf(dto.getCprId()));
+				participantForm.setCprActivityStatus(dto.getActivityStatus());
+
+				hasConsents = collectionProtocolBizLogic.hasConsents(
+						Long.parseLong(String.valueOf(participantForm.getCpId())), (HibernateDAO) dao);
+			}
+			finally
+			{
 				AppUtility.closeDAOSession(dao);
-			}  
+			}
 		}
-		request.setAttribute("cprId",participantForm.getCprId());
-		String collectionProtocolId = cpid == null?  request.getParameter("cpId") : cpid;
-		
-		if(collectionProtocolId!=null){
-			request.setAttribute("ppIdFormat",cprBizLogic.getPPIdformat(Long.parseLong(collectionProtocolId)));
-		}else{
-			request.setAttribute("ppIdFormat","");
+		request.setAttribute("cprId", participantForm.getCprId());
+		String collectionProtocolId = cpid == null ? request
+				.getParameter("cpId") : cpid;
+
+		if (collectionProtocolId != null)
+		{
+			request.setAttribute("ppIdFormat", cprBizLogic.getPPIdformat(Long
+					.parseLong(collectionProtocolId)));
 		}
-		
+		else
+		{
+			request.setAttribute("ppIdFormat", "");
+		}
+
 		request.setAttribute(
 				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
 				participantEntityId);
@@ -463,48 +514,48 @@ public class ParticipantAction extends CatissueBaseAction {
 		// amol changes
 		setEMPStatus(request, participantForm, mapCPR, count);
 		LOGGER.debug("pageOf :---------- " + pageOf);
-		request.setAttribute("participantAttributeDisplaySetInfo", Variables.attributesTodisplay);
-		  boolean hasConsents = false;
-          if(participantForm.getConsentResponseBeanCollection()!=null){
-              Iterator<ConsentResponseBean> consentBeanItr = participantForm.getConsentResponseBeanCollection().iterator();
-              if(consentBeanItr.hasNext()){
-                  ConsentResponseBean obj = consentBeanItr.next();
-                  hasConsents =  !obj.getConsentResponse().isEmpty();
-              }
-              
-          }           
-          request.setAttribute("hasConsents", hasConsents);
-      
+		request.setAttribute("participantAttributeDisplaySetInfo",
+				Variables.attributesTodisplay);
+
+		request.setAttribute("hasConsents", hasConsents);
+
 		return mapping.findForward(pageOf);
 	}
 
 	private void setEMPStatus(final HttpServletRequest request,
 			ParticipantForm participantForm, Map mapCPR, int count)
-			throws ParseException, ApplicationException {
+			throws ParseException, ApplicationException
+	{
 
 		participantForm = (ParticipantForm) request
 				.getAttribute("participantForm");
 		request.setAttribute("csEMPIStatus", Constants.FALSE);
 		boolean csEMPIStatus = false;
-		if (Constants.EDIT.equals(participantForm.getOperation())) {
+		if (Constants.EDIT.equals(participantForm.getOperation()))
+		{
 			// amol changes
 			// checks the list of CP that are assigned for a participant for
 			// empi enable
 			// if any one of the CP has enabled empi then csEMPIStatus is set to
 			// true
-			csEMPIStatus = ParticipantUtil.isEMPIEnable(participantForm.getCpId());
-			if (Constants.TRUE.equals(String.valueOf(csEMPIStatus))) {
+			csEMPIStatus = ParticipantUtil.isEMPIEnable(participantForm
+					.getCpId());
+			if (Constants.TRUE.equals(String.valueOf(csEMPIStatus)))
+			{
 				setEMPIIdStatus(participantForm, request);
-				request.setAttribute("csEMPIStatus", String
-						.valueOf(csEMPIStatus));
-			} else {
+				request.setAttribute("csEMPIStatus",
+						String.valueOf(csEMPIStatus));
+			}
+			else
+			{
 				setMesForeMPIIdGeneration(request);
 
 			}
 		}
 	}
 
-	private void setMesForeMPIIdGeneration(HttpServletRequest request) {
+	private void setMesForeMPIIdGeneration(HttpServletRequest request)
+	{
 		String lastName = null;
 		String firstName = null;
 		String key = (String) request.getSession().getAttribute(
@@ -513,52 +564,61 @@ public class ParticipantAction extends CatissueBaseAction {
 				.getSession()
 				.getAttribute(
 						edu.wustl.common.participant.utility.Constants.EMPI_GENERATED_PARTICIPANT);
-		if (particiapantFormOld != null && key != null) {
+		if (particiapantFormOld != null && key != null)
+		{
 			lastName = particiapantFormOld.getLastName();
 			firstName = particiapantFormOld.getFirstName();
-			if (lastName == null || "".equals(lastName)) {
+			if (lastName == null || "".equals(lastName))
+			{
 				lastName = firstName;
-			} else if (firstName != null && !"".equals(firstName)) {
+			}
+			else if (firstName != null && !"".equals(firstName))
+			{
 				lastName = lastName + "," + firstName;
 			}
 
 			setMessage(request, key, lastName);
-			request
-					.getSession()
+			request.getSession()
 					.removeAttribute(
 							edu.wustl.common.participant.utility.Constants.EMPI_ID_SUCCESS);
-			request
-					.getSession()
+			request.getSession()
 					.removeAttribute(
 							edu.wustl.common.participant.utility.Constants.EMPI_GENERATED_PARTICIPANT);
 		}
 	}
 
 	private void setMessage(final HttpServletRequest request, final String key,
-			String value) {
+			String value)
+	{
 
 		ActionMessages messages = (ActionMessages) request
 				.getAttribute(Globals.MESSAGE_KEY);
-		if (messages == null) {
+		if (messages == null)
+		{
 			messages = new ActionMessages();
 		}
 		boolean isDuplicateMsg = checkDuplicateMessage(messages, key);
-		if (!isDuplicateMsg) {
+		if (!isDuplicateMsg)
+		{
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
 					new ActionMessage(key, value));
-			if (request.getAttribute(Constants.PARTICIPANT_CONTINUE_LOOK_UP) == null) {
+			if (request.getAttribute(Constants.PARTICIPANT_CONTINUE_LOOK_UP) == null)
+			{
 				saveMessages(request, messages);
 			}
 		}
 	}
 
 	private boolean checkDuplicateMessage(final ActionMessages messages,
-			final String key) {
+			final String key)
+	{
 		Iterator itr = messages.get("org.apache.struts.action.GLOBAL_MESSAGE");
 		boolean isDuplicateMsg = false;
-		while (itr.hasNext()) {
+		while (itr.hasNext())
+		{
 			ActionMessage message = (ActionMessage) itr.next();
-			if (key.equals(message.getKey())) {
+			if (key.equals(message.getKey()))
+			{
 				isDuplicateMsg = true;
 				break;
 			}
@@ -568,20 +628,22 @@ public class ParticipantAction extends CatissueBaseAction {
 
 	private void setEMPIIdStatus(final ParticipantForm participantForm,
 			final HttpServletRequest request) throws BizLogicException,
-			DAOException, ParseException {
+			DAOException, ParseException
+	{
 		String mrn = null;
-//		String count ="0";
+		//		String count ="0";
 		String participantName = null;
 		String key = ParticipantManagerUtility
 				.getParticipantMedicalIdentifierKeyFor(1,
 						Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER);
 		if (participantForm.getValues() != null
-				&& !participantForm.getValues().isEmpty()) {
+				&& !participantForm.getValues().isEmpty())
+		{
 			mrn = (String) participantForm.getValues().get(key);
 		}
-		String ssn = participantForm.getSocialSecurityNumberPartA().concat(
-				participantForm.getSocialSecurityNumberPartB()).concat(
-				participantForm.getSocialSecurityNumberPartC());
+		String ssn = participantForm.getSocialSecurityNumberPartA()
+				.concat(participantForm.getSocialSecurityNumberPartB())
+				.concat(participantForm.getSocialSecurityNumberPartC());
 		final String empiIdStatus = ParticipantManagerUtility
 				.getPartiEMPIStatus(participantForm.getId());
 		participantForm.setEmpiIdStatus(empiIdStatus);
@@ -597,62 +659,70 @@ public class ParticipantAction extends CatissueBaseAction {
 				.getAttribute(edu.wustl.common.participant.utility.Constants.IS_GENERATE_EMPI_PAGE);
 
 		if (empiIdStatus
-				.equals(edu.wustl.common.participant.utility.Constants.EMPI_ID_PENDING)) {
-			request
-					.setAttribute(
-							Constants.GENERATE_EMPI_ID_NAME,
-							edu.wustl.common.participant.utility.Constants.GENERATE_EMPI_ID);
+				.equals(edu.wustl.common.participant.utility.Constants.EMPI_ID_PENDING))
+		{
+			request.setAttribute(
+					Constants.GENERATE_EMPI_ID_NAME,
+					edu.wustl.common.participant.utility.Constants.GENERATE_EMPI_ID);
 			setMessage(request,
 					"participant.empiid.generation.waiting.message", null);
-		} else if (empiIdStatus
-				.equals(edu.wustl.common.participant.utility.Constants.EMPI_ID_CREATED)) {
-			request
-					.setAttribute(
-							Constants.GENERATE_EMPI_ID_NAME,
-							edu.wustl.common.participant.utility.Constants.REGENERATE_EMPI_ID);
-		} else if (isPValidForEMPI && !Constants.TRUE.equals(isMatchedFromEMPI)) {
+		}
+		else if (empiIdStatus
+				.equals(edu.wustl.common.participant.utility.Constants.EMPI_ID_CREATED))
+		{
+			request.setAttribute(
+					Constants.GENERATE_EMPI_ID_NAME,
+					edu.wustl.common.participant.utility.Constants.REGENERATE_EMPI_ID);
+		}
+		else if (isPValidForEMPI && !Constants.TRUE.equals(isMatchedFromEMPI))
+		{
 			// final String isMatchedFromEMPI = (String) request
 			// .getAttribute(edu.wustl.common.participant.utility.Constants.
 			// MATCHED_PARTICIPANTS_FOUND_FROM_EMPI);
 
 			if (ParticipantManagerUtility
-					.isParticipantIsProcessing(participantForm.getId())) {
-//				count = this.getMatchingParticipantCount(request);
-//				if (!Constants.TRUE.equals(isMatchedFromEMPI) && !count.equalsIgnoreCase("0")) {
-//					setMessage(request,
-//							"participant.empiid.generation.message", count);
-//				}
+					.isParticipantIsProcessing(participantForm.getId()))
+			{
+				//				count = this.getMatchingParticipantCount(request);
+				//				if (!Constants.TRUE.equals(isMatchedFromEMPI) && !count.equalsIgnoreCase("0")) {
+				//					setMessage(request,
+				//							"participant.empiid.generation.message", count);
+				//				}
 				participantName = this.getParticipantName(participantForm);
-				 setMessage(request, "participant.empiid.generation.message",
-				 participantName);
-			} else {
-				request
-						.setAttribute(
-								Constants.GENERATE_EMPI_ID_NAME,
-								edu.wustl.common.participant.utility.Constants.GENERATE_EMPI_ID);
+				setMessage(request, "participant.empiid.generation.message",
+						participantName);
+			}
+			else
+			{
+				request.setAttribute(
+						Constants.GENERATE_EMPI_ID_NAME,
+						edu.wustl.common.participant.utility.Constants.GENERATE_EMPI_ID);
 			}
 
 		}
 
 		if (ParticipantManagerUtility.isParticipantIsProcessing(participantForm
-				.getId())) {
+				.getId()))
+		{
 			participantName = this.getParticipantName(participantForm);
-			if (!Constants.TRUE.equals(isMatchedFromEMPI)) {
+			if (!Constants.TRUE.equals(isMatchedFromEMPI))
+			{
 				setMessage(request, "participant.empiid.generation.message",
 						participantName);
 			}
 
-//			 setMessage(request, "participant.empiid.generation.message",
-//			 participantName);
+			//			 setMessage(request, "participant.empiid.generation.message",
+			//			 participantName);
 		}
 	}
 
-	private String getParticipantName(ParticipantForm participantForm){
+	private String getParticipantName(ParticipantForm participantForm)
+	{
 		String participantName = null;
-		participantName = participantForm.getLastName() + ", " + participantForm.getFirstName();
+		participantName = participantForm.getLastName() + ", "
+				+ participantForm.getFirstName();
 		return participantName;
 	}
-
 
 	/**
 	 * Update collection protocol registration collection.
@@ -669,13 +739,15 @@ public class ParticipantAction extends CatissueBaseAction {
 	 */
 	private void updateCollectionProtocolRegistrationCollection(
 			IBizLogic bizLogic, ParticipantForm participantForm, int count)
-			throws Exception {
+			throws Exception
+	{
 		// Gets the collection Protocol Registration map from ActionForm
 		final Map mapCollectionProtocolRegistration = participantForm
 				.getCollectionProtocolRegistrationValues();
 
 		if (mapCollectionProtocolRegistration != null
-				&& !mapCollectionProtocolRegistration.isEmpty()) {
+				&& !mapCollectionProtocolRegistration.isEmpty())
+		{
 			final Collection consentResponseBeanCollection = participantForm
 					.getConsentResponseBeanCollection();
 			this.setParticipantCollectionProtocolRegistrationId(bizLogic,
@@ -698,9 +770,11 @@ public class ParticipantAction extends CatissueBaseAction {
 	 *             : Exception
 	 */
 	private int updateCollectionProtocolRegistrationMap(
-			Map mapCollectionProtocolRegistration, int count) throws Exception {
+			Map mapCollectionProtocolRegistration, int count) throws Exception
+	{
 		int cprCount = 0;
-		for (int i = 1; i <= count; i++) {
+		for (int i = 1; i <= count; i++)
+		{
 			final String isActive = "CollectionProtocolRegistration:" + i
 					+ "_activityStatus";
 			final String collectionProtocolTitle = "CollectionProtocolRegistration:"
@@ -709,18 +783,21 @@ public class ParticipantAction extends CatissueBaseAction {
 					.get(isActive);
 			final String cpId = (String) mapCollectionProtocolRegistration
 					.get(collectionProtocolTitle);
-			if (activityStatus == null && cpId == null) {
+			if (activityStatus == null && cpId == null)
+			{
 				cprCount++;
 				continue;
 			}
-			if (activityStatus == null) {
+			if (activityStatus == null)
+			{
 				mapCollectionProtocolRegistration.put(isActive,
 						Status.ACTIVITY_STATUS_ACTIVE.toString());
 			}
 
 			if (activityStatus != null
 					&& activityStatus.equalsIgnoreCase(Constants.DISABLED)
-					|| (cpId != null && cpId.equalsIgnoreCase("-1"))) {
+					|| (cpId != null && cpId.equalsIgnoreCase("-1")))
+			{
 
 				final String collectionProtocolParticipantId = "CollectionProtocolRegistration:"
 						+ i + "_protocolParticipantIdentifier";
@@ -765,10 +842,11 @@ public class ParticipantAction extends CatissueBaseAction {
 	 *             : BizLogicException
 	 */
 	private Collection getConsentList(IBizLogic bizLogic, String cpId)
-			throws BizLogicException {
+			throws BizLogicException
+	{
 		final Collection consentTierCollection = (Collection) bizLogic
-				.retrieveAttribute(CollectionProtocol.class.getName(), Long
-						.parseLong(cpId), "elements(consentTierCollection)");
+				.retrieveAttribute(CollectionProtocol.class.getName(),
+						Long.parseLong(cpId), "elements(consentTierCollection)");
 		return consentTierCollection;
 	}
 
@@ -789,7 +867,8 @@ public class ParticipantAction extends CatissueBaseAction {
 	 *             : Exception
 	 */
 	private void setParticipantMedicalNumberId(IBizLogic bizLogic,
-			Long participantId, Map map) throws Exception {
+			Long participantId, Map map) throws Exception
+	{
 		// By Abhishek
 		// ParticipantBizLogic bizLogic = (ParticipantBizLogic)
 		// BizLogicFactory.getInstance
@@ -798,14 +877,17 @@ public class ParticipantAction extends CatissueBaseAction {
 				.retrieveAttribute(Participant.class.getName(), participantId,
 						"elements(participantMedicalIdentifierCollection)");
 		final Iterator iter = paticipantMedicalIdentifierCollection.iterator();
-		while (iter.hasNext()) {
+		while (iter.hasNext())
+		{
 			final ParticipantMedicalIdentifier pmi = (ParticipantMedicalIdentifier) iter
 					.next();
-			for (int i = 1; i <= paticipantMedicalIdentifierCollection.size(); i++) {
+			for (int i = 1; i <= paticipantMedicalIdentifierCollection.size(); i++)
+			{
 				// check for null medical record number since for participant
 				// having no PMI an empty PMI object is added
 				if (pmi.getMedicalRecordNumber() != null
-						&& pmi.getSite().getId().toString() != null) {
+						&& pmi.getSite().getId().toString() != null)
+				{
 					// check for site id and medical number, if they both
 					// matches then set id to the respective participant medical
 					// number
@@ -821,14 +903,13 @@ public class ParticipantAction extends CatissueBaseAction {
 													i,
 													Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID))))
 									.equalsIgnoreCase(pmi.getSite().getId()
-											.toString())) {
-						map
-								.put(
-										AppUtility
-												.getParticipantMedicalIdentifierKeyFor(
-														i,
-														Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID),
-										pmi.getId().toString());
+											.toString()))
+					{
+						map.put(AppUtility
+								.getParticipantMedicalIdentifierKeyFor(
+										i,
+										Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID),
+								pmi.getId().toString());
 						break;
 					}
 				}
@@ -856,7 +937,8 @@ public class ParticipantAction extends CatissueBaseAction {
 	private void setParticipantCollectionProtocolRegistrationId(
 			IBizLogic bizLogic, Long participantId, Map map,
 			Collection consentResponseBeanCollection, int cprCount)
-			throws Exception {
+			throws Exception
+	{
 		LOGGER.debug("Action ::: participant id :: " + participantId);
 		// By Abhishek Mehta
 		// ParticipantBizLogic bizLogic = (ParticipantBizLogic)
@@ -868,11 +950,14 @@ public class ParticipantAction extends CatissueBaseAction {
 		final Iterator iter = collectionProtocolRegistrationCollection
 				.iterator();
 
-		while (iter.hasNext()) {
+		while (iter.hasNext())
+		{
 			final CollectionProtocolRegistration cpri = (CollectionProtocolRegistration) iter
 					.next();
-			for (int i = 1; i <= cprCount; i++) {
-				if (cpri.getCollectionProtocol() != null) {
+			for (int i = 1; i <= cprCount; i++)
+			{
+				if (cpri.getCollectionProtocol() != null)
+				{
 					// Added by geeta
 					// DFCI requirement : barcode should be same as identifier
 					List list = null;
@@ -883,10 +968,10 @@ public class ParticipantAction extends CatissueBaseAction {
 							.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 					list = bizLogic1.retrieve(
 							CollectionProtocolRegistration.class.getName(),
-							new String[] { "barcode" }, new String[] { "id" },
-							new String[] { "=" }, new Long[] { cpri.getId() },
-							null);
-					if (list != null && !list.isEmpty()) {
+							new String[]{"barcode"}, new String[]{"id"},
+							new String[]{"="}, new Long[]{cpri.getId()}, null);
+					if (list != null && !list.isEmpty())
+					{
 						barcode = ((String) list.get(0));
 					}
 					final String collectionProtocolIdKey = "CollectionProtocolRegistration:"
@@ -898,10 +983,12 @@ public class ParticipantAction extends CatissueBaseAction {
 					// barcodekey added by geeta
 					final String barcodeKey = "CollectionProtocolRegistration:"
 							+ i + "_barcode";
-					if (map.containsKey(collectionProtocolIdKey)) {
+					if (map.containsKey(collectionProtocolIdKey))
+					{
 						if (((String) map.get(collectionProtocolIdKey))
 								.equalsIgnoreCase(cpri.getCollectionProtocol()
-										.getId().toString())) {
+										.getId().toString()))
+						{
 							map.put(collectionProtocolRegistrationIdKey, cpri
 									.getId().toString());
 							map.put(isActive, cpri.getActivityStatus());
@@ -909,15 +996,13 @@ public class ParticipantAction extends CatissueBaseAction {
 							// poplulate the Protocol Participant Id in map of
 							// Participant Form
 							map.put("CollectionProtocolRegistration:" + i
-									+ "_protocolParticipantIdentifier", cpri
-									.getProtocolParticipantIdentifier());
-							if (consentResponseBeanCollection != null) {
-								this
-										.setConsentResponseId(bizLogic, cpri
-												.getId(), cpri
-												.getCollectionProtocol()
-												.getId(),
-												consentResponseBeanCollection);
+									+ "_protocolParticipantIdentifier",
+									cpri.getProtocolParticipantIdentifier());
+							if (consentResponseBeanCollection != null)
+							{
+								this.setConsentResponseId(bizLogic, cpri
+										.getId(), cpri.getCollectionProtocol()
+										.getId(), consentResponseBeanCollection);
 							}
 							break;
 						}
@@ -944,15 +1029,17 @@ public class ParticipantAction extends CatissueBaseAction {
 	 */
 	private void setConsentResponseId(IBizLogic bizLogic, Long cprId,
 			Long colProtId, Collection consentResponseBeanCollection)
-			throws Exception {
+			throws Exception
+	{
 		// By Abhishek Mehta
 		final Collection consentTierResponseCollection = (Collection) bizLogic
-				.retrieveAttribute(CollectionProtocolRegistration.class
-						.getName(), cprId,
+				.retrieveAttribute(
+						CollectionProtocolRegistration.class.getName(), cprId,
 						"elements(consentTierResponseCollection)");
 
 		final Iterator itrRespBean = consentResponseBeanCollection.iterator();
-		while (itrRespBean.hasNext()) {
+		while (itrRespBean.hasNext())
+		{
 			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) itrRespBean
 					.next();
 			final long cpId = consentResponseBean.getCollectionProtocolID();
@@ -961,14 +1048,15 @@ public class ParticipantAction extends CatissueBaseAction {
 
 				LOGGER.debug("Action ::: collection protocol id :: "
 						+ colProtId);
-				LOGGER
-						.debug("Action ::: collection protocol registration id  :: "
-								+ cprId);
+				LOGGER.debug("Action ::: collection protocol registration id  :: "
+						+ cprId);
 				final Iterator iter = consentTierResponseCollection.iterator();
-				while (iter.hasNext()) {
+				while (iter.hasNext())
+				{
 					final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iter
 							.next();
-					if (consentTierResponse.getId() != null) {
+					if (consentTierResponse.getId() != null)
+					{
 						final ConsentTier consentTier = consentTierResponse
 								.getConsentTier();
 						final String consentTierId = consentTier.getId()
@@ -976,15 +1064,15 @@ public class ParticipantAction extends CatissueBaseAction {
 						final Collection consentResponse = consentResponseBean
 								.getConsentResponse();
 						final Iterator itResponse = consentResponse.iterator();
-						while (itResponse.hasNext()) {
+						while (itResponse.hasNext())
+						{
 							final ConsentBean consentBean = (ConsentBean) itResponse
 									.next();
 							final String ctId = consentBean.getConsentTierID();
-							if (ctId.equals(consentTierId)) {
-								LOGGER
-										.debug("Action ::: consent response  :: "
-												+ consentTierResponse
-														.getResponse());
+							if (ctId.equals(consentTierId))
+							{
+								LOGGER.debug("Action ::: consent response  :: "
+										+ consentTierResponse.getResponse());
 								consentBean
 										.setParticipantResponseID(consentTierResponse
 												.getId().toString());
@@ -1012,18 +1100,19 @@ public class ParticipantAction extends CatissueBaseAction {
 	 */
 	private Long getAssociatedIdentifiedReportId(
 			ParticipantBizLogic participantBizlogic, Long participantId)
-			throws BizLogicException {
+			throws BizLogicException
+	{
 		// By Abhishek Mehta
 		Long value = null;
 		final List idList = participantBizlogic.getSCGList(participantId);
 		Object[] obj = null;
-        if(!idList.isEmpty())
-        {
-            obj = (Object[]) idList.get(0);
-            value = ((Long) obj[2]);
-           
-        }
-		
+		if (!idList.isEmpty())
+		{
+			obj = (Object[]) idList.get(0);
+			value = ((Long) obj[2]);
+
+		}
+
 		return value;
 	}
 
@@ -1032,7 +1121,8 @@ public class ParticipantAction extends CatissueBaseAction {
 	 *
 	 * @return String : String
 	 */
-	public String getObjectId() {
+	public String getObjectId()
+	{
 		return "";
 	}
 
@@ -1044,49 +1134,64 @@ public class ParticipantAction extends CatissueBaseAction {
 	 *
 	 * @return String : String
 	 */
-	protected String getObjectId(AbstractActionForm form) {
+	protected String getObjectId(AbstractActionForm form)
+	{
 		final ParticipantForm participantForm = (ParticipantForm) form;
 		DAO dao = null;
 
-		if (participantForm.getCpId() != 0L && participantForm.getCpId() != -1L) {
+		if (participantForm.getCpId() != 0L && participantForm.getCpId() != -1L)
+		{
 			return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_"
 					+ participantForm.getCpId();
 		}
 
 		else if (participantForm.getCpId() == -1L
-				&& participantForm.getId() != 0L) {
-			try {
+				&& participantForm.getId() != 0L)
+		{
+			try
+			{
 				dao = AppUtility.openDAOSession(null);
 				final StringBuffer buffer = new StringBuffer();
 				Participant participant;
 
-				participant = (Participant) dao.retrieveById(Participant.class
-						.getName(), participantForm.getId());
+				participant = (Participant) dao.retrieveById(
+						Participant.class.getName(), participantForm.getId());
 
 				final Collection<CollectionProtocolRegistration> collection = participant
 						.getCollectionProtocolRegistrationCollection();
 
-				if (collection != null && !collection.isEmpty()) {
+				if (collection != null && !collection.isEmpty())
+				{
 					buffer.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
-					for (final CollectionProtocolRegistration cpr : collection) {
+					for (final CollectionProtocolRegistration cpr : collection)
+					{
 						buffer.append('_').append(
 								cpr.getCollectionProtocol().getId());
 					}
 				}
 
 				return buffer.toString();
-			} catch (final Exception e) {
+			}
+			catch (final Exception e)
+			{
 				LOGGER.error(e.getMessage(), e);
 				return null;
-			} finally {
-				try {
+			}
+			finally
+			{
+				try
+				{
 					AppUtility.closeDAOSession(dao);
-				} catch (final ApplicationException e) {
+				}
+				catch (final ApplicationException e)
+				{
 					LOGGER.error(e.getMessage(), e);
 				}
 			}
 
-		} else {
+		}
+		else
+		{
 			return null;
 		}
 

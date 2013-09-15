@@ -529,5 +529,6 @@
        </joined-subclass>
 
     </class>
-
+	<query name="getconsentTierCollection">Select sp.consentTierCollection from edu.wustl.catissuecore.domain.SpecimenProtocol sp WHERE sp.id = ?
+	</query>
 </hibernate-mapping>

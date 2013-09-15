@@ -39,6 +39,7 @@ import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsIntegrator;
@@ -79,6 +80,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
@@ -588,7 +590,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			// ************* ForwardTo implementation *************
 			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
-			Long collectionProtocolId ;
+			Long collectionProtocolId=null ;
 			Long participantId ;
 			String participantProtocolId = null ;
 			Long cpeId = null;
@@ -935,7 +937,8 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			specimenCollectionGroupForm.setCollectionEventPointLabel(scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
 			request.setAttribute("CollectionEventPointLabel",scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
 			
-			boolean hasConsents = !specimenCollectionGroupForm.getConsentResponseForScgValues().isEmpty();
+			CollectionProtocolBizLogic collectionProtocolBizLogic=new CollectionProtocolBizLogic();
+			boolean hasConsents =collectionProtocolBizLogic.hasConsents(collectionProtocolId, (HibernateDAO)dao);
 			request.setAttribute("hasConsents", hasConsents);
 
 		}
