@@ -47,7 +47,10 @@
     <dependency org="ant-contrib"
                 name="ant-contrib"
                 rev="1.0b3"
-                conf="static-data-service-tools->master"/>  
+                conf="static-data-service-tools->default">
+      <artifact name="ant-contrib" type="jar"/>
+      <exclude module="ant"/>
+    </dependency>  
   
     <dependency org="cagrid"
                 name="cagrid-introduce-buildtools"
@@ -95,7 +98,7 @@
     <dependency org="cagrid"
                 name="cagrid-advertisement"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>  
+                conf="static-data-service-lib->default"/>  
                 
                 
     <dependency org="cagrid"
@@ -242,7 +245,7 @@
     <dependency org="cagrid"
                 name="cagrid-introduce-servicetools"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>   
+                conf="static-data-service-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-sdk4xcql2-processor"
@@ -327,7 +330,11 @@
     <dependency org="commons-logging"
                 name="commons-logging"
                 rev="1.1"
-                conf="static-data-service-lib->master"/>                  
+                conf="static-data-service-lib->default">  
+      <artifact name="commons-logging" type="jar"/>
+      <exclude module="avalon-framework"/>
+      <exclude module="logkit"/>      
+    </dependency>
                 
     <dependency org="org.hibernate"
                 name="ejb3-persistence"
@@ -337,12 +344,18 @@
     <dependency org="org.hibernate"
                 name="hibernate-annotations"
                 rev="3.2.0.ga"
-                conf="static-data-service-lib->master"/>
+                conf="static-data-service-lib->default">  
+      <artifact name="hibernate-annotations" type="jar"/>
+      <exclude module="persistence-api"/> 
+      <exclude module="hibernate"/>
+    </dependency>
                 
     <dependency org="org.hibernate"
                 name="hibernate-validator"
                 rev="3.0.0.ga"
-                conf="static-data-service-lib->master"/>    
+                conf="static-data-service-lib->default">  
+      <artifact name="hibernate-validator" type="jar"/>
+    </dependency>    
                 
     <dependency org="org.hibernate"
                 name="hibernate"
@@ -398,7 +411,9 @@
     <dependency org="globus"
                 name="axis"
                 rev="1.2RC2"
-                conf="static-data-service-lib->master"/>
+                conf="static-data-service-lib->default">
+     <artifact name="axis" type="jar"/>
+    </dependency>
                 
  
     <dependency org="mysql" 
@@ -476,7 +491,9 @@
     <dependency org="dom4j"
                 name="dom4j"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default">
+      <artifact name="dom4j" type="jar"/>
+    </dependency>
                 
     <dependency org="ParticipantManager"
                 name="ParticipantManager"
@@ -496,7 +513,9 @@
     <dependency org="org.dspace.xmlui.xml"
                 name="xml-commons-resolver"
                 rev="1.1"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default">
+      <artifact name="xml-commons-resolver" type="jar"/>
+    </dependency>  
                 
     <dependency org="SimpleQuery"
                 name="SimpleQuery"
@@ -557,7 +576,10 @@
      <dependency org="ant-contrib"
                 name="ant-contrib"
                 rev="1.0b3"
-                conf="dedataservice-tools->master"/>  
+                conf="dedataservice-tools->default">
+      <artifact name="ant-contrib" type="jar"/>
+      <exclude module="ant"/>
+    </dependency>
   
     <dependency org="cagrid"
                 name="cagrid-introduce-buildtools"
@@ -789,7 +811,11 @@
     <dependency org="commons-logging"
                 name="commons-logging"
                 rev="1.1"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default">  
+      <artifact name="commons-logging" type="jar"/>
+      <exclude module="avalon-framework"/>
+      <exclude module="logkit"/>
+    </dependency>   
 
 
     <dependency org="cglib"
@@ -825,12 +851,18 @@
     <dependency org="org.hibernate"
                 name="hibernate-annotations"
                 rev="3.2.0.ga"
-                conf="dedataservice-lib->master"/>
+                conf="dedataservice-lib->default">  
+      <artifact name="hibernate-annotations" type="jar"/>
+            <exclude module="persistence-api"/> 
+      <exclude module="hibernate"/>
+    </dependency>
                 
     <dependency org="org.hibernate"
                 name="hibernate-validator"
                 rev="3.0.0.ga"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default">  
+      <artifact name="hibernate-validator" type="jar"/>
+    </dependency>     
                 
     <dependency org="cagrid"
                 name="cagrid-metadata-security"
@@ -891,7 +923,9 @@
     <dependency org="dom4j"
                 name="dom4j"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default">
+      <artifact name="dom4j" type="jar"/>
+    </dependency>
     <dependency org="asm"
                 name="asm"
                 rev="1.5.3"
@@ -1135,7 +1169,9 @@
     <dependency org="org.dspace.xmlui.xml"
                 name="xml-commons-resolver"
                 rev="1.1"
-                conf="notificationservice-wsrf->master"/> 
+                conf="notificationservice-wsrf->default">
+      <artifact name="xml-commons-resolver" type="jar"/>
+    </dependency> 
                 
     <dependency org="javax.xml"
                 name="saaj"
@@ -1172,7 +1208,10 @@
     <dependency org="ant-contrib"
                 name="ant-contrib"
                 rev="1.0b3"
-                conf="notificationservice-tools->master"/>  
+                conf="notificationservice-tools->default">
+      <artifact name="ant-contrib" type="jar"/>
+      <exclude module="ant"/>
+    </dependency>  
   
     <dependency org="cagrid"
                 name="cagrid-introduce-buildtools"
@@ -1299,7 +1338,7 @@
     <dependency org="cagrid"
                 name="cagrid-advertisement"
                 rev="1.4"
-                conf="notificationservice-lib->master"/>      
+                conf="notificationservice-lib->default"/>      
 
     <dependency org="cagrid"
                 name="cagrid-core"
@@ -1309,7 +1348,7 @@
     <dependency org="cagrid"
                 name="cagrid-introduce-servicetools"
                 rev="1.4"
-                conf="notificationservice-lib->master"/>          
+                conf="notificationservice-lib->default"/>          
                 
     <dependency org="cagrid"
                 name="cagrid-metadata-security"
