@@ -333,7 +333,8 @@
                 conf="static-data-service-lib->default">  
       <artifact name="commons-logging" type="jar"/>
       <exclude module="avalon-framework"/>
-      <exclude module="logkit"/>      
+      <exclude module="logkit"/> 
+      <exclude module="servlet-api"/>
     </dependency>
                 
     <dependency org="org.hibernate"
@@ -493,6 +494,11 @@
                 rev="1.4"
                 conf="static-data-service-lib->default">
       <artifact name="dom4j" type="jar"/>
+      <exclude module="jaxen"/>
+      <exclude module="xml-apis"/>
+      <exclude module="isorelax"/>
+      <exclude module="msv"/>
+      <exclude module="saxpath"/>
     </dependency>
                 
     <dependency org="ParticipantManager"
@@ -815,6 +821,7 @@
       <artifact name="commons-logging" type="jar"/>
       <exclude module="avalon-framework"/>
       <exclude module="logkit"/>
+      <exclude module="servlet-api"/>
     </dependency>   
 
 
@@ -853,7 +860,7 @@
                 rev="3.2.0.ga"
                 conf="dedataservice-lib->default">  
       <artifact name="hibernate-annotations" type="jar"/>
-            <exclude module="persistence-api"/> 
+      <exclude module="persistence-api"/> 
       <exclude module="hibernate"/>
     </dependency>
                 
@@ -925,6 +932,11 @@
                 rev="1.4"
                 conf="dedataservice-lib->default">
       <artifact name="dom4j" type="jar"/>
+      <exclude module="jaxen"/>
+      <exclude module="xml-apis"/>
+      <exclude module="isorelax"/>
+      <exclude module="msv"/>
+      <exclude module="saxpath"/>
     </dependency>
     <dependency org="asm"
                 name="asm"
