@@ -6,6 +6,7 @@ var timerForInvestigatorFilter, piText;
 // This function will initialise Custom DHTMLX DropDown control
 function initDropDownGrid(gridDropDownInfo, loadDataVariable) 
 {
+	
 		var gridObj = new dhtmlXGridObject(gridDropDownInfo['gridObj']);
 		gridObj.setImagePath("dhtmlx_suite/imgs/");
 		gridObj.setHeader(" ");
@@ -13,8 +14,10 @@ function initDropDownGrid(gridDropDownInfo, loadDataVariable)
 		gridObj.setColAlign("left");
 		gridObj.setColSorting("server");
 		gridObj.setSkin("drop");
-		gridObj.enablePaging(true, 6, 0, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
-		gridObj.setPagingSkin("bricks");
+		gridObj.enablePaging(true, 6, 0, gridDropDownInfo['pagingArea'], false, gridDropDownInfo['infoArea']);
+		//gridObj.setPagingSkin("bricks","dhx_pline_skyblue");
+		gridObj.setPagingSkin("toolbar");
+		gridObj.setPagingWTMode(true,false,false,false);
 		gridObj.enableAutoHeigth(true,100,false);
 		  
 		gridObj.enableRowsHover(true, "gridHover");

@@ -45,9 +45,7 @@
 	<tr>
 		<td class="bottomtd"></td>
 	</tr>
-	<tr>
-	<td align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
-	</tr>
+	
 </table>
 
 <div id="participantDetails" class="align_left_style">

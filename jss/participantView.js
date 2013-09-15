@@ -102,23 +102,30 @@ function createAliquote()
  var label = specimenCombo.getSelectedText();
  var noOfAliquotes = document.getElementById("noOfAliquots").value;
  var quantity = document.getElementById("quantityPerAliquot").value;
+ if(specimenId == null)
+{
+  alert("Select specimen to create Aliquots.");
+  return false;
+}
  if(isNaN(quantity))
  {
   quantity = "";
  }
  var isSubmit = true;
  var action = "";
-/*if((count==null ||count=="") || (quantity==null || quantity==""))
+if((noOfAliquotes==null ||noOfAliquotes=="" || noOfAliquotes == 'Count'))
 { 
  alert("Count is required");
+ return false;
  isSubmit = false;
-}*/
+}
 if(isSubmit)
 {
 	action = 'GetAliquotDetails.do?pageOf=fromSpecimen&parentSpecimentLabel='+label+"&aliquotCount="+noOfAliquotes+"&quantityPerAliquot="+quantity+"&searchBasedOn=label";
+	window.parent.frames[1].location=action;
 }
 
- window.parent.frames[1].location=action;
+ 
 }
 
 function createDerivative()
@@ -129,18 +136,25 @@ function createDerivative()
  var nodeId = "Specimen_"+specimenId;
  var scgId = eventCombo.getSelectedValue();
  var action = "";
+ if(specimenId == null)
+{
+  alert("Select specimen to create Derivative.");
+  return false;
+}
  if(count=="1")
  {
   action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&requestFrom=participantView&parentLabel='+label+'&parentSpecimenId='+specimenId;
+  window.parent.frames[1].location=action;
  }
- else //check if greater than 1
+ else if(count >= 1)//check if greater than 1
  {
   refreshTree(null,null,null,null,nodeId);
   action = "MultipleSpecimenFlexInitAction.do?operation=add&pageOf=pageOfMultipleSpWithoutMenu&parentType=Derived_Specimen&numberOfSpecimens="+count 
     +"&parentLabel="+label;
+	window.parent.frames[1].location=action;
  }
  
- window.parent.frames[1].location=action;
+ 
  
 }
 

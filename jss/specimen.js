@@ -635,7 +635,7 @@ function processData(obj)
 		
 			
 	}
-	if(obj.name=='concentration' && !isNumeric(obj.value.trim()))
+	else if(obj.name=='concentration' && !isNumeric(obj.value.trim()))
 	{
 		concentrationSubmit=false;
 		obj.className += " errorStyleOn";
