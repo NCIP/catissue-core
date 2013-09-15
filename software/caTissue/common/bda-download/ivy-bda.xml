@@ -1692,9 +1692,9 @@ This is the definition of a virtual module called bda-download that has a depend
     <dependency org="ant-contrib"
                 name="ant-contrib"
                 rev="1.0b2"
-                conf="private_public_migrator->default"/>
+                conf="private_public_migrator->master"/>
                 
-  <dependency org="antlr"
+    <dependency org="antlr"
                 name="antlr"
                 rev="2.7.6"
                 conf="private_public_migrator->master"/>          

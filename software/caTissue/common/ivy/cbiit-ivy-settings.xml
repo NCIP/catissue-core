@@ -40,14 +40,6 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 			<ibiblio name="erroritem-repo" m2compatible="true" root="http://erroritem.sourceforge.net/maven/repo" changingPattern=".*SNAPSHOT" />
       
       <ibiblio name="cbiit" m2compatible="true" root="https://ncimvn.nci.nih.gov/nexus/content/groups/public"/>
-    
-			<!--  Semanticbits shared repository [using sftp] -->
-      <!--
-			<url name="semanticbits-repo-http">
-				<ivy pattern="http://repo.semanticbits.com/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
-  				<artifact pattern="http://repo.semanticbits.com/ivy-repo/[organisation]/[module]/[revision]/[artifact].[ext]" />
-			</url>			
-      -->
 		</chain>
 	</resolvers>
 </ivysettings>

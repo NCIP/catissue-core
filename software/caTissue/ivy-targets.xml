@@ -40,64 +40,64 @@
     <ivy:resolve file="ivy.xml"
                  conf="cacore_resources" />
     <ivy:retrieve conf="cacore_resources"
-                  pattern="modules/cacore_resources/conf/[artifact]-[revision].[ext]" />
+                  pattern="modules/cacore_resources/conf/[artifact]-[revision](-[classifier]).[ext]" />
   </target> 
   <target name="ivy-caTissuePrintWebService" depends="ivy-settings">
     <ivy:resolve file="ivy.xml"
                  conf="caTissuePrintWebService" />
     <ivy:retrieve conf="caTissuePrintWebService"
-                  pattern="modules/core/conf/[artifact]-[revision].[ext]" />
+                  pattern="modules/core/conf/[artifact]-[revision](-[classifier]).[ext]" />
   </target>  
   <target name="ivy-minimaldatasharing" depends="ivy-settings">
     <ivy:resolve file="ivy.xml"
                  conf="minimaldatasharing" />
     <ivy:retrieve conf="minimaldatasharing"
-                  pattern="modules/minimalDataSharing/build/[artifact]-[revision].[ext]" />
+                  pattern="modules/minimalDataSharing/build/[artifact]-[revision](-[classifier]).[ext]" />
   </target>   
   <target name="ivy-decodegen" depends="ivy-settings">
     <ivy:resolve file="ivy.xml"
                  conf="decodegen" />
     <ivy:retrieve conf="decodegen"
-                  pattern="modules/DECodeGen/[artifact]-[revision].[ext]" />
+                  pattern="modules/DECodeGen/[artifact]-[revision](-[classifier]).[ext]" />
   </target>
   <target name="ivy-notificationservice" depends="ivy-settings">
     <ivy:resolve file="ivy.xml"
                  conf="notificationservice-lib" />
     <ivy:retrieve conf="notificationservice-lib"
-                  pattern="modules/NotificationService/lib/[artifact]-[revision].[ext]" />
+                  pattern="modules/NotificationService/lib/[artifact]-[revision](-[classifier]).[ext]" />
     <ivy:resolve file="ivy.xml"
                  conf="notificationservice-tools" />
     <ivy:retrieve conf="notificationservice-tools"
-                  pattern="modules/NotificationService/tools/lib/[artifact]-[revision].[ext]" />       
+                  pattern="modules/NotificationService/tools/lib/[artifact]-[revision](-[classifier]).[ext]" />       
     <ivy:resolve file="ivy.xml"
                  conf="notificationservice-extras" />
     <ivy:retrieve conf="notificationservice-extras"
-                  pattern="modules/NotificationService/extras/[artifact]-[revision].[ext]" />              
+                  pattern="modules/NotificationService/extras/[artifact]-[revision](-[classifier]).[ext]" />              
     <ivy:resolve file="ivy.xml"
                  conf="notificationservice-wsrf" />
     <ivy:retrieve conf="notificationservice-wsrf"
-                  pattern="modules/NotificationService/wsrf/WEB-INF/lib/[artifact]-[revision].[ext]" />           
+                  pattern="modules/NotificationService/wsrf/WEB-INF/lib/[artifact]-[revision](-[classifier]).[ext]" />           
   </target>
   
   <target name="ivy-dedataservice" depends="ivy-settings">
     <ivy:resolve file="ivy.xml"
                  conf="dedataservice-lib" />
     <ivy:retrieve conf="dedataservice-lib"
-                  pattern="modules/caTissueDEDataService/lib/[artifact]-[revision].[ext]" />
+                  pattern="modules/caTissueDEDataService/lib/[artifact]-[revision](-[classifier]).[ext]" />
     <ivy:resolve file="ivy.xml"
                  conf="dedataservice-tools" />
     <ivy:retrieve conf="dedataservice-tools"
-                  pattern="modules/caTissueDEDataService/tools/lib/[artifact]-[revision].[ext]" />                  
+                  pattern="modules/caTissueDEDataService/tools/lib/[artifact]-[revision](-[classifier]).[ext]" />                  
   </target>
   <target name="ivy-staticdataservice" depends="ivy-settings">
     <ivy:resolve file="ivy.xml"
                  conf="static-data-service-lib" />
     <ivy:retrieve conf="static-data-service-lib"
-                  pattern="modules/caTissueStaticDataService/lib/[artifact]-[revision].[ext]" />
+                  pattern="modules/caTissueStaticDataService/lib/[artifact]-[revision](-[classifier]).[ext]" />
     <ivy:resolve file="ivy.xml"
                  conf="static-data-service-tools" />
     <ivy:retrieve conf="static-data-service-tools"
-                  pattern="modules/caTissueStaticDataService/tools/lib/[artifact]-[revision].[ext]" />           
+                  pattern="modules/caTissueStaticDataService/tools/lib/[artifact]-[revision](-[classifier]).[ext]" />           
   </target>  
  
 </project>  

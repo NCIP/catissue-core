@@ -34,7 +34,7 @@
     <dependency org="minimalDataSharing"
                 name="minimalDataSharing"
                 rev="1.0"
-                conf="caTissuePrintWebService->*"/>     
+                conf="minimaldatasharing->*"/>     
                 
     <dependency org="decodegen"
                 name="introduce-artifacts"
@@ -62,7 +62,10 @@
     <dependency org="jdom"
                 name="jdom"
                 rev="1.0"
-                conf="static-data-service-tools->master"/>
+                conf="static-data-service-tools->default">
+      <artifact name="jdom" type="jar"/>
+    </dependency>               
+  
   
   
     <dependency org="catissue"
@@ -334,12 +337,12 @@
     <dependency org="org.hibernate"
                 name="hibernate-annotations"
                 rev="3.2.0.ga"
-                conf="static-data-service-lib->default"/>
+                conf="static-data-service-lib->master"/>
                 
     <dependency org="org.hibernate"
                 name="hibernate-validator"
                 rev="3.0.0.ga"
-                conf="static-data-service-lib->default"/>    
+                conf="static-data-service-lib->master"/>    
                 
     <dependency org="org.hibernate"
                 name="hibernate"
@@ -395,7 +398,7 @@
     <dependency org="globus"
                 name="axis"
                 rev="1.2RC2"
-                conf="static-data-service-lib->default"/>
+                conf="static-data-service-lib->master"/>
                 
  
     <dependency org="mysql" 
@@ -473,7 +476,7 @@
     <dependency org="dom4j"
                 name="dom4j"
                 rev="1.4"
-                conf="static-data-service-lib->default"/> 
+                conf="static-data-service-lib->master"/> 
                 
     <dependency org="ParticipantManager"
                 name="ParticipantManager"
@@ -493,7 +496,7 @@
     <dependency org="org.dspace.xmlui.xml"
                 name="xml-commons-resolver"
                 rev="1.1"
-                conf="static-data-service-lib->default"/> 
+                conf="static-data-service-lib->master"/> 
                 
     <dependency org="SimpleQuery"
                 name="SimpleQuery"
@@ -569,7 +572,9 @@
     <dependency org="jdom"
                 name="jdom"
                 rev="1.0"
-                conf="dedataservice-tools->master"/>
+                conf="dedataservice-tools->default">
+      <artifact name="jdom" type="jar"/>
+    </dependency>               
   
      <dependency org="jdom"
                  name="jdom"
@@ -634,7 +639,7 @@
     <dependency org="cagrid"
                 name="cagrid-advertisement"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-cadsr"
@@ -720,7 +725,7 @@
     <dependency org="cagrid"
                 name="cagrid-introduce-servicetools"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-metadata-common"
@@ -1230,7 +1235,9 @@
     <dependency org="jdom"
                 name="jdom"
                 rev="1.0"
-                conf="notificationservice-lib, notificationservice-tools->default"/>
+                conf="notificationservice-lib, notificationservice-tools->default">
+      <artifact name="jdom" type="jar"/>
+    </dependency>
                 
     <dependency org="globus"
                 name="globus_wsrf_mds_aggregator"
