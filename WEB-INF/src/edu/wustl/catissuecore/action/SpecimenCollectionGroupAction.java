@@ -937,9 +937,13 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			specimenCollectionGroupForm.setCollectionEventPointLabel(scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
 			request.setAttribute("CollectionEventPointLabel",scgBizLogic.getCollectionPointEventLabel(specimenCollectionGroupForm.getCollectionProtocolEventId(), dao));
 			
-			CollectionProtocolBizLogic collectionProtocolBizLogic=new CollectionProtocolBizLogic();
-			boolean hasConsents =collectionProtocolBizLogic.hasConsents(collectionProtocolId, (HibernateDAO)dao);
-			request.setAttribute("hasConsents", hasConsents);
+			 boolean hasConsents=false;
+			 if(specimenCollectionGroup!=null && specimenCollectionGroup.getCollectionProtocolRegistration()!=null)
+			 {	
+			  CollectionProtocolBizLogic collectionProtocolBizLogic=new CollectionProtocolBizLogic();
+			  hasConsents=collectionProtocolBizLogic.hasConsents(specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId(), (HibernateDAO)dao);
+			 }
+			 request.setAttribute("hasConsents", hasConsents);
 
 		}
 		finally
