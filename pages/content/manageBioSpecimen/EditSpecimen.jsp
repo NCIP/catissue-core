@@ -690,7 +690,7 @@ var specimenId='${specimenDTO.id}';
 var reportId='${identifiedReportId}';
 var entityId='${specimenRecordEntryEntityId}';
 var staticEntityName='${entityName}';
-var hasConsents = '${hasConsents}';
+var hasConsents = ${hasConsents};
 var isImageEnabled = ${isImageEnabled};
 
 
