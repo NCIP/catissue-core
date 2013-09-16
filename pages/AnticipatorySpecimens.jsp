@@ -291,13 +291,8 @@ function getElement(name)
 		function showMap(storageContainerDropDown,selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId)
 		{
 			var storageContainer =document.getElementById(storageContainerDropDown).value;
-			if(storageContainer!="")
-			{
-				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,"pageOfAntispec");
-			}
-			else
-			{
-				var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
+			
+				var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimenSummary&"+
 					"selectedContainerName=" + storageContainerDropDown +
 					"&pos1=" + positionDimensionOne +
 					"&pos2=" + positionDimensionTwo +
@@ -306,14 +301,35 @@ function getElement(name)
 					"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
 					"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
 					frameUrl+="&storageContainerName="+storageContainer;
+		
 					openPopupWindow(frameUrl,'newSpecimenPage');
-			}
-			//var storageContainer = document.getElementById(selectedContainerName).value;
 			
-
-			
-			//mapButtonClickedOnSpecimen(frameUrl,'newSpecimenPage');
 		}
+		
+		function showViewMap(storageContainerDropDown,selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId)
+		{
+				loadDHTMLXWindowForSpecimenSummary(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,"pageOfAntispec");
+		}
+		function loadDHTMLXWindowForSpecimenSummary(storageContainerDropDown,positionDimensionOne,positionDimensionTwo,specimenClassName,spType,cpId,pageOf)
+{
+	var storageContainer =document.getElementById(storageContainerDropDown).value;
+	//alert(storageContainer);
+	
+	
+		var w =700;
+		var h =450;
+		var x = (screen.width / 3) - (w / 2);
+		var y = 0;
+		dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+		var url = "ShowStoragePositionGridView.do?pageOf="+pageOf+"&controlName="+storageContainerDropDown+"&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer+"&holdSpecimenClass="+specimenClassName+"&holdSpecimenType="+spType+"&collectionProtocolId="+cpId;
+		//alert(url);
+		dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+		dhxWins.window("containerPositionPopUp").button("park").hide();
+		dhxWins.window("containerPositionPopUp").allowResize();
+		dhxWins.window("containerPositionPopUp").setModal(true);
+		dhxWins.window("containerPositionPopUp").setText("");    //it's the title for the popup
+	
+}
 		//bug 11169 start
 		function ChangeCheckBoxStatus(type,chkInstance)
 		{

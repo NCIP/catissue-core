@@ -1593,6 +1593,15 @@ public class FlexInterface
 					.getAttribute(Constants.SESSION_DATA);
 			final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 			cpColl = cpBizLogic.getCollectionProtocolCollection(sessionDataBean);
+			Set<CpAndParticipentsBean> beans = new HashSet<CpAndParticipentsBean>();
+			beans.addAll(cpColl);
+//			for (CpAndParticipentsBean cpAndParticipentsBean : cpColl)
+//			{
+//				beans.add(cpAndParticipentsBean);
+//			}
+			
+//			beans.addAll(cpColl);
+			cpColl = new ArrayList<CpAndParticipentsBean>(beans);
 			Collections.sort(cpColl);
 		
 		}

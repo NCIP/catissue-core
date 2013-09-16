@@ -83,7 +83,7 @@ function editSpecimen()
  var specimenId = specimenCombo.getSelectedValue();
  var participantId=document.getElementById("pId").value;
  var cpId=document.getElementById("cpId").value;
- if(specimenId == null)
+  if(specimenId == null || specimenId == '')
 {
   alert("Select specimen to edit.");
 }
@@ -102,7 +102,7 @@ function createAliquote()
  var label = specimenCombo.getSelectedText();
  var noOfAliquotes = document.getElementById("noOfAliquots").value;
  var quantity = document.getElementById("quantityPerAliquot").value;
- if(specimenId == null)
+ if(specimenId == null || specimenId == '')
 {
   alert("Select specimen to create Aliquots.");
   return false;
@@ -136,12 +136,17 @@ function createDerivative()
  var nodeId = "Specimen_"+specimenId;
  var scgId = eventCombo.getSelectedValue();
  var action = "";
- if(specimenId == null)
+ if(specimenId == null || specimenId == '')
 {
   alert("Select specimen to create Derivative.");
   return false;
 }
- if(count=="1")
+if((count==null ||count=="" || count == 'Count'))
+{ 
+ alert("Count is required");
+ return false;
+}
+ else if(count=="1")
  {
   action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&requestFrom=participantView&parentLabel='+label+'&parentSpecimenId='+specimenId;
   window.parent.frames[1].location=action;

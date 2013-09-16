@@ -136,4 +136,29 @@ public class CpAndParticipentsBean implements Externalizable,Comparable<CpAndPar
 			return result;
 		
 	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		Boolean result = Boolean.FALSE;
+		if (this == obj)
+		{
+			result = true;
+		}
+		if (obj == null)
+		{
+			result = false;
+		}
+		if(obj instanceof CpAndParticipentsBean)
+		{
+			CpAndParticipentsBean bean = (CpAndParticipentsBean)obj;
+			result = this.value.equals(bean.value);
+		}
+		return result;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Integer.valueOf(this.value);
+	}
 }

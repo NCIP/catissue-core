@@ -6045,7 +6045,7 @@ public class Constants
     public static final String PAGE_OF_EDIT_SPECIMEN="pageOfEditSpecimen";
     
     public static final String RED_LINE_VALUE = "graph.red.line.value";
-
+    public static final String PAGE_OF_SPECIMEN_SUMMARY_PAGE="pageOfSpecimenSummary";
     
 
 }

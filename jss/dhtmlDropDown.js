@@ -16,6 +16,48 @@ function initDropDownGrid(gridDropDownInfo, loadDataVariable)
 		gridObj.setSkin("drop");
 		gridObj.enablePaging(true, 6, 0, gridDropDownInfo['pagingArea'], false, gridDropDownInfo['infoArea']);
 		//gridObj.setPagingSkin("bricks","dhx_pline_skyblue");
+		gridObj.setPagingSkin("bricks");
+		//gridObj.setPagingWTMode(true,false,false,false);
+		gridObj.enableAutoHeigth(true,100,false);
+		  
+		gridObj.enableRowsHover(true, "gridHover");
+		gridObj.enableMultiline(true);
+		gridObj.init();
+		
+		// event to be call on selection of option from the dropdown
+		gridObj.attachEvent("onRowSelect", gridDropDownInfo['onOptionSelect']); 
+		
+		//if the row is selected by arrow keys and if we move the mouse over 
+		//the grid rows then the previously selected rows remains selected
+		gridObj.attachEvent("onMouseOver", function(id,ind){ gridObj.selectRowById(id, false, true , false);
+		gridObj.cells(id,ind).cell.title=gridObj.cellById(id,ind).getValue();
+		});
+		
+		//whenever the page is changed the focus is lost from the text box due 
+		//to which the arrow keys won't respond since we are handling key press event on the text box
+		gridObj.attachEvent("onPageChanged", function(ind,fInd,lInd){
+			document.getElementById(gridDropDownInfo['dropDownId']).focus();
+		});
+		hideGrid(gridDropDownInfo['gridDiv']);
+		if(loadDataVariable)
+		{
+			gridObj.load(gridDropDownInfo['actionToDo'], gridDropDownInfo['callBackAction']);
+		}
+		return gridObj;
+}
+
+function initDropDownGridForSummary(gridDropDownInfo, loadDataVariable) 
+{
+	
+		var gridObj = new dhtmlXGridObject(gridDropDownInfo['gridObj']);
+		gridObj.setImagePath("dhtmlx_suite/imgs/");
+		gridObj.setHeader(" ");
+		gridObj.setInitWidths("*");
+		gridObj.setColAlign("left");
+		gridObj.setColSorting("server");
+		gridObj.setSkin("drop");
+		gridObj.enablePaging(true, 6, 0, gridDropDownInfo['pagingArea'], false, gridDropDownInfo['infoArea']);
+		//gridObj.setPagingSkin("bricks","dhx_pline_skyblue");
 		gridObj.setPagingSkin("toolbar");
 		gridObj.setPagingWTMode(true,false,false,false);
 		gridObj.enableAutoHeigth(true,100,false);
@@ -45,8 +87,6 @@ function initDropDownGrid(gridDropDownInfo, loadDataVariable)
 		}
 		return gridObj;
 }
-
-
 
 //Arrow key navigation is not supported by the grids without selecting a row. So we are handling the arrow key press on the text box used for both the
 //dropdowns.whenever the button is clicked (that is present beside the text box) it sets the focus on the text box.

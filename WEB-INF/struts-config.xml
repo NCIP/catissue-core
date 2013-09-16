@@ -3881,11 +3881,13 @@ PUBLIC
 			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfEditSpecimen" path=".catissuecore.storageLocationViewDef" />
 			<forward name="pageOfMultipleSpecimen" path=".catissuecore.storageLocationViewDef" />
+			<forward name="pageOfSpecimenSummary" path=".catissuecore.storageLocationViewDef" />
 			<!--
 				<forward name="pageOfTissueSite"
 				path=".catissuecore.queryResultsTreeViewDef"/>
 			-->
 			<forward name="pageOfSpecimenTree" path=".catissuecore.requestDetailsTreeViewDef" />
+			
 			<forward name="pageOfStorageContainer"
 				path="/StorageContainerTree.do?pageOf=pageOfStorageContainer" />
 		</action>

@@ -90,7 +90,7 @@ public class ShowFramedPageAction extends XSSSupportedAction
 		session.removeAttribute("specCollStatus");
 
 
-		if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
+		if (Constants.PAGE_OF_SPECIMEN_SUMMARY_PAGE.equals(pageOf)||pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
 				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER) || pageOf.equals((Constants.PAGE_OF_EDIT_SPECIMEN)))
 		{
 			final String storageType = request.getParameter("storageType");

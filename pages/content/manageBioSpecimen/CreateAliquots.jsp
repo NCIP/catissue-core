@@ -187,7 +187,8 @@ ul li ul li a span {
 		}
 		function onGridLoad(grid_obj,rowCount){
 			for(var cnt=1;cnt<grid_obj.getRowsNum();cnt++){
-				grid_obj.cellByIndex(cnt,6).setValue("<a href='#' onClick='openMapPopUp(\""+cnt+"\")' >Map</a>");
+				grid_obj.cellByIndex(cnt,6).setValue("<a href='#' onclick='javascript:openMapPopUp(\""+cnt+"\");return false'><img src='images/uIEnhancementImages/grid_icon.png' alt='Displays the positions for the selected container'  width='16' height='16' border='0' style='vertical-align: middle' title='Displays the positions for the selected container'></a>&nbsp;<a href='#' onclick='javascript:openViewMap(\""+cnt+"\");return false'><img src='images/uIEnhancementImages/Tree.gif' border='0' width='16' height='16' style='vertical-align: bottom' title='select positions from hierarchical view'/></a>");
+				
 			}
 		}
 		function openMapPopUp(rowNum){
@@ -196,14 +197,23 @@ ul li ul li a span {
 			var pos1 = aliquotGrid.cellByIndex(rowNum,4).getValue();
 			var pos2 = aliquotGrid.cellByIndex(rowNum,5).getValue();
 				String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};
-			if(containerName.trim()!=""){
+			
 				loadDHTMLXWindowForTransferEvent(containerName,pos1,pos2,rowNum);
-			}
-			else{
+			
+		}
+		
+		function openViewMap(rowNum)
+		{
+			aliquotGrid.selectRow(rowNum);
+			var containerName = aliquotGrid.cellByIndex(rowNum,3).getValue();
+			var pos1 = aliquotGrid.cellByIndex(rowNum,4).getValue();
+			var pos2 = aliquotGrid.cellByIndex(rowNum,5).getValue();
+				String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};
+			
 				var frameUrl = "ShowFramedPage.do?pageOf=pageOfNewAliquot&xDimStyleId=" + pos1 + "&yDimStyleId=" + pos2 +  "&holdCollectionProtocol="+aliquotPopUpParam.cpID+"&holdSpecimenClass="+aliquotPopUpParam.specimenClass+"&holdSpecimenType="+aliquotPopUpParam.type;
 				frameUrl+="&storageContainerName="+containerName+"&containerStyle="+rowNum;
 				openPopupWindow(frameUrl,'transferEvents');
-			}
+			
 		}
 		
 		function loadDHTMLXWindowForTransferEvent(containerName,pos1,pos2,rowNum)

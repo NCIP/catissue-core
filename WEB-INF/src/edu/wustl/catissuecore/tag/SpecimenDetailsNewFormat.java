@@ -1474,6 +1474,9 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		final String functionCall = "showMap('" + storageContainerDropDown + "','" + selectedContainerName + "','"
 				+ positionDimensionOne + "','" + positionDimensionTwo + "','" + containerId + "','"
 				+ specimenClassName + "','" + specimenTypeName + "','"+ cpId + "')";
+		final String functionMapCall = "showViewMap('" + storageContainerDropDown + "','" + selectedContainerName + "','"
+				+ positionDimensionOne + "','" + positionDimensionTwo + "','" + containerId + "','"
+				+ specimenClassName + "','" + specimenTypeName + "','"+ cpId + "')";
 		
 		String isDisabled = "";
 		String lineage=getValueBasedOnLineage(specimen.getLineage());
@@ -1573,7 +1576,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				+ isDisabled + " >");
 		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);
-		stringBuffer.append("<a href=\"#\" onclick=\"" + functionCall + "\">");
+		stringBuffer.append("<a href=\"#\" onclick=\"" + functionMapCall + "\">");
+		stringBuffer
+				.append("<img src=\"images/uIEnhancementImages/grid_icon.png\" border=\"0\" width=\"15\" height=\"16\" title=\'View storage locations\'>");
+		stringBuffer.append("</a>");
+		stringBuffer.append("&nbsp;<a href=\"#\" onclick=\"" + functionCall + "\">");
 		stringBuffer
 				.append("<img src=\"images/Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
 		stringBuffer.append("</a>");

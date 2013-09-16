@@ -546,6 +546,49 @@ public class ShowStorageGridViewAction extends BaseAction
 										+ onClickEvent
 										+ "src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" align=\\\\\"middle\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
+							else if (Constants.PAGE_OF_SPECIMEN_SUMMARY_PAGE.equals(pageOf))
+							{								if (enablePage)
+							{
+								value = hyperLinkTag;
+								String methodName = "setTextBoxValueForContainer";
+								if (addContainer != null && "true".equals(addContainer))
+								{
+									methodName = "setTextBoxValueForContainerPage";
+								}
+								onClickEvent = "onclick=\\\\\""
+										+ methodName
+										+ "(\\\'"
+										+ selectedContainerName
+										+ "\\\',\\\'"
+										+ storageContainerGridObject.getName()
+										+ "\\\');\\ "
+										+ "setTextBoxValue(\\\'"
+										+ pos1
+										+ "\\\',\\\'"
+										+ AppUtility.getPositionValue(
+												storageContainerGridObject
+														.getOneDimensionLabellingScheme(), i)
+										+ "\\\');\\ "
+										+ "setTextBoxValue(\\\'"
+										+ pos2
+										+ "\\\',\\\'"
+										+ AppUtility.getPositionValue(
+												storageContainerGridObject
+														.getTwoDimensionLabellingScheme(), j)
+										+ "\\\');\\";
+								
+
+							}
+							value = value + "<img " + onClickEvent;
+							/*if(storageContainerIdFromMap!=null)
+							{
+								value=value +"setTextBoxValue(\\\'"+storageContainerIdFromMap+"\\\',\\\'"+id+"\\\');\\ ";
+							}*/
+							value = value
+									+ "closeFramedWindow()\\\\\" "
+									+ "src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" align=\\\\\"middle\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+							
+							}
 							else if (Constants.PAGE_OF_SPECIMEN.equals(pageOf))
 							{
 								if (enablePage)
@@ -653,8 +696,7 @@ public class ShowStorageGridViewAction extends BaseAction
 									onClickEvent = "onclick=\\\\\"setTextBoxValueForNewAliquot(\\\'"
 											+ containerStyle
 											+ "\\\',\\\'"
-											+ java.net.URLEncoder.encode(
-													storageContainerGridObject.getName(), "UTF-8")
+											+ storageContainerGridObject.getName()
 											+ "\\\',\\\'"
 											+ AppUtility.getPositionValue(
 													storageContainerGridObject

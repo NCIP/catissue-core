@@ -166,7 +166,7 @@ public class SpecimenScriptGeneratorForContainerComponent
 					scBuffer.append(NEXT_LINE);
 					scBuffer.append("// initialising grid");
 					scBuffer.append(NEXT_LINE);
-					scBuffer.append(scGrid+"= initDropDownGrid("+containerDropDownInfo+",false);"); 
+					scBuffer.append(scGrid+"= initDropDownGridForSummary("+containerDropDownInfo+",false);"); 
 					scBuffer.append(NEXT_LINE);
 					scBuffer.append(NEXT_LINE);
 				}
