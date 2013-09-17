@@ -379,6 +379,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	if(pageView.equals("viewAnnotations"))
 	{
 		%><!-- Mandar : 24Nov08 -->
+		
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 		  <!--tr height="1%">
 		    <td class="td_color_bfdcf3"></td>
@@ -400,26 +401,8 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	}
 	%>
 
-	  <%-- this is done at the end beacuse we want to set CpId value --%>
-	<%
-
-	String refreshTree = (String)request.getAttribute("refresh");
-   System.out.println("refreshTree: "+refreshTree);
-	if(refreshTree==null || refreshTree.equalsIgnoreCase("true"))
-	{
-	%>
-
-	<script language="javascript">
 	
-	 if(top.frames["cpAndParticipantView"] != undefined)
-	 {
-		top.frames["cpAndParticipantView"].refreshCpParticipants(<%=participantId%>);
-	 }
-
-	</script>
-
-	<%}
-	%>
+	
 
 	</html:form>
 <script>
