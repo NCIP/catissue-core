@@ -68,7 +68,6 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		request.setAttribute( "entityRecordId", request.getParameter( "entityRecordId" ) );
 		request.setAttribute( Constants.ID, request.getParameter( Constants.ID ) );
 		request.setAttribute( "staticEntityName", request.getParameter( "staticEntityName" ) );
-
 		final SessionDataBean sessionDataBean = this.getSessionData( request );
 
 		boolean matchingParticipantCase = false;
@@ -76,6 +75,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 				.getAssociatedStaticEntityForRecordEntry(request.getParameter("staticEntityName"));
 		List cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(associatedStaticEntity,
 				Long.valueOf(request.getParameter("entityRecordId")), sessionDataBean);
+		if(Participant.class.getName().equals(associatedStaticEntity)){
+		    request.setAttribute( "participantId", request.getParameter( "entityRecordId" ) );
+		}
 		if (cpIdsList.size() > 1 && Participant.class.getName().equals(associatedStaticEntity))
 		{
 			matchingParticipantCase = true;

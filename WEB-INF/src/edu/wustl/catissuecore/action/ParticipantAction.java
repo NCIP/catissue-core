@@ -174,10 +174,8 @@ public class ParticipantAction extends CatissueBaseAction
 		 * Falguni Sachde bug id :8150 Set participantId as request attribute as
 		 * Its required in case of viewannotations view of Edit participant
 		 */
-		if (participantForm.getOperation().equals(Constants.VIEW_ANNOTATION))
-		{
-			request.setAttribute("participantId",
-					String.valueOf(participantForm.getId()));
+		if (participantForm.getOperation().equals(Constants.VIEW_ANNOTATION)) {
+			request.setAttribute("participantId", request.getAttribute("participantId"));
 
 		}
 		final List key = new ArrayList();
