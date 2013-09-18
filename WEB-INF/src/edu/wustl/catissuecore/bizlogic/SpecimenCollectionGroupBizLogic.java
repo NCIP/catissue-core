@@ -4241,6 +4241,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	{
 		if(isAuthorized(dao, collectionGroup, sessionDataBean))
 		{
+			this.setDefaultEvents(collectionGroup, sessionDataBean);
 			insert(collectionGroup, dao, sessionDataBean);
 		}
 	}

@@ -81,7 +81,7 @@ function updateHelpURL()
  	appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
  	if(form  != null)
  	{
- 		if(id==null)
+ 		if(id==null || id.equals("0"))
  		{
  			id=String.valueOf(form.getId());
  		}
@@ -412,7 +412,6 @@ var scgEntityIdValue='${requestScope.scgRecordEntryEntityId}';
 var hasConsents = ${requestScope.hasConsents};
 
 var idValue='<%=id%>';
-
 var staticEntityNameValue='<%=staticEntityName%>'; 
 
 var consentLevelId = document.getElementById("id").value;

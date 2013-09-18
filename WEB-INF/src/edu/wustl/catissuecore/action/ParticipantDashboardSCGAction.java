@@ -77,10 +77,8 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 				
 				List<CollectionProtocolRegistration> cprList = hibernateDAO.executeQuery(cprSql, columnValueBeans);
 				CollectionProtocolRegistration cpr = cprList.get(0);
-				Collection<CollectionProtocolRegistration> cprCollection = new HashSet<CollectionProtocolRegistration>();
-				cprCollection.add(cpr);
 				specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
-				setRequestAttr(request, cpId, paricipantId, specimenCollectionGroup);
+				
 				if(collectionProtocolEvent.getDefaultSite() == null)
 				{
 					ActionErrors errors = new ActionErrors();
@@ -94,8 +92,10 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 					specimenCollectionGroup.setCollectionStatus(Constants.COMPLETE);
 					specimenCollectionGroup.setIsCPBasedSpecimenEntryChecked(isPlanned);
 					specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
+					specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(cpr);
 					collectionGroupBizLogic.insertSCG(specimenCollectionGroup,hibernateDAO,sessionDataBean);
 				}
+				setRequestAttr(request, cpId, paricipantId, specimenCollectionGroup);
 //				forwardTo = getForwardTo(request, isPlanned);
 				
 			}
