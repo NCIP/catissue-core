@@ -90,6 +90,7 @@ function initializeSCGCombo(operation)
 		clinicalDiagnosisCombo.loadXML('ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,function(){
 			clinicalDiagnosisCombo.setComboText(clinicalDiagnosisValue);
 			clinicalDiagnosisCombo.setComboValue(clinicalDiagnosisValue);
+			clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisValue;
 		
 		});
 		/*clinicalDiagnosisCombo.attachEvent("onOpen",function(){
@@ -101,6 +102,9 @@ function initializeSCGCombo(operation)
 			});
 			clinicalDiagnosisCombo.attachEvent("onOpen",onComboClick);
 			clinicalDiagnosisCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			clinicalDiagnosisCombo.attachEvent("onSelectionChange",function(){
+ clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisCombo.getSelectedText();
+ });
 		
 		
 		

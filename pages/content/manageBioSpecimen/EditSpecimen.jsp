@@ -690,7 +690,9 @@ var specimenId='${specimenDTO.id}';
 var reportId='${identifiedReportId}';
 var entityId='${specimenRecordEntryEntityId}';
 var staticEntityName='${entityName}';
+<logic:equal name="operation" value="edit">
 var hasConsents = ${hasConsents};
+</logic:equal>
 var isImageEnabled = ${isImageEnabled};
 
 
