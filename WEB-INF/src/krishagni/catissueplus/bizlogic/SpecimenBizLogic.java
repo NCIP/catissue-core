@@ -79,6 +79,7 @@ public class SpecimenBizLogic
 		Specimen oldSpecimenObj = null;
 		try
 		{
+		    
 			//object retrieval for auditing purpose
 			SpecimenDAO specimenDAO = new SpecimenDAO();
 			oldSpecimenObj = specimenDAO.getSpecimenById(specimenDTO.getId(), hibernateDao);
@@ -525,6 +526,10 @@ public class SpecimenBizLogic
 					throw new CatissueException(ApplicationProperties.getValue("shipment.samePositionForSpecimens"),
 							SpecimenErrorCodeEnum.POSITION_ALREADY_OCCUPIED.getCode());
 				}
+		}
+		if(specimen.getParentSpecimen()!=null && ((Specimen)(specimen.getParentSpecimen())).getCollectionStatus().equals(Constants.COLLECTION_STATUS_PENDING)){
+		   
+		    throw this.getBizLogicException(null, "specimen.parent.label.required","");
 		}
 		SpecimenDAO specimenDAO = new SpecimenDAO();
 		specimenDAO.checkDuplicateSpecimenFields(specimen, hibernateDao);
