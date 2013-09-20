@@ -307,19 +307,30 @@ function checkDisable(){
 				</logic:equal>
 				var tabDataJSON =  new Array();
 				var selectFields = document.getElementsByTagName("select");
+				var consentLevel = document.getElementById("consentLevel").value;
 				for(var cnt = 0;cnt<comboData.length;cnt++){
 					var selectedField = comboData[cnt];
 					var jsonObj = {};
+					if(selectedField.getSelectedText().trim()==""){
+						document.getElementById('error').style.display='block';
+						if(consentLevel=="specimen"||consentLevel=="scg"){
+							document.getElementById('errorMsg').innerHTML=" Please enter valid consent status.";
+						}else{
+							document.getElementById('errorMsg').innerHTML=" Please enter valid participant response.";
+						}
+						return;
+					}
+					
 					jsonObj.id = statusId[cnt];
-					jsonObj.status = selectedField.getSelectedValue();
-					jsonObj.participantResponses = selectedField.getSelectedValue();
+					jsonObj.status = selectedField.getSelectedText();
+					jsonObj.participantResponses = selectedField.getSelectedText();
 					jsonObj.consentStatusId =  0;
 					tabDataJSON.push(jsonObj);
 				}
 				//consentDto.consentTierList = JSON.stringify(tabDataJSON);
 				consentDto.consentLevel = document.getElementById("consentLevel").value;
 				consentDto.consentLevelId = document.getElementById("consentLevelId").value;
-				var consentLevel = document.getElementById("consentLevel").value;
+				
 				var consentLevelId = document.getElementById("consentLevelId").value;
 				var disposeSpecimen = document.getElementsByName("disableConsentCheckbox")[0].checked ;
 				var lodder = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateConsentTierStatus&consentLevel="+consentLevel+"&consentLevelId="+consentLevelId+"&dataJSON="+JSON.stringify(tabDataJSON)+"&disposeSpecimen="+disposeSpecimen+"&consentDto="+JSON.stringify(consentDto));
