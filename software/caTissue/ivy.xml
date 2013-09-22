@@ -60,7 +60,7 @@
     <dependency org="cagrid"
                 name="cagrid-metadata-validator"
                 rev="1.4"
-                conf="static-data-service-tools, static-data-service-lib->master"/>  
+                conf="static-data-service-tools, static-data-service-lib->default"/>  
                 
     <dependency org="jdom"
                 name="jdom"
@@ -104,12 +104,12 @@
     <dependency org="cagrid"
                 name="cagrid-cadsr"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>      
+                conf="static-data-service-lib->default"/>      
                 
     <dependency org="cagrid"
                 name="cagrid-cadsr-tests"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>             
+                conf="static-data-service-lib->default"/>             
                 
                 
 
@@ -121,7 +121,7 @@
     <dependency org="cagrid"
                 name="cagrid-core-resources"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>            
+                conf="static-data-service-lib->default"/>            
                 
  
     <dependency org="cagrid"
@@ -132,27 +132,27 @@
     <dependency org="cagrid"
                 name="cagrid-cql-cql.2.0"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>   
+                conf="static-data-service-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-cql-dcql.2.0"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-cql-mappings"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-cql-utils"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-data-cql"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>   
+                conf="static-data-service-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-data-common"
@@ -162,7 +162,7 @@
     <dependency org="cagrid"
                 name="cagrid-data-service"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>    
+                conf="static-data-service-lib->default"/>    
                 
     <dependency org="cagrid"
                 name="cagrid-data-stubs"
@@ -172,17 +172,17 @@
     <dependency org="cagrid"
                 name="cagrid-data-utils"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>     
+                conf="static-data-service-lib->default"/>     
                 
     <dependency org="cagrid"
                 name="cagrid-data-tools"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>     
+                conf="static-data-service-lib->default"/>     
                 
     <dependency org="cagrid"
                 name="cagrid-data-validation"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>          
+                conf="static-data-service-lib->default"/>          
                 
     <dependency org="cagrid"
                 name="cagrid-metadata-common"
@@ -206,17 +206,17 @@
     <dependency org="cagrid"
                 name="cagrid-mms-client"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-mms-common"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>    
+                conf="static-data-service-lib->default"/>    
                 
     <dependency org="cagrid"
                 name="cagrid-mms-stubs"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default"/> 
                 
                 
     <dependency org="cagrid"
@@ -250,21 +250,21 @@
     <dependency org="cagrid"
                 name="cagrid-sdk4xcql2-processor"
                 rev="1.4"
-                conf="static-data-service-lib->master"/> 
+                conf="static-data-service-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-sdkquery42-processor"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>                 
+                conf="static-data-service-lib->default"/>                 
     <dependency org="cagrid"
                 name="cagrid-sdkquery42-style"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>       
+                conf="static-data-service-lib->default"/>       
                 
     <dependency org="cagrid"
                 name="cagrid-sdkquery42-tests"
                 rev="1.4"
-                conf="static-data-service-lib->master"/>                  
+                conf="static-data-service-lib->default"/>                  
                 
                 
     <dependency org="cagrid"
@@ -290,7 +290,7 @@
    <dependency org="castor"
                 name="castor"
                 rev="1.0.2"
-                conf="static-data-service-lib->master"/>   
+                conf="static-data-service-lib->default"/>   
                 
     <dependency org="cglib"
                 name="cglib"
@@ -366,7 +366,7 @@
     <dependency org="sdk-security-client"
                  name="sdk-security-client"
                  rev="4.2"
-                 conf="static-data-service-lib->master"/> 
+                 conf="static-data-service-lib->default"/> 
                  
     <dependency org="sdk-client-framework"
                  name="sdk-client-framework"
@@ -379,7 +379,7 @@
     <dependency org="sdk-writable-api-client"
                  name="sdk-writable-api-client"
                  rev="4.2"
-                 conf="static-data-service-lib->master"/> 
+                 conf="static-data-service-lib->default"/> 
                  
     <dependency org="apache-xerces"
                 name="xercesImpl"
@@ -595,7 +595,7 @@
     <dependency org="cagrid"
                 name="cagrid-metadata-validator"
                 rev="1.4"
-                conf="dedataservice-tools, dedataservice-lib->master"/>  
+                conf="dedataservice-tools, dedataservice-lib->default"/>  
                 
     <dependency org="jdom"
                 name="jdom"
@@ -622,7 +622,7 @@
     <dependency org="sdk-security-client"
                  name="sdk-security-client"
                  rev="4.2"
-                 conf="dedataservice-lib->master"/> 
+                 conf="dedataservice-lib->default"/> 
                  
     <dependency org="sdk-client-framework"
                  name="sdk-client-framework"
@@ -635,7 +635,7 @@
     <dependency org="sdk-writable-api-client"
                  name="sdk-writable-api-client"
                  rev="4.2"
-                 conf="dedataservice-lib->master"/> 
+                 conf="dedataservice-lib->default"/> 
 
 
     <dependency org="apache-xerces"
@@ -672,12 +672,12 @@
     <dependency org="cagrid"
                 name="cagrid-cadsr"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>      
+                conf="dedataservice-lib->default"/>      
                 
     <dependency org="cagrid"
                 name="cagrid-cadsr-tests"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>     
+                conf="dedataservice-lib->default"/>     
                 
 
     <dependency org="cagrid"
@@ -688,7 +688,7 @@
     <dependency org="cagrid"
                 name="cagrid-core-resources"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default"/>   
     <dependency org="cagrid"
                 name="cagrid-cql-cql.1.0"
                 rev="1.4"
@@ -697,28 +697,28 @@
     <dependency org="cagrid"
                 name="cagrid-cql-cql.2.0"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-cql-dcql.2.0"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-cql-mappings"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-cql-utils"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
                 
     <dependency org="cagrid"
                 name="cagrid-data-cql"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default"/>   
                 
     <dependency org="cagrid"
                 name="cagrid-data-common"
@@ -728,7 +728,7 @@
     <dependency org="cagrid"
                 name="cagrid-data-service"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>    
+                conf="dedataservice-lib->default"/>    
                 
     <dependency org="cagrid"
                 name="cagrid-data-stubs"
@@ -738,17 +738,17 @@
     <dependency org="cagrid"
                 name="cagrid-data-utils"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>     
+                conf="dedataservice-lib->default"/>     
                 
     <dependency org="cagrid"
                 name="cagrid-data-tools"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>     
+                conf="dedataservice-lib->default"/>     
                 
     <dependency org="cagrid"
                 name="cagrid-data-validation"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>
+                conf="dedataservice-lib->default"/>
                 
     <dependency org="cagrid"
                 name="cagrid-introduce-servicetools"
@@ -773,41 +773,41 @@
     <dependency org="cagrid"
                 name="cagrid-mms-client"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-mms-common"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>    
+                conf="dedataservice-lib->default"/>    
                 
     <dependency org="cagrid"
                 name="cagrid-mms-stubs"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-sdk4xcql2-processor"
                 rev="1.4"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
     <dependency org="cagrid"
                 name="cagrid-sdkquery42-processor"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>                 
+                conf="dedataservice-lib->default"/>                 
     <dependency org="cagrid"
                 name="cagrid-sdkquery42-style"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>       
+                conf="dedataservice-lib->default"/>       
                 
     <dependency org="cagrid"
                 name="cagrid-sdkquery42-tests"
                 rev="1.4"
-                conf="dedataservice-lib->master"/>   
+                conf="dedataservice-lib->default"/>   
                 
    <dependency org="castor"
                 name="castor"
                 rev="1.0.2"
-                conf="dedataservice-lib->master"/> 
+                conf="dedataservice-lib->default"/> 
                 
     <dependency org="commons-codec"
                 name="commons-codec"
