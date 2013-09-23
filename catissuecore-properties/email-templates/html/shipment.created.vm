@@ -1,0 +1,11 @@
+Hello $siteadmin
+<br>
+<br>
+$creator has created shipment $name on $date. Shipment details is as below.
+Sender Site	 $senderSiteName	 	 	
+Receiver Site $requestSiteName
+<br>
+Please click on the link to see shipment dashboard: $url/ShowDashboardAction.do
+<br>
+<br>
+$footer

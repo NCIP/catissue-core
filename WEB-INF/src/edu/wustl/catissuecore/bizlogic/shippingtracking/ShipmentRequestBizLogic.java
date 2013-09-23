@@ -354,12 +354,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			if (!shipmentRequest.getActivityStatus().equals( Constants.ACTIVITY_STATUS_DRAFTED ))
 			{
 				//Add mailing functionality
-				final boolean mailStatus = this.sendNotification( shipmentRequest, sessionDataBean );
-				if (!mailStatus)
-				{
-					logger.debug( "failed to send email" );
-					//					logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"error occured in sending the mail"));
-				}
+				this.sendRequestShipmentNotification( shipmentRequest);
 			}
 		}
 		catch (final DAOException daoException)
@@ -804,12 +799,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			this.setShipmentSites( dao, shipmentRequest );
 			dao.update( shipmentRequest,oldObj );
 			//Add mailing functionality
-			final boolean mailStatus = this.sendNotification( shipmentRequest, sessionDataBean );
-			if (!mailStatus)
-			{
-				logger.debug( "failed to send email" );
-				//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"mail sending failed"));
-			}
+			this.sendShipmentAcceptedNotification( shipmentRequest);
 		}
 		catch (final DAOException daoException)
 		{

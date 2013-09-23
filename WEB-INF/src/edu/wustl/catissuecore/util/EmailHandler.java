@@ -265,4 +265,78 @@ public class EmailHandler
     	
         return emailStatus;
     }
+	public boolean reuestShipmentEmail(String creatorName,
+			String[] toEmailAddress, String[] ccEmailAddress,String bccEmailAddress,
+			String shipmentName, String siteAdmin,String siteName)
+    {
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+    	contextMap.put("creator", creatorName);
+    	contextMap.put("name", shipmentName);
+    	contextMap.put("siteadmin", siteAdmin);
+    	contextMap.put("date", new Date().toString());
+    	contextMap.put("siteName", siteName);
+    	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
+    	
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				 Constants.SHIPMENT_REQUEST,
+				  toEmailAddress,ccEmailAddress ,
+				 new String[]{ bccEmailAddress },contextMap);
+			
+		if (!emailStatus) {
+			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
+		}
+    	
+    	
+        return emailStatus;
+    }
+	public boolean acceptShipmentCreatedEmail(String creatorName,
+			String[] toEmailAddress, String[] ccEmailAddress,String bccEmailAddress,
+			String shipmentName, String siteAdmin,String requestSiteName,String senderSiteName)
+    {
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+    	contextMap.put("creator", creatorName);
+    	contextMap.put("name", shipmentName);
+    	contextMap.put("siteadmin", siteAdmin);
+    	contextMap.put("requestSiteName", requestSiteName);
+    	contextMap.put("senderSiteName", senderSiteName);
+    	contextMap.put("date", new Date().toString());
+    	
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				 Constants.SHIPMENT_ACCEPTED,
+				 toEmailAddress,ccEmailAddress,
+				 new String[]{ bccEmailAddress },contextMap);
+			
+		if (!emailStatus) {
+			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
+		}
+    	
+    	
+        return emailStatus;
+    }
+	
+	public boolean createShipmentEmail(String creatorName,
+			String[] toEmailAddress, String[] ccEmailAddress,String bccEmailAddress,
+			String shipmentName, String siteAdmin,String requestSiteName,String senderSiteName,Date createdDate)
+    {
+    	Map<String, Object> contextMap = new HashMap<String, Object>();
+    	contextMap.put("creator", creatorName);
+    	contextMap.put("name", shipmentName);
+    	contextMap.put("siteadmin", siteAdmin);
+    	contextMap.put("date", createdDate.toString());
+    	contextMap.put("requestSiteName", requestSiteName);
+    	contextMap.put("senderSiteName", senderSiteName);
+    	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
+    	
+		boolean emailStatus = EmailClient.getInstance().sendEmail(
+				 Constants.SHIPMENT_CREATED,
+				 toEmailAddress,ccEmailAddress,
+				 new String[]{ bccEmailAddress },contextMap);
+			
+		if (!emailStatus) {
+			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
+		}
+    	
+    	
+        return emailStatus;
+    }
 }

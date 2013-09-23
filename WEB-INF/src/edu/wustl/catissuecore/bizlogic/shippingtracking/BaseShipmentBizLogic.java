@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.shippingtracking.BaseShipment;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
@@ -45,6 +46,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -102,11 +104,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			baseShipment.getContainerCollection().clear();
 			baseShipment.getContainerCollection().addAll( containerCollection );
 			dao.insert( baseShipment );
-			final boolean mailStatus = this.sendNotification( baseShipment, sessionDataBean );
-			if (!mailStatus)
-			{
-				BaseShipmentBizLogic.logger.debug( "failed to send email.." );
-			}
+			this.sendCreateShipmentNotification( baseShipment);
+			
 			//insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
 			//bug 13387 start
 			/**
@@ -1085,14 +1084,65 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean containing session details.
 	 * @return Mail notification successful or not.
 	 */
-	protected boolean sendNotification(BaseShipment baseShipment, SessionDataBean sessionDataBean)
+	protected void sendRequestShipmentNotification(BaseShipment baseShipment)
 	{
-		final String[] toUser = this.getEmailAddressesForMailNotification( baseShipment );
-		final String subject = this.getNotificationMailSubject( baseShipment );
-		final String body = this.getNotificationMailBody( baseShipment );
-		return MailUtility.sendEmailToUser( toUser, null, subject, body );
+		final String[] toUser = this
+				.getEmailAddressesForMailNotification(baseShipment);
+		//Add mailing functionality
+		final EmailHandler emailHandler = new EmailHandler();
+		emailHandler.reuestShipmentEmail(baseShipment
+				.getReceiverContactPerson().getLastName()
+				+ ","
+				+ baseShipment.getReceiverContactPerson()
+						.getFirstName(), toUser, null,
+				XMLPropertyHandler
+						.getValue("email.administrative.emailAddress"),
+						baseShipment.getLabel(), baseShipment
+						.getSenderContactPerson().getLastName()
+						+ ","
+						+ baseShipment.getSenderContactPerson()
+								.getFirstName(),baseShipment.getReceiverSite().getName());
 	}
 
+	protected void sendShipmentAcceptedNotification(BaseShipment baseShipment)
+	{
+		final String[] toUser = this
+				.getEmailAddressesForMailNotification(baseShipment);
+		//Add mailing functionality
+		final EmailHandler emailHandler = new EmailHandler();
+		emailHandler.acceptShipmentCreatedEmail(baseShipment
+				.getReceiverContactPerson().getLastName()
+				+ ","
+				+ baseShipment.getReceiverContactPerson()
+						.getFirstName(), toUser, null,
+				XMLPropertyHandler
+						.getValue("email.administrative.emailAddress"),
+						baseShipment.getLabel(), baseShipment
+						.getSenderContactPerson().getLastName()
+						+ ","
+						+ baseShipment.getSenderContactPerson()
+								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getSenderSite().getName());
+	}
+	
+	protected void sendCreateShipmentNotification(BaseShipment baseShipment)
+	{
+		final String[] toUser = this
+				.getEmailAddressesForMailNotification(baseShipment);
+		//Add mailing functionality
+		final EmailHandler emailHandler = new EmailHandler();
+		emailHandler.createShipmentEmail(baseShipment
+				.getReceiverContactPerson().getLastName()
+				+ ","
+				+ baseShipment.getReceiverContactPerson()
+						.getFirstName(), toUser, null,
+				XMLPropertyHandler
+						.getValue("email.administrative.emailAddress"),
+						baseShipment.getLabel(), baseShipment
+						.getSenderContactPerson().getLastName()
+						+ ","
+						+ baseShipment.getSenderContactPerson()
+								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getSenderSite().getName(),baseShipment.getCreatedDate());
+	}
 	/**
 	 * Get email addresses to send mail notification.
 	 * @param baseShipment object of BaseShipment class.
@@ -1245,11 +1295,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			this.validateContainerInShipment( oldShipment, shipment );// bug 11410
 			dao.update( shipment,oldShipment );
 			// Add mailing functionality
-			final boolean mailStatus = this.sendNotification( shipment, sessionDataBean );
-			if (!mailStatus)
-			{
-				logger.debug( "failed to send email..." );
-			}
+			this.sendShipmentAcceptedNotification( shipment);
 		}
 		catch (final DAOException daoException)
 		{

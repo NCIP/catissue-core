@@ -5951,6 +5951,9 @@ public class Constants
 	public static final String EMPI_ADMINUSER_NOTEXISTS_EMAIL_TMPL = "eMPI.adminUserNotExitsTemplate"; 
 	public static final String ORDER_PLACEMENT_EMAIL_TMPL = "order.orderPlacementTemplate";
 	public static final String ORDER_DISTRIBTION_EMAIL_TMPL="order.submission";
+	public static final String SHIPMENT_CREATED="shipment.created";
+	public static final String SHIPMENT_REQUEST="shipment.requested";
+	public static final String SHIPMENT_ACCEPTED="shipment.accepted";	
 	public static final String FROM_CONTAINER_NAME="fromContainerName";
 	public static final String FROM_POSITION_DIMENSION_ONE="fromPos1";
 	public static final String FROM_POSITION_DIMENSION_TWO="fromPos2";

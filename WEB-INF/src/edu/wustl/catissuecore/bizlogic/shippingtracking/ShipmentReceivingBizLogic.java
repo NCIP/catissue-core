@@ -196,12 +196,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
 			throw this.getBizLogicException( ex, ex.getErrorKeyName(), ex.getMsgValues() );
 		}
-		final boolean mailStatus = this.sendNotification( shipment, sessionDataBean );
-		if (!mailStatus)
-		{
-			this.logger.info( "failed to send email.." );
-			//logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));
-		}
+		this.sendShipmentAcceptedNotification( shipment);
 	}
 
 	/**

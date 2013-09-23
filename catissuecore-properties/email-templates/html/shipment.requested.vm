@@ -1,0 +1,9 @@
+Hello $siteadmin
+<br>
+<br>
+$creator has requested for the shipment $name on $date. 
+<br>
+Please click on the link to see shipment dashboard: $url/ShowDashboardAction.do
+<br>
+<br>
+$footer
