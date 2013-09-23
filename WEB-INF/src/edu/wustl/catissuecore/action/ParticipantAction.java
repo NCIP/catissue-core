@@ -462,34 +462,32 @@ public class ParticipantAction extends CatissueBaseAction
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		CollectionProtocolBizLogic collectionProtocolBizLogic = new CollectionProtocolBizLogic();
 
-		if (!participantForm.getOperation().equals(Constants.ADD))
-		{
-			DAO dao = null;
-			try
-			{
-				dao = AppUtility.openDAOSession(sessionDataBean);
+        DAO dao = null;
+        try
+        {
+            dao = AppUtility.openDAOSession(sessionDataBean);
 
-				ParticipantDTO dto = cprBizLogic
-						.fetchCprDetailForParticipant(
-								participantForm.getCpId(),
-								participantForm.getId(), dao);
-				participantForm.setPpId(dto.getPpid());
-				participantForm.setBarcode(dto.getBarcode());
-				participantForm.setRegistrationDate(CommonUtilities
-						.parseDateToString(dto.getRegistrationDate(),
-								CommonServiceLocator.getInstance()
-										.getDatePattern()));
-				participantForm.setCprId(String.valueOf(dto.getCprId()));
-				participantForm.setCprActivityStatus(dto.getActivityStatus());
+            if (!participantForm.getOperation().equals(Constants.ADD))
+            {
 
-				hasConsents = collectionProtocolBizLogic.hasConsents(
-						Long.parseLong(String.valueOf(participantForm.getCpId())), (HibernateDAO) dao);
-			}
-			finally
-			{
-				AppUtility.closeDAOSession(dao);
-			}
-		}
+                ParticipantDTO dto = cprBizLogic.fetchCprDetailForParticipant(participantForm.getCpId(),
+                        participantForm.getId(), dao);
+                participantForm.setPpId(dto.getPpid());
+                participantForm.setBarcode(dto.getBarcode());
+                participantForm.setRegistrationDate(CommonUtilities.parseDateToString(dto.getRegistrationDate(),
+                        CommonServiceLocator.getInstance().getDatePattern()));
+                participantForm.setCprId(String.valueOf(dto.getCprId()));
+                participantForm.setCprActivityStatus(dto.getActivityStatus());
+            }
+            hasConsents = collectionProtocolBizLogic.hasConsents(
+                    Long.parseLong(String.valueOf(participantForm.getCpId())), (HibernateDAO) dao);
+
+        }
+        finally
+        {
+            AppUtility.closeDAOSession(dao);
+        }
+		
 		request.setAttribute("cprId", participantForm.getCprId());
 		String collectionProtocolId = cpid == null ? request
 				.getParameter("cpId") : cpid;
