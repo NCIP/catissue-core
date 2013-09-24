@@ -18,27 +18,6 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 		<!-- this is where you read from -->
 		<chain name="ncicb-chain">
 
-            <filesystem name="localResolver" local="true" >
-                <ivy pattern="${user.home}/.ivy2/caTissue/[organisation]/[module]/[revision]/ivy-[revision].xml"/>
-                <artifact pattern="${user.home}/.ivy2/caTissue/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
-            </filesystem>
-
-			<filesystem name="local-project-repo" local="true">
-				<!-- Local project level repo -->
-				<artifact pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/ivy.xml" />
-			</filesystem>
-			<filesystem name="local-system-repo" local="true">
-				<!-- Local system level repo, to share chagnes ammong multiple projects-->
-				<artifact pattern="${ivy.system.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="${ivy.system.repo}/[organisation]/[module]/[revision]/ivy.xml" />
-			</filesystem>      
-			<filesystem name="local-cbiit-ivy-repo" local="true">
-				<!-- local enterprise repository checkout, best used when working remote or network disconnected -->
-				<artifact pattern="${local.cbiit-ivy-repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="${local.cbiit-ivy-repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
-			</filesystem>
-
             <filesystem name="LOCAL.REPO">
                 <artifact pattern="${local.ivy.repo.dir}/[organisation]/[module]/[revision]/[artifact][revision].[ext]" />
                 <artifact pattern="${local.ivy.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -55,25 +34,12 @@ This file is the is the settings file used by IVY.  It is a good starting point 
                 <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
             </url>
 
-            <url name="MAVENSEARCH" m2compatible="true">
-                <artifact pattern="http://www.mvnsearch.org/maven2/[organisation]/[module]/[revision]/[module]-[revision].[ext]" />
-            </url>
-            <ibiblio name="local" m2compatible="true" root="http://localhost:8081/nexus/content/repositories/core2"/>
+            <ibiblio name="cbiit" m2compatible="true" root="https://ncimvn.nci.nih.gov/nexus/content/groups/public"/>
+                        
+            
 
-<!--
-			<url name="cbiit-ivy-repo">
-				&lt;!&ndash; remote enterprise repository &ndash;&gt;
-				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/ivy.xml" />
-			</url>
--->
 
-			<!--<ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />-->
-<!--
-			<url name="cbiit-maven-mirror" m2compatible="true">
-				<artifact pattern="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
-			</url>
--->
+
 
 			<!-- this is where you can publish to, either your own code or for testing new thirdparty files -->
 		</chain>
