@@ -86,25 +86,25 @@ function getActionToDoURL()
 		</tr>
 		<tr>
 			<td>
-				<table valign="center" cellpadding="0" cellspacing="0" border="0" >
+				<table valign="center" cellpadding="0" cellspacing="0" border="0" width="660px" >
 					<tr>
-						<td class="black_ar" align="left" style="padding:5px 5px 0 0;">&nbsp;&nbsp;&nbsp;<span style="white-space:nowrap;"><b>Container Name:</b></span>
+						<td class="black_ar" align="left" style="padding:5px 5px 0 0;"  Width="70px">&nbsp;&nbsp;&nbsp;<span style="white-space:nowrap;"><b>Container Name:</b></span>
 						</td>
-						<td class="black_ar">
+						<td class="black_ar" Width="330px">
 							<div id="comboDiv" style="width:200px;display:block;"></div>
 						</td>			
-						<td class="black_ar"  style="padding-left:15px;" >
+						<td class="black_ar"  style="padding-left:15px;"   Width="30px">
 							<input type="text" class="black_ar_md_new"  size="1" id="pos11" name="pos11" value="${sessionScope.pos1Val}"disabled= "false"/>
 						</td>
-						<td class="black_ar" align="left" style="padding-left:5px;">
+						<td class="black_ar" align="left" style="padding-left:5px;"  Width="30px">
 							<input type="text" class="black_ar_md_new"  size="1" id="pos22" name="pos22" value="${sessionScope.pos2Val}" disabled= "false"/>
 							<input type="hidden" id="pos1" name="pos1" />
 							<input type="hidden" id="pos2" name="pos2" />
 						</td>
-						<td class="black_ar" align="right" style="padding-top:2px">
+						<td class="black_ar" align="right" style="padding-top:2px"   Width="30px">
 							<input type="radio" id ="virtualCont" name="virtualCont" onClick="setVirtual()"/>&nbsp;
 						</td>
-						<td class="black_ar" align="left" style="padding-top:5px"> <b>Virtual</b>
+						<td class="black_ar" align="left" style="padding-top:5px"  Width="100px"> <b>Virtual</b>
 						</td>
 					</tr>
 				</table>
