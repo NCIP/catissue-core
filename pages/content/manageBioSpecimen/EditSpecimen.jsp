@@ -331,7 +331,7 @@
 									<input type="checkbox" name="available" id="available" onblur="processData(this)" disabled checked="checked"/>
 								</logic:equal>
 								<logic:equal name="operation" value="edit">
-										<html:checkbox property="available" styleId="available" onblur="processData(this)" >
+										<html:checkbox property="available" styleId="available" onclick="processData(this)" >
 									</html:checkbox>
 								</logic:equal>
 									

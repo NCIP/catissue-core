@@ -510,9 +510,13 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 			// bug no. 8081 and 8083
 //			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
-				if(aliquotMap.get(specimenKey + i + "_label") != null)
+			if(aliquotMap.get(specimenKey + i + "_label") != null)
 			{
 				aliquotSpecimen.setLabel((String) aliquotMap.get(specimenKey + i + "_label"));
+			}
+			if(aliquotMap.get(specimenKey + i + "_barcode") != null)
+			{
+				aliquotSpecimen.setBarcode((String) aliquotMap.get(specimenKey + i + "_barcode"));
 			}
 			specimenCollection.add(aliquotSpecimen);
 		}
