@@ -1,3 +1,13 @@
+/*L
+ *  Copyright Washington University in St. Louis
+ *  Copyright SemanticBits
+ *  Copyright Persistent Systems
+ *  Copyright Krishagni
+ *
+ *  Distributed under the OSI-approved BSD 3-Clause License.
+ *  See http://ncip.github.com/catissue-core/LICENSE.txt for details.
+ */
+
 /**
  * <p>Title:ShipmentForm Class</p>
  * <p>Description:ShipmentForm class is the subclass of he BaseShipmentForm bean classes. </p>

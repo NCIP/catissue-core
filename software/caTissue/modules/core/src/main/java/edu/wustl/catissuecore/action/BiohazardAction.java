@@ -1,3 +1,13 @@
+/*L
+ *  Copyright Washington University in St. Louis
+ *  Copyright SemanticBits
+ *  Copyright Persistent Systems
+ *  Copyright Krishagni
+ *
+ *  Distributed under the OSI-approved BSD 3-Clause License.
+ *  See http://ncip.github.com/catissue-core/LICENSE.txt for details.
+ */
+
 /**
  * <p>Title: BiohazardAction Class>
  * <p>Description:	This class initializes the fields of Biohazard.jsp Page</p>
