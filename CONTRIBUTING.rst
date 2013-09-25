@@ -2,7 +2,7 @@
 How to Contribute
 =================
 
-We welcome community contributions to the <PROJECTNAME> project.
+We welcome community contributions to the caTissue Core project.
 Your contributions back to this repository will allow the broader
 research community to benefit from your work and will allow your
 enhancements to be integrated with those of others.  There are a few
@@ -17,13 +17,11 @@ Getting Started
 
 * Fork the repository on GitHub to publish any proposed changes
 
-.. If the project uses an issue tracker, use the next bullet.
-   Otherwise, remove the next bullet.  Delete this note either way.
-
-* Submit a ticket for your issue at <ISSUE_TRACKER_URL>,
+* Submit a ticket for your issue at https://tracker.nci.nih.gov/browse/TMTCATISSUE,
   assuming one does not already exist.
 
-  - <INSERT INSTRUCTIONS FOR GETTING AN ISSUE TRACKER ACCOUNT>
+  - If you do not have an existing account, to go https://tracker.nci.nih.gov 
+    and click on the Create Account link.
   - Clearly describe the issue including steps to reproduce when it is a bug.
   - Make sure you fill in the earliest version that you know has the issue.
 
