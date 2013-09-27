@@ -9,7 +9,7 @@ wish to link into the virtual tissue repositories and query across Cancer Center
 The caTissue Core is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
-You will find more details about the caTissue Core in the following links:
+You will find more details about the caTissue Core project in the following links:
  * [Community Wiki](https://wiki.nci.nih.gov/x/F5H3Ag)
  * [Documentation](https://wiki.nci.nih.gov/x/uJT9AQ)
  * [Code Repository] (https://github.com/NCIP/catissue-core)
