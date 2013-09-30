@@ -17,7 +17,7 @@ You will find more details about the caTissue Core project in the following link
  * [Deployment Guide] (https://wiki.nci.nih.gov/x/zA9hAg)
  * [Release Notes] (https://wiki.nci.nih.gov/x/dQ9hAg)
  * [Community Forums] (https://cabig-kc.nci.nih.gov/Biospecimen/forums/)
- * [Knowledge Center] (https://wiki.nci.nih.gov/x/rAEYAw)
+ * [Knowledge Center] (https://wiki.nci.nih.gov/x/F5H3Ag)
 
 Please join us in further developing and improving the caTissue Core project.
 
