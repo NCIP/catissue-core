@@ -831,7 +831,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			{
 				for (ConsentTierResponse enteredResponse : responseColl)
 				{
-					if(consentTierResponse.getConsentTier().getStatement().equalsIgnoreCase(enteredResponse.getConsentTier().getStatement()))
+					if(consentTierResponse.getConsentTier().getStatement().equalsIgnoreCase(enteredResponse.getConsentTier().getStatement()) ||
+							consentTierResponse.getId().equals(enteredResponse.getId()))
 					{
 						validateResponse(enteredResponse);
 						consentTierResponse.setResponse(enteredResponse.getResponse());
