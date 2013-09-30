@@ -30,7 +30,9 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.LazyInitializationException;
 import org.json.JSONException;
 
+import edu.wustl.catissuecore.dao.CPRDAO;
 import edu.wustl.catissuecore.dao.SCGDAO;
+import edu.wustl.catissuecore.dao.SiteDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -75,6 +77,9 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.participant.domain.IParticipant;
+import edu.wustl.common.participant.domain.IParticipantMedicalIdentifier;
+import edu.wustl.common.participant.domain.ISite;
 import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -126,7 +131,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			boolean reportLoaderFlag = false;
 			if (scg.getSpecimenCollectionSite() != null)
 			{
-				final Object siteObj = scg.getSpecimenCollectionSite();
+				final Site siteObj = scg.getSpecimenCollectionSite();
 				/*final Object siteObj = dao.retrieveById(Site.class.getName(),
 						specimenCollectionGroup.getSpecimenCollectionSite().getId());*/
 				if (siteObj != null)
@@ -134,7 +139,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					// check for closed Site
 					this.checkStatus(dao, scg.getSpecimenCollectionSite(),
 							"Site");
-					scg.setSpecimenCollectionSite((Site) siteObj);
+					if((siteObj.getId() == null || siteObj.getId() == 0) && !Validator.isEmpty(siteObj.getName()))
+					{
+						SiteDAO siteDAO = new SiteDAO();
+						siteObj.setId(siteDAO.getIdBySiteName((HibernateDAO)dao, siteObj.getName()));
+					}
+					scg.setSpecimenCollectionSite(siteObj);
 				}
 			}
 			final String sourceObjectName = CollectionProtocolEvent.class
@@ -1691,64 +1701,67 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "errors.item.required",
 						message);
 			}
-
+			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+			CPRDAO cprdao = new CPRDAO();
 			if (group.getCollectionProtocolRegistration().getId() == null)
 			{
 				if (group.getCollectionProtocolRegistration()
-						.getProtocolParticipantIdentifier() == null)
+						.getProtocolParticipantIdentifier() == null || (group.getCollectionProtocolRegistration().getParticipant() == null || 
+						group.getCollectionProtocolRegistration().getParticipant().getParticipantMedicalIdentifierCollection() != null))
 				{
-					message = ApplicationProperties
-							.getValue("errors.specimenCollectionGroup.collectionprotocolregistration.ppid");
-					throw this.getBizLogicException(null,
-							"errors.item.required", message);
-				}
-
-				String ppid = group.getCollectionProtocolRegistration()
-						.getProtocolParticipantIdentifier();
-				String cpShortTitle = group.getCollectionProtocolRegistration()
-						.getCollectionProtocol().getShortTitle();
-
-				List cprList = null;
-				try
-				{
-					cprList = AppUtility
-							.executeSQLQuery("select cpr.identifier from catissue_coll_prot_reg cpr, catissue_specimen_protocol sp "
-									+ "where cpr.PROTOCOL_PARTICIPANT_ID='"
-									+ ppid
-									+ "' and cpr.COLLECTION_PROTOCOL_ID=sp.identifier and sp.SHORT_TITLE='"
-									+ cpShortTitle + "'");
-				}
-				catch (ApplicationException e)
-				{
-					e.printStackTrace();
-					message = ApplicationProperties
-							.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
-					throw this.getBizLogicException(null,
-							"errors.item.invalid", message);
-				}
-				/*List cprList = retrieve(
-						group.getCollectionProtocolRegistration().getClass().getName(),
-						"protocolParticipantIdentifier", group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());*/
-				if (cprList == null || cprList.isEmpty())
-				{
-					message = ApplicationProperties
-							.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
-					throw this.getBizLogicException(null,
-							"errors.item.invalid", message);
+					final Collection paticipantMedCol = group.getCollectionProtocolRegistration().getParticipant().getParticipantMedicalIdentifierCollection();
+					// Created a new PMI collection for bulk operation functionality.
+					if (paticipantMedCol != null && !paticipantMedCol.isEmpty())
+					{
+						final Iterator itr = paticipantMedCol.iterator();
+						 ISite site = null;
+						 String medicalRecordNo=null; 
+						while (itr.hasNext())
+						{
+							final IParticipantMedicalIdentifier<IParticipant, ISite> partiMedobj = (IParticipantMedicalIdentifier<IParticipant, ISite>) itr
+									.next();
+							site = partiMedobj.getSite();
+							medicalRecordNo = partiMedobj.getMedicalRecordNumber();
+							if (Validator.isEmpty(medicalRecordNo) || (site == null || (site.getId() == null && Validator.isEmpty(site.getName()))))
+							{
+								if (partiMedobj.getId() == null)
+								{
+									throw new BizLogicException(null, null, "errors.participant.extiden.missing", "");
+								}
+							}
+						}
+						if(site != null && !Validator.isEmpty(medicalRecordNo))
+						{
+							Long cprId = cprdao.getCPRIDByPMI((HibernateDAO)dao, group.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle(), site.getName(), medicalRecordNo);
+							collectionProtocolRegistration.setId(cprId);
+							group.setCollectionProtocolRegistration(collectionProtocolRegistration);
+						}
+					}
+					else
+					{
+						message = ApplicationProperties
+								.getValue("errors.specimenCollectionGroup.collectionprotocolregistration.ppid");
+						throw this.getBizLogicException(null,
+								"errors.item.required", message);
+					}
 				}
 				else
 				{
-					CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-					ArrayList arr = (ArrayList) cprList.get(0);
-					Long cprId = Long.valueOf((String) arr.get(0));
-					collectionProtocolRegistration.setId(cprId);
-					group.setCollectionProtocolRegistration(collectionProtocolRegistration);
+					String ppid = group.getCollectionProtocolRegistration()
+							.getProtocolParticipantIdentifier();
+					String cpShortTitle = group.getCollectionProtocolRegistration()
+							.getCollectionProtocol().getShortTitle();
+						if(!Validator.isEmpty(ppid))
+						{
+							Long cprId = cprdao.getCPRIDByPPID((HibernateDAO)dao,ppid, cpShortTitle);
+							collectionProtocolRegistration.setId(cprId);
+							group.setCollectionProtocolRegistration(collectionProtocolRegistration);
+						}
 				}
 			}
-
 			if (group.getSpecimenCollectionSite() == null
-					|| group.getSpecimenCollectionSite().getId() == null
-					|| group.getSpecimenCollectionSite().getId() == 0)
+					|| ((group.getSpecimenCollectionSite().getId() == null || group.getSpecimenCollectionSite().getId() == 0) 
+					&& Validator.isEmpty(group.getSpecimenCollectionSite().getName())))
 			{
 				message = ApplicationProperties
 						.getValue("specimenCollectionGroup.site");
@@ -1757,15 +1770,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				final String sourceObjectName = Site.class.getName();
-				final String[] selectColumnName = {"name"};
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(
-						sourceObjectName);
-				queryWhereClause.addCondition(new EqualClause("id", group
-						.getSpecimenCollectionSite().getId()));
-				final List list = dao.retrieve(sourceObjectName,
-						selectColumnName, queryWhereClause);
-				if (list.isEmpty())
+				SiteDAO siteDAO = new SiteDAO();
+				if(!siteDAO.isSitePresent((HibernateDAO)dao, group.getSpecimenCollectionSite().getName(), group.getSpecimenCollectionSite().getId()))
 				{
 					message = ApplicationProperties
 							.getValue("specimenCollectionGroup.site");

@@ -346,7 +346,7 @@
 edu.wustl.catissuecore.domain.CollectionEventParameters cep where sep.id=cep.id and sep.specimenCollectionGroup.id = ?
 </query>
 <query name="getSCGNameIdPairList">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolRegistration.id = ? and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
-<query name="getCPENameIdPairList">select cpe.collectionPointLabel,cpe.studyCalendarEventPoint,cpe.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.collectionProtocol.id=? order by cpe.collectionPointLabel</query>
+<query name="getCPENameIdPairList">select DISTINCT cpe.collectionPointLabel,cpe.studyCalendarEventPoint,cpe.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe, edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.collectionProtocolEvent.id = cpe.id and scg.collectionProtocolRegistration.id = ? order by cpe.collectionPointLabel</query>
 <query name="getSCGListFromCPE">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolEvent.id = ? and scg.collectionProtocolRegistration.id = ? and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
 </hibernate-mapping>
 

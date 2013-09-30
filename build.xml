@@ -10,11 +10,11 @@
 		</classpath>
 	</taskdef>
 
-	<loadfile property="dist.revision" srcFile="./.svn/entries">
+	<!--<loadfile property="dist.revision" srcFile="./.svn/entries">
 		<filterchain>
 			<headfilter lines="1" skip="4"/>
 		</filterchain>
-	</loadfile>
+	</loadfile>-->
 
 	<!--define require dir and Properties -->
 	<property file="JMeterTest.properties" />

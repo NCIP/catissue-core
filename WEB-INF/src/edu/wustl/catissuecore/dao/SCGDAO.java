@@ -18,9 +18,13 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.SCGEventPointDTO;
 import edu.wustl.catissuecore.dto.SCGSummaryDTO;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -30,7 +34,7 @@ import edu.wustl.dao.util.NamedQueryParam;
 
 public class SCGDAO
 {
-
+	private static final Logger LOGGER = Logger.getCommonLogger(SCGDAO.class);
 	/** Get event Point and scg associated with given registration id.
 	 * @param regId
 	 * @return

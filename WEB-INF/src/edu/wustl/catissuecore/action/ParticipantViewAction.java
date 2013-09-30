@@ -59,7 +59,7 @@ public class ParticipantViewAction  extends CatissueBaseAction
 		       SCGDAO scgdao= new SCGDAO();
 		       List<NameValueBean> scgLabels = scgdao.getSCGNameList(hibernateDao,registrationId);
 		       String scgLabelString = getJsonArrayFromList(scgLabels); 
-		       List<NameValueBean> eventLabels = scgdao.getEventLabelsList(hibernateDao,new Long(cpId));
+		       List<NameValueBean> eventLabels = scgdao.getEventLabelsList(hibernateDao,new Long(registrationId));
 		       String cpeLabelString = getJsonArrayFromList(eventLabels);
 		       List<NameValueBean> specimenLabels = scgdao.getspecimenLabelsList(hibernateDao,registrationId);
 		       String specLabelString = getJsonArrayFromList(specimenLabels);

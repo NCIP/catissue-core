@@ -170,6 +170,7 @@
     </class>
     <query name="getSiteByContainerName">Select ST.site from edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
 </query>
+<query name="getSiteIdByName">select site.id from edu.wustl.catissuecore.domain.Site site where site.name=?</query>
 <query name="getAllSiteNames">select st.name, st.id from edu.wustl.catissuecore.domain.Site st where st.activityStatus='Active'</query>
 
 </hibernate-mapping>

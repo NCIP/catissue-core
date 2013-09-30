@@ -795,6 +795,14 @@ public class AppUtility
 				"date", "13-02-2006", "12-02-2006");
 	}
 
+	public static List<String> getResponseList() {
+		final List<String> listOfResponces = new ArrayList<String>();
+		listOfResponces.add(Constants.NOT_SPECIFIED);
+		listOfResponces.add(Constants.BOOLEAN_YES);
+		listOfResponces.add(Constants.BOOLEAN_NO);
+		listOfResponces.add(Constants.WITHDRAWN);
+		return listOfResponces;
+	}
 	/**
 	 * This method returns a list of string values for a given CDE.
 	 * 

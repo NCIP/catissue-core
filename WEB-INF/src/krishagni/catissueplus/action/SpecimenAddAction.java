@@ -74,6 +74,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 				specimenDTO.setAvailable(Boolean.FALSE);
 				specimenDTO.setIsVirtual(Boolean.TRUE);
 				specimenDTO.setAvailableQuantity(0.0);
+				specimenDTO.setQuantity(0.0);
 				request.setAttribute("specimenDTO", specimenDTO);
 				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
