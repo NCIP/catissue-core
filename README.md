@@ -15,6 +15,7 @@ You will find more details about the caTissue Core project in the following link
  * [Code Repository] (https://github.com/NCIP/catissue-core)
  * [Documentation Repository] (https://github.com/NCIP/catissue-docs)
  * [Installation Package] (http://gforge.nci.nih.gov/frs/?group_id=18)
+ * [Release Notes] (https://wiki.nci.nih.gov/x/dQ9hAg)
  * [Community Forums] (https://cabig-kc.nci.nih.gov/Biospecimen/forums/)
  * [Knowledge Center] (https://wiki.nci.nih.gov/x/rAEYAw)
 
