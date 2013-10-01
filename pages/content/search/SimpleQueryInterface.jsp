@@ -635,17 +635,30 @@ function vieMapTabSelected(){
                   </tr>
               </table></td>
             </tr>
+			
 		</logic:equal>
+						<%
+												String searchAction = "callSerachAction('"
+												+ Constants.SIMPLE_SEARCH_ACTION + "')";
+									%> 
+
+		<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE%>">
+			<%
+				if(pageOf.equals("pageOfUserAdmin")||pageOf.equals("pageOfInstitution")||pageOf.equals("pageOfDepartment")||pageOf.equals("pageOfCancerResearchGroup")||pageOf.equals("pageOfSite")||pageOf.equals("pageOfBioHazard")){
+				searchAction = "callSerachAction('"
+						+ Constants.SIMPLE_SEARCH_ACTION + "?fromForm=true')";
+				}
+			%> 
+		</logic:notEqual>
+		
         </table></td>
       </tr>
       <tr>
-        <td colspan="2" class="buttonbg"><%
-												String searchAction = "callSerachAction('"
-												+ Constants.SIMPLE_SEARCH_ACTION + "')";
-									%> <html:button styleClass="blue_ar_b" property="searchButton"
-										onclick="<%=searchAction%>">
-										<bean:message key="buttons.search" />
-									</html:button></td>
+        <td colspan="2" class="buttonbg">
+				<html:button styleClass="blue_ar_b" property="searchButton"
+									onclick="<%=searchAction%>">
+									<bean:message key="buttons.search" />
+								</html:button></td>
       </tr>
     </table></td>
   </tr>

@@ -291,7 +291,7 @@ public class TitliFetchAction extends SecureAction
 
 			Vector selectDataElements = null;
 			selectDataElements = simpleQueryBizLogic.getSelectDataElements(null, aliasList,
-					this.columnNames, true, fieldList);
+					this.columnNames, true, fieldList,false);
 			query.setResultView(selectDataElements);
 
 			final Set fromTables = query.getTableNamesSet();

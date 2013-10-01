@@ -52,7 +52,7 @@ Ext.onReady(function(){
 							href:'User.do?operation=add&pageOf=pageOfUserAdmin'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&isForm=true'
                         }, {
                             text: 'Approve New Users',
                             href:'ApproveUserShow.do?pageNum=1'
@@ -72,7 +72,7 @@ Ext.onReady(function(){
 							href:'Institution.do?operation=add&pageOf=pageOfInstitution'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution&isForm=true'
                         }
                     ]
                 }
@@ -89,7 +89,7 @@ Ext.onReady(function(){
 							href:'Department.do?operation=add&pageOf=pageOfDepartment'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department&isForm=true'
                         }
                     ]
                 }
@@ -106,7 +106,7 @@ Ext.onReady(function(){
 							href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup&isForm=true'
                         }
                     ]
                 }
@@ -124,7 +124,7 @@ Ext.onReady(function(){
                             href:'Site.do?operation=add&pageOf=pageOfSite'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site&isForm=true'
                         }
                     ]
                 }
@@ -195,7 +195,7 @@ Ext.onReady(function(){
                             href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard&isForm=true'
                         }
                     ]
                 }
