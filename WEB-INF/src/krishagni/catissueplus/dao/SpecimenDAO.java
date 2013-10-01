@@ -269,7 +269,7 @@ public class SpecimenDAO
 			params.put("0",	new NamedQueryParam(DBTypes.STRING, specimen.getLabel()));
 			params.put("1",	new NamedQueryParam(DBTypes.STRING, specimen.getBarcode()));
 			specimenIds = hibernateDao.executeNamedQuery("getSpecimenIdByLabelorBarcode", params);
-			if(specimenIds != null && specimenIds.size() == 1 && (specimen.getId() == null || !specimen.getId().toString().equals(specimenIds.get(0).toString())))
+			if(specimenIds != null && specimenIds.size() >= 1 && (specimen.getId() == null || !specimen.getId().toString().equals(specimenIds.get(0).toString())))
 			{
 					throw DAOUtility.getInstance().getDAOException(null, "errors.specimen.label.barcode",specimen.getLabel());
 			}

@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
+import edu.wustl.catissuecore.dao.ConsentDAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -785,6 +786,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	{
 		try
 		{
+			checkConsents(collectionProtocolRegistration,dao);
 			boolean reportLoaderFlag = false;
 			if (Constants.REGISTRATION_FOR_REPORT_LOADER.equals(collectionProtocolRegistration
 					.getProtocolParticipantIdentifier()))
@@ -805,12 +807,108 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				}
 			}
 		}
-		catch (final DAOException e)
+		catch (final ApplicationException e)
 		{
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
+
+	private void checkConsents(CollectionProtocolRegistration cpr, DAO dao) throws ApplicationException
+	{
+		Collection<ConsentTierResponse> responseColl = cpr.getConsentTierResponseCollection();
+		ConsentDAO consentDAO = new ConsentDAO();
+		Collection<ConsentTier> consentTierColection = consentDAO.getConsentTierFromCP((HibernateDAO)dao, cpr.getCollectionProtocol().getId());
+		if((consentTierColection == null || consentTierColection.isEmpty()) && (responseColl != null && !responseColl.isEmpty()))
+		{
+			LOGGER.error("No Consents definition for the given CP.");
+			throw this.getBizLogicException(null, "consent.definition.undefined", ""); 
+		}
+		Collection<ConsentTierResponse> defaultResponseColl = prepareConsentTierResponseCollection(consentTierColection);
+		if(consentTierColection != null && !consentTierColection.isEmpty() && responseColl != null && !responseColl.isEmpty())
+		{
+			for (ConsentTierResponse consentTierResponse : defaultResponseColl)
+			{
+				for (ConsentTierResponse enteredResponse : responseColl)
+				{
+					if(consentTierResponse.getConsentTier().getStatement().equalsIgnoreCase(enteredResponse.getConsentTier().getStatement()) ||
+							consentTierResponse.getId().equals(enteredResponse.getId()))
+					{
+						validateResponse(enteredResponse);
+						consentTierResponse.setResponse(enteredResponse.getResponse());
+						responseColl.remove(enteredResponse);
+						break;
+					}
+				}
+			}
+			if(responseColl != null && !responseColl.isEmpty())
+			{
+				LOGGER.error("Invalid consent tier specieifed");
+				throw this.getBizLogicException(null, "invalid.consentTier", "");
+			}
+		}
+		cpr.setConsentTierResponseCollection(defaultResponseColl);
+		
+//		ConsentTier consentTier = null;
+//		if(responseColl == null || responseColl.isEmpty())
+//		{
+//			for (ConsentTierResponse consentTierResponse : responseColl)
+//			{
+//				if(consentTier == null)
+//				{
+//					consentTier = getConsentTierFromResponse(consentTierResponse,dao,cpr.getCollectionProtocol().getId());
+//				}
+//				validateResponse(consentTierResponse);
+//				consentTierResponse.setConsentTier(consentTier);
+//			}
+//		}
+	}
+
+	private Collection<ConsentTierResponse> prepareConsentTierResponseCollection(Collection consentTierCollection)
+	{
+		final Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
+		if (consentTierCollection != null && !consentTierCollection.isEmpty())
+		{
+				final Iterator iter = consentTierCollection.iterator();
+				while (iter.hasNext())
+				{
+					final ConsentTier consentTier = (ConsentTier) iter.next();
+					final ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+					consentTierResponse.setResponse(Constants.NOT_SPECIFIED);
+					consentTierResponse.setConsentTier(consentTier);
+					consentTierResponseCollection.add(consentTierResponse);
+				}
+	}
+		return consentTierResponseCollection;
+	}
+	private void validateResponse(ConsentTierResponse consentTierResponse) throws BizLogicException
+	{
+		List<String> responseValueList = AppUtility.getResponseList();
+		if(Validator.isEmpty(consentTierResponse.getResponse()) || !responseValueList.contains(consentTierResponse.getResponse()))
+		{
+			LOGGER.error("Consent Response Can not be empty");
+			throw this.getBizLogicException(null, "invalid.consents.response", "");
+		}
+	}
+
+	private ConsentTier getConsentTierFromResponse(ConsentTierResponse consentTierResponse,DAO dao, Long cpId) throws ApplicationException
+	{
+		ConsentTier consentTier = consentTierResponse.getConsentTier();
+		if(consentTier.getId() == null && !Validator.isEmpty(consentTier.getStatement()))
+		{
+//			String hql = "select con.id from "+ConsentTier.class.getName()+" con where con.statement='"+consentTier.getStatement()+"'";
+//			List idList = dao.executeQuery(hql);
+//			if(idList == null || idList.isEmpty())
+//			{
+//				LOGGER.error("Invalid Consent Details.");
+//				throw this.getBizLogicException(null, "invalid.consents.response", "");
+//			}
+			ConsentDAO consentDAO = new ConsentDAO();
+			consentTier.setId(consentDAO.getConsentIdFromStatement(consentTier.getStatement(),cpId));
+		}
+		return consentTier;
+	}
+
 
 	/** In this method if parent CP has any child which can be
 	 * automatically registered,then these child are registered.
