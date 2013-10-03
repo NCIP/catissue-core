@@ -33,6 +33,7 @@ import org.json.JSONException;
 import edu.wustl.catissuecore.dao.CPRDAO;
 import edu.wustl.catissuecore.dao.SCGDAO;
 import edu.wustl.catissuecore.dao.SiteDAO;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -222,7 +223,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// This check is added if empty values added by UI tnen shud add
 			// default values in parameters
 			this.checkSCGEvents(scg.getSpecimenEventParametersCollection(),
-					sessionDataBean);
+					sessionDataBean,(HibernateDAO)dao);
 			dao.insert(scg);
 			if (specimenColl != null && !reportLoaderFlag
 					&& scg.getIsToInsertAnticipatorySpecimens())
@@ -943,9 +944,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * @param scgEventColl : scgEventColl
 	 * @param sessionDataBean : sessionDataBean
+	 * @param hibernateDAO 
+	 * @throws BizLogicException 
+	 * @throws DAOException 
 	 */
 	private void checkSCGEvents(Collection scgEventColl,
-			SessionDataBean sessionDataBean)
+			SessionDataBean sessionDataBean, HibernateDAO hibernateDAO) throws DAOException, BizLogicException
 	{
 		if (scgEventColl != null && !scgEventColl.isEmpty())
 		{
@@ -961,6 +965,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					if (collEventParam.getUser() == null)
 					{
 						collEventParam.setUser(user);
+					}
+					else
+					{
+						if((collEventParam.getUser().getId() == null || collEventParam.getUser().getId() != 0l) && !Validator.isEmpty(collEventParam.getUser().getLoginName()))
+						{
+							UserDAO userDAO = new UserDAO();
+							collEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, collEventParam.getUser().getLoginName()));
+						}
 					}
 					if (collEventParam.getCollectionProcedure() != null
 							&& collEventParam.getCollectionProcedure().equals(
@@ -981,6 +993,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					if (recEventParam.getUser() == null)
 					{
 						recEventParam.setUser(user);
+					}
+					else
+					{
+						if((recEventParam.getUser().getId() == null || recEventParam.getUser().getId() != 0l) && !Validator.isEmpty(recEventParam.getUser().getLoginName()))
+						{
+							UserDAO userDAO = new UserDAO();
+							recEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, recEventParam.getUser().getLoginName()));
+						}
 					}
 
 					if (recEventParam.getReceivedQuality() != null
@@ -1706,7 +1726,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			if (group.getCollectionProtocolRegistration().getId() == null)
 			{
 				if (group.getCollectionProtocolRegistration()
-						.getProtocolParticipantIdentifier() == null || (group.getCollectionProtocolRegistration().getParticipant() == null || 
+						.getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration().getParticipant() == null || 
 						group.getCollectionProtocolRegistration().getParticipant().getParticipantMedicalIdentifierCollection() != null))
 				{
 					final Collection paticipantMedCol = group.getCollectionProtocolRegistration().getParticipant().getParticipantMedicalIdentifierCollection();
@@ -1732,7 +1752,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						}
 						if(site != null && !Validator.isEmpty(medicalRecordNo))
 						{
-							Long cprId = cprdao.getCPRIDByPMI((HibernateDAO)dao, group.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle(), site.getName(), medicalRecordNo);
+							Long cprId = cprdao.getCPRIDByPMI((HibernateDAO)dao, group.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle(), site, medicalRecordNo);
 							collectionProtocolRegistration.setId(cprId);
 							group.setCollectionProtocolRegistration(collectionProtocolRegistration);
 						}

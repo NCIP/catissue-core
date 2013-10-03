@@ -22,6 +22,7 @@ import java.util.Vector;
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.dao.ConsentDAO;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -32,6 +33,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -832,7 +834,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				for (ConsentTierResponse enteredResponse : responseColl)
 				{
 					if(consentTierResponse.getConsentTier().getStatement().equalsIgnoreCase(enteredResponse.getConsentTier().getStatement()) ||
-							consentTierResponse.getId().equals(enteredResponse.getId()))
+							consentTierResponse.getConsentTier().getId().equals(enteredResponse.getConsentTier().getId()))
 					{
 						validateResponse(enteredResponse);
 						consentTierResponse.setResponse(enteredResponse.getResponse());
@@ -848,20 +850,15 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 		}
 		cpr.setConsentTierResponseCollection(defaultResponseColl);
-		
-//		ConsentTier consentTier = null;
-//		if(responseColl == null || responseColl.isEmpty())
-//		{
-//			for (ConsentTierResponse consentTierResponse : responseColl)
-//			{
-//				if(consentTier == null)
-//				{
-//					consentTier = getConsentTierFromResponse(consentTierResponse,dao,cpr.getCollectionProtocol().getId());
-//				}
-//				validateResponse(consentTierResponse);
-//				consentTierResponse.setConsentTier(consentTier);
-//			}
-//		}
+		User witness = cpr.getConsentWitness();
+		if(witness != null)
+		{
+			if((witness.getId() == null || witness.getId() == 0l) && !Validator.isEmpty(witness.getLoginName()))
+			{
+				UserDAO userDAO = new UserDAO();
+				witness.setId(userDAO.getUserIDFromLoginName((HibernateDAO)dao, witness.getLoginName()));
+			}
+		}
 	}
 
 	private Collection<ConsentTierResponse> prepareConsentTierResponseCollection(Collection consentTierCollection)

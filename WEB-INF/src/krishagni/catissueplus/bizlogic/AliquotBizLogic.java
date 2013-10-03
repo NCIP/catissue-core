@@ -266,7 +266,7 @@ public class AliquotBizLogic
         params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLable));
         params.put("1", new NamedQueryParam(DBTypes.STRING, specimenLable));
 
-        List specimenDetailColl = hibernateDao.executeNamedQuery("getAvailabelSpecimenLabel", params);
+        List specimenDetailColl = hibernateDao.executeNamedQuery("getCollectedSpecimenLabel", params);
         for (int i = 0; i < specimenDetailColl.size(); i++)
         {
             Object[] objectArr = (Object[]) specimenDetailColl.get(i);

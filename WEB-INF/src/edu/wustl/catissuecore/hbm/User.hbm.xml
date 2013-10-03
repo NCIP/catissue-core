@@ -281,5 +281,5 @@
             containing the additional properties and place it in your merge dir.
         -->
     </class>
-
+<query name="getUserIdFromLoginName">select user.id from edu.wustl.catissuecore.domain.User user where user.loginName=? and user.activityStatus=?</query>
 </hibernate-mapping>
