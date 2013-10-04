@@ -179,7 +179,7 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 		hashMap.put(Constants.COLLECTION_PROTOCOL_ID, Long.valueOf(cpId));
 		hashMap.put(Constants.PARTICIPANT_ID, Long.valueOf(paricipantId));
 		hashMap.put("specimenCollectionGroupId", specimenCollectionGroup.getId());
-		
+		hashMap.put("COLLECTION_PROTOCOL_EVENT_ID", specimenCollectionGroup.getCollectionProtocolEvent().getId());
 		request.setAttribute("forwardToHashMap", hashMap);
 	}
 

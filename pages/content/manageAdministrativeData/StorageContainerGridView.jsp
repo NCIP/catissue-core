@@ -166,18 +166,22 @@ function updatePosition(contId,containerName,pos1,pos2)
 	
 	var storagePosition=parent.opener.document.getElementById('storageContainerPosition');
 		var newStoragePosition= containerName+" ("+pos1+","+pos2+")";
-		storagePosition.value=newStoragePosition;
-		storagePosition.title=newStoragePosition;
-		
+		if(storagePosition)
+		{
+			storagePosition.value=newStoragePosition;
+			storagePosition.title=newStoragePosition;
+		}
 		var container = parent.opener.document.getElementById('containerName');
 		var containerId = parent.opener.document.getElementById('containerId');
 		var position1= parent.opener.document.getElementById('pos1');
 		var position2= parent.opener.document.getElementById('pos2');
-		
-		containerId.value = contId;
-		container.value = containerName;
-		position1.value = pos1;
-		position2.value= pos2;
+		if(containerId)
+		{
+			containerId.value = contId;
+			container.value = containerName;
+			position1.value = pos1;
+			position2.value= pos2;
+		}
 		var isVirtual = parent.opener.document.getElementById('isVirtual');
 		if(isVirtual != null)
 		{

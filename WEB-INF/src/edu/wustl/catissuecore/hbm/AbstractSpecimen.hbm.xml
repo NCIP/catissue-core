@@ -447,8 +447,8 @@
 				left join specimen.specimenCharacteristics specimenCharacteristics where specimen.barcode=?
 	    
 	</query>
-	<query name="getAvailabelSpecimenLabel">
-	    select specimen.label,specimen.barcode from  edu.wustl.catissuecore.domain.Specimen as specimen  where specimen.label = ? or specimen.barcode = ?
+	<query name="getCollectedSpecimenLabel">
+	    select specimen.label,specimen.barcode from  edu.wustl.catissuecore.domain.Specimen as specimen  where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus = 'Active' and specimen.collectionStatus='Collected' 
 	</query>
 	
 	<query name="getSpecimenBylabel">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label = ? and specimen.activityStatus= ? </query>
