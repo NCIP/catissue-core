@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -37,6 +38,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -190,14 +192,30 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final Object object = dao.retrieveById(User.class.getName(), site.getCoordinator()
-					.getId());
 
-			if (object != null)
+			if(site.getCoordinator().getId() != null)
 			{
-				final User user = (User) object;
-				site.setCoordinator(user);
+				final Object object = dao.retrieveById(User.class.getName(), site.getCoordinator()
+						.getId());
+
+				if (object != null)
+				{
+					final User user = (User) object;
+					site.setCoordinator(user);
+				}
 			}
+			else if(site.getCoordinator() != null && !Validator.isEmpty(site.getCoordinator().getLoginName()))
+			{
+				UserDAO userDAO = new UserDAO();
+				site.getCoordinator().setId(userDAO.getUserIDFromLoginName((HibernateDAO)dao, site.getCoordinator().getLoginName()));
+			}
+			
+		}
+		catch (final BizLogicException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			ErrorKey errorKey = ErrorKey.getErrorKey("errors.invalid");
+			throw new BizLogicException(errorKey,null, ApplicationProperties.getValue("site.coordinator"));
 		}
 		catch (final DAOException daoExp)
 		{
@@ -280,9 +298,9 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
-		if (site.getCoordinator() == null || site.getCoordinator().getId() == null
+		if ((site.getCoordinator() == null || site.getCoordinator().getId() == null
 				|| site.getCoordinator().getId() == 0
-				|| site.getCoordinator().getId().longValue() == -1L)
+				|| site.getCoordinator().getId().longValue() == -1L) && Validator.isEmpty(site.getCoordinator().getLoginName()))
 		{
 			message = ApplicationProperties.getValue("site.coordinator");
 			throw this.getBizLogicException(null, "errors.item.required", message);

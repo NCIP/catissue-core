@@ -6,6 +6,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -27,7 +28,8 @@ public class UserDAO
 		if(userIds == null || userIds.isEmpty())
 		{
 			LOGGER.error("Invalid user details.");
-			throw new BizLogicException(null, null, "errors.invalid", "User");
+			ErrorKey errorKey = ErrorKey.getErrorKey("errors.invalid");
+			throw new BizLogicException(errorKey,null, "User");
 		}
 		return userIds.get(0);
 	}
