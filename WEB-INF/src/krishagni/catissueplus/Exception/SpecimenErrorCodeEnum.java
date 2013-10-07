@@ -21,6 +21,8 @@ public enum SpecimenErrorCodeEnum
     AlIQUOT_QUANTITY(1014,"Please enter valid aliquot quantity."),
     PARSE_ERROR (1015,"Error occured while parsing aliquot details."),
     INVALID_STORAGE_POSITION(1016,"Please enter valid storage position."),
+    DUPLICATE_LABEL_BARCODE(1017, "Label/Barcode already exists."),
+    LABEL_REQUIRED(1018, "Label cannot be empty."),
 
 	POSITION_ALREADY_OCCUPIED(1040,"Storage position is already occupied by other specimen."),
 	INVALID_USER(1041,"Please provide valid user information"),

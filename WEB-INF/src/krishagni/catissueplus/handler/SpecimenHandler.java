@@ -6,22 +6,27 @@ import krishagni.catissueplus.bizlogic.SpecimenBizLogic;
 import krishagni.catissueplus.dao.SpecimenDAO;
 import krishagni.catissueplus.dto.DerivedDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import krishagni.catissueplus.util.CommonUtil;
+import krishagni.catissueplus.util.DAOUtil;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.PrintUtil;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 
 public class SpecimenHandler
 {
 
+	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenHandler.class);
 	public SpecimenDTO createSpecimen(SpecimenDTO specimenDTO,
-			SessionDataBean sessionDataBean) throws ApplicationException
+			SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		HibernateDAO hibernateDao = null;
 		try
 		{
-			hibernateDao = (HibernateDAO) AppUtility
+			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
 			specimenDTO = specimenBizLogic.insert(specimenDTO, hibernateDao,
@@ -33,21 +38,31 @@ public class SpecimenHandler
 						null, sessionDataBean, specimenDTO.getId()));
 			}
 		}
+		catch (ApplicationException exception)
+		{
+			String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Inserting");
+			LOGGER.error(errMssg, exception);
+			throw new BizLogicException(exception.getErrorKey(),
+					exception,exception.getMsgValues(),errMssg);
+			
+		}
 		finally
 		{
-   			AppUtility.closeDAOSession(hibernateDao);
+   			DAOUtil.closeDAOSession(hibernateDao);
 		}
 
 		return specimenDTO;
 	}
-
+	
+	
+    
 	public SpecimenDTO updateSpecimen(SpecimenDTO specimenDTO,
-			SessionDataBean sessionDataBean) throws ApplicationException
+			SessionDataBean sessionDataBean) throws BizLogicException 
 	{
 		HibernateDAO hibernateDao = null;
 		try
 		{
-			hibernateDao = (HibernateDAO) AppUtility
+			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
 			specimenDTO = specimenBizLogic.updateSpecimen(hibernateDao,
@@ -59,22 +74,30 @@ public class SpecimenHandler
 						null, sessionDataBean, specimenDTO.getId()));
 			}
 		}
+		catch (ApplicationException exception)
+		{
+			String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Updating");
+			LOGGER.error(errMssg, exception);
+			throw new BizLogicException(exception.getErrorKey(),
+					exception,exception.getMsgValues(),errMssg);
+			
+		}
 		finally
 		{
-			AppUtility.closeDAOSession(hibernateDao);
+			DAOUtil.closeDAOSession(hibernateDao);
 		}
 
 		return specimenDTO;
 	}
 
 	public SpecimenDTO createDerivative(DerivedDTO derivedDTO,
-			SessionDataBean sessionDataBean) throws ApplicationException
+			SessionDataBean sessionDataBean) throws BizLogicException 
 	{
 		HibernateDAO hibernateDao = null;
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		try
 		{
-			hibernateDao = (HibernateDAO) AppUtility
+			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			DeriveBizLogic deriveBizlogic = new DeriveBizLogic();
 			specimenDTO = deriveBizlogic.insertDeriveSpecimen(hibernateDao,
@@ -84,36 +107,31 @@ public class SpecimenHandler
 			{
 				specimenDTO.setToPrintLabel(PrintUtil.printSpecimenLabel(null,
 						null, sessionDataBean, specimenDTO.getId()));
-				//				boolean printStatus = PrintUtil.printSpecimenLabel(" ", " ", request,
-				//						specimenDTO.getId());
-				//				if (printStatus)
-				//				{
-				//					returnMap.put("printLabelSuccess",
-				//							ApplicationProperties.getValue("specimen.label.print.success"));
-				//					returnMap.put("printLabel", "success.");
-				//				}
-				//				else
-				//				{
-				//					returnMap.put("printLabelError",
-				//							ApplicationProperties.getValue("specimen.label.print.fail"));
-				//				}
 			}
+		}
+		catch (ApplicationException exception)
+		{
+			String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Inserting");
+			LOGGER.error(errMssg, exception);
+			throw new BizLogicException(exception.getErrorKey(),
+					exception,exception.getMsgValues(),errMssg);
+			
 		}
 		finally
 		{
-			AppUtility.closeDAOSession(hibernateDao);
+			DAOUtil.closeDAOSession(hibernateDao);
 		}
 		return specimenDTO;
 	}
 
 	public SpecimenDTO getSpecimenDetails(String label,
-			SessionDataBean sessionDataBean) throws ApplicationException
+			SessionDataBean sessionDataBean) throws BizLogicException 
 	{
 		HibernateDAO hibernateDao = null;
 		SpecimenDTO specimenDTO = null;
 		try
 		{
-			hibernateDao = (HibernateDAO) AppUtility
+			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
 			SpecimenDAO specimenDAO = new SpecimenDAO();
@@ -128,9 +146,17 @@ public class SpecimenHandler
 						arr[1], hibernateDao));
 			}
 		}
+		catch (ApplicationException exception)
+		{
+			String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Inserting");
+			LOGGER.error(errMssg, exception);
+			throw new BizLogicException(exception.getErrorKey(),
+					exception,exception.getMsgValues(),errMssg);
+			
+		}
 		finally
 		{
-			AppUtility.closeDAOSession(hibernateDao);
+			DAOUtil.closeDAOSession(hibernateDao);
 		}
 
 		return specimenDTO;

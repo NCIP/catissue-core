@@ -85,7 +85,10 @@ public class SpecimenDAO
 				specimen.setSpecimenCollectionGroup(scg);
 				specimen.setId(Long.parseLong(valArr[2].toString()));
 				specimen.setLabel(valArr[3].toString());
-				specimen.setBarcode(valArr[4].toString());
+				if(valArr[4] != null)
+				{
+					specimen.setBarcode(valArr[4].toString());
+				}
 				specimen.setSpecimenClass(valArr[5].toString());
 				specimen.setSpecimenType(valArr[6].toString());
 				specimen.setPathologicalStatus(valArr[7].toString());
@@ -95,7 +98,9 @@ public class SpecimenDAO
 				specimen.setSpecimenCharacteristics(specimenChar);
 				specimen.setAvailableQuantity(Double.parseDouble(valArr[10].toString()));
 				if (valArr[11] != null)
+				{
 					specimen.setConcentrationInMicrogramPerMicroliter(Double.parseDouble(valArr[11].toString()));
+				}
 				specimen.setInitialQuantity(Double.parseDouble(valArr[12].toString()));
 			}
 		}
@@ -254,28 +259,6 @@ public class SpecimenDAO
 		return Constants.SUCCESS;
 	}
 
-	/**
-	 * Checks for duplicate specimenLabel and specimenBarcode fields.
-	 * @param specimen Specimen
-	 * @param hibernateDao hibernateDao
-	 * @throws DAOException 
-	 */
-	public void checkDuplicateSpecimenFields(Specimen specimen, HibernateDAO hibernateDao) throws DAOException
-	{
-		List specimenIds = null;
-		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		if (specimen.getLabel() != null)
-		{
-			params.put("0",	new NamedQueryParam(DBTypes.STRING, specimen.getLabel()));
-			params.put("1",	new NamedQueryParam(DBTypes.STRING, specimen.getBarcode()));
-			specimenIds = hibernateDao.executeNamedQuery("getSpecimenIdByLabelorBarcode", params);
-			if(specimenIds != null && specimenIds.size() >= 1 && (specimen.getId() == null || !specimen.getId().toString().equals(specimenIds.get(0).toString())))
-			{
-					throw DAOUtility.getInstance().getDAOException(null, "errors.specimen.label.barcode",specimen.getLabel());
-			}
-		}
-	}
-	
 	public Specimen getSpecimenById(Long id, HibernateDAO hibernateDAO) throws DAOException
 	{
 		return (Specimen) hibernateDAO.retrieveById(Specimen.class.getName(), id);

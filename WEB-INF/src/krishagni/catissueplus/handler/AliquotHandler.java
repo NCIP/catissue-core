@@ -12,20 +12,24 @@ import krishagni.catissueplus.dto.AliquotContainerDetailsDTO;
 import krishagni.catissueplus.dto.AliquotDetailsDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
 import krishagni.catissueplus.util.CatissuePlusCommonUtil;
+import krishagni.catissueplus.util.CommonUtil;
+import krishagni.catissueplus.util.DAOUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.sun.jersey.api.client.ClientResponse.Status;
 
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.PrintUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 
 public class AliquotHandler
@@ -33,6 +37,7 @@ public class AliquotHandler
 
     private static final String AVAILABEL_CONTAINER_NAME = "availabelContainerName";
     private static final String ALIQUOTS_DETAILS_DTO = "aliquotDetailsDTO";
+    private static final Logger LOGGER = Logger.getCommonLogger(AliquotHandler.class);
 
     public String getAliquotDetails(SessionDataBean sessionDataBean, String lable, String aliquotJson) throws Exception
     {
@@ -41,7 +46,7 @@ public class AliquotHandler
 
         try
         {
-            hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(sessionDataBean);
+            hibernateDAO = DAOUtil.openDAOSession(sessionDataBean);
             final AliquotBizLogic aliquotBizLogic = new AliquotBizLogic();
             List<SpecimenDTO> specimenDTOList;
             JSONObject jsonObject = new JSONObject(aliquotJson);
@@ -68,6 +73,7 @@ public class AliquotHandler
             {
                 returnJsonObject.put(Constants.SUCCESS, "false");
                 returnJsonObject.put("message", Constants.VALID_ALIQUOT_COUNT_ERROR);
+                LOGGER.error(SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getDescription());
                 throw new CatissueException(SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getDescription(),
                         SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getCode());
 
@@ -137,14 +143,14 @@ public class AliquotHandler
         }
         catch (NumberFormatException ex)
         {
-
+        	LOGGER.error(ex);
             throw new CatissueException(SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getDescription(),
                     SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getCode());
 
         }
         finally
         {
-            AppUtility.closeDAOSession(hibernateDAO);
+        	DAOUtil.closeDAOSession(hibernateDAO);
         }
 
         return returnJsonObject.toString();
@@ -158,7 +164,7 @@ public class AliquotHandler
         try
         {
             Gson gson = CatissuePlusCommonUtil.getGson();
-            hibernateDao = (HibernateDAO) AppUtility.openDAOSession(sessionDataBean);
+            hibernateDao = DAOUtil.openDAOSession(sessionDataBean);
 
             AliquotDetailsDTO aliquotDetailsDTO = gson.fromJson(aliquotJson, AliquotDetailsDTO.class);
             final AliquotBizLogic aliquotBizLogic = new AliquotBizLogic();
@@ -184,18 +190,22 @@ public class AliquotHandler
         }
         catch (NumberFormatException ex)
         {
+        	LOGGER.error(ex);
             throw new CatissueException(SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getDescription(),
                     SpecimenErrorCodeEnum.INVALID_ALIQUOT_COUNT.getCode());
 
         }
-        catch (final ApplicationException exp)
-        {
-            String msgString = exp.getErrorKey().getMessageWithValues();
-            throw new CatissueException(msgString, Status.INTERNAL_SERVER_ERROR.getStatusCode());
-
-        }
+        catch (ApplicationException exception)
+		{
+			String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Inserting");
+			LOGGER.error(errMssg, exception);
+			throw new BizLogicException(exception.getErrorKey(),
+					exception,exception.getMsgValues(),errMssg);
+			
+		}
         catch (JsonParseException ex)
         {
+        	LOGGER.error(ex);
             throw new CatissueException(SpecimenErrorCodeEnum.PARSE_ERROR.getDescription(),
                     SpecimenErrorCodeEnum.PARSE_ERROR.getCode());
 
@@ -203,10 +213,11 @@ public class AliquotHandler
 
         finally
         {
-            AppUtility.closeDAOSession(hibernateDao);
+            DAOUtil.closeDAOSession(hibernateDao);
         }
         return returnJsonObject.toString();
 
     }
+    
 
 }

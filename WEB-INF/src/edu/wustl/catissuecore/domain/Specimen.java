@@ -255,11 +255,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
-		final String nullString = null; //for PMD error.
-		if (Constants.DOUBLE_QUOTES.equals(barcode))
-		{
-			this.barcode = nullString;
-		}
+//		final String nullString = null; //for PMD error.
+//		if (Constants.DOUBLE_QUOTES.equals(barcode))
+//		{
+//			this.barcode = nullString;
+//		}
 	}
 
 	/**

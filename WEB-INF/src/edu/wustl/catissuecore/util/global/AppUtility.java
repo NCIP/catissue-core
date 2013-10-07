@@ -1534,8 +1534,15 @@ public class AppUtility
 			throws ApplicationException
 	{
 		final JDBCDAO jdbcDAO = openJDBCSession();
-		final List list = jdbcDAO.executeQuery(sql);
-		closeJDBCSession(jdbcDAO);
+		List list = new ArrayList();
+		try
+		{
+			list = jdbcDAO.executeQuery(sql);
+		}
+		finally
+		{
+			closeJDBCSession(jdbcDAO);
+		}
 		return list;
 	}
 

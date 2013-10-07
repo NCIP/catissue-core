@@ -531,8 +531,40 @@ public class SpecimenBizLogic
 		   
 		    throw this.getBizLogicException(null, "specimen.parent.label.required","");
 		}
-		SpecimenDAO specimenDAO = new SpecimenDAO();
-		specimenDAO.checkDuplicateSpecimenFields(specimen, hibernateDao);
+		if(!Variables.isSpecimenLabelGeneratorAvl && Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()) && Validator.isEmpty(specimen.getLabel()))
+		{
+			LOGGER.error("Specimen label cannot be empty.");
+			throw new CatissueException(SpecimenErrorCodeEnum.LABEL_REQUIRED.getCode());
+		}
+//		checkDuplicateSpecimenFields(specimen, hibernateDao);
+	}
+	
+	/**
+	 * Checks for duplicate specimenLabel and specimenBarcode fields.
+	 * @param specimen Specimen
+	 * @param hibernateDao hibernateDao
+	 * @throws DAOException 
+	 */
+	private void checkDuplicateSpecimenFields(Specimen specimen, HibernateDAO hibernateDao) throws DAOException
+	{
+		List specimenIds = null;
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		if (specimen.getLabel() != null)
+		{
+			params.put("0",	new NamedQueryParam(DBTypes.STRING, specimen.getLabel()==null?"":specimen.getLabel()));
+			params.put("1",	new NamedQueryParam(DBTypes.STRING, specimen.getBarcode()==null?"":specimen.getBarcode()));
+			specimenIds = hibernateDao.executeNamedQuery("getSpecimenIdByLabelorBarcode", params);
+			if(specimen.getId() == null && specimenIds != null && specimenIds.size() >= 1)
+			{
+				throw new CatissueException(SpecimenErrorCodeEnum.DUPLICATE_LABEL_BARCODE.getCode());
+//					throw DAOUtility.getInstance().getDAOException(null, "errors.specimen.label.barcode",specimen.getLabel());
+			}
+			else if(specimen.getId() != null && specimenIds != null && (specimenIds.size() > 1 || !specimen.getId().toString().equals(specimenIds.get(0).toString())))
+			{
+				throw new CatissueException(SpecimenErrorCodeEnum.DUPLICATE_LABEL_BARCODE.getCode());
+//				throw DAOUtility.getInstance().getDAOException(null, "errors.specimen.label.barcode",specimen.getLabel());
+			}
+		}
 	}
 
 	/**
@@ -670,7 +702,7 @@ public class SpecimenBizLogic
 	{
 		Specimen specimen = new Specimen();
 		try
-		{
+		{ 
 			if (!isAuthorizedForSpecimenProcessing(hibernateDao, specimenDTO, sessionDataBean))
 			{
 				throw AppUtility.getUserNotAuthorizedException("SPECIMEN_PROCESSING", "", specimen.getClass()
@@ -762,18 +794,18 @@ public class SpecimenBizLogic
 	{
 		Specimen specimen = new Specimen();
 		specimen.setActivityStatus(specimenDTO.getActivityStatus());
-		specimen.setAvailableQuantity(specimenDTO.getAvailableQuantity());
+		specimen.setAvailableQuantity(specimenDTO.getAvailableQuantity()==null?0.0:specimenDTO.getAvailableQuantity());
 		specimen.setBarcode(specimenDTO.getBarcode());
 		specimen.setExternalIdentifierCollection(getExterIdentifierColl(specimenDTO.getExternalIdentifiers(), specimen));
 		specimen.setCollectionStatus(specimenDTO.getCollectionStatus());
 		specimen.setComment(specimenDTO.getComments());
 		specimen.setConcentrationInMicrogramPerMicroliter(specimenDTO.getConcentration());
 		specimen.setCreatedOn(specimenDTO.getCreatedDate());
-		specimen.setInitialQuantity(specimenDTO.getQuantity());
+		specimen.setInitialQuantity(specimenDTO.getQuantity()==null?0.0:specimenDTO.getQuantity());
 		specimen.setIsAvailable(Boolean.TRUE);
 		specimen.setLabel(specimenDTO.getLabel());
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimen.setAvailableQuantity(specimenDTO.getQuantity());
+//		specimen.setAvailableQuantity(specimenDTO.getQuantity());
 		if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
 				|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
 		{
