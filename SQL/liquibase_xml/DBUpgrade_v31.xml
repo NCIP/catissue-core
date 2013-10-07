@@ -63,7 +63,7 @@
 	
 	
 
-<changeSet author="mosin" id="9">
+<changeSet author="mosin" id="10">
     <addNotNullConstraint 
             columnDataType="${int.type}"
             columnName="POSITION_DIMENSION_ONE"
@@ -86,5 +86,29 @@
             tableName="catissue_abstract_position"/>
 </changeSet>
 
+	<changeSet author="nitesh" id="11">
+    <modifyDataType 
+            columnName="DROPDOWN_NAME"
+            newDataType="${text.type}(767)"
+            tableName="CATISSUE_BULK_OPERATION"/>
+</changeSet>
+<changeSet author="nitesh" id="12">
+    <modifyDataType 
+            columnName="OPERATION"
+            newDataType="${text.type}(767)"
+            tableName="CATISSUE_BULK_OPERATION"/>
+</changeSet>
+<changeSet author="nitesh" id="13">
+    <modifyDataType 
+            columnName="JOB_NAME"
+            newDataType="${text.type}(767)"
+            tableName="JOB_DETAILS"/>
+</changeSet>
+<changeSet author="nitesh" id="14">
+    <modifyDataType 
+            columnName="LOG_FILE_NAME"
+            newDataType="${text.type}(767)"
+            tableName="JOB_DETAILS"/>
+</changeSet>
 	
 </databaseChangeLog>         
