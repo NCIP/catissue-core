@@ -169,8 +169,7 @@ function onScgSelect()
  var value = this.getSelectedValue();
  scgCombo.DOMelem_input.title=scgCombo.getSelectedText();
  getSpecimenLabelsforSCG(value);
- //alert('v');
- //getCPEForSCG(value);
+ getCPEForSCG(value);
 }
 
 function onEventSelect()
@@ -201,31 +200,37 @@ function onScgClick()
 this.setComboText("");
 
 }
+var droupDownCounter = 0;
 
 function getSCGLabelsForCPE(cpeId)
 {
 	var request = newXMLHTTPReq();
 	var cprId = document.getElementById('cprId').value;
 	     var url = "ParticipantViewAjax.do";//AJAX action class
+		 droupDownCounter = 0;
 	     request.onreadystatechange = getReadyStateHandler(request,populateSCGLabelsCombo,true);//AJAX handler
 	     request.open("POST", url, true);
 	     request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	     var dataToSend = "cpeId=" + cpeId+"&cprId="+cprId+"&method=getSCGLabel";
 	     request.send(dataToSend);
+		 
 }
 function getCPEForSCG(scgId)
 {
 	var request = newXMLHTTPReq();
 	var cprId = document.getElementById('cprId').value;
 	     var url = "ParticipantViewAjax.do";//AJAX action class
+		 droupDownCounter = 0;
 	     request.onreadystatechange = getReadyStateHandler(request,populateCPE,true);//AJAX handler
 	     request.open("POST", url, true);
 	     request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	     var dataToSend = "scgId=" + scgId+"&cprId="+cprId+"&method=getCPELabelsForSCG";
 	     request.send(dataToSend);
+		 
 }
 function populateCPE(response)
 {
+	if(droupDownCounter==0){
 	var cpeId = eval(response);
 	var count;
 	for(i=0;i<eventCombo.optionsArr.length;i++)
@@ -234,13 +239,19 @@ function populateCPE(response)
 		count = i;
 		break;
 	}
+	
+	/*
 	var scgVal = scgCombo.getSelectedText();
 	var scgTxt = scgCombo.getSelectedValue();
-	eventCombo.setComboText(eventCombo.optionsArr[count].text);
-	eventCombo.setComboValue(eventCombo.optionsArr[count].value);
+	eventCombo.setComboText(eventCombo.optionsArr[count].text);*/
+	eventCombo.setComboValue(cpeId);
+	
+		
+		droupDownCounter = 1;
+	}
 	
 	//alert(response);
-	alert(eval(response));
+	
 }
 // Populate specimen label on scg select.
 function getSpecimenLabelsforSCG(id)
@@ -255,17 +266,31 @@ function getSpecimenLabelsforSCG(id)
  }
 function populateSCGLabelsCombo(response)
 {
+	if(droupDownCounter==0){
+		var scgId = eval(response)[0].value;
+		var count = scgCombo.optionsArr.length;
+		if(count==1) //select if only one item pesent
+	   {
+		 scgCombo.selectOption(0);
+	   }
+		scgCombo.setComboValue(scgId);
+		
+
+		
+		
+	
+	
+	/*
+	
 	scgCombo.setComboText("");
         scgCombo.clearAll(); 
 	scgCombo.addOption(eval(response)); 
 	scgCombo.enableFilteringMode(true);
-	var count = scgCombo.optionsArr.length;
-	if(count==1) //select if only one item pesent
-               {
-                 scgCombo.selectOption(0);
-               }
         scgCombo.attachEvent("onOpen",onComboClick);
         scgCombo.attachEvent("onKeyPressed",onComboKeyPress); 
+	*/
+		droupDownCounter = 1;
+	}
 }
 function populateSpecimenLabelsCombo(response)
  {
@@ -331,8 +356,7 @@ function initComboForSCGEvents()
  		        
                 eventCombo = new dhtmlXCombo("eventsList", "addSCGEven1", 240);
                 
-		        eventCombo.attachEvent("onSelectionChange",onEventSelect);
-				eventCombo.attachEvent("onOpen",onComboClick);
+		       eventCombo.attachEvent("onOpen",onComboClick);
 eventCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
 				
@@ -340,8 +364,7 @@ eventCombo.attachEvent("onKeyPressed",onComboKeyPress);
 			   
 			   scgCombo = new dhtmlXCombo("scgList", "addSCGEven2", 240);
                 scgCombo.addOption(scgLabels);    
-		        scgCombo.attachEvent("onSelectionChange",onScgSelect);
-				scgCombo.attachEvent("onOpen",onComboClick);
+		       scgCombo.attachEvent("onOpen",onComboClick);
 scgCombo.attachEvent("onKeyPressed",onComboKeyPress);
                 var count = scgCombo.optionsArr.length;
                 if(count==1) //select if only one item pesent
@@ -355,6 +378,25 @@ scgCombo.attachEvent("onKeyPressed",onComboKeyPress);
                  eventCombo.selectOption(0);
                }
                initComboForSpecimenLabels();
+			    eventCombo.attachEvent("onChange",onEventSelect);
+				 scgCombo.attachEvent("onChange",onScgSelect);
+				/*  scgCombo.attachEvent("onKeyPressed", function(keyCode){alert(keyCode);});  
+				   scgCombo.attachEvent("onOpen", function(){alert(keyCode);});  */
+				   	       eventCombo.attachEvent("onOpen",onComboClick);
+eventCombo.attachEvent("onKeyPressed",onComboKeyPress);
+	       scgCombo.attachEvent("onOpen",onComboClick);
+scgCombo.attachEvent("onKeyPressed",onComboKeyPress);
+				
+				populateParticipantName();
+}
+function populateParticipantName(){
+	var participantName ="";
+	if(summaryLastName!=""){
+		participantName += summaryLastName+",";
+	}
+	participantName += summaryFirstName;
+	document.getElementById("summaryParticipantName").innerHTML = participantName;
+	
 }
 function createNewSpecimens()
 {

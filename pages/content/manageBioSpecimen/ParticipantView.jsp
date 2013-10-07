@@ -37,10 +37,9 @@
 <table width="100%" border="0"  cellpadding="10" cellspacing="0" class="whitetable_bg">	
 	<tr class="tr_bg_blue1 blue_ar_b">
 			<td  class="heading_text_style">
-				<bean:message key="participant.view.profile.summary"/> <bean:write name="participantDto" property="lastName" />,
-				<bean:write name="participantDto" property="firstName" />
+				<bean:message key="participant.view.profile.summary"/> <span id="summaryParticipantName"></span>
 				[<bean:write name="participantDto" property="ppid" />]
-				 
+				&nbsp <a href="#" onClick="showEditPage()">Edit</a>
 			</td>
 	</tr>
 	<tr>
@@ -59,7 +58,7 @@
 			</td>
 			<td class="black_ar" width="20%">
 				<c:if test="${empty participantDto.dob}">
-					<bean:message key="query.tree.label.NA"/>
+					<bean:message key="participant.view.not.specified"/>
 				 </c:if>
 				<fmt:formatDate value="${participantDto.dob}" pattern="${datePattern}" />
 			</td>
@@ -73,7 +72,7 @@
                     <bean:write name="partMrn" property="mrn" /> ( <bean:write name="partMrn" property="siteName" /> )
                  </logic:iterate>  
 				 <c:if test="${empty participantDto.mrns}">
-					<bean:message key="query.tree.label.NA"/>
+					<bean:message key="participant.view.not.specified"/>
 				 </c:if>
 	   </tr>
 	   
@@ -84,7 +83,7 @@
 		 <td class="black_ar bottomtd" width="20%">
 				<fmt:formatDate value="${participantDto.registrationDate}" pattern="${datePattern}" />
 				<c:if test="${empty participantDto.registrationDate}">
-					<bean:message key="query.tree.label.NA"/>
+					<bean:message key="participant.view.not.specified"/>
 				 </c:if>
 		</td>
 		<td  align="right" class="black_ar bottomtd  padding_right_style" width="30%"> 
@@ -101,7 +100,7 @@
 		</td>
 		<td  width="20%" class="black_ar"> <bean:write name="participantDto" property="gender" />
 		<c:if test="${empty participantDto.gender}">
-					<bean:message key="query.tree.label.NA"/>
+					<bean:message key="participant.view.not.specified"/>
 				 </c:if>
 		</td>
 		<td  width="30%" align="right" class="black_ar padding_right_style"><b><bean:message key="participant.race"/></b></td>
@@ -112,11 +111,11 @@
                     <bean:write name="prace" /> 
                  </logic:iterate>   
 				 <c:if test="${empty participantDto.race}">
-					<bean:message key="query.tree.label.NA"/>
+					<bean:message key="participant.view.not.specified"/>
 				 </c:if></td>
 	</tr>
 	
-	<tr class="tr_alternate_color_lightGrey">
+	<!--tr class="tr_alternate_color_lightGrey">
 			<td width="20%" align="right" class="black_ar padding_right_style">
 				<html:button  styleClass="blue_ar_b"	property="editParticipant"	title="Edit Only" value="Edit"  onclick="showEditPage()">
 				</html:button>
@@ -128,7 +127,7 @@
 			</td>
 			<td colspan="2"> 
 			</td>
-	</tr>
+	</tr-->
 	</table>
 </fieldset>
 </div>
@@ -166,7 +165,7 @@
 </tr>
 <tr class="tr_alternate_color_lightGrey">	
 			<td width="20%" class="black_ar padding_right_style"> 
-				<span style="float:left" ><b>OR</b></span>
+				<span style="float:left"  class="blue_ar_b"><b>OR</b></span>
 				<span style="float:right">
 				<b><bean:message key="label.selectSCG"/> </b></span>
 		        </td>
@@ -185,13 +184,13 @@
 </tr>
 			<!--          -->
 		<tr>
-          <td colspan="4" width="100%"><table width="100%" border="0" cellpadding="3" cellspacing="0">
-            <tr>
-				<td class="black_ar" width="55%">
+         
+				<td class="black_ar" width="20%">
 				
 								<span style="margin-left:5px;">
-								<span class="black_ar" style="vertical-align:2px">
+								<span class="black_ar" style="vertical-align:2px;float:right;">
 								<b><bean:message key="label.collectSpecimen"/></b> &nbsp;&nbsp;</span>
+				</td><td  width="35%">
 					 <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true"/>
 								<span class="black_ar" style="vertical-align:2px">
 								<b><bean:message key="label.collect.perCP"/></b>
@@ -206,13 +205,12 @@
 								<input type="text" style="text-align:right;border:0px;" size="1" maxlength="2" id="numberOfSpecimens" name="numberOfSpecimens"  onblur="isNumeric(this)" readOnly="true"/>
 						</span></span>
 						</td>
-				<td style="vertical-align:1px">
+				<td style="vertical-align:1px"  width="35%">
 						<span align="left" style="vertical-align:1px">
 						<html:button  styleClass="blue_ar_b" property="aliquot" title="Aliqut" value=" Go " onclick="createNewSpecimens()">
 				</html:button>
 						</span>
 </td>
-			</tr></table></td>
 			</tr>
 			<!--          -->
 
@@ -246,7 +244,7 @@
 		<td width="25%" >
 			<input type="text" name="noOfAliquots" id="noOfAliquots" size ="5" value="Count"  class="text_box_style" onfocus="inputFocus(this)" onblur="inputBlur(this)"/>
 						
-			<input type="text" name="quantityPerAliquot" id="quantityPerAliquot" size ="5" value="Qty" class="text_box_style" onfocus="inputFocus(this)" onblur="inputBlur(this)"/>
+			<input type="text" name="quantityPerAliquot" id="quantityPerAliquot" size ="5" value="Quantity" class="text_box_style" onfocus="inputFocus(this)" onblur="inputBlur(this)"/>
 		</td>
 		<td width="25%" >
 				<html:button  styleClass="blue_ar_b" property="aliquot" title="Aliqut" value=" Go " onclick="createAliquote()">
@@ -289,6 +287,10 @@
 </body>
 </html>
 <script>
+
+				
+var summaryFirstName = '<bean:write name="participantDto" property="firstName" />';
+var summaryLastName = '<bean:write name="participantDto" property="lastName" />';
 function disableButtonsOnCheck(chkbox)
 {
 	if(chkbox.value == 1)
