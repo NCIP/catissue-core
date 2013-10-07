@@ -39,7 +39,7 @@ public class AliquotHandler
     private static final String ALIQUOTS_DETAILS_DTO = "aliquotDetailsDTO";
     private static final Logger LOGGER = Logger.getCommonLogger(AliquotHandler.class);
 
-    public String getAliquotDetails(SessionDataBean sessionDataBean, String lable, String aliquotJson) throws Exception
+    public String getAliquotDetails(SessionDataBean sessionDataBean, String label, String aliquotJson) throws Exception
     {
         HibernateDAO hibernateDAO = null;
         JSONObject returnJsonObject = new JSONObject();
@@ -52,7 +52,7 @@ public class AliquotHandler
             JSONObject jsonObject = new JSONObject(aliquotJson);
             if (jsonObject.get("validated").toString().equals("false"))
             {
-                specimenDTOList = aliquotBizLogic.getAvailabelSpecimenList(lable, hibernateDAO);
+                specimenDTOList = aliquotBizLogic.getAvailabelSpecimenList(label, hibernateDAO);
                 JSONArray jsonArr = new JSONArray();
                 if (specimenDTOList.size() > 1)
                 {
@@ -101,7 +101,7 @@ public class AliquotHandler
                 List<AliquotContainerDetailsDTO> aliquotContainerDetailsDTOList = new ArrayList<AliquotContainerDetailsDTO>(); 
 //                		storageContainerBizlogic
 //                        .getStorageContainerList(containerInputDetails, null, hibernateDAO, 5);
-                AliquotDetailsDTO aliquotDetailsDTO = aliquotBizLogic.getAliquotDetailsDTO(lable, aliquotCount,
+                AliquotDetailsDTO aliquotDetailsDTO = aliquotBizLogic.getAliquotDetailsDTO(label, aliquotCount,
                         quantityPerAliquot, hibernateDAO, sessionDataBean,aliquotContainerDetailsDTOList);
 
                 
@@ -129,7 +129,7 @@ public class AliquotHandler
                 }
                 returnJsonObject.put("isLabelGenerationOn", isLabelGenerationOn);
                 boolean isBarGenerationOn = false;
-                if ((Variables.isSpecimenBarcodeGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl))
+                if ((Variables.isSpecimenBarcodeGeneratorAvl))
                 {
                     isBarGenerationOn = true;
                 }

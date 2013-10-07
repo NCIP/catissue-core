@@ -258,13 +258,13 @@ public class AliquotBizLogic
         return aliquotContainerDetailsDTO;
     }
 
-    public List<SpecimenDTO> getAvailabelSpecimenList(String specimenLable, HibernateDAO hibernateDao)
+    public List<SpecimenDTO> getAvailabelSpecimenList(String specimenLabel, HibernateDAO hibernateDao)
             throws ApplicationException
     {
         List<SpecimenDTO> specimenDaoList = new ArrayList<SpecimenDTO>();
         Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-        params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLable));
-        params.put("1", new NamedQueryParam(DBTypes.STRING, specimenLable));
+        params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
+        params.put("1", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 
         List specimenDetailColl = hibernateDao.executeNamedQuery("getCollectedSpecimenLabel", params);
         for (int i = 0; i < specimenDetailColl.size(); i++)
