@@ -401,7 +401,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			if (Variables.isSpecimenCollGroupLabelGeneratorAvl)
+			if (Variables.isSpecimenCollGroupLabelGeneratorAvl && Validator.isEmpty(specimenCollectionGroup.getName()))
 			{
 				final LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory
 						.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
