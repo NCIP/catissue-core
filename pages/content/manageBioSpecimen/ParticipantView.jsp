@@ -114,19 +114,22 @@
 					<bean:message key="participant.view.not.specified"/>
 				 </c:if></td>
 	</tr>
-	
+	<tr class="tr_alternate_color_lightGrey">
+		<td  width="30%" align="right" class="black_ar padding_right_style">
+			<b><bean:message key="participant.view.profile.associated.cp"/></b>
+		</td>
+		<td colspan="3"  width="70%"  class="black_ar" > 
+			${cpTitleList}
+		</td>
+	</tr>
 	<!--tr class="tr_alternate_color_lightGrey">
 			<td width="20%" align="right" class="black_ar padding_right_style">
 				<html:button  styleClass="blue_ar_b"	property="editParticipant"	title="Edit Only" value="Edit"  onclick="showEditPage()">
 				</html:button>
 			</td>
 			<td width="20%">
-			<!--	<html:button styleClass="blue_ar_b"	property="deleteParticipant"	title="Delete Only" value="Delete" >
-				</html:button> -->
 				
-			</td>
-			<td colspan="2"> 
-			</td>
+		
 	</tr-->
 	</table>
 </fieldset>

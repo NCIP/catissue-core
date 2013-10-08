@@ -55,6 +55,7 @@ public class ParticipantViewAction  extends CatissueBaseAction
 		       Long registrationId = cprbizlogic.getRegistrationId(hibernateDao,new Long(participantId),
 		    		   new Long(cpId));
 		       request.setAttribute("cprId", registrationId);
+		       request.setAttribute("cpTitleList",cprbizlogic.getCpTitlelistForParticipant(new Long(participantId),hibernateDao));
 		       SpecimenCollectionGroupBizLogic scgBizlogic = new SpecimenCollectionGroupBizLogic();
 		       SCGDAO scgdao= new SCGDAO();
 		       List<NameValueBean> scgLabels = scgdao.getSCGNameList(hibernateDao,registrationId);

@@ -2560,7 +2560,29 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		return containsConsentire;
 	}
-	
+	public String getCpTitlelistForParticipant(Long participantId,HibernateDAO hibernateDAO) throws BizLogicException{
+	    String hql = "select cp.shortTitle from  edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr join cpr.collectionProtocol cp " +
+	    		" where  cpr.participant.id = :pid";
+	    ColumnValueBean columnValueBean=new ColumnValueBean(participantId);
+        columnValueBean.setColumnName("pid");
+        List<ColumnValueBean>  columnValueBeans=new ArrayList();
+        columnValueBeans.add(columnValueBean);
+        String cpNameList = "";
+        try {
+            Iterator<Object> cprs=hibernateDAO.executeParamHQLIterator(hql,columnValueBeans);
+            while(cprs.hasNext()){
+                 cpNameList += cprs.next();
+                if(cprs.hasNext()){
+                    cpNameList += ",";
+                }
+             }
+        }
+        catch (DAOException e) {
+            throw new BizLogicException(e);
+        }
+        return cpNameList;
+	    
+	}
 	public edu.wustl.catissuecore.dto.ParticipantDTO fetchCprDetailForParticipant(Long cpid,Long pid,DAO dao) throws BizLogicException{
 		String hql = "select protocolParticipantIdentifier,registrationDate,barcode,id,activityStatus from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr " +
 				" where cpr.collectionProtocol.id=:cpid and  cpr.participant.id = :pid";

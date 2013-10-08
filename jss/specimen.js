@@ -810,9 +810,15 @@ req.onreadystatechange = function() {
   }
   // Request successful, read the response
   var resp = req.responseText;
+  var updatedSpecimenDTO = eval('('+resp+')')
+			
+  if(operation=="add"){
+	  var action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+updatedSpecimenDTO.id+"&refresh=true";
+	window.parent.frames[1].location=action;
+	return;
+  }
   
 	
-			var updatedSpecimenDTO = eval('('+resp+')')
 			
 				document.getElementById('available').disabled = false;
 				document.getElementById('available').checked = updatedSpecimenDTO.available;

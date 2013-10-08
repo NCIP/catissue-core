@@ -299,7 +299,7 @@ ul li ul li a span {
 						}else{
 							document.getElementById('success').style.display='none'
 							document.getElementById('error').style.display='block';
-							document.getElementById('errorMsg').innerHTML=response.msg;
+							document.getElementById('errorMsg').innerHTML=request.getResponseHeader("errorMsg");
 							
 							document.getElementById('submitButtonId').style.display='block'
 							document.getElementById('successButtonDiv').style.display='none';
@@ -308,7 +308,7 @@ ul li ul li a span {
 					}else if(request.status != 201){
 						document.getElementById('success').style.display='none'
 						document.getElementById('error').style.display='block';
-						document.getElementById('errorMsg').innerHTML=request.responseText;
+						document.getElementById('errorMsg').innerHTML=request.getResponseHeader("errorMsg");
 						
 						document.getElementById('submitButtonId').style.display='block'
 						document.getElementById('successButtonDiv').style.display='none';
@@ -425,7 +425,7 @@ var request = newXMLHTTPReq();
 					document.getElementById("aliquotDetailsDiv").style.display="none";
 					document.getElementById('success').style.display='none';
 					document.getElementById('error').style.display='block';
-					document.getElementById('errorMsg').innerHTML=response.message;
+					document.getElementById('errorMsg').innerHTML=request.getResponseHeader("errorMsg");
 					document.getElementById("aliquotDetailsDiv").style.display="none";
 					if(aliquotGrid.getRowsNum()!=0){
 							deleteAllRow();
@@ -435,7 +435,7 @@ var request = newXMLHTTPReq();
 						document.getElementById("aliquotDetailsDiv").style.display="none";
 					document.getElementById('success').style.display='none';
 					document.getElementById('error').style.display='block';
-					document.getElementById('errorMsg').innerHTML=request.responseText;
+					document.getElementById('errorMsg').innerHTML=request.getResponseHeader("errorMsg");
 					document.getElementById("aliquotDetailsDiv").style.display="none";
 					if(aliquotGrid.getRowsNum()!=0){
 							deleteAllRow();

@@ -459,8 +459,8 @@ function loadSCGTabbar()
 	if("edit" == operation)
 	{
 		scgTabbar.addTab("editSCGtab",'<span style="font-size:13px"> Edit SCG </span>', "150px");
-		scgTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s) </span>', "150px");
-		scgTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+		scgTabbar.addTab("reportsTab",'<span style="font-size:13px"> Report </span>', "150px");
+		scgTabbar.addTab("annotationTab",'<span style="font-size:13px"> Annotations </span>',"150px");
 		if(hasConsents){
 			scgTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
 		}
