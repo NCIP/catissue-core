@@ -2250,8 +2250,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					//this.validateUserForContainer(sessionDataBean, storageContainerObj);
 				}
 				SpecimenPosition specPos = specimen.getSpecimenPosition();
-				if (specPos.getPositionDimensionOne() == null
-						|| specPos.getPositionDimensionTwo() == null)
+				if ((specPos.getPositionDimensionOne() == null || specPos.getPositionDimensionTwo() == null) && 
+						(Validator.isEmpty(specPos.getPositionDimensionOneString()) || Validator.isEmpty(specPos.getPositionDimensionTwoString())))
 				{
 					final Position position = StorageContainerUtil
 							.getFirstAvailablePositionsInContainer(storageContainerObj,
@@ -2265,12 +2265,24 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					//StorageContainerUtil.convertPositionsToIntegerUsingContId(storageContainerObj.getId().toString(), 2,  String.valueOf(position.getYPos()));
 					//StorageContainerUtil.setContainerPositions(storageContainerObj.getId().toString(), String.valueOf(position.getXPos()),String.valueOf(position.getYPos()), specPos);
 				}
-				specPos.setPositionDimensionOneString(StorageContainerUtil
-						.convertSpecimenPositionsToString(storageContainerObj.getName(), 1,
-								specPos.getPositionDimensionOne()));
-				specPos.setPositionDimensionTwoString(StorageContainerUtil
-						.convertSpecimenPositionsToString(storageContainerObj.getName(), 2,
-								specPos.getPositionDimensionTwo()));
+				if(specPos.getPositionDimensionOne() != null && specPos.getPositionDimensionTwo() != null)
+				{
+					specPos.setPositionDimensionOneString(StorageContainerUtil
+							.convertSpecimenPositionsToString(storageContainerObj.getName(), 1,
+									specPos.getPositionDimensionOne()));
+					specPos.setPositionDimensionTwoString(StorageContainerUtil
+							.convertSpecimenPositionsToString(storageContainerObj.getName(), 2,
+									specPos.getPositionDimensionTwo()));
+				}
+				else if(!Validator.isEmpty(specPos.getPositionDimensionOneString()) && !Validator.isEmpty(specPos.getPositionDimensionTwoString()))
+				{
+					specPos.setPositionDimensionOne(StorageContainerUtil
+							.convertSpecimenPositionsToInteger(storageContainerObj.getName(), 1,
+									specPos.getPositionDimensionOneString()));
+					specPos.setPositionDimensionTwo(StorageContainerUtil
+							.convertSpecimenPositionsToInteger(storageContainerObj.getName(), 2,
+									specPos.getPositionDimensionTwoString()));
+				}
 				specPos.setSpecimen(specimen);
 				specPos.setStorageContainer(storageContainerObj);
 				specimen.setSpecimenPosition(specPos);
@@ -2300,7 +2312,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				else
 				{
 					throw AppUtility.getApplicationException(null,
-							"errors.storageContainer.Multiple.inUse", "StorageContainerUtil.java");
+							"errors.storageContainer.inUse", "StorageContainerUtil.java");
 				}
 				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
