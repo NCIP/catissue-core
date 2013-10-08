@@ -965,7 +965,7 @@ public final class StorageContainerUtil
 				else
 				{
 					throw AppUtility.getApplicationException(null,
-							"errors.storageContainer.Multiple.inUse", "StorageContainerUtil.java");
+							"errors.storageContainer.inUse", "StorageContainerUtil.java");
 				}
 			}
 

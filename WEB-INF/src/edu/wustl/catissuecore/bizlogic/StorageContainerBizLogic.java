@@ -1418,7 +1418,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			{
 
 				throw this.getBizLogicException(null,
-						"errors.storageContainer.Multiple.inUse", "");
+						"errors.storageContainer.inUse", "");
 			}
 			else
 			{
