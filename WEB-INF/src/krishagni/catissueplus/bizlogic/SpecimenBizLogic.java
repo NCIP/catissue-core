@@ -64,6 +64,7 @@ public class SpecimenBizLogic
 {
 
 	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenBizLogic.class);
+	private HashSet<String> allocatedPositions = new HashSet<String>();
 
 	/**
 	 * This will update the specimen object in the database
@@ -531,7 +532,7 @@ public class SpecimenBizLogic
 		   
 		    throw this.getBizLogicException(null, "specimen.parent.label.required","");
 		}
-		if(!Variables.isSpecimenLabelGeneratorAvl && Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()) && Validator.isEmpty(specimen.getLabel()))
+		if(Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()) && Validator.isEmpty(specimen.getLabel()))
 		{
 			LOGGER.error("Specimen label cannot be empty.");
 			throw new CatissueException(SpecimenErrorCodeEnum.LABEL_REQUIRED.getCode());
@@ -713,6 +714,7 @@ public class SpecimenBizLogic
 			generateBarCode(specimen);
 			validateSpecimen(specimen, hibernateDao, null);
 			hibernateDao.insert(specimen);
+			
 		}
 		catch (ApplicationException e)
 		{
@@ -882,7 +884,27 @@ public class SpecimenBizLogic
 			StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
 			 specimenPosition = storageContainerBizlogic.getPositionIfAvailableFromContainer(
 					 specimenDTO.getContainerName(), specimenDTO.getPos1(),
-					 specimenDTO.getPos2(), hibernateDao);
+					 specimenDTO.getPos2(), hibernateDao,allocatedPositions);
+			 String storageValue = "";
+			 if (specimenDTO.getContainerName() != null)
+				{
+					storageValue = storageContainerBizlogic.getStorageValueKey(specimenDTO.getContainerName(), null,
+							specimenPosition.getPositionDimensionOneString(), specimenPosition.getPositionDimensionTwoString(),hibernateDao);
+				}
+				else
+				{
+					storageValue = storageContainerBizlogic.getStorageValueKey(null,specimenDTO.getContainerId().toString(),
+							specimenPosition.getPositionDimensionOneString(), specimenPosition.getPositionDimensionTwoString(),hibernateDao);
+				}
+				if (!this.allocatedPositions.contains(storageValue))
+				{
+					this.allocatedPositions.add(storageValue);
+				}
+				else
+				{
+					throw AppUtility.getApplicationException(null,
+							"errors.storageContainer.inUse", "StorageContainerUtil.java");
+				}
 //           singleAliquotDetailsDTO.setPos1(specimenPosition.getPositionDimensionOneString());
 //           singleAliquotDetailsDTO.setPos2(specimenPosition.getPositionDimensionTwoString());
 //			specimenPosition.setPositionDimensionOneString((specimenDTO.getPos1()));

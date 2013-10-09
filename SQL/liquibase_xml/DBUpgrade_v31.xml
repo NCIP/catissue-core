@@ -110,5 +110,8 @@
             newDataType="${text.type}(767)"
             tableName="JOB_DETAILS"/>
 </changeSet>
-	
+<changeSet id="15" author="nitesh" runOnChange="true" failOnError="false">
+        <addUniqueConstraint constraintName="CATISSUE_CP_PART_UNIQUE_KEY"
+            tableName="CATISSUE_COLL_PROT_REG" columnNames="PARTICIPANT_ID,COLLECTION_PROTOCOL_ID,ACTIVITY_STATUS" />
+    </changeSet>	
 </databaseChangeLog>         

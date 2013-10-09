@@ -418,6 +418,12 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 <query name="getAssignedSpecimenCount">
 	select count(*) from SpecimenPosition specPos where specPos.storageContainer.id=?
 </query>
+<query name="getChildContainerCount">
+    select count(*) from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id=?
+</query>
+<query name="getContainerCapacityCount">
+    select cont.capacity.oneDimensionCapacity*cont.capacity.twoDimensionCapacity from StorageContainer cont where cont.id = ?
+</query>
 <query name="getStorageTypeCapacityFromContainerId">
 	select st.capacity from StorageContainer cont, StorageType st where size(st.holdsSpecimenClassCollection)>0 and size(st.holdsSpecimenTypeCollection)>0 and cont.storageType.id=st.id and cont.id=?
 </query>

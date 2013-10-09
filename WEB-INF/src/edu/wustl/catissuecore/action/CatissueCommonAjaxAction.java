@@ -46,8 +46,10 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SummaryBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.ConsentResponseDto;
 import edu.wustl.catissuecore.dto.ConsentTierDTO;
@@ -388,14 +390,22 @@ public class CatissueCommonAjaxAction extends DispatchAction
 					Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 					substParams.put("0", new NamedQueryParam(DBTypes.STRING, selectedContName));
 
-					final List list = ((HibernateDAO) dao).executeNamedQuery(
+					final List<Long> list = ((HibernateDAO) dao).executeNamedQuery(
 							"getStorageContainerIdByContainerName", substParams);
 
 					if (!list.isEmpty())
 					{
 						selectedContId = list.get(0).toString();
-						responseString.append(this.addRowToResponseXMLForDHTMLXcombo(
+						if(isContEmpty(list.get(0),(HibernateDAO)dao))
+						{
+							responseString.append(this.addRowToResponseXMLForDHTMLXcombo(
 								selectedContId, selectedContName, populateValueInCombo, true));
+						}
+						else
+						{
+							responseString.append(this.addRowToResponseXMLForDHTMLXcombo(
+									"", selectedContName, populateValueInCombo, true));
+						}
 					}
 
 				}
@@ -413,6 +423,34 @@ public class CatissueCommonAjaxAction extends DispatchAction
 			AppUtility.closeDAOSession(dao);
 		}
 		return null;
+	}
+
+	private boolean isContEmpty(Long containerId, HibernateDAO dao) throws DAOException 
+	{
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
+        //get child storage container ids
+        List<Integer> childContainerList = dao.executeNamedQuery("getChildContainerCount", params);
+        
+        params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
+
+        //get count of specimens stored in the container
+        List<Integer> allocatedList = dao.executeNamedQuery("getAssignedSpecimenCount", params);
+
+        params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
+
+        //get capacity of storage type which can hold specimens from container id
+        params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
+        List<Integer> containerList = dao.executeNamedQuery("getContainerCapacityCount", params);
+
+        Integer contCapacity = containerList.get(0);
+        
+        Integer childContCnt = childContainerList.get(0);
+        Integer specimenCnt = allocatedList.get(0);
+        return contCapacity > childContCnt + specimenCnt;
 	}
 
 	public ActionForward getStorageContainerListForRequestShipment(ActionMapping mapping,

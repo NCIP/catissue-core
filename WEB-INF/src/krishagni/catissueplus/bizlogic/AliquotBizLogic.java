@@ -253,7 +253,7 @@ public class AliquotBizLogic
 //        }
 //        aliquotContainerDetailsDTO = aliquotContainerDetailsDTOList.get(0);
         storageContainerBizlogic.setAvailablePositionsForContainer(aliquotContainerDetailsDTO, "", "",
-        		aliquotCount, hibernateDao);
+        		aliquotCount, hibernateDao,null);
 
         return aliquotContainerDetailsDTO;
     }
