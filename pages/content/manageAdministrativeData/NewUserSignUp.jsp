@@ -138,7 +138,7 @@ function disableIdpDetails(disableStatus)
 								</select></div>
 								<script>
 									  //common init code
-									  dhtmlx.skin ='dhx_skyblue';
+									 // dhtmlx.skin ='dhx_skyblue';
 									  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 									  target_combo = new dhtmlXCombo("target_combo","target_combo","100px");
 									  target_combo.enableFilteringMode(true);
@@ -232,7 +232,7 @@ function disableIdpDetails(disableStatus)
 						</div>
 						<script>
 							  //common init code
-							  dhtmlx.skin ='dhx_skyblue';
+							  //dhtmlx.skin ='dhx_skyblue';
 							  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 							  var state_combo = new dhtmlXCombo("state_combo","state_combo","100px");
 							  state_combo.enableFilteringMode(true);
@@ -257,7 +257,7 @@ function disableIdpDetails(disableStatus)
 							
 							  <script>
 							  //common init code
-							  dhtmlx.skin ='dhx_skyblue';
+							  //dhtmlx.skin ='dhx_skyblue';
 							  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 							  var country_combo = new dhtmlXCombo("country_combo","country_combo","100px");
 							  country_combo.enableFilteringMode(true);
