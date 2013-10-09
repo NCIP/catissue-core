@@ -13,9 +13,11 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -68,6 +70,8 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
 
@@ -2620,20 +2624,16 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 * @throws ApplicationException
 	 * @throws DAOException
 	 */
-	public Long getRegistrationId(final DAO dao,
-			Long cpId,Long participantId) throws ApplicationException, DAOException {
-		final String hql1 = "select cpr.id "
-				+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
-				+ "cpr.collectionProtocol.id= ? and cpr.participant.id= ?";
-		List<Object> list = null;
-		ColumnValueBean columnValueBean1=new ColumnValueBean(participantId);
-		ColumnValueBean columnValueBean2=new ColumnValueBean(cpId);
-	      List<ColumnValueBean>  columnValueBeans=new ArrayList();
-	      columnValueBeans.add(columnValueBean1);
-	      columnValueBeans.add(columnValueBean2);
-		list = dao.executeQuery(hql1, columnValueBeans);
-		//((HibernateDAO)dao).executeNamedQuery("", arg1)
-		return (Long)list.get(0);
+	public Long getRegistrationId(HibernateDAO hibernateDAO,
+			Long participantId,Long cpId) throws ApplicationException {
+//		String hql = "select cpr.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id= "+cpId
+//				+" and cpr.participant.id= "+participantId;
+//		List list = null;//hibernateDAO.executeQuery(hql);
+	       Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+	       params.put("0", new NamedQueryParam(DBTypes.LONG, cpId));
+	       params.put("1", new NamedQueryParam(DBTypes.LONG, participantId));
+	       List  list = hibernateDAO.executeNamedQuery("fetchCPRIdFromCPID", params);
+	       return (Long)list.get(0);
 	}
 
 }

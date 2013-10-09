@@ -163,6 +163,6 @@
         -->
 
     </class>
-
+<query name="fetchCPRIdFromCPID">select cpr.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id= ? and cpr.participant.id= ?</query>
 </hibernate-mapping>
 
