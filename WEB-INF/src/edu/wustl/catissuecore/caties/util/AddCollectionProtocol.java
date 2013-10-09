@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.caties.util;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -93,8 +94,7 @@ public class AddCollectionProtocol
 		collectionProtocol.setShortTitle(CaTIESProperties
 				.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 
-		collectionProtocol.setStartDate(CommonUtilities.parseDate("08/15/2003", CommonUtilities
-				.datePattern("08/15/1975")));
+		collectionProtocol.setStartDate(new Date());
 
 		final Collection collectionProtocolEventList = new LinkedHashSet();
 		final CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
