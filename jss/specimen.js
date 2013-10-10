@@ -416,7 +416,7 @@ function onSpecimenTypeChange(selectedElement)
 }
 
 
-function forwardToChildSpecimen() {
+function forwardToChildSpecimen(operation) {
 
     var radios = document.getElementsByName("specimenChild");
 	var checkedRadio;
@@ -459,8 +459,13 @@ function forwardToChildSpecimen() {
 		
 		case '4' :	action = 'AnticipatorySpecimenView.do?scgId='+scgId+'&specimenId='+specimenId; break;
 		
-		default :	action = "none";
+		default :	if(operation=="add"){
+						action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+specimenId+"&refresh=true";
+					}else{
+						action = "none";
+					}
 	}
+	
 	
 	if(action!="none")
 	{
@@ -811,12 +816,7 @@ req.onreadystatechange = function() {
   // Request successful, read the response
   var resp = req.responseText;
   var updatedSpecimenDTO = eval('('+resp+')')
-			
-  if(operation=="add"){
-	  var action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+updatedSpecimenDTO.id+"&refresh=true";
-	window.parent.frames[1].location=action;
-	return;
-  }
+	
   
 	
 			
@@ -848,7 +848,7 @@ req.onreadystatechange = function() {
 				document.getElementById('print-success').style.display='none';
 				document.getElementById('error').style.display='none';
 				document.getElementById('success').style.display='block';
-				forwardToChildSpecimen();
+				forwardToChildSpecimen(operation);
 			
 			if(printFlag)
 			{
