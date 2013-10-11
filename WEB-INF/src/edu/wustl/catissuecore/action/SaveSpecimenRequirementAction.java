@@ -647,7 +647,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 						.get(element);
 				deriveMap.put(element, deriveSpecimenMap.get(element));
 
-				if(oldDeriveSpecimenMap.get(element)!=null)
+				if(oldDeriveSpecimenMap!=null && oldDeriveSpecimenMap.get(element)!=null)
 				{	
 					final SpecimenRequirementBean oldBean = (SpecimenRequirementBean) oldDeriveSpecimenMap
 							.get(element);
