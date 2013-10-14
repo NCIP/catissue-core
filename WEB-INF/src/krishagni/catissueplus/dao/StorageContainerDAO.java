@@ -164,7 +164,6 @@ public class StorageContainerDAO
     	Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
         params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
 
-        String hql = "select cp.id from StorageContainer as con left outer join  con.collectionProtocolCollection as cp where con.id = "+containerId;
         List cpIds = hibernateDAO.executeNamedQuery("getCPIdsbyContainerID", params);
         if(cpIds == null || cpIds.isEmpty() || cpIds.contains(null) || cpIds.contains(cpId))
         {
