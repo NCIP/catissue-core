@@ -2,7 +2,9 @@ Hello $creator
 <br>
 <br>
 $siteadmin has accepted the shipment on $date which you have requested. Shipment details is as below.
+<br>
 Sender Site	 $senderSiteName	 	 	
+<br>
 Receiver Site $requestSiteName
 <br>
 <br>

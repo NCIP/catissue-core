@@ -652,9 +652,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	protected String[] getEmailAddressesForMailNotification(BaseShipment baseShipment)
 	{
 		final ShipmentRequest shipmentRequest = (ShipmentRequest) baseShipment;
-		final String[] toUser = new String[2];
+		final String[] toUser = new String[1];
 		toUser[0] = shipmentRequest.getSenderContactPerson().getEmailAddress();
-		toUser[1] = shipmentRequest.getReceiverSite().getEmailAddress();
 		return toUser;
 	}
 

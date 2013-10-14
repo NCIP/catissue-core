@@ -1088,20 +1088,20 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	{
 		final String[] toUser = this
 				.getEmailAddressesForMailNotification(baseShipment);
+		final String[] ccUsers={baseShipment
+				.getReceiverContactPerson().getEmailAddress()}; 
 		//Add mailing functionality
 		final EmailHandler emailHandler = new EmailHandler();
 		emailHandler.reuestShipmentEmail(baseShipment
 				.getReceiverContactPerson().getLastName()
 				+ ","
 				+ baseShipment.getReceiverContactPerson()
-						.getFirstName(), toUser, null,
-				XMLPropertyHandler
-						.getValue("email.administrative.emailAddress"),
+						.getFirstName(), toUser, ccUsers,null,
 						baseShipment.getLabel(), baseShipment
 						.getSenderContactPerson().getLastName()
 						+ ","
 						+ baseShipment.getSenderContactPerson()
-								.getFirstName(),baseShipment.getReceiverSite().getName());
+								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getId());
 	}
 
 	protected void sendShipmentAcceptedNotification(BaseShipment baseShipment)
@@ -1109,14 +1109,16 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		final String[] toUser = this
 				.getEmailAddressesForMailNotification(baseShipment);
 		//Add mailing functionality
+		final String[] ccUsers={baseShipment
+				.getReceiverContactPerson().getEmailAddress()}; 
+		
 		final EmailHandler emailHandler = new EmailHandler();
 		emailHandler.acceptShipmentCreatedEmail(baseShipment
 				.getReceiverContactPerson().getLastName()
 				+ ","
 				+ baseShipment.getReceiverContactPerson()
-						.getFirstName(), toUser, null,
-				XMLPropertyHandler
-						.getValue("email.administrative.emailAddress"),
+						.getFirstName(), toUser, ccUsers,
+						null,
 						baseShipment.getLabel(), baseShipment
 						.getSenderContactPerson().getLastName()
 						+ ","
@@ -1128,20 +1130,23 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	{
 		final String[] toUser = this
 				.getEmailAddressesForMailNotification(baseShipment);
+		
+		String[] ccUsers={baseShipment.getSenderContactPerson().getEmailAddress()};
 		//Add mailing functionality
+		
 		final EmailHandler emailHandler = new EmailHandler();
-		emailHandler.createShipmentEmail(baseShipment
-				.getReceiverContactPerson().getLastName()
+		emailHandler.createShipmentEmail(baseShipment.getSenderContactPerson()
+				.getLastName()
 				+ ","
-				+ baseShipment.getReceiverContactPerson()
-						.getFirstName(), toUser, null,
-				XMLPropertyHandler
-						.getValue("email.administrative.emailAddress"),
-						baseShipment.getLabel(), baseShipment
-						.getSenderContactPerson().getLastName()
+				+ baseShipment.getSenderContactPerson().getFirstName(), toUser,
+				ccUsers, baseShipment.getSenderContactPerson().getEmailAddress(),
+				baseShipment.getLabel(), baseShipment.getReceiverSite()
+						.getCoordinator().getLastName()
 						+ ","
-						+ baseShipment.getSenderContactPerson()
-								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getSenderSite().getName(),baseShipment.getCreatedDate());
+						+ baseShipment.getReceiverSite().getCoordinator()
+								.getFirstName(), baseShipment.getReceiverSite()
+						.getName(), baseShipment.getSenderSite().getName(),
+				baseShipment.getCreatedDate(),baseShipment.getId());
 	}
 	/**
 	 * Get email addresses to send mail notification.
