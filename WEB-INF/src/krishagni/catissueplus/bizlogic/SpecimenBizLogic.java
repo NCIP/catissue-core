@@ -16,6 +16,7 @@ import krishagni.catissueplus.Exception.CatissueException;
 import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.dao.SCGDAO;
 import krishagni.catissueplus.dao.SpecimenDAO;
+import krishagni.catissueplus.dao.StorageContainerDAO;
 import krishagni.catissueplus.dto.BiohazardDTO;
 import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
@@ -101,12 +102,15 @@ public class SpecimenBizLogic
 		{
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
-		catch (Exception e)
-		{
+		} catch (ParseException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new CatissueException(SpecimenErrorCodeEnum.INTERNAL_SERVER_ERROR.getCode());
 		}
+//		catch (Exception e)
+//		{
+//			LOGGER.error(e.getMessage(), e);
+//			throw new CatissueException(SpecimenErrorCodeEnum.INTERNAL_SERVER_ERROR.getCode());
+//		}
 		return this.getSpecimenDTOFromSpecimen(oldSpecimenObj);
 	}
 
@@ -512,7 +516,7 @@ public class SpecimenBizLogic
 			final String quantityString = ApplicationProperties.getValue("specimen.availableQuantity");
 			throw this.getBizLogicException(null, "errors.availablequantity", quantityString);
 		}
-		if (specimen.getSpecimenPosition() != null)
+		if (specimen.getSpecimenPosition() != null && validateContainerRestrictions(hibernateDao,specimen))
 		{
 			StorageContainerBizlogic containerForSpecimenBizLogic = new StorageContainerBizlogic();
 			SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
@@ -540,6 +544,16 @@ public class SpecimenBizLogic
 //		checkDuplicateSpecimenFields(specimen, hibernateDao);
 	}
 	
+	private boolean validateContainerRestrictions(HibernateDAO hibernateDao,Specimen specimen) throws BizLogicException 
+	{
+		StorageContainerDAO containerDAO = new StorageContainerDAO();
+		if(!containerDAO.isContainerCanHoldSpecimen(hibernateDao, specimen.getClassName(), specimen.getSpecimenType(), specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId(), specimen.getSpecimenPosition().getStorageContainer().getId()))
+		{
+			throw new CatissueException(SpecimenErrorCodeEnum.INVALID_CONTAINER.getCode());
+		}
+		return false;
+	}
+
 	/**
 	 * Checks for duplicate specimenLabel and specimenBarcode fields.
 	 * @param specimen Specimen
@@ -851,9 +865,9 @@ public class SpecimenBizLogic
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 			setSpecimenEvents(specimen, sessionDataBean);
-			SpecimenCollectionGroup collectionGroup = new SpecimenCollectionGroup();
-			collectionGroup.setId(parentSpecimen.getSpecimenCollectionGroup().getId());
-			specimen.setSpecimenCollectionGroup(collectionGroup);
+//			SpecimenCollectionGroup collectionGroup = new SpecimenCollectionGroup();
+//			collectionGroup.setId(parentSpecimen.getSpecimenCollectionGroup().getId());
+//			specimen.setSpecimenCollectionGroup(collectionGroup);
 		}
 		else
 		{

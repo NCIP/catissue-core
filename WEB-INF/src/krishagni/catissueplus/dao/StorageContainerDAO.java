@@ -1,16 +1,17 @@
 
 package krishagni.catissueplus.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
+import krishagni.catissueplus.bizlogic.SpecimenBizLogic;
+
 import edu.wustl.catissuecore.domain.Capacity;
+import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.DBTypes;
@@ -19,6 +20,7 @@ import edu.wustl.dao.util.NamedQueryParam;
 public class StorageContainerDAO
 {
 
+	private static final Logger LOGGER = Logger.getCommonLogger(StorageContainerDAO.class);
     /**
      * Returns list of child container id.
      * @param containerId
@@ -135,5 +137,40 @@ public class StorageContainerDAO
         List<Long> parentContList = hibernateDAO.executeNamedQuery("getIdOfParentStorageContainersBySiteName", params);
 
         return parentContList;
+    }
+    
+    public Boolean isContainerCanHoldSpecimen(HibernateDAO hibernateDAO, String specimenClass, String specimenType, Long cpId, Long containerId) throws BizLogicException
+    {
+    	String sqlForClassType="select cont.identifier from catissue_storage_container cont,catissue_stor_cont_spec_class contc," +
+    			" catissue_stor_cont_spec_type contt where cont.identifier="+containerId+" and contc.STORAGE_CONTAINER_ID=cont.identifier and " +
+    			"contt.STORAGE_CONTAINER_ID=cont.identifier and contc.SPECIMEN_CLASS like '"+specimenClass+"' and contt.SPECIMEN_TYPE like '"+specimenType+"'";
+    	try {
+			List result = AppUtility.executeSQLQuery(sqlForClassType);
+			if(result != null && result.size() >= 1 && isContainerCanHoldCp(hibernateDAO, cpId, containerId))
+			{
+				return Boolean.TRUE;
+			}
+		} catch (ApplicationException e) 
+		{
+			LOGGER.error(e);
+			throw new BizLogicException(null, e, "Error while DB operations.");
+		}
+    	
+    	return Boolean.FALSE;
+    }
+
+    public Boolean isContainerCanHoldCp(HibernateDAO hibernateDAO, Long cpId,Long containerId) throws DAOException
+    {
+    	Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, containerId));
+
+        String hql = "select cp.id from StorageContainer as con left outer join  con.collectionProtocolCollection as cp where con.id = "+containerId;
+        List cpIds = hibernateDAO.executeNamedQuery("getCPIdsbyContainerID", params);
+        if(cpIds == null || cpIds.isEmpty() || cpIds.contains(null) || cpIds.contains(cpId))
+        {
+        	return Boolean.TRUE;
+        }
+        	
+        return Boolean.FALSE;
     }
 }

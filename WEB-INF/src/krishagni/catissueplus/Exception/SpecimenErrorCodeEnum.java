@@ -23,6 +23,7 @@ public enum SpecimenErrorCodeEnum
     INVALID_STORAGE_POSITION(1016,"Please enter valid storage position."),
     DUPLICATE_LABEL_BARCODE(1017, "Label/Barcode already exists."),
     LABEL_REQUIRED(1018, "Label cannot be empty."),
+    INVALID_CONTAINER(1019,"This Storage Container cannot hold this Specimen."),
 
 	POSITION_ALREADY_OCCUPIED(1040,"Storage position is already occupied by other specimen."),
 	INVALID_USER(1041,"Please provide valid user information"),

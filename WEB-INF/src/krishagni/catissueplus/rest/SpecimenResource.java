@@ -251,7 +251,9 @@ public class SpecimenResource
             case 1009 :
             case 1010 :
             case 1012 :
+            case 1029 :
             case 1040 :
+            case 1050 :
                 httpCode = Status.BAD_REQUEST.getStatusCode();
                 break;
             default :
