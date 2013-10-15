@@ -13,6 +13,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.LazyInitializationException;
 import org.json.JSONException;
@@ -4257,9 +4259,26 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	
 	public void updateSCG(SpecimenCollectionGroup collectionGroup, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		
+			SpecimenCollectionGroup oldObj = new SpecimenCollectionGroup();
+			try {
+				oldObj = (SpecimenCollectionGroup)BeanUtils.cloneBean(collectionGroup);
+			} catch (IllegalAccessException e) {
+				LOGGER.error(e);
+			} catch (InstantiationException e) {
+				LOGGER.error(e);
+			} catch (InvocationTargetException e) {
+				LOGGER.error(e);
+			} catch (NoSuchMethodException e) {
+				LOGGER.error(e);
+			}
+//			DAO newDao = AppUtility.openDAOSession(sessionDataBean);
+//			oldObj = (SpecimenCollectionGroup)newDao.retrieveById(SpecimenCollectionGroup.class.getName(), collectionGroup.getId());
+//			AppUtility.closeDAOSession(newDao);
+		
 		if(isAuthorized(dao, collectionGroup, sessionDataBean))
 		{
-			update(dao, collectionGroup, collectionGroup, sessionDataBean);
+			update(dao, collectionGroup, oldObj, sessionDataBean);
 		}
 	}
 	

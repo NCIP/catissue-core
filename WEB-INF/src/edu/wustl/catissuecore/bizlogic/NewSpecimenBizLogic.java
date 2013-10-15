@@ -605,27 +605,65 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Sets the default events to specimen.
+	 * @param dao 
 	 *
 	 * @param specimen Set default events to specimens
 	 * @param sessionDataBean Session data bean This method sets the default events to
 	 * specimens if they are null
+	 * @throws BizLogicException 
 	 */
-	private void setDefaultEventsToSpecimen(Specimen specimen, SessionDataBean sessionDataBean)
+	private void setDefaultEventsToSpecimen(DAO dao, Specimen specimen, SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		final Collection<SpecimenEventParameters> specimenEventColl = new HashSet<SpecimenEventParameters>();
-		final User user = new User();
-		user.setId(sessionDataBean.getUserId());
-		final CollectionEventParameters collectionEventParameters = EventsUtil
-				.populateCollectionEventParameters(user);
-		collectionEventParameters.setSpecimen(specimen);
-		specimenEventColl.add(collectionEventParameters);
-
-		final ReceivedEventParameters receivedEventParameters = EventsUtil
-				.populateReceivedEventParameters(user);
-		receivedEventParameters.setSpecimen(specimen);
-		specimenEventColl.add(receivedEventParameters);
-
-		specimen.setSpecimenEventCollection(specimenEventColl);
+		Long scgId = specimen.getSpecimenCollectionGroup().getId();
+		try {
+			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+			params.put("0",	new NamedQueryParam(DBTypes.LONG, scgId));
+			List eventList  = ((HibernateDAO)dao).executeNamedQuery("getSpecimenEventCollFromSCGID", params);
+			final User user = new User();
+			user.setId(sessionDataBean.getUserId());
+			final Collection<SpecimenEventParameters> specimenEventColl = new HashSet<SpecimenEventParameters>();
+			if(eventList != null && !eventList.isEmpty())
+			{
+				for (Object object : eventList) 
+				{
+					if(object instanceof CollectionEventParameters)
+					{
+						CollectionEventParameters collectionEventParameters = (CollectionEventParameters)object;
+						CollectionEventParameters newCollectionEventParameters = EventsUtil
+								.populateCollectionEventParameters(user);
+						if(!collectionEventParameters.getCollectionProcedure().equals(Constants.CP_DEFAULT))
+						{
+							newCollectionEventParameters.setCollectionProcedure(collectionEventParameters.getCollectionProcedure());
+						}
+						if(!collectionEventParameters.getContainer().equals(Constants.CP_DEFAULT))
+						{
+							newCollectionEventParameters.setContainer(collectionEventParameters.getContainer());
+						}
+						newCollectionEventParameters.setComment(collectionEventParameters.getComment());
+						newCollectionEventParameters.setSpecimen(specimen);
+						specimenEventColl.add(newCollectionEventParameters);
+					}
+					if(object instanceof ReceivedEventParameters)
+					{
+						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)object;
+						ReceivedEventParameters newReceivedEventParameters = EventsUtil
+								.populateReceivedEventParameters(user);
+						if(!receivedEventParameters.getReceivedQuality().equals(Constants.CP_DEFAULT))
+						{
+							newReceivedEventParameters.setReceivedQuality(receivedEventParameters.getReceivedQuality());
+						}
+						newReceivedEventParameters.setComment(receivedEventParameters.getComment());
+						newReceivedEventParameters.setSpecimen(specimen);
+						newReceivedEventParameters.setUser(receivedEventParameters.getUser());
+						specimenEventColl.add(newReceivedEventParameters);
+					}
+				}
+			}
+			specimen.setSpecimenEventCollection(specimenEventColl);
+		} catch (DAOException e) {
+			LOGGER.error(e);
+			throw new BizLogicException(e);
+		}
 	}
 
 	/**
@@ -770,11 +808,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Sets the specimen events.
+	 * @param dao 
 	 *
 	 * @param specimen : specimen
 	 * @param sessionDataBean  : sessionDataBean
+	 * @throws BizLogicException 
 	 */
-	private void setSpecimenEvents(Specimen specimen, SessionDataBean sessionDataBean)
+	private void setSpecimenEvents(DAO dao, Specimen specimen, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		if (specimen.getCollectionStatus() != null
 				&& Constants.COLLECTION_STATUS_PENDING.equals(specimen.getCollectionStatus()))
@@ -791,7 +831,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if (sessionDataBean != null
 						&& (specimenEventColl == null || specimenEventColl.isEmpty()))
 				{
-					this.setDefaultEventsToSpecimen(specimen, sessionDataBean);
+					this.setDefaultEventsToSpecimen(dao,specimen, sessionDataBean);
 				}
 			}
 			else
@@ -2085,7 +2125,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException, SMException
 	{
 		this.setSpecimenEventParameterUserIdentifier(specimen, dao);
-		this.setSpecimenEvents(specimen, sessionDataBean);
+		this.setSpecimenEvents(dao,specimen, sessionDataBean);
 		this.setDefaultExternalIdentifiers(specimen);
 		if (specimen.getLineage() == null)
 		{

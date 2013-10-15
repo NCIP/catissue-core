@@ -255,11 +255,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
-//		final String nullString = null; //for PMD error.
-//		if (Constants.DOUBLE_QUOTES.equals(barcode))
-//		{
-//			this.barcode = nullString;
-//		}
+		final String nullString = null; //for PMD error.
+		if (Constants.DOUBLE_QUOTES.equals(barcode))
+		{
+			this.barcode = nullString;
+		}
 	}
 
 	/**
@@ -1462,9 +1462,17 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					{
 						collectionEventParameters.setCollectionProcedure(collProcedure);
 					}
+					else if(Constants.CP_DEFAULT.equals(collectionEventParameters.getCollectionProcedure()))
+					{
+						collectionEventParameters.setCollectionProcedure(Constants.NOT_SPECIFIED);
+					}
 					if (!Constants.CP_DEFAULT.equals(collContainer))
 					{
 						collectionEventParameters.setContainer(collContainer);
+					}
+					else if(Constants.CP_DEFAULT.equals(collectionEventParameters.getContainer()))
+					{
+						collectionEventParameters.setContainer(Constants.NOT_SPECIFIED);
 					}
 					specimenEventCollection.add(collectionEventParameters);
 				}
@@ -1482,6 +1490,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					if (!Constants.CP_DEFAULT.equals(recQty))
 					{
 						receivedEventParameters.setReceivedQuality(recQty);
+					}
+					else if(Constants.CP_DEFAULT.equals(receivedEventParameters.getReceivedQuality()))
+					{
+						receivedEventParameters.setReceivedQuality(Constants.NOT_SPECIFIED);
 					}
 					specimenEventCollection.add(receivedEventParameters);
 				}

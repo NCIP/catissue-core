@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.util;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.EmailClient;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -275,7 +277,8 @@ public class EmailHandler
     	contextMap.put("creator", creatorName);
     	contextMap.put("name", shipmentName);
     	contextMap.put("siteadmin", siteAdmin);
-    	contextMap.put("date", new Date().toString());
+    	contextMap.put("date", Utility.parseDateToString(Calendar.getInstance()
+				.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
     	contextMap.put("siteName", siteName);
     	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
     	contextMap.put("id", id);
@@ -302,7 +305,8 @@ public class EmailHandler
     	contextMap.put("siteadmin", siteAdmin);
     	contextMap.put("requestSiteName", requestSiteName);
     	contextMap.put("senderSiteName", senderSiteName);
-    	contextMap.put("date", new Date().toString());
+    	contextMap.put("date", Utility.parseDateToString(Calendar.getInstance()
+				.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
     	
 		boolean emailStatus = EmailClient.getInstance().sendEmail(
 				 Constants.SHIPMENT_ACCEPTED,
@@ -325,7 +329,7 @@ public class EmailHandler
     	contextMap.put("creator", creatorName);
     	contextMap.put("name", shipmentName);
     	contextMap.put("siteadmin", siteAdmin);
-    	contextMap.put("date", createdDate.toString());
+    	contextMap.put("date", Utility.parseDateToString(createdDate, CommonServiceLocator.getInstance().getDatePattern()));
     	contextMap.put("requestSiteName", requestSiteName);
     	contextMap.put("senderSiteName", senderSiteName);
     	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
