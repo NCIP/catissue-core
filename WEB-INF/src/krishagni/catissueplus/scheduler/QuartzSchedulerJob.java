@@ -26,11 +26,6 @@ public class QuartzSchedulerJob implements Job
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException
     {
-
-        logger.info("Starting execution of TitliIndexerJob");
-        TitliIndexer.main(null);//run titli indexer
-        logger.info("End of execution of TitliIndexerJob");
-
         logger.info("Starting execution of ContainerSpecimenCountJob");
         Class containerSpecimenCountJob;
         try
@@ -45,6 +40,11 @@ public class QuartzSchedulerJob implements Job
         {
            
         }
+        logger.info("Starting execution of TitliIndexerJob");
+        TitliIndexer.main(null);//run titli indexer
+        logger.info("End of execution of TitliIndexerJob");
+
+       
     }
     
  
