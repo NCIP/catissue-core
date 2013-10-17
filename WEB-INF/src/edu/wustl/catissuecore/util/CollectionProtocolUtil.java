@@ -217,7 +217,6 @@ public class CollectionProtocolUtil
 		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
 		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol
 				.getAliquotInSameContainer().booleanValue());
-		collectionProtocolBean.setDefaultReportSetTo(collectionProtocol.getDefaultReportSetTo());
 		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
 		collectionProtocolBean.setEndDate(endDate);
@@ -989,7 +988,6 @@ public class CollectionProtocolUtil
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
 		collectionProtocol.setIsEMPIEnabled(cpBean.getIsEMPIEnable());
 		collectionProtocol.setAliquotInSameContainer(cpBean.isAliqoutInSameContainer());
-		collectionProtocol.setDefaultReportSetTo(cpBean.getDefaultReportSetTo());
 		collectionProtocol.setConsentTierCollection(collectionProtocol
 				.prepareConsentTierCollection(cpBean.getConsentValues()));
 		Collection coordinatorCollection = new LinkedHashSet();

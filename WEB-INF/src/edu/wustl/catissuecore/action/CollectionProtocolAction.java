@@ -488,7 +488,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setEndDate(collectionProtocolBean.getEndDate());
 		collectionProtocolForm.setAliqoutInSameContainer(collectionProtocolBean
 				.isAliqoutInSameContainer());
-		collectionProtocolForm.setDefaultReportSetTo(collectionProtocolBean.getDefaultReportSetTo());
 		//		collectionProtocolForm.setGenerateLabel(collectionProtocolBean.isGenerateLabel());
 		collectionProtocolForm.setSpecimenLabelFormat(collectionProtocolBean.getLabelFormat());
 		collectionProtocolForm.setDerivativeLabelFormat(collectionProtocolBean

@@ -44,26 +44,14 @@
 		<sql>update catissue_address set city ='Not Specified' where city is null;</sql>
 		<sql>commit;</sql>
 	</changeSet>
-	<changeSet id="7" author="pathik" runOnChange="true" failOnError="false">
-		<sql>insert into catissue_specimen_protocol  (IDENTIFIER, PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE,  IRB_IDENTIFIER, START_DATE, END_DATE, ENROLLMENT, DESCRIPTION_URL,  ACTIVITY_STATUS, LABEL_FORMAT, DERIV_LABEL_FORMAT, ALIQUOT_LABEL_FORMAT,  PPID_FORMAT) values (-1, 1, 'D', 'D','', NULL, NULL, 0, '','Disabled', NULL, NULL, NULL,NULL);
-</sql>
-		<sql>insert into catissue_collection_protocol  (IDENTIFIER, UNSIGNED_CONSENT_DOC_URL, ALIQUOT_IN_SAME_CONTAINER,  CONSENTS_WAIVED, CP_TYPE, PARENT_CP_ID, SEQUENCE_NUMBER,  STUDY_CALENDAR_EVENT_POINT, IS_EMPI_ENABLE) values (-1, '', 0, 0, 'Parent', NULL, 0,0, 0);
-</sql>
-		<sql>commit;</sql>
-	</changeSet>
-	<changeSet id="8" author="pathik" runOnChange="true" failOnError="false">
-		<addColumn tableName="catissue_collection_protocol">
-			<column name="DEFAULT_REPORTS_SEND_TO" type="${text.type}(20)" />
-		</addColumn>
-	</changeSet>
-	<changeSet id="9" author="pathik" dbms="mysql">
+	<changeSet id="7" author="pathik" dbms="mysql">
 		<addAutoIncrement tableName="REPORT_DETAILS"
 			columnName="IDENTIFIER" columnDataType="${int.type}" />
 	</changeSet>
 	
 	
 
-<changeSet author="mosin" id="10">
+<changeSet author="mosin" id="8">
     <addNotNullConstraint 
             columnDataType="${int.type}"
             columnName="POSITION_DIMENSION_ONE"
@@ -86,31 +74,31 @@
             tableName="catissue_abstract_position"/>
 </changeSet>
 
-	<changeSet author="nitesh" id="11">
+	<changeSet author="nitesh" id="9">
     <modifyDataType 
             columnName="DROPDOWN_NAME"
             newDataType="${text.type}(767)"
             tableName="CATISSUE_BULK_OPERATION"/>
 </changeSet>
-<changeSet author="nitesh" id="12">
+<changeSet author="nitesh" id="10">
     <modifyDataType 
             columnName="OPERATION"
             newDataType="${text.type}(767)"
             tableName="CATISSUE_BULK_OPERATION"/>
 </changeSet>
-<changeSet author="nitesh" id="13">
+<changeSet author="nitesh" id="11">
     <modifyDataType 
             columnName="JOB_NAME"
             newDataType="${text.type}(767)"
             tableName="JOB_DETAILS"/>
 </changeSet>
-<changeSet author="nitesh" id="14">
+<changeSet author="nitesh" id="12">
     <modifyDataType 
             columnName="LOG_FILE_NAME"
             newDataType="${text.type}(767)"
             tableName="JOB_DETAILS"/>
 </changeSet>
-<changeSet id="15" author="nitesh" runOnChange="true" failOnError="false">
+<changeSet id="13" author="nitesh" runOnChange="true" failOnError="false">
         <addUniqueConstraint constraintName="CATISSUE_CP_PART_UNIQUE_KEY"
             tableName="CATISSUE_COLL_PROT_REG" columnNames="PARTICIPANT_ID,COLLECTION_PROTOCOL_ID,ACTIVITY_STATUS" />
     </changeSet>	

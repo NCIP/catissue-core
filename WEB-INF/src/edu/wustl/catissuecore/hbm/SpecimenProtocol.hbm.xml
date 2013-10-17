@@ -417,13 +417,6 @@
             insert="true"
             column="ALIQUOT_IN_SAME_CONTAINER"
         />
-        <property
-            name="defaultReportSetTo"
-            type="string"
-            update="true"
-            insert="true"
-            column="DEFAULT_REPORTS_SEND_TO"
-        />
 
         <property
             name="consentsWaived"

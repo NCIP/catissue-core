@@ -680,19 +680,6 @@ div#d999 {
 						key="consent.consentwaivedno" /></label></td>
 
 				</tr>
-				<tr>
-					<td align="center" class="black_ar">&nbsp;</td>
-					<td align="left" class="black_ar"><label>
-					Send default reports to:&nbsp</label><img src="images/help.png" alt="System will automatically email Protocol Summary reports periodically to these recipients." title="System will automatically email Protocol Summary reports periodically to these recipients." height="12" width="12">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-					<td align="left" valign="baseline" class="black_ar"><html:radio
-						property="defaultReportSetTo" styleId="defaultReportSetTo"
-						value="PI" />&nbsp;Principle Investigator&nbsp;&nbsp;&nbsp;<html:radio
-						property="defaultReportSetTo" styleId="defaultReportSetTo"
-						value="PI_AND_COORDINATORS" />&nbsp;Principle Investigator And Coordinators&nbsp;&nbsp;&nbsp;<html:radio
-						property="defaultReportSetTo" styleId="defaultReportSetTo"
-						value="NONE" />&nbsp;None&nbsp;&nbsp;&nbsp;</td>
-
-				</tr>
 				<!------------------------------------------------------------------------->
 
 				<tr height="10">
