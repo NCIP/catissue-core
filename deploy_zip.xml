@@ -5639,7 +5639,6 @@
 	<target name="upgrade_db_plusv3.1">
 						<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 						<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v31.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
-						<antcall target="load_default_reports" />
 	</target>
 	<target name="update_protection_element">
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
