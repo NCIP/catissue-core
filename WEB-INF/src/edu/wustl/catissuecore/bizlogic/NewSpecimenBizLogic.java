@@ -209,7 +209,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException exp)
 		{
 			LOGGER.error(exp.getMessage(), exp);
-			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+//			rollback(dao);
+			String errMssg = getErrorMessage(exp,obj,"Inserting");
+			LOGGER.debug(errMssg, exp);
+			throw new BizLogicException(exp.getErrorKey(),
+					exp,exp.getMsgValues(),errMssg);
+//			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 

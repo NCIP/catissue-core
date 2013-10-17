@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
 import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -21,6 +22,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -192,9 +194,10 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @param specimen Specimen.
 	 * @param aliquot Aliquot.
 	 * @param aliqoutCounter int.
+	 * @throws BizLogicException 
 	 */
 	private void processAliquotInSameContainer(Specimen specimen, Aliquot aliquot,
-			int aliqoutCounter, List<SpecimenPosition> specimenPosList)
+			int aliqoutCounter, List<SpecimenPosition> specimenPosList) throws BizLogicException
 	{
 		if (specimenPosList != null && specimenPosList.isEmpty())
 		{
@@ -206,10 +209,32 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			{
 				SpecimenPosition newSpecimenPosition = new SpecimenPosition();
 				SpecimenPosition specimenPosition = specimenPosList.get(0);
-				if(aliqoutCounter == 1)
+				if(aliqoutCounter == 0)
 				{
-					newSpecimenPosition.setPositionDimensionOne(specimenPosition.getPositionDimensionOne());
-					newSpecimenPosition.setPositionDimensionTwo(specimenPosition.getPositionDimensionTwo());
+					if(!Validator.isEmpty(specimenPosition.getPositionDimensionOneString()) && !Validator.isEmpty(specimenPosition.getPositionDimensionTwoString()))
+					{
+						newSpecimenPosition.setPositionDimensionOneString(specimenPosition.getPositionDimensionOneString());
+						newSpecimenPosition.setPositionDimensionTwoString(specimenPosition.getPositionDimensionTwoString());
+					}
+					else if(specimenPosition.getPositionDimensionOne() != null && specimenPosition.getPositionDimensionTwo() != null)
+					{
+						StorageContainerBizlogic bizlogic = new StorageContainerBizlogic(); 
+						newSpecimenPosition.setPositionDimensionOne(specimenPosition.getPositionDimensionOne());
+						newSpecimenPosition.setPositionDimensionTwo(specimenPosition.getPositionDimensionTwo());
+						try {
+							newSpecimenPosition.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(
+									specimenPosition.getStorageContainer().getName(), 1, specimenPosition.getPositionDimensionOne()));
+						
+						newSpecimenPosition.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(
+								specimenPosition.getStorageContainer().getName(), 2, specimenPosition.getPositionDimensionTwo()));
+						} catch (ApplicationException e) 
+						{
+							logger.error(e);
+							throw this.getBizLogicException(null, "errors.invalid",
+									ApplicationProperties.getValue("array.positionInStorageContainer"));
+						}
+					}
+					
 				}
 
 				StorageContainer container = specimenPosition.getStorageContainer();
