@@ -18,8 +18,14 @@ import edu.wustl.common.tags.dao.TagDAO;
 import edu.wustl.common.tags.domain.Tag;
 import edu.wustl.common.tags.domain.TagItem;
 import edu.wustl.common.tags.util.TagUtil;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.query.util.global.UserCache;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -28,6 +34,9 @@ public class SpecimenListBizlogic implements ITagBizlogic
 {
 	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenListBizlogic.class);
 	
+	private static final String GET_SPECIMEN_IDS_FROM_LABEL = "SELECT s.id FROM Specimen s WHERE s.label IN (:labels)";
+	
+	private static final String GET_SPECIMEN_IDS_FROM_BARCODE = "SELECT s.id FROM Specimen s WHERE s.barcode IN (:barcodes)";
 	/**
 	 * Insert New Tag to the database.
 	 * @param entityName from hbm file.
@@ -385,4 +394,52 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			}
 		}	
 	}	 
+	
+	public List<Long> getSpecimenIdsFromLabel(List<String> labels) throws DAOException, BizLogicException {
+		DAO dao = null;
+		List<Long> list = null;
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
+		try 
+		{
+			SessionDataBean sessionDataBean = new SessionDataBean();		
+			dao = daofactory.getDAO();
+			dao.openSession(sessionDataBean);
+			List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+			parameters.add(new ColumnValueBean("labels", labels));
+			list = ((HibernateDAO)dao).executeParamHQL(GET_SPECIMEN_IDS_FROM_LABEL, parameters);
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		} finally {
+			dao.closeSession();
+		}
+		
+		return list;
+	}
+	
+	public List<Long> getSpecimenIdsFromBarcode(List<String> barcodes) throws DAOException, BizLogicException {
+		DAO dao = null;
+		List<Long> list = null;
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
+		try 
+		{
+			SessionDataBean sessionDataBean = new SessionDataBean();		
+			dao = daofactory.getDAO();
+			dao.openSession(sessionDataBean);
+			List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>(); 
+			parameters.add(new ColumnValueBean("barcodes", barcodes));
+			list = ((HibernateDAO)dao).executeParamHQL(GET_SPECIMEN_IDS_FROM_BARCODE, parameters);
+		}
+		catch (DAOException e)
+		{
+			throw new BizLogicException(e);
+		} finally {
+			dao.closeSession();
+		}
+		
+		return list;
+	}
 }
