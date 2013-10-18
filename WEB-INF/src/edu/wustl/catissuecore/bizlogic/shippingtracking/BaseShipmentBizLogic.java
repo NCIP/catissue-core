@@ -1123,7 +1123,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						.getSenderContactPerson().getLastName()
 						+ ","
 						+ baseShipment.getSenderContactPerson()
-								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getSenderSite().getName());
+								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getSenderSite().getName(),
+								baseShipment.getActivityStatus());
 	}
 	
 	protected void sendCreateShipmentNotification(BaseShipment baseShipment)
