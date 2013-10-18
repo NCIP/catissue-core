@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenListBizlogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
@@ -943,4 +944,67 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
 		return null;
 	}
 
+	public ActionForward getSpecIdsFromLabels(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
+			IOException
+	{
+		String specLabels = request.getParameter("specLabels");
+		SpecimenListBizlogic specimenListBizlogic = new SpecimenListBizlogic();
+		
+		List<Long> dataList =  new ArrayList<Long>();
+		List<String> labelList = new ArrayList<String>();
+		String[] labelStr = specLabels.split("\\,");
+		
+		int count = 0; 
+		for (String label : labelStr) {
+			labelList.add(label);
+			++ count;
+			if ((count % 500) == 0 || labelStr.length == count) {
+				List<Long> results = specimenListBizlogic.getSpecimenIdsFromLabel(labelList);
+				dataList.addAll(results);
+				labelList = new ArrayList<String>();
+			}
+		}
+		
+		StringBuffer responseString = new StringBuffer();
+		for (Long id : dataList) {
+				responseString.append(id);
+				responseString.append(",");	
+		}
+
+		response.getWriter().write(responseString.toString());
+		return null;
+	}
+	
+	public ActionForward getSpecIdsFromBarcodes(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
+			IOException
+	{
+		String specBarcodes = request.getParameter("specBarcodes");
+		SpecimenListBizlogic specimenListBizlogic = new SpecimenListBizlogic();
+		
+		List<Long> dataList =  new ArrayList<Long>();
+		List<String> barcodeList = new ArrayList<String>();
+		String[] barcodeStr = specBarcodes.split("\\,");
+		
+		int count = 0; 
+		for (String barcode : barcodeStr) {
+			barcodeList.add(barcode);
+			++ count;
+			if ((count % 500) == 0 || barcodeStr.length == count) {
+				List<Long> results = specimenListBizlogic.getSpecimenIdsFromBarcode(barcodeList);
+				dataList.addAll(results);
+				barcodeList = new ArrayList<String>();
+			}
+		}
+		
+		StringBuffer responseString = new StringBuffer();
+		for (Long id : dataList) {
+				responseString.append(id);
+				responseString.append(",");	
+		}
+
+		response.getWriter().write(responseString.toString());
+		return null;
+	}
 }
