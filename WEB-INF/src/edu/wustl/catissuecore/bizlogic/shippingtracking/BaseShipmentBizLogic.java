@@ -104,7 +104,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			baseShipment.getContainerCollection().clear();
 			baseShipment.getContainerCollection().addAll( containerCollection );
 			dao.insert( baseShipment );
-			this.sendCreateShipmentNotification( baseShipment);
+			
 			
 			//insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
 			//bug 13387 start
@@ -125,6 +125,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					final ShipmentRequestBizLogic shipmentRequestBizLogic = new ShipmentRequestBizLogic();
 					shipmentRequestBizLogic.update( dao, shipmentRequest, null, sessionDataBean );//bug 12557
 
+				}
+				else
+				{
+					this.sendCreateShipmentNotification( baseShipment);
 				}
 			}
 			//bug 13387 end
@@ -1132,7 +1136,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		final String[] toUser = this
 				.getEmailAddressesForMailNotification(baseShipment);
 		
-		String[] ccUsers={baseShipment.getSenderContactPerson().getEmailAddress()};
+		String[] ccUsers={baseShipment.getReceiverContactPerson().getEmailAddress()};
 		//Add mailing functionality
 		
 		final EmailHandler emailHandler = new EmailHandler();
@@ -1147,7 +1151,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						+ baseShipment.getReceiverSite().getCoordinator()
 								.getFirstName(), baseShipment.getReceiverSite()
 						.getName(), baseShipment.getSenderSite().getName(),
-				baseShipment.getCreatedDate(),baseShipment.getId());
+				baseShipment.getCreatedDate(),baseShipment.getId(),baseShipment.getActivityStatus());
 	}
 	/**
 	 * Get email addresses to send mail notification.

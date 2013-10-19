@@ -324,7 +324,7 @@ public class EmailHandler
 	
 	public boolean createShipmentEmail(String creatorName,
 			String[] toEmailAddress, String[] ccEmailAddress,String bccEmailAddress,
-			String shipmentName, String siteAdmin,String requestSiteName,String senderSiteName,Date createdDate,Long id)
+			String shipmentName, String siteAdmin,String requestSiteName,String senderSiteName,Date createdDate,Long id,String activityStatus)
     {
     	Map<String, Object> contextMap = new HashMap<String, Object>();
     	contextMap.put("creator", creatorName);
@@ -335,10 +335,11 @@ public class EmailHandler
     	contextMap.put("senderSiteName", senderSiteName);
     	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
     	contextMap.put("id", id);
+    	contextMap.put("activityStatus", activityStatus);
 		boolean emailStatus = EmailClient.getInstance().sendEmail(
 				 Constants.SHIPMENT_CREATED,
 				 toEmailAddress,ccEmailAddress,
-				 new String[]{},contextMap,shipmentName);
+				 new String[]{},contextMap,shipmentName+" "+activityStatus);
 			
 		if (!emailStatus) {
 			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));

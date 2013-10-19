@@ -1,7 +1,7 @@
 Hello $siteadmin
 <br>
 <br>
-$creator has created shipment $name on $date. Shipment details is as below.
+$creator has $activityStatus shipment $name on $date. Shipment details is as below.
 <br>
 Sender Site  $senderSiteName            
 <br>

@@ -798,7 +798,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			this.setShipmentSites( dao, shipmentRequest );
 			dao.update( shipmentRequest,oldObj );
 			//Add mailing functionality
-			this.sendShipmentAcceptedNotification( shipmentRequest);
+			this.sendCreateShipmentNotification(shipmentRequest);
 		}
 		catch (final DAOException daoException)
 		{
