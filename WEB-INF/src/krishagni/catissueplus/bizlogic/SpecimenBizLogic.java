@@ -821,7 +821,7 @@ public class SpecimenBizLogic
 		specimen.setIsAvailable(Boolean.TRUE);
 		specimen.setLabel(specimenDTO.getLabel());
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-//		specimen.setAvailableQuantity(specimenDTO.getQuantity());
+		specimen.setAvailableQuantity(specimen.getInitialQuantity());
 		if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
 				|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
 		{
