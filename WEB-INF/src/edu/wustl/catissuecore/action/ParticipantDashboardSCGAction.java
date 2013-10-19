@@ -79,17 +79,17 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 				CollectionProtocolRegistration cpr = cprList.get(0);
 				specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
 				
-				if(collectionProtocolEvent.getDefaultSite() == null)
+				if(collectionProtocolEvent.getDefaultSite() == null && !isPlanned)
 				{
 					ActionErrors errors = new ActionErrors();
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Site"));
 					saveErrors(request, errors);
 					forwardTo = FORWARD_TO_ADD_SCG;
 				}
-				else if(collectionProtocolEvent.getDefaultSite() != null)
+				else// if(collectionProtocolEvent.getDefaultSite() != null)
 				{
 					specimenCollectionGroup.setSpecimenCollectionSite(collectionProtocolEvent.getDefaultSite());
-					specimenCollectionGroup.setCollectionStatus(Constants.COMPLETE);
+					specimenCollectionGroup.setCollectionStatus(isPlanned?Constants.COLLECTION_STATUS_PENDING:Constants.COMPLETE);
 					specimenCollectionGroup.setIsCPBasedSpecimenEntryChecked(isPlanned);
 					specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
 					specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(cpr);
@@ -105,7 +105,7 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 				request.setAttribute("id", scgId);
 				specimenCollectionGroup = (SpecimenCollectionGroup)hibernateDAO.retrieveById(SpecimenCollectionGroup.class.getName(), Long.valueOf(scgId));
 				CollectionProtocolEvent collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
-				if(Validator.isEmpty(specimenCollectionGroup.getCollectionStatus()) || Constants.COLLECTION_STATUS_PENDING.equals(specimenCollectionGroup.getCollectionStatus()))
+				if(!isPlanned && (Validator.isEmpty(specimenCollectionGroup.getCollectionStatus()) || Constants.COLLECTION_STATUS_PENDING.equals(specimenCollectionGroup.getCollectionStatus())))
 				{
 					if(specimenCollectionGroup.getSpecimenCollectionSite() == null && collectionProtocolEvent.getDefaultSite() == null)
 					{
@@ -116,7 +116,7 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 						request.setAttribute("cpSearchCpId",request.getParameter("cpSearchCpId"));
 						forwardTo = FORWARD_TO_EDIT_SCG;
 					}
-					else if(specimenCollectionGroup.getSpecimenCollectionSite() == null && collectionProtocolEvent.getDefaultSite() != null)
+					else //if(specimenCollectionGroup.getSpecimenCollectionSite() == null && collectionProtocolEvent.getDefaultSite() != null)
 					{
 						specimenCollectionGroup.setSpecimenCollectionSite(collectionProtocolEvent.getDefaultSite());
 						specimenCollectionGroup.setCollectionStatus(Constants.COMPLETE);
@@ -168,7 +168,9 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 		{
 			AppUtility.closeDAOSession(hibernateDAO);
 		}
+//		return mapping.findForward("anticipatedSpecimenSumarryPage");
 		return mapping.findForward(forwardTo);
+				
 	}
 
 	private void setRequestAttr(HttpServletRequest request, String cpId, String paricipantId,

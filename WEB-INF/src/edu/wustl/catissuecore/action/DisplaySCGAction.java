@@ -54,7 +54,7 @@ public class DisplaySCGAction extends Action
 			}
 
 				SCGSummaryDTO scgSummaryDTO = scgdao.getScgSummary(dao, identifier);
-				
+				scgSummaryDTO.setCollectionStatus(Constants.COMPLETE);
 				if(scgSummaryDTO.getSite() == null)
 				{
 					scgSummaryDTO.setSite(scgdao.getEventDefaultSite(scgSummaryDTO.getEventId(),(HibernateDAO)dao));
@@ -64,11 +64,20 @@ public class DisplaySCGAction extends Action
 				{   
 				    scgSummaryDTO.setReceivedDate(cal.getTime());
 				}
+				if(scgSummaryDTO.getReceiver() == null)
+				{
+					scgSummaryDTO.setReceiver(sessionData.getUserId());
+				}
 				if(scgSummaryDTO.getCollectedDate() == null)
 				{   
 					scgSummaryDTO.setCollectedDate(cal.getTime());
 					scgSummaryDTO.setCollectionStatus(Constants.COMPLETE); // default collection status
 				}
+				if(scgSummaryDTO.getCollector() == null)
+				{
+					scgSummaryDTO.setCollector(sessionData.getUserId());
+				}
+				
 				request.setAttribute("scgSummaryDTO", scgSummaryDTO);
 				//setSiteList
 				List<NameValueBean> sitelist = new SiteBizLogic().getSiteList(dao);

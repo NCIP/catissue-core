@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import krishagni.catissueplus.util.CommonUtil;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -21,10 +23,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.dto.SCGSummaryDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -49,31 +53,30 @@ public class SaveSCGAjaxAction extends Action
  		
 		 		 SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
 		 		 scgBizLogic.saveScgSummary(dao, scgDTO,errorList);
-		 		 if(!errorList.isEmpty())
-		 		 {
-		 			Iterator<String> itr = errorList.iterator();
-		 			JSONArray jsonArray = new JSONArray();
-		 			while(itr.hasNext())
-		 			{
-		 			
-		 			JSONObject jsonobj = new JSONObject();
-		 			jsonobj.put("msg",itr.next());
-		 			jsonArray.put(jsonobj);
-		 			}
-		 			responseString = jsonArray.toString();
-		 			 /*JsonElement element = gson.toJsonTree(errorList);
-		 			JsonArray jsonArray = element.getAsJsonArray();
-		 			responseString = jsonArray.getAsString();*/
-		 		 }
-		 		
 		 		dao.commit();
-		 		}catch(DAOException ex){
-		 			errorList.add(ex.getMsgValues());
+		 		}catch(ApplicationException ex){
+		 			errorList.add(CommonUtil.getErrorMessage(ex, new SpecimenCollectionGroup(), "update"));
+//		 			errorList.add(ex.getMsgValues());
 		         }finally
 		         {
 		        	 AppUtility.closeDAOSession(dao);
 		         }
-		    
+		    if(!errorList.isEmpty())
+	 		 {
+	 			Iterator<String> itr = errorList.iterator();
+	 			JSONArray jsonArray = new JSONArray();
+	 			while(itr.hasNext())
+	 			{
+	 			
+	 			JSONObject jsonobj = new JSONObject();
+	 			jsonobj.put("msg",itr.next());
+	 			jsonArray.put(jsonobj);
+	 			}
+	 			responseString = jsonArray.toString();
+	 			 /*JsonElement element = gson.toJsonTree(errorList);
+	 			JsonArray jsonArray = element.getAsJsonArray();
+	 			responseString = jsonArray.getAsString();*/
+	 		 }
 		    response.setContentType("application/json");
 	 		response.getWriter().write(responseString); 		            
 		           return null;
