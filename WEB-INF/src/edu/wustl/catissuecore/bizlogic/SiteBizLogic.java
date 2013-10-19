@@ -52,6 +52,8 @@ import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.dao.util.NamedQueryParam;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
@@ -840,6 +842,20 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			}
 		
 		return siteNVBList;
+	}
+
+	public boolean checkSpecimenProcessingPrivileges(HibernateDAO hibernateDao,List<Long> siteIds, String userName) throws SMException 
+	{
+		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(userName);
+		for (Long siteId : siteIds) 
+		{
+			String siteProtectionEleName = "SITE_" + siteId + "_All_CP";
+			if(privilegeCache.hasPrivilege(siteProtectionEleName, "SPECIMEN_PROCESSING"))
+			{
+				return Boolean.TRUE;
+			}
+		}
+		return Boolean.FALSE;
 	}
 	
 }

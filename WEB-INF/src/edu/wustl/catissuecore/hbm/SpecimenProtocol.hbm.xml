@@ -524,4 +524,5 @@
     </class>
 	<query name="getconsentTierCollection">Select sp.consentTierCollection from edu.wustl.catissuecore.domain.SpecimenProtocol sp WHERE sp.id = ?
 	</query>
+	<sql-query name="getSiteIdsByCPID">select site_id from CATISSUE_SITE_CP where collection_protocol_id = ?</sql-query>
 </hibernate-mapping>

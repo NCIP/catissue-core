@@ -20,6 +20,9 @@ import krishagni.catissueplus.dao.StorageContainerDAO;
 import krishagni.catissueplus.dto.BiohazardDTO;
 import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
+import edu.wustl.catissuecore.dao.CollectionProtocolDAO;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -45,7 +48,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -782,13 +784,35 @@ public class SpecimenBizLogic
 			Long siteId = specimenDAO.getSiteIdBySpecimenLabelOrId(hibernateDao, specimenName, specimenId);
 			Long cpId = specimenDAO.getCpIdFromSpecimenId(specimenId, hibernateDao);
 			isAuthorize = chkAuthorizationForCPnSite(siteId, cpId, sessionDataBean.getUserName());
+			if(!isAuthorize && siteId == null)
+			{
+				List<Long> siteIds = getSiteIds(hibernateDao,cpId,sessionDataBean.getUserId());
+				SiteBizLogic siteBizLogic = new SiteBizLogic();
+				isAuthorize = siteBizLogic.checkSpecimenProcessingPrivileges(hibernateDao,siteIds,sessionDataBean.getUserName());
+			}
 		}
 		return isAuthorize;
+	}
+
+	private List<Long> getSiteIds(HibernateDAO hibernateDao, Long cpId,Long userId) throws DAOException 
+	{
+		UserDAO userDAO = new UserDAO();
+		CollectionProtocolDAO cpDAO = new CollectionProtocolDAO();
+		List userSiteIds = userDAO.getAssociatedSiteIds(hibernateDao, userId);
+		List<Long> cpSiteIds = cpDAO.getAssociatedSiteIds(hibernateDao, cpId);
+		Set<Long> siteIdset = new HashSet<Long>();
+		siteIdset.addAll(cpSiteIds);
+		siteIdset.retainAll(userSiteIds);
+		return new ArrayList<Long>(siteIdset);
 	}
 
 	private Boolean chkAuthorizationForCPnSite(Long siteId, Long cpId, String userName) throws SMException
 	{
 		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(userName);
+//		privilegeCache.hasPrivilege(Site.class.getName()+"_31","SPECIMEN_PROCESSING");
+//		privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_110","SPECIMEN_PROCESSING");
+//		privilegeCache.getPrivilegesforObjectId(CollectionProtocol.class.getName()+"_110");
+//		privilegeCache.getPrivilegesforObjectId(Site.class.getName()+"_31");
 		boolean isAuthorized = Boolean.FALSE;
 		if (siteId != null)
 		{
@@ -802,6 +826,7 @@ public class SpecimenBizLogic
 			// privilege on the given protection element
 			isAuthorized = privilegeCache.hasPrivilege(cpProtectionEleName, "SPECIMEN_PROCESSING");
 		}
+		
 		return isAuthorized;
 	}
 

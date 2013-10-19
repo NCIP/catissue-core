@@ -282,4 +282,5 @@
         -->
     </class>
 <query name="getUserIdFromLoginName">select user.id from edu.wustl.catissuecore.domain.User user where user.loginName=? and user.activityStatus=?</query>
+<sql-query name="getSiteIdsByUserId">select site_id from catissue_site_users where user_id = ?</sql-query>
 </hibernate-mapping>

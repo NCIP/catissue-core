@@ -1,16 +1,23 @@
 package edu.wustl.catissuecore.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.participant.domain.ISite;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 
 
 public class CPRDAO
@@ -79,6 +86,20 @@ public class CPRDAO
 					.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
 			throw new BizLogicException(null,null,"errors.item.invalid", message);
 		}
+	}
+	
+	public CollectionProtocolRegistration getCPRByCPAndParticipantId(HibernateDAO hibernateDAO, Long participantId, Long cpId) throws DAOException, BizLogicException
+	{
+		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+		params.put("0", new NamedQueryParam(DBTypes.LONG,participantId));
+		params.put("1", new NamedQueryParam(DBTypes.LONG,cpId));
+		List<CollectionProtocolRegistration> cprs =hibernateDAO.executeNamedQuery("getCPRFromParticipantId", params);
+		if(cprs == null && cprs.isEmpty())
+		{
+			ErrorKey errorKey = ErrorKey.getErrorKeyObject("errors.invalid");
+			throw new BizLogicException(errorKey, null, "Participant details.");
+		}
+		return cprs.get(0);
 	}
 
 }

@@ -164,5 +164,6 @@
 
     </class>
 <query name="fetchCPRIdFromCPID">select cpr.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id= ? and cpr.participant.id= ?</query>
+<query name="getCPRFromParticipantId">select cpr from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?</query>
 </hibernate-mapping>
 

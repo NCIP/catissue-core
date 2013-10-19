@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.dao.CPRDAO;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -67,26 +68,28 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)hibernateDAO.retrieveById(CollectionProtocolEvent.class.getName(), Long.valueOf(eventId));
 				Collection<CollectionProtocolEvent> cpeCollection = new HashSet<CollectionProtocolEvent>();
 				cpeCollection.add(collectionProtocolEvent);
-				String cprSql = "select cpr from " +CollectionProtocolRegistration.class.getName()
-						+ " as cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?";
-				List<ColumnValueBean> columnValueBeans = new ArrayList();
-				ColumnValueBean columnValueBean = new ColumnValueBean(Long.valueOf(paricipantId));
-				ColumnValueBean columnValueBean1 = new ColumnValueBean(Long.valueOf(cpId));
-				columnValueBeans.add(columnValueBean);
-				columnValueBeans.add(columnValueBean1);
+//				String cprSql = "select cpr from " +CollectionProtocolRegistration.class.getName()
+//						+ " as cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?";
+//				List<ColumnValueBean> columnValueBeans = new ArrayList();
+//				ColumnValueBean columnValueBean = new ColumnValueBean(Long.valueOf(paricipantId));
+//				ColumnValueBean columnValueBean1 = new ColumnValueBean(Long.valueOf(cpId));
+//				columnValueBeans.add(columnValueBean);
+//				columnValueBeans.add(columnValueBean1);
+//				
+//				List<CollectionProtocolRegistration> cprList = hibernateDAO.executeQuery(cprSql, columnValueBeans);
+				CPRDAO cprdao = new CPRDAO();
 				
-				List<CollectionProtocolRegistration> cprList = hibernateDAO.executeQuery(cprSql, columnValueBeans);
-				CollectionProtocolRegistration cpr = cprList.get(0);
+				CollectionProtocolRegistration cpr = cprdao.getCPRByCPAndParticipantId(hibernateDAO, Long.valueOf(paricipantId), Long.valueOf(cpId));
 				specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
 				
-				if(collectionProtocolEvent.getDefaultSite() == null && !isPlanned)
+				if(!isPlanned && collectionProtocolEvent.getDefaultSite() == null)
 				{
 					ActionErrors errors = new ActionErrors();
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Site"));
 					saveErrors(request, errors);
 					forwardTo = FORWARD_TO_ADD_SCG;
 				}
-				else// if(collectionProtocolEvent.getDefaultSite() != null)
+				else
 				{
 					specimenCollectionGroup.setSpecimenCollectionSite(collectionProtocolEvent.getDefaultSite());
 					specimenCollectionGroup.setCollectionStatus(isPlanned?Constants.COLLECTION_STATUS_PENDING:Constants.COMPLETE);
@@ -116,7 +119,7 @@ public class ParticipantDashboardSCGAction extends CatissueBaseAction
 						request.setAttribute("cpSearchCpId",request.getParameter("cpSearchCpId"));
 						forwardTo = FORWARD_TO_EDIT_SCG;
 					}
-					else //if(specimenCollectionGroup.getSpecimenCollectionSite() == null && collectionProtocolEvent.getDefaultSite() != null)
+					else 
 					{
 						specimenCollectionGroup.setSpecimenCollectionSite(collectionProtocolEvent.getDefaultSite());
 						specimenCollectionGroup.setCollectionStatus(Constants.COMPLETE);
