@@ -26,7 +26,6 @@
 
 
 <script>
-
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
@@ -258,7 +257,7 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 //int rowSpan = (int)((collectionProtocolList.size()%3)== 0 ? collectionProtocolList.size()/3 : (collectionProtocolList.size()/3)+1 );
 %>
 
-		<!--<tr>
+		<tr id="showBaseOnMap">
 		 <td width="5" valign="bottom" >&nbsp;</td>
            <td >
 		     <table  border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -269,8 +268,12 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
                    </tr>
               </table>
 			 </td>
-          </tr>-->
-		  
+          </tr>
+		  <script>
+			if(window.parent.document.getElementById('from_view_Map')!=null){
+				  document.getElementById("showBaseOnMap").style.display = "none";
+			}
+		  </script>
 		
 	
 	<tr>
@@ -629,6 +632,8 @@ function forwardToPage(url)
 {
 	window.parent.parent.frames['StorageContainerView'].location=url;
 }
+
+
 </script>
 <%!
 // method to return the rowspan value for the cell.

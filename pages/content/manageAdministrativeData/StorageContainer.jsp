@@ -708,7 +708,7 @@ function calltest()
 				<td>
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
-						<!--<tr>
+						<tr id="showBaseOnMap">
 							<td><table width="100%" border="0" cellpadding="0"
 									cellspacing="0">
 									<tr>
@@ -732,7 +732,13 @@ function calltest()
 										</logic:equal>
 									</tr>
 								</table></td>
-						</tr>-->
+						</tr>
+						 <script>
+							if(window.parent.document.getElementById('from_view_Map')!=null){
+								  document.getElementById("showBaseOnMap").style.display = "none";
+							}
+						  </script>
+						
 						<tr>
 							<td>
 								<table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -990,7 +996,7 @@ function calltest()
 													<%
 														if (!Variables.isStorageContainerBarcodeGeneratorAvl
 																	|| operation.equals(Constants.EDIT)) {
-													%><td />
+													%>
 													<td align="left" class="black_ar"><bean:message
 															key="storageContainer.barcode" /></td>
 													<logic:equal name="<%=Constants.OPERATION%>"

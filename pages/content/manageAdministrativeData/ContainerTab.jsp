@@ -15,10 +15,12 @@
 	
 <body>
 	<div id="a_tabbar" style="width:100%; height:100%;"></div>
+	<input type="hidden" id="from_view_Map" value="from_view_Map">
 </body> 
 
 </html>
 <script>
+
 var tabbar = new dhtmlXTabBar("a_tabbar", "top");
 tabbar.setHrefMode("iframes-on-demand");
 tabbar.setSkin("dhx_skyblue");
