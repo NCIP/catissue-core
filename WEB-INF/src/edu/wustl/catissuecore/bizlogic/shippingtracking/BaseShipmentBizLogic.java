@@ -126,10 +126,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					shipmentRequestBizLogic.update( dao, shipmentRequest, null, sessionDataBean );//bug 12557
 
 				}
-				else
-				{
-					this.sendCreateShipmentNotification( baseShipment);
-				}
+				
+				this.sendCreateShipmentNotification( baseShipment);
 			}
 			//bug 13387 end
 		}
@@ -1090,66 +1088,64 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected void sendRequestShipmentNotification(BaseShipment baseShipment)
 	{
-		final String[] toUser = this
+		ShipmentRequest shipmentRequest=(ShipmentRequest) baseShipment;
+		final String[] ccUsers = this
 				.getEmailAddressesForMailNotification(baseShipment);
-		final String[] ccUsers={baseShipment
+		final String[] toUser={shipmentRequest
 				.getReceiverContactPerson().getEmailAddress()}; 
 		//Add mailing functionality
 		final EmailHandler emailHandler = new EmailHandler();
-		emailHandler.reuestShipmentEmail(baseShipment
-				.getReceiverContactPerson().getLastName()
+		emailHandler.reuestShipmentEmail(shipmentRequest
+				.getSenderContactPerson().getLastName()
 				+ ","
-				+ baseShipment.getReceiverContactPerson()
+				+ shipmentRequest.getSenderContactPerson()
 						.getFirstName(), toUser, ccUsers,null,
-						baseShipment.getLabel(), baseShipment
-						.getSenderContactPerson().getLastName()
+						shipmentRequest.getLabel(),shipmentRequest
+						.getReceiverContactPerson().getLastName()
 						+ ","
-						+ baseShipment.getSenderContactPerson()
-								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getId());
+						+ shipmentRequest.getReceiverContactPerson()
+								.getFirstName() ,shipmentRequest.getReceiverSite().getName(),shipmentRequest.getId());
 	}
 
 	protected void sendShipmentAcceptedNotification(BaseShipment baseShipment)
 	{
-		final String[] toUser = this
-				.getEmailAddressesForMailNotification(baseShipment);
+		final String[] toUser = {baseShipment.getSenderContactPerson().getEmailAddress()};
 		//Add mailing functionality
 		final String[] ccUsers={baseShipment
 				.getReceiverContactPerson().getEmailAddress()}; 
 		
 		final EmailHandler emailHandler = new EmailHandler();
 		emailHandler.acceptShipmentCreatedEmail(baseShipment
-				.getReceiverContactPerson().getLastName()
+				.getSenderContactPerson().getLastName()
 				+ ","
-				+ baseShipment.getReceiverContactPerson()
+				+ baseShipment.getSenderContactPerson()
 						.getFirstName(), toUser, ccUsers,
 						null,
-						baseShipment.getLabel(), baseShipment
-						.getSenderContactPerson().getLastName()
+						baseShipment.getLabel(),baseShipment
+						.getReceiverContactPerson().getLastName()
 						+ ","
-						+ baseShipment.getSenderContactPerson()
+						+ baseShipment.getReceiverContactPerson()
 								.getFirstName(),baseShipment.getReceiverSite().getName(),baseShipment.getSenderSite().getName(),
 								baseShipment.getActivityStatus());
 	}
 	
 	protected void sendCreateShipmentNotification(BaseShipment baseShipment)
 	{
-		final String[] toUser = this
-				.getEmailAddressesForMailNotification(baseShipment);
+		final String[] ccUsers = {baseShipment.getSenderContactPerson().getEmailAddress()};
 		
-		String[] ccUsers={baseShipment.getReceiverContactPerson().getEmailAddress()};
+		String[] toUser={baseShipment.getReceiverContactPerson().getEmailAddress()};
 		//Add mailing functionality
-		
 		final EmailHandler emailHandler = new EmailHandler();
-		emailHandler.createShipmentEmail(baseShipment.getSenderContactPerson()
+		emailHandler.createShipmentEmail(baseShipment.getReceiverSite()
+				.getCoordinator().getLastName()
+				+ ","
+				+ baseShipment.getReceiverSite().getCoordinator()
+						.getFirstName(), toUser,
+				ccUsers, baseShipment.getSenderContactPerson().getEmailAddress(),
+				baseShipment.getLabel(), baseShipment.getReceiverContactPerson()
 				.getLastName()
 				+ ","
-				+ baseShipment.getSenderContactPerson().getFirstName(), toUser,
-				ccUsers, baseShipment.getSenderContactPerson().getEmailAddress(),
-				baseShipment.getLabel(), baseShipment.getReceiverSite()
-						.getCoordinator().getLastName()
-						+ ","
-						+ baseShipment.getReceiverSite().getCoordinator()
-								.getFirstName(), baseShipment.getReceiverSite()
+				+ baseShipment.getReceiverContactPerson().getFirstName(), baseShipment.getReceiverSite()
 						.getName(), baseShipment.getSenderSite().getName(),
 				baseShipment.getCreatedDate(),baseShipment.getId(),baseShipment.getActivityStatus());
 	}
@@ -1186,17 +1182,42 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		//bug 12255
 		List receiverSiteList = null;
 		Site receiverSite = null;
-		final long siteId = baseShipment.getReceiverSite().getId();
-		if (siteId != 0l)
+		if(baseShipment instanceof ShipmentRequest)
 		{
-			receiverSiteList = dao.retrieve( Site.class.getName(),
-					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, siteId );
-			if (receiverSiteList != null && !receiverSiteList.isEmpty())
+			final long siteId = baseShipment.getReceiverSite().getId();
+			if (siteId != 0l)
 			{
-				receiverSite = (Site) receiverSiteList.get( 0 );
+				receiverSiteList = dao.retrieve( Site.class.getName(),
+						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, siteId );
+				if (receiverSiteList != null && !receiverSiteList.isEmpty())
+				{
+					receiverSite = (Site) receiverSiteList.get( 0 );
+				}
+				final User receiverSiteCoordinator = receiverSite.getCoordinator();
+				baseShipment.setReceiverContactPerson( receiverSiteCoordinator );
 			}
-			final User receiverSiteCoordinator = receiverSite.getCoordinator();
-			baseShipment.setReceiverContactPerson( receiverSiteCoordinator );
+		}
+		else if(baseShipment instanceof Shipment)
+		{
+			if(((Shipment)baseShipment).getShipmentRequest()!=null &&((Shipment)baseShipment).getShipmentRequest().getSenderContactPerson()!=null)
+			{
+				baseShipment.setReceiverContactPerson(((Shipment)baseShipment).getShipmentRequest().getSenderContactPerson());
+			}
+			else
+			{
+				final long siteId = baseShipment.getReceiverSite().getId();
+				if (siteId != 0l)
+				{
+					receiverSiteList = dao.retrieve( Site.class.getName(),
+							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, siteId );
+					if (receiverSiteList != null && !receiverSiteList.isEmpty())
+					{
+						receiverSite = (Site) receiverSiteList.get( 0 );
+					}
+					final User receiverSiteCoordinator = receiverSite.getCoordinator();
+					baseShipment.setReceiverContactPerson( receiverSiteCoordinator );
+				}
+			}
 		}
 	}
 

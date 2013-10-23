@@ -794,11 +794,18 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			{
 				this.updateShipmentSystemProperties( shipmentRequest, (ShipmentRequest) oldObj );
 			}
-			this.setShipmentContactPersons( dao, shipmentRequest, sessionDataBean.getUserId() );
+			
+			if(shipmentRequest.getSenderContactPerson()==null)
+			{
+				this.setShipmentContactPersons( dao, shipmentRequest, sessionDataBean.getUserId() );
+			}
 			this.setShipmentSites( dao, shipmentRequest );
 			dao.update( shipmentRequest,oldObj );
 			//Add mailing functionality
-			this.sendCreateShipmentNotification(shipmentRequest);
+			if(!Constants.ACTIVITY_STATUS_PROCESSED.equalsIgnoreCase(shipmentRequest.getActivityStatus()))
+			{
+				this.sendCreateShipmentNotification(shipmentRequest);
+			}
 		}
 		catch (final DAOException daoException)
 		{
