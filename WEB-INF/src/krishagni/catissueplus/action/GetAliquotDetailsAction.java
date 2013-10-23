@@ -58,7 +58,7 @@ public class GetAliquotDetailsAction extends BaseAction
 		}
 		request.setAttribute("isLabelGenerationOn", isLabelGenerationOn);
 		boolean isBarGenerationOn = false;
-		if ((Variables.isSpecimenBarcodeGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl))
+		if (Variables.isSpecimenBarcodeGeneratorAvl)
 		{
 			isBarGenerationOn = true;
 		}

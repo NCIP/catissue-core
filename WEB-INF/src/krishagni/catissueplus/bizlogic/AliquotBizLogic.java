@@ -18,12 +18,14 @@ import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
 import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import krishagni.catissueplus.dto.SingleAliquotDetailsDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
@@ -34,7 +36,7 @@ public class AliquotBizLogic
 {
 
     private SpecimenDTO createAliquotSpecimenDTOFromDTO(AliquotDetailsDTO aliquotDetailsDTO, Specimen parentSpecimen,
-            SingleAliquotDetailsDTO singleAliquotDetailsDTO, SpecimenPosition spePositionObj)
+            SingleAliquotDetailsDTO singleAliquotDetailsDTO, SpecimenPosition spePositionObj, HibernateDAO hibernateDao) throws BizLogicException
     {
         SpecimenDTO specimenDto = new SpecimenDTO();
         specimenDto.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
@@ -62,11 +64,11 @@ public class AliquotBizLogic
         specimenDto.setTissueSite(parentSpecimen.getSpecimenCharacteristics().getTissueSite());
         specimenDto.setExternalIdentifiers(new ArrayList<ExternalIdentifierDTO>());
         specimenDto.setType(parentSpecimen.getSpecimenType());
-        if (!Variables.isTemplateBasedLblGeneratorAvl && !Variables.isSpecimenLabelGeneratorAvl)
+        if (!new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(parentSpecimen.getId(), hibernateDao))
         {
             specimenDto.setLabel(singleAliquotDetailsDTO.getAliqoutLabel());
         }
-        if (!Variables.isSpecimenBarcodeGeneratorAvl && !Variables.isTemplateBasedLblGeneratorAvl)
+        if (!Variables.isSpecimenBarcodeGeneratorAvl)
         {
             specimenDto.setBarcode(singleAliquotDetailsDTO.getBarCode());
         }
@@ -132,7 +134,7 @@ public class AliquotBizLogic
             }
 
             SpecimenDTO aliquotSpecimen = createAliquotSpecimenDTOFromDTO(aliquotDetailsDTO, parentSpecimen,
-                    singleAliquotDetailsDTO, specimenPosition);
+                    singleAliquotDetailsDTO, specimenPosition,hibernateDao);
 
             specimenDtoList.add(aliquotSpecimen);
 

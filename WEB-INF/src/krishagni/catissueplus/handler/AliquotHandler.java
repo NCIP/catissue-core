@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
+import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.PrintUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -123,7 +124,7 @@ public class AliquotHandler
                 returnJsonObject.put(Constants.CP_ID,
                         specimenDAO.getCpIdFromSpecimenId(aliquotDetailsDTO.getParentId(), hibernateDAO));
                 boolean isLabelGenerationOn = false;
-                if ((Variables.isSpecimenLabelGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl))
+                if (new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(aliquotDetailsDTO.getParentId(), hibernateDAO))
                 {
                     isLabelGenerationOn = true;
                 }
