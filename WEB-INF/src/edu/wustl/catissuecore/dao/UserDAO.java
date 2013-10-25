@@ -22,12 +22,12 @@ public class UserDAO
 {
 
 	private static final Logger LOGGER = Logger.getCommonLogger(UserDAO.class);
-	public Long getUserIDFromLoginName(HibernateDAO hibernateDao,String loginName) throws DAOException, BizLogicException 
+	public Long getUserIDFromLoginName(HibernateDAO hibernateDao,String loginName,String activityStatus) throws DAOException, BizLogicException 
 	{
 
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, loginName));
-		params.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
+		params.put("1", new NamedQueryParam(DBTypes.STRING, activityStatus));
 		List<Long> userIds = hibernateDao.executeNamedQuery("getUserIdFromLoginName", params);
 		if(userIds == null || userIds.isEmpty())
 		{

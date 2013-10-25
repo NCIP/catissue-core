@@ -4190,6 +4190,8 @@ public class Constants
 	/** The Constant ORDER_STATUS_PENDING. */
 	public static final String ORDER_STATUS_PENDING = "Pending";
 
+	public static final String ACTIVITY_STATUS_LOCKED = "Locked";
+	public static final String LOGIN_FAILURE_ATTEMPTS_LIMIT = "loginFailureAttemptsLimit";
 	/** The Constant ORDER_STATUS_REJECTED. */
 	public static final String ORDER_STATUS_REJECTED = "Rejected";
 

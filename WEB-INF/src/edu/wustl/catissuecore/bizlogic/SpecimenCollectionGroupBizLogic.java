@@ -973,7 +973,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						if((collEventParam.getUser().getId() == null || collEventParam.getUser().getId() != 0l) && !Validator.isEmpty(collEventParam.getUser().getLoginName()))
 						{
 							UserDAO userDAO = new UserDAO();
-							collEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, collEventParam.getUser().getLoginName()));
+							collEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, collEventParam.getUser().getLoginName(),Constants.ACTIVITY_STATUS_ACTIVE));
 						}
 					}
 					if (collEventParam.getCollectionProcedure() != null
@@ -1001,7 +1001,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						if((recEventParam.getUser().getId() == null || recEventParam.getUser().getId() != 0l) && !Validator.isEmpty(recEventParam.getUser().getLoginName()))
 						{
 							UserDAO userDAO = new UserDAO();
-							recEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, recEventParam.getUser().getLoginName()));
+							recEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, recEventParam.getUser().getLoginName(),Constants.ACTIVITY_STATUS_ACTIVE));
 						}
 					}
 

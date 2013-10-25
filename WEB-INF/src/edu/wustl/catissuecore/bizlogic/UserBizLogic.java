@@ -1044,6 +1044,15 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		try
 		{
+			if (Constants.ACTIVITY_STATUS_LOCKED.equals(oldUser.getActivityStatus()))
+			{
+//				String userStatus = migra.checkForMigratedUser(user.getLoginName(),
+//						edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
+//				if (edu.wustl.wustlkey.util.global.Constants.CSM.equals(userStatus))
+//				{
+//					user.setFirstTimeLogin(Boolean.TRUE);
+//				}
+			}
 			// Get the csm userId if present.
 			String csmUserId = null;
 

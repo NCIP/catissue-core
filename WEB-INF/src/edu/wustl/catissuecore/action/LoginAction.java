@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import krishagni.catissueplus.util.DAOUtil;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -17,6 +19,7 @@ import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.authmanager.IDPAuthManager;
 import edu.wustl.authmanager.factory.AuthManagerFactory;
 import edu.wustl.catissuecore.actionForm.LoginForm;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.processor.CatissueLoginProcessor;
@@ -25,8 +28,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
 import edu.wustl.migrator.MigrationState;
@@ -122,12 +128,20 @@ public class LoginAction extends XSSSupportedAction
             throws CatissueException, NamingException, ApplicationException, AuthenticationException
     {
         String forwardTo;
+        
         final LoginForm loginForm = (LoginForm) form;
         final LoginCredentials loginCredentials = new LoginCredentials();
         loginCredentials.setLoginName(loginForm.getLoginName());
         loginCredentials.setPassword(loginForm.getPassword());
-        LoginProcessor.authenticate(loginCredentials);
+//        LoginProcessor.authenticate(loginCredentials);
           final edu.wustl.domain.LoginResult loginResult;
+          if(isUserLocked(loginForm.getLoginName()))
+          {
+        	  	ActionErrors errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("login.account.locked"));
+				saveErrors(request, errors);
+        	  return Constants.FAILURE; 
+          }
         if(isRequestFromClinportal(request))
         {
         	loginResult = new LoginResult();
@@ -173,28 +187,58 @@ public class LoginAction extends XSSSupportedAction
         }
         else
         {
-            LoginAction.LOGGER.info("User " + loginForm.getLoginName()
-                    + " Invalid user. Sending back to the login Page");
-            if (MigrationState.MIGRATED.equals(loginResult.getMigrationState())
-                    && loginForm.getLoginName().equals(loginResult.getAppLoginName()))
-            {
-                LoginAction.LOGGER.info("User " + loginForm.getLoginName()
-                        + " Migrated user. Sending back to the login Page");
-                handleError(request, "app.migrateduser");
-            }
-            else
-            {
-                handleError(request, "errors.incorrectLoginIDPassword");
-            }
+        	   LoginAction.LOGGER.info("User " + loginForm.getLoginName()
+	                    + " Invalid user. Sending back to the login Page");
+        	if(loginResult.isAccountLocked())
+        	{
+        		handleError(request, "login.account.locked");
+        	}
+        	else
+        	{
+	         
+	            if (MigrationState.MIGRATED.equals(loginResult.getMigrationState())
+	                    && loginForm.getLoginName().equals(loginResult.getAppLoginName()))
+	            {
+	                LoginAction.LOGGER.info("User " + loginForm.getLoginName()
+	                        + " Migrated user. Sending back to the login Page");
+	                handleError(request, "app.migrateduser");
+	            }
+	            else
+	            {
+	                handleError(request, "errors.incorrectLoginIDPassword");
+	            }
+        	}
             forwardTo = Constants.FAILURE;
         }
-
-
-
         return forwardTo;
     }
 
-    private boolean isRequestFromClinportal(final HttpServletRequest request)
+    private Boolean isUserLocked(String loginName) throws BizLogicException 
+    {
+    	Boolean isUserLocked = Boolean.FALSE;
+    	UserDAO userDAO = new UserDAO();
+    	HibernateDAO dao = null;
+    	try {
+    		dao = DAOUtil.openDAOSession(null);
+			if(userDAO.getUserIDFromLoginName(dao, loginName, Constants.ACTIVITY_STATUS_LOCKED) != null)
+			{
+				isUserLocked = Boolean.TRUE;
+			}
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BizLogicException e) 
+		{
+			LOGGER.error(e);
+		}
+    	finally
+    	{
+    		DAOUtil.closeDAOSession(dao);
+    	}
+		return isUserLocked;
+	}
+
+	private boolean isRequestFromClinportal(final HttpServletRequest request)
     {
         return request.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL) != null
                 && !(CDMSIntegrationConstants.DOUBLE_QUOTE.equals(request
