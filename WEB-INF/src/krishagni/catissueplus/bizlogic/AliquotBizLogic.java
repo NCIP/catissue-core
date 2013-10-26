@@ -64,7 +64,7 @@ public class AliquotBizLogic
         specimenDto.setTissueSite(parentSpecimen.getSpecimenCharacteristics().getTissueSite());
         specimenDto.setExternalIdentifiers(new ArrayList<ExternalIdentifierDTO>());
         specimenDto.setType(parentSpecimen.getSpecimenType());
-        if (!new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(parentSpecimen.getId(), hibernateDao))
+        if (!Validator.isEmpty(singleAliquotDetailsDTO.getAliqoutLabel()))
         {
             specimenDto.setLabel(singleAliquotDetailsDTO.getAliqoutLabel());
         }
