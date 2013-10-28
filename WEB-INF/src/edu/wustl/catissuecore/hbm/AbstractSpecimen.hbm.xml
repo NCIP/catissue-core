@@ -428,7 +428,7 @@
 	    		select specimen.activityStatus,scg.id, specimen.id, specimen.label,
 				specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
 				specimenCharacteristics.tissueSite, specimen.specimenCharacteristics.tissueSide,
-				specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+				specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
 				left join specimen.specimenCharacteristics specimenCharacteristics where specimen.label=?
 	</query>
 	<query name="getCpIdFromSpecimenId">
@@ -443,7 +443,7 @@
 	    		select specimen.activityStatus,scg.id, specimen.id, specimen.label,
 				specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
 				specimenCharacteristics.tissueSite, specimen.specimenCharacteristics.tissueSide,
-				specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity  from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+				specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
 				left join specimen.specimenCharacteristics specimenCharacteristics where specimen.barcode=?
 	    
 	</query>

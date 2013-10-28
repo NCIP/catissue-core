@@ -111,14 +111,17 @@ public class DeriveBizLogic
 		return characteristics;
 	}
 
-	public SpecimenDTO insertDeriveSpecimen(HibernateDAO hibernateDao, DerivedDTO deriveDTO, SessionDataBean sessionDataBean) throws BizLogicException
+	public SpecimenDTO insertDeriveSpecimen(HibernateDAO hibernateDao, DerivedDTO deriveDTO, SessionDataBean sessionDataBean) throws BizLogicException, DAOException
 	{
 		SpecimenDTO specimenDTO = getSpecimenDTO(deriveDTO);
 		SpecimenBizLogic specimenBizlogic = new SpecimenBizLogic();
 		specimenDTO = specimenBizlogic.insert(specimenDTO,hibernateDao,sessionDataBean);
+		Specimen parentSpecimen = new Specimen();
+		parentSpecimen.setId(specimenDTO.getParentSpecimenId());
 		if(deriveDTO.isDisposeParentSpecimen())
 		{
-			//dispose parent specimen
+			specimenBizlogic.disposeSpecimen(hibernateDao, sessionDataBean, parentSpecimen,
+		                    Constants.DERIVED_SPECIMEN_DISPOSAL_REASON);
 		}
 		return specimenDTO;
 	}

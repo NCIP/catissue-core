@@ -567,6 +567,4 @@
     </class>
 	<query name="getDistributionEvent">select distEventParam.comment,distEventParam.distributedQuantity,distEventParam.timestamp,user.firstName,user.lastName,site.name from DistributionEventParameters distEventParam left join distEventParam.user user left join distEventParam.distributionDetails distribution left join distribution.toSite site where distEventParam.id = ?
 	</query>
-	<query name="eventUserListById">select id,activityStatus from edu.wustl.catissuecore.domain.User where id=?</query>
-	<query name="eventUserListByName">select id,activityStatus from edu.wustl.catissuecore.domain.User where loginName=?</query>
 </hibernate-mapping>

@@ -1024,7 +1024,10 @@ public class SpecimenBizLogic
 		specimen.setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
 		hibernateDao.update(specimen);
-		hibernateDao.delete(prevPosition);
+		if(prevPosition != null)
+		{
+			hibernateDao.delete(prevPosition);
+		}
 	}
 
 	private DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean, AbstractSpecimen specimen,

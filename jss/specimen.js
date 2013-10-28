@@ -1104,6 +1104,10 @@ function processDeriveData(obj)
 		derLabelSubmit=false;
 		obj.className += " errorStyleOn";
 	}
+	else if(obj.name=='disposeParentSpecimen' || obj.name =='isToPrintLabel')
+	{
+		deriveDataJSON[obj.name] = obj.checked;
+	}
 	else
 	{	
 		if(obj.name=='initialQuantity')

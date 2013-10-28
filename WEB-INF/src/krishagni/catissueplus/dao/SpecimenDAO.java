@@ -102,6 +102,10 @@ public class SpecimenDAO
 					specimen.setConcentrationInMicrogramPerMicroliter(Double.parseDouble(valArr[11].toString()));
 				}
 				specimen.setInitialQuantity(Double.parseDouble(valArr[12].toString()));
+				if(valArr[13] != null)
+				{
+					specimen.setIsAvailable(Boolean.valueOf(valArr[13].toString()));
+				}
 			}
 		}
 		return specimen;
@@ -274,7 +278,7 @@ public class SpecimenDAO
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 			params.put("0", new NamedQueryParam(DBTypes.LONG, specimenEventParameter.getUser().getId()));
 			params.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
-			userIdList = hibernateDao.executeNamedQuery("eventUserListById", params);
+			userIdList = hibernateDao.executeNamedQuery("getUserListById", params);
 			message = ApplicationProperties.getValue("app.UserID");
 		}
 		else if (specimenEventParameter.getUser().getLoginName() != null
@@ -283,14 +287,14 @@ public class SpecimenDAO
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 			params.put("0", new NamedQueryParam(DBTypes.STRING, specimenEventParameter.getUser().getLoginName()));
 			params.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
-			userIdList = hibernateDao.executeNamedQuery("eventUserListByName", params);
+			userIdList = hibernateDao.executeNamedQuery("getUserIdFromLoginName", params);
 			message = ApplicationProperties.getValue("user.loginName");
 		}
 		if (userIdList != null && !userIdList.isEmpty())
 		{
-			Object[] object = (Object[]) userIdList.get(0);
+//			Object[] object = (Object[]) userIdList.get(0);
 			final User user = new User();
-			user.setId((Long) object[0]);
+			user.setId((Long) userIdList.get(0));
 			specimenEventParameter.setUser(user);
 		}
 		else

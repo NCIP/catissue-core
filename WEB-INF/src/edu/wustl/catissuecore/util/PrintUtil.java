@@ -1,14 +1,12 @@
 
 package edu.wustl.catissuecore.util;
 
-import javax.servlet.http.HttpServletRequest;
-
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -47,6 +45,14 @@ public class PrintUtil
 		catch (Exception exception)
 		{
 			logger.error(exception.getMessage(), exception);
+		}
+		finally
+		{
+			try {
+				AppUtility.closeDAOSession(dao);
+			} catch (ApplicationException e) {
+				logger.error(e.getMessage(), e);
+			}
 		}
 		return printStauts;
 	}
