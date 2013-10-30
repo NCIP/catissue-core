@@ -101,10 +101,19 @@ function initializeSCGCombo(operation)
 			clinicalDiagnosisCombo.attachEvent("onChange", function(){clinicalDiagnosisCombo.DOMelem_input.focus();});
 			});
 			clinicalDiagnosisCombo.attachEvent("onOpen",onComboClick);
-			clinicalDiagnosisCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			//clinicalDiagnosisCombo.attachEvent("onKeyPressed",onComboKeyPress);
 			clinicalDiagnosisCombo.attachEvent("onSelectionChange",function(){
  clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisCombo.getSelectedText();
  });
+ clinicalDiagnosisCombo.attachEvent("onXLE",function (){clinicalDiagnosisCombo.addOption(clinicalDiagnosisValue,clinicalDiagnosisValue);});
+ /*clinicalDiagnosisCombo.attachEvent("onBlur", onBlurFunc);
+function onBlurFunc() {alert(clinicalDiagnosisCombo.getLastSelectedValue());
+	if(!clinicalDiagnosisCombo.getSelectedValue())
+	{
+		clinicalDiagnosisCombo.setComboValue("Not Specified");
+	}
+    return true;
+}*/
 		
 		
 		
