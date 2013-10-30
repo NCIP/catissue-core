@@ -18,7 +18,6 @@ import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
 import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import krishagni.catissueplus.dto.SingleAliquotDetailsDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
-import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -113,9 +112,12 @@ public class AliquotBizLogic
 
         SpecimenDAO specimenDAO = new SpecimenDAO();
         Specimen parentSpecimen = specimenDAO.getParentSpecimenByLabelOrBarcode(hibernateDao, aliquotDetailsDTO.getParentLabel());
+        if(!parentSpecimen.getIsAvailable())
+        {
+        	throw new CatissueException(SpecimenErrorCodeEnum.SPECIMEN_NOT_AVAILABLE.getDescription(),SpecimenErrorCodeEnum.SPECIMEN_NOT_AVAILABLE.getCode());
+        }
         aliquotDetailsDTO.setParentId(parentSpecimen.getId());
         List<SingleAliquotDetailsDTO> aliquotDetailList = aliquotDetailsDTO.getPerAliquotDetailsCollection();
-        StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
         double totalDistributedQuantity = getTotalDistributedQuantity(aliquotDetailList,
                 parentSpecimen.getAvailableQuantity());
         SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
