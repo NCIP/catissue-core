@@ -381,8 +381,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			this.disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
 		}
-		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 		specimen = (Specimen)dao.retrieveById(Specimen.class.getName(), specimen.getId());
+		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 		specimen.setSpecimenPosition(null);
 		specimen.setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
