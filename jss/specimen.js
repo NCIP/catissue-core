@@ -873,6 +873,11 @@ req.onreadystatechange = function() {
 				divStyle='block';
 				document.getElementById('specListDiv').style.display='block';
 			}
+			tabDataJSON={};
+			if(operation == 'add')
+			{
+				LoadSCGTabBar('edit');
+			}
 			scrollToTop();
 		}
 		if(operation == 'edit')

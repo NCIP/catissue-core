@@ -45,7 +45,11 @@ public class SpecimenDAO
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId==null?0l:specimenId));
 		List specimenDetailColl = hibernateDao.executeNamedQuery("getCpIdFromSpecimenId", params);
-		return (Long) specimenDetailColl.get(0);
+		if (specimenDetailColl != null && specimenDetailColl.size() > 0)
+		{
+			return Long.valueOf(specimenDetailColl.get(0).toString());
+		}
+		return null;
 	}
 
 	public Long getCpIdFromSpecimenLabel(String specimenLable, HibernateDAO hibernateDao) throws DAOException

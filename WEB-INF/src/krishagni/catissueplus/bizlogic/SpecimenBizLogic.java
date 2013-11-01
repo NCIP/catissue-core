@@ -210,8 +210,13 @@ public class SpecimenBizLogic
 		{
 			oldSpecimenObj.setLabel(specimenDTO.getLabel());
 		}
+		Double quantityDiff = 0.0;
 		if (specimenDTO.getQuantity() != null)
 		{
+			if(specimenDTO.getQuantity() > oldSpecimenObj.getInitialQuantity())
+			{
+				quantityDiff = specimenDTO.getQuantity() - oldSpecimenObj.getInitialQuantity();
+			}
 			oldSpecimenObj.setInitialQuantity(specimenDTO.getQuantity());
 		}
 		if (isSpecimenStatusCollected(specimenDTO.getCollectionStatus())
@@ -235,6 +240,11 @@ public class SpecimenBizLogic
 			{
 				oldSpecimenObj.setCollectionStatus(specimenDTO.getCollectionStatus());
 			}
+			if(quantityDiff > 0.0)
+			{
+				oldSpecimenObj.setAvailableQuantity(oldSpecimenObj.getAvailableQuantity() + quantityDiff);
+				oldSpecimenObj.setIsAvailable(Boolean.TRUE);
+			}
 			if (specimenDTO.getAvailableQuantity() != null)
 			{
 				oldSpecimenObj.setAvailableQuantity(specimenDTO.getAvailableQuantity());
@@ -243,6 +253,10 @@ public class SpecimenBizLogic
 			{
 				oldSpecimenObj.setIsAvailable(specimenDTO.isAvailable());
 			}
+		}
+		if(oldSpecimenObj.getAvailableQuantity() == 0)
+		{
+			oldSpecimenObj.setIsAvailable(Boolean.FALSE);
 		}
 		if (!Validator.isEmpty(specimenDTO.getBarcode()))
 		{
