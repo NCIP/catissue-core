@@ -2446,7 +2446,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	private void setSiteTocontainer(HibernateDAO hibernateDao,
 			StorageContainer container) throws BizLogicException
 	{
-		if (container.getSite() != null
+		if (container.getSite() != null &&  container.getSite().getId()==null
 				&& container.getSite().getName() != null)
 		{
 			SiteBizLogic siteBizLogic = new SiteBizLogic();
