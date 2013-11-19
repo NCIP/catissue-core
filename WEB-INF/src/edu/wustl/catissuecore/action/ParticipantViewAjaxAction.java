@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
 
 public class ParticipantViewAjaxAction extends DispatchAction{
@@ -32,14 +33,16 @@ public class ParticipantViewAjaxAction extends DispatchAction{
 		SessionDataBean sessionData =  (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		String specimenLabels = "";
 		HibernateDAO hibernateDAO = null;
-		try{
+		try
+		{
 			hibernateDAO = (HibernateDAO)AppUtility.openDAOSession(sessionData);
-	    if(scgId!=null)
-	    {
-	    	SpecimenDAO specimenDAO = new SpecimenDAO();
-		 specimenLabels = getSpecimenLabelJson(specimenDAO.getSpecimenLableAndId(hibernateDAO,Long.valueOf(scgId)));
-	    }
-		}finally
+		    if(!Validator.isEmpty(scgId))
+		    {
+		    	SpecimenDAO specimenDAO = new SpecimenDAO();
+		    	specimenLabels = getSpecimenLabelJson(specimenDAO.getSpecimenLableAndId(hibernateDAO,Long.valueOf(scgId)));
+		    }
+		}
+		finally
 		 {
 			AppUtility.closeDAOSession(hibernateDAO);
 		 }
