@@ -122,7 +122,7 @@ public class AliquotHandler
                 SpecimenDAO specimenDAO = new SpecimenDAO();
                 returnJsonObject.put(ALIQUOTS_DETAILS_DTO, gson.toJson(aliquotDetailsDTO));
                 returnJsonObject.put(Constants.CP_ID,
-                        specimenDAO.getCpIdFromSpecimenId(aliquotDetailsDTO.getParentId(), hibernateDAO));
+                        specimenDAO.getCpId(aliquotDetailsDTO.getParentId(), hibernateDAO));
                 boolean isLabelGenerationOn = false;
                 if (new SpecimenBizlogic().isSpecimenLabelGeneratorAvl(aliquotDetailsDTO.getParentId(), hibernateDAO))
                 {

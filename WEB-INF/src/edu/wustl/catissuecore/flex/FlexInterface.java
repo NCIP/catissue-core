@@ -1635,11 +1635,40 @@ public class FlexInterface
 		// Removed the cp based cache : Geeta
 		final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 		
-		participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long.parseLong(cpId),isPHIView);
+		participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long.parseLong(cpId),"",isPHIView);
 		Collections.sort(participantsList);
 
     	return participantsList;
 	}
+
+	   /**
+     * This method retrieves the List of participants associated with a cp.
+     *
+     * @param cpId :Collection protocol Id
+     * @param cpTitle the cp title
+     *
+     * @return the list of Participants
+     *
+     * @throws ApplicationException the application exception
+     */
+    public List getParticipantsListAspPerQuery(String cpId, String cpTitle,String searchString, boolean isPHIView) throws ApplicationException
+    {
+        //Setting the cp title in session
+        if(isToInitializeSession)
+        {
+            this.session = flex.messaging.FlexContext.getHttpRequest().getSession();
+        }
+        this.session.setAttribute("cpTitle", cpTitle);
+        List<CpAndParticipentsBean> participantsList = new ArrayList<CpAndParticipentsBean>();
+        
+        // Removed the cp based cache : Geeta
+        final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
+        
+        participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long.parseLong(cpId),searchString,isPHIView);
+    //    Collections.sort(participantsList);
+
+        return participantsList;
+    }
 
 
 	/**

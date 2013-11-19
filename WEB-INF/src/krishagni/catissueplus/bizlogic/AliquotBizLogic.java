@@ -195,7 +195,7 @@ public class AliquotBizLogic
         {
             quantityPerAliquot = parentSpecimen.getAvailableQuantity() / aliquotCount;
         }
-        Long cpId = specimenDAO.getCpIdFromSpecimenLabel(aliquotDetailsDTO.getParentLabel(), hibernateDao);
+        Long cpId = specimenDAO.getCpId(aliquotDetailsDTO.getParentLabel(), hibernateDao);
         ContainerInputDetailsDTO containerInputDetail = new ContainerInputDetailsDTO();
         containerInputDetail.aliquotCount = aliquotCount;
         containerInputDetail.cpId = cpId;

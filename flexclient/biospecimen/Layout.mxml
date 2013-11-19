@@ -280,7 +280,8 @@
 		}
 		else
 		{
-			remoteObj.getParticipantsList(selectedCp.value,selectedCp.name,selectedCp.isPHIView);
+			Alert.show("participant refershed");
+			//remoteObj.getParticipantsList(selectedCp.value,selectedCp.name,selectedCp.isPHIView);
 		}
     }
 
@@ -490,7 +491,7 @@
 
 			spDetailsLabel.text = title;//+"  "+selectedP.name;
 
-    			var str:String = remoteObjForURLFeature.getTreeData(selectedCpId,selectedParticipantId);
+    		var str:String = remoteObjForURLFeature.getTreeData(selectedCpId,selectedParticipantId);
 		}
 	}
 
@@ -608,7 +609,8 @@
 		}
 		else
 		{
-			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name,selectedCp.isPHIView);
+		
+	//		remoteObj.getParticipantsList(selectedCp.value, selectedCp.name,selectedCp.isPHIView);
 		}
 
 		specimenTree.dataProvider = null;
@@ -619,8 +621,9 @@
 	*/
 	public function participantHandler(pevent:ResultEvent):void
 	{
-	    var bean : NameValueBean = new NameValueBean();
-		pCollection = pevent.result as ArrayCollection;
+	    /*var bean : NameValueBean = new NameValueBean();
+		pCollection = pevent.result as ArrayCollection;*/
+		Sp.participantComboHandler(pevent);
 //		pCombo.dataProvider = pCollection;
 	}
 	/*
@@ -890,7 +893,20 @@
         }
 
     }
-
+	 private function getParticipant():void
+	 {
+		var selectedCp : NameValueBean = new NameValueBean();
+	    selectedCp =  cpCombo as NameValueBean;
+	    if(selectedCp != null)
+	    {
+			remoteObj.getParticipantsList(selectedCp.value,selectedCp.name,selectedCp.isPHIView);
+		}
+	    else
+	    {
+	    	 Alert.show("Please select valid Collection Protocol");
+    	}
+    	
+	 }
 	 /*
             This function is to register a New Participant to CP
   	 */
@@ -1166,6 +1182,7 @@
 		<mx:method name="getTreeData" result="treeHandler(event)"/>
 		<mx:method name="getCpList" result="cpEventHandler(event)"/>
 		<mx:method name="chkArmShifting" result="armChkHandler(event)"/>
+		<mx:method name="getParticipantsListAspPerQuery" result="participantHandler(event)"/>
 	</mx:RemoteObject>
 
 	<mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
@@ -1190,13 +1207,16 @@
 			<mx:VBox width="50%">
                      		<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/>
 			</mx:VBox>
-			<mx:VBox width="50%">
+			<mx:VBox width="25%">
 	                     	<mx:Button id="registerNewPartButton" toolTip="Click to register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
                    	</mx:VBox>
+			<!--mx:VBox width="25%">
+	                     	<mx:Button id="getRegisterPartButton" toolTip="Click to Fetch Participant" label="Get Participant" color="black" click="getParticipant();" height="15"/>
+                   	</mx:VBox-->
 		</mx:HBox>
 		<mx:HBox width="100%">
 			<!-- Jignesh: AutoCompeleteDropDown component -->
-			<Components:AutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>
+			<Components:ServerSideAutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>
 		</mx:HBox>
 
 		<mx:HBox width="100%" borderSides="black">

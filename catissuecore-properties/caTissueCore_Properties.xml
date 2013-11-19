@@ -940,4 +940,8 @@ Helpdesk Phone : @@contact.number@@</value>
 		<name>nightly.cron.job.execution.time.min</name>
 		<value>@@nightly.cron.job.execution.time.min@@</value>
 	</property>
+	<property>
+	   <name>participant.list.count</name>
+	   <value>200</value>
+	</property>
 </properties>

@@ -40,7 +40,7 @@ public class SpecimenDAO
 
 	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenBizLogic.class);
 
-	public Long getCpIdFromSpecimenId(Long specimenId, HibernateDAO hibernateDao) throws DAOException
+	public Long getCpId(Long specimenId, HibernateDAO hibernateDao) throws DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId==null?0l:specimenId));
@@ -52,12 +52,16 @@ public class SpecimenDAO
 		return null;
 	}
 
-	public Long getCpIdFromSpecimenLabel(String specimenLable, HibernateDAO hibernateDao) throws DAOException
+	public Long getCpId(String specimenLabel, HibernateDAO hibernateDao) throws DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLable));
+		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 		List specimenDetailColl = hibernateDao.executeNamedQuery("getCpIdFromSpecimenLabel", params);
-		return (Long) specimenDetailColl.get(0);
+		if (specimenDetailColl != null && specimenDetailColl.size() > 0)
+		{
+			return Long.valueOf(specimenDetailColl.get(0).toString());
+		}
+		return null;
 	}
 
 	public Specimen getParentSpecimenByLabelOrBarcode(HibernateDAO hibernateDao, String label) throws ApplicationException

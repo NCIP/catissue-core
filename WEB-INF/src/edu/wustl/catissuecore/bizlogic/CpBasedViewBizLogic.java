@@ -19,9 +19,12 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
@@ -252,6 +255,115 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		return participantInfoList;
 	}
 
+	   /**
+     * This method will retrieve all the participant for the selected CP.
+     * @param cpId
+     * @return list of CpAndParticipentsBeans
+     * @throws BizLogicException : BizLogicException
+     */
+
+    public List<CpAndParticipentsBean> getRegisteredParticipantInfoCollection(Long cpId,String searchString,boolean isPHIView)
+            throws BizLogicException, ApplicationException
+    {
+        final List<CpAndParticipentsBean> participantInfoList = new Vector<CpAndParticipentsBean>();
+        final StringBuffer hql = new StringBuffer();
+        HibernateDAO hibernateDAO = null;
+        try
+        {
+            hql.append("select cpr.participant.id");
+            if(isPHIView)
+            {   
+                /*Added case  statements because when we add participants from BO or SPR reports,
+                 * participant's first name, last name can be null. If the last name,
+                 * first name or ppid is null then it will be replaced by blank string.
+                 */
+                String columnName=", case"+ 
+                                    " when cpr.participant.lastName is null"+
+                                    " then '' "+
+                                    "else"+
+                                    " cpr.participant.lastName"+ 
+                                    " end"+
+                                    "||', '||"+
+                                    "case "+
+                                    " when cpr.participant.firstName is null"+ 
+                                    " then '' "+ 
+                                    "else "+
+                                    "cpr.participant.firstName"+ 
+                                    " end"+
+                                    "||'( '||"+
+                                    "case"+
+                                    " when cpr.protocolParticipantIdentifier is null"+ 
+                                    " then '' "+
+                                    "else"+
+                                    " cpr.protocolParticipantIdentifier "+ 
+                                    "end"+
+                                    "||' )'";
+                hql.append(columnName);
+            }       
+            else
+            {
+                hql.append(",cpr.protocolParticipantIdentifier");
+            }
+            
+            hql.append(" from ");
+            hql.append(CollectionProtocolRegistration.class.getName());
+            hql.append(" as cpr  where  cpr.collectionProtocol.id = ");
+            hql.append("?");
+            hql.append(" and cpr.activityStatus != '");
+            hql.append(Status.ACTIVITY_STATUS_DISABLED.toString());
+            hql.append("' and ");
+            hql.append(" cpr.participant.activityStatus != '");
+            hql.append(Status.ACTIVITY_STATUS_DISABLED.toString()+"'");
+            hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
+            List paramList = new ArrayList();
+            paramList.add(cpId);
+            String hsqlString = hql.toString();
+            List<Object[]> participantList = null;
+            int upperLimit =  Integer.parseInt(XMLPropertyHandler.getValue("participant.list.count"));
+            if(Validator.isEmpty(searchString)){
+                participantList  = hibernateDAO.executeQuery(hsqlString+" order by cpr.registrationDate desc", 0,upperLimit,paramList );
+            }else{
+                String appendHql = "and ( lower(cpr.participant.lastName) like ? or   lower(cpr.participant.firstName) like ? or  lower(cpr.protocolParticipantIdentifier) like ?)";
+                paramList.add(searchString.toLowerCase()+"%");
+                paramList.add(searchString.toLowerCase()+"%");
+                paramList.add(searchString.toLowerCase()+"%");
+                participantList  = hibernateDAO.executeQuery(hsqlString+appendHql, 0, upperLimit,paramList );
+                
+            }
+                    
+                    
+                    
+                    
+                for (int j = 0; j < participantList.size(); j++)
+                {
+                    final Object[] participantObj = participantList.get(j);
+                    String display_name = (String) participantObj[1] ;
+                    
+                    Long identifier = (Long) participantObj[0];
+                    participantInfoList.add(new CpAndParticipentsBean(display_name, identifier.toString(),isPHIView));
+                }
+        }
+        catch (final DAOException daoExp)
+        {
+            CpBasedViewBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
+            throw this
+                    .getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+        }
+        catch (final ApplicationException appEx)
+        {
+            CpBasedViewBizLogic.LOGGER.error(appEx.getMessage(),appEx);
+            throw new ApplicationException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
+        }
+        catch (final Exception exp)
+        {
+            CpBasedViewBizLogic.LOGGER.error(exp.getMessage(),exp);
+        }
+        finally{
+            AppUtility.closeDAOSession(hibernateDAO);
+        }
+        return participantInfoList;
+    }
+    
 	/**
 	 * This method will format the participant name.
 	 * @param participantObj : participant object.

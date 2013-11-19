@@ -796,7 +796,30 @@ public class SpecimenBizLogic
 			}
 			SpecimenDAO specimenDAO = new SpecimenDAO();
 			Long siteId = specimenDAO.getSiteIdBySpecimenLabelOrId(hibernateDao, specimenName, specimenId);
-			Long cpId = specimenDAO.getCpIdFromSpecimenId(specimenId, hibernateDao);
+			Long cpId = 0l;
+			if(Constants.NEW_SPECIMEN.equals(specimenDTO.getLineage()))
+			{
+				SCGDAO scgdao = new SCGDAO();
+				if(!Validator.isEmpty(specimenDTO.getSpecimenCollectionGroupName()))
+				{
+					cpId = scgdao.getCPID(specimenDTO.getSpecimenCollectionGroupName(),hibernateDao);
+				}
+				else if(specimenDTO.getSpecimenCollectionGroupId() != null)
+				{
+					cpId = scgdao.getCPID(specimenDTO.getSpecimenCollectionGroupId(),hibernateDao);
+				}
+			}
+			else
+			{
+				if(specimenId != null)
+				{
+					cpId = specimenDAO.getCpId(specimenId, hibernateDao);
+				}
+				else if(!Validator.isEmpty(specimenName))
+				{
+					cpId = specimenDAO.getCpId(specimenName, hibernateDao);
+				}
+			}
 			isAuthorize = chkAuthorizationForCPnSite(siteId, cpId, sessionDataBean.getUserName());
 			if(!isAuthorize && siteId == null)
 			{

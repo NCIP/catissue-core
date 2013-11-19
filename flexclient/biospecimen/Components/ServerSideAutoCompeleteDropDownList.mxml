@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--////////////////////////////////////////////////////////////////////////////////
+//
+// @file: DropDownList.mxml
+// @author: Jignesh Wala
+// @date: 27-11-2008
+// @description: Drop down list component with paginated list depending upon search criteria.
+//
+//////////////////////////////////////////////////////////////////////////////// -->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" verticalGap="0" click="closeDropDownPage(event)">
+	<mx:HBox id="mainHBox" horizontalGap="1" width="100%" top="0">
+		<mx:TextInput id="inputArea" width="98%" height="100%" change="filterList(event);" keyUp="trapKeys(event)" right="5" click="closeDropDown();"/>
+		<mx:Button id="DropDownButton" width="1%" height="100%" icon="@Embed(source='../images/undo.png')" click="openClose(event)"/>
+	</mx:HBox>			
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import Components.ServerSideDropDownList;
+			import mx.managers.PopUpManager;			
+			import mx.controls.Alert;
+			import valueobjects.NameValueBean;
+			import mx.rpc.events.ResultEvent;
+			import mx.collections.ArrayCollection;
+			import mx.utils.StringUtil;
+    	
+    		public var dropList:ServerSideDropDownList=null;			
+   			
+   			[Bindable]
+   			public var txtEntered:String="";
+   			
+   			[Bindable]
+   			public var cDataProvider:Array;
+   			
+   			[Bindable]
+   			public var parentInstance:String;
+   			
+   			/**
+   			 	openClose function is opening and closing the dropdown list and create a instance of ServerSideDropDownList.
+   			*/   			
+			private function openClose(event:Event):void{
+				if(dropList==null){
+					/*PopUpManager.removePopUp(this.parentApplication.Sp.dropList);
+					this.parentApplication.Sp.dropList=null;
+					dropList = ServerSideDropDownList(PopUpManager.createPopUp(this,ServerSideDropDownList, false));					
+					dropList.width = mainHBox.width;
+					dropList.setFocus();															
+					var point:Point = new Point();
+	           	 	point.x=0;
+	            	point.y=0;       
+	            	point=inputArea.localToGlobal(point);
+	            	dropList.x=point.x + 0;
+	            	dropList.y=point.y + 22; 
+	            	dropList.parentInstance = this.parentInstance;           	
+					dropList.pagedInitialize(cDataProvider);	
+					dropList.addEventListener(MouseEvent.CLICK,closeDropDownPage);			*/
+					var selectedCp : NameValueBean = new NameValueBean();
+					selectedCp =  this.parentApplication.cpCombo as NameValueBean;
+					txtEntered = inputArea.text;
+					this.parentApplication.remoteObj.getParticipantsListAspPerQuery(selectedCp.value,selectedCp.name,txtEntered,selectedCp.isPHIView);
+			
+				}else{				
+					PopUpManager.removePopUp(dropList);	
+					dropList=null;
+				}
+			}	
+			
+			/**
+   			 	filterList function is aligning the popup ServerSideDropDownList depends on parent
+   			 	and calling filterList with parameter txtEntered and cDataProvider to search text from DataObject. 
+   			*/
+			private function filterList(event:Event = null) : void
+			{				
+				/*if(dropList==null){	
+					PopUpManager.removePopUp(this.parentApplication.Sp.dropList);
+					this.parentApplication.Sp.dropList=null;			
+					dropList = ServerSideDropDownList(PopUpManager.createPopUp(this,ServerSideDropDownList, false));
+					dropList.width = mainHBox.width;				
+					var point:Point = new Point();
+	           	 	point.x=0;
+	            	point.y=0;       
+	            	point=inputArea.localToGlobal(point);
+	            	dropList.x=point.x + 0;
+	            	dropList.y=point.y + 22; 
+	            	dropList.parentInstance = this.parentInstance;			
+					dropList.addEventListener(MouseEvent.CLICK,closeDropDownPage);
+				}										
+				txtEntered += event.currentTarget.text;
+				var selectedCp : NameValueBean = new NameValueBean();
+				selectedCp =  this.parentApplication.cpCombo as NameValueBean;
+				this.parentApplication.remoteObj.getParticipantsListAspPerQuery(selectedCp.value,selectedCp.name,selectedCp.isPHIView);*/	
+				/*dropList.filterList(txtEntered,cDataProvider);
+				txtEntered="";*/
+			}
+			
+			/**
+   			 	closeDropDownPage function is closing when click event trigger outside the component
+   			 	and except scrollThumb,applicationControlbar,VBox,HBox,Button and UITextField. 
+   			*/
+			private function closeDropDownPage(event:Event):void{
+				if(event.target.className != "ScrollThumb" && event.target.className != "ApplicationControlBar" && event.target.className != "UITextField" && event.target.className != "Button"){				
+					PopUpManager.removePopUp(dropList);	
+					dropList=null;
+				}
+			}
+			
+			/**
+   			 	trapKeys function is traping KeyboardEvent for dropdown item sroll and selection.   			 	
+   			*/
+			private function trapKeys(e:KeyboardEvent):void {
+				if(e.keyCode == Keyboard.DOWN && dropList != null){
+					dropList.dropDownList.selectedIndex = 0;
+					dropList.dropDownList.setFocus();
+				}else if(e.keyCode == Keyboard.ESCAPE){
+					PopUpManager.removePopUp(dropList);	
+					dropList=null;
+				}else{
+					txtEntered = StringUtil.trim(inputArea.text);
+					if(txtEntered!=""){
+						var selectedCp : NameValueBean = new NameValueBean();
+						selectedCp =  this.parentApplication.cpCombo as NameValueBean;
+						
+						this.parentApplication.remoteObj.getParticipantsListAspPerQuery(selectedCp.value,selectedCp.name,txtEntered,selectedCp.isPHIView);
+					}
+				}		   			
+	  		}
+	  		private function closeDropDown():void{
+	  			PopUpManager.removePopUp(this.parentApplication.Sp.dropList);
+				this.parentApplication.Sp.dropList=null;
+			}
+			public function participantComboHandler(pevent:ResultEvent):void
+			{
+				var bean : NameValueBean = new NameValueBean();
+				this.parentApplication.pCollection = pevent.result as ArrayCollection;
+				
+				if(dropList==null){	
+					PopUpManager.removePopUp(dropList);	
+					dropList = null;
+				}
+					PopUpManager.removePopUp(this.parentApplication.Sp.dropList);
+					this.parentApplication.Sp.dropList=null;			
+					dropList = ServerSideDropDownList(PopUpManager.createPopUp(this,ServerSideDropDownList, false));
+					dropList.width = mainHBox.width;				
+					var point:Point = new Point();
+	           	 	point.x=0;
+	            	point.y=0;       
+	            	point=inputArea.localToGlobal(point);
+	            	dropList.x=point.x + 0;
+	            	dropList.y=point.y + 22; 
+	            	dropList.parentInstance = this.parentInstance;			
+					dropList.addEventListener(MouseEvent.CLICK,closeDropDownPage);
+				
+				txtEntered = inputArea.text;
+				dropList.filterList(txtEntered,cDataProvider);
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:VBox>
+
+
+

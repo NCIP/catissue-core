@@ -127,7 +127,7 @@ List<AliquotContainerDetailsDTO> containerDetailsDTOs = new ArrayList<AliquotCon
 				ContainerInputDetailsDTO containerInputDetails = new ContainerInputDetailsDTO();
 				containerInputDetails.aliquotCount = aliquotCount;
 				SpecimenDAO specimenDAO = new SpecimenDAO();
-				containerInputDetails.cpId = specimenDAO.getCpIdFromSpecimenLabel(
+				containerInputDetails.cpId = specimenDAO.getCpId(
 						aliquotDetailsDTO.getParentLabel(), hibernateDAO);
 				containerInputDetails.isAdmin = sessionDataBean.isAdmin();
 				containerInputDetails.userId = sessionDataBean.getUserId();
@@ -155,7 +155,7 @@ List<AliquotContainerDetailsDTO> containerDetailsDTOs = new ArrayList<AliquotCon
 				Gson gson = CatissuePlusCommonUtil.getGson();
 
 				jsonObject.put(ALIQUOTS_DETAILS_DTO, gson.toJson(aliquotDetailsDTO));
-				jsonObject.put(Constants.CP_ID, specimenDAO.getCpIdFromSpecimenId(
+				jsonObject.put(Constants.CP_ID, specimenDAO.getCpId(
 						aliquotDetailsDTO.getParentId(), hibernateDAO));
 				boolean isLabelGenerationOn = false;
 				if ((Variables.isSpecimenLabelGeneratorAvl || Variables.isTemplateBasedLblGeneratorAvl))
