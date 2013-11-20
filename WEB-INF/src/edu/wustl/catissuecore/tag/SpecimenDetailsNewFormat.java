@@ -1526,9 +1526,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TD_CLOSE);*/
 
 		stringBuffer.append(TD_OPEN);
+		String hiddenLineage = this.dataListType.equalsIgnoreCase("Parent")?"specimen":lineage;
 		stringBuffer.append(
 				"<td width=\"60%\" align=\"left\" class=\"black_ar\">"
-				+"<input type=\"hidden\" class=\""+lineage+"\"name=\""+selectedContainerName+"\" id=\"selectedContainerName\" value=\"\"/>"
+				+"<input type=\"hidden\" class=\""+hiddenLineage+"\"name=\""+selectedContainerName+"\" id=\"selectedContainerName\" value=\"\"/>"
 				+"<div>"
 				+	"<table border=\"0\" width=\"29%\" id=\"outerTable2\" cellspacing=\"0\" cellpadding=\"0\">"
 				+	"	<tr>"
