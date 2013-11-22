@@ -16,7 +16,10 @@
     border: 1px solid #FF0000;
 }
 </style>
-
+<style type="text/css">
+    #myoutercontainer { text-align: center;display:block;float: left; }
+    #myinnercontainer { display: block; vertical-align: middle;*overflow: hidden;}    
+</style>
 <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
 <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
 
@@ -581,25 +584,25 @@
           <td valign="top">
           <table width="100%" border="0" cellpadding="3" cellspacing="0">
                <tr>
-                  <td width="17%" align="left" nowrap class="black_ar" colspan="2">
-                        <input type="radio" value="1" id="aliquotCheck" name="specimenChild" onclick="onCheckboxButtonClick(this)" checked="true"/>
-                                <span class="black_ar" style="vertical-align:2px">
+                  <td width="17%" align="left" nowrap class="black_ar" colspan="2"><div id="myinnercontainer">
+                        <input type="radio" value="1" id="aliquotCheck" name="specimenChild" onclick="onCheckboxButtonClick(this)" checked="true" style="vertical-align: middle;"/>
+                                <span class="black_ar" style="vertical-align: middle;">
                                 <bean:message key="app.none" />&nbsp;
                                 </span>
-                        <input type="radio" value="2" id="aliquotChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-                        <span class="black_ar" style="vertical-align:2px">
+                        <input type="radio" value="2" id="aliquotChk" name="specimenChild" onclick="onCheckboxButtonClick(this)" style="vertical-align: middle;"/>
+                        <span class="black_ar" style="vertical-align: middle;">
                                 <bean:message key="aliquots.title"/>
                                 &nbsp;
                                 </span>
-                        <input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-                                <span class="black_ar" style="vertical-align:2px">
+                        <input type="radio" value="3" id="deriveChk" name="specimenChild" onclick="onCheckboxButtonClick(this)" style="vertical-align: middle;"/>
+                                <span class="black_ar" style="vertical-align: middle;">
                                 <bean:message key="specimen.derivative" />
                                 &nbsp;</span>
                         <!-- 11706 S Desctiption : Remove equal check for Edit operation only....-->
-                        <input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)"/>
-                        <span class="black_ar" style="vertical-align:2px">
+                        <input type="radio" value="4" id="createCpChildCheckBox" name="specimenChild" onclick="onCheckboxButtonClick(this)" style="vertical-align: middle;"/>
+                        <span class="black_ar" style="vertical-align: middle;">
                                 <bean:message key="create.childAsperCP"/>
-                                </span>
+                                </span></div>
                         <!-- 11706 E -->
                     </td>
                 </tr>

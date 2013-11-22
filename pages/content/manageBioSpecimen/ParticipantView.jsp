@@ -14,6 +14,10 @@
 <script language="JavaScript" type="text/javascript" src="jss/participantView.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+<style type="text/css">
+    #myoutercontainer { text-align: center;display:block;float: left; }
+    #myinnercontainer { display: block; vertical-align: middle;*overflow: hidden;}    
+</style>
 <script>
       window.dhx_globalImgPath="dhtmlx_suite/imgs/";
      var eventPointLabels = ${requestScope.eventPointLabels}; 
@@ -193,23 +197,23 @@
                                 <span style="margin-left:5px;">
                                 <span class="black_ar" style="vertical-align:2px;float:right;">
                                 <b><bean:message key="label.collectSpecimen"/></b> &nbsp;&nbsp;</span>
-                </td><td  width="35%">
-                     <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true"/>
-                                <span class="black_ar" style="vertical-align:2px">
-                                <b><bean:message key="label.collect.perCP"/></b>
-                                </span>
-                                </span>
+                </td><td  width="35%"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+            <tr ><td>
+                  <div id="myinnercontainer"><span>
+                     <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true" style="vertical-align: middle;margin-bottom:1px;"/>
+                                <span style="font-family: verdana;font-size: 11px;">
+                                <label style="vertical-align: middle;">Planned</label>
+                                </span></span>
                                 <span style="margin-left:30px;">
-                        <input type="radio" value="2" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)"/>
-                                <span class="black_ar" style="vertical-align:2px">
-                                <b><bean:message key="label.adhocSpecimen"/></b>
-                                
-                                &nbsp;
-                                <input type="text" style="text-align:right;border:0px;" size="1" maxlength="2" id="numberOfSpecimens" name="numberOfSpecimens"  onblur="isNumeric(this)" readOnly="true"/>
+                        <input type="radio" value="2" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" style="vertical-align: middle;margin-bottom:1px"/>
+                                <span style="font-family: verdana;font-size: 11px;">
+                                <label style="vertical-align: middle;">Unplanned</label>
                         </span></span>
+                        &nbsp;<input type="text" style="text-align:right;border:0px;font-family: verdana;font-size: 11px;" size="1" maxlength="2" id="numberOfSpecimens" name="numberOfSpecimens"  onblur="isNumeric(this)" readOnly="true"/>
+                 </div></td></tr></table>
                         </td>
-                <td style="vertical-align:1px"  width="35%">
-                        <span align="left" style="vertical-align:1px">
+                <td width="35%">
+                        <span align="left">
                         <html:button  styleClass="blue_ar_b" property="aliquot" title="Aliqut" value=" Go " onclick="createNewSpecimens()">
                 </html:button>
                         </span>
@@ -298,7 +302,7 @@ function disableButtonsOnCheck(chkbox)
 {
     if(chkbox.value == 1)
     {
-        document.getElementById('numberOfSpecimens').value="";
+    	document.getElementById('numberOfSpecimens').value="";
         document.getElementById('numberOfSpecimens').readOnly = true;
         document.getElementById('numberOfSpecimens').style.border="0px";
     }
