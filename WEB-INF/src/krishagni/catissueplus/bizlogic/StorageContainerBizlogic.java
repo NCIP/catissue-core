@@ -578,6 +578,36 @@ public class StorageContainerBizlogic
                 }
             }
 
+        
+	        if (aliquotContainerDetailsDTO.position2.size() != emptyPosCount)
+	        {
+	        	for (int i = 0; i < dimX; i++)
+	            {
+	                for (int j = 0; j < dimY; j++)
+	                {
+	                    if (positions[i][j] )
+	                    {
+	                    	String pos1 = AppUtility.getPositionValue(labellingSchemeDTO.getDimensionOne(), i);
+	                    	String pos2 = AppUtility.getPositionValue(labellingSchemeDTO.getDimensionTwo(), j);
+	                    	String contValue = getStorageValueKey(aliquotContainerDetailsDTO.containerName, null, pos1, pos2, hibernateDao);
+	                    	if(allocatedPositions != null && !allocatedPositions.contains(contValue))
+	                    	{
+		                        aliquotContainerDetailsDTO.position1.add(pos1);
+		                        aliquotContainerDetailsDTO.position2.add(pos2);
+	                    	}
+	                    	else if(allocatedPositions == null)
+	                    	{
+	                    		aliquotContainerDetailsDTO.position1.add(pos1);
+		                        aliquotContainerDetailsDTO.position2.add(pos2);
+	                    	}
+	                        if (aliquotContainerDetailsDTO.position2.size() == emptyPosCount)
+	                        {
+	                            return;
+	                        }
+	                    }
+	                }
+	            }
+	        }
         }
         catch (final DAOException daoEx)
         {
@@ -608,7 +638,7 @@ public class StorageContainerBizlogic
     }
 
     public SpecimenPosition getPositionIfAvailableFromContainer(String containerName, String pos1, String pos2,
-            HibernateDAO hibernateDao, HashSet<String> allocatedPositions) throws ApplicationException
+    		String prevPos1, String prevPos2, HibernateDAO hibernateDao, HashSet<String> allocatedPositions) throws ApplicationException
     {
         SpecimenPosition specimenPosition;
         Long containerId = getContainerIdFromName(containerName, hibernateDao);
@@ -616,7 +646,7 @@ public class StorageContainerBizlogic
         LabellingSchemeDTO labellingSchemeDTO = getLabellingSchemeByContainerName(containerName, hibernateDao);
         if (Validator.isEmpty(pos1) || Validator.isEmpty(pos2))
         {
-            specimenPosition = getFirstAvailablePositionInContainer(containerName, labellingSchemeDTO, hibernateDao,allocatedPositions);
+            specimenPosition = getFirstAvailablePositionInContainer(containerName,prevPos1,prevPos2, labellingSchemeDTO, hibernateDao,allocatedPositions);
         }
         else
         {
@@ -762,13 +792,15 @@ public class StorageContainerBizlogic
     /**
      * This function returns the first available position in a container which can be allocated.
      * If container is full, returns null
+     * @param prevPos2 
+     * @param prevPos1 
      * @param allocatedPositions 
      * @param container : Container for which available position is to be searched
      * @return Position
      * @throws ApplicationException 
      */
     public SpecimenPosition getFirstAvailablePositionInContainer(String containerName,
-            LabellingSchemeDTO labellingSchemeDTO, HibernateDAO hibernateDao, HashSet<String> allocatedPositions) throws ApplicationException
+    		String prevPos1, String prevPos2, LabellingSchemeDTO labellingSchemeDTO, HibernateDAO hibernateDao, HashSet<String> allocatedPositions) throws ApplicationException
     {
         SpecimenPosition position = null;
         try
@@ -781,7 +813,7 @@ public class StorageContainerBizlogic
             aliquotContainerDetailsDTO.dimension1 = scCapacity.getOneDimensionCapacity();
             aliquotContainerDetailsDTO.dimension2 = scCapacity.getTwoDimensionCapacity();
             aliquotContainerDetailsDTO.emptyPositionCount = 1l;
-            setAvailablePositionsForContainer(aliquotContainerDetailsDTO, "", "", 1, hibernateDao,allocatedPositions);
+            setAvailablePositionsForContainer(aliquotContainerDetailsDTO, prevPos1, prevPos2, 1, hibernateDao,allocatedPositions);
 
             if (!aliquotContainerDetailsDTO.position1.isEmpty())
             {

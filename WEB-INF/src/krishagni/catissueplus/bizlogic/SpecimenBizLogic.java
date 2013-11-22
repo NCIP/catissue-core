@@ -68,6 +68,8 @@ public class SpecimenBizLogic
 
 	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenBizLogic.class);
 	private HashSet<String> allocatedPositions = new HashSet<String>();
+	/** The storage positions. */
+	private String storagePositions = "";
 
 	/**
 	 * This will update the specimen object in the database
@@ -957,10 +959,25 @@ public class SpecimenBizLogic
 		{
 			try
 			{
+				String pos1 = null;
+				String pos2 = null;
+				if (!Validator.isEmpty(storagePositions))
+				{
+					final String positionStr = storagePositions;
+					final String positions[] = positionStr.split(",");
+					final String strContainerName = positions[0];
+					if ((!Validator.isEmpty(strContainerName.trim()))
+							&& (!Validator.isEmpty(specimenDTO.getContainerName()))
+							&& (strContainerName.equals(specimenDTO.getContainerName())))
+					{
+						pos1 = positions[1];
+						pos2 = positions[2];
+					}
+				}
 			StorageContainerBizlogic storageContainerBizlogic = new StorageContainerBizlogic();
 			 specimenPosition = storageContainerBizlogic.getPositionIfAvailableFromContainer(
 					 specimenDTO.getContainerName(), specimenDTO.getPos1(),
-					 specimenDTO.getPos2(), hibernateDao,allocatedPositions);
+					 specimenDTO.getPos2(), pos1,pos2,hibernateDao,allocatedPositions);
 			 String storageValue = "";
 			 if (specimenDTO.getContainerName() != null)
 				{
@@ -975,6 +992,14 @@ public class SpecimenBizLogic
 				if (!this.allocatedPositions.contains(storageValue))
 				{
 					this.allocatedPositions.add(storageValue);
+					final StringBuffer posBuffer = new StringBuffer();
+					posBuffer.append(specimenPosition.getStorageContainer().getName());
+					posBuffer.append(',');
+					posBuffer.append(specimenPosition.getPositionDimensionOne());
+					posBuffer.append(',');
+					posBuffer.append(specimenPosition.getPositionDimensionTwo());
+					storagePositions = posBuffer.toString();
+					
 				}
 				else
 				{

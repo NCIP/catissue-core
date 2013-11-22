@@ -149,6 +149,9 @@ public class AliquotBizLogic
             aliquotDetailList.get(i).setAliqoutLabel(specimenDtoList.get(i).getLabel());
             aliquotDetailList.get(i).setBarCode(specimenDtoList.get(i).getBarcode());
             aliquotDetailList.get(i).setAliquotId(specimenDtoList.get(i).getId());
+            aliquotDetailList.get(i).setPos1(specimenDtoList.get(i).getPos1());
+            aliquotDetailList.get(i).setPos2(specimenDtoList.get(i).getPos2());
+//            aliquotDetailList.get(i).setStoragecontainer(specimenDtoList.get(i).getContainerName());
         }
 
         if (aliquotDetailsDTO.isDisposeParentSpecimen())

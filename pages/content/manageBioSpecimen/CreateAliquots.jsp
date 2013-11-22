@@ -493,14 +493,23 @@ function deleteAllRow(){
 
 function loadAliquotGridWithNewData(aliquotGrid,aliquotDetailsDTO){
     var gridData = aliquotDetailsDTO.perAliquotDetailsCollection;
-    
     var newId = "rownewId";
     //"Label,Barcode,Quantity,Storage Container,Position 1,Position 2,Container Map,"
     var barcode = "";
+    var containerName = "";
+    var pos1 = "";
+    var pos2 = "";
     for(var cnt = 0; cnt < gridData.length; cnt++){
     if(gridData[cnt].barCode)
-        barcode=gridData[cnt].barCode;
-        aliquotGrid.addRow(cnt,gridData[cnt].aliqoutLabel+","+barcode+","+gridData[cnt].quantity+","+gridData[cnt].storagecontainer+","+gridData[cnt].pos1+","+gridData[cnt].pos2+",,"+gridData[cnt].aliquotId,cnt+1);
+        {
+            barcode=gridData[cnt].barCode;
+        }
+    if(gridData[cnt].storagecontainer){containerName = gridData[cnt].storagecontainer;}
+    else{containerName="Virtual";}
+    if(gridData[cnt].pos1){pos1 = gridData[cnt].pos1;}else{pos1="";}
+    if(gridData[cnt].pos2){pos2 = gridData[cnt].pos2;}else{pos2="";}
+        
+        aliquotGrid.addRow(cnt,gridData[cnt].aliqoutLabel+","+barcode+","+gridData[cnt].quantity+","+containerName+","+pos1+","+pos2+",,"+gridData[cnt].aliquotId,cnt+1);
     }
 }
 function applyFirstToALL(){
