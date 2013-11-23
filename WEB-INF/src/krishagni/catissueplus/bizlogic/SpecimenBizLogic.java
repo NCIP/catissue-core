@@ -569,7 +569,7 @@ public class SpecimenBizLogic
 		{
 			throw new CatissueException(SpecimenErrorCodeEnum.INVALID_CONTAINER.getCode());
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -823,6 +823,14 @@ public class SpecimenBizLogic
 				}
 			}
 			isAuthorize = chkAuthorizationForCPnSite(siteId, cpId, sessionDataBean.getUserName());
+			
+			if(isAuthorize && siteId != null)
+			{   
+				UserDAO userDAO = new UserDAO();
+				List userSiteIds = userDAO.getAssociatedSiteIds(hibernateDao, sessionDataBean.getUserId());
+				
+				return userSiteIds != null?userSiteIds.contains(siteId):false;
+			}
 			if(!isAuthorize && siteId == null)
 			{
 				List<Long> siteIds = getSiteIds(hibernateDao,cpId,sessionDataBean.getUserId());
