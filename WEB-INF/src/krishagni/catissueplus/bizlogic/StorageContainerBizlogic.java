@@ -576,6 +576,7 @@ public class StorageContainerBizlogic
                         }
                     }
                 }
+                startPosyNum=0;
             }
 
         
