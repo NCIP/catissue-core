@@ -87,7 +87,7 @@ var  downloadUrl= "";
 						
 					</div>
 					
-					<div class="black_ar box-border box-content box-class" style="width:400px;">
+					<div class="black_ar box-border box-content box-class" style="width:400px;display:none;" id="dataAtGlanceDiv" >
 						<div class="help-header theam-font-color container-header-spacing" >
 							<span><bean:message key="login.data.at.glance" /></span>
 						</div>
@@ -141,7 +141,7 @@ login.forgot.password=Forgot password?
 								<li>Moleculer Specimen(3)</li>
 							</ul-->
 							
-						<a href="Summary.do" style="text-decoration: none"><span  class="black_ar detail-summary-link theam-font-color-orange"><bean:message key="login.detailed.summary" /></span></a>
+						<a href="Summary.do" style="text-decoration: none;" id="summaryLink"><span  class="black_ar detail-summary-link theam-font-color-orange"><bean:message key="login.detailed.summary" /></span></a>
 						</div>
 
 						
@@ -327,7 +327,6 @@ login.forgot.password=Forgot password?
 window.onload = homePageLoad();
 
 function homePageLoad(){
-	loadSummaryCount();
 	loadInstituteLogo();
 }
 
@@ -347,6 +346,12 @@ function loadInstituteLogo(){
 				document.getElementById("userManual").href =  myJsonResponse.userManual;
 				document.getElementById("contactNumber").innerHTML = myJsonResponse.contactNumber;
 				document.getElementById("whatsNew").href =  myJsonResponse.whatsNew;
+				if(myJsonResponse.dataAtGlanceDiv != undefined && myJsonResponse.dataAtGlanceDiv == "true"){
+					document.getElementById("dataAtGlanceDiv").style.display="";
+					loadSummaryCount();
+				}else{
+					document.getElementById("dataAtGlanceDiv").innerHTML = "";
+				}
 				
 				
 			}

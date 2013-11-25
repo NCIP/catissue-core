@@ -866,6 +866,7 @@
 				<replacefilter token="@@spr.dwd.terms.condiition.url@@" value="${spr.dwd.terms.condiition.url}" />
 				<replacefilter token="@@theam.css.path@@" value="${theam.css.path}" />
 				<replacefilter token="@@institute.logo.hyperlink@@" value="${institute.logo.hyperlink}" />
+				<replacefilter token="@@data.at.glance.visible@@" value="${data.at.glance.visible}" />
 				
 				<replacefilter token="@@user.manual@@" value="${user.manual}" />
 				<replacefilter token="@@contact.number@@" value="${help.desk.number}" />

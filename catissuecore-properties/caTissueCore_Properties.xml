@@ -360,6 +360,10 @@
 		<value>@@institute.logo.hyperlink@@</value>
 	</property>
 	<property>
+		<name>data.at.glance.visible</name>
+		<value>@@data.at.glance.visible@@</value>
+	</property>
+	<property>
 		<name>user.manual</name>
 		<value>@@user.manual@@</value>
 	</property>
