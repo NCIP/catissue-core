@@ -93,19 +93,41 @@ function initializeSCGCombo(operation)
 			clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisValue;
 		
 		});
-		/*clinicalDiagnosisCombo.attachEvent("onOpen",function(){
-		clinicalDiagnosisCombo.enableFilteringMode(true);
-		});*/
+		
 		clinicalDiagnosisCombo.attachEvent("onKeyPressed",function(){
 			clinicalDiagnosisCombo.enableFilteringMode(true,'ClinicalDiagnosisList.do?collectionProtocolId='+collectionProtocolId,false);
 			clinicalDiagnosisCombo.attachEvent("onChange", function(){clinicalDiagnosisCombo.DOMelem_input.focus();});
 			});
 			clinicalDiagnosisCombo.attachEvent("onOpen",onComboClick);
-			//clinicalDiagnosisCombo.attachEvent("onKeyPressed",onComboKeyPress);
+			
 			clinicalDiagnosisCombo.attachEvent("onSelectionChange",function(){
- clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisCombo.getSelectedText();
+ var diagnosisVal = clinicalDiagnosisCombo.getSelectedText();
+			if(diagnosisVal)
+				clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisCombo.getSelectedText();
+			else
+				clinicalDiagnosisCombo.DOMelem_input.title='Start typing to see values';
  });
  clinicalDiagnosisCombo.attachEvent("onXLE",function (){clinicalDiagnosisCombo.addOption(clinicalDiagnosisValue,clinicalDiagnosisValue);});
+ /*clinicalDiagnosisCombo.attachEvent("onBlur",function(){var diagnosisVal = clinicalDiagnosisCombo.getSelectedText();
+ if(!diagnosisVal)
+ {
+	clinicalDiagnosisCombo.DOMelem_input.value="";
+ }
+ });
+ clinicalDiagnosisCombo.DOMelem_input.onfocus=function(event)
+ {
+		var diagnosisVal = clinicalDiagnosisCombo.getSelectedText();
+			if(!diagnosisVal)
+				
+				clinicalDiagnosisCombo.DOMelem_input.value='Start typing to see values';
+ }*/
+ dhtmlxEvent(clinicalDiagnosisCombo.DOMelem_input,"mouseover",function(){
+     var diagnosisVal = clinicalDiagnosisCombo.getSelectedText();
+			if(diagnosisVal){
+				clinicalDiagnosisCombo.DOMelem_input.title=clinicalDiagnosisCombo.getSelectedText();}
+			else
+				clinicalDiagnosisCombo.DOMelem_input.title='Start typing to see values';
+});
  /*clinicalDiagnosisCombo.attachEvent("onBlur", onBlurFunc);
 function onBlurFunc() {alert(clinicalDiagnosisCombo.getLastSelectedValue());
 	if(!clinicalDiagnosisCombo.getSelectedValue())

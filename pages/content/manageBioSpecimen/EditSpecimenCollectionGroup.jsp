@@ -325,6 +325,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                                         <div>
                                            <html:select property="clinicalDiagnosis" styleClass="black_ar" styleId="clinicalDiagnosis" size="1">
                                             </html:select>
+                                            
                                         </div>
                                     </td>
                                     <script>
@@ -333,7 +334,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                     </script>
                                     <td>
                                     </td></tr></table>
-                                </td>
+                                
+                                            <span class="grey_ar_s">Start typing to see values</span></td>
                      <td width="20%" align="right" class="black_ar">
                      <img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
                      <b><bean:message key="specimenCollectionGroup.clinicalStatus"/></b></td>
