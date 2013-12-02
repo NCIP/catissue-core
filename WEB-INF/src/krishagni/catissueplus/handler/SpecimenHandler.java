@@ -1,6 +1,8 @@
 
 package krishagni.catissueplus.handler;
 
+import java.util.List;
+
 import krishagni.catissueplus.bizlogic.DeriveBizLogic;
 import krishagni.catissueplus.bizlogic.SpecimenBizLogic;
 import krishagni.catissueplus.dao.SpecimenDAO;
@@ -8,8 +10,15 @@ import krishagni.catissueplus.dto.DerivedDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
 import krishagni.catissueplus.util.CommonUtil;
 import krishagni.catissueplus.util.DAOUtil;
+
+import org.json.JSONObject;
+
+import edu.common.dynamicextensions.xmi.AnnotationUtil;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.PrintUtil;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -161,5 +170,63 @@ public class SpecimenHandler
 
 		return specimenDTO;
 	}
+	
+	public String getSpecimenTabDetails(SessionDataBean sessionDataBean, String specimenId) throws Exception
+    {
+
+        HibernateDAO hibernateDao = null;
+        JSONObject returnJsonObject = new JSONObject();
+        try
+        {
+            hibernateDao = DAOUtil.openDAOSession(sessionDataBean);
+            SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
+            Long specId= Long.parseLong(specimenId);
+            Long reportId = specimenBizLogic.getAssociatedIdentifiedReportId(specId, hibernateDao);
+            List<Object> list = specimenBizLogic.getcpIdandPartId(specId,hibernateDao);
+            Object[] objArr = (Object[]) list.get(0);
+            Long cpId = Long.valueOf(objArr[0].toString());
+            boolean hasConsents =specimenBizLogic.hasConsents(cpId, hibernateDao);
+            Long specimenEntityId = null;
+            if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+                    AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
+            {
+                specimenEntityId = (Long) CatissueCoreCacheManager.getInstance()
+                        .getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+            }
+            else
+            {
+                specimenEntityId = AnnotationUtil
+                        .getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+                CatissueCoreCacheManager.getInstance().addObjectToCache(
+                        AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+            }
+            
+            
+            returnJsonObject.put("success", true);
+            returnJsonObject.put("identifiedReportId", reportId);
+            returnJsonObject.put(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,specimenEntityId);
+            returnJsonObject.put("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+            returnJsonObject.put("hasConsents", hasConsents);
+            returnJsonObject.put("isImageEnabled", Variables.isImagingConfigurred);
+           
+        }
+        catch (ApplicationException exception)
+        {
+            String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Inserting");
+            LOGGER.error(errMssg, exception);
+            throw new BizLogicException(exception.getErrorKey(),
+                    exception,exception.getMsgValues(),errMssg);
+            
+        }
+      
+
+        finally
+        {
+            DAOUtil.closeDAOSession(hibernateDao);
+        }
+        return returnJsonObject.toString();
+
+    }
+
 
 }

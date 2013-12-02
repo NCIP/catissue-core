@@ -463,7 +463,9 @@ function forwardToChildSpecimen(operation) {
 		case '4' :	action = 'AnticipatorySpecimenView.do?scgId='+scgId+'&specimenId='+specimenId; break;
 		
 		default :	if(operation=="add"){
-						action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+specimenId+"&refresh=true";
+						/*action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+specimenId+"&refresh=true";*/
+			getTabDetails(specimenId);
+						action = "none";
 					}else{
 						action = "none";
 					}
@@ -898,6 +900,81 @@ req.setRequestHeader("Content-Type",
                      "application/json");
 req.send(JSON.stringify(specimenData));
 }
+
+function getTabDetails(specimenId){
+	var req = createRequest(); // defined above
+	// Create the callback:
+	req.onreadystatechange = function() {
+		  if (req.readyState != 4) return; // Not there yet
+		  if (req.status != 201) {
+			// Handle request failure here...
+			var errorMsg=req.getResponseHeader("errorMsg");
+			showErrorMessage(errorMsg);
+			return;
+		  }
+		  // Request successful, read the response
+		  var resp = req.responseText;
+		  var tabDetail = eval('('+resp+')');
+		  
+		  var reportId=tabDetail.identifiedReportId;
+			var entityId=tabDetail.specimenRecordEntryEntityId;
+			var staticEntityName=tabDetail.entityName;
+			var hasConsents = tabDetail.hasConsents;
+		 var isImageEnabled = tabDetail.isImageEnabled;
+
+
+		var showEventsTab = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
+
+
+		var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfNewSpecimenCPQuery&reportId="+reportId+"&id="+specimenId;
+
+		var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
+
+		var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
+
+		var showImagesTab="EditSpecimenImage.do?id="+specimenId;
+
+			
+		specimenTabbar.addTab("eventsTab",'<span style="font-size:13px"> Events </span>', "150px");
+	if(reportId != null && reportId != -1  && reportId != -2)
+	{
+		specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
+	}
+	specimenTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
+	if(hasConsents){
+	specimenTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
+	}
+	if(isImageEnabled)
+	{
+		specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
+	}
+	
+	specimenTabbar.setHrefMode("iframes-on-demand");
+	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
+	specimenTabbar.setContentHref("eventsTab", showEventsTab);
+	if(reportId != null && reportId != -1  && reportId != -2)
+	{
+		specimenTabbar.setContentHref("reportsTab", showViewSPRTab);  
+	}
+	specimenTabbar.setContentHref("annotationTab", showAnnotationTab);
+if(hasConsents){	
+	specimenTabbar.setContentHref("consentsTab", showConsentsTab);  
+	}
+	if(isImageEnabled)
+	{
+		specimenTabbar.setContentHref("imagesTab", showImagesTab);
+	}
+	specimenTabbar.setTabActive("specimenDetailsTab");
+	  
+	}
+	req.open("GET", "rest/specimens/"+specimenId+"/TabDetails", false);
+	req.setRequestHeader("Content-Type",
+                     "application/json");
+	req.send();
+}
+
+
+
 function showErrorMessage(msg)
 {
 	document.getElementById('print-error').style.display='none';

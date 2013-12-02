@@ -127,6 +127,35 @@ public class SpecimenResource
         }
         return response;
     }
+    
+    @Path("{id}/TabDetails")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSpecimenTabDetails(@PathParam("id") String id)
+    {
+        String tabtDetailJOSNString = null;
+        Response response = null;
+        try
+        {
+            SpecimenHandler specimenHandler = new SpecimenHandler();
+            tabtDetailJOSNString = specimenHandler.getSpecimenTabDetails(getSessionDataBean(), id);
+            response = Response.status(Status.CREATED.getStatusCode()).entity(tabtDetailJOSNString)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+        catch (CatissueException e)
+        {
+            LOGGER.error(e);
+            response = getResponse(e);
+        }
+        catch (Exception e)
+        {
+            LOGGER.error(e);
+            response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage())
+                    .header("errorMsg", e.getMessage()).type(MediaType.APPLICATION_JSON).build();
+        }
+        return response;
+    }
+
 
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})

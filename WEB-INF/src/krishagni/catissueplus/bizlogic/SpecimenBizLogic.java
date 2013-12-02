@@ -48,6 +48,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -55,6 +56,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.DBTypes;
@@ -1113,5 +1115,58 @@ public class SpecimenBizLogic
 		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 		return disposalEvent;
 	}
+	
+	   public boolean hasConsents(Long cpId,HibernateDAO dao) throws DAOException
+	    {
+	        boolean hasConsents=true;
+	        Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+	        substParams.put("0", new NamedQueryParam(DBTypes.STRING, String.valueOf(cpId)));
+	        List<ConsentTierStatus> consents = dao.executeNamedQuery(
+	                "getconsentTierCollection", substParams);
+	        if(consents.isEmpty())
+	        {
+	            hasConsents=false;
+	        }
+	        return hasConsents;
+	    }
+	   
+	   public Long getAssociatedIdentifiedReportId(Long specimenId, HibernateDAO hibernateDao)
+	            throws ApplicationException
+	    {
+	        Long valueToReturn = null;
+	        Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+            substParams.put("0", new NamedQueryParam(DBTypes.LONG,specimenId));
+	        final List<Long> reportIDList =  hibernateDao.executeNamedQuery(
+                    "getAssociatedIdentifiedReportId", substParams);
+	      
+	        if (reportIDList != null && !reportIDList.isEmpty())
+	        {
+	            valueToReturn = ((Long) reportIDList.get(0));
+	        }
+	        return valueToReturn;
+	    }
+	   
+	   /**
+	     * @param sessionData
+	     * @param specimenid
+	     * @return
+	     * @throws ApplicationException
+	     * @throws DAOException
+	     */
+	    public List<Object> getcpIdandPartId(Long specimenId, HibernateDAO hibernateDao)
+	            throws ApplicationException, DAOException
+	    {
+
+	        final String hql1 = 
+	       null;
+	        Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+            substParams.put("0", new NamedQueryParam(DBTypes.LONG,specimenId));
+            List<Object> list =   hibernateDao.executeNamedQuery(
+                    "getcpIdandPartId", substParams);
+          
+	        return list;
+	    }
+	    
+
 
 }
