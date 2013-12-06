@@ -944,4 +944,12 @@ Helpdesk Phone : @@contact.number@@</value>
         <name>loginFailureAttemptsLimit</name>
         <value>@@loginFailureAttemptsLimit@@</value>
     </property>
+    <property>
+        <name>throttlingTimeIntervalInMinutes</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>throttlingMaxLimits</name>
+        <value>4</value>
+    </property>
 </properties>

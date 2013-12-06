@@ -70,6 +70,7 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
@@ -249,10 +250,22 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		this.initCDEManager();
 		this.initDashboardCache();
 		this.initReportScheduler();
+		this.initThrottlingModule();
 		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "PrintServiceImplementor.properties";
 		Variables.setPrinterInfo(absolutePath);
 		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
+	}
+
+	private void initThrottlingModule() 
+	{
+		String timeIntervalInMinutes = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
+		String maxLimits = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
+		final int maximumTreeNodeLimit = Integer.parseInt(maxLimits);
+		Variables.throttlingMaxLimit = maximumTreeNodeLimit;
+		final long timeInterval = Long.parseLong(timeIntervalInMinutes);
+		Variables.throttlingTimeInterval = timeInterval*60*1000;
+		
 	}
 
 	private void initReportScheduler()
@@ -409,14 +422,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 		protectionGroupsForObjectTypes.put(Specimen.class.getName(),
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 		protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 

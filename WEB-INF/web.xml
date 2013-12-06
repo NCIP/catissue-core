@@ -79,9 +79,21 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<filter-name>RestApiAuthFilter</filter-name>
 		<filter-class>krishagni.catissueplus.rest.RestApiAuthFilter</filter-class>
 	</filter>
+	<filter>
+        <filter-name>ThrottlingFilter</filter-name>
+        <filter-class>krishagni.catissueplus.filter.ThrottlingFilter</filter-class>
+        <init-param>
+            <param-name>error-page</param-name>
+            <param-value>/catissuecore/RedirectHome.do</param-value>
+        </init-param>
+    </filter>
 	
 <!--  filter definition ends  -->
 <!--  filter mapping starts --> 
+<filter-mapping>
+        <filter-name>ThrottlingFilter</filter-name>
+        <url-pattern>/Login.do</url-pattern>
+    </filter-mapping>
 <filter-mapping>
 		<filter-name>RestApiAuthFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>

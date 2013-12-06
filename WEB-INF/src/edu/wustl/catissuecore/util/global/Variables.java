@@ -37,6 +37,8 @@ public class Variables
 {
 
 	private static Logger logger = Logger.getCommonLogger(Variables.class);
+	public static int throttlingMaxLimit;
+	public static long throttlingTimeInterval;
 	public static Vector databaseDefinitions = new Vector();
 	public static String databaseDriver = new String();
 	public static String[] databasenames;
@@ -189,5 +191,6 @@ public class Variables
 
 		final String str = prepareColTypes(list);
 		System.out.println(str);
+		
 	}
 }

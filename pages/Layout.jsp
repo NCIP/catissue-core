@@ -53,7 +53,7 @@
 
 			timeOut = -1;
 
-			if(request.getSession().getAttribute(Constants.SESSION_DATA) != null) //if user is logged in
+			if(request.getSession() != null && request.getSession().getAttribute(Constants.SESSION_DATA) != null) //if user is logged in
 			{
 				//timeOut = request.getSession().getMaxInactiveInterval();
 				String timeOutToSet = XMLPropertyHandler
@@ -123,7 +123,7 @@
 		function cancelMethod()
 		{
 			clearTimeout(defTimeout);
-			sendBlankRequest();
+			//sendBlankRequest();
 			setAdvanceSessionTimeout(timeOut);
 		}
 
@@ -140,7 +140,7 @@
 
 			if(((timeOut*1000) - activationTime) <= (advTime*60*1000)) {
 				lastRefreshTime = new Date().getTime();
-				sendBlankRequest();
+				//sendBlankRequest();
 				clearTimeout(warnTimeout);
 				clearTimeout(defTimeout);
 				setAdvanceSessionTimeout(timeOut);

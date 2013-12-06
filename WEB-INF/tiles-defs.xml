@@ -1312,6 +1312,10 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenCollectioGroupAnnotation.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.loginDashboardDef" extends=".catissuecore.homePageDef">
+        <put name="content" value="/pages/content/manageAdministrativeData/LoginAuditDashboard.jsp" />
+    </definition>
+
 	<!--Annotation defs End-->
 
 	<definition name=".catissuecore.DefineEvents" extends=".catissuecore.homePageDef">
