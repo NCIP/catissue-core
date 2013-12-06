@@ -2707,11 +2707,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void disableSubSpecimens(DAO dao, Long speIDArr[]) throws BizLogicException
 	{
-		/*
-		 * List listOfSubElement = disableObjects(dao, AbstractSpecimen.class,
-		 * "parentSpecimen", "CATISSUE_ABSTRACT_SPECIMEN", "PARENT_SPECIMEN_ID",
-		 * speIDArr);
-		 */
+
 		final List listOfSubElement = this.disableObjects(dao, "CATISSUE_SPECIMEN", Specimen.class,
 				"parentSpecimen", speIDArr);
 

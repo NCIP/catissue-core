@@ -74,7 +74,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ParticipantMedicalIdentifier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCharacteristics.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimenCollectionGroup.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml"/>

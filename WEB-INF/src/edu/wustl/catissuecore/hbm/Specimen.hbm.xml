@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- test check-in -->
+<hibernate-mapping
+>
+    <class
+        name="edu.wustl.catissuecore.domain.Specimen" table="CATISSUE_SPECIMEN"
+        lazy="true"
+    >
+        <cache usage="read-write" />
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPECIMEN_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one
+            name="parentSpecimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="false"
+            update="true"
+            insert="true"
+            column="PARENT_SPECIMEN_ID"
+            lazy="false"
+        />
+        <set
+            name="childSpecimenCollection"
+            table="CATISSUE_SPECIMEN"
+            lazy="true"
+            inverse="true"
+            cascade="all"
+            sort="unsorted"
+        >
+             <cache usage="read-write" />
+            <key
+                column="PARENT_SPECIMEN_ID"
+            >
+            </key>
+
+        <one-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+        />
+
+        </set>
+        <many-to-one
+                name="specimenCharacteristics"
+                class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+                cascade="all"
+                lazy="false"
+                outer-join="auto"
+                update="true"
+                insert="true"
+                column="SPECIMEN_CHARACTERISTICS_ID"
+         />
+
+        <property
+            name="initialQuantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="INITIAL_QUANTITY"
+            length="50"
+        />
+
+        <property
+            name="pathologicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="PATHOLOGICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="lineage"
+            type="string"
+            update="true"
+            insert="true"
+            column="LINEAGE"
+            length="50"
+        />
+         <property
+            name="specimenClass"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_CLASS"
+            length="50"
+        />
+         <property
+            name="specimenType"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_TYPE"
+            length="50"
+        />
+        <property
+                name="concentrationInMicrogramPerMicroliter"
+                type="double"
+                update="true"
+                insert="true"
+                column="CONCENTRATION"
+                length="50"
+            />
+
+        <set
+            name="specimenEventCollection"
+            fetch="join" lazy="false"
+            inverse="true"
+            cascade="all"
+            sort="unsorted"
+        >
+         <cache usage="read-write" />
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+            />
+
+        </set>
+
+           <set
+            name="consentTierStatusCollection"
+            table="CATISSUE_CONSENT_TIER_STATUS"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+         <cache usage="read-write" />
+              <key
+                  column="SPECIMEN_ID"
+              />
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+              />
+        </set>
+
+        <set
+            name="biohazardCollection"
+            table="CATISSUE_SPECIMEN_BIOHZ_REL"
+            fetch="join" lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+             <cache usage="read-write" />
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.Biohazard"
+                column="BIOHAZARD_ID"
+                outer-join="auto"
+             />
+
+        </set>
+          <set
+            name="externalIdentifierCollection"
+            table="CATISSUE_EXTERNAL_IDENTIFIER"
+            fetch="join" lazy="false"
+            inverse="false"
+            cascade="all-delete-orphan"
+            sort="unsorted"
+        >
+
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.ExternalIdentifier"
+            />
+
+        </set>
+
+        <one-to-one
+           name="specimenPosition"
+           class="edu.wustl.catissuecore.domain.SpecimenPosition"
+           cascade="save-update"
+           outer-join="auto"
+           constrained="false"
+           property-ref="specimen"
+       />
+
+        <property
+            name="label"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABEL"
+            length="255"
+        />
+
+        <property
+            name="isAvailable"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="AVAILABLE"
+        />
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="2000"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+         <property
+            name="collectionStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="COLLECTION_STATUS"
+            length="50"
+        />
+        <property
+            name="barcode"
+            type="string"
+            update="true"
+            insert="true"
+            column="BARCODE"
+            length="255"
+            unique="true"
+        />
+
+        <property
+            name="createdOn"
+            type="date"
+            update="true"
+            insert="true"
+            column="CREATED_ON_DATE"
+        />
+
+        <property
+            name="availableQuantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="AVAILABLE_QUANTITY"
+            length="50"
+        />
+        
+        <set
+            name="specimenRecordEntryCollection"
+            table="CATISSUE_SPECIMEN_REC_NTRY"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry"
+              />
+        </set>
+        <many-to-one
+            name="specimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_COLLECTION_GROUP_ID"
+            lazy="false"
+        />
+        <many-to-one
+            name="specimenRequirement"
+            class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+            cascade="none"
+            outer-join="auto"
+            update="false"
+            insert="true"
+            column="REQ_SPECIMEN_ID"
+            lazy="false"
+        />
+
+  </class>
+</hibernate-mapping>

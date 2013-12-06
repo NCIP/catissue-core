@@ -78,7 +78,6 @@ public class CollectionProtocolUtil
 	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolUtil.class);
 
-
 	/** The event bean. */
 	private final LinkedHashMap<String, CollectionProtocolEventBean> eventBean = new LinkedHashMap<String, CollectionProtocolEventBean>();
 
@@ -136,14 +135,12 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the collection protocol bean
 	 */
-	public static CollectionProtocolBean getCollectionProtocolBean(
-			CollectionProtocol collectionProtocol)
+	public static CollectionProtocolBean getCollectionProtocolBean(CollectionProtocol collectionProtocol)
 	{
 		CollectionProtocolBean collectionProtocolBean;
 
 		collectionProtocolBean = new CollectionProtocolBean();
-		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection()
-				.size());
+		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection().size());
 		Long identifier = Long.valueOf(collectionProtocol.getId().longValue());
 		collectionProtocolBean.setIdentifier(identifier);
 
@@ -151,8 +148,7 @@ public class CollectionProtocolUtil
 		coordinatorIds = getProtocolCordnateIds(collectionProtocol, coordinatorIds);
 
 		collectionProtocolBean.setCoordinatorIds(coordinatorIds);
-		collectionProtocolBean.setCoordinatorCollection(collectionProtocol
-				.getCoordinatorCollection());
+		collectionProtocolBean.setCoordinatorCollection(collectionProtocol.getCoordinatorCollection());
 
 		/**For Clinical Diagnosis subset **/
 		collectionProtocolBean.setClinicalDiagnosis(getClinicalDiagnosis(collectionProtocol));
@@ -165,13 +161,11 @@ public class CollectionProtocolUtil
 
 		collectionProtocolBean.setType(collectionProtocol.getType());
 		collectionProtocolBean.setSequenceNumber(collectionProtocol.getSequenceNumber());
-		collectionProtocolBean.setStudyCalendarEventPoint(collectionProtocol
-				.getStudyCalendarEventPoint());
+		collectionProtocolBean.setStudyCalendarEventPoint(collectionProtocol.getStudyCalendarEventPoint());
 
 		if (collectionProtocol.getParentCollectionProtocol() != null)
 		{
-			collectionProtocolBean.setParentCollectionProtocolId(collectionProtocol
-					.getParentCollectionProtocol().getId());
+			collectionProtocolBean.setParentCollectionProtocolId(collectionProtocol.getParentCollectionProtocol().getId());
 		}
 		collectionProtocolBean.setPpidFormat(collectionProtocol.getPpidFormat());
 		return collectionProtocolBean;
@@ -186,15 +180,13 @@ public class CollectionProtocolUtil
 	private static void setBasicCPProps(CollectionProtocol collectionProtocol,
 			CollectionProtocolBean collectionProtocolBean)
 	{
-		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol
-				.getPrincipalInvestigator().getId().longValue());
+		collectionProtocolBean
+				.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
 		Date date = collectionProtocol.getStartDate();
-		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date,
-				 CommonServiceLocator.getInstance()
-					.getDatePattern()));
+		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, CommonServiceLocator
+				.getInstance().getDatePattern()));
 		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
-		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol
-				.getUnsignedConsentDocumentURL());
+		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
 		setLabelFormatProps(collectionProtocol, collectionProtocolBean);
 		if (collectionProtocol.getConsentsWaived() == null)
 		{
@@ -204,21 +196,17 @@ public class CollectionProtocolUtil
 		{
 			collectionProtocol.setIsEMPIEnabled(false);
 		}
-		collectionProtocolBean.setConsentWaived(collectionProtocol.getConsentsWaived()
-				.booleanValue());
-		collectionProtocolBean
-				.setIsEMPIEnable(collectionProtocol.getIsEMPIEnabled().booleanValue());
+		collectionProtocolBean.setConsentWaived(collectionProtocol.getConsentsWaived().booleanValue());
+		collectionProtocolBean.setIsEMPIEnable(collectionProtocol.getIsEMPIEnabled().booleanValue());
 		collectionProtocolBean.setIrbID(collectionProtocol.getIrbIdentifier());
 		collectionProtocolBean.setTitle(collectionProtocol.getTitle());
 		collectionProtocolBean.setShortTitle(collectionProtocol.getShortTitle());
 		collectionProtocolBean.setEnrollment(String.valueOf(collectionProtocol.getEnrollment()));
-		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol
-				.getConsentTierCollection()));
+		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
 		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
-		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol
-				.getAliquotInSameContainer().booleanValue());
-		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),
-				CommonServiceLocator.getInstance().getDatePattern());
+		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
+		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(), CommonServiceLocator.getInstance()
+				.getDatePattern());
 		collectionProtocolBean.setEndDate(endDate);
 	}
 
@@ -232,8 +220,7 @@ public class CollectionProtocolUtil
 			CollectionProtocolBean collectionProtocolBean)
 	{
 		collectionProtocolBean.setLabelFormat(collectionProtocol.getSpecimenLabelFormat());
-		collectionProtocolBean.setDerivativeLabelFormat(collectionProtocol
-				.getDerivativeLabelFormat());
+		collectionProtocolBean.setDerivativeLabelFormat(collectionProtocol.getDerivativeLabelFormat());
 		collectionProtocolBean.setAliquotLabelFormat(collectionProtocol.getAliquotLabelFormat());
 	}
 
@@ -245,8 +232,7 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the protocol cordnate ids
 	 */
-	private static long[] getProtocolCordnateIds(CollectionProtocol collectionProtocol,
-			long[] coordinatorIds)
+	private static long[] getProtocolCordnateIds(CollectionProtocol collectionProtocol, long[] coordinatorIds)
 	{
 		Collection userCollection = collectionProtocol.getCoordinatorCollection();
 		if (userCollection != null)
@@ -274,8 +260,7 @@ public class CollectionProtocolUtil
 	private static String[] getClinicalDiagnosis(CollectionProtocol collectionProtocol)
 	{
 		String[] clinicalDiagnosisArr = null;
-		Collection<ClinicalDiagnosis> clinicDiagnosisCollection = collectionProtocol
-				.getClinicalDiagnosisCollection();
+		Collection<ClinicalDiagnosis> clinicDiagnosisCollection = collectionProtocol.getClinicalDiagnosisCollection();
 		if (clinicDiagnosisCollection != null)
 		{
 			clinicalDiagnosisArr = new String[clinicDiagnosisCollection.size()];
@@ -334,21 +319,19 @@ public class CollectionProtocolUtil
 	 * @throws DAOException the DAO exception
 	 */
 	public static CollectionProtocolEventBean getCollectionProtocolEventBean(
-			CollectionProtocolEvent collectionProtocolEvent, int counter, DAO dao)
-			throws DAOException
+			CollectionProtocolEvent collectionProtocolEvent, int counter, DAO dao) throws DAOException
 	{
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
-		eventBean.setStudyCalenderEventPoint(new Double(collectionProtocolEvent
-				.getStudyCalendarEventPoint()));
+		eventBean.setStudyCalenderEventPoint(new Double(collectionProtocolEvent.getStudyCalendarEventPoint()));
 		eventBean.setCollectionPointLabel(collectionProtocolEvent.getCollectionPointLabel());
 		eventBean.setClinicalDiagnosis(collectionProtocolEvent.getClinicalDiagnosis());
 		eventBean.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
 		eventBean.setUniqueIdentifier("E" + counter++);
 		eventBean.setSpecimenCollRequirementGroupId(collectionProtocolEvent.getId().longValue());
-		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(collectionProtocolEvent
-				.getSpecimenRequirementCollection(), eventBean.getUniqueIdentifier()));
+		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(collectionProtocolEvent.getSpecimenRequirementCollection(),
+				eventBean.getUniqueIdentifier()));
 
 		eventBean.setLabelFormat(collectionProtocolEvent.getLabelFormat());
 		if (collectionProtocolEvent.getDefaultSite() != null)
@@ -422,8 +405,7 @@ public class CollectionProtocolUtil
 			Collection<SpecimenRequirement> reqSpecimenCollection, String parentUniqueId)
 	{
 		LinkedHashMap<String, GenericSpecimen> reqSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
-		List<SpecimenRequirement> reqSpecimenList = new LinkedList<SpecimenRequirement>(
-				reqSpecimenCollection);
+		List<SpecimenRequirement> reqSpecimenList = new LinkedList<SpecimenRequirement>(reqSpecimenCollection);
 		getSortedCPEventList(reqSpecimenList);
 		Iterator<SpecimenRequirement> specimenIterator = reqSpecimenList.iterator();
 		int specCtr = 0;
@@ -432,8 +414,7 @@ public class CollectionProtocolUtil
 			SpecimenRequirement reqSpecimen = specimenIterator.next();
 			if (reqSpecimen.getParentSpecimen() == null)
 			{
-				SpecimenRequirementBean specBean = getSpecimenBean(reqSpecimen, null,
-						parentUniqueId, specCtr++);
+				SpecimenRequirementBean specBean = getSpecimenBean(reqSpecimen, null, parentUniqueId, specCtr++);
 				reqSpecimenMap.put(specBean.getUniqueIdentifier(), specBean);
 			}
 		}
@@ -449,8 +430,8 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the child aliquots
 	 */
-	private static LinkedHashMap<String, GenericSpecimen> getChildAliquots(
-			SpecimenRequirement reqSpecimen, String parentuniqueId, String parentName)
+	private static LinkedHashMap<String, GenericSpecimen> getChildAliquots(SpecimenRequirement reqSpecimen,
+			String parentuniqueId, String parentName)
 	{
 		Collection reqSpecimenChildren = reqSpecimen.getChildSpecimenCollection();
 		List reqSpecimenList = new LinkedList<SpecimenRequirement>(reqSpecimenChildren);
@@ -464,13 +445,13 @@ public class CollectionProtocolUtil
 			SpecimenRequirement childReqSpecimen = iterator.next();
 			if (Constants.ALIQUOT.equals(childReqSpecimen.getLineage()))
 			{
-			   if(!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childReqSpecimen.getActivityStatus()))
-			   {   
-				SpecimenRequirementBean specimenBean = getSpecimenBean(childReqSpecimen,
-						parentName, parentuniqueId, aliqCtr++);
-				aliquotMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
+				if (!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childReqSpecimen.getActivityStatus()))
+				{
+					SpecimenRequirementBean specimenBean = getSpecimenBean(childReqSpecimen, parentName, parentuniqueId,
+							aliqCtr++);
+					aliquotMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
+				}
 			}
-		}
 		}
 		return aliquotMap;
 	}
@@ -484,8 +465,8 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the child derived
 	 */
-	private static LinkedHashMap<String, GenericSpecimen> getChildDerived(
-			SpecimenRequirement specimen, String parentuniqueId, String parentName)
+	private static LinkedHashMap<String, GenericSpecimen> getChildDerived(SpecimenRequirement specimen,
+			String parentuniqueId, String parentName)
 	{
 		Collection specimenChildren = specimen.getChildSpecimenCollection();
 		List specimenList = new LinkedList(specimenChildren);
@@ -498,12 +479,12 @@ public class CollectionProtocolUtil
 			SpecimenRequirement childReqSpecimen = iterator.next();
 			if (Constants.DERIVED_SPECIMEN.equals(childReqSpecimen.getLineage()))
 			{
-				if(!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childReqSpecimen.getActivityStatus()))
-				{	
-				SpecimenRequirementBean specimenBean = getSpecimenBean(childReqSpecimen,
-						parentName, parentuniqueId, deriveCtr++);
-				derivedMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
-				}	
+				if (!Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(childReqSpecimen.getActivityStatus()))
+				{
+					SpecimenRequirementBean specimenBean = getSpecimenBean(childReqSpecimen, parentName, parentuniqueId,
+							deriveCtr++);
+					derivedMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
+				}
 			}
 		}
 
@@ -547,18 +528,16 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the specimen bean
 	 */
-	private static SpecimenRequirementBean getSpecimenBean(SpecimenRequirement reqSpecimen,
-			String parentName, String parentUniqueId, int specCtr)
+	private static SpecimenRequirementBean getSpecimenBean(SpecimenRequirement reqSpecimen, String parentName,
+			String parentUniqueId, int specCtr)
 	{
 
 		SpecimenRequirementBean speRequirementBean = new SpecimenRequirementBean();
 		speRequirementBean.setId(reqSpecimen.getId().longValue());
 		speRequirementBean.setLineage(reqSpecimen.getLineage());
-		speRequirementBean.setUniqueIdentifier(parentUniqueId
-				+ getUniqueId(reqSpecimen.getLineage(), specCtr));
+		speRequirementBean.setUniqueIdentifier(parentUniqueId + getUniqueId(reqSpecimen.getLineage(), specCtr));
 
-		speRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
-				+ speRequirementBean.getUniqueIdentifier());
+		speRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + speRequirementBean.getUniqueIdentifier());
 
 		speRequirementBean.setClassName(reqSpecimen.getClassName());
 		speRequirementBean.setType(reqSpecimen.getSpecimenType());
@@ -602,14 +581,12 @@ public class CollectionProtocolUtil
 			speRequirementBean.setTissueSide(characteristics.getTissueSide());
 		}
 
-		speRequirementBean.setSpecimenCharsId(reqSpecimen.getSpecimenCharacteristics().getId()
-				.longValue());
+		speRequirementBean.setSpecimenCharsId(reqSpecimen.getSpecimenCharacteristics().getId().longValue());
 		speRequirementBean.setPathologicalStatus(reqSpecimen.getPathologicalStatus());
 
 		if (Constants.MOLECULAR.equals(reqSpecimen.getClassName()))
 		{
-			Double concentration = (reqSpecimen)
-					.getConcentrationInMicrogramPerMicroliter();
+			Double concentration = (reqSpecimen).getConcentrationInMicrogramPerMicroliter();
 			if (concentration != null)
 			{
 				speRequirementBean.setConcentration(String.valueOf(concentration.doubleValue()));
@@ -624,8 +601,8 @@ public class CollectionProtocolUtil
 	 * @param parentName the parent name
 	 * @param speRequirementBean the spe requirement bean
 	 */
-	private static void setAliquotAndDerivedColl(SpecimenRequirement reqSpecimen,
-			String parentName, SpecimenRequirementBean speRequirementBean)
+	private static void setAliquotAndDerivedColl(SpecimenRequirement reqSpecimen, String parentName,
+			SpecimenRequirementBean speRequirementBean)
 	{
 		speRequirementBean.setParentName(parentName);
 
@@ -656,8 +633,7 @@ public class CollectionProtocolUtil
 	 * @param speRequirementBean the spe requirement bean
 	 * @param derivedCollection the derived collection
 	 */
-	private static void setDeriveQuantity(SpecimenRequirementBean speRequirementBean,
-			Collection derivedCollection)
+	private static void setDeriveQuantity(SpecimenRequirementBean speRequirementBean, Collection derivedCollection)
 	{
 		if (derivedCollection != null && !derivedCollection.isEmpty())
 		{
@@ -676,15 +652,13 @@ public class CollectionProtocolUtil
 	 * @param speRequirementBean the spe requirement bean
 	 * @param aliquotCollection the aliquot collection
 	 */
-	private static void setQuantityPerAliquot(SpecimenRequirementBean speRequirementBean,
-			Collection aliquotCollection)
+	private static void setQuantityPerAliquot(SpecimenRequirementBean speRequirementBean, Collection aliquotCollection)
 	{
 		if (aliquotCollection != null && !aliquotCollection.isEmpty())
 		{
 			Iterator iterator = aliquotCollection.iterator();
 			GenericSpecimen aliquotSpecimen = (GenericSpecimen) iterator.next();
-			speRequirementBean.setStorageContainerForAliquotSpecimem(aliquotSpecimen
-					.getStorageContainerForSpecimen());
+			speRequirementBean.setStorageContainerForAliquotSpecimem(aliquotSpecimen.getStorageContainerForSpecimen());
 			speRequirementBean.setQuantityPerAliquot(aliquotSpecimen.getQuantity());
 		}
 	}
@@ -707,8 +681,7 @@ public class CollectionProtocolUtil
 
 			StringBuffer derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_id");
-			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen
-					.getId()));
+			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen.getId()));
 
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_specimenClass");
@@ -720,8 +693,7 @@ public class CollectionProtocolUtil
 
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_storageLocation");
-			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen
-					.getStorageContainerForSpecimen());
+			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getStorageContainerForSpecimen());
 
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_quantity");
@@ -739,15 +711,15 @@ public class CollectionProtocolUtil
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_labelFormat");
 			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getLabelFormat());
-			
+
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_requirementLabel");
 			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getSpecimenRequirementLabel());
-			
+
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_collectionEventId");
 			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen.getCollectionEventId()));
-			
+
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_receivedEventId");
 			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen.getReceivedEventId()));
@@ -802,34 +774,24 @@ public class CollectionProtocolUtil
 	 * @param specimenRequirementBean the specimen requirement bean
 	 * @param iter the iter
 	 */
-	private static void setSpecimenEvents(SpecimenRequirementBean specimenRequirementBean,
-			Iterator iter)
+	private static void setSpecimenEvents(SpecimenRequirementBean specimenRequirementBean, Iterator iter)
 	{
 		Object tempObj = iter.next();
 
 		if (tempObj instanceof CollectionEventParameters)
 		{
 			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) tempObj;
-			specimenRequirementBean.setCollectionEventId(collectionEventParameters.getId()
-					.longValue());
-			//this.collectionEventSpecimenId = collectionEventParameters.getSpecimen().getId().longValue();
-			specimenRequirementBean.setCollectionEventUserId(collectionEventParameters.getUser()
-					.getId().longValue());
-			specimenRequirementBean.setCollectionEventCollectionProcedure(collectionEventParameters
-					.getCollectionProcedure());
+			specimenRequirementBean.setCollectionEventUserId(collectionEventParameters.getUser().getId());
+			specimenRequirementBean.setCollectionEventCollectionProcedure(collectionEventParameters.getCollectionProcedure());
 
-			specimenRequirementBean.setCollectionEventContainer(collectionEventParameters
-					.getContainer());
+			specimenRequirementBean.setCollectionEventContainer(collectionEventParameters.getContainer());
 		}
 		else if (tempObj instanceof ReceivedEventParameters)
 		{
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) tempObj;
 
-			specimenRequirementBean.setReceivedEventId(receivedEventParameters.getId().longValue());
-			specimenRequirementBean.setReceivedEventUserId(receivedEventParameters.getUser()
-					.getId().longValue());
-			specimenRequirementBean.setReceivedEventReceivedQuality(receivedEventParameters
-					.getReceivedQuality());
+			specimenRequirementBean.setReceivedEventUserId(receivedEventParameters.getUser().getId());
+			specimenRequirementBean.setReceivedEventReceivedQuality(receivedEventParameters.getReceivedQuality());
 		}
 	}
 
@@ -841,8 +803,7 @@ public class CollectionProtocolUtil
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public static void updateSession(HttpServletRequest request, Long identifieer)
-			throws ApplicationException
+	public static void updateSession(HttpServletRequest request, Long identifieer) throws ApplicationException
 	{
 
 		//add here label in specimenRequirementbean from specimenrequirement
@@ -859,13 +820,12 @@ public class CollectionProtocolUtil
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		setPrivilegesForCP(identifieer, session);
-		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) sessionCpList
-				.get(0);
+		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) sessionCpList.get(0);
 		collectionProtocolBean.setOperation("update");
 		String dashboardJson = (String) session.getAttribute("dashboardLabelJsonValue");
-		if(dashboardJson!=null) 
+		if (dashboardJson != null)
 		{
-		 collectionProtocolBean.setDashboardLabelJsonValue(dashboardJson);
+			collectionProtocolBean.setDashboardLabelJsonValue(dashboardJson);
 		}
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, sessionCpList.get(0));
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, sessionCpList.get(1));
@@ -884,8 +844,7 @@ public class CollectionProtocolUtil
 	 */
 	private static void setPrivilegesForCP(Long cpId, HttpSession session)
 	{
-		Map<String, SiteUserRolePrivilegeBean> map = CaTissuePrivilegeUtility
-				.getPrivilegesOnCP(cpId);
+		Map<String, SiteUserRolePrivilegeBean> map = CaTissuePrivilegeUtility.getPrivilegesOnCP(cpId);
 		session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP, map);
 
 	}
@@ -908,11 +867,10 @@ public class CollectionProtocolUtil
 		int ctr = 1;
 		while (iterator.hasNext())
 		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) iterator
-					.next();
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) iterator.next();
 
-			CollectionProtocolEventBean eventBean = CollectionProtocolUtil
-					.getCollectionProtocolEventBean(collectionProtocolEvent, ctr++, dao);
+			CollectionProtocolEventBean eventBean = CollectionProtocolUtil.getCollectionProtocolEventBean(
+					collectionProtocolEvent, ctr++, dao);
 			eventMap.put(eventBean.getUniqueIdentifier(), eventBean);
 		}
 		return eventMap;
@@ -927,8 +885,7 @@ public class CollectionProtocolUtil
 	 *
 	 * @throws Exception the exception
 	 */
-	public static CollectionProtocol populateCollectionProtocolObjects(HttpServletRequest request)
-			throws Exception
+	public static CollectionProtocol populateCollectionProtocolObjects(HttpServletRequest request) throws Exception
 	{
 
 		HttpSession session = request.getSession();
@@ -943,20 +900,19 @@ public class CollectionProtocolUtil
 			throw AppUtility.getApplicationException(null, "event.req", "");
 		}*/
 		CollectionProtocol collectionProtocol = createCollectionProtocolDomainObject(collectionProtocolBean);
-		
+
 		Collection collectionProtocolEventList = new LinkedHashSet();
 
-		Collection collectionProtocolEventBeanColl =  new LinkedHashSet();//cpEventMap.values();
+		Collection collectionProtocolEventBeanColl = new LinkedHashSet();//cpEventMap.values();
 		if (cpEventMap != null)
 		{
-			collectionProtocolEventBeanColl =  cpEventMap.values();
+			collectionProtocolEventBeanColl = cpEventMap.values();
 			Iterator cpEventIterator = collectionProtocolEventBeanColl.iterator();
 
 			while (cpEventIterator.hasNext())
 			{
 
-				CollectionProtocolEventBean cpEventBean = (CollectionProtocolEventBean) cpEventIterator
-						.next();
+				CollectionProtocolEventBean cpEventBean = (CollectionProtocolEventBean) cpEventIterator.next();
 				CollectionProtocolEvent collectionProtocolEvent = getCollectionProtocolEvent(cpEventBean);
 				collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 				collectionProtocolEventList.add(collectionProtocolEvent);
@@ -975,8 +931,8 @@ public class CollectionProtocolUtil
 	 *
 	 * @throws Exception the exception
 	 */
-	private static CollectionProtocol createCollectionProtocolDomainObject(
-			CollectionProtocolBean cpBean) throws Exception
+	private static CollectionProtocol createCollectionProtocolDomainObject(CollectionProtocolBean cpBean)
+			throws Exception
 	{
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
@@ -988,8 +944,8 @@ public class CollectionProtocolUtil
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
 		collectionProtocol.setIsEMPIEnabled(cpBean.getIsEMPIEnable());
 		collectionProtocol.setAliquotInSameContainer(cpBean.isAliqoutInSameContainer());
-		collectionProtocol.setConsentTierCollection(collectionProtocol
-				.prepareConsentTierCollection(cpBean.getConsentValues()));
+		collectionProtocol.setConsentTierCollection(collectionProtocol.prepareConsentTierCollection(cpBean
+				.getConsentValues()));
 		Collection coordinatorCollection = new LinkedHashSet();
 		Collection<Site> siteCollection = new LinkedHashSet<Site>();
 		Collection<ClinicalDiagnosis> clinicalDiagnosisCollection = new LinkedHashSet<ClinicalDiagnosis>();
@@ -1018,8 +974,7 @@ public class CollectionProtocolUtil
 
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
 		collectionProtocol.setShortTitle(cpBean.getShortTitle());
-		Date startDate = Utility.parseDate(cpBean.getStartDate(), Utility.datePattern(cpBean
-				.getStartDate()));
+		Date startDate = Utility.parseDate(cpBean.getStartDate(), Utility.datePattern(cpBean.getStartDate()));
 		collectionProtocol.setStartDate(startDate);
 		collectionProtocol.setTitle(cpBean.getTitle());
 		collectionProtocol.setUnsignedConsentDocumentURL(cpBean.getUnsignedConsentURLName());
@@ -1028,26 +983,24 @@ public class CollectionProtocolUtil
 		collectionProtocol.setType(cpBean.getType());
 		collectionProtocol.setSequenceNumber(cpBean.getSequenceNumber());
 		collectionProtocol.setStudyCalendarEventPoint(cpBean.getStudyCalendarEventPoint());
-	
-		if (cpBean.getParentCollectionProtocolId() != null
-				&& cpBean.getParentCollectionProtocolId() != 0
+
+		if (cpBean.getParentCollectionProtocolId() != null && cpBean.getParentCollectionProtocolId() != 0
 				&& !"".equals(cpBean.getParentCollectionProtocolId()))
 		{
-			collectionProtocol.setParentCollectionProtocol(getParentCollectionProtocol(cpBean
-					.getParentCollectionProtocolId()));
+			collectionProtocol
+					.setParentCollectionProtocol(getParentCollectionProtocol(cpBean.getParentCollectionProtocolId()));
 		}
 
 		//Ashraf: creating association collection from CP dashboard JSON string
 		if (cpBean.getDashboardLabelJsonValue() != null)
 		{
-			collectionProtocol.setLabelSQLAssociationCollection(populateLabelSQLAssocColl(cpBean
-					.getDashboardLabelJsonValue(), collectionProtocol));
+			collectionProtocol.setLabelSQLAssociationCollection(populateLabelSQLAssocColl(
+					cpBean.getDashboardLabelJsonValue(), collectionProtocol));
 		}
 		else
 		{
-			collectionProtocol.setLabelSQLAssociationCollection(new LinkedHashSet(
-					new LabelSQLAssociationBizlogic().getLabelSQLAssocCollection(cpBean
-							.getIdentifier())));
+			collectionProtocol.setLabelSQLAssociationCollection(new LinkedHashSet(new LabelSQLAssociationBizlogic()
+					.getLabelSQLAssocCollection(cpBean.getIdentifier())));
 		}
 		collectionProtocol.setPpidFormat(cpBean.getPpidFormat());
 		return collectionProtocol;
@@ -1065,8 +1018,8 @@ public class CollectionProtocolUtil
 	public static CollectionProtocol getParentCollectionProtocol(Long parentCollectionProtocolId)
 			throws ApplicationException
 	{
-		CollectionProtocol collectionProtocol = (CollectionProtocol) getObject(
-				CollectionProtocol.class.getName(), parentCollectionProtocolId);
+		CollectionProtocol collectionProtocol = (CollectionProtocol) getObject(CollectionProtocol.class.getName(),
+				parentCollectionProtocolId);
 		return collectionProtocol;
 	}
 
@@ -1077,8 +1030,8 @@ public class CollectionProtocolUtil
 	 * @param siteCollection the site collection
 	 * @param cpBean the cp bean
 	 */
-	private static void setSiteColl(CollectionProtocol collectionProtocol,
-			Collection<Site> siteCollection, CollectionProtocolBean cpBean)
+	private static void setSiteColl(CollectionProtocol collectionProtocol, Collection<Site> siteCollection,
+			CollectionProtocolBean cpBean)
 	{
 		long[] siteArr = cpBean.getSiteIds();
 		if (siteArr != null)
@@ -1103,8 +1056,8 @@ public class CollectionProtocolUtil
 	 * @param coordinatorCollection the coordinator collection
 	 * @param cpBean the cp bean
 	 */
-	private static void setCoordinatorColl(CollectionProtocol collectionProtocol,
-			Collection coordinatorCollection, CollectionProtocolBean cpBean)
+	private static void setCoordinatorColl(CollectionProtocol collectionProtocol, Collection coordinatorCollection,
+			CollectionProtocolBean cpBean)
 	{
 		long[] coordinatorsArr = cpBean.getCoordinatorIds();
 		if (coordinatorsArr != null)
@@ -1129,8 +1082,8 @@ public class CollectionProtocolUtil
 	 * @param clinicalDiagnosis the clinical diagnosis
 	 * @param cpBean the cp bean
 	 */
-	private static void setClinicalDiagnosis(CollectionProtocol collectionProtocol,
-			Collection clinicalDiagnosis, CollectionProtocolBean cpBean)
+	private static void setClinicalDiagnosis(CollectionProtocol collectionProtocol, Collection clinicalDiagnosis,
+			CollectionProtocolBean cpBean)
 	{
 		String[] clinicalDiagnosisArr = cpBean.getClinicalDiagnosis();
 
@@ -1159,22 +1112,21 @@ public class CollectionProtocolUtil
 	 * @return CollectionProtocolEvent domain object.
 	 * @throws ApplicationException 
 	 */
-	private static CollectionProtocolEvent getCollectionProtocolEvent(
-			CollectionProtocolEventBean cpEventBean) throws ApplicationException
+	private static CollectionProtocolEvent getCollectionProtocolEvent(CollectionProtocolEventBean cpEventBean)
+			throws ApplicationException
 	{
 
 		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
 		collectionProtocolEvent.setClinicalStatus(cpEventBean.getClinicalStatus());
 		collectionProtocolEvent.setCollectionPointLabel(cpEventBean.getCollectionPointLabel());
-		collectionProtocolEvent
-				.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
-		if(cpEventBean.getActivityStatus()!=null)
+		collectionProtocolEvent.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
+		if (cpEventBean.getActivityStatus() != null)
 		{
 			collectionProtocolEvent.setActivityStatus(cpEventBean.getActivityStatus());
 		}
 		else
 		{
-		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+			collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		}
 		collectionProtocolEvent.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 		if (cpEventBean.getId() == -1)
@@ -1188,8 +1140,7 @@ public class CollectionProtocolUtil
 
 		if (cpEventBean.getDefaultSiteId() != null && cpEventBean.getDefaultSiteId() != 0)
 		{
-			Site defaultSite = (Site) getObject(Site.class.getName(), cpEventBean
-					.getDefaultSiteId()); //defaultSite.setId(cpEventBean.getDefaultSiteId());
+			Site defaultSite = (Site) getObject(Site.class.getName(), cpEventBean.getDefaultSiteId()); //defaultSite.setId(cpEventBean.getDefaultSiteId());
 			collectionProtocolEvent.setDefaultSite(defaultSite);
 		}
 		Collection specimenCollection = null;
@@ -1197,8 +1148,7 @@ public class CollectionProtocolUtil
 
 		if (specimenMap != null && !specimenMap.isEmpty())
 		{
-			specimenCollection = getReqSpecimens(specimenMap.values(), null,
-					collectionProtocolEvent);
+			specimenCollection = getReqSpecimens(specimenMap.values(), null, collectionProtocolEvent);
 		}
 
 		collectionProtocolEvent.setSpecimenRequirementCollection(specimenCollection);
@@ -1207,8 +1157,7 @@ public class CollectionProtocolUtil
 		return collectionProtocolEvent;
 	}
 
-	private static AbstractDomainObject getObject(String className, long identifier)
-			throws ApplicationException
+	private static AbstractDomainObject getObject(String className, long identifier) throws ApplicationException
 	{
 		AbstractDomainObject domainObj = null;
 		DAO dao = null;
@@ -1234,15 +1183,14 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the req specimens
 	 */
-	public static Collection getReqSpecimens(Collection specimenRequirementBeanColl,
-			SpecimenRequirement parentSpecimen, CollectionProtocolEvent cpEvent)
+	public static Collection getReqSpecimens(Collection specimenRequirementBeanColl, SpecimenRequirement parentSpecimen,
+			CollectionProtocolEvent cpEvent)
 	{
 		Collection<SpecimenRequirement> reqSpecimenCollection = new LinkedHashSet<SpecimenRequirement>();
 		Iterator iterator = specimenRequirementBeanColl.iterator();
 		while (iterator.hasNext())
 		{
-			SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) iterator
-					.next();
+			SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) iterator.next();
 			SpecimenRequirement reqSpecimen = getSpecimenDomainObject(specimenRequirementBean);
 			reqSpecimen.setParentSpecimen(parentSpecimen);
 			if (parentSpecimen == null)
@@ -1286,8 +1234,7 @@ public class CollectionProtocolUtil
 				}
 				else
 				{
-					reqSpecimen.setSpecimenEventCollection(parentSpecimen
-							.getSpecimenEventCollection());
+					reqSpecimen.setSpecimenEventCollection(parentSpecimen.getSpecimenEventCollection());
 				}
 			}
 			reqSpecimen.setLineage(specimenRequirementBean.getLineage());
@@ -1296,19 +1243,16 @@ public class CollectionProtocolUtil
 			Collection childSpecimens = new HashSet();
 			if (aliquotColl != null && !aliquotColl.isEmpty())
 			{
-				Collection aliquotCollection = specimenRequirementBean
-						.getAliquotSpecimenCollection().values();
+				Collection aliquotCollection = specimenRequirementBean.getAliquotSpecimenCollection().values();
 				childSpecimens = getReqSpecimens(aliquotCollection, reqSpecimen, cpEvent);
 				reqSpecimenCollection.addAll(childSpecimens);
 			}
 			Map drivedColl = specimenRequirementBean.getDeriveSpecimenCollection();
 			if (drivedColl != null && !drivedColl.isEmpty())
 			{
-				Collection derivedCollection = specimenRequirementBean
-						.getDeriveSpecimenCollection().values();
+				Collection derivedCollection = specimenRequirementBean.getDeriveSpecimenCollection().values();
 
-				Collection derivedSpecimens = getReqSpecimens(derivedCollection, reqSpecimen,
-						cpEvent);
+				Collection derivedSpecimens = getReqSpecimens(derivedCollection, reqSpecimen, cpEvent);
 				if (childSpecimens == null || childSpecimens.isEmpty())
 				{
 					childSpecimens = derivedSpecimens;
@@ -1330,8 +1274,7 @@ public class CollectionProtocolUtil
 	 * @param reqSpecimen the req specimen
 	 * @param specimenRequirementBean the specimen requirement bean
 	 */
-	private static void setSpecimenEvents(SpecimenRequirement reqSpecimen,
-			SpecimenRequirementBean specimenRequirementBean)
+	private static void setSpecimenEvents(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		//seting collection event values
 		Collection<SpecimenEventParameters> specimenEventCollection = new LinkedHashSet<SpecimenEventParameters>();
@@ -1339,12 +1282,10 @@ public class CollectionProtocolUtil
 		if (specimenRequirementBean.getCollectionEventContainer() != null)
 		{
 			CollectionEventParameters collectionEvent = new CollectionEventParameters();
-			collectionEvent.setCollectionProcedure(specimenRequirementBean
-					.getCollectionEventCollectionProcedure());
+			collectionEvent.setCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
 			collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
 			User collectionEventUser = new User();
-			collectionEventUser.setId(Long.valueOf(specimenRequirementBean
-					.getCollectionEventUserId()));
+			collectionEventUser.setId(Long.valueOf(specimenRequirementBean.getCollectionEventUserId()));
 			collectionEvent.setUser(collectionEventUser);
 			collectionEvent.setSpecimen(reqSpecimen);
 			specimenEventCollection.add(collectionEvent);
@@ -1355,8 +1296,7 @@ public class CollectionProtocolUtil
 		if (specimenRequirementBean.getReceivedEventReceivedQuality() != null)
 		{
 			ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
-			receivedEvent.setReceivedQuality(specimenRequirementBean
-					.getReceivedEventReceivedQuality());
+			receivedEvent.setReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
 			User receivedEventUser = new User();
 			receivedEventUser.setId(Long.valueOf(specimenRequirementBean.getReceivedEventUserId()));
 			receivedEvent.setUser(receivedEventUser);
@@ -1368,7 +1308,6 @@ public class CollectionProtocolUtil
 
 	}
 
-	
 	private static void updateSpecimenEvents(SpecimenRequirement reqSpecimen,
 			SpecimenRequirementBean specimenRequirementBean)
 	{
@@ -1378,12 +1317,10 @@ public class CollectionProtocolUtil
 		if (specimenRequirementBean.getCollectionEventContainer() != null)
 		{
 			CollectionEventParameters collectionEvent = new CollectionEventParameters();
-			collectionEvent.setCollectionProcedure(specimenRequirementBean
-					.getCollectionEventCollectionProcedure());
+			collectionEvent.setCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
 			collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
 			User collectionEventUser = new User();
-			collectionEventUser.setId(Long.valueOf(specimenRequirementBean
-					.getCollectionEventUserId()));
+			collectionEventUser.setId(Long.valueOf(specimenRequirementBean.getCollectionEventUserId()));
 			collectionEvent.setUser(collectionEventUser);
 			collectionEvent.setSpecimen(reqSpecimen);
 			collectionEvent.setId(specimenRequirementBean.getCollectionEventId());
@@ -1395,8 +1332,7 @@ public class CollectionProtocolUtil
 		if (specimenRequirementBean.getReceivedEventReceivedQuality() != null)
 		{
 			ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
-			receivedEvent.setReceivedQuality(specimenRequirementBean
-					.getReceivedEventReceivedQuality());
+			receivedEvent.setReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
 			User receivedEventUser = new User();
 			receivedEventUser.setId(Long.valueOf(specimenRequirementBean.getReceivedEventUserId()));
 			receivedEvent.setUser(receivedEventUser);
@@ -1416,20 +1352,18 @@ public class CollectionProtocolUtil
 	 *
 	 * @return the specimen domain object
 	 */
-	private static SpecimenRequirement getSpecimenDomainObject(
-			SpecimenRequirementBean specimenRequirementBean)
+	private static SpecimenRequirement getSpecimenDomainObject(SpecimenRequirementBean specimenRequirementBean)
 	{
 		NewSpecimenForm form = new NewSpecimenForm();
 		form.setClassName(specimenRequirementBean.getClassName());
 		SpecimenRequirement reqSpecimen = null;
 		try
 		{
-				reqSpecimen = new SpecimenRequirement();
+			reqSpecimen = new SpecimenRequirement();
 		}
 		catch (Exception e1)
 		{
-			CollectionProtocolUtil.LOGGER.error("Error in setting Section " + "header Priorities"
-					+ e1.getMessage(), e1);
+			CollectionProtocolUtil.LOGGER.error("Error in setting Section " + "header Priorities" + e1.getMessage(), e1);
 			return null;
 		}
 
@@ -1441,9 +1375,9 @@ public class CollectionProtocolUtil
 		{
 			reqSpecimen.setId(Long.valueOf(specimenRequirementBean.getId()));
 		}
-		if(specimenRequirementBean.getActivityStatus()==null)
+		if (specimenRequirementBean.getActivityStatus() == null)
 		{
-		reqSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+			reqSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		}
 		else
 		{
@@ -1456,9 +1390,7 @@ public class CollectionProtocolUtil
 		String storageType = specimenRequirementBean.getStorageContainerForSpecimen();
 		if (specimenRequirementBean.getClassName().equalsIgnoreCase(Constants.MOLECULAR))
 		{
-			(reqSpecimen)
-					.setConcentrationInMicrogramPerMicroliter(new Double(specimenRequirementBean
-							.getConcentration()));
+			(reqSpecimen).setConcentrationInMicrogramPerMicroliter(new Double(specimenRequirementBean.getConcentration()));
 		}
 		reqSpecimen.setStorageType(storageType);
 		reqSpecimen.setSpecimenClass(specimenRequirementBean.getClassName());
@@ -1476,8 +1408,7 @@ public class CollectionProtocolUtil
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public static CollectionProtocol getCollectionProtocolForSCG(String identifier)
-			throws ApplicationException
+	public static CollectionProtocol getCollectionProtocolForSCG(String identifier) throws ApplicationException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
@@ -1487,8 +1418,8 @@ public class CollectionProtocolUtil
 		String[] whereColCond = {"="};
 		Object[] whereColVal = {Long.parseLong(identifier)};
 		String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol"};
-		List list = collectionProtocolBizLogic.retrieve(sourceObjectName, selectColumnName,
-				whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+		List list = collectionProtocolBizLogic.retrieve(sourceObjectName, selectColumnName, whereColName, whereColCond,
+				whereColVal, Constants.AND_JOIN_CONDITION);
 		CollectionProtocol returnVal = null;
 		if (list != null && !list.isEmpty())
 		{
@@ -1547,8 +1478,7 @@ public class CollectionProtocolUtil
 			{
 				for (int i = 0; i < clinicalDiagnosis.length; i++)
 				{
-					NameValueBean nvb = new NameValueBean(clinicalDiagnosis[i],
-							clinicalDiagnosis[i]);
+					NameValueBean nvb = new NameValueBean(clinicalDiagnosis[i], clinicalDiagnosis[i]);
 
 					nvb.getName().toLowerCase(locale);
 
@@ -1558,8 +1488,7 @@ public class CollectionProtocolUtil
 			}
 			Collection<NameValueBean> clinicalDiagnosisBeans = new ArrayList<NameValueBean>();
 			clinicalDiagnosisBeans.addAll(clinicalDiagnosisBean);
-			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES,
-					clinicalDiagnosisBeans);
+			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBeans);
 		}
 
 	}
@@ -1590,13 +1519,14 @@ public class CollectionProtocolUtil
 	 * @return collectionProtocolId - collectionProtocolId
 	 * @throws ApplicationException 
 	 */
-	
-	public static String getCPIdFromSpecimen(String specimenId, SessionDataBean sessionDataBean) throws ApplicationException
+
+	public static String getCPIdFromSpecimen(String specimenId, SessionDataBean sessionDataBean)
+			throws ApplicationException
 	{
-		DAO dao=null;
+		DAO dao = null;
 		try
 		{
-			dao=AppUtility.openDAOSession(sessionDataBean);
+			dao = AppUtility.openDAOSession(sessionDataBean);
 			return getCPIdFromSpecimen(specimenId, dao);
 		}
 		finally
@@ -1632,14 +1562,14 @@ public class CollectionProtocolUtil
 		return collectionProtocolId;
 	}
 
-	
-	public static String getCPIdFromSpecimenLabel(String specimenLabel, SessionDataBean sessionDataBean) throws ApplicationException
+	public static String getCPIdFromSpecimenLabel(String specimenLabel, SessionDataBean sessionDataBean)
+			throws ApplicationException
 	{
-		DAO dao=null;
+		DAO dao = null;
 		String collectionProtocolId = "";
 		try
 		{
-			dao=AppUtility.openDAOSession(sessionDataBean);
+			dao = AppUtility.openDAOSession(sessionDataBean);
 
 			if (specimenLabel != null && !"".equals(specimenLabel.trim()))
 			{
@@ -1669,14 +1599,15 @@ public class CollectionProtocolUtil
 		}
 		return collectionProtocolId;
 	}
-	
-	public static String getCPIdFromSpecimenBarcode(String specimenBarcode, SessionDataBean sessionDataBean) throws ApplicationException
+
+	public static String getCPIdFromSpecimenBarcode(String specimenBarcode, SessionDataBean sessionDataBean)
+			throws ApplicationException
 	{
-		DAO dao=null;
+		DAO dao = null;
 		String collectionProtocolId = "";
 		try
 		{
-			dao=AppUtility.openDAOSession(sessionDataBean);
+			dao = AppUtility.openDAOSession(sessionDataBean);
 
 			if (specimenBarcode != null && !"".equals(specimenBarcode.trim()))
 			{
@@ -1707,7 +1638,6 @@ public class CollectionProtocolUtil
 		return collectionProtocolId;
 	}
 
-
 	/**
 	 * Converts the JSON string to for dashboard items to LableSQLAssociationCollection object
 	 * @param dashboardLabelJsonValue
@@ -1715,14 +1645,13 @@ public class CollectionProtocolUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static Collection<LabelSQLAssociation> populateLabelSQLAssocColl(
-			String dashboardLabelJsonValue, CollectionProtocol cp) throws Exception
+	public static Collection<LabelSQLAssociation> populateLabelSQLAssocColl(String dashboardLabelJsonValue,
+			CollectionProtocol cp) throws Exception
 	{
 
 		JSONObject gridJson = new JSONObject(dashboardLabelJsonValue);
 		JSONArray innerArray = gridJson.getJSONArray("row");
-		Collection<LabelSQLAssociation> labelSQLAssociationCollection = cp
-				.getLabelSQLAssociationCollection();//retrieve labelSQL associations from CP
+		Collection<LabelSQLAssociation> labelSQLAssociationCollection = cp.getLabelSQLAssociationCollection();//retrieve labelSQL associations from CP
 
 		List<LabelSQLAssociation> labelSQLAssociationList = new ArrayList<LabelSQLAssociation>();
 		for (int i = 0; i < innerArray.length(); i++)
@@ -1794,8 +1723,7 @@ public class CollectionProtocolUtil
 		return ((strValue == null) ? null : strValue.trim());
 	}
 
-	public static LinkedList<GenericSpecimen> getSpecimenList(
-			Collection<GenericSpecimen> specimenColl)
+	public static LinkedList<GenericSpecimen> getSpecimenList(Collection<GenericSpecimen> specimenColl)
 	{
 		final LinkedList<GenericSpecimen> specimenList = new LinkedList<GenericSpecimen>();
 		if (!specimenColl.isEmpty())
@@ -1805,33 +1733,30 @@ public class CollectionProtocolUtil
 		return specimenList;
 	}
 
-	public static SpecimenRequirementBean duplicateSpeccimenRequirementBean(
-			SpecimenRequirementBean oldBean, String uniqueIdentifier, int index)
+	public static SpecimenRequirementBean duplicateSpeccimenRequirementBean(SpecimenRequirementBean oldBean,
+			String uniqueIdentifier, int index)
 	{
 		final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
 		if (oldBean.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			specimenRequirementBean
-					.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
-			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+			specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN
+					+ index);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
 					+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + index);
-			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
-					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + index);
 		}
 		else if (oldBean.getLineage().equals(Constants.ALIQUOT))
 		{
-			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + index);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
 					+ Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + index);
-			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
-					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + index);
 
 		}
 		else if (oldBean.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + index);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
 					+ Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + index);
-			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
-					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + index);
 		}
 		setSessionDataBean(specimenRequirementBean, oldBean);
 		specimenRequirementBean.setLineage(oldBean.getLineage());
@@ -1840,8 +1765,7 @@ public class CollectionProtocolUtil
 		specimenRequirementBean.setLabelFormat(oldBean.getLabelFormat());
 		specimenRequirementBean.setLabelFormatForAliquot(oldBean.getLabelFormatForAliquot());
 		specimenRequirementBean.setQuantityPerAliquot(oldBean.getQuantityPerAliquot());
-		specimenRequirementBean.setStorageContainerForAliquotSpecimem(oldBean
-				.getStorageContainerForAliquotSpecimem());
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(oldBean.getStorageContainerForAliquotSpecimem());
 		specimenRequirementBean.setNoOfDeriveSpecimen(oldBean.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(oldBean.getDeriveSpecimen());
 		specimenRequirementBean.setSpecimenRequirementLabel(oldBean.getSpecimenRequirementLabel());
@@ -1856,27 +1780,23 @@ public class CollectionProtocolUtil
 		newSpecimenRequirementBean.setType(oldSpecimenRequirementBean.getType());
 		newSpecimenRequirementBean.setTissueSide(oldSpecimenRequirementBean.getTissueSide());
 		newSpecimenRequirementBean.setTissueSite(oldSpecimenRequirementBean.getTissueSite());
-		newSpecimenRequirementBean.setPathologicalStatus(oldSpecimenRequirementBean
-				.getPathologicalStatus());
+		newSpecimenRequirementBean.setPathologicalStatus(oldSpecimenRequirementBean.getPathologicalStatus());
 		newSpecimenRequirementBean.setConcentration(oldSpecimenRequirementBean.getConcentration());
 		newSpecimenRequirementBean.setQuantity(oldSpecimenRequirementBean.getQuantity());
 		newSpecimenRequirementBean.setStorageContainerForSpecimen(oldSpecimenRequirementBean
 				.getStorageContainerForSpecimen());
 		// Collected and received events
-		newSpecimenRequirementBean.setCollectionEventUserId(oldSpecimenRequirementBean
-				.getCollectionEventUserId());
-		newSpecimenRequirementBean.setReceivedEventUserId(oldSpecimenRequirementBean
-				.getReceivedEventUserId());
-		newSpecimenRequirementBean.setCollectionEventContainer(oldSpecimenRequirementBean
-				.getCollectionEventContainer());
+		newSpecimenRequirementBean.setCollectionEventUserId(oldSpecimenRequirementBean.getCollectionEventUserId());
+		newSpecimenRequirementBean.setReceivedEventUserId(oldSpecimenRequirementBean.getReceivedEventUserId());
+		newSpecimenRequirementBean.setCollectionEventContainer(oldSpecimenRequirementBean.getCollectionEventContainer());
 		newSpecimenRequirementBean.setReceivedEventReceivedQuality(oldSpecimenRequirementBean
 				.getReceivedEventReceivedQuality());
 		newSpecimenRequirementBean.setCollectionEventCollectionProcedure(oldSpecimenRequirementBean
 				.getCollectionEventCollectionProcedure());
 	}
 
-	public static LinkedHashMap<String, GenericSpecimen> getSpecimenRequirementMap(
-			String uniqueIdentifier, LinkedList<GenericSpecimen> specimenList,int specCounter)
+	public static LinkedHashMap<String, GenericSpecimen> getSpecimenRequirementMap(String uniqueIdentifier,
+			LinkedList<GenericSpecimen> specimenList, int specCounter)
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		if (specimenList != null)
@@ -1893,20 +1813,20 @@ public class CollectionProtocolUtil
 
 				if (oldSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 				{
-					specimen = CollectionProtocolUtil.duplicateSpeccimenRequirementBean(
-							oldSpecimen, uniqueIdentifier, specCounter);
+					specimen = CollectionProtocolUtil.duplicateSpeccimenRequirementBean(oldSpecimen, uniqueIdentifier,
+							specCounter);
 					specCounter++;
 				}
 				else if (oldSpecimen.getLineage().equals(Constants.ALIQUOT))
 				{
-					specimen = CollectionProtocolUtil.duplicateSpeccimenRequirementBean(
-							oldSpecimen, uniqueIdentifier, aliquoteCounter);
+					specimen = CollectionProtocolUtil.duplicateSpeccimenRequirementBean(oldSpecimen, uniqueIdentifier,
+							aliquoteCounter);
 					aliquoteCounter++;
 				}
 				else
 				{
-					specimen = CollectionProtocolUtil.duplicateSpeccimenRequirementBean(
-							oldSpecimen, uniqueIdentifier, derivativeCounter);
+					specimen = CollectionProtocolUtil.duplicateSpeccimenRequirementBean(oldSpecimen, uniqueIdentifier,
+							derivativeCounter);
 					derivativeCounter++;
 				}
 				specimen.setContainerId(null);
@@ -1914,22 +1834,20 @@ public class CollectionProtocolUtil
 				{
 					specimen.getParentSpecimen().setId(0L);
 				}
-				if (oldSpecimen.getAliquotSpecimenCollection() != null
-						&& !oldSpecimen.getAliquotSpecimenCollection().isEmpty())
+				if (oldSpecimen.getAliquotSpecimenCollection() != null && !oldSpecimen.getAliquotSpecimenCollection().isEmpty())
 				{
-					final LinkedList<GenericSpecimen> aliquoteList = CollectionProtocolUtil
-							.getSpecimenList(oldSpecimen.getAliquotSpecimenCollection().values());
-					LinkedHashMap<String, GenericSpecimen> aliqMap = getSpecimenRequirementMap(
-							specimen.getUniqueIdentifier(), aliquoteList,0);
+					final LinkedList<GenericSpecimen> aliquoteList = CollectionProtocolUtil.getSpecimenList(oldSpecimen
+							.getAliquotSpecimenCollection().values());
+					LinkedHashMap<String, GenericSpecimen> aliqMap = getSpecimenRequirementMap(specimen.getUniqueIdentifier(),
+							aliquoteList, 0);
 					specimen.setAliquotSpecimenCollection(aliqMap);
 				}
-				if (oldSpecimen.getDeriveSpecimenCollection() != null
-						&& !oldSpecimen.getDeriveSpecimenCollection().isEmpty())
+				if (oldSpecimen.getDeriveSpecimenCollection() != null && !oldSpecimen.getDeriveSpecimenCollection().isEmpty())
 				{
-					final LinkedList<GenericSpecimen> derivativeList = CollectionProtocolUtil
-							.getSpecimenList(oldSpecimen.getDeriveSpecimenCollection().values());
-					LinkedHashMap<String, GenericSpecimen> derivMap = getSpecimenRequirementMap(
-							specimen.getUniqueIdentifier(), derivativeList,0);
+					final LinkedList<GenericSpecimen> derivativeList = CollectionProtocolUtil.getSpecimenList(oldSpecimen
+							.getDeriveSpecimenCollection().values());
+					LinkedHashMap<String, GenericSpecimen> derivMap = getSpecimenRequirementMap(specimen.getUniqueIdentifier(),
+							derivativeList, 0);
 					specimen.setDeriveSpecimenCollection(derivMap);
 				}
 				specimenMap.put(specimen.getUniqueIdentifier(), specimen);
@@ -1938,13 +1856,13 @@ public class CollectionProtocolUtil
 		}
 		return specimenMap;
 	}
-	
-	public static SpecimenRequirementBean getParentSpecimen(String mapKey,
-			final Map collectionProtocolEventMap) {
+
+	public static SpecimenRequirementBean getParentSpecimen(String mapKey, final Map collectionProtocolEventMap)
+	{
 		final StringTokenizer stringToken = new StringTokenizer(mapKey, "_");
 
 		String eventKey = null;
-		String specimenKey=null;
+		String specimenKey = null;
 		if (stringToken != null && stringToken.hasMoreTokens())
 		{
 			eventKey = stringToken.nextToken();
@@ -1952,16 +1870,14 @@ public class CollectionProtocolUtil
 		}
 		final CollectionProtocolEventBean collectionProtocolEventBean1 = (CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(eventKey);
-		final Map specimenRequirementmaps = collectionProtocolEventBean1
-				.getSpecimenRequirementbeanMap();
+		final Map specimenRequirementmaps = collectionProtocolEventBean1.getSpecimenRequirementbeanMap();
 		final SpecimenRequirementBean parentSpecimenRequirementBean = (SpecimenRequirementBean) specimenRequirementmaps
 				.get(specimenKey);
-		final SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(
-				stringToken, parentSpecimenRequirementBean, specimenKey);
+		final SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(stringToken,
+				parentSpecimenRequirementBean, specimenKey);
 		return specimenRequirementBean1;
 	}
-	
-	
+
 	private static SpecimenRequirementBean getSpecimenBeanFromMap(StringTokenizer keyToken,
 			SpecimenRequirementBean specimenRequirementBean, String parentKey)
 	{
@@ -1971,29 +1887,27 @@ public class CollectionProtocolUtil
 			final String currentKey = parentKey + "_" + specimenKey;
 			if (specimenKey.startsWith("A"))
 			{
-				final Map aliqutCollectionMap = specimenRequirementBean
-						.getAliquotSpecimenCollection();
+				final Map aliqutCollectionMap = specimenRequirementBean.getAliquotSpecimenCollection();
 				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) aliqutCollectionMap
 						.get(currentKey);
-				final SpecimenRequirementBean specimenRequirementBean1 = 
-						getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
+				final SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(keyToken,
+						childSpecimenRequirementBean, currentKey);
 				return specimenRequirementBean1;
 			}
 			else
 			{
-				final Map deriveCollectionMap = specimenRequirementBean
-						.getDeriveSpecimenCollection();
+				final Map deriveCollectionMap = specimenRequirementBean.getDeriveSpecimenCollection();
 				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) deriveCollectionMap
 						.get(currentKey);
-				final SpecimenRequirementBean specimenRequirementBean1 =
-						getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
+				final SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(keyToken,
+						childSpecimenRequirementBean, currentKey);
 				return specimenRequirementBean1;
 			}
 
 		}
 		return specimenRequirementBean;
 	}
-	
+
 	/**
 	 * Creates JSON for CP Dashboard items from domain objects
 	 * @param cpId
@@ -2006,9 +1920,9 @@ public class CollectionProtocolUtil
 		JSONArray innerDataArray = new JSONArray();
 		try
 		{
-			  if(labelSQLAssociations!=null && labelSQLAssociations.size() > 0)	
-			  {
-			    //Putting the JSON values from the objects
+			if (labelSQLAssociations != null && labelSQLAssociations.size() > 0)
+			{
+				//Putting the JSON values from the objects
 				for (LabelSQLAssociation labelSQLAssociation : labelSQLAssociations)
 				{
 					JSONObject innerJsonObject = new JSONObject();
@@ -2016,31 +1930,30 @@ public class CollectionProtocolUtil
 					innerJsonObject.put(Constants.ASSOC_ID, labelSQLAssociation.getId());
 					innerJsonObject.put(Constants.SEQ_ORDER, labelSQLAssociation.getSeqOrder());
 					innerJsonObject.put(Constants.LABEL_ID, labelSQLAssociation.getLabelSQL().getId());
-					innerJsonObject.put(Constants.USER_DEFINED_LABEL, labelSQLAssociation
-							.getUserDefinedLabel());
+					innerJsonObject.put(Constants.USER_DEFINED_LABEL, labelSQLAssociation.getUserDefinedLabel());
 					innerDataArray.put(innerJsonObject);
 				}
-			  }
-			  else
-			  {
-					List<String[]> dashbrdItems = edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD_ITEMS;
-					int seqorder = 1; 
-					LabelSQLBizlogic bizlogic = new LabelSQLBizlogic();
-					for(String[] item:dashbrdItems)
-					 {
-					    Long labelsqlId = bizlogic.getLabelSqlIdByLabel(item[0]);
-					  if(labelsqlId!=null)
-					  {
-					    JSONObject innerJsonObject = new JSONObject();
+			}
+			else
+			{
+				List<String[]> dashbrdItems = edu.wustl.common.util.global.Constants.DEFAULT_DASHBOARD_ITEMS;
+				int seqorder = 1;
+				LabelSQLBizlogic bizlogic = new LabelSQLBizlogic();
+				for (String[] item : dashbrdItems)
+				{
+					Long labelsqlId = bizlogic.getLabelSqlIdByLabel(item[0]);
+					if (labelsqlId != null)
+					{
+						JSONObject innerJsonObject = new JSONObject();
 						innerJsonObject.put(Constants.ASSOC_ID, Constants.DOUBLE_QUOTES); //Association id is not availabel for defualt items
 						innerJsonObject.put(Constants.SEQ_ORDER, seqorder++);
 						innerJsonObject.put(Constants.LABEL_ID, labelsqlId);
-						innerJsonObject.put(Constants.USER_DEFINED_LABEL,item[1]);
+						innerJsonObject.put(Constants.USER_DEFINED_LABEL, item[1]);
 						innerDataArray.put(innerJsonObject);
-					  }
-					 }
+					}
 				}
-			
+			}
+
 			mainJsonObject.put("row", innerDataArray);
 		}
 		catch (Exception ex)

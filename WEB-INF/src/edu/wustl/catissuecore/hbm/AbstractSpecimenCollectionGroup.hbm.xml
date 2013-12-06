@@ -9,7 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
         table="CATISSUE_ABS_SPECI_COLL_GROUP"
-		lazy="true"
+        lazy="true"
     >
 
    <cache usage="read-write" />
@@ -66,10 +66,10 @@
             insert="true"
             column="SITE_ID"  lazy="false"
         />
-		<joined-subclass
-	        name="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-	        table="CATISSUE_COLL_PROT_EVENT" lazy="false"
-	    >
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+            table="CATISSUE_COLL_PROT_EVENT" lazy="false"
+        >
            <key
                 column="IDENTIFIER"
             />
@@ -103,21 +103,21 @@
         />
 
          <set
-	            name="specimenRequirementCollection"
-	            table="CATISSUE_CP_REQ_SPECIMEN"
-	            lazy="true"
-	            inverse="true"
-	            cascade="save-update"
-	            sort="unsorted"
-	        >
-	         <cache usage="read-write" />
-	              <key
-	                  column="COLLECTION_PROTOCOL_EVENT_ID"
-	              />
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
-	              />
-	    </set>
+                name="specimenRequirementCollection"
+                table="CATISSUE_CP_REQ_SPECIMEN"
+                lazy="true"
+                inverse="true"
+                cascade="save-update"
+                sort="unsorted"
+            >
+             <cache usage="read-write" />
+                  <key
+                      column="COLLECTION_PROTOCOL_EVENT_ID"
+                  />
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                  />
+        </set>
 
         <many-to-one
             name="collectionProtocol"
@@ -139,157 +139,156 @@
             column="DEFAULT_SITE_ID"
         />
 
-	        <set
-	            name="specimenCollectionGroupCollection"
-	            table="CATISSUE_SPECIMEN_COLL_GROUP"
-	            lazy="true"
-	            inverse="true"
-	            cascade="save-update"
-	            sort="unsorted"
-	        >
-				 <cache usage="read-write" />
-	              <key
-	                  column="COLLECTION_PROTOCOL_EVENT_ID"
-	              />
+            <set
+                name="specimenCollectionGroupCollection"
+                table="CATISSUE_SPECIMEN_COLL_GROUP"
+                lazy="true"
+                inverse="true"
+                cascade="save-update"
+                sort="unsorted"
+            >
+                 <cache usage="read-write" />
+                  <key
+                      column="COLLECTION_PROTOCOL_EVENT_ID"
+                  />
 
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-	              />
-	        </set>
-		</joined-subclass>
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+                  />
+            </set>
+        </joined-subclass>
 
-	    <joined-subclass
-	        name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-	        table="CATISSUE_SPECIMEN_COLL_GROUP"
-	    >
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            table="CATISSUE_SPECIMEN_COLL_GROUP"
+        >
 
             <key
                 column="IDENTIFIER"
             />
 
-			<set
-	            name="specimenCollection"
-	            table="CATISSUE_SPECIMEN"
-	            lazy="true"
-	            inverse="true"
-	            cascade="none"
-	            order-by="LABEL asc"
-	        >
-	              <key
-	                  column="SPECIMEN_COLLECTION_GROUP_ID"
-	              >
-	              </key>
+            <set
+                name="specimenCollection"
+                table="CATISSUE_SPECIMEN"
+                lazy="true"
+                inverse="true"
+                cascade="none"
+                order-by="LABEL asc"
+            >
+                  <key
+                      column="SPECIMEN_COLLECTION_GROUP_ID"
+                  >
+                  </key>
 
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.Specimen"
-	              />
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.Specimen"
+                  />
 
-	        </set>
+            </set>
 
-	        <set
-	            name="consentTierStatusCollection"
-	            table="CATISSUE_CONSENT_TIER_STATUS"
-	            lazy="false"
-	            inverse="false"
-	            cascade="save-update"
-	            sort="unsorted"
-	        >
-				 <cache usage="read-write" />
-	              <key
-	                  column="SPECIMEN_COLL_GROUP_ID"
-	              />
+            <set
+                name="consentTierStatusCollection"
+                table="CATISSUE_CONSENT_TIER_STATUS"
+                lazy="false"
+                inverse="false"
+                cascade="save-update"
+                sort="unsorted"
+            >
+                 <cache usage="read-write" />
+                  <key
+                      column="SPECIMEN_COLL_GROUP_ID"
+                  />
 
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
-	              />
-	        </set>
-	        <set
-	            name="specimenEventParametersCollection"
-	            table="CATISSUE_SPECIMEN_EVENT_PARAM"
-	            fetch="join" lazy="false"
-	            inverse="true"
-	            cascade="save-update"
-	            sort="unsorted"
-	        >
-        	<cache usage="read-write" />
-	              <key
-	                  column="SPECIMEN_COLL_GRP_ID"
-	              />
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+                  />
+            </set>
+            <set
+                name="specimenEventParametersCollection"
+                fetch="join" lazy="false"
+                inverse="true"
+                cascade="save-update"
+                sort="unsorted"
+            >
+            <cache usage="read-write" />
+                  <key
+                      column="SPECIMEN_COLL_GRP_ID"
+                  />
 
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
-	              />
-	        </set>
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+                  />
+            </set>
 
-	        <set
-	            name="scgRecordEntryCollection"
-	            table="CATISSUE_SCG_REC_NTRY"
-	            lazy="false"
-	            inverse="true"
-	            cascade="save-update"
-	            sort="unsorted"
-	        >
+            <set
+                name="scgRecordEntryCollection"
+                table="CATISSUE_SCG_REC_NTRY"
+                lazy="false"
+                inverse="true"
+                cascade="save-update"
+                sort="unsorted"
+            >
 
-	              <key
-	                  column="SPECIMEN_COLLECTION_GROUP_ID"
-	              />
+                  <key
+                      column="SPECIMEN_COLLECTION_GROUP_ID"
+                  />
 
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry"
-	              />
-	        </set>
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry"
+                  />
+            </set>
 
-			<property
-	            name="name"
-	            type="string"
-	            update="true"
-	            insert="true"
-	            column="NAME"
-	            length="255"
-	    />
-	    	<property
-	            name="barcode"
-	            type="string"
-	            update="true"
-	            insert="true"
-	            column="BARCODE"
-	            length="255"
-	    />
-	        <property
-	            name="collectionStatus"
-	            type="string"
-	            update="true"
-	            insert="true"
-	            column="COLLECTION_STATUS"
-	            length="50"
-	        />
+            <property
+                name="name"
+                type="string"
+                update="true"
+                insert="true"
+                column="NAME"
+                length="255"
+        />
+            <property
+                name="barcode"
+                type="string"
+                update="true"
+                insert="true"
+                column="BARCODE"
+                length="255"
+        />
+            <property
+                name="collectionStatus"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_STATUS"
+                length="50"
+            />
 
-			<property
+            <property
             name="encounterTimestamp"
             type="timestamp"
             update="true"
             insert="true"
             column="ENCOUNTER_TIMESTAMP"
             length="50"
-       		/>
+            />
 
-			<property
-	            name="comment"
-	            type="string"
-	            update="true"
-	            insert="true"
-	            column="COMMENTS"
-	            length="2000"
-	        />
-	         <property
-	            name="surgicalPathologyNumber"
-	            type="string"
-	            update="true"
-	            insert="true"
-	            column="SURGICAL_PATHOLOGY_NUMBER"
-	            length="50"
-	        />
-	 		<property
+            <property
+                name="comment"
+                type="string"
+                update="true"
+                insert="true"
+                column="COMMENTS"
+                length="2000"
+            />
+             <property
+                name="surgicalPathologyNumber"
+                type="string"
+                update="true"
+                insert="true"
+                column="SURGICAL_PATHOLOGY_NUMBER"
+                length="50"
+            />
+            <property
             name="offset"
             type="int"
             update="true"
@@ -297,44 +296,44 @@
             column="DATE_OFFSET"
             length="30"
         />
-	        <many-to-one
-	            name="collectionProtocolRegistration"
-	            class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-	            cascade="none"
+            <many-to-one
+                name="collectionProtocolRegistration"
+                class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+                cascade="none"
 
-	            update="true"
-	            insert="true"
-	            column="COLLECTION_PROTOCOL_REG_ID"  lazy="false"
-	        />
+                update="true"
+                insert="true"
+                column="COLLECTION_PROTOCOL_REG_ID"  lazy="false"
+            />
 
-	        <many-to-one
-	            name="collectionProtocolEvent"
-	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-	            cascade="none"
+            <many-to-one
+                name="collectionProtocolEvent"
+                class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+                cascade="none"
 
-	            update="true"
-	            insert="true"
-	            column="COLLECTION_PROTOCOL_EVENT_ID"
-	        />
+                update="true"
+                insert="true"
+                column="COLLECTION_PROTOCOL_EVENT_ID"
+            />
 
-	        <one-to-one
-	            name="deIdentifiedSurgicalPathologyReport"
-	            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
-	            cascade="none"
+            <one-to-one
+                name="deIdentifiedSurgicalPathologyReport"
+                class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+                cascade="none"
 
-	            constrained="false"
-		     	property-ref="specimenCollectionGroup"
-	        />
+                constrained="false"
+                property-ref="specimenCollectionGroup"
+            />
 
-	        <one-to-one
-	            name="identifiedSurgicalPathologyReport"
-	            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
-	            cascade="none"
+            <one-to-one
+                name="identifiedSurgicalPathologyReport"
+                class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+                cascade="none"
 
-	            constrained="false"
-		     	property-ref="specimenCollectionGroup"
-	        />
-		</joined-subclass>
+                constrained="false"
+                property-ref="specimenCollectionGroup"
+            />
+        </joined-subclass>
     </class>
 <query name="getDefaultSite">select cpe.defaultSite.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.id=?
 </query>
@@ -345,9 +344,11 @@
 <query name="collectEventParam">select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters sep,
 edu.wustl.catissuecore.domain.CollectionEventParameters cep where sep.id=cep.id and sep.specimenCollectionGroup.id = ?
 </query>
-<query name="getSCGNameIdPairList">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolRegistration.id = ? and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
+<query name="getSCGNameIdPairList">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolRegistration.id = ? and scg.name != null and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
 <query name="getCPENameIdPairList">select DISTINCT cpe.collectionPointLabel,cpe.studyCalendarEventPoint,cpe.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe, edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.collectionProtocolEvent.id = cpe.id and scg.collectionProtocolRegistration.id = ? order by cpe.studyCalendarEventPoint</query>
 <query name="getSCGListFromCPE">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolEvent.id = ? and scg.collectionProtocolRegistration.id = ? and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
 <query name="getSpecimenEventCollFromSCGID">select scg.specimenEventParametersCollection from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id=?</query>
+<query name="getCPIdFromSCGId">select scg.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id=?</query>
+<query name="getCPIdFromSCGName">select scg.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.name=?</query>
 </hibernate-mapping>
 

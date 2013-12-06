@@ -30,16 +30,14 @@ public class ExportSpecimenListAction extends BaseAction{
 		// TODO Auto-generated method stub
 		String specIds = request.getParameter("specId");
 		String sql = "Select scg.NAME, Specimen1.LABEL, Specimen1.BARCODE, " +
-				" (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id),AbstractSpecimen1.SPECIMEN_CLASS, " +
-				" AbstractSpecimen1.SPECIMEN_TYPE, Specimen1.AVAILABLE_QUANTITY, AbstractSpecimen1.LINEAGE, Specimen1.IDENTIFIER " +
-				" FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , CATISSUE_ABSTRACT_SPECIMEN AbstractSpecimen1, " +
+				" (select label from catissue_Specimen where identifier=Specimen1.parent_specimen_id),Specimen1.SPECIMEN_CLASS, " +
+				" Specimen1.SPECIMEN_TYPE, Specimen1.AVAILABLE_QUANTITY, Specimen1.LINEAGE, Specimen1.IDENTIFIER " +
+				" FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , " +
 				" CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_SPECIMEN Specimen1 , catissue_specimen_coll_group scg " +
-				" WHERE scg.identifier = Specimen1.SPECIMEN_COLLECTION_GROUP_ID AND SpecimenCharacteristics1.IDENTIFIER   =  AbstractSpecimen1.SPECIMEN_CHARACTERISTICS_ID  AND " +
-				" Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID  AND AbstractSpecimen1.IDENTIFIER = " +
-				" Specimen1.IDENTIFIER  AND Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID   AND " +
+				" WHERE scg.identifier = Specimen1.SPECIMEN_COLLECTION_GROUP_ID AND SpecimenCharacteristics1.IDENTIFIER   =  Specimen1.SPECIMEN_CHARACTERISTICS_ID  AND " +
+				" Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID  AND Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID   AND " +
 				" ( ( Specimen1.IDENTIFIER  in ("+specIds+")  )   AND UPPER(Specimen1.ACTIVITY_STATUS ) != UPPER('Disabled')  ) " +
-				" ORDER BY Specimen1.IDENTIFIER ,SpecimenCharacteristics1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER , " +
-				" AbstractSpecimen1.IDENTIFIER";
+				" ORDER BY Specimen1.IDENTIFIER ,SpecimenCharacteristics1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER";
 		ColumnValueBean bean = new ColumnValueBean(specIds);
 		List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
 		list.add(bean);
