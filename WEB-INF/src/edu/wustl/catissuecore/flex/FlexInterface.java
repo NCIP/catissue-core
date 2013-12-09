@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bizlogic.CpBasedViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.dao.SCGDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -147,9 +148,18 @@ public class FlexInterface
 					if (scg != null)
 					{
 						final SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-						final Collection eventColl = (Collection) bizLogic.retrieveAttribute(
-								SpecimenCollectionGroup.class.getName(), scg.getId(),
-								"elements(specimenEventParametersCollection)");
+						SCGDAO scgdao = new SCGDAO();
+						List<SpecimenEventParameters> events = new ArrayList<SpecimenEventParameters>();
+						try
+						{
+							events = scgdao.getSCGEvents(scg);
+						}
+						catch (ApplicationException e)
+						{
+							LOGGER.error(e);
+//							throw this.getBizLogicException(e, e.getErrorKeyAsString(), e.getLogMessage());
+						}
+						final Collection eventColl = events;
 						if (eventColl != null && !eventColl.isEmpty())
 						{
 							final Iterator itr = eventColl.iterator();
@@ -157,17 +167,20 @@ public class FlexInterface
 							{
 								final SpecimenEventParameters event = (SpecimenEventParameters) itr
 										.next();
-								final String[] selectColName = {"user"};
-								final String[] whereColName = {"id"};
-								final String[] whereColCond = {"="};
-								final Object[] whereColVal = {event.getId()};
-								final List list = bizLogic.retrieve(SpecimenEventParameters.class
-										.getName(), selectColName, whereColName, whereColCond,
-										whereColVal, Constants.AND_JOIN_CONDITION);
-								LOGGER.info("List:" + list);
-								if (list != null && !list.isEmpty())
+								String hql = "select user.firstName, user.lastName from "+User.class.getName()+" user where user.id="+event.getUser().getId();
+								List userNameList = AppUtility.executeQuery(hql);
+								if (userNameList != null && !userNameList.isEmpty())
 								{
-									final User user = (User) list.get(0);
+									Object[] names = (Object[])userNameList.get(0);
+									User user = event.getUser();
+									if(names[0]!=null)
+									{
+										user.setFirstName(names[0].toString());
+									}
+									if(names[1]!=null)
+									{
+										user.setLastName(names[1].toString());
+									}
 									event.setUser(user);
 								}
 								if (event instanceof CollectionEventParameters)

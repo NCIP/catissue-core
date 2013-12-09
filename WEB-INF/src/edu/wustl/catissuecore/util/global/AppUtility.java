@@ -1481,12 +1481,22 @@ public class AppUtility
 	public static List<Object[]> executeQuery(final String hql)
 			throws ApplicationException
 	{
-		final IDAOFactory daofactory = DAOConfigFactory.getInstance()
-				.getDAOFactory(Constants.APPLICATION_NAME);
-		final DAO dao = daofactory.getDAO();
-		dao.openSession(null);
-		final List list = dao.executeQuery(hql);
-		dao.closeSession();
+		DAO dao = null;
+		List list = new ArrayList();
+		try
+		{
+			final IDAOFactory daofactory = DAOConfigFactory.getInstance()
+					.getDAOFactory(Constants.APPLICATION_NAME);
+			dao = daofactory.getDAO();
+			dao.openSession(null);
+			list = dao.executeQuery(hql);
+		}
+		finally
+		{
+			if(dao != null)
+			dao.closeSession();
+		}
+		
 		return list;
 	}
 

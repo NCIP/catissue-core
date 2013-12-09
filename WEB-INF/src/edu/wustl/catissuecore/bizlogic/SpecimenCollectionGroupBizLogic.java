@@ -2622,64 +2622,21 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				|| specimenCollGroup.getSpecimenEventParametersCollection()
 						.isEmpty())
 		{
-			final String hql = "select  scg.collectionTimestamp, scg.collector.id, scg.collectionComments, scg.collectionProcedure, scg.collectionContainer, " +
-					"scg.receivedQuality, scg.receivedTimestamp, scg.receiver.id, scg.receivedComments from "
-					+ SpecimenCollectionGroup.class.getName()
-					+ " as scg where scg.id= "
-					+ specimenCollGroup.getId().toString();
-
-			final List scgEventList = this.executeQuery(hql);
-			if(scgEventList != null && !scgEventList.isEmpty())
+			
+			SCGDAO scgdao = new SCGDAO();
+			List<SpecimenEventParameters> events = new ArrayList<SpecimenEventParameters>();
+			try
 			{
-				Object[] obj = (Object[])scgEventList.get(0);
-				CollectionEventParameters collEvent = new CollectionEventParameters();
-				if(obj[0] != null)
-				{
-					collEvent.setTimestamp((Date)obj[0]);
-				}
-				if(obj[1] != null)
-				{
-					User collector = new User();
-					collector.setId(Long.valueOf(obj[1].toString()));
-					collEvent.setUser(collector);
-				}
-				if(obj[2] != null)
-				{
-					collEvent.setComment(obj[2].toString());
-				}
-				if(obj[3] != null)
-				{
-					collEvent.setCollectionProcedure(obj[3].toString());
-				}
-				if(obj[4] != null)
-				{
-					collEvent.setContainer(obj[4].toString());
-				}
-				ReceivedEventParameters recEvent = new ReceivedEventParameters();
-				if(obj[5] != null)
-				{
-					recEvent.setReceivedQuality(obj[5].toString());
-				}
-				if(obj[6] != null)
-				{
-					recEvent.setTimestamp((Date)obj[6]);
-				}
-				if(obj[7] != null)
-				{
-					User receiver = new User();
-					receiver.setId(Long.valueOf(obj[7].toString()));
-					recEvent.setUser(receiver);
-				}
-				if(obj[8] != null)
-				{
-					recEvent.setComment(obj[8].toString());
-				}
-				List<SpecimenEventParameters> events = new ArrayList<SpecimenEventParameters>();
-				events.add(recEvent);
-				events.add(collEvent);
+				events = scgdao.getSCGEvents(specimenCollGroup);
+			}
+			catch (ApplicationException e)
+			{
+				LOGGER.error(e);
+				throw this.getBizLogicException(e, e.getErrorKeyAsString(), e.getLogMessage());
+			}
+			
 				specimenCollGroup
 						.setSpecimenEventParametersCollection(events);
-			}
 		}
 		if (specimenCollGroup.getSpecimenEventParametersCollection() != null
 				&& !specimenCollGroup.getSpecimenEventParametersCollection()
