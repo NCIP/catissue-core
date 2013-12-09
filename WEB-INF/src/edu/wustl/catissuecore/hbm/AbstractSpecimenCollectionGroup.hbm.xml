@@ -203,7 +203,7 @@
                       class="edu.wustl.catissuecore.domain.ConsentTierStatus"
                   />
             </set>
-            <set
+            <!-- <set
                 name="specimenEventParametersCollection"
                 fetch="join" lazy="false"
                 inverse="true"
@@ -218,7 +218,7 @@
                   <one-to-many
                       class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
                   />
-            </set>
+            </set> -->
 
             <set
                 name="scgRecordEntryCollection"
@@ -296,6 +296,81 @@
             column="DATE_OFFSET"
             length="30"
         />
+            <property
+                name="collectionTimestamp"
+                type="timestamp"
+                update="true"
+                insert="true"
+                column="COLLECTION_TIMESTAMP"
+                length="50"
+            />
+            <property
+                name="collectionComments"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_COMMENTS"
+                length="2000"
+            />
+            <property
+                name="collectionProcedure"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_PROCEDURE"
+                length="50"
+            />
+            <property
+                name="collectionContainer"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_CONTAINER"
+                length="50"
+            />
+            <many-to-one
+            name="collector"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="COLLECTOR_ID"
+        />
+        <property
+                name="receivedQuality"
+                type="string"
+                update="true"
+                insert="true"
+                column="RECEIVED_QUALITY"
+                length="50"
+            />
+        <property
+                name="receivedTimestamp"
+                type="timestamp"
+                update="true"
+                insert="true"
+                column="RECEIVED_TIMESTAMP"
+                length="50"
+            />
+            <property
+                name="receivedComments"
+                type="string"
+                update="true"
+                insert="true"
+                column="RECEIVED_COMMENTS"
+                length="2000"
+            />
+            <many-to-one
+            name="receiver"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="RECEIVER_ID"
+        />
+        
             <many-to-one
                 name="collectionProtocolRegistration"
                 class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
@@ -337,17 +412,12 @@
     </class>
 <query name="getDefaultSite">select cpe.defaultSite.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.id=?
 </query>
-<query name="getScgSummary">select scg.name,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?</query>
- 
-<query name="receiveEventParam">select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters sep,edu.wustl.catissuecore.domain.ReceivedEventParameters rep where sep.id=rep.id and sep.specimenCollectionGroup.id = ?
-</query>
-<query name="collectEventParam">select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters sep,
-edu.wustl.catissuecore.domain.CollectionEventParameters cep where sep.id=cep.id and sep.specimenCollectionGroup.id = ?
-</query>
+<query name="getScgSummary">select scg.name,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id, scg.collectionTimestamp, scg.collector.id, scg.receivedTimestamp, scg.receiver.id from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?</query> 
+<query name="getSpecimenEventCollFromSCGID">select scg.collectionTimestamp from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id=?</query>
 <query name="getSCGNameIdPairList">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolRegistration.id = ? and scg.name != null and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
 <query name="getCPENameIdPairList">select DISTINCT cpe.collectionPointLabel,cpe.studyCalendarEventPoint,cpe.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe, edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.collectionProtocolEvent.id = cpe.id and scg.collectionProtocolRegistration.id = ? order by cpe.studyCalendarEventPoint</query>
 <query name="getSCGListFromCPE">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolEvent.id = ? and scg.collectionProtocolRegistration.id = ? and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
-<query name="getSpecimenEventCollFromSCGID">select scg.specimenEventParametersCollection from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id=?</query>
+
 <query name="getCPIdFromSCGId">select scg.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id=?</query>
 <query name="getCPIdFromSCGName">select scg.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.name=?</query>
 </hibernate-mapping>

@@ -88,30 +88,34 @@ public class SCGDAO
 			scgSummDto.setScgId(scgId);
 			scgSummDto.setCollectionStatus((String)scgData[2]);
 			scgSummDto.setEventId((Long)scgData[3]);
+			scgSummDto.setCollectedDate((Date) scgData[4]);
+			scgSummDto.setCollector((Long) scgData[5]);
+			scgSummDto.setReceivedDate((Date) scgData[6]);
+			scgSummDto.setReceiver((Long) scgData[7]);
 		}
 
-		List receivedEvent = ((HibernateDAO) dao).executeNamedQuery("receiveEventParam", params);
-		final Calendar cal = Calendar.getInstance();
-		if (!receivedEvent.isEmpty())
-		{
-			for (Object recEvent : receivedEvent)
-			{
-				Object[] recEventData = (Object[]) recEvent;
-				scgSummDto.setReceivedDate((Date) recEventData[0]);
-				scgSummDto.setReceiver((Long) recEventData[1]);
-			}
-		}
-
-		List collectedEvent = ((HibernateDAO) dao).executeNamedQuery("collectEventParam", params);
-		if (!collectedEvent.isEmpty())
-		{
-			for (Object colEvent : collectedEvent)
-			{
-				Object[] colEventData = (Object[]) colEvent;
-				scgSummDto.setCollectedDate((Date) colEventData[0]);
-				scgSummDto.setCollector((Long) colEventData[1]);
-			}
-		}
+//		List receivedEvent = ((HibernateDAO) dao).executeNamedQuery("receiveEventParam", params);
+//		final Calendar cal = Calendar.getInstance();
+//		if (!receivedEvent.isEmpty())
+//		{
+//			for (Object recEvent : receivedEvent)
+//			{
+//				Object[] recEventData = (Object[]) recEvent;
+//				scgSummDto.setReceivedDate((Date) recEventData[0]);
+//				scgSummDto.setReceiver((Long) recEventData[1]);
+//			}
+//		}
+//
+//		List collectedEvent = ((HibernateDAO) dao).executeNamedQuery("collectEventParam", params);
+//		if (!collectedEvent.isEmpty())
+//		{
+//			for (Object colEvent : collectedEvent)
+//			{
+//				Object[] colEventData = (Object[]) colEvent;
+//				scgSummDto.setCollectedDate((Date) colEventData[0]);
+//				scgSummDto.setCollector((Long) colEventData[1]);
+//			}
+//		}
 
 		return scgSummDto;
 	}

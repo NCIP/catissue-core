@@ -11,11 +11,13 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
@@ -30,6 +32,7 @@ import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -138,10 +141,37 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * Description: 1 to many Association between SCG and SpecimenEventParameters.
 	 */
 
+
+	private Date collectionTimestamp;
+
 	/**
-	 * Collection and Received events associated with this SCG.
+	 * User who performs the event.
 	 */
-	protected Collection specimenEventParametersCollection = new HashSet();
+	private User collector;
+
+	/**
+	 * Text comment on event.
+	 */
+	private String collectionComments;
+
+	private String collectionProcedure;
+
+	/**
+	 * Container type in which specimen is collected (e.g. clot tube, KEDTA, ACD, sterile specimen cup)
+	 */
+	private String collectionContainer;
+
+	private String receivedQuality;
+
+	private Date receivedTimestamp;
+	/**
+	 * User who performs the event.
+	 */
+	private User receiver;
+	/**
+	 * Text comment on event.
+	 */
+	private String receivedComments;
 
 	/**
 	 * A required specimen collection event associated with a Collection Protocol.
@@ -180,6 +210,95 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * Get IsToInsertAnticipatorySpecimens value.
 	 * @return the isToInsertAnticipatorySpecimens
 	 */
+	public Date getCollectionTimestamp()
+	{
+		return collectionTimestamp;
+	}
+	
+	public void setCollectionTimestamp(Date collectionTimestamp)
+	{
+		this.collectionTimestamp = collectionTimestamp;
+	}
+	
+	public User getCollector()
+	{
+		return collector;
+	}
+	
+	public void setCollector(User collector)
+	{
+		this.collector = collector;
+	}
+	
+	public String getCollectionComments()
+	{
+		return collectionComments;
+	}
+	
+	public void setCollectionComments(String collectionComments)
+	{
+		this.collectionComments = collectionComments;
+	}
+	
+	public String getCollectionProcedure()
+	{
+		return collectionProcedure;
+	}
+	
+	public void setCollectionProcedure(String collectionProcedure)
+	{
+		this.collectionProcedure = collectionProcedure;
+	}
+	
+	public String getCollectionContainer()
+	{
+		return collectionContainer;
+	}
+	
+	public void setCollectionContainer(String collectionContainer)
+	{
+		this.collectionContainer = collectionContainer;
+	}
+	
+	public String getReceivedQuality()
+	{
+		return receivedQuality;
+	}
+	
+	public void setReceivedQuality(String receivedQuality)
+	{
+		this.receivedQuality = receivedQuality;
+	}
+	
+	public Date getReceivedTimestamp()
+	{
+		return receivedTimestamp;
+	}
+	
+	public void setReceivedTimestamp(Date receivedTimestamp)
+	{
+		this.receivedTimestamp = receivedTimestamp;
+	}
+	
+	public User getReceiver()
+	{
+		return receiver;
+	}
+	
+	public void setReceiver(User receiver)
+	{
+		this.receiver = receiver;
+	}
+	
+	public String getReceivedComments()
+	{
+		return receivedComments;
+	}
+	
+	public void setReceivedComments(String receivedComments)
+	{
+		this.receivedComments = receivedComments;
+	}
 	public Boolean getIsToInsertAnticipatorySpecimens()
 	{
 		return isToInsertAnticipatorySpecimens;
@@ -249,7 +368,29 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public Collection getSpecimenEventParametersCollection()
 	{
-		return this.specimenEventParametersCollection;
+		if(this.collector == null && this.receiver == null && Validator.isEmpty(this.collectionContainer) && Validator.isEmpty(this.collectionProcedure)
+				&& Validator.isEmpty(this.receivedQuality))
+		{
+			return new ArrayList<SpecimenEventParameters>();
+		}
+		CollectionEventParameters collectionEventParam = new CollectionEventParameters();
+		collectionEventParam.setComment(this.getCollectionComments());
+		collectionEventParam.setSpecimenCollectionGroup(this);
+		collectionEventParam.setTimestamp(this.getCollectionTimestamp());
+		collectionEventParam.setUser(this.getCollector());
+		collectionEventParam.setContainer(this.getCollectionContainer());
+		collectionEventParam.setCollectionProcedure(this.getCollectionProcedure());
+
+		ReceivedEventParameters receivedEventParam = new ReceivedEventParameters();
+		receivedEventParam.setComment(this.getReceivedComments());
+		receivedEventParam.setReceivedQuality(this.getReceivedQuality());
+		receivedEventParam.setSpecimenCollectionGroup(this);
+		receivedEventParam.setTimestamp(this.getReceivedTimestamp());
+		receivedEventParam.setUser(this.getReceiver());
+		List<SpecimenEventParameters> eventParameters = new ArrayList<SpecimenEventParameters>();
+		eventParameters.add(receivedEventParam);
+		eventParameters.add(collectionEventParam);
+		return eventParameters;
 	}
 
 	/**
@@ -257,7 +398,25 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public void setSpecimenEventParametersCollection(Collection specimenEventParametersCollection)
 	{
-		this.specimenEventParametersCollection = specimenEventParametersCollection;
+		for (Object event : specimenEventParametersCollection)
+		{
+			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) event;
+			if (specimenEventParameters instanceof CollectionEventParameters)
+			{
+				this.collectionComments = specimenEventParameters.getComment();
+				this.collectionContainer = ((CollectionEventParameters) specimenEventParameters).getContainer();
+				this.collectionProcedure = ((CollectionEventParameters) specimenEventParameters).getCollectionProcedure();
+				this.collectionTimestamp = specimenEventParameters.getTimestamp();
+				this.collector = specimenEventParameters.getUser();
+			}
+			else if (specimenEventParameters instanceof ReceivedEventParameters)
+			{
+				this.receivedQuality = ((ReceivedEventParameters) specimenEventParameters).getReceivedQuality();
+				this.receivedTimestamp = specimenEventParameters.getTimestamp();
+				this.receiver = specimenEventParameters.getUser();
+				this.receivedComments = specimenEventParameters.getComment();
+			}
+		}
 	}
 
 	/**
@@ -639,7 +798,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		}
 		else
 		{
-			final Iterator iter = this.specimenEventParametersCollection.iterator();
+			final Iterator iter = this.getSpecimenEventParametersCollection().iterator();
 			while (iter.hasNext())
 			{
 				final Object temp = iter.next();
@@ -670,12 +829,13 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		tempColl.add(receivedEventParameters);
 		if (operation.equals(Constants.ADD))
 		{
-			this.specimenEventParametersCollection.add(collectionEventParameters);
-			this.specimenEventParametersCollection.add(receivedEventParameters);
+			this.setSpecimenEventParametersCollection(tempColl);
+//			this.getSpecimenEventParametersCollection().add(collectionEventParameters);
+//			this.getSpecimenEventParametersCollection().add(receivedEventParameters);
 		}
 		else
 		{
-			this.specimenEventParametersCollection = tempColl;
+			this.setSpecimenEventParametersCollection(tempColl);
 		}
 	}
 

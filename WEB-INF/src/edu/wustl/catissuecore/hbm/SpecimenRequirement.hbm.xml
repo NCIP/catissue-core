@@ -251,11 +251,11 @@
                 length="50"
             />
             <property
-                name="receiverComments"
+                name="receivedComments"
                 type="string"
                 update="true"
                 insert="true"
-                column="RECEIVER_COMMENTS"
+                column="RECEIVED_COMMENTS"
                 length="2000"
             />
             <many-to-one

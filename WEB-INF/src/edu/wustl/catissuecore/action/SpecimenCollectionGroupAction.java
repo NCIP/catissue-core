@@ -1208,10 +1208,10 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 					}
 				}
 				// Setting the ids
-				specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId()
-						.longValue());
-				specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId()
-						.longValue());
+//				specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId()
+//						.longValue());
+//				specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId()
+//						.longValue());
 			}
 		}
 	}
@@ -1234,7 +1234,6 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 		if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
 		{
 			specimenCollectionGroupForm.setCollectionEventCollectionProcedure(Constants.CP_DEFAULT);
-
 		}
 		if (specimenCollectionGroupForm.getCollectionEventContainer() == null)
 		{

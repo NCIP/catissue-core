@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import edu.wustl.common.util.global.Validator;
+
 /**
  * SpecimenRequirement class.
  */
@@ -46,7 +48,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 	/**
 	 * Text comment on event.
 	 */
-	private String receiverComments;
+	private String receivedComments;
 
 	private String storageType;
 
@@ -152,14 +154,14 @@ public class SpecimenRequirement extends AbstractSpecimen
 		this.receiver = receiver;
 	}
 
-	public String getReceiverComments()
+	public String getReceivedComments()
 	{
-		return receiverComments;
+		return receivedComments;
 	}
 
-	public void setReceiverComments(String receiverComments)
+	public void setReceivedComments(String receiverComments)
 	{
-		this.receiverComments = receiverComments;
+		this.receivedComments = receiverComments;
 	}
 
 	public String getSpecimenRequirementLabel()
@@ -268,6 +270,11 @@ public class SpecimenRequirement extends AbstractSpecimen
 	@Override
 	public Collection<SpecimenEventParameters> getSpecimenEventCollection()
 	{
+		if(this.collector == null && this.receiver == null && Validator.isEmpty(this.collectionContainer) && Validator.isEmpty(this.collectionProcedure)
+				&& Validator.isEmpty(this.receivedQuality))
+		{
+			return new ArrayList<SpecimenEventParameters>();
+		}
 		CollectionEventParameters collectionEventParam = new CollectionEventParameters();
 		collectionEventParam.setComment(this.getCollectionComments());
 		collectionEventParam.setSpecimen(this);
@@ -277,7 +284,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 		collectionEventParam.setCollectionProcedure(this.getCollectionProcedure());
 
 		ReceivedEventParameters receivedEventParam = new ReceivedEventParameters();
-		receivedEventParam.setComment(this.getReceiverComments());
+		receivedEventParam.setComment(this.getReceivedComments());
 		receivedEventParam.setReceivedQuality(this.getReceivedQuality());
 		receivedEventParam.setSpecimen(this);
 		receivedEventParam.setTimestamp(this.getReceivedTimestamp());
@@ -313,7 +320,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 				this.receivedQuality = ((ReceivedEventParameters) specimenEventParameters).getReceivedQuality();
 				this.receivedTimestamp = specimenEventParameters.getTimestamp();
 				this.receiver = specimenEventParameters.getUser();
-				this.receiverComments = specimenEventParameters.getComment();
+				this.receivedComments = specimenEventParameters.getComment();
 			}
 		}
 	}

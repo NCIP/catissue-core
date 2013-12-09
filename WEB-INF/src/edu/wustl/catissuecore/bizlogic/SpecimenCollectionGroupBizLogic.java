@@ -652,6 +652,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final Collection pEvtPrmColl = persistentSCG
 						.getSpecimenEventParametersCollection();
 				final Iterator evntIterator = pEvtPrmColl.iterator();
+				List<SpecimenEventParameters> eventColl = new ArrayList<SpecimenEventParameters>();
 				while (evntIterator.hasNext())
 				{
 					final SpecimenEventParameters event = (SpecimenEventParameters) evntIterator
@@ -660,8 +661,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 							.getCorrespondingObject(spEventColl,
 									event.getClass());
 					this.updateEvent(event, newEvent, sessionDataBean);
+					eventColl.add(newEvent);
+
 					// spEventColl.remove(newEvent);
 				}
+				persistentSCG.setSpecimenEventParametersCollection(eventColl);
 			}
 			// Check for different closed site
 			final Site oldSite = oldspecimenCollectionGroup
@@ -2618,14 +2622,64 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				|| specimenCollGroup.getSpecimenEventParametersCollection()
 						.isEmpty())
 		{
-			final String hql = "select  scg.specimenEventParametersCollection from "
+			final String hql = "select  scg.collectionTimestamp, scg.collector.id, scg.collectionComments, scg.collectionProcedure, scg.collectionContainer, " +
+					"scg.receivedQuality, scg.receivedTimestamp, scg.receiver.id, scg.receivedComments from "
 					+ SpecimenCollectionGroup.class.getName()
 					+ " as scg where scg.id= "
 					+ specimenCollGroup.getId().toString();
 
 			final List scgEventList = this.executeQuery(hql);
-			specimenCollGroup
-					.setSpecimenEventParametersCollection(scgEventList);
+			if(scgEventList != null && !scgEventList.isEmpty())
+			{
+				Object[] obj = (Object[])scgEventList.get(0);
+				CollectionEventParameters collEvent = new CollectionEventParameters();
+				if(obj[0] != null)
+				{
+					collEvent.setTimestamp((Date)obj[0]);
+				}
+				if(obj[1] != null)
+				{
+					User collector = new User();
+					collector.setId(Long.valueOf(obj[1].toString()));
+					collEvent.setUser(collector);
+				}
+				if(obj[2] != null)
+				{
+					collEvent.setComment(obj[2].toString());
+				}
+				if(obj[3] != null)
+				{
+					collEvent.setCollectionProcedure(obj[3].toString());
+				}
+				if(obj[4] != null)
+				{
+					collEvent.setContainer(obj[4].toString());
+				}
+				ReceivedEventParameters recEvent = new ReceivedEventParameters();
+				if(obj[5] != null)
+				{
+					recEvent.setReceivedQuality(obj[5].toString());
+				}
+				if(obj[6] != null)
+				{
+					recEvent.setTimestamp((Date)obj[6]);
+				}
+				if(obj[7] != null)
+				{
+					User receiver = new User();
+					receiver.setId(Long.valueOf(obj[7].toString()));
+					recEvent.setUser(receiver);
+				}
+				if(obj[8] != null)
+				{
+					recEvent.setComment(obj[8].toString());
+				}
+				List<SpecimenEventParameters> events = new ArrayList<SpecimenEventParameters>();
+				events.add(recEvent);
+				events.add(collEvent);
+				specimenCollGroup
+						.setSpecimenEventParametersCollection(events);
+			}
 		}
 		if (specimenCollGroup.getSpecimenEventParametersCollection() != null
 				&& !specimenCollGroup.getSpecimenEventParametersCollection()
