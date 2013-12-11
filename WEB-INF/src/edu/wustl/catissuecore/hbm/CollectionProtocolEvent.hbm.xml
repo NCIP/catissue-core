@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+
+    <class
+        name="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+        table="CATISSUE_COLL_PROT_EVENT"
+        lazy="true"
+    >
+
+   <cache usage="read-write" />
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_COLL_PROT_EV_SEQ</param>
+              <!--
+                  To add non XDoclet generator parameters, create a file named
+                  hibernate-generator-params-SpecimenCollectionGroup.xml
+                  containing the additional parameters and place it in your merge dir.
+              -->
+            </generator>
+        </id>
+        <property
+            name="clinicalDiagnosis"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_DIAGNOSIS"
+            length="150"
+        />
+
+        <property
+            name="clinicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+        <many-to-one
+            name="specimenCollectionSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+
+            update="true"
+            insert="true"
+            column="SITE_ID"  lazy="false"
+        />
+
+         <property
+            name="collectionPointLabel"
+            type="string"
+            update="true"
+            insert="true"
+            column="COLLECTION_POINT_LABEL"
+            length="255"
+        />
+
+
+        <property
+            name="labelFormat"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABELFORMAT"
+            length="255"
+        />
+
+        <property
+            name="studyCalendarEventPoint"
+            type="double"
+            update="true"
+            insert="true"
+            column="STUDY_CALENDAR_EVENT_POINT"
+            length="50"
+        />
+
+         <set
+                name="specimenRequirementCollection"
+                table="CATISSUE_CP_REQ_SPECIMEN"
+                lazy="true"
+                inverse="true"
+                cascade="save-update"
+                sort="unsorted"
+            >
+             <cache usage="read-write" />
+                  <key
+                      column="COLLECTION_PROTOCOL_EVENT_ID"
+                  />
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                  />
+        </set>
+
+        <many-to-one
+            name="collectionProtocol"
+            class="edu.wustl.catissuecore.domain.CollectionProtocol"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="COLLECTION_PROTOCOL_ID"
+        />
+         <many-to-one
+            name="defaultSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            
+            update="true"
+            insert="true"
+            lazy="false"
+            column="DEFAULT_SITE_ID"
+        />
+
+            <set
+                name="specimenCollectionGroupCollection"
+                table="CATISSUE_SPECIMEN_COLL_GROUP"
+                lazy="true"
+                inverse="true"
+                cascade="save-update"
+                sort="unsorted"
+            >
+                 <cache usage="read-write" />
+                  <key
+                      column="COLLECTION_PROTOCOL_EVENT_ID"
+                  />
+
+                  <one-to-many
+                      class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+                  />
+            </set>
+    </class>
+</hibernate-mapping>
+

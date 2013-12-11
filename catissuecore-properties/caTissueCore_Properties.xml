@@ -952,4 +952,9 @@ Helpdesk Phone : @@contact.number@@</value>
         <name>throttlingMaxLimits</name>
         <value>4</value>
     </property>
+    <property>
+        <name>display.admin.emails.onSummaryPage</name>
+        <value>false</value>
+    </property>
+    
 </properties>

@@ -89,8 +89,8 @@
         />
 
         <set
-            name="abstractSpecimenCollectionGroupCollection"
-            table="CATISSUE_ABS_SPECI_COLL_GROUP"
+            name="specimenCollectionGroupCollection"
+            table="CATISSUE_SPECIMEN_COLL_GROUP"
             lazy="true"
             inverse="true"
             cascade="save-update"
@@ -105,7 +105,29 @@
               </key>
 
               <one-to-many
-                  class="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
+                  class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+              />
+
+        </set>
+        
+        <set
+            name="collectionProtocolEventcollection"
+            table="CATISSUE_COLL_PROT_EVENT"
+            lazy="true"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+              <key
+                  column="SITE_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
               />
 
         </set>

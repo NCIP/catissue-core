@@ -5,7 +5,7 @@
     
 <hibernate-mapping
 >
-    <class name="edu.wustl.catissuecore.domain.SpecimenEventParameters" abstract="true">
+    <class name="edu.wustl.catissuecore.domain.SpecimenEventParameters" table="CATISSUE_SPEC_EVENT_MAPPING">
     
     <cache usage="read-write" />
 
@@ -16,7 +16,7 @@
             length="30"
             unsaved-value="null"
         >
-            <generator class="increment">
+            <generator class="native">
                 <param name="sequence">CATISSUE_SPEC_EVENT_PARAM_SEQ</param>
               <!--  
                   To add non XDoclet generator parameters, create a file named 
@@ -25,15 +25,28 @@
               --> 
             </generator>
         </id>
-    <!-- <many-to-one
-            name="specimenCollectionGroup"
-            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+        
+        <discriminator column="EVENT_TYPE" type="string"/>
+        
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
              
             update="true"
             insert="true"
-            column="SPECIMEN_COLL_GRP_ID"
-        /> -->
+            column="SPECIMEN_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SpecimenEventParameters.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <subclass name="edu.wustl.catissuecore.domain.FixedEventParameters" discriminator-value="FIXED">
+        <join table="CATISSUE_FIXED_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
         <many-to-one
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
@@ -70,17 +83,6 @@
             column="COMMENTS"
             length="500"
         />
-
-        <!--
-            To add non XDoclet property mappings, create a file named
-                hibernate-properties-SpecimenEventParameters.xml
-            containing the additional properties and place it in your merge dir.
-        -->
-
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.FixedEventParameters"
-            table="CATISSUE_FIXED_EVENT_PARAM"
-        >
         <property
             name="fixationType"
             type="string"
@@ -99,12 +101,49 @@
             column="DURATION_IN_MINUTES"
             length="30"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.FrozenEventParameters" discriminator-value="FROZEN">
+        <join table="CATISSUE_FROZEN_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.FrozenEventParameters"
-            table="CATISSUE_FROZEN_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
+        
         <property
             name="method"
             type="string"
@@ -113,13 +152,47 @@
             column="METHOD"
             length="50"
         />
+        </join>
+        </subclass>
+        <subclass name="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter" discriminator-value="CHECKIN CHECKOUT">
+        <join table="CATISSUE_IN_OUT_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"
-            table="CATISSUE_IN_OUT_EVENT_PARAM"
-            lazy="true"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="storageStatus"
             type="string"
@@ -129,12 +202,48 @@
             length="100"
             not-null="true"
         />
+           </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.ProcedureEventParameters" discriminator-value="PROCEDURE">
+        <join table="CATISSUE_PROCEDURE_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.ProcedureEventParameters"
-            table="CATISSUE_PROCEDURE_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="url"
             type="string"
@@ -154,13 +263,48 @@
             length="255"
             not-null="true"
         />
+           </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.SpunEventParameters" discriminator-value="SPUN">
+        <join table="CATISSUE_SPUN_EVENT_PARAMETERS">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.SpunEventParameters"
-            table="CATISSUE_SPUN_EVENT_PARAMETERS"
-            lazy="true"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="gravityForce"
             type="double"
@@ -178,12 +322,48 @@
             column="DURATION_IN_MINUTES"
             length="30"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.TransferEventParameters" discriminator-value="TRANSFER">
+        <join table="CATISSUE_TRANSFER_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.TransferEventParameters"
-            table="CATISSUE_TRANSFER_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="fromPositionDimensionOne"
             type="int"
@@ -239,12 +419,48 @@
             insert="true"
             column="FROM_STORAGE_CONTAINER_ID"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.CollectionEventParameters" discriminator-value="COLLECTION">
+        <join table="CATISSUE_COLL_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.CollectionEventParameters"
-            table="CATISSUE_COLL_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="collectionProcedure"
             type="string"
@@ -262,12 +478,48 @@
             column="CONTAINER"
             length="50"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.ReceivedEventParameters" discriminator-value="RECEIVED">
+        <join table="CATISSUE_RECEIVED_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.ReceivedEventParameters"
-            table="CATISSUE_RECEIVED_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="receivedQuality"
             type="string"
@@ -275,12 +527,48 @@
             insert="true"
             column="RECEIVED_QUALITY"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.EmbeddedEventParameters" discriminator-value="EMBEDDED">
+        <join table="CATISSUE_EMBEDDED_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.EmbeddedEventParameters"
-            table="CATISSUE_EMBEDDED_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="embeddingMedium"
             type="string"
@@ -289,21 +577,92 @@
             column="EMBEDDING_MEDIUM"
             length="50"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.ThawEventParameters" discriminator-value="THAW">
+        <join table="CATISSUE_THAW_EVENT_PARAMETERS">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.ThawEventParameters"
-            table="CATISSUE_THAW_EVENT_PARAMETERS"
-            lazy="true"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
 
-        </union-subclass>
-        <union-subclass name="edu.wustl.catissuecore.domain.ReviewEventParameters" abstract="true">
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
 
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
-            table="CATISSUE_CELL_SPE_REVIEW_PARAM"
-        >
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
+        </join>
+        </subclass>
+
+        <subclass name="edu.wustl.catissuecore.domain.ReviewEventParameters" abstract="true">
+
+        <subclass name="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters" discriminator-value="CELL SPECIMEN REVIEW">
+        <join table="CATISSUE_CELL_SPE_REVIEW_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
+
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="neoplasticCellularityPercentage"
             type="double"
@@ -321,12 +680,48 @@
             column="VIABLE_CELL_PERCENTAGE"
             length="30"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters" discriminator-value="TISSUE SPECIMEN REVIEW">
+        <join table="CATISSUE_TIS_SPE_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters"
-            table="CATISSUE_TIS_SPE_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="neoplasticCellularityPercentage"
             type="double"
@@ -371,12 +766,48 @@
             column="HISTOLOGICAL_QUALITY"
             length="50"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters" discriminator-value="FLUID SPECIMEN REVIEW">
+        <join table="CATISSUE_FLUID_SPE_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters"
-            table="CATISSUE_FLUID_SPE_EVENT_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="cellCount"
             type="double"
@@ -385,12 +816,48 @@
             column="CELL_COUNT"
             length="30"
         />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters" discriminator-value="MOLECULAR SPECIMEN REVIEW">
+        <join table="CATISSUE_MOL_SPE_REVIEW_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"
-            table="CATISSUE_MOL_SPE_REVIEW_PARAM"
-        >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="gelImageURL"
             type="string"
@@ -453,14 +920,50 @@
             column="RATIO_28S_TO_18S"
             length="30"
         />
+        </join>
+        </subclass>
 
-        </union-subclass>
+        </subclass>
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.DisposalEventParameters"
-            table="CATISSUE_DISPOSAL_EVENT_PARAM"
-        >
+        <subclass name="edu.wustl.catissuecore.domain.DisposalEventParameters" discriminator-value="DISPOSAL">
+        <join table="CATISSUE_DISPOSAL_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
+
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <property
             name="reason"
             type="string"
@@ -469,12 +972,48 @@
             column="REASON"
             length="255"
          />
+        </join>
+        </subclass>
+        
+        <subclass name="edu.wustl.catissuecore.domain.DistributionEventParameters" discriminator-value="DISTRIBUTION">
+        <join table="CATISSUE_DISTRI_EVENT_PARAM">
+        <key column="IDENTIFIER"/>
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="SPECIMEN_ID"
+        />
 
-        </union-subclass>
-        <union-subclass
-            name="edu.wustl.catissuecore.domain.DistributionEventParameters"
-            table="CATISSUE_DISTRI_EVENT_PARAM"
-            >
+        <property
+            name="timestamp"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="EVENT_TIMESTAMP"
+        />
+
+        <many-to-one
+            name="user"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="USER_ID"
+        />
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
             <property
                 name="distributedQuantity"              
                 type="double"
@@ -491,7 +1030,8 @@
                 insert="true"
                 column="DISTRIBUTION_ID"
             />
-        </union-subclass>
+         </join>
+        </subclass>
     </class>
     <query name="getDistributionEvent">select distEventParam.comment,distEventParam.distributedQuantity,distEventParam.timestamp,user.firstName,user.lastName,site.name from DistributionEventParameters distEventParam left join distEventParam.user user left join distEventParam.distributionDetails distribution left join distribution.toSite site where distEventParam.id = ?
     </query>

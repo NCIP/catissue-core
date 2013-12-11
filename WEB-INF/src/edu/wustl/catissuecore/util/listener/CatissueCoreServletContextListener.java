@@ -295,6 +295,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		final int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
+		Variables.isToDisplayAdminEmail = Boolean.parseBoolean(XMLPropertyHandler.getValue("display.admin.emails.onSummaryPage"));
+		
 		HelpXMLPropertyHandler.init(CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "help_links.xml");
 	}

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.dao.SCGDAO;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -167,22 +168,16 @@ public class FlexInterface
 							{
 								final SpecimenEventParameters event = (SpecimenEventParameters) itr
 										.next();
-								String hql = "select user.firstName, user.lastName from "+User.class.getName()+" user where user.id="+event.getUser().getId();
-								List userNameList = AppUtility.executeQuery(hql);
-								if (userNameList != null && !userNameList.isEmpty())
-								{
-									Object[] names = (Object[])userNameList.get(0);
+								UserDAO userDAO = new UserDAO();
+								
+								 
+								String userName = userDAO.getUserNameById(event.getUser().getId(), null);
+								String[] nameArr = userName.split(",");
+								
 									User user = event.getUser();
-									if(names[0]!=null)
-									{
-										user.setFirstName(names[0].toString());
-									}
-									if(names[1]!=null)
-									{
-										user.setLastName(names[1].toString());
-									}
+									user.setLastName(nameArr[0]);
+									user.setFirstName(nameArr[1]);
 									event.setUser(user);
-								}
 								if (event instanceof CollectionEventParameters)
 								{
 									collEvBean.copy(event);

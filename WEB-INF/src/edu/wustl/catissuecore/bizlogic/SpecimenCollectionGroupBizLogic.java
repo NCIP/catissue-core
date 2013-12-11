@@ -1596,7 +1596,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final List listOfSubElement = this.getRelatedObjects(dao,
 				SpecimenCollectionGroup.class,
 				"collectionProtocolRegistration", collProtRegIDArr);
-		this.disableRelatedObjects(dao, "CATISSUE_ABS_SPECI_COLL_GROUP",
+		this.disableRelatedObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP",
 				Constants.SYSTEM_IDENTIFIER_COLUMN_NAME,
 				edu.wustl.common.util.Utility.toLongArray(listOfSubElement));
 		//this.auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);

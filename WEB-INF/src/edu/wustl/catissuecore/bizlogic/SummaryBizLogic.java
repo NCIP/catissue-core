@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
@@ -198,9 +199,9 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 
 	{
 		final String sql = "select specimen.SPECIMEN_TYPE,COUNT(*) from CATISSUE_SPECIMEN specimen "
-				+ " specimen.COLLECTION_STATUS='Collected' and specimen" + DISABLED
+				+ " where specimen.COLLECTION_STATUS='Collected' and specimen" + DISABLED
 				+ " and specimen.SPECIMEN_CLASS = '" + specimenType
-				+ "'group by specimen.SPECIMEN_TYPE " + DESC_ORDER;
+				+ "' group by specimen.SPECIMEN_TYPE " + DESC_ORDER;
 		final List<NameValueBean> nameValuePairs = this.getNameValuePairs(sql);
 		return nameValuePairs;
 	}
@@ -332,8 +333,18 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	private List getUserData() throws DAOException, ClassNotFoundException
 	{
 		final List<List> userData = new ArrayList<List>();
-		final String sql = "SELECT concat(FIRST_NAME,concat(', ',LAST_NAME)), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"
-				+ DISABLED;
+		String sql="";
+		if(Variables.isToDisplayAdminEmail)
+		{
+			 sql = "SELECT concat(FIRST_NAME,concat(', ',LAST_NAME)), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"
+					+ DISABLED;
+		}
+		else
+		{
+			sql = "SELECT concat(FIRST_NAME,concat(', ',LAST_NAME)), B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"
+					+ DISABLED;
+		}
+		
 		try
 		{
 			final List list = jdbcDAO.executeQuery(sql);
@@ -406,7 +417,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getTSiteWiseCount() throws BizLogicException
 	{
-		final String sql = "SELECT TISSUE_SITE, COUNT(B.IDENTIFIER) FROM CATISSUE_SPECIMEN_CHAR A, "
+		final String sql = "SELECT TISSUE_SITE, COUNT(C.IDENTIFIER) FROM CATISSUE_SPECIMEN_CHAR A, "
 				+ " CATISSUE_SPECIMEN C WHERE "
 				+ "A.IDENTIFIER = C.SPECIMEN_CHARACTERISTICS_ID AND "
 				+ "C.ACTIVITY_STATUS NOT IN ('Disabled') AND C.COLLECTION_STATUS LIKE 'Collected' GROUP BY A.TISSUE_SITE"
@@ -422,9 +433,9 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getPbyCD() throws BizLogicException
 	{
-		final String sql = "SELECT CLINICAL_DIAGNOSIS, COUNT(distinct C.PARTICIPANT_ID) FROM CATISSUE_ABS_SPECI_COLL_GROUP A,"
+		final String sql = "SELECT CLINICAL_DIAGNOSIS, COUNT(distinct C.PARTICIPANT_ID) FROM "
 				+ " CATISSUE_SPECIMEN_COLL_GROUP B, CATISSUE_COLL_PROT_REG C, CATISSUE_PARTICIPANT D WHERE"
-				+ " A.IDENTIFIER = B.IDENTIFIER AND B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
+				+ " B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
 				+ "D.IDENTIFIER = C.PARTICIPANT_ID AND D"
 				+ DISABLED
 				+ " AND "
@@ -442,9 +453,9 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getPbyCS() throws BizLogicException
 	{
-		final String sql = "SELECT CLINICAL_STATUS, COUNT(distinct C.PARTICIPANT_ID) FROM CATISSUE_ABS_SPECI_COLL_GROUP A,"
+		final String sql = "SELECT CLINICAL_STATUS, COUNT(distinct C.PARTICIPANT_ID) FROM "
 				+ " CATISSUE_SPECIMEN_COLL_GROUP B, CATISSUE_COLL_PROT_REG C, CATISSUE_PARTICIPANT D WHERE "
-				+ "A.IDENTIFIER = B.IDENTIFIER AND B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
+				+ " B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
 				+ "D.IDENTIFIER = C.PARTICIPANT_ID AND D"
 				+ DISABLED
 				+ " AND "
