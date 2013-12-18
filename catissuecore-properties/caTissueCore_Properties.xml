@@ -942,7 +942,7 @@ Helpdesk Phone : @@contact.number@@</value>
     </property>
     <property>
         <name>loginFailureAttemptsLimit</name>
-        <value>@@loginFailureAttemptsLimit@@</value>
+        <value>5</value>
     </property>
     <property>
         <name>throttlingTimeIntervalInMinutes</name>

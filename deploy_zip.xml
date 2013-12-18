@@ -785,7 +785,6 @@
                             </if>
 
         <replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-            <replacefilter token="@@loginFailureAttemptsLimit@@" value="${login.failure.attempts.limit}" />
             <replacefilter token="@@Forgot-Password-Enabled@@" value="${forgot.password.enabled}" />
             <replacefilter token="@@Load-Balancer-URL@@" value="${load.balancer.url}" />
             <replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
@@ -1227,7 +1226,6 @@
         </antcall>
         <replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties">
                                     <replacefilter token="@@app.version@@" value="${app.version}" />
-            <replacefilter token="@@loginFailureAttemptsLimit@@" value="${login.failure.attempts.limit}" />
                         <replacefilter token="@@contact.number@@" value="${contact.number}" />
                         <replacefilter token="@@contact.email@@" value="${email.administrative.emailAddress}" />
                                 </replace>

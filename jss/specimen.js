@@ -23,9 +23,12 @@ function initCombo()
 
 	//	typeCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 }
+var pathologicalStatusCombo;
+var tissueSiteCombo;
+var tissueSideCombo;
 function initSpecimenCombo()
 {
-		var tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
+		tissueSiteCombo = dhtmlXComboFromSelect("tissueSite");
 		tissueSiteCombo.setOptionWidth(202);
 		tissueSiteCombo.setSize(202);
 		tissueSiteCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
@@ -33,14 +36,14 @@ function initSpecimenCombo()
 		tissueSiteCombo.attachEvent("onOpen",onComboClick);
 		tissueSiteCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
-		var tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
+		tissueSideCombo = dhtmlXComboFromSelect("tissueSide");
 		tissueSideCombo.setOptionWidth(203);
 		tissueSideCombo.setSize(203);
 		tissueSideCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
 		tissueSideCombo.attachEvent("onOpen",onComboClick);
 		tissueSideCombo.attachEvent("onKeyPressed",onComboKeyPress);
 
-		var pathologicalStatusCombo = dhtmlXComboFromSelect("pathologicalStatus");
+		pathologicalStatusCombo = dhtmlXComboFromSelect("pathologicalStatus");
 		pathologicalStatusCombo.setOptionWidth(203);
 		pathologicalStatusCombo.setSize(203);
 		pathologicalStatusCombo.attachEvent("onChange", function(){validateAndProcessComboData(this);});
@@ -873,6 +876,11 @@ req.onreadystatechange = function() {
 				divStyle='block';
 				document.getElementById('specListDiv').style.display='block';
 			}
+			tabDataJSON={};
+			if(operation == 'add')
+			{
+				LoadSCGTabBar('edit');
+			}
 			scrollToTop();
 		}
 		if(operation == 'edit')
@@ -881,6 +889,9 @@ req.onreadystatechange = function() {
 		}
 		else if(operation == 'add')
 		{
+			specimenData['tissueSite']=tissueSiteCombo.getSelectedText();
+			specimenData['tissueSide']=tissueSideCombo.getSelectedText();
+			specimenData['pathologicalStatus']=pathologicalStatusCombo.getSelectedText();
 			req.open("POST", "rest/specimens/", false);
 		}
 req.setRequestHeader("Content-Type",
@@ -1103,6 +1114,10 @@ function processDeriveData(obj)
 	{
 		derLabelSubmit=false;
 		obj.className += " errorStyleOn";
+	}
+	else if(obj.name=='disposeParentSpecimen' || obj.name =='isToPrintLabel')
+	{
+		deriveDataJSON[obj.name] = obj.checked;
 	}
 	else
 	{	

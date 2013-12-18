@@ -21,6 +21,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -340,11 +341,10 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	private static Boolean lockAccount(User user, HibernateDAO dao) throws BizLogicException
 	{
 		int maxAttempts = 5;
-		if (AppUtility.isNumeric(XMLPropertyHandler
-				.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT)))
+		String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
+		if (!Validator.isEmpty(loginAttempts) && AppUtility.isNumeric(loginAttempts))
 		{
-			maxAttempts = Integer.valueOf(XMLPropertyHandler
-					.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT));
+			maxAttempts = Integer.valueOf(loginAttempts);
 		}
 		LoginAuditManager loginAuditManager = new LoginAuditManager();
 		List<LoginDetails> loginDetailsColl = loginAuditManager.getAllLoginDetailsForUser(user
