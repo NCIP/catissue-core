@@ -2490,7 +2490,7 @@ PUBLIC
             type="krishagni.catissueplus.action.LoginAuditDashboardAction" name="userForm"
             validate="false" scope="request">
             <forward name="success" path=".catissuecore.loginDashboardDef" />
-            <forward name="access_denied" path="/ManageAdministrativeData.do" />
+            <forward name="access_denied" path="/ManageAdministrativeData.do?isDashboardVisible=false" />
         </action>
 
 		<action path="/ApproveUser" type="edu.wustl.catissuecore.action.ApproveUserAction"

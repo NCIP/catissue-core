@@ -2,7 +2,6 @@ package krishagni.catissueplus.action;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,6 @@ import org.json.JSONObject;
 
 import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
@@ -37,7 +35,7 @@ public class LoginAuditDashboardAction extends CatissueBaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-		String target = Constants.FAILURE;
+		String target = Constants.ACCESS_DENIED;
 		if(sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			
@@ -45,11 +43,12 @@ public class LoginAuditDashboardAction extends CatissueBaseAction
 			String recordPerPage = request.getParameter("recordPerPage");
 			String startIndex = request.getParameter("startIndex");
 		
-			if (operation.equals("gridData")) {
+			if (operation.equals("gridData")) 
+			{
 				target = this.gridData(request, response, startIndex, recordPerPage);
-	//		} else if (operation.equals("showSQL")) {
-	//			target = this.showSQL(request, response);
-			} else if (operation.equals("init")) {
+			}
+			else if (operation.equals("init")) 
+			{
 				JSONObject gridDataJson = getGridData(startIndex, recordPerPage, null);
 				request.setAttribute("recordPerPage", recordPerPage);
 				request.setAttribute("gridDataJson", gridDataJson.toString());
@@ -72,17 +71,6 @@ public class LoginAuditDashboardAction extends CatissueBaseAction
 		response.flushBuffer();
 		return null;
 	}
-	
-//	private ActionForward showSQL(HttpServletRequest request, HttpServletResponse response) 
-//			throws DAOException, BizLogicException, IOException
-//	{
-//		LoginDashboardBizLogic loginDashboardBizLogic = new LoginDashboardBizLogic();
-//		Long auditId = Long.parseLong(request.getParameter("auditId")); 
-//		String sql = loginDashboardBizLogic.getGeneratedSql(auditId);
-//		response.getWriter().write(sql);
-//		response.flushBuffer();
-//		return null;
-//	}
 	
 	private JSONObject getGridData(String startIndexStr, String totalRecordStr, Map<String, String> filterValueMap) 
 			throws BizLogicException, DAOException, SQLException, JSONException 
@@ -107,12 +95,10 @@ public class LoginAuditDashboardAction extends CatissueBaseAction
 			Map<String, Object> rowContent = new HashMap<String, Object>();			
 			rowContent.put("id", position); 
 			JSONArray rowData =  new JSONArray(); 
-//			rowData.put(loginAuditBean.getQueryId());
 			rowData.put(loginAuditBean.getUserName());
 			rowData.put(loginAuditBean.getIpAddress());
 			rowData.put(loginAuditBean.getLoginTimeStamp());
 			rowData.put(loginAuditBean.getLastLoginState());
-//			rowData.put("<img src='images/advQuery/sql.png' onclick='showGeneratedSQL("+ loginAuditBean.getIdentifier() +")'/>"); 
 			rowContent.put("data", rowData);
 			rows.put(rowContent);
 			dataJson.put("rows", rows);

@@ -8,12 +8,15 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * @author mandar_deshmukh
@@ -39,6 +42,14 @@ public class ForwardAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
+		String isDashboardVisible = request.getParameter("isDashboardVisible");
+		if(!Validator.isEmpty(isDashboardVisible) && !Boolean.valueOf(isDashboardVisible))
+		{
+			ActionErrors actionErrors = new ActionErrors();
+			ActionError actionError = new ActionError("access.execute.action.denied","");
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+			saveErrors(request, actionErrors);
+		}
 		return (mapping.findForward(Constants.SUCCESS));
 	}
 
