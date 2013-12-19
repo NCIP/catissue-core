@@ -2354,7 +2354,7 @@
                                             </then>
                                 </elseif>
                                 <else>
-                                    <fail message="Invalid version specified, supported versions are:${plus1.0.version}, ${plus2.0.version}, ${plus2.1.1.version}. You entered ${from.version}"/>
+                                    <fail message="Invalid version specified, supported versions are:${suite-1.2.version}, ${plus1.0.version}, ${plus2.0.version}, ${plus2.1.1.version},${plus3.0.version},${plus3.1.version}. You entered ${from.version}"/>
                                 </else>
                                     </if>
     <!--    <antcall target="liquibase_upgrade_from_plusv1.0_to_plusv2.0"/>
