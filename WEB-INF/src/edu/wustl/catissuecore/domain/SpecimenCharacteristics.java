@@ -1,7 +1,7 @@
 /**
  * <p>Title: SpecimenCharacteristics Class>
  * <p>Description: The combined anatomic state and pathological
- * disease classification of a specimen.</p>
+ * diseaseclassification of a specimen.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -16,7 +16,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * The combined anatomic state and pathological
- * disease classification of a specimen.
+ * diseaseclassification of a specimen.
  * @hibernate.class table="CATISSUE_SPECIMEN_CHAR"
  * @author gautam_shetty
  */

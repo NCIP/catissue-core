@@ -72,7 +72,6 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	protected String isRNA = "false";
 
 	/**
-	 * A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a mammalian 
 	 * cellular RNA sample.
 	 */
 	protected String ratio28STo18S;
@@ -200,9 +199,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	}
 
 	/**
-	 * Returns  A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a 
 	 * mammalian cellular RNA sample. 
-	 * @return A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected 
 	 * in a mammalian cellular RNA sample.
 	 * @see #setRatio28STo18S(String)
 	 */
@@ -212,9 +209,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	}
 
 	/**
-	 * Sets  A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a 
 	 * mammalian cellular RNA sample.
-	 * @param ratio28STo18S  A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is 
 	 * detected in a mammalian cellular RNA sample.
 	 * @see #getRatio28STo18S()
 	 */

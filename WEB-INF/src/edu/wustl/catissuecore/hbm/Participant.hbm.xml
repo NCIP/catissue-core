@@ -212,7 +212,7 @@
               />
         </set>
 
-		<set
+		<!-- set
             name="participantRecordEntryCollection"
             table="CATISSUE_PARTICIPANT_REC_NTRY"
             lazy="false"
@@ -228,7 +228,7 @@
               <one-to-many
                   class="edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry"
               />
-        </set>
+        </set -->
 
 
         <!--

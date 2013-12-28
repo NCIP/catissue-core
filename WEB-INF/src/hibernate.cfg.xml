@@ -48,13 +48,6 @@
 		<!-- caTIES Suite-->
 
         <!-- List of all Mapping files -->
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/AbstractFormContext.hbm.xml"/>
-		<mapping resource="edu/common/dynamicextensions/hbm/integration/AbstractRecordEntry.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/ParticipantRecordEntry.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/SpecimenRecordEntry.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/SCGRecordEntry.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/StudyFormContext.hbm.xml"/>
-
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventDetails.hbm.xml"/>
@@ -100,7 +93,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
 
-		<mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
+		<!--  mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Condition.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Connector.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Constraints.hbm.xml" />
@@ -118,7 +111,7 @@
 		<mapping resource="edu/wustl/common/hbm/CustomFormula.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/OutputTerm.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/PersistentGraph.hbm.xml" />
-		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" />
+		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" / -->
 
 		<mapping resource="edu/wustl/catissuecore/hbm/CpSyncAudit.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>

@@ -35,9 +35,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.bulkoperator.util.BulkOperationException;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
@@ -875,21 +873,6 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId", scgEntityId);
 			}
 			request.setAttribute("scgEntityId", scgEntityId);*/
-			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID) == null)
-			{
-				scgEntityId = AnnotationUtil
-						.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
-				CatissueCoreCacheManager.getInstance().addObjectToCache(
-						AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
-			}
-			else
-			{
-				scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-						AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
-
-			}
-			request.setAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
 			AppUtility.setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
 			/**
 			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch

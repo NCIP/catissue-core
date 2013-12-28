@@ -434,14 +434,14 @@
             column="IS_EMPI_ENABLE"
         />
 
-		<set name="studyFormContextCollection" table="CATISSUE_CP_STUDYFORMCONTEXT"
+		<!--  set name="studyFormContextCollection" table="CATISSUE_CP_STUDYFORMCONTEXT"
 			 inverse="true">
 
 			<key column="COLLECTION_PROTOCOL_ID" />
 
 			<many-to-many column="STUDY_FORM_CONTEXT_ID"
 				class="edu.wustl.catissuecore.domain.StudyFormContext" />
-		</set>
+		</set -->
 		
 		<set
             name="labelSQLAssociationCollection"

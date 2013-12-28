@@ -32,8 +32,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
 import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -301,31 +299,6 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				request.getSession().removeAttribute("CPQuery");
 			}
 		}
-		Long specimenRecEntryEntityId = null;
-		try
-		{
-			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
-			{
-				specimenRecEntryEntityId = (Long) CatissueCoreCacheManager.getInstance()
-						.getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
-			}
-			else
-			{
-				specimenRecEntryEntityId = AnnotationUtil
-						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-				CatissueCoreCacheManager.getInstance().addObjectToCache(
-						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenRecEntryEntityId);
-			}
-
-		}
-		catch (final Exception e)
-		{
-			this.logger.error(e.getMessage(), e);
-		}
-		//request.setAttribute("specimenEntityId", specimenEntityId);
-		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
-				specimenRecEntryEntityId);
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 

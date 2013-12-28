@@ -1488,7 +1488,7 @@ public class CollectionProtocolUtil
 			}
 			Collection<NameValueBean> clinicalDiagnosisBeans = new ArrayList<NameValueBean>();
 			clinicalDiagnosisBeans.addAll(clinicalDiagnosisBean);
-			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBeans);
+			request.setAttribute("selectedCoordinators", clinicalDiagnosisBeans);
 		}
 
 	}

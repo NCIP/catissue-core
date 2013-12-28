@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.ConsentTrackingBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.dto.ConsentResponseDto;
@@ -74,7 +73,7 @@ public class FetchConsentsAction  extends SecureAction {
 				request.setAttribute("participantId",request.getParameter("participantId"));
 				request.setAttribute("cpId",request.getParameter("cpId"));
 				
-				request.setAttribute("staticEntityName",AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+				request.setAttribute("staticEntityName","edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry");
 			}else if(consentLevel.equals("specimen")){
 				request.setAttribute("reportId", request.getParameter("reportId"));
 				request.setAttribute("pageof", request.getParameter("pageof"));

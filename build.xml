@@ -42,7 +42,7 @@
 	<property name="custom.impl.lib.dir" value="${base.dir}/custom_impl_lib" />
 
 	<!-- flex related properties -->
-	<property name="FLEX_HOME" value="D:/tmp/flex2_sdk_hf1"/>
+	<property name="FLEX_HOME" value="E:/Flex SDK 2"/>
 	<property name="FLEX_APP_ROOT" value="flexclient"/>
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
@@ -417,6 +417,7 @@
 
 			<fileset dir="${base.dir}">
 				<!--include name="Applet/**" / -->
+				<include name="ngweb/**"/>
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
@@ -1616,16 +1617,15 @@
 	<target name="check.java.version"
 	            description="checks if the version of java is the correct one">
 		<echo>${java.version}</echo>
-		<if>
+		<!-- if>
 			<contains string="${java.version}" substring="${java.required.version}"/>
-			<!--equals arg1="${java.version}" arg2="1.5"/>-->
 			<then>
 
 			</then>
 			<else>
 				<fail message="Wrong Java version! [${java.version}] Required version: ${java.required.version}"/>
 			</else>
-		</if>
+		</if -->
 	</target>
 
 	<target name="bulkoperation_integrate_app" description="deploys the Bulk Operation module">

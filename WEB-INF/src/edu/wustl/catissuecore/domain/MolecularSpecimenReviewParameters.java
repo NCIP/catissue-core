@@ -69,10 +69,6 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	protected Double absorbanceAt280;
 
-	/**
-	 * A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a mammalian
-	 * cellular RNA sample.
-	 */
 	protected Double ratio28STo18S;
 
 	/**
@@ -208,11 +204,6 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	}
 
 	/**
-	 * Returns  A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a
-	 * mammalian cellular RNA sample.
-	 * @return A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected
-	 * in a mammalian cellular RNA sample.
-	 * @see #setRatio28STo18S(Double)
 	 * @hibernate.property name="ratio28STo18S" type="double"
 	 * column="RATIO_28S_TO_18S" length="30"
 	 */
@@ -221,13 +212,6 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 		return this.ratio28STo18S;
 	}
 
-	/**
-	 * Sets  A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is detected in a
-	 * mammalian cellular RNA sample.
-	 * @param ratio28STo18S  A unitless ratio of the full-length 28S to 18S ribosomal RNA mass that is
-	 * detected in a mammalian cellular RNA sample.
-	 * @see #getRatio28STo18S()
-	 */
 	public void setRatio28STo18S(Double ratio28STo18S)
 	{
 		this.ratio28STo18S = ratio28STo18S;

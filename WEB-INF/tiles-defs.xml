@@ -787,6 +787,15 @@
 		<put name="content" value="/pages/content/search/AdvanceQuery.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.csd" extends=".catissuecore.homePageDef">
+ 		<put name="content" value="/csd_web/pages/csdUI.html" />
+ 	</definition>
+ 	
+ 	<definition name=".catissuecore.ecrf" extends=".catissuecore.homePageDef">
+ 		<put name="content" value="/ngweb/pages/forms.html" />
+ 	</definition>
+ 	
+
 	<!--  Added By Ankush -->
 	<definition name=".catissuecore.queryParticipantViewEditDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ParticipantView.jsp" />

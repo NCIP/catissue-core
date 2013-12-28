@@ -1,0 +1,35 @@
+
+.cp-padded-hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.cp-clear {
+  clear: both;
+}
+
+.cp-select {
+  background-color: rgb(245, 245, 245);
+}
+
+.cp-form {
+  font-size: 14px;
+}
+
+.cp-round-button-icon {
+  width: 40px;
+  height:40px;
+  border-radius:100%;
+}
+
+.cp-notifs {
+  text-align: center;
+  z-index: 100;
+  position: fixed;
+  width:100%;
+  top: 0;
+}
+
+.cp-de-form {
+  font-size: 14px;
+}

@@ -14,10 +14,8 @@ import org.apache.struts.action.ActionMapping;
 
 import com.google.gson.Gson;
 
-import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
-import edu.wustl.catissuecore.dao.SpecimenDAO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -87,8 +85,7 @@ public class DisplayDeriveAction extends CatissueBaseAction
 	}
 
 	private void setSpecimenCharsInRequest(HttpServletRequest request)
-			throws BizLogicException, DAOException,
-			DynamicExtensionsSystemException
+			throws BizLogicException, DAOException
 	{
 		Gson gson = new Gson();
 		request.setAttribute(Constants.TISSUE_TYPE_LIST_JSON,

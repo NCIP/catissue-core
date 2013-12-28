@@ -21,7 +21,6 @@ import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
-import edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -315,7 +314,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	/**
 	 * Scg Record Entry Collection.
 	 */
-	protected Collection<SCGRecordEntry> scgRecordEntryCollection = new HashSet<SCGRecordEntry>();
+	//protected Collection<SCGRecordEntry> scgRecordEntryCollection = new HashSet<SCGRecordEntry>();
 
 	/**
 	 * @return the isCPBasedSpecimenEntryChecked
@@ -638,15 +637,15 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
 	}
 
-	public Collection<SCGRecordEntry> getScgRecordEntryCollection()
-	{
-		return scgRecordEntryCollection;
-	}
-
-	public void setScgRecordEntryCollection(Collection<SCGRecordEntry> scgRecordEntryCollection)
-	{
-		this.scgRecordEntryCollection = scgRecordEntryCollection;
-	}
+//	public Collection<SCGRecordEntry> getScgRecordEntryCollection()
+//	{
+//		return scgRecordEntryCollection;
+//	}
+//
+//	public void setScgRecordEntryCollection(Collection<SCGRecordEntry> scgRecordEntryCollection)
+//	{
+//		this.scgRecordEntryCollection = scgRecordEntryCollection;
+//	}
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(

@@ -916,7 +916,7 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	
 	var showSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+fwdPage+"&reportId="+reportId1+"&cpId="+cpId+"&cprId="+cprId;
 	
-	var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations&cpId="+cpId+"&cprId="+cprId;
+	var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId="+cprId+"&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations&cpId="+cpId+"&cprId="+cprId;
 	
 	var showConsentsTab="FetchConsents.do?consentLevelId="+cprId+"&consentLevel=participant&reportId=<%=reportId%>&pageof=<%=pageOf%>&participantEntityId=${particiapntRecordEntryEntityId}&participantId=${participantId}&cpId="+cpId;
 	doInitCal('birthDate',false,'${uiDatePattern}');doInitCal('deathDate',false,'${uiDatePattern}');

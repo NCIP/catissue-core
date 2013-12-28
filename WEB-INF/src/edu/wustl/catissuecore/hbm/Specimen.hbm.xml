@@ -267,7 +267,7 @@
             length="50"
         />
         
-        <set
+        <!--  set
             name="specimenRecordEntryCollection"
             table="CATISSUE_SPECIMEN_REC_NTRY"
             lazy="false"
@@ -283,7 +283,7 @@
               <one-to-many
                   class="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry"
               />
-        </set>
+        </set -->
         <many-to-one
             name="specimenCollectionGroup"
             class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"

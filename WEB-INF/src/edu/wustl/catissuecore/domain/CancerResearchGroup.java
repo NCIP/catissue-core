@@ -1,6 +1,6 @@
 /**
  * <p>Title: CancerResearchGroup Class</p>
- * <p>Description: A collection of scientist and/or clinician users with a common
+ * <p>Description: Acollection of scientist and/or clinician users with a common
  * research objective related to biospecimen collection and utilization.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -18,7 +18,7 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
- * A collection of scientist and/or clinician users with a common research objective related
+ * Acollection of scientist and/or clinician users with a common research objective related
  * to biospecimen collection and utilization.
  * @hibernate.class table="CATISSUE_CANCER_RESEARCH_GROUP"
  */

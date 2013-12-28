@@ -53,7 +53,6 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	protected Collection<AbstractSpecimen> childSpecimenCollection = new LinkedHashSet<AbstractSpecimen>();
 	/**
 	 * The combined specimenCharacteristics of anatomic state and pathological
-	 * disease classification of a specimen.
 	 */
 	protected SpecimenCharacteristics specimenCharacteristics;
 	/**
@@ -147,10 +146,8 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	}
 
 	/**
-	 * Returns the combined anatomic state and pathological disease classification of a specimen.
 	 * @hibernate.many-to-one column="SPECIMEN_CHARACTERISTICS_ID"
 	 * class="edu.wustl.catissuecore.domain.SpecimenCharacteristics" constrained="true"
-	 * @return the combined anatomic state and pathological disease classification of a specimen.
 	 * @see #setSpecimenCharacteristics(SpecimenCharacteristics)
 	 */
 	public SpecimenCharacteristics getSpecimenCharacteristics()
@@ -159,10 +156,6 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	}
 
 	/**
-	 * Sets the combined anatomic state and pathological disease classification of a specimen.
-	 * @param spChar the combined anatomic state and pathological disease 
-	 * classification of a specimen.
-	 * @see #getSpecimenCharacteristics()
 	 */
 	public void setSpecimenCharacteristics(final SpecimenCharacteristics spChar)
 	{

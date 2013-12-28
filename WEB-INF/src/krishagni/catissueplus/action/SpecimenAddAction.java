@@ -17,14 +17,10 @@ import org.apache.struts.action.ActionMapping;
 
 import com.google.gson.Gson;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.CatissueBaseAction;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -157,26 +153,7 @@ public class SpecimenAddAction extends CatissueBaseAction
 
 			String biohazardTypeNameListJSON = gson.toJson(biohazardTypeNameList);
 			request.setAttribute(Constants.BIOHAZARD_TYPE_NAME_LIST_JSON, biohazardTypeNameListJSON);
-
-			Long specimenEntityId = null;
-
-			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
-			{
-				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance()
-						.getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
-			}
-			else
-			{
-				specimenEntityId = AnnotationUtil
-						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-				CatissueCoreCacheManager.getInstance().addObjectToCache(
-						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
-			}
-			request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
-			request.setAttribute("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
 			request.setAttribute(Constants.OPERATION, Constants.ADD);
-
 		}
 		finally
 		{
