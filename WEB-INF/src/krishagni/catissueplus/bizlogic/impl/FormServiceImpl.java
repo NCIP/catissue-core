@@ -7,6 +7,7 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
+import edu.wustl.common.beans.SessionDataBean;
 
 import krishagni.catissueplus.bizlogic.FormService;
 import krishagni.catissueplus.dao.FormDao;
@@ -15,8 +16,13 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import krishagni.catissueplus.dto.FormRecordDetailsDTO;
 
 public class FormServiceImpl implements FormService {
-	
+	private SessionDataBean session;
+
 	private FormDao formDao = new FormDaoImpl();
+	
+	public FormServiceImpl(SessionDataBean session) {
+		this.session = session;
+	}
 
 	@Override
 	public Container getFormDefinition(Long formId) {
@@ -70,9 +76,9 @@ public class FormServiceImpl implements FormService {
 		recordId = formDataMgr.saveOrUpdateFormData(null, formData);
 		
 		if (isInsert) {
-			formDao.insertFormRecord(formId, objectId, recordId, null);			
+			formDao.insertFormRecord(formId, objectId, recordId, session.getUserId());			
 		} else {
-			formDao.updateFormRecord(formId, objectId, recordId, null);
+			formDao.updateFormRecord(formId, objectId, recordId, session.getUserId());
 		}
 		
 		return recordId;		

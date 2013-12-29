@@ -976,6 +976,10 @@
 	<path id="liquibaseClasspath">
 		<fileset dir="${lib.dir}" includes="*.jar" />
 	</path>
+	<path id="deLiquibaseClasspath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+                <pathelement path="${temp.dir}/dynamicextensions/db/liquibase"/>
+	</path>
 	<taskdef resource="liquibasetasks.properties">
 		<classpath>
 			<pathelement location="${lib.dir}/liquibase.jar" />
@@ -1001,8 +1005,24 @@
 	</target>
        <target name="upgrade_db_plusv3.2">
                <echo message="Upgrading DataBase with URL ${final.database.url}" />    
-		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+               <antcall target="upgrade_de_db"/>
+               <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
        </target>
+
+       <target name="upgrade_de_db">
+           <delete dir="${temp.dir}/dynamicextensions" failonerror="no"/>
+           <mkdir dir="${temp.dir}/dynamicextensions"/>
+           <unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions"/>
+           <updateDatabase 
+               changeLogFile="${temp.dir}/dynamicextensions/db/liquibase/db.changelog-master.xml" 
+               driver="${final.database.driver}" 
+               url="${final.database.url}" 
+               username="${database.username}"
+               password="${database.password}"
+               dropFirst="false"
+               classpathref="deLiquibaseClasspath"/>
+       </target>
+
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
 			<echo message="Upgrading DB using Liquibase Targets"/>
 			<antcall target="upgrade_db_to_plus_v20"/>

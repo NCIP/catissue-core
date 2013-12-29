@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -28,6 +30,8 @@ import edu.common.dynamicextensions.ndao.TransactionManager;
 import edu.common.dynamicextensions.ndao.TransactionManager.Transaction;
 import edu.common.dynamicextensions.nutility.ContainerJsonSerializer;
 import edu.common.dynamicextensions.nutility.ContainerSerializer;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 import krishagni.catissueplus.bizlogic.FormService;
 import krishagni.catissueplus.bizlogic.impl.FormServiceImpl;
@@ -36,8 +40,8 @@ import krishagni.catissueplus.dto.FormRecordDetailsDTO;
 
 @Path("/forms")
 public class FormResource {
-	private FormService formSvc = new FormServiceImpl();
-			
+	private @Context HttpServletRequest request;
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getForms(
@@ -50,7 +54,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			List<FormDetailsDTO> forms = formSvc.getForms(cpId, entity, objectId);		
+			List<FormDetailsDTO> forms = getFormService().getForms(cpId, entity, objectId);		
 			return Response.ok(forms).build();					
 		} catch (Exception e) {
 			return Response.serverError().build();
@@ -70,7 +74,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			final Container container = formSvc.getFormDefinition(formId);
+			final Container container = getFormService().getFormDefinition(formId);
 			return Response.ok(new StreamingOutput() {				
 				@Override
 				public void write(OutputStream out) 
@@ -101,7 +105,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			Long id = formSvc.saveForm(formDto);
+			Long id = getFormService().saveForm(formDto);
 			success = true;
 			return Response.ok(Collections.singletonMap("id", id)).build();
 		} catch (Exception e) {
@@ -126,7 +130,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			List<FormRecordDetailsDTO> records = formSvc.getFormRecords(formId, objectId);
+			List<FormRecordDetailsDTO> records = getFormService().getFormRecords(formId, objectId);
 			
 			Map<String, Object> resp = new HashMap<String, Object>();
 			resp.put("records", records);
@@ -150,7 +154,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			FormData formData = formSvc.getFormData(formId, recordId);
+			FormData formData = getFormService().getFormData(formId, recordId);
 			return Response.ok(formData.toJson()).build();					
 		} catch (Exception e) {
 			return Response.serverError().build();
@@ -171,7 +175,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			Long recordId = formSvc.saveFormData(formId, null, formDataJson);
+			Long recordId = getFormService().saveFormData(formId, null, formDataJson);
 			success = true;
 			return Response.ok(Collections.singletonMap("id", recordId)).build();					
 		} catch (Exception e) {
@@ -197,7 +201,7 @@ public class FormResource {
 
 		try {
 			txn = txnMgr.startTxn();
-			recordId = formSvc.saveFormData(formId, recordId, formDataJson);
+			recordId = getFormService().saveFormData(formId, recordId, formDataJson);
 			success = true;
 			return Response.ok(Collections.singletonMap("id", recordId)).build();					
 		} catch (Exception e) {
@@ -211,5 +215,10 @@ public class FormResource {
 				}				
 			}
 		}						
+	}
+
+	private FormService getFormService() {
+		SessionDataBean session = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		return new FormServiceImpl(session);
 	}
 }
