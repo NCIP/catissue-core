@@ -130,6 +130,10 @@ ViewFormSummary = Backbone.View.extend({
     this.$(".form-summary").toggleClass("de-select");
   },
 
+  addRecord: function() {
+    router.navigate("#/displayForm/" + this.model.get("id"));
+  },
+
   editRecord: function() {
     router.navigate("#/displayFormDataSummary/" + this.model.get('id'));
   }
@@ -203,7 +207,6 @@ ViewFormRecordSummary = Backbone.View.extend({
   },
 
   render: function() {
-    alert(JSON.stringify(this.record.toJSON()));
     this.$el.append(this.tableRowTmpl(this.record.toJSON()));
     return this;
   },
