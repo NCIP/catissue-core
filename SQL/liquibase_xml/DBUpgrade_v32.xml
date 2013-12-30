@@ -1143,14 +1143,14 @@
         referencedColumnNames="IDENTIFIER"/>
     </changeSet>
 
-    <changeSet author="vpawar" id="adding FK on form context to collection protocol table" failOnError="true">
+    <!-- changeSet author="vpawar" id="adding FK on form context to collection protocol table" failOnError="true">
       <addForeignKeyConstraint 
         constraintName="FK_FC_CP_ID_SP_IDENTIFIER"
         baseTableName="CATISSUE_FORM_CONTEXT"
         baseColumnNames="CP_ID"
         referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
         referencedColumnNames="IDENTIFIER"/>
-    </changeSet>
+    </changeSet -->
 
     <changeSet author="vpawar" id="adding new form record entries table" failOnError="true">
       <createTable tableName="CATISSUE_FORM_RECORD_ENTRY">
