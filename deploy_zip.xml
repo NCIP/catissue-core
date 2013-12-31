@@ -518,9 +518,9 @@
         <replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
             <replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
         </replace>
-        <replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+        <!--replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
             <replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
-        </replace>
+        </replace-->
 
         <replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
             <replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
@@ -534,10 +534,10 @@
             <replacefilter token="${oracle.dao.datasource.prop.filename}" value="${mysql.dao.datasource.prop.filename}" />
         </replace>
 
-        <replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
+        <!--replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
             <replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
             <replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
-        </replace>
+        </replace-->
 
     </target>
 
@@ -676,8 +676,8 @@
             </fileset>
         </war>
 
-        <copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
-        <!-- <war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
+        <!--copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
+        <war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
                     <fileset dir="${temp.dir}/caTissuePrintWebService">
                         <include name="**/**/**.*" />
                     </fileset>
@@ -941,6 +941,12 @@
     <path id="liquibaseClasspath">
         <fileset dir="${lib.dir}" includes="*.jar" />
     </path>
+
+    <path id="deLiquibaseClasspath">
+      <fileset dir="${lib.dir}" includes="*.jar" />
+        <pathelement path="${de.temp.dir}/db/liquibase"/>
+    </path>
+
     <taskdef resource="liquibasetasks.properties">
         <classpath>
             <pathelement location="${lib.dir}/liquibase.jar" />
@@ -1333,11 +1339,11 @@
         <tstamp>
             <format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
         </tstamp>
-        <echo>before cacore: ${before_cacore}</echo>
+        <!--echo>before cacore: ${before_cacore}</echo>
         <antcall target="generate.cacore.for.xmi" />
         <tstamp>
             <format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-        </tstamp>
+        </tstamp-->
         <echo>after cacore: ${after_cacore}</echo>
         <antcall target="de_integrate_app" />
         <antcall target="build_war" />
@@ -1499,161 +1505,34 @@
 
 
     <!-- Integrating DynamicExtensions application with catissue -->
-    <target name="de_integrate_app" depends="de_check_prerequisite" if="file.exists" description="Integrating DynamicExtensions application with catissue">
-        <echo message="Integrating DynamicExtensions app ...." />
-        <!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
-        <unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
-        <copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernateWeb.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
-        <copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
-
-        <!-- Inject db specific information to configuration files -->
-        <if>
-            <equals arg1="mysql" arg2="${database.type}" />
-            <then>
-                <antcall target="de_mysql_config" />
-            </then>
-            <elseif>
-                <equals arg1="oracle" arg2="${database.type}" />
-                <then>
-                    <antcall target="de_oracle_config" />
-                </then>
-            </elseif>
-        </if>
-
-        <!-- 1) Copy DynamicExtensions.jar -> copy it to catissue/WEB-INF/Lib -->
-        <copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
-        <copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/Applet" overwrite="true" />
-        <copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/Applet" overwrite="true" />
-
-        <!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders -->
-        <copy todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
-            <fileset dir="${temp.dir}/dynamicextensions/WEB-INF/classes">
-                <include name="edu/common/dynamicextensions/**/**.class"/>
-                <include name="edu/wustl/cab2b/**/**.class"/>
-                <include name="edu/wustl/common/**/**.class"/>
-                <include name="edu/wustl/metadata/**/**.class"/>
-                <include name="**/hbm/**/*.*"/>
-                <include name="DynamicExtensionsErrorsMessages.properties"/>
-                <include name="DynamicExtensionsFileFormats.properties"/>
-                <include name="DynamicExtensionsAuditMetadata.xml" />
-                <include name="DynamicExtensionsApplicationResources.properties" />
-                <include name="uicontrols-captions.properties" />
-                <include name="displaytype-classname-mapping.properties" />
-                <include name="ControlConfigurations.xml" />
-                <include name="EAVValidationRules.xml" />
-                <include name="PrimitiveAttributeDataTypes_MYSQL.xml" />
-                <include name="PrimitiveAttributeDataTypes_ORACLE.xml" />
-                <include name="RuleConfigurations.xml" />
-                <include name="XMI_1.4-1.3Transformer.xsl" />
-                <exclude name="dbutil.properties" />
-                <exclude name="DynamicExtensionsHibernate.cfg.xml" />
-                <exclude name="hibernate.properties" />
-                <exclude name="log4j.properties" />
+   <target name="de_integrate_app" depends="de_check_prerequisite" if="file.exists" description="Integrating DynamicExtensions application with catissue">
+          <echo message="Integrating DynamicExtensions app ...." />
+		
+          <copy todir="${temp.dir}/catissuecore/" overwrite="true">
+            <fileset dir="${temp.dir}/dynamicextensions">
+              <include name="csd_web/**" />
             </fileset>
-        </copy>
-        <copy todir="${temp.dir}/catissuecore/WEB-INF" overwrite="true">
-            <fileset dir="${temp.dir}/dynamicextensions/web/conf">
-                <include name="dynamicextensions-struts-config.xml" />
+          </copy>
+
+          <mkdir dir="${temp.dir}/catissuecore/ngweb/external/de"/>
+
+          <mkdir dir="${temp.dir}/catissuecore/ngweb/external/de/js"/>
+          <copy todir="${temp.dir}/catissuecore/ngweb/external/de/js/" overwrite="true">
+            <fileset dir="${temp.dir}/dynamicextensions/ngweb/js">
+              <include name="*/**"/>
             </fileset>
-        </copy>
-        <copy todir="${temp.dir}/catissuecore/WEB-INF" overwrite="true">
-            <fileset dir="${temp.dir}/dynamicextensions/web/taglibs">
-                <include name="dynamicExtensions.tld" />
+          </copy>
+
+          <mkdir dir="${temp.dir}/catissuecore/ngweb/external/de/css"/>
+          <copy todir="${temp.dir}/catissuecore/ngweb/external/de/css/" overwrite="true">
+            <fileset dir="${temp.dir}/dynamicextensions/ngweb/css">
+              <include name="*/**"/>
             </fileset>
-        </copy>
+          </copy>
 
-        <copy todir="${temp.dir}/catissuecore/" overwrite="true">
-            <fileset dir="${temp.dir}/dynamicextensions/web">
-                <include name="dhtml/**/*" />
-                <include name="images/**/*" />
-                <include name="javascripts/**/*" />
-                <include name="stylesheets/**/*" />
-                <include name="pages/**/*" />
-                <exclude name="taglibs/**/*" />
-                <exclude name="conf/**/*" />
-            </fileset>
-        </copy>
-
-        <!-- 3) Inject de-struts-config.xml entry in catisssue -> web.xml -->
-        <replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-                    <replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
-                    <replacetoken>@@listener@@</replacetoken>
-                    <replacevalue><![CDATA[
-                        <listener>
-                                            <listener-class>edu.common.dynamicextensions.util.listener.DynamicExtensionsServletContextListener</listener-class>
-                                        </listener>
-                        ]]></replacevalue>
-                                </replace>
-                <replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-                            <replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
-                            <replacetoken>@@servlet@@</replacetoken>
-                            <replacevalue><![CDATA[
-                                        <servlet>
-                                            <servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
-                                            <servlet-class>edu.common.dynamicextensions.interfaceactions.DynamicExtensionsInterfaceAction</servlet-class>
-                                        </servlet>
-                                        <servlet>
-                                            <servlet-name>DownloadFileAction</servlet-name>
-                                            <servlet-class>edu.common.dynamicextensions.ui.webui.action.DownloadFileAction</servlet-class>
-                                        </servlet>
-                                ]]></replacevalue>
-                </replace>
-                <replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-                                    <replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
-                                    <replacetoken>@@servlet-mapping@@</replacetoken>
-                                    <replacevalue><![CDATA[
-                                        <servlet-mapping>
-                                            <servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
-                                            <url-pattern>/DynamicExtensionsInterfaceAction</url-pattern>
-                                        </servlet-mapping>
-                                        <servlet-mapping>
-                                            <servlet-name>DownloadFileAction</servlet-name>
-                                            <url-pattern>/DownloadFileAction</url-pattern>
-                                        </servlet-mapping>
-                                        ]]></replacevalue>
-                </replace>
-                <replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-                                            <replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
-                                            <replacetoken>@@taglib@@</replacetoken>
-                                            <replacevalue><![CDATA[
-                                        <taglib>
-                                            <taglib-uri>/WEB-INF/dynamicExtensions.tld</taglib-uri>
-                                            <taglib-location>/WEB-INF/dynamicExtensions.tld</taglib-location>
-                                        </taglib>
-                                                ]]></replacevalue>
-                </replace>
-                <replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
-                                                    <replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
-                                                    <replacetoken>@@context-param@@</replacetoken>
-                                                    <replacevalue><![CDATA[
-                                        <context-param>
-                                            <param-name>ResourceBundleParamName</param-name>
-                                            <param-value>resourcebundleclass</param-value>
-                                        </context-param>
-                            ]]></replacevalue>
-                </replace>
-        <!-- 4) Inject db-util.properties entry in catissue -> db-util.properties -->
-        <replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
-            <replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
-        </replace>
-
-        <!-- 5) updating the application name in properties file  -->
-        <propertyfile  file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties">
-             <entry  key="app.name" value="caTissue Suite"/>
-        </propertyfile>
-
-        <!--
-        6) Concatenating the AppplicationResource.properties file from
-            DE to caTissue AppplicationResource.properties file
-        -->
-        <echo message="Concatenating the Application Resource Properties file" />
-        <concat
-            destfile="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties"
-            append="true" >
-            <fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
-        </concat>
-        <copy file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-    </target>
+          <copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" 
+                todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+	</target>
 
     <target name="CopyCAModelWars" description="copy the CA Model wars">
         <antcall target="assert" />
@@ -1781,9 +1660,9 @@
         <unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}" />
 
         <!-- <antcall target="upgrade_metadata_for_constraintproperties"/>  -->
-        <antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
+        <!--antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" /-->
         <!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
-        <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
+        <!--antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
         <antcall target="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" />
         <antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
         <antcall target="upgrade_de_integration_restructure_metadata"/>
@@ -1799,13 +1678,15 @@
         <antcall target="insertPaths"/>
         <tstamp>
             <format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-        </tstamp>
+        </tstamp!-->
         <echo>After Insert paths: ${pathtime}</echo>
         <antcall target="liquibase_upgrade_target"/>
         <antcall target="upgrade_db_from_plusv20_plusv2.1"/>
         <antcall target="update_protection_element" />
         <antcall target="upgrade_db_from_plusv2.1_plusv3.0"/>
+
         <antcall target="upgrade_db_plusv3.1" />
+        <antcall target="upgrade_db_plusv3.2" />
         <antcall target="deleteFiles"/>
 
         <!--<delete dir="${de.temp.dir}" />
@@ -1868,11 +1749,11 @@
             </classpath>
         </sql>
 
-        <antcall target="upgrade_metadata_for_constraintproperties"/>
-        <antcall target="update_metadata_for_model_changes">
+        <!--antcall target="upgrade_metadata_for_constraintproperties"/-->
+        <!--antcall target="update_metadata_for_model_changes">
              <param name="isUpgrade" value="false"/>
         </antcall>
-        <antcall target="update_metadata_for_CA_model_changes" />
+        <antcall target="update_metadata_for_CA_model_changes" /-->
         <sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
             <transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
             <transaction>commit;</transaction>
@@ -1892,7 +1773,7 @@
                         </fileset>
                     </classpath>
             </sql>
-        <antcall target="update_metadata_for_model_changes_mysql_post_P5" />
+        <!--antcall target="update_metadata_for_model_changes_mysql_post_P5" /-->
         <antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
         <antcall target="upgrade_db_for_empi_id__mysql"/>
         <!--<delete dir="${temp.dir}" />-->
@@ -2027,11 +1908,11 @@
             </classpath>
         </sql>
 
-        <antcall target="upgrade_metadata_for_constraintproperties"/>
-        <antcall target="update_metadata_for_model_changes" >
+        <!--antcall target="upgrade_metadata_for_constraintproperties"/-->
+        <!--antcall target="update_metadata_for_model_changes" >
              <param name="isUpgrade" value="false"/>
         </antcall>
-        <antcall target="update_metadata_for_CA_model_changes" />
+        <antcall target="update_metadata_for_CA_model_changes" /-->
         <antcall target="alter_CA_model_Tables" />
         <antcall target="reset_sequences" />
         <sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -2053,7 +1934,7 @@
                 </fileset>
             </classpath>
         </sql>
-        <antcall target="update_metadata_for_model_changes_oracle_post_P5" />
+        <!--antcall target="update_metadata_for_model_changes_oracle_post_P5" /-->
         <antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
         <antcall target="upgrade_db_for_empi_id_oracle"/>
         <!--<delete dir="${temp.dir}" />-->
@@ -2533,7 +2414,7 @@
                 </fileset>
             </classpath>
         </sql>
-        <antcall target="upgrade_metadata_for_constraintproperties" />
+        <!--antcall target="upgrade_metadata_for_constraintproperties" /-->
     </target>
 
     <!-- Upgrading from Suite1.1 p4 to p5 - MySQL -->
@@ -2568,7 +2449,7 @@
                 </fileset>
             </classpath>
         </sql>
-        <antcall target="upgrade_metadata_for_constraintproperties" />
+        <!--antcall target="upgrade_metadata_for_constraintproperties" /-->
         <antcall target="upgrade_saved_queries"></antcall>
    </target>
 
@@ -4729,8 +4610,8 @@
             </classpath>
         </sql>
 
-        <echo message="Upgrading MSSQL Metadata from p5 to p5.1" />
-        <antcall target="update_metadata_for_model_changes_mysql_post_P5" />
+        <!--echo message="Upgrading MSSQL Metadata from p5 to p5.1" />
+        <antcall target="update_metadata_for_model_changes_mysql_post_P5" /-->
 
     </target>
 
@@ -5649,9 +5530,23 @@
                         <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v31.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
     </target>
 	<target name="upgrade_db_plusv3.2">
-	                        <echo message="Upgrading DataBase with URL ${final.database.url}" />    
+	                        <echo message="Upgrading DataBase with URL ${final.database.url}" /> 
+                                <antcall target="upgrade_de_db"/>   
 	                        <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	    </target>
+
+         <target name="upgrade_de_db">
+           <updateDatabase 
+               changeLogFile="${de.temp.dir}/db/liquibase/db.changelog-master.xml" 
+               driver="${final.database.driver}" 
+               url="${final.database.url}" 
+               username="${database.username}"
+               password="${database.password}"
+               dropFirst="false"
+               classpathref="deLiquibaseClasspath"/>
+       </target>
+
+
     <target name="update_protection_element">
             <echo message="Upgrading DataBase with URL ${final.database.url}" />    
             <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_protection_element.xml" driver="${final.database.driver}" url="${final.csm.database.url}" username="${csm.database.username}" password="${csm.database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
