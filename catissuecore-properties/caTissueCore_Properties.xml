@@ -950,7 +950,7 @@ Helpdesk Phone : @@contact.number@@</value>
     </property>
     <property>
         <name>throttlingMaxLimits</name>
-        <value>4</value>
+        <value>100</value>
     </property>
     <property>
         <name>display.admin.emails.onSummaryPage</name>
