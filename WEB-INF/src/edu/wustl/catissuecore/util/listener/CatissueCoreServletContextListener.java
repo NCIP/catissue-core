@@ -49,7 +49,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
 import edu.wustl.catissuecore.util.ParticipantAttributeDisplayInfoUtility;
@@ -71,15 +70,11 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.DAOUtility;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
-import edu.wustl.query.bizlogic.QueryDataExportService;
-import edu.wustl.query.util.listener.QueryCoreServletContextListenerUtil;
-import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 /**
  *

@@ -9,7 +9,6 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
@@ -64,8 +63,6 @@ if(specimenIdentifier == null || specimenIdentifier.equals("0"))
 {
 	specimenIdentifier= (String)session.getAttribute(Constants.SPECIMEN_ID);
 }
-String staticEntityName=null;
-staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
 
 //------------- Mandar 04-july-06 QuickEvents
 String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
@@ -86,8 +83,6 @@ if(eventSelected != null)
 	formAction = Constants.QUICKEVENTSPARAMETERS_ACTION;
 }
 //------------- Mandar 04-july-06 QuickEvents
-Long specimenEntityId = null;
-specimenEntityId = (Long)request.getAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
 session.setAttribute("EventOrigin", "SpecimenEventParameters");
 %>
 

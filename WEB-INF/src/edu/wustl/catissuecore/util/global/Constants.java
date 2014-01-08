@@ -575,6 +575,10 @@ public class Constants
 
 	/** The Constant MAXIMUM_TREE_NODE_LIMIT. */
 	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
+	
+	public static final String THROTTLING_TIME_INTERVAL= "throttlingTimeIntervalInMinutes";
+	
+	public static final String THROTTLING_MAX_LIMIT="throttlingMaxLimits";
 
 	/** The Constant MAXIMUM_TREE_NODE_LIMIT_FOR_CHILD_NODE. */
 	public static final String MAXIMUM_TREE_NODE_LIMIT_FOR_CHILD_NODE = "resultView.maximumTreeNodeLimitForChildNode";

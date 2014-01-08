@@ -29,6 +29,7 @@ import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
@@ -65,6 +66,7 @@ public class LoginAction extends XSSSupportedAction
      * Common Logger for Login Action.
      */
     private static final Logger LOGGER = Logger.getCommonLogger(LoginAction.class);
+    String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
 
     /**
      * Overrides the execute method of Action class.
@@ -83,7 +85,7 @@ public class LoginAction extends XSSSupportedAction
     public ActionForward executeXSS(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response)
     {
-    	String forwardTo = Constants.FAILURE;
+    	String forwardTo = Constants.FAILURE; 
         if (form == null)
         {
             LoginAction.LOGGER.debug("Form is Null");
@@ -117,7 +119,8 @@ public class LoginAction extends XSSSupportedAction
             {
                 LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
                 cleanSession(request);
-                handleError(request, "errors.incorrectLoginIDPassword");
+                
+                handleError(request, "errors.incorrectLoginIDPassword",loginAttempts);
                 forwardTo = Constants.FAILURE;
             }
         }
@@ -169,7 +172,7 @@ public class LoginAction extends XSSSupportedAction
                 {
                 	LoginAction.LOGGER.info("User " + loginForm.getLoginName()
                             + " Invalid user. Sending back to the login Page");
-        			handleError(request, "errors.incorrectLoginIDPassword");
+        			handleError(request, "errors.incorrectLoginIDPassword",loginResult.getRemainingAttemptsIndex());
                     forwardTo = Constants.FAILURE;
                 }
             }
@@ -191,7 +194,7 @@ public class LoginAction extends XSSSupportedAction
 	                    + " Invalid user. Sending back to the login Page");
         	if(loginResult.isAccountLocked())
         	{
-        		handleError(request, "login.account.locked");
+        		handleError(request, "login.account.locked",null);
         	}
         	else
         	{
@@ -201,11 +204,11 @@ public class LoginAction extends XSSSupportedAction
 	            {
 	                LoginAction.LOGGER.info("User " + loginForm.getLoginName()
 	                        + " Migrated user. Sending back to the login Page");
-	                handleError(request, "app.migrateduser");
+	                handleError(request, "app.migrateduser",null);
 	            }
 	            else
 	            {
-	                handleError(request, "errors.incorrectLoginIDPassword");
+	                handleError(request, "errors.incorrectLoginIDPassword",loginResult.getRemainingAttemptsIndex());
 	            }
         	}
             forwardTo = Constants.FAILURE;
@@ -315,7 +318,7 @@ public class LoginAction extends XSSSupportedAction
         {
             LoginAction.LOGGER.debug("User " + loginResult.getAppLoginName()
                     + " Invalid user. Sending back to the login Page");
-            handleError(request, "errors.incorrectLoginIDPassword");
+            handleError(request, "errors.incorrectLoginIDPassword",loginAttempts);
             forwardTo = Constants.FAILURE;
         }
         else
@@ -348,16 +351,16 @@ public class LoginAction extends XSSSupportedAction
     {
         String forwardTo = edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
 
-        final HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession(true);
 
         final String userRole = CatissueLoginProcessor.getUserRole(validUser);
 
-        final SessionDataBean sessionData = initCacheAndSessionData(request, validUser, session, userRole);
+        final SessionDataBean sessionData = initCacheAndSessionData(request, validUser, loginResult, userRole,session);
 
         final String validRole = CatissueLoginProcessor.getForwardToPageOnLogin(userRole);
         if (isUserHasRole(validRole))
         {
-            forwardTo = handleUserWithNoRole(request, session);
+            forwardTo = handleUserWithNoRole(request,session);
         }
 
         String result = Constants.SUCCESS;
@@ -405,20 +408,19 @@ public class LoginAction extends XSSSupportedAction
     private String handleUserWithNoRole(final HttpServletRequest request, final HttpSession session)
     {
         String forwardTo;
-        handleError(request, "errors.noRole");
+        handleError(request, "errors.noRole",null);
         session.setAttribute(Constants.SESSION_DATA, null);
         forwardTo = Constants.FAILURE;
         return forwardTo;
     }
 
     private SessionDataBean initCacheAndSessionData(final HttpServletRequest request, final User validUser,
-            final HttpSession session, final String userRole) throws CatissueException
+            final LoginResult loginResult, final String userRole,HttpSession session) throws CatissueException
     {
         initPrivilegeCache(validUser);
 
         LoginAction.LOGGER.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
         final String ipAddress = request.getRemoteAddr();
-
         final SessionDataBean sessionData = setSessionDataBean(validUser, ipAddress, userRole);
         LOGGER.info("creating session data bean " + sessionData);
 
@@ -427,6 +429,9 @@ public class LoginAction extends XSSSupportedAction
         session.setAttribute("datePattern",ApplicationProperties.getValue("date.pattern"));
         session.setAttribute("uiDatePattern",ApplicationProperties.getValue("ui.date.pattern"));
         session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
+        String loginAttempt = loginResult.getLastLoginActivityStatus()?"successful":"unsuccessful";
+        session.setAttribute("lastLoginAttempt", loginAttempt);
+        session.setAttribute("lastLoginTimeStamp", loginResult.getLastLoginTime());
         return sessionData;
     }
 
@@ -518,10 +523,17 @@ public class LoginAction extends XSSSupportedAction
      * @param errorKey
      *            : errorKey
      */
-    private void handleError(final HttpServletRequest request, final String errorKey)
+    private void handleError(final HttpServletRequest request, final String errorKey,Object object)
     {
         final ActionErrors errors = new ActionErrors();
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey));
+        if(object != null)
+        {
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,object));
+        }
+        else
+        {
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey));
+        }
         // Report any errors we have discovered
         if (!errors.isEmpty())
         {

@@ -13,8 +13,8 @@ public class CounterFactoryImpl implements CounterFactory
 
 	public Counter create(Event event)
 	{
-		String timeIntervalInMinutes = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
-		String maxLimits = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
+		String timeIntervalInMinutes = XMLPropertyHandler.getValue(Constants.THROTTLING_TIME_INTERVAL);
+		String maxLimits = XMLPropertyHandler.getValue(Constants.THROTTLING_MAX_LIMIT);
 		final int maximumTreeNodeLimit = Integer.parseInt(maxLimits);
 		final long timeInterval = Long.parseLong(timeIntervalInMinutes)*60*1000;
 		Counter counter = new Counter(timeInterval, maximumTreeNodeLimit);

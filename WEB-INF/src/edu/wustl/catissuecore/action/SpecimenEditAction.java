@@ -14,8 +14,6 @@ import org.apache.struts.action.ActionMapping;
 
 import com.google.gson.Gson;
 
-//import edu.common.dynamicextensions.xmi.AnnotationUtil;
-//import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
