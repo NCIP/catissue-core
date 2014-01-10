@@ -1655,10 +1655,6 @@
         </tstamp>
         <echo>before DE_Starts: ${time}</echo>
 
-        <delete dir="${de.temp.dir}" failonerror="no" />
-        <mkdir dir="${de.temp.dir}" />
-        <unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}" />
-
         <!-- <antcall target="upgrade_metadata_for_constraintproperties"/>  -->
         <!--antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" /-->
         <!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
@@ -5535,7 +5531,11 @@
 	                        <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	    </target>
 
-         <target name="upgrade_de_db">
+		<target name="upgrade_de_db">
+        	<delete dir="${de.temp.dir}" failonerror="no" />
+        	<mkdir dir="${de.temp.dir}" />
+     		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}" />
+             
            <updateDatabase 
                changeLogFile="${de.temp.dir}/db/liquibase/db.changelog-master.xml" 
                driver="${final.database.driver}" 
