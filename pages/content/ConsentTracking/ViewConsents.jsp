@@ -6,9 +6,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
-<%@ page import="edu.common.dynamicextensions.xmi.AnnotationUtil"%>
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 

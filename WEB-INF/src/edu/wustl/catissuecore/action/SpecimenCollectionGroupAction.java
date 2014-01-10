@@ -860,19 +860,6 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			// -------called from Collection Protocol Registration end
 			// -------------------------------
 			// Falguni:Performance Enhancement.
-			Long scgEntityId = null;
-			/*if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
-			{
-				scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-						"scgEntityId");
-			}
-			else
-			{
-				scgEntityId = AnnotationUtil
-						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
-				CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId", scgEntityId);
-			}
-			request.setAttribute("scgEntityId", scgEntityId);*/
 			AppUtility.setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
 			/**
 			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch

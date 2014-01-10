@@ -1,5 +1,11 @@
 package edu.wustl.catissuecore.processor;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +25,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -26,6 +33,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.domain.LoginCredentials;
@@ -72,14 +80,15 @@ public final class CatissueLoginProcessor extends LoginProcessor
             final LoginCredentials loginCredentials) throws CatissueException
     {
         LoginResult loginResult = new LoginResult();
-        loginResult.setAppLoginName(loginCredentials.getLoginName());
+        loginResult.setAppLoginName(loginCredentials.getLoginName()); 
         loginResult.setAuthenticationSuccess(false);
         loginResult.setMigrationState(MigrationState.DO_NOT_MIGRATE);
-        loginResult.setIsAccountLocked(Boolean.FALSE);
+        
         try
         {
         	LoginProcessor.authenticate(loginCredentials);
             loginResult = processUserLogin(loginCredentials);
+            loginResult.setIsAccountLocked(Boolean.FALSE);
         }
         catch (final Exception exception)
         {
@@ -101,10 +110,13 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	 */
 	public static void lockUserAccount(String loginName, HibernateDAO dao, LoginResult loginResult)
 	{
+		String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
+		loginResult.setRemainingAttemptsIndex(Integer.valueOf(loginAttempts));
 		try {			
+			loginResult.setIsAccountLocked(Boolean.FALSE);
 			User user = getUser(loginName);
 			if (user != null) {
-				if(lockAccount(user,dao))
+				if(lockAccount(user,dao,loginResult))
 				{
 					loginResult.setIsAccountLocked(Boolean.TRUE);
 				}
@@ -166,18 +178,36 @@ public final class CatissueLoginProcessor extends LoginProcessor
             {
                 isLoginSuccessful = loginResult.isAuthenticationSuccess();
             }
-////            if(!isLoginSuccessful)
-//            {
-//            	String hql = "select login.isLoginSuccessful from "+LoginEvent.class.getName()+" login where login.userLoginId ="+userId+" order by login.timestamp desc 5";
-//            	List list = dao.executeQuery(hql);
-//            	System.out.println(list);
-//            	
-//            }
+            if(userId != null)
+            {
+	            String hql = "select loginAudit.userLoginId, loginAudit.sourceId, loginAudit.ipAddress, loginAudit.isLoginSuccessful,loginAudit.timestamp " +
+	        				"from edu.wustl.common.domain.LoginEvent loginAudit where loginAudit.userLoginId = ? order by loginAudit.timestamp desc";
+	            List columnValueBeans = new ArrayList();
+	//            ColumnValueBean bean = new ColumnValueBean(loginDetails.getUserLoginId());
+	            columnValueBeans.add(loginDetails.getUserLoginId());
+	        		try { 
+	        			List result = dao.executeQuery(hql,1,1, columnValueBeans);
+	        			if(result != null && result.size() > 0)
+	        			{
+		        			Object[] obj = (Object[])result.get(0);
+		        			loginResult.setLastLoginActivityStatus(Boolean.valueOf(obj[3].toString()));
+		        			Timestamp timestamp = (Timestamp)obj[4];
+		        			SimpleDateFormat sdf = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern.timestamp"));
+		        			String dateVal = sdf.format(timestamp);
+		        			loginResult.setLastLoginTime(dateVal);
+	        			}
+	        		}
+	        		catch (ApplicationException e1) {
+	        			// TODO Auto-generated catch block
+	        			e1.printStackTrace();
+	        		}
+            }
             (dao).auditLoginEvents(isLoginSuccessful, loginDetails);
             if(!isLoginSuccessful)
             {
             	lockUserAccount(loginName,dao,loginResult);
             }
+            
             dao.commit();
         }
         catch (final ApplicationException exception)
@@ -335,10 +365,11 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	 *
 	 * @param user the user
      * @param dao 
+     * @param loginResult 
 	 *
 	 * @throws DAOException the DAO exception
 	 */
-	private static Boolean lockAccount(User user, HibernateDAO dao) throws BizLogicException
+	private static Boolean lockAccount(User user, HibernateDAO dao, LoginResult loginResult) throws BizLogicException
 	{
 		int maxAttempts = 5;
 		String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
@@ -349,9 +380,15 @@ public final class CatissueLoginProcessor extends LoginProcessor
 		LoginAuditManager loginAuditManager = new LoginAuditManager();
 		List<LoginDetails> loginDetailsColl = loginAuditManager.getAllLoginDetailsForUser(user
 				.getId(), maxAttempts + 1);
+		
+//		LoginDetails details = loginDetailsColl.get(0);
+//		loginResult.setLastLoginActivityStatus(details.isLoginSuccessful());
+//		loginResult.setLastLoginTime(details.getLoginTimeStamp().toString());
+		int lastSuccessIndex = getLastSucessIndex(loginDetailsColl);
+		loginResult.setRemainingAttemptsIndex(maxAttempts-(lastSuccessIndex+1));
 		if (loginDetailsColl.size() >= maxAttempts)
 		{
-			int lastSuccessIndex = getLastSucessIndex(loginDetailsColl);
+			
 			if (lastSuccessIndex == -1 || lastSuccessIndex+1 >= maxAttempts)
 			{
 				Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();

@@ -4,9 +4,6 @@
 
 
 
-<%@ page import="edu.common.dynamicextensions.xmi.AnnotationUtil"%>
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
@@ -25,18 +22,6 @@
 		String formAction = Constants.VIEW_SPR_ACTION;
 
 
-		String staticEntityName=null;
-		staticEntityName = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
-		Long scgEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID) != null)
-		{
-			scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
-		}
-		else
-		{
-			scgEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
-			CatissueCoreCacheManager.getInstance().addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,scgEntityId);
-		}
 
 String id = request.getParameter("id");
 

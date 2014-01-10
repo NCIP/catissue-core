@@ -3,7 +3,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <script src="jss/javaScript.js" type="text/javascript"></script>
@@ -29,12 +28,8 @@
  		specimenIdentifier= (String) session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
 	}
 //      Falguni:Performance Enhancement.
-	Long specimenEntityId = null;
-	specimenEntityId = (Long)request.getAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
 
 	String consentTierCounter =(String)request.getParameter("consentTierCounter");
-	String staticEntityName=null;
-	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
 
 		String iframeSrc="";
 		String formAction = Constants.VIEW_SPR_ACTION;
