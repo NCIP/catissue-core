@@ -6049,6 +6049,11 @@ public class Constants
     
     public static final String RED_LINE_VALUE = "graph.red.line.value";
     public static final String PAGE_OF_SPECIMEN_SUMMARY_PAGE="pageOfSpecimenSummary";
+    public static final String ACTIVITY_STATUS_LOCKED = "Locked";
+    public static final String LOGIN_FAILURE_ATTEMPTS_LIMIT = "loginFailureAttemptsLimit";
+    public static final String THROTTLING_TIME_INTERVAL= "throttlingTimeIntervalInMinutes";
+  	
+  	public static final String THROTTLING_MAX_LIMIT="throttlingMaxLimits";
     
 
 }

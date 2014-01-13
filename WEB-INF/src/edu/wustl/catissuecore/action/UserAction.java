@@ -13,6 +13,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.auth.exception.AuthFileParseException;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
@@ -310,8 +312,23 @@ public class UserAction extends SecureAction
         // and the user page is of administrative tab.
         if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGE_OF_USER_ADMIN))
         {
-            // String activityStatusList = Constants.ACTIVITYSTATUSLIST;
-            request.setAttribute("activityStatusList", Constants.USER_ACTIVITY_STATUS_VALUES);
+//             String[] activityStatusList = Constants.USER_ACTIVITY_STATUS_VALUES;
+        	
+             if(Constants.ACTIVITY_STATUS_LOCKED.equals(userForm.getActivityStatus()))
+             {
+            	 String[] arr = new String[4];
+                 for(int i=0;i<Constants.USER_ACTIVITY_STATUS_VALUES.length;i++)
+                 {
+                	 arr[i]=Constants.USER_ACTIVITY_STATUS_VALUES[i];
+                 }
+                 arr[3] = Constants.ACTIVITY_STATUS_LOCKED;
+                 request.setAttribute("activityStatusList", arr);
+             }
+             else
+             {
+            	 request.setAttribute("activityStatusList", Constants.USER_ACTIVITY_STATUS_VALUES);
+             }
+            
         }
 
         // Populate the role dropdown if the page is of approve user or

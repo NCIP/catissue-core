@@ -652,6 +652,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final Collection pEvtPrmColl = persistentSCG
 						.getSpecimenEventParametersCollection();
 				final Iterator evntIterator = pEvtPrmColl.iterator();
+				List<SpecimenEventParameters> eventColl = new ArrayList<SpecimenEventParameters>();
 				while (evntIterator.hasNext())
 				{
 					final SpecimenEventParameters event = (SpecimenEventParameters) evntIterator
@@ -660,8 +661,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 							.getCorrespondingObject(spEventColl,
 									event.getClass());
 					this.updateEvent(event, newEvent, sessionDataBean);
+					eventColl.add(newEvent);
+
 					// spEventColl.remove(newEvent);
 				}
+				persistentSCG.setSpecimenEventParametersCollection(eventColl);
 			}
 			// Check for different closed site
 			final Site oldSite = oldspecimenCollectionGroup
@@ -973,7 +977,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						if((collEventParam.getUser().getId() == null || collEventParam.getUser().getId() != 0l) && !Validator.isEmpty(collEventParam.getUser().getLoginName()))
 						{
 							UserDAO userDAO = new UserDAO();
-							collEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, collEventParam.getUser().getLoginName()));
+							collEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, collEventParam.getUser().getLoginName(),Constants.ACTIVITY_STATUS_ACTIVE));
 						}
 					}
 					if (collEventParam.getCollectionProcedure() != null
@@ -1001,7 +1005,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						if((recEventParam.getUser().getId() == null || recEventParam.getUser().getId() != 0l) && !Validator.isEmpty(recEventParam.getUser().getLoginName()))
 						{
 							UserDAO userDAO = new UserDAO();
-							recEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, recEventParam.getUser().getLoginName()));
+							recEventParam.getUser().setId(userDAO.getUserIDFromLoginName(hibernateDAO, recEventParam.getUser().getLoginName(),Constants.ACTIVITY_STATUS_ACTIVE));
 						}
 					}
 
@@ -1592,13 +1596,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final List listOfSubElement = this.getRelatedObjects(dao,
 				SpecimenCollectionGroup.class,
 				"collectionProtocolRegistration", collProtRegIDArr);
-		if (listOfSubElement != null && !listOfSubElement.isEmpty())
-		{
-			this.disableRelatedObjects(dao, "CATISSUE_ABS_SPECI_COLL_GROUP",
+		this.disableRelatedObjects(dao, "CATISSUE_ABS_SPECI_COLL_GROUP",
 				Constants.SYSTEM_IDENTIFIER_COLUMN_NAME,
 				edu.wustl.common.util.Utility.toLongArray(listOfSubElement));
 		//this.auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);
-	
+		if (!listOfSubElement.isEmpty())
+		{
 			final IFactory factory = AbstractFactoryConfig.getInstance()
 					.getBizLogicFactory();
 			final NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory
@@ -2619,14 +2622,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				|| specimenCollGroup.getSpecimenEventParametersCollection()
 						.isEmpty())
 		{
-			final String hql = "select  scg.specimenEventParametersCollection from "
-					+ SpecimenCollectionGroup.class.getName()
-					+ " as scg where scg.id= "
-					+ specimenCollGroup.getId().toString();
-
-			final List scgEventList = this.executeQuery(hql);
-			specimenCollGroup
-					.setSpecimenEventParametersCollection(scgEventList);
+					final String hql = "select  scg.specimenEventParametersCollection from "+ SpecimenCollectionGroup.class.getName()+
+					 " as scg where scg.id= "+ specimenCollGroup.getId().toString();
+					final List scgEventList = this.executeQuery(hql);
+					specimenCollGroup.setSpecimenEventParametersCollection(scgEventList);
 		}
 		if (specimenCollGroup.getSpecimenEventParametersCollection() != null
 				&& !specimenCollGroup.getSpecimenEventParametersCollection()

@@ -209,7 +209,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			else if(site.getCoordinator() != null && !Validator.isEmpty(site.getCoordinator().getLoginName()))
 			{
 				UserDAO userDAO = new UserDAO();
-				site.getCoordinator().setId(userDAO.getUserIDFromLoginName((HibernateDAO)dao, site.getCoordinator().getLoginName()));
+				site.getCoordinator().setId(userDAO.getUserIDFromLoginName((HibernateDAO)dao, site.getCoordinator().getLoginName(),Constants.ACTIVITY_STATUS_ACTIVE));
 			}
 			
 		}

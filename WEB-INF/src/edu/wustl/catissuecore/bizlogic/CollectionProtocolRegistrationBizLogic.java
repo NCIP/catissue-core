@@ -860,7 +860,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			if((witness.getId() == null || witness.getId() == 0l) && !Validator.isEmpty(witness.getLoginName()))
 			{
 				UserDAO userDAO = new UserDAO();
-				witness.setId(userDAO.getUserIDFromLoginName((HibernateDAO)dao, witness.getLoginName()));
+				witness.setId(userDAO.getUserIDFromLoginName((HibernateDAO)dao, witness.getLoginName(),Constants.ACTIVITY_STATUS_ACTIVE));
 			}
 		}
 	}

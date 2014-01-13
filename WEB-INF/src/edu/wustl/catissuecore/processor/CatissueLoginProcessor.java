@@ -1,26 +1,44 @@
 package edu.wustl.catissuecore.processor;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import krishagni.catissueplus.util.DAOUtil;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.LoginDetails;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
+import edu.wustl.migrator.MigrationState;
 import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
@@ -61,10 +79,16 @@ public final class CatissueLoginProcessor extends LoginProcessor
     public static LoginResult processUserLogin(final HttpServletRequest request,
             final LoginCredentials loginCredentials) throws CatissueException
     {
-        LoginResult loginResult = null;
+        LoginResult loginResult = new LoginResult();
+        loginResult.setAppLoginName(loginCredentials.getLoginName()); 
+        loginResult.setAuthenticationSuccess(false);
+        loginResult.setMigrationState(MigrationState.DO_NOT_MIGRATE);
+        
         try
         {
+        	LoginProcessor.authenticate(loginCredentials);
             loginResult = processUserLogin(loginCredentials);
+            loginResult.setIsAccountLocked(Boolean.FALSE);
         }
         catch (final Exception exception)
         {
@@ -74,9 +98,34 @@ public final class CatissueLoginProcessor extends LoginProcessor
         {
             auditLogin(loginResult, loginCredentials.getLoginName(), request);
         }
-
         return loginResult;
     }
+    
+    /**
+	 * Lock user account.
+	 *
+	 * @param loginName the login name
+     * @param dao 
+     * @param loginResult 
+	 */
+	public static void lockUserAccount(String loginName, HibernateDAO dao, LoginResult loginResult)
+	{
+		String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
+		loginResult.setRemainingAttemptsIndex(Integer.valueOf(loginAttempts));
+		try {			
+			loginResult.setIsAccountLocked(Boolean.FALSE);
+			User user = getUser(loginName);
+			if (user != null) {
+				if(lockAccount(user,dao,loginResult))
+				{
+					loginResult.setIsAccountLocked(Boolean.TRUE);
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Exception obtain while locking the user account", e);
+			throw new RuntimeException("Exception obtain while locking the user account", e);
+		}
+	}
 
     /**
      * This method performs the auditing of the login attempt.
@@ -129,8 +178,36 @@ public final class CatissueLoginProcessor extends LoginProcessor
             {
                 isLoginSuccessful = loginResult.isAuthenticationSuccess();
             }
-
+            if(userId != null)
+            {
+	            String hql = "select loginAudit.userLoginId, loginAudit.sourceId, loginAudit.ipAddress, loginAudit.isLoginSuccessful,loginAudit.timestamp " +
+	        				"from edu.wustl.common.domain.LoginEvent loginAudit where loginAudit.userLoginId = ? order by loginAudit.timestamp desc";
+	            List columnValueBeans = new ArrayList();
+	//            ColumnValueBean bean = new ColumnValueBean(loginDetails.getUserLoginId());
+	            columnValueBeans.add(loginDetails.getUserLoginId());
+	        		try { 
+	        			List result = dao.executeQuery(hql,0,1, columnValueBeans);
+	        			if(result != null && result.size() > 0)
+	        			{
+		        			Object[] obj = (Object[])result.get(0);
+		        			loginResult.setLastLoginActivityStatus(Boolean.valueOf(obj[3].toString()));
+		        			Timestamp timestamp = (Timestamp)obj[4];
+		        			SimpleDateFormat sdf = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern.timestamp"));
+		        			String dateVal = sdf.format(timestamp);
+		        			loginResult.setLastLoginTime(dateVal);
+	        			}
+	        		}
+	        		catch (ApplicationException e1) {
+	        			// TODO Auto-generated catch block
+	        			e1.printStackTrace();
+	        		}
+            }
             (dao).auditLoginEvents(isLoginSuccessful, loginDetails);
+            if(!isLoginSuccessful)
+            {
+            	lockUserAccount(loginName,dao,loginResult);
+            }
+            
             dao.commit();
         }
         catch (final ApplicationException exception)
@@ -283,4 +360,71 @@ public final class CatissueLoginProcessor extends LoginProcessor
         return user;
     }
 
+    /**
+	 * Lock account.
+	 *
+	 * @param user the user
+     * @param dao 
+     * @param loginResult 
+	 *
+	 * @throws DAOException the DAO exception
+	 */
+	private static Boolean lockAccount(User user, HibernateDAO dao, LoginResult loginResult) throws BizLogicException
+	{
+		int maxAttempts = 5;
+		String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
+		if (!Validator.isEmpty(loginAttempts) && AppUtility.isNumeric(loginAttempts))
+		{
+			maxAttempts = Integer.valueOf(loginAttempts);
+		}
+		LoginAuditManager loginAuditManager = new LoginAuditManager();
+		List<LoginDetails> loginDetailsColl = loginAuditManager.getAllLoginDetailsForUser(user
+				.getId(), maxAttempts + 1);
+		
+//		LoginDetails details = loginDetailsColl.get(0);
+//		loginResult.setLastLoginActivityStatus(details.isLoginSuccessful());
+//		loginResult.setLastLoginTime(details.getLoginTimeStamp().toString());
+		int lastSuccessIndex = getLastSucessIndex(loginDetailsColl);
+		loginResult.setRemainingAttemptsIndex(maxAttempts-(lastSuccessIndex+1));
+		if (loginDetailsColl.size() >= maxAttempts)
+		{
+			
+			if (lastSuccessIndex == -1 || lastSuccessIndex+1 >= maxAttempts)
+			{
+				Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+				params.put("0", new NamedQueryParam(DBTypes.STRING,Constants.ACTIVITY_STATUS_LOCKED));
+				params.put("1", new NamedQueryParam(DBTypes.LONG,user.getId()));
+				try {
+					dao.executeUpdateWithNamedQuery("updateUserActivityStatus", params);
+					return Boolean.TRUE;
+				} catch (DAOException e) {
+					LOGGER.error(e);
+					LOGGER.error("Error while updating user activity status");
+					throw new BizLogicException(e);
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Gets the last sucess index.
+	 *
+	 * @param loginDetailsColl the login details coll
+	 *
+	 * @return the last sucess index
+	 */
+	public static int getLastSucessIndex(List<LoginDetails> loginDetailsColl)
+	{	
+		int lastSuccessIndex = -1;
+		int index = 0;		
+		for (LoginDetails loginDetails : loginDetailsColl) {
+			if (loginDetails.isLoginSuccessful()) {
+				lastSuccessIndex = index;
+				break;
+			}
+			index++;
+		}
+		return lastSuccessIndex;
+	}
 }
