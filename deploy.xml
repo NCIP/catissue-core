@@ -1013,7 +1013,6 @@
 	</target>
 	<target name="upgrade_db_plusv3.2">
            <echo message="Upgrading DataBase with URL ${final.database.url}" />    
-           <antcall target="upgrade_de_db"/>
            <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
    </target>
 	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
