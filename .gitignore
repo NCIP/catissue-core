@@ -5,6 +5,7 @@
 *.pydevproject
 .project
 .metadata
+caTissueSuite_Client/
 bin/
 WEB-INF/classes/
 WEB-INF/bulk*.xml
@@ -17,7 +18,6 @@ some.tmp.file
 tempCatissuecore/
 deploytempCatissuecore/
 CaTissueSuite_caGrid_Service/
-caTissueSuite_Client/
 catissue_de_integration_client/
 private*/
 bulkoperator.zip
@@ -158,7 +158,7 @@ csx
 AppPackages/
 
 # Others
-sql/
+
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*
