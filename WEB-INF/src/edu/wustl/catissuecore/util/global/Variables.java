@@ -53,6 +53,9 @@ public class Variables
 	public static boolean isSpecimenCollGroupBarcodeGeneratorAvl = false;
 	public static boolean isCollectionProtocolRegistrationBarcodeGeneratorAvl = false;
 	public static boolean isProtocolParticipantIdentifierLabelGeneratorAvl = false;
+	public static boolean isToDisplayAdminEmail = true;
+	public static int throttlingMaxLimit;
+	public static long throttlingTimeInterval;
 
 	public static boolean isPhoneNumberToBeValidated = true;
 	public static List<NameValueBean> printerLocationList = null;

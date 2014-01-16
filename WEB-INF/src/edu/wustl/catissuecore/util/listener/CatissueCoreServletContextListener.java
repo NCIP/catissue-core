@@ -249,10 +249,22 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		this.initCDEManager();
 		this.initDashboardCache();
 		this.initReportScheduler();
+		initThrottlingModule();
 		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "PrintServiceImplementor.properties";
 		Variables.setPrinterInfo(absolutePath);
 		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
+	}
+	
+	private void initThrottlingModule() 
+	{
+		String timeIntervalInMinutes = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
+		String maxLimits = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
+		final int maximumTreeNodeLimit = Integer.parseInt(maxLimits);
+		Variables.throttlingMaxLimit = maximumTreeNodeLimit;
+		final long timeInterval = Long.parseLong(timeIntervalInMinutes);
+		Variables.throttlingTimeInterval = timeInterval*60*1000;
+		
 	}
 
 	private void initReportScheduler()
@@ -282,6 +294,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		final int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
+		Variables.isToDisplayAdminEmail = Boolean.parseBoolean(XMLPropertyHandler.getValue("display.admin.emails.onSummaryPage"));
 		HelpXMLPropertyHandler.init(CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "help_links.xml");
 	}

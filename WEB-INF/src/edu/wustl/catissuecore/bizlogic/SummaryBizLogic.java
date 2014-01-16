@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
@@ -336,8 +337,17 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	private List getUserData() throws DAOException, ClassNotFoundException
 	{
 		final List<List> userData = new ArrayList<List>();
-		final String sql = "SELECT concat(FIRST_NAME,concat(', ',LAST_NAME)), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"
-				+ DISABLED;
+		String sql = "";
+		if(Variables.isToDisplayAdminEmail)
+		{
+			 sql = "SELECT concat(FIRST_NAME,concat(', ',LAST_NAME)), EMAIL_ADDRESS,B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"
+					+ DISABLED;
+		}
+		else
+		{
+			sql = "SELECT concat(FIRST_NAME,concat(', ',LAST_NAME)), B.PHONE_NUMBER FROM CATISSUE_USER A, CATISSUE_ADDRESS B WHERE CSM_USER_ID  IN (SELECT USER_ID FROM CSM_USER_GROUP WHERE GROUP_ID=1) AND A.IDENTIFIER>1 AND A.ADDRESS_ID=B.IDENTIFIER  AND A"
+					+ DISABLED;
+		}
 		try
 		{
 			final List list = jdbcDAO.executeQuery(sql);
