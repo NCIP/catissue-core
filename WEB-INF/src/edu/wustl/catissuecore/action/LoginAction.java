@@ -67,6 +67,7 @@ public class LoginAction extends XSSSupportedAction
      */
     private static final Logger LOGGER = Logger.getCommonLogger(LoginAction.class);
     String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
+    
 
     /**
      * Overrides the execute method of Action class.
@@ -119,8 +120,8 @@ public class LoginAction extends XSSSupportedAction
             {
                 LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
                 cleanSession(request);
-                
-                handleError(request, "errors.incorrectLoginIDPassword",loginAttempts);
+                int loginAttemptCount = Integer.valueOf(loginAttempts)-1;
+                handleError(request, "errors.incorrectLoginIDPassword",loginAttemptCount);
                 forwardTo = Constants.FAILURE;
             }
         }
@@ -141,8 +142,8 @@ public class LoginAction extends XSSSupportedAction
           if(isUserLocked(loginForm.getLoginName()))
           {
         	  	ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("login.account.locked"));
-				saveErrors(request, errors);
+        	  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("login.account.locked",XMLPropertyHandler.getValue("contact.number"),XMLPropertyHandler.getValue("email.administrative.emailAddress")));
+        	  	saveErrors(request, errors);
         	  return Constants.FAILURE; 
           }
         if(isRequestFromClinportal(request))
@@ -194,7 +195,10 @@ public class LoginAction extends XSSSupportedAction
 	                    + " Invalid user. Sending back to the login Page");
         	if(loginResult.isAccountLocked())
         	{
-        		handleError(request, "login.account.locked",null);
+        		ActionErrors errors = new ActionErrors();
+      	  	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("login.account.locked",XMLPropertyHandler.getValue("contact.number"),XMLPropertyHandler.getValue("email.administrative.emailAddress")));
+      	  	saveErrors(request, errors);
+//        		handleError(request, "login.account.locked",null);
         	}
         	else
         	{
@@ -318,7 +322,9 @@ public class LoginAction extends XSSSupportedAction
         {
             LoginAction.LOGGER.debug("User " + loginResult.getAppLoginName()
                     + " Invalid user. Sending back to the login Page");
-            handleError(request, "errors.incorrectLoginIDPassword",loginAttempts);
+            int loginAttemptCount = Integer.valueOf(loginAttempts)-1;
+            handleError(request, "errors.incorrectLoginIDPassword",loginAttemptCount);
+            handleError(request, "errors.incorrectLoginIDPassword",loginAttemptCount);
             forwardTo = Constants.FAILURE;
         }
         else
