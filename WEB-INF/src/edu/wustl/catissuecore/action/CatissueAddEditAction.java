@@ -27,6 +27,7 @@ public class CatissueAddEditAction extends CommonAddEditAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
+		request.getSession().setAttribute("displayMsg", "false");
 		LOGGER.info("in execute method");
 		BaseAddEditAction addEditAction;
 		AbstractActionForm abstractForm = (AbstractActionForm) form;

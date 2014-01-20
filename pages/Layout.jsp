@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <style>
-#df-left-menu-tools {
+#loginMessage {
     position: fixed;
     bottom: 0;
     text-align:right;
@@ -65,13 +65,14 @@
 
             if(request.getSession() != null && request.getSession().getAttribute(Constants.SESSION_DATA) != null) //if user is logged in
             {
+                
                 //timeOut = request.getSession().getMaxInactiveInterval();
                 String timeOutToSet = XMLPropertyHandler
                 .getValue(Constants.SESSION_TIME_OUT);
                 if(timeOutToSet != null)
                 {
-                request.getSession().setMaxInactiveInterval(Integer.parseInt(timeOutToSet)*60);
-                timeOut = request.getSession().getMaxInactiveInterval();
+                    request.getSession().setMaxInactiveInterval(Integer.parseInt(timeOutToSet)*60);
+                    timeOut = request.getSession().getMaxInactiveInterval();
                 }
             }
         %>
@@ -262,11 +263,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <div id="df-left-menu-tools">
-                          
+                        <div id="loginMessage" style="display:none">
+                          <logic:empty scope="session" name="displayMsg">
                             <logic:notEmpty scope="session" name="lastLoginTimeStamp">
         <span class="black_ar" style="text-align:right;padding:5px;background-color: #d8d8d8"><bean:message key="last.login.activity" arg0="${lastLoginTimeStamp}" arg1="${lastLoginAttempt}"/></span>
         </logic:notEmpty>
+        </logic:empty>
                         </div> 
                     </td>
                 </tr>
@@ -275,6 +277,35 @@
     </tr>
 </table>
 </body>
+<script>
+
+showsuccessMessageStrip();
+function showsuccessMessageStrip(){
+    showIt();
+    setTimeout("hideIt()", 7000); 
+}
+function showIt() {
+document.getElementById("loginMessage").style.opacity = 1;
+    document.getElementById("loginMessage").style.display = "block";
+}
+function hideIt() {
+fade(document.getElementById("loginMessage"));
+    //document.getElementById("successMessageStrip").style.display = "none";
+    
+}
+function fade(element) {
+    var op = 1;  // initial opacity
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 50);
+}
+</script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>

@@ -17,6 +17,7 @@ public abstract class CatissueBaseAction extends SecureAction
 			ActionForm arg1, HttpServletRequest arg2, HttpServletResponse arg3)
 			throws Exception 		
 	{
+		arg2.getSession().setAttribute("displayMsg", "false");
 		saveToken(arg2);
 		return executeCatissueAction(arg0, arg1, arg2, arg3);
 	}
