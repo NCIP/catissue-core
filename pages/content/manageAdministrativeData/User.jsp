@@ -174,14 +174,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="left" ><span
-                        class="black_ar"><logic:equal name="operation" value='${requestScope.editforJSP}'>
-                        <logic:notEmpty scope="session" name="lastLoginTimeStamp">
-        <span class="black_ar" style="padding:5px"><bean:message key="last.login.activity" arg0="${lastLoginTimeStamp}" arg1="${lastLoginAttempt}"/></span>
-        </logic:notEmpty>
-                    </logic:equal> </span></td>
-                </tr>
-                <tr>
                     <td colspan="2" align="left" class="tr_bg_blue1"><span
                         class="blue_ar_b">&nbsp;<logic:equal name="operation"
                         value='${requestScope.addforJSP}'><bean:message key="user.details.title" />
