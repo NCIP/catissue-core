@@ -6134,6 +6134,9 @@ PUBLIC
  
  		<action path="/ecrf" type="org.apache.struts.actions.ForwardAction"
  			parameter=".catissuecore.ecrf"/>
+
+ 		<action path="/query" type="org.apache.struts.actions.ForwardAction"
+ 			parameter=".catissuecore.query"/>
  
 
 	</action-mappings>

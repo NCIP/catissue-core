@@ -36,6 +36,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import krishagni.catissueplus.bizlogic.FormService;
 import krishagni.catissueplus.bizlogic.impl.FormServiceImpl;
 import krishagni.catissueplus.dto.FormDetailsDTO;
+import krishagni.catissueplus.dto.FormFieldSummary;
 import krishagni.catissueplus.dto.FormRecordDetailsDTO;
 
 @Path("/forms")
@@ -120,7 +121,27 @@ public class FormResource {
 			}
 		}		
 	}
-		
+	
+	@Path("{formId}/fields")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFormRecords(@PathParam("formId") Long formId) {
+		TransactionManager txnMgr = TransactionManager.getInstance();
+		Transaction txn = null;
+
+		try {
+			txn = txnMgr.startTxn();
+			List<FormFieldSummary> fields = getFormService().getFormFields(formId);
+			return Response.ok(fields).build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		} finally {
+			if (txn != null) {
+				txnMgr.rollback(txn);
+			}
+		}			
+	}
+	
 	@Path("{formId}/records")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

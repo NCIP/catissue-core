@@ -6,10 +6,13 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 
 import krishagni.catissueplus.dto.FormDetailsDTO;
+import krishagni.catissueplus.dto.FormFieldSummary;
 import krishagni.catissueplus.dto.FormRecordDetailsDTO;
 
 public interface FormService {
 	Container getFormDefinition(Long formId);
+	
+	List<FormFieldSummary> getFormFields(Long formId);
 			
 	FormData getFormData(Long formId, Long recordId);
 	

@@ -787,6 +787,13 @@
 		<put name="content" value="/pages/content/search/AdvanceQuery.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.homePageDef5" path="/pages/Layout5.jsp">
+		<put name="header" value="/pages/MainHeader.jsp" />
+		<put name="applicationheader" value="/pages/ApplicationHeader.jsp"/>
+		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
+		<put name="content" value="/pages/content/home/Home.jsp" />
+	</definition>
+
 	<definition name=".catissuecore.csd" extends=".catissuecore.homePageDef">
  		<put name="content" value="/csd_web/pages/csdUI.html" />
  	</definition>
@@ -794,6 +801,10 @@
  	<definition name=".catissuecore.ecrf" extends=".catissuecore.homePageDef">
  		<put name="content" value="/ngweb/pages/forms.html" />
  	</definition>
+
+        <definition name=".catissuecore.query" extends=".catissuecore.homePageDef5">
+                <put name="pageContentUrl" value="ngweb/pages/query.html" type="string"/>
+        </definition>
  	
 
 	<!--  Added By Ankush -->

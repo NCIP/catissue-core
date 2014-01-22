@@ -6,6 +6,7 @@ import krishagni.catissueplus.bizlogic.CollectionProtocolService;
 import krishagni.catissueplus.dao.CollectionProtocolDao;
 import krishagni.catissueplus.dao.impl.CollectionProtocolDaoImpl;
 import krishagni.catissueplus.dto.CollectionProtocolDTO;
+import krishagni.catissueplus.dto.FormDetailsDTO;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 	private CollectionProtocolDao cpDao = new CollectionProtocolDaoImpl();
@@ -13,5 +14,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@Override
 	public List<CollectionProtocolDTO> getCollectionProtocols() {
 		return cpDao.getCollectionProtocols();
+	}
+
+	@Override
+	public List<FormDetailsDTO> getCollectionProtocolForms(Long cpId) {
+		return cpDao.getForms(cpId);
 	}
 }
