@@ -223,6 +223,7 @@
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
+					<exclude name="dynamicextensions-legacy.jar"/>
 				</fileset>
 				<fileset dir="./lib">
 					<include name="j2ee.jar" />

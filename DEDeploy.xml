@@ -415,16 +415,17 @@
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
 		<mkdir dir="${temp.dir.DE}" />
-		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}" overwrite="true">
-		</unzip>
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}" overwrite="true"/>
+   		
+   				<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
 				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
 			</classpath>
 		</taskdef>
 		<unjar src="./${de.temp.dir}/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir.DE}" overwrite="true" />
-		<copy file="./${de.temp.dir}/conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir.DE}" overwrite="true" />
-		<copy file="./${de.temp.dir}/conf/ApplicationDAOProperties.xml" todir="${temp.dir.DE}" overwrite="true" />
+		<unjar src="WEB-INF/lib/dynamicextensions-legacy.jar" dest="${temp.dir.DE}/old" overwrite="true" />
+		<copy file="${temp.dir.DE}/old/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir.DE}" overwrite="true" />
+		<copy file="${temp.dir.DE}/old/ApplicationDAOProperties.xml" todir="${temp.dir.DE}" overwrite="true" />
 		<antcall target="create_loggger_properties_file" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
@@ -478,6 +479,7 @@
 		</replace>
 	</target>
 
+	
 	<!-- Target used to Import the Dynamic Model using Import XMI -->
 	<target name="import_xmi_DE" description="Target used to Import the Dynamic Model using Import XMI">
 		<antcall target="setupClassExecutionEnvironment" />
@@ -860,7 +862,7 @@
 
 
 	<target name="create_loggger_properties_file" description="create loggger properties file">
-		<copy file="./${de.temp.dir}/conf/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
+		<copy file="${temp.dir.DE}/old/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
 		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
 			<replacefilter token="@@jbosshome@@" value="." />

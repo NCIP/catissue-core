@@ -5565,4 +5565,23 @@
             <antcall target="update_protection_element" />  
         </target>
     
+
+		<target name="migrate_forms">
+            <unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+			<antcall target="setupClassExecutionEnvironment"/>
+			<java classname="krishagni.catissueplus.upgrade.MigrateForms" fork="true" maxmemory="1536M">
+				<arg value="${username}"/>
+				<classpath>
+					<pathelement location="${temp.dir.DE}" />
+					<pathelement location="${temp.dir.DE}/old" />
+					<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib/">
+						<include name="*" />
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="*" />
+					</fileset>
+					<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				</classpath>
+			</java>
+	</target>
 </project>
