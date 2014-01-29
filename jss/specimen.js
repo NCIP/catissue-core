@@ -854,11 +854,12 @@ req.onreadystatechange = function() {
 				document.getElementById('error').style.display='none';
 				document.getElementById('success').style.display='block';
 				forwardToChildSpecimen(operation);
-			
+				console.log(updatedSpecimenDTO);
+			//alert(updatedSpecimenDTO.isToPrintLabel+"    updatedSpecimenDTO.isToPrintLabel");
 			if(printFlag)
-			{
-				if(updatedSpecimenDTO.isToPrintLabel)
-				{
+			{//alert('print flag');
+				if(updatedSpecimenDTO.toPrintLabel)
+				{//alert("print true");
 					document.getElementById('print-error').style.display='none';
 					document.getElementById('print-success').innerHTML = 'Label Printed Successfully.';
 					document.getElementById('print-success').style.display='block';
