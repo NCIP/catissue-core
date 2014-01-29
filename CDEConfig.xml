@@ -24,7 +24,7 @@
 	
 	<XMLCDE cache="true" lazyLoading="false">
 		<name>Collection Status</name>
-		<publicId>collection_status</publicId>
+		<publicId>scg_collection_status</publicId>
 		<XMLPermissibleValues>
 			<evsTerminology>NCI-THESAURAUS</evsTerminology>
 			<conceptCode>PV</conceptCode> 

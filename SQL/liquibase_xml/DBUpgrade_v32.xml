@@ -20,5 +20,17 @@
     <property name="autoIncrement" value="true" dbms="mysql"/>
     <property name="autoIncrement" value="false" dbms="oracle"/>
  
+ 	<changeSet id="1" author="catissue" failOnError="false">
+		<sql>INSERT INTO CATISSUE_CDE VALUES ( 'scg_collection_status','Collection Status','Collection Status',1.0,null)</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64557,'Pending',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64558,'Pending-Partially Complete',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64559,'Overdue',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64560,'Overdue-Partially Complete',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64561,'Complete',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64562,'Complete-Late',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64563,'Incomplete',NULL,'scg_collection_status')</sql>
+		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(64564,'Not Collected',NULL,'scg_collection_status')</sql>
+	</changeSet>
+
 
 </databaseChangeLog>         
