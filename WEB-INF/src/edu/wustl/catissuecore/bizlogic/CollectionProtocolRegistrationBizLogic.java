@@ -1196,17 +1196,27 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					.getSpecimenCollectionGroupCollection();
 			collectionProtocolRegistration
 					.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-			 
-			//persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration.getConsentTierResponseCollection());
-			/*setConsetResponseCollection(dao, collectionProtocolRegistration,
-					persistentCPR);
-			this.updateConsentResponseForSCG(persistentCPR,oldCollectionProtocolRegistration, dao);
-			persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
-			persistentCPR.setConsentSignatureDate(collectionProtocolRegistration
-					.getConsentSignatureDate());
-			persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration
-					.getSignedConsentDocumentURL());
-		*/
+            if (collectionProtocolRegistration.getConsentTierResponseCollection() != null && !collectionProtocolRegistration.getConsentTierResponseCollection().isEmpty())
+            {
+//                persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration
+//                        .getConsentTierResponseCollection());
+                setConsetResponseCollection(dao, collectionProtocolRegistration, persistentCPR);
+                this.updateConsentResponseForSCG(persistentCPR, oldCollectionProtocolRegistration, dao);
+               
+            }
+            if(collectionProtocolRegistration.getConsentWitness()!=null){
+                persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
+            }
+            if (collectionProtocolRegistration.getConsentSignatureDate() != null)
+            {
+                persistentCPR.setConsentSignatureDate(collectionProtocolRegistration.getConsentSignatureDate());
+            }
+            if (collectionProtocolRegistration.getSignedConsentDocumentURL() != null)
+            {
+                persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration.getSignedConsentDocumentURL());
+            }
+            
+            
 			persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration
 					.getProtocolParticipantIdentifier());
 			persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());

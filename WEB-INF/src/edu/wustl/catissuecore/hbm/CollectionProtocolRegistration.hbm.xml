@@ -165,5 +165,11 @@
     </class>
 <query name="fetchCPRIdFromCPID">select cpr.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id= ? and cpr.participant.id= ?</query>
 <query name="getCPRFromParticipantId">select cpr from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?</query>
+<query name="selectParticipantIdFromMrnAndSite">select pmi.participant.id from ParticipantMedicalIdentifier pmi  left join pmi.site site where pmi.medicalRecordNumber = ? and site.name = ?</query>
+<query name="getSiteIdFromName">select site.id  from  edu.wustl.catissuecore.domain.Site site where site.name = ?</query>
+<query name="getConsentTierDetails">select consentTier.id,consentTier.statement from edu.wustl.catissuecore.domain.CollectionProtocol cp join cp.consentTierCollection consentTier where cp.id =? </query>
+<query name="getCPRDetailsByPID">select cpr.id, cpr.collectionProtocol.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.participant.id=? </query>
+<query name="updateCPRParticipantID">update edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr set cpr.participant = ? where cpr.id = ? </query>
+<query name="selectCPIDfromIRBID">select cp.id from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.irbIdentifier = ? </query>
 </hibernate-mapping>
 

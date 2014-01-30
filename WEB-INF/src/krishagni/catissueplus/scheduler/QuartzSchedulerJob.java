@@ -8,6 +8,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import edu.wustl.catissuecore.keywordsearch.TitliIndexer;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -26,7 +28,21 @@ public class QuartzSchedulerJob implements Job
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException
     {
-        logger.info("Starting execution of ContainerSpecimenCountJob");
+        String[] jobarr =  XMLPropertyHandler.getValue("schedularJobList").split(",");
+        Class schedularObj;
+        try
+        {
+            for(int i=0;i < jobarr.length;i++){
+                logger.info("Started execution of "+jobarr[i]);
+                schedularObj = Class.forName(jobarr[i]);
+                schedularObj.getMethod("init").invoke(null);
+                logger.info("End execution of "+jobarr[i]);
+            }
+        }
+        catch (Exception e)
+        {
+           
+        }
         Class containerSpecimenCountJob;
         try
         {

@@ -1469,6 +1469,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 	}
 
+	public Long registerParticipant(String userName,Participant participant)
+            throws ApplicationException
+    {
+	    this.insert(participant, AppUtility.getSessionDataBean(userName));
+	    return participant.getId();
+
+    }
+
 	/**
 	 * @param participant
 	 *            : participant.
@@ -1523,7 +1531,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
-	private void updateParticipant(String userName, Participant participant)
+	public void updateParticipant(String userName, Participant participant)
 			throws BizLogicException
 	{
 		HibernateDAO hibernateDao = null;
@@ -1545,6 +1553,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			throw new BizLogicException(ErrorKey.getErrorKey("common.errors.item"), e,
 					"Error while opening the session");
 		}
+	    
 		finally
 		{
 			try

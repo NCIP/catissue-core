@@ -1,5 +1,6 @@
 package krishagni.catissueplus.dao;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,4 +52,26 @@ public class SCGDAO
 		}
 		return null;
 	}
+	
+	public List<Long> getSCGIDListFromCPRID(Long cprID,HibernateDAO hibernateDao) throws DAOException 
+	{
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, cprID));
+        List<Long> cpIdCollection = hibernateDao.executeNamedQuery("getCPIdFromSCGId", params);
+        
+        return cpIdCollection;
+    }
+	
+	public void updateScgWithCprID(HibernateDAO hibernateDAO,Long cprID,Long scgID) throws DAOException{
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("1", new NamedQueryParam(DBTypes.LONG,cprID));
+        params.put("2",
+                new NamedQueryParam(DBTypes.LONG, scgID));
+        try{
+            hibernateDAO.executeUpdateWithNamedSQLQuery("updateCPRParticipantID", params);
+        }catch(SQLException ex){
+             new DAOException(null,ex,null);
+        }
+    }
+    
 }
