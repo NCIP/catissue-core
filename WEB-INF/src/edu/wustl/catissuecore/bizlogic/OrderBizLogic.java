@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,6 +31,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -69,6 +73,7 @@ import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
@@ -2289,14 +2294,31 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				orderItemDTO.setDescription(orderItemDetails[6].toString());
 			}
+			
 			orderItemDTO.setOrderItemId(Long.parseLong(orderItemDetails[7].toString()));
 			orderItemDTO.setSpecimenId(Long.parseLong(orderItemDetails[8].toString()));
+			
 			if (orderItemDetails[9] != null)
 			{
 				orderItemDTO.setDistributedQuantity(Double.parseDouble(orderItemDetails[9]
 						.toString()));
 			}
-
+			
+			if(orderItemDetails[10]!=null)
+			{
+				orderItemDTO.setSpecimenContainerName(orderItemDetails[10].toString());
+			}
+			
+			if(orderItemDetails[11]!=null)
+			{
+				orderItemDTO.setPositionDimensionOne(orderItemDetails[11].toString());
+			}
+			
+			if(orderItemDetails[12]!=null)
+			{
+				orderItemDTO.setPositionDimensionTwo(orderItemDetails[12].toString());
+			}
+			
 			orderItemsDTOs.add(orderItemDTO);
 		}
 
@@ -2304,7 +2326,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	public DisplayOrderDTO getOrderDetails(Long orderId, HibernateDAO dao)
-			throws BizLogicException, DAOException
+			throws BizLogicException, DAOException, ParseException
 	{
 		DisplayOrderDTO displayOrderDTO = new DisplayOrderDTO();
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
@@ -2326,14 +2348,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		if (orderDetailObject[4] != null && orderDetailObject[3] != null)
 		{
-			displayOrderDTO.setRequestorName(orderDetailObject[4] + "," + orderDetailObject[3]);
+			displayOrderDTO.setRequestorName(orderDetailObject[4] + ", " + orderDetailObject[3]);
 		}
 		if (orderDetailObject[5] != null)
 		{
 			displayOrderDTO.setRequestorEmail(orderDetailObject[5].toString());
 		}
-		displayOrderDTO.setRequestedDate(new java.sql.Date(((Timestamp) orderDetailObject[6])
-				.getTime()));
+		displayOrderDTO.setRequestedDate(new Date(((Timestamp)orderDetailObject[6]).getTime()));
 		if (orderDetailObject[7] != null)
 		{
 			displayOrderDTO.setComments(orderDetailObject[7].toString());
@@ -2377,16 +2398,18 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
+				String updateDistributionDetails="UPDATE edu.wustl.catissuecore.domain.Distribution distribution SET " +
+						"distribution.toSite = :site,distributionProtocol=:distributionProtocolId WHERE distribution.id=:distributionId";
 				distributionId = Long.parseLong(distributionDetails.get(0).toString());
-				params = new HashMap<String, NamedQueryParam>();
-				params.put("0", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getSite()));
-				params.put(
-						"1",
-						new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO
-								.getDisptributionProtocolId()));
-				params.put("2", new NamedQueryParam(DBTypes.LONG, distributionId));
-				dao.executeUpdateWithNamedQuery("updateDistributionDetails", params);
-
+				List<ColumnValueBean> nameValueParams=new ArrayList<ColumnValueBean>();
+				ColumnValueBean siteBean=new ColumnValueBean("site", orderSubmissionDTO.getSite());
+				nameValueParams.add(siteBean);
+				ColumnValueBean distributionProtocolIdBean=new ColumnValueBean("distributionProtocolId", orderSubmissionDTO
+						.getDisptributionProtocolId());
+				nameValueParams.add(distributionProtocolIdBean);
+				ColumnValueBean distributionIdBean=new ColumnValueBean("distributionId", distributionId);
+				nameValueParams.add(distributionIdBean);
+				dao.executeUpdateHQL(updateDistributionDetails, nameValueParams);
 			}
 
 			for (OrderItemSubmissionDTO orderItemSubmissionDTO : orderSubmissionDTO
@@ -2490,24 +2513,43 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				orderStatus = Constants.ORDER_STATUS_REJECTED;
 			}
-
-			params = new HashMap<String, NamedQueryParam>();
-			params.put("0", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getOrderName()));
-			params.put("1", new NamedQueryParam(DBTypes.STRING, orderStatus));
+			String updateOrderDetailsQuery="update edu.wustl.catissuecore.domain.OrderDetails orderDetails SET " +
+					" orderDetails.name=:name,orderDetails.status=:status,orderDetails.distributorsComment=:distributorsComment," +
+					"orderDetails.distributionProtocol=:distributionProtocol,orderDetails.requestedBy=:requestedBy,orderDetails.requestedDate=:requestedDate " +
+					" where orderDetails.id=:id";
+			
+			List<ColumnValueBean> nameValueParams=new ArrayList<ColumnValueBean>();
+			ColumnValueBean orderNameBean=new ColumnValueBean("name", orderSubmissionDTO.getOrderName());
+			nameValueParams.add(orderNameBean);
+			ColumnValueBean orderStatusBean=new ColumnValueBean("status", orderStatus);
+			nameValueParams.add(orderStatusBean);
+			ColumnValueBean distibutorsCommentBean=null;
+				
 			if(orderSubmissionDTO.getDistributorsComment()==null)
 			{
-				params.put("2", new NamedQueryParam(DBTypes.STRING, ""));
+				distibutorsCommentBean=new ColumnValueBean("distributorsComment","");
 			}
 			else
 			{
-				params.put("2", new NamedQueryParam(DBTypes.STRING, orderSubmissionDTO.getDistributorsComment()));
+				distibutorsCommentBean=new ColumnValueBean("distributorsComment",orderSubmissionDTO.getDistributorsComment());
 			}
-			params.put(
-					"3",
-					new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO
-							.getDisptributionProtocolId()));
-			params.put("4", new NamedQueryParam(DBTypes.LONG, orderSubmissionDTO.getId()));
-			dao.executeUpdateWithNamedQuery("updateOrderDetails", params);
+			
+			nameValueParams.add(distibutorsCommentBean);
+			
+			ColumnValueBean distributionProtocolBean=new ColumnValueBean("distributionProtocol",orderSubmissionDTO
+					.getDisptributionProtocolId());
+			nameValueParams.add(distributionProtocolBean);
+			
+			ColumnValueBean requestedByBean=new ColumnValueBean("requestedBy",orderSubmissionDTO.getRequestorId());
+			nameValueParams.add(requestedByBean);
+			
+			ColumnValueBean requestedDateBean=new ColumnValueBean("requestedDate",orderSubmissionDTO.getRequestedDate());
+			nameValueParams.add(requestedDateBean);
+			
+			ColumnValueBean idBean=new ColumnValueBean("id",orderSubmissionDTO.getId());
+			nameValueParams.add(idBean);
+			
+			dao.executeUpdateHQL(updateOrderDetailsQuery, nameValueParams);
 
 			orderStatusDTO.setStatus(orderStatus);
 			orderStatusDTO.setOrderId(orderSubmissionDTO.getId());

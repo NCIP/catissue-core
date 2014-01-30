@@ -32,7 +32,7 @@
 "Exported On:","$exportedOn"
 "Exported By:","$exportedBy"
 "Order Items Detail:"
-"Specimen Label","Specimen Type","Specimen Class","Available Quantity","Requested Quantity","Distributed Quantity","Status","Description"
+"Specimen Label","Specimen Type","Specimen Class","Specimen Position","Available Quantity","Requested Quantity","Distributed Quantity","Status","Description"
 #foreach( $gridData in $orderItemsDetail )
  #set ($description='')
  #if($gridData.description)
@@ -42,5 +42,21 @@
    #if($gridData.distributedQuantity)
       #set ($distributedQuantity=$gridData.distributedQuantity)
  #end
-"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${distributedQuantity}","${gridData.status}","${description}"
+ #set ($positionDimensionOne='')
+         #if($gridData.positionDimensionOne)
+           #set ($positionDimensionOne=$gridData.positionDimensionOne)
+      #end
+      #set ($positionDimensionTwo='')
+         #if($gridData.positionDimensionTwo)
+           #set ($positionDimensionTwo=$gridData.positionDimensionTwo)
+      #end
+      #set ($specimenContainerName='')
+         #if($gridData.specimenContainerName)
+           #set ($specimenContainerName=$gridData.specimenContainerName)
+      #end
+ #set ($specimenPosition='')
+ #if($gridData.specimenContainerName && $positionDimensionTwo && $gridData.positionDimensionOne)
+  #set ($specimenPosition = $specimenContainerName + "(" + $positionDimensionOne + "," + $positionDimensionTwo + ")")
+ #end
+"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${specimenPosition}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${distributedQuantity}","${gridData.status}","${description}"
 #end
