@@ -26,13 +26,14 @@ public class SpecimenHandler
 		HibernateDAO hibernateDao = null;
 		try
 		{
+			boolean printFlag = specimenDTO.isToPrintLabel();
 			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
 			specimenDTO = specimenBizLogic.insert(specimenDTO, hibernateDao,
 					sessionDataBean);
 			hibernateDao.commit();
-			if (specimenDTO.isToPrintLabel())
+			if (printFlag)
 			{
 				specimenDTO.setToPrintLabel(PrintUtil.printSpecimenLabel(null,
 						null, sessionDataBean, specimenDTO.getId()));
@@ -62,13 +63,17 @@ public class SpecimenHandler
 		HibernateDAO hibernateDao = null;
 		try
 		{
+			boolean printFlag = specimenDTO.isToPrintLabel();
 			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
+			
 			specimenDTO = specimenBizLogic.updateSpecimen(hibernateDao,
 					specimenDTO, sessionDataBean);
 			hibernateDao.commit();
-			if (specimenDTO.isToPrintLabel())
+			System.out.println("###### Inside Specimen class just before calling print API");
+			System.out.println("########## Print Label Flag: "+printFlag);
+			if (printFlag)
 			{
 				specimenDTO.setToPrintLabel(PrintUtil.printSpecimenLabel(null,
 						null, sessionDataBean, specimenDTO.getId()));

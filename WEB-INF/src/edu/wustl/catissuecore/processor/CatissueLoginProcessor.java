@@ -3,18 +3,13 @@ package edu.wustl.catissuecore.processor;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import krishagni.catissueplus.util.DAOUtil;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -33,7 +28,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.domain.LoginCredentials;
@@ -186,7 +180,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	//            ColumnValueBean bean = new ColumnValueBean(loginDetails.getUserLoginId());
 	            columnValueBeans.add(loginDetails.getUserLoginId());
 	        		try { 
-	        			List result = dao.executeQuery(hql,1,1, columnValueBeans);
+	        			List result = dao.executeQuery(hql,0,1, columnValueBeans);
 	        			if(result != null && result.size() > 0)
 	        			{
 		        			Object[] obj = (Object[])result.get(0);

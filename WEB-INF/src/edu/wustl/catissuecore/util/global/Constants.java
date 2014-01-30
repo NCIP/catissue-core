@@ -5845,6 +5845,7 @@ public class Constants
 	public static final String HL7_LISTENER_ADMIN_USER = "HL7ListenerAdminUser";
 	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
+	public static final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	/**
 	 * Constant for XML extension.

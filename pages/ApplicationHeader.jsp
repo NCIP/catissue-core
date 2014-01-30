@@ -8,11 +8,5 @@
             <img src="images/uIEnhancementImages/caTissue_logo_wo.png" />
             
         </td>
-        <td>
-        <logic:notEmpty scope="session" name="lastLoginTimeStamp">
-        <span class="black_ar" style="text-align:center">Last activity on ${lastLoginTimeStamp} was ${lastLoginAttempt}</span>
-        </logic:notEmpty>
-        </td>
-            
     </tr>
 </table>

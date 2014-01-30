@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:c="http://www.springframework.org/schema/c"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+  
+  
+  <bean id="daoConfigFactory" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+   <property name="targetClass"><value>edu.wustl.dao.daofactory.DAOConfigFactory</value></property>
+   <property name="targetMethod"><value>getInstance</value></property>
+  </bean>
+ 
+  <bean id="daoFactory" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+   <property name="targetObject"><ref local="daoConfigFactory"/></property>
+   <property name="targetMethod"><value>getDAOFactory</value></property>
+  </bean>
+  
+    
+  <aop:aspectj-autoproxy />
+  
+  <bean id="serviceInterceptor" class="com.krishagni.catissueplus.annotation.impl.TransactionalInterceptor">
+    <property name="sessionFactory" value="#{daoFactory.getSessionFactory()}"/>
+  </bean>
+    
+  <bean id="collectionProtocolDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolDaoImpl">
+    <property name="sessionFactory" value="#{daoFactory.getSessionFactory()}"/>  
+  </bean>
+  
+  <bean id="collectionProtocolRegistrationDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolRegistrationDaoImpl">
+    <property name="sessionFactory" value="#{daoFactory.getSessionFactory()}"/>  
+  </bean>
+  
+  <bean id="specimenCollectionGroupDao" class="com.krishagni.catissueplus.dao.impl.SpecimenCollectionGroupDaoImpl">
+    <property name="sessionFactory" value="#{daoFactory.getSessionFactory()}"/>  
+  </bean>
+  
+  <bean id="specimenDao" class="com.krishagni.catissueplus.dao.impl.SpecimenDaoImpl">
+    <property name="sessionFactory" value="#{daoFactory.getSessionFactory()}"/>  
+  </bean>
+  
+  <bean id="collectionProtocolService" class="com.krishagni.catissueplus.service.impl.CollectionProtocolServiceImpl">
+    <property name="collectionProtocolDao" ref="collectionProtocolDao"/>
+  </bean>
+  
+  <bean id="collectionProtocolRegistrationService" class="com.krishagni.catissueplus.service.impl.CollectionProtocolRegistrationServiceImpl">
+    <property name="collectionProtocolRegistrationDao" ref="collectionProtocolRegistrationDao"/>
+  </bean>
+  
+  <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.service.impl.SpecimenCollGroupServiceImpl">
+    <property name="specimenCollectionGroupDao" ref="specimenCollectionGroupDao"/>
+  </bean>
+  
+  <bean id="SpecimenServiceImpl" class="com.krishagni.catissueplus.service.impl.SpecimenServiceImpl">
+    <property name="specimenDao" ref="specimenDao"/>
+  </bean>
+  
+ </beans>

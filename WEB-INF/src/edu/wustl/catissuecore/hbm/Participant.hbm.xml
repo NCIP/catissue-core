@@ -238,5 +238,21 @@
         -->
 
     </class>
+    <query name="getParticipantInfoListByCPID">
+        select cpr.id, cpr.participant.id , case when cpr.participant.lastName is null  then '' else cpr.participant.lastName end,  
+        case when cpr.participant.firstName is null then '' else cpr.participant.firstName end,
+         cpr.protocolParticipantIdentifier from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr  
+         where  cpr.collectionProtocol.id = :cpId and cpr.activityStatus != :cprActivityStatus and  cpr.participant.activityStatus != :participantStatus  
+         order by cpr.participant.id
+    </query>
+    <query name="getParticipantInfoListByQuery">
+        select new com.krishagni.catissueplus.events.participants.ParticipantInfo(cpr.id, cpr.participant.id , cpr.protocolParticipantIdentifier, 
+        case when cpr.participant.firstName is null then '' else cpr.participant.firstName end,
+        case when cpr.participant.lastName is null  then '' else cpr.participant.lastName end)
+          from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr  
+         where  cpr.collectionProtocol.id = :cpId and cpr.activityStatus != :cprActivityStatus and  cpr.participant.activityStatus != :participantStatus
+         or (cpr.participant.lastName = :lastName or cpr.participant.firstName = :firstName or cpr.protocolParticipantIdentifier = :ppId)   
+         order by cpr.participant.lastName, cpr.participant.firstName 
+    </query>
 
 </hibernate-mapping>

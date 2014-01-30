@@ -35,7 +35,7 @@ public class LoginAuditManager
 	        hibernateDao = DAOUtil.openDAOSession(null);
 	        
 	        if(maxResults > 0)
-	            loginDetails = hibernateDao.executeQuery(queryName.toString(),1,maxResults, columnValueBeans);
+	            loginDetails = hibernateDao.executeQuery(queryName.toString(),0,maxResults, columnValueBeans);
 	        else
 	            loginDetails = hibernateDao.executeQuery(queryName.toString(), columnValueBeans);
         } catch (DAOException e) {
