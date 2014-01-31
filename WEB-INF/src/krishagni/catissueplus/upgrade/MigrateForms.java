@@ -16,6 +16,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
 import edu.common.dynamicextensions.domain.nui.UserContext;
+import edu.common.dynamicextensions.ndao.DEApp;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
@@ -96,7 +97,7 @@ public class MigrateForms {
 
 	private static void setupDataSource() throws Exception{
 		BasicDataSource ds = new BasicDataSource();
-	
+		
 		Properties prop = new Properties();
 		prop.load(new FileInputStream("caTissueInstall.properties"));
 		
@@ -120,9 +121,7 @@ public class MigrateForms {
 		String jdbcUrl = "jdbc:" + databaseType +  prop.getProperty("database.host") 
 							+ ":" + prop.getProperty("database.port") + "/" + prop.getProperty("database.name");
 		ds.setUrl(jdbcUrl);
-		
-		JdbcDaoFactory.setDataSource(ds);
-		TransactionManager.getInstance(ds);		
+		DEApp.init(ds);
 	}
 
 	private static UserContext getUserContext(final String username) {

@@ -29,8 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
-import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
-import edu.common.dynamicextensions.ndao.TransactionManager;
+import edu.common.dynamicextensions.ndao.DEApp;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
@@ -148,8 +147,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
             InitialContext ic = new InitialContext();
             DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
-            JdbcDaoFactory.setDataSource(ds);
-            TransactionManager.getInstance(ds);
+            DEApp.init(ds);
             
 			logger.info("Initialization complete");
 		}
