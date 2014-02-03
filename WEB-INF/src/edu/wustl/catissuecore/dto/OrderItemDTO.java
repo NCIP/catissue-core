@@ -17,6 +17,10 @@ public class OrderItemDTO {
     String description;
     Long OrderItemId;
     Long specimenId;
+    String specimenContainerName;
+    String positionDimensionOne;
+    String positionDimensionTwo;
+    
 	public String getSpecLabel() {
 		return specLabel;
 	}
@@ -77,5 +81,36 @@ public class OrderItemDTO {
 	public void setDistributedQuantity(Double distributedQuantity) {
 		this.distributedQuantity = distributedQuantity;
 	}
+	
+	public String getSpecimenContainerName()
+	{
+		return specimenContainerName;
+	}
+	
+	public void setSpecimenContainerName(String specimenContainerName)
+	{
+		this.specimenContainerName = specimenContainerName;
+	}
+	
+	public String getPositionDimensionOne()
+	{
+		return positionDimensionOne;
+	}
+	
+	public void setPositionDimensionOne(String positionDimensionOne)
+	{
+		this.positionDimensionOne = positionDimensionOne;
+	}
+	
+	public String getPositionDimensionTwo()
+	{
+		return positionDimensionTwo;
+	}
+	
+	public void setPositionDimensionTwo(String positionDimensionTwo)
+	{
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
+	
 	
 }

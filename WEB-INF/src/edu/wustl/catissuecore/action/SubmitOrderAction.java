@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.dto.OrderStatusDTO;
 import edu.wustl.catissuecore.dto.OrderSubmissionDTO;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
@@ -61,8 +62,8 @@ public class SubmitOrderAction extends BaseAction
 	{
 
 		String dataJSON = request.getParameter("dataJSON");
-		Gson gson = new Gson();
-
+		Gson gson = AppUtility.initGSONBuilder().create();
+		
 		OrderSubmissionDTO orderSubmissionDTO = gson.fromJson(dataJSON, OrderSubmissionDTO.class);
 
 		JSONObject jsonObject = new JSONObject(dataJSON);
@@ -87,11 +88,11 @@ public class SubmitOrderAction extends BaseAction
 			{
 				Map<String, Object> csvFileData = orderBizLogic.getOrderCsv(
 						orderStatusDTO.getOrderId(), getExportedName(sessionDataBean), dao);
-
+				UserBizLogic userBizLogic=new UserBizLogic();
 				dao.commit();
 				orderBizLogic
 						.sendOrderUpdateEmail(
-								orderSubmissionDTO.getRequestorName(),
+								userBizLogic.getUserNameById(orderSubmissionDTO.getRequestorId(), dao),
 								orderSubmissionDTO.getRequestorEmail(),
 								sessionDataBean.getUserName(),
 								orderSubmissionDTO.getOrderName(),

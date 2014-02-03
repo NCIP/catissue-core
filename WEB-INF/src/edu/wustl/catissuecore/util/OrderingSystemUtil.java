@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -1032,16 +1031,17 @@ public final class OrderingSystemUtil
 	{
 		Collection<RowDTO> rowDTOs=orderGrid.getRowDTOs();
 		Collection<OrderItemSubmissionDTO> orderItemSubmissionDTOs=new ArrayList<OrderItemSubmissionDTO>();
+		
 		for (RowDTO rowDTO : rowDTOs) {
 			List<String> cells=rowDTO.getCells();
 			OrderItemSubmissionDTO orderItemSubmissionDTO=new OrderItemSubmissionDTO();
 			orderItemSubmissionDTO.setSpecimenLabel(cells.get(0));
 			orderItemSubmissionDTO.setRequestedQty(Double.parseDouble(cells.get(4)));
-			orderItemSubmissionDTO.setDistQty(Double.parseDouble(cells.get(5)));
-			orderItemSubmissionDTO.setOrderitemId(Long.parseLong(cells.get(8)));
-			orderItemSubmissionDTO.setSpecimenId(Long.parseLong(cells.get(9)));
-			orderItemSubmissionDTO.setStatus(cells.get(6));
-			orderItemSubmissionDTO.setComments(cells.get(7));
+			orderItemSubmissionDTO.setDistQty(Double.parseDouble(cells.get(6)));
+			orderItemSubmissionDTO.setOrderitemId(Long.parseLong(cells.get(9)));
+			orderItemSubmissionDTO.setSpecimenId(Long.parseLong(cells.get(10)));
+			orderItemSubmissionDTO.setStatus(cells.get(7));
+			orderItemSubmissionDTO.setComments(cells.get(8));
 			orderItemSubmissionDTOs.add(orderItemSubmissionDTO);	
 		}
 		

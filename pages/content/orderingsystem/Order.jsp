@@ -25,6 +25,9 @@
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_mcol.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
 <script src="jss/json2.js" type="text/javascript"></script>
 <c:set var="tr_white_color" value="tr_alternate_color_white" />
 <c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
@@ -35,6 +38,7 @@ var tabDataJSON = {};
 var tabbar;
 var mygrid;
 var site_combo;
+var user_combo;
 var distributionProtocolNameCombo;
 
 function processData(obj)
@@ -51,8 +55,22 @@ function submitOrderNew(consentVerifiedValues)
 	}	
 	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getActualValue()=="-1")
 	{
-		alert("Please select distribution protocol.");
-		return;
+		var orderRejected=true;
+		for(var row=1;row<=mygrid.getRowsNum();row++)
+		{
+			var statusValue=mygrid.cellById(row,7).getValue();
+			if(statusValue == 'Rejected - Inappropriate Request' || statusValue == 'Rejected - Specimen Unavailable' || statusValue == 'Rejected - Unable to Create')
+			{
+			   orderRejected=false;	
+			}
+						
+		}	
+	
+		if(!orderRejected)
+		{
+                  alert("Please select distribution protocol.");
+		} 
+        return;
 	}
 	
 	if(site_combo.getActualValue()=="" || site_combo.getActualValue()=="-1")
@@ -69,15 +87,24 @@ function submitOrderNew(consentVerifiedValues)
    	 }
    	}
 	
+	if(user_combo.getActualValue()=="" || user_combo.getActualValue()=="-1")
+	{
+		alert("Please select Requestor Name.");
+		return;
+	}
+
 	tabDataJSON["gridXML"] = mygrid.serialize();
 	tabDataJSON["id"]=${requestScope.id};
 	tabDataJSON["orderName"]=document.getElementById('orderName').value;
-	tabDataJSON["disptributionProtocolId"]=distributionProtocolNameCombo.getActualValue();
-	tabDataJSON["disptributionProtocolName"]=distributionProtocolNameCombo.getComboText();
+	if(distributionProtocolNameCombo.getActualValue()!="-1")
+	{
+	 tabDataJSON["disptributionProtocolId"]=distributionProtocolNameCombo.getActualValue();
+	}
+    tabDataJSON["disptributionProtocolName"]=distributionProtocolNameCombo.getComboText();
 	tabDataJSON["site"]=site_combo.getActualValue();
 	tabDataJSON["requestorEmail"]='<bean:write name="DisplayOrderDTO" property="requestorEmail" scope="request"/>';
-	tabDataJSON["requestorName"]='<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/>';
-	
+	tabDataJSON["requestorId"]=user_combo.getActualValue();
+	tabDataJSON["requestedDate"]=document.getElementById('requestedDate').value;
 
 	var loader=dhtmlxAjax.postSync("SubmitOrder.do","dataJSON="+JSON.stringify(tabDataJSON));
 		
@@ -106,7 +133,7 @@ function submitOrderNew(consentVerifiedValues)
 				if(specimenlabel == mygrid.cellById(row+1,0).getValue())
 				{	
 				  mygrid.cellById(row+1,numberOfcolumns-1).setValue(orderErrorDTOs[i].error);
-				  mygrid.cellById(row+1,6).setValue(orderErrorDTOs[i].newStatus);	
+				  mygrid.cellById(row+1,7).setValue(orderErrorDTOs[i].newStatus);	
 				  break;
 				}
 			   }
@@ -126,28 +153,28 @@ function submitOrderNew(consentVerifiedValues)
 		if(id.value != -1)
 		{
 	
-		var combo = mygrid.getCombo(5);
+		var combo = mygrid.getCombo(6);
 	
 		document.getElementById("nextStatusId").value=id.value;
 		for(var row=0;row<mygrid.getRowsNum();row++)
 		{
 			if(id.value == ("Distributed And Close(Special)"))
 			{
-				var avlQty = Number(mygrid.cellById(row+1,3).getValue());
-				var reqQty = Number(mygrid.cellById(row+1,5).getValue());
+				var avlQty = Number(mygrid.cellById(row+1,4).getValue());
+				var reqQty = Number(mygrid.cellById(row+1,6).getValue());
 				if(avlQty == reqQty)
 				{
-					mygrid.cellById(row+1,6).setValue("Distributed And Close");
+					mygrid.cellById(row+1,7).setValue("Distributed And Close");
 				}
 				else
 				{
-					mygrid.cellById(row+1,6).setValue("Distributed");
+					mygrid.cellById(row+1,7).setValue("Distributed");
 					
 				}
 			}
 			else
 			{
-				mygrid.cellById(row+1,6).setValue(id.value);
+				mygrid.cellById(row+1,7).setValue(id.value);
 				
 			}
 		
@@ -251,14 +278,27 @@ function switchToOlderView()
 						</td>
 								
 			            	<td> 
-  
-				           <span class="link">
-								<a class="view" href='mailto:<bean:write name='DisplayOrderDTO'  property='requestorEmail' scope='request' />' >
-									<bean:write name="DisplayOrderDTO" property="requestorName" scope="request"/> 
-								</a>
-							</span>
-
-						</td>					
+ 							<div  class="dhtmlx-combo-margin">
+							 <html:select property="requestorName" name="DisplayOrderDTO" styleClass="formFieldSized" styleId="requestorName" size="100" onblur="processData(this)" style="width:30em;">
+							 <html:options collection="userList" labelProperty="name" property="value" />
+					       	</html:select>
+					       </div>
+						</td>
+						<script>
+								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+								  user_combo = new dhtmlXComboFromSelect("requestorName");
+								  user_combo.setSize(330);
+								  user_combo.enableFilteringMode(true);
+								  
+ 							  	  if(user_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.requestorName}')==null)
+								  {
+ 							  		user_combo.setComboValue("-1");		
+								  }
+								  else
+								  {
+									  user_combo.setComboValue(user_combo.getOptionByLabel('${requestScope.DisplayOrderDTO.requestorName}').value);
+								  }
+    					</script>					
               </tr>
             
 			<tr class="${tr_grey_color}">
@@ -295,7 +335,9 @@ function switchToOlderView()
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
 							</strong></td>
                 <td class="black_ar"> 
-					<fmt:formatDate value="${DisplayOrderDTO.requestedDate}" pattern="${datePattern}" />					
+				<input type="text" name="requestedDate" class="black_ar"
+                                   id="requestedDate" size="10" onblur="processData(this)" value='<fmt:formatDate value="${DisplayOrderDTO.requestedDate}" pattern="${datePattern}" />' onclick="doInitCalendar('requestedDate',false,'${uiDatePattern}');"/>
+                                <span id="dateId" class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
 						</td>			
               </tr>
 			    <tr>
@@ -419,7 +461,7 @@ function gotoconsentTab()
 		
 		for(var row=1;row<=mygrid.getRowsNum();row++)
 		{
-			var statusValue=mygrid.cellById(row,6).getValue();
+			var statusValue=mygrid.cellById(row,7).getValue();
 			if(statusValue == 'Distributed' || statusValue == 'Distributed And Close' || statusValue == 'Distributed And Close(Special)')
 			{
 			   	specimenLabels[arrayCount] = mygrid.cellById(row,0).getValue();
@@ -444,18 +486,18 @@ function init_grid()
 
 	mygrid = new dhtmlXGridObject('gridbox');
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
-	mygrid.setHeader("Specimen Label,Specimen Class,Specimen Type,Available Qty,Requested Qty,Distributed Qty,Status,Comments,,,Error");
-   	mygrid.setColumnHidden(8,true);
+	mygrid.setHeader("Specimen Label,Specimen Class,Specimen Type,Specimen Position,Available Qty,Requested Qty,Distributed Qty,Status,Comments,,,Error");
    	mygrid.setColumnHidden(9,true);
    	mygrid.setColumnHidden(10,true);
-	mygrid.attachHeader("#text_filter,#select_filter,#select_filter,,,,,,,,#select_filter"); 
+   	mygrid.setColumnHidden(11,true);
+	mygrid.attachHeader("#text_filter,#select_filter,#select_filter,#text_filter,,,,,,,,#select_filter"); 
 	mygrid.setEditable("true");
 	mygrid.enableAutoHeigth(false);
    	mygrid.enableRowsHover(true,'grid_hover')
-	mygrid.setInitWidthsP("20,7,7,5,5,5,15,*,0,0,20");
-	mygrid.setColTypes("ro,ro,ro,ro,ro,ed,coro,ed,ro,ro,ro");
+	mygrid.setInitWidthsP("20,7,7,20,5,5,5,15,*,0,0,20");
+	mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ed,coro,ed,ro,ro,ro");
 	mygrid.setSkin("dhx_skyblue");
-	mygrid.setColSorting("str,str,str,str,str,str,str,str,str,str,str");
+	mygrid.setColSorting("str,str,str,str,str,str,str,str,str,str,str,str");
 	mygrid.enableMultiselect(true);
 	mygrid.init();
 	mygrid.loadXML("OrderDetails.do?id="+${requestScope.id});
@@ -467,7 +509,7 @@ function init_grid()
 function setComboValues()
 {
 
-var combo = mygrid.getCombo(6);
+var combo = mygrid.getCombo(7);
 
 var status = ["Distributed","Distributed And Close"
 		,"Distributed And Close(Special)","New","Pending - For Distribution","Pending - Protocol Review","Specimen Preparation",
@@ -482,10 +524,10 @@ for(var row=0;row<status.length;row++)
 }
 function qtyChange(stage,rId,cInd,nValue,oValue)
 {
-	if(cInd == 5 && stage == 2)
+	if(cInd == 6 && stage == 2)
 	{
 	
-		var avlQty = Number(mygrid.cellById(rId,3).getValue());
+		var avlQty = Number(mygrid.cellById(rId,4).getValue());
 		var reqQty = Number(nValue);
 		if(reqQty > avlQty)
 		{
