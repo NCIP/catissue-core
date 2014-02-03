@@ -9,9 +9,12 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
@@ -42,10 +45,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -4953,4 +4958,54 @@ public class AppUtility
 				});
 		return gsonBuilder;
 	}
+
+	public static void moveParticipantConsentFile(FormFile consentFile,String consentDirectory)
+	{
+		
+		FileOutputStream outputStream = null;
+		InputStream consentFileInputStream=null;
+		int read = 0;
+		byte[] bytes = {};
+		try
+		{
+			consentFileInputStream=consentFile.getInputStream();
+			bytes=IOUtils.toByteArray(consentFileInputStream);
+			outputStream = new FileOutputStream(new File(consentDirectory+File.pathSeparator+consentFile.getFileName()));
+			while ((read = consentFileInputStream.read(bytes)) != -1)
+			{
+				outputStream.write(bytes, 0, read);
+			}
+		}
+		catch (IOException exception)
+		{
+			//LOGGER.error("Error while writing consent File to directory.");
+		}
+		finally
+		{
+			if (consentFileInputStream != null)
+			{
+				try
+				{
+					consentFileInputStream.close();
+				}
+				catch (IOException exception)
+				{
+					//LOGGER.error("Error while writing consent File to directory.");
+				}
+			}
+			if (outputStream != null)
+			{
+				try
+				{
+					outputStream.close();
+				}
+				catch (IOException exception)
+				{
+					//LOGGER.error("Error while writing consent File to directory.");
+				}
+
+			}
+		}
+	}
+
 }

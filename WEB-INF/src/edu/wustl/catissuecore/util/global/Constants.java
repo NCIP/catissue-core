@@ -5925,6 +5925,7 @@ public class Constants
 	public static final String CONTENT_TYPE_PDF = "application/pdf";
 	public static final String CONTENT_DISPOSITION ="Content-Disposition";
 	public static final String SPR_DIR_LOACTION ="spr.dir.location";
+	public static final String PARTICIPANT_CONSENT_DOC_DIR_LOCATION ="participant.consent.dir.location";
 	public static final String DWD_ERROR_MESSAGE = "Problem occured while downloading report.";
 	public static final String DASHBOARD_ITEMS_FILE_PATH = "dashboard.items.file";
 	public static final String USER_DEFINED_LABEL = "userDefinedLabel";

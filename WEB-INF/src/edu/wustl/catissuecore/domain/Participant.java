@@ -20,6 +20,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.struts.upload.FormFile;
+
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
@@ -160,6 +162,8 @@ public class Participant extends AbstractDomainObject
 
 	private String empiId = "";
 
+	private String consentDocumentName;
+	
 	// /**
 	// * empiId : EMPI id of the participant.
 	// */
@@ -218,6 +222,7 @@ public class Participant extends AbstractDomainObject
 		activityStatus = participant.getActivityStatus();
 		deathDate = participant.getDeathDate();
 		vitalStatus = participant.getVitalStatus();
+		consentDocumentName=participant.getConsentDocumentName();
 		collectionProtocolRegistrationCollection = null;
 		final Collection<Race> raceCollection = new ArrayList<Race>();
 		final Iterator<Race> raceItr = participant.getRaceCollection().iterator();
@@ -734,7 +739,18 @@ public class Participant extends AbstractDomainObject
 			{
 				ethnicity = nullString;
 			}
-
+			
+			if(form.getConsentDocument()!=null && !form.getConsentDocument().getFileName().isEmpty())
+			{
+				consentDocumentName=form.getConsentDocument().getFileName();
+			}
+			else
+			{
+				if(form.getConsentDocumentName()==null || form.getConsentDocumentName().isEmpty())
+				{
+					consentDocumentName=null;
+				}
+			}
 			// if(validator.isValidOption(form.getRace()) )
 			// this.race = form.getRace();
 			// else
@@ -1046,5 +1062,16 @@ public class Participant extends AbstractDomainObject
 
 	}
 
+	
+	public String getConsentDocumentName()
+	{
+		return consentDocumentName;
+	}
+
+	
+	public void setConsentDocumentName(String consentDocumentName)
+	{
+		this.consentDocumentName = consentDocumentName;
+	}
 
 }

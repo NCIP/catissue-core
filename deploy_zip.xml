@@ -815,6 +815,7 @@
 			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
 			<!-- added for spr report dir -->
 				<replacefilter token="@@spr.dir.location@@" value="${spr.dir.location}" />
+				<replacefilter token="@@participant.consent.dir.location@@" value="${participant.consent.dir.location}" />
 				<replacefilter token="@@spr.dwd.terms.condiition.url@@" value="${spr.dwd.terms.condiition.url}" />
 				<replacefilter token="@@theam.css.path@@" value="${theam.css.path}" />
 				<replacefilter token="@@institute.logo.hyperlink@@" value="${institute.logo.hyperlink}" />

@@ -346,7 +346,10 @@
 		<name>spr.dir.location</name>
 		<value>@@spr.dir.location@@</value>
 	</property>
-
+	<property>
+		<name>participant.consent.dir.location</name>
+		<value>@@participant.consent.dir.location@@</value>
+	</property>
 	<property>
 	    <name>spr.dwd.terms.condiition.url</name>
 	    <value>@@spr.dwd.terms.condiition.url@@</value>

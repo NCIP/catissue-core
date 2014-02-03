@@ -514,7 +514,20 @@ public class ParticipantAction extends CatissueBaseAction
 				Variables.attributesTodisplay);
 
 		request.setAttribute("hasConsents", hasConsents);
-
+		
+		if (participantForm.getConsentDocumentName() != null
+				&& !participantForm.getConsentDocumentName().isEmpty())
+		{
+			request.setAttribute("consentDocumentName",
+					participantForm.getConsentDocumentName());
+		}
+		if (participantForm.getConsentDocumentName() == null
+				&& participantForm.getConsentDocument() != null)
+		{
+			request.setAttribute("consentDocumentName", participantForm
+					.getConsentDocument().getFileName());
+		}
+		
 		return mapping.findForward(pageOf);
 	}
 

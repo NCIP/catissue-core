@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
@@ -45,10 +46,10 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.participant.actionForm.IParticipantForm;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
-import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.global.Permissions;
@@ -209,7 +210,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	
 	private String  cprActivityStatus;
 
-
+	private String consentDocumentName;
+	
+	private FormFile consentDocument;
+	
 	public String getCprActivityStatus() {
 		return cprActivityStatus;
 	}
@@ -306,8 +310,13 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		 this.ethnicity = participant.getEthnicity();
 		 this.vitalStatus = participant.getVitalStatus();
 		 this.pHIView = String.valueOf(isPHIView);
+		 this.consentDocumentName=participant.getConsentDocumentName();
+		 String consentDirectory = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
 		 
-		//Populating the map with the registrations of a Participant to a Collection Protocol.
+		 if(consentDocument!=null)
+		 {
+			 AppUtility.moveParticipantConsentFile(consentDocument,consentDirectory);
+		 }
 			//(Abhishek Mehta)
 			final Collection collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
@@ -1331,4 +1340,26 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		// TODO Auto-generated method stub
 		
 	}
+
+	
+	public String getConsentDocumentName()
+	{
+		return consentDocumentName;
+	}
+
+	public void setConsentDocumentName(String consentDocumentName)
+	{
+		this.consentDocumentName = consentDocumentName;
+	}
+
+	public FormFile getConsentDocument()
+	{
+		return consentDocument;
+	}
+	
+	public void setConsentDocument(FormFile consentDocument)
+	{
+		this.consentDocument = consentDocument;
+	}
+	
 }
