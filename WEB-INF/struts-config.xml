@@ -1171,7 +1171,9 @@ PUBLIC
           <action path="/DownloadAction" type="edu.wustl.common.action.DownloadAction"
 			 scope="request" validate="false">
 		</action>
-
+		<action path="/DownloadConsentFile" type="edu.wustl.catissuecore.action.DownloadConsentFileAction"
+                        scope="request" validate="false">
+        </action>
 		<!-- <action path="/CasLogin"
 			type="edu.wustl.catissuecore.action.CasLoginAction"
 			name="casLoginForm"
