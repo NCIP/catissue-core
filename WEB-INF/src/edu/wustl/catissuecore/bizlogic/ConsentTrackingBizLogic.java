@@ -1,6 +1,9 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -8,6 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -18,10 +23,13 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.ConsentTierDTO;
 import edu.wustl.catissuecore.dto.ConsentResponseDto;
+import edu.wustl.catissuecore.dto.ParticipantConsentFileDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.dao.DAO;
@@ -178,6 +186,40 @@ public class ConsentTrackingBizLogic
 		}
 
 		return retString;
+	}
+	public ParticipantConsentFileDTO getParticipantConsentFileDetails(Long participantId, HibernateDAO dao)
+			throws ApplicationException {
+		String fileName = null;
+		byte[] byteArr= {};
+		ParticipantConsentFileDTO participantConsentFileDTO=new ParticipantConsentFileDTO();
+		try {
+			
+			final ColumnValueBean columnValueBean = new ColumnValueBean("id",participantId);
+			final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+			columnValueBeanList.add(columnValueBean);
+			
+			final List resultList = dao.executeNameQueryParamHQL("getConsentFileName", columnValueBeanList);
+			
+			final Iterator iterator = resultList.iterator();
+			if (iterator.hasNext()) {
+				fileName = (String) iterator.next();
+			}
+			String consentDir = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
+			File file = new File(consentDir + "/" + fileName);
+			FileInputStream fin = new FileInputStream(file);
+			byteArr = IOUtils.toByteArray(fin);
+			participantConsentFileDTO.setFileName(fileName);
+			participantConsentFileDTO.setByteArr(byteArr);
+		
+		} catch (ApplicationException ex) {
+			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
+			
+		}catch (IOException  ex) {
+			throw new BizLogicException(null, null, ex.getMessage());
+			
+		} 
+		return participantConsentFileDTO;
+
 	}
 
 }

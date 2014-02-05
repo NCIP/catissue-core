@@ -4,6 +4,7 @@
 package edu.wustl.catissuecore.dto;
 
 import java.util.Collection;
+import java.util.Date;
 
 
 
@@ -16,9 +17,9 @@ public class OrderSubmissionDTO {
 	private Long disptributionProtocolId;
 	private String disptributionProtocolName;
 	private String requestorEmail;
-	private String requestorName;
+	private Long requestorId;
 	private String distributorsComment;
-	
+	private Date requestedDate;
 	public Long getId() {
 		return id;
 	}
@@ -62,11 +63,14 @@ public class OrderSubmissionDTO {
 	public void setRequestorEmail(String requestorEmail) {
 		this.requestorEmail = requestorEmail;
 	}
-	public String getRequestorName() {
-		return requestorName;
+	public Long getRequestorId()
+	{
+		return requestorId;
 	}
-	public void setRequestorName(String requestorName) {
-		this.requestorName = requestorName;
+	
+	public void setRequestorId(Long requestorId)
+	{
+		this.requestorId = requestorId;
 	}
 	public String getDisptributionProtocolName() {
 		return disptributionProtocolName;
@@ -79,6 +83,16 @@ public class OrderSubmissionDTO {
 	}
 	public void setDistributorsComment(String distributorsComment) {
 		this.distributorsComment = distributorsComment;
+	}
+	
+	public Date getRequestedDate()
+	{
+		return requestedDate;
+	}
+	
+	public void setRequestedDate(Date requestedDate)
+	{
+		this.requestedDate = requestedDate;
 	}
 		
 }

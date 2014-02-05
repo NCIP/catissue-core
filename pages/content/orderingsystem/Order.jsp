@@ -69,8 +69,9 @@ function submitOrderNew(consentVerifiedValues)
 		if(!orderRejected)
 		{
                   alert("Please select distribution protocol.");
+                  return;	
 		} 
-        return;
+        
 	}
 	
 	if(site_combo.getActualValue()=="" || site_combo.getActualValue()=="-1")

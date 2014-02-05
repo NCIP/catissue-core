@@ -64,10 +64,13 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.UserDetails;
 import edu.wustl.migrator.exception.MigratorException;
@@ -2885,5 +2888,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		return userNvblist;
 		
 	}
-
+	public String getUserNameById(Long id,HibernateDAO dao) throws DAOException
+	{
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.LONG, id));
+		final List userNames = dao.executeNamedQuery("getUserName", substParams);
+		Object[] userNameValues = (Object[]) userNames.get(0);
+		return userNameValues[0].toString()+userNameValues[1].toString();
+	}
 }
