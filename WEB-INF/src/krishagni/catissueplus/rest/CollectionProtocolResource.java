@@ -61,4 +61,24 @@ public class CollectionProtocolResource {
 			}
 		}				
 	}
+	
+	@Path("{id}/query-forms")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCollectionProtocolQueryForms(@PathParam("id") Long cpId) {
+		TransactionManager txnMgr = TransactionManager.getInstance();
+		Transaction txn = null;
+
+		try {
+			txn = txnMgr.startTxn();
+			List<FormDetailsDTO> forms = cpSvc.getQueryForms(cpId);		
+			return Response.ok(forms).build();					
+		} catch (Exception e) {
+			return Response.serverError().build();
+		} finally {
+			if (txn != null) {
+				txnMgr.rollback(txn);
+			}
+		}		
+	}
 }

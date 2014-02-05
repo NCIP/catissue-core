@@ -53,7 +53,9 @@ public class SyncCPThreadExecuterImpl
 	
 	public  void shutdown()
 	{
-		executor.shutdownNow();
+                if (executor != null) {
+                	executor.shutdownNow();
+                }
 	}
 	
 	

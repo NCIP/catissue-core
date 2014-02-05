@@ -380,9 +380,20 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		</init-param>
 	</servlet>
 
+
+        <servlet>
+          <servlet-name>CreateFormAction</servlet-name>
+          <servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
+        </servlet>
+
 	
 <!-- servlet configuration ends -->
 <!-- servlet mapping starts -->
+        <servlet-mapping>
+          <servlet-name>CreateFormAction</servlet-name>
+          <url-pattern>/CreateFormAction.de</url-pattern>
+        </servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>CSD</servlet-name>
 		<url-pattern>/csdApi/*</url-pattern>

@@ -29,8 +29,8 @@ import org.apache.commons.io.FilenameUtils;
 
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
-import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
-import edu.common.dynamicextensions.ndao.TransactionManager;
+import edu.common.dynamicextensions.ndao.DEApp;
+import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
@@ -145,11 +145,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
             //QueryDataExportService.initialize();
 
-            CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
-            InitialContext ic = new InitialContext();
-            DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
-            JdbcDaoFactory.setDataSource(ds);
-            TransactionManager.getInstance(ds);
+			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+			InitialContext ic = new InitialContext();
+			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
+			DEApp.init(ds);
+			initQueryPathsConfig();
             
 			logger.info("Initialization complete");
 		}
@@ -160,6 +160,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
+
+ 	private void initQueryPathsConfig() {
+ 		System.err.println("Initializing query paths");
+ 		String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
+ 		PathConfig.intialize(path);
+ 		System.err.println("Query paths initialized");
+	}
+
 	
 	private void initCiderIntegration()
 	{

@@ -1601,4 +1601,24 @@
 				</classpath>
 			</java>
 		</target>
+
+ 
+ 
+                 <target name="create_form" description="Target used to create form">
+                   <antcall target="setupClassExecutionEnvironment" />
+                   <echo message="Create Form !! " />
+                   <java classname="edu.common.dynamicextensions.nui.client.CreateFormClient" fork="true" maxmemory="1024M">
+                     <arg value="${Application.url}" />
+                     <arg value="${filename}" />
+                     <arg value="${create_tables}" />
+                     <classpath>
+                       <fileset dir="${de.temp.dir}/binaries/DynamicExtensionsInterface">
+                         <include name="DynamicExtensions.jar" />
+                       </fileset>
+                      <fileset dir="${de.temp.dir}/lib/">
+                         <include name="*.jar" />
+                       </fileset>
+                     </classpath>
+                   </java>
+                 </target>
 </project>
