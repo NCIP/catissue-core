@@ -1,0 +1,39 @@
+<paths>
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>CollectionProtocol</to>
+		<links>
+			<link>
+				<key>CP_ID</key>
+				<ref-tab-key>IDENTIFIER</ref-tab-key>
+			</link>
+		</links>
+	</path>
+
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>SpecimenCollectionGroup</to>
+		<links>
+			<link>
+				<key>CPR_ID</key>
+				<ref-tab-key>COLLECTION_PROTOCOL_REG_ID</ref-tab-key>
+			</link>
+		</links>
+	</path>
+
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>Specimen</to>
+		<links>	
+			<link>
+				<key>CPR_ID</key>
+				<ref-tab>CATISSUE_SPECIMEN_COLL_GROUP</ref-tab>
+				<ref-tab-key>COLLECTION_PROTOCOL_REG_ID</ref-tab-key>
+			</link>
+			<link>
+				<key>IDENTIFIER</key>
+				<ref-tab-key>SCG_ID</ref-tab-key>
+			</link>
+		</links>
+	</path>
+</paths>

@@ -144,10 +144,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
             //QueryDataExportService.initialize();
 
-            CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
-            InitialContext ic = new InitialContext();
-            DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
-            DEApp.init(ds);
+			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+			InitialContext ic = new InitialContext();
+			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
+			DEApp.init(ds);
+			initQueryPathsConfig();
             
 			logger.info("Initialization complete");
 		}
@@ -158,6 +159,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
+
+ 	private void initQueryPathsConfig() {
+ 		System.err.println("Initializing query paths");
+ 		String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
+ 		PathConfig.intialize(path);
+ 		System.err.println("Query paths initialized");
+	}
+
 	
 	private void initCiderIntegration()
 	{

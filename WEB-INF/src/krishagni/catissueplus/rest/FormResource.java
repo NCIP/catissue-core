@@ -129,11 +129,13 @@ public class FormResource {
 		TransactionManager txnMgr = TransactionManager.getInstance();
 		Transaction txn = null;
 
+		System.err.println("" + formId + "/fields");
 		try {
 			txn = txnMgr.startTxn();
 			List<FormFieldSummary> fields = getFormService().getFormFields(formId);
 			return Response.ok(fields).build();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Response.serverError().build();
 		} finally {
 			if (txn != null) {

@@ -20,4 +20,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	public List<FormDetailsDTO> getCollectionProtocolForms(Long cpId) {
 		return cpDao.getForms(cpId);
 	}
+
+	@Override
+	public List<FormDetailsDTO> getQueryForms(Long cpId) {
+		List<FormDetailsDTO> queryForms = cpDao.getStaticQueryForms(cpId);
+//		List<FormDetailsDTO> deForms = cpDao.getForms(cpId);
+//		queryForms.addAll(deForms);
+		return queryForms;
+	}
 }

@@ -6,6 +6,8 @@
     <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/jquery/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/angularjs/css/ng-grid.min.css" rel="stylesheet" type="text/css"></link>
 
     <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../external/jquery/jquery-ui.min.js" type="text/javascript"></script>
@@ -14,6 +16,7 @@
     <script src="../external/angularjs/angular.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/angular-resource.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/ng-grid-2.0.7.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/sortable.js" type="text/javascript"></script>
     <script src="../external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
     <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
@@ -69,6 +72,10 @@
         margin-bottom: 1%;
       }
 
+      .filter-item-error {
+        border: 1px solid red;
+      }
+
       .filter-item-valign {
         height: 2.5em;
         list-style-type: none;
@@ -103,91 +110,187 @@
         font-size: 0.5em;
         color: #cccccc;
       }
- 
-      span.glyphicon-remove:focus {
-        font-size: 0.5em;
-        color: red;
+
+      .data-grid {
+        border: 1px solid rgb(212,212,212);
+        width: 100%;
       }
 
+      .static-popover .popover {
+        position: relative;
+        display: block;
+        margin: 20px;
+      }
+
+      html, body {
+        height: 100%;
+      }
     </style>
   </head>
 
   <body ng-controller="QueryController">
-    <div style="margin-left: 2%; width: 96%;">
-      <div class="row">
-        <div class="col-xs-offset-10 col-xs-2">
-          <div class="btn-group pull-right">
-            <div class="btn btn-default"><span class="glyphicon glyphicon-dashboard"></span></div>
-            <div class="btn btn-default"><span class="glyphicon glyphicon-play"></span></div>
-            <div class="btn btn-default"><span class="glyphicon glyphicon-save"></span></div>
+    <div style="margin-left: 2%; height: 100%; width: 96%;" ng-if="queryData.showRecs">
+      <div class="row" style="6%;margin-bottom: 1%;">
+        <div class="pull-left" style="padding-left: 15px;">
+          <div class="btn-group">
+            <div class="btn btn-default" ng-click="redefineQuery()"> 
+              <span>&larr;</span>
+              <span>Back</span> 
+            </div> 
+            <div class="btn btn-default" ng-click="redefineQuery()"> 
+              <span class="glyphicon glyphicon-wrench"></span> 
+              <span> Edit Query </span>
+            </div> 
+            <div class="btn btn-default"> 
+              <span class="glyphicon glyphicon-eye-open"></span> 
+              <span> Define View </span>
+            </div> 
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-xs-3">
-          <div class="panel panel-primary"> 
+      <div class="row" style="height: 90%; padding-left: 15px;">
+        <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
+      </div>
+    </div>
+    <div style="height: 100%; margin-left: 2%; width: 96%;" ng-if="!queryData.showRecs">
+      <div class="row" style="height: 6%;">
+        <div class="pull-right" style="padding-right: 15px;"> <!-- class="col-xs-offset-8 col-xs-4" -->
+          <div class="btn-group">
+            <div class="btn btn-default" tooltip="Get Count" tooltip-placement="bottom" ng-click="getCount()" ng-disabled="queryData.filters.length == 0 || !queryData.isValid">
+              <span class="glyphicon glyphicon-dashboard"></span>
+              <span>Get Count</span>
+            </div>
+            <div class="btn btn-default" tooltip="Run Query" tooltip-placement="bottom" ng-click="getRecords()" ng-disabled="queryData.filters.length == 0 || !queryData.isValid">
+              <span class="glyphicon glyphicon-play"></span>
+              <span>View Records</span>
+            </div>
+            <div class="btn btn-default" tooltip="Save Query" tooltip-placement="bottom" ng-click="saveQuery()" ng-disabled="queryData.filters.length == 0 || !queryData.isValid">
+              <span class="glyphicon glyphicon-save"></span>
+              <span>Save Query</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="height: 94%;">
+        <div class="col-xs-3" style="height: 100%;">
+          <div class="panel panel-primary" style="height: 20%;"> 
             <div class="panel-heading panel-title">
               Collection Protocol
             </div>
             <div class="panel-body">
-              <ka-select options="queryData.cpList" option-id="id" option-value="shortTitle" on-select="onCpSelect" style="width: 100%;"/>
+              <ka-callout show-when="{{showCpSelectCallout()}}"
+                          data-container="body" data-placement="right" data-content="Select a Collection Protocol">
+                <ka-select 
+                  ng-model="queryData.selectedCp"
+                  options="queryData.cpList" 
+                  option-id="id" option-value="shortTitle" 
+                  on-select="onCpSelect" 
+                  ng-disabled="queryData.filters.length > 0" style="width: 100%;">
+                </ka-select>
+              </ka-callout>
             </div>
           </div>
-
-          <accordion close-others="true">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <div class="panel-title">Forms</div>
+ 
+          <div style="height: 80%;">
+            <accordion ka-fix-height="100%" close-others="true"> <!-- style="height: 100%;" -->
+              <div style="height: 9%;" class="panel panel-primary">
+                <div class="panel-heading">
+                  <ka-callout
+                    show-when="{{showFormSelectCallout()}}"
+                    data-container="body" data-placement="right"
+                    data-content="Click on form title. Roll mouse over form fields. Click on the field that you wish to add in filter condition">
+                    <div class="panel-title">Forms</div>
+                  </ka-callout>
+                </div>
               </div>
-            </div>
-            <accordion-group heading="{{form.caption}}" ng-repeat="form in queryData.cpForms" is-open="false" ng-click="onFormClick(form)">
-              <div ng-show="!form.fields">
-                Loading form fields. Please wait for a while...
+              <div style="height: 84%; margin-top: 5px;overflow:auto;">
+                <accordion-group ng-repeat="form in queryData.cpForms" is-open="false">
+                  <accordion-heading>
+                    <div ng-click="onFormClick(form)">{{form.caption}}</div>
+                  </accordion-heading>
+                  <div ng-show="!form.fields">
+                    Loading form fields. Please wait for a while...
+                  </div>
+                  <div ng-show="form.fields">
+                    <div style="margin-bottom: 3px;" 
+                         class="field" 
+                         ka-draggable="{helper: 'clone', zIndex: 100}" 
+                         id="{{form.name}}.{{field.name}}" 
+                         data-arg="{{form.name}}.{{field.name}}"
+                         ng-repeat="field in form.fields">
+                      <span style="cursor: pointer;" tooltip="Click to add field in filter condition" tooltip-placement="right" ng-click="addField($event, form, field)">
+                        {{field.caption}}
+                      </span>
+                      <!-- div ka-show-on-parent-focus tooltip="Click to add field to filter" 
+                       class="btn btn-default btn-xs" style="display:none" ng-click="addField($event, form, field)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </div -->
+                    </div>
+                  </div>
+                </accordion-group>
               </div>
-              <div ng-show="form.fields">
-                <div style="margin-bottom: 3px;" 
-                     class="field" 
-                     ka-draggable="{helper: 'clone', zIndex: 100}" 
-                     id="{{form.name}}.{{field.name}}" 
-                     data-arg="{{form.name}}.{{field.name}}"
-                     ng-repeat="field in form.fields"> {{field.caption}} </div>
-              </div>
-            </accordion-group>
-          </accordion>
+            </accordion>
+          </div>
         </div>
 
-        <div class="col-xs-9">
+        <div class="col-xs-9" style="height:100%;">
+          <div class="alert alert-info clearfix" style="top:0; position: absolute; z-index: 100;width: 97%; padding: 10px 15px" ng-if="queryData.notifs.showCount">
+            <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
+            <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
+            <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+          </div>
+
           <ul class="nav nav-pills nav-justified">
             <li class="active"><a href="#addFilter" data-toggle="tab">Add Filter</a></li>
             <li><a href="#editQuery" data-toggle="tab">Query Expression</a></li>
           </ul>
 
-          <div class="tab-content">
+          <div class="tab-content" style="height: 40%;margin-bottom: 1%;">
             <div class="tab-pane fade in active" id="addFilter">
               <div class="panel panel-primary">
                 <div class="panel-body">
                   <div style="margin-bottom: 2%;">
-                    <div class="pull-left btn-toolbar" role="toolbar" aq-filter-ops field-type="queryData.currFilter.field.dataType">
-                      <div class="btn-group">
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="eq" class="op btn btn-default"> &#61; </div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ne" class="op btn btn-default"> &#8800; </div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="lt" class="op numeric btn btn-default"> &#60; </div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="le" class="op numeric btn btn-default"> &#8804; </div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="gt" class="op numeric btn btn-default"> &#62; </div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ge" class="op numeric btn btn-default"> &#8805; </div>
+                      <div class="pull-left">
+                    <ka-callout 
+                      show-when="{{showOpSelectCallout()}}"
+                      data-container="body" data-placement="left"
+                      data-content="Click on an operator button. Roll mouse over buttons to see operator details">
+                        <div class="btn-toolbar" role="toolbar" aq-filter-ops field="queryData.currFilter.field">
+                          <div class="btn-group">
+                            <div tooltip="Equals" tooltip-placement="bottom" 
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="eq" ng-click="addOp($event, 'eq')" class="op btn btn-default"> &#61; </div>
+                            <div tooltip="Not Equals" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ne" ng-click="addOp($event, 'ne')" class="op btn btn-default"> &#8800; </div>
+                            <div tooltip="Less Than" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="lt" ng-click="addOp($event, 'lt')" class="op numeric btn btn-default"> &#60; </div>
+                            <div tooltip="Less Than or Equals" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="le" ng-click="addOp($event, 'le')" class="op numeric btn btn-default"> &#8804; </div>
+                            <div tooltip="Greater Than" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="gt" ng-click="addOp($event, 'gt')" class="op numeric btn btn-default"> &#62; </div>
+                            <div tooltip="Greater Than or Equals" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ge" ng-click="addOp($event, 'ge')" class="op numeric btn btn-default"> &#8805; </div>
+                          </div>
+                          <div class="btn-group">
+                            <div tooltip="Exists" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="exists" ng-click="addOp($event, 'exists')" class="op btn btn-default">&#8707;</div>
+                            <div tooltip="Does Not Exists" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="not_exists" ng-click="addOp($event, 'not_exists')" class="op btn btn-default">&#8708;</div>
+                            <div tooltip="Element Of" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="qin" ng-click="addOp($event, 'qin')" class="op pv btn btn-default"> &#8712; </div>
+                            <div tooltip="Not Element Of" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="not_in" ng-click="addOp($event, 'not_in')" class="op pv btn btn-default"> &#8713; </div>
+                          </div>
+                          <div class="btn-group">
+                            <div tooltip="Starts With" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="starts_with" ng-click="addOp($event, 'starts_with')" class="op string btn btn-default"> &#8963;&#61;</div>
+                            <div tooltip="Ends With" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ends_with" ng-click="addOp($event, 'ends_with')" class="op string btn btn-default"> &#36;&#61;</div>
+                            <div tooltip="Contains" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="contains" ng-click="addOp($event, 'contains')" class="op string btn btn-default"> &#126;</div>
+                          </div>
+                        </div>
+                    </ka-callout>
                       </div>
-                      <div class="btn-group">
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="exists" class="op btn btn-default">&#8707;</div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="not_exists" class="op btn btn-default">&#8708;</div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="qin" class="op btn btn-default"> &#8712; </div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="not_in" class="op btn btn-default"> &#8713; </div>
-                      </div>
-                      <div class="btn-group">
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="starts_with" class="op string btn btn-default"> &#8963;&#61;</div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ends_with" class="op string btn btn-default"> &#36;&#61;</div>
-                        <div ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="contains" class="op string btn btn-default"> &#126;</div>
-                      </div>
-                    </div>
               
                     <div class="pull-right">
                       <div class="btn-group">
@@ -200,7 +303,7 @@
                   </div>
 
                   <div style="margin-bottom: 2%;">
-                    <div ng-switch="!queryData.currFilter.field">
+                    <div id="filterField" ng-switch="!queryData.currFilter.field">
                       <div ng-switch-when="true" style="margin-right: 2%; width: 25%"
                            ka-droppable="{accept: '.field', activeClass: 'focus'}" 
                            on-drop="onFieldSelect"
@@ -210,23 +313,30 @@
                     </div>
                         
                     <div ng-switch="!queryData.currFilter.op">
-                      <div ng-switch-when="true" style="margin-right: 2%; width: 10%"
+                      <div id="filterOpAb" ng-switch-when="true" style="margin-right: 2%; width: 10%"
                            ka-droppable="{accept: '.op', activeClass: 'focus'}"
                            on-drop="onOperatorSelect"
                            class="btn pull-left droppable"> Operator </div>
-                      <div ng-switch-default style="margin-right: 2%; width: 10%"
+                      <div id="filterOpPr" ng-switch-default style="margin-right: 2%; width: 10%"
                            class="btn pull-left dropped"> <span ng-bind-html="getOpCode(queryData.currFilter.op)"></span></div>
                     </div>
 
-                    <div ng-switch="getValueType()" style="margin-right: 2%;width:40%;" class="pull-left">
-                      <div ng-switch-when="select">
-                        <ka-select options="queryData.currFilter.field.pvs" ng-model="queryData.currFilter.value" style="width: 100%"></ka-select>
-                      </div>
-                      <div ng-switch-when="multiSelect">
-                        <ka-select multiple options="queryData.currFilter.field.pvs" ng-model="queryData.currFilter.value" style="width: 100%"></ka-select>
-                      </div>
-                      <input ng-switch-when="datePicker" class="form-control" type="text" ka-date-picker ng-model="queryData.currFilter.value"></input>
-                      <input ng-switch-default class="form-control" type="text" placeholder="Value" ng-model="queryData.currFilter.value"></input>
+                    <div class="pull-left" style="margin-right: 2%; width:40%;" ng-hide="isUnaryOpSelected()">
+                      <ka-callout 
+                        show-when="{{showValueSelectCallout()}}"
+                        data-container="body" data-placement="top"
+                        data-content="Specify condition value to use in filter">
+                        <div ng-switch="getValueType()">
+                          <div ng-switch-when="select">
+                            <ka-select options="queryData.currFilter.field.pvs" ng-model="queryData.currFilter.value" style="width: 100%"></ka-select>
+                          </div>
+                          <div ng-switch-when="multiSelect">
+                            <ka-select multiple options="queryData.currFilter.field.pvs" ng-model="queryData.currFilter.value" style="width: 100%"></ka-select>
+                          </div>
+                          <input ng-switch-when="datePicker" class="form-control" type="text" ka-date-picker ng-model="queryData.currFilter.value"></input>
+                          <input ng-switch-default class="form-control" type="text" placeholder="Value" ng-model="queryData.currFilter.value"></input>
+                        </div>
+                      </ka-callout>
                     </div>
 
                     <div class="clearfix"></div>
@@ -245,7 +355,12 @@
                     <div class="clearfix"></div>
                   </div>
                   <div style="margin-bottom: 2%;">
-                    <button class="btn btn-success" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
+                    <ka-callout
+                      show-when="{{showAddFilterCallout()}}"
+                      data-container="body" data-placement="bottom"
+                      data-content="Click above button to add a filter">
+                      <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
+                    </ka-callout>
                     <button class="btn btn-success" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
                     <button class="btn btn-default" ng-click="clearFilter()">Clear</button>
                   </div>
@@ -266,7 +381,8 @@
                     <div class="btn-group" ng-show="queryData.joinType == 'adv'">
                       <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="and">AND</div>
                       <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="or">OR</div>
-                      <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="intersect">&#8745;</div>
+                      <div tooltip="Intersection" tooltip-placement="bottom"
+                           class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="intersect">&#8745;</div>
                       <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="not">NOT</div>
                     </div>
 
@@ -276,51 +392,81 @@
                     </div>
                   </div>
 
-                  <div id="expr" class="filter-item clearfix" style="width: 100%; margin-top: 2%;" ng-model="queryData.exprNodes" ui-sortable="exprSortOpts">
-                    <div ng-switch="node.type" ng-repeat="node in queryData.exprNodes" class="pull-left">
-                      <div ng-switch-when="filter" class="filter-item-valign filter-node">
-                        <b>{{node.value}}</b>
-                      </div>
-                      <div ng-switch-when="op" class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;">
-                           <!-- ka-droppable="{accept: '.adv-op', activeClass: 'focus'}" on-drop="onAdvOpDrop" data-node-pos="{{$index}}" -->
-                        <span ng-bind-html="getOpCode(node.value)"></span>
-                        <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
-                      </div>
-                      <div ng-switch-when="paren" class="filter-item-valign paren-node" style="position: relative;">
-                        {{node.value}}
-                        <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                  <ka-callout show-when="{{!queryData.isValid}}" data-container="body" data-placement="bottom"
+                              data-content="There's an error in your query expression. Please rectify before proceeding"
+                              fade-out="2000">
+                    <div id="expr" class="filter-item clearfix" ng-class="{'filter-item-error': !queryData.isValid}" 
+                         style="width: 100%; margin-top: 2%;" ng-model="queryData.exprNodes" ui-sortable="exprSortOpts">
+                      <div ng-switch="node.type" ng-repeat="node in queryData.exprNodes" class="pull-left">
+                        <div ng-switch-when="filter" class="filter-item-valign filter-node">
+                          <b>{{node.value}}</b>
+                        </div>
+                        <div ng-switch-when="op" class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;">
+                             <!-- ka-droppable="{accept: '.adv-op', activeClass: 'focus'}" on-drop="onAdvOpDrop" data-node-pos="{{$index}}" -->
+                          <span ng-bind-html="getOpCode(node.value)"></span>
+                          <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                        </div>
+                        <div ng-switch-when="paren" class="filter-item-valign paren-node" style="position: relative;">
+                          {{node.value}}
+                          <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </ka-callout>
                 </div>
               </div>
             </div>
           </div> <!-- end of tabs -->
 
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <div class="panel-title">Filters</div>
-            </div>
-            <div class="panel-body">
-              <div class="filter-item" style="display: table; width: 100%;" ng-repeat="filter in queryData.filters">
-                <div class="filter-item-valign pull-left" style="background-color: #cccccc; width:2.5em; border-radius: 50%; border: 1px solid #cccccc;text-align: center;margin-right: 2%;">
-                  <div><b>{{filter.id}}</b></div>
-                </div>
-                <div class="filter-item-valign pull-left">
-                  <i>{{filter.formCaption}} &gt;&gt; {{filter.field.caption}} </i> <b> {{getOpDesc(filter.op)}} </b> <i>{{filter.value}}</i>
-                </div>
-                <div>
-                  <div class="btn-group pull-right">
-                    <button class="btn btn-default" ng-click="deleteFilter(filter)"><span class="glyphicon glyphicon-trash"></span></button>
-                    <button class="btn btn-default" ng-click="displayFilter(filter)"><span class="glyphicon glyphicon-pencil"></span></button>
+          <ka-callout 
+            show-when="{{showAddFilterSuccessCallout()}}" fade-out="5000"
+            data-container="body" data-placement="top"
+            data-original-title="You're a Gem"
+            data-content="You've successfully added a filter. Repeat this process to add more filters. Click on query expression tab to create complex queries involving AND/OR/NOT. Alternatively you can click on Get Count/View Records to view count of records, sample records matching query criteria.">
+            <div class="panel panel-primary" style="height: 50%">
+              <div class="panel-heading" style="height: 15%;">
+                <div class="panel-title">Filters</div>
+              </div>
+              <div class="panel-body" style="height: 85%; overflow: auto;">
+                <div class="filter-item" style="display: table; width: 100%;" ng-repeat="filter in queryData.filters">
+                  <div class="filter-item-valign pull-left" style="background-color: #cccccc; width:2.5em; border-radius: 50%; border: 1px solid #cccccc;text-align: center;margin-right: 2%;">
+                    <div><b>{{filter.id}}</b></div>
                   </div>
-                  <div class="clearfix"></div>
+                  <div class="col-xs-10 filter-item-valign pull-left">
+                    <i>{{filter.formCaption}} &gt;&gt; {{filter.field.caption}} </i> <b> {{getOpDesc(filter.op)}} </b> <i>{{filter.value}}</i>
+                  </div>
+                  <div>
+                    <div class="btn-group pull-right">
+                      <button class="btn btn-default" ng-click="deleteFilter(filter)"><span class="glyphicon glyphicon-trash"></span></button>
+                      <button class="btn btn-default" ng-click="displayFilter(filter)"><span class="glyphicon glyphicon-pencil"></span></button>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ka-callout>
         </div>
       </div>
     </div>
+
+    <script type="text/ng-template" id="showCount.html">
+        <!-- div class="modal-header">
+          <h4>Records Count</h4>
+        </div -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-7"><b>Collection Protocol Registration Count</b></div>
+            <div class="col-xs-3"><h3>200</h3></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-7"><b>Specimen Count</b></div>
+            <div class="col-xs-3"><h3>400</h3></div>
+          </div>
+        </div>
+        <!-- div class="modal-footer">
+          <button class="btn btn-primary" ng-click="$dismiss()">OK</button>
+        </div -->
+    </script>
   </body>
 </html>

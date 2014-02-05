@@ -431,6 +431,7 @@
 				<include name="flexclient/**" />
 				<include name="runtime/**" />
 				<include name="WEB-INF/**" />
+				<include name="WEB-INF/lib/antlr-4.1-complete.jar" />
 				<include name="CDEConfig.xml" />
 				<include name="CDEConfig.xsd" />
 				<include name="ApplicationVersionInfo.txt" />
@@ -449,7 +450,7 @@
 				<exclude name="**/log4j.properties" />
 				<exclude name="**/WEB-INF/src*/**" />
 				<exclude name="**/WEB-INF/lib/*.zip" />
-				<exclude name="**/WEB-INF/lib/ant*.jar" />
+				<!-- exclude name="**/WEB-INF/lib/ant*.jar" / -->
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
 				<!--<exclude name="**/WEB-INF/lib/dom4*.jar" />-->
 				<exclude name="**/*servlet.jar*" />

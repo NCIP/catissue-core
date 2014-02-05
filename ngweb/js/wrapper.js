@@ -38,7 +38,23 @@ var Select2 = function(element, config) {
     this.element.select2();
     
     if (this.config.selectedOpts) {
-      this.element.select2('val', this.config.selectedOpts);
+      if (this.config.selectedOpts instanceof Array) {
+        var selectedVals = [];
+        for (var i = 0; i < this.config.selectedOpts.length; ++i) {
+          if (typeof this.config.selectedOpts[i] == "object") {
+            selectedVals.push(this.config.selectedOpts[i][id]);
+          } else {
+            selectedVals.push(this.config.selectedOpts[i]);
+          }
+        }
+        this.element.select2('val', selectedVals);
+      } else if (typeof this.config.selectedOpts == "object") {
+        this.element.select2('val', this.config.selectedOpts[id]);
+      } else {
+        this.element.select2('val', this.config.selectedOpts);
+      }
+    } else {
+      this.element.select2('val', '');
     }
 
     return this;

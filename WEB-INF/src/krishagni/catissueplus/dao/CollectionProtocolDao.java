@@ -9,4 +9,6 @@ public interface CollectionProtocolDao {
 	List<CollectionProtocolDTO> getCollectionProtocols();
 	
 	List<FormDetailsDTO> getForms(Long cpId);
+	
+	public List<FormDetailsDTO> getStaticQueryForms(Long cpId);
 }

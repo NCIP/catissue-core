@@ -50,9 +50,10 @@ public class CollectionProtocolDaoImpl implements CollectionProtocolDao {
 							FormDetailsDTO form = new FormDetailsDTO();
 							form.setCpId(cpId);
 							form.setId(rs.getLong(1));
-							form.setContainerId(rs.getLong(2));
-							form.setName(rs.getString(3));
-							form.setCaption(rs.getString(4));
+							form.setEntityType(rs.getString(2));
+							form.setContainerId(rs.getLong(3));
+							form.setName(rs.getString(4));
+							form.setCaption(rs.getString(5));
 							forms.add(form);
 						}
 						
@@ -61,15 +62,51 @@ public class CollectionProtocolDaoImpl implements CollectionProtocolDao {
 				});
 	}
 	
+	public List<FormDetailsDTO> getStaticQueryForms(final Long cpId) {
+		return JdbcDaoFactory.getJdbcDao().getResultSet(
+				GET_STATIC_QUERY_FORMS_SQL, Collections.singletonList(cpId), 
+				new ResultExtractor<List<FormDetailsDTO>>() {
+					@Override
+					public List<FormDetailsDTO> extract(ResultSet rs)
+					throws SQLException {
+						List<FormDetailsDTO> forms = new ArrayList<FormDetailsDTO>();
+						while (rs.next()) {
+							FormDetailsDTO form = new FormDetailsDTO();
+							form.setCpId(cpId);
+							form.setId(rs.getLong(1));
+							form.setEntityType(rs.getString(2));
+							form.setContainerId(rs.getLong(3));
+							form.setName(rs.getString(4));
+							form.setCaption(rs.getString(5));
+							forms.add(form);
+						}
+						
+						return forms;
+					}
+				});
+		
+	}
+	
 	private static final String GET_CP_SQL = 
 			"select identifier, short_title, title from catissue_specimen_protocol";
 	
 	private static final String GET_CP_FORMS_SQL =
 			"select " +
-			"  ctxt.identifier, c.identifier, c.name, c.caption " +
+			"  ctxt.identifier, ctxt.entity_type, c.identifier, c.name, c.caption " +
 			"from " +
 			"  catissue_form_context ctxt " +
 			"  inner join dyextn_containers c on ctxt.container_id = c.identifier " +
 			"where " +
-			"  ctxt.cp_id = -1 or ctxt.cp_id = ?";
+			"  (ctxt.cp_id = -1 or ctxt.cp_id = ?) and " +
+			"  ctxt.entity_type != 'Query'";
+	
+	private static final String GET_STATIC_QUERY_FORMS_SQL = 
+			"select " +
+			"  ctxt.identifier, ctxt.entity_type, c.identifier, c.name, c.caption " +
+			"from " +
+			"  catissue_form_context ctxt " +
+			"  inner join dyextn_containers c on ctxt.container_id = c.identifier " +
+			"where " +
+			"  (ctxt.cp_id = -1 or ctxt.cp_id = ?) and " +
+			"  ctxt.entity_type = 'Query'";
 }
