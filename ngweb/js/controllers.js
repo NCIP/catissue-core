@@ -49,6 +49,10 @@ angular.module('plus.controllers', [])
           query += filter.form + "." + filter.field.name + " ";
           query += opsMap[filter.op].symbol + " ";
 
+          if (filter.op == 'exists' || filter.op == 'not_exists') {
+            continue;
+          }
+
           var queryVal = filter.value;
           if (filter.field.dataType == "STRING" || filter.field.dataType == "DATE") {
             if (filter.op == 'qin' || filter.op == 'not_in') {
@@ -115,10 +119,12 @@ angular.module('plus.controllers', [])
     $scope.getCount= function() {
       var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
       var aql = "select count(distinct CollectionProtocolRegistration.id) as \"cprCnt\", count(distinct Specimen.id) as \"specimenCnt\" where " + query;
+      $scope.queryData.notifs.showCount = true;
+      $scope.queryData.notifs.waitCount = true;
       QueryService.executeQuery($scope.queryData.selectedCp.id, 'CollectionProtoocolRegistration', aql).then(function(result) {
         $scope.queryData.cprCnt  = result.rows[0][0];
         $scope.queryData.specimenCnt = result.rows[0][1];
-        $scope.queryData.notifs.showCount = true;
+        $scope.queryData.notifs.waitCount = false;
       });
     };
 
@@ -251,7 +257,8 @@ angular.module('plus.controllers', [])
       },
 
       notifs: {
-        showCount: false
+        showCount: false,
+        waitCount: true
       },
 
       resultData: [],
@@ -277,21 +284,20 @@ angular.module('plus.controllers', [])
     };
 
     $scope.onCpSelect = function(selectedCp) {
-      if (selectedCp.id == -1) {
-        $scope.queryData.cpForms = [];
-        return;
-      }
-
       $scope.queryData.selectedCp = selectedCp;
       CollectionProtocolService.getQueryForms(selectedCp.id).then(function(forms) {
         var uniqIds = {};
         $scope.queryData.cpForms = forms.filter(function(form) {
+          if (selectedCp.id != -1 && form.name == 'CollectionProtocol') {
+            return false;
+          }
           return !uniqIds[form.containerId] && (uniqIds[form.containerId] = 1);
         });
       });
     };
 
     CollectionProtocolService.getCpList().then(function(cpList) {
+      cpList.unshift({id: -1, shortTitle: "ALL", title: "ALL"});
       $scope.queryData.cpList = cpList;
     });
 

@@ -22,7 +22,7 @@ var Select2 = function(element, config) {
     }
 
     this.element.children().remove();
-    this.element.append($('<option/>').prop('value', -1).append(""));
+    this.element.append($('<option/>').prop('value', "").append(""));
 
     var id = this.config.id || "id";
     var value = this.config.value || "value";
