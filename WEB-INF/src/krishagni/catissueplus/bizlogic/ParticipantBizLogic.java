@@ -142,7 +142,9 @@ public class ParticipantBizLogic
         while (cprItr.hasNext())
         {
             CollectionProtocolRegistration cprObj = cprItr.next();
-            if ((cprDTOObj.getCpId()!=null && cprObj.getCollectionProtocol().getId().compareTo(cprDTOObj.getCpId()) == 0 )|| cprObj.getCollectionProtocol().getIrbIdentifier().equals(cprDTOObj.getIrbID()))
+            if ((cprDTOObj.getCpId() != null && cprObj.getCollectionProtocol().getId().compareTo(cprDTOObj.getCpId()) == 0)
+                    || (cprObj.getCollectionProtocol().getIrbIdentifier() != null && cprObj.getCollectionProtocol()
+                            .getIrbIdentifier().equals(cprDTOObj.getIrbID())))
             {
                 cprObj.setRegistrationDate(cprDTOObj.getRegistrationDate());
                 cprObj.setConsentSignatureDate(cprDTOObj.getConsentSignatureDate());
@@ -298,7 +300,7 @@ public class ParticipantBizLogic
         {
             ParticipantMedicalIdentifier mrnObj = mrnItr.next();
             if ((mrnDTOObj.getSiteId()!=null && mrnObj.getSite().getId().compareTo(mrnDTOObj.getSiteId()) == 0)
-                    || mrnObj.getSite().getName().equals(mrnDTOObj.getSiteName()))
+                    || (mrnObj.getSite().getName()!=null && mrnObj.getSite().getName().equals(mrnDTOObj.getSiteName())))
             {
                 mrnObj.setMedicalRecordNumber(mrnDTOObj.getMrnValue());
                 result = true;

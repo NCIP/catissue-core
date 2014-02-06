@@ -1,0 +1,11 @@
+Dear caTissue Administrator,<br>
+<br>
+This is to notify that the Epic participant integration job for $jobDate is finised.<br>
+Finished job details are as follow <br>
+Added Participant Count $addedCount <br>
+Updated Participant Count $editedCount <br>
+Failed Participant Count $failedCount <br> 
+
+<br>
+<br>
+$footer
