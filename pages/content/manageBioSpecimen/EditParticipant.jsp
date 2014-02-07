@@ -563,13 +563,38 @@
 			   <%
 			   	}
 			   %>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								<tr class="${tr_grey_color}">	<td></td>
+									<td valign="middle" class="black_ar align_right_style" align="right">
+										&nbsp;&nbsp;&nbsp;Consent File
+									</td>
+									<td class="${tr_grey_color}">
+										<c:if test="${requestScope.consentDocumentName !=null}"> 
+										<div id="consentFileInfo" style="float:left; margin-top: 3px;margin-left:10px;">
+										<div style="float:left;">
+									  <a href="#" onClick="DownloadConsentFile()" title="Click to download Consent File" class="blue_ar_b" style="margin-right: 6px;">Download</a> 
+									  </div>
+										<img  id="removeImage" src="images/delete-alt.png"  style="margin-right: 8px;  margin-top: -2px;" onclick="RemoveFile()"/>
+										<input type="hidden" name="consentDocumentName" value="${requestScope.consentDocumentName}"/> 
+										</div>
+										</c:if>	
+										<div style="float:left;">
+										<input id="consentDocument" type="file" name="consentDocument" value="Browse" size="14">	
+										</div>
+								
+									</td>
+									<td class="black_ar"></td>
+								</tr>
+				</logic:equal>
 			  	<!-- activitystatus -->
+			  		
+			  		
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
-					 <c:if test="${i%2 == 0}">
+					 <c:if test="${i%2 == 1}">
 							<tr class="${tr_white_color}">
 					</c:if>
-					<c:if test="${i%2 == 1}">
+					<c:if test="${i%2 == 0}">
 						   <tr class="${tr_grey_color}">
 					</c:if>
 						<c:set var="i" value="${i+1}" scope="request" />
@@ -913,7 +938,6 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	var cprId = document.getElementsByName("cprId")[0].value;
 	var cpId = document.getElementsByName("cpId")[0].value;
 	var hasConsent = ${requestScope.hasConsents};
-	
 	var showSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf="+fwdPage+"&reportId="+reportId1+"&cpId="+cpId+"&cprId="+cprId;
 	
 	var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations&cpId="+cpId+"&cprId="+cprId;
@@ -921,4 +945,15 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	var showConsentsTab="FetchConsents.do?consentLevelId="+cprId+"&consentLevel=participant&reportId=<%=reportId%>&pageof=<%=pageOf%>&participantEntityId=${particiapntRecordEntryEntityId}&participantId=${participantId}&cpId="+cpId;
 	doInitCal('birthDate',false,'${uiDatePattern}');doInitCal('deathDate',false,'${uiDatePattern}');
 	doInitCal('registrationDate',false,'${uiDatePattern}');
+
+	function DownloadConsentFile(){
+			var action = "DownloadConsentFile.do?pId=" + '${requestScope.participantId}';
+			mywindow = window.open(action, "Download", "width=10,height=10");
+			mywindow.moveTo(0,0);
+		}
+	function RemoveFile(){
+		document.getElementsByName('consentDocumentName')[0].value='';
+		document.getElementById('consentFileInfo').style.display = 'none';
+		//document.getElementById('dwdImage').style.display = 'none';
+	}
 </script>
