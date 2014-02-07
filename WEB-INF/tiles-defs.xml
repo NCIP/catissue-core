@@ -803,7 +803,7 @@
  	</definition>
 
         <definition name=".catissuecore.query" extends=".catissuecore.homePageDef5">
-                <put name="pageContentUrl" value="ngweb/pages/query.html" type="string"/>
+                <put name="pageContentUrl" value="ngweb/pages/nquery.html" type="string"/>
         </definition>
  	
 

@@ -7,7 +7,7 @@ angular.module("plus.directives", [])
       template: "<select></select>",
       scope: {
         options: "=options",
-        selected: "=ngModel",
+        selected: "=selected",
         onSelect: "&onSelect",
         disabled: "=disabled"
       },
@@ -17,10 +17,24 @@ angular.module("plus.directives", [])
           options: [], 
           id: attrs.optionId,
           value: attrs.optionValue,
-          onSelect: scope.onSelect()
+          onSelect: function(selected) {
+            scope.selected = selected;
+            var fn = scope.onSelect();
+            if (fn) {
+              fn(selected);
+            }
+
+            if (!scope.$$phase) {
+              scope.$apply();
+            }
+          }
         };
  
         scope.select = new Select2(element, config).render();
+        scope.$watch('selected', function(selected) {
+          console.log("selected option is " + JSON.stringify(selected));
+          scope.select.selectedOpts(selected);
+        });
 
         scope.$watch('options', function(options) {
           scope.select.options(options).selectedOpts(scope.selected).render();

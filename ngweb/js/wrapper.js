@@ -2,17 +2,48 @@
 var Select2 = function(element, config) {
   this.element = element;
   this.config = config || {}
+  this.rendered = false;
 
   var that = this;
   this.element.bind("change", function(e) {
     e.stopImmediatePropagation();
-    var option = element.select2('data');
+    var selectedOpt = element.select2('data');
 
-    var selected = {};
-    selected[that.config.id || "id"] = option.id;
-    selected[that.config.value || "value"] = option.text;
-    if (that.config.onSelect) {
-      that.config.onSelect(selected);
+    if (!that.config.onSelect) {
+      return;
+    }
+
+    var id = that.config.id || "id";
+    var selectedOptIds = [];
+    var multiple = false;
+    if (selectedOpt instanceof Array) {
+      for (var i = 0; i < selectedOpt.length; ++i) {
+        selectedOptIds.push(selectedOpt[i].id);
+      }
+      multiple = true;
+    } else {
+      selectedOptIds.push(selectedOpt.id);
+    }
+
+    var selectedOptObjs = [];
+    for (var i = 0; i < that.config.options.length; ++i) {
+      var option = that.config.options[i];
+      var optionId = (typeof option == "object") ? option[id] : option;
+      for (var j = 0; j < selectedOptIds.length; j++) {
+        if (selectedOptIds[j] == optionId) {
+          selectedOptObjs.push(option);
+          break;
+        }
+      }
+      if (selectedOptObjs.length == selectedOptIds.length) {
+        break;
+      }
+    }
+
+    if (multiple) {
+      that.config.onSelect(selectedOptObjs);
+    } else {
+      that.config.onSelect(selectedOptObjs.length > 0 ? selectedOptObjs[0] : null);
     }
   });
 
@@ -22,7 +53,9 @@ var Select2 = function(element, config) {
     }
 
     this.element.children().remove();
-    this.element.append($('<option/>').prop('value', "").append(""));
+    if (!element.attr('multiple')) {
+      this.element.append($('<option/>').prop('value', "").append(""));
+    }
 
     var id = this.config.id || "id";
     var value = this.config.value || "value";
@@ -36,7 +69,34 @@ var Select2 = function(element, config) {
     }
 
     this.element.select2();
-    
+    this.highlightSelectedOpts();
+    this.rendered = true;
+    return this;
+  };
+
+  this.options = function(options) {
+    this.config.options = options;
+    this.rendered = false;
+    return this;
+  };
+
+  this.selectedOpts = function(selectedOpts) {
+    this.config.selectedOpts = selectedOpts;
+    if (this.rendered) {
+      console.log("Highlighting the options");
+      this.highlightSelectedOpts();
+    }
+    return this;
+  };
+
+  this.onSelect = function(onSelect) {
+    this.config.onSelect = onSelect;
+    return this;
+  };
+
+  this.highlightSelectedOpts = function() {
+    var id = this.config.id || "id";
+    var value = this.config.value || "value";
     if (this.config.selectedOpts) {
       if (this.config.selectedOpts instanceof Array) {
         var selectedVals = [];
@@ -56,23 +116,6 @@ var Select2 = function(element, config) {
     } else {
       this.element.select2('val', '');
     }
-
-    return this;
   };
-
-  this.options = function(options) {
-    this.config.options = options;
-    return this;
-  };
-
-  this.selectedOpts = function(selectedOpts) {
-    this.config.selectedOpts = selectedOpts;
-    return this;
-  };
-
-  this.onSelect = function(onSelect) {
-    this.config.onSelect = onSelect;
-    return this;
-  }
 };
 
