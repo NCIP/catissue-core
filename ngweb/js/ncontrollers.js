@@ -260,6 +260,24 @@ angular.module('plus.controllers', [])
       }
     };
 
+    $scope.getFilterDesc = function(filterId) {
+      var filter = null;
+      var filters = $scope.queryData.filters;
+      for (var i = 0; i < filters.length; ++i) {
+        if (filters[i].id == filterId) {
+          filter = filters[i];
+          break;
+        }
+      }
+
+      var desc = "Unknown";
+      if (filter) {
+        desc = "<i>" + filter.form.caption + "  >> " + filter.field.caption + "</i> <b>" + filter.op.desc + "</b> " + filter.value;
+      }
+
+      return desc;
+    };
+
     $scope.exprSortOpts = {
       placeholder: 'sortablePlaceholder',
       stop: function(event, ui) {
