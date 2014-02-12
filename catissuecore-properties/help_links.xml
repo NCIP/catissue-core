@@ -2,152 +2,151 @@
 <properties>
     <property>
         <name>edu.wustl.catissuecore.actionForm.UserForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-ProvisioningcaTissueSuiteUsers</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-ProvisioningcaTissuePlusUsers</value>
     </property> 
     <property>
         <name>edu.wustl.catissuecore.actionForm.InstitutionForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-SettingUpInstitutes</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpInstitutes</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.DepartmentForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-SettingUpDepartments</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpDepartments</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.CancerResearchGroupForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-SettingUpCancerResearchGroups(CRGs)</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpCancerResearchGroups%28CRGs%29</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.SiteForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-SettingUpSites</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpSites</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.StorageTypeForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-CreatingStorageTypes</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-CreatingStorageTypes</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.StorageContainerForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-CreatingStorageContainers</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpStorageContainers</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-SettingUpSpecimenArrays</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpSpecimenArrays</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.BiohazardForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/3+-+Setting+Up+caTissue+Suite#id-3-SettingUpcaTissueSuite-SettingUpBiohazards</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpBiohazards</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.CollectionProtocolForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/4+-+Setting+Up+Protocols#id-4-SettingUpProtocols-AddingaCollectionProtocol</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Protocols+Setup#ProtocolsSetup-AddingaCollectionProtocol</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.DistributionProtocolForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/4+-+Setting+Up+Protocols#id-4-SettingUpProtocols-SettingUpDistributionProtocols</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Protocols+Setup#ProtocolsSetup-SettingUpDistributionProtocols</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.AnnotationForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/5+-+Creating+Dynamic+Extensions+in+the+caTissue+Suite+User+Interface#id-5-CreatingDynamicExtensionsinthecaTissueSuiteUserInterface-CreatingaForm</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Creating+Dynamic+Extensions#CreatingDynamicExtensions-CreatingaForm</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ConsentResponse</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/6-+Setting+Up+Consent+Tracking#id-6-SettingUpConsentTracking-RegistrationLevel</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Consent+Tracking+Setup#ConsentTrackingSetup-SettingUpConsentTracking</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-AddingaBiospecimenEvent</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingaBiospecimenEvent</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.OrderForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/11+-+Ordering+Biospecimens#id-11-OrderingBiospecimens-OrderingWorkflow</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Ordering+Biospecimens#OrderingBiospecimens-OrderingWorkflow</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.OrderSpecimenForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/11+-+Ordering+Biospecimens#id-11-OrderingBiospecimens-OrderingWorkflow</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Ordering+Biospecimens#OrderingBiospecimens-OrderingWorkflow</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/12+-+Shipping+and+Tracking#id-12-ShippingandTracking-CreatingaNewShipment</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Shipping+and+Tracking#ShippingandTracking-CreatingaNewShipment</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.shippingtracking.shippingtracking.ShipmentRequestForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/12+-+Shipping+and+Tracking#id-12-ShippingandTracking-RequestingaShipment</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Shipping+and+Tracking#ShippingandTracking-RequestingaShipment</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/12+-+Shipping+and+Tracking#id-12-ShippingandTracking-ProcessingtheShipmentorShipmentRequest</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Shipping+and+Tracking#ShippingandTracking-ProcessingaReceivedShipment</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ParticipantForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-RegisteringaParticipanttoaCollectionProtocol</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-RegisteringaParticipanttoaCollectionProtocol</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.NewSpecimenForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-SpecimenOperations</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-SpecimenOperations</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.CreateSpecimenForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-CreatingBiospecimenDerivative</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-CreatingBiospecimenDerivative</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.AliquotForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-AliquotingaBiospecimen</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AliquotingaBiospecimen</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm</name>
-        <value>https://wiki.nci.nih.gov/display/caTissuedoc/4.2+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v2.0#id-42-HandlingBiospecimensforTechniciansandSupervisorsv20-SpecimenSummaryandCollection</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-HowDoesCPBasedDataEntryWork?</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/10+-+Introduction+to+Clinical+Annotations#id-10-IntroductiontoClinicalAnnotations-AssigningAnnotationstoaCollectionProtocol</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Clinical+Annotations+Introduction#ClinicalAnnotationsIntroduction-AddingClinicalandPathologicalDatatoanAnnotation</value>
     </property>
     <property>
         <name>edu.wustl.query.actionForm.SaveQueryForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/13+-+Performing+Searches#id-13-PerformingSearches-SavingtheQuery</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-SavingtheQuery</value>
     </property>
     <property>
         <name>edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/13+-+Performing+Searches#id-13-PerformingSearches-PerformingaSimpleSearch</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-PerformingaSimpleSearch</value>
     </property>
     <property>
         <name>edu.wustl.bulkoperator.actionForm.BulkOperationForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/14+-+Bulk+Operations#id-14-BulkOperations-RunningBulkOperationsfromcaTissueSuite</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Bulk+Operations#BulkOperations-RunningBulkOperationsfromcaTissuePlus</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.TitliSearchForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/13+-+Performing+Searches#id-13-PerformingSearches-PerformingaKeywordSearch</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-PerformingaKeywordSearch</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.shippingtracking.DashboardForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/12+-+Shipping+and+Tracking#id-12-ShippingandTracking-ViewingtheDashboard</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Shipping+and+Tracking#ShippingandTracking-ViewingtheDashboard</value>
     </property>
     <property>
         <name>edu.wustl.query.actionForm.CategorySearchForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/13+-+Performing+Searches#id-13-PerformingSearches-UsingtheAdvancedQueryWizard</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-UsingtheAdvancedQueryWizard</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.CPSearchForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-HowDoesCPBasedDataEntryWork?
-        </value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-HowDoesCPBasedDataEntryWork?</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ConflictViewForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/8+-+Surgical+Pathology+Report#id-8-SurgicalPathologyReport-ConflictingSPRs</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Surgical+Pathology+Report#SurgicalPathologyReport-ConflictingSPRs</value>
     </property>
     <property>
         <name>edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchForm</name>
-        <value>https://wiki.nci.nih.gov/display/caTissuedoc/4.1+-+Registering+Participants+v2.0</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-RegisteringaParticipanttoaCollectionProtocol</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm</name>
-        <value></value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-SpecimenCollectionGroup%28SCG%29Information</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.SpecimenArrayForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-AddingaSpecimenArray</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingaSpecimenArray</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-AddingaSpecimenArray</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingaSpecimenArray</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.RequestListFilterationForm</name>
@@ -155,18 +154,18 @@
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.AdvanceSearchForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/13+-+Performing+Searches#id-13-PerformingSearches-UsingtheAdvancedQueryWizard</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-UsingtheAdvancedQueryWizard</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.QuickEventsForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors#id-7-HandlingBiospecimensforTechniciansandSupervisors-AddingaBiospecimenEvent</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingaBiospecimenEvent</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ConfigureResultViewForm</name>
-        <value>https://wiki.nci.nih.gov/display/caTissuedoc/4.9+-+Distributing+Biospecimens+v2.0</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Ordering+Biospecimens#OrderingBiospecimens-DistributingOrderedItems</value>
     </property>
     <property>
         <name>helpHomePage</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/caTissue+Plus+-+User+Manual</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/User+Manual</value>
     </property>
 </properties>
