@@ -297,7 +297,11 @@ function checkDisable(){
 			if(isConsentResponseWithdrawn){
 				document.getElementById("disableConsentCheckboxDiv").style.display = "block";
 			}
-			
+			if(typeof String.prototype.trim !== 'function') {
+			  String.prototype.trim = function() {
+				return this.replace(/^\s+|\s+$/g, ''); 
+			  }
+			}
 			function onSubmit(){
 				var consentDto = {};
 				<logic:equal name="consentLevel" value="participant">
