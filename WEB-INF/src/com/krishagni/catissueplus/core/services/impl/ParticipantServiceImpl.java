@@ -1,9 +1,14 @@
 
 package com.krishagni.catissueplus.core.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.krishagni.catissueplus.core.events.participants.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.events.participants.ParticipantCreatedEvent;
+import com.krishagni.catissueplus.core.events.participants.ParticipantDetails;
 import com.krishagni.catissueplus.core.events.participants.ParticipantDetailsEvent;
+import com.krishagni.catissueplus.core.events.participants.ParticipantSummary;
 import com.krishagni.catissueplus.core.events.participants.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.events.participants.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.events.participants.ReqParticipantsSummaryEvent;
@@ -12,20 +17,26 @@ import com.krishagni.catissueplus.core.events.registration.AllParticipantsSummar
 import com.krishagni.catissueplus.core.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.services.ParticipantService;
 
+import edu.wustl.catissuecore.domain.Participant;
+
 public class ParticipantServiceImpl implements ParticipantService {
 
 	private ParticipantDao participantDao;
 
 	@Override
 	public AllParticipantsSummaryEvent getallParticipants(ReqParticipantsSummaryEvent event) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Participant> participants = participantDao.getAllParticipants();
+		List<ParticipantSummary> participantsSummary = new ArrayList<ParticipantSummary>();
+		for (Participant participant : participants) {
+			participantsSummary.add(ParticipantSummary.fromDomain(participant));
+		}
+		return AllParticipantsSummaryEvent.ok(participantsSummary);
 	}
 
 	@Override
 	public ParticipantDetailsEvent getParticipant(ReqParticipantDetailEvent event) {
-		// TODO Auto-generated method stub
-		return null;
+		Participant participant = participantDao.getParticipant(event.getParticipantId());
+		return ParticipantDetailsEvent.ok(ParticipantDetails.fromDomain(participant));
 	}
 
 	@Override
