@@ -4,6 +4,6 @@ import java.util.List;
 
 
 public interface PermissibleValuesManager {
-	public List getPermissibleValueList(String itemName);
+	public List<String> getPermissibleValueList(String itemName);
 
 }

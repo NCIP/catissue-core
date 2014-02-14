@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.dto.MedicalRecordNumberDTO;
 
 public class ParticipantDetails {
 
@@ -27,7 +26,7 @@ public class ParticipantDetails {
 
 	private String vitalStatus;
 
-	private List<MedicalRecordNumberDTO> mrns;
+	private List<MedicalRecordNumberDetail> mrns;
 
 	private String isConsented = "No";
 
@@ -145,11 +144,11 @@ public class ParticipantDetails {
 		this.race = race;
 	}
 
-	public List<MedicalRecordNumberDTO> getMrns() {
+	public List<MedicalRecordNumberDetail> getMrns() {
 		return mrns;
 	}
 
-	public void setMrns(List<MedicalRecordNumberDTO> mrns) {
+	public void setMrns(List<MedicalRecordNumberDetail> mrns) {
 		this.mrns = mrns;
 	}
 

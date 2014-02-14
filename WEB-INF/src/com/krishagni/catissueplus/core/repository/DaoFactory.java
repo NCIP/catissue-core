@@ -5,4 +5,5 @@ public interface DaoFactory {
 
 	public ParticipantDao getParticipantDao();
 	public CollectionProtocolRegistrationDao getregistrationDao();
+	public SiteDao getSiteDao();
 }
