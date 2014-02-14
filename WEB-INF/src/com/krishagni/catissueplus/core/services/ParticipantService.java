@@ -20,8 +20,6 @@ public interface ParticipantService {
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event);
 
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event);
-	
-	public void setParticipantDao(ParticipantDao participantDao);
 
 	public Object listPedigree(ReqParticipantDetailEvent event);
 

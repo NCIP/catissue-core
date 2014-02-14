@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.events.participants.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.events.participants.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.events.participants.ParticipantDetails;
@@ -14,18 +15,20 @@ import com.krishagni.catissueplus.core.events.participants.ReqParticipantDetailE
 import com.krishagni.catissueplus.core.events.participants.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.events.participants.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.events.registration.AllParticipantsSummaryEvent;
-import com.krishagni.catissueplus.core.repository.ParticipantDao;
+import com.krishagni.catissueplus.core.repository.DaoFactory;
 import com.krishagni.catissueplus.core.services.ParticipantService;
 
 import edu.wustl.catissuecore.domain.Participant;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
-	private ParticipantDao participantDao;
+	private DaoFactory daoFactory;
+	
+	private ParticipantFactory participantFactory;
 
 	@Override
 	public AllParticipantsSummaryEvent getallParticipants(ReqParticipantsSummaryEvent event) {
-		List<Participant> participants = participantDao.getAllParticipants();
+		List<Participant> participants = daoFactory.getParticipantDao().getAllParticipants();
 		List<ParticipantSummary> participantsSummary = new ArrayList<ParticipantSummary>();
 		for (Participant participant : participants) {
 			participantsSummary.add(ParticipantSummary.fromDomain(participant));
@@ -35,14 +38,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	public ParticipantDetailsEvent getParticipant(ReqParticipantDetailEvent event) {
-		Participant participant = participantDao.getParticipant(event.getParticipantId());
+		Participant participant = daoFactory.getParticipantDao().getParticipant(event.getParticipantId());
 		return ParticipantDetailsEvent.ok(ParticipantDetails.fromDomain(participant));
 	}
 
 	@Override
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
-		// TODO Auto-generated method stub
-		return null;
+		Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
+		daoFactory.getParticipantDao().saveOrUpdate(participant);
+		return ParticipantCreatedEvent.ok(ParticipantDetails.fromDomain(participant));
 	}
 
 	/* 
@@ -82,9 +86,5 @@ public class ParticipantServiceImpl implements ParticipantService {
 		return null;
 	}
 
-	@Override
-	public void setParticipantDao(ParticipantDao participantDao) {
-		this.participantDao = participantDao;
-	}
 
 }
