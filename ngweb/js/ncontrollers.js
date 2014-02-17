@@ -272,7 +272,10 @@ angular.module('plus.controllers', [])
 
       var desc = "Unknown";
       if (filter) {
-        desc = "<i>" + filter.form.caption + "  >> " + filter.field.caption + "</i> <b>" + filter.op.desc + "</b> " + filter.value;
+        desc = "<i>" + filter.form.caption + "  >> " + filter.field.caption + "</i> <b>" + filter.op.desc + "</b> ";
+        if (filter.value) {
+          desc += filter.value;
+        }
       }
 
       return desc;
