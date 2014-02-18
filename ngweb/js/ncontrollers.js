@@ -36,7 +36,15 @@ angular.module('plus.controllers', [])
       intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand'},
       not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not'}
     };
-    
+
+    var hidePopovers = function() {
+      var popups = document.querySelectorAll('div.popover');
+      for (var i = 0; i < popups.length; i++) {
+        var popup = angular.element(popups[i]);
+        popup.scope().tt_isOpen = false;
+        popup.remove();
+      }
+    };
 
     var getValidOps = function(field) {
       var result = null;
@@ -141,7 +149,6 @@ angular.module('plus.controllers', [])
 
       var qre = /^(\(*\s*)*(not)?\s*(\(*\s*)*\d+\s*(\)*\s*)*((and|or|intersect)\s*(\(*\s*)*(not)?\s*(\(*\s*)*\d+(\s*\)*)*\s*)*$/
       var result = qre.test(result.expr);
-      console.log("Is Valid Query: " + result);
       return result;
     }
 
@@ -159,9 +166,7 @@ angular.module('plus.controllers', [])
 
 
     $scope.setPagedData = function(pageNo, recCnt) {
-      console.log("start");
       var pageRows = $scope.queryData.resultData.slice((pageNo - 1) * recCnt, pageNo * recCnt);
-      console.log("sliced");
       var formatedRows = [];
        
       for (var i = 0; i < pageRows.length; ++i) {
@@ -173,7 +178,6 @@ angular.module('plus.controllers', [])
       }
 
       $scope.queryData.pagedData = formatedRows;
-      console.log("setting paged data done");
     };
 
     $scope.$watch('queryData.pagingOptions', function(newVal, oldVal) {
@@ -414,6 +418,8 @@ angular.module('plus.controllers', [])
     }
 
     $scope.onFormSelect = function(form) {
+      hidePopovers();
+      $scope.queryData.openForm = form;
       $scope.queryData.currFilter.form = form;
       $scope.queryData.currFilter.field = null;
       $scope.queryData.currFilter.op = null;
@@ -426,23 +432,17 @@ angular.module('plus.controllers', [])
     };
 
     $scope.onFieldSelect = function(field) {
-      console.log("Selected field is " + JSON.stringify(field));
+      hidePopovers();
+      $scope.queryData.currFilter = {};
       $scope.queryData.currFilter.field = field;
       $scope.queryData.currFilter.op = null;
       $scope.queryData.currFilter.value = null;
       $scope.queryData.currFilter.ops = getValidOps(field);
-      if (!$scope.$$phase) {
-        $scope.$apply();
-      }
     };
 
     $scope.onOpSelect = function(op) {
       $scope.queryData.currFilter.op = op;
       $scope.queryData.currFilter.value = null;
-      if (!$scope.$$phase) {
-        console.log("Apply Selected op: " + JSON.stringify(op));
-        $scope.$apply();
-      }
     };
 
     $scope.isUnaryOpSelected = function() {
@@ -473,10 +473,12 @@ angular.module('plus.controllers', [])
     }
 
     $scope.addFilter = function() {
+      hidePopovers();
+
       $scope.queryData.filterId++;
       var filter = {
         id: $scope.queryData.filterId,
-        form: $scope.queryData.currFilter.form,
+        form: $scope.queryData.openForm,
         field: $scope.queryData.currFilter.field,
         op: $scope.queryData.currFilter.op,
         value: $scope.queryData.currFilter.value
@@ -489,13 +491,11 @@ angular.module('plus.controllers', [])
       $scope.queryData.exprNodes.push({type: 'filter', value: filter.id});
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
       $scope.queryData.currFilter = {};
-
-      if ($scope.queryData.showCallout && $scope.queryData.filters.length == 1) {
-        setTimeout(function() { $scope.queryData.showCallout = false; }, 1000);
-      }
     };
 
     $scope.editFilter = function() {
+      hidePopovers();
+
       var filter = {
         id: $scope.queryData.currFilter.id,
         form: $scope.queryData.currFilter.form,
@@ -514,11 +514,15 @@ angular.module('plus.controllers', [])
     };
 
     $scope.displayFilter = function(filter) {
+      hidePopovers();
+
       $scope.queryData.currFilter = angular.copy(filter);
       $scope.queryData.currFilter.ops = getValidOps(filter.field);
     };
 
     $scope.deleteFilter = function(filter) {
+      hidePopovers();
+
       for (var i = 0; i < $scope.queryData.filters.length; ++i) {
         if (filter.id == $scope.queryData.filters[i].id) {
           $scope.queryData.filters.splice(i, 1);
@@ -546,7 +550,8 @@ angular.module('plus.controllers', [])
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
     };
 
-    $scope.clearFilter = function() {
+    $scope.cancelFilter = function() {
+      hidePopovers();
       $scope.queryData.currFilter = {};
     };
 

@@ -83,7 +83,6 @@ var Select2 = function(element, config) {
   this.selectedOpts = function(selectedOpts) {
     this.config.selectedOpts = selectedOpts;
     if (this.rendered) {
-      console.log("Highlighting the options");
       this.highlightSelectedOpts();
     }
     return this;

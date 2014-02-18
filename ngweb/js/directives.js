@@ -14,7 +14,7 @@ angular.module("plus.directives", [])
 
       link: function(scope, element, attrs) {
         var config = {
-          options: [], 
+          options: [],
           id: attrs.optionId,
           value: attrs.optionValue,
           onSelect: function(selected) {
@@ -32,7 +32,6 @@ angular.module("plus.directives", [])
  
         scope.select = new Select2(element, config).render();
         scope.$watch('selected', function(selected) {
-          console.log("selected option is " + JSON.stringify(selected));
           scope.select.selectedOpts(selected);
         });
 
@@ -41,7 +40,6 @@ angular.module("plus.directives", [])
         });
 
         scope.$watch('disabled', function(disabled) {
-          console.log("Disabled: " + disabled);
         });
       }
     };
@@ -183,9 +181,48 @@ angular.module("plus.directives", [])
       restrict: "A",
       priority: 9933,
       link: function(scope, element, attrs) {
-        console.log("fixing height of " + element.children().first());
         var height = attrs.kaFixHeight;
         element.children().first().css("height", height);
       }
     }
-  });
+  })
+
+  .directive('kaPopoverTemplatePopup', ['$templateCache', '$compile', function ( $templateCache, $compile ) {
+    return {
+      restrict: 'EA',
+      replace: true,
+      scope: { title: '@', content: '@', placement: '@', animation: '&', isOpen: '&' },
+      templateUrl: 'templates/popover-template.html',
+      link: function(scope, iElement) {
+        var content = angular.fromJson(scope.content),
+        template = $templateCache.get(content.templateUrl),
+        templateScope = scope,
+        scopeElements = document.getElementsByClassName('ng-scope');
+ 
+        angular.forEach(scopeElements, function(element) {
+          var aScope = angular.element(element).scope();
+          if (aScope.$id == content.scopeId) {
+            templateScope = aScope;
+          }
+        });
+ 
+        iElement.find('div.popover-content').html($compile(template)(templateScope));
+      }
+    };
+  }])
+
+  .directive('kaPopoverTemplate', ['$tooltip', function($tooltip) {
+    var tooltip = $tooltip('kaPopoverTemplate', 'popover', 'click');
+    var linker = tooltip.compile;
+ 
+    tooltip.compile = function(tElem, tAttrs) {
+      return {
+        'pre': function(scope, iElement, iAttrs) {
+          iAttrs.$set('kaPopoverTemplate', {templateUrl: iAttrs.kaPopoverTemplate, scopeId: scope.$id});
+        },
+        'post': linker(tElem, tAttrs)
+      };
+    };
+ 
+    return tooltip;
+  }]);
