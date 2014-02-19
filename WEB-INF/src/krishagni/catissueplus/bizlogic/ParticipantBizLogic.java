@@ -99,6 +99,10 @@ public class ParticipantBizLogic
         {
             participant.setDeathDate(participantDTO.getDeathDate());
         }
+        if(participantDTO.getEthnicity()!=null)
+        {
+            participant.setEthnicity(participantDTO.getEthnicity());
+        }
 
         if (participantDTO.getMedicalIdentifierList() != null && !participantDTO.getMedicalIdentifierList().isEmpty())
         {
