@@ -811,6 +811,21 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					this.createSCG(collectionProtocolRegistration, dao, sessionDataBean);
 					this.chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
 				}
+				else
+				{
+					if (!collectionProtocolRegistration
+							.getSpecimenCollectionGroupCollection().isEmpty())
+					{
+						SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = new SpecimenCollectionGroupBizLogic();
+						Collection<SpecimenCollectionGroup> scgCollection = specimenCollectionGroupBizLogic
+								.createNonAnticipatorySCGs(
+										collectionProtocolRegistration
+												.getSpecimenCollectionGroupCollection(),
+										dao, sessionDataBean);
+						collectionProtocolRegistration
+								.setSpecimenCollectionGroupCollection(scgCollection);
+					}
+				}
 			}
 		}
 		catch (final ApplicationException e)
