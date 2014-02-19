@@ -324,9 +324,9 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
                 participantList  = hibernateDAO.executeQuery(hsqlString+" order by cpr.registrationDate desc", 0,upperLimit,paramList );
             }else{
                 String appendHql = "and ( lower(cpr.participant.lastName) like ? or   lower(cpr.participant.firstName) like ? or  lower(cpr.protocolParticipantIdentifier) like ?)";
-                paramList.add(searchString.toLowerCase()+"%");
-                paramList.add(searchString.toLowerCase()+"%");
-                paramList.add(searchString.toLowerCase()+"%");
+                paramList.add("%"+searchString.toLowerCase()+"%");
+                paramList.add("%"+searchString.toLowerCase()+"%");
+                paramList.add("%"+searchString.toLowerCase()+"%");
                 participantList  = hibernateDAO.executeQuery(hsqlString+appendHql, 0, upperLimit,paramList );
                 
             }
