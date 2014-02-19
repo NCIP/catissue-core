@@ -9,7 +9,7 @@
 <%@ page import="edu.wustl.common.labelSQLApp.form.CPDashboardForm"%>
 <%@ taglib uri="/WEB-INF/scheduler.tld" prefix="scheduler"%>
 
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@page import="java.util.*"%>
 <%@page import="java.util.HashMap"%>
 
