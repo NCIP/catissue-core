@@ -1807,6 +1807,7 @@
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0"/>
 		<antcall target="upgrade_db_plusv3.1" />
 		<antcall target="upgrade_db_plusv3.2" />
+		<antcall target="upgrade_db_plusv3.3" />	
 		<antcall target="deleteFiles"/>
 
 		<!--<delete dir="${de.temp.dir}" />
