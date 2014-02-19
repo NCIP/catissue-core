@@ -624,7 +624,7 @@ PUBLIC
 
 		</action>
 		<action path="/GetAliquotDetails"
-			type="krishagni.catissueplus.action.GetAliquotDetailsAction"  validate="false" scope="request">
+			type="krishagni.catissueplus.action.GetAliquotDetailsAction"  name="aliquotForm" validate="false" scope="request">
 			<forward name="fromSpecimen" path=".catissuecore.CreateAliquots" />
 			<forward name="fromMenu" path=".catissuecore.CreateAliquotsFromMenu" />
 		</action>
@@ -5486,7 +5486,7 @@ PUBLIC
 		</action>
 
 		<action path="/DefineAnnotationsInformationPage" type="edu.wustl.catissuecore.action.ForwardAction"
-			validate="false" scope="request">
+			name="annotationForm" validate="false" scope="request">
 			<forward name="success"
 				path=".catissuecore.DefineAnnotationsInformationPage"></forward>
 		</action>

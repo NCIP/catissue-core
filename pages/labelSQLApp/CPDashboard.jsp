@@ -81,7 +81,11 @@ boolean isWhite = false;
 		isSysDashboard=true;
 		}
 	}
-	
+	function updateHelpURL()
+	{
+		var URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.CPSearchForm")%>";
+		return URL;
+	}	
 	initSchedulerProp();
 </script>
 
