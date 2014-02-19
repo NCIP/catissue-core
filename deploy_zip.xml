@@ -5658,6 +5658,10 @@
                         <echo message="Upgrading DataBase with URL ${final.database.url}" /> 
                         <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
     </target>
+	<target name="upgrade_db_plusv3.3">
+                        <echo message="Upgrading DataBase with URL ${final.database.url}" /> 
+                        <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v33.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+    </target>
 	<target name="update_protection_element">
 			<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 			<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_protection_element.xml" driver="${final.database.driver}" url="${final.csm.database.url}" username="${csm.database.username}" password="${csm.database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
