@@ -379,7 +379,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
 		}
 		LoginAuditManager loginAuditManager = new LoginAuditManager();
 		List<LoginDetails> loginDetailsColl = loginAuditManager.getAllLoginDetailsForUser(user
-				.getId(), maxAttempts + 1);
+				.getId(), maxAttempts);
 		
 //		LoginDetails details = loginDetailsColl.get(0);
 //		loginResult.setLastLoginActivityStatus(details.isLoginSuccessful());
@@ -416,15 +416,13 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	 */
 	public static int getLastSucessIndex(List<LoginDetails> loginDetailsColl)
 	{	
-		int lastSuccessIndex = -1;
-		int index = 0;		
+	   int index = 0;		
 		for (LoginDetails loginDetails : loginDetailsColl) {
 			if (loginDetails.isLoginSuccessful()) {
-				lastSuccessIndex = index;
 				break;
 			}
 			index++;
 		}
-		return lastSuccessIndex;
+		return index;
 	}
 }
