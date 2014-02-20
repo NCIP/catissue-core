@@ -65,11 +65,6 @@
                                     <table width="100%">
                                         <tr class="tr_h2_bggray">
                                             <td width="${v35}" class="gray_h2_md"><bean:message key="summary.page.admin" /></td>
-                                            <td width="${v35}" class="gray_h2_md"><bean:message key="summary.page.contact" /></td>
-                                            <%if(Variables.isToDisplayAdminEmail) 
-                                            {%>
-                                            <td width="${v34}" class="gray_h2_md"><bean:message key="summary.page.email" /></td>
-                                            <%} %>
                                         </tr>
                                     </table>
                                 </td>
@@ -81,11 +76,6 @@
                                         <c:forEach var="userRow" items="${summaryForm.adminDetails.adminInfo}">
                                           <tr>
                                             <td class="black_ar" width="${v35}">${userRow[0]}</td>
-                                            <td class="black_ar" width="${v35}">${userRow[2]}</td>
-                                            <%if(Variables.isToDisplayAdminEmail) 
-                                            {%>
-                                            <td class="black_ar" width="${v34}"><a href="mailto:${userRow[1]}">${userRow[1]}</a></td>
-                                            <%} %>
                                           </tr>
                                         </c:forEach>
                                     </table>
