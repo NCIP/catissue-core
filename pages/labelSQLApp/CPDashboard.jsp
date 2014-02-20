@@ -12,7 +12,7 @@
 
 <%@page import="java.util.*"%>
 <%@page import="java.util.HashMap"%>
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
@@ -82,6 +82,11 @@ boolean isWhite = false;
 		}
 	}
 	
+	function updateHelpURL()
+ 	{
+ 		var URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.CPSearchForm")%>";
+ 		return URL;
+ 	}	
 	initSchedulerProp();
 </script>
 
