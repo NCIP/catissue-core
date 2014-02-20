@@ -3,7 +3,7 @@
     <property>
         <name>edu.wustl.catissuecore.actionForm.UserForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-ProvisioningcaTissuePlusUsers</value>
-    </property> 
+    </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.InstitutionForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-SettingUpInstitutes</value>
@@ -56,6 +56,14 @@
         <name>edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingaBiospecimenEvent</value>
     </property>
+    <property>
+        <name>edu.wustl.catissuecore.actionForm.RequestListFilterationForm</name>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Ordering+Biospecimens#OrderingBiospecimens</value>
+    </property>		
+    <property>
+        <name>edu.wustl.catissuecore.actionForm.RequestDetailsForm</name>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Ordering+Biospecimens#OrderingBiospecimens</value>
+    </property>	
     <property>
         <name>edu.wustl.catissuecore.actionForm.OrderForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Ordering+Biospecimens#OrderingBiospecimens-OrderingWorkflow</value>
@@ -126,7 +134,7 @@
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.CPSearchForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-HowDoesCPBasedDataEntryWork?</value>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-HowDoesCPBasedDataEntryWork</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ConflictViewForm</name>
@@ -149,10 +157,6 @@
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingaSpecimenArray</value>
     </property>
     <property>
-        <name>edu.wustl.catissuecore.actionForm.RequestListFilterationForm</name>
-        <value></value>
-    </property>
-    <property>
         <name>edu.wustl.catissuecore.actionForm.AdvanceSearchForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-UsingtheAdvancedQueryWizard</value>
     </property>
@@ -167,5 +171,13 @@
     <property>
         <name>helpHomePage</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/User+Manual</value>
+    </property>
+    <property>
+        <name>edu.wustl.catissuecore.actionForm.SummaryForm</name>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Biorepository+Summary+Page</value>
+    </property>
+    <property>
+        <name>edu.wustl.catissuecore.actionForm.MultipleSpecimenForm</name>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingMultipleSpecimens</value>
     </property>
 </properties>

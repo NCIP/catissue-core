@@ -214,6 +214,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					specimenColl = this.getCollectionSpecimen(dao, scg, cpe,
 							userId);
 				}
+				else
+				{
+					if (scg.getSpecimenCollection() != null
+							&& !scg.getSpecimenCollection().isEmpty())
+					{
+						specimenColl = scg.getSpecimenCollection();
+					}
+				}
 			}
 
 			final String barcode = scg.getName();

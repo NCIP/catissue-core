@@ -99,7 +99,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		{
 			request.setAttribute(Constants.PAGE_OF, "pageOfMultipleSpWithMenu");
 		}
-
+		request.setAttribute(Constants.HELP_URL_KEY, "edu.wustl.catissuecore.actionForm.MultipleSpecimenForm");
 		return mapping.findForward("success");
 	}
 

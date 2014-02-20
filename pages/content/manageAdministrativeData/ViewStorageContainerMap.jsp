@@ -19,6 +19,11 @@
 	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
 	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
 	
+	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+	
 </head>
 <%
 	String siteName = (String) request.getAttribute("siteName");   
@@ -577,9 +582,18 @@ grid.attachEvent("onDrag", function(sId,tId,sObj,tObj,sInd,tInd){
 							grid.cells(sId,sInd).setValue(b);
 							grid.cells(tId,tInd).setValue(a);
 							//window.parent.showsuccessMessageStrip();
-							showsuccessMessageStrip();
+							var successmessage="";
+							if(hasContainer){
+								successmessage = "Container "+ReplaceTags(a).trim()+" transfered successfully.";
+							}else{
+							    successmessage = "Specimen "+ReplaceTags(a).trim()+" transfered successfully.";
+							}
+							//showSuccessMsg(successmessage);
+							alert(successmessage);
+						//	showsuccessMessageStrip();
 						}
 						else{
+							//showSuccessMsg(ReplaceTags(a).trim()+" transfered successfully.");
 							alert(myJsonResponse.msg);
 						}
 					}
@@ -632,7 +646,49 @@ function forwardToPage(url)
 {
 	window.parent.parent.frames['StorageContainerView'].location=url;
 }
+var dhxWins;
+function showSuccessMsg(message){
+	/*if(dhxWins == undefined)*/{
+			dhxWins = new dhtmlXWindows();
+			dhxWins.setSkin("dhx_skyblue");
+		//	dhxWins.enableAutoViewport(true);
+			
+		}
+		
+		dhxWins.setImagePath("");
+	/*	if(dhxWins.window("containerPositionPopUp")==null)*/{
+			var w =280;
+			var h =150;
+			var x =0; (screen.width / 3) - (w / 2);
+			var y = 0;screen.height / 2;
+			dhxWins.createWindow("containerPositionPopUp", 300, 300, w, h);
+			dhxWins.window("containerPositionPopUp").center();
+			dhxWins.window("containerPositionPopUp").allowResize();
+			//dhxWins.window("containerPositionPopUp").setModal(true);
+			dhxWins.window("containerPositionPopUp").setText("Success");
+			dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+			dhxWins.window("containerPositionPopUp").button("park").hide();
+			//dhxWins.window("containerPositionPopUp").button("close").hide();
+			//dhxWins.window("containerPositionPopUp").setIcon("images/terms-conditions.png", "images/terms-conditions.png");
+			 //dhxWins.window("containerPositionPopUp").setModal(false);
+			var div = document.createElement("div");
+		
+			div.id="popupDiv";
+			div.innerHTML = "<div style='padding-left:10px;padding-top:30px;' class='black_ar'><span style='vertical-align:2px;display:inline-block;'>"+message+"</a></span></div>"
+			+"<div style='padding-left:10px;padding-top:30px;' class='black_ar'>"+
+			"<input type='button' name='OK' onClick='closePopUp()' id='iAgreeButton' value='OK' style='margin-left:103px'></div>";
+			document.body.appendChild(div);
+			dhxWins.window("containerPositionPopUp").attachObject("popupDiv");
+		}
 
+
+
+
+
+}
+function closePopUp(){
+		dhxWins.window("containerPositionPopUp").close();
+	}
 
 </script>
 <%!

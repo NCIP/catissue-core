@@ -9,7 +9,7 @@
 <%@ page import="edu.wustl.common.labelSQLApp.form.CPDashboardForm"%>
 <%@ taglib uri="/WEB-INF/scheduler.tld" prefix="scheduler"%>
 
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@page import="java.util.*"%>
 <%@page import="java.util.HashMap"%>
 
@@ -81,7 +81,11 @@ boolean isWhite = false;
 		isSysDashboard=true;
 		}
 	}
-	
+	function updateHelpURL()
+	{
+		var URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.CPSearchForm")%>";
+		return URL;
+	}	
 	initSchedulerProp();
 </script>
 
