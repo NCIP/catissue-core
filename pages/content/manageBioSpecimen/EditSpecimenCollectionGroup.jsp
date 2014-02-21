@@ -329,7 +329,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                                         </div>
                                     </td>
                                     <script>
-                                    var clinicalDiagnosisValue = '${clinicalDiagnosis}';
+                                    var clinicalDiagnosisValue = "${clinicalDiagnosis}";
                     
                     </script>
                                     <td>
