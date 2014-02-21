@@ -4299,5 +4299,16 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			insert(collectionGroup, dao, sessionDataBean);
 		}
 	}
-
+	public Collection<SpecimenCollectionGroup> createNonAnticipatorySCGs(
+			Collection<SpecimenCollectionGroup> specimenCollectionGroups,
+			DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		final Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+		for (SpecimenCollectionGroup specimenCollectionGroup : specimenCollectionGroups)
+		{
+			insert(specimenCollectionGroup, dao, sessionDataBean);
+			scgCollection.add(specimenCollectionGroup);
+		}
+		return scgCollection;
+	}
 }
