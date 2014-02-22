@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class 
+        name="krishagni.catissueplus.beans.FormContextBean"
+        table="CATISSUE_FORM_CONTEXT"
+        dynamic-update="false"
+        dynamic-insert="false"
+		lazy="true"
+    >
+    
+    <cache usage="read-write" />
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native"/>
+        </id>
+
+        <property
+            name="containerId"
+            column="CONTAINER_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+        <property
+            name="entityType"
+            column="ENTITY_TYPE"
+            type="string"
+            update="true"
+            insert="true"
+            length="255"
+        />
+
+         <property
+            name="cpId"
+            column="CP_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+        
+      <sql-query name="getFormsAttachedToAllProtocols">
+	    <return-scalar column="formId" type="long"/>
+	    <return-scalar column="formCaption" type="string"/>
+	    <return-scalar column="creationTime" type="timestamp"/>
+	    <return-scalar column="modificationTime" type="timestamp"/>	    
+	    <return-scalar column="userId" type="long"/>
+	    <return-scalar column="userFirstName" type="string"/>
+	    <return-scalar column="userLastName" type="string"/>
+	    
+	    select
+	      c.identifier as formId, c.caption as formCaption,
+	      c.create_time as creationTime, c.last_modify_time as modificationTime	      
+	    from
+	      dyextn_containers c
+	      inner join catissue_user u on u.identifier = c.created_by
+	      inner join catissue_form_context fctxt on fctxt.container_id = c.identifier
+	    where
+	      fctxt.cp_id = -1 and fctxt.entity_type != 'Query'        
+      </sql-query>
+      
+	  <sql-query name="getAllFormsSummary">
+	    <return-scalar column="formId" type="long"/>
+	    <return-scalar column="formName" type="string"/>
+	    <return-scalar column="formCaption" type="string"/>
+	    <return-scalar column="creationTime" type="timestamp"/>
+	    <return-scalar column="modificationTime" type="timestamp"/>
+	    <return-scalar column="cpCount" type="integer"/>
+	    <return-scalar column="allCp" type="integer"/>
+	    <return-scalar column="userId" type="long"/>
+	    <return-scalar column="userFirstName" type="string"/>
+	    <return-scalar column="userLastName" type="string"/>	  
+	  
+	    select
+	      c.identifier as formId, c.name as formName, c.caption as formCaption, 	    
+	      c.create_time as creationTime, 
+	      case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime, 
+	      derived.cpCount as cpCount, derived.allCp,	    
+	      u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+	    from 
+	      dyextn_containers c 
+	      inner join catissue_user u on u.identifier = c.created_by
+	      inner join (
+	        select 
+	          ic.identifier as formId, min(ctxt.cp_id) as allCp, count(distinct ctxt.cp_id) as cpCount
+	        from
+	          dyextn_containers ic
+	          left join catissue_form_context ctxt on ctxt.container_id = ic.identifier
+	        where
+	          ctxt.entity_type is null or ctxt.entity_type != 'Query'
+	        group by
+	          formId	      
+	      ) derived on derived.formId = c.identifier
+	    order by
+	      modificationTime desc	    	    
+	  </sql-query>
+	  
+	  <sql-query name="getQueryForms">
+	    <return-scalar column="formId" type="long"/>
+	    <return-scalar column="formName" type="string"/>
+	    <return-scalar column="formCaption" type="string"/>
+	    <return-scalar column="creationTime" type="timestamp"/>
+	    <return-scalar column="modificationTime" type="timestamp"/>
+	    <return-scalar column="userId" type="long"/>
+	    <return-scalar column="userFirstName" type="string"/>
+	    <return-scalar column="userLastName" type="string"/>	  
+	  
+	    select 
+	      c.identifier as formId, c.name as formName, c.caption as formCaption,
+	      c.create_time as creationTime, 
+	      case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+	      u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+	    from
+	      dyextn_containers c 
+	      inner join catissue_user u on u.identifier = c.created_by
+	      inner join catissue_form_context ctxt on ctxt.container_id = c.identifier
+	    where
+	      ctxt.entity_type = 'Query'
+	  </sql-query>
+	  
+	  <sql-query name="getFormContexts">
+	    <return-scalar column="ctxtId" type="long"/>
+	    <return-scalar column="formId" type="long"/>
+	    <return-scalar column="level"  type="string"/>
+	    <return-scalar column="cpId"   type="long"/>
+	    <return-scalar column="shortTitle" type="string"/>
+	    <return-scalar column="title" type="string"/>
+	    
+	    select
+	      fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as level,
+	      cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
+	    from
+	      catissue_form_context fctxt
+	      left join catissue_specimen_protocol cp on cp.identifier = fctxt.cp_id
+	    where
+	      fctxt.container_id = :formId
+	  </sql-query>
+	  	  
+	  <query name="getFormContext">
+	    from
+	      FormContextBean as f
+	    where
+	      f.containerId = :formId and
+	      (f.cpId = :cpId or f.cpId = -1) and
+	      f.entityType = :entityType
+	  </query>
+	  
+	  <sql-query name="getCprForms">
+        <return-scalar column="formCtxtId" type="long"/>
+        <return-scalar column="formId" type="long"/>
+        <return-scalar column="formCaption" type="string"/>
+        <return-scalar column="cpId" type="long"/>
+        <return-scalar column="recordCnt" type="integer"/>
+
+		select
+			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, count(r.identifier) as recordCnt
+		from
+			catissue_form_context fc
+			left join catissue_coll_prot_reg reg on reg.collection_protocol_id = fc.cp_id
+			inner join dyextn_containers c on c.identifier = fc.container_id
+			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :cprId
+		where
+			fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)      
+		group by
+			formCtxtId, formId, formCaption, cpId
+      </sql-query>
+      
+      <sql-query name="getSpecimenForms">
+        <return-scalar column="formCtxtId" type="long"/>
+        <return-scalar column="formId" type="long"/>
+        <return-scalar column="formCaption" type="string"/>
+        <return-scalar column="cpId" type="long"/>
+        <return-scalar column="recordCnt" type="integer"/>
+        
+		select 
+			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, count(r.identifier) as recordCnt
+		from 
+			catissue_form_context fc 
+			left join (
+				catissue_coll_prot_reg reg 
+				inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier 
+				inner join catissue_specimen specimen on specimen.specimen_collection_group_id = scg.identifier) 
+				on reg.collection_protocol_id = fc.cp_id 
+			inner join dyextn_containers c on c.identifier = fc.container_id 
+			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId 
+		where 
+			fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1) 
+		group by 
+			formCtxtId, formId, formCaption, cpId
+      </sql-query>      
+
+      <sql-query name="getScgForms">
+        <return-scalar column="formCtxtId" type="long"/>
+        <return-scalar column="formId" type="long"/>
+        <return-scalar column="formCaption" type="string"/>
+        <return-scalar column="cpId" type="long"/>
+        <return-scalar column="recordCnt" type="integer"/>
+      
+        select 
+			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, count(r.identifier) as recordCnt
+		from 
+			catissue_form_context fc 
+			left join (
+				catissue_coll_prot_reg reg 
+				inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier) 
+				on reg.collection_protocol_id = fc.cp_id 
+			inner join dyextn_containers c on c.identifier = fc.container_id 
+			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :scgId 
+		where 
+			fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1) 
+		group by 
+			formCtxtId, formId, formCaption, cpId
+      </sql-query>      
+      
+      <sql-query name="getFormRecords">
+        <return-scalar column="id" type="long"/>
+        <return-scalar column="recordId" type="long"/>
+        <return-scalar column="updateTime" type="timestamp"/>
+        <return-scalar column="userId" type="long"/>
+        <return-scalar column="userFirstName" type="string"/>
+        <return-scalar column="userLastName" type="string"/>
+        
+        select 
+          r.identifier as id, r.record_id as recordId, r.update_time as updateTime,
+          u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+        from 
+          catissue_form_record_entry r 
+          inner join catissue_form_context f on r.form_ctxt_id = f.identifier 
+          inner join catissue_user u on u.identifier = r.updated_by 
+        where 
+          form_ctxt_id = :formCtxtId and object_id = :objectId
+      </sql-query>      	  
+    </class>
+    
+    <query name = "getContainerId">
+      select containerId from 
+        krishagni.catissueplus.beans.FormContextBean 
+      where 
+        identifier = :identifier
+    </query>
+    <query name="getFormContextId">
+		select identifier 
+		  from krishagni.catissueplus.beans.FormContextBean 
+		where containerId = :containerId and entityType = :entityType
+	</query>	
+</hibernate-mapping>

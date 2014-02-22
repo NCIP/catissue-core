@@ -14,6 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
+import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
+import com.krishagni.catissueplus.core.de.services.FormService;
 import com.krishagni.catissueplus.events.specimens.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.events.specimens.SpecimenInfo;
 import com.krishagni.catissueplus.service.SpecimenCollGroupService;
@@ -30,15 +39,58 @@ public class SpecimenCollectionGroupController {
 
 	@Autowired
 	private SpecimenCollGroupService specimenCollGroupService;
+	
+	@Autowired
+	private FormService formSvc;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/child-specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenInfo> getSpecimensList(@PathVariable("id") Long scgId) {
 		ReqSpecimenSummaryEvent event = new ReqSpecimenSummaryEvent();
-		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
+		event.setSessionDataBean(getSession());
 		event.setParentId(scgId);
 		return specimenCollGroupService.getSpecimensList(event).getSpecimensInfo();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/forms")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<FormCtxtSummary> getForms(@PathVariable("id") Long scgId) {
+		ReqEntityFormsEvent req = new ReqEntityFormsEvent();
+		req.setEntityId(scgId);
+		req.setEntityType(EntityType.SPECIMEN_COLLECTION_GROUP);
+		req.setSessionDataBean(getSession());
+		
+		EntityFormsEvent resp = formSvc.getEntityForms(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getForms();
+		}
+		
+		return null;
+	}
 
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/forms/{formCtxtId}/records")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<FormRecordSummary> getFormRecords(
+			@PathVariable("id") Long scgId,
+			@PathVariable("formCtxtId") Long formCtxtId) {
+		
+		ReqEntityFormRecordsEvent req = new ReqEntityFormRecordsEvent();
+		req.setEntityId(scgId);
+		req.setFormCtxtId(formCtxtId);
+		req.setSessionDataBean(getSession());
+		
+		EntityFormRecordsEvent resp = formSvc.getEntityFormRecords(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getFormRecords();
+		}
+		
+		return null;
+	}
+
+	private SessionDataBean getSession() {
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);		
+	}	
 }

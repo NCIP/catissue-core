@@ -1,17 +1,17 @@
 
 package com.krishagni.catissueplus.service;
 
-import com.krishagni.catissueplus.events.collectionprotocols.AllCollProtocolsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.events.collectionprotocols.CollectionProtocolDetailEvent;
 import com.krishagni.catissueplus.events.collectionprotocols.ReqCollProtocolDetailEvent;
-import com.krishagni.catissueplus.events.collectionprotocols.ReqCollProtocolsSummaryEvent;
 import com.krishagni.catissueplus.events.participants.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.events.participants.ReqParticipantsSummaryEvent;
 
 public interface CollectionProtocolService {
 
-	public AllCollProtocolsSummaryEvent getCollectionProtocolList(
-			ReqCollProtocolsSummaryEvent reqCollectionProtocolsSummary);
+	public AllCollectionProtocolsEvent getCollectionProtocolList(
+			ReqAllCollectionProtocolsEvent reqCollectionProtocolsSummary);
 
 	public CollectionProtocolDetailEvent getCollectionProtocol(ReqCollProtocolDetailEvent reqProtocolDetailEvent);
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import krishagni.catissueplus.dao.FormDao;
-import krishagni.catissueplus.dao.impl.FormDaoImpl;
+//import krishagni.catissueplus.dao.impl.FormDaoImpl;
 import krishagni.catissueplus.dto.FormDetailsDTO;
 
 import org.apache.commons.lang.StringUtils;
@@ -884,9 +884,10 @@ public class MigrateForm {
 			dto.setContainerId(formMigrationCtxt.newForm.getId());
 			dto.setEntityType(entityType);
 			dto.setCpId(cpId);
-			
-			FormDao formDao = new FormDaoImpl();
-			formDao.insertForm(dto);
+
+			// TODO: Replace this with new call
+//			FormDao formDao = new FormDaoImpl();
+//			formDao.insertForm(dto);
 			info.setNewFormCtxId(dto.getId());
 			migrateFormData(info);
 			

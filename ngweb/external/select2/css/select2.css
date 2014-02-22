@@ -446,7 +446,7 @@ disabled look for disabled choices in the results dropdown
 }
 
 .select2-container-multi .select2-choices {
-    min-height: 26px;
+    min-height: 34px;
 }
 
 .select2-container-multi.select2-container-active .select2-choices {

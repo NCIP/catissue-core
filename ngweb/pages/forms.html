@@ -1,102 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="forms-app">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextGen Dynamic Extensions Form Builder - Demo</title>
-    <link rel="stylesheet" href="ngweb/css/app.css">
-    <link rel="stylesheet" href="ngweb/external/jquery/css/chosen.min.css">
-    <link rel="stylesheet" href="ngweb/external/jquery/css/chosen-sprite.png">
-    <link rel="stylesheet" href="ngweb/external/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="ngweb/external/bootstrap/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" href="ngweb/external/eternicode/css/datepicker.css">
-    <link rel="stylesheet" href="ngweb/external/de/css/de.css">
-    <script type="text/javascript" src="ngweb/external/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="ngweb/external/jquery/chosen.jquery.min.js"></script>
-    <script type="text/javascript" src="ngweb/external/underscorejs/underscore-min.js"></script>
-    <script type="text/javascript" src="ngweb/external/backbonejs/backbone-min.js"></script>
-    <script type="text/javascript" src="ngweb/external/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="ngweb/external/bootstrap/js/bootstrap-theme.min.css"></script>
-    <script type="text/javascript" src="ngweb/external/bootstrap/js/bootbox.min.js"></script>
-    <script type="text/javascript" src="ngweb/external/eternicode/js/bootstrap-datepicker.js"></script>
-    <style type="stylesheet">
-    .chosen-container { width: 220px !important; }
+
+    <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/de/css/de.css" rel="stylesheet" type="text/css"></link>
+
+    <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../external/select2/select2.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/angular.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/angular-resource.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
+    <script src="../external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
+
+    <style type="text/css">
+      .yellowbg {
+        background-color: #ffffcc;
+      }
+
+      .plus-hr {
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
+  
+      .plus-addon {
+        position: relative;
+      }
+
+      .plus-addon-input-right input {
+        padding-right: 30px;
+      }
+
+      .plus-addon-input-right span {
+        position: absolute;
+        right: 0px;
+        padding: 10px 20px;
+        pointer-events: none;
+      }
+
+      .modal-content {
+        height: 550px;
+      }
+
     </style>
   </head>
-</html>
-<body>
-  <div id="notifications" class="cp-notifs hidden"></div>
-  <div id="containers-list" class="panel panel-default">
-   <div class="panel-heading">
-      <span>All Forms</span>
-      <a href="/catissuecore/loadcsd.do" class="btn btn-default btn-sm cp-round-button-icon" style="padding-top:12px;">
-        <span class="glyphicon glyphicon-plus"></span>
-      </a>
-    </div>
-    <div class="panel-body">
-      <div class="row" style="border:none;">
-        <div class="col-xs-10">
-          <div class="col-xs-1">ID</div>
-          <div class="col-xs-5">Caption</div>
-          <div class="col-xs-2">Created By</div>
-          <div class="col-xs-2">Creation Date</div>
-        </div>
-        <div class="col-xs-2">Action</div>
-      </div>
-      <hr class="cp-padded-hr"></hr>
-      <div id="containers-summary">
-      </div>
-    </div>
-  </div>
-
-  <script type="text/template" class="template_container_summary">
-    <div id="container-<%- id %>" class="container-summary">
-      <div class="row" style="border:none;">
-        <div class="col-xs-10">
-          <div class="col-xs-1"><%- id %></div> 
-          <div class="col-xs-5"><%- caption %></div>
-          <div class="col-xs-2"><%- createdBy %></div>
-          <div class="col-xs-2"><% print(Utility.formatDate(creationTime)) %></div>
-        </div>
-        <div class="col-xs-2">
-          <button type="button" class="btn btn-default btn-xs container-attach">
-            <span class="glyphicon glyphicon-share"></span>
-          </button>
+  <body ng-controller="FormsController">
+    <!--div id="notifications" class="cp-notifs hidden">{{alert(notify.msg, notify.type)}</div-->
+    <div id="notifications" class="cp-notifs hidden"></div>
+    <div id="containers-list" class="container">
+      <div class="row">
+        <div class="col-xs-2"><button class="btn btn-primary" ng-click="addForm()">Add Form</button></div>
+        <div class="col-xs-offset-7 col-xs-3">
+          <div class="plus-addon plus-addon-input-right">
+            <span class="glyphicon glyphicon-search"></span>
+            <input type="text" class="form-control" placeholder="Search Forms" ng-model="searchFormName">
+          </div>
         </div>
       </div>
-      <hr class="cp-padded-hr"></hr>
+      <div class="row">
+        <div class="col-xs-7"><h3>Forms</h3></div>
+      </div>
+      <table class="table" overflow="auto" ng-if="formsList.length > 0">
+        <thead>
+          <tr>
+            <th class="col-xs-4">Caption</th>
+            <th class="col-xs-3">Created By</th>
+            <th class="col-xs-2">Last Updated</th>
+            <th class="col-xs-1">Count of Protocols</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="form in formsList | filter:searchFormName" 
+              ng-mouseenter="form.highlight=true"
+              ng-mouseleave="form.highlight=false">
+            <td>
+              <a style="cursor:pointer;" ng-click="editForm(form)" tooltip-placement="right" tooltip="Click to edit form">{{form.caption}}</a>
+            </td>
+            <td>{{formatUsername(form.createdBy)}}</td>
+            <td ng-if="form.modificationTime">{{formatDate(form.modificationTime)}}</td>
+            <td ng-if="!form.modificationTime">{{formatDate(form.creationTime)}}</td>
+            <td> 
+              {{form.cpCount == -1 ? "ALL" : form.cpCount}} 
+              <span style="cursor: pointer;" ng-if="form.highlight" class="pull-right glyphicon glyphicon-eye-open"
+                    ng-click="showFormContexts(form)"
+                    tooltip="Click to attach form to a Collection Protocol"
+                    tooltip-placement="left">
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </script>
 
-  <script type="text/template" class="template_container_attach">
-    <div class="form-group">
-      <label for="collectionProtocol">Collection Protocol</label>
-      <select class="form-control" id="collectionProtocol">
-        <option value="-1">All</option>
-        <% _.each(cpCollection, function(cp) { %>
-        <option value="<%- cp.id %>"><%- cp.shortTitle %></option>
-        <% }); %> 
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="entity">Entity</label>
-      <select class="form-control" id="entity" placeholder="Entity">
-        <option value="Participant">Participant</option>
-        <option value="Specimen">Specimen</option>
-        <option value="SpecimenCollectionGroup">Specimen Collection Group</option>
-      </select>
-    </div>
-  </script>
+    <script type="text/ng-template" id="formCtxts.html">
+      <div class="modal-header" style="height: 10%;">
+        <h4>{{form.caption}}</h4>
+      </div>
+      <div class="modal-body" style="height: 75%;">
+        <div style="margin-bottom: 10px;">
+          Used in following collection protocols
+        </div>
+        <table class="table" style="margin-bottom: 0px;">
+          <thead>
+            <tr>
+              <th class="col-xs-6">Collection Protocol</th>
+              <th class="col-xs-6">Level</th>
+            </tr>
+          </thead>
+        </table>
+        <div style="height:40%; margin-bottom: 20px; width: 100%; overflow:auto;">
+          <table class="table">
+            <tbody>
+              <tr ng-repeat="cpFormCtxt in cpFormCtxts">
+                <td class="col-xs-6">{{cpFormCtxt.title}}</td>
+                <td class="col-xs-6">{{cpFormCtxt.levels.join(", ")}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="height: 45%; overflow: auto;">
+          <div>Use form in following collection protocols</div>
+          <div class="checkbox">
+            <label><input type="checkbox" ng-checked="allProtocols" ng-model="allProtocols"> All Present and Future Collection Protocols </label>
+          </div>
+          <div ng-show="allProtocols != true" style="margin-top:10px;margin-bottom:10px;">
+            <ka-select style="width: 100%" multiple data-placeholder="Select One or More Collection Protocols"
+                       options="cpList" option-id="id" option-value="shortTitle" selected="selectedCps"></ka-select>
+          </div>
+          <div style="margin-top:10px;margin-bottom:10px;">
+            <ka-select style="width: 100%" data-placeholder="Select Level"
+                       options="extnEntities" option-id="entity" option-value="name" selected="selectedEntity"></ka-select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" ng-switch on="enableAttach(allProtocols, selectedCps, selectedEntity)" style="height: 12%;">
+        <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(allProtocols, selectedCps, selectedEntity)">Attach Form</button>
+        <button ng-switch-when="true"  class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()">Done</button>
+      </div> 
+    </script>
 
-  <script type="text/javascript" src="ngweb/js/utility.js"></script>
-  <script type="text/javascript" src="ngweb/js/models.js"></script>
-  <script type="text/javascript" src="ngweb/js/container-views.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var containers = new ContainerCollection();
-      var listOfContainersView = new ViewListOfContainers({collection: containers});
-      listOfContainersView.show();
-    });
-  </script>
+    <script src="../js/utility.js" type="text/javascript"></script>
+    <script src="../js/wrapper.js" type="text/javascript"></script>
+    <script src="../js/directives.js" type="text/javascript"></script>
+    <script src="../js/forms-controller.js" type="text/javascript"></script>
+    <script src="../js/forms-service.js" type="text/javascript"></script>
+    <script src="../js/forms-app.js" type="text/javascript"></script>
 </body>

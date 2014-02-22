@@ -1,6 +1,6 @@
 
 angular.module('plus.controllers', [])
-  .controller('QueryController', ['$scope', '$sce', '$modal', 'CollectionProtocolService', 'FormService', 'QueryService', function($scope, $sce, $modal, CollectionProtocolService, FormService, QueryService) {
+  .controller('QueryController', ['$scope', '$sce', '$modal', 'CollectionProtocolService', 'FormsService', 'QueryService', function($scope, $sce, $modal, CollectionProtocolService, FormsService, QueryService) {
     var opsMap = {
       eq: {desc: "Equals", code: "&#61;", symbol: '='}, 
       ne: {desc: "Not Equals", code: "&#8800;", symbol: '!='}, 
@@ -157,7 +157,7 @@ angular.module('plus.controllers', [])
       var aql = "select count(distinct CollectionProtocolRegistration.id) as \"cprCnt\", count(distinct Specimen.id) as \"specimenCnt\" where " + query;
       $scope.queryData.notifs.showCount = true;
       $scope.queryData.notifs.waitCount = true;
-      QueryService.executeQuery(-1, 'CollectionProtoocolRegistration', aql).then(function(result) {
+      QueryService.executeQuery('CollectionProtoocolRegistration', aql).then(function(result) {
         $scope.queryData.cprCnt  = result.rows[0][0];
         $scope.queryData.specimenCnt = result.rows[0][1];
         $scope.queryData.notifs.waitCount = false;
@@ -198,7 +198,7 @@ angular.module('plus.controllers', [])
       var aql = "select " + selectList + " where " + query + " limit 0, 10000";
 
       var startTime = new Date();
-      QueryService.executeQuery(-1, 'CollectionProtocolRegistration', aql).then(function(result) {
+      QueryService.executeQuery('CollectionProtocolRegistration', aql).then(function(result) {
         var endTime = new Date();
         var colDefs = [];
         for (var i = 0; i < result.columnLabels.length; ++i) {
@@ -361,7 +361,7 @@ angular.module('plus.controllers', [])
       totalServerItems: 'queryData.resultDataSize'
     };
 
-    CollectionProtocolService.getQueryForms(-1).then(function(forms) {
+    FormsService.getQueryForms().then(function(forms) {
       $scope.queryData.forms = forms;
     });
 
@@ -425,7 +425,7 @@ angular.module('plus.controllers', [])
       $scope.queryData.currFilter.op = null;
       $scope.queryData.currFilter.value = null;
       if (!form.fields) {
-        FormService.getFormFields(form.id).then(function(fields) {
+        FormsService.getFormFields(form.formId).then(function(fields) {
           form.fields = fields;
         });
       }

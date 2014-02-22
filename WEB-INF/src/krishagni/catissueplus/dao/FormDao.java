@@ -2,6 +2,8 @@ package krishagni.catissueplus.dao;
 
 import java.util.List;
 
+import edu.wustl.bulkoperator.metadata.HookingInformation;
+
 import krishagni.catissueplus.dto.FormDetailsDTO;
 import krishagni.catissueplus.dto.FormRecordDetailsDTO;
 
@@ -27,4 +29,6 @@ public interface FormDao {
 	Long getCpIdByRegistrationId(Long cprId);
 	
 	void insertForm(FormDetailsDTO form);
+
+	void insertFormRecord(Long containerId, Long recordId, HookingInformation recEntryInfo);
 }

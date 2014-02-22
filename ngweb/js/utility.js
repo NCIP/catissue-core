@@ -19,7 +19,10 @@ Utility = {
         hours = (hours == 12 ? hours : (hours - 12));
         suffix = "pm";
       }
-      return hours + ":" + input.getMinutes() + " " + suffix;
+      var minutes = input.getMinutes();
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      hours = hours < 10 ? "0" + hours : hours;
+      return hours + ":" + minutes + " " + suffix;
     }
   },
 

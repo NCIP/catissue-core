@@ -89,6 +89,7 @@ var Select2 = function(element, config) {
   };
 
   this.onSelect = function(onSelect) {
+    console.log("On selected:");
     this.config.onSelect = onSelect;
     return this;
   };

@@ -794,12 +794,12 @@
 		<put name="content" value="/pages/content/home/Home.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.csd" extends=".catissuecore.homePageDef">
- 		<put name="content" value="/csd_web/pages/csdUI.html" />
+	<definition name=".catissuecore.csd" extends=".catissuecore.homePageDef5">
+ 		<put name="pageContentUrl" value="csd_web/pages/csdUI.html" type="string"/>
  	</definition>
  	
- 	<definition name=".catissuecore.ecrf" extends=".catissuecore.homePageDef">
- 		<put name="content" value="/ngweb/pages/forms.html" />
+ 	<definition name=".catissuecore.ecrf" extends=".catissuecore.homePageDef5">
+ 		<put name="pageContentUrl" value="ngweb/pages/forms.html" type="string"/>
  	</definition>
 
         <definition name=".catissuecore.query" extends=".catissuecore.homePageDef5">

@@ -3,7 +3,7 @@ package com.krishagni.catissueplus.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.krishagni.catissueplus.annotation.PlusTransactional;
+import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.dao.SpecimenDao;
 import com.krishagni.catissueplus.errors.CaTissueException;
 import com.krishagni.catissueplus.events.specimens.AllSpecimensSummaryEvent;

@@ -460,7 +460,20 @@
                   class="edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation"
               />
         </set>
-		
+        
+        <sql-query name="getAllProtocols">
+          <return-scalar column="identifier" type="long"/>
+          <return-scalar column="short_title" type="string"/>
+          <return-scalar column="title" type="string"/>
+          
+          select 
+            identifier, short_title, title 
+          from 
+            catissue_specimen_protocol 
+          where 
+            activity_status = :activityStatus
+        </sql-query>
+        		
         </joined-subclass>
 
         <joined-subclass

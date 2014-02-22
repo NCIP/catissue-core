@@ -251,7 +251,7 @@
 					<td colspan="2" width="100%" valign="top" height="100%"><!-- target of anchor to skip menus -->
         <tiles:useAttribute name="pageContentUrl" classname="org.apache.struts.tiles.DirectStringAttribute"/>
         <% String url = pageContentUrl.getValue().toString(); %>
-					<a name="content" style="height:100%"/> <iframe src="<%= url %>" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"></iframe>
+					<a name="content" style="height:100%"/> <iframe src="<%= url %>" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe>
 				</tr>
 			</table>
 		</td>

@@ -23,6 +23,7 @@
 
     <script src="../js/wrapper.js" type="text/javascript"></script>
     <script src="../js/services.js" type="text/javascript"></script>
+    <script src="../js/forms-service.js" type="text/javascript"></script>
     <script src="../js/ncontrollers.js" type="text/javascript"></script>
     <script src="../js/directives.js" type="text/javascript"></script>
     <script src="../js/query-directives.js" type="text/javascript"></script>
@@ -144,6 +145,7 @@
         width:2.5em; 
         border: 1px solid #cccccc;
         text-align: center;
+        cursor: pointer;
       }
 
       .clickable-node {
@@ -346,7 +348,8 @@
                     <b>{{node.value}}</b>
                   </div>
                   <div ng-switch-when="op" ng-click="toggleOp($index)" 
-                       class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;">
+                       class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;"
+                       tooltip="Click to toggle operator" tooltip-placement="bottom">
                     <span ng-bind-html="getOpCode(node.value)"></span>
                     <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
                   </div>

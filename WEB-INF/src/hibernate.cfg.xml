@@ -7,7 +7,7 @@
 
     <session-factory>
 
-    	<property name="show_sql">false</property>
+    	<property name="show_sql">true</property>
     	<property name="dialect">edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect</property>
 	    <property name="connection.datasource">java:/catissuecore</property>
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
@@ -147,6 +147,10 @@
 		<!-- Scheduler -->
 		<mapping resource="edu/wustl/common/scheduler/hbm/Schedule.hbm.xml" />
 		<mapping resource="edu/wustl/common/scheduler/hbm/GeneratedFileDetails.hbm.xml" />
+
+		<!--  Form Context and Record Entry -->
+		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
+		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
 		
     </session-factory>
 

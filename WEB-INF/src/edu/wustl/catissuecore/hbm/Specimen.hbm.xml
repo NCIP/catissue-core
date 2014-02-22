@@ -303,7 +303,6 @@
             insert="true"
             column="REQ_SPECIMEN_ID"
             lazy="false"
-        />
-
+        />      
   </class>
 </hibernate-mapping>
