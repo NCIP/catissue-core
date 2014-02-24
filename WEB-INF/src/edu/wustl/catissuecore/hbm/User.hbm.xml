@@ -282,7 +282,10 @@
         -->
     </class>
 <query name="getUserIdFromLoginName">select user.id from edu.wustl.catissuecore.domain.User user where user.loginName=? and user.activityStatus=?</query>
+<query name="getUserFromLoginName">select user from edu.wustl.catissuecore.domain.User user where user.loginName=? and user.activityStatus=?</query>
+<query name="getLoginDetails">select user.id, user.csmUserId from edu.wustl.catissuecore.domain.User user where user.activityStatus= ? and UPPER(user.loginName) =?</query>
 <query name="getUserListById">select id from edu.wustl.catissuecore.domain.User user where user.id=? and user.activityStatus=?</query>
 <query name="updateUserActivityStatus">update edu.wustl.catissuecore.domain.User user set user.activityStatus = ? where user.id=?</query>
 <sql-query name="getSiteIdsByUserId">select site_id from catissue_site_users where user_id = ?</sql-query>
+<query name="getUserLoginResult">select loginAudit.userLoginId, loginAudit.sourceId, loginAudit.ipAddress, loginAudit.isLoginSuccessful,max(loginAudit.timestamp) from edu.wustl.common.domain.LoginEvent loginAudit where loginAudit.userLoginId = ? </query>
 </hibernate-mapping>

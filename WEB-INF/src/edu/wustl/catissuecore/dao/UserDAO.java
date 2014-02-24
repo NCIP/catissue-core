@@ -2,6 +2,8 @@ package edu.wustl.catissuecore.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,17 +13,24 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.LoginDetails;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.DAOUtility;
 import edu.wustl.dao.util.NamedQueryParam;
+import edu.wustl.domain.LoginResult;
 
 
 public class UserDAO
@@ -114,4 +123,77 @@ public class UserDAO
 		}
 		return userName.toString();
 	}
+	
+    public void updateUserActivityStatus(HibernateDAO hibernateDAO, Long userId, String activityStatus)
+            throws DAOException
+    {
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.STRING, activityStatus));
+        params.put("1", new NamedQueryParam(DBTypes.LONG, userId));
+
+        hibernateDAO.executeUpdateWithNamedQuery("updateUserActivityStatus", params);
+
+    }
+
+    public User getUserFromLoginName(HibernateDAO hibernateDao, String loginName) throws DAOException,
+            BizLogicException
+    {
+
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.STRING, loginName));
+
+        params.put("1", new NamedQueryParam(DBTypes.STRING , Status.ACTIVITY_STATUS_ACTIVE.toString()));
+        List<User> userList = hibernateDao.executeNamedQuery("getUserFromLoginName", params);
+        if (userList == null || userList.isEmpty())
+        {
+            LOGGER.error("Invalid user details.");
+            ErrorKey errorKey = ErrorKey.getErrorKey("errors.invalid");
+            throw new BizLogicException(errorKey, null, "User");
+        }
+        return userList.get(0);
+    }
+
+    public LoginDetails getLoginDetails(HibernateDAO hibernateDao, String loginName, String remoteAddr)
+            throws DAOException
+    {
+
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.STRING, Status.ACTIVITY_STATUS_ACTIVE.toString()));
+        params.put("1", new NamedQueryParam(DBTypes.STRING, loginName.toUpperCase()));
+        LoginDetails loginDetails = null;
+        final List UserIds = hibernateDao.executeNamedQuery("getLoginDetails", params);
+        if (UserIds != null && !UserIds.isEmpty())
+        {
+            final Object[] obj = (Object[]) UserIds.get(0);
+            loginDetails = new LoginDetails((Long) obj[0], (Long) obj[1], remoteAddr);
+        }
+
+        return loginDetails;
+
+    }
+	   
+    public void populateLoginResult(HibernateDAO hibernateDAO, LoginDetails loginDetails, LoginResult loginResult)
+            throws DAOException
+    {
+         Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("0", new NamedQueryParam(DBTypes.LONG, loginDetails.getUserLoginId()));
+        try{
+           
+        List result = hibernateDAO.executeNamedQuery("getUserLoginResult", params);
+        if (result != null && result.size() > 0)
+        {
+            Object[] obj = (Object[]) result.get(0);
+            loginResult.setLastLoginActivityStatus(Boolean.valueOf(obj[3].toString()));
+            Timestamp timestamp = (Timestamp) obj[4];
+            SimpleDateFormat sdf = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern.timestamp"));
+            String dateVal = sdf.format(timestamp);
+            loginResult.setLastLoginTime(dateVal);
+        }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            throw new DAOException(null,null,null);
+        }
+
+    }
+
 }
