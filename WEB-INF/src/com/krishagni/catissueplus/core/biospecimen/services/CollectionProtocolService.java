@@ -8,22 +8,27 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEve
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
+import com.krishagni.catissueplus.events.participants.ParticipantsSummaryEvent;
 
 public interface CollectionProtocolService {
-	
+
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req);
 
 	public AllRegistrationsSummaryEvent getAllRegistrations(ReqRegistrationSummaryEvent event);
+
+	public ParticipantsSummaryEvent getRegisteredParticipantList(ReqParticipantsSummaryEvent reqParticipantsSummaryEvent);
 
 	public AllConsentsSummaryEvent getConsents(ReqConsentsSummaryEvent event);
 
 	public RegistrationCreatedEvent createRegistration(ReqRegistrationEvent event);
 
 	public RegistrationUpdatedEvent updateResgistration(UpdateRegistrationEvent event);
-	
-	public void setRegistrationDao(CollectionProtocolRegistrationDao dao);	
+
+	public void setRegistrationDao(CollectionProtocolRegistrationDao dao);
+
 }

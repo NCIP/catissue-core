@@ -3,6 +3,7 @@ var Select2Search = function(element) {
         this.queryFn = null;
         this.onChangeFn = null;
 		this.setValue = null;
+		this.initSelectionFn = null;
         
         var that = this;
         this.element.bind("change", function(e) {
@@ -20,16 +21,14 @@ var Select2Search = function(element) {
             minimumInputLength: 0, 
             query: function(query) { 
 			  that.queryFn(query.term, function(result){
-					console.log(result);
+					//console.log(result);
 					query.callback({results: result});
-			  })
-              // var results = [];
-              // if (that.queryFn) {
-                // results = that.queryFn(query.term);
-              // }
+			  })},
+			initSelection: function(element, callback) {
+				that.initSelectionFn(element,callback);
+			}
 
-              // query.callback({results: results});
-            }});
+            });
 
           return this;
         },
@@ -42,10 +41,16 @@ var Select2Search = function(element) {
         this.onChange = function(onChangeFn) {
           this.onChangeFn = onChangeFn;
           return this;
-        }
+        },
 		
-		this.setValue = function(){
-		$(this.element).select2("val","");
+		this.onInitSelection = function(initSelectionFn) {
+          this.initSelectionFn = initSelectionFn;
+          return this;
+        },
+		
+		this.setValue = function(value){
+		console.log('here');
+		$(this.element).select2("val", value);
 		return this;
 		}
 		

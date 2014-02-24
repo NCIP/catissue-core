@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.List;
+
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllRegistrationsSummaryEvent;
@@ -8,6 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEve
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
@@ -15,6 +18,9 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.errors.CaTissueException;
+import com.krishagni.catissueplus.events.participants.ParticipantInfo;
+import com.krishagni.catissueplus.events.participants.ParticipantsSummaryEvent;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 	
@@ -32,6 +38,20 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@PlusTransactional
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req) {
 		return AllCollectionProtocolsEvent.ok(daoFactory.getCollectionProtocolDao().getAllCollectionProtocols());
+	}
+	
+	
+	@Override
+	@PlusTransactional
+	public ParticipantsSummaryEvent getRegisteredParticipantList(ReqParticipantsSummaryEvent reqParticipantsSummaryEvent) {
+		try {
+			List<ParticipantInfo> participantsInfo = daoFactory.getCollectionProtocolDao().getRegisteredParticipants(
+					reqParticipantsSummaryEvent.getCpId(), reqParticipantsSummaryEvent.getSearchString());
+			return ParticipantsSummaryEvent.ok(participantsInfo);
+		}
+		catch (CaTissueException e) {
+			return ParticipantsSummaryEvent.serverError(e);
+		}
 	}
 	
 	@Override

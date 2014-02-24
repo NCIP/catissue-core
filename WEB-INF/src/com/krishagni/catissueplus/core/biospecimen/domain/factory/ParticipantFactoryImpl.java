@@ -103,9 +103,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 				participant.setDeathDate(deathDate);
 			}
 		}
-		else if (deathDate != null) {
-			reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
-		}
+//		else if (deathDate != null) {
+//			reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
+//		}
 
 	}
 
@@ -153,7 +153,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private ParticipantMedicalIdentifier getMedicalIdentifier(MedicalRecordNumberDetail medicalRecordNumberDetail) {
-		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteId());
+		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteId());//TODO handling of name
 		if (site == null) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}

@@ -8,15 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.events.participants.ParticipantInfo;
+import com.krishagni.catissueplus.events.participants.ParticipantsSummaryEvent;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -51,7 +56,7 @@ public class CollectionProtocolController {
 		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
 		CollectionProtocolDetailEvent result = collectionProtocolService.getCollectionProtocol(event);
 		return result.getCollectionProtocolDetail();
-	}
+	}*/
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participants")
 	@ResponseStatus(HttpStatus.OK)
@@ -62,10 +67,10 @@ public class CollectionProtocolController {
 		event.setCpId(cpId);
 		event.setSearchString(searchStr);
 		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
-		ParticipantsSummaryEvent result = collectionProtocolService.getRegisteredParticipantList(event);
+		ParticipantsSummaryEvent result = cpSvc.getRegisteredParticipantList(event);
 		return result.getParticipantsInfo();
 	}
-*/
+
 	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

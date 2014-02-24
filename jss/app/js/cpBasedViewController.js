@@ -53,7 +53,7 @@ demoApp.controller('CpController', function($scope,$http,repository) {
 		$scope.tree=[];
 		$scope.$apply($scope.tree);
 		
-		$scopy.$apply();
+		$scope.$apply();
     };
 
     $scope.showCp = function() {

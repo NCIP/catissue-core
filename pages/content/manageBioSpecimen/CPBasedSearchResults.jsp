@@ -61,7 +61,7 @@
     <script type="text/javascript" src="ngweb/external/angularjs/angular-ui.js"></script>
     <script type="text/javascript" src="ngweb/external/bootstrap/js/bootstrap.min.js"></script>
     
-    <script type="text/javascript" src="ngweb/external/angularjs/ui-bootstrap-tpls-0.7.0.min.js"></script>
+    <script type="text/javascript" src="ngweb/external/angularjs/ui-bootstrap-tpls-0.10.0.min.js"></script>
     
     
     <script type="text/javascript" src="jss/app/js/cpBasedViewController.js"></script>

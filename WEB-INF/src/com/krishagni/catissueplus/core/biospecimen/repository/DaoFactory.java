@@ -11,4 +11,5 @@ public interface DaoFactory {
 	public SiteDao getSiteDao();
 	
 	public SpecimenDao getSpecimenDao();
+	
 }

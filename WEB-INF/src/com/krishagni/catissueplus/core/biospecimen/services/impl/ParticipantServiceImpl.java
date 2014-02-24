@@ -17,6 +17,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummary
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 import edu.wustl.catissuecore.domain.Participant;
 
@@ -55,8 +56,14 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 */
 	@Override
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Participant participant = participantFactory.createParticipant(event.getParticipantDto());
+			daoFactory.getParticipantDao().saveOrUpdate(null);
+			return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(participant));
+		}
+		catch (CatissueException ce) {
+			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		}
 	}
 
 	/* (non-Javadoc)
