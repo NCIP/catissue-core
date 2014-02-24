@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllRegistrationsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -13,7 +14,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
-import com.krishagni.catissueplus.events.participants.ParticipantsSummaryEvent;
 
 public interface CollectionProtocolService {
 

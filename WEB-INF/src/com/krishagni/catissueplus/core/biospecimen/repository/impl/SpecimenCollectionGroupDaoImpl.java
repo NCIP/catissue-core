@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.dao.impl;
+package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,14 +7,16 @@ import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.krishagni.catissueplus.dao.SpecimenCollectionGroupDao;
-import com.krishagni.catissueplus.events.specimens.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
+import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.util.global.Status;
 
 @Repository("specimenCollectionGroupDao")
-public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollectionGroupDao>
+public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollectionGroup>
 		implements
 			SpecimenCollectionGroupDao {
 

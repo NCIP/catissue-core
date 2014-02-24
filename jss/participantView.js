@@ -313,8 +313,12 @@ function showEditPage()
 {
 	var participantId=document.getElementById("pId").value;
 	var cpId=document.getElementById("cpId").value;
-	action="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=search&id="+participantId+"&cpSearchCpId="+cpId;	
-	window.parent.frames[1].location=action;
+	var action="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=search&id="+participantId+"&cpSearchCpId="+cpId;
+//alert(action);	
+//$('#cpFrameNew').attr('src',action);
+//document.getElementById('cpFrameNew').contentWindow.location=action;
+self.location = action;
+	//window.parent.frames["cpFrameNew"].location=action;
 	
 }
 

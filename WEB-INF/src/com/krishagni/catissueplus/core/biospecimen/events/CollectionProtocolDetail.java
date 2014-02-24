@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.events.collectionprotocols;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 

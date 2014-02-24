@@ -10,8 +10,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
-import com.krishagni.catissueplus.errors.CaTissueException;
-import com.krishagni.catissueplus.errors.ErrorCodeEnum;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
 
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.common.util.logger.Logger;
@@ -69,7 +69,7 @@ public class TransactionalInterceptor {
 				tx.rollback();
 				LOGGER.info("Error thrown, transaction rolled back.");
 			}
-			throw new CaTissueException(ErrorCodeEnum.QUERY_EXECUTION_ERROR, "Error while executing query");
+			throw new CatissueException(ErrorCodeEnum.QUERY_EXECUTION_ERROR, "Error while executing query");
 		}
 		finally {
 			if (isTransactionStarted && tx != null) {

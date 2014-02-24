@@ -6,6 +6,8 @@ import java.util.List;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllRegistrationsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -18,9 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.errors.CaTissueException;
-import com.krishagni.catissueplus.events.participants.ParticipantInfo;
-import com.krishagni.catissueplus.events.participants.ParticipantsSummaryEvent;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 	
@@ -49,7 +49,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 					reqParticipantsSummaryEvent.getCpId(), reqParticipantsSummaryEvent.getSearchString());
 			return ParticipantsSummaryEvent.ok(participantsInfo);
 		}
-		catch (CaTissueException e) {
+		catch (CatissueException e) {
 			return ParticipantsSummaryEvent.serverError(e);
 		}
 	}

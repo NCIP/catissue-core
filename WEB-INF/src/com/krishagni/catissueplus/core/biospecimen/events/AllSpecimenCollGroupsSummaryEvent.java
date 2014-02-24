@@ -1,10 +1,10 @@
 
-package com.krishagni.catissueplus.events.specimencollectiongroups;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.List;
 
-import com.krishagni.catissueplus.events.EventStatus;
-import com.krishagni.catissueplus.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class AllSpecimenCollGroupsSummaryEvent extends ResponseEvent {
 

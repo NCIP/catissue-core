@@ -3,24 +3,25 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.dao.SpecimenCollectionGroupDao;
-import com.krishagni.catissueplus.errors.CaTissueException;
-import com.krishagni.catissueplus.events.specimens.AllSpecimensSummaryEvent;
-import com.krishagni.catissueplus.events.specimens.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.service.SpecimenCollGroupService;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 @Service(value = "specimenCollGroupService")
 public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
-	private SpecimenCollectionGroupDao specimenCollectionGroupDao;
+	private DaoFactory daoFactory;
 
-	public SpecimenCollectionGroupDao getSpecimenCollectionGroupDao() {
-		return specimenCollectionGroupDao;
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
 	}
 
-	public void setSpecimenCollectionGroupDao(SpecimenCollectionGroupDao specimenCollectionGroupDao) {
-		this.specimenCollectionGroupDao = specimenCollectionGroupDao;
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
 	}
 
 	@Override
@@ -28,9 +29,9 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event) {
 
 		try {
-			return AllSpecimensSummaryEvent.ok(specimenCollectionGroupDao.getSpecimensList(event.getParentId()));
+			return AllSpecimensSummaryEvent.ok(daoFactory.getSpecimenCollectionGroupDao().getSpecimensList(event.getParentId()));
 		}
-		catch (CaTissueException e) {
+		catch (CatissueException e) {
 			return AllSpecimensSummaryEvent.serverError(e);
 		}
 	}

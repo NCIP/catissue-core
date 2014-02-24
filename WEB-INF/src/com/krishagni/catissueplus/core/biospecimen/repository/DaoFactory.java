@@ -12,4 +12,8 @@ public interface DaoFactory {
 	
 	public SpecimenDao getSpecimenDao();
 	
+	public SpecimenCollectionGroupDao getSpecimenCollectionGroupDao();
+	
+	public CollectionProtocolRegistrationDao getRegistrationDao();
+	
 }

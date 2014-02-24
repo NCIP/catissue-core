@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import com.krishagni.catissueplus.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqAllCollectionProtocolsEvent extends RequestEvent {
 

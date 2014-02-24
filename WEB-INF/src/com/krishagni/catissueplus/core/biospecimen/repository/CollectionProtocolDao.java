@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.common.repository.Dao;
-import com.krishagni.catissueplus.events.participants.ParticipantInfo;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;

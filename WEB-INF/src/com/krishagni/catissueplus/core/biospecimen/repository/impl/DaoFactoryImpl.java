@@ -8,6 +8,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
@@ -22,7 +23,7 @@ public class DaoFactoryImpl implements DaoFactory {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	public void setSessionFactory(AbstractDao<?> dao) {
 		dao.setSessionFactory(sessionFactory);
 	}
@@ -47,7 +48,7 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-	
+
 	@Override
 	public SpecimenDao getSpecimenDao() {
 		SpecimenDaoImpl dao = new SpecimenDaoImpl();
@@ -58,6 +59,20 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public CollectionProtocolDao getCollectionProtocolDao() {
 		CollectionProtocolDaoImpl dao = new CollectionProtocolDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public SpecimenCollectionGroupDao getSpecimenCollectionGroupDao() {
+		SpecimenCollectionGroupDaoImpl dao = new SpecimenCollectionGroupDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public CollectionProtocolRegistrationDao getRegistrationDao() {
+		CollectionProtocolRegistrationDaoImpl dao = new CollectionProtocolRegistrationDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -23,9 +26,6 @@ import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
-import com.krishagni.catissueplus.events.specimens.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.events.specimens.SpecimenInfo;
-import com.krishagni.catissueplus.service.SpecimenCollGroupService;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;

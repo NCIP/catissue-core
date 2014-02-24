@@ -1,8 +1,8 @@
 
-package com.krishagni.catissueplus.events.collectionprotocols;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
-import com.krishagni.catissueplus.events.EventStatus;
-import com.krishagni.catissueplus.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class CollectionProtocolDetailEvent extends ResponseEvent {
 

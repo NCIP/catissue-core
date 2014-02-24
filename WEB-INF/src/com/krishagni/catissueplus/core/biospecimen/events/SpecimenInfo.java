@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.events.specimens;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
 public class SpecimenInfo {
 

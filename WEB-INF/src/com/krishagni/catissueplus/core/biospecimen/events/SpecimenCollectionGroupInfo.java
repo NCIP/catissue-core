@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.events.specimencollectiongroups;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 

@@ -38,10 +38,10 @@
   <bean id="serviceInterceptor" class="com.krishagni.catissueplus.core.common.TransactionalInterceptor">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
-    
+  
   <!-- bean id="collectionProtocolDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolDaoImpl">
-    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>  
-  </bean -->
+    <property name="daoFactory" value="daoFactory"/>  
+  </bean>
   
   <bean id="collectionProtocolRegistrationDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolRegistrationDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>  
@@ -53,22 +53,18 @@
   
   <bean id="specimenDao" class="com.krishagni.catissueplus.dao.impl.SpecimenDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>  
+  </bean-->
+  
+  <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <!-- bean id="collectionProtocolService" class="com.krishagni.catissueplus.service.impl.CollectionProtocolServiceImpl">
-    <property name="collectionProtocolDao" ref="collectionProtocolDao"/>
-  </bean -->
-  
-  <bean id="collectionProtocolRegistrationService" class="com.krishagni.catissueplus.service.impl.CollectionProtocolRegistrationServiceImpl">
-    <property name="collectionProtocolRegistrationDao" ref="collectionProtocolRegistrationDao"/>
+  <bean id="collectionProtocolRegistrationService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.service.impl.SpecimenCollGroupServiceImpl">
-    <property name="specimenCollectionGroupDao" ref="specimenCollectionGroupDao"/>
-  </bean>
-  
-  <bean id="SpecimenServiceImpl" class="com.krishagni.catissueplus.service.impl.SpecimenServiceImpl">
-    <property name="specimenDao" ref="specimenDao"/>
+  <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">

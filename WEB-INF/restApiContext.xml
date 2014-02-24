@@ -16,5 +16,5 @@
     </mvc:message-converters>
   </mvc:annotation-driven>
 
-  <context:component-scan base-package="com.krishagni.catissueplus.rest.controller,krishagni.catissueplus.rest"/>
+  <context:component-scan base-package="com.krishagni.catissueplus.rest"/>
 </beans>

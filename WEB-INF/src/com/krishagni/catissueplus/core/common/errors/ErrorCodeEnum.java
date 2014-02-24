@@ -1,7 +1,7 @@
-package com.krishagni.catissueplus.errors;
+package com.krishagni.catissueplus.core.common.errors;
 
 
-public enum ErrorCodeEnum {
+public enum ErrorCodeEnum implements CatissueErrorCode{
 	QUERY_EXECUTION_ERROR(1000, "Error while executing query");
 		
 	private int code;
