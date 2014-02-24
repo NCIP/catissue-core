@@ -267,8 +267,8 @@ function hideCursor(){
     SearchResult2=document.getElementById('SearchLeftPart2');
     SearchResult2.style.height = (document.body.clientHeight - 60) + 'px';
     var control=null;
-    var selectionCp = {id:1,value:"SCS_CP"};
-    var selParticipant = {id:"1,1", text:"Deb,John(1_1)"};
+    var selectionCp = "";
+    var selParticipant = "";
 </script>
 
 </body>
