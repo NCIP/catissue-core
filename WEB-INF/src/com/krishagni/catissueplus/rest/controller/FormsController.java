@@ -90,9 +90,12 @@ public class FormsController {
 	@RequestMapping(method = RequestMethod.GET, value="{id}/fields")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FormFieldSummary> getFormFields(@PathVariable("id") Long formId) {
+	public List<FormFieldSummary> getFormFields(
+			@PathVariable("id") Long formId,
+			@RequestParam(value="prefixParentCaption", required=false, defaultValue="false") boolean prefixParentCaption) {
 		ReqFormFieldsEvent req = new ReqFormFieldsEvent();
 		req.setFormId(formId);
+		req.setPrefixParentFormCaption(prefixParentCaption);
 		
 		FormFieldsEvent resp = formSvc.getFormFields(req);
 		if (resp.getStatus() == EventStatus.OK) {

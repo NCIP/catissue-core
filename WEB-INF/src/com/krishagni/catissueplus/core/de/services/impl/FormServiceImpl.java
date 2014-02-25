@@ -30,7 +30,6 @@ import com.krishagni.catissueplus.core.de.events.ReqFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.SaveFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent.FormType;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -93,7 +92,7 @@ public class FormServiceImpl implements FormService {
 			return FormFieldsEvent.notFound(formId);
 		}
 				
-		return FormFieldsEvent.ok(formId, getFormFields(form, "", ""));
+		return FormFieldsEvent.ok(formId, getFormFields(form, req.isPrefixParentFormCaption(), "", ""));
 	}
 	
 	@Override
@@ -209,16 +208,16 @@ public class FormServiceImpl implements FormService {
 		return FormDataEvent.ok(formData.getContainer().getId(), recordId, formData);		
 	}
 	
-	private List<FormFieldSummary> getFormFields(Container container, String captionPrefix, String namePrefix) {
+	private List<FormFieldSummary> getFormFields(Container container, boolean prefixParentFormCaption, String captionPrefix, String namePrefix) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();
 
         for (Control control : container.getControls()) {
                 if (control instanceof SubFormControl) {
                         SubFormControl sfCtrl = (SubFormControl)control;
                         Container sf = sfCtrl.getSubContainer();
-                        String sfCaptionPrefix = captionPrefix + sf.getCaption() + ": ";
+                        String sfCaptionPrefix = prefixParentFormCaption ? captionPrefix + sf.getCaption() + ": " : captionPrefix;
                         String sfNamePrefix = namePrefix + sfCtrl.getUserDefinedName() + ".";
-                        fields.addAll(getFormFields(sf, sfCaptionPrefix, sfNamePrefix));
+                        fields.addAll(getFormFields(sf, prefixParentFormCaption, sfCaptionPrefix, sfNamePrefix));
                         
                 } else if (!(control instanceof Label || control instanceof PageBreak)) {
                         FormFieldSummary field = new FormFieldSummary();

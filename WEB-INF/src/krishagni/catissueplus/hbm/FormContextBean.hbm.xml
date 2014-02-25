@@ -127,6 +127,8 @@
 	      inner join catissue_form_context ctxt on ctxt.container_id = c.identifier
 	    where
 	      ctxt.entity_type = 'Query'
+	    order by
+	      ctxt.sort_order;
 	  </sql-query>
 	  
 	  <sql-query name="getFormContexts">
