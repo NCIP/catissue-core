@@ -454,11 +454,11 @@ angular.module('plus.controllers', [])
       var field = $scope.queryData.currFilter.field;
       var op = $scope.queryData.currFilter.op;
 
-      if (!field) {
+      if (!field || !op) {
         return "text";
       } else if (field.pvs && op && (op.name == "qin" || op.name == "not_in")) {
         return "multiSelect";
-      } else if (field.pvs) {
+      } else if (field.pvs && !(op.name == 'contains' || op.name == 'starts_with' || op.name == 'ends_with')) {
         return "select";
       } else if (field.dataType == "DATE") {
         return "datePicker";
