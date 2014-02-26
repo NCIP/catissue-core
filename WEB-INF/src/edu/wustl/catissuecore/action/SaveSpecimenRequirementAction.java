@@ -146,16 +146,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					objectName  = parentNodeId.substring(0,parentNodeId.indexOf('_')); 
 					parentId = parentNodeId.substring(parentNodeId.lastIndexOf('_')+1,parentNodeId.length());
 				}
-				//Set requirement title to parent requirementTitle if derived/aliquot requirement title is empty
-				if((currentSpecimenRequirementBean.getLineage().equals(Constants.DERIVED_SPECIMEN) || currentSpecimenRequirementBean.getLineage().equals(Constants.ALIQUOT))
-						&& (currentSpecimenRequirementBean.getSpecimenRequirementLabel()==null || currentSpecimenRequirementBean.getSpecimenRequirementLabel().isEmpty()))
-				{
-					
-					final SpecimenRequirementBean parentSpecimenRequirementBean = CollectionProtocolUtil.getParentSpecimen(
-							mapKey, collectionProtocolEventMap);
-					currentSpecimenRequirementBean.setSpecimenRequirementLabel(parentSpecimenRequirementBean.getSpecimenRequirementLabel());
-				}
-				
+
 				AppUtility.createSpecimenNode(objectName, parentId, currentSpecimenRequirementBean,
 						treeData, operation);
 				request.setAttribute("nodeAdded", treeData);
