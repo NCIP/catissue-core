@@ -77,25 +77,25 @@
 	<changeSet author="nitesh" id="9">
     <modifyDataType 
             columnName="DROPDOWN_NAME"
-            newDataType="${text.type}(767)"
+            newDataType="${text.type}(255)"
             tableName="CATISSUE_BULK_OPERATION"/>
 </changeSet>
 <changeSet author="nitesh" id="10">
     <modifyDataType 
             columnName="OPERATION"
-            newDataType="${text.type}(767)"
+            newDataType="${text.type}(255)"
             tableName="CATISSUE_BULK_OPERATION"/>
 </changeSet>
 <changeSet author="nitesh" id="11">
     <modifyDataType 
             columnName="JOB_NAME"
-            newDataType="${text.type}(767)"
+            newDataType="${text.type}(255)"
             tableName="JOB_DETAILS"/>
 </changeSet>
 <changeSet author="nitesh" id="12">
     <modifyDataType 
             columnName="LOG_FILE_NAME"
-            newDataType="${text.type}(767)"
+            newDataType="${text.type}(255)"
             tableName="JOB_DETAILS"/>
 </changeSet>
 <changeSet id="13" author="nitesh" runOnChange="true" failOnError="false">

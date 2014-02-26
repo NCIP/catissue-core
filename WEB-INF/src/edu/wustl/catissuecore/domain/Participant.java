@@ -11,6 +11,7 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -41,6 +42,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.participant.domain.IParticipant;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.ObjectCloner;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -740,17 +742,6 @@ public class Participant extends AbstractDomainObject
 				ethnicity = nullString;
 			}
 			
-			if(form.getConsentDocument()!=null && !form.getConsentDocument().getFileName().isEmpty())
-			{
-				consentDocumentName=form.getConsentDocument().getFileName();
-			}
-			else
-			{
-				if(form.getConsentDocumentName()==null || form.getConsentDocumentName().isEmpty())
-				{
-					consentDocumentName=null;
-				}
-			}
 			// if(validator.isValidOption(form.getRace()) )
 			// this.race = form.getRace();
 			// else
@@ -843,6 +834,25 @@ public class Participant extends AbstractDomainObject
 			if(form.getCprId().equals("")){
 			this.setConsentsResponseToCollectionProtocolRegistration(form);
 			}
+			
+			    
+			if(form.getConsentDocument()!=null && !form.getConsentDocument().getFileName().isEmpty())
+            {
+			    String consentDirectory = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
+			    Long uniqueNumber = (new Date()).getTime();
+	            consentDocumentName=uniqueNumber+"_"+form.getConsentDocument().getFileName();
+	            consentDirectory = consentDirectory+File.separator+consentDocumentName;
+	            AppUtility.moveParticipantConsentFile(form.getConsentDocument(),consentDirectory);
+            }
+            else
+            {
+                if(form.getConsentDocumentName()==null || form.getConsentDocumentName().isEmpty())
+                {
+                    consentDocumentName=null;
+                }
+            }
+            
+			 
 		}
 		catch (final Exception excp)
 		{

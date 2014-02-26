@@ -50,9 +50,10 @@ public class DownloadConsentFileAction extends SecureAction
 			ParticipantConsentFileDTO participantConsentFileDTO = bizLogic
 					.getParticipantConsentFileDetails(Long.parseLong(pId), dao);
 			response.setContentType("application/download");
-			
+			String fileName = participantConsentFileDTO.getFileName();
+			fileName = fileName.replace(fileName.split("_")[0]+"_","");
 			response.setHeader("Content-Disposition", "attachment;"
-					+ "filename=\"" + participantConsentFileDTO.getFileName() + "\"");
+					+ "filename=\"" +fileName + "\"");
 			byte[] byteArr = participantConsentFileDTO.getByteArr();
 
 			response.getOutputStream().write(byteArr);
@@ -77,6 +78,7 @@ public class DownloadConsentFileAction extends SecureAction
 		}
 		finally
 		{
+		    AppUtility.closeDAOSession(dao);
 			response.flushBuffer();
 		}
 

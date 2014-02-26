@@ -178,7 +178,10 @@ function updatePosition(contId,containerName,pos1,pos2)
 		if(containerId)
 		{
 			containerId.value = contId;
-			container.value = containerName;
+			if(container!=null)  
+			{
+				container.value = containerName;
+			}
 			position1.value = pos1;
 			position2.value= pos2;
 		}

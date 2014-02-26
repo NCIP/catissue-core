@@ -4968,9 +4968,9 @@ public class AppUtility
 		byte[] bytes = {};
 		try
 		{
-			consentFileInputStream=consentFile.getInputStream();
+		 	consentFileInputStream=consentFile.getInputStream();
 			bytes=IOUtils.toByteArray(consentFileInputStream);
-			outputStream = new FileOutputStream(new File(consentDirectory+File.pathSeparator+consentFile.getFileName()));
+			outputStream = new FileOutputStream(new File(consentDirectory));
 			while ((read = consentFileInputStream.read(bytes)) != -1)
 			{
 				outputStream.write(bytes, 0, read);

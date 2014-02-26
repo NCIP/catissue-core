@@ -68,16 +68,11 @@
 	 			 </td>
 		         <td class="link">
 			  <label>
-				<logic:equal name="isParticipantReg" value="true">
-					<html:textarea styleClass="formFieldSized"  style="width:90%;" rows="2" property='${requestScope.consentName}' readonly='${pageScope.readonly}'/>
-					<html:hidden property="${requestScope.consentKey}"/>
-				</logic:equal>
-
-				<logic:notEqual name="isParticipantReg" value="true">
+				
 					<html:textarea styleClass="formFieldSized"  style="width:90%;" rows="2" property='${requestScope.consentName}' />
 					
 					<html:hidden property="${requestScope.consentKey}"/>
-				</logic:notEqual>
+				
 			  </label>
 		  </td>
 	        </tr>
