@@ -93,7 +93,7 @@ public class CasLoginAction extends XSSSupportedAction
 		try
 		{
 			loginResult = LoginProcessor.processUserLogin(loginCredentials);
-			CatissueLoginProcessor.auditLogin(loginResult, casLoginForm.getLoginName(), request);
+			CatissueLoginProcessor.manageLoginHistory(loginResult, casLoginForm.getLoginName(), request);
 		}
 		catch (AuthenticationException authExp)
 		{

@@ -83,7 +83,6 @@ public final class CatissueLoginProcessor extends LoginProcessor
         loginResult.setAppLoginName(loginCredentials.getLoginName()); 
         loginResult.setAuthenticationSuccess(false);
         loginResult.setMigrationState(MigrationState.DO_NOT_MIGRATE);
-        
         try
         {
         	LoginProcessor.authenticate(loginCredentials);
@@ -96,7 +95,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
         finally
         {
-            auditLogin(loginResult, loginCredentials.getLoginName(), request);
+            manageLoginHistory(loginResult, loginCredentials.getLoginName(), request);
         }
         return loginResult;
     }
@@ -114,7 +113,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
 		loginResult.setRemainingAttemptsIndex(Integer.valueOf(loginAttempts));
 		try {			
 			loginResult.setIsAccountLocked(Boolean.FALSE);
-			User user = getUser(loginName);
+			User user = new UserDAO().getUserFromLoginName(dao,loginName);
 			if (user != null) {
 				if(lockAccount(user,dao,loginResult))
 				{
@@ -140,75 +139,30 @@ public final class CatissueLoginProcessor extends LoginProcessor
      * @throws CatissueException
      *             the catissue exception
      */
-    public static void auditLogin(final LoginResult loginResult, final String loginName,
+    public static void manageLoginHistory(LoginResult loginResult, final String loginName,
             final HttpServletRequest request) throws CatissueException
     {
-        HibernateDAO dao = null;
+        HibernateDAO hibernateDAO = null;
         try
         {
-            dao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
-                    CommonServiceLocator.getInstance().getAppName()).getDAO();
+            hibernateDAO =(HibernateDAO) AppUtility.openDAOSession(null);
 
-            Long userId = null;
-            Long csmUserId = null;
-            dao.openSession(null);
-
-            final String userIdhql = "select user.id, user.csmUserId from edu.wustl.catissuecore.domain.User user where "
-                    + "user.activityStatus= "
-                    + "'"
-                    + Status.ACTIVITY_STATUS_ACTIVE.toString()
-                    + "' and UPPER(user.loginName) =" + "'" + loginName.toUpperCase() + "'";
-
-            final List UserIds = dao.executeQuery(userIdhql);
-            if (UserIds != null && !UserIds.isEmpty())
-            {
-                final Object[] obj = (Object[]) UserIds.get(0);
-                userId = (Long) obj[0];
-                csmUserId = (Long) obj[1];
-            }
-
-            final LoginDetails loginDetails = new LoginDetails(userId, csmUserId, request.getRemoteAddr());
-
+            UserDAO userDAO = new UserDAO();
+            LoginDetails loginDetails = userDAO.getLoginDetails(hibernateDAO, loginName, request.getRemoteAddr());
+                
             boolean isLoginSuccessful;
-            if (loginResult == null)
+            isLoginSuccessful = loginResult.isAuthenticationSuccess();
+            if(loginDetails!=null && loginDetails.getUserLoginId() != null)
             {
-                isLoginSuccessful = false;
+                userDAO.populateLoginResult(hibernateDAO,loginDetails,loginResult);
             }
-            else
-            {
-                isLoginSuccessful = loginResult.isAuthenticationSuccess();
-            }
-            if(userId != null)
-            {
-	            String hql = "select loginAudit.userLoginId, loginAudit.sourceId, loginAudit.ipAddress, loginAudit.isLoginSuccessful,loginAudit.timestamp " +
-	        				"from edu.wustl.common.domain.LoginEvent loginAudit where loginAudit.userLoginId = ? order by loginAudit.timestamp desc";
-	            List columnValueBeans = new ArrayList();
-	//            ColumnValueBean bean = new ColumnValueBean(loginDetails.getUserLoginId());
-	            columnValueBeans.add(loginDetails.getUserLoginId());
-	        		try { 
-	        			List result = dao.executeQuery(hql,0,1, columnValueBeans);
-	        			if(result != null && result.size() > 0)
-	        			{
-		        			Object[] obj = (Object[])result.get(0);
-		        			loginResult.setLastLoginActivityStatus(Boolean.valueOf(obj[3].toString()));
-		        			Timestamp timestamp = (Timestamp)obj[4];
-		        			SimpleDateFormat sdf = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern.timestamp"));
-		        			String dateVal = sdf.format(timestamp);
-		        			loginResult.setLastLoginTime(dateVal);
-	        			}
-	        		}
-	        		catch (ApplicationException e1) {
-	        			// TODO Auto-generated catch block
-	        			e1.printStackTrace();
-	        		}
-            }
-            (dao).auditLoginEvents(isLoginSuccessful, loginDetails);
+            (hibernateDAO).auditLoginEvents(isLoginSuccessful, loginDetails);
             if(!isLoginSuccessful)
             {
-            	lockUserAccount(loginName,dao,loginResult);
+            	lockUserAccount(loginName,hibernateDAO,loginResult);
             }
             
-            dao.commit();
+            hibernateDAO.commit();
         }
         catch (final ApplicationException exception)
         {
@@ -217,7 +171,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
         finally
         {
-            closeHibernateSession(dao);
+            closeHibernateSession(hibernateDAO);
         }
     }
 
@@ -369,7 +323,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	 *
 	 * @throws DAOException the DAO exception
 	 */
-	private static Boolean lockAccount(User user, HibernateDAO dao, LoginResult loginResult) throws BizLogicException
+	private static Boolean lockAccount(User user, HibernateDAO dao, LoginResult loginResult) throws ApplicationException
 	{
 		int maxAttempts = 5;
 		String loginAttempts = XMLPropertyHandler.getValue(Constants.LOGIN_FAILURE_ATTEMPTS_LIMIT);
@@ -380,33 +334,26 @@ public final class CatissueLoginProcessor extends LoginProcessor
 		LoginAuditManager loginAuditManager = new LoginAuditManager();
 		List<LoginDetails> loginDetailsColl = loginAuditManager.getAllLoginDetailsForUser(user
 				.getId(), maxAttempts);
-		
-//		LoginDetails details = loginDetailsColl.get(0);
-//		loginResult.setLastLoginActivityStatus(details.isLoginSuccessful());
-//		loginResult.setLastLoginTime(details.getLoginTimeStamp().toString());
-		int lastSuccessIndex = getLastSucessIndex(loginDetailsColl);
-		loginResult.setRemainingAttemptsIndex(maxAttempts-(lastSuccessIndex+1));
-		if (loginDetailsColl.size() >= maxAttempts)
+
+		int remainingAttempt = getRemainingAttempt(loginDetailsColl,maxAttempts);
+		loginResult.setRemainingAttemptsIndex(remainingAttempt);
+		if (remainingAttempt==0)
 		{
-			
-			if (lastSuccessIndex == -1 || lastSuccessIndex+1 >= maxAttempts)
-			{
-				Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-				params.put("0", new NamedQueryParam(DBTypes.STRING,Constants.ACTIVITY_STATUS_LOCKED));
-				params.put("1", new NamedQueryParam(DBTypes.LONG,user.getId()));
-				try {
-					dao.executeUpdateWithNamedQuery("updateUserActivityStatus", params);
-					return Boolean.TRUE;
-				} catch (DAOException e) {
-					LOGGER.error(e);
-					LOGGER.error("Error while updating user activity status");
-					throw new BizLogicException(e);
-				}
-			}
+		   new UserDAO().updateUserActivityStatus(dao,user.getId(),Constants.ACTIVITY_STATUS_LOCKED);
+		   return Boolean.TRUE;
 		}
 		return false;
 	}
 
+	private static int getRemainingAttempt(List<LoginDetails> loginDetailsColl,int maxAttempt){
+	    for (LoginDetails loginDetails : loginDetailsColl) {
+	        maxAttempt--;
+            if (loginDetails.isLoginSuccessful()) {
+                break;
+            }
+        }
+	    return maxAttempt;
+	}
 	/**
 	 * Gets the last sucess index.
 	 *
@@ -414,15 +361,15 @@ public final class CatissueLoginProcessor extends LoginProcessor
 	 *
 	 * @return the last sucess index
 	 */
-	public static int getLastSucessIndex(List<LoginDetails> loginDetailsColl)
-	{	
-	   int index = 0;		
-		for (LoginDetails loginDetails : loginDetailsColl) {
-			if (loginDetails.isLoginSuccessful()) {
-				break;
-			}
-			index++;
-		}
-		return index;
-	}
+//	public static int getLastSucessIndex(List<LoginDetails> loginDetailsColl)
+//	{	
+//	   int index = 0;		
+//		for (LoginDetails loginDetails : loginDetailsColl) {
+//			if (loginDetails.isLoginSuccessful()) {
+//				break;
+//			}
+//			index++;
+//		}
+//		return index;
+//	}
 }
