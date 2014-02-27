@@ -10,6 +10,9 @@
 
     <property name="int.type" value="bigint(20)" dbms="mysql" />
     <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+    <property name="smallint.type" value="smallint" dbms="mysql" />
+    <property name="smallint.type" value="number(5,0)" dbms="oracle" />
     
     <property name="date.type" value="date" dbms="mysql" />
     <property name="date.type" value="date" dbms="oracle" />
@@ -1131,6 +1134,9 @@
         <column name="CP_ID" type="${int.type}">
           <constraints nullable="false"/>
         </column>
+ 
+        <column name="SORT_ORDER" type="${smallint.type}">
+	</column>
       </createTable>
     </changeSet>
 
