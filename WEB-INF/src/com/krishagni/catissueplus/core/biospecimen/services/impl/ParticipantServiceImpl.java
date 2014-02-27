@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.AllParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
@@ -18,24 +19,13 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
-
-import edu.wustl.catissuecore.domain.Participant;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
 	private DaoFactory daoFactory;
-	
-	private ParticipantFactory participantFactory;
 
-	@Override
-	public AllParticipantsSummaryEvent getallParticipants(ReqParticipantsSummaryEvent event) {
-		List<Participant> participants = daoFactory.getParticipantDao().getAllParticipants();
-		List<ParticipantSummary> participantsSummary = new ArrayList<ParticipantSummary>();
-		for (Participant participant : participants) {
-			participantsSummary.add(ParticipantSummary.fromDomain(participant));
-		}
-		return AllParticipantsSummaryEvent.ok(participantsSummary);
-	}
+	private ParticipantFactory participantFactory;
 
 	@Override
 	public ParticipantDetailsEvent getParticipant(ReqParticipantDetailEvent event) {
@@ -45,9 +35,25 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
-		Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
-		daoFactory.getParticipantDao().saveOrUpdate(participant);
-		return ParticipantCreatedEvent.ok(ParticipantDetails.fromDomain(participant));
+		if (hasPrivileges(event)) {
+			try {
+				Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
+				daoFactory.getParticipantDao().saveOrUpdate(participant);
+				return ParticipantCreatedEvent.ok(ParticipantDetails.fromDomain(participant));
+			}
+			catch (CatissueException ce) {
+				return ParticipantCreatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+			}
+			catch (Exception e) {
+				return ParticipantCreatedEvent.serverError(e);
+			}
+		}
+		return ParticipantCreatedEvent.notAuthorized(event);
+	}
+
+	private boolean hasPrivileges(RequestEvent event) {
+		//TODO: handle privileges
+		return true;
 	}
 
 	/* 
@@ -56,14 +62,22 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 */
 	@Override
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
-		try {
-			Participant participant = participantFactory.createParticipant(event.getParticipantDto());
-			daoFactory.getParticipantDao().saveOrUpdate(null);
-			return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(participant));
+		if (hasPrivileges(event)) {
+			try {
+				Participant participant = participantFactory.createParticipant(event.getParticipantDto());
+				Participant existingParticipant = daoFactory.getParticipantDao().getParticipant(participant.getId());
+				existingParticipant.update(participant);
+				daoFactory.getParticipantDao().saveOrUpdate(existingParticipant);
+				return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(existingParticipant));
+			}
+			catch (CatissueException ce) {
+				return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+			}
+			catch (Exception e) {
+				return ParticipantUpdatedEvent.serverError(e);
+			}
 		}
-		catch (CatissueException ce) {
-			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
-		}
+		return ParticipantUpdatedEvent.notAuthorized(event);
 	}
 
 	/* (non-Javadoc)
@@ -92,6 +106,5 @@ public class ParticipantServiceImpl implements ParticipantService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

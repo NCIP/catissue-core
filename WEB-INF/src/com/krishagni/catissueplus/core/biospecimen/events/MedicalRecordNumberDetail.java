@@ -7,16 +7,6 @@ public class MedicalRecordNumberDetail {
 
 	String mrn;
 
-	Long siteId;
-
-	public Long getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Long siteId) {
-		this.siteId = siteId;
-	}
-
 	public String getSiteName() {
 		return siteName;
 	}

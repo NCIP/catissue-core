@@ -3,7 +3,8 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+
 
 public class CollectionProtocolRegistrationDetails {
 
