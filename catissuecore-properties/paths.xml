@@ -13,27 +13,24 @@
 	<path>
 		<from>CollectionProtocolRegistration</from>
 		<to>SpecimenCollectionGroup</to>
+		<start-field>scgs</start-field>
 		<links>
-			<link>
-				<key>CPR_ID</key>
-				<ref-tab-key>COLLECTION_PROTOCOL_REG_ID</ref-tab-key>
-			</link>
 		</links>
 	</path>
 
 	<path>
 		<from>CollectionProtocolRegistration</from>
 		<to>Specimen</to>
+		<start-field>scgs.specimens</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>SpecimenEvent</to>
+		<start-field>scgs.specimens.events</start-field>
 		<links>	
-			<link>
-				<key>CPR_ID</key>
-				<ref-tab>CATISSUE_SPECIMEN_COLL_GROUP</ref-tab>
-				<ref-tab-key>COLLECTION_PROTOCOL_REG_ID</ref-tab-key>
-			</link>
-			<link>
-				<key>IDENTIFIER</key>
-				<ref-tab-key>SCG_ID</ref-tab-key>
-			</link>
 		</links>
 	</path>
 </paths>
