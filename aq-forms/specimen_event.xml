@@ -1,0 +1,395 @@
+<form>
+	<view>
+		<name>SpecimenEvent</name>
+		<caption>Specimen Event</caption>
+		<table>CATISSUE_SPECIMEN_EVENT_PARAMETER</table>
+		<row>
+			<numberField>
+				<name>id</name>
+				<udn>id</udn>
+				<caption>Identifier</caption>
+				<column>IDENTIFIER</column>
+			</numberField>
+		</row>
+		<row>
+			<datePicker>
+				<name>eventTimestamp</name>
+				<udn>eventTimestamp</udn>
+				<caption>Event Time</caption>
+				<column>EVENT_TIMESTAMP</column>
+				<format>MM-dd-yyyy</format>
+			</datePicker>
+		</row>
+		<row>
+			<textField>
+				<name>comments</name>
+				<udn>comments</udn>
+				<caption>Comments</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
+		<row>
+			<subForm>
+				<name>FixedEvent</name>
+				<udn>FixedEvent</udn>
+				<caption>Fixed Event</caption>
+				<table>CATISSUE_FIXED_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<dropDown>
+						<name>fixationType</name>
+						<udn>fixationType</udn>
+						<caption>Fixation Type</caption>
+						<column>FIXATION_TYPE</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003995' order by value</sql>
+						</options>
+					</dropDown>
+					<numberField>
+						<name>durationInMins</name>
+						<udn>durationInMins</udn>
+						<caption>Fixation Duration</caption>
+						<column>DURATION_IN_MINUTES</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>FrozenEvent</name>
+				<udn>FrozenEvent</udn>
+				<caption>Frozen Event</caption>
+				<table>CATISSUE_FROZEN_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<dropDown>
+						<name>method</name>
+						<udn>method</udn>
+						<caption>Frozen Method</caption>
+						<column>METHOD</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003998' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>CheckInOutEvent</name>
+				<udn>CheckInOutEvent</udn>
+				<caption>Check-In Check-Out</caption>
+				<table>CATISSUE_IN_OUT_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<dropDown>
+						<name>storageStatus</name>
+						<udn>storageStatus</udn>
+						<caption>Check In Check Out Storage Status</caption>
+						<column>STORAGE_STATUS</column>
+						<options>
+							<option><value>CHECK IN</value></option>
+							<option><value>CHECK OUT</value></option>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>ProcedureEvent</name>
+				<udn>ProcedureEvent</udn>
+				<caption>Procedure Event</caption>
+				<table>CATISSUE_PROCEDURE_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<textField>
+						<name>url</name>
+						<udn>url</udn>
+						<caption>Procedure URL</caption>
+						<column>URL</column>
+					</textField>
+					<textField>
+						<name>name</name>
+						<udn>name</udn>
+						<caption>Procedure Name</caption>
+						<column>NAME</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>SpunEvent</name>
+				<udn>SpunEvent</udn>
+				<caption>Spun Event</caption>
+				<table>CATISSUE_SPUN_EVENT_PARAMETERS</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<numberField>
+						<name>gforce</name>
+						<udn>gforce</udn>
+						<caption>Spun GForce</caption>
+						<column>GFORCE</column>
+					</numberField>
+					<numberField>
+						<name>duration</name>
+						<udn>duration</udn>
+						<caption>Spun Duration</caption>
+						<column>DURATION_IN_MINUTES</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>CollectionEvent</name>
+				<udn>CollectionEvent</udn>
+				<caption>Collection Event</caption>
+				<table>CATISSUE_COLL_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<dropDown>
+						<name>procedure</name>
+						<udn>procedure</udn>
+						<caption>Collection Procedure</caption>
+						<column>COLLECTION_PROCEDURE</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003996' order by value</sql>
+						</options>
+					</dropDown>
+					<dropDown>
+						<name>container</name>
+						<udn>container</udn>
+						<caption>Collection Container</caption>
+						<column>CONTAINER</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003997' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>ReceivedEvent</name>
+				<udn>ReceivedEvent</udn>
+				<caption>Received Event</caption>
+				<table>CATISSUE_RECEIVED_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<dropDown>
+						<name>quality</name>
+						<udn>quality</udn>
+						<caption>Received Quality</caption>
+						<column>RECEIVED_QUALITY</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003994' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>EmbeddedEvent</name>
+				<udn>EmbeddedEvent</udn>
+				<caption>Embedded Event</caption>
+				<table>CATISSUE_EMBEDDED_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<dropDown>
+						<name>embeddingMedium</name>
+						<udn>embeddingMedium</udn>
+						<caption>Embedding Medium</caption>
+						<column>EMBEDDING_MEDIUM</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003999' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>CellSpecimenReviewEvent</name>
+				<udn>CellSpecimenReviewEvent</udn>
+				<caption>Cell Specimen Review Event</caption>
+				<table>CATISSUE_CELL_SPE_REVIEW_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<numberField>
+						<name>neoPlasticCellularityPct</name>
+						<udn>neoPlasticCellularityPct</udn>
+						<caption>Cell Neo Plastic Cellularity Percentage</caption>
+						<column>NEOPLASTIC_CELLULARITY_PER</column>
+					</numberField>
+					<numberField>
+						<name>viableCellPct</name>
+						<udn>viableCellPct</udn>
+						<caption>Viable Cell Percentage</caption>
+						<column>VIABLE_CELL_PERCENTAGE</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>TissueSpecimenReviewEvent</name>
+				<udn>TissueSpecimenReviewEvent</udn>
+				<caption>Tissue Specimen Review Event</caption>
+				<table>CATISSUE_TIS_SPE_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<numberField>
+						<name>neoPlasticCellularityPct</name>
+						<udn>neoPlasticCellularityPct</udn>
+						<caption>Tissue Neo Plastic Cellularity Percentage</caption>
+						<column>NEOPLASTIC_CELLULARITY_PER</column>
+					</numberField>
+					<numberField>
+						<name>necrosisPct</name>
+						<udn>necrosisPct</udn>
+						<caption>Necrosis Percentage</caption>
+						<column>NECROSIS_PERCENTAGE</column>
+					</numberField>
+					<numberField>
+						<name>lymphocyticPct</name>
+						<udn>lymphocyticPct</udn>
+						<caption>Lymphocytic Percentage</caption>
+						<column>LYMPHOCYTIC_PERCENTAGE</column>
+					</numberField>
+					<numberField>
+						<name>totalCellularityPct</name>
+						<udn>totalCellularityPct</udn>
+						<caption>Total Cellularity Percentage</caption>
+						<column>TOTAL_CELLULARITY_PERCENTAGE</column>
+					</numberField>
+					<dropDown>
+						<name>histologicalQuality</name>
+						<udn>histologicalQuality</udn>
+						<caption>Histological Quality</caption>
+						<column>HISTOLOGICAL_QUALITY</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = 'Hist_Quality' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<subForm>
+				<name>FluidSpecimenReviewEvent</name>
+				<udn>FluidSpecimenReviewEvent</udn>
+				<caption>Fluid Specimen Review Event</caption>
+				<table>CATISSUE_FLUID_SPE_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<numberField>
+						<name>cellCount</name>
+						<udn>cellCount</udn>
+						<caption>Cell Count</caption>
+						<column>CELL_COUNT</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>MolecularSpecimenReviewEvent</name>
+				<udn>MolecularSpecimenReviewEvent</udn>
+				<caption>Molecular Specimen Review Event</caption>
+				<table>CATISSUE_MOL_SPE_REVIEW_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<textField>
+						<name>gelImageUrl</name>
+						<udn>gelImageUrl</udn>
+						<caption>Gel Image URL</caption>
+						<column>GEL_IMAGE_URL</column>
+					</textField>
+					<textField>
+						<name>qualityIndex</name>
+						<udn>qualityIndex</udn>
+						<caption>Quality Index</caption>
+						<column>QUALITY_INDEX</column>
+					</textField>
+					<numberField>
+						<name>gelNumber</name>
+						<udn>gelNumber</udn>
+						<caption>Gel Number</caption>
+						<column>GEL_NUMBER</column>
+					</numberField>
+					<textField>
+						<name>laneNumber</name>
+						<udn>laneNumber</udn>
+						<caption>Lane Number</caption>
+						<column>LANE_NUMBER</column>
+					</textField>
+					<numberField>
+						<name>absorbanceAt260</name>
+						<udn>absorbanceAt260</udn>
+						<caption>Absorbance At 260</caption>
+						<column>ABSORBANCE_AT_260</column>
+					</numberField>
+					<numberField>
+						<name>absorbanceAt280</name>
+						<udn>absorbanceAt280</udn>
+						<caption>Absorbance At 280</caption>
+						<column>ABSORBANCE_AT_280</column>
+					</numberField>
+					<numberField>
+						<name>ratio28sTo18s</name>
+						<udn>ratio28sTo18s</udn>
+						<caption>Ratio 28S To 18S</caption>
+						<column>RATIO_28S_TO_18S</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>DisposalEvent</name>
+				<udn>DisposalEvent</udn>
+				<caption>Disposal Event</caption>
+				<table>CATISSUE_DISPOSAL_EVENT_PARAM</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>
+					<textField>
+						<name>reason</name>
+						<udn>reason</udn>
+						<caption>Disposal Reason</caption>
+						<column>REASON</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+	</view>
+</form>

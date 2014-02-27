@@ -1,6 +1,5 @@
 <form>
 	<view>
-		<id>51</id>
 		<name>Specimen</name>
 		<caption>Specimen</caption>
 		<table>CATISSUE_SPECIMEN_VIEW</table>
@@ -48,10 +47,7 @@
                                 <caption>Class</caption>
                                 <column>SPECIMEN_CLASS</column>
                                 <options>
-                                        <option><value>Cell</value></option>
-                                        <option><value>Fluid</value></option>
-                                        <option><value>Molecular</value></option>
-                                        <option><value>Tissue</value></option>
+					<sql>select value from catissue_permissible_value where public_id = 2003991 order by value</sql>
                                 </options>
 			</dropDown>
 		</row>
@@ -62,7 +58,7 @@
                                 <caption>Type</caption>
                                 <column>SPECIMEN_TYPE</column>
                                 <options>
-                                      <sql>select distinct specimen_type from catissue_specimen_view</sql>
+                                      <sql>select subpv.value from catissue_permissible_value subpv inner join catissue_permissible_value mainpv on subpv.parent_identifier = mainpv.identifier where mainpv.public_id = 2003991 order by subpv.value</sql>
                                 </options>
 			</dropDown>
 		</row>
@@ -73,7 +69,7 @@
 				<caption>Tissue Site</caption>
 				<column>TISSUE_SITE</column>
 				<options>
-					<sql>select distinct tissue_site from catissue_specimen_view</sql>
+					<sql>select value from catissue_permissible_value where public_id = 'Tissue_Site_PID' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -84,10 +80,7 @@
 				<caption>Tissue Side</caption>
 				<column>TISSUE_SIDE</column>
 				<options>
-					<option><value>Left</value></option>
-					<option><value>Right</value></option>
-					<option><value>Not Specified</value></option>
-					<option><value>Not Applicable</value></option>
+					<sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -98,7 +91,7 @@
 				<caption>Pathological Status</caption>
 				<column>PATHOLOGICAL_STATUS</column>
 				<options>
-					<sql>select distinct pathological_status from catissue_specimen_view</sql>
+					<sql>select value from catissue_permissible_value where public_id = '2003993' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -160,5 +153,15 @@
 				</options>
 			</dropDown>
 		</row>
+                <row>
+                        <subForm>
+                                <name>events</name>
+                                <udn>events</udn>
+                                <caption>Specimen Events</caption>
+                                <table>CATISSUE_SPEC_EVENT_MAPPING</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+                        </subForm>
+                </row>
 	</view>
 </form>
