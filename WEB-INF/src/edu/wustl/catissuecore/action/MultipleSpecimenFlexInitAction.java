@@ -90,6 +90,8 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 						.getDatePattern());
 
 		final String pageOf = request.getParameter("pageOf");
+
+		request.setAttribute(Constants.HELP_URL_KEY, "edu.wustl.catissuecore.actionForm.MultipleSpecimenForm");
 		if (pageOf != null)
 		{
 			request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -99,7 +101,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		{
 			request.setAttribute(Constants.PAGE_OF, "pageOfMultipleSpWithMenu");
 		}
-		request.setAttribute(Constants.HELP_URL_KEY, "edu.wustl.catissuecore.actionForm.MultipleSpecimenForm");
+		
 		return mapping.findForward("success");
 	}
 

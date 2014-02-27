@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.SpecimenDTO;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -173,7 +174,8 @@ public class SpecimenEditAction extends CatissueBaseAction
 			request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
 			request.setAttribute("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
 			request.setAttribute(Constants.OPERATION, Constants.EDIT);
-			
+			//Set the help url.--Pathik
+			request.setAttribute(Constants.HELP_URL_KEY, HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.NewSpecimenForm"));
 
 		}
 		finally

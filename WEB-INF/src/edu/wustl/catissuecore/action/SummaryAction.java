@@ -135,6 +135,7 @@ public class SummaryAction extends XSSSupportedAction
 			e.printStackTrace() ;
 		}
 		request.setAttribute("summaryForm", summaryForm);
+		request.setAttribute(Constants.HELP_URL_KEY, "edu.wustl.catissuecore.actionForm.SummaryForm");
 		if (true)
 		{
 			;

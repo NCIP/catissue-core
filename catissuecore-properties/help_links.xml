@@ -180,4 +180,8 @@
         <name>edu.wustl.catissuecore.actionForm.MultipleSpecimenForm</name>
         <value>https://catissueplus.atlassian.net/wiki/x/SoASAQ#HandlingBiospecimens-AddingMultipleSpecimens</value>
     </property>
+	<property>
+        <name>viewMapPage</name>
+        <value> https://catissueplus.atlassian.net/wiki/display/CAT/Admin+Setup#AdminSetup-ViewingtheStorageContainerHierarchy</value>
+    </property>
 </properties>

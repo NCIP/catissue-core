@@ -83,6 +83,12 @@
 <script>
     var imgsrc="images/";
     window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+
+    <!-- Added the method which is being called from layout.jsp to get URL in case of page under iframe. --Pathik -->
+    function updateHelpURL()
+	{
+		return '${requestScope.helpURLKey}';
+	}	
 </script>
 <!----------------------------------------------------------------------->
 <body onload="LoadSCGTabBar('${requestScope.operation}');"> 

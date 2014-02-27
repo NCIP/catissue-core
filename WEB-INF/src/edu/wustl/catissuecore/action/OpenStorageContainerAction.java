@@ -137,6 +137,10 @@ public class OpenStorageContainerAction extends BaseAction
 		*/
 		session.setAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN, storageContainerBean);
 		request.setAttribute(Constants.OPERATION, operation);
+		if("showEditAPageAndMap".equalsIgnoreCase(operation))
+		{
+			request.setAttribute(Constants.HELP_URL_KEY, "viewMapPage");
+		}
 		return mapping.findForward(target);
 	}
 

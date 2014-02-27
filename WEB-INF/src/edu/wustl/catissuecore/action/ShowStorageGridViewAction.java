@@ -941,6 +941,7 @@ public class ShowStorageGridViewAction extends BaseAction
 		}
 		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, spClassList);
 		request.setAttribute(Constants.MAP_SPECIMEN_TYPE_LIST, specimenTypeList);
+		request.setAttribute(Constants.HELP_URL_KEY, "viewMapPage");
 		return mapping.findForward(target);
 	}
 
