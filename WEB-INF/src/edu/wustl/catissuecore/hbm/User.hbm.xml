@@ -287,5 +287,5 @@
 <query name="getUserListById">select id from edu.wustl.catissuecore.domain.User user where user.id=? and user.activityStatus=?</query>
 <query name="updateUserActivityStatus">update edu.wustl.catissuecore.domain.User user set user.activityStatus = ? where user.id=?</query>
 <sql-query name="getSiteIdsByUserId">select site_id from catissue_site_users where user_id = ?</sql-query>
-<query name="getUserLoginResult">select loginAudit.userLoginId, loginAudit.sourceId, loginAudit.ipAddress, loginAudit.isLoginSuccessful,max(loginAudit.timestamp) from edu.wustl.common.domain.LoginEvent loginAudit where loginAudit.userLoginId = ? </query>
+<query name="getUserLoginResult">select loginAudit.userLoginId, loginAudit.sourceId, loginAudit.ipAddress, loginAudit.isLoginSuccessful,loginAudit.timestamp from edu.wustl.common.domain.LoginEvent loginAudit where loginAudit.userLoginId = ? and loginAudit.timestamp = (select max(audit.timestamp) from edu.wustl.common.domain.LoginEvent audit where audit.userLoginId = ? ) </query>
 </hibernate-mapping>

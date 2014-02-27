@@ -177,6 +177,8 @@ public class UserDAO
     {
          Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
         params.put("0", new NamedQueryParam(DBTypes.LONG, loginDetails.getUserLoginId()));
+        params.put("1",
+                new NamedQueryParam(DBTypes.LONG,  loginDetails.getUserLoginId()));
         try{
            
         List result = hibernateDAO.executeNamedQuery("getUserLoginResult", params);

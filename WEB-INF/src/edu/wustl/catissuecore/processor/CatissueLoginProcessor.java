@@ -347,11 +347,14 @@ public final class CatissueLoginProcessor extends LoginProcessor
 
 	private static int getRemainingAttempt(List<LoginDetails> loginDetailsColl,int maxAttempt){
 	    for (LoginDetails loginDetails : loginDetailsColl) {
-	        maxAttempt--;
             if (loginDetails.isLoginSuccessful()) {
                 break;
             }
+	        maxAttempt--;
         }
+	    if(maxAttempt>0){
+	        maxAttempt--;
+	    }
 	    return maxAttempt;
 	}
 	/**
