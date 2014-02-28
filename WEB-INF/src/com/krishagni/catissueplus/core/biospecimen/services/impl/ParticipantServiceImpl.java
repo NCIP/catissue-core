@@ -1,28 +1,22 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.AllParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
+	//TODO: Handle privileges
 	private DaoFactory daoFactory;
 
 	private ParticipantFactory participantFactory;
@@ -35,7 +29,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
-		if (hasPrivileges(event)) {
 			try {
 				Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
 				daoFactory.getParticipantDao().saveOrUpdate(participant);
@@ -47,14 +40,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 			catch (Exception e) {
 				return ParticipantCreatedEvent.serverError(e);
 			}
-		}
-		return ParticipantCreatedEvent.notAuthorized(event);
 	}
 
-	private boolean hasPrivileges(RequestEvent event) {
-		//TODO: handle privileges
-		return true;
-	}
 
 	/* 
 	 * This will update the participant details.
@@ -62,7 +49,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 */
 	@Override
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
-		if (hasPrivileges(event)) {
 			try {
 				Participant participant = participantFactory.createParticipant(event.getParticipantDto());
 				Participant existingParticipant = daoFactory.getParticipantDao().getParticipant(participant.getId());
@@ -76,8 +62,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 			catch (Exception e) {
 				return ParticipantUpdatedEvent.serverError(e);
 			}
-		}
-		return ParticipantUpdatedEvent.notAuthorized(event);
 	}
 
 	/* (non-Javadoc)

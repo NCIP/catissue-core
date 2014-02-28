@@ -4,9 +4,10 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-
 
 public class Participant {
 
@@ -218,8 +219,46 @@ public class Participant {
 		this.setEthnicity(participant.getEthnicity());
 		this.setBirthDate(participant.getBirthDate());
 		this.setDeathDate(participant.getDeathDate());
-		this.setRaceCollection(participant.getRaceCollection());
-		this.setParticipantMedicalIdentifierCollection(participant.getParticipantMedicalIdentifierCollection());
+		updateRace(participant);
+		updatePmi(participant);
+	}
+
+	private void updateRace(Participant participant) {
+		Set<String> newRaceColection = new HashSet<String>();
+		for (String race : participant.getRaceCollection()) {
+			if (!this.raceCollection.contains(race)) {
+				newRaceColection.add(race);
+			}
+		}
+		Set<String> deletedRaces = new HashSet<String>();
+		for (String race : raceCollection) {
+			if (!participant.getRaceCollection().contains(race)) {
+				deletedRaces.add(race);
+			}
+		}
+
+		raceCollection.removeAll(deletedRaces);
+		raceCollection.addAll(newRaceColection);
+	}
+
+	private void updatePmi(Participant participant) {
+		Map<String, ParticipantMedicalIdentifier> addedPMI = new HashMap<String, ParticipantMedicalIdentifier>();
+		for (Entry<String, ParticipantMedicalIdentifier> key : participant.getParticipantMedicalIdentifierCollection()
+				.entrySet()) {
+			if (!participantMedicalIdentifierCollection.containsKey(key.getKey())) {
+				addedPMI.put(key.getKey(), key.getValue());
+			}
+		}
+		Iterator<Entry<String, ParticipantMedicalIdentifier>> entries = participantMedicalIdentifierCollection.entrySet()
+				.iterator();
+		while (entries.hasNext()) {
+			Entry<String, ParticipantMedicalIdentifier> entry = entries.next();
+			if (!participant.getParticipantMedicalIdentifierCollection().containsKey(entry.getKey())) {
+				entries.remove();
+			}
+		}
+
+		participantMedicalIdentifierCollection.putAll(addedPMI);
 	}
 
 }
