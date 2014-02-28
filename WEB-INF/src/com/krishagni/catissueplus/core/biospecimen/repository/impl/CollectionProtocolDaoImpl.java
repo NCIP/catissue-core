@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -79,6 +80,12 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		query.setMaxResults(maxParticipantCount);
 		List<ParticipantInfo> participantsList = query.list();
 		return participantsList;
+	}
+
+	@Override
+	public CollectionProtocolRegistration getCpr(Long cpId, String ppid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
