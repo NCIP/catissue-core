@@ -20,9 +20,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.tokenprocessor.TokenManager;
 
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
 
@@ -33,6 +30,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private final String PPID = "participant protocol identifier";
 
 	private final String ACTIVITY_STATUS_ACTIVE = "Active";
+
+	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
 
 	private ParticipantFactory participantFactory;
 
@@ -49,34 +48,39 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetails details) {
 		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
-		
-		setBasicAttrs(registration, details);
+
+		setBarcode(registration, details);
+		setRegistrationDate(registration, details);
+		setActivityStatus(registration, details);
 		setCollectionProtocol(registration, details);
 		Participant participant = participantFactory.createParticipant(details.getParticipantDetails());
 		registration.setParticipant(participant);
-		participant.getCollectionProtocolRegistrationCollection().put(registration.getCollectionProtocol().getTitle(), registration);
+		participant.getCollectionProtocolRegistrationCollection().put(registration.getCollectionProtocol().getTitle(),
+				registration);
 		setPPId(registration, details);
 		setConsents(registration, details);
 		setSpecimenCollectionGroups(registration);
-		
+
 		return registration;
 	}
 
-	private void setBasicAttrs(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
-		if (StringUtils.isBlank(details.getBarcode())) {
-			generateBarcode(registration);
-		}
-		else {
-			registration.setBarcode(details.getBarcode());
-		}
+	private void setBarcode(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
+		registration.setBarcode(details.getBarcode());
+	}
+
+	private void setRegistrationDate(CollectionProtocolRegistration registration,
+			CollectionProtocolRegistrationDetails details) {
 		if (details.getRegistrationDate() == null) {
 			registration.setRegistrationDate(new Date());
 		}
 		else {
 			registration.setRegistrationDate(details.getRegistrationDate());
 		}
-		registration.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+	}
 
+	private void setActivityStatus(CollectionProtocolRegistration registration,
+			CollectionProtocolRegistrationDetails details) {
+		registration.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 	}
 
 	private void setCollectionProtocol(CollectionProtocolRegistration registration,
@@ -91,14 +95,16 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setCollectionProtocol(protocol);
 	}
 
-	//TODO : PPID Format
 	private void setPPId(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
 		if (StringUtils.isBlank(details.getPpid())) {
-			generatePPId(registration);
+			reportError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
 		}
-		else {
-			registration.setProtocolParticipantIdentifier(details.getPpid());
+		CollectionProtocolRegistration cpr = daoFactory.getCollectionProtocolDao().getCpr(details.getCpId(),
+				details.getPpid());
+		if (cpr != null) {
+			reportError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
 		}
+		registration.setProtocolParticipantIdentifier(details.getPpid());
 	}
 
 	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
@@ -110,14 +116,12 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			while (iter.hasNext()) {
 				final ConsentTier consentTier = (ConsentTier) iter.next();
 				final ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-				consentTierResponse.setResponse(Constants.NOT_SPECIFIED);
+				consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
 				consentTierResponse.setConsentTier(consentTier);
 				consentTierResponseCollection.add(consentTierResponse);
 			}
 		}
 		registration.setConsentTierResponseCollection(consentTierResponseCollection);
-		// TODO Need to handle consents
-
 	}
 
 	private void setSpecimenCollectionGroups(CollectionProtocolRegistration registration) {
@@ -131,25 +135,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			}
 		}
 		registration.setSpecimenCollectionGroupCollection(scgCollection);
-	}
-
-	private void generateBarcode(CollectionProtocolRegistration registration) {
-		// TODO Handle barcode generation
-
-	}
-
-	private void generatePPId(CollectionProtocolRegistration registration) {
-		String PPIdformat = registration.getCollectionProtocol().getPpidFormat();
-		if (StringUtils.isNotBlank(PPIdformat)) {
-			try {
-				//TODO: need to handle the TokenManager code, move it to new code
-				registration.setProtocolParticipantIdentifier(TokenManager.getLabelValue(registration.getCollectionProtocol(),
-						PPIdformat));
-			}
-			catch (ApplicationException e) {
-				reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, PPID);
-			}
-		}
 	}
 
 }

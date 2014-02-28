@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.repository;
 import java.util.Collection;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.common.repository.Dao;
@@ -16,5 +17,6 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public CollectionProtocol getCollectionProtocol(Long cpId);
 	public Collection<ConsentTier> getConsentTierCollection(Long cpId);
 	public List<ParticipantInfo> getRegisteredParticipants(Long cpId, String searchString);
+	public CollectionProtocolRegistration getCpr(Long cpId, String ppid);
 
 }

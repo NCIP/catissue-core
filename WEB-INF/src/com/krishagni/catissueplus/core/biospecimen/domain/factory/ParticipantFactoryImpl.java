@@ -83,9 +83,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setName(Participant participant, ParticipantDetails details) {
-		participant.setFirstName(StringUtils.isBlank(details.getFirstName()) ? EMPTY_STRING : details.getFirstName());
-		participant.setLastName(StringUtils.isBlank(details.getLastName()) ? EMPTY_STRING : details.getLastName());
-		participant.setMiddleName(StringUtils.isBlank(details.getMiddleName()) ? EMPTY_STRING : details.getMiddleName());
+		participant.setFirstName(details.getFirstName());
+		participant.setLastName(details.getLastName());
+		participant.setMiddleName(details.getMiddleName());
 	}
 
 	private void setDates(Participant participant, ParticipantDetails details) {

@@ -3,7 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-public class ReqRegistrationEvent extends RequestEvent {
+public class CreateRegistrationEvent extends RequestEvent {
 
 	private CollectionProtocolRegistrationDetails registrationDetails;
 

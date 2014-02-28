@@ -16,7 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEve
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqRegistrationSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
@@ -72,7 +72,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	@Override
-	public RegistrationCreatedEvent createRegistration(ReqRegistrationEvent event) {
+	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
 		try {
 			CollectionProtocolRegistration registration = protocolRegistrationFactory.createCpr(event
 					.getRegistrationDetails());

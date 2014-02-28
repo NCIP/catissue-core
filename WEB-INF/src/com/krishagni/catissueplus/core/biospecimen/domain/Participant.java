@@ -242,13 +242,6 @@ public class Participant {
 	}
 
 	private void updatePmi(Participant participant) {
-		Map<String, ParticipantMedicalIdentifier> addedPMI = new HashMap<String, ParticipantMedicalIdentifier>();
-		for (Entry<String, ParticipantMedicalIdentifier> key : participant.getParticipantMedicalIdentifierCollection()
-				.entrySet()) {
-			if (!participantMedicalIdentifierCollection.containsKey(key.getKey())) {
-				addedPMI.put(key.getKey(), key.getValue());
-			}
-		}
 		Iterator<Entry<String, ParticipantMedicalIdentifier>> entries = participantMedicalIdentifierCollection.entrySet()
 				.iterator();
 		while (entries.hasNext()) {
@@ -258,7 +251,7 @@ public class Participant {
 			}
 		}
 
-		participantMedicalIdentifierCollection.putAll(addedPMI);
+		participantMedicalIdentifierCollection.putAll(participant.getParticipantMedicalIdentifierCollection());
 	}
 
 }

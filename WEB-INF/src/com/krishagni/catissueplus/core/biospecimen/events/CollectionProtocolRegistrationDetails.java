@@ -19,7 +19,7 @@ public class CollectionProtocolRegistrationDetails {
 	private String barcode;
 
 	private Date registrationDate;
-
+	
 	public String getBarcode() {
 		return barcode;
 	}

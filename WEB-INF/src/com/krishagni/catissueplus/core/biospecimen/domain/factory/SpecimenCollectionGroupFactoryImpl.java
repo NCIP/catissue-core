@@ -34,6 +34,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		setClinicalStatus(group, collectionProtocolEvent.getClinicalStatus());
 		setCollectionStatus(group, COLLECTION_STATUS_PENDING);
 		setActivityStatus(group, ACTIVITY_STATUS);
+		setSpecimenCollection(group,collectionProtocolEvent);
 		return group;
 	}
 
@@ -83,6 +84,10 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 			return;
 		}
 		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
+	}
+	
+	private void setSpecimenCollection(SpecimenCollectionGroup group, CollectionProtocolEvent collectionProtocolEvent) {
+		
 	}
 
 }
