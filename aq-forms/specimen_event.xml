@@ -2,7 +2,7 @@
 	<view>
 		<name>SpecimenEvent</name>
 		<caption>Specimen Event</caption>
-		<table>CATISSUE_SPECIMEN_EVENT_PARAMETER</table>
+		<table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
 		<row>
 			<numberField>
 				<name>id</name>

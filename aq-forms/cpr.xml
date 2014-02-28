@@ -140,8 +140,8 @@
 						<name>specimens</name>
 						<udn>specimens</udn>
 						<caption>Specimens</caption>
-						<table>CATISSUE_SPECIMEN_VIEW</table>
-						<foreignKey>SCG_ID</foreignKey>
+						<table>CATISSUE_SPECIMEN</table>
+						<foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
 						<parentKey>IDENTIFIER</parentKey>
 
 						<row>
@@ -149,7 +149,7 @@
 								<name>events</name>
 								<udn>events</udn>
 								<caption>Specimen Events</caption>
-								<table>CATISSUE_SPEC_EVENT_MAPPING</table>
+								<table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
 								<foreignKey>SPECIMEN_ID</foreignKey>
 								<parentKey>IDENTIFIER</parentKey>
 							</subForm>

@@ -2,7 +2,7 @@
 	<view>
 		<name>Specimen</name>
 		<caption>Specimen</caption>
-		<table>CATISSUE_SPECIMEN_VIEW</table>
+		<table>CATISSUE_SPECIMEN</table>
 		<row>
 			<numberField>
 				<name>id</name>
@@ -63,26 +63,35 @@
 			</dropDown>
 		</row>
 		<row>
-			<dropDown>
-				<name>tissueSite</name>
-				<udn>tissueSite</udn>
-				<caption>Tissue Site</caption>
-				<column>TISSUE_SITE</column>
-				<options>
-					<sql>select value from catissue_permissible_value where public_id = 'Tissue_Site_PID' order by value</sql>
-				</options>
-			</dropDown>
-		</row>
-		<row>
-			<dropDown>
-				<name>tissueSide</name>
-				<udn>tissueSide</udn>
-				<caption>Tissue Side</caption>
-				<column>TISSUE_SIDE</column>
-				<options>
-					<sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
-				</options>
-			</dropDown>
+                        <subForm>
+                                <name>SpecimenCharacteristics</name>
+                                <udn>SpecimenCharacteristics</udn>
+                                <caption>Specimen Characteristics</caption>
+                                <table>CATISSUE_SPECIMEN_CHAR</table>
+                                <foreignKey>IDENTIFIER</foreignKey>
+                                <parentKey>SPECIMEN_CHARACTERISTICS_ID</parentKey>
+
+				<row>
+					<dropDown>
+						<name>tissueSite</name>
+						<udn>tissueSite</udn>
+						<caption>Tissue Site</caption>
+						<column>TISSUE_SITE</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = 'Tissue_Site_PID' order by value</sql>
+						</options>
+					</dropDown>
+					<dropDown>
+						<name>tissueSide</name>
+						<udn>tissueSide</udn>
+						<caption>Tissue Side</caption>
+						<column>TISSUE_SIDE</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
 		</row>
 		<row>
 			<dropDown>
@@ -158,7 +167,7 @@
                                 <name>events</name>
                                 <udn>events</udn>
                                 <caption>Specimen Events</caption>
-                                <table>CATISSUE_SPEC_EVENT_MAPPING</table>
+                                <table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
                                 <foreignKey>SPECIMEN_ID</foreignKey>
                                 <parentKey>IDENTIFIER</parentKey>
                         </subForm>
