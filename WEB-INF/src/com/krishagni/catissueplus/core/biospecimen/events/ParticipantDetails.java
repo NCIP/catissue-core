@@ -1,10 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import edu.wustl.catissuecore.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
 public class ParticipantDetails {
 
@@ -14,74 +18,82 @@ public class ParticipantDetails {
 
 	private String middleName;
 
-	private String ppid;
-
-	private Date dob;
+	private Date birthDate;
 
 	private Date deathDate;
 
 	private String gender;
 
-	private List<String> race;
+	private Set<String> race;
 
 	private String vitalStatus;
 
 	private List<MedicalRecordNumberDetail> mrns;
 
-	private String isConsented = "No";
+	private String sexGenotype;
 
 	private String ethnicity;
 
 	private String ssn;
 
-	private Date registrationDate;
-
-	private Long participantId;
-
-	private Long cpId;
-
-	private String barcode;
-
-	private Long cprId;
-
 	private String activityStatus;
 
 	private Long id;
 
-	public Long getId() {
-		return id;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public Long getCpId() {
-		return cpId;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setCpId(Long cpId) {
-		this.cpId = cpId;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public Long getParticipantId() {
-		return participantId;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setParticipantId(Long participantId) {
-		this.participantId = participantId;
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	}
 
-	public Date getRegistrationDate() {
-		return registrationDate;
+	public Date getBirthDate() {
+		return birthDate;
 	}
 
-	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
-	public String getPpid() {
-		return ppid;
+	public Date getDeathDate() {
+		return deathDate;
+	}
+
+	public void setDeathDate(Date deathDate) {
+		this.deathDate = deathDate;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public Set<String> getRace() {
+		return race;
+	}
+
+	public void setRace(Set<String> race) {
+		this.race = race;
 	}
 
 	public String getVitalStatus() {
@@ -92,58 +104,6 @@ public class ParticipantDetails {
 		this.vitalStatus = vitalStatus;
 	}
 
-	public void setPpid(String ppid) {
-		this.ppid = ppid;
-	}
-
-	public Date getDob() {
-		return dob;
-	}
-
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public String getBarcode() {
-		return barcode;
-	}
-
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
-
-	public Long getCprId() {
-		return cprId;
-	}
-
-	public void setCprId(Long cprId) {
-		this.cprId = cprId;
-	}
-
-	public String getActivityStatus() {
-		return activityStatus;
-	}
-
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public List<String> getRace() {
-		return race;
-	}
-
-	public void setRace(List<String> race) {
-		this.race = race;
-	}
-
 	public List<MedicalRecordNumberDetail> getMrns() {
 		return mrns;
 	}
@@ -152,12 +112,12 @@ public class ParticipantDetails {
 		this.mrns = mrns;
 	}
 
-	public String getIsConsented() {
-		return isConsented;
+	public String getSexGenotype() {
+		return sexGenotype;
 	}
 
-	public void setIsConsented(String isConsented) {
-		this.isConsented = isConsented;
+	public void setSexGenotype(String sexGenotype) {
+		this.sexGenotype = sexGenotype;
 	}
 
 	public String getEthnicity() {
@@ -176,40 +136,48 @@ public class ParticipantDetails {
 		this.ssn = ssn;
 	}
 
-	public String getMiddleName() {
-		return middleName;
+	public String getActivityStatus() {
+		return activityStatus;
 	}
 
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public Long getId() {
+		return id;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Date getDeathDate() {
-		return deathDate;
-	}
-
-	public void setDeathDate(Date deathDate) {
-		this.deathDate = deathDate;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public static ParticipantDetails fromDomain(Participant participant) {
 		ParticipantDetails dto = new ParticipantDetails();
+		dto.setFirstName(participant.getFirstName());
+		dto.setLastName(participant.getLastName());
+		dto.setMiddleName(participant.getMiddleName());
+		dto.setActivityStatus(participant.getActivityStatus());
+		dto.setBirthDate(participant.getBirthDate());
+		dto.setDeathDate(participant.getDeathDate());
+		dto.setEthnicity(participant.getEthnicity());
+		dto.setGender(participant.getGender());
+		dto.setId(participant.getId());
+		Map<String, ParticipantMedicalIdentifier> pmi = participant.getParticipantMedicalIdentifierCollection();
+		List<MedicalRecordNumberDetail> medicalRecordNumberDetails = new ArrayList<MedicalRecordNumberDetail>();
+		if (pmi != null) {
+			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
+				MedicalRecordNumberDetail medicalRecordNumberDetail = new MedicalRecordNumberDetail();
+				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
+				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
+				medicalRecordNumberDetails.add(medicalRecordNumberDetail);
+			}
+		}
+		dto.setMrns(medicalRecordNumberDetails);
+		dto.setRace(participant.getRaceCollection());
+		dto.setSexGenotype(participant.getSexGenotype());
+		dto.setSsn(participant.getSocialSecurityNumber());
+		dto.setVitalStatus(participant.getVitalStatus());
 		return dto;
 	}
 }

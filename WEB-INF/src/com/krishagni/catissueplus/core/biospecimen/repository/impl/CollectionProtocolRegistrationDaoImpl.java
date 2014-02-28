@@ -8,11 +8,11 @@ import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.util.global.Status;
 
@@ -53,7 +53,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 
 	@Override
 	public List<CollectionProtocolRegistration> getAllRegistrations(Long cpId) {
-		
+
 		return null;
 	}
 

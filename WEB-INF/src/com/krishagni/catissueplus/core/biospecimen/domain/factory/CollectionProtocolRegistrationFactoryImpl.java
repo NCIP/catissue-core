@@ -10,15 +10,15 @@ import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
@@ -36,6 +36,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private ParticipantFactory participantFactory;
 
+	private SpecimenCollectionGroupFactory scgFactory;
+
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -47,20 +49,22 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetails details) {
 		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
-		Participant participant = participantFactory.createParticipant(details.getParticipantDetails());
-		registration.setParticipant(participant);
-		participant.getCollectionProtocolRegistrationCollection().add(registration);
+		
 		setBasicAttrs(registration, details);
 		setCollectionProtocol(registration, details);
+		Participant participant = participantFactory.createParticipant(details.getParticipantDetails());
+		registration.setParticipant(participant);
+		participant.getCollectionProtocolRegistrationCollection().put(registration.getCollectionProtocol().getTitle(), registration);
 		setPPId(registration, details);
 		setConsents(registration, details);
 		setSpecimenCollectionGroups(registration);
+		
 		return registration;
 	}
 
 	private void setBasicAttrs(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
 		if (StringUtils.isBlank(details.getBarcode())) {
-			setBarcode(registration);
+			generateBarcode(registration);
 		}
 		else {
 			registration.setBarcode(details.getBarcode());
@@ -92,13 +96,17 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (StringUtils.isBlank(details.getPpid())) {
 			generatePPId(registration);
 		}
+		else {
+			registration.setProtocolParticipantIdentifier(details.getPpid());
+		}
 	}
 
 	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
-		Collection<ConsentTier> consentTierCollection = daoFactory.getCollectionProtocolDao().getConsentTierCollection(details.getCpId());
+		Collection<ConsentTier> consentTierCollection = daoFactory.getCollectionProtocolDao().getConsentTierCollection(
+				details.getCpId());
 		final Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
 		if (consentTierCollection != null && !consentTierCollection.isEmpty()) {
-			final Iterator iter = consentTierCollection.iterator();
+			final Iterator<ConsentTier> iter = consentTierCollection.iterator();
 			while (iter.hasNext()) {
 				final ConsentTier consentTier = (ConsentTier) iter.next();
 				final ConsentTierResponse consentTierResponse = new ConsentTierResponse();
@@ -119,17 +127,13 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		while (collectionProtocolEventIterator.hasNext()) {
 			final CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator.next();
 			if (ACTIVITY_STATUS_ACTIVE.toString().equalsIgnoreCase(collectionProtocolEvent.getActivityStatus())) {
-
-				final SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
-				specimenCollectionGroup.setCollectionProtocolRegistration(registration);
-				specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(registration);
-				scgCollection.add(specimenCollectionGroup);
+				scgCollection.add(scgFactory.createScg(collectionProtocolEvent));
 			}
 		}
 		registration.setSpecimenCollectionGroupCollection(scgCollection);
 	}
 
-	private void setBarcode(CollectionProtocolRegistration registration) {
+	private void generateBarcode(CollectionProtocolRegistration registration) {
 		// TODO Handle barcode generation
 
 	}

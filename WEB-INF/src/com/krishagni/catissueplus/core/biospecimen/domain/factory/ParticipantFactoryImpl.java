@@ -1,24 +1,26 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
-import java.util.ArrayList;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
 import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
-
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 
 public class ParticipantFactoryImpl implements ParticipantFactory {
@@ -88,7 +90,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setDates(Participant participant, ParticipantDetails details) {
 
-		Date birthDate = details.getDob();
+		Date birthDate = details.getBirthDate();
 		Date deathDate = details.getDeathDate();
 
 		if (birthDate != null) {
@@ -103,9 +105,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 				participant.setDeathDate(deathDate);
 			}
 		}
-//		else if (deathDate != null) {
-//			reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
-//		}
 
 	}
 
@@ -124,8 +123,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setRace(Participant participant, ParticipantDetails details) {
-		List<String> raceList = details.getRace();
-		if (raceList != null && raceList.size() > 0) {
+		Set<String> raceList = details.getRace();
+		if (raceList != null) {
 			for (String race : raceList) {
 				ensureValidPermissibleValue(race, RACE);
 			}
@@ -143,17 +142,19 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setPmi(Participant participant, ParticipantDetails details) {
 		List<MedicalRecordNumberDetail> mrns = details.getMrns();
-		List<ParticipantMedicalIdentifier> medicalIdentifiers = new ArrayList<ParticipantMedicalIdentifier>();
+		Map<String, ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
 		if (mrns != null && mrns.size() > 0) {
 			for (MedicalRecordNumberDetail medicalRecordNumberDetail : mrns) {
-				medicalIdentifiers.add(getMedicalIdentifier(medicalRecordNumberDetail));
+				ParticipantMedicalIdentifier medicalIdentifier = getMedicalIdentifier(medicalRecordNumberDetail);
+				map.put(medicalIdentifier.getSite().getName(), medicalIdentifier);
 			}
+			participant.setParticipantMedicalIdentifierCollection(map);
 		}
 
 	}
 
 	private ParticipantMedicalIdentifier getMedicalIdentifier(MedicalRecordNumberDetail medicalRecordNumberDetail) {
-		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteId());//TODO handling of name
+		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteName());
 		if (site == null) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}

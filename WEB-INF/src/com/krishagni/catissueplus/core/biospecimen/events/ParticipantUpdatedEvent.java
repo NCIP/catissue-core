@@ -40,4 +40,10 @@ public class ParticipantUpdatedEvent extends ResponseEvent {
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;		
 	}
+	
+	public static ParticipantUpdatedEvent notAuthorized(UpdateParticipantEvent event1) {
+		ParticipantUpdatedEvent event = new ParticipantUpdatedEvent();
+		event.setStatus(EventStatus.NOT_AUTHORIZED);
+		return event;
+	}
 }
