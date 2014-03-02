@@ -1,3 +1,4 @@
+
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
@@ -10,14 +11,15 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.common.util.global.Status;
 
 public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {
+
+	private String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
 			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
 			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.parentSpecimen.id = :parentSpecimenId"
-			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by sp.id";
+			+ " and sp.activityStatus <> '" + ACTIVITY_STATUS_DISABLED + "' order by sp.id";
 
 	@Override
 	public List<SpecimenInfo> getSpecimensList(Long parentSpecimenId) {
@@ -38,5 +40,15 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			specimensInfo.add(info);
 		}
 		return specimensInfo;
+	}
+
+	@Override
+	public void deleteSpecimens(Long participantId) {
+		String hql = "update " + Specimen.class.getName() + " specimen set specimen.activityStatus ='"
+				+ ACTIVITY_STATUS_DISABLED
+				+ "' where specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id = :participantId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setLong("participantId", participantId);
+		query.executeUpdate();
 	}
 }

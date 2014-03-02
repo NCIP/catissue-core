@@ -8,4 +8,6 @@ public interface CollectionProtocolRegistrationService {
 
 	public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(
 			ReqSpecimenCollGroupSummaryEvent reqSpecimenCollGroupSummaryEvent);
+
+	public void delete(Long participantId);
 }

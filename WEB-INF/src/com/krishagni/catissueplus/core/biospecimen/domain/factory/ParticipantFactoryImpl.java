@@ -35,8 +35,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		this.daoFactory = daoFactory;
 	}
 
-	private final String EMPTY_STRING = "";
-
 	private final String SSN = "social security number";
 
 	private final String RACE = "race";

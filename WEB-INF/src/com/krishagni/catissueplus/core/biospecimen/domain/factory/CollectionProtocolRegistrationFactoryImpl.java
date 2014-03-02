@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -20,6 +21,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
 
@@ -99,6 +101,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (StringUtils.isBlank(details.getPpid())) {
 			reportError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
 		}
+		//TODO: have to confirm this
 		CollectionProtocolRegistration cpr = daoFactory.getCollectionProtocolDao().getCpr(details.getCpId(),
 				details.getPpid());
 		if (cpr != null) {
@@ -108,30 +111,46 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	}
 
 	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
+		if (details.getConsentResponseDetails() != null) {
+			registration.setConsentSignatureDate(details.getConsentResponseDetails().getConsentDate());
+			User witness = daoFactory.getUserDao().getUser(details.getConsentResponseDetails().getWitnessName());
+			if (witness == null) {
+				reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, "consent witness");
+			}
+			registration.setConsentWitness(witness);
+		}
 		Collection<ConsentTier> consentTierCollection = daoFactory.getCollectionProtocolDao().getConsentTierCollection(
 				details.getCpId());
-		final Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
+		Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
 		if (consentTierCollection != null && !consentTierCollection.isEmpty()) {
-			final Iterator<ConsentTier> iter = consentTierCollection.iterator();
+			Iterator<ConsentTier> iter = consentTierCollection.iterator();
 			while (iter.hasNext()) {
-				final ConsentTier consentTier = (ConsentTier) iter.next();
-				final ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+				ConsentTier consentTier = (ConsentTier) iter.next();
+				ConsentTierResponse consentTierResponse = new ConsentTierResponse();
 				consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
 				consentTierResponse.setConsentTier(consentTier);
 				consentTierResponseCollection.add(consentTierResponse);
+				for (ConsentTierDetails tier : details.getConsentResponseDetails()
+						.getConsentTierList()) {
+					if (consentTier.getStatement().equals(tier.getConsentStatment())) {
+						consentTierResponse.setResponse(tier.getParticipantResponse());
+					}
+				}
+
 			}
 		}
 		registration.setConsentTierResponseCollection(consentTierResponseCollection);
 	}
 
 	private void setSpecimenCollectionGroups(CollectionProtocolRegistration registration) {
-		final Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = registration.getCollectionProtocol()
-				.getCollectionProtocolEventCollection().iterator();
-		final Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+		Collection<CollectionProtocolEvent> cpeColl = daoFactory.getCollectionProtocolDao().getEventCollection(
+				registration.getCollectionProtocol().getId());
+		Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = cpeColl.iterator();
+		Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
 		while (collectionProtocolEventIterator.hasNext()) {
-			final CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator.next();
+			CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator.next();
 			if (ACTIVITY_STATUS_ACTIVE.toString().equalsIgnoreCase(collectionProtocolEvent.getActivityStatus())) {
-				scgCollection.add(scgFactory.createScg(collectionProtocolEvent));
+				scgCollection.add(scgFactory.createScg(registration, collectionProtocolEvent));
 			}
 		}
 		registration.setSpecimenCollectionGroupCollection(scgCollection);

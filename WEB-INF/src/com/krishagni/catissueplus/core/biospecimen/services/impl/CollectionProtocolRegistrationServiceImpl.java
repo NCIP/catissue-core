@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsS
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
@@ -14,6 +15,8 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
 
 	private DaoFactory daoFactory;
+	
+	private SpecimenCollGroupService specimenCollGroupSvc;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -37,5 +40,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 
 	}
+
+	@Override
+	public void delete(Long participantId) {
+		specimenCollGroupSvc.deleteGroups(participantId);
+		daoFactory.getRegistrationDao().delete(participantId);
+	}
+
 
 }

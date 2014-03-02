@@ -20,6 +20,8 @@ import edu.wustl.common.util.global.Status;
 public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<CollectionProtocolRegistration>
 		implements
 			CollectionProtocolRegistrationDao {
+	
+	private String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "
 			+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"
@@ -52,9 +54,11 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	}
 
 	@Override
-	public List<CollectionProtocolRegistration> getAllRegistrations(Long cpId) {
-
-		return null;
+	public void delete(Long participantId) {
+		String hql = "update "+ CollectionProtocolRegistration.class.getName()+" cpr set cpr.activityStatus = '"+ACTIVITY_STATUS_DISABLED+"' where cpr.participant.id = :participantId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setLong("participantId", participantId);
+		query.executeUpdate();
 	}
 
 }

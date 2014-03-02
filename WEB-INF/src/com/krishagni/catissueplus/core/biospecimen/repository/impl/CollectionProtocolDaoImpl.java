@@ -14,7 +14,9 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
@@ -84,6 +86,18 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@Override
 	public CollectionProtocolRegistration getCpr(Long cpId, String ppid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<CollectionProtocolEvent> getEventCollection(Long cpId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<SpecimenRequirement> getSpecimenRequirements(Long cpeId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

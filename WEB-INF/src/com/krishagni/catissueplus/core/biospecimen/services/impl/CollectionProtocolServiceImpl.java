@@ -22,15 +22,17 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEven
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
-
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory protocolRegistrationFactory;
+
+	private SpecimenCollGroupService specimenCollGroupSvc;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -60,12 +62,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	@Override
-	public AllRegistrationsSummaryEvent getAllRegistrations(ReqRegistrationSummaryEvent event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public AllConsentsSummaryEvent getConsents(ReqConsentsSummaryEvent event) {
 		// TODO Auto-generated method stub
 		return null;
@@ -91,6 +87,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	public RegistrationUpdatedEvent updateResgistration(UpdateRegistrationEvent event) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteRegistrations(Long participantId) {
+		specimenCollGroupSvc.deleteGroups(participantId);
+		daoFactory.getRegistrationDao().delete(participantId);
 	}
 
 	@Override

@@ -11,4 +11,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 public interface SpecimenCollectionGroupDao extends Dao<SpecimenCollectionGroup> {
 
 	public List<SpecimenInfo> getSpecimensList(Long scgId);
+
+	public void deleteGroups(Long participantId);
 }

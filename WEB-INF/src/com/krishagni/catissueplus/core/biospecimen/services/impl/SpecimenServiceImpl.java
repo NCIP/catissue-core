@@ -29,4 +29,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return AllSpecimensSummaryEvent.serverError(e);
 		}
 	}
+
+	@Override
+	public void deleteSpecimens(Long participantId) {
+		daoFactory.getSpecimenDao().deleteSpecimens(participantId);
+	}
 }

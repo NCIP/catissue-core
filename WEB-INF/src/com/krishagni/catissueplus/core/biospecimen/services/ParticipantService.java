@@ -2,7 +2,9 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
@@ -15,6 +17,8 @@ public interface ParticipantService {
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event);
 
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event);
+	
+	public ParticipantDeletedEvent delete(DeleteParticipantEvent event);
 
 	public Object listPedigree(ReqParticipantDetailEvent event);
 

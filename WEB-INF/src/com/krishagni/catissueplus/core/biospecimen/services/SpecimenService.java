@@ -7,4 +7,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEven
 public interface SpecimenService {
 	
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
+
+	public void deleteSpecimens(Long participantId);
 }

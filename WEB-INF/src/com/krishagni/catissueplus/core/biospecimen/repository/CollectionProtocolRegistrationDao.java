@@ -11,5 +11,5 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public List<SpecimenCollectionGroupInfo> getSpecimenCollectiongroupsList(Long cprId);
 
-	public List<CollectionProtocolRegistration> getAllRegistrations(Long cpId);
+	public void delete(Long participantId);
 }
