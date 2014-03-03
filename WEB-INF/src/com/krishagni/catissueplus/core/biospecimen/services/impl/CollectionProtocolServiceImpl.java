@@ -5,10 +5,15 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllRegistrationsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
@@ -40,6 +45,22 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public CollectionProtocolRegistrationFactory getProtocolRegistrationFactory() {
+		return protocolRegistrationFactory;
+	}
+
+	public void setProtocolRegistrationFactory(CollectionProtocolRegistrationFactory protocolRegistrationFactory) {
+		this.protocolRegistrationFactory = protocolRegistrationFactory;
+	}
+
+	public SpecimenCollGroupService getSpecimenCollGroupSvc() {
+		return specimenCollGroupSvc;
+	}
+
+	public void setSpecimenCollGroupSvc(SpecimenCollGroupService specimenCollGroupSvc) {
+		this.specimenCollGroupSvc = specimenCollGroupSvc;
 	}
 
 	@Override
@@ -90,14 +111,27 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 
 	@Override
-	public void deleteRegistrations(Long participantId) {
-		specimenCollGroupSvc.deleteGroups(participantId);
-		daoFactory.getRegistrationDao().delete(participantId);
+	public void delete(DeleteParticipantEvent event) {
+		if (event.isIncludeChildren()) {
+			specimenCollGroupSvc.delete(event);
+		}
+		else if (daoFactory.getRegistrationDao().checkActiveChildrenForParticipant(event.getId())) {
+			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+		}
+		daoFactory.getRegistrationDao().deleteByParticipant(event.getId());
 	}
-
+	
 	@Override
-	public void setRegistrationDao(CollectionProtocolRegistrationDao dao) {
-		// TODO Auto-generated method stub
-
+	public void delete(DeleteRegistrationEvent event)
+	{
+		if (event.isIncludeChildren()) {
+			specimenCollGroupSvc.delete(event);
+		}
+		else if (daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
+			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+		}
+			daoFactory.getRegistrationDao().delete(event.getId());
 	}
+	
+
 }

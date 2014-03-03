@@ -37,6 +37,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory{
 		return specimen;
 	}
 
+	/**
+	 * Sets the consents
+	 * @param specimen
+	 * @param group
+	 */
 	private void setConsents(Specimen specimen, SpecimenCollectionGroup group) {
 		Collection<ConsentTierStatus> consentTierStatusCollectionN = new HashSet<ConsentTierStatus>();
 

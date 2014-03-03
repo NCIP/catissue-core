@@ -41,11 +41,5 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	}
 
-	@Override
-	public void delete(Long participantId) {
-		specimenCollGroupSvc.deleteGroups(participantId);
-		daoFactory.getRegistrationDao().delete(participantId);
-	}
-
 
 }

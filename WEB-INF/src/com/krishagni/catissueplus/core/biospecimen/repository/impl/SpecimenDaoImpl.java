@@ -43,12 +43,54 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	}
 
 	@Override
-	public void deleteSpecimens(Long participantId) {
+	public void deleteByParticipant(Long participantId) {
 		String hql = "update " + Specimen.class.getName() + " specimen set specimen.activityStatus ='"
 				+ ACTIVITY_STATUS_DISABLED
 				+ "' where specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id = :participantId";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setLong("participantId", participantId);
 		query.executeUpdate();
+	}
+
+	@Override
+	public void deleteByRegistration(Long registrationId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteBycollectionGroup(Long collecionGroupId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean checkActiveChildrenForParticipant(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildrenForRegistration(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildrenForCollGroup(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildren(long id) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

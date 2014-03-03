@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
@@ -22,11 +23,36 @@ public class ParticipantServiceImpl implements ParticipantService {
 	//TODO: Handle privileges
 	private DaoFactory daoFactory;
 
+	/**
+	 * Participant factory to create/update and perform all validations on participant details 
+	 */
 	private ParticipantFactory participantFactory;
 
 	private CollectionProtocolService collectionProtocolSvc;
 
-	private String SUCCESS = "success";
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+
+	public ParticipantFactory getParticipantFactory() {
+		return participantFactory;
+	}
+
+	public void setParticipantFactory(ParticipantFactory participantFactory) {
+		this.participantFactory = participantFactory;
+	}
+
+	public CollectionProtocolService getCollectionProtocolSvc() {
+		return collectionProtocolSvc;
+	}
+
+	public void setCollectionProtocolSvc(CollectionProtocolService collectionProtocolSvc) {
+		this.collectionProtocolSvc = collectionProtocolSvc;
+	}
 
 	@Override
 	public ParticipantDetailsEvent getParticipant(ReqParticipantDetailEvent event) {
@@ -74,9 +100,12 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
 		try {
 			if (event.isIncludeChildren()) {
-				collectionProtocolSvc.deleteRegistrations(event.getId());
-				daoFactory.getParticipantDao().delete(event.getId());
+				collectionProtocolSvc.delete(event);
 			}
+			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
+				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+			}
+			daoFactory.getParticipantDao().delete(event.getId());
 			return ParticipantDeletedEvent.ok();
 		}
 		catch (CatissueException ce) {

@@ -47,6 +47,27 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		this.daoFactory = daoFactory;
 	}
 
+	public ParticipantFactory getParticipantFactory() {
+		return participantFactory;
+	}
+
+	public void setParticipantFactory(ParticipantFactory participantFactory) {
+		this.participantFactory = participantFactory;
+	}
+
+	public SpecimenCollectionGroupFactory getScgFactory() {
+		return scgFactory;
+	}
+
+	public void setScgFactory(SpecimenCollectionGroupFactory scgFactory) {
+		this.scgFactory = scgFactory;
+	}
+
+	/**
+	 * This method validate and populates collection protocol registration with the given details.
+	 * @param details
+	 * @returns instance of CollectionProtocolRegistration
+	 */
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetails details) {
 		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
@@ -61,15 +82,25 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 				registration);
 		setPPId(registration, details);
 		setConsents(registration, details);
-		setSpecimenCollectionGroups(registration);
+		createAnticipatedScgs(registration);
 
 		return registration;
 	}
 
+	/**
+	 * Sets barcode
+	 * @param registration
+	 * @param details
+	 */
 	private void setBarcode(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
 		registration.setBarcode(details.getBarcode());
 	}
 
+	/**
+	 * Sets the registration date. If null then sets the current date as registration date
+	 * @param registration
+	 * @param details
+	 */
 	private void setRegistrationDate(CollectionProtocolRegistration registration,
 			CollectionProtocolRegistrationDetails details) {
 		if (details.getRegistrationDate() == null) {
@@ -80,11 +111,21 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		}
 	}
 
+	/**
+	 * Sets the activity status Active
+	 * @param registration
+	 * @param details
+	 */
 	private void setActivityStatus(CollectionProtocolRegistration registration,
 			CollectionProtocolRegistrationDetails details) {
 		registration.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 	}
 
+	/**
+	 * Sets the Collection Protocol
+	 * @param registration
+	 * @param details
+	 */
 	private void setCollectionProtocol(CollectionProtocolRegistration registration,
 			CollectionProtocolRegistrationDetails details) {
 		if (details.getCpId() == null) {
@@ -97,6 +138,11 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setCollectionProtocol(protocol);
 	}
 
+	/**
+	 * Sets the given participant protocol identifier
+	 * @param registration
+	 * @param details
+	 */
 	private void setPPId(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
 		if (StringUtils.isBlank(details.getPpid())) {
 			reportError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
@@ -110,7 +156,18 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setProtocolParticipantIdentifier(details.getPpid());
 	}
 
+	/**
+	 * This method converts the consent tier from the CP to consent response.  
+	 * @param registration
+	 * @param details
+	 */
 	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
+		Collection<ConsentTier> consentTierCollection = daoFactory.getCollectionProtocolDao().getConsentTierCollection(
+				details.getCpId());
+		if (consentTierCollection == null || consentTierCollection.isEmpty()) {
+			return;
+		}
+
 		if (details.getConsentResponseDetails() != null) {
 			registration.setConsentSignatureDate(details.getConsentResponseDetails().getConsentDate());
 			User witness = daoFactory.getUserDao().getUser(details.getConsentResponseDetails().getWitnessName());
@@ -119,22 +176,19 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			}
 			registration.setConsentWitness(witness);
 		}
-		Collection<ConsentTier> consentTierCollection = daoFactory.getCollectionProtocolDao().getConsentTierCollection(
-				details.getCpId());
+
 		Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
-		if (consentTierCollection != null && !consentTierCollection.isEmpty()) {
-			Iterator<ConsentTier> iter = consentTierCollection.iterator();
-			while (iter.hasNext()) {
-				ConsentTier consentTier = (ConsentTier) iter.next();
-				ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-				consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
-				consentTierResponse.setConsentTier(consentTier);
-				consentTierResponseCollection.add(consentTierResponse);
-				for (ConsentTierDetails tier : details.getConsentResponseDetails()
-						.getConsentTierList()) {
-					if (consentTier.getStatement().equals(tier.getConsentStatment())) {
-						consentTierResponse.setResponse(tier.getParticipantResponse());
-					}
+
+		Iterator<ConsentTier> iter = consentTierCollection.iterator();
+		while (iter.hasNext()) {
+			ConsentTier consentTier = (ConsentTier) iter.next();
+			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+			consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
+			consentTierResponse.setConsentTier(consentTier);
+			consentTierResponseCollection.add(consentTierResponse);
+			for (ConsentTierDetails tier : details.getConsentResponseDetails().getConsentTierList()) {
+				if (consentTier.getStatement().equals(tier.getConsentStatment())) {
+					consentTierResponse.setResponse(tier.getParticipantResponse());
 				}
 
 			}
@@ -142,7 +196,11 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setConsentTierResponseCollection(consentTierResponseCollection);
 	}
 
-	private void setSpecimenCollectionGroups(CollectionProtocolRegistration registration) {
+	/**
+	 * Populate the Specimen Collection Group collection for the collection protocol registration
+	 * @param registration instance of CollectionProtocolRegistration
+	 */
+	private void createAnticipatedScgs(CollectionProtocolRegistration registration) {
 		Collection<CollectionProtocolEvent> cpeColl = daoFactory.getCollectionProtocolDao().getEventCollection(
 				registration.getCollectionProtocol().getId());
 		Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = cpeColl.iterator();

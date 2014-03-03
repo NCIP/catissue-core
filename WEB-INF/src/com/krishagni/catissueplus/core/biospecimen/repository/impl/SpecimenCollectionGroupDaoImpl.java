@@ -53,11 +53,41 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 	}
 
 	@Override
-	public void deleteGroups(Long participantId) {
+	public void deleteByParticipant(Long participantId) {
 		String hql = "update "+SpecimenCollectionGroup.class.getName()+" scg set scg.activityStatus = '"+ACTIVITY_STATUS_DISABLED+"' where scg.collectionProtocolRegistration.participant.id = :participantId";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setLong("participantId", participantId);
 		query.executeUpdate();
+	}
+
+	@Override
+	public void deleteByRegistration(Long registrationId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Long collectionGroupId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean checkActivechildrenForParticipant(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildrenForRegistration(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildren(long id) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -12,5 +12,15 @@ public interface SpecimenCollectionGroupDao extends Dao<SpecimenCollectionGroup>
 
 	public List<SpecimenInfo> getSpecimensList(Long scgId);
 
-	public void deleteGroups(Long participantId);
+	public void deleteByParticipant(Long participantId);
+
+	public void deleteByRegistration(Long registrationId);
+
+	public void delete(Long collectionGroupId);
+
+	public boolean checkActivechildrenForParticipant(long id);
+
+	public boolean checkActiveChildrenForRegistration(long id);
+
+	public boolean checkActiveChildren(long id);
 }

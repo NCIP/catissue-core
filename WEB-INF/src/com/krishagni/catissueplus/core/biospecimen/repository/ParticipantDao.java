@@ -8,4 +8,5 @@ public interface ParticipantDao extends Dao<Participant>{
 
 	public Participant getParticipant(Long id);
 	public void delete(Long participantId);
+	public boolean checkActiveChildren(Long id);
 }

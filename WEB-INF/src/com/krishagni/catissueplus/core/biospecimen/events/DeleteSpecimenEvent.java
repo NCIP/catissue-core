@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 
-public class DeleteParticipantEvent extends DeleteEvent{
+public class DeleteSpecimenEvent extends DeleteEvent{
 
 }
