@@ -5,12 +5,11 @@ import java.util.Date;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 
-
 public class CollectionProtocolRegistrationDetails {
 
 	private ParticipantDetails participantDetails;
 
-	private Long cprId;
+	private Long id;
 
 	private Long cpId;
 
@@ -19,6 +18,16 @@ public class CollectionProtocolRegistrationDetails {
 	private String barcode;
 
 	private Date registrationDate;
+
+	private ConsentResponseDetails consentResponseDetails;
+
+	public ConsentResponseDetails getConsentResponseDetails() {
+		return consentResponseDetails;
+	}
+
+	public void setConsentResponseDetails(ConsentResponseDetails consentResponseDetails) {
+		this.consentResponseDetails = consentResponseDetails;
+	}
 
 	public String getBarcode() {
 		return barcode;
@@ -36,12 +45,12 @@ public class CollectionProtocolRegistrationDetails {
 		this.registrationDate = registrationDate;
 	}
 
-	public Long getCprId() {
-		return cprId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCprId(Long cprId) {
-		this.cprId = cprId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getCpId() {
@@ -67,9 +76,8 @@ public class CollectionProtocolRegistrationDetails {
 	public void setParticipantDetails(ParticipantDetails participantDetails) {
 		this.participantDetails = participantDetails;
 	}
-	
-	public static CollectionProtocolRegistrationDetails fromDomain(CollectionProtocolRegistration protocolRegistration)
-	{
+
+	public static CollectionProtocolRegistrationDetails fromDomain(CollectionProtocolRegistration protocolRegistration) {
 		CollectionProtocolRegistrationDetails details = new CollectionProtocolRegistrationDetails();
 		return details;
 	}

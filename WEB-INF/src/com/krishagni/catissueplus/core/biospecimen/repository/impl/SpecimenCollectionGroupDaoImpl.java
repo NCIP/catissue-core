@@ -20,11 +20,12 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		implements
 			SpecimenCollectionGroupDao {
 
-	String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
+	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
 			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
 			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.specimenCollectionGroup.id = :scgId"
 			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
 			+ "' and sp.parentSpecimen.id is null order by sp.id";
+	private String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	@Override
 	public List<SpecimenInfo> getSpecimensList(Long scgId) {
@@ -49,6 +50,44 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		}
 
 		return specimensInfo;
+	}
+
+	@Override
+	public void deleteByParticipant(Long participantId) {
+		String hql = "update "+SpecimenCollectionGroup.class.getName()+" scg set scg.activityStatus = '"+ACTIVITY_STATUS_DISABLED+"' where scg.collectionProtocolRegistration.participant.id = :participantId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setLong("participantId", participantId);
+		query.executeUpdate();
+	}
+
+	@Override
+	public void deleteByRegistration(Long registrationId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Long collectionGroupId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean checkActivechildrenForParticipant(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildrenForRegistration(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildren(long id) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -163,7 +163,7 @@ public class ParticipantDetails {
 		dto.setEthnicity(participant.getEthnicity());
 		dto.setGender(participant.getGender());
 		dto.setId(participant.getId());
-		Map<String, ParticipantMedicalIdentifier> pmi = participant.getParticipantMedicalIdentifierCollection();
+		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
 		List<MedicalRecordNumberDetail> medicalRecordNumberDetails = new ArrayList<MedicalRecordNumberDetail>();
 		if (pmi != null) {
 			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {

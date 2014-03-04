@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.core.biospecimen.domain.factory;
+package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
@@ -15,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -34,8 +36,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-
-	private final String EMPTY_STRING = "";
 
 	private final String SSN = "social security number";
 
@@ -83,9 +83,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setName(Participant participant, ParticipantDetails details) {
-		participant.setFirstName(StringUtils.isBlank(details.getFirstName()) ? EMPTY_STRING : details.getFirstName());
-		participant.setLastName(StringUtils.isBlank(details.getLastName()) ? EMPTY_STRING : details.getLastName());
-		participant.setMiddleName(StringUtils.isBlank(details.getMiddleName()) ? EMPTY_STRING : details.getMiddleName());
+		participant.setFirstName(details.getFirstName());
+		participant.setLastName(details.getLastName());
+		participant.setMiddleName(details.getMiddleName());
 	}
 
 	private void setDates(Participant participant, ParticipantDetails details) {
@@ -148,7 +148,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 				ParticipantMedicalIdentifier medicalIdentifier = getMedicalIdentifier(medicalRecordNumberDetail);
 				map.put(medicalIdentifier.getSite().getName(), medicalIdentifier);
 			}
-			participant.setParticipantMedicalIdentifierCollection(map);
+			participant.setPmiCollection(map);
 		}
 
 	}
@@ -161,10 +161,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (StringUtils.isBlank(medicalRecordNumberDetail.getMrn())) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
 		}
-		ParticipantMedicalIdentifier medicalIdentifier = new ParticipantMedicalIdentifier();
-		medicalIdentifier.setSite(site);
-		medicalIdentifier.setMedicalRecordNumber(medicalRecordNumberDetail.getMrn());
-		return medicalIdentifier;
+		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+		pmi.setSite(site);
+		pmi.setMedicalRecordNumber(medicalRecordNumberDetail.getMrn());
+		return pmi;
 	}
 
 	private void ensureValidPermissibleValue(String value, String type) {

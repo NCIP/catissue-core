@@ -21,6 +21,8 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		implements
 			CollectionProtocolRegistrationDao {
 
+	private String ACTIVITY_STATUS_DISABLED = "Disabled";
+
 	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "
 			+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"
 			+ "scg.collectionProtocolEvent.collectionPointLabel, scg.collectionProtocolRegistration.registrationDate from "
@@ -52,8 +54,40 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	}
 
 	@Override
-	public List<CollectionProtocolRegistration> getAllRegistrations(Long cpId) {
+	public void deleteByParticipant(Long participantId) {
+		String hql = "update " + CollectionProtocolRegistration.class.getName() + " cpr set cpr.activityStatus = '"
+				+ ACTIVITY_STATUS_DISABLED + "' where cpr.participant.id = :participantId";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setLong("participantId", participantId);
+		query.executeUpdate();
+	}
 
+	@Override
+	public void deleteByRegistration(Long registrationId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(Long id) {
+
+	}
+
+	@Override
+	public boolean checkActiveChildren(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean checkActiveChildrenForParticipant(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public CollectionProtocolRegistration getCpr(Long cprId) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

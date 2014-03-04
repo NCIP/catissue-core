@@ -4,9 +4,10 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-
 
 public class Participant {
 
@@ -77,12 +78,12 @@ public class Participant {
 	 */
 	protected String vitalStatus;
 
-	protected Map<String, ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = new HashMap<String, ParticipantMedicalIdentifier>();
+	protected Map<String, ParticipantMedicalIdentifier> pmiCollection = new HashMap<String, ParticipantMedicalIdentifier>();
 
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
 	 */
-	protected Map<String, CollectionProtocolRegistration> collectionProtocolRegistrationCollection = new HashMap<String, CollectionProtocolRegistration>();
+	protected Map<String, CollectionProtocolRegistration> cprCollection = new HashMap<String, CollectionProtocolRegistration>();
 
 	public Long getId() {
 		return id;
@@ -188,22 +189,22 @@ public class Participant {
 		this.vitalStatus = vitalStatus;
 	}
 
-	public Map<String, ParticipantMedicalIdentifier> getParticipantMedicalIdentifierCollection() {
-		return participantMedicalIdentifierCollection;
+	public Map<String, ParticipantMedicalIdentifier> getPmiCollection() {
+		return pmiCollection;
 	}
 
-	public void setParticipantMedicalIdentifierCollection(
+	public void setPmiCollection(
 			Map<String, ParticipantMedicalIdentifier> participantMedicalIdentifierCollection) {
-		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection;
+		this.pmiCollection = participantMedicalIdentifierCollection;
 	}
 
-	public Map<String, CollectionProtocolRegistration> getCollectionProtocolRegistrationCollection() {
-		return collectionProtocolRegistrationCollection;
+	public Map<String, CollectionProtocolRegistration> getCprCollection() {
+		return cprCollection;
 	}
 
-	public void setCollectionProtocolRegistrationCollection(
+	public void setCprCollection(
 			Map<String, CollectionProtocolRegistration> collectionProtocolRegistrationCollection) {
-		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
+		this.cprCollection = collectionProtocolRegistrationCollection;
 	}
 
 	public void update(Participant participant) {
@@ -218,8 +219,39 @@ public class Participant {
 		this.setEthnicity(participant.getEthnicity());
 		this.setBirthDate(participant.getBirthDate());
 		this.setDeathDate(participant.getDeathDate());
-		this.setRaceCollection(participant.getRaceCollection());
-		this.setParticipantMedicalIdentifierCollection(participant.getParticipantMedicalIdentifierCollection());
+		updateRace(participant);
+		updatePmi(participant);
+	}
+
+	private void updateRace(Participant participant) {
+		Set<String> newRaceColection = new HashSet<String>();
+		for (String race : participant.getRaceCollection()) {
+			if (!this.raceCollection.contains(race)) {
+				newRaceColection.add(race);
+			}
+		}
+		Set<String> deletedRaces = new HashSet<String>();
+		for (String race : raceCollection) {
+			if (!participant.getRaceCollection().contains(race)) {
+				deletedRaces.add(race);
+			}
+		}
+
+		raceCollection.removeAll(deletedRaces);
+		raceCollection.addAll(newRaceColection);
+	}
+
+	private void updatePmi(Participant participant) {
+		Iterator<Entry<String, ParticipantMedicalIdentifier>> entries = pmiCollection.entrySet()
+				.iterator();
+		while (entries.hasNext()) {
+			Entry<String, ParticipantMedicalIdentifier> entry = entries.next();
+			if (!participant.getPmiCollection().containsKey(entry.getKey())) {
+				entries.remove();
+			}
+		}
+
+		pmiCollection.putAll(participant.getPmiCollection());
 	}
 
 }

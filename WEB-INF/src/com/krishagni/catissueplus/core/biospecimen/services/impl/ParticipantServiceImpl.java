@@ -1,31 +1,59 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.AllParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
+	//TODO: Handle privileges
 	private DaoFactory daoFactory;
 
+	/**
+	 * Participant factory to create/update and perform all validations on participant details 
+	 */
 	private ParticipantFactory participantFactory;
+
+	private CollectionProtocolRegistrationService registrationSvc;
+
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+
+	public ParticipantFactory getParticipantFactory() {
+		return participantFactory;
+	}
+
+	public void setParticipantFactory(ParticipantFactory participantFactory) {
+		this.participantFactory = participantFactory;
+	}
+
+	public CollectionProtocolRegistrationService getRegistrationSvc() {
+		return registrationSvc;
+	}
+
+	public void setRegistrationSvc(CollectionProtocolRegistrationService registrationSvc) {
+		this.registrationSvc = registrationSvc;
+	}
 
 	@Override
 	public ParticipantDetailsEvent getParticipant(ReqParticipantDetailEvent event) {
@@ -35,25 +63,17 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	@Override
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
-		if (hasPrivileges(event)) {
-			try {
-				Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
-				daoFactory.getParticipantDao().saveOrUpdate(participant);
-				return ParticipantCreatedEvent.ok(ParticipantDetails.fromDomain(participant));
-			}
-			catch (CatissueException ce) {
-				return ParticipantCreatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
-			}
-			catch (Exception e) {
-				return ParticipantCreatedEvent.serverError(e);
-			}
+		try {
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
+			daoFactory.getParticipantDao().saveOrUpdate(participant);
+			return ParticipantCreatedEvent.ok(ParticipantDetails.fromDomain(participant));
 		}
-		return ParticipantCreatedEvent.notAuthorized(event);
-	}
-
-	private boolean hasPrivileges(RequestEvent event) {
-		//TODO: handle privileges
-		return true;
+		catch (CatissueException ce) {
+			return ParticipantCreatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		}
+		catch (Exception e) {
+			return ParticipantCreatedEvent.serverError(e);
+		}
 	}
 
 	/* 
@@ -62,22 +82,44 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 */
 	@Override
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
-		if (hasPrivileges(event)) {
-			try {
-				Participant participant = participantFactory.createParticipant(event.getParticipantDto());
-				Participant existingParticipant = daoFactory.getParticipantDao().getParticipant(participant.getId());
-				existingParticipant.update(participant);
-				daoFactory.getParticipantDao().saveOrUpdate(existingParticipant);
-				return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(existingParticipant));
+		try {
+			Long participantId = event.getParticipantDto().getId();
+			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
+			if (oldParticipant == null) {
+				return ParticipantUpdatedEvent.notFound(participantId);
 			}
-			catch (CatissueException ce) {
-				return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
-			}
-			catch (Exception e) {
-				return ParticipantUpdatedEvent.serverError(e);
-			}
+			Participant participant = participantFactory.createParticipant(event.getParticipantDto());
+
+			oldParticipant.update(participant);
+			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
+			return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(oldParticipant));
 		}
-		return ParticipantUpdatedEvent.notAuthorized(event);
+		catch (CatissueException ce) {
+			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		}
+		catch (Exception e) {
+			return ParticipantUpdatedEvent.serverError(e);
+		}
+	}
+
+	@Override
+	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
+		try {
+			if (event.isIncludeChildren()) {
+				registrationSvc.delete(event);
+			}
+			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
+				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+			}
+			daoFactory.getParticipantDao().delete(event.getId());
+			return ParticipantDeletedEvent.ok();
+		}
+		catch (CatissueException ce) {
+			return ParticipantDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		}
+		catch (Exception e) {
+			return ParticipantDeletedEvent.serverError(e);
+		}
 	}
 
 	/* (non-Javadoc)

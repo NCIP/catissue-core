@@ -7,7 +7,9 @@ public enum ParticipantErrorCode implements CatissueErrorCode {
 
 	MISSING_ATTR_VALUE(1000, "Required attribute is either empty or null"), 
 	INVALID_ATTR_VALUE(1001,"Attribute value is invalid"), 
-	CONSTRAINT_VIOLATION(1002, "Attribute violates one or more constraints");
+	CONSTRAINT_VIOLATION(1002, "Attribute violates one or more constraints"),
+	DUPLICATE_PPID(1003, "Same protocol participant identifier is already exists with this collection protocol."),
+	ACTIVE_CHILDREN_FOUND(1004, "Participant cannot be deleted, Active childrens found.");
 
 	private int code;
 

@@ -10,6 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.UserDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class DaoFactoryImpl implements DaoFactory {
@@ -75,5 +76,11 @@ public class DaoFactoryImpl implements DaoFactory {
 		CollectionProtocolRegistrationDaoImpl dao = new CollectionProtocolRegistrationDaoImpl();
 		setSessionFactory(dao);
 		return dao;
+	}
+
+	@Override
+	public UserDao getUserDao() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
