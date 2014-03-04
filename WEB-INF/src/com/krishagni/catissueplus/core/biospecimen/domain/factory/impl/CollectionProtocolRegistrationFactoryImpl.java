@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.core.biospecimen.domain.factory;
+package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
@@ -12,6 +12,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -78,12 +82,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setCollectionProtocol(registration, details);
 		Participant participant = participantFactory.createParticipant(details.getParticipantDetails());
 		registration.setParticipant(participant);
-		participant.getCollectionProtocolRegistrationCollection().put(registration.getCollectionProtocol().getTitle(),
-				registration);
+		participant.getCprCollection().put(registration.getCollectionProtocol().getTitle(), registration);
 		setPPId(registration, details);
-		setConsents(registration, details);
-		createAnticipatedScgs(registration);
-
+			setConsentsDuringRegistration(registration, details);
+			createAnticipatedScgs(registration);
 		return registration;
 	}
 
@@ -161,7 +163,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * @param registration
 	 * @param details
 	 */
-	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetails details) {
+	private void setConsentsDuringRegistration(CollectionProtocolRegistration registration,
+			CollectionProtocolRegistrationDetails details) {
 		Collection<ConsentTier> consentTierCollection = daoFactory.getCollectionProtocolDao().getConsentTierCollection(
 				details.getCpId());
 		if (consentTierCollection == null || consentTierCollection.isEmpty()) {
@@ -169,12 +172,15 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		}
 
 		if (details.getConsentResponseDetails() != null) {
-			registration.setConsentSignatureDate(details.getConsentResponseDetails().getConsentDate());
-			User witness = daoFactory.getUserDao().getUser(details.getConsentResponseDetails().getWitnessName());
-			if (witness == null) {
-				reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, "consent witness");
+			setConsentSignDate(registration, details.getConsentResponseDetails().getConsentDate());
+			String witnessName = details.getConsentResponseDetails().getWitnessName();
+			if (StringUtils.isNotBlank(witnessName)) {
+				User witness = daoFactory.getUserDao().getUser(witnessName);
+				if (witness == null) {
+					reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, "consent witness");
+				}
+				registration.setConsentWitness(witness);
 			}
-			registration.setConsentWitness(witness);
 		}
 
 		Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
@@ -196,6 +202,12 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setConsentTierResponseCollection(consentTierResponseCollection);
 	}
 
+	private void setConsentSignDate(CollectionProtocolRegistration registration, Date consentDate) {
+		if (consentDate != null) {
+			registration.setConsentSignatureDate(consentDate);
+		}
+	}
+
 	/**
 	 * Populate the Specimen Collection Group collection for the collection protocol registration
 	 * @param registration instance of CollectionProtocolRegistration
@@ -212,6 +224,16 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			}
 		}
 		registration.setSpecimenCollectionGroupCollection(scgCollection);
+	}
+	
+	/**
+	 * Sets consents from details event to CPR
+	 * @param registration
+	 * @param details
+	 */
+	private void setConsentsDuringUpdate(CollectionProtocolRegistration registration,
+			CollectionProtocolRegistrationDetails details) {
+		//TODO handle consents update
 	}
 
 }

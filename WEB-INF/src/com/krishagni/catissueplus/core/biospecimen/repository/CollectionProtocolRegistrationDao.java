@@ -21,4 +21,6 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public boolean checkActiveChildrenForParticipant(long id);
 
+	public CollectionProtocolRegistration getCpr(Long cprId);
+
 }

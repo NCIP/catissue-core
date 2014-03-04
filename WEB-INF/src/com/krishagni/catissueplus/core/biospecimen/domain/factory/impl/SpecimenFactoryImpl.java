@@ -1,8 +1,10 @@
-package com.krishagni.catissueplus.core.biospecimen.domain.factory;
+package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -17,7 +19,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory{
 	private String ACTIVITY_STATUS_ACTIVE = "Active";
 	@Override
 	public Specimen createSpecimen(SpecimenRequirement requirement, SpecimenCollectionGroup group) {
-		
+		//TODO: yet to handle the parent child relationship
 		Specimen specimen = new Specimen();
 //		this.availableQuantity = new Double(0);
 		specimen.setSpecimenType(requirement.getSpecimenType());

@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEven
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
@@ -28,7 +29,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 */
 	private ParticipantFactory participantFactory;
 
-	private CollectionProtocolService collectionProtocolSvc;
+	private CollectionProtocolRegistrationService registrationSvc;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -46,12 +47,12 @@ public class ParticipantServiceImpl implements ParticipantService {
 		this.participantFactory = participantFactory;
 	}
 
-	public CollectionProtocolService getCollectionProtocolSvc() {
-		return collectionProtocolSvc;
+	public CollectionProtocolRegistrationService getRegistrationSvc() {
+		return registrationSvc;
 	}
 
-	public void setCollectionProtocolSvc(CollectionProtocolService collectionProtocolSvc) {
-		this.collectionProtocolSvc = collectionProtocolSvc;
+	public void setRegistrationSvc(CollectionProtocolRegistrationService registrationSvc) {
+		this.registrationSvc = registrationSvc;
 	}
 
 	@Override
@@ -82,11 +83,16 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
 		try {
+			Long participantId = event.getParticipantDto().getId();
+			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
+			if (oldParticipant == null) {
+				return ParticipantUpdatedEvent.notFound(participantId);
+			}
 			Participant participant = participantFactory.createParticipant(event.getParticipantDto());
-			Participant existingParticipant = daoFactory.getParticipantDao().getParticipant(participant.getId());
-			existingParticipant.update(participant);
-			daoFactory.getParticipantDao().saveOrUpdate(existingParticipant);
-			return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(existingParticipant));
+
+			oldParticipant.update(participant);
+			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
+			return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(oldParticipant));
 		}
 		catch (CatissueException ce) {
 			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
@@ -100,7 +106,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
 		try {
 			if (event.isIncludeChildren()) {
-				collectionProtocolSvc.delete(event);
+				registrationSvc.delete(event);
 			}
 			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);

@@ -141,4 +141,9 @@ public class CollectionProtocolRegistration {
 		this.barcode = barcode;
 	}
 
+	public void update(CollectionProtocolRegistration cpr) {
+		// TODO: Auto-generated method stub
+		
+	}
+
 }

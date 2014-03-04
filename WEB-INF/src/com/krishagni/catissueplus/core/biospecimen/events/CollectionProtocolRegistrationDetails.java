@@ -9,7 +9,7 @@ public class CollectionProtocolRegistrationDetails {
 
 	private ParticipantDetails participantDetails;
 
-	private Long cprId;
+	private Long id;
 
 	private Long cpId;
 
@@ -45,12 +45,12 @@ public class CollectionProtocolRegistrationDetails {
 		this.registrationDate = registrationDate;
 	}
 
-	public Long getCprId() {
-		return cprId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCprId(Long cprId) {
-		this.cprId = cprId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getCpId() {

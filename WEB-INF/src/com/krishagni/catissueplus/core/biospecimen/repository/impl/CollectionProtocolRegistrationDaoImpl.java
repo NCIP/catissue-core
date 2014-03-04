@@ -85,4 +85,10 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		return false;
 	}
 
+	@Override
+	public CollectionProtocolRegistration getCpr(Long cprId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

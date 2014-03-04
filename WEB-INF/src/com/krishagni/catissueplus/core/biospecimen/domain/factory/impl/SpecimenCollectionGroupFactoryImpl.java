@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.core.biospecimen.domain.factory;
+package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValidPermissibleValue;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
@@ -11,6 +11,9 @@ import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -176,6 +179,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		Collection<SpecimenRequirement> specimenRequirements = daoFactory.getCollectionProtocolDao()
 				.getSpecimenRequirements(CollectionProtocolEvent.getId());
 		for (SpecimenRequirement specimenRequirement : specimenRequirements) {
+			//TODO: yet to handle the parent child relationship in specimen factory
 			Specimen specimen = specimenFactory.createSpecimen(specimenRequirement, group);
 			specimenCollection.add(specimen);
 		}
