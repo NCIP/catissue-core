@@ -257,10 +257,12 @@ angular.module('plus.controllers', [])
 
     $scope.toggleOp = function(index) {
       var node = $scope.queryData.exprNodes[index];
-      if (node.value == 'or') {
-        node.value = 'and';
-      } else if (node.value == 'and') {
+      if (node.value == 'and') {
         node.value = 'or';
+      } else if (node.value == 'or') {
+        node.value = 'intersect';
+      } else if (node.value == 'intersect') {
+        node.value = 'and';
       }
     };
 

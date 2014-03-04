@@ -4,31 +4,6 @@
 		<caption>Specimen Event</caption>
 		<table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
 		<row>
-			<numberField>
-				<name>id</name>
-				<udn>id</udn>
-				<caption>Identifier</caption>
-				<column>IDENTIFIER</column>
-			</numberField>
-		</row>
-		<row>
-			<datePicker>
-				<name>eventTimestamp</name>
-				<udn>eventTimestamp</udn>
-				<caption>Event Time</caption>
-				<column>EVENT_TIMESTAMP</column>
-				<format>MM-dd-yyyy</format>
-			</datePicker>
-		</row>
-		<row>
-			<textField>
-				<name>comments</name>
-				<udn>comments</udn>
-				<caption>Comments</caption>
-				<column>COMMENTS</column>
-			</textField>
-		</row>
-		<row>
 			<subForm>
 				<name>FixedEvent</name>
 				<udn>FixedEvent</udn>
@@ -37,7 +12,15 @@
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>IDENTIFIER</parentKey>
 
-				<row>
+                                <row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Fixation Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<dropDown>
 						<name>fixationType</name>
 						<udn>fixationType</udn>
@@ -66,6 +49,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Frozen Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<dropDown>
 						<name>method</name>
 						<udn>method</udn>
@@ -88,6 +79,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Check In Check Out Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<dropDown>
 						<name>storageStatus</name>
 						<udn>storageStatus</udn>
@@ -111,6 +110,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Procedure Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<textField>
 						<name>url</name>
 						<udn>url</udn>
@@ -136,6 +143,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Spun Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<numberField>
 						<name>gforce</name>
 						<udn>gforce</udn>
@@ -161,6 +176,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Collection Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<dropDown>
 						<name>procedure</name>
 						<udn>procedure</udn>
@@ -170,6 +193,7 @@
 							<sql>select value from catissue_permissible_value where public_id = '2003996' order by value</sql>
 						</options>
 					</dropDown>
+
 					<dropDown>
 						<name>container</name>
 						<udn>container</udn>
@@ -192,6 +216,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Received Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<dropDown>
 						<name>quality</name>
 						<udn>quality</udn>
@@ -214,6 +246,14 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Embedded Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<dropDown>
 						<name>embeddingMedium</name>
 						<udn>embeddingMedium</udn>
@@ -236,12 +276,21 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Cell Review Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
+
 					<numberField>
 						<name>neoPlasticCellularityPct</name>
 						<udn>neoPlasticCellularityPct</udn>
 						<caption>Cell Neo Plastic Cellularity Percentage</caption>
 						<column>NEOPLASTIC_CELLULARITY_PER</column>
 					</numberField>
+
 					<numberField>
 						<name>viableCellPct</name>
 						<udn>viableCellPct</udn>
@@ -261,6 +310,13 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Tissue Review Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
 					<numberField>
 						<name>neoPlasticCellularityPct</name>
 						<udn>neoPlasticCellularityPct</udn>
@@ -308,6 +364,13 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Fluid Review Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
 					<numberField>
 						<name>cellCount</name>
 						<udn>cellCount</udn>
@@ -327,6 +390,13 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Molecular Review Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
 					<textField>
 						<name>gelImageUrl</name>
 						<udn>gelImageUrl</udn>
@@ -382,6 +452,13 @@
 				<parentKey>IDENTIFIER</parentKey>
 
 				<row>
+			                <datePicker>
+                                          <name>eventTimestamp</name>
+                                          <udn>eventTimestamp</udn>
+                                          <caption>Disposal Time</caption>
+                                          <column>EVENT_TIMESTAMP</column>
+                                          <format>MM-dd-yyyy</format>
+                                        </datePicker>
 					<textField>
 						<name>reason</name>
 						<udn>reason</udn>
