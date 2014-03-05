@@ -11,6 +11,7 @@ import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistration {
 
+	private final String ACTIVITY_STATUS_ACTIVE = "Active";
 	private Long id;
 
 	private String protocolParticipantIdentifier;
@@ -144,6 +145,11 @@ public class CollectionProtocolRegistration {
 	public void update(CollectionProtocolRegistration cpr) {
 		// TODO: Auto-generated method stub
 		
+	}
+	
+	public void setActive()
+	{
+		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 	}
 
 }

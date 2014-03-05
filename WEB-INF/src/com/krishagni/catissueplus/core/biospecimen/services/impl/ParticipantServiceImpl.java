@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -15,7 +18,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEv
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
-import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
@@ -23,6 +25,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	//TODO: Handle privileges
 	private DaoFactory daoFactory;
+
+	private final String SSN = "social security number";
 
 	/**
 	 * Participant factory to create/update and perform all validations on participant details 
@@ -65,6 +69,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
 		try {
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
+			ensureUniqueSsn(participant.getSocialSecurityNumber());
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ParticipantCreatedEvent.ok(ParticipantDetails.fromDomain(participant));
 		}
@@ -89,7 +94,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
 			Participant participant = participantFactory.createParticipant(event.getParticipantDto());
-
+			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber());
 			oldParticipant.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
 			return ParticipantUpdatedEvent.ok(ParticipantDetails.fromDomain(oldParticipant));
@@ -99,6 +104,22 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 		catch (Exception e) {
 			return ParticipantUpdatedEvent.serverError(e);
+		}
+	}
+
+	private void validateSsn(String oldSsn, String newSsn) {
+		if ((isBlank(oldSsn) && !isBlank(newSsn))) {
+			ensureUniqueSsn(newSsn);
+		}
+		else if (!isBlank(oldSsn) && !isBlank(newSsn) && !oldSsn.equals(newSsn)) {
+			ensureUniqueSsn(newSsn);
+		}
+
+	}
+
+	private void ensureUniqueSsn(String ssn) {
+		if (daoFactory.getParticipantDao().isSsnUnique(ssn)) {
+			reportError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
 		}
 	}
 

@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValidPermissibleValue;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.Date;
@@ -10,8 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
@@ -62,6 +62,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setSsn(participant, details.getSsn());
 		setName(participant, details);
 		setDates(participant, details);
+		setActivityStatus(participant, details);
 		setVitalStatus(participant, details);
 		setGender(participant, details);
 		setRace(participant, details);
@@ -71,7 +72,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setSsn(Participant participant, String ssn) {
-		if (StringUtils.isBlank(ssn)) {
+		if (isBlank(ssn)) {
 			return;
 		}
 		if (isSsnValid(ssn)) {
@@ -108,15 +109,19 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	}
 
+	private void setActivityStatus(Participant participant, ParticipantDetails details) {
+		participant.updateActivityStatus(details.getActivityStatus());
+	}
+
 	private void setVitalStatus(Participant participant, ParticipantDetails details) {
-		if (StringUtils.isNotBlank(details.getVitalStatus())) {
+		if (!isBlank(details.getVitalStatus())) {
 			ensureValidPermissibleValue(details.getVitalStatus(), VITAL_STATUS);
 			participant.setVitalStatus(details.getVitalStatus());
 		}
 	}
 
 	private void setGender(Participant participant, ParticipantDetails details) {
-		if (StringUtils.isNotBlank(details.getGender())) {
+		if (!isBlank(details.getGender())) {
 			ensureValidPermissibleValue(details.getGender(), GENDER);
 			participant.setGender(details.getGender());
 		}
@@ -125,16 +130,15 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private void setRace(Participant participant, ParticipantDetails details) {
 		Set<String> raceList = details.getRace();
 		if (raceList != null) {
-			for (String race : raceList) {
-				ensureValidPermissibleValue(race, RACE);
-			}
+			String[] races = (String[])raceList.toArray();
+				ensureValidPermissibleValue(races, RACE);
 			participant.setRaceCollection(raceList);
 		}
 
 	}
 
 	private void setEthnicity(Participant participant, ParticipantDetails details) {
-		if (StringUtils.isNotBlank(details.getEthnicity())) {
+		if (!isBlank(details.getEthnicity())) {
 			ensureValidPermissibleValue(details.getEthnicity(), ETHNICITY);
 			participant.setEthnicity(details.getEthnicity());
 		}
@@ -158,22 +162,13 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (site == null) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}
-		if (StringUtils.isBlank(medicalRecordNumberDetail.getMrn())) {
+		if (isBlank(medicalRecordNumberDetail.getMrn())) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
 		}
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		pmi.setSite(site);
 		pmi.setMedicalRecordNumber(medicalRecordNumberDetail.getMrn());
 		return pmi;
-	}
-
-	private void ensureValidPermissibleValue(String value, String type) {
-		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
-		List<String> pvList = pvManager.getPermissibleValueList(type);
-		if (pvList.contains(value)) {
-			return;
-		}
-		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
 	}
 
 	private boolean isSsnValid(String ssn) {

@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
 import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -24,6 +26,8 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 @Service(value = "CollectionProtocolRegistrationServiceImpl")
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
 
+	private final String PPID = "participant protocol identifier";
+
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
@@ -36,6 +40,22 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public CollectionProtocolRegistrationFactory getRegistrationFactory() {
+		return registrationFactory;
+	}
+
+	public void setRegistrationFactory(CollectionProtocolRegistrationFactory registrationFactory) {
+		this.registrationFactory = registrationFactory;
+	}
+
+	public SpecimenCollGroupService getSpecimenCollGroupSvc() {
+		return specimenCollGroupSvc;
+	}
+
+	public void setSpecimenCollGroupSvc(SpecimenCollGroupService specimenCollGroupSvc) {
+		this.specimenCollGroupSvc = specimenCollGroupSvc;
 	}
 
 	@Override
@@ -57,6 +77,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
 		try {
 			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getRegistrationDetails());
+			if (daoFactory.getCollectionProtocolDao().isPpidUniqueForProtocol(registration.getCollectionProtocol().getId(),
+					registration.getProtocolParticipantIdentifier())) {
+				reportError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
+			}
 			daoFactory.getRegistrationDao().saveOrUpdate(registration);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetails.fromDomain(registration));
 		}

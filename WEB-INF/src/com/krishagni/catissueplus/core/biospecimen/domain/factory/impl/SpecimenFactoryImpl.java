@@ -35,7 +35,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory{
 //		specimen.setParentSpecimen(parentSpecimen)
 //		specimen.setChildSpecimenCollection(/)
 		specimen.setSpecimenCollectionGroup(group);
-		setConsents(specimen,group);
+		//setConsents(specimen,group);
 		return specimen;
 	}
 
