@@ -88,22 +88,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 	}
 
-	private void validateSsn(String oldSsn, String newSsn) {
-		if ((isBlank(oldSsn) && !isBlank(newSsn))) {
-			ensureUniqueSsn(newSsn);
-		}
-		else if (!isBlank(oldSsn) && !isBlank(newSsn) && !oldSsn.equals(newSsn)) {
-			ensureUniqueSsn(newSsn);
-		}
-
-	}
-
-	private void ensureUniqueSsn(String ssn) {
-		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			reportError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
-		}
-	}
-
 	@Override
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
 		try {
@@ -125,32 +109,22 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ParticipantDeletedEvent.serverError(e);
 		}
 	}
-	//
-	//	/* (non-Javadoc)
-	//	 * @see com.krishagni.catissueplus.core.services.ParticipantService#listPedigree(com.krishagni.catissueplus.core.events.participants.ReqParticipantDetailEvent)
-	//	 */
-	//	@Override
-	//	public Object listPedigree(ReqParticipantDetailEvent event) {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//
-	//	/**
-	//	 * Updates the given relation
-	//	 */
-	//	@Override
-	//	public Object updateRelation() {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//
-	//	/**
-	//	 * this will create the new relations for the given patients
-	//	 */
-	//	@Override
-	//	public Object createRelation() {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
+	
+	private void validateSsn(String oldSsn, String newSsn) {
+		if ((isBlank(oldSsn) && !isBlank(newSsn))) {
+			ensureUniqueSsn(newSsn);
+		}
+		else if (!isBlank(oldSsn) && !isBlank(newSsn) && !oldSsn.equals(newSsn)) {
+			ensureUniqueSsn(newSsn);
+		}
+
+	}
+
+	private void ensureUniqueSsn(String ssn) {
+		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
+			reportError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+		}
+	}
+
 
 }

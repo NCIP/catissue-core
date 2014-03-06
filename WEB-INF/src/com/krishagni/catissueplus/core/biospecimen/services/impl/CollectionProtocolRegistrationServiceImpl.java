@@ -37,20 +37,20 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.registrationFactory = registrationFactory;
 	}
 
-		@Override
-		@PlusTransactional
-		public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(
-				ReqSpecimenCollGroupSummaryEvent reqSpecimenCollGroupSummaryEvent) {
-	
-			try {
-				return AllSpecimenCollGroupsSummaryEvent.ok(daoFactory.getRegistrationDao().getSpecimenCollectiongroupsList(
-						reqSpecimenCollGroupSummaryEvent.getCollectionProtocolRegistrationId()));
-			}
-			catch (Exception e) {
-				return AllSpecimenCollGroupsSummaryEvent.serverError(e);
-			}
-	
+	@Override
+	@PlusTransactional
+	public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(
+			ReqSpecimenCollGroupSummaryEvent reqSpecimenCollGroupSummaryEvent) {
+
+		try {
+			return AllSpecimenCollGroupsSummaryEvent.ok(daoFactory.getRegistrationDao().getSpecimenCollectiongroupsList(
+					reqSpecimenCollGroupSummaryEvent.getCollectionProtocolRegistrationId()));
 		}
+		catch (Exception e) {
+			return AllSpecimenCollGroupsSummaryEvent.serverError(e);
+		}
+
+	}
 
 	@Override
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
@@ -71,49 +71,26 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	//	@Override
-	//	public RegistrationUpdatedEvent updateResgistration(UpdateRegistrationEvent event) {
-	////		try {
-	////			Long registrationId = event.getRegistrationDetails().getId();
-	////			CollectionProtocolRegistration oldCpr = daoFactory.getRegistrationDao().getCpr(registrationId);
-	////			if (oldCpr == null) {
-	////				RegistrationUpdatedEvent.notFound(registrationId);
-	////			}
-	////			//TODO: Handle populating the object from factory.
-	////			CollectionProtocolRegistration cpr = null;
-	////			oldCpr.update(cpr);
-	////			RegistrationUpdatedEvent.ok(CollectionProtocolRegistrationDetails.fromDomain(oldCpr));
-	////		}
-	////		catch (CatissueException ce) {
-	////			return RegistrationUpdatedEvent.invalidRequest(ce.getMessage());
-	////		}
-	////		catch (Exception e) {
-	////			return RegistrationUpdatedEvent.serverError(e);
-	////		}
-	//		return null;
-	//	}
-	//
-		@Override
-		public RegistrationDeletedEvent delete(DeleteRegistrationEvent event) {
-			try{
-				CollectionProtocolRegistration registration = daoFactory.getRegistrationDao().getCpr(event.getId());
-				if(registration == null)
-				{
-					return RegistrationDeletedEvent.notFound(event.getId());
-				}
-			 if (event.isIncludeChildren() && daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
+	@Override
+	public RegistrationDeletedEvent delete(DeleteRegistrationEvent event) {
+		try {
+			CollectionProtocolRegistration registration = daoFactory.getRegistrationDao().getCpr(event.getId());
+			if (registration == null) {
+				return RegistrationDeletedEvent.notFound(event.getId());
+			}
+			if (event.isIncludeChildren() && daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
-			 registration.delete(event.isIncludeChildren());
+			registration.delete(event.isIncludeChildren());
 			daoFactory.getRegistrationDao().delete(registration);
 			return RegistrationDeletedEvent.ok();
-			}
-			catch(CatissueException ce){
-				return RegistrationDeletedEvent.invalidRequest(ce.getMessage()+" : "+ ce.getErroneousFields());
-			}
-			catch(Exception e){
-				return RegistrationDeletedEvent.serverError(e);
-			}
 		}
+		catch (CatissueException ce) {
+			return RegistrationDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		}
+		catch (Exception e) {
+			return RegistrationDeletedEvent.serverError(e);
+		}
+	}
 
 }
