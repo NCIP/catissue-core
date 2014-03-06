@@ -1,8 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValidPermissibleValue;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.Date;
@@ -20,8 +20,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFac
 import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
-import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 
 import edu.wustl.catissuecore.domain.Site;
 
@@ -130,8 +128,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private void setRace(Participant participant, ParticipantDetails details) {
 		Set<String> raceList = details.getRace();
 		if (raceList != null) {
-			String[] races = (String[])raceList.toArray();
-				ensureValidPermissibleValue(races, RACE);
+			
+			String[] races = raceList.toArray(new String[0]);
+			ensureValidPermissibleValue(races, RACE);
 			participant.setRaceCollection(raceList);
 		}
 

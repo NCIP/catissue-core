@@ -33,4 +33,10 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 		return false;
 	}
 
+	@Override
+	public boolean isSsnUnique(String socialSecurityNumber) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -3,10 +3,12 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -158,6 +160,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 */
 	private void setConsentsDuringRegistration(CollectionProtocolRegistration registration,
 			CollectionProtocolRegistrationDetails details) {
+		List<ConsentTierDetails> userProvidedConsents = new ArrayList<ConsentTierDetails>();
 		Collection<ConsentTier> consentTierCollection = registration.getCollectionProtocol().getConsentTierCollection();
 		//		daoFactory.getCollectionProtocolDao().getConsentTierCollection(
 		//				details.getCpId());
@@ -166,6 +169,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		}
 
 		if (details.getConsentResponseDetails() != null) {
+			userProvidedConsents = details.getConsentResponseDetails().getConsentTierList();
 			setConsentSignDate(registration, details.getConsentResponseDetails().getConsentDate());
 			String witnessName = details.getConsentResponseDetails().getWitnessName();
 			if (StringUtils.isNotBlank(witnessName)) {
@@ -186,7 +190,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
 			consentTierResponse.setConsentTier(consentTier);
 			consentTierResponseCollection.add(consentTierResponse);
-			for (ConsentTierDetails tier : details.getConsentResponseDetails().getConsentTierList()) {
+			for (ConsentTierDetails tier : userProvidedConsents) {
 				if (consentTier.getStatement().equals(tier.getConsentStatment())) {
 					consentTierResponse.setResponse(tier.getParticipantResponse());
 				}

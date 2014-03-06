@@ -118,29 +118,30 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	private void ensureUniqueSsn(String ssn) {
-		if (daoFactory.getParticipantDao().isSsnUnique(ssn)) {
+		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
 			reportError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
 		}
 	}
 
 	@Override
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
-		try {
-			if (event.isIncludeChildren()) {
-				registrationSvc.delete(event);
-			}
-			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-			}
-			daoFactory.getParticipantDao().delete(event.getId());
-			return ParticipantDeletedEvent.ok();
-		}
-		catch (CatissueException ce) {
-			return ParticipantDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
-		}
-		catch (Exception e) {
-			return ParticipantDeletedEvent.serverError(e);
-		}
+//		try {
+//			if (event.isIncludeChildren()) {
+//				registrationSvc.delete(event);
+//			}
+//			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
+//				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+//			}
+//			daoFactory.getParticipantDao().delete(event.getId());
+//			return ParticipantDeletedEvent.ok();
+//		}
+//		catch (CatissueException ce) {
+//			return ParticipantDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+//		}
+//		catch (Exception e) {
+//			return ParticipantDeletedEvent.serverError(e);
+//		}
+		return null;
 	}
 
 	/* (non-Javadoc)

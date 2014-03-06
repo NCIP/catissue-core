@@ -85,7 +85,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetails.fromDomain(registration));
 		}
 		catch (CatissueException ce) {
-			return RegistrationCreatedEvent.invalidRequest(ce.getMessage());
+			return RegistrationCreatedEvent.invalidRequest(ce.getMessage()+ " : " + ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return RegistrationCreatedEvent.serverError(e);
@@ -94,46 +94,46 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	@Override
 	public RegistrationUpdatedEvent updateResgistration(UpdateRegistrationEvent event) {
-		try {
-			Long registrationId = event.getRegistrationDetails().getId();
-			CollectionProtocolRegistration oldCpr = daoFactory.getRegistrationDao().getCpr(registrationId);
-			if (oldCpr == null) {
-				RegistrationUpdatedEvent.notFound(registrationId);
-			}
-			//TODO: Handle populating the object from factory.
-			CollectionProtocolRegistration cpr = null;
-			oldCpr.update(cpr);
-			RegistrationUpdatedEvent.ok(CollectionProtocolRegistrationDetails.fromDomain(oldCpr));
-		}
-		catch (CatissueException ce) {
-			return RegistrationUpdatedEvent.invalidRequest(ce.getMessage());
-		}
-		catch (Exception e) {
-			return RegistrationUpdatedEvent.serverError(e);
-		}
+//		try {
+//			Long registrationId = event.getRegistrationDetails().getId();
+//			CollectionProtocolRegistration oldCpr = daoFactory.getRegistrationDao().getCpr(registrationId);
+//			if (oldCpr == null) {
+//				RegistrationUpdatedEvent.notFound(registrationId);
+//			}
+//			//TODO: Handle populating the object from factory.
+//			CollectionProtocolRegistration cpr = null;
+//			oldCpr.update(cpr);
+//			RegistrationUpdatedEvent.ok(CollectionProtocolRegistrationDetails.fromDomain(oldCpr));
+//		}
+//		catch (CatissueException ce) {
+//			return RegistrationUpdatedEvent.invalidRequest(ce.getMessage());
+//		}
+//		catch (Exception e) {
+//			return RegistrationUpdatedEvent.serverError(e);
+//		}
 		return null;
 	}
 
 	@Override
 	public void delete(DeleteParticipantEvent event) {
-		if (event.isIncludeChildren()) {
-			specimenCollGroupSvc.delete(event);
-		}
-		else if (daoFactory.getRegistrationDao().checkActiveChildrenForParticipant(event.getId())) {
-			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-		}
-		daoFactory.getRegistrationDao().deleteByParticipant(event.getId());
+//		if (event.isIncludeChildren()) {
+//			specimenCollGroupSvc.delete(event);
+//		}
+//		else if (daoFactory.getRegistrationDao().checkActiveChildrenForParticipant(event.getId())) {
+//			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+//		}
+//		daoFactory.getRegistrationDao().deleteByParticipant(event.getId());
 	}
 
 	@Override
 	public void delete(DeleteRegistrationEvent event) {
-		if (event.isIncludeChildren()) {
-			specimenCollGroupSvc.delete(event);
-		}
-		else if (daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
-			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-		}
-		daoFactory.getRegistrationDao().delete(event.getId());
+//		if (event.isIncludeChildren()) {
+//			specimenCollGroupSvc.delete(event);
+//		}
+//		else if (daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
+//			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+//		}
+//		daoFactory.getRegistrationDao().delete(event.getId());
 	}
 
 }
