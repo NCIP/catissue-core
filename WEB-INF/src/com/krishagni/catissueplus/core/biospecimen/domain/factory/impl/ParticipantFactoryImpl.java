@@ -27,10 +27,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private DaoFactory daoFactory;
 
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -98,7 +94,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			}
 			participant.setBirthDate(birthDate);
 			if (deathDate != null) {
-				if ((!"Death".equals(participant.getVitalStatus()) || deathDate.before(birthDate))) {
+				if ((!"Death".equals(details.getVitalStatus()) || deathDate.before(birthDate))) {
 					reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
 				}
 				participant.setDeathDate(deathDate);
@@ -128,7 +124,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private void setRace(Participant participant, ParticipantDetails details) {
 		Set<String> raceList = details.getRace();
 		if (raceList != null) {
-			
+
 			String[] races = raceList.toArray(new String[0]);
 			ensureValidPermissibleValue(races, RACE);
 			participant.setRaceCollection(raceList);

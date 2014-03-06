@@ -27,13 +27,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	private final String CLINICAL_STATUS = "clinical status";
 
 	/**
-	 * @returns specimenFactory
-	 */
-	public SpecimenFactory getSpecimenFactory() {
-		return specimenFactory;
-	}
-
-	/**
 	 * Sets specimenFactory
 	 * @param specimenFactory
 	 */

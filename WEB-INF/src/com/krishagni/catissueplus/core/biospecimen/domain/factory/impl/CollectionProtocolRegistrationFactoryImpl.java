@@ -43,24 +43,12 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private SpecimenCollectionGroupFactory scgFactory;
 
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
-	public ParticipantFactory getParticipantFactory() {
-		return participantFactory;
-	}
-
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
 		this.participantFactory = participantFactory;
-	}
-
-	public SpecimenCollectionGroupFactory getScgFactory() {
-		return scgFactory;
 	}
 
 	public void setScgFactory(SpecimenCollectionGroupFactory scgFactory) {

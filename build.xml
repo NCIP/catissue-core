@@ -1698,4 +1698,102 @@
 		</copy>
 
 	</target>
+
+	<target name="compile_mock_TestCases" depends="compile">
+	        <javac destdir="${target.dir}" includes="**/*Test.java" includeAntRuntime="false" target="1.6">
+	            <src path="./WEB-INF/test"/>
+	        	<src path="./WEB-INF/src"/>
+	            <classpath>
+	                <fileset dir="${lib.dir}">
+	                    <include name="**/*.jar"/>
+	                </fileset>
+	            </classpath>
+	        </javac>
+	    </target>
+	<target name="runMockTestCases" depends="instrument-classes">
+	        <mkdir dir="${report.dir}/Nightly_Build_Report" />
+	        <mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
+
+	        <junit printsummary="yes" fork="yes" haltonfailure="no">
+	            <formatter type="xml" />
+	        	
+	        	<sysproperty key="net.sourceforge.cobertura.datafile" file="${base.dir}/cobertura.ser" />
+
+
+	        	            <classpath>
+	        	                <pathelement path="./cobertura/instrumented" />
+	        	                <pathelement path="${target.dir}" />
+	        	            </classpath>
+
+	        	<classpath>
+	        	                     <fileset dir="${lib.dir}">
+	        	                        <include name="*.jar" />
+	        	                    </fileset>
+	        	                </classpath>
+	            <classpath>
+	                <pathelement path="${target.dir}" />
+	            </classpath>
+
+	            <classpath refid="junit.classpath" />
+
+	            <batchtest todir="${report.dir}/Nightly_Build_Report">
+	                <fileset dir="./WEB-INF/test">
+	                    <include name="**/CollectionProtocolRegTest.java" />
+	                	<include name="**/ParticipantTest.java" />
+	                </fileset>
+	            </batchtest>
+	        </junit>
+		
+	<junitreport todir="${report.dir}/Nightly_Build_Report">
+	            <fileset dir="${report.dir}/Nightly_Build_Report">
+	                <include name="TEST-*.xml" />
+	            </fileset>
+	            <report todir="${report.dir}/Nightly_Build_Report/Html_reports" />
+	        </junitreport>
+	    </target>
+	
+	<path id="cover-test.classpath">
+	      <fileset dir="${lib.dir}" includes="**/*.jar" />
+	      <pathelement location="${cobertura.instrumented-classes.dir}" />
+	      <pathelement location="${build.dir}" />
+	  </path>
+	
+	<target name="gen_cobertura_report" depends="runMockTestCases">
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="./cobertura/reports/coverage" format="html">
+		          <fileset dir="${src.dir}">
+		              <include name="**/*.java" />
+		          </fileset>
+		      </cobertura-report>
+		<delete file="${base.dir}/cobertura.ser"/>
+	    </target>
+	
+	<target name="instrument-classes" depends="compile_mock_TestCases">
+	        <delete dir="./cobertura/instrumented" />
+	        <mkdir dir="./cobertura/instrumented" />
+	        <!--
+	           Instrument the application classes, writing the
+	           instrumented classes into ${build.instrumented.dir}.
+	        -->
+	        <cobertura-instrument datafile="${base.dir}/cobertura.ser"
+	            todir="./cobertura/instrumented">
+	            <!--
+	             The following line causes instrument to ignore any
+	             source line containing a reference to log4j, for the
+	             purposes of coverage reporting.
+	          -->
+	            <ignore regex="org.apache.log4j.*" />
+	            <classpath refid="cobertura.classpath" />
+	            <fileset dir="./WEB-INF/classes">
+	                <include name="com/krishagni/**/*.class" />
+	            	<exclude name="**/*Test.class"/>
+	            </fileset>
+
+	        </cobertura-instrument>
+	        <echo>Copying instrumented class files to classes folder</echo>
+	        <copy todir="./WEB-INF/classes">
+	            <fileset dir="./cobertura/instrumented">
+	                <include name="**/*.class" />
+	            </fileset>
+	        </copy>
+	    </target>
 </project>

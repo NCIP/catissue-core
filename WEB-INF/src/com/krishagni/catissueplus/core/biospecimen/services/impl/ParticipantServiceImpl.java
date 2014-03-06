@@ -33,30 +33,12 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 */
 	private ParticipantFactory participantFactory;
 
-	private CollectionProtocolRegistrationService registrationSvc;
-
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
-	public ParticipantFactory getParticipantFactory() {
-		return participantFactory;
-	}
-
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
 		this.participantFactory = participantFactory;
-	}
-
-	public CollectionProtocolRegistrationService getRegistrationSvc() {
-		return registrationSvc;
-	}
-
-	public void setRegistrationSvc(CollectionProtocolRegistrationService registrationSvc) {
-		this.registrationSvc = registrationSvc;
 	}
 
 	@Override
@@ -123,52 +105,52 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 	}
 
-	@Override
-	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
-//		try {
-//			if (event.isIncludeChildren()) {
-//				registrationSvc.delete(event);
-//			}
-//			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
-//				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-//			}
-//			daoFactory.getParticipantDao().delete(event.getId());
-//			return ParticipantDeletedEvent.ok();
-//		}
-//		catch (CatissueException ce) {
-//			return ParticipantDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
-//		}
-//		catch (Exception e) {
-//			return ParticipantDeletedEvent.serverError(e);
-//		}
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.krishagni.catissueplus.core.services.ParticipantService#listPedigree(com.krishagni.catissueplus.core.events.participants.ReqParticipantDetailEvent)
-	 */
-	@Override
-	public Object listPedigree(ReqParticipantDetailEvent event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Updates the given relation
-	 */
-	@Override
-	public Object updateRelation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * this will create the new relations for the given patients
-	 */
-	@Override
-	public Object createRelation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
+//		//		try {
+//		//			if (event.isIncludeChildren()) {
+//		//				registrationSvc.delete(event);
+//		//			}
+//		//			else if (daoFactory.getParticipantDao().checkActiveChildren(event.getId())) {
+//		//				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+//		//			}
+//		//			daoFactory.getParticipantDao().delete(event.getId());
+//		//			return ParticipantDeletedEvent.ok();
+//		//		}
+//		//		catch (CatissueException ce) {
+//		//			return ParticipantDeletedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+//		//		}
+//		//		catch (Exception e) {
+//		//			return ParticipantDeletedEvent.serverError(e);
+//		//		}
+//		return null;
+//	}
+//
+//	/* (non-Javadoc)
+//	 * @see com.krishagni.catissueplus.core.services.ParticipantService#listPedigree(com.krishagni.catissueplus.core.events.participants.ReqParticipantDetailEvent)
+//	 */
+//	@Override
+//	public Object listPedigree(ReqParticipantDetailEvent event) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	/**
+//	 * Updates the given relation
+//	 */
+//	@Override
+//	public Object updateRelation() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	/**
+//	 * this will create the new relations for the given patients
+//	 */
+//	@Override
+//	public Object createRelation() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }
