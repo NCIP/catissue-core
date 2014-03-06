@@ -4,19 +4,17 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.MapUpdater;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 
-import edu.wustl.common.domain.AbstractDomainObject;
-
 public class Participant {
 
 	private final String ACTIVITY_STATUS_ACTIVE = "Active";
+
+	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	/**
 	 * System generated unique id.
@@ -229,10 +227,8 @@ public class Participant {
 	}
 
 	private void updateRace(Participant participant) {
-		SetUpdater.<String> newInstance().update(raceCollection,
-				participant.getRaceCollection());
+		SetUpdater.<String> newInstance().update(raceCollection, participant.getRaceCollection());
 	}
-
 
 	private void updatePmi(Participant participant) {
 		MapUpdater.<String, ParticipantMedicalIdentifier> newInstance().update(pmiCollection,
@@ -245,6 +241,16 @@ public class Participant {
 
 	public boolean isActive() {
 		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+	}
+
+	public void delete(boolean isIncludeChildren) {
+		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		if (isIncludeChildren) {
+			Map<String, CollectionProtocolRegistration> registrationCollection = this.getCprCollection();
+			for (CollectionProtocolRegistration cpr : registrationCollection.values()) {
+				cpr.delete(isIncludeChildren);
+			}
+		}
 	}
 
 }

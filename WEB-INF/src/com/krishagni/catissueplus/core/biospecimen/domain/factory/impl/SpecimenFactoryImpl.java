@@ -1,10 +1,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
@@ -22,7 +23,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setSpecimenRequirement(requirement);
 		specimen.setSpecimenClass(requirement.getSpecimenClass());
 		specimen.setPathologicalStatus(requirement.getPathologicalStatus());
-		specimen.setSpecimenCharacteristics(requirement.getSpecimenCharacteristics());
+		SpecimenCharacteristics characteristics = requirement.getSpecimenCharacteristics();
+		if (characteristics != null) {
+			specimen.setTissueSide(characteristics.getTissueSide());
+			specimen.setTissueSite(characteristics.getTissueSite());
+		}
 		specimen.setLineage(requirement.getLineage());
 		specimen.setConcentrationInMicrogramPerMicroliter(requirement.getConcentrationInMicrogramPerMicroliter());
 		specimen.setIsAvailable(false);

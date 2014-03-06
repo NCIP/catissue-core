@@ -69,7 +69,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(CollectionProtocolRegistration cpr) {
 
 	}
 

@@ -2,9 +2,9 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
 public interface SpecimenCollectionGroupFactory {
 

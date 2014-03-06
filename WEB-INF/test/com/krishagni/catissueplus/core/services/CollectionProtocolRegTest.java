@@ -3,8 +3,11 @@ package com.krishagni.catissueplus.core.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +17,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -90,7 +92,7 @@ public class CollectionProtocolRegTest {
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 
 		Site site = new Site();
-		when(siteDao.getSite(Matchers.anyString())).thenReturn(site);
+		when(siteDao.getSite(anyString())).thenReturn(site);
 		registrationSvc = new CollectionProtocolRegistrationServiceImpl();
 		((CollectionProtocolRegistrationServiceImpl) registrationSvc).setDaoFactory(daoFactory);
 		registrationFactory = new CollectionProtocolRegistrationFactoryImpl();
@@ -106,8 +108,8 @@ public class CollectionProtocolRegTest {
 
 		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setScgFactory(scgFactory);
 
-		when(collectionProtocolDao.isPpidUniqueForProtocol(Matchers.anyLong(), Matchers.anyString())).thenReturn(true);
-		when(userDao.getUser(Matchers.anyString())).thenReturn(getUser(1L));
+		when(collectionProtocolDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(true);
+		when(userDao.getUser(anyString())).thenReturn(getUser(1L));
 
 	}
 
@@ -116,7 +118,7 @@ public class CollectionProtocolRegTest {
 		Long cpId = 1l;
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
 		protocol.setCollectionProtocolEventCollection(getCpeCollection(protocol));
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(protocol);
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(protocol);
 
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -134,12 +136,12 @@ public class CollectionProtocolRegTest {
 
 	@Test
 	public void testForRegistrationDuplicatePpid() {
-		when(collectionProtocolDao.isPpidUniqueForProtocol(Matchers.anyLong(), Matchers.anyString())).thenReturn(false);
+		when(collectionProtocolDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(false);
 		Long cpId = 1l;
 
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
 		protocol.setCollectionProtocolEventCollection(getCpeCollection(protocol));
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(protocol);
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(protocol);
 
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -159,9 +161,8 @@ public class CollectionProtocolRegTest {
 
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
 		protocol.setCollectionProtocolEventCollection(getCpeCollection(protocol));
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(protocol);
-		doThrow(new RuntimeException()).when(registrationDao).saveOrUpdate(
-				Matchers.any(CollectionProtocolRegistration.class));
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(protocol);
+		doThrow(new RuntimeException()).when(registrationDao).saveOrUpdate(any(CollectionProtocolRegistration.class));
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		reqEvent.setRegistrationDetails(getRegistrationDetails(cpId));
@@ -182,7 +183,7 @@ public class CollectionProtocolRegTest {
 		Collection<ConsentTier> consentTierCollection = new HashSet<ConsentTier>();
 		consentTierCollection.add(tier);
 		protocol.setConsentTierCollection(consentTierCollection);
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(protocol);
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(protocol);
 
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -204,7 +205,7 @@ public class CollectionProtocolRegTest {
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
 		Collection<ConsentTier> consentTierCollection = new HashSet<ConsentTier>();
 		protocol.setConsentTierCollection(consentTierCollection);
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(protocol);
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(protocol);
 
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -223,7 +224,7 @@ public class CollectionProtocolRegTest {
 	public void testRegistrationCreationEmptyPPID() {
 		Long cpId = 1l;
 		CollectionProtocol protocol = getCollectionProtocol(cpId);
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(protocol);
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(protocol);
 
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -271,17 +272,16 @@ public class CollectionProtocolRegTest {
 		Long cprId = 1l;
 		ReqSpecimenCollGroupSummaryEvent event = new ReqSpecimenCollGroupSummaryEvent();
 		event.setCollectionProtocolRegistrationId(cprId);
-		when(registrationDao.getSpecimenCollectiongroupsList(Matchers.anyLong())).thenReturn(getSCGSummaryList(cprId));
+		when(registrationDao.getSpecimenCollectiongroupsList(anyLong())).thenReturn(getSCGSummaryList(cprId));
 		AllSpecimenCollGroupsSummaryEvent response = registrationSvc.getSpecimenCollGroupsList(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertEquals(getSCGSummaryList(cprId).size(), response.getSpecimenCollectionGroupsInfo().size());
 	}
 
-
 	@Test
 	public void testRegistrationCreationInvalidCP() {
-		when(collectionProtocolDao.getCollectionProtocol(Matchers.anyLong())).thenReturn(null);
+		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(null);
 		CreateRegistrationEvent reqEvent = new CreateRegistrationEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		CollectionProtocolRegistrationDetails details = getRegistrationDetails(1L);
@@ -396,7 +396,7 @@ public class CollectionProtocolRegTest {
 		user.setLastName("lastName");
 		return user;
 	}
-	
+
 	private List<SpecimenCollectionGroupInfo> getSCGSummaryList(Long cprId) {
 		List<SpecimenCollectionGroupInfo> groupsInfo = new ArrayList<SpecimenCollectionGroupInfo>();
 		SpecimenCollectionGroupInfo groupInfo = new SpecimenCollectionGroupInfo();

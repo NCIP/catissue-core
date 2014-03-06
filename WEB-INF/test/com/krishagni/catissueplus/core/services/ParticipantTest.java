@@ -2,8 +2,12 @@
 package com.krishagni.catissueplus.core.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -15,7 +19,6 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -41,7 +44,6 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.beans.SessionDataBean;
-import static org.mockito.Mockito.doThrow;
 
 public class ParticipantTest {
 
@@ -67,9 +69,9 @@ public class ParticipantTest {
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		participantFactory = new ParticipantFactoryImpl();
 		((ParticipantFactoryImpl) participantFactory).setDaoFactory(daoFactory);
-		when(siteDao.getSite(Matchers.anyString())).thenReturn(getSite("siteName"));
+		when(siteDao.getSite(anyString())).thenReturn(getSite("siteName"));
 		((ParticipantServiceImpl) participantService).setParticipantFactory(participantFactory);
-		when(participantDao.isSsnUnique(Matchers.anyString())).thenReturn(true);
+		when(participantDao.isSsnUnique(anyString())).thenReturn(true);
 	}
 
 	@Test
@@ -179,7 +181,7 @@ public class ParticipantTest {
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
-		when(siteDao.getSite(Matchers.anyString())).thenReturn(null);
+		when(siteDao.getSite(anyString())).thenReturn(null);
 		reqEvent.setParticipantDetails(participantDto);
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
@@ -245,7 +247,7 @@ public class ParticipantTest {
 	@Test
 	public void testParticipantCreationDuplicateSsn() {
 
-		when(participantDao.isSsnUnique(Matchers.anyString())).thenReturn(false);
+		when(participantDao.isSsnUnique(anyString())).thenReturn(false);
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
@@ -267,7 +269,7 @@ public class ParticipantTest {
 		ParticipantDetails participantDto = getParticipantDetails();
 
 		reqEvent.setParticipantDetails(participantDto);
-		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(Matchers.any(Participant.class));
+		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(any(Participant.class));
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
@@ -277,14 +279,14 @@ public class ParticipantTest {
 	@Test
 	public void testForSuccessfulParticipantUpdate() {
 
-		when(participantDao.isSsnUnique(Matchers.anyString())).thenReturn(true);
+		when(participantDao.isSsnUnique(anyString())).thenReturn(true);
 		Participant participant = getParticipant(1L);
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		pmi.setMedicalRecordNumber("234r5");
 		pmi.setSite(getSite("some test site"));
 		pmi.setParticipant(participant);
 		participant.getPmiCollection().put(pmi.getSite().getName(), pmi);
-		when(participantDao.getParticipant(Matchers.anyLong())).thenReturn(participant);
+		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
@@ -309,7 +311,7 @@ public class ParticipantTest {
 	public void testParticipantUpdateInvalidSsn() {
 
 		Participant participant = getParticipant(1L);
-		when(participantDao.getParticipant(Matchers.anyLong())).thenReturn(participant);
+		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
@@ -334,7 +336,7 @@ public class ParticipantTest {
 		Participant participant = getParticipant(1L);
 		String newSsn = "111-21-4315";
 		participant.setSocialSecurityNumber(newSsn);
-		when(participantDao.getParticipant(Matchers.anyLong())).thenReturn(participant);
+		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
@@ -358,7 +360,7 @@ public class ParticipantTest {
 	@Test
 	public void testParticipantUpdateInvaliParticipant() {
 
-		when(participantDao.getParticipant(Matchers.anyLong())).thenReturn(null);
+		when(participantDao.getParticipant(anyLong())).thenReturn(null);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
@@ -374,13 +376,13 @@ public class ParticipantTest {
 	@Test
 	public void testParticipantUpdateWithServerErr() {
 
-		when(participantDao.getParticipant(Matchers.anyLong())).thenReturn(getParticipant(1l));
+		when(participantDao.getParticipant(anyLong())).thenReturn(getParticipant(1l));
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		ParticipantDetails participantDto = getParticipantDetails();
 		participantDto.setId(1l);
 		reqEvent.setParticipantDto(participantDto);
-		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(Matchers.any(Participant.class));
+		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(any(Participant.class));
 		ParticipantUpdatedEvent response = participantService.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
@@ -391,7 +393,7 @@ public class ParticipantTest {
 	public void testGetParticipant() {
 		Long participantId = 1L;
 		Participant participant = getParticipant(participantId);
-		when(participantDao.getParticipant(Matchers.anyLong())).thenReturn(participant);
+		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 
 		ReqParticipantDetailEvent reqEvent = new ReqParticipantDetailEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -401,7 +403,7 @@ public class ParticipantTest {
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetails retrievedParticipant = response.getParticipantDto();
+		ParticipantDetails retrievedParticipant = response.getParticipantDetails();
 		assertEquals(participantId, retrievedParticipant.getId());
 
 	}

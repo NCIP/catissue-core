@@ -11,7 +11,9 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -91,26 +93,27 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	//		return null;
 	//	}
 	//
-	//	@Override
-	//	public void delete(DeleteParticipantEvent event) {
-	////		if (event.isIncludeChildren()) {
-	////			specimenCollGroupSvc.delete(event);
-	////		}
-	////		else if (daoFactory.getRegistrationDao().checkActiveChildrenForParticipant(event.getId())) {
-	////			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-	////		}
-	////		daoFactory.getRegistrationDao().deleteByParticipant(event.getId());
-	//	}
-	//
-	//	@Override
-	//	public void delete(DeleteRegistrationEvent event) {
-	////		if (event.isIncludeChildren()) {
-	////			specimenCollGroupSvc.delete(event);
-	////		}
-	////		else if (daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
-	////			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-	////		}
-	////		daoFactory.getRegistrationDao().delete(event.getId());
-	//	}
+		@Override
+		public RegistrationDeletedEvent delete(DeleteRegistrationEvent event) {
+			try{
+				CollectionProtocolRegistration registration = daoFactory.getRegistrationDao().getCpr(event.getId());
+				if(registration == null)
+				{
+					return RegistrationDeletedEvent.notFound(event.getId());
+				}
+			 if (event.isIncludeChildren() && daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
+				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+			}
+			 registration.delete(event.isIncludeChildren());
+			daoFactory.getRegistrationDao().delete(registration);
+			return RegistrationDeletedEvent.ok();
+			}
+			catch(CatissueException ce){
+				return RegistrationDeletedEvent.invalidRequest(ce.getMessage()+" : "+ ce.getErroneousFields());
+			}
+			catch(Exception e){
+				return RegistrationDeletedEvent.serverError(e);
+			}
+		}
 
 }
