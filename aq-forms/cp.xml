@@ -13,12 +13,15 @@
 		</row>
 		
 		<row>
-			<textField>
+			<dropDown>
 				<name>shortTitle</name>
 				<udn>shortTitle</udn>
 				<caption>Short Title</caption>
 				<column>SHORT_TITLE</column>
-			</textField>
+				<options>
+					<sql>select distinct SHORT_TITLE from CATISSUE_SPECIMEN_PROTOCOL</sql>
+				</options>
+			</dropDown>
 		</row>
 
 		<row>
