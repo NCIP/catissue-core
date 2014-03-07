@@ -19,10 +19,10 @@ public interface ParticipantService {
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event);
 	
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event);
-
-	public Object listPedigree(ReqParticipantDetailEvent event);
-
-	public Object updateRelation();
-
-	public Object createRelation();
+//
+//	public Object listPedigree(ReqParticipantDetailEvent event);
+//
+//	public Object updateRelation();
+//
+//	public Object createRelation();
 }

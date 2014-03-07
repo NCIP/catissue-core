@@ -4,12 +4,17 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.common.MapUpdater;
+import com.krishagni.catissueplus.core.common.SetUpdater;
+
 public class Participant {
+
+	private final String ACTIVITY_STATUS_ACTIVE = "Active";
+
+	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	/**
 	 * System generated unique id.
@@ -193,8 +198,7 @@ public class Participant {
 		return pmiCollection;
 	}
 
-	public void setPmiCollection(
-			Map<String, ParticipantMedicalIdentifier> participantMedicalIdentifierCollection) {
+	public void setPmiCollection(Map<String, ParticipantMedicalIdentifier> participantMedicalIdentifierCollection) {
 		this.pmiCollection = participantMedicalIdentifierCollection;
 	}
 
@@ -202,8 +206,7 @@ public class Participant {
 		return cprCollection;
 	}
 
-	public void setCprCollection(
-			Map<String, CollectionProtocolRegistration> collectionProtocolRegistrationCollection) {
+	public void setCprCollection(Map<String, CollectionProtocolRegistration> collectionProtocolRegistrationCollection) {
 		this.cprCollection = collectionProtocolRegistrationCollection;
 	}
 
@@ -224,34 +227,30 @@ public class Participant {
 	}
 
 	private void updateRace(Participant participant) {
-		Set<String> newRaceColection = new HashSet<String>();
-		for (String race : participant.getRaceCollection()) {
-			if (!this.raceCollection.contains(race)) {
-				newRaceColection.add(race);
-			}
-		}
-		Set<String> deletedRaces = new HashSet<String>();
-		for (String race : raceCollection) {
-			if (!participant.getRaceCollection().contains(race)) {
-				deletedRaces.add(race);
-			}
-		}
-
-		raceCollection.removeAll(deletedRaces);
-		raceCollection.addAll(newRaceColection);
+		SetUpdater.<String> newInstance().update(raceCollection, participant.getRaceCollection());
 	}
 
 	private void updatePmi(Participant participant) {
-		Iterator<Entry<String, ParticipantMedicalIdentifier>> entries = pmiCollection.entrySet()
-				.iterator();
-		while (entries.hasNext()) {
-			Entry<String, ParticipantMedicalIdentifier> entry = entries.next();
-			if (!participant.getPmiCollection().containsKey(entry.getKey())) {
-				entries.remove();
+		MapUpdater.<String, ParticipantMedicalIdentifier> newInstance().update(pmiCollection,
+				participant.getPmiCollection());
+	}
+
+	public void updateActivityStatus(String activityStatus) {
+		this.setActivityStatus(activityStatus);
+	}
+
+	public boolean isActive() {
+		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+	}
+
+	public void delete(boolean isIncludeChildren) {
+		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		if (isIncludeChildren) {
+			Map<String, CollectionProtocolRegistration> registrationCollection = this.getCprCollection();
+			for (CollectionProtocolRegistration cpr : registrationCollection.values()) {
+				cpr.delete(isIncludeChildren);
 			}
 		}
-
-		pmiCollection.putAll(participant.getPmiCollection());
 	}
 
 }

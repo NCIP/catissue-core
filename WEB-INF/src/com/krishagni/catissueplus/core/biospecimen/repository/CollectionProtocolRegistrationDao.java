@@ -15,7 +15,7 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public void deleteByRegistration(Long registrationId);
 
-	public void delete(Long id);
+	public void delete(CollectionProtocolRegistration registration);
 
 	public boolean checkActiveChildren(long id);
 

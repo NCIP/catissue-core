@@ -6,10 +6,13 @@ import java.util.Date;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistration {
+
+	private final String ACTIVITY_STATUS_ACTIVE = "Active";
+
+	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	private Long id;
 
@@ -143,7 +146,20 @@ public class CollectionProtocolRegistration {
 
 	public void update(CollectionProtocolRegistration cpr) {
 		// TODO: Auto-generated method stub
-		
+
+	}
+
+	public void setActive() {
+		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+	}
+
+	public void delete(boolean isIncludeChildren) {
+		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		if (isIncludeChildren) {
+			for (SpecimenCollectionGroup scg : this.getSpecimenCollectionGroupCollection()) {
+				scg.delete(isIncludeChildren);
+			}
+		}
 	}
 
 }

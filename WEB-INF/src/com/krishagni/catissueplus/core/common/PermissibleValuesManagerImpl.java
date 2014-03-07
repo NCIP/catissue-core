@@ -10,5 +10,14 @@ public class PermissibleValuesManagerImpl implements PermissibleValuesManager{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public boolean validate(String itemName, String item){
+		//TODO Auto-generated method stub
+		return true;
+	}
+	
+	public boolean validate(String itemName, String[] item){
+		//TODO Auto-generated method stub
+		return true;
+	}
 }

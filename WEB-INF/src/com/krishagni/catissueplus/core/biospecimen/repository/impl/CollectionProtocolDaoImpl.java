@@ -102,4 +102,10 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return null;
 	}
 
+	@Override
+	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

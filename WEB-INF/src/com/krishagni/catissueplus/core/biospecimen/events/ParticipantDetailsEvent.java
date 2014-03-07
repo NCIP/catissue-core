@@ -6,20 +6,19 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantDetailsEvent extends ResponseEvent {
 
-	private ParticipantDetails participantDto;
+	private ParticipantDetails participantDetails;
 
-	public ParticipantDetails getParticipantDto() {
-		return participantDto;
+	public ParticipantDetails getParticipantDetails() {
+		return participantDetails;
 	}
 
-	public void setParticipantDto(ParticipantDetails participantDto) {
-		this.participantDto = participantDto;
+	public void setParticipantDetails(ParticipantDetails participantDetails) {
+		this.participantDetails = participantDetails;
 	}
-	
-	public static ParticipantDetailsEvent ok(ParticipantDetails details)
-	{
+
+	public static ParticipantDetailsEvent ok(ParticipantDetails participantDetails) {
 		ParticipantDetailsEvent event = new ParticipantDetailsEvent();
-		event.setParticipantDto(details);
+		event.setParticipantDetails(participantDetails);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}

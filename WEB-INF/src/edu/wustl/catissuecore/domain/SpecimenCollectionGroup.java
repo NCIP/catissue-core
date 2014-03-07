@@ -55,6 +55,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	private static final long serialVersionUID = 8543074529678284997L;
 
+	private static final String ACTIVITY_STATUS_ACTIVE = "Active";
+	private static final String COLLECTION_STATUS_PENDING = "Pending";
 	/**
 	 * name assigned to Specimen Collection Group.
 	 */
@@ -1187,5 +1189,15 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	public void setEncounterTimestamp(Date encounterTimestamp)
 	{
 		this.encounterTimestamp = encounterTimestamp;
+	}
+	
+	public void setActive()
+	{
+		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+	}
+	
+	public void setCollectionStatusPending()
+	{
+		this.setCollectionStatus(COLLECTION_STATUS_PENDING);
 	}
 }

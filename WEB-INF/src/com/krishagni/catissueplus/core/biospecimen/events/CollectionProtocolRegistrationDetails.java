@@ -77,8 +77,10 @@ public class CollectionProtocolRegistrationDetails {
 		this.participantDetails = participantDetails;
 	}
 
-	public static CollectionProtocolRegistrationDetails fromDomain(CollectionProtocolRegistration protocolRegistration) {
+	public static CollectionProtocolRegistrationDetails fromDomain(CollectionProtocolRegistration cpr) {
 		CollectionProtocolRegistrationDetails details = new CollectionProtocolRegistrationDetails();
+		details.setId(cpr.getId());
+		details.setCpId(cpr.getCollectionProtocol().getId());
 		return details;
 	}
 
