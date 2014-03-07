@@ -96,7 +96,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 				return ParticipantDeletedEvent.notFound(event.getId());
 			}
 			participant.delete(event.isIncludeChildren());
-			daoFactory.getParticipantDao().delete(participant);
+			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ParticipantDeletedEvent.ok();
 		}
 		catch (CatissueException ce) {

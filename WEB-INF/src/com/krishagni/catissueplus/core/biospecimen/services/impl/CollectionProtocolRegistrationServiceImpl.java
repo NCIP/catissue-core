@@ -79,7 +79,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return RegistrationDeletedEvent.notFound(event.getId());
 			}
 			registration.delete(event.isIncludeChildren());
-			daoFactory.getRegistrationDao().delete(registration);
+			daoFactory.getRegistrationDao().saveOrUpdate(registration);
 			return RegistrationDeletedEvent.ok();
 		}
 		catch (CatissueException ce) {
