@@ -9,7 +9,7 @@ public enum ParticipantErrorCode implements CatissueErrorCode {
 	INVALID_ATTR_VALUE(1001,"Attribute value is invalid"), 
 	CONSTRAINT_VIOLATION(1002, "Attribute violates one or more constraints"),
 	DUPLICATE_PPID(1003, "Same protocol participant identifier is already exists with this collection protocol."),
-	ACTIVE_CHILDREN_FOUND(1004, "Participant cannot be deleted, Active childrens found."),
+	ACTIVE_CHILDREN_FOUND(1004, "Cannot be deleted, Active childrens found."),
 	DUPLICATE_SSN(1005,"Participant with the same social security number is already present in the system.");
 
 	private int code;

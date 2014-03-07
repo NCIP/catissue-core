@@ -78,9 +78,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (registration == null) {
 				return RegistrationDeletedEvent.notFound(event.getId());
 			}
-			if (event.isIncludeChildren() && daoFactory.getRegistrationDao().checkActiveChildren(event.getId())) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-			}
 			registration.delete(event.isIncludeChildren());
 			daoFactory.getRegistrationDao().delete(registration);
 			return RegistrationDeletedEvent.ok();

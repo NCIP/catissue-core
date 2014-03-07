@@ -7,14 +7,14 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class AllRegistrationsSummaryEvent extends ResponseEvent {
 
-	public List<ParticipantDetails> getParticipantDetails() {
+	public List<ParticipantDetail> getParticipantDetails() {
 		return participantDetails;
 	}
 
-	public void setParticipantDetails(List<ParticipantDetails> participantDetails) {
+	public void setParticipantDetails(List<ParticipantDetail> participantDetails) {
 		this.participantDetails = participantDetails;
 	}
 
-	private List<ParticipantDetails> participantDetails;
+	private List<ParticipantDetail> participantDetails;
 
 }

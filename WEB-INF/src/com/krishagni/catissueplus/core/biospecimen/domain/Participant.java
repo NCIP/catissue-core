@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.MapUpdater;
 import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 public class Participant {
 
@@ -244,13 +246,24 @@ public class Participant {
 	}
 
 	public void delete(boolean isIncludeChildren) {
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 		if (isIncludeChildren) {
 			Map<String, CollectionProtocolRegistration> registrationCollection = this.getCprCollection();
 			for (CollectionProtocolRegistration cpr : registrationCollection.values()) {
 				cpr.delete(isIncludeChildren);
 			}
 		}
+		else {
+			checkActiveChildren();
+		}
+		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+	}
+
+	private void checkActiveChildren() {
+			for (CollectionProtocolRegistration cpr : this.getCprCollection().values()) {
+				if (cpr.isActive()) {
+					throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+				}
+			}
 	}
 
 }

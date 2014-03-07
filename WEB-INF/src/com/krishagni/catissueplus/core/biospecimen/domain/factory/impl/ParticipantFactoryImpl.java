@@ -18,7 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIden
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 
 import edu.wustl.catissuecore.domain.Site;
@@ -50,7 +50,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private final String SITE = "site";
 
 	@Override
-	public Participant createParticipant(ParticipantDetails details) {
+	public Participant createParticipant(ParticipantDetail details) {
 		Participant participant = new Participant();
 
 		setSsn(participant, details.getSsn());
@@ -77,13 +77,13 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 	}
 
-	private void setName(Participant participant, ParticipantDetails details) {
+	private void setName(Participant participant, ParticipantDetail details) {
 		participant.setFirstName(details.getFirstName());
 		participant.setLastName(details.getLastName());
 		participant.setMiddleName(details.getMiddleName());
 	}
 
-	private void setDates(Participant participant, ParticipantDetails details) {
+	private void setDates(Participant participant, ParticipantDetail details) {
 
 		Date birthDate = details.getBirthDate();
 		Date deathDate = details.getDeathDate();
@@ -103,25 +103,25 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	}
 
-	private void setActivityStatus(Participant participant, ParticipantDetails details) {
+	private void setActivityStatus(Participant participant, ParticipantDetail details) {
 		participant.updateActivityStatus(details.getActivityStatus());
 	}
 
-	private void setVitalStatus(Participant participant, ParticipantDetails details) {
+	private void setVitalStatus(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getVitalStatus())) {
 			ensureValidPermissibleValue(details.getVitalStatus(), VITAL_STATUS);
 			participant.setVitalStatus(details.getVitalStatus());
 		}
 	}
 
-	private void setGender(Participant participant, ParticipantDetails details) {
+	private void setGender(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getGender())) {
 			ensureValidPermissibleValue(details.getGender(), GENDER);
 			participant.setGender(details.getGender());
 		}
 	}
 
-	private void setRace(Participant participant, ParticipantDetails details) {
+	private void setRace(Participant participant, ParticipantDetail details) {
 		Set<String> raceList = details.getRace();
 		if (raceList != null) {
 
@@ -132,14 +132,14 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	}
 
-	private void setEthnicity(Participant participant, ParticipantDetails details) {
+	private void setEthnicity(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getEthnicity())) {
 			ensureValidPermissibleValue(details.getEthnicity(), ETHNICITY);
 			participant.setEthnicity(details.getEthnicity());
 		}
 	}
 
-	private void setPmi(Participant participant, ParticipantDetails details) {
+	private void setPmi(Participant participant, ParticipantDetail details) {
 		List<MedicalRecordNumberDetail> mrns = details.getMrns();
 		Map<String, ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
 		if (mrns != null && mrns.size() > 0) {

@@ -10,7 +10,7 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
-public class ParticipantDetails {
+public class ParticipantDetail {
 
 	private String firstName;
 
@@ -152,17 +152,17 @@ public class ParticipantDetails {
 		this.id = id;
 	}
 
-	public static ParticipantDetails fromDomain(Participant participant) {
-		ParticipantDetails dto = new ParticipantDetails();
-		dto.setFirstName(participant.getFirstName());
-		dto.setLastName(participant.getLastName());
-		dto.setMiddleName(participant.getMiddleName());
-		dto.setActivityStatus(participant.getActivityStatus());
-		dto.setBirthDate(participant.getBirthDate());
-		dto.setDeathDate(participant.getDeathDate());
-		dto.setEthnicity(participant.getEthnicity());
-		dto.setGender(participant.getGender());
-		dto.setId(participant.getId());
+	public static ParticipantDetail fromDomain(Participant participant) {
+		ParticipantDetail participantDetail = new ParticipantDetail();
+		participantDetail.setFirstName(participant.getFirstName());
+		participantDetail.setLastName(participant.getLastName());
+		participantDetail.setMiddleName(participant.getMiddleName());
+		participantDetail.setActivityStatus(participant.getActivityStatus());
+		participantDetail.setBirthDate(participant.getBirthDate());
+		participantDetail.setDeathDate(participant.getDeathDate());
+		participantDetail.setEthnicity(participant.getEthnicity());
+		participantDetail.setGender(participant.getGender());
+		participantDetail.setId(participant.getId());
 		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
 		List<MedicalRecordNumberDetail> medicalRecordNumberDetails = new ArrayList<MedicalRecordNumberDetail>();
 		if (pmi != null) {
@@ -173,11 +173,11 @@ public class ParticipantDetails {
 				medicalRecordNumberDetails.add(medicalRecordNumberDetail);
 			}
 		}
-		dto.setMrns(medicalRecordNumberDetails);
-		dto.setRace(participant.getRaceCollection());
-		dto.setSexGenotype(participant.getSexGenotype());
-		dto.setSsn(participant.getSocialSecurityNumber());
-		dto.setVitalStatus(participant.getVitalStatus());
-		return dto;
+		participantDetail.setMrns(medicalRecordNumberDetails);
+		participantDetail.setRace(participant.getRaceCollection());
+		participantDetail.setSexGenotype(participant.getSexGenotype());
+		participantDetail.setSsn(participant.getSocialSecurityNumber());
+		participantDetail.setVitalStatus(participant.getVitalStatus());
+		return participantDetail;
 	}
 }

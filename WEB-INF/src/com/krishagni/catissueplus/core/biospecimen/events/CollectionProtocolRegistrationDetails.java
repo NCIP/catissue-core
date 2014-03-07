@@ -7,7 +7,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 
 public class CollectionProtocolRegistrationDetails {
 
-	private ParticipantDetails participantDetails;
+	private ParticipantDetail participantDetails;
 
 	private Long id;
 
@@ -69,11 +69,11 @@ public class CollectionProtocolRegistrationDetails {
 		this.ppid = ppid;
 	}
 
-	public ParticipantDetails getParticipantDetails() {
+	public ParticipantDetail getParticipantDetails() {
 		return participantDetails;
 	}
 
-	public void setParticipantDetails(ParticipantDetails participantDetails) {
+	public void setParticipantDetails(ParticipantDetail participantDetails) {
 		this.participantDetails = participantDetails;
 	}
 

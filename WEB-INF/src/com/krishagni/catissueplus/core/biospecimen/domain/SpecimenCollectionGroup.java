@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
+
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
@@ -265,12 +268,26 @@ public class SpecimenCollectionGroup {
 		this.setCollectionStatus(COLLECTION_STATUS_PENDING);
 	}
 
+	public boolean isActive() {
+		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+	}
 
 	public void delete(boolean isIncludeChildren) {
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 		if (isIncludeChildren) {
 			for (Specimen specimen : this.getSpecimenCollection()) {
 				specimen.delete(isIncludeChildren);
+			}
+		}
+		else {
+			checkActiveChildren();
+		}
+		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+	}
+
+	private void checkActiveChildren() {
+		for (Specimen specimen : this.getSpecimenCollection()) {
+			if (specimen.isActive()) {
+				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
 		}
 	}

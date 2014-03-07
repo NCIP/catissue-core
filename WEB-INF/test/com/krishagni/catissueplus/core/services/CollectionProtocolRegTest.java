@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -35,8 +38,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentResponseDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -82,6 +87,11 @@ public class CollectionProtocolRegTest {
 	private SpecimenCollectionGroupFactory scgFactory;
 
 	private SpecimenFactory specimenFactory;
+
+	private final String NOT_SPECIFIED = "Not Specified";
+
+	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
+	private final String ACTIVITY_STATUS_ACTIVE = "Active";
 
 	@Before
 	public void setUp() {
@@ -295,9 +305,102 @@ public class CollectionProtocolRegTest {
 
 	}
 
+	@Test
+	public void testSuccessfulRegistrationDelete() {
+		Long cprId = 1l;
+		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
+		event.setId(cprId);
+		event.setIncludeChildren(true);
+		event.setSessionDataBean(getSessionDataBean());
+		CollectionProtocolRegistration cprToDelete = getCPR(cprId);
+		when(registrationDao.getCpr(cprId)).thenReturn(cprToDelete);
+		RegistrationDeletedEvent response = registrationSvc.delete(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(ACTIVITY_STATUS_DISABLED, cprToDelete.getActivityStatus());
+	}
+	
+	@Test
+	public void testRegistrationDeleteWithActiveChildren() {
+		Long cprId = 1l;
+		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
+		event.setId(cprId);
+		event.setIncludeChildren(false);
+		event.setSessionDataBean(getSessionDataBean());
+		CollectionProtocolRegistration cprToDelete = getCPR(cprId);
+		when(registrationDao.getCpr(cprId)).thenReturn(cprToDelete);
+		RegistrationDeletedEvent response = registrationSvc.delete(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	}
+
+	@Test
+	public void testRegistrationDeleteNotFound() {
+		Long cprId = 1l;
+		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
+		event.setId(cprId);
+		event.setIncludeChildren(true);
+		event.setSessionDataBean(getSessionDataBean());
+		when(registrationDao.getCpr(cprId)).thenReturn(null);
+		RegistrationDeletedEvent response = registrationSvc.delete(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testRegistrationDeleteServerError() {
+		Long cprId = 1l;
+		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
+		event.setId(cprId);
+		event.setIncludeChildren(true);
+		event.setSessionDataBean(getSessionDataBean());
+		doThrow(new RuntimeException()).when(registrationDao).getCpr(anyLong());
+		RegistrationDeletedEvent response = registrationSvc.delete(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	private CollectionProtocolRegistration getCPR(Long cprId) {
+		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+		cpr.setId(cprId);
+		cpr.setActive();
+		cpr.setCollectionProtocol(getCollectionProtocol(cprId));
+		cpr.setSpecimenCollectionGroupCollection(getScgCollection(cpr));
+		return cpr;
+	}
+
+	private Collection<SpecimenCollectionGroup> getScgCollection(CollectionProtocolRegistration cpr) {
+		Set<SpecimenCollectionGroup> scgColl = new HashSet<SpecimenCollectionGroup>();
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg.setActive();
+		scg.setBarcode("barcode");
+		scg.setClinicalDiagnosis(NOT_SPECIFIED);
+		scg.setClinicalStatus(NOT_SPECIFIED);
+		scg.setCollectionComments("collectionComments");
+		scg.setCollectionContainer(NOT_SPECIFIED);
+		scg.setCollectionProcedure(NOT_SPECIFIED);
+		scg.setCollectionProtocolRegistration(cpr);
+		scg.setCollectionStatus("Complete");
+		scg.setCollectionTimestamp(new Date());
+		scg.setName("scg_name");
+		scg.setSpecimenCollection(getSpecimenCollection(scg));
+		scgColl.add(scg);
+		return scgColl;
+	}
+
+	private Set<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) {
+		Set<Specimen> specimenColl = new HashSet<Specimen>();
+		Specimen specimen = new Specimen();
+		specimen.setActive();
+		specimen.setSpecimenCollectionGroup(scg);
+		specimenColl.add(specimen);
+		return specimenColl;
+	}
+
 	private CollectionProtocol getCollectionProtocol(Long cpId) {
 		CollectionProtocol protocol = new CollectionProtocol();
 		protocol.setId(cpId);
+		protocol.setTitle("Test case CP");
 		return protocol;
 	}
 
@@ -330,8 +433,8 @@ public class CollectionProtocolRegTest {
 		return list;
 	}
 
-	private ParticipantDetails getParticipantDto() {
-		ParticipantDetails participantDto = new ParticipantDetails();
+	private ParticipantDetail getParticipantDto() {
+		ParticipantDetail participantDto = new ParticipantDetail();
 		participantDto.setFirstName("firstName");
 		participantDto.setLastName("lastName");
 		participantDto.setGender("male");
@@ -353,9 +456,9 @@ public class CollectionProtocolRegTest {
 	private Collection getCpeCollection(CollectionProtocol protocol) {
 		Collection<CollectionProtocolEvent> cpes = new HashSet<CollectionProtocolEvent>();
 		CollectionProtocolEvent event = new CollectionProtocolEvent();
-		event.setActivityStatus("Active");
-		event.setClinicalDiagnosis("Not Specified");
-		event.setClinicalStatus("Not Specified");
+		event.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+		event.setClinicalDiagnosis(NOT_SPECIFIED);
+		event.setClinicalStatus(NOT_SPECIFIED);
 		event.setCollectionPointLabel("visit1");
 		event.setStudyCalendarEventPoint(0.0);
 		event.setCollectionProtocol(protocol);
@@ -367,18 +470,18 @@ public class CollectionProtocolRegTest {
 	private Collection<SpecimenRequirement> getSpecimenRequirementColl(CollectionProtocolEvent event) {
 		Collection<SpecimenRequirement> requirements = new HashSet<SpecimenRequirement>();
 		SpecimenRequirement requirement = new SpecimenRequirement();
-		requirement.setActivityStatus("Active");
+		requirement.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 		requirement.setCollectionComments("comments");
-		requirement.setCollectionContainer("Not Specified");
-		requirement.setCollectionProcedure("Not Specified");
+		requirement.setCollectionContainer(NOT_SPECIFIED);
+		requirement.setCollectionProcedure(NOT_SPECIFIED);
 		requirement.setCollectionProtocolEvent(event);
 		requirement.setCollectionTimestamp(new Date());
 		requirement.setCollector(getUser(1l));
 		requirement.setInitialQuantity(1.0);
 		requirement.setLineage("New");
-		requirement.setPathologicalStatus("Not Specified");
+		requirement.setPathologicalStatus(NOT_SPECIFIED);
 		requirement.setReceivedComments("comments");
-		requirement.setReceivedQuality("Not Specified");
+		requirement.setReceivedQuality(NOT_SPECIFIED);
 		requirement.setReceivedTimestamp(new Date());
 		requirement.setReceiver(getUser(1l));
 		requirement.setSpecimenCharacteristics(null);

@@ -4,6 +4,9 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.Collection;
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
+
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.User;
@@ -144,9 +147,8 @@ public class CollectionProtocolRegistration {
 		this.barcode = barcode;
 	}
 
-	public void update(CollectionProtocolRegistration cpr) {
-		// TODO: Auto-generated method stub
-
+	public boolean isActive() {
+		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
 	}
 
 	public void setActive() {
@@ -154,10 +156,21 @@ public class CollectionProtocolRegistration {
 	}
 
 	public void delete(boolean isIncludeChildren) {
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 		if (isIncludeChildren) {
 			for (SpecimenCollectionGroup scg : this.getSpecimenCollectionGroupCollection()) {
 				scg.delete(isIncludeChildren);
+			}
+		}
+		else {
+			checkActiveChildren();
+		}
+		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+	}
+
+	private void checkActiveChildren() {
+		for (SpecimenCollectionGroup scg : this.getSpecimenCollectionGroupCollection()) {
+			if (scg.isActive()) {
+				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
 		}
 	}

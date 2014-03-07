@@ -6,7 +6,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantUpdatedEvent extends ResponseEvent {
 
-	private ParticipantDetails participantDto;
+	private ParticipantDetail participantDto;
 
 	private Long participantId;
 
@@ -18,15 +18,15 @@ public class ParticipantUpdatedEvent extends ResponseEvent {
 		this.participantId = participantId;
 	}
 
-	public ParticipantDetails getParticipantDto() {
+	public ParticipantDetail getParticipantDto() {
 		return participantDto;
 	}
 
-	public void setParticipantDto(ParticipantDetails participantDto) {
+	public void setParticipantDto(ParticipantDetail participantDto) {
 		this.participantDto = participantDto;
 	}
 
-	public static ParticipantUpdatedEvent ok(ParticipantDetails details) {
+	public static ParticipantUpdatedEvent ok(ParticipantDetail details) {
 		ParticipantUpdatedEvent event = new ParticipantUpdatedEvent();
 		event.setParticipantDto(details);
 		event.setStatus(EventStatus.OK);

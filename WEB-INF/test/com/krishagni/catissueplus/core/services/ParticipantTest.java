@@ -12,9 +12,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
@@ -22,15 +25,20 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
@@ -42,6 +50,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -58,8 +67,12 @@ public class ParticipantTest {
 
 	private ParticipantFactory participantFactory;
 
-	ParticipantService participantService;
+	private ParticipantService participantService;
 
+	private final String NOT_SPECIFIED = "Not Specified";
+	
+	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
+	
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -79,7 +92,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setActivityStatus("Active");
 		participantDto.setFirstName("firstName");
 		participantDto.setLastName("lastName");
@@ -90,7 +103,7 @@ public class ParticipantTest {
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetails createdParticipantDto = response.getParticipantDto();
+		ParticipantDetail createdParticipantDto = response.getParticipantDto();
 		assertEquals(participantDto.getFirstName(), createdParticipantDto.getFirstName());
 		assertEquals(participantDto.getActivityStatus(), createdParticipantDto.getActivityStatus());
 		assertEquals(participantDto.getGender(), createdParticipantDto.getGender());
@@ -102,7 +115,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setSsn("22-43-546");
 
 		reqEvent.setParticipantDetails(participantDto);
@@ -119,7 +132,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		Calendar calendar = Calendar.getInstance();
 
 		calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -139,7 +152,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		Calendar calendar = Calendar.getInstance();
 
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
@@ -159,7 +172,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		Calendar calendar = Calendar.getInstance();
 
 		calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -180,7 +193,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		when(siteDao.getSite(anyString())).thenReturn(null);
 		reqEvent.setParticipantDetails(participantDto);
 
@@ -196,7 +209,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setMrns(getMrnWithEmptyNumber());
 		reqEvent.setParticipantDetails(participantDto);
 
@@ -213,7 +226,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setGender("mal");
 
 		reqEvent.setParticipantDetails(participantDto);
@@ -230,7 +243,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		Set<String> race = new HashSet<String>();
 		race.add("melanin");
 		participantDto.setRace(race);
@@ -250,7 +263,7 @@ public class ParticipantTest {
 		when(participantDao.isSsnUnique(anyString())).thenReturn(false);
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 
 		reqEvent.setParticipantDetails(participantDto);
 
@@ -266,7 +279,7 @@ public class ParticipantTest {
 
 		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 
 		reqEvent.setParticipantDetails(participantDto);
 		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(any(Participant.class));
@@ -289,7 +302,7 @@ public class ParticipantTest {
 		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setId(1L);
 		participantDto.setActivityStatus("Active");
 		participantDto.setFirstName("firstName");
@@ -301,7 +314,7 @@ public class ParticipantTest {
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetails createdParticipant = response.getParticipantDto();
+		ParticipantDetail createdParticipant = response.getParticipantDto();
 		assertEquals(participantDto.getFirstName(), createdParticipant.getFirstName());
 		assertNotNull(createdParticipant.getMrns());
 		assertEquals(1, createdParticipant.getMrns().size());
@@ -314,7 +327,7 @@ public class ParticipantTest {
 		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setId(1L);
 		participantDto.setActivityStatus("Active");
 		participantDto.setFirstName("firstName");
@@ -339,7 +352,7 @@ public class ParticipantTest {
 		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setId(1L);
 		participantDto.setActivityStatus("Active");
 		participantDto.setFirstName("firstName");
@@ -353,7 +366,7 @@ public class ParticipantTest {
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetails updatedResult = response.getParticipantDto();
+		ParticipantDetail updatedResult = response.getParticipantDto();
 		assertNotSame(newSsn, updatedResult.getSsn());
 	}
 
@@ -363,7 +376,7 @@ public class ParticipantTest {
 		when(participantDao.getParticipant(anyLong())).thenReturn(null);
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setId(1l);
 		reqEvent.setParticipantDto(participantDto);
 
@@ -379,7 +392,7 @@ public class ParticipantTest {
 		when(participantDao.getParticipant(anyLong())).thenReturn(getParticipant(1l));
 		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetails participantDto = getParticipantDetails();
+		ParticipantDetail participantDto = getParticipantDetails();
 		participantDto.setId(1l);
 		reqEvent.setParticipantDto(participantDto);
 		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(any(Participant.class));
@@ -403,9 +416,112 @@ public class ParticipantTest {
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetails retrievedParticipant = response.getParticipantDetails();
+		ParticipantDetail retrievedParticipant = response.getParticipantDetails();
 		assertEquals(participantId, retrievedParticipant.getId());
 
+	}
+	
+	@Test
+	public void testSuccessfulParticipantDelete(){
+		Long participantId = 1l;
+		DeleteParticipantEvent event = new DeleteParticipantEvent();
+		event.setId(participantId);
+		event.setIncludeChildren(true);
+		event.setSessionDataBean(getSessionDataBean());
+		Participant participantToDelete = getParticipant(participantId);
+		participantToDelete.setCprCollection(getCprCollection());
+		when(participantDao.getParticipant(anyLong())).thenReturn(participantToDelete);
+		ParticipantDeletedEvent response = participantService.delete(event);
+		assertNotNull("response cannot be null",response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(ACTIVITY_STATUS_DISABLED, participantToDelete.getActivityStatus());
+	}
+	
+	@Test
+	public void testParticipantDeleteNotFound(){
+		Long participantId = 1l;
+		DeleteParticipantEvent event = new DeleteParticipantEvent();
+		event.setId(participantId);
+		event.setSessionDataBean(getSessionDataBean());
+		when(participantDao.getParticipant(anyLong())).thenReturn(null);
+		ParticipantDeletedEvent response = participantService.delete(event);
+		assertNotNull("response cannot be null",response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testParticipantDeleteServerError(){
+		Long participantId = 1l;
+		DeleteParticipantEvent event = new DeleteParticipantEvent();
+		event.setIncludeChildren(true);
+		event.setId(participantId);
+		event.setSessionDataBean(getSessionDataBean());
+		doThrow(new RuntimeException()).when(participantDao).getParticipant(anyLong());
+		ParticipantDeletedEvent response = participantService.delete(event);
+		assertNotNull("response cannot be null",response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+	
+	@Test
+	public void testDeleteParticipantWithoutChild(){
+		Long participantId = 1l;
+		DeleteParticipantEvent event = new DeleteParticipantEvent();
+		event.setIncludeChildren(false);
+		event.setId(participantId);
+		event.setSessionDataBean(getSessionDataBean());
+		Participant participantToDelete = getParticipant(participantId);
+		participantToDelete.setCprCollection(getCprCollection());
+		when(participantDao.getParticipant(anyLong())).thenReturn(participantToDelete);
+		ParticipantDeletedEvent response = participantService.delete(event);
+		assertNotNull("response cannot be null",response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	}
+
+	private Map<String, CollectionProtocolRegistration> getCprCollection() {
+		Map<String, CollectionProtocolRegistration> cprColl = new HashMap<String, CollectionProtocolRegistration>();
+		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+		cpr.setActive();
+		cpr.setBarcode("barcode");
+		cpr.setCollectionProtocol(getCollectionProtocol());
+		cpr.setProtocolParticipantIdentifier("ppid1");
+		cpr.setRegistrationDate(new Date());
+		cpr.setSpecimenCollectionGroupCollection(getscgCollection(cpr));
+		cprColl.put(cpr.getCollectionProtocol().getTitle(), cpr);
+		return cprColl;
+	}
+
+	private CollectionProtocol getCollectionProtocol() {
+		CollectionProtocol protocol = new CollectionProtocol();
+		protocol.setTitle("Test case CP");
+		return protocol;
+	}
+
+	private Collection<SpecimenCollectionGroup> getscgCollection(CollectionProtocolRegistration cpr) {
+		Set<SpecimenCollectionGroup> scgColl = new HashSet<SpecimenCollectionGroup>();
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg.setActive();
+		scg.setBarcode("barcode");
+		scg.setClinicalDiagnosis(NOT_SPECIFIED);
+		scg.setClinicalStatus(NOT_SPECIFIED);
+		scg.setCollectionComments("collectionComments");
+		scg.setCollectionContainer(NOT_SPECIFIED);
+		scg.setCollectionProcedure(NOT_SPECIFIED);
+		scg.setCollectionProtocolRegistration(cpr);
+		scg.setCollectionStatus("Complete");
+		scg.setCollectionTimestamp(new Date());
+		scg.setName("scg_name");
+		scg.setSpecimenCollection(getSpecimenCollection(scg));
+		scgColl.add(scg);
+		return scgColl;
+	}
+
+	private Set<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) {
+		Set<Specimen> specimenColl = new HashSet<Specimen>();
+		Specimen specimen = new Specimen();
+		specimen.setActive();
+		specimen.setSpecimenCollectionGroup(scg);
+		specimenColl.add(specimen);
+		return specimenColl;
 	}
 
 	private SessionDataBean getSessionDataBean() {
@@ -428,8 +544,8 @@ public class ParticipantTest {
 		return participant;
 	}
 
-	private ParticipantDetails getParticipantDetails() {
-		ParticipantDetails details = new ParticipantDetails();
+	private ParticipantDetail getParticipantDetails() {
+		ParticipantDetail details = new ParticipantDetail();
 		details.setActivityStatus("Active");
 		details.setFirstName("firstName");
 		details.setLastName("lastName");
