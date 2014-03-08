@@ -225,4 +225,12 @@ angular.module("plus.directives", [])
     };
  
     return tooltip;
-  }]);
+  }])
+  
+  .directive('treeView', function() {
+    return {
+      restrict: "E",
+      replace : true,
+      templateUrl: "ngweb/pages/templates/tree.html"
+    }
+  });

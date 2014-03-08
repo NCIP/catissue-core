@@ -5,14 +5,14 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqSpecimenSummaryEvent extends RequestEvent {
 
-	private Long parentId;
+	private Long scgId;
 
-	public Long getParentId() {
-		return parentId;
+	public Long getScgId() {
+		return scgId;
 	}
 
-	public void setParentId(Long specimenCollectionGroupId) {
-		this.parentId = specimenCollectionGroupId;
+	public void setScgId(Long scgId) {
+		this.scgId = scgId;
 	}
 
 }

@@ -8,21 +8,21 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class AllSpecimenCollGroupsSummaryEvent extends ResponseEvent {
 
-	private List<SpecimenCollectionGroupInfo> specimenCollectionGroupsInfo;
+	private List<SpecimenCollectionGroupInfo> scgList;
 
-	public List<SpecimenCollectionGroupInfo> getSpecimenCollectionGroupsInfo() {
-		return specimenCollectionGroupsInfo;
+	public List<SpecimenCollectionGroupInfo> getScgList() {
+		return scgList;
 	}
 
-	public void setSpecimenCollectionGroupsInfo(List<SpecimenCollectionGroupInfo> specimenCollectionGroupsInfo) {
-		this.specimenCollectionGroupsInfo = specimenCollectionGroupsInfo;
+	public void setScgList(List<SpecimenCollectionGroupInfo> scgList) {
+		this.scgList = scgList;
 	}
 
-	public static AllSpecimenCollGroupsSummaryEvent ok(List<SpecimenCollectionGroupInfo> specimenCollectionGroupsInfo) {
-		AllSpecimenCollGroupsSummaryEvent specimenCollGroupsSummaryEvent = new AllSpecimenCollGroupsSummaryEvent();
-		specimenCollGroupsSummaryEvent.setSpecimenCollectionGroupsInfo(specimenCollectionGroupsInfo);
-		specimenCollGroupsSummaryEvent.setStatus(EventStatus.OK);
-		return specimenCollGroupsSummaryEvent;
+	public static AllSpecimenCollGroupsSummaryEvent ok(List<SpecimenCollectionGroupInfo> scgList) {
+		AllSpecimenCollGroupsSummaryEvent resp = new AllSpecimenCollGroupsSummaryEvent();
+		resp.setScgList(scgList);
+		resp.setStatus(EventStatus.OK);
+		return resp;
 	}
 
 	public static AllSpecimenCollGroupsSummaryEvent serverError(Throwable... t) {

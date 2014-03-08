@@ -12,10 +12,7 @@ public interface DaoFactory {
 	
 	public SpecimenDao getSpecimenDao();
 	
-	public SpecimenCollectionGroupDao getSpecimenCollectionGroupDao();
+	public SpecimenCollectionGroupDao getScgDao();
 	
-	public CollectionProtocolRegistrationDao getRegistrationDao();
-
-	public UserDao getUserDao();
-	
+	public UserDao getUserDao();	
 }

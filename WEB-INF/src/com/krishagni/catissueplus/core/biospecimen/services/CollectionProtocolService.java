@@ -12,7 +12,7 @@ public interface CollectionProtocolService {
 
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req);
 
-	public ParticipantsSummaryEvent getRegisteredParticipantList(ReqParticipantsSummaryEvent reqParticipantsSummaryEvent);
+	public ParticipantsSummaryEvent getParticipants(ReqParticipantsSummaryEvent req);
 
 	public AllConsentsSummaryEvent getConsents(ReqConsentsSummaryEvent event);
 

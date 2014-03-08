@@ -303,6 +303,12 @@
             insert="true"
             column="REQ_SPECIMEN_ID"
             lazy="false"
-        />      
+        />
+        
+        <sql-query name="getScgIdBySpecimenId">
+          <return-scalar column="scgId" type="long"/>
+          
+          select SPECIMEN_COLLECTION_GROUP_ID as scgId from CATISSUE_SPECIMEN where IDENTIFIER = :specimenId
+        </sql-query>      
   </class>
 </hibernate-mapping>

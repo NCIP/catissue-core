@@ -27,4 +27,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public boolean checkActiveChildrenForCollGroup(long id);
 
 	public boolean checkActiveChildren(long id);
+
+	public Long getScgId(Long specimenId);
 }

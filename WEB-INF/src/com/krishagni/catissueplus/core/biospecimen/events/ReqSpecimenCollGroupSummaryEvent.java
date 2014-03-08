@@ -5,14 +5,14 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqSpecimenCollGroupSummaryEvent extends RequestEvent {
 
-	private Long collectionProtocolRegistrationId;
+	private Long cprId;
 
-	public Long getCollectionProtocolRegistrationId() {
-		return collectionProtocolRegistrationId;
+	public Long getCprId() {
+		return cprId;
 	}
 
-	public void setCollectionProtocolRegistrationId(Long collectionProtocolRegistrationId) {
-		this.collectionProtocolRegistrationId = collectionProtocolRegistrationId;
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
 	}
 
 }

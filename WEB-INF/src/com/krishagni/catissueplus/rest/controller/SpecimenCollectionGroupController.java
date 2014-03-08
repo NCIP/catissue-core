@@ -43,14 +43,14 @@ public class SpecimenCollectionGroupController {
 	@Autowired
 	private FormService formSvc;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/child-specimens")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenInfo> getSpecimensList(@PathVariable("id") Long scgId) {
-		ReqSpecimenSummaryEvent event = new ReqSpecimenSummaryEvent();
-		event.setSessionDataBean(getSession());
-		event.setParentId(scgId);
-		return specimenCollGroupService.getSpecimensList(event).getSpecimensInfo();
+		ReqSpecimenSummaryEvent req = new ReqSpecimenSummaryEvent();
+		req.setSessionDataBean(getSession());
+		req.setScgId(scgId);
+		return specimenCollGroupService.getSpecimensList(req).getSpecimensInfo();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/forms")

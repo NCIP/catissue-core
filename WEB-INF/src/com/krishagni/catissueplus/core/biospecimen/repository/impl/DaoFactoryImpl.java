@@ -65,15 +65,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public SpecimenCollectionGroupDao getSpecimenCollectionGroupDao() {
+	public SpecimenCollectionGroupDao getScgDao() {
 		SpecimenCollectionGroupDaoImpl dao = new SpecimenCollectionGroupDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public CollectionProtocolRegistrationDao getRegistrationDao() {
-		CollectionProtocolRegistrationDaoImpl dao = new CollectionProtocolRegistrationDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

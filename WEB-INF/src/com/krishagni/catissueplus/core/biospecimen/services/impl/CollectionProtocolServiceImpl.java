@@ -35,11 +35,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
-	public ParticipantsSummaryEvent getRegisteredParticipantList(ReqParticipantsSummaryEvent reqParticipantsSummaryEvent) {
+	public ParticipantsSummaryEvent getParticipants(ReqParticipantsSummaryEvent req) {
 		try {
-			List<ParticipantInfo> participantsInfo = daoFactory.getCollectionProtocolDao().getRegisteredParticipants(
-					reqParticipantsSummaryEvent.getCpId(), reqParticipantsSummaryEvent.getSearchString());
-			return ParticipantsSummaryEvent.ok(participantsInfo);
+			Long cpId = req.getCpId();
+			String searchStr = req.getSearchString();
+			
+			List<ParticipantInfo> participants = daoFactory.getCprDao().getParticipants(cpId, searchStr);			
+			return ParticipantsSummaryEvent.ok(participants);
 		}
 		catch (CatissueException e) {
 			return ParticipantsSummaryEvent.serverError(e);

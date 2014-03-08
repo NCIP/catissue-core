@@ -33,11 +33,10 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 	@Override
 	@PlusTransactional
-	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event) {
+	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
 
 		try {
-			return AllSpecimensSummaryEvent.ok(daoFactory.getSpecimenCollectionGroupDao().getSpecimensList(
-					event.getParentId()));
+			return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensList(req.getScgId()));
 		}
 		catch (CatissueException e) {
 			return AllSpecimensSummaryEvent.serverError(e);
@@ -49,10 +48,10 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		if (event.isIncludeChildren()) {
 			specimenSvc.delete(event);
 		}
-		else if (daoFactory.getSpecimenCollectionGroupDao().checkActivechildrenForParticipant(event.getId())) {
+		else if (daoFactory.getScgDao().checkActivechildrenForParticipant(event.getId())) {
 			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 		}
-			daoFactory.getSpecimenCollectionGroupDao().deleteByParticipant(event.getId());
+			daoFactory.getScgDao().deleteByParticipant(event.getId());
 	}
 
 	public void delete(DeleteRegistrationEvent event)
@@ -60,10 +59,10 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		if (event.isIncludeChildren()) {
 			specimenSvc.delete(event);
 		}
-		else if (daoFactory.getSpecimenCollectionGroupDao().checkActiveChildrenForRegistration(event.getId())) {
+		else if (daoFactory.getScgDao().checkActiveChildrenForRegistration(event.getId())) {
 			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 		}
-			daoFactory.getSpecimenCollectionGroupDao().deleteByRegistration(event.getId());
+			daoFactory.getScgDao().deleteByRegistration(event.getId());
 	}
 	
 	public void delete(DeleteSpecimenGroupsEvent event)
@@ -71,10 +70,10 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		if (event.isIncludeChildren()) {
 			specimenSvc.delete(event);
 		}
-		else if (daoFactory.getSpecimenCollectionGroupDao().checkActiveChildren(event.getId())) {
+		else if (daoFactory.getScgDao().checkActiveChildren(event.getId())) {
 			throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 		}
-			daoFactory.getSpecimenCollectionGroupDao().delete(event.getId());
+			daoFactory.getScgDao().delete(event.getId());
 	}
 	
 

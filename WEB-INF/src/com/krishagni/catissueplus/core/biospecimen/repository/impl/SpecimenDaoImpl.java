@@ -11,16 +11,11 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.common.util.global.Status;
 
 public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {
 
-	private String ACTIVITY_STATUS_DISABLED = "Disabled";
-
-	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
-			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
-			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.parentSpecimen.id = :parentSpecimenId"
-			+ " and sp.activityStatus <> '" + ACTIVITY_STATUS_DISABLED + "' order by sp.id";
-
+	
 	@Override
 	public List<SpecimenInfo> getSpecimensList(Long parentSpecimenId) {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -93,4 +88,29 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Long getScgId(Long specimenId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_ID_BY_SPECIMEN_ID);
+		query.setLong("specimenId", specimenId);
+		
+		List<Long> rows = query.list();
+		if (rows != null && !rows.isEmpty()) {
+			return rows.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	private String ACTIVITY_STATUS_DISABLED = "Disabled";
+
+	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
+			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
+			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.parentSpecimen.id = :parentSpecimenId"
+			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by sp.id";
+
+	private static String FQN = Specimen.class.getName();
+	
+	private static String GET_SCG_ID_BY_SPECIMEN_ID = FQN + ".getScgIdBySpecimenId";
 }

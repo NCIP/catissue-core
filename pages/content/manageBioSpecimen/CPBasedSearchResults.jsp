@@ -47,8 +47,9 @@
     }
 
 %>
-<html ng-app="demoApp">
+<html ng-app="cpview-app">
     <link rel="stylesheet" type="text/css" href="ngweb/external/select2/css/select2.css"></link>
+    <link href="ngweb/external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
     <link rel="stylesheet" type="text/css" href="jss/app/css/tree.css"></link> 
     <link href="ngweb/external/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet"/>
     <link href="ngweb/external/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
@@ -56,17 +57,13 @@
     <script type="text/javascript" src="ngweb/external/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="ngweb/external/angularjs/angular.min.js"></script>
     <script type="text/javascript" src="ngweb/external/select2/select2.min.js"></script>
+   
     <script type="text/javascript" src="ngweb/external/jquery/jquery-ui.min.js"></script>
     <script type="text/javascript" src="ngweb/external/jquery/jquery-ui.min.js"></script>
     <script type="text/javascript" src="ngweb/external/angularjs/angular-ui.js"></script>
     <script type="text/javascript" src="ngweb/external/bootstrap/js/bootstrap.min.js"></script>
     
     <script type="text/javascript" src="ngweb/external/angularjs/ui-bootstrap-tpls-0.10.0.min.js"></script>
-    
-    
-    <script type="text/javascript" src="jss/app/js/cpBasedViewController.js"></script>
-    <script type="text/javascript" src="jss/app/js/select2Combo.js"></script>
-    <script type="text/javascript" src="jss/app/js/select2SearchCombo.js"></script>
     
 
 <script type="text/javascript">
@@ -84,8 +81,10 @@ var isParticipantUpdated = true;
   -moz-border-radius: 9px;
   border-radius: 9px;
 }
-    .left-box {
+
+    .cp-left-panel {
         padding: 10px;
+        margin: 2px;
     }
     
     .btn-enabled {
@@ -102,10 +101,6 @@ var isParticipantUpdated = true;
     
     .clear{
         clear: both;
-    }
-    
-    .select-box div{
-        margin: 5px 0;
     }
     
     a:hover{
@@ -132,7 +127,55 @@ var isParticipantUpdated = true;
         font-family: verdana;
         font-size: 9pt;
     }
-        
+    
+    .dropdown {
+      padding: 0px;
+      margin: 5px 0px 5px -15px;
+    }    
+
+    .cp-dropdown-label {
+      font-size: 14px;
+      font-weight: bold;
+      font-family: verdana;
+      margin: 0px 0px 4px 0px;
+    }
+    
+    .img-circle {
+      margin: 0px 4px 3px -2px;
+      border: solid;
+      border-radius: 50%;
+      height: 8px;
+      width: 8px;
+    }
+    
+    .complete, .collected{
+      border-color: green;
+      background: green;
+    }
+    
+     .pending {
+      border-color: grey;
+      background: grey;
+    }
+    
+    .not-collected {
+      border-color: red;
+      background: red;
+    }
+    
+    .distributed {
+      border-color: blue;
+      background: blue;
+    }
+   
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }    
+    
+    .black_ar {
+      text-overflow: ellipsis;
+    }   
     </style>
 <script>
 
@@ -211,55 +254,55 @@ function hideCursor(){
     document.body.style.cursor='default';
 }
 </script>
-<!-- Mandar : 25Nov08  -->
-    <TABLE border="1" width="100%" height="100%" cellpadding="0" cellspacing="0">
-        <TR>
-            <TD valign="top" height="100%" id='sideMenuTd' width="25%">
-                <div id="SearchLeftPart" style="overflow:auto">
-                    <div ng-controller="CpController" class="left-box">
-                        <div class="search-box" >                             
-                            <div class="select-box" >
-                                <div class="bold_ar_b">Collection Protocol: 
-                                    </div>
-                                <ka-select option-id="id" option-value="name" options="cps" ng-model="selectedCp.id" on-select="onCpSelect" style="width:100%;" ></ka-select>
-                            </div>
-                            <div class="pull-right" style="display:none">
-                                <input type="button" class="btn btn-default" ng-class="{true: 'btn-enabled', false: 'btn-disabled'}[selectedCp.id != -1]" value="Register New" ng-click="registerParticipant()" ng-disabled="selectedCp.id == -1"/>
-                            </div>
-                            <div class="clear"></div>
-                            <div class="select-box">
-                                <div style="padding-top:10px">
-                                <div class="bold_ar_b">Participant: 
-                                    <div class="btn-group">
-                                    <span class="btn btn-default" ng-click="registerParticipant()" ng-disabled="selectedCp.id == -1"><span class="glyphicon glyphicon-plus"></span> Add</span><span class="btn btn-default" ng-click="viewParticipant()"><span class="glyphicon glyphicon-eye-open"></span> View</span>
-                                    </div>
-                                </div>
-                                <ka-search ng-model="SelectedParticipant" on-initselectionfn="initSel" on-query="participantSearch" on-select="participantSelect(selected)" style="width:100%;"  ></ka-search>
-                            </div>
-                            <div class="pull-right" style="display:none">
-                                
-                                <input type="button" class="btn btn-default" ng-class="{true: 'btn-enabled', false: 'btn-disabled'}[SelectedParticipant.id != -1]" value="View" ng-click="viewParticipant()" ng-disabled="SelectedParticipant.id == -1"/>
-                            </div>
-                            <div class="clear"></div>
-                            </div>
-                        </div>
-                        <div class="clearer">  
-                            <div class="bold_ar_b" style="margin: 10px 0;">Specimen Details:</div>
-                            <tree-view tree-data="tree" ></tree-view>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td width="75%" valign="top" height="100%" id="contentTd">
-                <div id="SearchLeftPart2" style=" width:100%;height:100%; overflow:none;">
-                    <iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="CPDashboardAction.do?isSystemDashboard=true" scrolling="none" frameborder="0" width="100%" height="100%">
-                        Your Browser doesn't support IFrames.
-                    </iframe>
-                </div>
-                <iframe name="downloadframe" src="" style="display:none"></iframe>  
-            </TD>
-        </TR>
-    </TABLE>
+<table border="1" width="100%" height="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td valign="top" height="100%" id='sideMenuTd' width="25%">
+      <div id="SearchLeftPart" style="overflow:auto">
+        <div ng-controller="CpViewController" class="cp-left-panel">
+          <div>
+            <div>
+              <div class="cp-dropdown-label"> Collection Protocol </div>
+              <ka-select  data-placeholder="Select Collection Protocol" 
+                          option-id="id" option-value="shortTitle" 
+                          options="cps" selected="selectedCp.id"  on-select="onCpSelect" style="width:100%;" >
+              </ka-select>
+            </div>
+            <div style="margin-top: 20px">
+              <div class="cp-dropdown-label"> Participant </div>
+              <ka-select data-placeholder="Select Participant" 
+                         option-id="id" option-value="name" 
+                         options="participantList"  selected="selectedParticipant.id" on-select="onParticipantSelect" style="width:100%;">
+              </ka-select>
+            </div>
+            <div class="btn-group" style="margin-top: 10px; width: 100%;">
+              <button class="btn btn-default btn-sm" ng-click="registerParticipant()" ng-disabled="selectedCp.id == -1" style="width: 50%">
+                <span class="glyphicon glyphicon-plus"></span> Register Participant
+              </button>
+              <button class="btn btn-default btn-sm" ng-click="viewParticipant()" style="width: 50%">
+                <span class="glyphicon glyphicon-eye-open"></span> View Participant
+              </button>
+            </div>
+          </div>
+          <div ng-if="tree.length>0">  
+            <hr>
+            <div class="cp-dropdown-label" style="margin: 10px 0;"> Specimen Tree </div>
+            <tree-view tree-data="tree" ></tree-view>
+          </div>
+        </div>
+      </div>
+    </td>
+  
+    <td width="75%" valign="top" height="100%" id="contentTd">
+      <div id="SearchLeftPart2" style=" width:100%;height:100%; overflow:none;">
+        <iframe id="cpFrameNew" name="<%=Constants.DATA_DETAILS_VIEW%>" src="CPDashboardAction.do?isSystemDashboard=true" 
+        scrolling="none" frameborder="0" width="100%" height="100%">
+          Your Browser doesn't support IFrames.
+        </iframe>
+      </div>
+      <iframe name="downloadframe" src="" style="display:none"></iframe>  
+    </TD>
+  </TR>
+</TABLE>
     
 <script>
     SearchResult=document.getElementById('SearchLeftPart');
@@ -267,9 +310,35 @@ function hideCursor(){
     SearchResult2=document.getElementById('SearchLeftPart2');
     SearchResult2.style.height = (document.body.clientHeight - 60) + 'px';
     var control=null;
-    var selectionCp = "";
-    var selParticipant = "";
+    
+    var cpId = "<%= request.getParameter("cpId") %>";
+    var participantId = "<%= request.getParameter("participantId") %>";
+    var scgId = "<%= request.getParameter("scgId") %>";
+    var specimenId = "<%= request.getParameter("specimenId") %>";
+    
+    var selectionCp = {id: cpId, shortTitle:""};
+
+    var selParticipant = {id: participantId != "null" ? participantId : -1, name: ""}; 
+
+    var selectedScg = undefined;
+    if (scgId == "null") {
+      scgId = "${scgId}";
+    }
+    if (scgId != "null" && scgId != "") {
+      selectedScg = {id: scgId, type: 'scg'};
+    }
+
+    var selectedSpecimen = undefined;
+    if (specimenId != "null") {
+      selectedSpecimen = {id: specimenId, type: 'specimen'};
+    }
 </script>
 
+<script type="text/javascript" src="ngweb/js/wrapper.js"></script>
+<script type="text/javascript" src="ngweb/js/directives.js"></script>
+<script type="text/javascript" src="ngweb/js/cpview-service.js"></script>
+<script type="text/javascript" src="ngweb/js/cpview-controller.js"></script>
+<script type="text/javascript" src="ngweb/js/cpview-app.js"></script>
+    
 </body>
 </html>

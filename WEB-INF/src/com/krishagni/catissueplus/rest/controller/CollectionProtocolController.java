@@ -61,13 +61,14 @@ public class CollectionProtocolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participants")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<ParticipantInfo> getParticipants(@PathVariable("id") Long cpId,
+	public List<ParticipantInfo> getParticipants(
+			@PathVariable("id") Long cpId,
 			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr) {
 		ReqParticipantsSummaryEvent event = new ReqParticipantsSummaryEvent();
 		event.setCpId(cpId);
 		event.setSearchString(searchStr);
-		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
-		ParticipantsSummaryEvent result = cpSvc.getRegisteredParticipantList(event);
+		event.setSessionDataBean(getSession());
+		ParticipantsSummaryEvent result = cpSvc.getParticipants(event);
 		return result.getParticipantsInfo();
 	}
 

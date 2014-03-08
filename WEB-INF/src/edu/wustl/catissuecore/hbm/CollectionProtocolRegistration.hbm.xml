@@ -161,6 +161,34 @@
                 hibernate-properties-CollectionProtocolRegistration.xml
             containing the additional properties and place it in your merge dir.
         -->
+        
+        <query name="getParticipantsByCpId">
+          select 
+            cpr.id, participant.id, cpr.protocolParticipantIdentifier, participant.firstName, participant.lastName 
+          from
+            CollectionProtocolRegistration cpr 
+            inner join cpr.participant participant
+            inner join cpr.collectionProtocol cp
+          where
+            cp.id = :cpId and cpr.activityStatus != 'Disabled' and participant.activityStatus != 'Disabled'
+        </query>
+        
+        <query name="getParticipantsByCpIdAndSearchTerm">
+          select 
+            cpr.id, participant.id, cpr.protocolParticipantIdentifier, participant.firstName, participant.lastName
+          from
+            CollectionProtocolRegistration cpr 
+            inner join cpr.participant participant
+            inner join cpr.collectionProtocol cp
+          where
+            cp.id = :cpId
+            and (
+              lower(participant.firstName) like :searchTerm or
+              lower(participant.lastName) like :searchTerm or
+              lower(cpr.protocolParticipantIdentifier) like :searchTerm
+            ) 
+            and cpr.activityStatus != 'Disabled' and participant.activityStatus != 'Disabled' 
+        </query>        
     </class>
     <query name="fetchCPRIdFromCPID">select cpr.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id= ? and cpr.participant.id= ?</query>
     <query name="getCPRFromParticipantId">select cpr from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?</query>    

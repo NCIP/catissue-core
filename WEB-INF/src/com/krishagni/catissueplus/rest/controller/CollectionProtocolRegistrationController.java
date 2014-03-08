@@ -50,11 +50,11 @@ public class CollectionProtocolRegistrationController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimen-collection-groups")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenCollectionGroupInfo> getCollectionGroupsList(@PathVariable("id") Long cprId) {
-		ReqSpecimenCollGroupSummaryEvent event = new ReqSpecimenCollGroupSummaryEvent();
-		event.setCollectionProtocolRegistrationId(cprId);
-		event.setSessionDataBean(getSession());
-		return registrationService.getSpecimenCollGroupsList(event).getSpecimenCollectionGroupsInfo();
+	public List<SpecimenCollectionGroupInfo> getScgList(@PathVariable("id") Long cprId) {
+		ReqSpecimenCollGroupSummaryEvent req = new ReqSpecimenCollGroupSummaryEvent();
+		req.setCprId(cprId);
+		req.setSessionDataBean(getSession());
+		return registrationService.getSpecimenCollGroupsList(req).getScgList();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/forms")

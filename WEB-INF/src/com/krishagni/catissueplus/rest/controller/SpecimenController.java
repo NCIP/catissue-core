@@ -44,13 +44,13 @@ public class SpecimenController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/child-specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenInfo> getchildSpecimenList(@PathVariable("id") Long parentId) {
+	public List<SpecimenInfo> getChildSpecimenList(@PathVariable("id") Long parentId) {
 		ReqSpecimenSummaryEvent event = new ReqSpecimenSummaryEvent();
-		event.setParentId(parentId);
+		event.setScgId(parentId);
 		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
 		return specimenSvc.getSpecimensList(event).getSpecimensInfo();
 	}

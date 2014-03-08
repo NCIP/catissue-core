@@ -39,17 +39,13 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	@Override
 	@PlusTransactional
-	public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(
-			ReqSpecimenCollGroupSummaryEvent reqSpecimenCollGroupSummaryEvent) {
-
+	public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(ReqSpecimenCollGroupSummaryEvent req) {
 		try {
-			return AllSpecimenCollGroupsSummaryEvent.ok(daoFactory.getRegistrationDao().getSpecimenCollectiongroupsList(
-					reqSpecimenCollGroupSummaryEvent.getCollectionProtocolRegistrationId()));
+			return AllSpecimenCollGroupsSummaryEvent.ok(daoFactory.getCprDao().getScgList(req.getCprId()));
 		}
 		catch (Exception e) {
 			return AllSpecimenCollGroupsSummaryEvent.serverError(e);
 		}
-
 	}
 
 	@Override
@@ -60,7 +56,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 					registration.getProtocolParticipantIdentifier())) {
 				reportError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
 			}
-			daoFactory.getRegistrationDao().saveOrUpdate(registration);
+			// TODO: NM to fix
+			//daoFactory.getCprDao().saveOrUpdate(registration);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetails.fromDomain(registration));
 		}
 		catch (CatissueException ce) {
@@ -74,12 +71,15 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@Override
 	public RegistrationDeletedEvent delete(DeleteRegistrationEvent event) {
 		try {
-			CollectionProtocolRegistration registration = daoFactory.getRegistrationDao().getCpr(event.getId());
+			// TODO: NM to fix
+			CollectionProtocolRegistration registration = null; //daoFactory.getCprDao().getCpr(event.getId());			
 			if (registration == null) {
 				return RegistrationDeletedEvent.notFound(event.getId());
 			}
 			registration.delete(event.isIncludeChildren());
-			daoFactory.getRegistrationDao().saveOrUpdate(registration);
+			
+			// TODO: NM to fix
+			//daoFactory.getCprDao().saveOrUpdate(registration);
 			return RegistrationDeletedEvent.ok();
 		}
 		catch (CatissueException ce) {

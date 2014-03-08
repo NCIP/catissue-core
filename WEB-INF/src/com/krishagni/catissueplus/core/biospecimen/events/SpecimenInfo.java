@@ -1,6 +1,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.wustl.catissuecore.domain.Specimen;
+
 public class SpecimenInfo {
 
 	private Long id;
@@ -16,6 +21,8 @@ public class SpecimenInfo {
 	private String collectionContainer;
 
 	private String collectionStatus;
+	
+	private List<SpecimenInfo> children = new ArrayList<SpecimenInfo>();
 
 	public String getSpecimenClass() {
 		return specimenClass;
@@ -73,4 +80,29 @@ public class SpecimenInfo {
 		this.collectionContainer = collectionContainer;
 	}
 
+	
+	public List<SpecimenInfo> getChildren() {
+		return children;
+	}
+	
+	public void addChildren(SpecimenInfo specimenInfo) {
+		this.children.add(specimenInfo);
+	}
+
+	public void setChildren(List<SpecimenInfo> specimenInfoList) {
+		this.children = specimenInfoList;
+	}
+	
+	public static SpecimenInfo from(Specimen specimen) {
+		SpecimenInfo specimenInfo = new SpecimenInfo();
+		specimenInfo.setId(specimen.getId());
+		specimenInfo.setLabel(specimen.getLabel());
+		specimenInfo.setSpecimenClass(specimen.getSpecimenClass());
+		specimenInfo.setSpecimenType(specimen.getSpecimenType());
+		specimenInfo.setCollectionStatus(specimen.getCollectionStatus());
+		
+		specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getLabel());
+		specimenInfo.setCollectionContainer(specimen.getSpecimenRequirement().getCollectionContainer());
+		return specimenInfo;
+	}
 }

@@ -8,18 +8,19 @@ import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.util.global.Status;
+import gov.nih.nci.logging.api.util.StringUtils;
 
 @Repository("collectionProtocolRegistrationDao")
 public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<CollectionProtocolRegistration>
-		implements
-			CollectionProtocolRegistrationDao {
+		implements	CollectionProtocolRegistrationDao {
 
 	private String ACTIVITY_STATUS_DISABLED = "Disabled";
 
@@ -30,27 +31,61 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 			+ " and scg.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
 			+ "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<SpecimenCollectionGroupInfo> getSpecimenCollectiongroupsList(Long cprId) {
+	public List<ParticipantInfo> getParticipants(Long cpId, String searchString) {		
+		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString); 
+		
+		String queryName = GET_PARTICIPANTS_BY_CP_ID;
+		if (isSearchTermSpecified) {
+			queryName = GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
+		}
+		
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
+		query.setLong("cpId", cpId);
+		
+		if (isSearchTermSpecified) {
+			query.setString("searchTerm", searchString.toLowerCase() + "%");
+		}
+		
+		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();		
+		List<Object[]> rows = query.list();
+		for (Object[] row : rows) {
+			ParticipantInfo participant = new ParticipantInfo();
+			participant.setCollectionProtocolRegistrationId((Long)row[0]);
+			participant.setId((Long)row[1]);
+			participant.setProtocolParticipantIdentifier((String)row[2]);
+			participant.setFirstName((String)row[3]);
+			participant.setLastName((String)row[4]);
+			
+			result.add(participant);			
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public List<SpecimenCollectionGroupInfo> getScgList(Long cprId) {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setLong("cprId", cprId);
 		List<Object[]> results = query.list();
-		List<SpecimenCollectionGroupInfo> collectionGroupsInfo = new ArrayList<SpecimenCollectionGroupInfo>();
+		
+		List<SpecimenCollectionGroupInfo> scgs = new ArrayList<SpecimenCollectionGroupInfo>();
 		for (Object[] object : results) {
-			SpecimenCollectionGroupInfo info = new SpecimenCollectionGroupInfo();
-			info.setId(Long.valueOf(object[0].toString()));
-			info.setName(object[1].toString());
-			info.setCollectionStatus(object[2].toString());
+			SpecimenCollectionGroupInfo scg = new SpecimenCollectionGroupInfo();
+			scg.setId(Long.valueOf(object[0].toString()));
+			scg.setName(object[1].toString());
+			scg.setCollectionStatus(object[2].toString());
 			if (object[3] != null) {
-				info.setReceivedDate((Date) object[7]);
+				scg.setReceivedDate((Date) object[7]);
 			}
-			info.setEventPoint(Double.parseDouble(object[5].toString()));
-			info.setCollectionPointLabel(object[6].toString());
-			info.setRegistrationDate((Date) object[7]);
-			collectionGroupsInfo.add(info);
+			scg.setEventPoint(Double.parseDouble(object[5].toString()));
+			scg.setCollectionPointLabel(object[6].toString());
+			scg.setRegistrationDate((Date) object[7]);
+			scgs.add(scg);
 		}
 
-		return collectionGroupsInfo;
+		return scgs;
 	}
 
 	@Override
@@ -90,5 +125,10 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	private static final String FQN = CollectionProtocolRegistration.class.getName();
+	
+	private static final String GET_PARTICIPANTS_BY_CP_ID = FQN + ".getParticipantsByCpId";
+	
+	private static final String GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getParticipantsByCpIdAndSearchTerm";
 }

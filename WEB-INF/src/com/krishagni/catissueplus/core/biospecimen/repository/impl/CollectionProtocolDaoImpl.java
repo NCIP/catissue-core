@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -46,42 +53,10 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return null;
 	}
 
-	private static final String FQN = CollectionProtocol.class.getName();
-
-	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
-
-	private String hql = "select new com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo(cpr.id, cpr.participant.id , cpr.protocolParticipantIdentifier,"
-			+ "case when cpr.participant.firstName is null then '' else cpr.participant.firstName end, "
-			+ "case when cpr.participant.lastName is null  then '' else cpr.participant.lastName end) "
-			+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr "
-			+ "where  cpr.collectionProtocol.id = :cpId and cpr.activityStatus != :cprActivityStatus and  cpr.participant.activityStatus != :participantStatus "
-			+ " and (lower(cpr.participant.lastName) like :lastName or lower(cpr.participant.firstName) like :firstName or "
-			+ "lower(cpr.protocolParticipantIdentifier) like :ppId)";
-
-	private int maxParticipantCount = 200;
-
 	@Override
 	public Collection<ConsentTier> getConsentTierCollection(Long cpId) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public List<ParticipantInfo> getRegisteredParticipants(Long cpId, String searchString) {
-		if (searchString != null)
-			searchString.toLowerCase();
-
-		//" order by cpr.participant.lastName, cpr.participant.firstName ";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);//getNamedQuery(GET_PARTICIPANT_INFO_LIST_BY_QUERY);
-		query.setLong("cpId", cpId);
-		query.setString("lastName", searchString + "%");
-		query.setString("firstName", searchString + "%");
-		query.setString("ppId", searchString + "%");
-		query.setString("cprActivityStatus", Constants.ACTIVITY_STATUS_DISABLED);
-		query.setString("participantStatus", Constants.ACTIVITY_STATUS_DISABLED);
-		query.setMaxResults(maxParticipantCount);
-		List<ParticipantInfo> participantsList = query.list();
-		return participantsList;
 	}
 
 	@Override
@@ -107,5 +82,10 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	private static final String FQN = CollectionProtocol.class.getName();
 
+	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
+	
+	private static final int MAX_PARTICIPANTS = 200;
 }
