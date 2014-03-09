@@ -141,7 +141,7 @@ var isParticipantUpdated = true;
     }
     
     .img-circle {
-      margin: 0px 4px 3px -2px;
+      margin: 5px 4px 3px -2px;
       border: solid;
       border-radius: 50%;
       height: 8px;
@@ -285,7 +285,7 @@ function hideCursor(){
           </div>
           <div ng-if="tree.length>0">  
             <hr>
-            <div class="cp-dropdown-label" style="margin: 10px 0;"> Specimen Tree </div>
+            <div class="cp-dropdown-label" style="margin: 7px 0;"> Specimen Tree </div>
             <tree-view tree-data="tree" ></tree-view>
           </div>
         </div>
