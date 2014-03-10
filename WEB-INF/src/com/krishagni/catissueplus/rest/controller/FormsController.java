@@ -46,7 +46,7 @@ import edu.wustl.common.beans.SessionDataBean;
 
 
 @Controller
-@RequestMapping("/ng/forms")
+@RequestMapping("/forms")
 public class FormsController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;

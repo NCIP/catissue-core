@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
-@RequestMapping("/ng/specimen-collection-groups")
+@RequestMapping("/specimen-collection-groups")
 public class SpecimenCollectionGroupController {
 
 	@Autowired

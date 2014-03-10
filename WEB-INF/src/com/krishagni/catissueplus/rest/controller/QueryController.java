@@ -14,7 +14,7 @@ import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 @Controller
-@RequestMapping("/ng/query")
+@RequestMapping("/query")
 public class QueryController {
 	
 	@Autowired

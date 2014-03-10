@@ -27,7 +27,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
-@RequestMapping("/ng/collection-protocols")
+@RequestMapping("/collection-protocols")
 public class CollectionProtocolController {
 
 	@Autowired
