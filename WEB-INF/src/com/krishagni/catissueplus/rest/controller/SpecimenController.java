@@ -33,7 +33,7 @@ import edu.wustl.common.beans.SessionDataBean;
 //import com.krishagni.catissueplus.service.SpecimenService;
 
 @Controller
-@RequestMapping("/ng/specimens")
+@RequestMapping("/specimens")
 public class SpecimenController {
 
 	@Autowired

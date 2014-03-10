@@ -92,7 +92,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 <filter-mapping>
 		<filter-name>RestApiAuthFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>
+		
 	</filter-mapping>
+	<filter-mapping>
+        <filter-name>RestApiAuthFilter</filter-name>
+        <url-pattern>/rest/ng/*</url-pattern>
+        
+    </filter-mapping>
 	<filter-mapping>
 		<filter-name>FlexComponentFilter</filter-name>
 		<url-pattern>/flexclient/*</url-pattern>
@@ -385,10 +391,32 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 			<param-value>edu.wustl.dynamicextensions.formdesigner.resource.Resources</param-value>
 		</init-param>
 	</servlet>
-
+<servlet>
+<servlet-name>caTissue REST Service</servlet-name>
+<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+<init-param>
+<param-name>com.sun.jersey.config.property.packages</param-name>
+<param-value>krishagni.catissueplus.rest</param-value>
+</init-param>
+<init-param>
+        <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+        <param-value>true</param-value>
+    </init-param>
+<!--
+<init-param>
+<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
+<param-value>krishagni.catissueplus.rest.imaging.RestAuthFilterFactory</param-value>
+</init-param>
+-->
+<load-on-startup>1</load-on-startup>
+</servlet>
 	
 <!-- servlet configuration ends -->
 <!-- servlet mapping starts -->
+<servlet-mapping>
+<servlet-name>caTissue REST Service</servlet-name>
+<url-pattern>/rest/*</url-pattern>
+</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CSD</servlet-name>
 		<url-pattern>/csdApi/*</url-pattern>
@@ -401,7 +429,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
 <servlet-mapping>
 <servlet-name>restApi</servlet-name>
-<url-pattern>/rest/*</url-pattern>
+<url-pattern>/rest/ng/*</url-pattern>
 </servlet-mapping>
 	<servlet-mapping>
 		 <servlet-name>ContainerExportServlet</servlet-name>
