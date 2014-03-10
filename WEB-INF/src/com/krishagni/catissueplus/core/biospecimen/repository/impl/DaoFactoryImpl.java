@@ -73,7 +73,8 @@ public class DaoFactoryImpl implements DaoFactory {
 
 	@Override
 	public UserDao getUserDao() {
-		// TODO Auto-generated method stub
-		return null;
+		UserDaoImpl dao = new UserDaoImpl();
+		setSessionFactory(dao);
+		return dao;
 	}
 }

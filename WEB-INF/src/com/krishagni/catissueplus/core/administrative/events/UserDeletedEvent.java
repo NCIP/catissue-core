@@ -1,0 +1,46 @@
+package com.krishagni.catissueplus.core.administrative.events;
+
+import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+
+public class UserDeletedEvent extends ResponseEvent{
+	
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public static UserDeletedEvent ok() {
+		UserDeletedEvent event = new UserDeletedEvent();
+		event.setStatus(EventStatus.OK);
+		return event;
+	}
+
+	public static UserDeletedEvent invalidRequest(String message, Long... id) {
+		UserDeletedEvent resp = new UserDeletedEvent();
+		resp.setStatus(EventStatus.BAD_REQUEST);
+		resp.setMessage(message);
+		return resp;
+	}
+
+	public static UserDeletedEvent serverError(Throwable... t) {
+		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
+		UserDeletedEvent resp = new UserDeletedEvent();
+		resp.setStatus(EventStatus.INTERNAL_SERVER_ERROR);
+		resp.setException(t1);
+		resp.setMessage(t1 != null ? t1.getMessage() : null);
+		return resp;
+	}
+
+	public static UserDeletedEvent notFound(Long participantId) {
+		UserDeletedEvent resp = new UserDeletedEvent();
+		resp.setId(participantId);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
+}
