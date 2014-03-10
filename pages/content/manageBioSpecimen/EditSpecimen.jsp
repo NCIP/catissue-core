@@ -712,7 +712,7 @@ var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}','${requestScope.operation}');
 doInitCal('createdDate',false,'${uiDatePattern}');
 var nodeId= "Specimen_"+document.getElementById("id").value;
-refreshTree(null,null,null,null,nodeId);
+//refreshTree(null,null,null,null,nodeId);
                 
 var tabDataJSON = {};
 var spId = document.getElementById("id").value;
