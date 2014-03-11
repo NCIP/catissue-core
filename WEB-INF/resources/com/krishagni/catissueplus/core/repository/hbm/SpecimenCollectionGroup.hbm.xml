@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+
+    <class 
+        name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"
+        table="CATISSUE_SPECIMEN_COLL_GROUP"
+    >
+       <id name="id"
+            column="IDENTIFIER"
+            type="long"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPECIMEN_COLL_GRP_SEQ</param>
+            </generator>
+        </id>
+        <property
+            name="clinicalDiagnosis"
+            type="string"
+            column="CLINICAL_DIAGNOSIS"
+        />
+
+        <property
+            name="clinicalStatus"
+            type="string"
+            column="CLINICAL_STATUS"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            column="ACTIVITY_STATUS"
+        />
+
+        <many-to-one
+            name="collectionSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            column="SITE_ID"
+        />
+        <set
+                name="specimenColl"
+                table="CATISSUE_SPECIMEN"
+                inverse="true"
+                cascade="save-update"
+            >
+                  <key column="SPECIMEN_COLLECTION_GROUP_ID"></key>
+                  <one-to-many
+                      class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+                  />
+           </set>
+
+            <property
+                name="name"
+                type="string"
+                column="NAME"
+        />
+            <property
+                name="barcode"
+                type="string"
+                column="BARCODE"
+        />
+            <property
+                name="collectionStatus"
+                type="string"
+                column="COLLECTION_STATUS"
+            />
+
+            <property
+            name="encounterTimestamp"
+            type="timestamp"
+            column="ENCOUNTER_TIMESTAMP"
+            />
+
+            <property
+                name="comment"
+                type="string"
+                column="COMMENTS"
+            />
+             <property
+                name="surgicalPathologyNumber"
+                type="string"
+                column="SURGICAL_PATHOLOGY_NUMBER"
+            />
+            <property
+            name="offset"
+            type="int"
+            column="DATE_OFFSET"
+        />
+            <property
+                name="collectionTimestamp"
+                type="timestamp"
+                column="COLLECTION_TIMESTAMP"
+            />
+            <property
+                name="collectionComments"
+                type="string"
+                column="COLLECTION_COMMENTS"
+            />
+            <property
+                name="collectionProcedure"
+                type="string"
+                column="COLLECTION_PROCEDURE"
+            />
+            <property
+                name="collectionContainer"
+                type="string"
+                column="COLLECTION_CONTAINER"
+            />
+            <many-to-one
+            name="collector"
+            class="edu.wustl.catissuecore.domain.User"
+            column="COLLECTOR_ID"
+        />
+        <property
+                name="receivedQuality"
+                type="string"
+                column="RECEIVED_QUALITY"
+            />
+        <property
+                name="receivedTimestamp"
+                type="timestamp"
+                column="RECEIVED_TIMESTAMP"
+            />
+            <property
+                name="receivedComments"
+                type="string"
+                column="RECEIVED_COMMENTS"
+            />
+            <many-to-one
+            name="receiver"
+            class="edu.wustl.catissuecore.domain.User"
+            column="RECEIVER_ID"
+        />
+        
+            <many-to-one
+                name="collectionProtocolRegistration"
+                class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"
+                column="COLLECTION_PROTOCOL_REG_ID"
+            />
+
+            <many-to-one
+                name="collectionProtocolEvent"
+                class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+                column="COLLECTION_PROTOCOL_EVENT_ID"
+            />
+
+    </class>
+</hibernate-mapping>

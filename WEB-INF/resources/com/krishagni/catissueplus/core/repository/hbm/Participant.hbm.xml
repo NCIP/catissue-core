@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+    <class 
+        name="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
+        table="CATISSUE_PARTICIPANT"
+        dynamic-update="false"
+        dynamic-insert="false"
+		lazy="true"
+    >
+
+    <cache usage="read-write" />
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_PARTICIPANT_SEQ</param>
+            </generator>
+        </id>
+
+        <property
+            name="lastName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LAST_NAME"
+            length="255"
+        />
+
+        <property
+            name="firstName"
+            type="string"
+            update="true"
+            insert="true"
+            column="FIRST_NAME"
+            length="255"
+        />
+
+        <property
+            name="middleName"
+            type="string"
+            update="true"
+            insert="true"
+            column="MIDDLE_NAME"
+            length="255"
+        />
+
+        <property
+            name="birthDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="BIRTH_DATE"
+        />
+
+        <property
+            name="gender"
+            type="string"
+            update="true"
+            insert="true"
+            column="GENDER"
+            length="20"
+        />
+
+        <property
+            name="sexGenotype"
+            type="string"
+            update="true"
+            insert="true"
+            column="GENOTYPE"
+            length="50"
+        />
+		
+        <set name="raceColl" table="CATISSUE_RACE">
+			<key column="PARTICIPANT_ID"/>
+			<element type="text"/>
+		</set>
+            
+        <property
+            name="ethnicity"
+            type="string"
+            update="true"
+            insert="true"
+            column="ETHNICITY"
+            length="50"
+        />
+
+        <property
+            name="socialSecurityNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="SOCIAL_SECURITY_NUMBER"
+            length="50"
+            unique="true"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+        <property
+            name="deathDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="DEATH_DATE"
+        />
+
+        <property
+            name="vitalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="VITAL_STATUS"
+            length="50"
+        />
+
+		
+		<map name="pmiCollection" table="CATISSUE_PART_MEDICAL_ID" cascade="all">
+			<key column="PARTICIPANT_ID"/>
+			<map-key formula="(Select site.name from catissue_site site where site.identifier = SITE_ID)" type="string"/>
+			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier"/>
+		</map>
+        
+
+		<map name="cprCollection" table="catissue_coll_prot_reg" cascade="all">
+			<key column="PARTICIPANT_ID"/>
+			<map-key formula="(select cp.TITLE from catissue_specimen_protocol cp where cp.identifier=COLLECTION_PROTOCOL_ID)" type="string"/>
+			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
+		</map>
+		
+    </class>
+    
+</hibernate-mapping>
