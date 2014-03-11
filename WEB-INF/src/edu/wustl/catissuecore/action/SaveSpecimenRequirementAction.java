@@ -447,11 +447,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					specimenRequirementBean.setId(deriveSpecimenBean.getId());
 				}
 			}
-			if(deriveSpecimenBean.getCollectionEventId()!=null)
+			if(deriveSpecimenBean.getCollectionEventId()!=null && !deriveSpecimenBean.getCollectionEventId().isEmpty())
 			{
 				specimenRequirementBean.setCollectionEventId(Long.parseLong(deriveSpecimenBean.getCollectionEventId()));
 			}
-			if(deriveSpecimenBean.getReceivedEventId()!=null)
+			if(deriveSpecimenBean.getReceivedEventId()!=null && !deriveSpecimenBean.getReceivedEventId().isEmpty())
 			{
 				specimenRequirementBean.setReceivedEventId(Long.parseLong(deriveSpecimenBean.getReceivedEventId()));
 			}
