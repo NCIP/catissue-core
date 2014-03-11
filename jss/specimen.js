@@ -854,8 +854,6 @@ req.onreadystatechange = function() {
 				document.getElementById('error').style.display='none';
 				document.getElementById('success').style.display='block';
 				forwardToChildSpecimen(operation);
-				console.log(updatedSpecimenDTO);
-			//alert(updatedSpecimenDTO.isToPrintLabel+"    updatedSpecimenDTO.isToPrintLabel");
 			if(printFlag)
 			{//alert('print flag');
 				if(updatedSpecimenDTO.toPrintLabel)
@@ -880,10 +878,10 @@ req.onreadystatechange = function() {
 				document.getElementById('specListDiv').style.display='block';
 			}
 			tabDataJSON={};
-			if(operation == 'add')
+		/*	if(operation == 'add')
 			{
 				LoadSCGTabBar('edit');
-			}
+			}*/
 			scrollToTop();
 		}
 		if(operation == 'edit')
@@ -935,7 +933,7 @@ function getTabDetails(specimenId){
 
 		var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 
-			
+		specimenTabbar.setLabel("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
 		specimenTabbar.addTab("eventsTab",'<span style="font-size:13px"> Events </span>', "150px");
 	if(reportId != null && reportId != -1  && reportId != -2)
 	{
