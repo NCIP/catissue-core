@@ -424,7 +424,7 @@ public class LoginAction extends XSSSupportedAction
             final LoginResult loginResult, final String userRole,HttpSession session) throws CatissueException
     {
         initPrivilegeCache(validUser);
-
+      
         LoginAction.LOGGER.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
         final String ipAddress = request.getRemoteAddr();
         final SessionDataBean sessionData = setSessionDataBean(validUser, ipAddress, userRole);
@@ -435,7 +435,8 @@ public class LoginAction extends XSSSupportedAction
         session.setAttribute("datePattern",ApplicationProperties.getValue("date.pattern"));
         session.setAttribute("uiDatePattern",ApplicationProperties.getValue("ui.date.pattern"));
         session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
-        String loginAttempt = loginResult.getLastLoginActivityStatus()?"successful":"unsuccessful";
+        String loginAttempt = loginResult.getLastLoginActivityStatus() == null
+                || loginResult.getLastLoginActivityStatus() ? "successful" : "unsuccessful";
         session.setAttribute("lastLoginAttempt", loginAttempt);
         session.setAttribute("lastLoginTimeStamp", loginResult.getLastLoginTime());
         return sessionData;
