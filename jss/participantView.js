@@ -405,13 +405,10 @@ function populateParticipantName(){
 	
 }
 function createNewSpecimens()
-{alert('f');
+{
 var eventId = eventCombo.getSelectedValue();
-alert(eventId+"  eventId");
 var scgId = scgCombo.getSelectedValue();
-alert(scgId+"  scgId");
 var participantId=document.getElementById("pId").value;
-alert(participantId+"  participantId");
  var cpId=document.getElementById("cpId").value;
  var radios = document.getElementsByName("specimenChild");
  var isPlanned = '';

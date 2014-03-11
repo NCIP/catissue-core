@@ -30,6 +30,7 @@
 <script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
 
 <script src="jss/json2.js" type="text/javascript"></script>
+<script src="jss/ajax.js" type="text/javascript"></script>
 
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script src="jss/calendarComponent.js"></script>
@@ -294,7 +295,7 @@ ul li ul li a span {
                             var idList = getCommaseparatedIdList();
                             document.getElementById('assignTargetCall').value = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+idList+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+idList+"')";
                         
-                            refreshTree(null,null,null,null,nodeId);
+                            //refreshTree(null,null,null,null,nodeId);
                             
                         }else{
                             document.getElementById('success').style.display='none'
