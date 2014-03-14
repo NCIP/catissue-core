@@ -8,7 +8,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistration {
@@ -27,7 +26,7 @@ public class CollectionProtocolRegistration {
 
 	private CollectionProtocol collectionProtocol;
 
-	private Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection;
+	private Collection<SpecimenCollectionGroup> scgCollection;
 
 	private String activityStatus;
 
@@ -37,9 +36,7 @@ public class CollectionProtocolRegistration {
 
 	private User consentWitness;
 
-	private Collection<ConsentTierResponse> consentTierResponseCollection;
-
-	private Integer offset;
+	private Collection<ConsentTierResponse> consentResponseCollection;
 
 	private String barcode;
 
@@ -83,12 +80,12 @@ public class CollectionProtocolRegistration {
 		this.collectionProtocol = collectionProtocol;
 	}
 
-	public Collection<SpecimenCollectionGroup> getSpecimenCollectionGroupCollection() {
-		return specimenCollectionGroupCollection;
+	public Collection<SpecimenCollectionGroup> getScgCollection() {
+		return scgCollection;
 	}
 
-	public void setSpecimenCollectionGroupCollection(Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection) {
-		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
+	public void setScgCollection(Collection<SpecimenCollectionGroup> scgCollection) {
+		this.scgCollection = scgCollection;
 	}
 
 	public String getActivityStatus() {
@@ -123,20 +120,12 @@ public class CollectionProtocolRegistration {
 		this.consentWitness = consentWitness;
 	}
 
-	public Collection<ConsentTierResponse> getConsentTierResponseCollection() {
-		return consentTierResponseCollection;
+	public Collection<ConsentTierResponse> getConsentResponseCollection() {
+		return consentResponseCollection;
 	}
 
-	public void setConsentTierResponseCollection(Collection<ConsentTierResponse> consentTierResponseCollection) {
-		this.consentTierResponseCollection = consentTierResponseCollection;
-	}
-
-	public Integer getOffset() {
-		return offset;
-	}
-
-	public void setOffset(Integer offset) {
-		this.offset = offset;
+	public void setConsentResponseCollection(Collection<ConsentTierResponse> consentTierResponseCollection) {
+		this.consentResponseCollection = consentTierResponseCollection;
 	}
 
 	public String getBarcode() {
@@ -157,18 +146,18 @@ public class CollectionProtocolRegistration {
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			for (SpecimenCollectionGroup scg : this.getSpecimenCollectionGroupCollection()) {
+			for (SpecimenCollectionGroup scg : this.getScgCollection()) {
 				scg.delete(isIncludeChildren);
 			}
 		}
 		else {
-			checkActiveChildren();
+			checkActiveDependents();
 		}
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
-	private void checkActiveChildren() {
-		for (SpecimenCollectionGroup scg : this.getSpecimenCollectionGroupCollection()) {
+	private void checkActiveDependents() {
+		for (SpecimenCollectionGroup scg : this.getScgCollection()) {
 			if (scg.isActive()) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}

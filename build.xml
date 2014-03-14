@@ -20,6 +20,7 @@
 	<property file="JMeterTest.properties" />
 	<property name="base.dir" value="." />
 	<property name="src.dir" value="${base.dir}/WEB-INF/src" />
+	<property name="resources.dir" value="${base.dir}/WEB-INF/resources" />
 	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
 	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
 	<property name="applet.dir" value="${base.dir}/Applet" />
@@ -239,6 +240,9 @@
 				<include name="**/*.hbm.xml" />
 				<include name="**/*.ser" />
 				<include name="**/*.vm" />
+			</fileset>
+			<fileset dir="${resources.dir}">
+				<include name="**/*.hbm.xml" />
 			</fileset>
 		</copy>
 	</target>

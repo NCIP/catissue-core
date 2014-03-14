@@ -6,29 +6,29 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class RegistrationUpdatedEvent extends ResponseEvent {
 
-	private Long registrationId;
+	private Long cprId;
 
-	private CollectionProtocolRegistrationDetails registrationDetails;
+	private CollectionProtocolRegistrationDetail cprDetail;
 
-	public Long getRegistrationId() {
-		return registrationId;
+	public Long getCprId() {
+		return cprId;
 	}
 
-	public void setRegistrationId(Long registrationId) {
-		this.registrationId = registrationId;
+	public void setCprId(Long registrationId) {
+		this.cprId = registrationId;
 	}
 
-	public CollectionProtocolRegistrationDetails getRegistrationDetails() {
-		return registrationDetails;
+	public CollectionProtocolRegistrationDetail getCprDetail() {
+		return cprDetail;
 	}
 
-	public void setRegistrationDetails(CollectionProtocolRegistrationDetails registrationDetails) {
-		this.registrationDetails = registrationDetails;
+	public void setCprDetail(CollectionProtocolRegistrationDetail cprDetail) {
+		this.cprDetail = cprDetail;
 	}
 
-	public static RegistrationUpdatedEvent ok(CollectionProtocolRegistrationDetails details) {
+	public static RegistrationUpdatedEvent ok(CollectionProtocolRegistrationDetail details) {
 		RegistrationUpdatedEvent event = new RegistrationUpdatedEvent();
-		event.setRegistrationDetails(details);
+		event.setCprDetail(details);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}
@@ -52,7 +52,7 @@ public class RegistrationUpdatedEvent extends ResponseEvent {
 
 	public static RegistrationUpdatedEvent notFound(Long registrationId) {
 		RegistrationUpdatedEvent resp = new RegistrationUpdatedEvent();
-		resp.setRegistrationId(registrationId);
+		resp.setCprId(registrationId);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

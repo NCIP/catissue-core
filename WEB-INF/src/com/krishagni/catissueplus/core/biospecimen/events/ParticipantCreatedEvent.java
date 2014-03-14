@@ -1,24 +1,25 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantCreatedEvent extends ResponseEvent {
 
-	private ParticipantDetail participantDto;
+	private ParticipantDetail participantDetail;
 
-	public ParticipantDetail getParticipantDto() {
-		return participantDto;
+	public ParticipantDetail getParticipantDetail() {
+		return participantDetail;
 	}
 
-	public void setParticipantDto(ParticipantDetail participantDto) {
-		this.participantDto = participantDto;
+	public void setParticipantDetail(ParticipantDetail participantDetail) {
+		this.participantDetail = participantDetail;
 	}
 
-	public static ParticipantCreatedEvent ok(ParticipantDetail details) {
+	public static ParticipantCreatedEvent ok(ParticipantDetail detail) {
 		ParticipantCreatedEvent event = new ParticipantCreatedEvent();
-		event.setParticipantDto(details);
+		event.setParticipantDetail(detail);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}
@@ -29,8 +30,9 @@ public class ParticipantCreatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static ParticipantCreatedEvent invalidRequest(String message, Long... id) {
+	public static ParticipantCreatedEvent invalidRequest(String message, ErroneousField... fields) {
 		ParticipantCreatedEvent resp = new ParticipantCreatedEvent();
+		resp.setErroneousFields(fields);
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
 		return resp;

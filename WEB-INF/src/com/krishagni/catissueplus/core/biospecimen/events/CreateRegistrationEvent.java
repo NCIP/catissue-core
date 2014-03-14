@@ -5,13 +5,24 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class CreateRegistrationEvent extends RequestEvent {
 
-	private CollectionProtocolRegistrationDetails registrationDetails;
+	private Long cpId;
 
-	public CollectionProtocolRegistrationDetails getRegistrationDetails() {
-		return registrationDetails;
+	private CollectionProtocolRegistrationDetail cprDetail;
+
+	public CollectionProtocolRegistrationDetail getCprDetail() {
+		return cprDetail;
 	}
 
-	public void setRegistrationDetails(CollectionProtocolRegistrationDetails registrationDetails) {
-		this.registrationDetails = registrationDetails;
+	public void setCprDetail(CollectionProtocolRegistrationDetail cprDetail) {
+		this.cprDetail = cprDetail;
 	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
 }

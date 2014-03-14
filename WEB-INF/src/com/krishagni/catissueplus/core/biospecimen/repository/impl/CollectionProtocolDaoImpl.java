@@ -5,25 +5,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
@@ -50,7 +40,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@Override
 	public CollectionProtocol getCollectionProtocol(Long cpId) {
-		return null;
+		return (CollectionProtocol)sessionFactory.getCurrentSession().get(CollectionProtocol.class.getName(), cpId);
 	}
 
 	@Override
@@ -66,26 +56,13 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	@Override
-	public Collection<CollectionProtocolEvent> getEventCollection(Long cpId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<SpecimenRequirement> getSpecimenRequirements(Long cpeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
-	
+
 	private static final String FQN = CollectionProtocol.class.getName();
 
 	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
-	
-	private static final int MAX_PARTICIPANTS = 200;
+
 }

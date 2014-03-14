@@ -6,19 +6,19 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class RegistrationCreatedEvent extends ResponseEvent {
 
-	private CollectionProtocolRegistrationDetails registrationDetails;
+	private CollectionProtocolRegistrationDetail cprDetail;
 
-	public CollectionProtocolRegistrationDetails getRegistrationDetails() {
-		return registrationDetails;
+	public CollectionProtocolRegistrationDetail getCprDetail() {
+		return cprDetail;
 	}
 
-	public void setRegistrationDetails(CollectionProtocolRegistrationDetails registrationDetails) {
-		this.registrationDetails = registrationDetails;
+	public void setCprDetail(CollectionProtocolRegistrationDetail cprDetail) {
+		this.cprDetail = cprDetail;
 	}
 
-	public static RegistrationCreatedEvent ok(CollectionProtocolRegistrationDetails details) {
+	public static RegistrationCreatedEvent ok(CollectionProtocolRegistrationDetail cprdetail) {
 		RegistrationCreatedEvent event = new RegistrationCreatedEvent();
-		event.setRegistrationDetails(details);
+		event.setCprDetail(cprdetail);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}

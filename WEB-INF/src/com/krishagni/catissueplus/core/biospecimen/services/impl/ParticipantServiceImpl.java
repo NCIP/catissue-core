@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -12,13 +11,16 @@ import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
+import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
@@ -27,6 +29,9 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	private final String SSN = "social security number";
 
+	private ObjectCreationException exceptionHandler;
+	
+//	CatissueException catissueException = new 
 	/**
 	 * Participant factory to create/update and perform all validations on participant details 
 	 */
@@ -41,21 +46,25 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	@Override
-	public ParticipantDetailsEvent getParticipant(ReqParticipantDetailEvent event) {
+	@PlusTransactional
+	public ParticipantDetailEvent getParticipant(ReqParticipantDetailEvent event) {
 		Participant participant = daoFactory.getParticipantDao().getParticipant(event.getParticipantId());
-		return ParticipantDetailsEvent.ok(ParticipantDetail.fromDomain(participant));
+		return ParticipantDetailEvent.ok(ParticipantDetail.fromDomain(participant));
 	}
 
 	@Override
+	@PlusTransactional
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
+		exceptionHandler = new ObjectCreationException();
 		try {
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetails());
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(),exceptionHandler);
 			ensureUniqueSsn(participant.getSocialSecurityNumber());
+			exceptionHandler.checkErrorAndThrow();
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ParticipantCreatedEvent.ok(ParticipantDetail.fromDomain(participant));
 		}
-		catch (CatissueException ce) {
-			return ParticipantCreatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		catch (ObjectCreationException ce) {
+			return ParticipantCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(),ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return ParticipantCreatedEvent.serverError(e);
@@ -67,21 +76,25 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 * @see com.krishagni.catissueplus.core.services.ParticipantService#updateParticipant(com.krishagni.catissueplus.core.events.participants.UpdateParticipantEvent)
 	 */
 	@Override
+	@PlusTransactional
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
+		exceptionHandler = new ObjectUpdationException();
 		try {
-			Long participantId = event.getParticipantDto().getId();
+			Long participantId = event.getParticipantDetail().getId();
 			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
-			Participant participant = participantFactory.createParticipant(event.getParticipantDto());
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(),exceptionHandler);
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber());
+			exceptionHandler.checkErrorAndThrow();
+			
 			oldParticipant.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
 			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
 		}
-		catch (CatissueException ce) {
-			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		catch (ObjectUpdationException ce) {
+			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage(), ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return ParticipantUpdatedEvent.serverError(e);
@@ -89,6 +102,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	@Override
+	@PlusTransactional
 	public ParticipantDeletedEvent delete(DeleteParticipantEvent event) {
 		try {
 			Participant participant = daoFactory.getParticipantDao().getParticipant(event.getId());
@@ -119,7 +133,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	private void ensureUniqueSsn(String ssn) {
 		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			reportError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+			exceptionHandler.addError(ParticipantErrorCode.DUPLICATE_SSN	, SSN);
 		}
 	}
 

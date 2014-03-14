@@ -121,8 +121,8 @@ demoApp.controller('CpController', function($scope,$http,repository) {
 					$scope.participantList=[];
 					for (var i = 0; i < result.length; ++i) {
 						$scope.participantList
-								.push({id: result[i].id+','+result[i].collectionProtocolRegistrationId, 
-									   text: result[i].lastName+','+result[i].firstName+'('+result[i].protocolParticipantIdentifier+')'});
+								.push({id: result[i].id+','+result[i].cprId, 
+									   text: result[i].lastName+','+result[i].firstName+'('+result[i].ppId+')'});
 					}
 					//console.log($scope.participantList);
 					callback($scope.participantList);

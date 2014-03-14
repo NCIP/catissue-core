@@ -19,8 +19,8 @@ angular.module('plus.cpview', [])
       $scope.participantList = [];
       for (var i = 0; i < result.length; ++i) {
         var participant = {
-          id: result[i].id + "," + result[i].collectionProtocolRegistrationId,
-          name: result[i].lastName + "," + result[i].firstName + '(' + result[i].protocolParticipantIdentifier + ')'           
+          id: result[i].id + "," + result[i].cprId,
+          name: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'           
         }
         $scope.participantList.push(participant);
       }

@@ -4,7 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.util.Date;
 import java.util.List;
 
-public class ConsentResponseDetails {
+public class ConsentResponseDetail {
 
 	String consentUrl;
 
@@ -12,7 +12,7 @@ public class ConsentResponseDetails {
 
 	String witnessName;
 
-	List<ConsentTierDetails> consentTierList;
+	List<ConsentTierDetail> consentTierList;
 
 	public String getConsentUrl() {
 		return consentUrl;
@@ -38,11 +38,11 @@ public class ConsentResponseDetails {
 		this.witnessName = witnessName;
 	}
 
-	public List<ConsentTierDetails> getConsentTierList() {
+	public List<ConsentTierDetail> getConsentTierList() {
 		return consentTierList;
 	}
 
-	public void setConsentTierList(List<ConsentTierDetails> consentTierList) {
+	public void setConsentTierList(List<ConsentTierDetail> consentTierList) {
 		this.consentTierList = consentTierList;
 	}
 }

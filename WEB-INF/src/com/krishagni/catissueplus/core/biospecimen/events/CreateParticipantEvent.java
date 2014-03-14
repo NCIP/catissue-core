@@ -5,14 +5,14 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class CreateParticipantEvent extends RequestEvent {
 
-	private ParticipantDetail participantDetails;
+	private ParticipantDetail participantDetail;
 
-	public ParticipantDetail getParticipantDetails() {
-		return participantDetails;
+	public ParticipantDetail getParticipantDetail() {
+		return participantDetail;
 	}
 
-	public void setParticipantDetails(ParticipantDetail participantDetails) {
-		this.participantDetails = participantDetails;
+	public void setParticipantDetail(ParticipantDetail participantDetail) {
+		this.participantDetail = participantDetail;
 	}
 
 }

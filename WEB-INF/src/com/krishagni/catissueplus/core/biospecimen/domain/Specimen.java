@@ -10,6 +10,7 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -62,9 +63,11 @@ public class Specimen {
 
 	private Specimen parentSpecimen;
 
-	private Set<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
+	private SpecimenCharacteristics characteristics;
 
-	private Set<Specimen> childSpecimenCollection = new HashSet<Specimen>();
+	private Set<SpecimenEventParameters> eventCollection = new HashSet<SpecimenEventParameters>();
+
+	private Set<Specimen> childCollection = new HashSet<Specimen>();
 
 	private Set<Biohazard> biohazardCollection = new HashSet<Biohazard>();
 
@@ -238,20 +241,20 @@ public class Specimen {
 		this.parentSpecimen = parentSpecimen;
 	}
 
-	public Set<SpecimenEventParameters> getSpecimenEventCollection() {
-		return specimenEventCollection;
+	public Set<SpecimenEventParameters> getEventCollection() {
+		return eventCollection;
 	}
 
-	public void setSpecimenEventCollection(Set<SpecimenEventParameters> specimenEventCollection) {
-		this.specimenEventCollection = specimenEventCollection;
+	public void setEventCollection(Set<SpecimenEventParameters> specimenEventCollection) {
+		this.eventCollection = specimenEventCollection;
 	}
 
-	public Set<Specimen> getChildSpecimenCollection() {
-		return childSpecimenCollection;
+	public Set<Specimen> getChildCollection() {
+		return childCollection;
 	}
 
-	public void setChildSpecimenCollection(Set<Specimen> childSpecimenCollection) {
-		this.childSpecimenCollection = childSpecimenCollection;
+	public void setChildCollection(Set<Specimen> childSpecimenCollection) {
+		this.childCollection = childSpecimenCollection;
 	}
 
 	public Set<Biohazard> getBiohazardCollection() {
@@ -270,6 +273,14 @@ public class Specimen {
 		this.externalIdentifierCollection = externalIdentifierCollection;
 	}
 
+	public SpecimenCharacteristics getCharacteristics() {
+		return characteristics;
+	}
+
+	public void setCharacteristics(SpecimenCharacteristics characteristics) {
+		this.characteristics = characteristics;
+	}
+
 	public void setActive() {
 		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 	}
@@ -280,18 +291,18 @@ public class Specimen {
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			for (Specimen specimen : this.getChildSpecimenCollection()) {
+			for (Specimen specimen : this.getChildCollection()) {
 				specimen.delete(isIncludeChildren);
 			}
 		}
 		else {
-			checkActiveChildren();
+			checkActiveDependents();
 		}
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
-	private void checkActiveChildren() {
-		for (Specimen specimen : this.getChildSpecimenCollection()) {
+	private void checkActiveDependents() {
+		for (Specimen specimen : this.getChildCollection()) {
 			if (specimen.isActive()) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}

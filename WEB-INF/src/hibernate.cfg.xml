@@ -152,6 +152,13 @@
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
 		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
 		
+		<!-- mapping for new domain objects added -->
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolRegistration.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Participant.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ParticipantMedicalIdentifier.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Specimen.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenCollectionGroup.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />
     </session-factory>
 
 </hibernate-configuration>

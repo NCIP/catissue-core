@@ -5,8 +5,7 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValid
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -16,7 +15,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollec
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGroupFactory {
 
@@ -103,13 +101,9 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	 * @param CollectionProtocolEvent
 	 */
 	private void createAnticipatedSpecimens(SpecimenCollectionGroup group, CollectionProtocolEvent CollectionProtocolEvent) {
-		final Collection<Specimen> specimenCollection = new HashSet<Specimen>();
-		Collection<SpecimenRequirement> specimenRequirements = CollectionProtocolEvent.getSpecimenRequirementCollection();
-		for (SpecimenRequirement specimenRequirement : specimenRequirements) {
-			//TODO: yet to handle the parent child relationship in specimen factory
-			Specimen specimen = specimenFactory.createSpecimen(specimenRequirement, group);
-			specimenCollection.add(specimen);
-		}
+		Set<Specimen> specimenCollection = specimenFactory.createSpecimens(
+				CollectionProtocolEvent.getSpecimenRequirementCollection(), group);
+		group.setSpecimenCollection(specimenCollection);
 	}
 
 }

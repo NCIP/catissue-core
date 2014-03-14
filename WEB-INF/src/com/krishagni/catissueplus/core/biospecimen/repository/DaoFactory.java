@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+
 public interface DaoFactory {
 	
 	public CollectionProtocolDao getCollectionProtocolDao();

@@ -59,16 +59,36 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="collectionProtocolRegistrationService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
   <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="participantFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  <bean id="specimenFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl">
+  </bean>
+  <bean id="scgFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl">
+    <property name="specimenFactory" ref="specimenFactory"/>
+  </bean>
+  <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="participantFactory" ref="participantFactory"/>
+    <property name="scgFactory" ref="scgFactory"/>
+  </bean>
+  <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="participantFactory" ref="participantFactory"/>
+  </bean>
+  
+  <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="registrationFactory" ref="cprFactory"/>
+    <property name="participantFactory" ref="participantFactory"/>
   </bean>
 
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">

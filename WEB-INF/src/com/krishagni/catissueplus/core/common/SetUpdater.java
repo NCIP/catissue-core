@@ -12,6 +12,8 @@ public class SetUpdater<T> {
 	
 	public void update(Set<T> oldColl,Set<T> newColl)
 	{
+		oldColl = oldColl==null?new HashSet<T>():oldColl;
+		newColl = newColl==null?new HashSet<T>():newColl;
 		Set<T> addedObjects = new HashSet<T>();
 		for (T object : newColl) {
 			if (!oldColl.contains(object)) {

@@ -10,7 +10,8 @@ public enum ParticipantErrorCode implements CatissueErrorCode {
 	CONSTRAINT_VIOLATION(1002, "Attribute violates one or more constraints"),
 	DUPLICATE_PPID(1003, "Same protocol participant identifier is already exists with this collection protocol."),
 	ACTIVE_CHILDREN_FOUND(1004, "Cannot be deleted, Active childrens found."),
-	DUPLICATE_SSN(1005,"Participant with the same social security number is already present in the system.");
+	DUPLICATE_SSN(1005,"Participant with the same social security number is already present in the system."),
+	ERRORS(1009, "Please resolve the highlighted errors.");
 
 	private int code;
 

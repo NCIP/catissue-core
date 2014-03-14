@@ -34,8 +34,6 @@ public class SpecimenCollectionGroup {
 
 	private String collectionStatus;
 
-	private Integer offset;
-
 	private String barcode;
 
 	private String comment;
@@ -122,14 +120,6 @@ public class SpecimenCollectionGroup {
 
 	public void setCollectionStatus(String collectionStatus) {
 		this.collectionStatus = collectionStatus;
-	}
-
-	public Integer getOffset() {
-		return offset;
-	}
-
-	public void setOffset(Integer offset) {
-		this.offset = offset;
 	}
 
 	public String getBarcode() {
@@ -279,12 +269,12 @@ public class SpecimenCollectionGroup {
 			}
 		}
 		else {
-			checkActiveChildren();
+			checkActiveDependents();
 		}
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
-	private void checkActiveChildren() {
+	private void checkActiveDependents() {
 		for (Specimen specimen : this.getSpecimenCollection()) {
 			if (specimen.isActive()) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);

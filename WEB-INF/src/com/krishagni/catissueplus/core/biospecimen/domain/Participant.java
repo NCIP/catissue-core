@@ -56,7 +56,7 @@ public class Participant {
 	/**
 	 * Participant's race origination.
 	 */
-	protected Set<String> raceCollection = new HashSet<String>();
+	protected Set<String> raceColl = new HashSet<String>();
 
 	/**
 	 * Participant's ethnicity status.
@@ -148,12 +148,12 @@ public class Participant {
 		this.sexGenotype = sexGenotype;
 	}
 
-	public Set<String> getRaceCollection() {
-		return raceCollection;
+	public Set<String> getRaceColl() {
+		return raceColl;
 	}
 
-	public void setRaceCollection(Set<String> raceCollection) {
-		this.raceCollection = raceCollection;
+	public void setRaceColl(Set<String> raceCollection) {
+		this.raceColl = raceCollection;
 	}
 
 	public String getEthnicity() {
@@ -229,7 +229,7 @@ public class Participant {
 	}
 
 	private void updateRace(Participant participant) {
-		SetUpdater.<String> newInstance().update(raceCollection, participant.getRaceCollection());
+		SetUpdater.<String> newInstance().update(raceColl, participant.getRaceColl());
 	}
 
 	private void updatePmi(Participant participant) {
@@ -253,12 +253,12 @@ public class Participant {
 			}
 		}
 		else {
-			checkActiveChildren();
+			checkActiveDependents();
 		}
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
-	private void checkActiveChildren() {
+	private void checkActiveDependents() {
 			for (CollectionProtocolRegistration cpr : this.getCprCollection().values()) {
 				if (cpr.isActive()) {
 					throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);

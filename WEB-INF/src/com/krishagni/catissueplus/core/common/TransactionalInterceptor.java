@@ -64,12 +64,13 @@ public class TransactionalInterceptor {
 			object = pjp.proceed();
 		}
 		catch (Throwable e) {
+			LOGGER.error(e.getCause());
 			LOGGER.error(e.getStackTrace());
 			if (isTransactionStarted && tx != null) {
 				tx.rollback();
 				LOGGER.info("Error thrown, transaction rolled back.");
 			}
-			throw new CatissueException(ErrorCodeEnum.QUERY_EXECUTION_ERROR, "Error while executing query");
+			throw new CatissueException(ErrorCodeEnum.QUERY_EXECUTION_ERROR);
 		}
 		finally {
 			if (isTransactionStarted && tx != null) {

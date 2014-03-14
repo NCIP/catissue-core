@@ -8,9 +8,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSumm
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
@@ -22,9 +20,9 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public CollectionProtocolRegistration getCpr(Long cpId, String ppid);
 	
-	public Collection<CollectionProtocolEvent> getEventCollection(Long cpId);
-	
-	public Collection<SpecimenRequirement> getSpecimenRequirements(Long cpeId);
+//	public Collection<CollectionProtocolEvent> getEventCollection(Long cpId);
+//	
+//	public Collection<SpecimenRequirement> getSpecimenRequirements(Long cpeId);
 	
 	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier);
 }

@@ -4,7 +4,8 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+
 
 public class SpecimenInfo {
 
@@ -100,9 +101,11 @@ public class SpecimenInfo {
 		specimenInfo.setSpecimenClass(specimen.getSpecimenClass());
 		specimenInfo.setSpecimenType(specimen.getSpecimenType());
 		specimenInfo.setCollectionStatus(specimen.getCollectionStatus());
-		
+		if(specimen.getSpecimenRequirement() !=null)
+		{
 		specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getLabel());
 		specimenInfo.setCollectionContainer(specimen.getSpecimenRequirement().getCollectionContainer());
+		}
 		return specimenInfo;
 	}
 }

@@ -1,12 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantUpdatedEvent extends ResponseEvent {
 
-	private ParticipantDetail participantDto;
+	private ParticipantDetail participantDetail;
 
 	private Long participantId;
 
@@ -18,24 +19,24 @@ public class ParticipantUpdatedEvent extends ResponseEvent {
 		this.participantId = participantId;
 	}
 
-	public ParticipantDetail getParticipantDto() {
-		return participantDto;
+	public ParticipantDetail getParticipantDetail() {
+		return participantDetail;
 	}
 
-	public void setParticipantDto(ParticipantDetail participantDto) {
-		this.participantDto = participantDto;
+	public void setParticipantDetail(ParticipantDetail participantDetail) {
+		this.participantDetail = participantDetail;
 	}
 
 	public static ParticipantUpdatedEvent ok(ParticipantDetail details) {
 		ParticipantUpdatedEvent event = new ParticipantUpdatedEvent();
-		event.setParticipantDto(details);
+		event.setParticipantDetail(details);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}
 
-	public static ParticipantUpdatedEvent invalidRequest(String message, Long... id) {
+	public static ParticipantUpdatedEvent invalidRequest(String message, ErroneousField[] fields) {
 		ParticipantUpdatedEvent resp = new ParticipantUpdatedEvent();
-		//		resp.setId(id != null && id.length > 0 ? id[0] : null);
+		resp.setErroneousFields(fields);
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
 		return resp;

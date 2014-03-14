@@ -8,17 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-
-import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.common.util.global.Status;
 
 @Repository("specimenCollectionGroupDao")
 public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollectionGroup>
@@ -28,54 +24,15 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SpecimenInfo> getSpecimensList(Long scgId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_BY_ID);
-		query.setLong("scgId", scgId);
+		Object object = sessionFactory.getCurrentSession().get(SpecimenCollectionGroup.class.getName(),scgId);
+//		query.setLong("scgId", scgId);
 		
-		List<SpecimenCollectionGroup> scgs = query.list();
-		if (scgs == null || scgs.isEmpty()) {
+		if (object == null) {
 			return Collections.emptyList();
 		}
 		
-		SpecimenCollectionGroup scg = scgs.get(0);				
+		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)object;				
 		return getSpecimensList(scg.getSpecimenCollection());
-	}
-
-	@Override
-	public void deleteByParticipant(Long participantId) {
-		String hql = "update "+SpecimenCollectionGroup.class.getName()+" scg set scg.activityStatus = '"+Status.ACTIVITY_STATUS_DISABLED.toString()+"' where scg.collectionProtocolRegistration.participant.id = :participantId";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setLong("participantId", participantId);
-		query.executeUpdate();
-	}
-
-	@Override
-	public void deleteByRegistration(Long registrationId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(Long collectionGroupId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean checkActivechildrenForParticipant(long id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean checkActiveChildrenForRegistration(long id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean checkActiveChildren(long id) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	private List<SpecimenInfo> getSpecimensList(Collection<Specimen> specimens) {
@@ -110,11 +67,11 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		}	
 	}
 	
-	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
-			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
-			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.specimenCollectionGroup.id = :scgId"
-			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
-			+ "' and sp.parentSpecimen.id is null order by sp.id";
+//	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
+//			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
+//			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.specimenCollectionGroup.id = :scgId"
+//			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
+//			+ "' and sp.parentSpecimen.id is null order by sp.id";
 
 	private static final String FQN = SpecimenCollectionGroup.class.getName();
 	

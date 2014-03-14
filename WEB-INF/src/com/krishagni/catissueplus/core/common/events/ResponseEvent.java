@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.common.events;
 
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+
 public class ResponseEvent {
 
 	private EventStatus status;
@@ -8,6 +10,8 @@ public class ResponseEvent {
 	private String message;
 
 	private Throwable exception;
+
+	private ErroneousField[] erroneousFields;
 
 	public EventStatus getStatus() {
 		return status;
@@ -29,7 +33,16 @@ public class ResponseEvent {
 		return exception;
 	}
 
+	public ErroneousField[] getErroneousFields() {
+		return erroneousFields;
+	}
+
+	public void setErroneousFields(ErroneousField[] erroneousFields) {
+		this.erroneousFields = erroneousFields;
+	}
+
 	public void setException(Throwable exception) {
 		this.exception = exception;
 	}
+
 }

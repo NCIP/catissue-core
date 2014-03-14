@@ -10,14 +10,14 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 
 	@Override
 	public Site getSite(String name) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
-	public Site getSite(Long Id) {
+	public Site getSite(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return (Site)sessionFactory.getCurrentSession().get(Site.class, id);
 	}
 
 }

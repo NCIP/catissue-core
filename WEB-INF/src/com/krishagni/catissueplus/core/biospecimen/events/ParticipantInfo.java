@@ -5,14 +5,14 @@ import edu.wustl.catissuecore.domain.Participant;
 
 public class ParticipantInfo {
 
-	public ParticipantInfo(Long collectionProtocolRegistrationId, Long id, String protocolParticipantIdentifier,
+	public ParticipantInfo(Long cprId, Long id, String ppId,
 			String firstName, String lastName) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.id = id;
-		this.protocolParticipantIdentifier = protocolParticipantIdentifier;
-		this.collectionProtocolRegistrationId = collectionProtocolRegistrationId;
+		this.ppId = ppId;
+		this.cprId = cprId;
 	}
 
 	private String firstName;
@@ -21,20 +21,20 @@ public class ParticipantInfo {
 
 	private Long id;
 
-	private String protocolParticipantIdentifier;
+	private String ppId;
 
-	private Long collectionProtocolRegistrationId;
+	private Long cprId;
 
 	public ParticipantInfo() {
 		super();
 	}
 
-	public Long getCollectionProtocolRegistrationId() {
-		return collectionProtocolRegistrationId;
+	public Long getCprId() {
+		return cprId;
 	}
 
-	public void setCollectionProtocolRegistrationId(Long collectionProtocolRegistrationId) {
-		this.collectionProtocolRegistrationId = collectionProtocolRegistrationId;
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
 	}
 
 	public String getFirstName() {
@@ -61,12 +61,12 @@ public class ParticipantInfo {
 		this.id = id;
 	}
 
-	public String getProtocolParticipantIdentifier() {
-		return protocolParticipantIdentifier;
+	public String getPpId() {
+		return ppId;
 	}
 
-	public void setProtocolParticipantIdentifier(String protocolParticipantIdentifier) {
-		this.protocolParticipantIdentifier = protocolParticipantIdentifier;
+	public void setPpId(String ppId) {
+		this.ppId = ppId;
 	}
 
 	public static ParticipantInfo fromParticipant(Participant participant) {

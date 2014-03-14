@@ -1,9 +1,7 @@
-package com.krishagni.catissueplus.core.biospecimen.repository.impl;
-
-import org.hibernate.Query;
+package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class UserDaoImpl extends AbstractDao<User>implements UserDao {

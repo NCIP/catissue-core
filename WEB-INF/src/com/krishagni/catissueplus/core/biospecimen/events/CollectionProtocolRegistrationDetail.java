@@ -5,9 +5,9 @@ import java.util.Date;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 
-public class CollectionProtocolRegistrationDetails {
+public class CollectionProtocolRegistrationDetail {
 
-	private ParticipantDetail participantDetails;
+	private ParticipantDetail participantDetail;
 
 	private Long id;
 
@@ -19,14 +19,14 @@ public class CollectionProtocolRegistrationDetails {
 
 	private Date registrationDate;
 
-	private ConsentResponseDetails consentResponseDetails;
+	private ConsentResponseDetail responseDetail;
 
-	public ConsentResponseDetails getConsentResponseDetails() {
-		return consentResponseDetails;
+	public ConsentResponseDetail getResponseDetail() {
+		return responseDetail;
 	}
 
-	public void setConsentResponseDetails(ConsentResponseDetails consentResponseDetails) {
-		this.consentResponseDetails = consentResponseDetails;
+	public void setResponseDetail(ConsentResponseDetail responseDetail) {
+		this.responseDetail = responseDetail;
 	}
 
 	public String getBarcode() {
@@ -69,19 +69,19 @@ public class CollectionProtocolRegistrationDetails {
 		this.ppid = ppid;
 	}
 
-	public ParticipantDetail getParticipantDetails() {
-		return participantDetails;
+	public ParticipantDetail getParticipantDetail() {
+		return participantDetail;
 	}
 
-	public void setParticipantDetails(ParticipantDetail participantDetails) {
-		this.participantDetails = participantDetails;
+	public void setParticipantDetail(ParticipantDetail participantDetail) {
+		this.participantDetail = participantDetail;
 	}
 
-	public static CollectionProtocolRegistrationDetails fromDomain(CollectionProtocolRegistration cpr) {
-		CollectionProtocolRegistrationDetails details = new CollectionProtocolRegistrationDetails();
-		details.setId(cpr.getId());
-		details.setCpId(cpr.getCollectionProtocol().getId());
-		return details;
+	public static CollectionProtocolRegistrationDetail fromDomain(CollectionProtocolRegistration cpr) {
+		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
+		detail.setId(cpr.getId());
+		detail.setCpId(cpr.getCollectionProtocol().getId());
+		return detail;
 	}
 
 }

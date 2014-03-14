@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.core.biospecimen.repository;
+package com.krishagni.catissueplus.core.administrative.repository;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.repository.Dao;

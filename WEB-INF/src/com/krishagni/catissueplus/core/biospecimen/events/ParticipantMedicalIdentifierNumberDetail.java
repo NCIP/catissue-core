@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class MedicalRecordNumberDetail {
+public class ParticipantMedicalIdentifierNumberDetail {
 
 	String siteName;
 

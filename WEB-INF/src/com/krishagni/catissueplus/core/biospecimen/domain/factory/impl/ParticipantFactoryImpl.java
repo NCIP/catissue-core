@@ -3,8 +3,8 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValidPermissibleValue;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +17,12 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
-import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 import edu.wustl.catissuecore.domain.Site;
 
@@ -48,9 +51,11 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private final String MEDICAL_RECORD_NUMBER = "medical record number";
 
 	private final String SITE = "site";
+	
+	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
 
 	@Override
-	public Participant createParticipant(ParticipantDetail details) {
+	public Participant createParticipant(ParticipantDetail details,ObjectCreationException exceptionHandler) {
 		Participant participant = new Participant();
 
 		setSsn(participant, details.getSsn());
@@ -62,6 +67,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setRace(participant, details);
 		setEthnicity(participant, details);
 		setPmi(participant, details);
+		exceptionHandler.addError(erroneousFields);
 		return participant;
 	}
 
@@ -73,7 +79,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			participant.setSocialSecurityNumber(ssn);
 		}
 		else {
-			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, SSN);
+			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SSN);
 		}
 	}
 
@@ -90,12 +96,12 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 		if (birthDate != null) {
 			if (birthDate.after(new Date())) {
-				reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, BIRTH_DATE);
+				addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, BIRTH_DATE);
 			}
 			participant.setBirthDate(birthDate);
 			if (deathDate != null) {
 				if ((!"Death".equals(details.getVitalStatus()) || deathDate.before(birthDate))) {
-					reportError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
+					addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
 				}
 				participant.setDeathDate(deathDate);
 			}
@@ -127,7 +133,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 			String[] races = raceList.toArray(new String[0]);
 			ensureValidPermissibleValue(races, RACE);
-			participant.setRaceCollection(raceList);
+			participant.setRaceColl(raceList);
 		}
 
 	}
@@ -140,10 +146,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setPmi(Participant participant, ParticipantDetail details) {
-		List<MedicalRecordNumberDetail> mrns = details.getMrns();
+		List<ParticipantMedicalIdentifierNumberDetail> mrns = details.getPmiCollection();
 		Map<String, ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
 		if (mrns != null && mrns.size() > 0) {
-			for (MedicalRecordNumberDetail medicalRecordNumberDetail : mrns) {
+			for (ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail : mrns) {
 				ParticipantMedicalIdentifier medicalIdentifier = getMedicalIdentifier(medicalRecordNumberDetail);
 				map.put(medicalIdentifier.getSite().getName(), medicalIdentifier);
 			}
@@ -152,13 +158,13 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	}
 
-	private ParticipantMedicalIdentifier getMedicalIdentifier(MedicalRecordNumberDetail medicalRecordNumberDetail) {
+	private ParticipantMedicalIdentifier getMedicalIdentifier(ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail) {
 		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteName());
 		if (site == null) {
-			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
+			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}
 		if (isBlank(medicalRecordNumberDetail.getMrn())) {
-			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
+			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
 		}
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		pmi.setSite(site);
@@ -178,5 +184,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 		return result;
 	}
-
+	
+	private void addError(CatissueErrorCode event,String field)
+	{
+		erroneousFields.add(new ErroneousField(event,field));
+	}
 }

@@ -11,9 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -36,7 +39,7 @@ import edu.wustl.common.beans.SessionDataBean;
 public class CollectionProtocolRegistrationController {
 
 	@Autowired
-	private CollectionProtocolRegistrationService registrationService; // TODO: This need to go way
+	private CollectionProtocolRegistrationService cprSvc; // TODO: This need to go way
 	
 	@Autowired
 	private CollectionProtocolService cpSvc;
@@ -54,7 +57,7 @@ public class CollectionProtocolRegistrationController {
 		ReqSpecimenCollGroupSummaryEvent req = new ReqSpecimenCollGroupSummaryEvent();
 		req.setCprId(cprId);
 		req.setSessionDataBean(getSession());
-		return registrationService.getSpecimenCollGroupsList(req).getScgList();
+		return cprSvc.getSpecimenCollGroupsList(req).getScgList();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/forms")
@@ -91,6 +94,21 @@ public class CollectionProtocolRegistrationController {
 			return resp.getFormRecords();
 		}
 		
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Long delete(@PathVariable Long id,@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
+		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
+		event.setSessionDataBean(getSession());
+		event.setId(id);
+		event.setIncludeChildren(Boolean.valueOf(includeChildren));
+		RegistrationDeletedEvent resp = cprSvc.delete(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getId();
+		}
 		return null;
 	}
 	

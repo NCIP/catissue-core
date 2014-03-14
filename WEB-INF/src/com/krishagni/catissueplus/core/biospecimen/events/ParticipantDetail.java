@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
+
+import edu.wustl.catissuecore.util.global.AppUtility;
 
 public class ParticipantDetail {
 
@@ -28,7 +31,7 @@ public class ParticipantDetail {
 
 	private String vitalStatus;
 
-	private List<MedicalRecordNumberDetail> mrns;
+	private List<ParticipantMedicalIdentifierNumberDetail> pmiCollection;
 
 	private String sexGenotype;
 
@@ -104,12 +107,12 @@ public class ParticipantDetail {
 		this.vitalStatus = vitalStatus;
 	}
 
-	public List<MedicalRecordNumberDetail> getMrns() {
-		return mrns;
+	public List<ParticipantMedicalIdentifierNumberDetail> getPmiCollection() {
+		return pmiCollection;
 	}
 
-	public void setMrns(List<MedicalRecordNumberDetail> mrns) {
-		this.mrns = mrns;
+	public void setPmiCollection(List<ParticipantMedicalIdentifierNumberDetail> pmiCollection) {
+		this.pmiCollection = pmiCollection;
 	}
 
 	public String getSexGenotype() {
@@ -163,21 +166,23 @@ public class ParticipantDetail {
 		participantDetail.setEthnicity(participant.getEthnicity());
 		participantDetail.setGender(participant.getGender());
 		participantDetail.setId(participant.getId());
+		//TODO revisit
 		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
-		List<MedicalRecordNumberDetail> medicalRecordNumberDetails = new ArrayList<MedicalRecordNumberDetail>();
+		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
 		if (pmi != null) {
 			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
-				MedicalRecordNumberDetail medicalRecordNumberDetail = new MedicalRecordNumberDetail();
+				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
 				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
 				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
-				medicalRecordNumberDetails.add(medicalRecordNumberDetail);
+				pmiColl.add(medicalRecordNumberDetail);
 			}
 		}
-		participantDetail.setMrns(medicalRecordNumberDetails);
-		participantDetail.setRace(participant.getRaceCollection());
+		participantDetail.setPmiCollection(pmiColl);
+		participantDetail.setRace(participant.getRaceColl());
 		participantDetail.setSexGenotype(participant.getSexGenotype());
 		participantDetail.setSsn(participant.getSocialSecurityNumber());
 		participantDetail.setVitalStatus(participant.getVitalStatus());
 		return participantDetail;
 	}
+
 }

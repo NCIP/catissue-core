@@ -12,11 +12,5 @@ public interface SpecimenService {
 
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
 
-	public void delete(DeleteParticipantEvent event);
-
-	public void delete(DeleteRegistrationEvent event);
-
-	public void delete(DeleteSpecimenGroupsEvent event);
-
 	public void delete(DeleteSpecimenEvent event);
 }
