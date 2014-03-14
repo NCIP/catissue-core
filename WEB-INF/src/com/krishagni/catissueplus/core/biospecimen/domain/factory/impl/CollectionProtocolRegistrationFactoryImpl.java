@@ -43,8 +43,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private SpecimenCollectionGroupFactory scgFactory;
 
-	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
-
+	private List<ErroneousField> erroneousFields;
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -65,6 +64,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail,
 			ObjectCreationException exception) {
+		erroneousFields = new ArrayList<ErroneousField>();
 		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
 
 		setBarcode(registration, detail);

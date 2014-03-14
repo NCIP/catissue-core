@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValidPermissibleValue;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
@@ -59,7 +59,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		if (isBlank(clinicalStatus)) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, CLINICAL_STATUS);
 		}
-		ensureValidPermissibleValue(clinicalStatus, CLINICAL_STATUS);
+		isValidPv(clinicalStatus, CLINICAL_STATUS);
 		group.setClinicalStatus(clinicalStatus);
 
 	}
@@ -73,7 +73,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		if (isBlank(clinicalDiagnosis)) {
 			reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, CLINICAL_DIAGNOSIS);
 		}
-		ensureValidPermissibleValue(clinicalDiagnosis, CLINICAL_DIAGNOSIS);
+		isValidPv(clinicalDiagnosis, CLINICAL_DIAGNOSIS);
 		group.setClinicalDiagnosis(clinicalDiagnosis);
 	}
 

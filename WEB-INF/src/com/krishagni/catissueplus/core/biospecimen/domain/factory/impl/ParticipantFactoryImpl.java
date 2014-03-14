@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.ensureValidPermissibleValue;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import java.util.ArrayList;
@@ -115,14 +115,14 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setVitalStatus(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getVitalStatus())) {
-			ensureValidPermissibleValue(details.getVitalStatus(), VITAL_STATUS);
+			isValidPv(details.getVitalStatus(), VITAL_STATUS);
 			participant.setVitalStatus(details.getVitalStatus());
 		}
 	}
 
 	private void setGender(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getGender())) {
-			ensureValidPermissibleValue(details.getGender(), GENDER);
+			isValidPv(details.getGender(), GENDER);
 			participant.setGender(details.getGender());
 		}
 	}
@@ -132,7 +132,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (raceList != null) {
 
 			String[] races = raceList.toArray(new String[0]);
-			ensureValidPermissibleValue(races, RACE);
+			isValidPv(races, RACE);
 			participant.setRaceColl(raceList);
 		}
 
@@ -140,7 +140,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setEthnicity(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getEthnicity())) {
-			ensureValidPermissibleValue(details.getEthnicity(), ETHNICITY);
+			isValidPv(details.getEthnicity(), ETHNICITY);
 			participant.setEthnicity(details.getEthnicity());
 		}
 	}

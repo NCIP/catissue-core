@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 
 
 public class CommonValidator {
-	public static boolean ensureValidPermissibleValue(String value, String type) {
+	public static boolean isValidPv(String value, String type) {
 		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
 		if (pvManager.validate(type, value)) {
 			return true;
@@ -19,7 +19,7 @@ public class CommonValidator {
 		return StringUtils.isBlank(value);
 	}
 	
-	public static boolean ensureValidPermissibleValue(String[] value, String type)
+	public static boolean isValidPv(String[] value, String type)
 	{
 		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
 		if (pvManager.validate(type, value)) {
