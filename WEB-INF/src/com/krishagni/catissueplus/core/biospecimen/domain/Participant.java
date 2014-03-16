@@ -241,6 +241,10 @@ public class Participant {
 		this.setActivityStatus(activityStatus);
 	}
 
+	public void setActive()
+	{
+		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+	}
 	public boolean isActive() {
 		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
 	}

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import java.util.ArrayList;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private SpecimenCollectionGroupFactory scgFactory;
 
 	private List<ErroneousField> erroneousFields;
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -71,8 +73,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setRegistrationDate(registration, detail);
 		setActivityStatus(registration, detail);
 		setCollectionProtocol(registration, detail);
-//		registration.setParticipant(participant);
-//		participant.getCprCollection().put(registration.getCollectionProtocol().getTitle(), registration);
+		//		registration.setParticipant(participant);
+		//		participant.getCprCollection().put(registration.getCollectionProtocol().getTitle(), registration);
 		setPPId(registration, detail);
 		setConsentsDuringRegistration(registration, detail);
 		createAnticipatedScgs(registration);
@@ -111,7 +113,13 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 */
 	private void setActivityStatus(CollectionProtocolRegistration registration,
 			CollectionProtocolRegistrationDetail detail) {
-		registration.setActive();
+		if (isBlank(detail.getActivityStatus())) {
+			registration.setActive();
+		}
+		else {
+			registration.setActivityStatus(detail.getActivityStatus());
+		}
+
 	}
 
 	/**

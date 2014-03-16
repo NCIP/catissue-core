@@ -4,11 +4,9 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqConsentsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -39,19 +37,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		try {
 			Long cpId = req.getCpId();
 			String searchStr = req.getSearchString();
-			
-			List<ParticipantInfo> participants = daoFactory.getCprDao().getParticipants(cpId, searchStr);			
+
+			List<ParticipantInfo> participants = daoFactory.getCprDao().getParticipants(cpId, searchStr);
 			return ParticipantsSummaryEvent.ok(participants);
 		}
 		catch (CatissueException e) {
 			return ParticipantsSummaryEvent.serverError(e);
 		}
-	}
-
-	@Override
-	public AllConsentsSummaryEvent getConsents(ReqConsentsSummaryEvent event) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -2,18 +2,15 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Query;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
@@ -44,20 +41,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	@Override
-	public Collection<ConsentTier> getConsentTierCollection(Long cpId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CollectionProtocolRegistration getCpr(Long cpId, String ppid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

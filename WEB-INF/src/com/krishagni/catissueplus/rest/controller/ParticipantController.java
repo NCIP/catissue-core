@@ -51,11 +51,12 @@ public class ParticipantController {
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantDetail updateParticipant(@RequestBody ParticipantDetail participantDetail) {
+	public ParticipantDetail updateParticipant(@PathVariable Long id,@RequestBody ParticipantDetail participantDetail) {
 		UpdateParticipantEvent event = new UpdateParticipantEvent();
+		event.setParticipantId(id);
 		event.setSessionDataBean(getSession());
 		event.setParticipantDetail(participantDetail);
 		ParticipantUpdatedEvent response = participantSvc.updateParticipant(event);

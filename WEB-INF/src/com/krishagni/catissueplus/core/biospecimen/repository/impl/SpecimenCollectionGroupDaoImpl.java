@@ -21,12 +21,10 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		implements
 			SpecimenCollectionGroupDao {
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public List<SpecimenInfo> getSpecimensList(Long scgId) {
 		Object object = sessionFactory.getCurrentSession().get(SpecimenCollectionGroup.class.getName(),scgId);
-//		query.setLong("scgId", scgId);
-		
 		if (object == null) {
 			return Collections.emptyList();
 		}

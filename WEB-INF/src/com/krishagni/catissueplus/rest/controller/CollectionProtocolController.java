@@ -20,11 +20,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocols
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -98,19 +96,6 @@ public class CollectionProtocolController {
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="{id}/registrations")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public Long deleteCpr(@PathVariable Long id) {
-		DeleteRegistrationEvent event = new DeleteRegistrationEvent();
-		event.setSessionDataBean(getSession());
-		event.setId(id);
-		RegistrationDeletedEvent resp = cprSvc.delete(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getId();
-		}
-		return null;
-	}
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

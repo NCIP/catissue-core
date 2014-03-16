@@ -51,11 +51,11 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private final String MEDICAL_RECORD_NUMBER = "medical record number";
 
 	private final String SITE = "site";
-	
+
 	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
 
 	@Override
-	public Participant createParticipant(ParticipantDetail details,ObjectCreationException exceptionHandler) {
+	public Participant createParticipant(ParticipantDetail details, ObjectCreationException exceptionHandler) {
 		Participant participant = new Participant();
 
 		setSsn(participant, details.getSsn());
@@ -110,7 +110,12 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private void setActivityStatus(Participant participant, ParticipantDetail details) {
-		participant.updateActivityStatus(details.getActivityStatus());
+		if (isBlank(details.getActivityStatus())) {
+			participant.setActive();
+		}
+		else {
+			participant.updateActivityStatus(details.getActivityStatus());
+		}
 	}
 
 	private void setVitalStatus(Participant participant, ParticipantDetail details) {
@@ -158,7 +163,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	}
 
-	private ParticipantMedicalIdentifier getMedicalIdentifier(ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail) {
+	private ParticipantMedicalIdentifier getMedicalIdentifier(
+			ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail) {
 		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteName());
 		if (site == null) {
 			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
@@ -184,9 +190,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		}
 		return result;
 	}
-	
-	private void addError(CatissueErrorCode event,String field)
-	{
-		erroneousFields.add(new ErroneousField(event,field));
+
+	private void addError(CatissueErrorCode event, String field) {
+		erroneousFields.add(new ErroneousField(event, field));
 	}
 }

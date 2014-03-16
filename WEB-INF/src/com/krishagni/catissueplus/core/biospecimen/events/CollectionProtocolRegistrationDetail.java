@@ -17,9 +17,19 @@ public class CollectionProtocolRegistrationDetail {
 
 	private String barcode;
 
+	private String activityStatus;
+
 	private Date registrationDate;
 
 	private ConsentResponseDetail responseDetail;
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
+	}
 
 	public ConsentResponseDetail getResponseDetail() {
 		return responseDetail;

@@ -80,7 +80,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
 		exceptionHandler = new ObjectUpdationException();
 		try {
-			Long participantId = event.getParticipantDetail().getId();
+			Long participantId = event.getParticipantId();
 			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
