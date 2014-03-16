@@ -159,6 +159,10 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Specimen.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenCollectionGroup.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Department.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
+		
     </session-factory>
 
 </hibernate-configuration>
