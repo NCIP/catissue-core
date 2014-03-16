@@ -1,8 +1,10 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+
+public class User implements Serializable {
 	
 	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 	
@@ -14,7 +16,7 @@ public class User {
  
 	private Long ldapId;
  
-	private String emailId;
+	private String emailAddress;
  
 	private String loginName;
 	
@@ -25,6 +27,10 @@ public class User {
 	private Department department;
 	
 	private Address address;
+
+	private String comments;
+	
+	private Password password;
 	
 	public Long getId() {
 		return id;
@@ -58,12 +64,12 @@ public class User {
 		this.ldapId = ldapId;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmailAddress() {
+		return emailAddress;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	public String getLoginName() {
@@ -105,9 +111,24 @@ public class User {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
-	public void update(User user) {
 
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	
+	public Password getPassword() {
+		return password;
+	}
+
+	public void setPassword(Password password) {
+		this.password = password;
+	}
+
+	public void update(User user) {
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());
 		this.setId(user.getId());
@@ -117,10 +138,23 @@ public class User {
 		this.setLoginName(user.getLoginName());
 		this.setStartDate(user.getStartDate());
 		this.setDepartment(user.getDepartment());
-		this.setEmailId(user.emailId);
+		this.setEmailAddress(user.getEmailAddress());
+		this.setComments(user.getComments());
+		this.setPassword(user.getPassword());
+		updateAddressDetails(this.getAddress(), user.getAddress());		
 	}
 	
 	public void delete() {
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+	}
+	
+	private void updateAddressDetails(Address oldAddress, Address address) {
+		oldAddress.setStreet(address.getStreet());
+		oldAddress.setCountry(address.getCountry());
+		oldAddress.setFaxNumber(address.getFaxNumber());
+		oldAddress.setPhoneNumber(address.getPhoneNumber());
+		oldAddress.setState(address.getState());
+		oldAddress.setCity(address.getCity());
+		oldAddress.setZipCode(address.getZipCode());
 	}
 }

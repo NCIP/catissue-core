@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -29,10 +30,11 @@ public class UserCreatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static UserCreatedEvent invalidRequest(String message, Long... id) {
+	public static UserCreatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
 		UserCreatedEvent resp = new UserCreatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
+		resp.setErroneousFields(erroneousField);
 		return resp;
 	}
 

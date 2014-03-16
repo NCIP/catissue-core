@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import org.hibernate.SessionFactory;
 
+import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
@@ -75,6 +77,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public UserDao getUserDao() {
 		UserDaoImpl dao = new UserDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public DepartmentDao getDepartmentDao() {
+		DepartmentDaoImpl dao = new DepartmentDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

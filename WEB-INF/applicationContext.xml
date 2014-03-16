@@ -91,6 +91,15 @@
     <property name="participantFactory" ref="participantFactory"/>
   </bean>
 
+  <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+  <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="userFactory" ref="userFact"/>	
+  </bean>	
+
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>

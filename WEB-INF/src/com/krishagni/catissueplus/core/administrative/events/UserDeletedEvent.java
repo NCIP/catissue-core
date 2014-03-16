@@ -37,9 +37,9 @@ public class UserDeletedEvent extends ResponseEvent{
 		return resp;
 	}
 
-	public static UserDeletedEvent notFound(Long participantId) {
+	public static UserDeletedEvent notFound(Long userId) {
 		UserDeletedEvent resp = new UserDeletedEvent();
-		resp.setId(participantId);
+		resp.setId(userId);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

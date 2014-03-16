@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.Date;
+
+import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class UserDetails {
@@ -13,7 +15,7 @@ public class UserDetails {
  
 	protected Long ldapId;
  
-	protected String emailId;
+	protected String emailAddress;
  
 	protected String loginName;
 	
@@ -21,10 +23,24 @@ public class UserDetails {
 	
 	protected String activityStatus;
 	
-	protected Long departmentId;
+	protected String deptName;
 	
-	protected Long addressId;
+	protected String comments;
 
+	protected String street;
+	
+	protected String city;
+	
+	protected String state;
+	
+	protected String country;
+	
+	protected String zipCode;
+	
+	protected String faxNumber;
+	
+	protected String phoneNumber;
+	
 	public Long getId() {
 		return id;
 	}
@@ -56,13 +72,13 @@ public class UserDetails {
 	public void setLdapId(Long ldapId) {
 		this.ldapId = ldapId;
 	}
-
-	public String getEmailId() {
-		return emailId;
+	
+	public String getEmailAddress() {
+		return emailAddress;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	public String getLoginName() {
@@ -89,32 +105,102 @@ public class UserDetails {
 		this.activityStatus = activityStatus;
 	}
 
-	public Long getDepartmentId() {
-		return departmentId;
+	public String getDeptName() {
+		return deptName;
 	}
 
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
 	}
 
-	public Long getAddressId() {
-		return addressId;
+	public String getComments() {
+		return comments;
 	}
 
-	public void setAddressId(Long addressId) {
-		this.addressId = addressId;
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getFaxNumber() {
+		return faxNumber;
+	}
+
+	public void setFaxNumber(String faxNumber) {
+		this.faxNumber = faxNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public static UserDetails fromDomain(User user) {
 		UserDetails dto = new UserDetails();
+		
 		dto.setFirstName(user.getFirstName());
 		dto.setLastName(user.getLastName());
-		dto.setDepartmentId(user.getDepartment().getId());
+		dto.setDeptName(user.getDepartment().getName());
 		dto.setActivityStatus(user.getActivityStatus());
-		dto.setEmailId(user.getEmailId());
+		dto.setEmailAddress(user.getEmailAddress());
 		dto.setId(user.getId());
 		dto.setLdapId(user.getLdapId());
 		dto.setStartDate(user.getStartDate());
-		return dto;
+		dto.setComments(user.getComments());
+		updateAddressDetails(dto, user.getAddress());
+		return dto;	
 	}
+	
+	private static void updateAddressDetails(UserDetails dto, Address address) {
+		dto.setStreet(address.getStreet());
+		dto.setCountry(address.getCountry());
+		dto.setFaxNumber(address.getFaxNumber());
+		dto.setPhoneNumber(address.getPhoneNumber());
+		dto.setState(address.getState());
+		dto.setCity(address.getCity());
+		dto.setZipCode(address.getZipCode());
+	}
+	
 }

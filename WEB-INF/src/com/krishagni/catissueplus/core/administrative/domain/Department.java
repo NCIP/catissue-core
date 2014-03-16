@@ -1,10 +1,12 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-public class Department {
+import java.io.Serializable;
+
+public class Department implements Serializable{
 
 	private Long id;
 	
-	private String Name;
+	private String name;
 
 	public Long getId() {
 		return id;
@@ -15,10 +17,11 @@ public class Department {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
+	
 }

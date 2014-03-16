@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -33,10 +34,11 @@ public class UserUpdatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static UserUpdatedEvent invalidRequest(String message, Long... id) {
+	public static UserUpdatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
 		UserUpdatedEvent resp = new UserUpdatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
+		resp.setErroneousFields(erroneousField);
 		return resp;
 	}
 
@@ -55,9 +57,9 @@ public class UserUpdatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static UserUpdatedEvent notFound(Long participantId) {
+	public static UserUpdatedEvent notFound(Long userId) {
 		UserUpdatedEvent resp = new UserUpdatedEvent();
-		resp.setUserId(participantId);
+		resp.setUserId(userId);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}
