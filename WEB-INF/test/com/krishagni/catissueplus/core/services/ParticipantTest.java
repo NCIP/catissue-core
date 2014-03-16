@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -35,11 +34,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFac
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.MedicalRecordNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
@@ -49,12 +48,16 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.services.testdata.ParticipantTestData;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.beans.SessionDataBean;
-
 public class ParticipantTest {
+
+	private final String SITE = "site";
+
+	private final String DEATH_DATE = "death date";
 
 	@Mock
 	private DaoFactory daoFactory;
@@ -70,9 +73,13 @@ public class ParticipantTest {
 	private ParticipantService participantService;
 
 	private final String NOT_SPECIFIED = "Not Specified";
-	
+
 	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
-	
+
+	private final String SSN = "social security number";
+
+	private final String BIRTH_DATE = "birth date";
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -82,7 +89,7 @@ public class ParticipantTest {
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		participantFactory = new ParticipantFactoryImpl();
 		((ParticipantFactoryImpl) participantFactory).setDaoFactory(daoFactory);
-		when(siteDao.getSite(anyString())).thenReturn(getSite("siteName"));
+		when(siteDao.getSite(anyString())).thenReturn(ParticipantTestData.getSite("siteName"));
 		((ParticipantServiceImpl) participantService).setParticipantFactory(participantFactory);
 		when(participantDao.isSsnUnique(anyString())).thenReturn(true);
 	}
@@ -90,146 +97,103 @@ public class ParticipantTest {
 	@Test
 	public void testForSuccessfulParticipantCreation() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setActivityStatus("Active");
-		participantDto.setFirstName("firstName");
-		participantDto.setLastName("lastName");
-		participantDto.setGender("male");
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateEvent();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetail createdParticipantDto = response.getParticipantDto();
-		assertEquals(participantDto.getFirstName(), createdParticipantDto.getFirstName());
-		assertEquals(participantDto.getActivityStatus(), createdParticipantDto.getActivityStatus());
-		assertEquals(participantDto.getGender(), createdParticipantDto.getGender());
+		ParticipantDetail createdParticipant = response.getParticipantDetail();
+		assertNotNull(createdParticipant);
 
 	}
 
 	@Test
 	public void testParticipantCreationInvalidSSN() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setSsn("22-43-546");
-
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateEventInvalidSSN();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals("Attribute value is invalid : social security number", response.getMessage());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
+		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
 	public void testParticipantCreationFutureBirthDate() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		Calendar calendar = Calendar.getInstance();
-
-		calendar.add(Calendar.DAY_OF_YEAR, 1);
-		Date tomorrow = calendar.getTime();
-		participantDto.setBirthDate(tomorrow);
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateWithFutureDate();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message()+" : birth date", response.getMessage());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(BIRTH_DATE, response.getErroneousFields()[0].getFieldName());
+		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testParticipantCreationPastDeathDate() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		Calendar calendar = Calendar.getInstance();
-
-		calendar.add(Calendar.DAY_OF_YEAR, -1);
-		Date yesterday = calendar.getTime();
-		participantDto.setDeathDate(yesterday);
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreatEventPastDeathDate();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message()+" : death date", response.getMessage());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(DEATH_DATE, response.getErroneousFields()[0].getFieldName());
+		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testParticipantCreationInvalidDeathDate() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		Calendar calendar = Calendar.getInstance();
-
-		calendar.add(Calendar.DAY_OF_YEAR, 1);
-		Date tomorrow = calendar.getTime();
-		participantDto.setDeathDate(tomorrow);
-		participantDto.setVitalStatus("Alive");
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateInvalidDeathDate();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message()+" : death date", response.getMessage());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(DEATH_DATE, response.getErroneousFields()[0].getFieldName());
+		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testParticipantCreationInvalidSite() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateEventInvalidSite();
 		when(siteDao.getSite(anyString())).thenReturn(null);
-		reqEvent.setParticipantDetails(participantDto);
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message()+" : site", response.getMessage());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(SITE, response.getErroneousFields()[0].getFieldName());
+		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testParticipantCreationEmptyMrn() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setMrns(getMrnWithEmptyNumber());
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateEmptyMrn();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message()+" : medical record number", response.getMessage());
+		assertEquals(ParticipantErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-
 
 	@Test
 	public void testParticipantCreationInvalidGender() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setGender("mal");
-
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateInvalidGender();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
@@ -241,51 +205,35 @@ public class ParticipantTest {
 	@Test
 	public void testParticipantCreationInvalidRace() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		Set<String> race = new HashSet<String>();
-		race.add("melanin");
-		participantDto.setRace(race);
-
-		reqEvent.setParticipantDetails(participantDto);
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateInvalidRace();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals("Attribute value is invalid : race", response.getMessage());
 	}
 
 	@Test
 	public void testParticipantCreationDuplicateSsn() {
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateDuplicateSsn();
 
 		when(participantDao.isSsnUnique(anyString())).thenReturn(false);
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-
-		reqEvent.setParticipantDetails(participantDto);
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(ParticipantErrorCode.DUPLICATE_SSN.message() + " : social security number", response.getMessage());
+		assertEquals(ParticipantErrorCode.DUPLICATE_SSN.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
 	}
 
 	@Test
 	public void testParticipantCreationWithServerErr() {
 
-		CreateParticipantEvent reqEvent = new CreateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
+		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateEvent();
 
-		reqEvent.setParticipantDetails(participantDto);
 		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(any(Participant.class));
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
@@ -293,299 +241,124 @@ public class ParticipantTest {
 	public void testForSuccessfulParticipantUpdate() {
 
 		when(participantDao.isSsnUnique(anyString())).thenReturn(true);
-		Participant participant = getParticipant(1L);
-		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
-		pmi.setMedicalRecordNumber("234r5");
-		pmi.setSite(getSite("some test site"));
-		pmi.setParticipant(participant);
-		participant.getPmiCollection().put(pmi.getSite().getName(), pmi);
-		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
-		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setId(1L);
-		participantDto.setActivityStatus("Active");
-		participantDto.setFirstName("firstName");
-		participantDto.setLastName("lastName");
-		participantDto.setGender("male");
-		reqEvent.setParticipantDto(participantDto);
+
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getUpdateParticipant());
+		UpdateParticipantEvent reqEvent = ParticipantTestData.getParticipantUpdateEvent();
 
 		ParticipantUpdatedEvent response = participantService.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetail createdParticipant = response.getParticipantDto();
-		assertEquals(participantDto.getFirstName(), createdParticipant.getFirstName());
-		assertNotNull(createdParticipant.getMrns());
-		assertEquals(1, createdParticipant.getMrns().size());
+		ParticipantDetail createdParticipant = response.getParticipantDetail();
+		assertNotNull(createdParticipant);
 	}
 
 	@Test
 	public void testParticipantUpdateInvalidSsn() {
 
-		Participant participant = getParticipant(1L);
-		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
-		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setId(1L);
-		participantDto.setActivityStatus("Active");
-		participantDto.setFirstName("firstName");
-		participantDto.setLastName("lastName");
-		participantDto.setGender("male");
-		participantDto.setSsn("222-3-333");
-		reqEvent.setParticipantDto(participantDto);
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getUpdateParticipant());
+		UpdateParticipantEvent reqEvent = ParticipantTestData.getParticipantUpdateInvalidSsn();
 
 		ParticipantUpdatedEvent response = participantService.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals("Attribute value is invalid : social security number", response.getMessage());
+		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
 	}
 
 	@Test
 	public void testParticipantUpdateNewSsn() {
 
-		Participant participant = getParticipant(1L);
-		String newSsn = "111-21-4315";
-		participant.setSocialSecurityNumber(newSsn);
-		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
-		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setId(1L);
-		participantDto.setActivityStatus("Active");
-		participantDto.setFirstName("firstName");
-		participantDto.setLastName("lastName");
-		participantDto.setGender("male");
-		participantDto.setSsn("222-32-1333");
-		reqEvent.setParticipantDto(participantDto);
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getUpdatedParticipantWithNewSsn());
+
+		UpdateParticipantEvent reqEvent = ParticipantTestData.getUpdateParticipantNewSsn();
 
 		ParticipantUpdatedEvent response = participantService.updateParticipant(reqEvent);
-		System.out.println(response.getMessage());
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetail updatedResult = response.getParticipantDto();
-		assertNotSame(newSsn, updatedResult.getSsn());
 	}
 
 	@Test
 	public void testParticipantUpdateInvaliParticipant() {
 
 		when(participantDao.getParticipant(anyLong())).thenReturn(null);
-		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setId(1l);
-		reqEvent.setParticipantDto(participantDto);
+		UpdateParticipantEvent reqEvent = ParticipantTestData.getParticipantUpdateEvent();
 
 		ParticipantUpdatedEvent response = participantService.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 
 	@Test
 	public void testParticipantUpdateWithServerErr() {
 
-		when(participantDao.getParticipant(anyLong())).thenReturn(getParticipant(1l));
-		UpdateParticipantEvent reqEvent = new UpdateParticipantEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		ParticipantDetail participantDto = getParticipantDetails();
-		participantDto.setId(1l);
-		reqEvent.setParticipantDto(participantDto);
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getUpdateParticipant());
+		UpdateParticipantEvent reqEvent = ParticipantTestData.getParticipantUpdateEvent();
+
 		doThrow(new RuntimeException()).when(participantDao).saveOrUpdate(any(Participant.class));
 		ParticipantUpdatedEvent response = participantService.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
 	@Test
 	public void testGetParticipant() {
-		Long participantId = 1L;
-		Participant participant = getParticipant(participantId);
-		when(participantDao.getParticipant(anyLong())).thenReturn(participant);
 
-		ReqParticipantDetailEvent reqEvent = new ReqParticipantDetailEvent();
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		reqEvent.setParticipantId(participantId);
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getUpdateParticipant());
 
-		ParticipantDetailsEvent response = participantService.getParticipant(reqEvent);
+		ReqParticipantDetailEvent reqEvent = ParticipantTestData.getRequestParticipantEvent();
+
+		ParticipantDetailEvent response = participantService.getParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
 		assertEquals(EventStatus.OK, response.getStatus());
-		ParticipantDetail retrievedParticipant = response.getParticipantDetails();
-		assertEquals(participantId, retrievedParticipant.getId());
+		ParticipantDetail retrievedParticipant = response.getParticipantDetail();
+		assertNotNull(retrievedParticipant);
+	}
 
-	}
-	
 	@Test
-	public void testSuccessfulParticipantDelete(){
-		Long participantId = 1l;
-		DeleteParticipantEvent event = new DeleteParticipantEvent();
-		event.setId(participantId);
-		event.setIncludeChildren(true);
-		event.setSessionDataBean(getSessionDataBean());
-		Participant participantToDelete = getParticipant(participantId);
-		participantToDelete.setCprCollection(getCprCollection());
-		when(participantDao.getParticipant(anyLong())).thenReturn(participantToDelete);
+	public void testSuccessfulParticipantDelete() {
+		DeleteParticipantEvent event = ParticipantTestData.getParticipantDeleteEvent();
+
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getParticipantToDelete());
 		ParticipantDeletedEvent response = participantService.delete(event);
-		assertNotNull("response cannot be null",response);
+		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(ACTIVITY_STATUS_DISABLED, participantToDelete.getActivityStatus());
 	}
-	
+
+
 	@Test
-	public void testParticipantDeleteNotFound(){
-		Long participantId = 1l;
-		DeleteParticipantEvent event = new DeleteParticipantEvent();
-		event.setId(participantId);
-		event.setSessionDataBean(getSessionDataBean());
+	public void testParticipantDeleteNotFound() {
+		DeleteParticipantEvent event = ParticipantTestData.getParticipantDeleteEvent();
+
 		when(participantDao.getParticipant(anyLong())).thenReturn(null);
+
 		ParticipantDeletedEvent response = participantService.delete(event);
-		assertNotNull("response cannot be null",response);
+		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
-	public void testParticipantDeleteServerError(){
-		Long participantId = 1l;
-		DeleteParticipantEvent event = new DeleteParticipantEvent();
-		event.setIncludeChildren(true);
-		event.setId(participantId);
-		event.setSessionDataBean(getSessionDataBean());
+	public void testParticipantDeleteServerError() {
+		DeleteParticipantEvent event = ParticipantTestData.getParticipantDeleteEvent();
+
 		doThrow(new RuntimeException()).when(participantDao).getParticipant(anyLong());
+
 		ParticipantDeletedEvent response = participantService.delete(event);
-		assertNotNull("response cannot be null",response);
+		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
-	public void testDeleteParticipantWithoutChild(){
-		Long participantId = 1l;
-		DeleteParticipantEvent event = new DeleteParticipantEvent();
-		event.setIncludeChildren(false);
-		event.setId(participantId);
-		event.setSessionDataBean(getSessionDataBean());
-		Participant participantToDelete = getParticipant(participantId);
-		participantToDelete.setCprCollection(getCprCollection());
-		when(participantDao.getParticipant(anyLong())).thenReturn(participantToDelete);
+	public void testDeleteParticipantWithoutChild() {
+		DeleteParticipantEvent event = ParticipantTestData.getParticipantDeleteEventWithoutChildren();
+
+		when(participantDao.getParticipant(anyLong())).thenReturn(ParticipantTestData.getParticipantToDelete());
+
 		ParticipantDeletedEvent response = participantService.delete(event);
-		assertNotNull("response cannot be null",response);
+		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 	}
 
-	private Map<String, CollectionProtocolRegistration> getCprCollection() {
-		Map<String, CollectionProtocolRegistration> cprColl = new HashMap<String, CollectionProtocolRegistration>();
-		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-		cpr.setActive();
-		cpr.setBarcode("barcode");
-		cpr.setCollectionProtocol(getCollectionProtocol());
-		cpr.setProtocolParticipantIdentifier("ppid1");
-		cpr.setRegistrationDate(new Date());
-		cpr.setSpecimenCollectionGroupCollection(getscgCollection(cpr));
-		cprColl.put(cpr.getCollectionProtocol().getTitle(), cpr);
-		return cprColl;
-	}
 
-	private CollectionProtocol getCollectionProtocol() {
-		CollectionProtocol protocol = new CollectionProtocol();
-		protocol.setTitle("Test case CP");
-		return protocol;
-	}
-
-	private Collection<SpecimenCollectionGroup> getscgCollection(CollectionProtocolRegistration cpr) {
-		Set<SpecimenCollectionGroup> scgColl = new HashSet<SpecimenCollectionGroup>();
-		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-		scg.setActive();
-		scg.setBarcode("barcode");
-		scg.setClinicalDiagnosis(NOT_SPECIFIED);
-		scg.setClinicalStatus(NOT_SPECIFIED);
-		scg.setCollectionComments("collectionComments");
-		scg.setCollectionContainer(NOT_SPECIFIED);
-		scg.setCollectionProcedure(NOT_SPECIFIED);
-		scg.setCollectionProtocolRegistration(cpr);
-		scg.setCollectionStatus("Complete");
-		scg.setCollectionTimestamp(new Date());
-		scg.setName("scg_name");
-		scg.setSpecimenCollection(getSpecimenCollection(scg));
-		scgColl.add(scg);
-		return scgColl;
-	}
-
-	private Set<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg) {
-		Set<Specimen> specimenColl = new HashSet<Specimen>();
-		Specimen specimen = new Specimen();
-		specimen.setActive();
-		specimen.setSpecimenCollectionGroup(scg);
-		specimenColl.add(specimen);
-		return specimenColl;
-	}
-
-	private SessionDataBean getSessionDataBean() {
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setAdmin(true);
-		sessionDataBean.setCsmUserId("1");
-		sessionDataBean.setFirstName("admin");
-		sessionDataBean.setIpAddress("127.0.0.1");
-		sessionDataBean.setLastName("admin");
-		sessionDataBean.setUserId(1L);
-		sessionDataBean.setUserName("admin@admin.com");
-		return sessionDataBean;
-	}
-
-	private Participant getParticipant(Long id) {
-		Participant participant = new Participant();
-		participant.setId(id);
-		participant.setFirstName("firstName1");
-		participant.setLastName("lastName1");
-		return participant;
-	}
-
-	private ParticipantDetail getParticipantDetails() {
-		ParticipantDetail details = new ParticipantDetail();
-		details.setActivityStatus("Active");
-		details.setFirstName("firstName");
-		details.setLastName("lastName");
-		details.setGender("male");
-		details.setBirthDate(new Date());
-		details.setSsn("123-34-3654");
-		details.setVitalStatus("Death");
-		
-		Calendar calendar = Calendar.getInstance();
-
-		calendar.add(Calendar.DAY_OF_YEAR, 1);
-		Date tomorrow = calendar.getTime();
-		details.setDeathDate(tomorrow);
-		
-		details.setEthnicity("Not Reported");
-		Set<String> race = new HashSet<String>();
-		race.add("Asian");
-		details.setRace(race);
-		MedicalRecordNumberDetail medicalRecordNumberDetail = new MedicalRecordNumberDetail();
-		medicalRecordNumberDetail.setMrn("234");
-		medicalRecordNumberDetail.setSiteName("siteName");
-		List<MedicalRecordNumberDetail> mrns = new ArrayList<MedicalRecordNumberDetail>();
-		mrns.add(medicalRecordNumberDetail);
-		details.setMrns(mrns);
-		return details;
-	}
-
-	private Site getSite(String string) {
-		Site site = new Site();
-		site.setName(string);
-		return site;
-	}
-	
-	private List<MedicalRecordNumberDetail> getMrnWithEmptyNumber() {
-		MedicalRecordNumberDetail medicalRecordNumberDetail = new MedicalRecordNumberDetail();
-		medicalRecordNumberDetail.setMrn("");
-		medicalRecordNumberDetail.setSiteName("siteName");
-		List<MedicalRecordNumberDetail> mrns = new ArrayList<MedicalRecordNumberDetail>();
-		mrns.add(medicalRecordNumberDetail);
-		return mrns;
-	}
 
 }

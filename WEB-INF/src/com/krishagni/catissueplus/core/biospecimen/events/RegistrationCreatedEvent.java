@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -23,9 +24,9 @@ public class RegistrationCreatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static RegistrationCreatedEvent invalidRequest(String message, Long... id) {
+	public static RegistrationCreatedEvent invalidRequest(String message, ErroneousField... fields) {
 		RegistrationCreatedEvent resp = new RegistrationCreatedEvent();
-		//		resp.setDealId(id != null && id.length > 0 ? id[0] : null);
+		resp.setErroneousFields(fields);
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
 		return resp;

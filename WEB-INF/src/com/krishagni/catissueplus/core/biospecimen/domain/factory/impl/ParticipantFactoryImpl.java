@@ -164,7 +164,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}
 		if (isBlank(medicalRecordNumberDetail.getMrn())) {
-			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
+			addError(ParticipantErrorCode.MISSING_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
 		}
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		pmi.setSite(site);

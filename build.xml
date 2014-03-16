@@ -1742,8 +1742,7 @@
 
 	            <batchtest todir="${report.dir}/Nightly_Build_Report">
 	                <fileset dir="./WEB-INF/test">
-	                    <include name="**/CollectionProtocolRegTest.java" />
-	                	<include name="**/ParticipantTest.java" />
+	                    <include name="com/**/*Test.java" />
 	                </fileset>
 	            </batchtest>
 	        </junit>

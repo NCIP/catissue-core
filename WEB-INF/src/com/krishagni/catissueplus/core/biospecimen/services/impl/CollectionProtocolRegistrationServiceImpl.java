@@ -82,8 +82,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			daoFactory.getCprDao().saveOrUpdate(registration);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(registration));
 		}
-		catch (CatissueException ce) {
-			return RegistrationCreatedEvent.invalidRequest(ce.getMessage() + " : " + ce.getErroneousFields());
+		catch (ObjectCreationException ce) {
+			return RegistrationCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return RegistrationCreatedEvent.serverError(e);

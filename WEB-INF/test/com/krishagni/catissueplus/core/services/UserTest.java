@@ -20,10 +20,10 @@ import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.repository.UserDao;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.common.beans.SessionDataBean;

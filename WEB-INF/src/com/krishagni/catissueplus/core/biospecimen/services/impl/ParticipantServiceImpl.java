@@ -94,7 +94,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
 		}
 		catch (ObjectUpdationException ce) {
-			return ParticipantUpdatedEvent.invalidRequest(ce.getMessage(), ce.getErroneousFields());
+			return ParticipantUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return ParticipantUpdatedEvent.serverError(e);
