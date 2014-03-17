@@ -28,6 +28,8 @@ public class UserFactoryImpl implements UserFactory {
 	private final String LAST_NAME = "last name";
 
 	private final String LOGIN_NAME = "login name";
+	
+	private final String DEPARTMENT = "department";
 
 	private final String EMAIL_ADDRESS = "email address";
 	
@@ -39,9 +41,7 @@ public class UserFactoryImpl implements UserFactory {
 	
 	public User createUser(UserDetails details, ObjectCreationException exceptionHandler) {
 		User user = new User();
-		user.setId(details.getId());
 		user.setLdapId(details.getLdapId());
-		user.setStartDate(details.getStartDate());  //TODO need to consider for validation
 		user.setComments(details.getComments());
 
 		setLoginName(user, details);
@@ -77,7 +77,7 @@ public class UserFactoryImpl implements UserFactory {
 		Department department = daoFactory.getDepartmentDao().getDepartment(details.getDeptName());
 		
 		if(department == null) {
-			new RuntimeException("Department is not present");  //TO DO :  Handle with proper exception after nitesh's checkin
+			addError(UserErrorCode.NOT_FOUND, DEPARTMENT);
 		}		
 		user.setDepartment(department);
 	}

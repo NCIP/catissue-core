@@ -1,7 +1,5 @@
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
+import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.DeleteUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
@@ -34,23 +29,13 @@ import edu.wustl.common.beans.SessionDataBean;
 @RequestMapping("/users")
 public class UserController {
 
-		private String ACTIVITY_STATUS_DISABLED = "Disabled";
+		private String ACTIVITY_STATUS_CLOSED = "Closed";
 		
 		@Autowired
 		private UserService userService;
 
 		@Autowired
 		private HttpServletRequest httpServletRequest;
-
-		@RequestMapping(method = RequestMethod.GET)
-		@ResponseStatus(HttpStatus.OK)
-		@ResponseBody
-		public List<User> getUserList() {
-			ReqAllUsersEvent req = new ReqAllUsersEvent();
-			req.setSessionDataBean(getSession());
-			AllUsersEvent result = userService.getAllUsers(req);
-			return result.getUserList();
-		}
 		
 		@RequestMapping(method = RequestMethod.POST)
 		@ResponseStatus(HttpStatus.OK)
@@ -73,21 +58,22 @@ public class UserController {
 			}
 			return null;
 		}
-		
-		@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
-		@ResponseStatus(HttpStatus.OK)
+			
+		@RequestMapping(method = RequestMethod.PUT, value="/{id}/close")
 		@ResponseBody
-		public String deleteUser(@PathVariable Long id) {
-			DeleteUserEvent event = new DeleteUserEvent();
-			event.setId(id);
-			UserDeletedEvent resp = userService.delete(event);;
+		@ResponseStatus(HttpStatus.OK)
+		public String closeUser(@PathVariable Long id) {
+			CloseUserEvent event= new CloseUserEvent();
+            event.setId(id);
+            event.setSessionDataBean(getSession());
+			UserClosedEvent resp = userService.closeUser(event);
 			if (resp.getStatus() == EventStatus.OK) {
 				return resp.getMessage();
 			}
 			return null;
 		}
-
+		
 		private SessionDataBean getSession() {
-			return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+			 return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 		}
 }

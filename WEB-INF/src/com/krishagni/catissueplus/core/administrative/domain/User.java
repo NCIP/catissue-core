@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class User implements Serializable {
 	
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
+	private final String ACTIVITY_STATUS_CLOSED = "Closed";
 	
 	private Long id;
 
@@ -20,7 +20,7 @@ public class User implements Serializable {
  
 	private String loginName;
 	
-	private Date startDate;
+	private Date createDate;
 	
 	private String activityStatus;
 	
@@ -80,12 +80,12 @@ public class User implements Serializable {
 		this.loginName = loginName;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 	public String getActivityStatus() {
@@ -131,12 +131,11 @@ public class User implements Serializable {
 	public void update(User user) {
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());
-		this.setId(user.getId());
 		this.setActivityStatus(user.getActivityStatus());
 		this.setLdapId(user.getLdapId());
 		this.setAddress(user.getAddress());
 		this.setLoginName(user.getLoginName());
-		this.setStartDate(user.getStartDate());
+		this.setCreateDate(user.getCreateDate());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
@@ -144,8 +143,8 @@ public class User implements Serializable {
 		updateAddressDetails(this.getAddress(), user.getAddress());		
 	}
 	
-	public void delete() {
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+	public void close() {
+		this.setActivityStatus(ACTIVITY_STATUS_CLOSED);
 	}
 	
 	private void updateAddressDetails(Address oldAddress, Address address) {

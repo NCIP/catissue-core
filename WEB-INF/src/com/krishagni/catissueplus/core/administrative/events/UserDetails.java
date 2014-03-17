@@ -19,7 +19,7 @@ public class UserDetails {
  
 	protected String loginName;
 	
-	protected Date startDate;
+	protected Date createDate;
 	
 	protected String activityStatus;
 	
@@ -89,12 +89,12 @@ public class UserDetails {
 		this.loginName = loginName;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 	public String getActivityStatus() {
@@ -187,7 +187,7 @@ public class UserDetails {
 		dto.setEmailAddress(user.getEmailAddress());
 		dto.setId(user.getId());
 		dto.setLdapId(user.getLdapId());
-		dto.setStartDate(user.getStartDate());
+		dto.setCreateDate(user.getCreateDate());
 		dto.setComments(user.getComments());
 		updateAddressDetails(dto, user.getAddress());
 		return dto;	
