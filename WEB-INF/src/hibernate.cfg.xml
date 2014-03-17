@@ -162,6 +162,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Department.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		
     </session-factory>
 

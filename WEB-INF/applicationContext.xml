@@ -114,5 +114,13 @@
 
   <bean id="querySvc" class="com.krishagni.catissueplus.core.de.services.impl.QueryServiceImpl">
   </bean>
+  
+  <bean id="auditFactory" class="com.krishagni.catissueplus.core.audit.domain.factory.impl.AuditFactoryImpl">
+  </bean>
+  
+  <bean id="auditService" class="com.krishagni.catissueplus.core.audit.services.impl.AuditServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="auditFactory" ref="auditFactory"/>
+  </bean>
 
  </beans>

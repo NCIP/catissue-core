@@ -23,7 +23,7 @@
     <property name="autoIncrement" value="true" dbms="mysql"/>
     <property name="autoIncrement" value="false" dbms="oracle"/>
  
-    <changeSet id="1" author="nitesh" runOnChange="true">
+     <changeSet id="1" author="nitesh" runOnChange="true">
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="SPECIMEN_CLASS" type="${text.type}(50)" />
         </addColumn>
@@ -1149,16 +1149,16 @@
         referencedColumnNames="IDENTIFIER"/>
     </changeSet>
 
-    <!-- changeSet author="vpawar" id="adding FK on form context to collection protocol table" failOnError="true">
+     <!-- changeSet author="vpawar" id="adding FK on form context to collection protocol table" failOnError="true">
       <addForeignKeyConstraint 
         constraintName="FK_FC_CP_ID_SP_IDENTIFIER"
         baseTableName="CATISSUE_FORM_CONTEXT"
         baseColumnNames="CP_ID"
         referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
         referencedColumnNames="IDENTIFIER"/>
-    </changeSet -->
+    </changeSet --> 
 
-    <changeSet author="vpawar" id="adding new form record entries table" failOnError="true">
+     <changeSet author="vpawar" id="adding new form record entries table" failOnError="true">
       <createTable tableName="CATISSUE_FORM_RECORD_ENTRY">
         <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
           <constraints primaryKey="true" nullable="false"/>
@@ -1202,5 +1202,68 @@
         baseColumnNames="UPDATED_BY"
         referencedTableName="CATISSUE_USER"
         referencedColumnNames="IDENTIFIER"/>
+    </changeSet> 
+    
+    <changeSet author="vinod" id="adding audit table" failOnError="true">
+      <createTable tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS">
+        <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+          <constraints primaryKey="true" nullable="false"/>
+        </column>
+        
+        <column name="OBJECT_TYPE" type="${text.type}(50)">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="OBJECT_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="OPERATION" type="${text.type}(15)">
+          <constraints nullable="false"/>
+        </column>
+        
+        <column name="USER_ID" type="${int.type}">
+         <constraints nullable="false"/>
+        </column>
+        
+        <column name="UPDATED_DATE" type="${timestamp.type}">
+          <constraints nullable="false"/>
+        </column>
+            
+        <column name="REASON_FOR_CHANGE" type="${text.type}(500)">
+        </column>
+        
+        <column name="IP_ADDRESS" type="${text.type}(15)">
+        	 <constraints nullable="false"/>
+        </column>
+
+      </createTable>
     </changeSet>
+    
+    <changeSet author="vinod" id="adding FK on USER_ID to users table" failOnError="true">
+      <addForeignKeyConstraint 
+        constraintName="FK_RE_USER_ID_USERS_ID"
+        baseTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+        baseColumnNames="USER_ID"
+        referencedTableName="CATISSUE_USER"
+        referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
+    
+    <changeSet author="vinod" id="creating index on OBJECT_TYPE" failOnError="false">
+	    <createIndex 
+	            indexName="idx_audit_object_type"
+	            tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+	            unique="false">
+	        <column name="OBJECT_TYPE" type="${text.type}(50)"/>
+	    </createIndex>
+	 </changeSet>
+	 	
+	  <changeSet author="vinod" id="creating index on OBJECT_ID" failOnError="false">
+	    <createIndex 
+	            indexName="idx_audit_object_id"
+	            tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+	            unique="false">
+	        <column name="OBJECT_ID" type="${int.type}"/>
+	    </createIndex>
+	 </changeSet>
 </databaseChangeLog>         
