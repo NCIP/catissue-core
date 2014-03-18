@@ -37,12 +37,4 @@ public class AuditCreatedEvent extends ResponseEvent {
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
 	}
-
-	public static AuditCreatedEvent invalidRequest(String message, Long... id) {
-		AuditCreatedEvent resp = new AuditCreatedEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		return resp;
-	}
-
 }

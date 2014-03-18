@@ -10,7 +10,6 @@ import com.krishagni.catissueplus.core.audit.events.CreateAuditEvent;
 import com.krishagni.catissueplus.core.audit.services.AuditService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 public class AuditServiceImpl implements AuditService {
 	private DaoFactory daoFactory;
@@ -38,9 +37,6 @@ public class AuditServiceImpl implements AuditService {
 					.getAuditDetail());
 			daoFactory.getAuditDao().saveOrUpdate(audit);
 			return AuditCreatedEvent.ok(createAuditEvent.getAuditDetail());
-		} catch (CatissueException ce) {
-			return AuditCreatedEvent.invalidRequest(ce.getMessage() + " : "
-					+ ce.getErroneousFields());
 		} catch (Exception e) {
 			return AuditCreatedEvent.serverError(e);
 		}
