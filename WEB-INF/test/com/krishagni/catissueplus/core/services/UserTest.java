@@ -220,17 +220,18 @@ public class UserTest {
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 	
-	/*@Test
+	@Test
 	public void testUserUpdateWithServerErr() {
-		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));	
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		UpdateUserEvent reqEvent = UserTestData.getUpdateUserEvent();
 		
 		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
 		UserUpdatedEvent response = userService.updateUser(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
-	}*/
+	}
 	
 	@Test
 	public void testForInvalidUserClose() {
@@ -263,5 +264,20 @@ public class UserTest {
 		UserClosedEvent response = userService.closeUser(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+	
+	@Test
+	public void testUserCreationWithInvalidDepartment() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);		
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
+		when(departmentDao.getDepartment(anyString())).thenReturn(null);
+		
+		UserCreatedEvent response = userService.createUser(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+    	assertEquals(UserTestData.DEPARTMENT,response.getErroneousFields()[0].getFieldName());
+        assertEquals(UserErrorCode.NOT_FOUND.message(),response.getErroneousFields()[0].getErrorMessage());
+
 	}
 }

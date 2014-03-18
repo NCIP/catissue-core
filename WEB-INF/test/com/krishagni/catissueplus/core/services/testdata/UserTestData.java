@@ -26,6 +26,7 @@ public class UserTestData {
 
 	public static final String EMAIL_ADDRESS = "email address";
 	
+	public static final String DEPARTMENT = "department";
 	
 	public static List<User> getUserList() {
 		List<User> users = new ArrayList<User>();
@@ -73,7 +74,7 @@ public class UserTestData {
 		details.setLoginName("admin@admin.com");
 		details.setLdapId(1L);
 		
-		UpdateUserEvent reqEvent = new UpdateUserEvent(details, anyLong());
+		UpdateUserEvent reqEvent = new UpdateUserEvent(details, 1L);
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		reqEvent.setUserDetails(details);
 		return reqEvent;
