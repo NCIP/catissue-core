@@ -1785,7 +1785,7 @@
 	             purposes of coverage reporting.
 	          -->
 	            <ignore regex="org.apache.log4j.*" />
-	            <classpath refid="cobertura.classpath" />
+	            
 	            <fileset dir="./WEB-INF/classes">
 	                <include name="com/krishagni/**/*.class" />
 	            	<exclude name="**/*Test.class"/>
