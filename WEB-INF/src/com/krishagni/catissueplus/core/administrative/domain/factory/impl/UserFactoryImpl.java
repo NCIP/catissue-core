@@ -90,6 +90,7 @@ public class UserFactoryImpl implements UserFactory {
 		address.setPhoneNumber(details.getPhoneNumber());
 		address.setZipCode(details.getZipCode());
 		address.setState(details.getState());
+		address.setCity(details.getCity());
 		user.setAddress(address);	
 	}
 

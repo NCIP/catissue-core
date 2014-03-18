@@ -77,6 +77,6 @@
             insert="true"
             column="FAX_NUMBER"
             length="50"/>
-
+            
     </class>
 </hibernate-mapping>

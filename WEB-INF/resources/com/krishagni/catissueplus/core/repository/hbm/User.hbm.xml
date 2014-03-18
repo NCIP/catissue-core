@@ -79,11 +79,7 @@
             insert="true"
             column="DEPARTMENT_ID"  lazy="false"/>
 
-        <many-to-one
-           name="address"
-           class="com.krishagni.catissueplus.core.administrative.domain.Address"
-           cascade="save-update"
-           column="ADDRESS_ID"/>
+        <many-to-one name="address" class="com.krishagni.catissueplus.core.administrative.domain.Address" column="ADDRESS_ID" cascade="all" not-null="true" />
 
         <property
             name="ldapId"

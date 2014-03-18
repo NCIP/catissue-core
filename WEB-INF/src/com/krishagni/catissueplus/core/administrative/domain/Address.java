@@ -1,24 +1,23 @@
+
 package com.krishagni.catissueplus.core.administrative.domain;
 
 public class Address {
-	
+
 	private Long id;
-	
+
 	private String street;
-	
+
 	private String city;
-	
+
 	private String state;
-	
+
 	private String country;
-	
+
 	private String zipCode;
 
 	private String phoneNumber;
-	
+
 	private String faxNumber;
-	
-	private User user;
 
 	public Long getId() {
 		return id;
@@ -82,14 +81,6 @@ public class Address {
 
 	public void setFaxNumber(String faxNumber) {
 		this.faxNumber = faxNumber;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 }
