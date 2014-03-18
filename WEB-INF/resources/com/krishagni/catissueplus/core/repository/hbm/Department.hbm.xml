@@ -32,5 +32,8 @@
             not-null="true"
             unique="true"/>
 
+	<query name="getDepartmentByName">
+		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name
+	</query>
     </class>
 </hibernate-mapping>

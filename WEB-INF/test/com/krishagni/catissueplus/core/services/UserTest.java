@@ -2,8 +2,10 @@ package com.krishagni.catissueplus.core.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -11,38 +13,26 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
-import com.krishagni.catissueplus.core.administrative.events.DeleteUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
-
-import edu.wustl.common.beans.SessionDataBean;
+import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
 public class UserTest {
-	
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
-	
-	private final String FIRST_NAME = "first name";
-
-	private final String LAST_NAME = "last name";
-
-	private final String LOGIN_NAME = "login name";
-
-	private final String EMAIL_ADDRESS = "email address";
 	
 	@Mock
 	private DaoFactory daoFactory;
@@ -70,13 +60,14 @@ public class UserTest {
 		((UserServiceImpl) userService).setUserFactory(userFactory);
 		
 		when(daoFactory.getDepartmentDao()).thenReturn(departmentDao);
-		when(departmentDao.getDepartment(anyString())).thenReturn(getDeparment("Chemical"));
+		when(departmentDao.getDepartment(anyString())).thenReturn(UserTestData.getDeparment("Chemical"));
 	}
 
 	@Test
 	public void testForSuccessfulUserCreation() {
-		CreateUserEvent reqEvent = getUserDetailsForUserCreation();
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);		
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertNotNull("response cannot be null", response);
@@ -88,201 +79,189 @@ public class UserTest {
 	@Test
 	public void testUserCreationWithDuplicateLoginName() {
 		
-		CreateUserEvent reqEvent = getUserDetailsForUserCreation();
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.FALSE);		
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-        assertEquals(LOGIN_NAME,response.getErroneousFields()[0].getFieldName());
-        assertEquals(UserErrorCode.DUPLICATE_LOGIN_NAME.message(),response.getErroneousFields()[0].getErrorMessage());
+	    assertEquals(UserTestData.LOGIN_NAME,response.getErroneousFields()[0].getFieldName());
+	    assertEquals(UserErrorCode.DUPLICATE_LOGIN_NAME.message(),response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
 	public void testUserCreationWithEmptyLoginName() {
-		CreateUserEvent reqEvent = getUserDetailsWithEmptyLoginName();
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventWithEmptyLoginName();
 		when(userDao.isUniqueLoginName("")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-        assertEquals(LOGIN_NAME,response.getErroneousFields()[0].getFieldName());
+        assertEquals(UserTestData.LOGIN_NAME,response.getErroneousFields()[0].getFieldName());
+        assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testUserCreationWithEmptyEmail() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventWithEmptyEmail();
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("")).thenReturn(Boolean.TRUE);
+		
+		UserCreatedEvent response = userService.createUser(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(2, response.getErroneousFields().length);
+        assertEquals(UserTestData.EMAIL_ADDRESS,response.getErroneousFields()[0].getFieldName());
         assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
 	public void testUserCreationWithEmptyFirstName() {
-		CreateUserEvent reqEvent = getUserDetailsWithEmptyFirstName();
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventWithEmptyFirstName();
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-        assertEquals(FIRST_NAME,response.getErroneousFields()[0].getFieldName());
+        assertEquals(UserTestData.FIRST_NAME,response.getErroneousFields()[0].getFieldName());
         assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
 	public void testUserCreationWithEmptyLastName() {
-		CreateUserEvent reqEvent = getUserDetailsWithEmptyLastName();
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventWithEmptyLastName();
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-        assertEquals(LAST_NAME,response.getErroneousFields()[0].getFieldName());
-        assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
+    	assertEquals(UserTestData.LAST_NAME,response.getErroneousFields()[0].getFieldName());
+    	assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
 	public void testUserCreationWithInvalidEmailAddress() {
-		CreateUserEvent reqEvent = getUserDetailsWithInvalidEmail();
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventWithInvalidEmail();
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("admin")).thenReturn(Boolean.TRUE);
 		
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-        assertEquals(EMAIL_ADDRESS,response.getErroneousFields()[0].getFieldName());
-        assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
+    	assertEquals(UserTestData.EMAIL_ADDRESS,response.getErroneousFields()[0].getFieldName());
+    	assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(),response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testUserCreationWithNonUniqueEmailAddress() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEvent();
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.FALSE);
+		
+		UserCreatedEvent response = userService.createUser(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+    	assertEquals(UserTestData.EMAIL_ADDRESS,response.getErroneousFields()[0].getFieldName());
+    	assertEquals(UserErrorCode.DUPLICATE_EMAIL_ADDRESS.message(),response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testUserCreationWithServerErr() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
+		
+		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
+		UserCreatedEvent response = userService.createUser(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
 	@Test
 	public void testForSuccessfulUserUpdate() {
-		User user = getUser(1L);
-		when(userDao.getUser(anyLong())).thenReturn(user);
-		
-		UserDetails details = getUserDetailsForUpdate();
-		UpdateUserEvent reqEvent = new UpdateUserEvent(details, anyLong());
-		reqEvent.setSessionDataBean(getSessionDataBean());
-		reqEvent.setUserDetails(details);	
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		UpdateUserEvent reqEvent = UserTestData.getUpdateUserEvent();
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
 		UserUpdatedEvent response = userService.updateUser(reqEvent);
-		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		
 		UserDetails createdUser = response.getUserDetails();
-		assertEquals(details.getFirstName(), createdUser.getFirstName());
+		assertEquals(reqEvent.getUserDetails().getFirstName(), createdUser.getFirstName());
 		assertNotNull(createdUser.getDeptName());
 		assertEquals("firstName", createdUser.getFirstName());
 	}
 	
 	@Test
-	public void testSuccessfulUserDelete(){
-		Long userId = 1l;
-		DeleteUserEvent event = new DeleteUserEvent();
-		event.setId(userId);
-		event.setIncludeChildren(true);
-		event.setSessionDataBean(getSessionDataBean());
+	public void testForUserUpdateWithChangedLoginName() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		UpdateUserEvent reqEvent = UserTestData.getUpadteUserEventWithLNUpdate();
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
 		
-		User userToDelete = getUser(userId);
+		UserUpdatedEvent response = userService.updateUser(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+    	assertEquals(UserTestData.LOGIN_NAME,response.getErroneousFields()[0].getFieldName());
+        assertEquals(UserErrorCode.CHANGE_IN_LOGIN_NAME.message(),response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testForInvalidUserUpdate() {
+		when(userDao.getUser(anyLong())).thenReturn(null);		
+		UpdateUserEvent reqEvent = UserTestData.getUpdateUserEvent();
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
+		
+		UserUpdatedEvent response = userService.updateUser(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	/*@Test
+	public void testUserUpdateWithServerErr() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		UpdateUserEvent reqEvent = UserTestData.getUpdateUserEvent();
+		
+		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
+		UserUpdatedEvent response = userService.updateUser(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}*/
+	
+	@Test
+	public void testForInvalidUserClose() {
+		when(userDao.getUser(anyLong())).thenReturn(null);		
+		CloseUserEvent reqEvent = UserTestData.getCloseUserEvent();
+		reqEvent.setSessionDataBean(UserTestData.getSessionDataBean());
+		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.TRUE);
+		
+		UserClosedEvent response = userService.closeUser(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testSuccessfulUserClose(){
+		CloseUserEvent reqEvent = UserTestData.getCloseUserEvent();
+		User userToDelete = UserTestData.getUser(1L);
 		when(userDao.getUser(anyLong())).thenReturn(userToDelete);
-		UserDeletedEvent response = userService.delete(event);
+		UserClosedEvent response = userService.closeUser(reqEvent);
 		assertNotNull("response cannot be null",response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(ACTIVITY_STATUS_DISABLED, userToDelete.getActivityStatus());
+		assertEquals(UserTestData.ACTIVITY_STATUS_CLOSED, userToDelete.getActivityStatus());
 	}
 	
-	private SessionDataBean getSessionDataBean() {
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setAdmin(true);
-		sessionDataBean.setCsmUserId("1");
-		sessionDataBean.setFirstName("admin");
-		sessionDataBean.setIpAddress("127.0.0.1");
-		sessionDataBean.setLastName("admin");
-		sessionDataBean.setUserId(1L);
-		sessionDataBean.setUserName("admin@admin.com");
-		return sessionDataBean;
+	@Test
+	public void testUserCloseWithServerErr() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1l));		
+		CloseUserEvent reqEvent = UserTestData.getCloseUserEvent();
+		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
+		UserClosedEvent response = userService.closeUser(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
-	private User getUser(Long id) {
-		User user = new User();
-		user.setId(id);
-		user.setFirstName("firstName1");
-		user.setLastName("lastName1");
-		user.setLoginName("admin@admin.com");
-		return user;
-	}
-	
-	private UserDetails getUserDetailsForUpdate() {
-		CreateUserEvent reqEvent = new CreateUserEvent(null);
-		reqEvent.setSessionDataBean(getSessionDataBean());
-
-		UserDetails details = new UserDetails();
-		details.setActivityStatus("Active");
-		details.setFirstName("firstName");
-		details.setLastName("lastName");
-		details.setDeptName("Chemical");
-		details.setEmailAddress("sci@sci.com");
-		details.setLoginName("admin@admin.com");
-		details.setLdapId(1L);
-		details.setStartDate(new java.util.Date());		
-		
-		return details;
-	}
-	
-	private  CreateUserEvent getUserDetails() {
-		CreateUserEvent reqEvent = new CreateUserEvent(null);
-		reqEvent.setSessionDataBean(getSessionDataBean());
-
-		UserDetails details = new UserDetails();
-		details.setActivityStatus("Active");
-		details.setFirstName("firstName");
-		details.setLastName("lastName");
-		details.setDeptName("Chemical");
-		details.setEmailAddress("sci@sci.com");
-		details.setLoginName("admin@admin.com");
-		details.setLdapId(1L);
-		details.setStartDate(new java.util.Date());		
-		
-		reqEvent.setUserDetails(details);
-		return reqEvent;
-	}
-	
-	private CreateUserEvent getUserDetailsWithInvalidEmail() {
-		CreateUserEvent reqEvent = getUserDetails();
-		UserDetails details = reqEvent.getUserDetails();
-		details.setEmailAddress("admin");
-		reqEvent.setUserDetails(details);
-		return reqEvent;
-	}
-
-	private CreateUserEvent getUserDetailsForUserCreation() {
-		CreateUserEvent reqEvent = getUserDetails();
-		UserDetails details = reqEvent.getUserDetails();
-		reqEvent.setUserDetails(details);
-		return reqEvent;
-	}
-	
-	private CreateUserEvent getUserDetailsWithEmptyLoginName() {
-		CreateUserEvent reqEvent = getUserDetails();
-		UserDetails details = reqEvent.getUserDetails();
-		details.setLoginName("");
-		reqEvent.setUserDetails(details);
-		return reqEvent;
-	}
-	
-	private CreateUserEvent getUserDetailsWithEmptyFirstName() {
-		CreateUserEvent reqEvent = getUserDetails();
-		UserDetails details = reqEvent.getUserDetails();
-		details.setFirstName("");
-		reqEvent.setUserDetails(details);
-		return reqEvent;
-	}
-	
-	private CreateUserEvent getUserDetailsWithEmptyLastName() {
-		CreateUserEvent reqEvent = getUserDetails();
-		UserDetails details = reqEvent.getUserDetails();
-		details.setLastName("");
-		reqEvent.setUserDetails(details);
-		return reqEvent;
-	}
-	
-	private Department getDeparment(String name) {
-		Department department = new Department();
-		department.setId(10l);
-		department.setName(name);
-		return department;
-	}
-
 }

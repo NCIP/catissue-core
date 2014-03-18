@@ -6,8 +6,8 @@ import org.hibernate.Query;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class DepartmentDaoImpl extends AbstractDao<User> implements DepartmentDao {
@@ -20,12 +20,19 @@ private DaoFactory daoFactory;
 	
 	@Override
 	public Department getDepartment(String name) {
-		String hql = "FROM "+ Department.class.getName() +" d WHERE name = :name";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DEPARTMENT_BY_NAME);
 		query.setString("name", name);
-		List<Department> rows = query.list();
-		Department department = rows.get(0);
-		return department; 
+		List<Department> results = query.list();
+		
+		if(results.size() > 0){
+			return results.get(0);
+		}
+		return null;
 	}
+	
+	private static final String FQN = Department.class.getName();
+
+	private static final String GET_DEPARTMENT_BY_NAME = FQN + ".getDepartmentByName";
+
 
 }
