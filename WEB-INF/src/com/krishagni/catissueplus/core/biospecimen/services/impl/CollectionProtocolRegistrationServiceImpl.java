@@ -17,6 +17,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEve
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
+import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
@@ -26,17 +27,20 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	private final String PPID = "participant protocol identifier";
 
+	private final String BARCODE = "barcode";
+
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
+
 	private ParticipantFactory participantFactory;
 
-	
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
 		this.participantFactory = participantFactory;
 	}
 
 	private ObjectCreationException exception;
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -59,25 +63,23 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@Override
 	@PlusTransactional
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
-			exception = new ObjectCreationException();
+		exception = new ObjectCreationException();
 		try {
-			CollectionProtocolRegistration registration = registrationFactory
-					.createCpr(event.getCprDetail(), exception);
+			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail(), exception);
+			Long participantId = event.getCprDetail().getParticipantDetail().getId();
 			Participant participant;
-			if(event.getCprDetail().getParticipantDetail().getId() == null)
-			{
+			if (participantId == null) {
 				participant = participantFactory.createParticipant(event.getCprDetail().getParticipantDetail(), exception);
 			}
-			else
-			{
-				participant = daoFactory.getParticipantDao().getParticipant(event.getCprDetail().getParticipantDetail().getId());
+			else {
+				participant = daoFactory.getParticipantDao().getParticipant(participantId);
 			}
-			if(participant == null)
-			{
+			if (participant == null) {
 				exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
 			}
 			registration.setParticipant(participant);
 			ensureUniquePpid(registration);
+			ensureUniqueBarcode(registration);
 			exception.checkErrorAndThrow();
 			daoFactory.getCprDao().saveOrUpdate(registration);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(registration));
@@ -110,7 +112,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return RegistrationDeletedEvent.serverError(e);
 		}
 	}
-	
+
 	private void ensureUniquePpid(CollectionProtocolRegistration registration) {
 		if (!daoFactory.getCollectionProtocolDao().isPpidUniqueForProtocol(registration.getCollectionProtocol().getId(),
 				registration.getProtocolParticipantIdentifier())) {
@@ -118,5 +120,11 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
+	private void ensureUniqueBarcode(CollectionProtocolRegistration registration) {
+		if (!CommonValidator.isBlank(registration.getBarcode())
+				&& daoFactory.getCprDao().isBacodeUnique(registration.getBarcode())) {
+			exception.addError(ParticipantErrorCode.DUPLICATE_PPID, BARCODE);
+		}
+	}
 
 }

@@ -80,6 +80,13 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	}
 
 	@Override
+	public boolean isBacodeUnique(String barcode) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPR_ID_BY_BARCODE);
+		query.setString("barcode", barcode);
+		return query.list().isEmpty() ? true : false;
+	}
+
+	@Override
 	public CollectionProtocolRegistration getCpr(Long cprId) {
 
 		return (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
@@ -93,6 +100,8 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	private static final String GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getParticipantsByCpIdAndSearchTerm";
 
 	private static final String GET_COLLECTION_GROUPSBY_CPR_ID = FQN + ".getCollectionGroupsByCprId";
+
+	private static final String GET_CPR_ID_BY_BARCODE = FQN + ".getCprIdByBarcode";
 
 	//	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "
 	//			+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"

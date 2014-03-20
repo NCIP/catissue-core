@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
@@ -153,6 +154,8 @@ public class CollectionProtocolRegistration {
 		else {
 			checkActiveDependents();
 		}
+		this.setBarcode(Utility.getDisabledValue(this.getBarcode()));
+		this.setProtocolParticipantIdentifier(Utility.getDisabledValue(protocolParticipantIdentifier));
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 

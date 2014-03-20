@@ -63,9 +63,17 @@
 			<key column="PARTICIPANT_ID" />
 			<element column="RACE_NAME" type="string" />
 		</set>
-        
-        <query name="getParticipantIdBySSN">
-            select participant.id from com.krishagni.catissueplus.core.biospecimen.domain.Participant participant where participant.socialSecurityNumber = :ssn
-        </query>
+
+		<query name="getParticipantIdBySSN">
+			select participant.id from
+			com.krishagni.catissueplus.core.biospecimen.domain.Participant
+			participant where participant.socialSecurityNumber = :ssn
+		</query>
+
+		<query name="getPmiIdBySiteMrn">
+			select pmi.id from
+			com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier
+			pmi where pmi.site.name=:siteName and pmi.medicalRecordNumber=:mrn
+		</query>
 	</class>
 </hibernate-mapping>

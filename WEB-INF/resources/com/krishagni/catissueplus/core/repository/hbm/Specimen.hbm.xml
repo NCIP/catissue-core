@@ -66,7 +66,7 @@
 		</set>
 
 		<one-to-one name="specimenPosition"
-			class="edu.wustl.catissuecore.domain.SpecimenPosition" cascade="save-update"
+			class="edu.wustl.catissuecore.domain.SpecimenPosition" cascade="all"
 			property-ref="specimen" />
 
 		<property name="label" type="string" column="LABEL" />

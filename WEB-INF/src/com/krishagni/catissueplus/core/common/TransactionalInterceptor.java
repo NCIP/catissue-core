@@ -13,13 +13,12 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
 
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
 @Aspect
 public class TransactionalInterceptor {
 
-	private static Logger LOGGER = Logger.getCommonLogger(NewSpecimenBizLogic.class);
+	private static Logger LOGGER = Logger.getCommonLogger(TransactionalInterceptor.class);
 
 	private SessionFactory sessionFactory;
 
@@ -43,7 +42,7 @@ public class TransactionalInterceptor {
 		catch (IllegalStateException ex) {
 			//			ex.printStackTrace();
 			LOGGER.info("Session not found. Creating a new session");
-			LOGGER.info(ex);
+			LOGGER.info(ex.getMessage(),ex);
 		}
 
 		if (session == null) {
@@ -64,8 +63,8 @@ public class TransactionalInterceptor {
 			object = pjp.proceed();
 		}
 		catch (Throwable e) {
-			LOGGER.error(e.getCause());
-			LOGGER.error(e.getStackTrace());
+			LOGGER.error(e.getCause(),e);
+			LOGGER.error(e.getMessage(),e);
 			if (isTransactionStarted && tx != null) {
 				tx.rollback();
 				LOGGER.info("Error thrown, transaction rolled back.");

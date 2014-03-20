@@ -52,6 +52,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private final String SITE = "site";
 
+	private final String VITAL_STATUS_DEATH = "Death";
+
 	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
 
 	@Override
@@ -100,7 +102,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			}
 			participant.setBirthDate(birthDate);
 			if (deathDate != null) {
-				if ((!"Death".equals(details.getVitalStatus()) || deathDate.before(birthDate))) {
+				if ((!VITAL_STATUS_DEATH.equals(details.getVitalStatus()) || deathDate.before(birthDate))) {
 					addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
 				}
 				participant.setDeathDate(deathDate);
@@ -120,14 +122,14 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setVitalStatus(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getVitalStatus())) {
-			isValidPv(details.getVitalStatus(), VITAL_STATUS);
+			addError(isValidPv(details.getVitalStatus(), VITAL_STATUS),ParticipantErrorCode.CONSTRAINT_VIOLATION,VITAL_STATUS);
 			participant.setVitalStatus(details.getVitalStatus());
 		}
 	}
 
 	private void setGender(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getGender())) {
-			isValidPv(details.getGender(), GENDER);
+			addError(isValidPv(details.getGender(), GENDER),ParticipantErrorCode.CONSTRAINT_VIOLATION,GENDER);
 			participant.setGender(details.getGender());
 		}
 	}
@@ -136,8 +138,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		Set<String> raceList = details.getRace();
 		if (raceList != null) {
 
-			String[] races = raceList.toArray(new String[0]);
+			String[] races = raceList.toArray(new String[raceList.size()]);
 			isValidPv(races, RACE);
+			addError(isValidPv(races, RACE),ParticipantErrorCode.CONSTRAINT_VIOLATION,RACE);
 			participant.setRaceColl(raceList);
 		}
 
@@ -146,6 +149,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	private void setEthnicity(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getEthnicity())) {
 			isValidPv(details.getEthnicity(), ETHNICITY);
+			addError(isValidPv(details.getEthnicity(), ETHNICITY),ParticipantErrorCode.CONSTRAINT_VIOLATION,ETHNICITY);
 			participant.setEthnicity(details.getEthnicity());
 		}
 	}
@@ -193,5 +197,11 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void addError(CatissueErrorCode event, String field) {
 		erroneousFields.add(new ErroneousField(event, field));
+	}
+	
+	private void addError(boolean isAddErro,CatissueErrorCode event, String field) {
+		if(isAddErro){
+			addError(event, field);
+		}
 	}
 }

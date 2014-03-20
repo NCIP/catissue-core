@@ -9,11 +9,12 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
@@ -22,19 +23,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private String ACTIVITY_STATUS_ACTIVE = "Active";
 
-	@Override
-	public Set<Specimen> createSpecimens(Collection<SpecimenRequirement> requirements, SpecimenCollectionGroup group) {
-		Set<Specimen> specimenCollection = new HashSet<Specimen>();
-		for (SpecimenRequirement specimenRequirement : requirements) {
-			
-			if (Constants.NEW_SPECIMEN.equals(specimenRequirement.getLineage())
-					&& !Status.ACTIVITY_STATUS_DISABLED.toString().equalsIgnoreCase(specimenRequirement.getActivityStatus())) {
-				
-				specimenCollection.add(this.getCorrespondingSpecimen(specimenRequirement, null, group));
-			}
-		}
-		return specimenCollection;
-	}
 
 	private void populateSpecimen(SpecimenRequirement requirement, Specimen specimen) {
 		specimen.setSpecimenType(requirement.getSpecimenType());
@@ -84,6 +72,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 
 		return newSpecimen;
+	}
+
+	@Override
+	public Specimen createSpecimen(SpecimenDetail specimenDetail, ObjectCreationException exceptionHandler) {
+		Specimen specimen = new Specimen();
+		return specimen;
 	}
 
 }

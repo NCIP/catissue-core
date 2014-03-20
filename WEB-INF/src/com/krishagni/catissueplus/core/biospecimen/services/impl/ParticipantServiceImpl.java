@@ -3,7 +3,11 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
@@ -29,9 +33,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	private final String SSN = "social security number";
 
+	private static final String PMI = "participant medical identifier";
+
 	private ObjectCreationException exceptionHandler;
-	
-//	CatissueException catissueException = new 
+
 	/**
 	 * Participant factory to create/update and perform all validations on participant details 
 	 */
@@ -57,14 +62,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
 		exceptionHandler = new ObjectCreationException();
 		try {
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(),exceptionHandler);
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(), exceptionHandler);
 			ensureUniqueSsn(participant.getSocialSecurityNumber());
+			ensureUniquePMI(participant.getPmiCollection());
 			exceptionHandler.checkErrorAndThrow();
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ParticipantCreatedEvent.ok(ParticipantDetail.fromDomain(participant));
 		}
 		catch (ObjectCreationException ce) {
-			return ParticipantCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(),ce.getErroneousFields());
+			return ParticipantCreatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return ParticipantCreatedEvent.serverError(e);
@@ -85,10 +91,11 @@ public class ParticipantServiceImpl implements ParticipantService {
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(),exceptionHandler);
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(), exceptionHandler);
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber());
+			ensureUniquePMI(participant.getPmiCollection());
 			exceptionHandler.checkErrorAndThrow();
-			
+
 			oldParticipant.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
 			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
@@ -120,7 +127,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ParticipantDeletedEvent.serverError(e);
 		}
 	}
-	
+
 	private void validateSsn(String oldSsn, String newSsn) {
 		if ((isBlank(oldSsn) && !isBlank(newSsn))) {
 			ensureUniqueSsn(newSsn);
@@ -133,9 +140,20 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	private void ensureUniqueSsn(String ssn) {
 		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			exceptionHandler.addError(ParticipantErrorCode.DUPLICATE_SSN	, SSN);
+			exceptionHandler.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
 		}
 	}
 
+	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection) {
+		//TODO: need to handle for update
+		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
+			String siteName = entry.getKey();
+			String mrn = entry.getValue().getMedicalRecordNumber();
+			if (daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
+				exceptionHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
+			}
+
+		}
+	}
 
 }

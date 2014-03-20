@@ -99,6 +99,11 @@
 			!= 'Disabled' order by
 			scg.collectionProtocolEvent.studyCalendarEventPoint
 		</query>
+		
+		<query name="getCprIdByBarcode">
+		  select cpr.id from CollectionProtocolRegistration cpr where cpr.barcode=:barcode
+		</query>
+		
 	</class>
 </hibernate-mapping>
 

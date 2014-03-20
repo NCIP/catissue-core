@@ -1,25 +1,15 @@
 
-package com.krishagni.catissueplus.core.biospecimen.domain;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.common.errors.CatissueException;
-import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
+public class ScgDetail {
 
-public class SpecimenCollectionGroup {
+	private Long cprId;
 
-	private final String ACTIVITY_STATUS_ACTIVE = "Active";
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
-
-	private final String COLLECTION_STATUS_PENDING = "Pending";
+	private Long cpeId;
 
 	private Long id;
 
@@ -31,7 +21,7 @@ public class SpecimenCollectionGroup {
 
 	private String activityStatus;
 
-	private Site collectionSite;
+	private String collectionSiteName;
 
 	private String collectionStatus;
 
@@ -41,7 +31,7 @@ public class SpecimenCollectionGroup {
 
 	private String surgicalPathologyNumber;
 
-	private User collector;
+	private String collectorName;
 
 	private Date collectionTimestamp;
 
@@ -51,7 +41,7 @@ public class SpecimenCollectionGroup {
 
 	private String collectionContainer;
 
-	private User receiver;
+	private String receiverName;
 
 	private Date receivedTimestamp;
 
@@ -59,11 +49,21 @@ public class SpecimenCollectionGroup {
 
 	private String receivedQuality;
 
-	private CollectionProtocolEvent collectionProtocolEvent;
+	public Long getCprId() {
+		return cprId;
+	}
 
-	private Set<Specimen> specimenCollection = new HashSet<Specimen>();
+	public void setCprId(Long cprId) {
+		this.cprId = cprId;
+	}
 
-	private CollectionProtocolRegistration collectionProtocolRegistration;
+	public Long getCpeId() {
+		return cpeId;
+	}
+
+	public void setCpeId(Long cpeId) {
+		this.cpeId = cpeId;
+	}
 
 	public Long getId() {
 		return id;
@@ -105,12 +105,12 @@ public class SpecimenCollectionGroup {
 		this.activityStatus = activityStatus;
 	}
 
-	public Site getCollectionSite() {
-		return collectionSite;
+	public String getCollectionSiteName() {
+		return collectionSiteName;
 	}
 
-	public void setCollectionSite(Site collectionSite) {
-		this.collectionSite = collectionSite;
+	public void setCollectionSiteName(String collectionSiteName) {
+		this.collectionSiteName = collectionSiteName;
 	}
 
 	public String getCollectionStatus() {
@@ -145,12 +145,12 @@ public class SpecimenCollectionGroup {
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	}
 
-	public User getCollector() {
-		return collector;
+	public String getCollectorName() {
+		return collectorName;
 	}
 
-	public void setCollector(User collector) {
-		this.collector = collector;
+	public void setCollectorName(String collectorName) {
+		this.collectorName = collectorName;
 	}
 
 	public Date getCollectionTimestamp() {
@@ -185,12 +185,12 @@ public class SpecimenCollectionGroup {
 		this.collectionContainer = collectionContainer;
 	}
 
-	public User getReceiver() {
-		return receiver;
+	public String getReceiverName() {
+		return receiverName;
 	}
 
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
 	}
 
 	public Date getReceivedTimestamp() {
@@ -217,62 +217,9 @@ public class SpecimenCollectionGroup {
 		this.receivedQuality = receivedQuality;
 	}
 
-	public CollectionProtocolEvent getCollectionProtocolEvent() {
-		return collectionProtocolEvent;
-	}
-
-	public void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent) {
-		this.collectionProtocolEvent = collectionProtocolEvent;
-	}
-
-	public Set<Specimen> getSpecimenCollection() {
-		return specimenCollection;
-	}
-
-	public void setSpecimenCollection(Set<Specimen> specimenCollection) {
-		this.specimenCollection = specimenCollection;
-	}
-
-	public CollectionProtocolRegistration getCollectionProtocolRegistration() {
-		return collectionProtocolRegistration;
-	}
-
-	public void setCollectionProtocolRegistration(CollectionProtocolRegistration collectionProtocolRegistration) {
-		this.collectionProtocolRegistration = collectionProtocolRegistration;
-	}
-
-	public void setActive() {
-		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
-	}
-
-	public void setCollectionStatusPending() {
-		this.setCollectionStatus(COLLECTION_STATUS_PENDING);
-	}
-
-	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
-	}
-
-	public void delete(boolean isIncludeChildren) {
-		if (isIncludeChildren) {
-			for (Specimen specimen : this.getSpecimenCollection()) {
-				specimen.delete(isIncludeChildren);
-			}
-		}
-		else {
-			checkActiveDependents();
-		}
-		this.setBarcode(Utility.getDisabledValue(barcode));
-		this.setName(Utility.getDisabledValue(name));
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
-	}
-
-	private void checkActiveDependents() {
-		for (Specimen specimen : this.getSpecimenCollection()) {
-			if (specimen.isActive()) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-			}
-		}
+	public static ScgDetail fromDomain(SpecimenCollectionGroup scg) {
+		ScgDetail detail = new ScgDetail();
+		return detail;
 	}
 
 }

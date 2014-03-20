@@ -16,4 +16,8 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 
 	public CollectionProtocolRegistration getCpr(Long cprId);
 
+	public boolean isBacodeUnique(String barcode);
+
+	public CollectionProtocolRegistration getCprByPpid(String ppid);
+
 }

@@ -8,4 +8,5 @@ public interface ParticipantDao extends Dao<Participant>{
 
 	public Participant getParticipant(Long id);
 	public boolean isSsnUnique(String socialSecurityNumber);
+	public boolean isPmiUnique(String siteName, String mrn);
 }

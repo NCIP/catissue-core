@@ -2,15 +2,17 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 
 public interface SpecimenService {
 
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
 
-	public void delete(DeleteSpecimenEvent event);
+	public SpecimenDeletedEvent delete(DeleteSpecimenEvent event);
+
+	public SpecimenCreatedEvent createSpecimen(CreateSpecimenEvent event);
 }

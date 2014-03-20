@@ -21,7 +21,18 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 		return query.list().isEmpty() ? true : false;
 	}
 
+	@Override
+	public boolean isPmiUnique(String siteName, String mrn) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PMI_ID_BY_SITE_MRN);
+		query.setString("siteName", siteName);
+		query.setString("mrn", mrn);
+		return query.list().isEmpty() ? true : false;
+	}
+
 	private static final String FQN = Participant.class.getName();
 
 	private static final String GET_PARTICIPANT_ID_BY_SSN = FQN + ".getParticipantIdBySSN";
+
+	private static final String GET_PMI_ID_BY_SITE_MRN = FQN + ".getPmiIdBySiteMrn";
+
 }

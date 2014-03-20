@@ -12,4 +12,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public List<SpecimenInfo> getSpecimensList(Long scgId);
 
 	public Long getScgId(Long specimenId);
+
+	public Specimen getSpecimen(Long id);
 }

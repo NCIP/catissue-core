@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -298,6 +299,14 @@ public class Specimen {
 		else {
 			checkActiveDependents();
 		}
+		if(specimenPosition!=null)
+		{
+			specimenPosition.setSpecimen(null);
+			this.setSpecimenPosition(null);
+		}
+		
+		this.setBarcode(Utility.getDisabledValue(barcode));
+		this.setLabel(Utility.getDisabledValue(label));
 		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 

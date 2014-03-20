@@ -1,8 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import java.util.ArrayList;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,11 +14,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -26,7 +24,6 @@ import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.User;
 
@@ -40,22 +37,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
 
-	private ParticipantFactory participantFactory;
-
-	private SpecimenCollectionGroupFactory scgFactory;
-
 	private List<ErroneousField> erroneousFields;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
-	}
-
-	public void setParticipantFactory(ParticipantFactory participantFactory) {
-		this.participantFactory = participantFactory;
-	}
-
-	public void setScgFactory(SpecimenCollectionGroupFactory scgFactory) {
-		this.scgFactory = scgFactory;
 	}
 
 	/**
@@ -77,7 +62,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		//		participant.getCprCollection().put(registration.getCollectionProtocol().getTitle(), registration);
 		setPPId(registration, detail);
 		setConsentsDuringRegistration(registration, detail);
-		createAnticipatedScgs(registration);
 		exception.addError(this.erroneousFields);
 		return registration;
 	}
@@ -202,24 +186,6 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (consentDate != null) {
 			registration.setConsentSignatureDate(consentDate);
 		}
-	}
-
-	/**
-	 * Populate the Specimen Collection Group collection for the collection protocol registration
-	 * @param registration instance of CollectionProtocolRegistration
-	 */
-	private void createAnticipatedScgs(CollectionProtocolRegistration registration) {
-		Collection<CollectionProtocolEvent> cpeColl = registration.getCollectionProtocol()
-				.getCollectionProtocolEventCollection();
-		Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = cpeColl.iterator();
-		Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
-		while (collectionProtocolEventIterator.hasNext()) {
-			CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator.next();
-			if (collectionProtocolEvent.isActive()) {
-				scgCollection.add(scgFactory.createScg(registration, collectionProtocolEvent));
-			}
-		}
-		registration.setScgCollection(scgCollection);
 	}
 
 	private void addError(CatissueErrorCode event, String field) {

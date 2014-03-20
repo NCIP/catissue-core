@@ -112,6 +112,7 @@ public class CollectionProtocolRegistrationController {
 		return null;
 	}
 	
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);		
 	}

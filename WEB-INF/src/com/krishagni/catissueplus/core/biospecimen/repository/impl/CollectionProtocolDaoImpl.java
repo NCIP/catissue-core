@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
@@ -37,16 +38,26 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 
 	@Override
 	public CollectionProtocol getCollectionProtocol(Long cpId) {
-		return (CollectionProtocol)sessionFactory.getCurrentSession().get(CollectionProtocol.class.getName(), cpId);
+		return (CollectionProtocol) sessionFactory.getCurrentSession().get(CollectionProtocol.class.getName(), cpId);
 	}
 
 	@Override
 	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
-		return true;
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPID_BY_PPID_AND_CPID);
+		query.setString("ppid", protocolParticipantIdentifier);
+		query.setLong("cpId", cpId);
+		return query.list().isEmpty() ? true : false;
+	}
+
+	@Override
+	public CollectionProtocolEvent getCpe(Long cpeId) {
+		return (CollectionProtocolEvent) sessionFactory.getCurrentSession().get(CollectionProtocolEvent.class, cpeId);
 	}
 
 	private static final String FQN = CollectionProtocol.class.getName();
 
 	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
+
+	private static final String GET_CPID_BY_PPID_AND_CPID = FQN + ".getCpIdByPpid";
 
 }
