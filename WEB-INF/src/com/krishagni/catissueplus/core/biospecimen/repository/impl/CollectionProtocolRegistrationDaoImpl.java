@@ -93,6 +93,14 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 				CollectionProtocolRegistration.class, cprId);
 	}
 
+	@Override
+	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPID_BY_PPID_AND_CPID);
+		query.setString("ppid", protocolParticipantIdentifier);
+		query.setLong("cpId", cpId);
+		return query.list().isEmpty() ? true : false;
+	}
+
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
 
 	private static final String GET_PARTICIPANTS_BY_CP_ID = FQN + ".getParticipantsByCpId";
@@ -102,6 +110,8 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	private static final String GET_COLLECTION_GROUPSBY_CPR_ID = FQN + ".getCollectionGroupsByCprId";
 
 	private static final String GET_CPR_ID_BY_BARCODE = FQN + ".getCprIdByBarcode";
+
+	private static final String GET_CPID_BY_PPID_AND_CPID = FQN + ".getCprIdByPpid";
 
 	//	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "
 	//			+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"

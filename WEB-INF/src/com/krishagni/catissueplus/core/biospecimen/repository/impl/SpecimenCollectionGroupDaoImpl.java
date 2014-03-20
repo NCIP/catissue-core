@@ -78,19 +78,18 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 			linkParentChildSpecimens(specimensMap, childSpecimens);
 		}
 	}
-
-	//	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
-	//			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
-	//			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.specimenCollectionGroup.id = :scgId"
-	//			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
-	//			+ "' and sp.parentSpecimen.id is null order by sp.id";
+	
+	@Override
+	public SpecimenCollectionGroup getscg(Long id) {
+		return (SpecimenCollectionGroup)sessionFactory.getCurrentSession().get(SpecimenCollectionGroup.class, id);
+	}
 
 	private static final String FQN = SpecimenCollectionGroup.class.getName();
-
-	private static final String GET_SCG_BY_ID = FQN + ".getScgById";
 
 	private static final String GET_SCG_ID_BY_BARCODE = FQN + ".getScgIdByBarcode";
 
 	private static final String GET_SCG_ID_BY_NAME = FQN + ".getScgIdByName";
+
+	
 
 }

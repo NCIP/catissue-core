@@ -42,14 +42,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	@Override
-	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPID_BY_PPID_AND_CPID);
-		query.setString("ppid", protocolParticipantIdentifier);
-		query.setLong("cpId", cpId);
-		return query.list().isEmpty() ? true : false;
-	}
-
-	@Override
 	public CollectionProtocolEvent getCpe(Long cpeId) {
 		return (CollectionProtocolEvent) sessionFactory.getCurrentSession().get(CollectionProtocolEvent.class, cpeId);
 	}
@@ -57,7 +49,5 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String FQN = CollectionProtocol.class.getName();
 
 	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
-
-	private static final String GET_CPID_BY_PPID_AND_CPID = FQN + ".getCpIdByPpid";
 
 }

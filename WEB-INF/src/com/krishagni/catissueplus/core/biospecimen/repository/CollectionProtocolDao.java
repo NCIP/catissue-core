@@ -14,7 +14,5 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
 	public CollectionProtocol getCollectionProtocol(Long cpId);
 	
-	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier);
-
 	public CollectionProtocolEvent getCpe(Long cpeId);
 }

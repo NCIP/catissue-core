@@ -147,16 +147,16 @@ public class CollectionProtocolRegistration {
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			for (SpecimenCollectionGroup scg : this.getScgCollection()) {
+			for (SpecimenCollectionGroup scg : this.scgCollection) {
 				scg.delete(isIncludeChildren);
 			}
 		}
 		else {
 			checkActiveDependents();
 		}
-		this.setBarcode(Utility.getDisabledValue(this.getBarcode()));
-		this.setProtocolParticipantIdentifier(Utility.getDisabledValue(protocolParticipantIdentifier));
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		setBarcode(Utility.getDisabledValue(this.barcode));
+		setProtocolParticipantIdentifier(Utility.getDisabledValue(this.protocolParticipantIdentifier));
+		setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
 	private void checkActiveDependents() {

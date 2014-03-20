@@ -1,18 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.MapUpdater;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
@@ -235,29 +231,29 @@ public class Participant {
 	}
 
 	private void updateRace(Participant participant) {
-		SetUpdater.<String> newInstance().update(raceColl, participant.getRaceColl());
+		SetUpdater.<String> newInstance().update(this.raceColl, participant.getRaceColl());
 	}
 
 	private void updatePmi(Participant participant) {
-		MapUpdater.<String, ParticipantMedicalIdentifier> newInstance().update(pmiCollection,
+		MapUpdater.<String, ParticipantMedicalIdentifier> newInstance().update(this.pmiCollection,
 				participant.getPmiCollection());
 	}
 
 	public void updateActivityStatus(String activityStatus) {
-		this.setActivityStatus(activityStatus);
+		setActivityStatus(activityStatus);
 	}
 
 	public void setActive()
 	{
-		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+		setActivityStatus(ACTIVITY_STATUS_ACTIVE);
 	}
 	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+		return ACTIVITY_STATUS_ACTIVE.equals(this.activityStatus);
 	}
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			Map<String, CollectionProtocolRegistration> registrationCollection = this.getCprCollection();
+			Map<String, CollectionProtocolRegistration> registrationCollection = this.cprCollection;
 			for (CollectionProtocolRegistration cpr : registrationCollection.values()) {
 				cpr.delete(isIncludeChildren);
 			}
@@ -265,13 +261,13 @@ public class Participant {
 		else {
 			checkActiveDependents();
 		}
-		this.setSocialSecurityNumber(Utility.getDisabledValue(socialSecurityNumber));
+		setSocialSecurityNumber(Utility.getDisabledValue(this.socialSecurityNumber));
 		updateMrn();
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
 	private void updateMrn() {
-		Iterator<ParticipantMedicalIdentifier> entries = pmiCollection.values().iterator();
+		Iterator<ParticipantMedicalIdentifier> entries = this.pmiCollection.values().iterator();
 		while (entries.hasNext()) {
 			ParticipantMedicalIdentifier pmi = entries.next();
 			pmi.setMedicalRecordNumber(Utility.getDisabledValue(pmi.getMedicalRecordNumber()));
@@ -279,7 +275,7 @@ public class Participant {
 	}
 
 	private void checkActiveDependents() {
-			for (CollectionProtocolRegistration cpr : this.getCprCollection().values()) {
+			for (CollectionProtocolRegistration cpr : this.cprCollection.values()) {
 				if (cpr.isActive()) {
 					throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 				}

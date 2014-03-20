@@ -50,16 +50,15 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		}
 	}
 
-	//	private String ACTIVITY_STATUS_DISABLED = "Disabled";
-	//
-	//	private String hql = "select sp.id,sp.label,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, "
-	//			+ "spr.specimenRequirementLabel from " + Specimen.class.getName()
-	//			+ " as sp left outer join sp.specimenRequirement as spr " + " where sp.parentSpecimen.id = :parentSpecimenId"
-	//			+ " and sp.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by sp.id";
+	@Override
+	public Specimen getSpecimen(Long id) {
+		return (Specimen)sessionFactory.getCurrentSession().get(Specimen.class, id);
+	}
 
 	private static String FQN = Specimen.class.getName();
 
 	private static String GET_SCG_ID_BY_SPECIMEN_ID = FQN + ".getScgIdBySpecimenId";
 
 	private static String GET_SPECIMEN_DETAILS_DY_SCG_ID = FQN + ".getSpecimenDetailsByScgId";
+
 }

@@ -250,25 +250,25 @@ public class SpecimenCollectionGroup {
 	}
 
 	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+		return ACTIVITY_STATUS_ACTIVE.equals(this.activityStatus);
 	}
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
-			for (Specimen specimen : this.getSpecimenCollection()) {
+			for (Specimen specimen : this.specimenCollection) {
 				specimen.delete(isIncludeChildren);
 			}
 		}
 		else {
 			checkActiveDependents();
 		}
-		this.setBarcode(Utility.getDisabledValue(barcode));
-		this.setName(Utility.getDisabledValue(name));
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		setBarcode(Utility.getDisabledValue(barcode));
+		setName(Utility.getDisabledValue(name));
+		setActivityStatus(ACTIVITY_STATUS_DISABLED);
 	}
 
 	private void checkActiveDependents() {
-		for (Specimen specimen : this.getSpecimenCollection()) {
+		for (Specimen specimen : this.specimenCollection) {
 			if (specimen.isActive()) {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}

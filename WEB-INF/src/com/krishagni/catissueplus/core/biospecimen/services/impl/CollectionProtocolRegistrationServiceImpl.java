@@ -114,7 +114,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 
 	private void ensureUniquePpid(CollectionProtocolRegistration registration) {
-		if (!daoFactory.getCollectionProtocolDao().isPpidUniqueForProtocol(registration.getCollectionProtocol().getId(),
+		if (!daoFactory.getCprDao().isPpidUniqueForProtocol(registration.getCollectionProtocol().getId(),
 				registration.getProtocolParticipantIdentifier())) {
 			exception.addError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
 		}

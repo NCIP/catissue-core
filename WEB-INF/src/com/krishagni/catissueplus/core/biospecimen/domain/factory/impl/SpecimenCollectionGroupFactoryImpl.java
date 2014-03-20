@@ -117,7 +117,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setName(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
-		if (isBlank(scgDetail.getName())) {//mandatory if activity status is active
+		if (scg.isActive() && isBlank(scgDetail.getName())) {
 			addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
 			return;
 		}

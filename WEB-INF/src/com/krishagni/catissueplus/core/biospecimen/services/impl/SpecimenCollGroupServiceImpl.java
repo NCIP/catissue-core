@@ -25,14 +25,15 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	private DaoFactory daoFactory;
 
 	private SpecimenCollectionGroupFactory scgFactory;
-	
+
 	private static final String NAME = "name";
+
 	private static final String BARCODE = "barcode";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-	
+
 	ObjectCreationException exceptionHandler;
 
 	@Override
@@ -50,35 +51,19 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	@PlusTransactional
 	public ScgCreatedEvent createScg(CreateScgEvent scgEvent) {
-		try{
-		SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail(),exceptionHandler);
-		ensureUniqueBarcode(scg);
-		ensureUniqueName(scg);
-		exceptionHandler.checkErrorAndThrow();
-		daoFactory.getScgDao().saveOrUpdate(scg);
-		return ScgCreatedEvent.ok(ScgDetail.fromDomain(scg));
+		try {
+			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail(), exceptionHandler);
+			ensureUniqueBarcode(scg);
+			ensureUniqueName(scg);
+			exceptionHandler.checkErrorAndThrow();
+			daoFactory.getScgDao().saveOrUpdate(scg);
+			return ScgCreatedEvent.ok(ScgDetail.fromDomain(scg));
 		}
-		catch(ObjectCreationException oce){
-			return ScgCreatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(),oce.getErroneousFields());
+		catch (ObjectCreationException oce) {
+			return ScgCreatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
 		}
-		catch(Exception ex)
-		{
+		catch (Exception ex) {
 			return ScgCreatedEvent.serverError(ex);
-		}
-	}
-
-
-	private void ensureUniqueName(SpecimenCollectionGroup scg) {
-		if(!daoFactory.getScgDao().isNameUnique(scg.getName()))
-		{
-			exceptionHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
-		}
-	}
-
-	private void ensureUniqueBarcode(SpecimenCollectionGroup scg) {
-		if(!daoFactory.getScgDao().isBarcodeUnique(scg.getBarcode()))
-		{
-			exceptionHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
@@ -99,6 +84,18 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		}
 		catch (Exception e) {
 			return ScgDeletedEvent.serverError(e);
+		}
+	}
+
+	private void ensureUniqueName(SpecimenCollectionGroup scg) {
+		if (!daoFactory.getScgDao().isNameUnique(scg.getName())) {
+			exceptionHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
+		}
+	}
+
+	private void ensureUniqueBarcode(SpecimenCollectionGroup scg) {
+		if (!daoFactory.getScgDao().isBarcodeUnique(scg.getBarcode())) {
+			exceptionHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
