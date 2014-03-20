@@ -67,8 +67,7 @@ public class UserServiceImpl implements UserService {
 				return UserUpdatedEvent.notFound(userId);
 			}
 			User user = userFactory.createUser(event.getUserDetails(), exceptionHandler);
-			ensureUniqueEmailAddress(user.getEmailAddress());
-			validateLoginName(oldUser, user);
+			validateFields(oldUser, user);
 			exceptionHandler.checkErrorAndThrow();
 			
 			oldUser.update(user);
@@ -107,9 +106,11 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private void validateLoginName(User oldUser, User newUser) {
+	private void validateFields(User oldUser, User newUser) {
 		if(!oldUser.getLoginName().equals(newUser.getLoginName())) {
 			exceptionHandler.addError(UserErrorCode.CHANGE_IN_LOGIN_NAME, LOGIN_NAME);
+		} else if (!oldUser.getEmailAddress().equals(newUser.getEmailAddress())) {
+			ensureUniqueEmailAddress(newUser.getEmailAddress());
 		}
 	}
 	
