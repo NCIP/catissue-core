@@ -180,6 +180,7 @@ public class UserDetails {
 	public static UserDetails fromDomain(User user) {
 		UserDetails dto = new UserDetails();
 		
+		dto.setLoginName(user.getLoginName());
 		dto.setFirstName(user.getFirstName());
 		dto.setLastName(user.getLastName());
 		dto.setDeptName(user.getDepartment().getName());
