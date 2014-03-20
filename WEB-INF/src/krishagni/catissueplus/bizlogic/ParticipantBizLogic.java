@@ -5,17 +5,20 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import krishagni.catissueplus.dao.CollectionProtocolDAO;
 import krishagni.catissueplus.dao.ParticipantDAO;
+import krishagni.catissueplus.dao.SCGDAO;
+import krishagni.catissueplus.dao.CollectionProtocolRegistrationDAO;
 import krishagni.catissueplus.dto.CollectionProtocolRegistrationDTO;
 import krishagni.catissueplus.dto.ConsentResponseDTO;
 import krishagni.catissueplus.dto.ConsentTierDTO;
 import krishagni.catissueplus.dto.MedicalIdentifierDTO;
 import krishagni.catissueplus.dto.ParticipantDetailsDTO;
+import krishagni.catissueplus.dto.ParticipantResponseStatusEnum;
 import krishagni.catissueplus.dto.ParticpantResponseDTO;
-import krishagni.catissueplus.dto.ParticpantResponseDTO.StatusEnum;
 import krishagni.catissueplus.dao.SiteDAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -28,33 +31,35 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 
 public class ParticipantBizLogic
 {
 
-    public ParticpantResponseDTO registerParticipantFromDTO(String userName, ParticipantDetailsDTO participantDTO) throws SQLException,
-            ApplicationException
+    public ParticpantResponseDTO updateParticipantFromDTO(String userName, ParticipantDetailsDTO participantDTO)
+            throws SQLException, ApplicationException
     {
         Participant participant = null;
         edu.wustl.catissuecore.bizlogic.ParticipantBizLogic participantBizLogic = new edu.wustl.catissuecore.bizlogic.ParticipantBizLogic();
         ParticipantDAO participantDAO = new ParticipantDAO();
-        participantDAO.populateParticipantId(participantDTO);
+        populateParticipantId(participantDTO);
         ParticpantResponseDTO particpantResponseDTO = new ParticpantResponseDTO();
         if (participantDTO.getId() != null)
         {
-            participant = getParticipantById(participantDTO.getId());
+            participant = participantDAO.getParticipantById(participantDTO.getId()); // sri:move method to dao
             populateParticipant(participantDTO, participant);
             participantBizLogic.updateParticipant(userName, participant);
-            particpantResponseDTO.setStatusEnum(StatusEnum.MODIFIED);
+            particpantResponseDTO.setParticipantResponseStatusEnum(ParticipantResponseStatusEnum.MODIFIED);
         }
         else
         {
             participant = new Participant();
             populateParticipant(participantDTO, participant);
+            participant.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
             participantBizLogic.registerParticipant(userName, participant);
-            particpantResponseDTO.setStatusEnum(StatusEnum.ADDED);
+            particpantResponseDTO.setParticipantResponseStatusEnum(ParticipantResponseStatusEnum.ADDED);
             participantDTO.setId(participant.getId());
         }
         particpantResponseDTO.setParticipantDetailsDTO(participantDTO);
@@ -99,7 +104,7 @@ public class ParticipantBizLogic
         {
             participant.setDeathDate(participantDTO.getDeathDate());
         }
-        if(participantDTO.getEthnicity()!=null)
+        if (participantDTO.getEthnicity() != null)
         {
             participant.setEthnicity(participantDTO.getEthnicity());
         }
@@ -189,9 +194,12 @@ public class ParticipantBizLogic
             Participant participant) throws SQLException, ApplicationException
     {
         CollectionProtocol cp = new CollectionProtocol();
-        if(cprDTOObj.getCpId()==null){
+        if (cprDTOObj.getCpId() == null)
+        {
             cp.setId((new CollectionProtocolDAO()).getCPID(cprDTOObj));
-        }else{
+        }
+        else
+        {
             cp.setId(cprDTOObj.getCpId());
         }
         CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
@@ -226,10 +234,11 @@ public class ParticipantBizLogic
                 }
 
             }
-            if(consentTierResponse.getResponse()==null){
+            if (consentTierResponse.getResponse() == null)
+            {
                 consentTierResponse.setResponse(Constants.NOT_SPECIFIED);
             }
-            
+
             ConsentTier consentTier = new ConsentTier();
             consentTier.setId(consentTierDtoList.get(i).getId());
             consentTierResponse.setConsentTier(consentTier);
@@ -278,7 +287,13 @@ public class ParticipantBizLogic
         return race;
     }
 
-    public void populateMrnList(List<MedicalIdentifierDTO> mrnDTOList, Participant participant) throws SQLException, ApplicationException
+    public static void init(List<MedicalIdentifierDTO> mrnDTOList, Participant participant)throws Exception{
+        ParticipantBizLogic partBizlogic = new ParticipantBizLogic();
+        partBizlogic.populateMrnList(mrnDTOList, participant);
+    }
+    
+    public void populateMrnList(List<MedicalIdentifierDTO> mrnDTOList, Participant participant) throws SQLException,
+            ApplicationException
     {
         Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
                 .getParticipantMedicalIdentifierCollection();
@@ -292,8 +307,32 @@ public class ParticipantBizLogic
             }
 
         }
+        
+        Collection<ParticipantMedicalIdentifier> deleteMRNCollection = new LinkedHashSet<ParticipantMedicalIdentifier>();
+        Iterator<ParticipantMedicalIdentifier> itr = participantMedicalIdentifierCollection.iterator();
+        while (itr.hasNext())
+        {
+            ParticipantMedicalIdentifier mrnObj = itr.next();
+            boolean mrnFoundFlag = false;
+            for (int i = 0; i < mrnDTOList.size(); i++)
+            {
+                if (mrnObj.getId()==null || mrnDTOList.get(i).getSiteName().equals(mrnObj.getSite().getName()))
+                {
+                    mrnFoundFlag = true;
+                    break;
+                }
+            }
+            if (!mrnFoundFlag)
+            {
+                deleteMRNCollection.add(mrnObj);
+            }
 
+        }
+        
+        participantMedicalIdentifierCollection.removeAll(deleteMRNCollection);
+        
     }
+   
 
     private boolean checkAndUpdateMRN(Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection,
             MedicalIdentifierDTO mrnDTOObj)
@@ -303,8 +342,9 @@ public class ParticipantBizLogic
         while (mrnItr.hasNext())
         {
             ParticipantMedicalIdentifier mrnObj = mrnItr.next();
-            if ((mrnDTOObj.getSiteId()!=null && mrnObj.getSite().getId().compareTo(mrnDTOObj.getSiteId()) == 0)
-                    || (mrnObj.getSite().getName()!=null && mrnObj.getSite().getName().equals(mrnDTOObj.getSiteName())))
+            if ((mrnDTOObj.getSiteId() != null && mrnObj.getSite().getId().compareTo(mrnDTOObj.getSiteId()) == 0)
+                    || (mrnObj.getSite()!=null && mrnObj.getSite().getName() != null && mrnObj.getSite().getName()
+                            .equals(mrnDTOObj.getSiteName())))
             {
                 mrnObj.setMedicalRecordNumber(mrnDTOObj.getMrnValue());
                 result = true;
@@ -312,8 +352,49 @@ public class ParticipantBizLogic
             }
 
         }
+        
         return result;
 
+    }
+    
+    public void deleteMRN(Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection,
+            List<MedicalIdentifierDTO> mrnDTOList) throws ApplicationException
+    {
+        HibernateDAO hibernateDAO = null;
+        try
+        {
+            hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
+            
+            Collection<ParticipantMedicalIdentifier> deleteMRNCollection = new LinkedHashSet<ParticipantMedicalIdentifier>();
+            Iterator<ParticipantMedicalIdentifier> itr = participantMedicalIdentifierCollection.iterator();
+            while (itr.hasNext())
+            {
+                ParticipantMedicalIdentifier mrnObj = itr.next();
+                boolean mrnFoundFlag = false;
+                for (int i = 0; i < mrnDTOList.size(); i++)
+                {
+                    if (mrnDTOList.get(i).getSiteName().equals(mrnObj.getSite().getName()))
+                    {
+                        mrnFoundFlag = true;
+                        break;
+                    }
+                }
+                if (!mrnFoundFlag)
+                {
+                    new ParticipantDAO().deleteMRN(mrnObj, hibernateDAO);
+//                    hibernateDAO.delete(mrnObj);
+                }
+
+            }
+            hibernateDAO.commit();
+        }
+        finally
+        {
+            if (hibernateDAO != null)
+            {
+                AppUtility.closeDAOSession(hibernateDAO);
+            }
+        }
     }
 
     private ParticipantMedicalIdentifier getParticipantMedicalIdentifier(MedicalIdentifierDTO mrnDTOObj,
@@ -323,80 +404,81 @@ public class ParticipantBizLogic
         participantMedicalIdentifier.setMedicalRecordNumber(mrnDTOObj.getMrnValue());
         participantMedicalIdentifier.setParticipant(participant);
         Site site = new Site();
-        if(mrnDTOObj.getSiteId()==null){
+        if (mrnDTOObj.getSiteId() == null)
+        {
             site.setId((new SiteDAO()).getSiteIdByName(mrnDTOObj.getSiteName()));
-        }else{
+            site.setName(mrnDTOObj.getSiteName());
+        }
+        else
+        {
             site.setId(mrnDTOObj.getSiteId());
         }
         participantMedicalIdentifier.setSite(site);
         return participantMedicalIdentifier;
     }
 
-    public Participant getParticipantById(Long id) throws ApplicationException
+    public boolean hasSpecimen(Long participantId) throws ApplicationException //sri: move to dao
     {
-        HibernateDAO hibernateDao = null;
-        Participant participant = null;
-        try
-        {
-            hibernateDao = (HibernateDAO) AppUtility.openDAOSession(null);
-            participant = (Participant) hibernateDao.retrieveById(Participant.class.getName(), id);
-        }
-        finally
-        {
-            AppUtility.closeDAOSession(hibernateDao);
-        }
-        return participant;
-    }
-    
-  /*  public void mergeParticipant(HibernateDAO hibernateDAO,Long primaryParticipantID, Long secondaryParticipantID) throws DAOException{
-        CollectionProtocolRegistrationDAO cprDAO = new  CollectionProtocolRegistrationDAO();
-        List<CollectionProtocolRegistrationDTO> primaryPartCPRDTOList = cprDAO.getCprDTOListByParticipantID(hibernateDAO, primaryParticipantID);
-        List<CollectionProtocolRegistrationDTO> secondaryPartCPRDTOList = cprDAO.getCprDTOListByParticipantID(hibernateDAO, secondaryParticipantID);
-        
-        for(int i=0;i<secondaryPartCPRDTOList.size();i++){
-            CollectionProtocolRegistrationDTO secCPRObj = secondaryPartCPRDTOList.get(i);
-            CollectionProtocolRegistrationDTO priCPRObj = getCPRFromSameCP(primaryPartCPRDTOList,secCPRObj);
-            if(priCPRObj!=null){
-                mergeSCGOfCPR(hibernateDAO,priCPRObj.getCprId(),secCPRObj.getCprId());
-            }else{
-                Long cprID = secondaryPartCPRDTOList.get(i).getCprId();
-                cprDAO.updateCPRParticipantID(hibernateDAO,cprID,primaryParticipantID);
-            }
-        }
-        ParticipantDAO participantDAO = new ParticipantDAO();
-        participantDAO.updateParticipantActivitStatus(hibernateDAO, secondaryParticipantID, Constants.ACTIVITY_STATUS_CLOSED);
-        
-    }
-    
-    public void mergeSCGOfCPR(HibernateDAO hibernateDAO,Long primaryCprId,Long secondaryCprId) throws DAOException{
-        SCGDAO scgDAO = new  SCGDAO();
-        List<Long> scgIDList = scgDAO.getSCGIDListFromCPRID(secondaryCprId,hibernateDAO);
-        for(int i = 0 ;i< scgIDList.size();i++){
-            scgDAO.updateScgWithCprID(hibernateDAO,primaryCprId,scgIDList.get(i));
-        }        
-    }
-    public CollectionProtocolRegistrationDTO getCPRFromSameCP(List<CollectionProtocolRegistrationDTO> cprDTOList,CollectionProtocolRegistrationDTO cprDTO){
-        for(int i=0; i < cprDTOList.size();i++){
-           CollectionProtocolRegistrationDTO priCPRObj = cprDTOList.get(i);
-           if(priCPRObj.getCprId().compareTo(cprDTO.getCprId())==0 && priCPRObj.getCpId().compareTo(cprDTO.getCpId())==0){
-               return priCPRObj;
-           }
-        }
-        return null;
-    }
-    
-    
-    public static void executeMethod(){
-        
-        HibernateDAO hibernateDAO = null;
 
+        HibernateDAO hibernateDAO = null;
+        boolean result = false;
         try
         {
             hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
-            ParticipantBizLogic bizlogic = new ParticipantBizLogic();
-            bizlogic.mergeParticipant(hibernateDAO,1l,2l);
-        }catch(Exception ex){
-            
+            ParticipantDAO participantDAO = new ParticipantDAO();
+            result = participantDAO.hasSpecimen(hibernateDAO, participantId);
         }
-    }*/
+        finally
+        {
+            if (hibernateDAO != null)
+            {
+                AppUtility.closeDAOSession(hibernateDAO);
+            }
+        }
+        return result;
+    }
+    
+    public void populateParticipantId(ParticipantDetailsDTO participantDetailsDTO) throws ApplicationException
+    {
+        Long participantId = null;
+        if(participantDetailsDTO.getId()!=null){
+            return;
+        }
+        if (participantDetailsDTO.getMedicalIdentifierList() != null
+                && !participantDetailsDTO.getMedicalIdentifierList().isEmpty())
+        {
+            for (int i = 0; i < participantDetailsDTO.getMedicalIdentifierList().size(); i++)
+            {
+                MedicalIdentifierDTO medicalIdentifierDTO = participantDetailsDTO.getMedicalIdentifierList().get(i);
+                participantId = new ParticipantDAO().getParticipantIdFromMRN(medicalIdentifierDTO.getMrnValue(),
+                        medicalIdentifierDTO.getSiteName());
+                if (participantId != null)
+                {
+                    break;
+                }
+
+            }
+            participantDetailsDTO.setId(participantId);
+        }
+    }
+   public void populateCPTitlePPID(ParticipantDetailsDTO participantDetailsDTO) throws ApplicationException{
+       HibernateDAO hibernateDAO = null;
+       try
+       {
+           hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(null);
+           ParticipantDAO participantDAO = new ParticipantDAO();
+           participantDAO.populateCPTitlePPID(hibernateDAO, participantDetailsDTO);
+           
+       }
+       finally
+       {
+           if (hibernateDAO != null)
+           {
+               AppUtility.closeDAOSession(hibernateDAO);
+           }
+       }
+   }
+   public void deleteParticipantMrn(){
+       
+   }
 }

@@ -5,13 +5,23 @@ import krishagni.catissueplus.dto.ParticipantDetailsDTO;
 
 public class ParticpantResponseDTO
 {
-    public enum StatusEnum {
-        ADDED,MODIFIED,ERROR 
-    }
     private ParticipantDetailsDTO  participantDetailsDTO;
-    private StatusEnum statusEnum;
+    private ParticipantDetailsDTO  mergeFromParticipantDetailsDTO;
+    private ParticipantResponseStatusEnum participantResponseStatusEnum;
     private String message;
     
+    
+    public ParticipantDetailsDTO getMergeFromParticipantDetailsDTO()
+    {
+        return mergeFromParticipantDetailsDTO;
+    }
+
+    
+    public void setMergeFromParticipantDetailsDTO(ParticipantDetailsDTO mergeFromParticipantDetailsDTO)
+    {
+        this.mergeFromParticipantDetailsDTO = mergeFromParticipantDetailsDTO;
+    }
+
     public ParticipantDetailsDTO getParticipantDetailsDTO()
     {
         return participantDetailsDTO;
@@ -22,15 +32,6 @@ public class ParticpantResponseDTO
         this.participantDetailsDTO = participantDetailsDTO;
     }
     
-    public StatusEnum getStatusEnum()
-    {
-        return statusEnum;
-    }
-    
-    public void setStatusEnum(StatusEnum statusEnum)
-    {
-        this.statusEnum = statusEnum;
-    }
     
     public String getMessage()
     {
@@ -40,6 +41,19 @@ public class ParticpantResponseDTO
     public void setMessage(String message)
     {
         this.message = message;
+    }
+
+    
+    public ParticipantResponseStatusEnum getParticipantResponseStatusEnum()
+    {
+        return participantResponseStatusEnum;
+    }
+
+
+    
+    public void setParticipantResponseStatusEnum(ParticipantResponseStatusEnum participantResponseStatusEnum)
+    {
+        this.participantResponseStatusEnum = participantResponseStatusEnum;
     }
     
 }

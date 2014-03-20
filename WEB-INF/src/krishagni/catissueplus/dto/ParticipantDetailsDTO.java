@@ -31,8 +31,38 @@ public class ParticipantDetailsDTO
     private String empiId;
     private String lookUpMRNNumber;
     private String lookUpSiteName;
+    private String ppidsString;//This is comma separated List
+    private String cpTitles;//This are the comma separated List
     
     
+    
+    public String getPpidsString()
+    {
+        return ppidsString;
+    }
+
+
+    
+    public void setPpidsString(String ppidsString)
+    {
+        this.ppidsString = ppidsString;
+    }
+
+
+    
+    public String getCpTitles()
+    {
+        return cpTitles;
+    }
+
+
+    
+    public void setCpTitles(String cpTitles)
+    {
+        this.cpTitles = cpTitles;
+    }
+
+
     public String getLookUpMRNNumber()
     {
         return lookUpMRNNumber;

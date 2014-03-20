@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import krishagni.catissueplus.dao.ParticipantDAO;
+
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
@@ -357,13 +359,42 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				disableObject(dao, participant);
 			}
+			
+			 Iterator<ParticipantMedicalIdentifier> oldMrnitr = oldParticipant.getParticipantMedicalIdentifierCollection().iterator();
+	            while (oldMrnitr.hasNext())
+	            {
+	                ParticipantMedicalIdentifier oldMRNObj = oldMrnitr.next();
+	                boolean mrnFoundFlag = false;
+	                Iterator<ParticipantMedicalIdentifier> newMrnitr = participant.getParticipantMedicalIdentifierCollection().iterator();
+	               while(newMrnitr.hasNext())
+	                {
+	                   ParticipantMedicalIdentifier newMRNObj = newMrnitr.next();
+	                    if (oldMRNObj!=null && newMRNObj!=null && oldMRNObj.getId().compareTo(newMRNObj.getId())==0)
+	                    {
+	                        mrnFoundFlag = true;
+	                        break;
+	                    }
+	                }
+	                if (!mrnFoundFlag)
+	                {  
+                            dao.delete(oldMRNObj);
+                       
+	                }
+
+	            }
+
 		}
 		catch (final BizLogicException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
+		} catch (DAOException daoExp)
+        {
+		    logger.error(daoExp.getMessage(), daoExp);
+            throw this
+                    .getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+        }
 	}
 
 	/**

@@ -42,6 +42,7 @@ public class CollectionProtocolDAO
                 consentTierDTOList.add(consentTierDTO);
             }
             return consentTierDTOList;
+            
         }
         catch (BizLogicException daoException)
         {
