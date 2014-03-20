@@ -1,0 +1,40 @@
+Dear $user.lastName, $user.firstName<br>
+<br>
+Congratulations! Your profile has been updated. Your details are as follows:<br> 
+<table> 
+	<tr>
+		<td> Login Name  </td> <td>: #if ($user.loginName != '$user.loginName') $user.loginName #end </td>
+	</tr>
+	<tr>	
+		<td>Last Name </td> <td> : #if ($user.lastName != '$user.lastName') $user.lastName #end</td>
+	</tr>
+	<tr>
+		<td>First Name </td><td> : #if ($user.firstName != '$user.firstName') $user.firstName #end</td>
+	</tr>
+	<tr>
+		<td>Street </td><td> : #if ($user.street != '$user.street') $user.street #end</td>
+	</tr>
+	<tr>
+		<td>City </td></td> : #if ($user.city != '$user.city') $user.city #end</td>
+	</tr>
+	<tr>
+		<td>Zip Code </td><td> : #if ($user.zipCode != '$user.zipCode') $user.zipCode #end</td>
+	</tr>
+	<tr>
+		<td>State </td><td> : #if ($user.state != '$user.state') $user.state #end </td>
+	</tr>
+	<tr>
+		<td>Country </td><td> : #if ($user.country != '$user.country') $user.country #end</td>
+	</tr>
+	<tr>
+		<td>Phone Number </td><td> : #if ($user.phoneNumber != '$user.phoneNumber') $user.phoneNumber #end</td>
+	</tr>
+	<tr>
+		<td>Fax Number </td><td> : #if ($user.faxNumber != '$user.faxNumber') $user.faxNumber #end</td>
+	</tr>
+	<tr>
+		<td>Email Address </td><td> : #if ($user.emailAddress != '$user.emailAddress') $user.emailAddress #end</td>
+	</tr>
+</table>
+<br>
+$footer
