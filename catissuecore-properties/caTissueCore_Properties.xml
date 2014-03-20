@@ -964,4 +964,50 @@ Helpdesk Phone : @@contact.number@@</value>
         <name>display.admin.emails.onSummaryPage</name>
         <value>false</value>
     </property>
+    
+    <property>
+    <name>user.name</name>
+    <value>admin@admin.com</value>
+</property>
+<property>
+    <name>schedularJobList</name>
+    <value>krishagni.plugin.scheduler.StagingParticipantRegistration</value>
+</property>
+
+
+<property>
+        <name>staging.database.server</name>
+        <value>localhost</value>
+    </property>
+
+    <property>
+
+       <name>staging.database.port</name>
+
+        <value>1521</value>
+
+    </property>
+
+    <property>
+        <name>staging.database.name</name>
+        <value>xe</value>
+    </property>
+    
+    <property>
+        <name>staging.database.username</name>
+        <value></value>
+    </property>
+    
+    <property>
+        <name>staging.database.password</name>
+        <value></value>
+    </property>
+	
+	 <property>
+        <name>epic.to.email.address</name>
+        <value></value>
+    </property>
+	
+	
+   
 </properties>
