@@ -73,12 +73,10 @@
   <bean id="specimenFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl">
   </bean>
   <bean id="scgFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl">
-    <property name="specimenFactory" ref="specimenFactory"/>
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="participantFactory" ref="participantFactory"/>
-    <property name="scgFactory" ref="scgFactory"/>
   </bean>
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>

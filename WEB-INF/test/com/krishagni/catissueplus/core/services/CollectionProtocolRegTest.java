@@ -9,13 +9,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,29 +16,18 @@ import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentResponseDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -56,13 +38,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProto
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.CprTestData;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.beans.SessionDataBean;
 
 public class CollectionProtocolRegTest {
 
@@ -90,16 +66,6 @@ public class CollectionProtocolRegTest {
 
 	private ParticipantFactory participantFactory;
 
-	private SpecimenCollectionGroupFactory scgFactory;
-
-	private SpecimenFactory specimenFactory;
-
-	private final String NOT_SPECIFIED = "Not Specified";
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
-
-	private final String ACTIVITY_STATUS_ACTIVE = "Active";
-
 	private final String PPID = "participant protocol identifier";
 
 	@Before
@@ -120,15 +86,8 @@ public class CollectionProtocolRegTest {
 		((CollectionProtocolRegistrationServiceImpl) registrationSvc).setRegistrationFactory(registrationFactory);
 		participantFactory = new ParticipantFactoryImpl();
 		((ParticipantFactoryImpl) participantFactory).setDaoFactory(daoFactory);
-		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setParticipantFactory(participantFactory);
 
-		specimenFactory = new SpecimenFactoryImpl();
-		scgFactory = new SpecimenCollectionGroupFactoryImpl();
-		((SpecimenCollectionGroupFactoryImpl) scgFactory).setSpecimenFactory(specimenFactory);
-
-		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setScgFactory(scgFactory);
-
-		when(collectionProtocolDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(true);
+		when(registrationDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(true);
 		when(userDao.getUser(anyString())).thenReturn(CprTestData.getUser());
 
 		when(participantDao.getParticipant(anyLong())).thenReturn(CprTestData.getParticipant());
@@ -168,7 +127,7 @@ public class CollectionProtocolRegTest {
 
 	@Test
 	public void testForRegistrationDuplicatePpid() {
-		when(collectionProtocolDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(false);
+		when(registrationDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(false);
 		when(collectionProtocolDao.getCollectionProtocol(anyLong())).thenReturn(CprTestData.getCptoReturn());
 
 		CreateRegistrationEvent reqEvent = CprTestData.getCprCreateEventDuplicatePpid();

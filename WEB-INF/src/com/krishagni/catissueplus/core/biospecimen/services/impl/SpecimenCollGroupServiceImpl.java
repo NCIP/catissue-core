@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
 import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
@@ -13,8 +15,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEven
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
+import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
@@ -53,8 +58,9 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	public ScgCreatedEvent createScg(CreateScgEvent scgEvent) {
 		try {
 			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail(), exceptionHandler);
-			ensureUniqueBarcode(scg);
-			ensureUniqueName(scg);
+			ensureUniqueBarcode(scg.getBarcode());
+			ensureUniqueName(scg.getName());
+			validateCprAndCpe(scg);
 			exceptionHandler.checkErrorAndThrow();
 			daoFactory.getScgDao().saveOrUpdate(scg);
 			return ScgCreatedEvent.ok(ScgDetail.fromDomain(scg));
@@ -64,6 +70,34 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		}
 		catch (Exception ex) {
 			return ScgCreatedEvent.serverError(ex);
+		}
+	}
+
+	private void validateCprAndCpe(SpecimenCollectionGroup scg) {
+		
+	}
+
+	@Override
+	@PlusTransactional
+	public ScgUpdatedEvent updateScg(UpdateScgEvent scgEvent) {
+		try {
+			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(scgEvent.getId());
+			if (oldScg == null) {
+				ScgUpdatedEvent.notFound(scgEvent.getId());
+			}
+			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail(), exceptionHandler);
+			validateBarcode(oldScg.getBarcode(), scg.getBarcode());
+			validateName(oldScg.getName(), scg.getName());
+			exceptionHandler.checkErrorAndThrow();
+			oldScg.update(scg);
+			daoFactory.getScgDao().saveOrUpdate(scg);
+			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(scg));
+		}
+		catch (ObjectCreationException oce) {
+			return ScgUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
+		}
+		catch (Exception ex) {
+			return ScgUpdatedEvent.serverError(ex);
 		}
 	}
 
@@ -87,16 +121,33 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		}
 	}
 
-	private void ensureUniqueName(SpecimenCollectionGroup scg) {
-		if (!daoFactory.getScgDao().isNameUnique(scg.getName())) {
+	private void ensureUniqueName(String name) {
+		if (!daoFactory.getScgDao().isNameUnique(name)) {
 			exceptionHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
 		}
 	}
 
-	private void ensureUniqueBarcode(SpecimenCollectionGroup scg) {
-		if (!daoFactory.getScgDao().isBarcodeUnique(scg.getBarcode())) {
+	private void ensureUniqueBarcode(String barcode) {
+		if (!daoFactory.getScgDao().isBarcodeUnique(barcode)) {
 			exceptionHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
+	private void validateName(String oldName, String newName) {
+		if ((isBlank(oldName) && !isBlank(newName))) {
+			ensureUniqueName(newName);
+		}
+		else if (!isBlank(oldName) && !isBlank(newName) && !oldName.equals(newName)) {
+			ensureUniqueName(newName);
+		}
+	}
+
+	private void validateBarcode(String oldBarcode, String newBarcode) {
+		if ((isBlank(oldBarcode) && !isBlank(newBarcode))) {
+			ensureUniqueName(newBarcode);
+		}
+		else if (!isBlank(oldBarcode) && !isBlank(newBarcode) && !oldBarcode.equals(newBarcode)) {
+			ensureUniqueName(newBarcode);
+		}
+	}
 }

@@ -122,14 +122,14 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setVitalStatus(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getVitalStatus())) {
-			addError(isValidPv(details.getVitalStatus(), VITAL_STATUS),ParticipantErrorCode.CONSTRAINT_VIOLATION,VITAL_STATUS);
+			addError(!isValidPv(details.getVitalStatus(), VITAL_STATUS),ParticipantErrorCode.CONSTRAINT_VIOLATION,VITAL_STATUS);
 			participant.setVitalStatus(details.getVitalStatus());
 		}
 	}
 
 	private void setGender(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getGender())) {
-			addError(isValidPv(details.getGender(), GENDER),ParticipantErrorCode.CONSTRAINT_VIOLATION,GENDER);
+			addError(!isValidPv(details.getGender(), GENDER),ParticipantErrorCode.CONSTRAINT_VIOLATION,GENDER);
 			participant.setGender(details.getGender());
 		}
 	}
@@ -139,8 +139,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (raceList != null) {
 
 			String[] races = raceList.toArray(new String[raceList.size()]);
-			isValidPv(races, RACE);
-			addError(isValidPv(races, RACE),ParticipantErrorCode.CONSTRAINT_VIOLATION,RACE);
+			addError(!isValidPv(races, RACE),ParticipantErrorCode.CONSTRAINT_VIOLATION,RACE);
 			participant.setRaceColl(raceList);
 		}
 
@@ -148,8 +147,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private void setEthnicity(Participant participant, ParticipantDetail details) {
 		if (!isBlank(details.getEthnicity())) {
-			isValidPv(details.getEthnicity(), ETHNICITY);
-			addError(isValidPv(details.getEthnicity(), ETHNICITY),ParticipantErrorCode.CONSTRAINT_VIOLATION,ETHNICITY);
+			addError(!isValidPv(details.getEthnicity(), ETHNICITY),ParticipantErrorCode.CONSTRAINT_VIOLATION,ETHNICITY);
 			participant.setEthnicity(details.getEthnicity());
 		}
 	}

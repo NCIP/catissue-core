@@ -25,8 +25,8 @@
 
 		<property name="collectionStatus" type="string" column="COLLECTION_STATUS" />
 
-		<property name="encounterTimestamp" type="timestamp"
-			column="ENCOUNTER_TIMESTAMP" />
+		<!-- <property name="encounterTimestamp" type="timestamp"
+			column="ENCOUNTER_TIMESTAMP" /> -->
 
 		<property name="comment" type="string" column="COMMENTS" />
 

@@ -7,12 +7,16 @@ import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEv
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 
 public interface SpecimenCollGroupService {
 
-	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
+	AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
 
-	public ScgDeletedEvent delete(DeleteSpecimenGroupsEvent event);
+	ScgDeletedEvent delete(DeleteSpecimenGroupsEvent event);
 
-	public ScgCreatedEvent createScg(CreateScgEvent scgEvent);
+	ScgCreatedEvent createScg(CreateScgEvent scgEvent);
+
+	ScgUpdatedEvent updateScg(UpdateScgEvent scgEvent);
 }

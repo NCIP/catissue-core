@@ -3,19 +3,18 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistration {
-
-	private final String ACTIVITY_STATUS_ACTIVE = "Active";
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	private Long id;
 
@@ -37,7 +36,7 @@ public class CollectionProtocolRegistration {
 
 	private User consentWitness;
 
-	private Collection<ConsentTierResponse> consentResponseCollection;
+	private Set<ConsentTierResponse> consentResponseCollection;
 
 	private String barcode;
 
@@ -121,11 +120,11 @@ public class CollectionProtocolRegistration {
 		this.consentWitness = consentWitness;
 	}
 
-	public Collection<ConsentTierResponse> getConsentResponseCollection() {
+	public Set<ConsentTierResponse> getConsentResponseCollection() {
 		return consentResponseCollection;
 	}
 
-	public void setConsentResponseCollection(Collection<ConsentTierResponse> consentTierResponseCollection) {
+	public void setConsentResponseCollection(Set<ConsentTierResponse> consentTierResponseCollection) {
 		this.consentResponseCollection = consentTierResponseCollection;
 	}
 
@@ -138,11 +137,11 @@ public class CollectionProtocolRegistration {
 	}
 
 	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
 	}
 
 	public void setActive() {
-		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
 	public void delete(boolean isIncludeChildren) {
@@ -156,7 +155,7 @@ public class CollectionProtocolRegistration {
 		}
 		setBarcode(Utility.getDisabledValue(this.barcode));
 		setProtocolParticipantIdentifier(Utility.getDisabledValue(this.protocolParticipantIdentifier));
-		setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	private void checkActiveDependents() {
@@ -165,6 +164,21 @@ public class CollectionProtocolRegistration {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
 		}
+	}
+
+	public void update(CollectionProtocolRegistration cpr) {
+		setProtocolParticipantIdentifier(cpr.getProtocolParticipantIdentifier());
+		setRegistrationDate(cpr.getRegistrationDate());
+		setActivityStatus(cpr.getActivityStatus());
+		setSignedConsentDocumentURL(cpr.getSignedConsentDocumentURL());
+		setConsentSignatureDate(cpr.getConsentSignatureDate());
+		setConsentWitness(cpr.getConsentWitness());
+		setBarcode(cpr.getBarcode());
+		setconsents(cpr.getConsentResponseCollection());
+	}
+
+	private void setconsents(Set<ConsentTierResponse> consentResponseCollection) {
+		SetUpdater.<ConsentTierResponse> newInstance().update(this.consentResponseCollection, consentResponseCollection);
 	}
 
 }

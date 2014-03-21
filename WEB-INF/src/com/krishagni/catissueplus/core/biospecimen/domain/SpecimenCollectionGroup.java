@@ -5,8 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -14,10 +15,6 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 
 public class SpecimenCollectionGroup {
-
-	private final String ACTIVITY_STATUS_ACTIVE = "Active";
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	private final String COLLECTION_STATUS_PENDING = "Pending";
 
@@ -242,7 +239,7 @@ public class SpecimenCollectionGroup {
 	}
 
 	public void setActive() {
-		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+		this.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
 	public void setCollectionStatusPending() {
@@ -250,7 +247,7 @@ public class SpecimenCollectionGroup {
 	}
 
 	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.activityStatus);
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
 
 	public void delete(boolean isIncludeChildren) {
@@ -264,15 +261,38 @@ public class SpecimenCollectionGroup {
 		}
 		setBarcode(Utility.getDisabledValue(barcode));
 		setName(Utility.getDisabledValue(name));
-		setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	private void checkActiveDependents() {
 		for (Specimen specimen : this.specimenCollection) {
 			if (specimen.isActive()) {
-				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
+				throw new CatissueException(ScgErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
 		}
+	}
+
+	public void update(SpecimenCollectionGroup scg) {
+		setActivityStatus(scg.getActivityStatus());
+		setBarcode(scg.getBarcode());
+		setClinicalDiagnosis(scg.getClinicalDiagnosis());
+		setClinicalStatus(scg.getClinicalStatus());
+		setCollectionComments(scg.getCollectionComments());
+		setCollectionContainer(scg.getCollectionContainer());
+		setCollectionProcedure(scg.getCollectionProcedure());
+		setCollectionProtocolEvent(scg.getCollectionProtocolEvent());
+		setCollectionProtocolRegistration(scg.getCollectionProtocolRegistration());
+		setCollectionSite(scg.getCollectionSite());
+		setCollectionStatus(scg.getCollectionStatus());
+		setCollectionTimestamp(scg.getCollectionTimestamp());
+		setCollector(scg.getCollector());
+		setComment(scg.getComment());
+		setName(scg.getName());
+		setReceivedComments(scg.getReceivedComments());
+		setReceivedQuality(scg.getReceivedQuality());
+		setReceivedTimestamp(scg.getReceivedTimestamp());
+		setReceiver(scg.getReceiver());
+		setSurgicalPathologyNumber(scg.getSurgicalPathologyNumber());
 	}
 
 }

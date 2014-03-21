@@ -77,6 +77,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	@Override
 	public Specimen createSpecimen(SpecimenDetail specimenDetail, ObjectCreationException exceptionHandler) {
 		Specimen specimen = new Specimen();
+//		setScg();
 		return specimen;
 	}
 

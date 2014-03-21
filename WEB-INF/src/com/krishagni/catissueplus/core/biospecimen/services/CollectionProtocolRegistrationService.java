@@ -6,20 +6,19 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEven
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 
 public interface CollectionProtocolRegistrationService {
 
-	public AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(
+	AllSpecimenCollGroupsSummaryEvent getSpecimenCollGroupsList(
 			ReqSpecimenCollGroupSummaryEvent reqSpecimenCollGroupSummaryEvent);
 
-	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event);
+	RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event);
 
-	public RegistrationDeletedEvent delete(DeleteRegistrationEvent event);
-//	public RegistrationUpdatedEvent updateResgistration(UpdateRegistrationEvent event);
-//
-//	public void delete(DeleteParticipantEvent event);
-//
-//	public void delete(DeleteRegistrationEvent event);
+	RegistrationDeletedEvent delete(DeleteRegistrationEvent event);
+
+	RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event);
 
 }

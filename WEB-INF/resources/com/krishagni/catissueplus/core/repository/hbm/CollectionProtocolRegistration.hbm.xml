@@ -105,7 +105,7 @@
 		</query>
 		
 		<query name="getCprIdByPpid">
-            select cpr.id from CollectionProtocolRegistration cpr where cpr.collectionProtocol.id=:cpId and cpr.protocolParticipantIdentifier:ppid
+            select cpr.id from CollectionProtocolRegistration cpr where cpr.collectionProtocol.id=:cpId and cpr.protocolParticipantIdentifier=:ppid
         </query>
 		
 	</class>

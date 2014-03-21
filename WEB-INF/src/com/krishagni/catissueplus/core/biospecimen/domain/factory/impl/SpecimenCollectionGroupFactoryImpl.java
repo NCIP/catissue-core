@@ -16,6 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
@@ -38,8 +39,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	private static final String SITE = "site";
 
 	private static final String NAME = "name";
-
-	private static final String ACTIVITY_STATUS = "activity status";
 
 	private static final String COLLECTION_CONTAINER = "collection container";
 
@@ -105,11 +104,11 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setActivityStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
-		if (isValidPv(scgDetail.getActivityStatus(), ACTIVITY_STATUS)) {
+		if (isValidPv(scgDetail.getActivityStatus(), Status.ACTIVITY_STATUS.getStatus())) {
 			scg.setActivityStatus(scgDetail.getActivityStatus());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
+		addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
 	}
 
 	private void setBarcode(ScgDetail scgDetail, SpecimenCollectionGroup scg) {

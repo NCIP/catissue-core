@@ -12,13 +12,10 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.common.MapUpdater;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class Participant {
-
-	private final String ACTIVITY_STATUS_ACTIVE = "Active";
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	/**
 	 * System generated unique id.
@@ -245,10 +242,10 @@ public class Participant {
 
 	public void setActive()
 	{
-		setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.activityStatus);
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
 
 	public void delete(boolean isIncludeChildren) {
@@ -263,7 +260,7 @@ public class Participant {
 		}
 		setSocialSecurityNumber(Utility.getDisabledValue(this.socialSecurityNumber));
 		updateMrn();
-		setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	private void updateMrn() {

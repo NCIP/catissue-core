@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -36,6 +37,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private final String PPID = "participant protocol identifier";
 
 	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
+	
+	private final String CONSENT_WITNESS = "consent witness";
 
 	private List<ErroneousField> erroneousFields;
 
@@ -58,10 +61,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setRegistrationDate(registration, detail);
 		setActivityStatus(registration, detail);
 		setCollectionProtocol(registration, detail);
-		//		registration.setParticipant(participant);
-		//		participant.getCprCollection().put(registration.getCollectionProtocol().getTitle(), registration);
 		setPPId(registration, detail);
-		setConsentsDuringRegistration(registration, detail);
 		exception.addError(this.erroneousFields);
 		return registration;
 	}
@@ -119,8 +119,15 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		CollectionProtocol protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
 		if (protocol == null) {
 			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+			return;
 		}
 		registration.setCollectionProtocol(protocol);
+		if (detail.getId() == null) {
+			setConsentsDuringRegistration(registration, detail);
+		}
+		else {
+			setConsentDuringUpdate(registration, detail);
+		}
 	}
 
 	/**
@@ -156,13 +163,13 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			if (StringUtils.isNotBlank(witnessName)) {
 				User witness = daoFactory.getUserDao().getUser(witnessName);
 				if (witness == null) {
-					addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "consent witness");
+					addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
 				}
 				registration.setConsentWitness(witness);
 			}
 		}
 
-		Collection<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
+		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
 
 		Iterator<ConsentTier> iter = consentTierCollection.iterator();
 		while (iter.hasNext()) {
@@ -179,6 +186,38 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 			}
 		}
+		registration.setConsentResponseCollection(consentTierResponseCollection);
+	}
+
+	private void setConsentDuringUpdate(CollectionProtocolRegistration registration,
+			CollectionProtocolRegistrationDetail detail) {
+
+		if (detail.getResponseDetail() == null) {
+			return;
+		}
+		List<ConsentTierDetail> userProvidedConsents = detail.getResponseDetail().getConsentTierList();
+		setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
+		String witnessName = detail.getResponseDetail().getWitnessName();
+		if (StringUtils.isNotBlank(witnessName)) {
+			User witness = daoFactory.getUserDao().getUser(witnessName);
+			if (witness == null) {
+				addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
+			}
+			registration.setConsentWitness(witness);
+		}
+		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
+
+		for (ConsentTierDetail tier : userProvidedConsents) {
+			ConsentTier consentTier = new ConsentTier();
+			consentTier.setStatement(tier.getConsentStatment());
+			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+			consentTierResponse.setCpr(registration);
+			consentTierResponse.setResponse(tier.getParticipantResponse());
+			consentTierResponse.setConsentTier(consentTier);
+			consentTierResponseCollection.add(consentTierResponse);
+			
+		}
+
 		registration.setConsentResponseCollection(consentTierResponseCollection);
 	}
 

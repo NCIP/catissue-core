@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -17,10 +18,6 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 public class Specimen {
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
-
-	private final String ACTIVITY_STATUS_ACTIVE = "Active";
 
 	private Long id;
 
@@ -283,11 +280,11 @@ public class Specimen {
 	}
 
 	public void setActive() {
-		this.setActivityStatus(ACTIVITY_STATUS_ACTIVE);
+		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
 	public boolean isActive() {
-		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
 	}
 
 	public void delete(boolean isIncludeChildren) {
@@ -307,7 +304,7 @@ public class Specimen {
 		
 		this.setBarcode(Utility.getDisabledValue(barcode));
 		this.setLabel(Utility.getDisabledValue(label));
-		this.setActivityStatus(ACTIVITY_STATUS_DISABLED);
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	private void checkActiveDependents() {

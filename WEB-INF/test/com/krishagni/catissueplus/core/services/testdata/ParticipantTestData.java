@@ -31,11 +31,6 @@ public class ParticipantTestData {
 	
 	private static final String NOT_SPECIFIED = "Not Specified";
 
-	private static final String ACTIVITY_STATUS_DISABLED = "Disabled";
-
-	private static final String SSN = "social security number";
-
-	private static  final String BIRTH_DATE = "birth date";
 	public static DeleteParticipantEvent getParticipantDeleteEventWithoutChildren() {
 		DeleteParticipantEvent event = new DeleteParticipantEvent();
 		event.setId(1l);
@@ -337,5 +332,18 @@ public class ParticipantTestData {
 		List<ParticipantMedicalIdentifierNumberDetail> mrns = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
 		mrns.add(medicalRecordNumberDetail);
 		return mrns;
+	}
+
+	public static CreateParticipantEvent getParticipantCreateEventDuplicateMrn() {
+		CreateParticipantEvent event = new CreateParticipantEvent();
+		ParticipantDetail detail = getParticipantDetails();
+
+//		ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
+//		medicalRecordNumberDetail.setMrn("234");
+//		medicalRecordNumberDetail.setSiteName("newSiteName");
+//		detail.getPmiCollection().add(medicalRecordNumberDetail);
+		event.setParticipantDetail(detail);
+		event.setSessionDataBean(getSessionDataBean());
+		return event;
 	}
 }

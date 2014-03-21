@@ -9,26 +9,12 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl;
@@ -38,7 +24,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEven
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
@@ -49,10 +34,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.ParticipantTestData;
-
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.common.beans.SessionDataBean;
 public class ParticipantTest {
 
 	private final String SITE = "site";
@@ -72,11 +53,9 @@ public class ParticipantTest {
 
 	private ParticipantService participantService;
 
-	private final String NOT_SPECIFIED = "Not Specified";
-
-	private final String ACTIVITY_STATUS_DISABLED = "Disabled";
-
 	private final String SSN = "social security number";
+	
+	private final String PMI = "participant medical identifier";
 
 	private final String BIRTH_DATE = "birth date";
 
@@ -105,6 +84,7 @@ public class ParticipantTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 		ParticipantDetail createdParticipant = response.getParticipantDetail();
 		assertNotNull(createdParticipant);
+		assertEquals(reqEvent.getParticipantDetail().getFirstName(), createdParticipant.getFirstName());
 
 	}
 
@@ -123,16 +103,18 @@ public class ParticipantTest {
 	}
 
 	@Test
-	public void testParticipantCreationFutureBirthDate() {
+	public void testParticipantCreationFutureBirthaAndPastDeathDate() {
 
 		CreateParticipantEvent reqEvent = ParticipantTestData.getParticipantCreateWithFutureDate();
 
 		ParticipantCreatedEvent response = participantService.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(2, response.getErroneousFields().length);
 		assertEquals(BIRTH_DATE, response.getErroneousFields()[0].getFieldName());
 		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DEATH_DATE, response.getErroneousFields()[1].getFieldName());
+		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(), response.getErroneousFields()[1].getErrorMessage());
 	}
 
 	@Test
@@ -250,6 +232,7 @@ public class ParticipantTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 		ParticipantDetail createdParticipant = response.getParticipantDetail();
 		assertNotNull(createdParticipant);
+		assertEquals(reqEvent.getParticipantDetail().getFirstName(), createdParticipant.getFirstName());
 	}
 
 	@Test
@@ -357,6 +340,22 @@ public class ParticipantTest {
 		ParticipantDeletedEvent response = participantService.delete(event);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	}
+	
+	@Test
+	public void testCreateParticipantDuplicateMrn() {
+		CreateParticipantEvent event = ParticipantTestData.getParticipantCreateEventDuplicateMrn();
+
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(true);
+		when(siteDao.getSite("siteName")).thenReturn(ParticipantTestData.getSite("siteName"));
+		when(siteDao.getSite("newSiteName")).thenReturn(ParticipantTestData.getSite("newSiteName"));
+
+		ParticipantCreatedEvent response = participantService.createParticipant(event);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(ParticipantErrorCode.DUPLICATE_PMI.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(PMI, response.getErroneousFields()[0].getFieldName());
 	}
 
 
