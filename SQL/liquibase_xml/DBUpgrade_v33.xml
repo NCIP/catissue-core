@@ -7,6 +7,8 @@
 
     <property name="text.type" value="varchar" dbms="mysql" />
     <property name="text.type" value="varchar2" dbms="oracle" />
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
 
  
  	<changeSet id="1" author="catissue" failOnError="false">
@@ -14,6 +16,34 @@
 			<column name="CONSENT_DOCUMENT_NAME" type="${text.type}(255)" />
 		</addColumn>
 	</changeSet>
-
+	<changeSet id="2" author="catissue" runOnChange="true">
+		<createTable tableName="CATISSUE_STOR_CONT_UTILIZATION">
+			<column name="STORAGE_CONTAINER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="STORED_SPECIMEN_COUNT" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="CONT_DATE" type="${date.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="UTILIZATION_PERCENTAGE" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="TOTAL_CAPACITY" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="SITE_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="FK_STORAGE_CONTAINER_ID"
+			baseTableName="CATISSUE_STOR_CONT_UTILIZATION" baseColumnNames="STORAGE_CONTAINER_ID"
+			referencedTableName="CATISSUE_STORAGE_CONTAINER" referencedColumnNames="IDENTIFIER" /> 
+	
+		<createIndex tableName="CATISSUE_STOR_CONT_UTILIZATION" indexName="CATISSUE_STOR_CONT_UTILIZATION_CONT_ID">
+    		<column name="STORAGE_CONTAINER_ID"/>
+		</createIndex>
+	</changeSet>
 
 </databaseChangeLog>         
