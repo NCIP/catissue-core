@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 package com.krishagni.catissueplus.core.audit.events;
 
 import java.util.Date;
@@ -24,21 +25,6 @@ public class AuditDetail {
 	private String reasonForChange;
 
 	/**
-	 * @return the objectType
-	 */
-	public String getObjectType() {
-		return objectType;
-	}
-
-	/**
-	 * @param objectType
-	 *            the objectType to set
-	 */
-	public void setObjectType(String objectType) {
-		this.objectType = objectType;
-	}
-
-	/**
 	 * @return the objectId
 	 */
 	public Long getObjectId() {
@@ -54,6 +40,20 @@ public class AuditDetail {
 	}
 
 	/**
+	 * @return the objectType
+	 */
+	public String getObjectType() {
+		return objectType;
+	}
+
+	/**
+	 * @param objectType the objectType to set
+	 */
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+
+	/**
 	 * @return the operation
 	 */
 	public String getOperation() {
@@ -61,8 +61,7 @@ public class AuditDetail {
 	}
 
 	/**
-	 * @param operation
-	 *            the operation to set
+	 * @param operation the operation to set
 	 */
 	public void setOperation(String operation) {
 		this.operation = operation;

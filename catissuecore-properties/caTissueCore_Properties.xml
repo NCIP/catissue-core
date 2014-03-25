@@ -957,4 +957,14 @@ Helpdesk Phone : @@contact.number@@</value>
         <value>false</value>
     </property>
     
+    <property>
+    	<name>MirthUrl</name>
+    	<value>http://localhost:18041/</value>
+    </property>
+
+    <property>
+    	<name>extAppSchTimeIntervalInMinutes</name>
+    	<value>1</value>
+    </property>
+    
 </properties>

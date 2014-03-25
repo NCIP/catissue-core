@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 package com.krishagni.catissueplus.core.audit.services.impl;
 
 import com.krishagni.catissueplus.core.audit.domain.Audit;
@@ -12,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 
 public class AuditServiceImpl implements AuditService {
+
 	private DaoFactory daoFactory;
 
 	private AuditFactory auditFactory;
@@ -30,14 +32,13 @@ public class AuditServiceImpl implements AuditService {
 
 	@Override
 	@PlusTransactional
-	public AuditCreatedEvent insertAuditDetails(
-			CreateAuditEvent createAuditEvent) {
+	public AuditCreatedEvent insertAuditDetails(CreateAuditEvent createAuditEvent) {
 		try {
-			Audit audit = auditFactory.getAudit(createAuditEvent
-					.getAuditDetail());
+			Audit audit = auditFactory.getAudit(createAuditEvent.getAuditDetail());
 			daoFactory.getAuditDao().saveOrUpdate(audit);
 			return AuditCreatedEvent.ok(createAuditEvent.getAuditDetail());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			return AuditCreatedEvent.serverError(e);
 		}
 	}

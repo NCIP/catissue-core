@@ -120,5 +120,9 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="auditFactory" ref="auditFactory"/>
   </bean>
+  
+  <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.extapp.services.impl.ExternalAppNotificationServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory" />
+  </bean>
 
  </beans>
