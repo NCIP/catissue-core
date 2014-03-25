@@ -2290,6 +2290,7 @@
 							<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 							<antcall target="upgrade_db_plusv3.1" />
 							<antcall target="upgrade_db_plusv3.2" />
+							<antcall target="upgrade_db_plusv3.3" />
 						</then>
 					<elseif>
 									<equals arg1="${plus2.0.version}" arg2="${from.version}"/>
@@ -2298,6 +2299,7 @@
 										<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 										<antcall target="upgrade_db_plusv3.1" />
 										<antcall target="upgrade_db_plusv3.2" />
+										<antcall target="upgrade_db_plusv3.3" />
 									</then>
 						</elseif>
 						<elseif>
@@ -2306,6 +2308,7 @@
 										<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 										<antcall target="upgrade_db_plusv3.1" />
 										<antcall target="upgrade_db_plusv3.2" />
+										<antcall target="upgrade_db_plusv3.3" />
 									</then>
 							</elseif>
 							<elseif>
@@ -2313,12 +2316,20 @@
 									<then>
 										<antcall target="upgrade_db_plusv3.1" />
 										<antcall target="upgrade_db_plusv3.2" />
+										<antcall target="upgrade_db_plusv3.3" />
 									</then>
 								</elseif>
 							    <elseif>
                                     <equals arg1="${plus3.1.version}" arg2="${from.version}"/>
                                     <then>
                                         <antcall target="upgrade_db_plusv3.2" />
+										<antcall target="upgrade_db_plusv3.3" />
+                                    </then>
+                                </elseif>
+								<elseif>
+                                    <equals arg1="${plus3.2.version}" arg2="${from.version}"/>
+                                    <then>
+                                        <antcall target="upgrade_db_plusv3.3" />
                                     </then>
                                 </elseif>
 								<elseif>
@@ -2327,6 +2338,7 @@
 													<antcall target="upgrade_db_from_plusv1.2_to_plusv3.0" />
 													<antcall target="upgrade_db_plusv3.1" />
 													<antcall target="upgrade_db_plusv3.2" />
+													<antcall target="upgrade_db_plusv3.3" />
 												</then>
 									</elseif>
 									<else>

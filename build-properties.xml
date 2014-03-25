@@ -23,6 +23,7 @@
         <property name="plus2.1.1.version" value="v21" />
         <property name="plus3.0.version" value="v30" />
         <property name="plus3.1.version" value="v31" />
+		<property name="plus3.2.version" value="v32" />
         <property name="suite-1.2.version" value="nci_v12" />
         <property name="build.version" value="v${app.version}"/>
     </project>
