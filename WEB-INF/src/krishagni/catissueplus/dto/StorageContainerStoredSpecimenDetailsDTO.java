@@ -7,10 +7,73 @@ public class StorageContainerStoredSpecimenDetailsDTO
 {
 
     private Date dateOfSpecimenCount;
-    private Integer specimenCount;
-    private long percentUtilization;
+    private Long specimenCount;
+    private Long percentUtilization;
+    private Long capacity;
+    private Long siteId;
+    private String siteName;
+    
+    
+    
+    public String getSiteName()
+    {
+        return siteName;
+    }
+
 
     
+    public void setSiteName(String siteName)
+    {
+        this.siteName = siteName;
+    }
+
+
+    public Long getSiteId()
+    {
+        return siteId;
+    }
+
+    
+    public void setSiteId(Long siteId)
+    {
+        this.siteId = siteId;
+    }
+
+    
+    public Long getSpecimenCount()
+    {
+        return specimenCount;
+    }
+
+
+
+    public Long getCapacity()
+    {
+        return capacity;
+    }
+
+
+    
+    public void setCapacity(Long capacity)
+    {
+        this.capacity = capacity;
+    }
+
+
+    
+    public void setSpecimenCount(Long specimenCount)
+    {
+        this.specimenCount = specimenCount;
+    }
+
+
+    
+    public void setPercentUtilization(Long percentUtilization)
+    {
+        this.percentUtilization = percentUtilization;
+    }
+
+
     public long getPercentUtilization()
     {
         return percentUtilization;
@@ -38,21 +101,6 @@ public class StorageContainerStoredSpecimenDetailsDTO
         this.dateOfSpecimenCount = dateOfSpecimenCount;
     }
 
-    /**
-     * @return the specimenCount
-     */
-    public Integer getSpecimenCount()
-    {
-        return specimenCount;
-    }
-
-    /**
-     * @param specimenCount the specimenCount to set
-     */
-    public void setSpecimenCount(Integer specimenCount)
-    {
-        this.specimenCount = specimenCount;
-    }
 
 
 }
