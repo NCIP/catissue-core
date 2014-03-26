@@ -53,6 +53,7 @@ public class UserTestData {
 		user.setFirstName("firstName1");
 		user.setLastName("lastName1");
 		user.setLoginName("admin@admin.com");
+		user.setEmailAddress("sci@sci.com");
 		return user;
 	}
 	
