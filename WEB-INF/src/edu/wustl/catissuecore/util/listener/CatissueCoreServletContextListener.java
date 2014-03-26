@@ -29,7 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
-import edu.common.dynamicextensions.ndao.DEApp;
+import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
@@ -93,6 +93,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * DATASOURCE_JNDI_NAME.
 	 */
 	private static final String JNDI_NAME = "java:/catissuecore";
+	
+	private static final String DE_FILEUPLOAD_DIR = "de.fileUploadDir";
 
 	//class level instance to access methods for registering and unregistering queues
 	private final ParticipantManagerUtility participantManagerUtility = new ParticipantManagerUtility();
@@ -146,9 +148,12 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             //QueryDataExportService.initialize();
 
 			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+			
 			InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
-			DEApp.init(ds);
+			
+			String deFileUploadDir = XMLPropertyHandler.getValue(DE_FILEUPLOAD_DIR);
+			DEApp.init(ds, deFileUploadDir);
 			initQueryPathsConfig();
             
 			logger.info("Initialization complete");
@@ -162,10 +167,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
  	private void initQueryPathsConfig() {
- 		System.err.println("Initializing query paths");
  		String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
  		PathConfig.intialize(path);
- 		System.err.println("Query paths initialized");
 	}
 
 	

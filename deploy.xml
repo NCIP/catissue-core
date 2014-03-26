@@ -883,6 +883,7 @@
 			<!-- Nightly Cron Job Config End -->
 			
 				<replacefilter token="@@usermanual@@" value="${user.manual}" />
+                                <replacefilter token="@@de.fileUploadDir@@" value="${de.fileUploadDir}"/>
 
 					</replace>
 					<replace file="${temp.dir}/catissuecore-properties/help_links.xml" token="@@usermanual@@" value="${user.manual}" />

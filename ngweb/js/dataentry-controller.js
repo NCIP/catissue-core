@@ -67,6 +67,12 @@ angular.module('plus.dataentry', [])
     };
     
     $scope.renderForm = function(form, recordId) {
+      if ( $scope.currentView == 'form') {
+        // link has been clicked more than once.. !
+        return;
+      }
+
+      $scope.currentView = 'form';
       FormsService.getFormDef(form.formId).then(function(data) {
         var that = this;
         this.form = new edu.common.de.Form({
@@ -75,23 +81,28 @@ angular.module('plus.dataentry', [])
           recordId     : recordId,
           formDiv      : 'form-view',
           appData      : {formCtxtId: form.formCtxtId, objectId: entityObjId},
-          /*formDefUrl   : '/catissuecore/rest/ng/forms/:formId/definition', */
           formDataUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId',
+          fileUploadUrl : '/catissuecore/rest/ng/form-files',
+          fileDownloadUrl: function(formId, recordId, ctrlName) {
+            return '/catissuecore/rest/ng/form-files?formId=' + formId + '&recordId=' + recordId + '&ctrlName=' + ctrlName;
+          },
+
           onSaveSuccess: function() {
             that.form.destroy();
             $scope.displayRecords(form, false);
             Utility.notify($("#notifications"), "Form Data Saved", "success", true);
           },
+
           onSaveError: function() {
             Utility.notify($("#notifications"), "Form Data Save Failed", "error", true);
           },
+
           onCancel: function() {
             that.form.destroy();
             $scope.displayRecords(form, false);
           }
         });
         this.form.render();
-        $scope.currentView = 'form';
       });
     }; 
   }]);

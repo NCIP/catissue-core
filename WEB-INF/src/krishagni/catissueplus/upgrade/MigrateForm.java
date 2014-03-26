@@ -97,6 +97,7 @@ import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
 import edu.common.dynamicextensions.nutility.DeleteOnCloseFileInputStream;
+import edu.common.dynamicextensions.nutility.FileUploadMgr;
 import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.common.dynamicextensions.processor.ProcessorConstants;
 import edu.common.dynamicextensions.util.DataValueMapUtility;
@@ -1098,7 +1099,6 @@ public class MigrateForm {
 			@Override
 			public FileControlValue extract(ResultSet rs) throws SQLException {
 				FileControlValue fcv = new FileControlValue();
-				File blobFile = null;
 				if (rs.next()) {
 					Blob fileContent   = rs.getBlob(1);
 					String fileName    = rs.getString(2);
@@ -1112,13 +1112,8 @@ public class MigrateForm {
 						return fcv;
 					}
 				
-					try {
-						blobFile = copyBlobToTempFile(fileContent); 
-						fcv.setIn(new DeleteOnCloseFileInputStream(blobFile));
-					} catch (FileNotFoundException e) {
-						IoUtil.delete(blobFile);
-						logger.error("Error obtaining file content"); 
-					}
+					String fileId = FileUploadMgr.getInstance().saveFile(fileContent.getBinaryStream());
+					fcv.setFileId(fileId);
 				}	
 				return fcv;
 			}

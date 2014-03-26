@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.de.services.impl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -8,11 +9,16 @@ import java.util.Map;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
+import com.krishagni.catissueplus.core.de.events.FileDetail;
+import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
+import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
@@ -25,11 +31,13 @@ import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqFileDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.SaveFormDataEvent;
+import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -42,9 +50,11 @@ import edu.common.dynamicextensions.domain.nui.PageBreak;
 import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.domain.nui.SelectControl;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
+import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
+import edu.common.dynamicextensions.nutility.FileUploadMgr;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class FormServiceImpl implements FormService {
@@ -208,6 +218,37 @@ public class FormServiceImpl implements FormService {
 		return FormDataEvent.ok(formData.getContainer().getId(), recordId, formData);		
 	}
 	
+	@Override
+	@PlusTransactional
+	public FileDetailEvent getFileDetail(ReqFileDetailEvent req) {
+		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+		FileControlValue fcv = formDataMgr.getFileControlValue(req.getFormId(), req.getRecordId(), req.getCtrlName());
+		if (fcv == null) {
+			return FileDetailEvent.notFound();
+		}
+		
+		return FileDetailEvent.ok(FileDetail.from(fcv));
+	}
+	
+	@Override
+	public FileUploadedEvent uploadFile(UploadFileEvent req) {
+		MultipartFile input = req.getFile();
+		
+		FileDetail fileDetail = new FileDetail();
+		fileDetail.setFilename(input.getOriginalFilename());
+		fileDetail.setSize(input.getSize());
+		fileDetail.setContentType(input.getContentType());
+		
+		try {
+			InputStream in = input.getInputStream();
+			String fileId = FileUploadMgr.getInstance().saveFile(in);
+			fileDetail.setFileId(fileId);
+			return FileUploadedEvent.ok(fileDetail);
+		} catch (Exception e) {
+			return FileUploadedEvent.serverError();
+		}		
+	}
+		
 	private List<FormFieldSummary> getFormFields(Container container, boolean prefixParentFormCaption, String captionPrefix, String namePrefix) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();
 
@@ -243,5 +284,4 @@ public class FormServiceImpl implements FormService {
 
         return fields;		
 	}
-	
 }

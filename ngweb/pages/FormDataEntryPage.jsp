@@ -17,13 +17,15 @@
 
     <script src="ngweb/external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="ngweb/external/jquery/chosen.jquery.min.js" type="text/javascript"></script>
+    <script src="ngweb/external/jquery/jquery.ui.widget.js" type="text/javascript"></script>
+    <script src="ngweb/external/jquery/jquery.iframe-transport.js" type="text/javascript"></script>
+    <script src="ngweb/external/jquery/jquery.fileupload.js" type="text/javascript"></script>
     <script src="ngweb/external/select2/select2.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/angular.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/angular-resource.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
     <script src="ngweb/external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="ngweb/external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
-    <script src="ngweb/external/de/js/de-form.js" type="text/javascript"></script>
 
   </head>
   <body ng-controller="FormsDataController" style="height: 100%;" class="clearfix">
@@ -52,7 +54,7 @@
                 <a style="cursor:pointer;" 
                    tooltip-placement="bottom" 
                    tooltip="Click to view form records" 
-                   ng-click="displayRecords(form)">#{{form.formCtxtId}} {{form.formCaption}}
+                   ng-click="displayRecords(form)">{{form.formCaption}}
                 </a>
               </td>
               <td>{{form.noOfRecords}}</td>
@@ -119,6 +121,6 @@
     <script src="ngweb/js/forms-service.js" type="text/javascript"></script>
     <script src="ngweb/js/dataentry-controller.js" type="text/javascript"></script>
     <script src="ngweb/js/dataentry-app.js" type="text/javascript"></script>
-
+    <script src="ngweb/external/de/js/de-form.js" type="text/javascript"></script>
   </body>
 </html>

@@ -16,11 +16,11 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
 import edu.common.dynamicextensions.domain.nui.UserContext;
-import edu.common.dynamicextensions.ndao.DEApp;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
 import edu.common.dynamicextensions.ndao.TransactionManager;
+import edu.common.dynamicextensions.nutility.DEApp;
 
 
 public class MigrateForms {
@@ -121,7 +121,9 @@ public class MigrateForms {
 		String jdbcUrl = "jdbc:" + databaseType +  prop.getProperty("database.host") 
 							+ ":" + prop.getProperty("database.port") + "/" + prop.getProperty("database.name");
 		ds.setUrl(jdbcUrl);
-		DEApp.init(ds);
+		
+		String fileUploadDir = prop.getProperty("de.fileUploadDir");
+		DEApp.init(ds, fileUploadDir);
 	}
 
 	private static UserContext getUserContext(final String username) {
