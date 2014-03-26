@@ -446,8 +446,10 @@ select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left out
     </sql-query>
 
     <sql-query name="getSiteUtilization" >
-    select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization 
-    join catissue_site site on site.identifier = site_id where CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)
+   select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization 
+   left join catissue_container st_container on st_container.identifier = catissue_stor_cont_utilization.storage_container_id 
+   left join catissue_container_position pos on pos.container_id = st_container.identifier
+   left join catissue_site site on site.identifier = site_id where pos.container_id is null and CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)
     </sql-query>
 
 </hibernate-mapping>

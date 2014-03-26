@@ -26,7 +26,7 @@ public class StorageContainerGraphBizlogic
      * @return
      * @throws ApplicationException
      */
-    private List<Long> updateContainerSpecimenAndCapacityCounts( StorageContainerUtilizationDTO storageContainerUtilizationDTO,Long containerId, HibernateDAO dao)
+    private void updateContainerSpecimenAndCapacityCounts( StorageContainerUtilizationDTO storageContainerUtilizationDTO,Long containerId, HibernateDAO dao)
             throws ApplicationException
     {
         StorageContainerGraphDAO storageContainerGraphDAO = new StorageContainerGraphDAO();
@@ -46,15 +46,10 @@ public class StorageContainerGraphBizlogic
 
         List<Long> childContainerList = new StorageContainerGraphDAO().getListOfChildContainerId(containerId, dao);
 
-        List<Long> containerList = new ArrayList<Long>();
-
         for (Long childId : childContainerList)
         {
-            containerList.addAll(updateContainerSpecimenAndCapacityCounts(storageContainerUtilizationDTO,childId, dao));//recursive call to find children of child container
+            updateContainerSpecimenAndCapacityCounts(storageContainerUtilizationDTO,childId, dao);//recursive call to find children of child container
         }
-        childContainerList.addAll(containerList);
-
-        return childContainerList;
     }
 
     public List<StorageContainerStoredSpecimenDetailsDTO> getSiteUtilizationDTO(HibernateDAO hibernateDAO) throws ApplicationException, SQLException{
