@@ -1,3 +1,4 @@
+
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import org.hibernate.SessionFactory;
@@ -16,6 +17,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.extapp.repository.ExternalAppNotificationDao;
+import com.krishagni.catissueplus.core.extapp.repository.impl.ExternalAppNotificationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -92,6 +95,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public AuditDao getAuditDao() {
 		AuditDaoImpl dao = new AuditDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public ExternalAppNotificationDao getExternalAppNotificationDao() {
+		ExternalAppNotificationDaoImpl dao = new ExternalAppNotificationDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
