@@ -74,16 +74,13 @@ public class StorageContainerStoredSpecimenDetailsDTO
     }
 
 
-    public long getPercentUtilization()
+    public Long getPercentUtilization()
     {
         return percentUtilization;
     }
 
     
-    public void setPercentUtilization(long percentUtilization)
-    {
-        this.percentUtilization = percentUtilization;
-    }
+  
 
     /**
      * @return the dateOfSpecimenCount

@@ -442,12 +442,12 @@ select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left out
     </sql-query>
 
     <sql-query name="getUtilizationCountsOfContainerById" >
-	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)
+	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT,spec.total_capacity from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)
     </sql-query>
 
     <sql-query name="getSiteUtilization" >
-    select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site_id,site.name site_name from catissue_stor_cont_utilization 
-    join catissue_site site on site.identifier = site_id where CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site_id,site.name)
+    select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization 
+    join catissue_site site on site.identifier = site_id where CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)
     </sql-query>
 
 </hibernate-mapping>

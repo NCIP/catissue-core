@@ -196,7 +196,7 @@ public class StorageContainerGraphDAO
             StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = new StorageContainerStoredSpecimenDetailsDTO();
             storageContainerStoredSpecimenDetailsDTO.setDateOfSpecimenCount(resultSet.getDate(1));
             storageContainerStoredSpecimenDetailsDTO.setSpecimenCount(resultSet.getLong(2));
-            storageContainerStoredSpecimenDetailsDTO.setPercentUtilization(resultSet.getInt(3));
+            storageContainerStoredSpecimenDetailsDTO.setPercentUtilization(resultSet.getLong(3));
             storageContainerStoredSpecimenDetailsDTOList.add(storageContainerStoredSpecimenDetailsDTO);
         }
         return storageContainerStoredSpecimenDetailsDTOList;
@@ -211,7 +211,7 @@ public class StorageContainerGraphDAO
      * @throws DAOException
      * @throws SQLException
      */
-    public StorageContainerStoredSpecimenDetailsDTO getUtilizationCountsOfContainerById(HibernateDAO hibernateDAO,
+    public StorageContainerStoredSpecimenDetailsDTO getStrotedSpecimenDetailsDTOByContainerId(HibernateDAO hibernateDAO,
             Long containerId) throws DAOException, SQLException
     {
         StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = new StorageContainerStoredSpecimenDetailsDTO();
@@ -223,8 +223,10 @@ public class StorageContainerGraphDAO
 
         if (resultSet.next())
         {
-            storageContainerStoredSpecimenDetailsDTO.setPercentUtilization(resultSet.getLong(1));
-            storageContainerStoredSpecimenDetailsDTO.setSpecimenCount(resultSet.getLong(2));
+            storageContainerStoredSpecimenDetailsDTO.setPercentUtilization(resultSet.getLong("UTILIZATION_PERCENTAGE"));
+            storageContainerStoredSpecimenDetailsDTO.setSpecimenCount(resultSet.getLong("STORED_SPECIMEN_COUNT"));
+            storageContainerStoredSpecimenDetailsDTO.setCapacity(resultSet.getLong("total_capacity"));
+            
 
         }
         
@@ -267,7 +269,6 @@ public class StorageContainerGraphDAO
             StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = new StorageContainerStoredSpecimenDetailsDTO();
             storageContainerStoredSpecimenDetailsDTO.setSpecimenCount(resultSet.getLong("total_count"));
             storageContainerStoredSpecimenDetailsDTO.setCapacity(resultSet.getLong("total_capacity"));
-            storageContainerStoredSpecimenDetailsDTO.setSiteId(resultSet.getLong("site_id"));
             storageContainerStoredSpecimenDetailsDTO.setSiteName(resultSet.getString("site_name"));
             storageContainerStoredSpecimenDetailsDTOList.add(storageContainerStoredSpecimenDetailsDTO);
         }
