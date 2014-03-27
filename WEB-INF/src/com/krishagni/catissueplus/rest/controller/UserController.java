@@ -30,7 +30,6 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import gov.nih.nci.semantic.util.Email;
 
 @Controller
 @RequestMapping("/users")
