@@ -97,6 +97,10 @@ angular.module('plus.dataentry', [])
             Utility.notify($("#notifications"), "Form Data Save Failed", "error", true);
           },
 
+          onValidationError: function() {
+            Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
+          },
+
           onCancel: function() {
             that.form.destroy();
             $scope.displayRecords(form, false);
