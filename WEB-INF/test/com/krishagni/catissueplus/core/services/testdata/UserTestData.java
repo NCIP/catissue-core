@@ -1,14 +1,15 @@
 package com.krishagni.catissueplus.core.services.testdata;
 
-import static org.mockito.Matchers.anyLong;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 
@@ -54,6 +55,7 @@ public class UserTestData {
 		user.setLastName("lastName1");
 		user.setLoginName("admin@admin.com");
 		user.setEmailAddress("sci@sci.com");
+		user.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
 		return user;
 	}
 	
@@ -162,4 +164,54 @@ public class UserTestData {
 		return department;
 	}
 
+	public static UpdatePasswordEvent getUpdatePasswordEvent() {
+		PasswordDetails details = new PasswordDetails();
+		details.setId(80L);
+		details.setNewPassword("krishagni");
+		details.setConfirmPassword("krishagni");
+		
+		UpdatePasswordEvent reqEvent = new UpdatePasswordEvent(details, "e5412f93-a1c5-4ede-b66d-b32302cd4018", 80L);
+		reqEvent.setSessionDataBean(getSessionDataBean());
+		reqEvent.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
+		return reqEvent;
+	}
+	
+	public static UpdatePasswordEvent getUpdatePasswordEventForReSet() {		
+		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
+		reqEvent.getPasswordDetails().setOldPassword("catissue");
+		return reqEvent;	
+	}
+
+	public static UpdatePasswordEvent getUpdatePasswordEventForBlankNewPass() {
+		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
+		reqEvent.getPasswordDetails().setNewPassword("");
+		reqEvent.getPasswordDetails().setOldPassword("catissue");
+		return reqEvent;	
+	}
+	
+	public static UpdatePasswordEvent getUpdatePasswordEventForBlankOldPass() {
+		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
+		reqEvent.getPasswordDetails().setOldPassword("");
+		return reqEvent;	
+	}
+	
+	public static UpdatePasswordEvent getUpdatePasswordEventForBlankConfirmPass() {
+		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
+		reqEvent.getPasswordDetails().setOldPassword("catissue");
+		reqEvent.getPasswordDetails().setConfirmPassword("");
+		return reqEvent;	
+	}
+
+	public static UpdatePasswordEvent getUpdatePasswordEventForDiffPass() {
+		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
+		reqEvent.getPasswordDetails().setNewPassword("catissue");
+		reqEvent.getPasswordDetails().setConfirmPassword("sadsa");
+		return reqEvent;	
+	}
+	
+	public static UpdatePasswordEvent getUpdatePasswordEventForDiffTokens() {
+		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
+		reqEvent.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302");
+		return reqEvent;	
+	}
 }
