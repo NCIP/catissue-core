@@ -89,11 +89,12 @@
             <td ng-if="!form.modificationTime">{{formatDate(form.creationTime)}}</td>
             <td> 
               {{form.cpCount == -1 ? "ALL" : form.cpCount}} 
-              <span style="cursor: pointer;" ng-if="form.highlight" class="pull-right glyphicon glyphicon-eye-open"
-                    ng-click="showFormContexts(form)"
-                    tooltip="Click to attach form to a Collection Protocol"
-                    tooltip-placement="left">
-              </span>
+              <div style="cursor: pointer;" ng-if="form.highlight" class="pull-right" ng-click="showFormContexts(form)"
+                   tooltip="Click to attach form to a Collection Protocol"
+                   tooltip-placement="left">
+                <span class="glyphicon glyphicon-wrench"></span>
+                Attach
+              </div>
             </td>
           </tr>
         </tbody>
