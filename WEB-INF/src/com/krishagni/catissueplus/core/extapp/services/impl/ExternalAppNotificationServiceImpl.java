@@ -41,7 +41,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 	 * application.
 	 */
 	@Override
-	public void notificationService() {
+	public void notificationService() {//notifyExternalApps
 		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
 		ExternalAppNotificationService extAppNotifSvc = (ExternalAppNotificationService) caTissueContext
 				.getBean("extAppNotificationService");

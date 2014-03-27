@@ -1,26 +1,13 @@
 package krishagni.catissueplus.bizlogic;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import krishagni.catissueplus.dto.BiohazardDTO;
 import krishagni.catissueplus.dto.DerivedDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
-import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.DBTypes;
-import edu.wustl.dao.util.NamedQueryParam;
 
 
 public class DeriveBizLogic
@@ -56,60 +43,6 @@ public class DeriveBizLogic
 		return specimenDTO;
 	}
 
-	private Collection<BiohazardDTO> getBiohazardColl(Long parentSpecimenId,
-			HibernateDAO hibernateDao) throws BizLogicException
-	{
-		String sql = "select specimen.biohazardCollection from "+Specimen.class.getName()+" specimen where specimen.id="+parentSpecimenId;
-		Collection<BiohazardDTO> biohazardDTOs = new HashSet<BiohazardDTO>();
-		try{
-			
-			List bioList = hibernateDao.executeQuery(sql);
-			if(bioList != null && !bioList.isEmpty())
-			{
-				for (Object object : bioList)
-				{
-					Biohazard biohazard = (Biohazard)object;
-					BiohazardDTO biohazardDTO = new BiohazardDTO();
-					biohazardDTO.setId(biohazard.getId());
-					biohazardDTO.setName(biohazard.getName());
-					biohazardDTO.setType(biohazard.getType());
-					biohazardDTO.setStatus("ADD");
-					biohazardDTOs.add(biohazardDTO);
-				}
-			}
-		}
-		catch (final DAOException daoExp)
-		{
-			LOGGER.error(daoExp.getMessage(), daoExp);
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		return biohazardDTOs;
-	}
-
-	private SpecimenCharacteristics getSpecimenCharacteristics(Long parentSpecimenId,
-			HibernateDAO hibernateDao) throws BizLogicException 
-	{
-		
-		SpecimenCharacteristics characteristics = null;
-		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
-		substParams.put("0",new NamedQueryParam(DBTypes.LONG, parentSpecimenId));
-		try
-		{
-			List list = hibernateDao.executeNamedQuery("getSpChars", substParams);
-			if(list != null || !list.isEmpty())
-			{
-				characteristics = (SpecimenCharacteristics)list.get(0);
-			}
-		}
-		catch (final DAOException daoExp)
-		{
-			LOGGER.error(daoExp.getMessage(), daoExp);
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		return characteristics;
-	}
 
 	public SpecimenDTO insertDeriveSpecimen(HibernateDAO hibernateDao, DerivedDTO deriveDTO, SessionDataBean sessionDataBean) throws BizLogicException
 	{

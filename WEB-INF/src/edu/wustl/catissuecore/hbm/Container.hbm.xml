@@ -443,6 +443,7 @@ FROM edu.wustl.catissuecore.domain.StorageContainer STCONT WHERE STCONT.name= ?
 	select cont.id from StorageContainer cont, Site site where cont.activityStatus!='Disabled' and cont.site.id=site.id and site.name=? and not exists (select cntPos.occupiedContainer.id from ContainerPosition cntPos where cont.id = cntPos.occupiedContainer.id)
 </query>
 <query name="getCPIdsbyContainerID">select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left outer join  con.collectionProtocolCollection as cp where con.id = ?</query>
+<query name="getContainerByName"> select con from edu.wustl.catissuecore.domain.StorageContainer as con where con.name=:name</query>
 <sql-query name="insertIntoStorContSpecCountsTable">
 	INSERT INTO catissue_stor_cont_utilization(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, CONT_DATE, UTILIZATION_PERCENTAGE) VALUES(?,?,?,?) 
 </sql-query>

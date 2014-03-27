@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
@@ -12,7 +13,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistration {
 
@@ -93,6 +93,9 @@ public class CollectionProtocolRegistration {
 	}
 
 	public void setActivityStatus(String activityStatus) {
+		if (Status.ACTIVITY_STATUS_DISABLED.equals(activityStatus)) {
+			delete(false);
+		}
 		this.activityStatus = activityStatus;
 	}
 
@@ -153,9 +156,9 @@ public class CollectionProtocolRegistration {
 		else {
 			checkActiveDependents();
 		}
-		setBarcode(Utility.getDisabledValue(this.barcode));
-		setProtocolParticipantIdentifier(Utility.getDisabledValue(this.protocolParticipantIdentifier));
-		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		this.barcode = Utility.getDisabledValue(this.barcode);
+		this.protocolParticipantIdentifier = Utility.getDisabledValue(this.protocolParticipantIdentifier);
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
 	private void checkActiveDependents() {

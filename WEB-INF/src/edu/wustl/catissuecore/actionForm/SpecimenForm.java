@@ -722,11 +722,9 @@ public class SpecimenForm extends AbstractActionForm
 		}
 		else
 		{
-			this.quantity = specimen.getInitialQuantity().toString();
-			this.availableQuantity = specimen.getAvailableQuantity().toString();
+//			this.quantity = specimen.getInitialQuantity().toString();
+//			this.availableQuantity = specimen.getAvailableQuantity().toString();
 		}
-
-		specimen.getSpecimenCharacteristics();
 
 		final Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		this.exIdCounter = 1;

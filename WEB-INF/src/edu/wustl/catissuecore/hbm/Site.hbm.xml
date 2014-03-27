@@ -189,6 +189,10 @@
 		            column="FACILITY_ID"
 		            length="50"
 		        />
+		    
+		    <query name="getSiteByName">
+		      from edu.wustl.catissuecore.domain.Site site where site.name=:name
+		    </query>
     </class>
     <query name="getSiteByContainerName">Select ST.site from edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
 </query>

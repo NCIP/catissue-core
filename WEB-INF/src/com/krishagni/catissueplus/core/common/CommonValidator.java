@@ -28,4 +28,13 @@ public class CommonValidator {
 		return false;
 //		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
 	}
+	
+	public static boolean isValidPv(String parentValue, String value, String type) {
+		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
+		if (pvManager.validate(type, parentValue,value)) {
+			return true;
+		}
+		return false;
+//		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
+	}
 }

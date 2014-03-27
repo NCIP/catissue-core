@@ -30,7 +30,7 @@ public class CPRDAO
 		{
 		query = "select cpr.identifier from catissue_coll_prot_reg cpr join catissue_participant part on " +
 				"cpr.participant_id=part.identifier join catissue_part_medical_id pmi on pmi.participant_id = part.identifier " +
-				"join catissue_site site on pmi.site_id=site.identifier join catissue_specimen_protocol cp on " +
+				"join catissue_site site on pmi.site_id=site.identifier join CATISSUE_COLLECTION_PROTOCOL cp on " +
 				"cpr.COLLECTION_PROTOCOL_ID = cp.identifier where site.name='"+site.getName()+"' and pmi.MEDICAL_RECORD_NUMBER='"+medicalRecordNo+"' " +
 				"and cp.SHORT_TITLE='"+cpShortTitle+"'";
 		}
@@ -38,7 +38,7 @@ public class CPRDAO
 		{
 			query = "select cpr.identifier from catissue_coll_prot_reg cpr join catissue_participant part on " +
 					"cpr.participant_id=part.identifier join catissue_part_medical_id pmi on pmi.participant_id = part.identifier " +
-					"join catissue_site site on pmi.site_id=site.identifier join catissue_specimen_protocol cp on " +
+					"join catissue_site site on pmi.site_id=site.identifier join CATISSUE_COLLECTION_PROTOCOL cp on " +
 					"cpr.COLLECTION_PROTOCOL_ID = cp.identifier where site.identifier="+site.getId()+" and pmi.MEDICAL_RECORD_NUMBER='"+medicalRecordNo+"' " +
 					"and cp.SHORT_TITLE='"+cpShortTitle+"'";
 		}
@@ -66,7 +66,7 @@ public class CPRDAO
 		try
 		{
 			List cprList = AppUtility
-				.executeSQLQuery("select cpr.identifier from catissue_coll_prot_reg cpr, catissue_specimen_protocol sp "
+				.executeSQLQuery("select cpr.identifier from catissue_coll_prot_reg cpr, CATISSUE_COLLECTION_PROTOCOL sp "
 						+ "where cpr.PROTOCOL_PARTICIPANT_ID='"
 						+ ppid
 						+ "' and cpr.COLLECTION_PROTOCOL_ID=sp.identifier and sp.SHORT_TITLE='"

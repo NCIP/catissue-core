@@ -6,7 +6,7 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface UserDao extends Dao<User> {
 
-	edu.wustl.catissuecore.domain.User getUser(String witnessName);
+	User getUser(String witnessName);
 	
 	User getUser(Long userId);
 		

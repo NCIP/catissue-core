@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -465,12 +464,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setReadOnly(true);
 		}
 		specimenDataBean.setType(specimen.getSpecimenType());
-		final SpecimenCharacteristics characteristics = specimen.getSpecimenCharacteristics();
-		if (characteristics != null)
-		{
-			specimenDataBean.setTissueSide(characteristics.getTissueSide());
-			specimenDataBean.setTissueSite(characteristics.getTissueSite());
-		}
+			specimenDataBean.setTissueSide(specimen.getTissueSide());
+			specimenDataBean.setTissueSite(specimen.getTissueSite());
 		String concentration = "";
 		if (Constants.MOLECULAR.equals(specimen.getClassName()))
 		{

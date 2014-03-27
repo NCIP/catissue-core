@@ -44,7 +44,6 @@ import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -1110,9 +1109,8 @@ public class AliquotAction extends SecureAction
 			form.setSpecimenLabel(specimen.getLabel());
 		}
 		// bug 12954 end
-		final SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
-		form.setTissueSite(chars.getTissueSite());
-		form.setTissueSide(chars.getTissueSide());
+		form.setTissueSite(specimen.getTissueSite());
+		form.setTissueSide(specimen.getTissueSide());
 		form.setPathologicalStatus(specimen.getPathologicalStatus());
 		form.setInitialAvailableQuantity(this.getAvailableQuantity(specimen));
 		form.setAvailableQuantity(this.getAvailableQuantity(specimen));

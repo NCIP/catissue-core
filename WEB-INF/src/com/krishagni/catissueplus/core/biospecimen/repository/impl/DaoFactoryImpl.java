@@ -3,13 +3,16 @@ package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import org.hibernate.SessionFactory;
 
+import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.repository.impl.CollectionProtocolDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
-import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
@@ -102,6 +105,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public ExternalAppNotificationDao getExternalAppNotificationDao() {
 		ExternalAppNotificationDaoImpl dao = new ExternalAppNotificationDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public ContainerDao getContainerDao() {
+		ContainerDaoImpl dao = new ContainerDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

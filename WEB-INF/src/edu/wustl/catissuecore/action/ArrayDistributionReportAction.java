@@ -256,8 +256,8 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			specimenDetails.add(CommonUtilities.toString(arrayContent.getPositionDimensionTwo()));
 			specimenDetails.add(specimen.getClassName());
 			specimenDetails.add(specimen.getSpecimenType());
-			specimenDetails.add(specimen.getSpecimenCharacteristics().getTissueSide());
-			specimenDetails.add(specimen.getSpecimenCharacteristics().getTissueSite());
+			specimenDetails.add(specimen.getTissueSide());
+			specimenDetails.add(specimen.getTissueSite());
 
 			specimensDetails.add(specimenDetails);
 		}

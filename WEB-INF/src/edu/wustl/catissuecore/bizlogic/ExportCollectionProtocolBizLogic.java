@@ -379,26 +379,20 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
 								.append(specimenRequirement.getLineage())
 								.append("\"").append(",");
 
-						//headerDataMap.put("Tissue Site"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSite());
 						headerString.append("Tissue Site#").append(eventsCount)
 								.append("#").append(specimenRequirementCount)
 								.append(",");
 						valueString
 								.append("\"")
-								.append(specimenRequirement
-										.getSpecimenCharacteristics()
-										.getTissueSite()).append("\"")
+								.append(specimenRequirement.getTissueSite()).append("\"")
 								.append(",");
 
-						//headerDataMap.put("Tissue Side"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSide());
 						headerString.append("Tissue Side#").append(eventsCount)
 								.append("#").append(specimenRequirementCount)
 								.append(",");
 						valueString
 								.append("\"")
-								.append(specimenRequirement
-										.getSpecimenCharacteristics()
-										.getTissueSide()).append("\"")
+								.append(specimenRequirement.getTissueSide()).append("\"")
 								.append(",");
 
 						if (specimenRequirement.getLabelFormat() != null)
@@ -523,22 +517,18 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
 						.append(((SpecimenRequirement) abstractSpecimen)
 								.getLineage()).append("\"").append(",");
 
-				//headerDataMap.put("Tissue Site"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSite());
 				headerString.append("Tissue Site").append(postfix).append("#")
 						.append(childSpecimenCount).append(",");
 				valueString
 						.append("\"")
-						.append(((SpecimenRequirement) abstractSpecimen)
-								.getSpecimenCharacteristics().getTissueSite())
+						.append(((SpecimenRequirement) abstractSpecimen).getTissueSite())
 						.append("\"").append(",");
 
-				//headerDataMap.put("Tissue Side"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSide());
 				headerString.append("Tissue Side").append(postfix).append("#")
 						.append(childSpecimenCount).append(",");
 				valueString
 						.append("\"")
-						.append(((SpecimenRequirement) abstractSpecimen)
-								.getSpecimenCharacteristics().getTissueSide())
+						.append(((SpecimenRequirement) abstractSpecimen).getTissueSide())
 						.append("\"").append(",");
 
 				if (((SpecimenRequirement) abstractSpecimen).getLabelFormat() != null)

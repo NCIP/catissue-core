@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -12,7 +13,6 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
 
 public class SpecimenCollectionGroup {
 
@@ -99,6 +99,10 @@ public class SpecimenCollectionGroup {
 	}
 
 	public void setActivityStatus(String activityStatus) {
+		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
+		{
+			delete(false);
+		}
 		this.activityStatus = activityStatus;
 	}
 
@@ -249,6 +253,10 @@ public class SpecimenCollectionGroup {
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
+	
+	public boolean isCompleted() {
+		return Status.SCG_COLLECTION_STATUS_COMPLETED.getStatus().equals(this.collectionStatus);
+	}
 
 	public void delete(boolean isIncludeChildren) {
 		if (isIncludeChildren) {
@@ -259,9 +267,9 @@ public class SpecimenCollectionGroup {
 		else {
 			checkActiveDependents();
 		}
-		setBarcode(Utility.getDisabledValue(barcode));
-		setName(Utility.getDisabledValue(name));
-		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		this.barcode = Utility.getDisabledValue(barcode);
+		this.name = Utility.getDisabledValue(name);
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
 	private void checkActiveDependents() {

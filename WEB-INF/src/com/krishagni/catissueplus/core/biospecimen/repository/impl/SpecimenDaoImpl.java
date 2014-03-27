@@ -54,11 +54,28 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	public Specimen getSpecimen(Long id) {
 		return (Specimen)sessionFactory.getCurrentSession().get(Specimen.class, id);
 	}
+	
+	@Override
+	public boolean isLabelUnique(String label) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_ID_BY_LABEL);
+		query.setString("label", label);
+		return query.list().isEmpty()?true:false;
+	}
 
-	private static String FQN = Specimen.class.getName();
+	@Override
+	public boolean isBarcodeUnique(String barcode) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_ID_BY_BARCODE);
+		query.setString("barcode", barcode);
+		return query.list().isEmpty()?true:false;
+	}
 
-	private static String GET_SCG_ID_BY_SPECIMEN_ID = FQN + ".getScgIdBySpecimenId";
+	private static final String FQN = Specimen.class.getName();
 
-	private static String GET_SPECIMEN_DETAILS_DY_SCG_ID = FQN + ".getSpecimenDetailsByScgId";
+	private static final String GET_SCG_ID_BY_SPECIMEN_ID = FQN + ".getScgIdBySpecimenId";
+
+	private static final String GET_SPECIMEN_DETAILS_DY_SCG_ID = FQN + ".getSpecimenDetailsByScgId";
+	
+	private static final String GET_SPECIMEN_ID_BY_BARCODE = FQN +".getSpecimenIdByBarcode";
+	private static final String GET_SPECIMEN_ID_BY_LABEL = FQN +".getSpecimenIdByLabel";
 
 }

@@ -7,6 +7,7 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
@@ -20,7 +21,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.User;
 
 public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGroupFactory {
 
@@ -36,7 +36,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 
 	private static final String CPR = "collection protocol registration";
 
-	private static final String SITE = "site";
+	private static final String SITE = "site name";
 
 	private static final String NAME = "name";
 
@@ -61,15 +61,15 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		setCpe(scgDetail, scg);
 		setCpr(scgDetail, scg);
+		setCollectionStatus(scgDetail, scg);
+		setClinicalStatus(scgDetail, scg);
 		setSite(scgDetail, scg);
 		setActivityStatus(scgDetail, scg);
 		setBarcode(scgDetail, scg);
 		setName(scgDetail, scg);
 		setClinicalDiagnosis(scgDetail, scg);
-		setClinicalStatus(scgDetail, scg);
 		setCollectionEventDetails(scgDetail, scg);
 		setReceivedEventDetails(scgDetail, scg);
-		setCollectionStatus(scgDetail, scg);
 		setComments(scgDetail, scg);
 		setSprNumber(scgDetail, scg);
 		exceptionHandler.addError(erroneousFields);
@@ -94,13 +94,28 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		scg.setCollectionProtocolRegistration(cpr);
 	}
 
-	private void setSite(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
-		Site site = daoFactory.getSiteDao().getSite(scgDetail.getCollectionSiteName());
-		if (site == null) {
-			addError(ScgErrorCode.INVALID_ATTR_VALUE, SITE);
+	private void setClinicalStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+		if (isValidPv(scgDetail.getClinicalStatus(), CLINICAL_STATUS)) {
+			scg.setClinicalStatus(scgDetail.getClinicalStatus());
 			return;
 		}
-		scg.setCollectionSite(site);
+		addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_STATUS);
+	}
+
+	private void setSite(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+		if (scg.isCompleted() && isBlank(scgDetail.getCollectionSiteName())) {
+			addError(ScgErrorCode.MISSING_ATTR_VALUE, SITE);
+			return;
+		}
+		else {
+			Site site = daoFactory.getSiteDao().getSite(scgDetail.getCollectionSiteName());
+			if (site == null) {
+				addError(ScgErrorCode.INVALID_ATTR_VALUE, SITE);
+				return;
+			}
+			scg.setCollectionSite(site);
+		}
+
 	}
 
 	private void setActivityStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
@@ -116,12 +131,12 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setName(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
-		if (scg.isActive() && isBlank(scgDetail.getName())) {
+		if (!scg.isCompleted() && isBlank(scgDetail.getName())) {
 			addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
 			return;
 		}
 		scg.setName(scgDetail.getName());
-		
+
 	}
 
 	private void setClinicalDiagnosis(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
@@ -130,14 +145,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 			return;
 		}
 		addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_DIAGNOSIS);
-	}
-
-	private void setClinicalStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
-		if (isValidPv(scgDetail.getClinicalStatus(), CLINICAL_STATUS)) {
-			scg.setClinicalStatus(scgDetail.getClinicalStatus());
-			return;
-		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_STATUS);
 	}
 
 	private void setCollectionEventDetails(ScgDetail scgDetail, SpecimenCollectionGroup scg) {

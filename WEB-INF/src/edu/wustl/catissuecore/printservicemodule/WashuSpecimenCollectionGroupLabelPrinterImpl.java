@@ -78,10 +78,10 @@ public class WashuSpecimenCollectionGroupLabelPrinterImpl
 					{
 						dataMap.put(PrintWebServiceConstants.SPECIMEN_BARCODE, barcode);
 					}
-					if (obj.getSpecimenCharacteristics() != null)
+					if (obj.getTissueSite() != null)
 					{
 						dataMap.put(PrintWebServiceConstants.SPECIMEN_TISSUE_SITE, CommonUtilities
-								.toString(obj.getSpecimenCharacteristics().getTissueSite()));
+								.toString(obj.getTissueSite()));
 					}
 					if (obj.getCollectionStatus() != null)
 					{

@@ -50,16 +50,22 @@
         />
 
         </set>
-        <many-to-one
-                name="specimenCharacteristics"
-                class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-                cascade="all"
-                lazy="false"
-                outer-join="auto"
-                update="true"
-                insert="true"
-                column="SPECIMEN_CHARACTERISTICS_ID"
-         />
+        <property
+            name="tissueSide"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SIDE"
+            length="50"
+        />
+        <property
+            name="tissueSite"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SITE"
+            length="50"
+        />
 
         <property
             name="initialQuantity"
@@ -296,9 +302,9 @@
     <query name="selectParentSpecimenDetailsForAliquot">
                 select specimen.activityStatus,scg.id, specimen.id, specimen.label,
                 specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
-                specimenCharacteristics.tissueSite, specimen.specimenCharacteristics.tissueSide,
+                specimen.tissueSite, specimen.tissueSide,
                 specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
-                left join specimen.specimenCharacteristics specimenCharacteristics where specimen.label=?
+                 where specimen.label=?
     </query>
     <query name="getCpIdFromSpecimenId">
         select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
@@ -311,9 +317,9 @@
     <query name="selectParentSpecimenDetailsForAliquotByBarcode">
                 select specimen.activityStatus,scg.id, specimen.id, specimen.label,
                 specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
-                specimenCharacteristics.tissueSite, specimen.specimenCharacteristics.tissueSide,
+                specimen.tissueSite, specimen.tissueSide,
                 specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
-                left join specimen.specimenCharacteristics specimenCharacteristics where specimen.barcode=?
+                 where specimen.barcode=?
         
     </query>
     <query name="getCollectedSpecimenLabel">
@@ -322,6 +328,6 @@
     
     <query name="getSpecimenBylabel">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label = ? and specimen.activityStatus= ? </query>
     <query name="getSpecimenByBarcode">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.barcode = ? and specimen.activityStatus= ? </query>
-    <query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>
+    <!--  <query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>-->
     <query name="getSpecimenIdLabelPairForScg">select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label</query>
 </hibernate-mapping>

@@ -167,10 +167,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 
 	private void validateBarcode(String oldBarcode, String newBarcode) {
-		if ((isBlank(oldBarcode) && !isBlank(newBarcode))) {
-			ensureUniqueBarcode(newBarcode);
-		}
-		else if (!isBlank(oldBarcode) && !isBlank(newBarcode) && !oldBarcode.equals(newBarcode)) {
+		if (!isBlank(newBarcode) && !newBarcode.equals(oldBarcode)) {
 			ensureUniqueBarcode(newBarcode);
 		}
 	}

@@ -14,4 +14,8 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public Long getScgId(Long specimenId);
 
 	public Specimen getSpecimen(Long id);
+
+	public boolean isLabelUnique(String label);
+
+	public boolean isBarcodeUnique(String barcode);
 }

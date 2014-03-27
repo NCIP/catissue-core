@@ -88,7 +88,7 @@ public class CollectionProtocolDaoImpl implements CollectionProtocolDao {
 	}
 	
 	private static final String GET_CP_SQL = 
-			"select identifier, short_title, title from catissue_specimen_protocol";
+			"select identifier, short_title, title from catissue_collection_protocol";
 	
 	private static final String GET_CP_FORMS_SQL =
 			"select " +

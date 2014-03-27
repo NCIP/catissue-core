@@ -17,7 +17,7 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 	}
 
 	@Override 
-	public edu.wustl.catissuecore.domain.User getUser(String witnessName) {
+	public User getUser(String witnessName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -41,7 +41,6 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -543,8 +542,7 @@ public class CollectionProtocolUtil
 		speRequirementBean.setType(reqSpecimen.getSpecimenType());
 		speRequirementBean.setId(reqSpecimen.getId().longValue());
 		speRequirementBean.setSpecimenRequirementLabel(reqSpecimen.getSpecimenRequirementLabel());
-		SpecimenCharacteristics characteristics = reqSpecimen.getSpecimenCharacteristics();
-		updateSpeRequirementBean(reqSpecimen, speRequirementBean, characteristics);
+		updateSpeRequirementBean(reqSpecimen, speRequirementBean);
 
 		Double quantity = reqSpecimen.getInitialQuantity();
 
@@ -573,15 +571,11 @@ public class CollectionProtocolUtil
 	 * @param characteristics the characteristics
 	 */
 	private static void updateSpeRequirementBean(SpecimenRequirement reqSpecimen,
-			SpecimenRequirementBean speRequirementBean, SpecimenCharacteristics characteristics)
+			SpecimenRequirementBean speRequirementBean)
 	{
-		if (characteristics != null)
-		{
-			speRequirementBean.setTissueSite(characteristics.getTissueSite());
-			speRequirementBean.setTissueSide(characteristics.getTissueSide());
-		}
+			speRequirementBean.setTissueSite(reqSpecimen.getTissueSite());
+			speRequirementBean.setTissueSide(reqSpecimen.getTissueSide());
 
-		speRequirementBean.setSpecimenCharsId(reqSpecimen.getSpecimenCharacteristics().getId().longValue());
 		speRequirementBean.setPathologicalStatus(reqSpecimen.getPathologicalStatus());
 
 		if (Constants.MOLECULAR.equals(reqSpecimen.getClassName()))
@@ -1195,16 +1189,9 @@ public class CollectionProtocolUtil
 			reqSpecimen.setParentSpecimen(parentSpecimen);
 			if (parentSpecimen == null)
 			{
-				SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-				long identifier = specimenRequirementBean.getSpecimenCharsId();
-				if (identifier != -1)
-				{
-					specimenCharacteristics.setId(Long.valueOf(identifier));
-				}
-				specimenCharacteristics.setTissueSide(specimenRequirementBean.getTissueSide());
-				specimenCharacteristics.setTissueSite(specimenRequirementBean.getTissueSite());
+				reqSpecimen.setTissueSide(specimenRequirementBean.getTissueSide());
+				reqSpecimen.setTissueSite(specimenRequirementBean.getTissueSite());
 				reqSpecimen.setCollectionProtocolEvent(cpEvent);
-				reqSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 				//Collected and received events
 				if (reqSpecimen.getId() == null)
 				{
@@ -1217,7 +1204,8 @@ public class CollectionProtocolUtil
 			}
 			else
 			{
-				reqSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+				reqSpecimen.setTissueSide(parentSpecimen.getTissueSide());
+				reqSpecimen.setTissueSite(parentSpecimen.getTissueSite());
 				//bug no. 7489
 				//Collected and received events
 				if (specimenRequirementBean.getCollectionEventContainer() != null

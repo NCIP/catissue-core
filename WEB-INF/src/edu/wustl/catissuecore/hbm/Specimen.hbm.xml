@@ -50,17 +50,23 @@
         />
 
         </set>
-        <many-to-one
-                name="specimenCharacteristics"
-                class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-                cascade="all"
-                lazy="false"
-                outer-join="auto"
-                update="true"
-                insert="true"
-                column="SPECIMEN_CHARACTERISTICS_ID"
-         />
 
+        <property
+            name="tissueSide"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SIDE"
+            length="50"
+        />
+        <property
+            name="tissueSite"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SITE"
+            length="50"
+        />
         <property
             name="initialQuantity"
             type="double"

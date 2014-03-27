@@ -705,7 +705,8 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		aliquotSpecimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 		aliquotSpecimen.setParentSpecimen(parentSpecimen);
 		aliquotSpecimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-		aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+		aliquotSpecimen.setTissueSide(parentSpecimen.getTissueSide());
+		aliquotSpecimen.setTissueSite(parentSpecimen.getTissueSite());
 		return aliquotSpecimen;
 	}
 	
@@ -903,7 +904,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {
 				"activityStatus","id","label","barcode","specimenClass",
-				"specimenType","pathologicalStatus","specimenCharacteristics.tissueSite","specimenCharacteristics.tissueSide",
+				"specimenType","pathologicalStatus","tissueSite","tissueSide",
 				"availableQuantity","specimenPosition.storageContainer.name","specimenPosition.positionDimensionOne","specimenPosition.positionDimensionTwo"
 		};
 		
@@ -954,8 +955,8 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 				specimen.setSpecimenClass(aliquotObj.getSpecimenClass());
 				specimen.setSpecimenType(aliquotObj.getSpecimenType());
 				specimen.setPathologicalStatus(aliquotObj.getPathologicalStatus());
-				specimen.setTissueSite(aliquotObj.getSpecimenCharacteristics().getTissueSite());
-				specimen.setTissueSide(aliquotObj.getSpecimenCharacteristics().getTissueSide());
+				specimen.setTissueSite(aliquotObj.getTissueSite());
+				specimen.setTissueSide(aliquotObj.getTissueSide());
 				specimen.setAvailableQuantity(aliquotObj.getAvailableQuantity());
 				specimen.setContainerName(aliquotObj.getSpecimenPosition().getStorageContainer().getName());
 				specimen.setPositionDimensionOneString(aliquotObj.getSpecimenPosition().getPositionDimensionOne().toString());

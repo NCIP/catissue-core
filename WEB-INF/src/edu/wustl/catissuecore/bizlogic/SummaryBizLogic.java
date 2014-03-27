@@ -292,8 +292,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private String getTotalCPCount() throws DAOException, ClassNotFoundException
 	{
-		final String sql = "SELECT COUNT(*) FROM CATISSUE_SPECIMEN_PROTOCOL A, CATISSUE_COLLECTION_PROTOCOL B WHERE A.IDENTIFIER = B.IDENTIFIER AND A"
-				+ DISABLED;
+		final String sql = "SELECT COUNT(*) FROM CATISSUE_COLLECTION_PROTOCOL A WHERE A"+ DISABLED;
 		return this.getCount(sql);
 	}
 
@@ -305,8 +304,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private String getTotalDPCount() throws DAOException, ClassNotFoundException
 	{
-		final String sql = "SELECT COUNT(*) FROM CATISSUE_SPECIMEN_PROTOCOL A, CATISSUE_DISTRIBUTION_PROTOCOL B WHERE A.IDENTIFIER = B.IDENTIFIER AND A"
-				+ DISABLED;
+		final String sql = "SELECT COUNT(*) FROM CATISSUE_DISTRIBUTION_PROTOCOL A WHERE A"+ DISABLED;
 		return this.getCount(sql);
 	}
 
@@ -417,9 +415,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getTSiteWiseCount() throws BizLogicException
 	{
-		final String sql = "SELECT TISSUE_SITE, COUNT(C.IDENTIFIER) FROM CATISSUE_SPECIMEN_CHAR A, "
+		final String sql = "SELECT C.TISSUE_SITE, COUNT(C.IDENTIFIER) FROM , "
 				+ " CATISSUE_SPECIMEN C WHERE "
-				+ "A.IDENTIFIER = C.SPECIMEN_CHARACTERISTICS_ID AND "
 				+ "C.ACTIVITY_STATUS NOT IN ('Disabled') AND C.COLLECTION_STATUS LIKE 'Collected' GROUP BY A.TISSUE_SITE"
 				+ DESC_ORDER;
 

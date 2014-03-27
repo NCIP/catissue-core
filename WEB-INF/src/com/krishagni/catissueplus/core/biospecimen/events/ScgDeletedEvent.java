@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -22,7 +23,7 @@ public class ScgDeletedEvent extends ResponseEvent{
 		return event;
 	}
 
-	public static ScgDeletedEvent invalidRequest(String message, Long... id) {
+	public static ScgDeletedEvent invalidRequest(String message, ErroneousField... field) {
 		ScgDeletedEvent resp = new ScgDeletedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);

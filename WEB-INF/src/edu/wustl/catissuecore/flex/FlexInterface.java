@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.flex;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.Collections;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
@@ -34,7 +34,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -816,17 +815,13 @@ public class FlexInterface
 			sb.creationDate = specimen.getCreatedOn();
 		}
 
-		final SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
-		if (characteristic != null)
+		if (specimen.getTissueSide() != null)
 		{
-			if (characteristic.getTissueSide() != null)
-			{
-				sb.tissueSide = characteristic.getTissueSide();
-			}
-			if (characteristic.getTissueSite() != null)
-			{
-				sb.tissueSite = characteristic.getTissueSite();
-			}
+			sb.tissueSide = specimen.getTissueSide();
+		}
+		if (specimen.getTissueSite() != null)
+		{
+			sb.tissueSite = specimen.getTissueSite();
 		}
 		if (specimen.getComment() != null)
 		{
@@ -1086,8 +1081,8 @@ public class FlexInterface
 		specimenDataBean.setParentSpecimen(parentSpecimen);
 		specimenDataBean.setPathologicalStatus(sp.getPathologicalStatus());
 
-		specimenDataBean.setTissueSide(sp.getSpecimenCharacteristics().getTissueSide());
-		specimenDataBean.setTissueSite(sp.getSpecimenCharacteristics().getTissueSite());
+		specimenDataBean.setTissueSide(sp.getTissueSide());
+		specimenDataBean.setTissueSite(sp.getTissueSite());
 		specimenDataBean.setLineage(sp.getLineage());
 		specimenDataBean.setSpecimenCollectionGroup(sp.getSpecimenCollectionGroup());
 		specimenDataBean.setSpecimenEventCollection(sp.getSpecimenEventCollection());
@@ -1196,10 +1191,8 @@ public class FlexInterface
 
 		specimen.setPathologicalStatus(spBean.pathologicalStatus);
 
-		final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-		specimenCharacteristics.setTissueSide(spBean.tissueSide);
-		specimenCharacteristics.setTissueSite(spBean.tissueSite);
-		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+		specimen.setTissueSide(spBean.tissueSide);
+		specimen.setTissueSite(spBean.tissueSite);
 
 		if (spBean.derivedColl != null)
 		{
@@ -1213,7 +1206,8 @@ public class FlexInterface
 				derivedBean.receivedEvent = spBean.receivedEvent;
 				final Specimen derivedSp = this.prepareSpecimen(derivedBean);
 				derivedSp.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
-				derivedSp.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+				derivedSp.setTissueSide(specimen.getTissueSide());
+				derivedSp.setTissueSite(specimen.getTissueSite());
 				derivedSpecimenSet.add(derivedSp);
 				i++;
 			}

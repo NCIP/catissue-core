@@ -24,7 +24,6 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * A set of procedures that govern the collection and/or distribution of biospecimens.
  * @author mandar_deshmukh
- * @hibernate.class table="CATISSUE_SPECIMEN_PROTOCOL"
  */
 public abstract class SpecimenProtocol extends AbstractDomainObject implements java.io.Serializable
 {
@@ -191,9 +190,6 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
 	/**
 	 * Returns the id of the protocol.
-	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_PROTOCOL_SEQ"
 	 * @return Returns the id.
 	 */
 	@Override

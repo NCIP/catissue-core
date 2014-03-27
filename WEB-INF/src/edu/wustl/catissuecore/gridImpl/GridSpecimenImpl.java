@@ -26,13 +26,13 @@ public class GridSpecimenImpl extends AbstractGridImpl
 				"case when Specimen1.AVAILABLE_QUANTITY  is null then 0 else Specimen1.AVAILABLE_QUANTITY end as AVL_QUANTITY,"+ 
 				"case when Specimen1.LINEAGE is null then '' else Specimen1.LINEAGE end as LINEAGE, "+
 				"Specimen1.IDENTIFIER as IDENTIFIER "+
-				"FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , "+ 
+				"FROM   "+ 
 				"CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_SPECIMEN Specimen1 , catissue_spec_tag_items atg, catissue_specimen_coll_group scg "+ 
-				" WHERE scg.identifier = Specimen1.SPECIMEN_COLLECTION_GROUP_ID AND SpecimenCharacteristics1.IDENTIFIER   =  Specimen1.SPECIMEN_CHARACTERISTICS_ID  AND "+ 
+				" WHERE scg.identifier = Specimen1.SPECIMEN_COLLECTION_GROUP_ID AND "+ 
 				"Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID  AND "+
 				" Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID   AND atg.tag_id= "+ jsonString +" and "+ 
 				"( ( Specimen1.IDENTIFIER  =atg.obj_id  )   AND UPPER(Specimen1.ACTIVITY_STATUS ) != UPPER('Disabled')  ) "+
-				" ORDER BY atg.IDENTIFIER,Specimen1.IDENTIFIER ,SpecimenCharacteristics1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER "; 
+				" ORDER BY atg.IDENTIFIER,Specimen1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER "; 
 		
 		
 

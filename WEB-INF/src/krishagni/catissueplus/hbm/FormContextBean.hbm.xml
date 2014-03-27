@@ -144,7 +144,7 @@
 	      cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
 	    from
 	      catissue_form_context fctxt
-	      left join catissue_specimen_protocol cp on cp.identifier = fctxt.cp_id
+	      left join catissue_collection_protocol cp on cp.identifier = fctxt.cp_id
 	    where
 	      fctxt.container_id = :formId
 	  </sql-query>

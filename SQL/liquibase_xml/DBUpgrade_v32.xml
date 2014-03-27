@@ -37,9 +37,6 @@
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-            <column name="SPECIMEN_CHARACTERISTICS_ID" type="${int.type}" />
-        </addColumn>
-        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="INITIAL_QUANTITY" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
@@ -75,6 +72,12 @@
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="RECEIVED_QUALITY" type="${text.type}(50)" />
         </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="TISSUE_SITE" type="${text.type}(150)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="TISSUE_SIDE" type="${text.type}(50)" />
+        </addColumn>
     </changeSet>
     
     <changeSet id="2" author="nitesh" runOnChange="true">
@@ -91,9 +94,6 @@
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
-            <column name="SPECIMEN_CHARACTERISTICS_ID" type="${int.type}" />
-        </addColumn>
-        <addColumn tableName="CATISSUE_SPECIMEN">
             <column name="INITIAL_QUANTITY" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
@@ -101,6 +101,12 @@
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
             <column name="LINEAGE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="TISSUE_SITE" type="${text.type}(150)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="TISSUE_SIDE" type="${text.type}(50)" />
         </addColumn>
     </changeSet>
     
@@ -118,23 +124,29 @@
     
     <changeSet id="6" author="nitesh" dbms="mysql">
         <sql>update catissue_specimen specimen join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimen.identifier
-			set specimen.PARENT_SPECIMEN_ID = aspecimen.PARENT_SPECIMEN_ID, 
-			specimen.SPECIMEN_CHARACTERISTICS_ID = aspecimen.SPECIMEN_CHARACTERISTICS_ID,
-			specimen.INITIAL_QUANTITY = aspecimen.INITIAL_QUANTITY,
-			specimen.PATHOLOGICAL_STATUS = aspecimen.PATHOLOGICAL_STATUS,
-			specimen.LINEAGE = aspecimen.LINEAGE,
-			specimen.SPECIMEN_CLASS = aspecimen.SPECIMEN_CLASS,
-			specimen.SPECIMEN_TYPE = aspecimen.SPECIMEN_TYPE,
-			specimen.CONCENTRATION = aspecimen.CONCENTRATION where specimen.identifier is not null</sql>
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            set specimen.PARENT_SPECIMEN_ID = aspecimen.PARENT_SPECIMEN_ID, 
+            specimen.INITIAL_QUANTITY = aspecimen.INITIAL_QUANTITY,
+            specimen.PATHOLOGICAL_STATUS = aspecimen.PATHOLOGICAL_STATUS,
+            specimen.LINEAGE = aspecimen.LINEAGE,
+            specimen.SPECIMEN_CLASS = aspecimen.SPECIMEN_CLASS,
+            specimen.SPECIMEN_TYPE = aspecimen.SPECIMEN_TYPE,
+            specimen.CONCENTRATION = aspecimen.CONCENTRATION, 
+            specimen.tissue_side = sp_char.tissue_side, 
+            specimen.tissue_site = sp_char.tissue_site
+            where specimen.identifier is not null</sql>
 		<sql>update catissue_cp_req_specimen specimenReq join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimenReq.identifier
-			set specimenReq.PARENT_SPECIMEN_ID = aspecimen.PARENT_SPECIMEN_ID, 
-			specimenReq.SPECIMEN_CHARACTERISTICS_ID = aspecimen.SPECIMEN_CHARACTERISTICS_ID,
-			specimenReq.INITIAL_QUANTITY = aspecimen.INITIAL_QUANTITY,
-			specimenReq.PATHOLOGICAL_STATUS = aspecimen.PATHOLOGICAL_STATUS,
-			specimenReq.LINEAGE = aspecimen.LINEAGE,
-			specimenReq.SPECIMEN_CLASS = aspecimen.SPECIMEN_CLASS,
-			specimenReq.SPECIMEN_TYPE = aspecimen.SPECIMEN_TYPE,
-			specimenReq.CONCENTRATION = aspecimen.CONCENTRATION where specimenReq.identifier is not null</sql>
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            set specimenReq.PARENT_SPECIMEN_ID = aspecimen.PARENT_SPECIMEN_ID, 
+            specimenReq.INITIAL_QUANTITY = aspecimen.INITIAL_QUANTITY,
+            specimenReq.PATHOLOGICAL_STATUS = aspecimen.PATHOLOGICAL_STATUS,
+            specimenReq.LINEAGE = aspecimen.LINEAGE,
+            specimenReq.SPECIMEN_CLASS = aspecimen.SPECIMEN_CLASS,
+            specimenReq.SPECIMEN_TYPE = aspecimen.SPECIMEN_TYPE,
+            specimenReq.CONCENTRATION = aspecimen.CONCENTRATION,
+            specimenReq.tissue_side = sp_char.tissue_side, 
+            specimenReq.tissue_site = sp_char.tissue_site
+            where specimenReq.identifier is not null</sql>
 		<sql>update catissue_cp_req_specimen specimenReq join catissue_specimen_event_param event on 
 			event.specimen_id = specimenReq.identifier join catissue_coll_event_param collEvent on 
 			collEvent.identifier = event.identifier 
@@ -158,45 +170,51 @@
     
     <changeSet id="7" author="nitesh" dbms="oracle">
         <sql>update (
-			select specimen.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
-			specimen.SPECIMEN_CHARACTERISTICS_ID as sCharId, aspecimen.SPECIMEN_CHARACTERISTICS_ID as aCharId,
-			specimen.INITIAL_QUANTITY as sInitQty, aspecimen.INITIAL_QUANTITY as aInitQty,
-			specimen.PATHOLOGICAL_STATUS as sPathStatus, aspecimen.PATHOLOGICAL_STATUS as aPathStatus,
-			specimen.LINEAGE as sLineage, aspecimen.LINEAGE as aLineage,
-			specimen.SPECIMEN_CLASS as sClass, aspecimen.SPECIMEN_CLASS as aClass,
-			specimen.SPECIMEN_TYPE as sType, aspecimen.SPECIMEN_TYPE as aType,
-			specimen.CONCENTRATION as sCon, aspecimen.CONCENTRATION as aCon from 
-			catissue_specimen specimen join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimen.identifier
-			where specimen.identifier is not null
-			) up
-			set up.sParentId = up.aParentId,
-			up.sCharId = up.aCharId,
-			up.sInitQty = up.aInitQty,
-			up.sPathStatus = up.aPathStatus,
-			up.sLineage = up.aLineage,
-			up.sClass = up.aClass,
-			up.sType = up.aType,
-			up.sCon = up.aCon;</sql>
+            select specimen.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
+            specimen.INITIAL_QUANTITY as sInitQty, aspecimen.INITIAL_QUANTITY as aInitQty,
+            specimen.PATHOLOGICAL_STATUS as sPathStatus, aspecimen.PATHOLOGICAL_STATUS as aPathStatus,
+            specimen.LINEAGE as sLineage, aspecimen.LINEAGE as aLineage,
+            specimen.SPECIMEN_CLASS as sClass, aspecimen.SPECIMEN_CLASS as aClass,
+            specimen.SPECIMEN_TYPE as sType, aspecimen.SPECIMEN_TYPE as aType,
+            specimen.CONCENTRATION as sCon, aspecimen.CONCENTRATION as aCon, 
+            specimen.tissue_side as sTissueSide, sp_char.tissue_side as sp_charTissueSide,
+            specimen.tissue_site as sTissueSite, sp_char.tissue_site as sp_charTissueSite from
+            catissue_specimen specimen join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimen.identifier 
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            where specimen.identifier is not null
+            ) up
+            set up.sParentId = up.aParentId,
+            up.sInitQty = up.aInitQty,
+            up.sPathStatus = up.aPathStatus,
+            up.sLineage = up.aLineage,
+            up.sClass = up.aClass,
+            up.sType = up.aType,
+            up.sCon = up.aCon,
+            up.sTissueSide = up.sp_charTissueSide,
+            up.sTissueSite = up.sp_charTissueSite;</sql>
 		<sql>update (
-			select specimenReq.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
-			specimenReq.SPECIMEN_CHARACTERISTICS_ID as sCharId, aspecimen.SPECIMEN_CHARACTERISTICS_ID as aCharId,
-			specimenReq.INITIAL_QUANTITY as sInitQty, aspecimen.INITIAL_QUANTITY as aInitQty,
-			specimenReq.PATHOLOGICAL_STATUS as sPathStatus, aspecimen.PATHOLOGICAL_STATUS as aPathStatus,
-			specimenReq.LINEAGE as sLineage, aspecimen.LINEAGE as aLineage,
-			specimenReq.SPECIMEN_CLASS as sClass, aspecimen.SPECIMEN_CLASS as aClass,
-			specimenReq.SPECIMEN_TYPE as sType, aspecimen.SPECIMEN_TYPE as aType,
-			specimenReq.CONCENTRATION as sCon, aspecimen.CONCENTRATION as aCon from 
-			catissue_cp_req_specimen specimenReq join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimenReq.identifier
-			where specimenReq.identifier is not null
-			) up
-			set up.sParentId = up.aParentId,
-			up.sCharId = up.aCharId,
-			up.sInitQty = up.aInitQty,
-			up.sPathStatus = up.aPathStatus,
-			up.sLineage = up.aLineage,
-			up.sClass = up.aClass,
-			up.sType = up.aType,
-			up.sCon = up.aCon;</sql>
+            select specimenReq.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
+            specimenReq.INITIAL_QUANTITY as sInitQty, aspecimen.INITIAL_QUANTITY as aInitQty,
+            specimenReq.PATHOLOGICAL_STATUS as sPathStatus, aspecimen.PATHOLOGICAL_STATUS as aPathStatus,
+            specimenReq.LINEAGE as sLineage, aspecimen.LINEAGE as aLineage,
+            specimenReq.SPECIMEN_CLASS as sClass, aspecimen.SPECIMEN_CLASS as aClass,
+            specimenReq.SPECIMEN_TYPE as sType, aspecimen.SPECIMEN_TYPE as aType,
+            specimenReq.CONCENTRATION as sCon, aspecimen.CONCENTRATION as aCon,
+            specimenReq.tissue_side as sTissueSide, sp_char.tissue_side as sp_charTissueSide,
+            specimenReq.tissue_site as sTissueSite, sp_char.tissue_site as sp_charTissueSite from 
+            catissue_cp_req_specimen specimenReq join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimenReq.identifier
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            where specimenReq.identifier is not null
+            ) up
+            set up.sParentId = up.aParentId,
+            up.sInitQty = up.aInitQty,
+            up.sPathStatus = up.aPathStatus,
+            up.sLineage = up.aLineage,
+            up.sClass = up.aClass,
+            up.sType = up.aType,
+            up.sCon = up.aCon,
+            up.sTissueSide = up.sp_charTissueSide,
+            up.sTissueSite = up.sp_charTissueSite;</sql>
 		<sql>merge into catissue_cp_req_specimen t2
 			   using ( select event.EVENT_TIMESTAMP as aTime, 
 			event.COMMENTS as aComments,
@@ -252,11 +270,6 @@
                    constraintName="FK_RECEIVER_CP_REQ_SPECIMEN"
                    referencedColumnNames="IDENTIFIER"
                    referencedTableName="CATISSUE_USER"/>
-         <addForeignKeyConstraint baseColumnNames="SPECIMEN_CHARACTERISTICS_ID"
-                   baseTableName="CATISSUE_CP_REQ_SPECIMEN"
-                   constraintName="FK_SP_CHAR_CP_REQ_SPECIMEN"
-                   referencedColumnNames="IDENTIFIER"
-                   referencedTableName="CATISSUE_SPECIMEN_CHAR"/>
     </changeSet>
     <changeSet author="nitesh" id="10" failOnError="false">
 	     <addForeignKeyConstraint baseColumnNames="PARENT_SPECIMEN_ID"
@@ -264,11 +277,6 @@
 	               constraintName="FK_PARENT_SPECIMEN"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_SPECIMEN"/>
-	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_CHARACTERISTICS_ID"
-	               baseTableName="CATISSUE_SPECIMEN"
-	               constraintName="FK_SP_CHAR_SPECIMEN"
-	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPECIMEN_CHAR"/>
     </changeSet>
     
 	<changeSet author="nitesh" id="11" failOnError="false">
@@ -850,6 +858,7 @@
 			DECLARE
 			reqId NUMBER;
 			cpeId NUMBER;
+			dpId NUMBER;
 			  BEGIN
 			  SELECT MAX(IDENTIFIER)+1
 			  INTO reqId
@@ -858,8 +867,14 @@
 			  SELECT MAX(IDENTIFIER)+1
 			  INTO cpeId
 			  FROM CATISSUE_COLL_PROT_EVENT;
+			  
+			  SELECT NVL(MAX(IDENTIFIER),0)+1
+              INTO dpId
+              FROM CATISSUE_DISTRIBUTION_PROTOCOL;
+              
 			  execute immediate('CREATE SEQUENCE CATISSUE_REQ_SPECIMEN_SEQ MINVALUE 0 START WITH '||reqId||' INCREMENT BY 1 NOCACHE');
 			  execute immediate('CREATE SEQUENCE CATISSUE_COLL_PROT_EV_SEQ MINVALUE 0 START WITH '||cpeId||' INCREMENT BY 1 NOCACHE');
+			  execute immediate('CREATE SEQUENCE CATISSUE_DISTRI_PROT_SEQ MINVALUE 0 START WITH '||dpId||' INCREMENT BY 1 NOCACHE');
 			  END;
 			END;
 			/
@@ -1263,7 +1278,194 @@
             indexName="idx_audit_object_id"
             tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
             unique="false">
-        <column name="OBJECT_ID" type="${int.type}"/>
-    </createIndex>
- </changeSet>
+            <column name="OBJECT_ID" type="${int.type}"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="adding columns for distribution protocol" author="nitesh">
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="SHORT_TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="START_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="END_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="ENROLLMENT" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="DESCRIPTION_URL" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="updating constraints for distribution protocol" author="nitesh">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL" constraintName="FKC8999977BC7298A9"/>
+        <createIndex 
+                indexName="idx_ditri_title"
+                tableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+                unique="true">
+            <column name="TITLE" type="varchar(255)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="adding autoIncrement for CATISSUE_DISTRIBUTION_PROTOCOL" author="nitesh" dbms="mysql">
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_DISTRIBUTION_PROTOCOL"/>
+    </changeSet>
+    <changeSet id="migrating data for distribution protocol for mysql" author="nitesh" dbms="mysql">
+        <sql>update catissue_distribution_protocol dp join catissue_specimen_protocol sp on sp.identifier = dp.identifier
+			set dp.PRINCIPAL_INVESTIGATOR_ID = sp.PRINCIPAL_INVESTIGATOR_ID,
+			dp.TITLE=sp.TITLE,
+			dp.SHORT_TITLE=sp.SHORT_TITLE,
+			dp.IRB_IDENTIFIER=sp.IRB_IDENTIFIER,
+			dp.START_DATE=sp.START_DATE,
+			dp.END_DATE=sp.END_DATE,
+			dp.ENROLLMENT=sp.ENROLLMENT,
+			dp.DESCRIPTION_URL=sp.DESCRIPTION_URL,
+			dp.ACTIVITY_STATUS=sp.ACTIVITY_STATUS where dp.identifier is not null
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet id="migrating data for CATISSUE_DISTRIBUTION_PROTOCOL for oracle" author="nitesh" dbms="oracle">
+        <sql>update (
+            select dp.TITLE as cpTitle, sp.TITLE as spTitle,
+            dp.SHORT_TITLE as cpSTitle, sp.SHORT_TITLE as spSTitle,
+            dp.IRB_IDENTIFIER as cpIrb, sp.IRB_IDENTIFIER as spIrb,
+            dp.START_DATE as cpSDate, sp.START_DATE as spSDate,
+            dp.END_DATE as cpEDate, sp.END_DATE as spEDate,
+            dp.ENROLLMENT as cpEnrol, sp.ENROLLMENT as spEnroll,
+            dp.DESCRIPTION_URL as cpUrl, sp.DESCRIPTION_URL as spUrl,
+            dp.ACTIVITY_STATUS as cpAct, sp.ACTIVITY_STATUS as spAct from 
+            CATISSUE_DISTRIBUTION_PROTOCOL dp join catissue_specimen_protocol sp on sp.identifier = dp.identifier
+            where dp.identifier is not null
+            ) up
+            set up.cpTitle = up.spTitle,
+            up.cpSTitle = up.spSTitle,
+            up.cpIrb = up.spIrb,
+            up.cpSDate = up.spSDate,
+            up.cpEDate = up.spEDate,
+            up.cpEnrol = up.spEnroll,
+            up.cpUrl = up.spUrl,
+            up.cpAct = up.spAct;</sql>
+      </changeSet>
+    
+    <changeSet id="adding columns for collection protocol" author="nitesh">
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="SHORT_TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="START_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="END_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="ENROLLMENT" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="DESCRIPTION_URL" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="LABEL_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="DERIV_LABEL_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="ALIQUOT_LABEL_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="PPID_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="updating constraints for CATISSUE_COLLECTION_PROTOCOL" author="nitesh">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_COLLECTION_PROTOCOL" constraintName="FK32DC439DBC7298A9"/>
+        <createIndex 
+                indexName="idx_collection_prot_title"
+                tableName="CATISSUE_COLLECTION_PROTOCOL"
+                unique="true">
+            <column name="TITLE" type="varchar(255)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="adding autoIncrement for CATISSUE_COLLECTION_PROTOCOL" author="nitesh" dbms="mysql">
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+    </changeSet>
+    
+    <changeSet id="migrating data for CATISSUE_COLLECTION_PROTOCOL for mysql" author="nitesh" dbms="mysql">
+        <sql>update catissue_collection_protocol cp join catissue_specimen_protocol sp on sp.identifier = cp.identifier
+			set cp.PRINCIPAL_INVESTIGATOR_ID = sp.PRINCIPAL_INVESTIGATOR_ID,
+			cp.TITLE=sp.TITLE,
+			cp.SHORT_TITLE=sp.SHORT_TITLE,
+			cp.IRB_IDENTIFIER=sp.IRB_IDENTIFIER,
+			cp.START_DATE=sp.START_DATE,
+			cp.END_DATE=sp.END_DATE,
+			cp.ENROLLMENT=sp.ENROLLMENT,
+			cp.DESCRIPTION_URL=sp.DESCRIPTION_URL,
+			cp.ACTIVITY_STATUS=sp.ACTIVITY_STATUS,
+			cp.LABEL_FORMAT=sp.LABEL_FORMAT,
+			cp.DERIV_LABEL_FORMAT=sp.DERIV_LABEL_FORMAT,
+			cp.ALIQUOT_LABEL_FORMAT=sp.ALIQUOT_LABEL_FORMAT,
+			cp.PPID_FORMAT=sp.PPID_FORMAT where cp.identifier is not null
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
+    <changeSet id="migrating data for CATISSUE_COLLECTION_PROTOCOL for oracle" author="nitesh" dbms="oracle">
+        <sql>update (
+            select cp.TITLE as cpTitle, sp.TITLE as spTitle,
+            cp.SHORT_TITLE as cpSTitle, sp.SHORT_TITLE as spSTitle,
+            cp.IRB_IDENTIFIER as cpIrb, sp.IRB_IDENTIFIER as spIrb,
+            cp.START_DATE as cpSDate, sp.START_DATE as spSDate,
+            cp.END_DATE as cpEDate, sp.END_DATE as spEDate,
+            cp.ENROLLMENT as cpEnrol, sp.ENROLLMENT as spEnroll,
+            cp.DESCRIPTION_URL as cpUrl, sp.DESCRIPTION_URL as spUrl,
+            cp.ACTIVITY_STATUS as cpAct, sp.ACTIVITY_STATUS as spAct,
+            cp.LABEL_FORMAT as cpLabel, sp.LABEL_FORMAT as spLabel,
+            cp.DERIV_LABEL_FORMAT as cpDLabel, sp.DERIV_LABEL_FORMAT as spDLabel,
+            cp.ALIQUOT_LABEL_FORMAT as cpALabel, sp.ALIQUOT_LABEL_FORMAT as spALabel,
+            cp.PPID_FORMAT as cpPpid, sp.PPID_FORMAT as spPpid from 
+            catissue_collection_protocol cp join catissue_specimen_protocol sp on sp.identifier = cp.identifier
+            where cp.identifier is not null
+            ) up
+            set up.cpTitle = up.spTitle,
+            up.cpSTitle = up.spSTitle,
+            up.cpIrb = up.spIrb,
+            up.cpSDate = up.spSDate,
+            up.cpEDate = up.spEDate,
+            up.cpEnrol = up.spEnroll,
+            up.cpUrl = up.spUrl,
+            up.cpAct = up.spAct,
+            up.cpLabel = up.spLabel,
+            up.cpDLabel = up.spDLabel,
+            up.cpALabel = up.spALabel,
+            up.cpPpid = up.spPpid;</sql>
+      </changeSet>
+    
 </databaseChangeLog>         

@@ -42,7 +42,6 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
@@ -392,8 +391,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 		protectionGroupsForObjectTypes.put(Specimen.class.getName(),
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-		protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
-				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
+//		protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
+//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 
 		edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
 				.putAll(protectionGroupsForObjectTypes);

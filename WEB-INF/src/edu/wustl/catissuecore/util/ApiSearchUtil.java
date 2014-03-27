@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
@@ -159,11 +158,6 @@ public final class ApiSearchUtil
     		specimen.setSpecimenCollectionGroup(new SpecimenCollectionGroup());
     	}		
 		
-    	if (SearchUtil.isNullobject(specimen.getSpecimenCharacteristics()))
-    	{
-    		specimen.setSpecimenCharacteristics(new SpecimenCharacteristics());
-    	}		
-		
     	if (SearchUtil.isNullobject(specimen.getInitialQuantity()))
     	{
     		specimen.setInitialQuantity(new Double(0));
@@ -180,11 +174,6 @@ public final class ApiSearchUtil
     	if (SearchUtil.isNullobject(requirementSpecimen.getCollectionProtocolEvent()))
     	{
     		requirementSpecimen.setCollectionProtocolEvent(new CollectionProtocolEvent());
-    	}		
-		
-    	if (SearchUtil.isNullobject(requirementSpecimen.getSpecimenCharacteristics()))
-    	{
-    		requirementSpecimen.setSpecimenCharacteristics(new SpecimenCharacteristics());
     	}		
 		
     	if (SearchUtil.isNullobject(requirementSpecimen.getInitialQuantity()))

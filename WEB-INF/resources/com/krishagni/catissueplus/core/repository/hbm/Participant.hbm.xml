@@ -53,7 +53,7 @@
 		<map name="cprCollection" table="catissue_coll_prot_reg" cascade="all">
 			<key column="PARTICIPANT_ID" />
 			<map-key
-				formula="(select cp.TITLE from catissue_specimen_protocol cp where cp.identifier=COLLECTION_PROTOCOL_ID)"
+				formula="(select cp.TITLE from catissue_collection_protocol cp where cp.identifier=COLLECTION_PROTOCOL_ID)"
 				type="string" />
 			<one-to-many
 				class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration" />

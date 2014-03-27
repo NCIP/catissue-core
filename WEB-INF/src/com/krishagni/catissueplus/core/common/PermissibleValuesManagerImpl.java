@@ -20,4 +20,10 @@ public class PermissibleValuesManagerImpl implements PermissibleValuesManager{
 		//TODO Auto-generated method stub
 		return true;
 	}
+
+	@Override
+	public boolean validate(String type, String parentValue, String value) {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

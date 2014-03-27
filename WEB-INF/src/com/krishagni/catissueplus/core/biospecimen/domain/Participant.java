@@ -176,6 +176,9 @@ public class Participant {
 	}
 
 	public void setActivityStatus(String activityStatus) {
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
+			delete(false);
+		}
 		this.activityStatus = activityStatus;
 	}
 
@@ -240,10 +243,10 @@ public class Participant {
 		setActivityStatus(activityStatus);
 	}
 
-	public void setActive()
-	{
+	public void setActive() {
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
+
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
@@ -258,9 +261,9 @@ public class Participant {
 		else {
 			checkActiveDependents();
 		}
-		setSocialSecurityNumber(Utility.getDisabledValue(this.socialSecurityNumber));
 		updateMrn();
-		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		this.socialSecurityNumber = Utility.getDisabledValue(this.socialSecurityNumber);
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
 	private void updateMrn() {
@@ -272,11 +275,11 @@ public class Participant {
 	}
 
 	private void checkActiveDependents() {
-			for (CollectionProtocolRegistration cpr : this.cprCollection.values()) {
-				if (cpr.isActive()) {
-					throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
-				}
+		for (CollectionProtocolRegistration cpr : this.cprCollection.values()) {
+			if (cpr.isActive()) {
+				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
+		}
 	}
 
 }

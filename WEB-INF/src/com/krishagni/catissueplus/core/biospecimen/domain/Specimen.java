@@ -12,7 +12,6 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -60,8 +59,6 @@ public class Specimen {
 	private SpecimenPosition specimenPosition;
 
 	private Specimen parentSpecimen;
-
-	private SpecimenCharacteristics characteristics;
 
 	private Set<SpecimenEventParameters> eventCollection = new HashSet<SpecimenEventParameters>();
 
@@ -156,8 +153,20 @@ public class Specimen {
 	}
 
 	public void setActivityStatus(String activityStatus) {
+		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
+		{
+			delete(false);
+		}
 		this.activityStatus = activityStatus;
 	}
+	
+//	public void setActivityStatus(String activityStatus,boolean isToIncludeChildren) {
+//		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
+//		{
+//			delete(isToIncludeChildren);
+//		}
+//		this.activityStatus = activityStatus;
+//	}
 
 	public Boolean getIsAvailable() {
 		return isAvailable;
@@ -271,20 +280,16 @@ public class Specimen {
 		this.externalIdentifierCollection = externalIdentifierCollection;
 	}
 
-	public SpecimenCharacteristics getCharacteristics() {
-		return characteristics;
-	}
-
-	public void setCharacteristics(SpecimenCharacteristics characteristics) {
-		this.characteristics = characteristics;
-	}
-
 	public void setActive() {
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
 
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
+	}
+	
+	public boolean isCollected() {
+		return Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus().equals(this.collectionStatus);
 	}
 
 	public void delete(boolean isIncludeChildren) {
@@ -296,15 +301,15 @@ public class Specimen {
 		else {
 			checkActiveDependents();
 		}
-		if(specimenPosition!=null)
+		if(this.specimenPosition!=null)
 		{
-			specimenPosition.setSpecimen(null);
+//			this.specimenPosition.setSpecimen(null);
 			this.setSpecimenPosition(null);
 		}
 		
-		this.setBarcode(Utility.getDisabledValue(barcode));
-		this.setLabel(Utility.getDisabledValue(label));
-		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		this.barcode = Utility.getDisabledValue(barcode);
+		this.label = Utility.getDisabledValue(label);
+		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 	}
 
 	private void checkActiveDependents() {
@@ -313,6 +318,10 @@ public class Specimen {
 				throw new CatissueException(ParticipantErrorCode.ACTIVE_CHILDREN_FOUND);
 			}
 		}
+	}
+
+	public void update(Specimen specimen) {
+		
 	}
 
 }

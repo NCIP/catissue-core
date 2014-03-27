@@ -20,7 +20,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -34,6 +33,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * <p>This class initializes the fields of MultipleSpecimenValidationUtil.java</p>
@@ -102,7 +102,8 @@ public final class MultipleSpecimenValidationUtil
 			while (iterator.hasNext())
 			{
 				Specimen derivedSpecimen = (Specimen) iterator.next();
-				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+				derivedSpecimen.setTissueSide(specimen.getTissueSide());
+				derivedSpecimen.setTissueSite(specimen.getTissueSite());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
@@ -314,10 +315,9 @@ public final class MultipleSpecimenValidationUtil
 					}
 				}
 			}
-			SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
 			if (specimen.getParentSpecimen() == null)
 			{
-				if (characters == null)
+				if (Validator.isEmpty(specimen.getTissueSide()) && Validator.isEmpty(specimen.getTissueSite()))
 				{
 					throw AppUtility.getApplicationException( null,"specimen.characteristics.errMsg",  "");
 				}
@@ -332,7 +332,7 @@ public final class MultipleSpecimenValidationUtil
 								Constants.CDE_NAME_TISSUE_SITE, null);
 
 						if (!Validator
-								.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+								.isEnumeratedValue(tissueSiteList, specimen.getTissueSite()))
 						{
 							throw AppUtility.getApplicationException( null,"protocol.tissueSite.errMsg",  "");
 						}
@@ -342,7 +342,7 @@ public final class MultipleSpecimenValidationUtil
 								Constants.CDE_NAME_TISSUE_SIDE, null);
 
 						if (!Validator
-								.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+								.isEnumeratedValue(tissueSideList, specimen.getTissueSide()))
 						{
 							throw AppUtility.getApplicationException( null,"specimen.tissueSide.errMsg",  "");
 						}

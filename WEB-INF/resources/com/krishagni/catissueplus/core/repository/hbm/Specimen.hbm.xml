@@ -85,19 +85,16 @@
 
 		<property name="availableQuantity" type="double" column="AVAILABLE_QUANTITY" />
 
+		<property name="tissueSide" type="string" column="TISSUE_SIDE" />
+		
+		<property name="tissueSite" type="string" column="TISSUE_SITE" />
+
 		<many-to-one name="specimenCollectionGroup"
 			class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"
 			column="SPECIMEN_COLLECTION_GROUP_ID" />
 
 		<many-to-one name="specimenRequirement"
 			class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="REQ_SPECIMEN_ID" />
-			
-		<many-to-one
-                name="characteristics"
-                class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-                cascade="all"
-                column="SPECIMEN_CHARACTERISTICS_ID"
-         />
 
 		<query name="getSpecimenDetails">
 			select
@@ -105,6 +102,13 @@
 			spr.specimenRequirementLabel from Specimen as sp left outer join
 			sp.specimenRequirement as spr where sp.parentSpecimen.id =
 			:parentSpecimenId and sp.activityStatus != 'Disabled' order by sp.id
+		</query>
+		<query name="getSpecimenIdByBarcode">
+			select sp.id from Specimen sp where
+			sp.barcode=:barcode
+		</query>
+		<query name="getSpecimenIdByLabel">
+			select sp.id from Specimen sp where sp.label=:label
 		</query>
 		<sql-query name="getScgIdBySpecimenId">
 			<return-scalar column="scgId" type="long" />

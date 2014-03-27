@@ -19,6 +19,10 @@ public final class Status {
 	public static final Status ACTIVITY_STATUS_CLOSED = new Status("Closed", 3);
 
 	public static final Status ACTIVITY_STATUS = new Status("activityStatus", 4);
+	
+	public static final Status SPECIMEN_COLLECTION_STATUS_COLLECTED = new Status("Collected", 5);
+	
+	public static final Status SCG_COLLECTION_STATUS_COMPLETED = new Status("Completed", 6);
 
 	public String getStatus() {
 		return this.statusName;

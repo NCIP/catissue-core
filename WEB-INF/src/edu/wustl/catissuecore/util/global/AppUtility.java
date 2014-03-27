@@ -2725,6 +2725,7 @@ public class AppUtility
 	}
 
 	// bug 11611 and 11659 end
+	//-- TODO need to modify this call as this is throwing the edu/wustl/cab2b/common/exception/CheckedException which was present in older DE.
 	public static boolean hasPrivilegeToView(final String objName,
 			final Long identifier, final SessionDataBean sessionDataBean,
 			final String privilegeName)
@@ -2736,9 +2737,9 @@ public class AppUtility
 
 		List cpIdsList = new ArrayList();
 		final Set<Long> cpIds = new HashSet<Long>();
-
-		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName,
-				identifier, sessionDataBean);
+		//-- TODO need to modify this call as this is throwing the edu/wustl/cab2b/common/exception/CheckedException which was present in older DE.
+//		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName,
+//				identifier, sessionDataBean);
 
 		if (cpIdsList == null)
 		{
@@ -3857,7 +3858,7 @@ public class AppUtility
 			throws ApplicationException
 	{
 		// Query to return titles of collection protocol related to given
-		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
+		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_COLLECTION_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
 				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "
 				+ id;
 		final List resultList = executeSQLQuery(sql);

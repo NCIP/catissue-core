@@ -14,7 +14,6 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -38,9 +37,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -262,10 +259,10 @@ public class SpecimenBizlogic
 			oldSpecimenObj.setPathologicalStatus(specimenDTO.getPathologicalStatus());
 
 		if (!Validator.isEmpty(specimenDTO.getTissueSide()))
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
+			oldSpecimenObj.setTissueSide(specimenDTO.getTissueSide());
 
 		if (!Validator.isEmpty(specimenDTO.getTissueSite()))
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
+			oldSpecimenObj.setTissueSite(specimenDTO.getTissueSite());
 
 		if (!Validator.isEmpty(specimenDTO.getComments()))
 			oldSpecimenObj.setComment(specimenDTO.getComments());
@@ -688,8 +685,8 @@ public class SpecimenBizlogic
 			specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup()
 					.getName());
 		}
-		specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
-		specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+		specimenDTO.setTissueSide(specimen.getTissueSide());
+		specimenDTO.setTissueSite(specimen.getTissueSite());
 		specimenDTO.setType(specimen.getSpecimenType());
 		if (specimen.getSpecimenPosition() != null)
 		{
@@ -839,10 +836,8 @@ public class SpecimenBizlogic
 		specimen.setPathologicalStatus(specimenDTO.getPathologicalStatus());
 		specimen.setSpecimenClass(specimenDTO.getClassName());
 		specimen.setSpecimenType(specimenDTO.getType());
-		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-		specimenCharacteristics.setTissueSide(specimenDTO.getTissueSide());
-		specimenCharacteristics.setTissueSite(specimenDTO.getTissueSite());
-		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+		specimen.setTissueSide(specimenDTO.getTissueSide());
+		specimen.setTissueSite(specimenDTO.getTissueSite());
 		SpecimenPosition position = new SpecimenPosition();
 		position.setPositionDimensionOneString((specimenDTO.getPos1()));
 		position.setPositionDimensionTwoString((specimenDTO.getPos2()));

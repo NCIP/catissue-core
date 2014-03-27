@@ -2,7 +2,7 @@
 	<view>
 		<name>CollectionProtocol</name>
 		<caption>Collection Protocol</caption>
-		<table>CATISSUE_SPECIMEN_PROTOCOL</table>
+		<table>CATISSUE_COLLECTION_PROTOCOL</table>
 		<row>
 			<numberField>
 				<name>id</name>
@@ -19,7 +19,7 @@
 				<caption>Short Title</caption>
 				<column>SHORT_TITLE</column>
 				<options>
-					<sql>select distinct SHORT_TITLE from CATISSUE_SPECIMEN_PROTOCOL</sql>
+					<sql>select distinct SHORT_TITLE from CATISSUE_COLLECTION_PROTOCOL</sql>
 				</options>
 			</dropDown>
 		</row>

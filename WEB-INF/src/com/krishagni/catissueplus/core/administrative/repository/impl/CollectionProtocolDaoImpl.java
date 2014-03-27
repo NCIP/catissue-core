@@ -1,17 +1,18 @@
 
-package com.krishagni.catissueplus.core.biospecimen.repository.impl;
+package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
 
+import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
-import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
@@ -49,5 +50,10 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String FQN = CollectionProtocol.class.getName();
 
 	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
+
+	@Override
+	public SpecimenRequirement getSpecimenRequirement(Long requirementId) {
+		return (SpecimenRequirement) sessionFactory.getCurrentSession().get(SpecimenRequirement.class, requirementId);
+	}
 
 }

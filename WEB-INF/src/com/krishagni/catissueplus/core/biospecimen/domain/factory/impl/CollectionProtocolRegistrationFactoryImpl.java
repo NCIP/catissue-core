@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
@@ -26,7 +27,6 @@ import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.User;
 
 public class CollectionProtocolRegistrationFactoryImpl implements CollectionProtocolRegistrationFactory {
 

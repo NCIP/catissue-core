@@ -248,7 +248,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 		xmlSpecimen.setActivityStatus(specimen.getActivityStatus());
 		// add specimen characterastics
 		SpecimenCharacteristicsType xmlCharacterastics = new SpecimenCharacteristicsTypeImpl();
-		xmlCharacterastics.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+		xmlCharacterastics.setTissueSite(specimen.getTissueSite());
 		xmlSpecimen.setSpecimenCharacteristics(xmlCharacterastics);
 
 		updateXmlObjectForPosition(specimen, xmlSpecimen);
