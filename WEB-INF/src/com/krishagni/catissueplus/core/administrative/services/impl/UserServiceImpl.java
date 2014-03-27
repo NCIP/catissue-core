@@ -11,7 +11,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
@@ -25,6 +27,8 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
+
+import edu.wustl.catissuecore.actionForm.UserForm;
 
 public class UserServiceImpl implements UserService {
 
@@ -150,10 +154,10 @@ public class UserServiceImpl implements UserService {
 			if (user == null) {
 				return PasswordUpdatedEvent.notFound(userId);
 			}
-			
+
 			validateTerms(event, user);
 			validateOldPassword(event.getPasswordDetails());
-			
+
 			user.updatePassword(event.getPasswordDetails());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			return PasswordUpdatedEvent.ok(event.getPasswordDetails());
@@ -163,6 +167,24 @@ public class UserServiceImpl implements UserService {
 		}
 		catch (Exception e) {
 			return PasswordUpdatedEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public PasswordForgottenEvent forgotPassword(ForgotPasswordEvent event) {
+		try {
+			Long userId = event.getId();
+			User user = daoFactory.getUserDao().getUser(userId);
+			if (user == null) {
+				return PasswordForgottenEvent.notFound(userId);
+			}
+			user.setPasswordToken(UUID.randomUUID().toString());
+			daoFactory.getUserDao().saveOrUpdate(user);
+			return PasswordForgottenEvent.ok(UserDetails.fromDomain(user));
+		}
+		catch (Exception e) {
+			return PasswordForgottenEvent.serverError(e);
 		}
 	}
 
@@ -184,12 +206,12 @@ public class UserServiceImpl implements UserService {
 		if (isBlank(event.getPasswordDetails().getConfirmPassword())) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, CONFIRM_PASSWORD);
 		}
-		
+
 		if (!event.getPasswordDetails().getNewPassword().equals(event.getPasswordDetails().getConfirmPassword())) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, NEW_PASSWORD);
 		}
-		
-		if(!user.getPasswordToken().equals(event.getPasswordToken())){
+
+		if (!user.getPasswordToken().equals(event.getPasswordToken())) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
 		}
 	}

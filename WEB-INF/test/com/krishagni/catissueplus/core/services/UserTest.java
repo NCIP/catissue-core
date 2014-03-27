@@ -20,7 +20,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
@@ -35,6 +37,8 @@ import com.krishagni.catissueplus.core.administrative.services.impl.UserServiceI
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.UserTestData;
+
+import edu.wustl.catissuecore.actionForm.UserForm;
 
 public class UserTest {
 
@@ -313,6 +317,19 @@ public class UserTest {
 	}
 	
 	@Test
+	public void testPasswordReSetWithInvalidOldPassword() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		when(userDao.isValidOldPassword(anyString(), anyLong())).thenReturn(false);
+		
+		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEvent();
+		
+		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
+	}
+	
+	@Test
 	public void testForPasswordSetWithInvalidUser() {
 		when(userDao.getUser(anyLong())).thenReturn(null);
 		UpdatePasswordEvent reqEvent =  UserTestData.getUpdatePasswordEvent();
@@ -383,6 +400,36 @@ public class UserTest {
 		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
 		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+	
+	@Test
+	public void testForInvalidUserForgotPassword() {
+		when(userDao.getUser(anyLong())).thenReturn(null);
+		ForgotPasswordEvent reqEvent = UserTestData.getForgotPasswordEvent();
+		reqEvent.setSessionDataBean(UserTestData.getSessionDataBean());
+
+		PasswordForgottenEvent response = userService.forgotPassword(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testSuccessfulForgotPassword() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		ForgotPasswordEvent reqEvent = UserTestData.getForgotPasswordEvent();
+		PasswordForgottenEvent response = userService.forgotPassword(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getUserDetails().getPasswordToken());
+	}
+
+	@Test
+	public void testForgotPasswordWithServerErr() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		ForgotPasswordEvent reqEvent = UserTestData.getForgotPasswordEvent();
+		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
+		PasswordForgottenEvent response = userService.forgotPassword(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}

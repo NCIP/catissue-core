@@ -40,8 +40,6 @@ public class UserFactoryImpl implements UserFactory {
 
 	private final String COUNTRY = "country";
 
-	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}

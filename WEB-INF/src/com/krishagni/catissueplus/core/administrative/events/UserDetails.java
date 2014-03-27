@@ -41,6 +41,8 @@ public class UserDetails {
 	
 	protected String phoneNumber;
 	
+	protected String passwordToken;
+	
 	public Long getId() {
 		return id;
 	}
@@ -177,6 +179,14 @@ public class UserDetails {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public String getPasswordToken() {
+		return passwordToken;
+	}
+
+	public void setPasswordToken(String passwordToken) {
+		this.passwordToken = passwordToken;
+	}
+
 	public static UserDetails fromDomain(User user) {
 		UserDetails dto = new UserDetails();
 		
@@ -190,6 +200,7 @@ public class UserDetails {
 		dto.setLdapId(user.getLdapId());
 		dto.setCreateDate(user.getCreateDate());
 		dto.setComments(user.getComments());
+		dto.setPasswordToken(user.getPasswordToken());
 		updateAddressDetails(dto, user.getAddress());
 		return dto;	
 	}

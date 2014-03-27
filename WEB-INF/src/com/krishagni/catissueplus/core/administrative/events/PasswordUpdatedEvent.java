@@ -1,7 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -41,7 +39,7 @@ public class PasswordUpdatedEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static PasswordUpdatedEvent notAuthorized(UpdateParticipantEvent event1) {
+	public static PasswordUpdatedEvent notAuthorized(UpdateUserEvent event1) {
 		PasswordUpdatedEvent event = new PasswordUpdatedEvent();
 		event.setStatus(EventStatus.NOT_AUTHORIZED);
 		return event;

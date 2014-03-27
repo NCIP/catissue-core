@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
@@ -23,10 +25,12 @@ import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.common.email.EmailHandler;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import gov.nih.nci.semantic.util.Email;
 
 @Controller
 @RequestMapping("/users")
@@ -44,6 +48,7 @@ public class UserController {
 		public UserDetails createUser(@RequestBody UserDetails userDetails) {
 			UserCreatedEvent resp = userService.createUser(new CreateUserEvent(userDetails));
 			if (resp.getStatus() == EventStatus.OK) {
+				EmailHandler.sendUserCreatedEmail(resp.getUserDetails());
 				return resp.getUserDetails();
 			}		
 			return null;
@@ -55,6 +60,7 @@ public class UserController {
 		public UserDetails updateUser(@PathVariable Long id, @RequestBody UserDetails userDetails) {
 			UserUpdatedEvent resp = userService.updateUser(new UpdateUserEvent(userDetails, id));
 			if (resp.getStatus() == EventStatus.OK) {
+				EmailHandler.sendUserUpdatedEmail(resp.getUserDetails());
 				return resp.getUserDetails();
 			}
 			return null;
@@ -92,6 +98,20 @@ public class UserController {
 			PasswordUpdatedEvent resp = userService.resetPassword(new UpdatePasswordEvent(passwordDetails, token, id));
 			if (resp.getStatus() == EventStatus.OK) {
 				return resp.getPasswordDetails();
+			}
+			return null;
+		}
+		
+		@RequestMapping(method = RequestMethod.PUT, value="/{id}/forgotPassword")
+		@ResponseBody
+		@ResponseStatus(HttpStatus.OK)
+		public String forgotPassword(@PathVariable Long id) {
+			ForgotPasswordEvent event = new ForgotPasswordEvent();
+			event.setId(id);
+			PasswordForgottenEvent resp = userService.forgotPassword(event);
+			if (resp.getStatus() == EventStatus.OK) {
+				EmailHandler.sendForgotPasswordEmail(resp.getUserDetails());
+				return resp.getMessage();
 			}
 			return null;
 		}

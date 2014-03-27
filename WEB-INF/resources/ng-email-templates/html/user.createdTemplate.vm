@@ -38,5 +38,8 @@ Congratulations! You are now a member of caTissue. Your registration details are
 
 </table>
 <br>
-
+Please click the below link to set your password:
+<br>
+$appUrl/rest/ng/users/$user.id/setPassword/$user.passwordToken<br>
+<br>
 $footer

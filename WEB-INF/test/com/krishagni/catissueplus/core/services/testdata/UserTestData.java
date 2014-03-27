@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
@@ -56,12 +58,22 @@ public class UserTestData {
 		user.setLoginName("admin@admin.com");
 		user.setEmailAddress("sci@sci.com");
 		user.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
+		user.setDepartment(new Department());
+		user.setAddress(new Address());
 		return user;
 	}
 	
 	public static  CloseUserEvent getCloseUserEvent() {
 		Long userId = 1l;
 		CloseUserEvent event = new CloseUserEvent();
+		event.setId(userId);
+		event.setSessionDataBean(getSessionDataBean());
+		return event;
+	}
+	
+	public static  ForgotPasswordEvent getForgotPasswordEvent() {
+		Long userId = 1l;
+		ForgotPasswordEvent event = new ForgotPasswordEvent();
 		event.setId(userId);
 		event.setSessionDataBean(getSessionDataBean());
 		return event;
