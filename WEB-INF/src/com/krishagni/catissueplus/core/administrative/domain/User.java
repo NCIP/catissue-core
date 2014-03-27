@@ -2,6 +2,10 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 
 
 public class User implements Serializable {
@@ -30,7 +34,9 @@ public class User implements Serializable {
 
 	private String comments;
 	
-	private Password password;
+	private Set<Password> passwordCollection = new HashSet<Password>();
+	
+	private String passwordToken = null;
 	
 	public Long getId() {
 		return id;
@@ -120,12 +126,20 @@ public class User implements Serializable {
 		this.comments = comments;
 	}
 	
-	public Password getPassword() {
-		return password;
+	public Set<Password> getPasswordCollection() {
+		return passwordCollection;
+	}
+	
+	public void setPasswordCollection(Set<Password> passwordCollection) {
+		this.passwordCollection = passwordCollection;
 	}
 
-	public void setPassword(Password password) {
-		this.password = password;
+	public String getPasswordToken() {
+		return passwordToken;
+	}
+	
+	public void setPasswordToken(String passwordToken) {
+		this.passwordToken = passwordToken;
 	}
 
 	public void update(User user) {
@@ -139,7 +153,6 @@ public class User implements Serializable {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
-		this.setPassword(user.getPassword());
 		updateAddressDetails(this.getAddress(), user.getAddress());		
 	}
 	
@@ -155,5 +168,14 @@ public class User implements Serializable {
 		oldAddress.setState(address.getState());
 		oldAddress.setCity(address.getCity());
 		oldAddress.setZipCode(address.getZipCode());
+	}
+	
+	public void updatePassword(PasswordDetails passwordDetails) {
+		Password password =  new Password();
+		password.setPassword(passwordDetails.getNewPassword());
+		password.setUpdateDate(new Date());
+		password.setUser(this);
+		this.passwordCollection.add(password);
+		this.setPasswordToken(null);
 	}
 }

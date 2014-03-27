@@ -20,10 +20,13 @@ import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
 
 public class UserFactoryImpl implements UserFactory {
 
 	private DaoFactory daoFactory;
+
+	private ObjectCreationException exceptionHandler = new ObjectUpdationException();
 
 	private final String FIRST_NAME = "first name";
 
@@ -43,7 +46,7 @@ public class UserFactoryImpl implements UserFactory {
 		this.daoFactory = daoFactory;
 	}
 
-	public User createUser(UserDetails details, ObjectCreationException exceptionHandler) {
+	public User createUser(UserDetails details) {
 		User user = new User();
 		user.setLdapId(details.getLdapId());
 		user.setComments(details.getComments());
@@ -54,25 +57,25 @@ public class UserFactoryImpl implements UserFactory {
 		setAddress(user, details);
 		setEmailAddress(user, details.getEmailAddress());
 		setDepartment(user, details);
-		exceptionHandler.addError(erroneousFields);
+		exceptionHandler.checkErrorAndThrow();
 		return user;
 	}
 
 	private void setName(User user, UserDetails details) {
 		if (isBlank(details.getFirstName())) {
-			addError(UserErrorCode.INVALID_ATTR_VALUE, FIRST_NAME);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, FIRST_NAME);
 		}
 		user.setFirstName(details.getFirstName());
 
 		if (isBlank(details.getLastName())) {
-			addError(UserErrorCode.INVALID_ATTR_VALUE, LAST_NAME);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, LAST_NAME);
 		}
 		user.setLastName(details.getLastName());
 	}
 
 	private void setLoginName(User user, UserDetails details) {
 		if (isBlank(details.getLoginName())) {
-			addError(UserErrorCode.INVALID_ATTR_VALUE, LOGIN_NAME);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, LOGIN_NAME);
 		}
 		user.setLoginName(details.getLoginName());
 	}
@@ -81,7 +84,7 @@ public class UserFactoryImpl implements UserFactory {
 		Department department = daoFactory.getDepartmentDao().getDepartment(details.getDeptName());
 
 		if (department == null) {
-			addError(UserErrorCode.NOT_FOUND, DEPARTMENT);
+			exceptionHandler.addError(UserErrorCode.NOT_FOUND, DEPARTMENT);
 		}
 		user.setDepartment(department);
 	}
@@ -105,17 +108,17 @@ public class UserFactoryImpl implements UserFactory {
 
 	private void checkForPVs(UserDetails details) {
 		if (!CommonValidator.isValidPv(details.getCountry(), COUNTRY)) {
-			addError(UserErrorCode.INVALID_ATTR_VALUE, COUNTRY);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, COUNTRY);
 		}
 	}
 
 	private void setEmailAddress(User user, String email) {
 		if (isBlank(email)) {
-			addError(UserErrorCode.INVALID_ATTR_VALUE, EMAIL_ADDRESS);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, EMAIL_ADDRESS);
 		}
 
 		if (!isEmailValid(email)) {
-			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, EMAIL_ADDRESS);
+			exceptionHandler.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, EMAIL_ADDRESS);
 		}
 		user.setEmailAddress(email);
 	}
@@ -132,7 +135,4 @@ public class UserFactoryImpl implements UserFactory {
 		return result;
 	}
 
-	private void addError(CatissueErrorCode event, String field) {
-		erroneousFields.add(new ErroneousField(event, field));
-	}
 }

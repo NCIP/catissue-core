@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
@@ -29,8 +32,6 @@ import edu.wustl.common.beans.SessionDataBean;
 @RequestMapping("/users")
 public class UserController {
 
-		private String ACTIVITY_STATUS_CLOSED = "Closed";
-		
 		@Autowired
 		private UserService userService;
 
@@ -69,6 +70,28 @@ public class UserController {
 			UserClosedEvent resp = userService.closeUser(event);
 			if (resp.getStatus() == EventStatus.OK) {
 				return resp.getMessage();
+			}
+			return null;
+		}
+		
+		@RequestMapping(method = RequestMethod.PUT, value="/{id}/setPassword/{token}")
+		@ResponseBody
+		@ResponseStatus(HttpStatus.OK)
+		public PasswordDetails setPassword(@PathVariable Long id, @PathVariable String token, @RequestBody PasswordDetails passwordDetails) {
+			PasswordUpdatedEvent resp = userService.setPassword(new UpdatePasswordEvent(passwordDetails, token, id));
+			if (resp.getStatus() == EventStatus.OK) {
+				return resp.getPasswordDetails();
+			}
+			return null;
+		}
+		
+		@RequestMapping(method = RequestMethod.PUT, value="/{id}/resetPassword/{token}")
+		@ResponseBody
+		@ResponseStatus(HttpStatus.OK)
+		public PasswordDetails resetPassword(@PathVariable Long id, @PathVariable String token, @RequestBody PasswordDetails passwordDetails) {
+			PasswordUpdatedEvent resp = userService.resetPassword(new UpdatePasswordEvent(passwordDetails, token, id));
+			if (resp.getStatus() == EventStatus.OK) {
+				return resp.getPasswordDetails();
 			}
 			return null;
 		}

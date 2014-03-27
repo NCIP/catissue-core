@@ -23,11 +23,7 @@ private DaoFactory daoFactory;
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DEPARTMENT_BY_NAME);
 		query.setString("name", name);
 		List<Department> results = query.list();
-		
-		if(results.size() > 0){
-			return results.get(0);
-		}
-		return null;
+		return results.size() > 0 ?  results.get(0) : null;
 	}
 	
 	private static final String FQN = Department.class.getName();

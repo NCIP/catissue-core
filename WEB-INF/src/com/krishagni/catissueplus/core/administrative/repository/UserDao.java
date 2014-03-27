@@ -13,4 +13,7 @@ public interface UserDao extends Dao<User> {
 	Boolean isUniqueLoginName(String loginName);
 	
 	Boolean isUniqueEmailAddress(String emailAddress);
+
+	Boolean isValidOldPassword(String oldPassword, Long id);
+
 }

@@ -34,6 +34,7 @@ public class ObjectCreationException extends RuntimeException {
 	public ErroneousField[] getErroneousFields(){
 		return fields.toArray(new ErroneousField[fields.size()]);
 	}
+	
 	public void addError(List<ErroneousField> fields) {
 		this.fields.addAll(fields);
 	}
