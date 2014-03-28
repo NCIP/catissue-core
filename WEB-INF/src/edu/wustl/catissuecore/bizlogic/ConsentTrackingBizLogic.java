@@ -65,8 +65,9 @@ public class ConsentTrackingBizLogic
 		{
 			consentDetails = ((HibernateDAO) dao).executeNamedQuery("cprConsentQuery", params);
 			ite = consentDetails.iterator();
+			List<ConsentTier> cpConsentTierList =  ((HibernateDAO) dao).executeNamedQuery("cpConsentTierList", params);
 			consentTierList = getCprConsentTierList(((HibernateDAO) dao).executeNamedQuery(
-					"cprConsetTierQuery", params));
+					"cprConsetTierQuery", params),cpConsentTierList);
 
 		}
 		else if (CONSENT_LEVEL_SCG.equals(consentLevel))
@@ -112,7 +113,7 @@ public class ConsentTrackingBizLogic
 
 	}
 
-	private List<ConsentTierDTO> getCprConsentTierList(List consentDetailList)
+	private List<ConsentTierDTO> getCprConsentTierList(List consentDetailList,List<ConsentTier> cpConsentTierList)
 			throws ApplicationException
 	{
 		List<ConsentTierDTO> consentTierList = new ArrayList<ConsentTierDTO>();
@@ -126,6 +127,22 @@ public class ConsentTrackingBizLogic
 			dto.setParticipantResponses(String.valueOf(arr[1]));
 			dto.setId((Long) arr[2]);
 			consentTierList.add(dto);
+		}
+		for(int i = 0;i<cpConsentTierList.size();i++){
+		    boolean consentTierExists = false;
+		    for(int j = 0;j<consentTierList.size();j++){
+		        if(consentTierList.get(j).getId().compareTo(cpConsentTierList.get(i).getId())==0){
+		            consentTierExists = true;
+		            break;
+		        }
+		    }
+		    if(!consentTierExists){
+		        dto = new ConsentTierDTO();
+	            dto.setConsentStatment(cpConsentTierList.get(i).getStatement());
+	            dto.setParticipantResponses(Constants.NOT_SPECIFIED);
+	            dto.setId(cpConsentTierList.get(i).getId());
+	            consentTierList.add(dto);
+		    }
 		}
 		return consentTierList;
 

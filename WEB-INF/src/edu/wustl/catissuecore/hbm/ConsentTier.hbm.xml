@@ -79,6 +79,9 @@
      select cpr.signedConsentDocumentURL,consentWitness,cpr.consentSignatureDate 
 	 from CollectionProtocolRegistration cpr  left join cpr.consentWitness consentWitness  where cpr.id = ?
     </query>
+     <query name="cpConsentTierList">
+     select cp.consentTierCollection from CollectionProtocolRegistration cpr  join cpr.collectionProtocol cp where cpr.id = ?
+    </query>
     
          
    <query name="scgConsentQuery">
