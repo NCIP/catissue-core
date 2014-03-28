@@ -463,11 +463,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			this.specimenCollectionGroup = new SpecimenCollectionGroup();
 		}
 
-		if (SearchUtil.isNullobject(this.specimenCharacteristics))
-		{
-			this.specimenCharacteristics = new SpecimenCharacteristics();
-		}
-
 		if (SearchUtil.isNullobject(this.initialQuantity))
 		{
 			this.initialQuantity = new Double(0);
@@ -625,8 +620,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					//Setting the SpecimenCharacteristics
 					this.pathologicalStatus = form.getPathologicalStatus();
-					this.specimenCharacteristics.tissueSide = form.getTissueSide();
-					this.specimenCharacteristics.tissueSite = form.getTissueSite();
+					this.tissueSide = form.getTissueSide();
+					this.tissueSite = form.getTissueSite();
 
 					//Getting the Map of External Identifiers
 					final Map extMap = form.getExternalIdentifier();
@@ -1271,11 +1266,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		this.lineage = reqSpecimen.getLineage();
 		this.pathologicalStatus = reqSpecimen.getPathologicalStatus();
 		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
-		if (reqSpecimen.getSpecimenCharacteristics() != null)
-		{
-			this.specimenCharacteristics = new SpecimenCharacteristics(reqSpecimen
-					.getSpecimenCharacteristics());
-		}
+		this.tissueSide = reqSpecimen.getTissueSide();
+		this.tissueSite = reqSpecimen.getTissueSite();
 		this.specimenType = reqSpecimen.getSpecimenType();
 		this.specimenClass = reqSpecimen.getClassName();
 		this.isAvailable = Boolean.FALSE;
