@@ -44,5 +44,10 @@
 		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES('Not Collected',NULL,'scg_collection_status')</sql>
 	</changeSet>
 
+	<changeSet id="3" author="catissue" failOnError="false" runOnChange="true">
+		<addColumn tableName="CATISSUE_AUDIT_EVENT_QUERY_LOG">
+			<column name="TIME_TAKEN_TO_RUN_IN_MS" type="${int.type}" defaultValue="0"/>
+		</addColumn>
+	</changeSet>
 
 </databaseChangeLog>         
