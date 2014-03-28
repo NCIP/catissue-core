@@ -966,5 +966,11 @@ Helpdesk Phone : @@contact.number@@</value>
     	<name>extAppSchTimeIntervalInMinutes</name>
     	<value>1</value>
     </property>
+
+    <property>
+        <name>de.fileUploadDir</name>
+        <value>@@de.fileUploadDir@@</value>
+    </property>
+
     
 </properties>
