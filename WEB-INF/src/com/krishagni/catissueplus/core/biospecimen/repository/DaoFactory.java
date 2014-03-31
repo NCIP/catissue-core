@@ -6,9 +6,8 @@ import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
-import com.krishagni.catissueplus.core.extapp.repository.ExternalAppNotificationDao;
-
-import edu.wustl.catissuecore.domain.StorageContainer;
+import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
+import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
 
 public interface DaoFactory {
 
@@ -28,10 +27,12 @@ public interface DaoFactory {
 
 	public UserDao getUserDao();
 
+	public ContainerDao getContainerDao();
+	
 	public AuditDao getAuditDao();
 
 	public ExternalAppNotificationDao getExternalAppNotificationDao();
 
-	public ContainerDao getContainerDao();
+	public ExternalApplicationDao getExternalApplicationDao();
 
 }

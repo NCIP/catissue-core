@@ -20,8 +20,10 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.extapp.repository.ExternalAppNotificationDao;
-import com.krishagni.catissueplus.core.extapp.repository.impl.ExternalAppNotificationDaoImpl;
+import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
+import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
+import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
+import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -103,6 +105,14 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
+	public ContainerDao getContainerDao() {
+		ContainerDaoImpl dao = new ContainerDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+	
+
+	@Override
 	public ExternalAppNotificationDao getExternalAppNotificationDao() {
 		ExternalAppNotificationDaoImpl dao = new ExternalAppNotificationDaoImpl();
 		setSessionFactory(dao);
@@ -110,8 +120,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public ContainerDao getContainerDao() {
-		ContainerDaoImpl dao = new ContainerDaoImpl();
+	public ExternalApplicationDao getExternalApplicationDao() {
+		ExternalApplicationDaoImpl dao = new ExternalApplicationDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

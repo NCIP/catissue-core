@@ -9,7 +9,7 @@
 
 		<id name="id" column="IDENTIFIER" type="long" length="30">
 			<generator class="native">
-				<param name="sequence">CATISSUE_NEXTGEN_AUDIT_DETAILS_SEQ</param>
+				<param name="sequence">CAT_CP_EXTAPP_STUDY_REL_SEQ</param>
 			</generator>
 		</id>
 		
@@ -37,15 +37,18 @@
 		<property name="ipAddress" type="string" column="IP_ADDRESS" />
 
 		<query name="getNotificationObjects">
-			select
-			audit.id,audit.objectType,audit.objectId,audit.operation,externalApp,cpmap.studyId
-			from com.krishagni.catissueplus.core.audit.domain.Audit audit,
-			com.krishagni.catissueplus.core.extapp.domain.CollectionProtocolStudyMapping
-			cpmap,
-			com.krishagni.catissueplus.core.extapp.domain.ExternalApplication
-			externalApp where audit.cpId = cpmap.collectionProtocol.id and
-			cpmap.externalApplication.id = externalApp.id
+			select audit.id,audit.objectType,audit.objectId,audit.operation
+			from com.krishagni.catissueplus.core.audit.domain.Audit audit
 		</query>
+		
+<!-- 		select -->
+<!-- 			audit.id,audit.objectType,audit.objectId,audit.operation,externalApp,cpmap.studyId -->
+<!-- 			from com.krishagni.catissueplus.core.audit.domain.Audit audit, -->
+<!-- 			com.krishagni.catissueplus.core.extapp.domain.CollectionProtocolStudyMapping -->
+<!-- 			cpmap, -->
+<!-- 			com.krishagni.catissueplus.core.extapp.domain.ExternalApplication -->
+<!-- 			externalApp where audit.cpId = cpmap.collectionProtocol.id and -->
+<!-- 			cpmap.externalApplication.id = externalApp.id -->
 
 	</class>
 

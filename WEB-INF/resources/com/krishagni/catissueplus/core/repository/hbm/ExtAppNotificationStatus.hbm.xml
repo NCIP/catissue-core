@@ -5,13 +5,12 @@
     
 <hibernate-mapping auto-import="false">
     <class
-        name="com.krishagni.catissueplus.core.extapp.domain.ExternalAppNotification"
+        name="com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus"
         table="CATISSUE_NOTIFICATION_STATUS"
 	lazy="false" >
-    
 	<cache usage="read-write" />
 	
-	 <id name="id"  column="IDENTIFIER"	>
+	 <id name="id"  column="AUDIT_ID">
     <generator class="foreign">
       <param name="property">audit</param>
     </generator>
@@ -20,7 +19,7 @@
 		
         <many-to-one
            name="externalApplication"
-           class="com.krishagni.catissueplus.core.extapp.domain.ExternalApplication"
+           class="com.krishagni.catissueplus.core.notification.domain.ExternalApplication"
            cascade="save-update"
            column="APP_ID"/>
                    

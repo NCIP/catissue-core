@@ -5,11 +5,12 @@
 
 <hibernate-mapping auto-import="false">
 	<class
-		name="com.krishagni.catissueplus.core.extapp.domain.CollectionProtocolStudyMapping"
+		name="com.krishagni.catissueplus.core.notification.domain.CollectionProtocolStudyMapping"
 		table="CATISSUE_CP_EXTAPP_STUDY_REL" lazy="true">
 
 		<id name="id" column="IDENTIFIER">
 			<generator class="native">
+				<param name="sequence">CAT_CP_EXTAPP_STUDY_REL_SEQ</param>
 			</generator>
 		</id>
 
@@ -19,13 +20,13 @@
 			class="edu.wustl.catissuecore.domain.CollectionProtocol" column="CP_ID" />
 
 		<many-to-one name="externalApplication"
-			class="com.krishagni.catissueplus.core.extapp.domain.ExternalApplication"
+			class="com.krishagni.catissueplus.core.notification.domain.ExternalApplication"
 			cascade="save-update" column="APP_ID" />
 
 		<query name="getMappedStudyId">
 			select cpmap.studyId from
-			com.krishagni.catissueplus.core.extapp.domain.CollectionProtocolStudyMapping
-			as cpmap where collectionProtocol.id =:cpid and
+			com.krishagni.catissueplus.core.notification.domain.CollectionProtocolStudyMapping
+			as cpmap where collectionProtocol.id =:cpId and
 			externalApplication.applicationName =:appName
 		</query>
 
