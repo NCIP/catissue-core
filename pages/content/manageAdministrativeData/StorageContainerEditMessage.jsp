@@ -47,7 +47,7 @@
 						enabled :true
 					},
 					title: {
-						text: 'Daywise Storage Container Usage Chart for '+decodeURI(siteName)+ 'Repository'
+						text: "Daywise Storage Container Usage Chart for '"+decodeURI(siteName)+ "' Repository"
 					},
 					xAxis: {
 						title: {
@@ -158,11 +158,14 @@
 							var data = eval('('+returnData.data+')');
 							$(function () {
 								$('#specimenCountForSiteTab').highcharts({
+									exporting:{
+										enabled:false
+									},
 									chart: {
 										type: 'column'
 									},
 									title: {
-										text: 'Site Utilization Chart'
+										text: 'Repository Utilization Chart'
 									},
 									xAxis: {
 										categories: data.siteName
