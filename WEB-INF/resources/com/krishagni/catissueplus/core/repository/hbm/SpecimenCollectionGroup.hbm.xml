@@ -45,7 +45,7 @@
 		<property name="collectionContainer" type="string"
 			column="COLLECTION_CONTAINER" />
 
-		<many-to-one name="collector" class="edu.wustl.catissuecore.domain.User"
+		<many-to-one name="collector" class="com.krishagni.catissueplus.core.administrative.domain.User"
 			column="COLLECTOR_ID" />
 
 		<property name="receivedQuality" type="string" column="RECEIVED_QUALITY" />
@@ -54,7 +54,7 @@
 
 		<property name="receivedComments" type="string" column="RECEIVED_COMMENTS" />
 
-		<many-to-one name="receiver" class="edu.wustl.catissuecore.domain.User"
+		<many-to-one name="receiver" class="com.krishagni.catissueplus.core.administrative.domain.User"
 			column="RECEIVER_ID" />
 
 		<many-to-one name="collectionProtocolRegistration"
