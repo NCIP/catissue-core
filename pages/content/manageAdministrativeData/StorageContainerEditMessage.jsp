@@ -17,7 +17,7 @@
 </div>
 </div>
 
-<div id="sitUtilizationGraph" style = "width:100%;height:100%;">
+<div id="sitUtilizationGraph">
 <div id="specimenCountForSiteTab" name="Specimen Count">
 	<!--div id="containerSpecimenGraphDiv" style="width: 100%; height: 600px;"></div-->
 </div>
@@ -43,35 +43,8 @@
 					legend: {
 						enabled :true
 					},
-					rangeSelector: {
-						buttons: [{
-						type: 'day',
-						count: 3,
-						text: '3d'
-						}, {
-						type: 'week',
-						count: 1,
-						text: '1w'
-						}, {
-						type: 'month',
-						count: 1,
-						text: '1m'
-						}, {
-						type: 'month',
-						count: 6,
-						text: '6m'
-						}, {
-						type: 'year',
-						count: 1,
-						text: '1y'
-						}, {
-						type: 'all',
-						text: 'All'
-						}],
-						selected: 4
-					},
 					title: {
-						text: 'Daywise Storage Container Usage Chart'
+						text: 'Daywise Storage Container Usage Chart for '+decodeURI(siteName)
 					},
 					xAxis: {
 						title: {
@@ -98,7 +71,7 @@
 							};
 							options.yAxis= {
 								title: {
-									text: 'Specimen Count'
+									text: 'Number of Specimens'
 								},
 								lineWidth: 2};
 							while(xdata[cnt]!=undefined){
@@ -132,20 +105,20 @@
 							var cnt =0;
 							options.series=[];
 							options.subtitle = {
-								text: 'Percentage Utilization v/s Date'
+								text: 'Percentage Utilization v/s Date for '
 							};
 							options.yAxis= [{
 								title: {
 									text: 'Percentage'
 								},
-								min:0,max:100,
+								min:0,max:200,
 								plotLines : [ {
 									value : returnData.redLineValue,
 									color : 'red',
 									dashStyle : 'shortdash',
 									width : 2,
 									label : {
-										text : '90% Utilization'
+										text : returnData.redLineValue+'% Utilization'
 									}
 								}],
 								lineWidth: 2}];
@@ -194,7 +167,7 @@
 									yAxis: {
 										min: 0,
 										title: {
-											text: 'Specimen Count'
+											text: 'Number of Specimens'
 										},
 										stackLabels: {
 											enabled: true,
@@ -236,7 +209,7 @@
 									},
 									series: [{
 										name: 'Free Positions',
-										//color:'#C8CDCF',
+										color:'#BFDCF3',
 										data: data.availablePosition
 									}, {
 										name: 'Occupied Positions',
@@ -265,7 +238,7 @@
 
     var tabbar=new dhtmlXTabBar("containerGraphtabbar","top");
 	function onGraphPageLoad(){
-		tabbar.setSkin("dhx_skyblue");
+		tabbar.setSkin("modern");
 		tabbar.setImagePath("dhtmlx_suite/imgs/");
 		tabbar.addTab("specimenCountTab","Specimen Count","120px");
 		tabbar.addTab("percentTab","Percent Utilization","150px");
