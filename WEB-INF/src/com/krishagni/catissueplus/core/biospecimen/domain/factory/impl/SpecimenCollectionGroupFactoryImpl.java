@@ -4,9 +4,6 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
@@ -15,7 +12,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollec
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -48,69 +44,71 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 
 	private static final String RECEIVER = "receiver name";
 
-	private static final String RECEIVED_QUALITY = "received quality";
+	private static final String CPR_CPE = "registraion and event point refering to different protocols.";
 
-	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
+	private static final String RECEIVED_QUALITY = "received quality";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
 	@Override
-	public SpecimenCollectionGroup createScg(ScgDetail scgDetail, ObjectCreationException exceptionHandler) {
+	public SpecimenCollectionGroup createScg(ScgDetail scgDetail) {
+		ObjectCreationException errorHandler = new ObjectCreationException();
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-		setCpe(scgDetail, scg);
-		setCpr(scgDetail, scg);
-		setCollectionStatus(scgDetail, scg);
-		setClinicalStatus(scgDetail, scg);
-		setSite(scgDetail, scg);
-		setActivityStatus(scgDetail, scg);
-		setBarcode(scgDetail, scg);
-		setName(scgDetail, scg);
-		setClinicalDiagnosis(scgDetail, scg);
-		setCollectionEventDetails(scgDetail, scg);
-		setReceivedEventDetails(scgDetail, scg);
+		setCpe(scgDetail, scg,errorHandler);
+		setCpr(scgDetail, scg,errorHandler);
+		setCollectionStatus(scgDetail, scg,errorHandler);
+		setClinicalStatus(scgDetail, scg,errorHandler);
+		setSite(scgDetail, scg,errorHandler);
+		setActivityStatus(scgDetail, scg,errorHandler);
+		setBarcode(scgDetail, scg,errorHandler);
+		setName(scgDetail, scg,errorHandler);
+		setClinicalDiagnosis(scgDetail, scg,errorHandler);
+		setCollectionEventDetails(scgDetail, scg,errorHandler);
+		setReceivedEventDetails(scgDetail, scg,errorHandler);
 		setComments(scgDetail, scg);
 		setSprNumber(scgDetail, scg);
-		exceptionHandler.addError(erroneousFields);
+		validateCprAndCpe(scg,errorHandler);//this should be part of factory
+		errorHandler.checkErrorAndThrow();
 		return scg;
 	}
 
-	private void setCpe(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setCpe(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
 		if (cpe == null) {
-			addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
 			return;
 		}
 		scg.setCollectionProtocolEvent(cpe);
 	}
 
-	private void setCpr(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setCpr(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
 		if (cpr == null) {
-			addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
 			return;
 		}
 		scg.setCollectionProtocolRegistration(cpr);
 	}
 
-	private void setClinicalStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setClinicalStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scgDetail.getClinicalStatus(), CLINICAL_STATUS)) {
 			scg.setClinicalStatus(scgDetail.getClinicalStatus());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_STATUS);
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_STATUS);
 	}
 
-	private void setSite(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setSite(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (scg.isCompleted() && isBlank(scgDetail.getCollectionSiteName())) {
-			addError(ScgErrorCode.MISSING_ATTR_VALUE, SITE);
+			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, SITE);
 			return;
 		}
 		else {
 			Site site = daoFactory.getSiteDao().getSite(scgDetail.getCollectionSiteName());
 			if (site == null) {
-				addError(ScgErrorCode.INVALID_ATTR_VALUE, SITE);
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SITE);
 				return;
 			}
 			scg.setCollectionSite(site);
@@ -118,89 +116,89 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 
 	}
 
-	private void setActivityStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setActivityStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scgDetail.getActivityStatus(), Status.ACTIVITY_STATUS.getStatus())) {
 			scg.setActivityStatus(scgDetail.getActivityStatus());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
 	}
 
-	private void setBarcode(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setBarcode(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		scg.setBarcode(scgDetail.getBarcode());
 	}
 
-	private void setName(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setName(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (!scg.isCompleted() && isBlank(scgDetail.getName())) {
-			addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
+			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
 			return;
 		}
 		scg.setName(scgDetail.getName());
 
 	}
 
-	private void setClinicalDiagnosis(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setClinicalDiagnosis(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scg.getClinicalDiagnosis(), CLINICAL_DIAGNOSIS)) {
 			scg.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_DIAGNOSIS);
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CLINICAL_DIAGNOSIS);
 	}
 
-	private void setCollectionEventDetails(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setCollectionEventDetails(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 
-		setCollectionContainer(scgDetail, scg);
-		setCollectionProcedure(scgDetail, scg);
-		scg.setCollector(getUser(scgDetail.getCollectorName(), COLLECTOR));
+		setCollectionContainer(scgDetail, scg,errorHandler);
+		setCollectionProcedure(scgDetail, scg,errorHandler);
+		scg.setCollector(getUser(scgDetail.getCollectorName(), COLLECTOR,errorHandler));
 		scg.setCollectionTimestamp(scgDetail.getCollectionTimestamp());
 		scg.setCollectionComments(scgDetail.getCollectionComments());
 	}
 
-	private void setCollectionContainer(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setCollectionContainer(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scgDetail.getCollectionContainer(), COLLECTION_CONTAINER)) {
 			scg.setCollectionContainer(scgDetail.getCollectionContainer());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, COLLECTION_CONTAINER);
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, COLLECTION_CONTAINER);
 	}
 
-	private void setCollectionProcedure(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setCollectionProcedure(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scgDetail.getCollectionProcedure(), COLLECTION_PROCEDURE)) {
 			scg.setCollectionProcedure(scgDetail.getCollectionProcedure());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROCEDURE);
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROCEDURE);
 	}
 
-	private User getUser(String userLoginName, String message) {
+	private User getUser(String userLoginName, String message, ObjectCreationException errorHandler) {
 		User user = daoFactory.getUserDao().getUser(userLoginName);
 		if (user == null) {
-			addError(ScgErrorCode.INVALID_ATTR_VALUE, message);
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, message);
 		}
 		return user;
 	}
 
-	private void setReceivedEventDetails(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
-		setReveivedQuality(scgDetail, scg);
-		scg.setReceiver(getUser(scgDetail.getReceiverName(), RECEIVER));
+	private void setReceivedEventDetails(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
+		setReveivedQuality(scgDetail, scg,errorHandler);
+		scg.setReceiver(getUser(scgDetail.getReceiverName(), RECEIVER,errorHandler));
 		scg.setReceivedComments(scgDetail.getReceivedComments());
 		scg.setReceivedTimestamp(scgDetail.getReceivedTimestamp());
 	}
 
-	private void setReveivedQuality(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setReveivedQuality(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scgDetail.getReceivedQuality(), RECEIVED_QUALITY)) {
 			scg.setReceivedQuality(scgDetail.getReceivedQuality());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, RECEIVED_QUALITY);
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, RECEIVED_QUALITY);
 	}
 
-	private void setCollectionStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
+	private void setCollectionStatus(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
 		if (isValidPv(scgDetail.getClinicalStatus(), SCG_COLLECTION_STATUS)) {
 			scg.setCollectionStatus(scgDetail.getCollectionStatus());
 			return;
 		}
-		addError(ScgErrorCode.INVALID_ATTR_VALUE, SCG_COLLECTION_STATUS);
+		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SCG_COLLECTION_STATUS);
 	}
 
 	private void setComments(ScgDetail scgDetail, SpecimenCollectionGroup scg) {
@@ -211,8 +209,17 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		scg.setSurgicalPathologyNumber(scgDetail.getSurgicalPathologyNumber());
 	}
 
-	private void addError(CatissueErrorCode event, String field) {
-		erroneousFields.add(new ErroneousField(event, field));
+	private void validateCprAndCpe(SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
+		if (scg.getCollectionProtocolRegistration() != null && scg.getCollectionProtocolEvent() != null) {
+			if (!scg.getCollectionProtocolRegistration().getCollectionProtocol().getId()
+					.equals(scg.getCollectionProtocolEvent().getCollectionProtocol().getId())) {
+				errorHandler.addError(ScgErrorCode.INVALID_CPR_CPE, CPR_CPE);
+			}
+		}
 	}
+
+//	private void addError(CatissueErrorCode event, String field) {
+//		objectCreationException.addError(event, field);
+//	}
 
 }

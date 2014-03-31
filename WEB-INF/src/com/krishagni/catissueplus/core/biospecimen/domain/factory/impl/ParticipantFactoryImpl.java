@@ -1,10 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +16,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.Site;
 
@@ -54,26 +54,25 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private final String VITAL_STATUS_DEATH = "Death";
 
-	private List<ErroneousField> erroneousFields = new ArrayList<ErroneousField>();
-
 	@Override
-	public Participant createParticipant(ParticipantDetail details, ObjectCreationException exceptionHandler) {
+	public Participant createParticipant(ParticipantDetail details) {
 		Participant participant = new Participant();
+		ObjectCreationException exception = new ObjectCreationException();
 
-		setSsn(participant, details.getSsn());
-		setName(participant, details);
-		setDates(participant, details);
-		setActivityStatus(participant, details);
-		setVitalStatus(participant, details);
-		setGender(participant, details);
-		setRace(participant, details);
-		setEthnicity(participant, details);
-		setPmi(participant, details);
-		exceptionHandler.addError(erroneousFields);
+		setSsn(participant, details.getSsn(), exception);
+		setName(participant, details, exception);
+		setDates(participant, details, exception);
+		setActivityStatus(participant, details, exception);
+		setVitalStatus(participant, details, exception);
+		setGender(participant, details, exception);
+		setRace(participant, details, exception);
+		setEthnicity(participant, details, exception);
+		setPmi(participant, details, exception);
+		exception.checkErrorAndThrow();
 		return participant;
 	}
 
-	private void setSsn(Participant participant, String ssn) {
+	private void setSsn(Participant participant, String ssn, ObjectCreationException exception) {
 		if (isBlank(ssn)) {
 			return;
 		}
@@ -81,29 +80,29 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			participant.setSocialSecurityNumber(ssn);
 		}
 		else {
-			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SSN);
+			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SSN);
 		}
 	}
 
-	private void setName(Participant participant, ParticipantDetail details) {
+	private void setName(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
 		participant.setFirstName(details.getFirstName());
 		participant.setLastName(details.getLastName());
 		participant.setMiddleName(details.getMiddleName());
 	}
 
-	private void setDates(Participant participant, ParticipantDetail details) {
+	private void setDates(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
 
 		Date birthDate = details.getBirthDate();
 		Date deathDate = details.getDeathDate();
 
 		if (birthDate != null) {
 			if (birthDate.after(new Date())) {
-				addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, BIRTH_DATE);
+				exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, BIRTH_DATE);
 			}
 			participant.setBirthDate(birthDate);
 			if (deathDate != null) {
 				if ((!VITAL_STATUS_DEATH.equals(details.getVitalStatus()) || deathDate.before(birthDate))) {
-					addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
+					exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, DEATH_DATE);
 				}
 				participant.setDeathDate(deathDate);
 			}
@@ -111,53 +110,64 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	}
 
-	private void setActivityStatus(Participant participant, ParticipantDetail details) {
+	private void setActivityStatus(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
 		if (isBlank(details.getActivityStatus())) {
 			participant.setActive();
+			return;
 		}
-		else {
+		if (isValidPv(details.getActivityStatus(), Status.ACTIVITY_STATUS.toString())) {
 			participant.updateActivityStatus(details.getActivityStatus());
+			return;
 		}
+		exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.toString());
 	}
 
-	private void setVitalStatus(Participant participant, ParticipantDetail details) {
-		if (!isBlank(details.getVitalStatus())) {
-			addError(!isValidPv(details.getVitalStatus(), VITAL_STATUS),ParticipantErrorCode.CONSTRAINT_VIOLATION,VITAL_STATUS);
+	private void setVitalStatus(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
+		if (!isBlank(details.getVitalStatus()) && !isValidPv(details.getVitalStatus(), VITAL_STATUS)) {
+			exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION,VITAL_STATUS);
+			return;
+		}
 			participant.setVitalStatus(details.getVitalStatus());
-		}
 	}
 
-	private void setGender(Participant participant, ParticipantDetail details) {
-		if (!isBlank(details.getGender())) {
-			addError(!isValidPv(details.getGender(), GENDER),ParticipantErrorCode.CONSTRAINT_VIOLATION,GENDER);
-			participant.setGender(details.getGender());
+	private void setGender(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
+		if (!isBlank(details.getGender()) && !isValidPv(details.getGender(), GENDER)) {
+			exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, GENDER);
+			return;
 		}
+		participant.setGender(details.getGender());
 	}
 
-	private void setRace(Participant participant, ParticipantDetail details) {
+	private void setRace(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
+
+		if (details.getRace() == null || details.getRace().isEmpty()) {
+			return;
+		}
+
 		Set<String> raceList = details.getRace();
-		if (raceList != null) {
-
-			String[] races = raceList.toArray(new String[raceList.size()]);
-			addError(!isValidPv(races, RACE),ParticipantErrorCode.CONSTRAINT_VIOLATION,RACE);
+		String[] races = raceList.toArray(new String[raceList.size()]);
+		if (isValidPv(races, RACE)) {
 			participant.setRaceColl(raceList);
+			return;
 		}
+		exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, RACE);
 
 	}
 
-	private void setEthnicity(Participant participant, ParticipantDetail details) {
-		if (!isBlank(details.getEthnicity())) {
-			addError(!isValidPv(details.getEthnicity(), ETHNICITY),ParticipantErrorCode.CONSTRAINT_VIOLATION,ETHNICITY);
+	private void setEthnicity(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
+		if (!isBlank(details.getEthnicity()) && !isValidPv(details.getEthnicity(), ETHNICITY)) {
+			exception.addError(ParticipantErrorCode.CONSTRAINT_VIOLATION, ETHNICITY);
+		return;
+		}
 			participant.setEthnicity(details.getEthnicity());
-		}
 	}
 
-	private void setPmi(Participant participant, ParticipantDetail details) {
+	private void setPmi(Participant participant, ParticipantDetail details, ObjectCreationException exception) {
 		List<ParticipantMedicalIdentifierNumberDetail> mrns = details.getPmiCollection();
 		Map<String, ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
 		if (mrns != null && mrns.size() > 0) {
 			for (ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail : mrns) {
-				ParticipantMedicalIdentifier medicalIdentifier = getMedicalIdentifier(medicalRecordNumberDetail);
+				ParticipantMedicalIdentifier medicalIdentifier = getMedicalIdentifier(medicalRecordNumberDetail,exception);
 				map.put(medicalIdentifier.getSite().getName(), medicalIdentifier);
 			}
 			participant.setPmiCollection(map);
@@ -166,13 +176,13 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	private ParticipantMedicalIdentifier getMedicalIdentifier(
-			ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail) {
+			ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail, ObjectCreationException exception) {
 		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteName());
 		if (site == null) {
-			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
+			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}
 		if (isBlank(medicalRecordNumberDetail.getMrn())) {
-			addError(ParticipantErrorCode.MISSING_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
+			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, MEDICAL_RECORD_NUMBER);
 		}
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		pmi.setSite(site);
@@ -193,13 +203,13 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		return result;
 	}
 
-	private void addError(CatissueErrorCode event, String field) {
-		erroneousFields.add(new ErroneousField(event, field));
-	}
-	
-	private void addError(boolean isAddErro,CatissueErrorCode event, String field) {
-		if(isAddErro){
-			addError(event, field);
-		}
-	}
+//	private void addError(CatissueErrorCode event, String field) {
+//		objectCreationException.addError(event, field);
+//	}
+//
+//	private void addError(boolean isAddErro, CatissueErrorCode event, String field) {
+//		if (isAddErro) {
+//			addError(event, field);
+//		}
+//	}
 }

@@ -22,7 +22,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupSer
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
 
 @Service(value = "specimenCollGroupService")
 public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
@@ -35,8 +34,6 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 	private static final String BARCODE = "barcode";
 	
-	private static final String CPR_CPE= "registraion and event point refering to different protocols.";
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -45,7 +42,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		this.scgFactory = scgFactory;
 	}
 
-	ObjectCreationException exceptionHandler;
+	private ObjectCreationException exceptionHandler = new ObjectCreationException();;
 
 	@Override
 	@PlusTransactional
@@ -62,13 +59,11 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	@PlusTransactional
 	public ScgCreatedEvent createScg(CreateScgEvent scgEvent) {
-		exceptionHandler = new ObjectCreationException();
 		try {
-			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail(), exceptionHandler);
+			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
 			
 			ensureUniqueBarcode(scg.getBarcode());
 			ensureUniqueName(scg.getName());
-			validateCprAndCpe(scg);//this should be part of factory
 			exceptionHandler.checkErrorAndThrow();
 			daoFactory.getScgDao().saveOrUpdate(scg);
 			return ScgCreatedEvent.ok(ScgDetail.fromDomain(scg));
@@ -76,34 +71,20 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		catch (ObjectCreationException oce) {
 			return ScgCreatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
 		}
-//		catch (Uniqu oce) {
-//			return ScgCreatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
-//		}
 		catch (Exception ex) {
 			return ScgCreatedEvent.serverError(ex);
-		}
-	}
-
-	private void validateCprAndCpe(SpecimenCollectionGroup scg) {
-		if(scg.getCollectionProtocolRegistration() != null && scg.getCollectionProtocolEvent() != null)
-		{
-			if(!scg.getCollectionProtocolRegistration().getCollectionProtocol().getId().equals(scg.getCollectionProtocolEvent().getCollectionProtocol().getId()))
-			{
-				exceptionHandler.addError(ScgErrorCode.INVALID_CPR_CPE, CPR_CPE);
-			}
 		}
 	}
 
 	@Override
 	@PlusTransactional
 	public ScgUpdatedEvent updateScg(UpdateScgEvent scgEvent) {
-		exceptionHandler = new ObjectUpdationException();
 		try {
 			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(scgEvent.getId());
 			if (oldScg == null) {
 				ScgUpdatedEvent.notFound(scgEvent.getId());
 			}
-			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail(), exceptionHandler);
+			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
 			validateBarcode(oldScg.getBarcode(), scg.getBarcode());
 			validateName(oldScg.getName(), scg.getName());
 			exceptionHandler.checkErrorAndThrow();
@@ -111,7 +92,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			daoFactory.getScgDao().saveOrUpdate(oldScg);
 			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(scg));
 		}
-		catch (ObjectUpdationException oce) {
+		catch (ObjectCreationException oce) {
 			return ScgUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
 		}
 		catch (Exception ex) {

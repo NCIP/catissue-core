@@ -21,8 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -37,10 +35,8 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private final String PPID = "participant protocol identifier";
 
 	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
-	
-	private final String CONSENT_WITNESS = "consent witness";
 
-	private List<ErroneousField> erroneousFields;
+	private final String CONSENT_WITNESS = "consent witness";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -52,17 +48,15 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * @returns instance of CollectionProtocolRegistration
 	 */
 	@Override
-	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail,
-			ObjectCreationException exception) {
-		erroneousFields = new ArrayList<ErroneousField>();
+	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
 		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
-
-		setBarcode(registration, detail);
-		setRegistrationDate(registration, detail);
-		setActivityStatus(registration, detail);
-		setCollectionProtocol(registration, detail);
-		setPPId(registration, detail);
-		exception.addError(this.erroneousFields);
+		ObjectCreationException exception = new ObjectCreationException();
+		setBarcode(registration, detail, exception);
+		setRegistrationDate(registration, detail, exception);
+		setActivityStatus(registration, detail, exception);
+		setCollectionProtocol(registration, detail, exception);
+		setPPId(registration, detail, exception);
+		exception.checkErrorAndThrow();
 		return registration;
 	}
 
@@ -70,8 +64,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * Sets barcode
 	 * @param registration
 	 * @param detail
+	 * @param exception 
 	 */
-	private void setBarcode(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail) {
+	private void setBarcode(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
+			ObjectCreationException exception) {
 		registration.setBarcode(detail.getBarcode());
 	}
 
@@ -79,9 +75,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * Sets the registration date. If null then sets the current date as registration date
 	 * @param registration
 	 * @param detail
+	 * @param exception 
 	 */
 	private void setRegistrationDate(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail) {
+			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
 		if (detail.getRegistrationDate() == null) {
 			registration.setRegistrationDate(new Date());
 		}
@@ -94,9 +91,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * Sets the activity status Active
 	 * @param registration
 	 * @param detail
+	 * @param exception 
 	 */
 	private void setActivityStatus(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail) {
+			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
 		if (isBlank(detail.getActivityStatus())) {
 			registration.setActive();
 		}
@@ -110,34 +108,32 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * Sets the Collection Protocol
 	 * @param registration
 	 * @param detail
+	 * @param exception 
 	 */
 	private void setCollectionProtocol(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail) {
+			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
 		if (detail.getCpId() == null) {
-			addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
+			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
 		}
 		CollectionProtocol protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
 		if (protocol == null) {
-			addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
 			return;
 		}
 		registration.setCollectionProtocol(protocol);
-		if (detail.getId() == null) {
-			setConsentsDuringRegistration(registration, detail);
-		}
-		else {
-			setConsentDuringUpdate(registration, detail);
-		}
+		setConsents(registration, detail, exception);
 	}
 
 	/**
 	 * Sets the given participant protocol identifier
 	 * @param registration
 	 * @param detail
+	 * @param exception 
 	 */
-	private void setPPId(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail) {
+	private void setPPId(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
+			ObjectCreationException exception) {
 		if (StringUtils.isBlank(detail.getPpid())) {
-			addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
+			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
 		}
 
 		registration.setProtocolParticipantIdentifier(detail.getPpid());
@@ -147,9 +143,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * This method converts the consent tier from the CP to consent response.  
 	 * @param registration
 	 * @param detail
+	 * @param exception 
 	 */
-	private void setConsentsDuringRegistration(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail) {
+	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
+			ObjectCreationException exception) {
 		List<ConsentTierDetail> userProvidedConsents = new ArrayList<ConsentTierDetail>();
 		Collection<ConsentTier> consentTierCollection = registration.getCollectionProtocol().getConsentTierCollection();
 		if (consentTierCollection == null || consentTierCollection.isEmpty()) {
@@ -163,7 +160,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			if (StringUtils.isNotBlank(witnessName)) {
 				User witness = daoFactory.getUserDao().getUser(witnessName);
 				if (witness == null) {
-					addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
+					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
 				}
 				registration.setConsentWitness(witness);
 			}
@@ -189,37 +186,37 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setConsentResponseCollection(consentTierResponseCollection);
 	}
 
-	private void setConsentDuringUpdate(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail) {
-
-		if (detail.getResponseDetail() == null) {
-			return;
-		}
-		List<ConsentTierDetail> userProvidedConsents = detail.getResponseDetail().getConsentTierList();
-		setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
-		String witnessName = detail.getResponseDetail().getWitnessName();
-		if (StringUtils.isNotBlank(witnessName)) {
-			User witness = daoFactory.getUserDao().getUser(witnessName);
-			if (witness == null) {
-				addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
-			}
-			registration.setConsentWitness(witness);
-		}
-		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
-
-		for (ConsentTierDetail tier : userProvidedConsents) {
-			ConsentTier consentTier = new ConsentTier();
-			consentTier.setStatement(tier.getConsentStatment());
-			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-			consentTierResponse.setCpr(registration);
-			consentTierResponse.setResponse(tier.getParticipantResponse());
-			consentTierResponse.setConsentTier(consentTier);
-			consentTierResponseCollection.add(consentTierResponse);
-			
-		}
-
-		registration.setConsentResponseCollection(consentTierResponseCollection);
-	}
+	//	private void setConsentDuringUpdate(CollectionProtocolRegistration registration,
+	//			CollectionProtocolRegistrationDetail detail) {
+	//
+	//		if (detail.getResponseDetail() == null) {
+	//			return;
+	//		}
+	//		List<ConsentTierDetail> userProvidedConsents = detail.getResponseDetail().getConsentTierList();
+	//		setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
+	//		String witnessName = detail.getResponseDetail().getWitnessName();
+	//		if (StringUtils.isNotBlank(witnessName)) {
+	//			User witness = daoFactory.getUserDao().getUser(witnessName);
+	//			if (witness == null) {
+	//				addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
+	//			}
+	//			registration.setConsentWitness(witness);
+	//		}
+	//		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
+	//
+	//		for (ConsentTierDetail tier : userProvidedConsents) {
+	//			ConsentTier consentTier = new ConsentTier();
+	//			consentTier.setStatement(tier.getConsentStatment());
+	//			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+	//			consentTierResponse.setCpr(registration);
+	//			consentTierResponse.setResponse(tier.getParticipantResponse());
+	//			consentTierResponse.setConsentTier(consentTier);
+	//			consentTierResponseCollection.add(consentTierResponse);
+	//			
+	//		}
+	//
+	//		registration.setConsentResponseCollection(consentTierResponseCollection);
+	//	}
 
 	private void setConsentSignDate(CollectionProtocolRegistration registration, Date consentDate) {
 		if (consentDate != null) {
@@ -227,7 +224,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		}
 	}
 
-	private void addError(CatissueErrorCode event, String field) {
-		erroneousFields.add(new ErroneousField(event, field));
-	}
+	//	private void addError(CatissueErrorCode event, String field) {
+	//		exception.addError(event, field);
+	//	}
 }

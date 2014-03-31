@@ -33,7 +33,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	private SpecimenFactory specimenFactory;
 	
-	private ObjectCreationException exceptionHandler;
+	private ObjectCreationException exceptionHandler = new ObjectCreationException();
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -58,8 +58,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public SpecimenCreatedEvent createSpecimen(CreateSpecimenEvent event) {
 		try {
-			exceptionHandler = new ObjectCreationException();
-			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail(), exceptionHandler);
+			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail());
 			ensureUniqueBarocde(specimen.getBarcode());
 			ensureUniqueLabel(specimen.getLabel());
 			exceptionHandler.checkErrorAndThrow();
@@ -78,21 +77,20 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public SpecimenUpdatedEvent updateSpecimen(UpdateSpecimenEvent event) {
 		try {
-			exceptionHandler = new ObjectUpdationException();
 			Long specimenId = event.getId();
 			Specimen oldSpecimen = daoFactory.getSpecimenDao().getSpecimen(specimenId);
 			if(oldSpecimen == null)
 			{
 				return SpecimenUpdatedEvent.notFound(specimenId);
 			}
-			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail(), exceptionHandler);
+			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail());
 			validateLabelBarcodeUnique(oldSpecimen,specimen);
 			exceptionHandler.checkErrorAndThrow();
 			oldSpecimen.update(specimen);
 			daoFactory.getSpecimenDao().saveOrUpdate(oldSpecimen);
 			return SpecimenUpdatedEvent.ok(SpecimenDetail.fromDomain(specimen));
 		}
-		catch (ObjectUpdationException oce) {
+		catch (ObjectCreationException oce) {
 			return SpecimenUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
 		}
 		catch (Exception ex) {

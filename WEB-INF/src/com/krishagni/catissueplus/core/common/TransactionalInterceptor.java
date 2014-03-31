@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
+import org.hibernate.context.ManagedSessionContext;
 
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
@@ -33,24 +33,10 @@ public class TransactionalInterceptor {
 	@Around("anyPublicMethod() && @annotation(plusTransactional)")
 	public Object startTransaction(ProceedingJoinPoint pjp, PlusTransactional plusTransactional) {
 		boolean isTransactionStarted = false;
-		boolean isSessionStarted = false;
+		boolean isSessionStarted = ManagedSessionContext.hasBind(sessionFactory);
 
-		Session session = null;
-		try {
-			session = SessionFactoryUtils.doGetSession(sessionFactory, false);
-		}
-		catch (IllegalStateException ex) {
-			//			ex.printStackTrace();
-			LOGGER.info("Session not found. Creating a new session");
-			LOGGER.info(ex.getMessage(),ex);
-		}
-
-		if (session == null) {
-			session = sessionFactory.getCurrentSession();
-			LOGGER.info("New session created");
-			isSessionStarted = true;
-		}
-
+		Session session = sessionFactory.getCurrentSession();
+ 
 		Transaction tx = session.getTransaction();
 		if (tx != null && !tx.isActive()) {
 			tx = session.beginTransaction();
@@ -63,8 +49,8 @@ public class TransactionalInterceptor {
 			object = pjp.proceed();
 		}
 		catch (Throwable e) {
-			LOGGER.error(e.getCause(),e);
-			LOGGER.error(e.getMessage(),e);
+			LOGGER.error(e.getCause(), e);
+			LOGGER.error(e.getMessage(), e);
 			if (isTransactionStarted && tx != null) {
 				tx.rollback();
 				LOGGER.info("Error thrown, transaction rolled back.");
@@ -74,6 +60,7 @@ public class TransactionalInterceptor {
 		finally {
 			if (isTransactionStarted && tx != null) {
 				tx.commit();
+				LOGGER.info("Transaction commited.");
 			}
 			if (session != null && session.isOpen() && isSessionStarted) {
 				session.close();

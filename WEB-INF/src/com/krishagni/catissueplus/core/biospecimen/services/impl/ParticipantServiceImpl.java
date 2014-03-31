@@ -35,7 +35,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	private static final String PMI = "participant medical identifier";
 
-	private ObjectCreationException exceptionHandler;
+	private ObjectCreationException objectCreationException = new ObjectCreationException();;
 
 	/**
 	 * Participant factory to create/update and perform all validations on participant details 
@@ -60,12 +60,11 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
-		exceptionHandler = new ObjectCreationException();
 		try {
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(), exceptionHandler);
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
 			ensureUniqueSsn(participant.getSocialSecurityNumber());
 			ensureUniquePMI(participant.getPmiCollection());
-			exceptionHandler.checkErrorAndThrow();
+			objectCreationException.checkErrorAndThrow();
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ParticipantCreatedEvent.ok(ParticipantDetail.fromDomain(participant));
 		}
@@ -84,23 +83,22 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
-		exceptionHandler = new ObjectUpdationException();
 		try {
 			Long participantId = event.getParticipantId();
 			Participant oldParticipant = daoFactory.getParticipantDao().getParticipant(participantId);
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
-			Participant participant = participantFactory.createParticipant(event.getParticipantDetail(), exceptionHandler);
+			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber());
 			ensureUniquePMI(participant.getPmiCollection());
-			exceptionHandler.checkErrorAndThrow();
+			objectCreationException.checkErrorAndThrow();
 
 			oldParticipant.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
 			return ParticipantUpdatedEvent.ok(ParticipantDetail.fromDomain(oldParticipant));
 		}
-		catch (ObjectUpdationException ce) {
+		catch (ObjectCreationException ce) {
 			return ParticipantUpdatedEvent.invalidRequest(ParticipantErrorCode.ERRORS.message(), ce.getErroneousFields());
 		}
 		catch (Exception e) {
@@ -140,7 +138,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	private void ensureUniqueSsn(String ssn) {
 		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			exceptionHandler.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+			objectCreationException.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
 		}
 	}
 
@@ -150,7 +148,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			String siteName = entry.getKey();
 			String mrn = entry.getValue().getMedicalRecordNumber();
 			if (daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
-				exceptionHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
+				objectCreationException.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
 			}
 
 		}

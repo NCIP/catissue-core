@@ -43,7 +43,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.participantFactory = participantFactory;
 	}
 
-	private ObjectCreationException exception;
+	private ObjectCreationException exception = new ObjectCreationException();
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -67,13 +67,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@Override
 	@PlusTransactional
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
-		exception = new ObjectCreationException();
 		try {
-			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail(), exception);
+			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail());
 			Long participantId = event.getCprDetail().getParticipantDetail().getId();
 			Participant participant;
 			if (participantId == null) {
-				participant = participantFactory.createParticipant(event.getCprDetail().getParticipantDetail(), exception);
+				participant = participantFactory.createParticipant(event.getCprDetail().getParticipantDetail());
 			}
 			else {
 				participant = daoFactory.getParticipantDao().getParticipant(participantId);
@@ -99,14 +98,13 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@Override
 	@PlusTransactional
 	public RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event) {
-		exception = new ObjectCreationException();
 		try {
 			CollectionProtocolRegistration oldCpr = daoFactory.getCprDao().getCpr(event.getId());
 			if (oldCpr == null) {
 				RegistrationUpdatedEvent.notFound(event.getId());
 			}
 			event.getCprDetail().setId(event.getId());
-			CollectionProtocolRegistration cpr = registrationFactory.createCpr(event.getCprDetail(), exception);
+			CollectionProtocolRegistration cpr = registrationFactory.createCpr(event.getCprDetail());
 
 			validatePpid(oldCpr, cpr);
 			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode());
