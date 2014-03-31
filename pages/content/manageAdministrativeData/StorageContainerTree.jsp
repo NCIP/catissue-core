@@ -76,7 +76,7 @@
 	window.parent.document.body.appendChild(element);
 	var interVeil=window.parent.document.getElementById("loadingDivWthBg"); //Reference "veil" div
 	}
-	
+	var nodeParentId = 0;
 	function expand(id,mode)
 	{
 		var iCountCount=tree.hasChildren(id);
@@ -94,6 +94,7 @@
 		{
 			return true;
 		}
+		nodeParentId = parentId;
 		var parameter='containerId='+nodeId+'&parentId='+parentId+'&nodeName='+nodeName;
 		ajaxCall(parameter);
 		return true;
@@ -138,7 +139,7 @@
 			if(childList[3] == "Closed") {
 				tree.insertNewChild(childList[2],childList[4],childList[4],0,"redbox.gif","redbox.gif","redbox.gif","");
 			} else {
-				if(childList[7]=="false"){
+				if(childList[7]=="false" || nodeParentId!=0){
 				tree.insertNewChild(childList[2],childList[4],childList[4],0,"bluebox.gif","bluebox.gif","bluebox.gif","");
 				}else{
 				tree.insertNewChild(childList[2],childList[4],"<span title='This container is running out of space.'>"+childList[4]+"</span>",0,"alert.png","alert.png","alert.png","");

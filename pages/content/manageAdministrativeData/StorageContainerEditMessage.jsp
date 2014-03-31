@@ -36,6 +36,9 @@
 									}
 							});
 				var options = {
+					exporting:{
+						enabled:false
+					},
 					chart: {
 						 type: 'spline',
 						zoomType: 'x'
@@ -44,7 +47,7 @@
 						enabled :true
 					},
 					title: {
-						text: 'Daywise Storage Container Usage Chart for '+decodeURI(siteName)
+						text: 'Daywise Storage Container Usage Chart for '+decodeURI(siteName)+ 'Repository'
 					},
 					xAxis: {
 						title: {
@@ -111,7 +114,7 @@
 								title: {
 									text: 'Percentage'
 								},
-								min:0,max:200,
+								min:0,max:100,
 								plotLines : [ {
 									value : returnData.redLineValue,
 									color : 'red',
