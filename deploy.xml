@@ -428,7 +428,6 @@
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 
 		<antcall target="configure_contactus" />
-		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
