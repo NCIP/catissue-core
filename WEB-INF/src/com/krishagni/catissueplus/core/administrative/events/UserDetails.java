@@ -188,31 +188,31 @@ public class UserDetails {
 	}
 
 	public static UserDetails fromDomain(User user) {
-		UserDetails dto = new UserDetails();
+		UserDetails userDto = new UserDetails();
 		
-		dto.setLoginName(user.getLoginName());
-		dto.setFirstName(user.getFirstName());
-		dto.setLastName(user.getLastName());
-		dto.setDeptName(user.getDepartment().getName());
-		dto.setActivityStatus(user.getActivityStatus());
-		dto.setEmailAddress(user.getEmailAddress());
-		dto.setId(user.getId());
-		dto.setLdapId(user.getLdapId());
-		dto.setCreateDate(user.getCreateDate());
-		dto.setComments(user.getComments());
-		dto.setPasswordToken(user.getPasswordToken());
-		updateAddressDetails(dto, user.getAddress());
-		return dto;	
+		userDto.setLoginName(user.getLoginName());
+		userDto.setFirstName(user.getFirstName());
+		userDto.setLastName(user.getLastName());
+		userDto.setDeptName(user.getDepartment().getName());
+		userDto.setActivityStatus(user.getActivityStatus());
+		userDto.setEmailAddress(user.getEmailAddress());
+		userDto.setId(user.getId());
+		userDto.setLdapId(user.getLdapId());
+		userDto.setCreateDate(user.getCreateDate());
+		userDto.setComments(user.getComments());
+		userDto.setPasswordToken(user.getPasswordToken());
+		updateAddressDetails(userDto, user.getAddress());
+		return userDto;	
 	}
 	
-	private static void updateAddressDetails(UserDetails dto, Address address) {
-		dto.setStreet(address.getStreet());
-		dto.setCountry(address.getCountry());
-		dto.setFaxNumber(address.getFaxNumber());
-		dto.setPhoneNumber(address.getPhoneNumber());
-		dto.setState(address.getState());
-		dto.setCity(address.getCity());
-		dto.setZipCode(address.getZipCode());
+	private static void updateAddressDetails(UserDetails userDto, Address address) {
+		userDto.setStreet(address.getStreet());
+		userDto.setCountry(address.getCountry());
+		userDto.setFaxNumber(address.getFaxNumber());
+		userDto.setPhoneNumber(address.getPhoneNumber());
+		userDto.setState(address.getState());
+		userDto.setCity(address.getCity());
+		userDto.setZipCode(address.getZipCode());
 	}
 	
 }
