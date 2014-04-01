@@ -12,7 +12,6 @@
 	
 	<property environment="env" />
 	<import file="build-properties.xml"/>
-	<import file="dbunit_temp.xml"/>
 
 	<property name="base.dir" value="." />
 	<property name="mail.file.dir" value="${base.dir}" />
@@ -2104,50 +2103,7 @@
 	<!--Target for Application Upgrade from Suite p5.1 to Suite 1.2.1-->
 	<target name="upgrade_app" depends="deploy_app" description="this target urgrades the catissue application only from the current version.">
 	</target>
-<!--
-	<target name="upgrade_db">
-		<antcall target="upgrade_from_Suite1.0_to_1.1" />
-		<antcall target="upgrade_clinicalDiagnosis_values"/>
-		<antcall  target="Export_Clinical_diagnosis"/>
-		<antcall target="update_metadata_for_model_changes" />
-		<antcall target="update_metadata_for_CA_model_changes" />
-		<antcall target="runMigration" />
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/radiation.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/chemotherapy.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
-		</antcall>
-		<antcall target="import_permissible_values">
-			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
-		</antcall>
-		<antcall target="show_hide_forms">
-		</antcall>
-		<antcall target="show_hide_forms_based_on_CPs">
-		</antcall>
-	</target>
--->
-	<target name="show_hide_forms" description="set the values for show_hide_forms">
-		<if>
-			<equals arg1="${show.hide.forms}" arg2="true" />
-			<then>
-				<echo message="Value of show_hide_forms is set to true" />
-				<antcall target="Associate_forms">
-					<param name="entitiesFormsCSVFile" value="${base.dir}/Show_Hide_Forms.csv"/>
-				</antcall>
-				<echo message="Associated selected Forms..." />
-			</then>
-			<else>
-				<echo message="Value of show_hide_forms is set to false" />
-			</else>
-		</if>
-	</target>
+
 	
 <!--Target for Database Upgrade from suite v1.2 to plus2.0-->
 	<target name="upgrade_db_from_suitev1.2_to_plus20" description="Upgrading Database from Suite v1.2 to Plus2.0">
@@ -3731,22 +3687,6 @@
 		</sql>
 	</target>
 
-
-	<target name="show_hide_forms_based_on_CPs" description="set the show_hide_forms_based_on_CPs property">
-		<if>
-			<equals arg1="${show.hide.forms.based.on.CPs}" arg2="true" />
-			<then>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to true" />
-				<antcall target="Associate_forms_to_CPs">
-					<param name="cpsEntitiesXMLFile" value="${base.dir}/Show_Hide_Forms.xml"/>
-				</antcall>
-				<echo message="Associated selected Forms with Cps..." />
-			</then>
-			<else>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to false" />
-			</else>
-		</if>
-	</target>
 
 	<!-- Associating forms/entities with CPs  - start -->
 	<target name="Associate_forms_to_CPs" description="Associating forms/entities with CPs">

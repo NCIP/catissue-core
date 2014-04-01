@@ -757,7 +757,6 @@
 			todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="DEDeploy_zip.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<rename src="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy_zip.xml" dest="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy.xml"/>
-		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/identity_provider_support/conf" overwrite="true">
 			<fileset dir="${base.dir}/idp" />
