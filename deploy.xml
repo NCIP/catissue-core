@@ -1348,17 +1348,7 @@
 
 	<!--Start of Integrating the Advance Query Module  -->
 	<target name="integrate_advanced_query" description="Start of Integrating the Advance Query Module">
-		<echo>Integrating the  Advance Query Module</echo>
-			<antcall target="unzip_aq_installable" />
-			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">
-				<property name="parent.base.dir" value="${base.dir}" />
-				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-				<property name="war.dir" value="catissuecore"/>
-				<property name="datasource" value="${catissue.datasource}" />
-				<property name="database.type" value="${database.type}" />
-				<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
-				<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-			</ant>
+		
 	</target>
 	<!--End of Integrating the Advance Query Module  -->
 	
@@ -3819,29 +3809,6 @@
 			<replacefilter token="@@JAVA_HOME@@" value="${env.JAVA_HOME}" />
 		</replace>
 	</target>
-	<!-- Query Integration targets start -->
-			<target name="unzip_aq_installable" depends="aq_check_prerequisite" description="unzip the advance query zip">
-				<unzip src="AdvanceQuery_Installable.zip" dest="${temp.dir}/AdvanceQuery"
-				overwrite="true" />
-			</target>
-			<target name="aq_check_prerequisite" description="Check AdvanceQueryInstallable.zip file exists or not in base directory">
-				<!--
-					Check AdvanceQueryInstallable.zip file exists or not in base
-					directory.
-				-->
-				<available file="${base.dir}/AdvanceQuery_Installable.zip" property="file.exists" value="false" />
-				<if>
-					<not>
-						<isset property="file.exists" />
-					</not>
-					<then>
-						<echo
-							message="AdvanceQuery_Installable.zip file not found. It should be in base directory to deploy Advance Query."
-							level="error" />
-					</then>
-				</if>
-			</target>
-	<!-- Query Integration targets End -->
 
 	<target name="commondbconfig" description="database configuration">
 	<delete quiet="true" includeemptydirs="true">
