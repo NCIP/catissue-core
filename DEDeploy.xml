@@ -1621,4 +1621,30 @@
                      </classpath>
                    </java>
                  </target>
+                 
+                <target name="export_form" description="Target used to export form">
+                  <antcall target="setupClassExecutionEnvironment" />
+                  <echo message="Export Form !! " />
+                  <if>
+                    <contains string="${downloadPath}" substring="{downloadPath}" />
+                    <then>
+                      <echo message="downloadPath param is not specified, hence setting it as $CP_HOME/Exported-Forms " />
+                      <property name="downloadPath" value="Exported-Forms" />
+                    </then>
+                  </if>
+                  <java classname="edu.common.dynamicextensions.nui.client.ExportFormClient" fork="true" maxmemory="1024M">
+                    <arg value="${Application.url}" />
+                    <arg value="${containerId}" />
+                    <arg value="${downloadPath}" />
+
+                    <classpath>
+		      <fileset dir="${de.temp.dir}/binaries/DynamicExtensionsInterface">
+                        <include name="DynamicExtensions.jar" />
+                      </fileset>
+                      <fileset dir="${de.temp.dir}/lib/">
+                        <include name="*.jar" />
+                      </fileset>
+                    </classpath>
+                  </java>
+                </target>
 </project>

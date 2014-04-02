@@ -380,8 +380,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
           <servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
         </servlet>
 
- 	
-
+        <servlet>
+          <servlet-name>ExportFormAction</servlet-name>
+          <servlet-class>edu.common.dynamicextensions.nui.action.ExportFormAction</servlet-class>
+        </servlet>
 
 	<servlet>
 		<servlet-name>CSD</servlet-name>
@@ -426,6 +428,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
           <servlet-name>CreateFormAction</servlet-name>
           <url-pattern>/CreateFormAction.de</url-pattern>
         </servlet-mapping>
+        
+          <servlet-mapping>
+          <servlet-name>ExportFormAction</servlet-name>
+          <url-pattern>/ExportFormAction.de</url-pattern>
+        </servlet-mapping>
+        
 
 <servlet-mapping>
 <servlet-name>restApi</servlet-name>
