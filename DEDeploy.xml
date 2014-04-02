@@ -1638,7 +1638,7 @@
                     <arg value="${downloadPath}" />
 
                     <classpath>
-		      <fileset dir="${de.temp.dir}/binaries/DynamicExtensionsInterface">
+                      <fileset dir="${de.temp.dir}/binaries/DynamicExtensionsInterface">
                         <include name="DynamicExtensions.jar" />
                       </fileset>
                       <fileset dir="${de.temp.dir}/lib/">
