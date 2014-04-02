@@ -12,7 +12,6 @@
 
     <property environment="env" />
     <import file="./modules/caTissue/conf/build-properties.xml"/>
-    <property file="./modules/caTIES/conf/deploycaties.properties" />
     <propertyfile file="${basedir}/modules/caTissue/conf/allTokens.properties"/>
     <property name="base.dir" value="." />
     <property name="temp.dir" value="./temp" />
@@ -83,7 +82,6 @@
     
     <var name="databaseurl" value="" />
     <import file="./modules/dynamic_extensions/conf/DEDeploy.xml" />
-    <import file="./modules/caTIES/conf/deploycaties.xml" />
 
     <property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
     <property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
@@ -426,7 +424,6 @@
         <!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 
         <antcall target="configure_contactus" />
-        <copy file="${base.dir}/modules/caTIES/conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
         <copy file="${base.dir}/modules/caTissue/conf/catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
         <copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
@@ -1293,20 +1290,6 @@
 
     <!--End of Integrating the Bulk Operation Module  -->
 
-    <!--Start of Integrating the Advance Query Module  -->
-    <target name="integrate_advanced_query" description="Start of Integrating the Advance Query Module">
-        <echo>Integrating the  Advance Query Module</echo>
-            <antcall target="unzip_aq_installable" />
-            <ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">
-                <property name="parent.base.dir" value="${base.dir}" />
-                <property name="deploy.temp.dir" value="${basedir}/temp"/>
-                <property name="war.dir" value="catissuecore"/>
-                <property name="datasource" value="${catissue.datasource}" />
-                <property name="database.type" value="${database.type}" />
-                <property name="oracle.dialect.string" value="${oracle.dialect.string}" />
-                <property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-            </ant>
-    </target>
     
     <!--Integration of Bulk Operations starts-->
     <target name="integrate_bulk_operations" description="Start of Integrating the Bulk operation Module">
@@ -1332,7 +1315,6 @@
     <target name="deploy_app_catissue" description="Target for fresh deployment of caTissue application">
         <antcall target="pre_initialization" />
         <antcall target="db_configuration" />
-        <antcall target="integrate_advanced_query"/>
         <antcall target="integrate_bulk_operations"/>
             
         <antcall target="app_configuration"/>

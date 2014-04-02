@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -25,7 +26,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class CprTestData {
@@ -206,20 +206,29 @@ public class CprTestData {
 		requirement.setCollectionProcedure(NOT_SPECIFIED);
 		requirement.setCollectionProtocolEvent(event);
 		requirement.setCollectionTimestamp(new Date());
-		requirement.setCollector(getUser(1l));
+		requirement.setCollector(getOldUser(1l));
 		requirement.setInitialQuantity(1.0);
 		requirement.setLineage("New");
 		requirement.setPathologicalStatus(NOT_SPECIFIED);
 		requirement.setReceivedComments("comments");
 		requirement.setReceivedQuality(NOT_SPECIFIED);
 		requirement.setReceivedTimestamp(new Date());
-		requirement.setReceiver(getUser(1l));
-		requirement.setSpecimenCharacteristics(null);
+		requirement.setReceiver(getOldUser(1l));
+		requirement.setTissueSide(NOT_SPECIFIED);
+		requirement.setTissueSite(NOT_SPECIFIED);
 		requirement.setSpecimenClass("Fluid");
 		requirement.setSpecimenType("Feces");
 		requirement.setStorageType("Manual");
 		requirements.add(requirement);
 		return requirements;
+	}
+	
+	private static edu.wustl.catissuecore.domain.User getOldUser(Long userId) {
+		edu.wustl.catissuecore.domain.User user = new edu.wustl.catissuecore.domain.User();
+		user.setId(userId);
+		user.setFirstName("firstName");
+		user.setLastName("lastName");
+		return user;
 	}
 
 	private static User getUser(Long userId) {

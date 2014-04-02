@@ -28,8 +28,6 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
 
-import edu.wustl.catissuecore.actionForm.UserForm;
-
 public class UserServiceImpl implements UserService {
 
 	private DaoFactory daoFactory;

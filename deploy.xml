@@ -12,7 +12,6 @@
 	
 	<property environment="env" />
 	<import file="build-properties.xml"/>
-	<import file="dbunit_temp.xml"/>
 
 	<property name="base.dir" value="." />
 	<property name="mail.file.dir" value="${base.dir}" />
@@ -419,6 +418,10 @@
 		</copy>
 		<delete dir="${temp.dir}/catissuecore-properties/email-templates"/>
 		
+		<copy todir="${temp.dir}/catissuecore-properties/ng-email-templates" overwrite="true">
+			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
+		</copy>
+		
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
 					<fileset dir="${base.dir}/custom_impl_lib" />
 		</copy>
@@ -428,7 +431,6 @@
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 
 		<antcall target="configure_contactus" />
-		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
@@ -1350,17 +1352,7 @@
 
 	<!--Start of Integrating the Advance Query Module  -->
 	<target name="integrate_advanced_query" description="Start of Integrating the Advance Query Module">
-		<echo>Integrating the  Advance Query Module</echo>
-			<antcall target="unzip_aq_installable" />
-			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">
-				<property name="parent.base.dir" value="${base.dir}" />
-				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-				<property name="war.dir" value="catissuecore"/>
-				<property name="datasource" value="${catissue.datasource}" />
-				<property name="database.type" value="${database.type}" />
-				<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
-				<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-			</ant>
+		
 	</target>
 	<!--End of Integrating the Advance Query Module  -->
 	
@@ -2105,50 +2097,7 @@
 	<!--Target for Application Upgrade from Suite p5.1 to Suite 1.2.1-->
 	<target name="upgrade_app" depends="deploy_app" description="this target urgrades the catissue application only from the current version.">
 	</target>
-<!--
-	<target name="upgrade_db">
-		<antcall target="upgrade_from_Suite1.0_to_1.1" />
-		<antcall target="upgrade_clinicalDiagnosis_values"/>
-		<antcall  target="Export_Clinical_diagnosis"/>
-		<antcall target="update_metadata_for_model_changes" />
-		<antcall target="update_metadata_for_CA_model_changes" />
-		<antcall target="runMigration" />
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/radiation.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/chemotherapy.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
-		</antcall>
-		<antcall target="import_permissible_values">
-			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
-		</antcall>
-		<antcall target="show_hide_forms">
-		</antcall>
-		<antcall target="show_hide_forms_based_on_CPs">
-		</antcall>
-	</target>
--->
-	<target name="show_hide_forms" description="set the values for show_hide_forms">
-		<if>
-			<equals arg1="${show.hide.forms}" arg2="true" />
-			<then>
-				<echo message="Value of show_hide_forms is set to true" />
-				<antcall target="Associate_forms">
-					<param name="entitiesFormsCSVFile" value="${base.dir}/Show_Hide_Forms.csv"/>
-				</antcall>
-				<echo message="Associated selected Forms..." />
-			</then>
-			<else>
-				<echo message="Value of show_hide_forms is set to false" />
-			</else>
-		</if>
-	</target>
+
 	
 <!--Target for Database Upgrade from suite v1.2 to plus2.0-->
 	<target name="upgrade_db_from_suitev1.2_to_plus20" description="Upgrading Database from Suite v1.2 to Plus2.0">
@@ -3733,22 +3682,6 @@
 	</target>
 
 
-	<target name="show_hide_forms_based_on_CPs" description="set the show_hide_forms_based_on_CPs property">
-		<if>
-			<equals arg1="${show.hide.forms.based.on.CPs}" arg2="true" />
-			<then>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to true" />
-				<antcall target="Associate_forms_to_CPs">
-					<param name="cpsEntitiesXMLFile" value="${base.dir}/Show_Hide_Forms.xml"/>
-				</antcall>
-				<echo message="Associated selected Forms with Cps..." />
-			</then>
-			<else>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to false" />
-			</else>
-		</if>
-	</target>
-
 	<!-- Associating forms/entities with CPs  - start -->
 	<target name="Associate_forms_to_CPs" description="Associating forms/entities with CPs">
 		<delete quiet="true" includeemptydirs="true">
@@ -3880,29 +3813,6 @@
 			<replacefilter token="@@JAVA_HOME@@" value="${env.JAVA_HOME}" />
 		</replace>
 	</target>
-	<!-- Query Integration targets start -->
-			<target name="unzip_aq_installable" depends="aq_check_prerequisite" description="unzip the advance query zip">
-				<unzip src="AdvanceQuery_Installable.zip" dest="${temp.dir}/AdvanceQuery"
-				overwrite="true" />
-			</target>
-			<target name="aq_check_prerequisite" description="Check AdvanceQueryInstallable.zip file exists or not in base directory">
-				<!--
-					Check AdvanceQueryInstallable.zip file exists or not in base
-					directory.
-				-->
-				<available file="${base.dir}/AdvanceQuery_Installable.zip" property="file.exists" value="false" />
-				<if>
-					<not>
-						<isset property="file.exists" />
-					</not>
-					<then>
-						<echo
-							message="AdvanceQuery_Installable.zip file not found. It should be in base directory to deploy Advance Query."
-							level="error" />
-					</then>
-				</if>
-			</target>
-	<!-- Query Integration targets End -->
 
 	<target name="commondbconfig" description="database configuration">
 	<delete quiet="true" includeemptydirs="true">
