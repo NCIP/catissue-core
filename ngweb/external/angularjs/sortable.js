@@ -86,8 +86,6 @@ angular.module('ui.sortable', [])
 
                   // Reorder array and apply change to scope
                   ui.item.sortable.resort.$modelValue.splice(end, 0, ui.item.sortable.resort.$modelValue.splice(start, 1)[0]);
-                  console.log("CAME HERE !!!");
-
                 }
               };
 

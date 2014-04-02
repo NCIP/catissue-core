@@ -33,3 +33,28 @@
 .cp-de-form {
   font-size: 14px;
 }
+
+.ka-tree ul {
+  list-style-type: none;
+  padding-left: 15px;
+}
+
+.ka-tree-node-toggle-marker, .ka-tree-node-checkbox {
+  margin-right: 4px;
+  float: left;
+  cursor: pointer;
+}
+
+.ka-tree-node-toggle-marker {
+  margin-top: 6px;
+}
+
+.ka-tree-node-label {
+  margin-top: 2px;
+  float: left;
+}
+
+.ka-tree-node-offset {
+  padding-left: 15px;
+}
+

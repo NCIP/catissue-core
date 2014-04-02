@@ -7,9 +7,11 @@ public class FormFieldSummary {
 	
 	private String caption;
 	
-	private String dataType;
+	private String type;
 	
 	private List<String> pvs;
+	
+	private List<FormFieldSummary> subFields;
 
 	public String getName() {
 		return name;
@@ -27,12 +29,12 @@ public class FormFieldSummary {
 		this.caption = caption;
 	}
 
-	public String getDataType() {
-		return dataType;
+	public String getType() {
+		return type;
 	}
 
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public List<String> getPvs() {
@@ -41,5 +43,13 @@ public class FormFieldSummary {
 
 	public void setPvs(List<String> pvs) {
 		this.pvs = pvs;
+	}
+
+	public List<FormFieldSummary> getSubFields() {
+		return subFields;
+	}
+
+	public void setSubFields(List<FormFieldSummary> subFields) {
+		this.subFields = subFields;
 	}
 }

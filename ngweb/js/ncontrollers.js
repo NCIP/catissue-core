@@ -1,6 +1,6 @@
 
 angular.module('plus.controllers', [])
-  .controller('QueryController', ['$scope', '$sce', '$modal', 'CollectionProtocolService', 'FormsService', 'QueryService', function($scope, $sce, $modal, CollectionProtocolService, FormsService, QueryService) {
+  .controller('QueryController', ['$scope', '$sce', '$modal', '$q', 'CollectionProtocolService', 'FormsService', 'QueryService', function($scope, $sce, $modal, $q, CollectionProtocolService, FormsService, QueryService) {
     var opsMap = {
       eq: {desc: "Equals", code: "&#61;", symbol: '='}, 
       ne: {desc: "Not Equals", code: "&#8800;", symbol: '!='}, 
@@ -48,7 +48,7 @@ angular.module('plus.controllers', [])
 
     var getValidOps = function(field) {
       var result = null;
-      if (field.dataType == "STRING") {
+      if (field.type == "STRING") {
         result = getStringOps();
       } else {
         result = getNumericOps();
@@ -91,7 +91,7 @@ angular.module('plus.controllers', [])
           }
 
           var queryVal = filter.value;
-          if (filter.field.dataType == "STRING" || filter.field.dataType == "DATE") {
+          if (filter.field.type == "STRING" || filter.field.type == "DATE") {
             if (filter.op.name == 'qin' || filter.op.name == 'not_in') {
               var quotedValues = [];
               for (var j = 0; j < queryVal.length; ++j) {
@@ -190,15 +190,11 @@ angular.module('plus.controllers', [])
       $scope.queryData.showRecs = true;
 
       var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
-      var selectList = 
-        "CollectionProtocolRegistration.id, CollectionProtocolRegistration.firstName, CollectionProtocolRegistration.lastName, " +
-        "CollectionProtocolRegistration.dateOfBirth, CollectionProtocolRegistration.ssn, CollectionProtocolRegistration.gender, " + 
-        "CollectionProtocolRegistration.genotype, CollectionProtocolRegistration.race, CollectionProtocolRegistration.regDate, " + 
-        "CollectionProtocolRegistration.ppid, CollectionProtocolRegistration.activityStatus";
+      var selectList = $scope.queryData.selectedFields.join();
       var aql = "select " + selectList + " where " + query + " limit 0, 10000";
 
       var startTime = new Date();
-      QueryService.executeQuery('CollectionProtocolRegistration', aql).then(function(result) {
+      QueryService.executeQuery('CollectionProtocolRegistration', aql, true).then(function(result) {
         var endTime = new Date();
         var colDefs = [];
         for (var i = 0; i < result.columnLabels.length; ++i) {
@@ -317,12 +313,22 @@ angular.module('plus.controllers', [])
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
     };
 
+    var getDefaultSelectedFields = function() {
+      return [
+        "CollectionProtocolRegistration.id", "CollectionProtocolRegistration.firstName", "CollectionProtocolRegistration.lastName", 
+        "CollectionProtocolRegistration.dateOfBirth", "CollectionProtocolRegistration.ssn", "CollectionProtocolRegistration.gender",
+        "CollectionProtocolRegistration.genotype", "CollectionProtocolRegistration.race", "CollectionProtocolRegistration.regDate",
+        "CollectionProtocolRegistration.ppid", "CollectionProtocolRegistration.activityStatus"
+      ];
+    }
+
     $scope.queryData = {
       showCallout: true,
       showRecs: false,
       isValid: true,
       forms: [],
       selectedForm: null,
+      selectedFields: getDefaultSelectedFields(),
       filters: [],
       joinType: 'all',
       exprNodes: [],              //{type: filter/op/paran, val: filter id/and-or-intersect-not}
@@ -419,6 +425,21 @@ angular.module('plus.controllers', [])
       }
     }
 
+    var flattenFields = function(fqn, fields) {
+      var result = [];
+      for (var i = 0; i < fields.length; ++i) {
+        if (fields[i].type == 'SUBFORM') {
+          result = result.concat(flattenFields(fqn + fields[i].name + ".", fields[i].subFields));
+        } else {
+          var field = angular.extend({}, fields[i]);
+          field.name = fqn + fields[i].name;
+          result.push(field);
+        }
+      }
+
+      return result;
+    };
+
     $scope.onFormSelect = function(form) {
       hidePopovers();
       $scope.queryData.openForm = form;
@@ -429,7 +450,10 @@ angular.module('plus.controllers', [])
       if (!form.fields) {
         FormsService.getFormFields(form.formId).then(function(fields) {
           form.fields = fields;
+          form.flattenedFields = flattenFields("", fields);
         });
+      } else if (!form.flattenedFields) {
+        form.flattenedFields = flattenFields("", form.fields);
       }
     };
 
@@ -462,7 +486,7 @@ angular.module('plus.controllers', [])
         return "multiSelect";
       } else if (field.pvs && !(op.name == 'contains' || op.name == 'starts_with' || op.name == 'ends_with')) {
         return "select";
-      } else if (field.dataType == "DATE") {
+      } else if (field.type == "DATE") {
         return "datePicker";
       } else {
         return "text";
@@ -574,4 +598,234 @@ angular.module('plus.controllers', [])
       $scope.queryData.exprNodes = newExprNodes;
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
     };
+
+    $scope.defineView = function() {
+      var defineViewModal = $modal.open({
+        templateUrl: 'define-view.html',
+        controller: DefineViewCtrl,
+        resolve: {
+          queryData: function() {
+            return $scope.queryData;
+          }
+        }
+      });
+
+      defineViewModal.result.then(
+        function(selectedFields) {
+          $scope.queryData.selectedFields = selectedFields;
+          alert("Initiating get records");
+          $scope.getRecords(); 
+          alert("Initiated records");
+        }
+      );
+    }
+
+    var DefineViewCtrl = function($scope, $modalInstance, queryData) {
+      $scope.queryData = queryData;
+
+      var forms = [];
+      for (var i = 0; i < queryData.forms.length; ++i) {
+        var form = { type: 'form', val: queryData.forms[i].caption, form: queryData.forms[i] };
+        forms.push(form);
+      }
+
+
+      $scope.treeOpts = {
+        treeData: forms,
+
+        toggleNode: function(node) {
+          if (node.expanded) {
+            loadNodeChildren(node);
+          }
+        },
+
+        nodeChecked: function(node) {
+          if (node.type == 'form') {
+            loadNodeChildren(node).then(function() { nodeChecked(node); });
+          } else {
+            nodeChecked(node);
+          }
+        }
+      };
+
+      $scope.ok = function() {
+        var selectedFields = getSelectedFields(forms);
+        $modalInstance.close(selectedFields);
+      };
+
+      $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+      };
+
+      var getFormFields = function(form) {
+        var deferred = $q.defer();
+        if (!form.fields) {
+          FormsService.getFormFields(form.formId).then(
+            function(fields) {
+              form.fields = fields;
+              deferred.resolve(form.fields);
+            }
+          );
+        } else {
+          deferred.resolve(form.fields);
+        }
+
+        return deferred.promise;
+      };
+
+      var processFields = function(prefix, fields) {
+        var result = [];
+        for (var i = 0; i < fields.length; ++i) {
+          var field = {type: 'field', val: fields[i].caption, name: prefix + fields[i].name};
+          if (fields[i].type == 'SUBFORM') {
+            field.type = 'subform';
+            field.children = processFields(prefix + fields[i].name + ".", fields[i].subFields);
+          } else {
+            field.children = [];
+          }
+          result.push(field);
+        }
+      
+        return result;
+      };
+
+      var loadNodeChildren = function(node) {
+        var deferred = $q.defer();
+        if (node.type != 'form' || node.children) {
+          deferred.resolve(node.children);
+          return deferred.promise;
+        }
+
+        getFormFields(node.form).then(
+          function(fields) {
+            node.children = processFields(node.form.name + ".", fields);
+            deferred.resolve(node.children);
+          }
+        );
+
+        return deferred.promise;
+      };
+
+      var nodeChecked = function(node) {
+        if (node.checked) {
+          node.expanded = true;
+        }
+
+        for (var i = 0; i < node.children.length; ++i) {
+          node.children[i].checked = node.checked;
+          nodeChecked(node.children[i]);
+        }
+      };
+
+      var selectFields = function(selectedFieldsMap, nodes) {
+        var i = 0;
+        for (var formName in selectedFieldsMap) {
+          for (var j = 0; j < nodes.length; j++) {
+            if (formName == nodes[j].form.name) {
+              var node = nodes.splice(j, 1)[0]; // removes node 
+              nodes.splice(i, 0, node); // inserts node
+              selectFormFields(selectedFieldsMap[formName], node);
+              break;
+            }
+          } 
+          ++i;
+        }
+      };
+
+      var selectFormFields = function(selectedFields, node) {
+        loadNodeChildren(node).then(
+          function() {
+            orderAndSetSelectedFields(selectedFields, node, 1);
+          }
+        );
+      }
+
+      var orderAndSetSelectedFields = function(selectedFields, node, level) {
+        var i = 0;
+        var pos = 0;
+        var fields = node.children;
+        while (i < selectedFields.length) {
+          var nodeIdx = getMatchingNodeIdx(selectedFields[i], fields, level);
+          var fieldNode = fields.splice(nodeIdx, 1)[0];
+          fields.splice(pos, 0, fieldNode);
+          pos++;
+
+          if (fieldNode.type == 'subform') {
+            var sfSelectedFields = [];
+            while (i < selectedFields.length) {
+              var name = selectedFields[i].split(".", level + 1).join(".");
+              if (name != fieldNode.name) {
+                break;
+              }
+              sfSelectedFields.push(selectedFields[i]);
+              ++i;
+            }
+            orderAndSetSelectedFields(sfSelectedFields, fieldNode, level + 1);
+          } else {
+            fieldNode.checked = true;
+            ++i;
+          }
+        }
+      };
+
+      var getMatchingNodeIdx = function(fieldName, fields, level) {
+        var name = fieldName.split(".", level + 1).join(".");
+        var idx = -1;
+        for (var i = 0; i < fields.length; ++i) {
+          if (name == fields[i].name) {
+            idx = i;
+            break;
+          }
+        }
+
+        return idx;
+      };
+
+      var getSelectedFields = function(forms) {
+        var selected = [];
+        for (var i = 0; i < forms.length; ++i) {
+          if (forms[i].checked) {
+            selected = selected.concat(getAllFormFields(forms[i]));
+          } else if (forms[i].children) {
+            var fields = forms[i].children;
+            for (var j = 0; j < fields.length; ++j) {
+              var field = fields[j];
+              if (field.type == 'subform') {
+                selected = selected.concat(getSelectedFields([field]));
+              } else if (field.checked) {
+                selected.push(field.name);
+              }
+            }
+          }
+        }        
+        
+        return selected;
+      };
+
+      var getAllFormFields = function(form) {
+        var result = [];
+        for (var i = 0; i < form.children.length; ++i) {
+          var field = form.children[i];
+          if (field.type == 'subform') {
+            result = result.concat(getAllFormFields(field));
+          } else {
+            result.push(field.name);
+          }
+        }
+
+        return result;
+      };
+
+      var selectedFieldsMap = {};
+      for (var i = 0; i < queryData.selectedFields.length; ++i) {
+        var selectedField = queryData.selectedFields[i];
+        var form = selectedField.split(".", 1);
+        if (!selectedFieldsMap[form]) {
+          selectedFieldsMap[form] = [];
+        }
+        selectedFieldsMap[form].push(selectedField);
+      }
+
+      selectFields(selectedFieldsMap, forms);
+    }
   }]);

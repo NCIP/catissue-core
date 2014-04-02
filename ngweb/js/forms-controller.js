@@ -68,12 +68,9 @@ angular.module('plus.forms', [])
         });
 
         formCtxtsModal.result.then(function(newCpCnt) {
-          console.log("New count in result is " + newCpCnt);
           form.cpCount = newCpCnt;
         });
       });
-
-
     };
 
     var FormCtxtsCtrl = function($scope, $modalInstance, args) {

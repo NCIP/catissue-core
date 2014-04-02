@@ -8,6 +8,7 @@
     <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/jquery/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/angularjs/css/ng-grid.min.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" type="text/css"></link>
 
     <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../external/jquery/jquery-ui.min.js" type="text/javascript"></script>
@@ -29,6 +30,7 @@
     <script src="../js/query-directives.js" type="text/javascript"></script>
     <script src="../js/app.js" type="text/javascript"></script>
   
+    <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
     <style type="text/css">
 	.plus-panel {
 	  background-color: #FAFAFA;
@@ -272,6 +274,10 @@
         border-color: #ffffff rgba(0, 0, 0, 0);
       }
 
+      .modal-content {
+        height: 550px;
+      }
+
 
       html, body {
         height: 100%;
@@ -292,7 +298,7 @@
               <span class="glyphicon glyphicon-wrench"></span> 
               <span> Edit Query </span>
             </div> 
-            <div class="btn btn-default"> 
+            <div class="btn btn-default" ng-click="defineView()"> 
               <span class="glyphicon glyphicon-eye-open"></span> 
               <span> Define View </span>
             </div> 
@@ -318,15 +324,15 @@
                 <accordion-heading>
                   <div ng-click="onFormSelect(form)">{{form.caption}}</div>
                 </accordion-heading>
-                <div ng-show="!form.fields">
+                <div ng-show="!form.flattenedFields">
                   Loading form fields. Please wait for a while...
                 </div>
-                <div ng-show="form.fields">
+                <div ng-show="form.flattenedFields">
                   <div style="margin-bottom: 3px;" 
                        class="field" 
                        id="{{form.name}}.{{field.name}}" 
                        data-arg="{{form.name}}.{{field.name}}"
-                       ng-repeat="field in form.fields">
+                       ng-repeat="field in form.flattenedFields">
                     <span style="cursor: pointer" 
                           ng-click="onFieldSelect(field)"
                           popover-title="Add Filter"
@@ -499,6 +505,20 @@
         <button class="btn btn-default" ng-click="cancelFilter()">Cancel</button>
       </div>
     </div>
+    </script>
+
+    <script type="text/ng-template" id="define-view.html">
+      <div class="modal-header" style="height: 10%">
+        <h4>Define Results View</h4>
+      </div>
+      <div class="modal-body" style="height: 75%;overflow:auto">
+        <label>Please select the fields that you wish to view in results table</label>
+        <ka-tree opts='treeOpts'></ka-tree>
+      </div>
+      <div class="modal-footer" style="height: 12%">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="ok()">Ok</button>
+      </div>
     </script>
   </body>
 </html>

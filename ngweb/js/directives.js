@@ -233,4 +233,90 @@ angular.module("plus.directives", [])
       replace : true,
       templateUrl: "ngweb/pages/templates/tree.html"
     }
+  })
+
+  .directive('kaTree', function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      template: 
+        '<div class="ka-tree">' +
+        '  <ul ui-sortable ng-model="opts.treeData"> <ka-tree-node ng-repeat="node in opts.treeData" node="node"></ka-tree-item></ul> ' +
+        '</div>',
+
+      link: function(scope, element, attrs) {
+        var opts = attrs.opts;
+        scope.$watch(opts, function(newOpts) {
+          scope.opts = newOpts;
+        }, true);
+      },
+
+      controller: function($scope) {
+        this.nodeChecked = function(node) {
+          if (typeof $scope.opts.nodeChecked == "function") {
+            $scope.opts.nodeChecked(node);
+          }
+        };
+
+        this.onNodeToggle = function(node) {
+          node.expanded = !node.expanded;
+          if (typeof $scope.opts.toggleNode == "function") {
+            $scope.opts.toggleNode(node);
+          }
+        };
+
+        this.isNodeChecked = function(node) {
+          if (node.checked) {
+            return true;
+          }
+
+          for (var i = 0; i < node.children.length; ++i) {
+            if (this.isNodeChecked(node.children[i])) {
+              return true;
+            }
+          }
+
+          return false;
+        }
+      }
+    };
+  })
+
+  .directive('kaTreeNode', function($compile) {
+    return {
+      restrict: 'E',
+      require: '^kaTree',
+      replace: 'true',
+      scope: {
+        node: '='
+      },
+      link: function(scope, element, attrs, ctrl) {
+        element.append($compile(
+          '<ul ui-sortable ng-model="node.children" ng-if="node.expanded"> ' +
+          '  <ka-tree-node ng-repeat="child in node.children" node="child"></ka-tree-node> ' + 
+          '</ul>')(scope));
+
+        scope.nodeChecked = ctrl.nodeChecked;
+        scope.onNodeToggle = ctrl.onNodeToggle;
+        scope.isNodeChecked = ctrl.isNodeChecked;
+      },
+
+      template:
+        '<li>' +
+        '  <div class="clearfix ka-tree-node" ng-class="{\'ka-tree-node-offset\': node.children && node.children.length <= 0}"> ' +
+        '    <div ng-if="!node.children || node.children.length > 0" ' +
+        '         class="ka-tree-node-toggle-marker fa" ' +
+        '         ng-class="{true: \'fa-plus-square-o\', false: \'fa-minus-square-o\'}[!node.expanded]" ' +
+        '         ng-click="onNodeToggle(node)"> ' +
+        '    </div> ' +
+        '    <div class="ka-tree-node-checkbox"> ' +
+        '      <input type="checkbox" ng-model="node.checked" ng-checked="isNodeChecked(node)" ng-change="nodeChecked(node)"> ' +
+        '    </div> ' +
+        '    <div class="ka-tree-node-label"> ' +
+        '      {{node.val}}' +
+        '    </div> ' +
+        '  </div> ' +
+        '</li>'
+    };
   });
+

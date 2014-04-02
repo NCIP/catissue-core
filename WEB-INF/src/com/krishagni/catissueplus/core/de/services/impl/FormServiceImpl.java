@@ -102,7 +102,7 @@ public class FormServiceImpl implements FormService {
 			return FormFieldsEvent.notFound(formId);
 		}
 				
-		return FormFieldsEvent.ok(formId, getFormFields(form, req.isPrefixParentFormCaption(), "", ""));
+		return FormFieldsEvent.ok(formId, getFormFields(form));
 	}
 	
 	@Override
@@ -249,37 +249,36 @@ public class FormServiceImpl implements FormService {
 		}		
 	}
 		
-	private List<FormFieldSummary> getFormFields(Container container, boolean prefixParentFormCaption, String captionPrefix, String namePrefix) {
+	private List<FormFieldSummary> getFormFields(Container container) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();
 
-        for (Control control : container.getControls()) {
-                if (control instanceof SubFormControl) {
-                        SubFormControl sfCtrl = (SubFormControl)control;
-                        Container sf = sfCtrl.getSubContainer();
-                        String sfCaptionPrefix = prefixParentFormCaption ? captionPrefix + sf.getCaption() + ": " : captionPrefix;
-                        String sfNamePrefix = namePrefix + sfCtrl.getUserDefinedName() + ".";
-                        fields.addAll(getFormFields(sf, prefixParentFormCaption, sfCaptionPrefix, sfNamePrefix));
-                        
-                } else if (!(control instanceof Label || control instanceof PageBreak)) {
-                        FormFieldSummary field = new FormFieldSummary();
-                        field.setName(namePrefix + control.getUserDefinedName());
-                        field.setCaption(captionPrefix + control.getCaption());
+        for (Control control : container.getControls()) {        	
+            FormFieldSummary field = new FormFieldSummary();
+            field.setName(control.getUserDefinedName());
+            field.setCaption(control.getCaption());
 
-                        DataType dataType = (control instanceof FileUploadControl) ? DataType.STRING : control.getDataType();
-                        field.setDataType(dataType.toString());
-
-                        if (control instanceof SelectControl) {
-                                SelectControl selectCtrl = (SelectControl)control;                                
-                                List<String> pvs = new ArrayList<String>();
-                                for (PermissibleValue pv : selectCtrl.getPvs()) {
-                                    pvs.add(pv.getValue());
-                                }
-
-                                field.setPvs(pvs);
-                        }
-
-                        fields.add(field);
-                }
+            if (control instanceof SubFormControl) {
+            	SubFormControl sfCtrl = (SubFormControl)control;
+            	field.setType("SUBFORM");
+            	field.setSubFields(getFormFields(sfCtrl.getSubContainer()));
+            	fields.add(field);
+            } else if (!(control instanceof Label || control instanceof PageBreak)) {
+            	DataType dataType = (control instanceof FileUploadControl) ? DataType.STRING : control.getDataType();
+            	field.setType(dataType.name());
+            	
+                
+            	if (control instanceof SelectControl) {
+            		SelectControl selectCtrl = (SelectControl)control;
+            		List<String> pvs = new ArrayList<String>();
+            		for (PermissibleValue pv : selectCtrl.getPvs()) {
+            			pvs.add(pv.getValue());
+            		}
+            		
+            		field.setPvs(pvs);
+            	}
+            	
+            	fields.add(field);
+            }
         }
 
         return fields;		
