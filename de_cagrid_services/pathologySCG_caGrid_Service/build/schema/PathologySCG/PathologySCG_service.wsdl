@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="PathologySCG" targetNamespace="http://pathology_scg/PathologySCG/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://pathology_scg/PathologySCG/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://pathology_scg/PathologySCG/bindings" location="PathologySCG_bindings.wsdl"/>
-  <wsdl:service name="PathologySCGService">
-    <wsdl:port name="PathologySCGPortTypePort" binding="binding:PathologySCGPortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>

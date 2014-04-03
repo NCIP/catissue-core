@@ -12,7 +12,6 @@
 	
 	<property environment="env" />
 	<import file="build-properties.xml"/>
-	<import file="dbunit_temp.xml"/>
 
 	<property name="base.dir" value="." />
 	<property name="mail.file.dir" value="${base.dir}" />
@@ -428,7 +427,6 @@
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 
 		<antcall target="configure_contactus" />
-		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
@@ -1350,17 +1348,7 @@
 
 	<!--Start of Integrating the Advance Query Module  -->
 	<target name="integrate_advanced_query" description="Start of Integrating the Advance Query Module">
-		<echo>Integrating the  Advance Query Module</echo>
-			<antcall target="unzip_aq_installable" />
-			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">
-				<property name="parent.base.dir" value="${base.dir}" />
-				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-				<property name="war.dir" value="catissuecore"/>
-				<property name="datasource" value="${catissue.datasource}" />
-				<property name="database.type" value="${database.type}" />
-				<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
-				<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-			</ant>
+		
 	</target>
 	<!--End of Integrating the Advance Query Module  -->
 	
@@ -1712,8 +1700,8 @@
 		</tstamp>
 		<echo>before DE_Starts: ${time}</echo>
 		<!-- <antcall target="upgrade_metadata_for_constraintproperties"/>  -->
-		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
-		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
+		<!--<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
 		<antcall target="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" />
 		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
@@ -1727,7 +1715,7 @@
 					<format property="DEtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 				</tstamp>
 				<echo>After DE_Starts: ${DEtime}</echo>
-		<antcall target="insertPaths"/>
+		<antcall target="insertPaths"/>-->
 		<tstamp>
 							<format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 						</tstamp>
@@ -1752,10 +1740,10 @@
 			<transaction src="${mysql.sql.dir}/csm_catissuecore.sql" />
 			<transaction src="${common.sql.dir}/insert_default_data.sql" />
 			<transaction src="${common.sql.dir}/indexes.sql" />
-			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+			<!--<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>-->
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1768,37 +1756,6 @@
 		
 		<antcall target="integrate_bulk_operation_mysql" />
 
-		<antcall target="unzip_aq_installable" />
-		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
-			<property name="database.type" value="${database.type}" />
-			<property name="database.driver" value="com.mysql.jdbc.Driver" />
-			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="lib.dir" value="${lib.dir}" />
-		</ant>
-
-		<antcall  target="Export_Clinical_diagnosis_mysql"/>
-		<antcall target="CAModel_import_data" />
-		<antcall target="temp_update_metadata_for_clob_support_mysql" />
-		<antcall target="insert_entity_group_metadata_mysql" />
-		<antcall target="upgrade_db_demodel_mysql" />
-		<sql driver="${mysql.driver.string}"
-		url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/Upgrade_DE_Schema.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-
-		<antcall target="upgrade_metadata_for_constraintproperties"/>
-		<antcall target="update_metadata_for_model_changes">
-			 <param name="isUpgrade" value="false"/>
-		</antcall>
-		<antcall target="update_metadata_for_CA_model_changes" />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
@@ -1808,17 +1765,6 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<echo message="Upgrading MySQL Database." />
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_QueryMetadata.sql" />
-				<transaction>commit;</transaction>
-					<classpath>
-						<fileset dir="${lib.dir}">
-							<include name="*.jar" />
-						</fileset>
-					</classpath>
-			</sql>
-		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
 		<antcall target="upgrade_db_for_empi_id__mysql"/>
 	</target>
@@ -1879,7 +1825,7 @@
 		<echo message="Initializing Oracle Database for caTissue Suite v1.1.p5. Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />
+			<!--<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />-->
 			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
 			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
 			<transaction src="${oracle.sql.dir}/AlterTable.sql" />
@@ -1887,9 +1833,9 @@
 			<transaction src="${oracle.sql.dir}/CSM_Create_Oracle.sql" />
 			<transaction src="${oracle.sql.dir}/insert_default_data.sql" />
 			<transaction src="${common.sql.dir}/indexes.sql" />
-			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
+			<!--<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />
+			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />-->
 		<!--	<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />  -->
 			<transaction>commit;</transaction>
 			<classpath>
@@ -1904,7 +1850,7 @@
 		
 		<antcall target="integrate_bulk_operation_oracle"/>
 
-		<antcall target="unzip_aq_installable" />
+		<!--<antcall target="unzip_aq_installable" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
 			<property name="database.type" value="${database.type}" />
 			<property name="database.driver" value="${oracle.driver.string}" />
@@ -1915,7 +1861,7 @@
 			<property name="lib.dir" value="${lib.dir}" />
 		</ant>
 
-		<antcall target="insertQueryMetadata" />
+		<antcall target="insertQueryMetadata" />-->
 
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
 			<transaction src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql" />
@@ -1936,7 +1882,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="temp_update_metadata_for_clob_support_oracle" />
+		<!--<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="insert_entity_group_metadata_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -1955,7 +1901,7 @@
 		</antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
 		<antcall target="alter_CA_model_Tables" />
-    	<antcall target="reset_sequences" />
+    	<antcall target="reset_sequences" />-->
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
@@ -1965,7 +1911,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<echo message="Upgrading Oracle Database p5 to p5.1" />
+		<!--<echo message="Upgrading Oracle Database p5 to p5.1" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_QueryMetadata.sql" />
 			<transaction>commit;</transaction>
@@ -1975,7 +1921,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
+		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />-->
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
 		<antcall target="upgrade_db_for_empi_id_oracle"/>
 	</target>
@@ -2105,50 +2051,7 @@
 	<!--Target for Application Upgrade from Suite p5.1 to Suite 1.2.1-->
 	<target name="upgrade_app" depends="deploy_app" description="this target urgrades the catissue application only from the current version.">
 	</target>
-<!--
-	<target name="upgrade_db">
-		<antcall target="upgrade_from_Suite1.0_to_1.1" />
-		<antcall target="upgrade_clinicalDiagnosis_values"/>
-		<antcall  target="Export_Clinical_diagnosis"/>
-		<antcall target="update_metadata_for_model_changes" />
-		<antcall target="update_metadata_for_CA_model_changes" />
-		<antcall target="runMigration" />
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/radiation.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/chemotherapy.csv"/>
-		</antcall>
-		<antcall target="create_category">
-			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/alcohol.csv"/>
-		</antcall>
-		<antcall target="import_permissible_values">
-			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
-		</antcall>
-		<antcall target="show_hide_forms">
-		</antcall>
-		<antcall target="show_hide_forms_based_on_CPs">
-		</antcall>
-	</target>
--->
-	<target name="show_hide_forms" description="set the values for show_hide_forms">
-		<if>
-			<equals arg1="${show.hide.forms}" arg2="true" />
-			<then>
-				<echo message="Value of show_hide_forms is set to true" />
-				<antcall target="Associate_forms">
-					<param name="entitiesFormsCSVFile" value="${base.dir}/Show_Hide_Forms.csv"/>
-				</antcall>
-				<echo message="Associated selected Forms..." />
-			</then>
-			<else>
-				<echo message="Value of show_hide_forms is set to false" />
-			</else>
-		</if>
-	</target>
+
 	
 <!--Target for Database Upgrade from suite v1.2 to plus2.0-->
 	<target name="upgrade_db_from_suitev1.2_to_plus20" description="Upgrading Database from Suite v1.2 to Plus2.0">
@@ -3733,22 +3636,6 @@
 	</target>
 
 
-	<target name="show_hide_forms_based_on_CPs" description="set the show_hide_forms_based_on_CPs property">
-		<if>
-			<equals arg1="${show.hide.forms.based.on.CPs}" arg2="true" />
-			<then>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to true" />
-				<antcall target="Associate_forms_to_CPs">
-					<param name="cpsEntitiesXMLFile" value="${base.dir}/Show_Hide_Forms.xml"/>
-				</antcall>
-				<echo message="Associated selected Forms with Cps..." />
-			</then>
-			<else>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to false" />
-			</else>
-		</if>
-	</target>
-
 	<!-- Associating forms/entities with CPs  - start -->
 	<target name="Associate_forms_to_CPs" description="Associating forms/entities with CPs">
 		<delete quiet="true" includeemptydirs="true">
@@ -3880,29 +3767,6 @@
 			<replacefilter token="@@JAVA_HOME@@" value="${env.JAVA_HOME}" />
 		</replace>
 	</target>
-	<!-- Query Integration targets start -->
-			<target name="unzip_aq_installable" depends="aq_check_prerequisite" description="unzip the advance query zip">
-				<unzip src="AdvanceQuery_Installable.zip" dest="${temp.dir}/AdvanceQuery"
-				overwrite="true" />
-			</target>
-			<target name="aq_check_prerequisite" description="Check AdvanceQueryInstallable.zip file exists or not in base directory">
-				<!--
-					Check AdvanceQueryInstallable.zip file exists or not in base
-					directory.
-				-->
-				<available file="${base.dir}/AdvanceQuery_Installable.zip" property="file.exists" value="false" />
-				<if>
-					<not>
-						<isset property="file.exists" />
-					</not>
-					<then>
-						<echo
-							message="AdvanceQuery_Installable.zip file not found. It should be in base directory to deploy Advance Query."
-							level="error" />
-					</then>
-				</if>
-			</target>
-	<!-- Query Integration targets End -->
 
 	<target name="commondbconfig" description="database configuration">
 	<delete quiet="true" includeemptydirs="true">

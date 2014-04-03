@@ -33,7 +33,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	private static final String NAME = "name";
 
 	private static final String BARCODE = "barcode";
-	
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -41,8 +41,6 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	public void setScgFactory(SpecimenCollectionGroupFactory scgFactory) {
 		this.scgFactory = scgFactory;
 	}
-
-	private ObjectCreationException exceptionHandler = new ObjectCreationException();;
 
 	@Override
 	@PlusTransactional
@@ -61,10 +59,10 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	public ScgCreatedEvent createScg(CreateScgEvent scgEvent) {
 		try {
 			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
-			
-			ensureUniqueBarcode(scg.getBarcode());
-			ensureUniqueName(scg.getName());
-			exceptionHandler.checkErrorAndThrow();
+			ObjectCreationException errorHandler = new ObjectCreationException();
+			ensureUniqueBarcode(scg.getBarcode(), errorHandler);
+			ensureUniqueName(scg.getName(), errorHandler);
+			errorHandler.checkErrorAndThrow();
 			daoFactory.getScgDao().saveOrUpdate(scg);
 			return ScgCreatedEvent.ok(ScgDetail.fromDomain(scg));
 		}
@@ -85,9 +83,10 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 				ScgUpdatedEvent.notFound(scgEvent.getId());
 			}
 			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
-			validateBarcode(oldScg.getBarcode(), scg.getBarcode());
-			validateName(oldScg.getName(), scg.getName());
-			exceptionHandler.checkErrorAndThrow();
+			ObjectCreationException errorHandler = new ObjectCreationException();
+			validateBarcode(oldScg.getBarcode(), scg.getBarcode(), errorHandler);
+			validateName(oldScg.getName(), scg.getName(), errorHandler);
+			errorHandler.checkErrorAndThrow();
 			oldScg.update(scg);
 			daoFactory.getScgDao().saveOrUpdate(oldScg);
 			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(scg));
@@ -120,27 +119,27 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		}
 	}
 
-	private void ensureUniqueName(String name) {
+	private void ensureUniqueName(String name, ObjectCreationException errorHandler) {
 		if (!daoFactory.getScgDao().isNameUnique(name)) {
-			exceptionHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
+			errorHandler.addError(ScgErrorCode.DUPLICATE_NAME, NAME);
 		}
 	}
 
-	private void ensureUniqueBarcode(String barcode) {
+	private void ensureUniqueBarcode(String barcode, ObjectCreationException errorHandler) {
 		if (!daoFactory.getScgDao().isBarcodeUnique(barcode)) {
-			exceptionHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
+			errorHandler.addError(ScgErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
-	private void validateName(String oldName, String newName) {
+	private void validateName(String oldName, String newName, ObjectCreationException errorHandler) {
 		if (!isBlank(newName) && !newName.equals(oldName)) {
-			ensureUniqueName(newName);
+			ensureUniqueName(newName, errorHandler);
 		}
 	}
 
-	private void validateBarcode(String oldBarcode, String newBarcode) {
+	private void validateBarcode(String oldBarcode, String newBarcode, ObjectCreationException errorHandler) {
 		if (!isBlank(newBarcode) && !newBarcode.equals(oldBarcode)) {
-			ensureUniqueBarcode(newBarcode);
+			ensureUniqueBarcode(newBarcode, errorHandler);
 		}
 	}
 }

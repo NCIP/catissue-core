@@ -24,7 +24,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
@@ -34,8 +33,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 	private final String SSN = "social security number";
 
 	private static final String PMI = "participant medical identifier";
-
-	private ObjectCreationException objectCreationException = new ObjectCreationException();;
 
 	/**
 	 * Participant factory to create/update and perform all validations on participant details 
@@ -62,9 +59,12 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
 		try {
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			ensureUniqueSsn(participant.getSocialSecurityNumber());
-			ensureUniquePMI(participant.getPmiCollection());
-			objectCreationException.checkErrorAndThrow();
+
+			ObjectCreationException errorHandler = new ObjectCreationException();;
+
+			ensureUniqueSsn(participant.getSocialSecurityNumber(), errorHandler);
+			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
+			errorHandler.checkErrorAndThrow();
 			daoFactory.getParticipantDao().saveOrUpdate(participant);
 			return ParticipantCreatedEvent.ok(ParticipantDetail.fromDomain(participant));
 		}
@@ -90,9 +90,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber());
-			ensureUniquePMI(participant.getPmiCollection());
-			objectCreationException.checkErrorAndThrow();
+			ObjectCreationException errorHandler = new ObjectCreationException();;
+			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
+			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
+			errorHandler.checkErrorAndThrow();
 
 			oldParticipant.update(participant);
 			daoFactory.getParticipantDao().saveOrUpdate(oldParticipant);
@@ -126,29 +127,30 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 	}
 
-	private void validateSsn(String oldSsn, String newSsn) {
+	private void validateSsn(String oldSsn, String newSsn, ObjectCreationException errorHandler) {
 		if ((isBlank(oldSsn) && !isBlank(newSsn))) {
-			ensureUniqueSsn(newSsn);
+			ensureUniqueSsn(newSsn, errorHandler);
 		}
 		else if (!isBlank(oldSsn) && !isBlank(newSsn) && !oldSsn.equals(newSsn)) {
-			ensureUniqueSsn(newSsn);
+			ensureUniqueSsn(newSsn, errorHandler);
 		}
 
 	}
 
-	private void ensureUniqueSsn(String ssn) {
+	private void ensureUniqueSsn(String ssn, ObjectCreationException errorHandler) {
 		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
-			objectCreationException.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+			errorHandler.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
 		}
 	}
 
-	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection) {
+	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection,
+			ObjectCreationException errorHandler) {
 		//TODO: need to handle for update
 		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
 			String siteName = entry.getKey();
 			String mrn = entry.getValue().getMedicalRecordNumber();
 			if (daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
-				objectCreationException.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
+				errorHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
 			}
 
 		}

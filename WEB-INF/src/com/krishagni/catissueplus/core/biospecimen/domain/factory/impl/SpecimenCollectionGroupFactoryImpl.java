@@ -11,7 +11,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 

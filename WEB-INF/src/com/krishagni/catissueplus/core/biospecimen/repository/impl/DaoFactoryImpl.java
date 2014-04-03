@@ -22,10 +22,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
-import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
-import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
-import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
+import com.krishagni.catissueplus.core.extapp.repository.ExternalAppNotificationDao;
+import com.krishagni.catissueplus.core.extapp.repository.impl.ExternalAppNotificationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -121,12 +119,12 @@ public class DaoFactoryImpl implements DaoFactory {
 		return dao;
 	}
 
-	@Override
-	public ExternalApplicationDao getExternalApplicationDao() {
-		ExternalApplicationDaoImpl dao = new ExternalApplicationDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
+//	@Override
+//	public ExternalApplicationDao getExternalApplicationDao() {
+//		ExternalApplicationDaoImpl dao = new ExternalApplicationDaoImpl();
+//		setSessionFactory(dao);
+//		return dao;
+//	}
 
 	@Override
 	public LdapDao getLdapDao() {

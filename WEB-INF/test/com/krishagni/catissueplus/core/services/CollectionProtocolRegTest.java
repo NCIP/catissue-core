@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
@@ -28,7 +29,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEven
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;

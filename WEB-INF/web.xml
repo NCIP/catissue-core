@@ -196,7 +196,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
 		<init-param>
 			<param-name>config</param-name>
-			<param-value>/WEB-INF/struts-config.xml, /WEB-INF/bulkoperation-struts-config.xml, /WEB-INF/advancequery-struts-config.xml, /WEB-INF/bulkoperation-struts-config.xml</param-value>
+			<param-value>/WEB-INF/struts-config.xml, /WEB-INF/bulkoperation-struts-config.xml</param-value>
 		</init-param>
 		<init-param>
 			<param-name>debug</param-name>
@@ -260,20 +260,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>AppLogout</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
    </servlet>
-	<servlet>
-		<servlet-name>context</servlet-name>
-		<servlet-class>
-			org.springframework.web.context.ContextLoaderServlet
-		</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>httpinvoker</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
-		</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
+	
+	
 	<servlet>
 		<servlet-name>sdkstartup</servlet-name>
 		<servlet-class>
@@ -496,10 +484,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-name>ResponseServlet</servlet-name>
 		<url-pattern>/ResponseServlet</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>httpinvoker</servlet-name>
-		<url-pattern>/http/*</url-pattern>
-	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>sdkstartup</servlet-name>
 		<url-pattern>/server/HTTPServer</url-pattern>

@@ -8,11 +8,14 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.doReturn;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -357,7 +360,5 @@ public class ParticipantTest {
 		assertEquals(ParticipantErrorCode.DUPLICATE_PMI.message(), response.getErroneousFields()[0].getErrorMessage());
 		assertEquals(PMI, response.getErroneousFields()[0].getFieldName());
 	}
-
-
 
 }

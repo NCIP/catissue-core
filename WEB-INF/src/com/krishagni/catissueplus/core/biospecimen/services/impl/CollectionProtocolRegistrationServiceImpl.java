@@ -43,8 +43,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		this.participantFactory = participantFactory;
 	}
 
-	private ObjectCreationException exception = new ObjectCreationException();
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -69,6 +67,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
 		try {
 			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail());
+			ObjectCreationException errorHandler = new ObjectCreationException();
 			Long participantId = event.getCprDetail().getParticipantDetail().getId();
 			Participant participant;
 			if (participantId == null) {
@@ -78,12 +77,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				participant = daoFactory.getParticipantDao().getParticipant(participantId);
 			}
 			if (participant == null) {
-				exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
+				errorHandler.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
 			}
 			registration.setParticipant(participant);
-			ensureUniquePpid(registration);
-			ensureUniqueBarcode(registration.getBarcode());
-			exception.checkErrorAndThrow();
+			ensureUniquePpid(registration,errorHandler);
+			ensureUniqueBarcode(registration.getBarcode(),errorHandler);
+			errorHandler.checkErrorAndThrow();
 			daoFactory.getCprDao().saveOrUpdate(registration);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(registration));
 		}
@@ -103,13 +102,13 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (oldCpr == null) {
 				RegistrationUpdatedEvent.notFound(event.getId());
 			}
+			ObjectCreationException errorHandler = new ObjectCreationException();
 			event.getCprDetail().setId(event.getId());
 			CollectionProtocolRegistration cpr = registrationFactory.createCpr(event.getCprDetail());
 
-			validatePpid(oldCpr, cpr);
-			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode());
-			ensureUniquePpid(cpr);
-			exception.checkErrorAndThrow();
+			validatePpid(oldCpr, cpr,errorHandler);
+			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(),errorHandler);
+			errorHandler.checkErrorAndThrow();
 			oldCpr.update(cpr);
 			daoFactory.getCprDao().saveOrUpdate(cpr);
 			return RegistrationUpdatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(cpr));
@@ -143,30 +142,30 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	private void ensureUniquePpid(CollectionProtocolRegistration registration) {
+	private void ensureUniquePpid(CollectionProtocolRegistration registration, ObjectCreationException errorHandler) {
 		if (!daoFactory.getCprDao().isPpidUniqueForProtocol(registration.getCollectionProtocol().getId(),
 				registration.getProtocolParticipantIdentifier())) {
-			exception.addError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
+			errorHandler.addError(ParticipantErrorCode.DUPLICATE_PPID, PPID);
 		}
 	}
 
-	private void ensureUniqueBarcode(String barcode) {
+	private void ensureUniqueBarcode(String barcode, ObjectCreationException errorHandler) {
 		if (!CommonValidator.isBlank(barcode) && daoFactory.getCprDao().isBacodeUnique(barcode)) {
-			exception.addError(ParticipantErrorCode.DUPLICATE_PPID, BARCODE);
+			errorHandler.addError(ParticipantErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}
 
-	private void validatePpid(CollectionProtocolRegistration oldCpr, CollectionProtocolRegistration cpr) {
+	private void validatePpid(CollectionProtocolRegistration oldCpr, CollectionProtocolRegistration cpr, ObjectCreationException errorHandler) {
 		String oldPpid = oldCpr.getProtocolParticipantIdentifier();
 		String newPpid = cpr.getProtocolParticipantIdentifier();
 		if (!oldPpid.equals(newPpid)) {
-			ensureUniquePpid(cpr);
+			ensureUniquePpid(cpr,errorHandler);
 		}
 	}
 
-	private void validateBarcode(String oldBarcode, String newBarcode) {
+	private void validateBarcode(String oldBarcode, String newBarcode, ObjectCreationException errorHandler) {
 		if (!isBlank(newBarcode) && !newBarcode.equals(oldBarcode)) {
-			ensureUniqueBarcode(newBarcode);
+			ensureUniqueBarcode(newBarcode,errorHandler);
 		}
 	}
 }

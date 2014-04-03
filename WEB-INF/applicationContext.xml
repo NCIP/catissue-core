@@ -136,16 +136,4 @@
     <property name="auditFactory" ref="auditFactory"/>
   </bean>
   
-  <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl">
-		<property name="daoFactory" ref="biospecimenDaoFactory" />
-  </bean>
-  
-   <bean id="externalApplications" class="com.krishagni.catissueplus.core.notification.util.ExternalApplications"  scope="singleton">
-		<property name="daoFactory" ref="biospecimenDaoFactory" />
-  </bean>
-  
-  <bean id="mirthAppService" class="com.krishagni.catissueplus.core.notification.services.impl.MirthApplicationService">
-		<property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
-  </bean>
-
  </beans>
