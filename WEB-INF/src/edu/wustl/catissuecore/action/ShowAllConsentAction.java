@@ -132,15 +132,15 @@ public class ShowAllConsentAction extends BaseAction
 //		{
 			builder.append(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId());
 			
-			Collection<ConsentTierStatus> specimenCon = specimen.getConsentTierStatusCollection();
+//			Collection<ConsentTierStatus> specimenCon = specimen.getConsentTierStatusCollection();
 			List<ConsentTierStatus> consentList = new ArrayList<ConsentTierStatus>();
-			consentList.addAll(specimenCon);
+		/*	consentList.addAll(specimenCon);
 			Collections.sort(consentList, new IdComparator());
 			for (ConsentTierStatus consentTierStatus : consentList) 
 			{
 				builder.append(consentTierStatus.getConsentTier().getId());
 				builder.append(consentTierStatus.getStatus());
-			}
+			}*/
 //		}
 		return builder.toString();
 	}
@@ -262,7 +262,7 @@ public class ShowAllConsentAction extends BaseAction
 //						.next();
 //				consentTierID = consentTierResponse.getConsentTier().getId();
 				List<ConsentTierStatus> consentList = new ArrayList<ConsentTierStatus>();
-				consentList.addAll(specimen.getConsentTierStatusCollection());
+				//consentList.addAll(specimen.getConsentTierStatusCollection());
 				Collections.sort(consentList, new IdComparator());
 				final Iterator specimenCollectionIter = consentList.iterator();
 				while (specimenCollectionIter.hasNext())

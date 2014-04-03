@@ -299,14 +299,7 @@ function updateHelpURL()
 		var display=document.getElementById('scgPageButtons');
 		display.style.display=tabSelected;
 
-		var displayConsentTable=document.getElementById('consentTabForSCG');
-		if(displayConsentTable!=null)
-		{
-			displayConsentTable.style.display=displayTable;
-		}
-		//var collectionTab=document.getElementById('specimenCollectionGroupTab');
-		var consentTab=document.getElementById('consentTab');
-
+	
   }
 	
 		function editSCG()
@@ -419,8 +412,6 @@ var consentLevelId = document.getElementById("id").value;
 var showViewSPRTab="ViewSurgicalPathologyReport.do?scgId="+document.getElementById("id").value+"&operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
 
 var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+scgEntityIdValue+"&entityRecordId="+idValue+"&staticEntityName="+staticEntityNameValue+"&pageOf="+pageOfValue+"&operation=viewAnnotations";
-
-var showConsentsTab="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId="+scgEntityIdValue+"&staticEntityName="+staticEntityNameValue;
 
 showPriterTypeLocation();
 if(disablePHIView)

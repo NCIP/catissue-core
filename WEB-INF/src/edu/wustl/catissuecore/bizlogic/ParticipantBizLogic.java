@@ -27,6 +27,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.CpSyncAudit;
@@ -1616,7 +1617,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			//Below while loop is to update ConsentResponse Objects 
 			//with participant response  depending on  consentTierDto list
-
+			CollectionProtocolRegistration cprObj = null;
 			while (consentTierDtoIter.hasNext())
 			{
 				ConsentTierDTO consentTierDto = consentTierDtoIter.next();
@@ -1631,14 +1632,28 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					ConsentTierResponse responseObj = (ConsentTierResponse) ite.next();
 					responseObj.setResponse(consentTierDto.getParticipantResponses());
 					dao.update(responseObj);
+				}else{
+				    ConsentTier consentTier = new ConsentTier();
+				    consentTier.setId(consentTierDto.getId());
+				    if(cprObj == null){
+				        cprObj = (CollectionProtocolRegistration)dao.retrieveById(CollectionProtocolRegistration.class.getName(), consentDto.getConsentLevelId());
+				    }
+				    ConsentTierResponse responseObj = new ConsentTierResponse(); 
+				    responseObj.setResponse(consentTierDto.getParticipantResponses());
+				    responseObj.setConsentTier(consentTier);
+				    cprObj.getConsentTierResponseCollection().add(responseObj);
+			
 				}
 			}
 
 			//Below changes are for updateing cprObj with ConsentSignatureDate, witness,SignedConsentDocumentURL.			
-
-			CollectionProtocolRegistration cprObj = (CollectionProtocolRegistration) dao
-					.retrieveById(CollectionProtocolRegistration.class.getName(),
-							consentDto.getConsentLevelId());
+			if(cprObj!=null){
+			     dao.update(cprObj);
+			}else{
+    			cprObj = (CollectionProtocolRegistration) dao
+    					.retrieveById(CollectionProtocolRegistration.class.getName(),
+    							consentDto.getConsentLevelId());
+			}
 			SimpleDateFormat dateFormat = new SimpleDateFormat(CommonServiceLocator.getInstance()
 					.getDatePattern(), CommonServiceLocator.getInstance().getDefaultLocale());
 

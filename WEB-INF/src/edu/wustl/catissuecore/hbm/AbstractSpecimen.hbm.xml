@@ -137,24 +137,7 @@
 
            <key column="IDENTIFIER"/>
 
-           <set
-            name="consentTierStatusCollection"
-            table="CATISSUE_CONSENT_TIER_STATUS"
-            lazy="true"
-            inverse="false"
-            cascade="save-update"
-            sort="unsorted"
-        >
-         <cache usage="read-write" />
-              <key
-                  column="SPECIMEN_ID"
-              />
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
-              />
-        </set>
-
-	    <set
+        <set
             name="biohazardCollection"
             table="CATISSUE_SPECIMEN_BIOHZ_REL"
             fetch="join" lazy="false"
@@ -401,8 +384,8 @@
 	</joined-subclass>
   </class>
   <query name="getSpecimenIdByBarcode">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.barcode = ? and spec.activityStatus= ?</query>
-    <query name="getConsentResponseCollection">Select specimen.consentTierStatusCollection from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ?
-	</query>
+  <query name="getConsentResponseCollection">Select cpr.consentTierResponseCollection from edu.wustl.catissuecore.domain.Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr WHERE specimen.label = ?</query>
+    
 	<query name="getQuantityAndAvailability">Select specimen.availableQuantity from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ? and specimen.isAvailable=? and specimen.activityStatus='Active'
 	</query>
 	<query name="updateQuantityAndAvailability">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.availableQuantity=?,specimen.isAvailable=? where specimen.label=?

@@ -1037,7 +1037,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 
 		requestDetailsBean.setInstanceOf("Existing");
 
-		if (existingSpecimenorderItem.getSpecimen().getConsentTierStatusCollection().isEmpty())
+	/*	if (existingSpecimenorderItem.getSpecimen().getConsentTierStatusCollection().isEmpty())
 		{
 			requestDetailsBean.setConsentVerificationkey(Constants.NO_CONSENTS);
 
@@ -1047,7 +1047,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 			requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
 
 		}
-
+*/
 		// condition added by vaishali beacause requested Qty is coming NULL.
 		// @FIX ME
 

@@ -1347,9 +1347,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		{
 			final SpecimenCollectionGroup specimenCollectionGroup = specimenCollectionGroupIterator
 					.next();
-			specimenCollectionGroup
-					.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-
+		
 			SpecimenCollectionGroup oldSpecimenCollectionGroup = getOldSpecimenCollectionGroup
 			(specimenCollectionGroup.getId(),oldCollectionProtocolRegistration.getSpecimenCollectionGroupCollection());
 
@@ -1363,7 +1361,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					final Specimen specimen = itSpecimenCollection.next();
 					Specimen oldSpecimen = getOldSpecimen(specimen.getId(),specimenCollectionGroup
 							.getSpecimenCollection());
-					specimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
+				//	specimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
 					dao.update(specimen,oldSpecimen);
 				}
 			}
@@ -1985,25 +1983,18 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		final Collection scgCollection = oldCollectionProtocolRegistration
 				.getSpecimenCollectionGroupCollection();
 		final Iterator scgItr = scgCollection.iterator();
-		try
-		{
+		
 			while (scgItr.hasNext())
 			{
 				final SpecimenCollectionGroup scg = (SpecimenCollectionGroup) scgItr.next();
 				final String cprWithdrawOption = collectionProtocolRegistration
 						.getConsentWithdrawalOption();
 
-				ConsentUtil.updateSCG(scg, consentTierID, cprWithdrawOption, dao, sessionDataBean);
-
+			
 				newScgCollection.add(scg); // set updated scg in cpr
 			}
 			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
-		}
-		catch (final ApplicationException e)
-		{
-			LOGGER.error(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+		
 	}
 
 	// Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- end

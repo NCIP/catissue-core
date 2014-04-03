@@ -334,21 +334,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 					// ().getConsentTierResponseCollection();
 					// Collection consentResponseStatuslevel=
 					// specimenCollectionGroup.getConsentTierStatusCollection();
-					List consentResponse = null, consentResponseStatuslevel = null;
-					consentResponse = dao
-							.retrieveAttribute(SpecimenCollectionGroup.class, "id",
-									specimenCollectionGroup.getId(),
-									"elements(collectionProtocolRegistration.consentTierResponseCollection)");
-
-					consentResponseStatuslevel =new ArrayList(specimenCollectionGroup.getConsentTierStatusCollection());
-					final String scgResponsekey = "_specimenCollectionGroupLevelResponse";
-					final String scgResponseIDkey = "_specimenCollectionGroupLevelResponseID";
-					final Map tempMap = ConsentUtil.prepareSCGResponseMap(
-							consentResponseStatuslevel, consentResponse, scgResponsekey,
-							scgResponseIDkey);
-					specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
-					specimenCollectionGroupForm.setConsentTierCounter(participantResponseList
-							.size());
+					
 					final HttpSession session = request.getSession();
 					session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 					session.setAttribute(Constants.COLUMNLIST, columnList);

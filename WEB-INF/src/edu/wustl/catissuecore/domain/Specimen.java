@@ -153,7 +153,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	/**
 	 * The consent tier status for multiple participants for a particular specimen.
 	 */
-	private Collection<ConsentTierStatus> consentTierStatusCollection;
+	
 
 	/**
 	 * To perform operation based on withdraw button clicked.
@@ -170,27 +170,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	
 
 	protected Collection<SpecimenRecordEntry> specimenRecordEntryCollection = new HashSet<SpecimenRecordEntry>();
-
-	/**
-	 * @return the consentTierStatusCollection
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.
-	 * ConsentTierStatus" lazy="true" cascade="save-update"
-	 * @hibernate.set name="consentTierStatusCollection" table="CATISSUE_CONSENT_TIER_STATUS"
-	 * @hibernate.collection-key column="SPECIMEN_ID"
-	 */
-	public Collection<ConsentTierStatus> getConsentTierStatusCollection()
-	{
-		return this.consentTierStatusCollection;
-	}
-
-	/**
-	 * @param consentTierStatusCollection the consentTierStatusCollection to set
-	 */
-	public void setConsentTierStatusCollection(
-			Collection<ConsentTierStatus> consentTierStatusCollection)
-	{
-		this.consentTierStatusCollection = consentTierStatusCollection;
-	}
 
 	/**
 	 * Default Specimen.
@@ -895,7 +874,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		if (abstractForm instanceof NewSpecimenForm)
 		{
 			final NewSpecimenForm form = (NewSpecimenForm) abstractForm;
-			this.consentTierStatusCollection = this.prepareParticipantResponseCollection(form);
 			// ----------- Mandar --16-Jan-07
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
 			// ----- Mandar : ---23-jan-07 For bug 3464.
@@ -1305,57 +1283,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		this.setSpecimenEventCollection(specimenEventCollection);
 	}
 
-	/**
-	 * Set ConsentTierStatusCollectionFromSCG.
-	 * @param specimenCollectionGroup SpecimenCollectionGroup.
-	 */
-	public void setConsentTierStatusCollectionFromSCG(
-			SpecimenCollectionGroup specimenCollectionGroup)
-	{
-		Collection consentTierStatusCollectionN = this.getConsentTierStatusCollection();
-		if (consentTierStatusCollectionN == null)
-		{
-			consentTierStatusCollectionN = new HashSet();
-		}
-
-		final Collection consentTierStatusCollection = specimenCollectionGroup
-				.getConsentTierStatusCollection();
-		Collection specConsTierColl = this.getConsentTierStatusCollection();
-		boolean hasMoreConsents = false;
-		if (consentTierStatusCollection != null && !consentTierStatusCollection.isEmpty())
-		{
-			final Iterator iterator = consentTierStatusCollection.iterator();
-			Iterator specCoIterator = null;
-			if(specConsTierColl==null)
-			{
-				specConsTierColl=new HashSet();
-			}
-			if (specConsTierColl != null)
-			{
-				specCoIterator = specConsTierColl.iterator();
-			}
-			while (iterator.hasNext())
-			{
-				final ConsentTierStatus consentTierStatus = (ConsentTierStatus) iterator.next();
-				ConsentTierStatus consentTierstatusN = null;
-				hasMoreConsents = specCoIterator.hasNext();
-				if (hasMoreConsents)
-				{
-					consentTierstatusN = (ConsentTierStatus) specCoIterator.next();
-					consentTierstatusN.setConsentTier(consentTierStatus.getConsentTier());
-					consentTierstatusN.setStatus(consentTierStatus.getStatus());//bug 7637
-					hasMoreConsents = specCoIterator.hasNext();
-				}
-				else
-				{
-					consentTierstatusN = new ConsentTierStatus(consentTierStatus);
-					consentTierStatusCollectionN.add(consentTierstatusN);
-				}
-			}
-		}
-		this.setConsentTierStatusCollection(consentTierStatusCollectionN);
-	}
-
+	
 	/**
 	 * @return the specimenPosition
 	 * @hibernate.one-to-one class="edu.wustl.catissuecore.domain.SpecimenPosition" cascade="save-update"

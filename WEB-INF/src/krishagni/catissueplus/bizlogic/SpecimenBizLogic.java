@@ -758,26 +758,26 @@ public class SpecimenBizLogic
 		return getSpecimenDTOFromSpecimen(specimen);
 	}
 
-	private void setConsentTierStatus(Specimen specimen,
-			Collection<ConsentTierStatus> consentTierStatusCollection)
-	{
-		Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = null;
-		if (consentTierStatusCollection != null)
-		{
-			consentTierStatusCollectionForSpecimen = new HashSet<ConsentTierStatus>();
-			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
-			while (itr.hasNext())
-			{
-				final ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
-				final ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
-				consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
-				consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
-				consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
-			}
-			specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
-		}
-
-	}
+//	private void setConsentTierStatus(Specimen specimen,
+//			Collection<ConsentTierStatus> consentTierStatusCollection)
+//	{
+//		Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = null;
+//		if (consentTierStatusCollection != null)
+//		{
+//			consentTierStatusCollectionForSpecimen = new HashSet<ConsentTierStatus>();
+//			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
+//			while (itr.hasNext())
+//			{
+//				final ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
+//				final ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
+//				consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
+//				consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
+//				consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
+//			}
+//			specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
+//		}
+//
+//	}
 
 	private boolean isAuthorizedForSpecimenProcessing(HibernateDAO hibernateDao, SpecimenDTO specimenDTO,
 			SessionDataBean sessionDataBean) throws DAOException, SMException
@@ -934,7 +934,7 @@ public class SpecimenBizLogic
 				biohazards.add(biohazard);
 			}
 			specimen.setBiohazardCollection(biohazards);
-			setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
+		//	setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
 			//specimen.setChildSpecimenCollection(parentSpecimen.getChildSpecimenCollection());
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
@@ -956,7 +956,7 @@ public class SpecimenBizLogic
 			specimenCharacteristics.setTissueSite(specimenDTO.getTissueSite());
 			specimen.setSpecimenCharacteristics(specimenCharacteristics);
 			specimen.setBiohazardCollection(getBiohazardCollection(specimenDTO.getBioHazards()));
-			specimen.setConsentTierStatusCollectionFromSCG(collectionGroup);
+		//	specimen.setConsentTierStatusCollectionFromSCG(collectionGroup);
 		}
 		specimen.setSpecimenClass(specimenDTO.getClassName());
 		specimen.setSpecimenType(specimenDTO.getType());

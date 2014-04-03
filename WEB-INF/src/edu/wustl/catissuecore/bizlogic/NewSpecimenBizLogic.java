@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
@@ -418,13 +419,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			Parent Specimen : " + parentSpecimen.getId());
 		}*/
 
-		Collection consentTierStatusCollection = parentSpecimen.getConsentTierStatusCollection();
-		if (isChildSpeCollectionEmpty(consentTierStatusCollection))
-		{
-			consentTierStatusCollection = (Collection) this.retrieveAttribute(dao, Specimen.class,
-					parentSpecimen.getId(), "elements(consentTierStatusCollection)");
-			parentSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
-		}
 		/*else
 		{
 			throw this.getBizLogicException(null, "error.parent.specimen.consent.tier",
@@ -557,7 +551,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		// ;
 		// 11177 E
 		this.setParentCharacteristics(parentSpecimen, specimen);
-		this.setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
 		this.setParentBioHazard(parentSpecimen, specimen);
 	}
 
@@ -1225,8 +1218,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		Collection<ConsentTierStatus> consentTierStatusCollection = null;
 		SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 		scg = new SpecimenCollectionGroupBizLogic().retrieveSCG(dao, scg);
-		consentTierStatusCollection = ((SpecimenCollectionGroup) scg)
-				.getConsentTierStatusCollection();
 		this.setConsentTierStatus(specimen, consentTierStatusCollection);
 		specimen.setSpecimenCollectionGroup(scg);
 	}
@@ -1830,15 +1821,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				dao.update(specimen.getSpecimenCharacteristics(),
 						specimenOld.getSpecimenCharacteristics());
 			}
-			if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(
+			/*if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(
 					Constants.WITHDRAW_RESPONSE_NOACTION))
 			{
 				this.updateConsentWithdrawStatus(specimen, dao, sessionDataBean);
-			}
-			else if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
+			}*/
+			/*else if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 			{
 				this.updateConsentStatus(specimen, dao, specimenOld);
-			}
+			}*/
 			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity() == 0)
 					|| specimen.getCollectionStatus() == null
 					|| specimen.getCollectionStatus().equalsIgnoreCase(
@@ -1952,8 +1943,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		persistentSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		persistentSpecimen.setSpecimenType(specimen.getSpecimenType());
 		persistentSpecimen.setCollectionStatus(specimen.getCollectionStatus());
-		persistentSpecimen
-				.setConsentTierStatusCollection(specimen.getConsentTierStatusCollection());
 		Double conc = 0D;
 		if (Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
@@ -2218,7 +2207,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
 				consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
 			}
-			specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
 		}
 	}
 
@@ -3922,95 +3910,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	/**
-	 * This method updates the consents and specimen based on the the consent
-	 * withdrawal option.
-	 *
-	 * @param specimen New object
-	 * @param oldSpecimen Old Object
-	 * @param dao DAO object
-	 * @param sessionDataBean Session Details
-	 *
-	 * @throws BizLogicException Database exception
-	 */
-	private void updateConsentWithdrawStatus(Specimen specimen, DAO dao,
-			SessionDataBean sessionDataBean) throws BizLogicException
-	{
-		try
-		{
-			if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(
-					Constants.WITHDRAW_RESPONSE_NOACTION))
-			{
-
-				final String consentWithdrawOption = specimen.getConsentWithdrawalOption();
-				final Collection<ConsentTierStatus> consentTierStatusCollection = specimen
-						.getConsentTierStatusCollection();
-				final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
-				while (itr.hasNext())
-				{
-					final ConsentTierStatus status = (ConsentTierStatus) itr.next();
-					final long consentTierID = status.getConsentTier().getId().longValue();
-					if (status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN))
-					{
-
-						ConsentUtil.updateSpecimenStatus(specimen, consentWithdrawOption,
-								consentTierID, dao, sessionDataBean);
-					}
-				}
-			}
-		}
-		catch (final ApplicationException e)
-		{
-			LOGGER.error(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
-	}
-
-	/**
-	 * This method is used to update the consent status of child specimens as
-	 * per the option selected by the user.
-	 *
-	 * @param specimen New object
-	 * @param oldSpecimen Old Object
-	 * @param dao DAO object
-	 *
-	 * @throws BizLogicException Database exception
-	 * @throws DAOException : DAOException
-	 */
-	private void updateConsentStatus(Specimen specimen, DAO dao, Specimen oldSpecimen)
-			throws BizLogicException, DAOException
-	{
-		if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
-		{
-			final String applyChangesTo = specimen.getApplyChangesTo();
-			final Collection<ConsentTierStatus> consentTierStatusCollection = specimen
-					.getConsentTierStatusCollection();
-			final Collection<ConsentTierStatus> oldConsentTierStatusCollection = oldSpecimen
-					.getConsentTierStatusCollection();
-			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
-			while (itr.hasNext())
-			{
-				final ConsentTierStatus status = (ConsentTierStatus) itr.next();
-				final long consentTierID = status.getConsentTier().getId().longValue();
-				final String statusValue = status.getStatus();
-				final Collection childSpecimens = (Collection) this.retrieveAttribute(dao,
-						Specimen.class, specimen.getId(), "elements(childSpecimenCollection)");
-				if (childSpecimens != null)
-				{
-
-					final Iterator childItr = childSpecimens.iterator();
-					while (childItr.hasNext())
-					{
-						final Specimen childSpecimen = (Specimen) childItr.next();
-						ConsentUtil.updateSpecimenConsentStatus(childSpecimen, applyChangesTo,
-								consentTierID, statusValue, consentTierStatusCollection,
-								oldConsentTierStatusCollection, dao);
-					}
-				}
-			}
-		}
-	}
-
+	
 	/**
 	 * This function is used to update specimens and their dervied & aliquot
 	 * specimens.
@@ -4978,7 +4878,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			final Specimen specimen = this.getSpecimenObj(specimenID, dao);
 			this.getSpecimenInternal(specimen, finalDataList);
-			specimen.getConsentTierStatusCollection();
+			//specimen.getConsentTierStatusCollection();
 			specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
 					.getConsentTierResponseCollection();
 			return specimen;
@@ -6217,15 +6117,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 			substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-			List<ConsentTierStatus> consentResponses = dao.executeNamedQuery(
+			List<ConsentTierResponse> consentResponses = dao.executeNamedQuery(
 					"getConsentResponseCollection", substParams);
-			for (ConsentTierStatus consentTierStatus : consentResponses)
+			for (ConsentTierResponse consentResponse : consentResponses)
 			{
 				ConsentTierDTO consentTierDTO = new ConsentTierDTO();
 				consentTierDTO
-						.setConsentStatment(consentTierStatus.getConsentTier().getStatement());
-				consentTierDTO.setStatus(consentTierStatus.getStatus());
-				consentTierDTO.setId(consentTierStatus.getConsentTier().getId());
+						.setConsentStatment(consentResponse.getConsentTier().getStatement());
+				consentTierDTO.setParticipantResponses(consentResponse.getResponse());
+				consentTierDTO.setId(consentResponse.getConsentTier().getId());
 				consentTierDTOs.add(consentTierDTO);
 			}
 		}

@@ -721,14 +721,14 @@ public class RequestDetailsForm extends AbstractActionForm
 				this.values.put(rowStatuskey, "enable");
 			}
 
-			final Collection col = existingSpecimenOrderItem.getSpecimen()
-					.getConsentTierStatusCollection();
-			final Iterator itr = col.iterator();
+//			final Collection col = existingSpecimenOrderItem.getSpecimen()
+//					.getConsentTierStatusCollection();
+			/*final Iterator itr = col.iterator();
 			if (itr.hasNext())
 			{
 				this.values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
 			}
-			else
+			else*/
 			{
 				this.values.put(consentVerificationkey, Constants.NO_CONSENTS);
 			}
@@ -821,19 +821,19 @@ public class RequestDetailsForm extends AbstractActionForm
 						Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 			}
 
-			final Collection col = derivedSpecimenOrderItem.getParentSpecimen()
-					.getConsentTierStatusCollection();
-			final Iterator itr = col.iterator();
+//			final Collection col = derivedSpecimenOrderItem.getParentSpecimen()
+//					.getConsentTierStatusCollection();
+			//final Iterator itr = col.iterator();
 
 			if (!allSpecimen.isEmpty())
 			{
 				this.values.put(availableQty, (((Specimen) allSpecimen.get(0))
 						.getAvailableQuantity().toString()));
-				if (itr.hasNext())
+			/*	if (itr.hasNext())
 				{
 					this.values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
 				}
-				else
+				else*/
 				{
 					this.values.put(consentVerificationkey, Constants.NO_CONSENTS);
 				}
@@ -922,16 +922,16 @@ public class RequestDetailsForm extends AbstractActionForm
 			{
 				final Specimen spec = ((Specimen) totalSpecimenColl.get(0));
 
-				final Collection col = spec.getConsentTierStatusCollection();
-				final Iterator itr = col.iterator();
-				if (itr.hasNext())
-				{
-					this.values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
-				}
-				else
-				{
-					this.values.put(consentVerificationkey, Constants.NO_CONSENTS);
-				}
+//				final Collection col = spec.getConsentTierStatusCollection();
+//				final Iterator itr = col.iterator();
+//				if (itr.hasNext())
+//				{
+//					this.values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
+//				}
+//				else
+//				{
+//					this.values.put(consentVerificationkey, Constants.NO_CONSENTS);
+//				}
 
 				this.values.put(requestFor, spec.getId());
 				this.values.put(selectedSpecimenTypeKey, spec.getSpecimenType());

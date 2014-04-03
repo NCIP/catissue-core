@@ -294,9 +294,9 @@ function loadSpecimenTabbarForEdit()
 		specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
 	}
 	specimenTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
-	if(hasConsents){
+	/*if(hasConsents){
 	specimenTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
-	}
+	}*/
 	if(isImageEnabled)
 	{
 		specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
@@ -310,9 +310,9 @@ function loadSpecimenTabbarForEdit()
 		specimenTabbar.setContentHref("reportsTab", showViewSPRTab);  
 	}
 	specimenTabbar.setContentHref("annotationTab", showAnnotationTab);
-if(hasConsents){	
+/*if(hasConsents){	
 	specimenTabbar.setContentHref("consentsTab", showConsentsTab);  
-	}
+	}*/
 	if(isImageEnabled)
 	{
 		specimenTabbar.setContentHref("imagesTab", showImagesTab);

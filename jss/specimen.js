@@ -929,8 +929,8 @@ function getTabDetails(specimenId){
 
 		var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
 
-		var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
-
+		/*var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
+*/
 		var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 
 		specimenTabbar.setLabel("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
@@ -940,9 +940,9 @@ function getTabDetails(specimenId){
 		specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
 	}
 	specimenTabbar.addTab("annotationTab",'<span style="font-size:13px">View Annotation </span>',"150px");
-	if(hasConsents){
+	/*if(hasConsents){
 	specimenTabbar.addTab("consentsTab",'<span style="font-size:13px">Consents </span>',"150px");
-	}
+	}*/
 	if(isImageEnabled)
 	{
 		specimenTabbar.addTab("imagesTab",'<span style="font-size:13px">Images </span>',"150px");
@@ -956,9 +956,9 @@ function getTabDetails(specimenId){
 		specimenTabbar.setContentHref("reportsTab", showViewSPRTab);  
 	}
 	specimenTabbar.setContentHref("annotationTab", showAnnotationTab);
-if(hasConsents){	
+/*if(hasConsents){	
 	specimenTabbar.setContentHref("consentsTab", showConsentsTab);  
-	}
+	}*/
 	if(isImageEnabled)
 	{
 		specimenTabbar.setContentHref("imagesTab", showImagesTab);

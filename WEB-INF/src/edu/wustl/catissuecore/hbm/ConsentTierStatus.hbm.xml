@@ -51,19 +51,7 @@
 
     </class>
     
-    <query  name="selectScgConsentStatus">
-        select  consentTierStatus 
-		 from SpecimenCollectionGroup scg join scg.consentTierStatusCollection consentTierStatus 
-		 join consentTierStatus.consentTier consentTier 
-		 where scg.id = ? and consentTier.id = ? 
-    </query>
     
-    <query name="selectSpecimenConsentStatus">
-        select  consentTierStatus 
-		 from Specimen specimen join specimen.consentTierStatusCollection consentTierStatus 
-		 join consentTierStatus.consentTier consentTier
-		 where specimen.id = ? and consentTier.id = ?
-        
-    </query>
+    
 
 </hibernate-mapping>

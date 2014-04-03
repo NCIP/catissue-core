@@ -107,11 +107,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 
 	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 
-	/**
-	 * The consent tier status by multiple participants for a particular specimen collection group.
-	 */
-	protected Collection<ConsentTierStatus> consentTierStatusCollection;
-
+	
 	/**
 	 * To perform operation based on withdraw button clicked.
 	 * Default No Action to allow normal behaviour.
@@ -260,26 +256,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		this.specimenEventParametersCollection = specimenEventParametersCollection;
 	}
 
-	/**
-	 * @return the consentTierStatusCollection
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus"
-	 * lazy="true" cascade="save-update"
-	 * @hibernate.set table="CATISSUE_CONSENT_TIER_STATUS" name="consentTierStatusCollection"
-	 * @hibernate.collection-key column="SPECIMEN_COLL_GROUP_ID"
-	 */
-	public Collection<ConsentTierStatus> getConsentTierStatusCollection()
-	{
-		return this.consentTierStatusCollection;
-	}
-
-	/**
-	 * @param consentTierStatusCollection the consentTierStatusCollection to set
-	 */
-	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
-	{
-		this.consentTierStatusCollection = consentTierStatusCollection;
-	}
-
+	
 	/**
 	 * Get Consent Withdrawal Option.
 	 * @return String.
@@ -580,12 +557,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			collectionProtocol.setId(Long.valueOf(form.getCollectionProtocolId()));
 			this.collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
-			/**
-			 * Setting the consentTier responses for SCG Level.
-			 * Virender Mehta
-			 */
-			this.consentTierStatusCollection = this.prepareParticipantResponseCollection(form);
-
+		
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
 			this.applyChangesTo = form.getApplyChangesTo();
 			this.stringOfResponseKeys = form.getStringOfResponseKeys();
@@ -846,67 +818,6 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
 	}
 
-	/**
-	 * Set ConsentTier Status Collection From CPR.
-	 * @param collectionProtocolRegistration of CollectionProtocolRegistration type.
-	 */
-	public void setConsentTierStatusCollectionFromCPR(
-			CollectionProtocolRegistration collectionProtocolRegistration)
-	{
-		Collection consentTierStatusCollectionN = this.getConsentTierStatusCollection();
-		if (consentTierStatusCollectionN == null)
-		{
-			consentTierStatusCollectionN = new HashSet();
-		}
-		final Collection consentTierResponseCollection = collectionProtocolRegistration
-				.getConsentTierResponseCollection();
-		Collection scgConsTierColl = this.getConsentTierStatusCollection();
-		boolean hasMoreConsents = false;
-
-		try
-		{
-			if(scgConsTierColl==null)
-			{
-				scgConsTierColl=new HashSet();
-			}
-			if (consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
-			{
-				final Iterator iterator = consentTierResponseCollection.iterator();
-				Iterator scgIterator = null;
-				if (scgConsTierColl != null)
-				{
-					scgIterator = scgConsTierColl.iterator();
-					
-				}
-				while (iterator.hasNext())
-				{
-					final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator
-							.next();
-					ConsentTierStatus consentTierstatusN;
-					hasMoreConsents=scgIterator.hasNext();
-					if (hasMoreConsents)
-					{
-						consentTierstatusN = (ConsentTierStatus) scgIterator.next();
-					}
-					else
-					{
-						consentTierstatusN = new ConsentTierStatus();
-						consentTierStatusCollectionN.add(consentTierstatusN);
-					}
-					final ConsentTier consentTier = new ConsentTier(consentTierResponse
-							.getConsentTier());
-					consentTierstatusN.setConsentTier(consentTier);
-					consentTierstatusN.setStatus(consentTierResponse.getResponse());
-
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		this.setConsentTierStatusCollection(consentTierStatusCollectionN);
-	}
 
 	/**
 	 * Set Default Specimen Group Name.

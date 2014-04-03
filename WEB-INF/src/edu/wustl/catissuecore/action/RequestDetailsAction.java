@@ -1020,19 +1020,19 @@ public class RequestDetailsAction extends BaseAction
 						Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 			}
 
-			final Collection col = derivedSpecimenOrderItem.getParentSpecimen()
-					.getConsentTierStatusCollection();
-			final Iterator itr = col.iterator();
+//			final Collection col = derivedSpecimenOrderItem.getParentSpecimen()
+//					.getConsentTierStatusCollection();
+		//	final Iterator itr = col.iterator();
 
 			if (!allSpecimen.isEmpty())
 			{
 				requestDetailsForm.setValue(availableQty, (((Specimen) allSpecimen.get(0))
 						.getAvailableQuantity().toString()));
-				if (itr.hasNext())
+			/*	if (itr.hasNext())
 				{
 					requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
 				}
-				else
+				else*/
 				{
 					requestDetailsForm.setValue(consentVerificationkey, Constants.NO_CONSENTS);
 				}
@@ -1128,13 +1128,13 @@ public class RequestDetailsAction extends BaseAction
 			{
 				final Specimen spec = ((Specimen) totalSpecimenColl.get(0));
 
-				final Collection col = spec.getConsentTierStatusCollection();
-				final Iterator itr = col.iterator();
+//				final Collection col = spec.getConsentTierStatusCollection();
+			/*	final Iterator itr = col.iterator();
 				if (itr.hasNext())
 				{
 					requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
 				}
-				else
+				else*/
 				{
 					requestDetailsForm.setValue(consentVerificationkey, Constants.NO_CONSENTS);
 				}

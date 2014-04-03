@@ -43,15 +43,7 @@
 
     </class>
     
-    <query name="scgConsetTierQuery">
-         select consentTier.statement,consentTierResponse.response,consentTierStatus.status,consentTier.id,consentTierStatus.id 
-		 from SpecimenCollectionGroup scg join scg.collectionProtocolRegistration cpr 
-		 join cpr.consentTierResponseCollection consentTierResponse  
-		 join scg.consentTierStatusCollection consentTierStatus 
-		 join consentTierStatus.consentTier consentTier 
-		 join consentTierResponse.consentTier consentTier_response 
-		 where scg.id = ? and consentTierResponse.consentTier.id = consentTierStatus.consentTier.id order by consentTier.id asc 
-    </query>
+   
     
     <query name="cprConsetTierQuery">
          select consentTierResponse.consentTier.statement,consentTierResponse.response,consentTierResponse.consentTier.id 
@@ -61,15 +53,7 @@
 		 where cpr.id=?  order by consentTierResponse.consentTier.id  asc 
     </query>
     
-    <query name="specimenConsetTierQuery">
-        select  consentTier.statement,consentTierResponse.response,consentTierStatus.status,consentTier.id,consentTierStatus.id 
-		from Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr 
-		join specimen.consentTierStatusCollection consentTierStatus 
-		join cpr.consentTierResponseCollection consentTierResponse 
-		 join consentTierStatus.consentTier consentTier 
-		 join consentTierResponse.consentTier consentTier_response 
-		 where specimen.id = ? and consentTierResponse.consentTier.id = consentTierStatus.consentTier.id  order by consentTier.id asc 
-    </query>
+   
     <query name="specimenConsentQuery">
         select cpr.signedConsentDocumentURL,consentWitness,cpr.consentSignatureDate 
         from Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr left join cpr.consentWitness consentWitness where specimen.id = ?
@@ -78,6 +62,9 @@
     <query name="cprConsentQuery">
      select cpr.signedConsentDocumentURL,consentWitness,cpr.consentSignatureDate 
 	 from CollectionProtocolRegistration cpr  left join cpr.consentWitness consentWitness  where cpr.id = ?
+    </query>
+     <query name="cpConsentTierList">
+     select cp.consentTierCollection from CollectionProtocolRegistration cpr  join cpr.collectionProtocol cp where cpr.id = ?
     </query>
     
          

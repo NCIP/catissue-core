@@ -57,5 +57,6 @@
 	    join cpr.consentTierResponseCollection consentTierResponse  join consentTierResponse.consentTier consentTier 
 		 where cpr.id = ? and consentTier.id = ? 
 	</query>
-
+	
+     
 </hibernate-mapping>

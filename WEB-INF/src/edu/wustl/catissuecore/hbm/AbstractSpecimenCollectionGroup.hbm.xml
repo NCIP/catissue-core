@@ -187,23 +187,6 @@
 	        </set>
 
 	        <set
-	            name="consentTierStatusCollection"
-	            table="CATISSUE_CONSENT_TIER_STATUS"
-	            lazy="false"
-	            inverse="false"
-	            cascade="save-update"
-	            sort="unsorted"
-	        >
-				 <cache usage="read-write" />
-	              <key
-	                  column="SPECIMEN_COLL_GROUP_ID"
-	              />
-
-	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
-	              />
-	        </set>
-	        <set
 	            name="specimenEventParametersCollection"
 	            table="CATISSUE_SPECIMEN_EVENT_PARAM"
 	            fetch="join" lazy="false"
@@ -338,6 +321,7 @@
     </class>
 <query name="getDefaultSite">select cpe.defaultSite.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.id=?
 </query>
+
 <query name="getScgSummary">select scg.name,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?</query>
  
 <query name="receiveEventParam">select sep.timestamp,sep.user.id from edu.wustl.catissuecore.domain.SpecimenEventParameters sep,edu.wustl.catissuecore.domain.ReceivedEventParameters rep where sep.id=rep.id and sep.specimenCollectionGroup.id = ?

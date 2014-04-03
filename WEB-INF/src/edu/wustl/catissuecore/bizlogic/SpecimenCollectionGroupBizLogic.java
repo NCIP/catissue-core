@@ -356,8 +356,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 * (reqSpecimen.getSpecimenEventCollection(), userId); }
 		 */
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-		newSpecimen
-				.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
+		
 
 		/*
 		 * Collection childrenSpecimenCollection =
@@ -721,28 +720,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 			// Specimen(s) start
-
-			if (!Constants.WITHDRAW_RESPONSE_NOACTION
-					.equalsIgnoreCase(specimenCollectionGroup
-							.getConsentWithdrawalOption()))
-			{
-				this.verifyAndUpdateConsentWithdrawn(specimenCollectionGroup,
-						oldspecimenCollectionGroup, dao, sessionDataBean);
-				persistentSCG
-						.setConsentTierStatusCollection(specimenCollectionGroup
-								.getConsentTierStatusCollection());
-
-			}
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 			// Specimen(s) end
 			// Mandar 24-Jan-07 To update consents accordingly in SCG and
 			// Specimen(s) start
-			else if (!specimenCollectionGroup.getApplyChangesTo()
-					.equalsIgnoreCase(Constants.APPLY_NONE))
-			{
-				ConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup,
-						oldspecimenCollectionGroup, dao);
-			}
+			
 			// Mandar 24-Jan-07 To update consents accordingly in SCG and
 			// Specimen(s) end
 			// change by pathik
@@ -790,8 +772,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					.getClinicalStatus());
 			persistentSCG.setName(specimenCollectionGroup.getName());
 			persistentSCG.setBarcode(specimenCollectionGroup.getBarcode());
-			setConsetTierStatus(specimenCollectionGroup, persistentSCG);
-
+		
 			// change by pathik
 			if (!specimenCollectionGroup.getCollectionProtocolRegistration()
 					.getId().equals(0L)
@@ -853,42 +834,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	/**
-	 * @param dao
-	 * @param specimenCollectionGroup
-	 * @param persistentSCG
-	 * @throws BizLogicException
-	 */
-	private void setConsetTierStatus(
-			final SpecimenCollectionGroup specimenCollectionGroup,
-			SpecimenCollectionGroup persistentSCG) throws BizLogicException
-	{
-		Collection<ConsentTierStatus> consentColl = specimenCollectionGroup
-				.getConsentTierStatusCollection();
-		Collection<ConsentTierStatus> persistConsentTierStatusCollection = persistentSCG
-				.getConsentTierStatusCollection();
-		if (consentColl != null)
-		{
-			for (ConsentTierStatus consentTierStatus : consentColl)
-			{
-				if (persistConsentTierStatusCollection != null)
-				{
-					for (ConsentTierStatus persistConsentTierStatus : persistConsentTierStatusCollection)
-					{
-						if (persistConsentTierStatus
-								.getConsentTier()
-								.getId()
-								.equals(consentTierStatus.getConsentTier()
-										.getId()))
-						{
-							persistConsentTierStatus
-									.setStatus(consentTierStatus.getStatus());
-						}
-					}
-				}
-			}
-		}
-	}
 
 	/**
 	 * @param objectCollection : objectCollection
@@ -1409,21 +1354,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getSpecimenCollectionGroupCollection()
 				.add(specimenCollectionGroup);
-		updateConsent(specimenCollectionGroup, cpr);
 	}
 
-	private void updateConsent(SpecimenCollectionGroup specimenCollectionGroup,
-			CollectionProtocolRegistration cpr)
-	{
-		if (cpr.getConsentTierResponseCollection() != null
-				&& !cpr.getConsentTierResponseCollection().isEmpty()
-				&& (specimenCollectionGroup.getConsentTierStatusCollection() == null || specimenCollectionGroup
-						.getConsentTierStatusCollection().isEmpty()))
-		{
-			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(cpr);
-		}
-	}
-
+	
 	/**
 	 * @param dao : dao
 	 * @param specimenCollectionGroup : specimenCollectionGroup
@@ -3115,46 +3048,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		return toolTipText.toString();
 	}
-
-	/**
-	 *  Mandar : 15-Jan-07 For Consent Tracking Withdrawal -------- start.
-	 * This method verifies and updates SCG and child elements for withdrawn.
-	 * consents
-	 * @param specimenCollectionGroup : specimenCollectionGroup
-	 * @param oldspecimenCollectionGroup : oldspecimenCollectionGroup
-	 * @param dao : dao
-	 * @param sessionDataBean : sessionDataBean
-	 * @throws BizLogicException : BizLogicException
-	 * @throws ApplicationException : ApplicationException
-	 */
-	private void verifyAndUpdateConsentWithdrawn(
-			SpecimenCollectionGroup specimenCollectionGroup,
-			SpecimenCollectionGroup oldspecimenCollectionGroup, DAO dao,
-			SessionDataBean sessionDataBean) throws BizLogicException,
-			ApplicationException
-	{
-		final Collection newConsentTierStatusCollection = specimenCollectionGroup
-				.getConsentTierStatusCollection();
-		final Iterator itr = newConsentTierStatusCollection.iterator();
-		while (itr.hasNext())
-		{
-			final ConsentTierStatus consentTierStatus = (ConsentTierStatus) itr
-					.next();
-			if (consentTierStatus.getStatus().equalsIgnoreCase(
-					Constants.WITHDRAWN))
-			{
-				final long consentTierID = consentTierStatus.getConsentTier()
-						.getId().longValue();
-				final String cprWithdrawOption = specimenCollectionGroup
-						.getConsentWithdrawalOption();
-				ConsentUtil.updateSCG(specimenCollectionGroup,
-						oldspecimenCollectionGroup, consentTierID,
-						cprWithdrawOption, dao, sessionDataBean);
-				// break;
-			}
-		}
-	}
-
+		
 	/**
 	 * @param identifier : id
 	 * @return String
@@ -3429,30 +3323,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				absScg.setName(scg.getGroupName());
 				absScg.setId(identifier);
 				absScg.setActivityStatus(activityStatus);
-				if (consentTierStatusCollection != null
-						&& !consentTierStatusCollection.isEmpty())
-				{
-					absScg.setConsentTierStatusCollection(consentTierStatusCollection);
-				}
-				else
-				{
-					try
-					{
-						// This is to handle API test cases. While running from API test cases, this collection is prepopulated
-						if ((absScg.getConsentTierStatusCollection() != null)
-								&& (!absScg.getConsentTierStatusCollection()
-										.isEmpty()))
-						{
-							absScg.setConsentTierStatusCollection(absScg
-									.getConsentTierStatusCollection());
-						}
-					}
-					catch (LazyInitializationException e)
-					{
-						//						this.LOGGER.error(e.getMessage(),e) ;
-						absScg.setConsentTierStatusCollection(consentTierStatusCollection);
-					}
-				}
 				registration.setCollectionProtocol(collectionProtocol);
 				absScg.setCollectionProtocolRegistration(registration);
 			}
@@ -3979,9 +3849,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						collectionProtocolEvent);
 				specimenCollectionGroup
 						.setCollectionProtocolRegistration(collectionProtocolRegistration);
-				specimenCollectionGroup
-						.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-
+				
 				specimenBizLogic.insert(specimenCollectionGroup, dao,
 						sessionDataBean);
 				scgCollection.add(specimenCollectionGroup);

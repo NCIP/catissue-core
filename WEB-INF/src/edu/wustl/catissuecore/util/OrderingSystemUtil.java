@@ -719,7 +719,7 @@ public final class OrderingSystemUtil
 			if(!cp.getConsentsWaived())
 			{
 				List spConsentList = dao.executeQuery(specimenConsentHql,columnBeanList);
-				specimen.setConsentTierStatusCollection(spConsentList);
+			//	specimen.setConsentTierStatusCollection(spConsentList);
 			}
 		}
 		finally
@@ -958,7 +958,7 @@ public final class OrderingSystemUtil
 			specimen.setSpecimenCollectionGroup(scg);
 			if(cp.getConsentsWaived())
 			{
-				specimen.getConsentTierStatusCollection().clear();
+		//		specimen.getConsentTierStatusCollection().clear();
 			}
 		}
 		
@@ -987,13 +987,13 @@ public final class OrderingSystemUtil
 				list.add(status);
 				if(specMap.containsKey(specimenID))
 				{
-					specMap.get(specimenID).getConsentTierStatusCollection().add(status);
+			//		specMap.get(specimenID).getConsentTierStatusCollection().add(status);
 				}
 				else
 				{
 					Specimen specimen = new Specimen();
 					specimen.setId(specimenID);
-					specimen.setConsentTierStatusCollection(list);
+				//	specimen.setConsentTierStatusCollection(list);
 					specMap.put(specimenID, specimen);
 					SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
@@ -1011,7 +1011,7 @@ public final class OrderingSystemUtil
 					specimen.setSpecimenCollectionGroup(scg);
 					if(cp.getConsentsWaived())
 					{
-						specimen.getConsentTierStatusCollection().clear();
+				//		specimen.getConsentTierStatusCollection().clear();
 					}
 					
 				}

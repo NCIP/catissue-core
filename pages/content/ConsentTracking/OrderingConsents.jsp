@@ -92,7 +92,7 @@
 								</td>
 								
 								<td align="left" class='${pageScope.style}'>
-									${consentTierDTO.status}
+									${consentTierDTO.participantResponses}
 								</td>
 							</tr>
 							<c:set var="count" value='${pageScope.count+1}' scope="page" />
