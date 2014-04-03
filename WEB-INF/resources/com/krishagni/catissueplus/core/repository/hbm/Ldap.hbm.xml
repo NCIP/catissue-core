@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+    <class
+        name="com.krishagni.catissueplus.core.auth.domain.Ldap"
+        table="CATISSUE_LDAP_DETAILS"
+	lazy="true">
+    
+    	<cache usage="read-write" />
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null">
+            <generator class="native">
+                <param name="sequence">CATISSUE_LDAP_SEQ</param>
+            </generator>
+        </id>
+
+        <property
+            name="host"
+            type="string"
+            column="HOST"
+            length="255"/>
+            
+        <property
+            name="ldapName"
+            type="string"
+            column="NAME"
+            length="255"/>
+            
+        <property
+            name="port"
+            type="string"
+            column="PORT"
+            length="50"/>
+        
+        <property
+            name="loginName"
+            type="string"
+            column="LOGIN_NAME"
+            length="255"/>
+        
+        <property
+            name="password"
+            type="string"
+            column="PASSWORD"
+            length="255"/>
+            
+        <property
+            name="idField"
+            type="string"
+            column="ID_FIELD"
+            length="50"/>
+
+		<property
+            name="directoryContext"
+            type="string"
+            column="DIRECTORY_CONTEXT"
+            length="255"/>
+
+		<property
+            name="surnameField"
+            type="string"
+            column="SURNAME_FIELD"
+            length="255"/>
+		
+		<property
+            name="givenNameField"
+            type="string"
+            column="GIVEN_NAME_FIELD"
+            length="255"/>
+            
+        <property
+            name="emailField"
+            type="string"
+            column="EMAIL_FIELD"
+            length="255"/>
+        
+        <query name="getLdapByName">
+			SELECT ldap.ldapName FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.ldapName = :ldapName
+		</query>
+    </class>
+
+</hibernate-mapping>

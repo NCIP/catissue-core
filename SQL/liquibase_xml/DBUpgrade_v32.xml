@@ -1219,68 +1219,6 @@
         referencedColumnNames="IDENTIFIER"/>
     </changeSet> 
     
-    <changeSet author="vinod" id="adding audit table" failOnError="true">
-      <createTable tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS">
-        <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-          <constraints primaryKey="true" nullable="false"/>
-        </column>
-        
-        <column name="OBJECT_TYPE" type="${text.type}(50)">
-          <constraints nullable="false"/>
-        </column>
-
-        <column name="OBJECT_ID" type="${int.type}">
-          <constraints nullable="false"/>
-        </column>
-
-        <column name="OPERATION" type="${text.type}(15)">
-          <constraints nullable="false"/>
-        </column>
-        
-        <column name="USER_ID" type="${int.type}">
-         <constraints nullable="false"/>
-        </column>
-        
-        <column name="UPDATED_DATE" type="${timestamp.type}">
-          <constraints nullable="false"/>
-        </column>
-            
-        <column name="REASON_FOR_CHANGE" type="${text.type}(500)">
-        </column>
-        
-        <column name="IP_ADDRESS" type="${text.type}(15)">
-        	 <constraints nullable="false"/>
-        </column>
-
-      </createTable>
-    </changeSet>
-    
-    <changeSet author="vinod" id="adding FK on USER_ID to users table" failOnError="true">
-      <addForeignKeyConstraint 
-        constraintName="FK_RE_USER_ID_USERS_ID"
-        baseTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
-        baseColumnNames="USER_ID"
-        referencedTableName="CATISSUE_USER"
-        referencedColumnNames="IDENTIFIER"/>
-    </changeSet>
-    
-    <changeSet author="vinod" id="creating index on OBJECT_TYPE" failOnError="false">
-	    <createIndex 
-	            indexName="idx_audit_object_type"
-	            tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
-	            unique="false">
-	        <column name="OBJECT_TYPE" type="${text.type}(50)"/>
-	    </createIndex>
-	 </changeSet>
-	 	
-	<changeSet author="vinod" id="creating index on OBJECT_ID" failOnError="false">
- 		<createIndex 
-            indexName="idx_audit_object_id"
-            tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
-            unique="false">
-            <column name="OBJECT_ID" type="${int.type}"/>
-        </createIndex>
-    </changeSet>
     <changeSet id="adding columns for distribution protocol" author="nitesh">
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
@@ -1467,5 +1405,235 @@
             up.cpALabel = up.spALabel,
             up.cpPpid = up.spPpid;</sql>
       </changeSet>
+      
+      <changeSet author="vinod" id="adding audit table"
+		failOnError="true">
+		<createTable tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false"
+					primaryKeyName="PK_CAT_NEXTGEN_AUDIT_DETAILS" />
+			</column>
+
+			<column name="OBJECT_TYPE" type="${text.type}(50)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="OBJECT_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="CP_ID" type="${int.type}">
+			</column>
+
+			<column name="OPERATION" type="${text.type}(15)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="UPDATED_DATE" type="${timestamp.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="REASON_FOR_CHANGE" type="${text.type}(500)">
+			</column>
+
+			<column name="IP_ADDRESS" type="${text.type}(15)">
+				<constraints nullable="false" />
+			</column>
+
+		</createTable>
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Sequence CATISSUE_NEXTGEN_AUDIT_DETAILS_SEQ" failOnError="true">
+		<createSequence 
+			sequenceName="CATISSUE_NEXTGEN_AUDIT_SEQ" 
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding FK on USER_ID to users table" failOnError="true">
+		<addForeignKeyConstraint 
+			constraintName="FK_RE_USER_ID_USERS_ID"
+			baseTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS" 
+			baseColumnNames="USER_ID"
+			referencedTableName="CATISSUE_USER" 
+			referencedColumnNames="IDENTIFIER" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding FK on CP_ID to COLLECTION_PROTOCOL table" failOnError="true">
+		<addForeignKeyConstraint 
+			constraintName="FK_AUDIT_CP_ID"
+			baseTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS" 
+			baseColumnNames="CP_ID"
+			referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+			referencedColumnNames="IDENTIFIER" />
+	</changeSet>
+
+	<changeSet author="vinod" id="creating index on OBJECT_TYPE" failOnError="false">
+		<createIndex indexName="idx_audit_object_type" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+			unique="false">
+			<column name="OBJECT_TYPE" type="${text.type}(50)" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="vinod" id="creating index on OBJECT_ID"
+		failOnError="false">
+		<createIndex indexName="idx_audit_object_id" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+			unique="false">
+			<column name="OBJECT_ID" type="${int.type}" />
+		</createIndex>
+	</changeSet>
+
+
+	<changeSet author="vinod" id="adding external application table" failOnError="true">
+		<createTable tableName="CATISSUE_EXTERNAL_APPLICATION">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_EXTERNAL_APPLICATION"/>
+			</column>
+
+			<column name="APP_NAME" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="SERVICE_CLASS" type="${text.type}(200)">
+				<constraints nullable="false" />
+			</column>
+
+		</createTable>
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Sequence CAT_EXTERNAL_APP_SEQ" failOnError="true">
+		<createSequence sequenceName="CAT_EXTERNAL_APP_SEQ"
+			startValue="1" incrementBy="1" ordered="true" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding CP and external app study mapping table" failOnError="true">
+		<createTable tableName="CATISSUE_CP_EXTAPP_STUDY_REL">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_CP_EXTAPP_STUDY_REL"/>
+			</column>
+
+			<column name="CP_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="APP_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="STUDY_ID" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint 
+			constraintName="FK_RE_APP_ID_FC_IDENTIFIER"
+			baseTableName="CATISSUE_CP_EXTAPP_STUDY_REL" 
+			baseColumnNames="APP_ID"
+			referencedTableName="CATISSUE_EXTERNAL_APPLICATION"
+			referencedColumnNames="IDENTIFIER" />
+
+		<addForeignKeyConstraint 
+			constraintName="FK_EXTAPP_CP_ID_FC_IDENTIFIER"
+			baseTableName="CATISSUE_CP_EXTAPP_STUDY_REL" 
+			baseColumnNames="CP_ID"
+			referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+			referencedColumnNames="IDENTIFIER" />
+
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Sequence CATISSUE_CP_EXTAPP_STUDY_REL_SEQ" failOnError="true">
+		<createSequence 
+			sequenceName="CAT_CP_EXTAPP_STUDY_REL_SEQ"
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Notification status table" failOnError="true">
+		<createTable tableName="CATISSUE_NOTIFICATION_STATUS">
+			<column name="AUDIT_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="APP_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="STATUS" type="${text.type}(15)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="COMMENTS" type="${text.type}(500)">
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint 
+			constraintName="FK_AUDIT_ID_FC_IDENTIFIER"
+			baseTableName="CATISSUE_NOTIFICATION_STATUS" 
+			baseColumnNames="AUDIT_ID"
+			referencedTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+			referencedColumnNames="IDENTIFIER" />
+
+	</changeSet>   
+
+	<changeSet author="dpatil" id="adding CATISSUE_LDAP_DETAILS table" failOnError="true">
+        <createTable tableName="CATISSUE_LDAP_DETAILS">
+            <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_ldap_id"/>
+            </column>
+
+            <column name="NAME" type="${text.type}(100)">
+                <constraints unique="true" nullable="false" />
+            </column>
+
+            <column name="HOST" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="PORT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="LOGIN_NAME" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+   
+            <column name="PASSWORD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+            <column name="ID_FIELD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="SURNAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="GIVEN_NAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="EMAIL_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="DIRECTORY_CONTEXT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+        </createTable>
+
+    </changeSet>  
+
+    <changeSet author="dpatil" id="adding ldap sequence" failOnError="true">
+        <createSequence
+            sequenceName="CATISSUE_LDAP_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+    </changeSet>    
     
 </databaseChangeLog>         

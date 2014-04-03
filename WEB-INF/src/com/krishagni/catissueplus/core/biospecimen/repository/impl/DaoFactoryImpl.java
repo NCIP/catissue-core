@@ -13,6 +13,8 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.Department
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
+import com.krishagni.catissueplus.core.auth.repository.LdapDao;
+import com.krishagni.catissueplus.core.auth.repository.impl.LdapDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
@@ -20,8 +22,10 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.extapp.repository.ExternalAppNotificationDao;
-import com.krishagni.catissueplus.core.extapp.repository.impl.ExternalAppNotificationDaoImpl;
+import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
+import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
+import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
+import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -103,6 +107,14 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
+	public ContainerDao getContainerDao() {
+		ContainerDaoImpl dao = new ContainerDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+	
+
+	@Override
 	public ExternalAppNotificationDao getExternalAppNotificationDao() {
 		ExternalAppNotificationDaoImpl dao = new ExternalAppNotificationDaoImpl();
 		setSessionFactory(dao);
@@ -110,8 +122,15 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public ContainerDao getContainerDao() {
-		ContainerDaoImpl dao = new ContainerDaoImpl();
+	public ExternalApplicationDao getExternalApplicationDao() {
+		ExternalApplicationDaoImpl dao = new ExternalApplicationDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public LdapDao getLdapDao() {
+		LdapDaoImpl dao = new LdapDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
