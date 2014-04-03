@@ -163,8 +163,9 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Password.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalApplication.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalAppNotification.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExtAppNotificationStatus.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolStudyMapping.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Ldap.hbm.xml" />	
 		
     </session-factory>
 
