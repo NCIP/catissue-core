@@ -64,16 +64,6 @@ angular.module('plus.dataentry', [])
       });
     };
     
-    $scope.deleteCounter = 0;
-    
-    $scope.handleDelete = function(mfd) {
-      if (mfd == true) {
-    	  $scope.deleteCounter++;
-      } else {
-    	  $scope.deleteCounter--; 
-      }
-    }
-    
     $scope.showDeleteButton = function() {
       var show = false;
       for (var i = 0; i < $scope.records.length; ++i) {
@@ -88,7 +78,6 @@ angular.module('plus.dataentry', [])
     
     $scope.deleteRecords = function() {
       var recIds = [];
-      var splicedIds = [];
       for (var i = 0 ; i < $scope.records.length ; i++) {
         if ($scope.records[i].mfd) {
           recIds.push($scope.records[i].recordId);
