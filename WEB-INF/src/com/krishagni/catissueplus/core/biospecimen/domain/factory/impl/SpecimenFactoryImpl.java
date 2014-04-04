@@ -15,7 +15,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.BiohazardDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ExternalIdentifierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -59,23 +58,23 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	public Specimen createSpecimen(SpecimenDetail specimenDetail) {
 		ObjectCreationException errorHandler = new ObjectCreationException();
 		Specimen specimen = new Specimen();
-		setScg(specimenDetail,specimen,errorHandler);
-		setParentSpecimen(specimenDetail, specimen,errorHandler); //check for parent in this method
-		setActivityStatus(specimenDetail, specimen,errorHandler);
-		setSpecimenRequirement(specimenDetail, specimen,errorHandler);
-		setCollectionStatus(specimenDetail, specimen,errorHandler);
-		setTissueSite(specimenDetail, specimen,errorHandler);
-		setTissueSide(specimenDetail, specimen,errorHandler);
-		setPathologyStatus(specimenDetail, specimen,errorHandler);
-		setQuantity(specimenDetail, specimen,errorHandler);
-		setClassAndType(specimenDetail, specimen,errorHandler);
-		setLabel(specimenDetail, specimen,errorHandler);
-		setBarcode(specimenDetail, specimen,errorHandler);
+		setScg(specimenDetail, specimen, errorHandler);
+		setParentSpecimen(specimenDetail, specimen, errorHandler); //check for parent in this method
+		setActivityStatus(specimenDetail, specimen, errorHandler);
+		setSpecimenRequirement(specimenDetail, specimen, errorHandler);
+		setCollectionStatus(specimenDetail, specimen, errorHandler);
+		setTissueSite(specimenDetail, specimen, errorHandler);
+		setTissueSide(specimenDetail, specimen, errorHandler);
+		setPathologyStatus(specimenDetail, specimen, errorHandler);
+		setQuantity(specimenDetail, specimen, errorHandler);
+		setClassAndType(specimenDetail, specimen, errorHandler);
+		setLabel(specimenDetail, specimen, errorHandler);
+		setBarcode(specimenDetail, specimen, errorHandler);
 		setComment(specimenDetail, specimen);
-		setCreatedOn(specimenDetail, specimen,errorHandler);
-		setContainerPositions(specimenDetail, specimen,errorHandler);
-		setBiohazardCollection(specimenDetail, specimen,errorHandler);
-		setExternalIdsCollection(specimenDetail, specimen,errorHandler);
+		setCreatedOn(specimenDetail, specimen, errorHandler);
+		setContainerPositions(specimenDetail, specimen, errorHandler);
+		setBiohazardCollection(specimenDetail, specimen, errorHandler);
+		setExternalIdsCollection(specimenDetail, specimen, errorHandler);
 		errorHandler.checkErrorAndThrow();
 		return specimen;
 	}
@@ -93,7 +92,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setSpecimenCollectionGroup(scg);
 	}
 
-	private void setParentSpecimen(SpecimenDetail specimenDetail, Specimen specimen,ObjectCreationException errorHandler) {
+	private void setParentSpecimen(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
 		if (specimenDetail.getParentSpecimenId() == null && !"New".equals(specimenDetail.getLineage())) {
 			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, PARENT);
 			return;
@@ -105,8 +104,9 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		specimen.setParentSpecimen(parentSpecimen);
 	}
-	
-	private void setSpecimenRequirement(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
+
+	private void setSpecimenRequirement(SpecimenDetail specimenDetail, Specimen specimen,
+			ObjectCreationException errorHandler) {
 		if (specimenDetail.getRequirementId() == null) {
 			return;
 		}
@@ -187,7 +187,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setCreatedOn(specimenDetail.getCreatedOn());
 	}
 
-	private void setCollectionStatus(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
+	private void setCollectionStatus(SpecimenDetail specimenDetail, Specimen specimen,
+			ObjectCreationException errorHandler) {
 		if (isValidPv(specimenDetail.getCollectionStatus(), COLLECTION_STATUS)) {
 			specimen.setCollectionStatus(specimenDetail.getCollectionStatus());
 			return;
@@ -195,7 +196,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, COLLECTION_STATUS);
 	}
 
-	private void setContainerPositions(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
+	private void setContainerPositions(SpecimenDetail specimenDetail, Specimen specimen,
+			ObjectCreationException errorHandler) {
 		if (isBlank(specimenDetail.getContainerName()) && isBlank(specimenDetail.getPos1())
 				&& isBlank(specimenDetail.getPos2())) {
 			//			specimen.setSpecimenPosition(null);
@@ -210,7 +212,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		//		ContainerUtil.checkAndAssignPositions(container,specimenDetail.getPos1(),specimenDetail.getPos2(),specimen);
 	}
 
-	private void setBiohazardCollection(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
+	private void setBiohazardCollection(SpecimenDetail specimenDetail, Specimen specimen,
+			ObjectCreationException errorHandler) {
 		if (specimenDetail.getBiohazardDetails() == null && specimenDetail.getBiohazardDetails().isEmpty()) {
 			return;
 		}
@@ -219,7 +222,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 	}
 
-	private void setExternalIdsCollection(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
+	private void setExternalIdsCollection(SpecimenDetail specimenDetail, Specimen specimen,
+			ObjectCreationException errorHandler) {
 		//need to call the common update collection method
 		if (specimenDetail.getExternalIdentifierDetails() == null
 				&& specimenDetail.getExternalIdentifierDetails().isEmpty()) {
@@ -238,7 +242,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setExternalIdentifierCollection(externalIdentifiers);
 	}
 
-//	private void addError(CatissueErrorCode event, String field) {
-//		exception.addError(event, field);
-//	}
+	//	private void addError(CatissueErrorCode event, String field) {
+	//		exception.addError(event, field);
+	//	}
 }

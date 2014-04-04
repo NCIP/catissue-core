@@ -13,6 +13,8 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.Department
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
+import com.krishagni.catissueplus.core.auth.repository.LdapDao;
+import com.krishagni.catissueplus.core.auth.repository.impl.LdapDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
@@ -122,6 +124,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public ExternalApplicationDao getExternalApplicationDao() {
 		ExternalApplicationDaoImpl dao = new ExternalApplicationDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public LdapDao getLdapDao() {
+		LdapDaoImpl dao = new LdapDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

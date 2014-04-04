@@ -1704,8 +1704,8 @@
 		</tstamp>
 		<echo>before DE_Starts: ${time}</echo>
 		<!-- <antcall target="upgrade_metadata_for_constraintproperties"/>  -->
-		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
-		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
+		<!--<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
 		<antcall target="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" />
 		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
@@ -1719,7 +1719,7 @@
 					<format property="DEtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 				</tstamp>
 				<echo>After DE_Starts: ${DEtime}</echo>
-		<antcall target="insertPaths"/>
+		<antcall target="insertPaths"/>-->
 		<tstamp>
 							<format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 						</tstamp>
@@ -1744,10 +1744,10 @@
 			<transaction src="${mysql.sql.dir}/csm_catissuecore.sql" />
 			<transaction src="${common.sql.dir}/insert_default_data.sql" />
 			<transaction src="${common.sql.dir}/indexes.sql" />
-			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+			<!--<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>-->
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1760,37 +1760,6 @@
 		
 		<antcall target="integrate_bulk_operation_mysql" />
 
-		<antcall target="unzip_aq_installable" />
-		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
-			<property name="database.type" value="${database.type}" />
-			<property name="database.driver" value="com.mysql.jdbc.Driver" />
-			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="lib.dir" value="${lib.dir}" />
-		</ant>
-
-		<antcall  target="Export_Clinical_diagnosis_mysql"/>
-		<antcall target="CAModel_import_data" />
-		<antcall target="temp_update_metadata_for_clob_support_mysql" />
-		<antcall target="insert_entity_group_metadata_mysql" />
-		<antcall target="upgrade_db_demodel_mysql" />
-		<sql driver="${mysql.driver.string}"
-		url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/Upgrade_DE_Schema.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-
-		<antcall target="upgrade_metadata_for_constraintproperties"/>
-		<antcall target="update_metadata_for_model_changes">
-			 <param name="isUpgrade" value="false"/>
-		</antcall>
-		<antcall target="update_metadata_for_CA_model_changes" />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
@@ -1800,17 +1769,6 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<echo message="Upgrading MySQL Database." />
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_QueryMetadata.sql" />
-				<transaction>commit;</transaction>
-					<classpath>
-						<fileset dir="${lib.dir}">
-							<include name="*.jar" />
-						</fileset>
-					</classpath>
-			</sql>
-		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
 		<antcall target="upgrade_db_for_empi_id__mysql"/>
 	</target>
@@ -1871,7 +1829,7 @@
 		<echo message="Initializing Oracle Database for caTissue Suite v1.1.p5. Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />
+			<!--<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />-->
 			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
 			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
 			<transaction src="${oracle.sql.dir}/AlterTable.sql" />
@@ -1879,9 +1837,9 @@
 			<transaction src="${oracle.sql.dir}/CSM_Create_Oracle.sql" />
 			<transaction src="${oracle.sql.dir}/insert_default_data.sql" />
 			<transaction src="${common.sql.dir}/indexes.sql" />
-			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
+			<!--<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />
+			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />-->
 		<!--	<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />  -->
 			<transaction>commit;</transaction>
 			<classpath>
@@ -1896,7 +1854,7 @@
 		
 		<antcall target="integrate_bulk_operation_oracle"/>
 
-		<antcall target="unzip_aq_installable" />
+		<!--<antcall target="unzip_aq_installable" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
 			<property name="database.type" value="${database.type}" />
 			<property name="database.driver" value="${oracle.driver.string}" />
@@ -1907,7 +1865,7 @@
 			<property name="lib.dir" value="${lib.dir}" />
 		</ant>
 
-		<antcall target="insertQueryMetadata" />
+		<antcall target="insertQueryMetadata" />-->
 
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
 			<transaction src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql" />
@@ -1928,7 +1886,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="temp_update_metadata_for_clob_support_oracle" />
+		<!--<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="insert_entity_group_metadata_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -1947,7 +1905,7 @@
 		</antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
 		<antcall target="alter_CA_model_Tables" />
-    	<antcall target="reset_sequences" />
+    	<antcall target="reset_sequences" />-->
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
@@ -1957,7 +1915,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<echo message="Upgrading Oracle Database p5 to p5.1" />
+		<!--<echo message="Upgrading Oracle Database p5 to p5.1" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_QueryMetadata.sql" />
 			<transaction>commit;</transaction>
@@ -1967,7 +1925,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
+		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />-->
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
 		<antcall target="upgrade_db_for_empi_id_oracle"/>
 	</target>

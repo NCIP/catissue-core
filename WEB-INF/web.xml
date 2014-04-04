@@ -260,20 +260,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>AppLogout</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
    </servlet>
-	<servlet>
-		<servlet-name>context</servlet-name>
-		<servlet-class>
-			org.springframework.web.context.ContextLoaderServlet
-		</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>httpinvoker</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
-		</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
+	
+	
 	<servlet>
 		<servlet-name>sdkstartup</servlet-name>
 		<servlet-class>
@@ -380,7 +368,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
           <servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
         </servlet>
 
- 	
+ 	    <servlet>
+          <servlet-name>ExportFormAction</servlet-name>
+          <servlet-class>edu.common.dynamicextensions.nui.action.ExportFormAction</servlet-class>
+        </servlet>
 
 
 	<servlet>
@@ -426,6 +417,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
           <servlet-name>CreateFormAction</servlet-name>
           <url-pattern>/CreateFormAction.de</url-pattern>
         </servlet-mapping>
+         <servlet-mapping>
+          <servlet-name>ExportFormAction</servlet-name>
+          <url-pattern>/ExportFormAction.de</url-pattern>
+        </servlet-mapping>
+        
 
 <servlet-mapping>
 <servlet-name>restApi</servlet-name>
@@ -488,10 +484,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-name>ResponseServlet</servlet-name>
 		<url-pattern>/ResponseServlet</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>httpinvoker</servlet-name>
-		<url-pattern>/http/*</url-pattern>
-	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>sdkstartup</servlet-name>
 		<url-pattern>/server/HTTPServer</url-pattern>

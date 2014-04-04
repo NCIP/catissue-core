@@ -1580,5 +1580,60 @@
 			referencedColumnNames="IDENTIFIER" />
 
 	</changeSet>   
+
+	<changeSet author="dpatil" id="adding CATISSUE_LDAP_DETAILS table" failOnError="true">
+        <createTable tableName="CATISSUE_LDAP_DETAILS">
+            <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_ldap_id"/>
+            </column>
+
+            <column name="NAME" type="${text.type}(100)">
+                <constraints unique="true" nullable="false" />
+            </column>
+
+            <column name="HOST" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="PORT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="LOGIN_NAME" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+   
+            <column name="PASSWORD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+            <column name="ID_FIELD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="SURNAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="GIVEN_NAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="EMAIL_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="DIRECTORY_CONTEXT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+        </createTable>
+
+    </changeSet>  
+
+    <changeSet author="dpatil" id="adding ldap sequence" failOnError="true">
+        <createSequence
+            sequenceName="CATISSUE_LDAP_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+    </changeSet>    
     
 </databaseChangeLog>         
