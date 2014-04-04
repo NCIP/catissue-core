@@ -69,15 +69,20 @@
         <div class="panel-title clearfix">
           <div class="pull-left" style="padding-top:5px;">{{form.formCaption}} Records</div>
           <div class="btn-group pull-right">
-            <button class="btn btn-primary" ng-click="addRecord()">
-              <span class="glyphicon glyphicon-plus"></span>
-              Add Record
+            <button type="button" class="btn btn-default" ng-show="showDeleteButton()" ng-click="deleteRecords()">
+              <span class="glyphicon glyphicon-trash"></span> 
+              Delete
             </button>
             <button class="btn btn-default" ng-click="showForms(false)">
               <span class="glyphicon glyphicon-th-list"></span>
               List Forms
             </button>
+            <button class="btn btn-primary" ng-click="addRecord()">
+              <span class="glyphicon glyphicon-plus"></span>
+              Add Record
+            </button>
           </div>
+         
         </div>
       </div>
 
@@ -88,7 +93,7 @@
         <table class="table" style="max-height: 75%;" ng-if="records.length > 0"> 
           <thead>
             <tr>
-              <th class="col-xs-1">Record Id</th>
+              <th class="col-xs-3">Record Id</th>
               <th class="col-xs-3">Modified By </th>
               <th class="col-xs-3">Updated</th>
             </tr>
@@ -96,7 +101,10 @@
           <tbody>
             <tr ng-repeat="record in records | orderBy:'updateTime':true" id="{{record.id}}">
               <td>
-                <a style="cursor: pointer;" 
+                <span style="vertical-align: middle;">
+                  <input type="checkbox" ng-model="record.mfd"/>
+                </span>
+                <a style="cursor: pointer; margin-left: 5px;" 
                    tooltip-placement="right"
                    tooltip="Click to view/edit form record"
                    ng-click="editFormData(record)">#{{record.recordId}}

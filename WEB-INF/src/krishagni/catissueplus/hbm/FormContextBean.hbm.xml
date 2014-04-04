@@ -173,7 +173,8 @@
 			inner join dyextn_containers c on c.identifier = fc.container_id
 			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :cprId
 		where
-			fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)      
+			fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)  
+			and (r.activity_status = 'ACTIVE' or r.activity_status is null) 
 		group by
 			formCtxtId, formId, formCaption, cpId
       </sql-query>
@@ -198,6 +199,7 @@
 			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId 
 		where 
 			fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1) 
+			and (r.activity_status = 'ACTIVE' or r.activity_status is null)
 		group by 
 			formCtxtId, formId, formCaption, cpId
       </sql-query>      
@@ -221,6 +223,7 @@
 			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :scgId 
 		where 
 			fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1) 
+			and (r.activity_status = 'ACTIVE' or r.activity_status is null)
 		group by 
 			formCtxtId, formId, formCaption, cpId
       </sql-query>      
@@ -241,7 +244,7 @@
           inner join catissue_form_context f on r.form_ctxt_id = f.identifier 
           inner join catissue_user u on u.identifier = r.updated_by 
         where 
-          form_ctxt_id = :formCtxtId and object_id = :objectId
+          form_ctxt_id = :formCtxtId and object_id = :objectId and r.activity_status = 'ACTIVE'
       </sql-query>      	  
     </class>
     

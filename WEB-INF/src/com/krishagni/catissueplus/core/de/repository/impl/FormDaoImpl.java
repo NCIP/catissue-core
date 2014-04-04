@@ -186,6 +186,16 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;		
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public FormRecordEntryBean getRecordEntry(Long recordId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID);
+		query.setLong("recordId", recordId);
+		
+		List<FormRecordEntryBean> objs = query.list();
+		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;		
+	}
+	
 	private List<FormCtxtSummary> getEntityForms(List<Object[]> rows) {
 		Map<Long, FormCtxtSummary> formsMap = new LinkedHashMap<Long, FormCtxtSummary>(); 
 		
@@ -231,4 +241,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String RE_FQN = FormRecordEntryBean.class.getName();
 	
 	private static final String GET_RECORD_ENTRY = RE_FQN + ".getRecordEntry";
+	
+	private static final String GET_RECORD_ENTRY_BY_REC_ID = RE_FQN + ".getRecordEntryByRecId";
+
 }

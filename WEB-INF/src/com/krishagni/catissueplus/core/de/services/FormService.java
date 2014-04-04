@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.services;
 
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
@@ -11,6 +12,7 @@ import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.FormDataEvent;
 import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
+import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -43,6 +45,8 @@ public interface FormService {
 
 	public FileDetailEvent getFileDetail(ReqFileDetailEvent req);
 
-	public FileUploadedEvent uploadFile(UploadFileEvent req); 
+	public FileUploadedEvent uploadFile(UploadFileEvent req);
+
+	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry); 
 	
 }

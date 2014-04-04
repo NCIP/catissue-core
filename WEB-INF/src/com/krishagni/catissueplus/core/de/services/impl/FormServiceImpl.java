@@ -8,12 +8,14 @@ import java.util.Map;
 
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
+import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FileDetail;
@@ -28,6 +30,7 @@ import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -202,9 +205,14 @@ public class FormServiceImpl implements FormService {
 		SessionDataBean session = req.getSessionDataBean();
 		FormRecordEntryBean recordEntry = null;
 		if (isInsert) {
-			recordEntry = new FormRecordEntryBean();						
+			recordEntry = new FormRecordEntryBean();	
+			recordEntry.setActivityStatus(Status.ACTIVE);
 		} else {
 			recordEntry = formDao.getRecordEntry(formCtxtId, objectId, recordId);
+		}
+		
+		if (recordEntry.getActivityStatus().equals(Status.CLOSED.toString())) {
+			return FormDataEvent.notFound(formData.getContainer().getId(), recordId);
 		}
 		
 		recordEntry.setFormCtxtId(formCtxtId);
@@ -247,6 +255,22 @@ public class FormServiceImpl implements FormService {
 		} catch (Exception e) {
 			return FileUploadedEvent.serverError();
 		}		
+	}
+	
+	@Override
+	@PlusTransactional
+	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry) {
+		List<Long> deletedRecIds = new ArrayList<Long>();
+		for(Long recId : delRecEntry.getRecordIds()) {
+			FormRecordEntryBean recEntry = formDao.getRecordEntry(recId);
+			if (recEntry != null) {
+				recEntry.setActivityStatus(Status.CLOSED);
+				formDao.saveOrUpdateRecordEntry(recEntry);
+				deletedRecIds.add(recId);
+			} 
+		}
+		
+		return  RecordEntriesDeletedEvent.ok(deletedRecIds);
 	}
 		
 	private List<FormFieldSummary> getFormFields(Container container) {

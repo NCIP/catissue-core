@@ -1198,6 +1198,10 @@
         <column name="UPDATE_TIME" type="${timestamp.type}">
           <constraints nullable="false"/>
         </column>
+        
+         <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+          <constraints nullable="false"/>
+        </column>
       </createTable>
     </changeSet>
 

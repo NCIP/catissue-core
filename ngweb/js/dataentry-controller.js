@@ -41,7 +41,9 @@ angular.module('plus.dataentry', [])
       }
 
       $scope.form = form;
+      $scope.showDeleteBtn = false;
       var recordsq = undefined;
+
       if (entity == 'Participant') {
         recordsq = FormsService.getCprFormRecords(entityObjId, form.formCtxtId);
       } else if (entity == 'Specimen') {
@@ -58,6 +60,46 @@ angular.module('plus.dataentry', [])
         } else {
           $scope.records = records;
           $scope.currentView = 'records-list';
+        }
+      });
+    };
+    
+    $scope.deleteCounter = 0;
+    
+    $scope.handleDelete = function(mfd) {
+      if (mfd == true) {
+    	  $scope.deleteCounter++;
+      } else {
+    	  $scope.deleteCounter--; 
+      }
+    }
+    
+    $scope.showDeleteButton = function() {
+      var show = false;
+      for (var i = 0; i < $scope.records.length; ++i) {
+        if ($scope.records[i].mfd) {
+          show = true;
+          break;
+        }
+      }
+      
+      return show;
+    }
+    
+    $scope.deleteRecords = function() {
+      var recIds = [];
+      var splicedIds = [];
+      for (var i = 0 ; i < $scope.records.length ; i++) {
+        if ($scope.records[i].mfd) {
+          recIds.push($scope.records[i].recordId);
+        }
+      }
+      
+      FormsService.deleteRecords($scope.form.formId, recIds).then(function(deletedRecIds) {
+        for (var i = $scope.records.length - 1; i >= 0; --i) {
+          if (deletedRecIds.data.indexOf($scope.records[i].recordId) != -1) {
+            $scope.records.splice(i, 1);
+          }
         }
       });
     };

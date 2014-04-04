@@ -83,6 +83,12 @@ angular.module('plus.formsServices', [])
 
       getScgFormRecords: function(scgId, formCtxtId) {
         return $http.get(getRecordsUrl('specimen-collection-groups', scgId, formCtxtId)).then(successfn);
+      },
+      
+      deleteRecords: function(formId, recIds) {
+        var delUrl = baseUrl + "/" + formId + "/data";
+        return  $http({method: 'DELETE', url: delUrl, data: recIds, 
+        		  headers: {'Content-Type': 'application/json;charset=utf-8'}});
       }
     };
   })

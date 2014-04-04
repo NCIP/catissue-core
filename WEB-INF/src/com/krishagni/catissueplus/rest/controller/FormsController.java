@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
@@ -29,6 +30,7 @@ import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
+import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent.FormType;
 import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
@@ -169,6 +171,22 @@ public class FormsController {
 			return resp.getFormCtxts();
 		}
 		
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Long> deleteRecords(@PathVariable("id") Long formId, @RequestBody List<Long> recIds) {
+		
+		DeleteRecordEntriesEvent delRecEntry = new DeleteRecordEntriesEvent();
+		delRecEntry.setFormId(formId);
+		delRecEntry.setRecordIds(recIds);
+		RecordEntriesDeletedEvent resp = formSvc.deleteRecords(delRecEntry);
+		
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDeletedRecIds();
+		}
 		return null;
 	}
 

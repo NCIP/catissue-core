@@ -16,6 +16,12 @@ public class FormRecordEntryBean {
 	
 	private Date updatedTime;
 	
+	private Status status;
+
+	public enum Status {
+		ACTIVE, CLOSED
+	}
+	
 	public Long getIdentifier() {
 		return identifier;
 	}
@@ -62,5 +68,21 @@ public class FormRecordEntryBean {
 
 	public void setUpdatedTime(Date updatedTime) {
 		this.updatedTime = updatedTime;
+	}
+
+	public Status getActivityStatus() {
+		return status;
+	}
+
+	public void setActivityStatus(Status status) {
+	  this.status = status;
+	}
+
+	public String getActivityStatusStr() {
+	  return status != null ? status.name() : null;
+	}
+
+	public void setActivityStatusStr(String status) {
+	  this.status = status != null ? Status.valueOf(status) : Status.ACTIVE;
 	}
 }

@@ -67,6 +67,15 @@
             insert="true"
             length="30"
         />
+         
+        <property
+            name="activityStatusStr"
+            column="ACTIVITY_STATUS"
+            type="string"
+            update="true"
+            insert="true"
+            length="16"
+        />
         
         <query name="getRecordEntry">
           from
@@ -75,6 +84,13 @@
             formCtxtId = :formCtxtId and 
             recordId = :recordId and
             objectId = :objectId 
+        </query>
+        
+        <query name="getRecordEntryByRecId">
+          from
+            FormRecordEntryBean
+          where
+            recordId = :recordId
         </query>
     </class>
 </hibernate-mapping>
