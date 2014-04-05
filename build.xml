@@ -95,6 +95,11 @@
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
 		<tstamp />
+		<delete includeemptydirs="true">
+		            <fileset dir="${target.dir}">
+		                <include name="**/*" />
+		            </fileset>
+		        </delete>
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${target.dir}" />
 		<!-- Create the temp directory for caCORE CSM war file-->

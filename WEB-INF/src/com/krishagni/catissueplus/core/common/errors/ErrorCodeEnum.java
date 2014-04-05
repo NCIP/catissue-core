@@ -2,7 +2,8 @@ package com.krishagni.catissueplus.core.common.errors;
 
 
 public enum ErrorCodeEnum implements CatissueErrorCode{
-	QUERY_EXECUTION_ERROR(1000, "Error while executing query");
+	QUERY_EXECUTION_ERROR(1000, "Error while executing query"),
+	AUDIT_ERROR(1001, "Error while performing the audit");
 		
 	private int code;
 	
