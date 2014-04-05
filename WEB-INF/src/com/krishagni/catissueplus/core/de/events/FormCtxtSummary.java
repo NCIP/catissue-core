@@ -8,6 +8,8 @@ public class FormCtxtSummary {
 	private String formCaption;
 	
 	private Integer noOfRecords;
+	
+	private boolean multiRecord;
 
 	public Long getFormCtxtId() {
 		return formCtxtId;
@@ -39,5 +41,13 @@ public class FormCtxtSummary {
 
 	public void setNoOfRecords(Integer noOfRecords) {
 		this.noOfRecords = noOfRecords;
+	}
+	
+	public boolean isMultiRecord() {
+		return multiRecord;
+	}
+
+	public void setMultiRecord(boolean isMultiRecord) {
+		this.multiRecord = isMultiRecord;
 	}
 }

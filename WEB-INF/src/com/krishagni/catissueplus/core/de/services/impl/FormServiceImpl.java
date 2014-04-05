@@ -124,13 +124,14 @@ public class FormServiceImpl implements FormService {
 			Long formId = formCtxtDetail.getFormId();
 			Long cpId = formCtxtDetail.getCollectionProtocol().getId();
 			String entity = formCtxtDetail.getLevel();
-			
+			boolean isMultiRecord = formCtxtDetail.isMultiRecord();
 			FormContextBean formCtxt = formDao.getFormContext(formId, cpId, entity);
 			if (formCtxt == null) {
 				formCtxt = new FormContextBean();
 				formCtxt.setContainerId(formId);
 				formCtxt.setCpId(cpId);
 				formCtxt.setEntityType(entity);
+				formCtxt.setMultiRecord(isMultiRecord);
 				formDao.saveOrUpdate(formCtxt);
 			}
 			
@@ -211,7 +212,7 @@ public class FormServiceImpl implements FormService {
 			recordEntry = formDao.getRecordEntry(formCtxtId, objectId, recordId);
 		}
 		
-		if (recordEntry.getActivityStatus().equals(Status.CLOSED.toString())) {
+		if (recordEntry.getActivityStatus() == Status.CLOSED) {
 			return FormDataEvent.notFound(formData.getContainer().getId(), recordId);
 		}
 		

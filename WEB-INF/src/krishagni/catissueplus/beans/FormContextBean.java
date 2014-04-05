@@ -9,6 +9,8 @@ public class FormContextBean {
 	private String entityType;
 	
 	private Long cpId;
+	
+	private boolean multiRecord;
 
 	public Long getIdentifier() {
 		return identifier;
@@ -40,5 +42,13 @@ public class FormContextBean {
 
 	public void setCpId(Long cpId) {
 		this.cpId = cpId;
+	}
+
+	public boolean isMultiRecord() {
+		return multiRecord;
+	}
+
+	public void setMultiRecord(boolean isMultiRecord) {
+		this.multiRecord = isMultiRecord;
 	}
 }

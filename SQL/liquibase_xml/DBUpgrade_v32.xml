@@ -19,6 +19,15 @@
 
     <property name="timestamp.type" value="timestamp" dbms="mysql" />
     <property name="timestamp.type" value="timestamp" dbms="oracle" />
+    
+    <property name="boolean.type" value="boolean" dbms="mysql" />
+    <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+    
+    <property name="boolean.true" value="true" dbms="mysql" />
+    <property name="boolean.true" value="1" dbms="oracle" />
+    
+    <property name="boolean.false" value="false" dbms="mysql" />
+    <property name="boolean.false" value="0" dbms="oracle" />
 
     <property name="autoIncrement" value="true" dbms="mysql"/>
     <property name="autoIncrement" value="false" dbms="oracle"/>
@@ -1151,6 +1160,8 @@
         </column>
  
         <column name="SORT_ORDER" type="${smallint.type}">
+        
+        <column name="IS_MULTIRECORD" type="${boolean.type}" defaultValueBoolean="{boolean.false}"/>
 	</column>
       </createTable>
     </changeSet>

@@ -140,10 +140,13 @@
             <ka-select style="width: 100%" data-placeholder="Select Level"
                        options="extnEntities" option-id="entity" option-value="name" selected="selectedEntity"></ka-select>
           </div>
+          <div class="checkbox">
+            <label><input type="checkbox" ng-checked="isMultiRecord" ng-model="isMultiRecord"> Multiple records allowed </label>
+          </div>
         </div>
       </div>
       <div class="modal-footer" ng-switch on="enableAttach(allProtocols, selectedCps, selectedEntity)" style="height: 12%;">
-        <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(allProtocols, selectedCps, selectedEntity)">Attach Form</button>
+        <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(allProtocols, selectedCps, selectedEntity, isMultiRecord)">Attach Form</button>
         <button ng-switch-when="true"  class="btn btn-default" ng-click="cancel()">Cancel</button>
         <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()">Done</button>
       </div> 

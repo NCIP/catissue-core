@@ -10,6 +10,8 @@ public class FormContextDetail {
 	private String level;
 	
 	private Long formId;
+	
+	private boolean isMultiRecord;
 
 	public Long getFormCtxtId() {
 		return formCtxtId;
@@ -41,5 +43,13 @@ public class FormContextDetail {
 
 	public void setFormId(Long formId) {
 		this.formId = formId;
+	}
+
+	public boolean isMultiRecord() {
+		return isMultiRecord;
+	}
+
+	public void setMultiRecord(boolean isMultiRecord) {
+		this.isMultiRecord = isMultiRecord;
 	}
 }

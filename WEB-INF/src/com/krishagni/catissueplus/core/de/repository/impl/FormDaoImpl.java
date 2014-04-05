@@ -213,7 +213,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			form.setFormId(formId);
 			form.setFormCaption((String)row[2]);
 			form.setNoOfRecords((Integer)row[4]);
-			
+			form.setMultiRecord((Boolean)row[5]);
 			formsMap.put(formId, form);
 		}
 		

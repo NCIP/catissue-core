@@ -104,6 +104,7 @@ angular.module('plus.forms', [])
       $scope.extnEntities = args.extnEntities;
 
       $scope.allProtocols = false;
+      $scope.isMultiRecord = false;
       $scope.selectedCps = undefined;
       $scope.selectedEntity = undefined;
 
@@ -111,7 +112,7 @@ angular.module('plus.forms', [])
          return ((allProtocols || (selectedCps && selectedCps.length > 0)) && selectedEntity) ? true : false;
       };
 
-      $scope.attach = function(allProtocols, selectedCps, selectedEntity) {
+      $scope.attach = function(allProtocols, selectedCps, selectedEntity, isMultiRecord) {
          var cpIds = [], newCpCnt = 0;
          if (allProtocols) { 
            cpIds = [-1];
@@ -124,7 +125,7 @@ angular.module('plus.forms', [])
            }
          }
 
-         FormsService.addFormContexts($scope.form.formId, cpIds, selectedEntity.entity).then(
+         FormsService.addFormContexts($scope.form.formId, cpIds, selectedEntity.entity, isMultiRecord).then(
            function(data) {
              var cpCnt = -1;
              if (existingCpCount != -1 && !allProtocols) {

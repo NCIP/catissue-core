@@ -52,10 +52,10 @@ angular.module('plus.formsServices', [])
         return $http.get(baseUrl + "/" + formId + "/contexts").then(successfn);
       },
 
-      addFormContexts: function(formId, cpIds, entity) {
+      addFormContexts: function(formId, cpIds, entity, isMultiRecord) {
         var formCtxts = [];
         for (var i = 0; i < cpIds.length; ++i) {
-          formCtxts.push({formId: formId, collectionProtocol: {id: cpIds[i]}, level: entity});
+          formCtxts.push({formId: formId, collectionProtocol: {id: cpIds[i]}, level: entity, multiRecord: isMultiRecord});
         }
 
         return $http.put(baseUrl + "/" + formId + "/contexts", formCtxts).then(successfn);

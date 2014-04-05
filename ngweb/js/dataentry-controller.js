@@ -55,7 +55,7 @@ angular.module('plus.dataentry', [])
       recordsq.then(function(records) {
         if (records.length == 0 && redirect) {
           $scope.renderForm(form);
-        } else if (records.length == 1 && redirect) {
+        } else if (records.length == 1 && redirect && !form.multiRecord) {
           $scope.renderForm(form, records[0].recordId);
         } else {
           $scope.records = records;

@@ -2,7 +2,9 @@ package com.krishagni.catissueplus.core.de.events;
 
 import java.util.List;
 
-public class DeleteRecordEntriesEvent {
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+
+public class DeleteRecordEntriesEvent extends RequestEvent {
 
 	private Long formId;
 	

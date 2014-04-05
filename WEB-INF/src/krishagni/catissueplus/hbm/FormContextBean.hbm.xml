@@ -49,6 +49,14 @@
             insert="true"
             length="30"
         />
+         
+        <property
+            name="multiRecord"
+            column="IS_MULTIRECORD"
+            type="boolean"
+            update="true"
+            insert="true"
+        />
         
       <sql-query name="getFormsAttachedToAllProtocols">
 	    <return-scalar column="formId" type="long"/>
@@ -80,7 +88,7 @@
 	    <return-scalar column="allCp" type="integer"/>
 	    <return-scalar column="userId" type="long"/>
 	    <return-scalar column="userFirstName" type="string"/>
-	    <return-scalar column="userLastName" type="string"/>	  
+	    <return-scalar column="userLastName" type="string"/>
 	  
 	    select
 	      c.identifier as formId, c.name as formName, c.caption as formCaption, 	    
@@ -164,9 +172,12 @@
         <return-scalar column="formCaption" type="string"/>
         <return-scalar column="cpId" type="long"/>
         <return-scalar column="recordCnt" type="integer"/>
+        <return-scalar column="isMultirecord" type="boolean"/>
+        
 
 		select
-			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, count(r.identifier) as recordCnt
+			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+			count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
 		from
 			catissue_form_context fc
 			left join catissue_coll_prot_reg reg on reg.collection_protocol_id = fc.cp_id
@@ -185,9 +196,11 @@
         <return-scalar column="formCaption" type="string"/>
         <return-scalar column="cpId" type="long"/>
         <return-scalar column="recordCnt" type="integer"/>
+        <return-scalar column="isMultirecord" type="boolean"/>
         
 		select 
-			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, count(r.identifier) as recordCnt
+			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, 
+			count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
 		from 
 			catissue_form_context fc 
 			left join (
@@ -210,9 +223,11 @@
         <return-scalar column="formCaption" type="string"/>
         <return-scalar column="cpId" type="long"/>
         <return-scalar column="recordCnt" type="integer"/>
+        <return-scalar column="isMultirecord" type="boolean"/>
       
         select 
-			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, count(r.identifier) as recordCnt
+			fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId, 
+			count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
 		from 
 			catissue_form_context fc 
 			left join (
