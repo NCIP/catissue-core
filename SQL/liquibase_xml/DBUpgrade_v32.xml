@@ -869,11 +869,11 @@
 			cpeId NUMBER;
 			dpId NUMBER;
 			  BEGIN
-			  SELECT MAX(IDENTIFIER)+1
+			  SELECT NVL(MAX(IDENTIFIER),0)+1
 			  INTO reqId
 			  FROM CATISSUE_CP_REQ_SPECIMEN;
 			  
-			  SELECT MAX(IDENTIFIER)+1
+			  SELECT NVL(MAX(IDENTIFIER),0)+1
 			  INTO cpeId
 			  FROM CATISSUE_COLL_PROT_EVENT;
 			  
@@ -1159,16 +1159,14 @@
           <constraints nullable="false"/>
         </column>
  
-        <column name="SORT_ORDER" type="${smallint.type}">
-        
-        <column name="IS_MULTIRECORD" type="${boolean.type}" defaultValueBoolean="{boolean.false}"/>
-	</column>
+        <column name="SORT_ORDER" type="${smallint.type}"/>
+        <column name="IS_MULTIRECORD" type="${boolean.type}" defaultValueBoolean="${boolean.false}"/>
       </createTable>
     </changeSet>
 
     <changeSet author="vpawar" id="adding FK on form context to containers table" failOnError="true">
       <addForeignKeyConstraint 
-        constraintName="FK_FC_CONTAINER_ID_DC_IDENTIFIER"
+        constraintName="FK_FC_CNTR_ID_DC_IDENTIFIER"
         baseTableName="CATISSUE_FORM_CONTEXT"
         baseColumnNames="CONTAINER_ID"
         referencedTableName="DYEXTN_CONTAINERS"

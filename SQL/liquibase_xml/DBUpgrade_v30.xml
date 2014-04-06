@@ -107,11 +107,11 @@
 		<sql>update catissue_abstract_specimen set concentration = (select concentration from catissue_molecular_specimen where catissue_molecular_specimen.identifier = catissue_abstract_specimen.identifier) where catissue_abstract_specimen.identifier in (select identifier from catissue_molecular_specimen)</sql>
 	</changeSet>
 
-	<changeSet id="7" author="dpatil" runOnChange="true">
+	<!-- <changeSet id="7" author="dpatil" runOnChange="true">
 		<addColumn tableName="QUERY_PARAMETERIZED_QUERY">
 			<column name="STATUS" type="${text.type}(32)"  defaultValue="ACTIVE"/>
 		</addColumn>
-	</changeSet>
+	</changeSet>-->
 	<changeSet id="8" author="catissue" runOnChange="true" dbms="mysql">
 		<modifyDataType tableName="JOB_DETAILS" columnName="LOG_FILE" newDataType="${longblob.type}"/>
 	</changeSet>

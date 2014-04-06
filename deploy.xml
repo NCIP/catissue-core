@@ -572,13 +572,6 @@
 			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
 		</replace>
 
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
-			<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
-			<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
-		</replace>
-
-
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
 			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
 		</replace>
@@ -586,12 +579,6 @@
 			<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
 		</replace>
 
-		<replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
-			<replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
-			<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
-			<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
-		</replace>
 	</target>
 
 	<!--Server clean-up-->
@@ -1729,7 +1716,7 @@
 		<antcall target="update_protection_element" />
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 		<antcall target="upgrade_db_plusv3.1" />
-
+		<antcall target="upgrade_db_plusv3.2" />
 	</target>
 
 	<!--MySQL Database Creation -->
@@ -1759,7 +1746,8 @@
 		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 		
 		<antcall target="integrate_bulk_operation_mysql" />
-
+		<antcall target="Export_Clinical_diagnosis_mysql" />
+		
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
@@ -1866,7 +1854,7 @@
 		</ant>
 
 		<antcall target="insertQueryMetadata" />-->
-
+		<antcall  target="Export_Clinical_diagnosis_oracle"/>
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
 			<transaction src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql" />
 			<transaction src="${oracle.sql.dir}/DBUtility.sql" />
@@ -2095,6 +2083,7 @@
 						<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 						<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 						<antcall target="upgrade_db_plusv3.1" />
+						<antcall target="upgrade_db_plusv3.2" />
 					</then>
 				<elseif>
 								<equals arg1="${plus2.0.version}" arg2="${from.version}"/>
@@ -2102,6 +2091,7 @@
 									<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 									<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 									<antcall target="upgrade_db_plusv3.1" />
+									<antcall target="upgrade_db_plusv3.2" />
 								</then>
 					</elseif>
 					<elseif>
@@ -2109,12 +2099,14 @@
 								<then>
 									<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 									<antcall target="upgrade_db_plusv3.1" />
+									<antcall target="upgrade_db_plusv3.2" />
 								</then>
 						</elseif>
 						<elseif>
 								<equals arg1="${plus3.0.version}" arg2="${from.version}"/>
 								<then>
 									<antcall target="upgrade_db_plusv3.1" />
+									<antcall target="upgrade_db_plusv3.2" />
 								</then>
 							</elseif>
                                                         <elseif>
@@ -2128,6 +2120,7 @@
 											<then>
 												<antcall target="upgrade_db_from_plusv1.2_to_plusv3.0" />
 												<antcall target="upgrade_db_plusv3.1" />
+												<antcall target="upgrade_db_plusv3.2" />
 											</then>
 								</elseif>
 								<else>
