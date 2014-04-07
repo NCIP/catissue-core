@@ -135,7 +135,19 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 	 * Get IsToInsertAnticipatorySCGs value.
 	 * @return the isToInsertAnticipatorySCGs
 	 */
-	public Boolean getIsToInsertAnticipatorySCGs()
+	private String consentDocumentName;
+	
+	
+    public String getConsentDocumentName()
+    {
+        return consentDocumentName;
+    }
+    
+    public void setConsentDocumentName(String consentDocumentName)
+    {
+        this.consentDocumentName = consentDocumentName;
+    }
+    public Boolean getIsToInsertAnticipatorySCGs()
 	{
 		return isToInsertAnticipatorySCGs;
 	}

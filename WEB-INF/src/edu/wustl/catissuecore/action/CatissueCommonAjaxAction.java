@@ -19,11 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,9 +36,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.ConsentTrackingBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
@@ -1008,4 +1012,45 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
 		response.getWriter().write(responseString.toString());
 		return null;
 	}
+
+    public ActionForward deleteConsentDocument(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
+            IOException
+    {
+        String participantId = request.getParameter("participantID");
+        CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+
+        HibernateDAO hibernateDAO = null;
+        JSONObject returnedJObject= new JSONObject();
+        String successMessage = "";
+        String errorMessage = "";
+        try {
+            SessionDataBean sessionDataBean = (SessionDataBean) request
+                    .getSession().getAttribute(Constants.SESSION_DATA);
+            hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(sessionDataBean);
+            cprBizLogic.updateDocumentName(Long.parseLong(participantId),null,hibernateDAO);
+            successMessage = "true";
+        }catch (ApplicationException e) {
+            errorMessage = e.getMessage();
+        }catch (Exception ex) {
+            errorMessage = Constants.UPLOAD_ERROR_MESSAGE;
+        }
+        finally{
+            AppUtility.closeDAOSession(hibernateDAO);
+        }
+        try {
+            if(!"".equals(successMessage)){
+                returnedJObject.put("message", successMessage);
+            }else{
+                returnedJObject.put("errorMessage", errorMessage);
+                
+            }
+            
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        response.setContentType("text/html");
+        response.getWriter().write(returnedJObject.toString());
+        return null;
+    }
 }

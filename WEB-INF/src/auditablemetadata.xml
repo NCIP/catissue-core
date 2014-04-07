@@ -255,7 +255,7 @@
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.ConsentTier"
 			relationShipType="containment"
-			roleName="consentTierCollection">
+			roleName="trutsTierCollection">
 		</containmentAssociationCollection>
 
 	</AuditableClass>
@@ -466,11 +466,6 @@
 		<attribute name="encounterTimestamp" dataType="Date" />
 		<attribute name="clinicalDiagnosis" dataType="String" />
 		<attribute name="clinicalStatus" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
-			relationShipType="association"
-			roleName="consentTierStatusCollection">
-		</referenceAssociationCollection>
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="collection"

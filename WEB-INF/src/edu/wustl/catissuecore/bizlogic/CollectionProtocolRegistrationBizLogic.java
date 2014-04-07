@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
+import org.apache.commons.fileupload.FileItem;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
@@ -57,6 +60,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.tokenprocessor.TokenManager;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
@@ -2594,25 +2598,25 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	    
 	}
 	public edu.wustl.catissuecore.dto.ParticipantDTO fetchCprDetailForParticipant(Long cpid,Long pid,DAO dao) throws BizLogicException{
-		String hql = "select protocolParticipantIdentifier,registrationDate,barcode,id,activityStatus from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr " +
-				" where cpr.collectionProtocol.id=:cpid and  cpr.participant.id = :pid";
-		ColumnValueBean columnValueBean=new ColumnValueBean(cpid);
-		columnValueBean.setColumnName("cpid");
-		List<ColumnValueBean>  columnValueBeans=new ArrayList();
-		columnValueBeans.add(columnValueBean);
-		columnValueBean=new ColumnValueBean(pid);
-		columnValueBean.setColumnName("pid");
-		columnValueBeans.add(columnValueBean);
 		edu.wustl.catissuecore.dto.ParticipantDTO dto = new edu.wustl.catissuecore.dto.ParticipantDTO();
 		
 		try {
-			Iterator<Object> cprs=dao.executeParamHQLIterator(hql,columnValueBeans);
+		    
+		    final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+            columnValueBeanList.add( new ColumnValueBean("cpid",cpid));
+            columnValueBeanList.add( new ColumnValueBean("pid",pid));
+            
+            final List resultList = ((HibernateDAO)dao).executeNameQueryParamHQL("getCPRDetailsForParticipant", columnValueBeanList);
+		    
+		    
+			Iterator<Object> cprs=resultList.iterator();
 			while(cprs.hasNext()){
 				Object[] arr= (Object[])cprs.next();
 				dto.setPpid(String.valueOf(arr[0]!=null?arr[0]:""));
 				dto.setRegistrationDate((Date)arr[1]);
 				dto.setBarcode(String.valueOf(arr[2]!=null?arr[2]:""));
 				dto.setCprId(Long.parseLong(String.valueOf(arr[3])));
+				dto.setConsentDocumentName(arr[5]!=null?arr[5].toString():null);
 				dto.setActivityStatus((String) arr[4]);
 			}
 		} 
@@ -2641,5 +2645,44 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	       List  list = hibernateDAO.executeNamedQuery("fetchCPRIdFromCPID", params);
 	       return (Long)list.get(0);
 	}
+    public void uploadConsentDocument(Long participantId, FileItem fileItem, HibernateDAO hibernateDAO)
+            throws ApplicationException
+    {
+        try
+        {
+            String consentDirectory = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
+            File destinationDir = new File(consentDirectory);
+            if (!destinationDir.exists())
+            {
+                destinationDir.mkdirs();
+            }
+            Long uniqueNumber = (new Date()).getTime();
+            String fileName = uniqueNumber + "_" + fileItem.getName();
+            File file = new File(destinationDir, fileName);
+            fileItem.write(file);
+            updateDocumentName(participantId,fileName,hibernateDAO);
+        }
+        catch (ApplicationException e)
+        {
+            throw new BizLogicException(e.getErrorKey(), e, e.getMessage());
+        }
+        catch (Exception ex)
+        {
+            throw new BizLogicException(null, null, ex.getMessage());
+        }
+
+    }
+
+    public void updateDocumentName(Long participantId,String documentName, HibernateDAO hibernateDAO)
+            throws ApplicationException
+    {
+            CollectionProtocolRegistration cprObj = (CollectionProtocolRegistration) hibernateDAO.retrieveById(CollectionProtocolRegistration.class.getName(), participantId);
+            cprObj.setConsentDocumentName(documentName);
+            hibernateDAO.update(cprObj);
+            hibernateDAO.commit();
+        
+
+    }
+
 
 }

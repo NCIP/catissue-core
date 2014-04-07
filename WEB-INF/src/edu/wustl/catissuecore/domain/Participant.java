@@ -164,7 +164,7 @@ public class Participant extends AbstractDomainObject
 
 	private String empiId = "";
 
-	private String consentDocumentName;
+	
 	
 	// /**
 	// * empiId : EMPI id of the participant.
@@ -224,7 +224,6 @@ public class Participant extends AbstractDomainObject
 		activityStatus = participant.getActivityStatus();
 		deathDate = participant.getDeathDate();
 		vitalStatus = participant.getVitalStatus();
-		consentDocumentName=participant.getConsentDocumentName();
 		collectionProtocolRegistrationCollection = null;
 		final Collection<Race> raceCollection = new ArrayList<Race>();
 		final Iterator<Race> raceItr = participant.getRaceCollection().iterator();
@@ -834,24 +833,6 @@ public class Participant extends AbstractDomainObject
 			if(form.getCprId().equals("")){
 			this.setConsentsResponseToCollectionProtocolRegistration(form);
 			}
-			
-			    
-			if(form.getConsentDocument()!=null && !form.getConsentDocument().getFileName().isEmpty())
-            {
-			    String consentDirectory = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
-			    Long uniqueNumber = (new Date()).getTime();
-	            consentDocumentName=uniqueNumber+"_"+form.getConsentDocument().getFileName();
-	            consentDirectory = consentDirectory+File.separator+consentDocumentName;
-	            AppUtility.moveParticipantConsentFile(form.getConsentDocument(),consentDirectory);
-            }
-            else
-            {
-                if(form.getConsentDocumentName()==null || form.getConsentDocumentName().isEmpty())
-                {
-                    consentDocumentName=null;
-                }
-            }
-            
 			 
 		}
 		catch (final Exception excp)
@@ -1072,16 +1053,5 @@ public class Participant extends AbstractDomainObject
 
 	}
 
-	
-	public String getConsentDocumentName()
-	{
-		return consentDocumentName;
-	}
-
-	
-	public void setConsentDocumentName(String consentDocumentName)
-	{
-		this.consentDocumentName = consentDocumentName;
-	}
 
 }

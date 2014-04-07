@@ -1,6 +1,8 @@
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
+<script language="JavaScript"  type="text/javascript" src="jss/fileUploader.js"></script>
+
 <c:set var="tr_white_color" value="tr_alternate_color_white" />
 <c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
 <c:set var="i" value="1" scope="request" />
@@ -563,30 +565,7 @@
 			   <%
 			   	}
 			   %>
-				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-								<tr class="${tr_grey_color}">	<td></td>
-									<td valign="middle" class="black_ar align_right_style" align="right">
-										&nbsp;&nbsp;&nbsp;Consent File
-									</td>
-									<td class="${tr_grey_color}">
-										<c:if test="${requestScope.consentDocumentName !=null}"> 
-										<div id="consentFileInfo" style="float:left; margin-top: 3px;margin-left:10px;">
-										<div style="float:left;">
-									  <a href="#" onClick="DownloadConsentFile()" title="Click to download Consent File" class="blue_ar_b" style="margin-right: 6px;">Download</a> 
-									  </div>
-										<img  id="removeImage" src="images/delete-alt.png"  style="margin-right: 8px;  margin-top: -2px;" onclick="RemoveFile()"/>
-										<input type="hidden" name="consentDocumentName" value="${requestScope.consentDocumentName}"/> 
-										</div>
-										</c:if>	
-										<div style="float:left;">
-										<input id="consentDocument" type="file" name="consentDocument" value="Browse" size="14">	
-										</div>
-								
-									</td>
-									<td class="black_ar"></td>
-								</tr>
-				</logic:equal>
-			  	<!-- activitystatus -->
+							  	<!-- activitystatus -->
 			  		
 			  		
 					<logic:equal name="<%=Constants.OPERATION%>"
@@ -724,6 +703,39 @@
 						</logic:equal>						 
 						</td>
 					 </tr>
+					 
+					 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<c:if test="${i%2 == 0}">
+					<tr class="${tr_white_color}">
+					</c:if>
+					<c:if test="${i%2 == 1}">
+					 <tr class="${tr_grey_color}">
+					</c:if>
+					<c:set var="i" value="${i+1}" scope="request" />
+
+						<td valign="middle" class="black_ar align_right_style" align="right">
+														<label for="activityStatus"	class="black_ar">
+								<b><bean:message
+								key="participant.consent.form" /> </b></label>
+						</td>
+						<td>
+							<div id="consentFileInfo" style="float:left; margin-top: 3px;margin-left:10px;display:none;">
+							<div style="float:left;">
+						  <a href="#" onClick="DownloadConsentFile()" title="Click to download Consent File" class="blue_ar_b" style="margin-right: 6px;">Download</a> 
+						  </div>
+							<img  id="removeImage" src="images/delete-alt.png"  style="margin-right: 8px;  margin-top: -2px;" onclick="deleteConsentDoc()"/>
+							<input type="hidden" name="consentDocumentName" value="${requestScope.consentDocumentName}"/> 
+							</div>
+							<div id="consentDocUploader"  style="float:left;display:block;">
+							<input id="consentDocument" type="file" name="consentDocument" value="Browse" size="14">
+							<input type="button" value="Upload" onclick="uploadConsentDoc()">
+							</div>
+					
+						</td>
+						<td class="black_ar"></td>
+					</tr>
+				</logic:equal>
+
 				</table>
 			</td>
 		</tr>
@@ -933,6 +945,67 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 		</td></tr></table>
 		
 <script>
+if("${requestScope.consentDocumentName}"!="" || "${requestScope.consentDocumentName}"=="null"){
+	document.getElementById("consentDocUploader").style.display = "none";
+	document.getElementById("consentFileInfo").style.display = "block";
+}
+function deleteConsentDoc(){
+	var r=confirm("Do you want to delete the file permanently?");
+	if (r==true)
+	{
+		confirmDeleteConsentDoc();
+	}
+	else
+	{
+
+	}
+
+}
+
+function confirmDeleteConsentDoc(){
+    var request = new  XMLHttpRequest();
+    request.onreadystatechange=function(){
+        if(request.readyState == 4)
+        {  
+            //Response is ready
+            if(request.status == 200)
+            {
+                var responseString = request.responseText;
+                var myJsonResponse = eval('(' + responseString + ')');
+				if(myJsonResponse.message = "true"){
+					document.getElementById("consentDocUploader").style.display = "block";
+					document.getElementById("consentFileInfo").style.display = "none";
+				}
+                
+                
+            }
+            
+            
+        }   
+    };
+	var partDocID = document.getElementsByName("cprId")[0].value;
+    request.open("POST","CatissueCommonAjaxAction.do?type=deleteConsentDocument&cprID="+partDocID,true);
+    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    request.send();
+
+}
+	function uploadConsentDoc() {
+		var uploader = new FileUploader({
+			element: document.getElementById('consentDocument'),
+			endpoint: 'UploadConsentDocumentAction.do?type=getSpecimenIds',
+			params:{cprID:document.getElementsByName("cprId")[0].value},
+			onComplete:function(response){
+				if(response.message = "true"){
+					document.getElementById("consentDocUploader").style.display = "none";
+					document.getElementById("consentFileInfo").style.display = "block";
+				}else{
+					alert(response.errorMessage);
+					
+				}
+			}
+		});
+	};
+										
 	var fwdPage='${requestScope.pageOf}';
 	var reportId1='${sessionScope.identifiedReportId}';
 	var cprId = document.getElementsByName("cprId")[0].value;
@@ -947,7 +1020,7 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 	doInitCal('registrationDate',false,'${uiDatePattern}');
 
 	function DownloadConsentFile(){
-			var action = "DownloadConsentFile.do?pId=" + '${requestScope.participantId}';
+			var action = "DownloadConsentFile.do?cprId=" + document.getElementsByName("cprId")[0].value;
 			mywindow = window.open(action, "Download", "width=10,height=10");
 			mywindow.moveTo(0,0);
 		}

@@ -310,7 +310,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		 this.ethnicity = participant.getEthnicity();
 		 this.vitalStatus = participant.getVitalStatus();
 		 this.pHIView = String.valueOf(isPHIView);
-		 this.consentDocumentName=participant.getConsentDocumentName();
+		// this.consentDocumentName=participant.getConsentDocumentName();
 		 String consentDirectory = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
 		 
 		 if(consentDocument!=null)

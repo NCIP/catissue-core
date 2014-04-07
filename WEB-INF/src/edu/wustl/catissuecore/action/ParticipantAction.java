@@ -478,6 +478,7 @@ public class ParticipantAction extends CatissueBaseAction
                         CommonServiceLocator.getInstance().getDatePattern()));
                 participantForm.setCprId(String.valueOf(dto.getCprId()));
                 participantForm.setCprActivityStatus(dto.getActivityStatus());
+                participantForm.setConsentDocumentName(dto.getConsentDocumentName());
             }
             hasConsents = collectionProtocolBizLogic.hasConsents(
                     Long.parseLong(String.valueOf(participantForm.getCpId())), (HibernateDAO) dao);

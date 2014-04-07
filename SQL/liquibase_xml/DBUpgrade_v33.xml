@@ -16,7 +16,7 @@
 
  
  	<changeSet id="1" author="catissue" failOnError="false">
-		<addColumn tableName="catissue_participant">
+		<addColumn tableName="CATISSUE_COLL_PROT_REG">
 			<column name="CONSENT_DOCUMENT_NAME" type="${text.type}(255)" />
 		</addColumn>
 	</changeSet>

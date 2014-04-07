@@ -37,7 +37,14 @@
             insert="true"
             column="CONSENT_SIGN_DATE"
         />
-
+		<property
+            name="consentDocumentName"
+            type="string"
+            update="true"
+            insert="true"
+            column="CONSENT_DOCUMENT_NAME"
+            length="255"
+        />
         <property
             name="signedConsentDocumentURL"
             type="string"
@@ -165,5 +172,9 @@
     </class>
 <query name="fetchCPRIdFromCPID">select cpr.id from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id= ? and cpr.participant.id= ?</query>
 <query name="getCPRFromParticipantId">select cpr from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?</query>
+ <query name="getConsentFileName">select consentDocumentName from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.id=:id
+	</query>
+	<query name="getCPRDetailsForParticipant">select protocolParticipantIdentifier,registrationDate,barcode,id,activityStatus,consentDocumentName from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr 
+				 where cpr.collectionProtocol.id=:cpid and  cpr.participant.id = :pid</query>
 </hibernate-mapping>
 

@@ -30,8 +30,20 @@ public class ParticipantDTO
 	 String barcode;
 	 Long cprId;
 	 String activityStatus;
+	 String consentDocumentName;
 	 
-	public Long getCpId() {
+	 
+	
+    public String getConsentDocumentName()
+    {
+        return consentDocumentName;
+    }
+    
+    public void setConsentDocumentName(String consentDocumentName)
+    {
+        this.consentDocumentName = consentDocumentName;
+    }
+    public Long getCpId() {
 		return cpId;
 	}
 	public void setCpId(Long cpId) {

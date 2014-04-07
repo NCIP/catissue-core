@@ -71,6 +71,7 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<exclude>/catissuecore/ConsentVerification.do</exclude>
 		<exclude>/catissuecore/BulkMatchingFileUpload.do*</exclude>
 		<exclude>/catissuecore/UploadSprReport.do*</exclude>
+			<exclude>/catissuecore/UploadConsentDocumentAction.do*</exclude>
 		<exclude>/catissuecore/SubmitOrder.do*</exclude>
 		<exclude>/catissuecore/CreateAliquotsFromSpecimen.do*</exclude>
 		<exclude>/catissuecore/GetAliquotInfoAjax.do*</exclude>

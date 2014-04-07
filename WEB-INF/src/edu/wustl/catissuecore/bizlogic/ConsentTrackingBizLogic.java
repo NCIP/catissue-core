@@ -204,14 +204,14 @@ public class ConsentTrackingBizLogic
 
 		return retString;
 	}
-	public ParticipantConsentFileDTO getParticipantConsentFileDetails(Long participantId, HibernateDAO dao)
+	public ParticipantConsentFileDTO getParticipantConsentFileDetails(Long cprId, HibernateDAO dao)
 			throws ApplicationException {
 		String fileName = null;
 		byte[] byteArr= {};
 		ParticipantConsentFileDTO participantConsentFileDTO=new ParticipantConsentFileDTO();
 		try {
 			
-			final ColumnValueBean columnValueBean = new ColumnValueBean("id",participantId);
+			final ColumnValueBean columnValueBean = new ColumnValueBean("id",cprId);
 			final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
 			columnValueBeanList.add(columnValueBean);
 			

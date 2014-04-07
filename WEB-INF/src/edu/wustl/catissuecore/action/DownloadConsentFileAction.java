@@ -46,9 +46,9 @@ public class DownloadConsentFileAction extends SecureAction
 			dao = (HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
 
 			ConsentTrackingBizLogic bizLogic = new ConsentTrackingBizLogic();
-			String pId = request.getParameter("pId");
+			String cprId = request.getParameter("cprId");
 			ParticipantConsentFileDTO participantConsentFileDTO = bizLogic
-					.getParticipantConsentFileDetails(Long.parseLong(pId), dao);
+					.getParticipantConsentFileDetails(Long.parseLong(cprId), dao);
 			response.setContentType("application/download");
 			String fileName = participantConsentFileDTO.getFileName();
 			fileName = fileName.replace(fileName.split("_")[0]+"_","");

@@ -172,15 +172,7 @@
             length="50"
         />
 
-		<property
-            name="consentDocumentName"
-            type="string"
-            update="true"
-            insert="true"
-            column="CONSENT_DOCUMENT_NAME"
-            length="255"
-        />
-
+		
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
@@ -247,6 +239,5 @@
         -->
 
     </class>
-    <query name="getConsentFileName">select consentDocumentName from edu.wustl.catissuecore.domain.Participant participant where participant.id=:id
-	</query>
+   
 </hibernate-mapping>
