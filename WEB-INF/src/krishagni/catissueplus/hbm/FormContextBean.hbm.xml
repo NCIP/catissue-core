@@ -140,15 +140,16 @@
 	  </sql-query>
 	  
 	  <sql-query name="getFormContexts">
-	    <return-scalar column="ctxtId" type="long"/>
-	    <return-scalar column="formId" type="long"/>
-	    <return-scalar column="level"  type="string"/>
-	    <return-scalar column="cpId"   type="long"/>
-	    <return-scalar column="shortTitle" type="string"/>
-	    <return-scalar column="title" type="string"/>
+	    <return-scalar column="ctxtId"        type="long"/>
+	    <return-scalar column="formId"        type="long"/>
+	    <return-scalar column="level"         type="string"/>
+	    <return-scalar column="isMultirecord" type="boolean"/>
+	    <return-scalar column="cpId"          type="long"/>
+	    <return-scalar column="shortTitle"    type="string"/>
+	    <return-scalar column="title"         type="string"/>
 	    
 	    select
-	      fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as level,
+	      fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as level, fctxt.is_multirecord as isMultirecord,
 	      cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
 	    from
 	      catissue_form_context fctxt
@@ -183,9 +184,9 @@
 			left join catissue_coll_prot_reg reg on reg.collection_protocol_id = fc.cp_id
 			inner join dyextn_containers c on c.identifier = fc.container_id
 			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :cprId
+				and r.activity_status = 'ACTIVE'
 		where
 			fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)  
-			and (r.activity_status = 'ACTIVE' or r.activity_status is null) 
 		group by
 			formCtxtId, formId, formCaption, cpId
       </sql-query>
@@ -210,9 +211,9 @@
 				on reg.collection_protocol_id = fc.cp_id 
 			inner join dyextn_containers c on c.identifier = fc.container_id 
 			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId 
+				and r.activity_status = 'ACTIVE'
 		where 
 			fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1) 
-			and (r.activity_status = 'ACTIVE' or r.activity_status is null)
 		group by 
 			formCtxtId, formId, formCaption, cpId
       </sql-query>      
@@ -236,9 +237,9 @@
 				on reg.collection_protocol_id = fc.cp_id 
 			inner join dyextn_containers c on c.identifier = fc.container_id 
 			left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :scgId 
+				and r.activity_status = 'ACTIVE'
 		where 
 			fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1) 
-			and (r.activity_status = 'ACTIVE' or r.activity_status is null)
 		group by 
 			formCtxtId, formId, formCaption, cpId
       </sql-query>      

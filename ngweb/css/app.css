@@ -58,3 +58,6 @@
   padding-left: 15px;
 }
 
+.tooltip {
+	z-index: 9999;
+}

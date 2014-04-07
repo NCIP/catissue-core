@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextGen Dynamic Extensions Form Builder - Demo</title>
 
-    <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/de/css/de.css" rel="stylesheet" type="text/css"></link>
+    <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
 
     <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../external/select2/select2.min.js" type="text/javascript"></script>
@@ -118,7 +118,8 @@
           <thead>
             <tr>
               <th class="col-xs-6">Collection Protocol</th>
-              <th class="col-xs-6">Level</th>
+              <th class="col-xs-5">Level</th>
+              <th class="col-xs-1"></th>
             </tr>
           </thead>
         </table>
@@ -127,7 +128,12 @@
             <tbody>
               <tr ng-repeat="cpFormCtxt in cpFormCtxts">
                 <td class="col-xs-6">{{cpFormCtxt.title}}</td>
-                <td class="col-xs-6">{{cpFormCtxt.levels.join(", ")}}</td>
+                <td class="col-xs-5">{{cpFormCtxt.levels.join(", ")}}</td>
+                <td class="col-xs-1">
+                  <span class="glyphicon glyphicon-th-list" 
+                        tooltip="Multiple records allowed" tooltip-placement= "bottom" tooltip-append-to-body="true" 
+                        ng-if="cpFormCtxt.multiRecord"></span>
+                </td>
               </tr>
             </tbody>
           </table>
