@@ -80,8 +80,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				errorHandler.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
 			}
 			registration.setParticipant(participant);
-			ensureUniquePpid(registration,errorHandler);
-			ensureUniqueBarcode(registration.getBarcode(),errorHandler);
+			ensureUniquePpid(registration, errorHandler);
+			ensureUniqueBarcode(registration.getBarcode(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			daoFactory.getCprDao().saveOrUpdate(registration);
 			return RegistrationCreatedEvent.ok(CollectionProtocolRegistrationDetail.fromDomain(registration));
@@ -98,7 +98,16 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event) {
 		try {
-			CollectionProtocolRegistration oldCpr = daoFactory.getCprDao().getCpr(event.getId());
+			CollectionProtocolRegistration oldCpr = null;
+			if(event.getId() != null)
+			{
+				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
+			}
+			else if(event.getCprDetail().getPpid() != null && event.getCprDetail().getCpId() != null)
+			{
+				oldCpr = daoFactory.getCprDao().getCprByPpId(event.getCprDetail().getCpId(), event.getCprDetail().getPpid());
+			}
+			
 			if (oldCpr == null) {
 				RegistrationUpdatedEvent.notFound(event.getId());
 			}
@@ -106,8 +115,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			event.getCprDetail().setId(event.getId());
 			CollectionProtocolRegistration cpr = registrationFactory.createCpr(event.getCprDetail());
 
-			validatePpid(oldCpr, cpr,errorHandler);
-			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(),errorHandler);
+			validatePpid(oldCpr, cpr, errorHandler);
+			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			oldCpr.update(cpr);
 			daoFactory.getCprDao().saveOrUpdate(cpr);
@@ -155,17 +164,18 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
-	private void validatePpid(CollectionProtocolRegistration oldCpr, CollectionProtocolRegistration cpr, ObjectCreationException errorHandler) {
+	private void validatePpid(CollectionProtocolRegistration oldCpr, CollectionProtocolRegistration cpr,
+			ObjectCreationException errorHandler) {
 		String oldPpid = oldCpr.getProtocolParticipantIdentifier();
 		String newPpid = cpr.getProtocolParticipantIdentifier();
 		if (!oldPpid.equals(newPpid)) {
-			ensureUniquePpid(cpr,errorHandler);
+			ensureUniquePpid(cpr, errorHandler);
 		}
 	}
 
 	private void validateBarcode(String oldBarcode, String newBarcode, ObjectCreationException errorHandler) {
 		if (!isBlank(newBarcode) && !newBarcode.equals(oldBarcode)) {
-			ensureUniqueBarcode(newBarcode,errorHandler);
+			ensureUniqueBarcode(newBarcode, errorHandler);
 		}
 	}
 }

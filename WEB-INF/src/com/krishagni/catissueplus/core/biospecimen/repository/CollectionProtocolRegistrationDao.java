@@ -15,6 +15,8 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 	public List<SpecimenCollectionGroupInfo> getScgList(Long cprId);
 
 	public CollectionProtocolRegistration getCpr(Long cprId);
+	
+	public CollectionProtocolRegistration getCprByPpId(Long cpId, String protocolParticipantIdentifier);
 
 	public boolean isBacodeUnique(String barcode);
 

@@ -40,4 +40,5 @@ public class RegistrationCreatedEvent extends ResponseEvent {
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
 	}
+	
 }

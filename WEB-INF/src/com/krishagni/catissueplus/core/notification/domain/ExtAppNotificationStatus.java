@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.notification.domain;
 
 import com.krishagni.catissueplus.core.audit.domain.Audit;
+import com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl.NotificationStatus;
 
 public class ExtAppNotificationStatus {
 
@@ -14,6 +15,8 @@ public class ExtAppNotificationStatus {
 	private String status;
 
 	private String comments;
+
+	private int noOfRetries;
 
 	/**
 	 * @return the id
@@ -69,6 +72,9 @@ public class ExtAppNotificationStatus {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+		if (NotificationStatus.FAIL.toString().equals(status)) {
+			this.increaseNoOfRetries();
+		}
 	}
 
 	/**
@@ -83,6 +89,19 @@ public class ExtAppNotificationStatus {
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public int getNoOfRetries() {
+		return noOfRetries;
+	}
+
+	public void setNoOfRetries(int noOfRetries) {
+		this.noOfRetries = noOfRetries;
+	}
+
+	public void increaseNoOfRetries() {
+		this.noOfRetries = this.noOfRetries + 1;
+
 	}
 
 }

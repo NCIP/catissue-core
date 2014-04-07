@@ -12,13 +12,13 @@ import com.krishagni.catissueplus.core.notification.services.ExternalAppNotifica
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
-public class ExternalAppNotificationSchedular implements Runnable {
+public class ExternalAppFailNotificationSchedular implements Runnable {
 
 	private static final Logger LOGGER = Logger.getCommonLogger(ExternalAppNotificationSchedular.class);
 
 	private static final String NOTIFICATION_EXCEPTION = "Error while Notifiying External Applications :";
 
-	private static final String SCH_TIME_INTERVAL = "extApp.sch.time.interval.in.minutes";
+	private static final String SCH_TIME_INTERVAL = "extApp.fail.notification.sch.time.interval.in.minutes";
 
 	public static void scheduleExtAppNotifSchedulerJob() throws Exception {
 		ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(100);
@@ -26,7 +26,7 @@ public class ExternalAppNotificationSchedular implements Runnable {
 		String schTimeIntervalProperty = XMLPropertyHandler.getValue(SCH_TIME_INTERVAL).trim();
 		if (!schTimeIntervalProperty.isEmpty() || schTimeIntervalProperty != null)
 			schTimeInterval = Integer.parseInt(schTimeIntervalProperty);
-		executor.scheduleWithFixedDelay(new ExternalAppNotificationSchedular(), 0, schTimeInterval, TimeUnit.MINUTES);
+		executor.scheduleWithFixedDelay(new ExternalAppFailNotificationSchedular(), 0, schTimeInterval, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -35,7 +35,8 @@ public class ExternalAppNotificationSchedular implements Runnable {
 			ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
 			ExternalAppNotificationService extApp = (ExternalAppNotificationService) caTissueContext
 					.getBean("extAppNotificationService");
-			extApp.notifyExternalApps();
+			extApp.notifyFailedNotifications();
+
 		}
 		catch (Exception ex) {
 			LOGGER.error(NOTIFICATION_EXCEPTION + ex.getMessage());

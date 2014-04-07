@@ -1583,6 +1583,9 @@
 
 			<column name="COMMENTS" type="${text.type}(500)">
 			</column>
+			
+			<column name="NO_OF_RETRIES" type="${int.type}">
+			</column>
 		</createTable>
 
 		<addForeignKeyConstraint 

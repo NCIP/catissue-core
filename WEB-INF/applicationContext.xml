@@ -157,4 +157,10 @@
 		<property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
 
+	<bean id="catissueNotificationSvc"
+		class="com.krishagni.catissueplus.core.notification.services.impl.CatissueNotificationServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory" />
+		<property name="cprSvc" ref="cprSvc" />
+	</bean>
+
  </beans>

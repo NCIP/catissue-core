@@ -92,13 +92,25 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		return (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
 				CollectionProtocolRegistration.class, cprId);
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public CollectionProtocolRegistration getCprByPpId(Long cpId, String protocolParticipantIdentifier) {
+
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPR_BY_PPID_AND_CPID);
+		query.setString("ppid", protocolParticipantIdentifier);
+		query.setLong("cpId", cpId);
+		List<CollectionProtocolRegistration> result = query.list();
+		return result.isEmpty()?null:result.get(0);
+	}
 
 	@Override
 	public boolean isPpidUniqueForProtocol(Long cpId, String protocolParticipantIdentifier) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPID_BY_PPID_AND_CPID);
 		query.setString("ppid", protocolParticipantIdentifier);
 		query.setLong("cpId", cpId);
-		return query.list().isEmpty() ? true : false;
+		 boolean isUnique =query.list().isEmpty() ? true : false;
+		 return isUnique;
 	}
 
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
@@ -112,6 +124,8 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	private static final String GET_CPR_ID_BY_BARCODE = FQN + ".getCprIdByBarcode";
 
 	private static final String GET_CPID_BY_PPID_AND_CPID = FQN + ".getCprIdByPpid";
+	
+	private static final String GET_CPR_BY_PPID_AND_CPID = FQN + ".getCprByPpid";
 
 	//	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "
 	//			+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"

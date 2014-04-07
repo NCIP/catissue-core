@@ -15,6 +15,14 @@ public class ObjectCreationException extends RuntimeException {
 
 	private List<ErroneousField> fields = new ArrayList<ErroneousField>();
 
+	public static void raiseError(CatissueErrorCode errorCode, String field) {
+		throw new ObjectCreationException(new ErroneousField(errorCode, field));
+	}
+
+	public ObjectCreationException(ErroneousField field) {
+		this.fields.add(field);
+	}
+
 	public ObjectCreationException() {
 
 	}
@@ -31,10 +39,10 @@ public class ObjectCreationException extends RuntimeException {
 		fields.add(new ErroneousField(errorCode, field));
 	}
 
-	public ErroneousField[] getErroneousFields(){
+	public ErroneousField[] getErroneousFields() {
 		return fields.toArray(new ErroneousField[fields.size()]);
 	}
-	
+
 	public void addError(List<ErroneousField> fields) {
 		this.fields.addAll(fields);
 	}

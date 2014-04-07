@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.auth.repository.LdapDao;
+import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
 
@@ -37,4 +38,6 @@ public interface DaoFactory {
 	public ExternalApplicationDao getExternalApplicationDao();
 
 	public LdapDao getLdapDao();
+	
+	public CPStudyMappingDao getCPStudyMappingDao();
 }

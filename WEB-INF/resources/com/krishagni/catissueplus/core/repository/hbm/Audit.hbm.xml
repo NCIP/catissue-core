@@ -9,23 +9,17 @@
 
 		<id name="id" column="IDENTIFIER" type="long" length="30">
 			<generator class="native">
-				<param name="sequence">CAT_CP_EXTAPP_STUDY_REL_SEQ</param>
+				<param name="sequence">CATISSUE_NEXTGEN_AUDIT_SEQ</param>
 			</generator>
 		</id>
-		
+
 		<property name="objectType" type="string" column="OBJECT_TYPE" />
-		
-<!-- 		<property name="objectType" column="OBJECT_TYPE" > -->
-<!-- 			<type name="org.hibernate.type.EnumType"> -->
-<!--          		<param name="enumClass">com.krishagni.catissueplus.core.common.util.ObjectType</param> -->
-<!--          		<param name="type">12</param> -->
-<!-- 	      	</type> -->
-<!-- 		</property> -->
+
 
 		<property name="objectId" type="long" column="OBJECT_ID" />
 
 		<property name="cpId" type="long" column="CP_ID" />
-		
+
 		<property name="operation" type="string" column="OPERATION" />
 
 		<property name="updatedDate" type="timestamp" column="UPDATED_DATE" />
@@ -36,19 +30,18 @@
 
 		<property name="ipAddress" type="string" column="IP_ADDRESS" />
 
-		<query name="getNotificationObjects">
-			select audit.id,audit.objectType,audit.objectId,audit.operation
-			from com.krishagni.catissueplus.core.audit.domain.Audit audit
-		</query>
-		
-<!-- 		select -->
-<!-- 			audit.id,audit.objectType,audit.objectId,audit.operation,externalApp,cpmap.studyId -->
-<!-- 			from com.krishagni.catissueplus.core.audit.domain.Audit audit, -->
-<!-- 			com.krishagni.catissueplus.core.extapp.domain.CollectionProtocolStudyMapping -->
-<!-- 			cpmap, -->
-<!-- 			com.krishagni.catissueplus.core.extapp.domain.ExternalApplication -->
-<!-- 			externalApp where audit.cpId = cpmap.collectionProtocol.id and -->
-<!-- 			cpmap.externalApplication.id = externalApp.id -->
+
+		<sql-query name="getNotificationObjects">
+			select
+			audit.identifier,object_type,object_id,operation
+			from
+			catissue_nextgen_audit_details audit
+			left join
+			catissue_notification_status ns on audit.identifier = ns.audit_id
+			where
+			ns.audit_id is null
+		</sql-query>
+
 
 	</class>
 

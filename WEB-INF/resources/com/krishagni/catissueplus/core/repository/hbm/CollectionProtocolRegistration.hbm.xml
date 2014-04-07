@@ -44,7 +44,8 @@
 		<set name="consentResponseCollection" table="CATISSUE_CONSENT_TIER_RESPONSE"
 			inverse="true" cascade="save-update">
 			<key column="COLL_PROT_REG_ID" />
-			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse" />
+			<one-to-many
+				class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse" />
 		</set>
 
 
@@ -59,11 +60,14 @@
 
 		<query name="getParticipantsByCpId">
 			select
-			cpr.id, participant.id, cpr.protocolParticipantIdentifier,
-			participant.firstName, participant.lastName
+			cpr.id, participant.id,
+			cpr.protocolParticipantIdentifier,
+			participant.firstName,
+			participant.lastName
 			from
 			CollectionProtocolRegistration cpr
-			inner join cpr.participant participant
+			inner join
+			cpr.participant participant
 			inner join cpr.collectionProtocol cp
 			where
 			cp.id = :cpId and cpr.activityStatus != 'Disabled' and
@@ -72,11 +76,14 @@
 
 		<query name="getParticipantsByCpIdAndSearchTerm">
 			select
-			cpr.id, participant.id, cpr.protocolParticipantIdentifier,
-			participant.firstName, participant.lastName
+			cpr.id, participant.id,
+			cpr.protocolParticipantIdentifier,
+			participant.firstName,
+			participant.lastName
 			from
 			CollectionProtocolRegistration cpr
-			inner join cpr.participant participant
+			inner join
+			cpr.participant participant
 			inner join cpr.collectionProtocol cp
 			where
 			cp.id = :cpId
@@ -85,12 +92,14 @@
 			lower(participant.lastName) like :searchTerm or
 			lower(cpr.protocolParticipantIdentifier) like :searchTerm
 			)
-			and cpr.activityStatus != 'Disabled' and participant.activityStatus !=
+			and
+			cpr.activityStatus != 'Disabled' and participant.activityStatus !=
 			'Disabled'
 		</query>
 
 		<query name="getCollectionGroupsByCprId">
-			select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp,
+			select scg.id,scg.name,scg.collectionStatus,
+			scg.receivedTimestamp,
 			scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,
 			scg.collectionProtocolEvent.collectionPointLabel,
 			scg.collectionProtocolRegistration.registrationDate from
@@ -99,15 +108,27 @@
 			!= 'Disabled' order by
 			scg.collectionProtocolEvent.studyCalendarEventPoint
 		</query>
-		
+
 		<query name="getCprIdByBarcode">
-		  select cpr.id from CollectionProtocolRegistration cpr where cpr.barcode=:barcode
+			select cpr.id from CollectionProtocolRegistration
+			cpr where
+			cpr.barcode=:barcode
 		</query>
-		
+
 		<query name="getCprIdByPpid">
-            select cpr.id from CollectionProtocolRegistration cpr where cpr.collectionProtocol.id=:cpId and cpr.protocolParticipantIdentifier=:ppid
-        </query>
-		
+			select cpr.id from CollectionProtocolRegistration
+			cpr where
+			cpr.collectionProtocol.id=:cpId and
+			cpr.protocolParticipantIdentifier=:ppid
+		</query>
+
+		<query name="getCprByPpid">
+			from
+			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
+			cpr where cpr.collectionProtocol.id=:cpId and
+			cpr.protocolParticipantIdentifier=:ppid
+		</query>
+
 	</class>
 </hibernate-mapping>
 

@@ -23,10 +23,10 @@
 			class="com.krishagni.catissueplus.core.notification.domain.ExternalApplication"
 			cascade="save-update" column="APP_ID" />
 
-		<query name="getMappedStudyId">
-			select cpmap.studyId from
-			com.krishagni.catissueplus.core.notification.domain.CollectionProtocolStudyMapping
-			as cpmap where collectionProtocol.id =:cpId and
+		<query name="getMappedCpId">
+			select collectionProtocol.id 
+			from com.krishagni.catissueplus.core.notification.domain.CollectionProtocolStudyMapping as cpmap 
+			where cpmap.studyId =:studyId and 
 			externalApplication.applicationName =:appName
 		</query>
 

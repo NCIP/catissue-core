@@ -4,20 +4,15 @@ package com.krishagni.catissueplus.core.notification.events;
 import com.krishagni.catissueplus.core.common.util.ObjectType;
 import com.krishagni.catissueplus.core.common.util.Operation;
 
-public class NotificationDto {
+public class NotificationDetails {
 
-	Long auditId;
+	private Long auditId;
 
-	ObjectType objectType;
+	private ObjectType objectType;
 
-	Long objectId;
+	private Long objectId;
 
-	Operation operation;
-
-	//
-	//	ExternalApplication extApp;
-	//
-	//	String studyId;
+	private Operation operation;
 
 	/**
 	 * @return the auditId
@@ -75,22 +70,5 @@ public class NotificationDto {
 	public void setOperation(Operation operation) {
 		this.operation = operation;
 	}
-
-	/*
-		public ExternalApplication getExtApp() {
-		return extApp;
-		}
-
-		public void setExtApp(ExternalApplication extApp) {
-		this.extApp = extApp;
-		}
-
-		public String getStudyId() {
-		return studyId;
-		}
-
-		public void setStudyId(String studyId) {
-		this.studyId = studyId;
-		}*/
 
 }
