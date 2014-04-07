@@ -38,8 +38,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
-import edu.wustl.catissuecore.actionForm.UserForm;
-
 public class UserTest {
 
 	@Mock
@@ -69,6 +67,7 @@ public class UserTest {
 
 		when(daoFactory.getDepartmentDao()).thenReturn(departmentDao);
 		when(departmentDao.getDepartment(anyString())).thenReturn(UserTestData.getDeparment("Chemical"));
+		when(daoFactory.getUserDao().isValidLdapId(anyLong())).thenReturn(true);
 
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(userDao.isUniqueLoginName("admin@admin.com")).thenReturn(Boolean.TRUE);
@@ -161,6 +160,18 @@ public class UserTest {
 	}
 
 	@Test
+	public void testUserCreationWithInvalidLdapId() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEvent();
+		when(daoFactory.getUserDao().isValidLdapId(anyLong())).thenReturn(false);
+		UserCreatedEvent response = userService.createUser(reqEvent);
+		
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(UserTestData.LDAP_ID, response.getErroneousFields()[0].getFieldName());
+		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
 	public void testUserCreationWithNonUniqueEmailAddress() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEvent();
 		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.FALSE);
@@ -193,6 +204,17 @@ public class UserTest {
 		assertEquals(reqEvent.getUserDetails().getFirstName(), createdUser.getFirstName());
 		assertNotNull(createdUser.getDeptName());
 		assertEquals("firstName", createdUser.getFirstName());
+	}
+	
+	@Test
+	public void testForSuccessfulUserUpdateWithNonUniqueEmail() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		UpdateUserEvent reqEvent = UserTestData.getCreateUserEventWithNonDupEmail();
+		when(userDao.isUniqueEmailAddress("sci@sci.com")).thenReturn(Boolean.FALSE);
+		UserUpdatedEvent response = userService.updateUser(reqEvent);
+		
+		assertEquals(UserTestData.EMAIL_ADDRESS, response.getErroneousFields()[0].getFieldName());
+		assertEquals(UserErrorCode.DUPLICATE_EMAIL_ADDRESS.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -319,7 +341,7 @@ public class UserTest {
 	@Test
 	public void testPasswordReSetWithInvalidOldPassword() {
 		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
-		when(userDao.isValidOldPassword(anyString(), anyLong())).thenReturn(false);
+		when(userDao.getOldPasswords(anyLong())).thenReturn(UserTestData.getOldPasswordList());
 		
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEvent();
 		
@@ -340,7 +362,7 @@ public class UserTest {
 	@Test
 	public void testForPasswordResetWithInvalidUser() {
 		when(userDao.getUser(anyLong())).thenReturn(null);
-		when(userDao.isValidOldPassword(anyString(), anyLong())).thenReturn(true);
+		when(userDao.getOldPasswords(anyLong())).thenReturn(UserTestData.getOldPasswordList());
 		UpdatePasswordEvent reqEvent =  UserTestData.getUpdatePasswordEventForReSet();
 		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
@@ -350,7 +372,7 @@ public class UserTest {
 	public void testSuccessfullPasswordReset() {
 		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventForReSet();
-		when(userDao.isValidOldPassword(anyString(), anyLong())).thenReturn(true);
+		when(userDao.getOldPasswords(anyLong())).thenReturn(UserTestData.getOldPasswordList());
 
 		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);
 		assertNotNull("response cannot be null", response);
@@ -395,7 +417,7 @@ public class UserTest {
 	public void testPasswordReSetWithServerErr() {
 		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventForReSet();
-		when(userDao.isValidOldPassword(anyString(), anyLong())).thenReturn(true);
+		when(userDao.getOldPasswords(anyLong())).thenReturn(UserTestData.getOldPasswordList());
 
 		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
 		PasswordUpdatedEvent response = userService.resetPassword(reqEvent);

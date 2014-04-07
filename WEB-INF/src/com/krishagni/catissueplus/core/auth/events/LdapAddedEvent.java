@@ -24,12 +24,6 @@ public class LdapAddedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static LdapAddedEvent notAuthorized(AddLdapEvent event1) {
-		LdapAddedEvent event = new LdapAddedEvent();
-		event.setStatus(EventStatus.NOT_AUTHORIZED);
-		return event;
-	}
-
 	public static LdapAddedEvent invalidRequest(String message, ErroneousField... erroneousField) {
 		LdapAddedEvent resp = new LdapAddedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);

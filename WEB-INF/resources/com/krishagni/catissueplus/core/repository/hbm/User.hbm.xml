@@ -86,7 +86,7 @@
             type="long"
             update="true"
             insert="true"
-            column="CSM_USER_ID"
+            column="LDAP_ID"
             length="20"/>
 
 		<set
@@ -119,12 +119,11 @@
             length="200"/>
             
     <query name="getUserByLoginName">
-		SELECT user.loginName FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName
 	</query>
 
 	<query name="getUserByEmailAddress">
 		SELECT user.emailAddress FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.emailAddress = :emailAddress
 	</query>
-	
-    </class>
+   </class>
 </hibernate-mapping>

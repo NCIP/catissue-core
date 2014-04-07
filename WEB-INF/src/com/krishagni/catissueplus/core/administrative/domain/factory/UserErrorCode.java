@@ -13,6 +13,7 @@ public enum UserErrorCode implements CatissueErrorCode{
 	CHANGE_IN_LOGIN_NAME(1207,"User login name cannot be changed in update"),
 	ERROR_WHILE_USER_UPDATION(1208,"Error occured while user updation"),
 	ERROR_WHILE_USER_CREATION(1209,"Error occured while user creation"),
+	ERROR_WHILE_USER_AUTHENTICATION(1210,"Error occured while user authentication"),
 	ERRORS(1211, "Please resolve the highlighted errors."),
 	DUPLICATE_EMAIL_ADDRESS(1212,"User with the same email address is already present in the system.");
 

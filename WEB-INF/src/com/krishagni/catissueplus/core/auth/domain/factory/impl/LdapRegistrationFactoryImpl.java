@@ -63,7 +63,7 @@ public class LdapRegistrationFactoryImpl implements LdapRegistrationFactory {
 	}
 
 	private void setPort(LdapDetails ldapDetails, Ldap ldap, ObjectCreationException exceptionHandler) {
-		if (isBlank(ldapDetails.getPort())) {
+		if (ldapDetails.getPort() == null) {
 			exceptionHandler.addError(UserErrorCode.MISSING_ATTR_VALUE, PORT);
 			return;
 		}

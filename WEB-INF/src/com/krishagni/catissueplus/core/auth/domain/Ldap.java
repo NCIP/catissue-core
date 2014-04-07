@@ -18,7 +18,7 @@ public class Ldap {
 	/**
 	*  eg. 10389, 389 etc
 	*/
-	private String port;
+	private Long port;
 
 	/**
 	* eg. stuart
@@ -71,11 +71,11 @@ public class Ldap {
 		this.host = host;
 	}
 
-	public String getPort() {
+	public Long getPort() {
 		return port;
 	}
 
-	public void setPort(String port) {
+	public void setPort(Long port) {
 		this.port = port;
 	}
 

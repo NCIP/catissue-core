@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class PasswordForgottenEvent extends ResponseEvent {

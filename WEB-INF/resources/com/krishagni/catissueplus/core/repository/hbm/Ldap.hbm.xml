@@ -36,9 +36,9 @@
             
         <property
             name="port"
-            type="string"
+            type="long"
             column="PORT"
-            length="50"/>
+            length="19"/>
         
         <property
             name="loginName"
@@ -58,19 +58,19 @@
             column="ID_FIELD"
             length="50"/>
 
-		<property
+	<property
             name="directoryContext"
             type="string"
             column="DIRECTORY_CONTEXT"
             length="255"/>
 
-		<property
+	<property
             name="surnameField"
             type="string"
             column="SURNAME_FIELD"
             length="255"/>
 		
-		<property
+	<property
             name="givenNameField"
             type="string"
             column="GIVEN_NAME_FIELD"
@@ -83,8 +83,12 @@
             length="255"/>
         
         <query name="getLdapByName">
-			SELECT ldap.ldapName FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.ldapName = :ldapName
-		</query>
+		SELECT ldap.ldapName FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.ldapName = :ldapName
+	</query>
+
+	<query name="getLdapByLdapId">
+		SELECT ldap.id FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.id = :ldapId
+	</query>
     </class>
 
 </hibernate-mapping>

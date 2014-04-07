@@ -15,7 +15,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.core.common.errors.ObjectUpdationException;
 
 public class UserFactoryImpl implements UserFactory {
 
@@ -38,7 +37,8 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	public User createUser(UserDetails details) {
-		ObjectCreationException exceptionHandler = new ObjectUpdationException();
+		
+		ObjectCreationException exceptionHandler = new ObjectCreationException();
 		User user = new User();
 		user.setLdapId(details.getLdapId());
 		user.setComments(details.getComments());

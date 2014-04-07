@@ -113,7 +113,7 @@ public class LdapTest {
 
 	@Test
 	public void testUserCreationWithEmptyLdapPort() {
-		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyPort();
+		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithNullPort();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
@@ -159,7 +159,7 @@ public class LdapTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	@Test	
+	@Test
 	public void testUserCreationWithWrongLdapInfo() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithwrongLdapInfo();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);

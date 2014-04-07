@@ -20,7 +20,7 @@ public class LdapDetails {
 	/**
 	*  eg. 10389, 389 etc
 	*/
-	private String port;
+	private Long port = null;
 
 	/**
 	* eg. stuart, john etc
@@ -73,11 +73,11 @@ public class LdapDetails {
 		this.host = host;
 	}
 
-	public String getPort() {
+	public Long getPort() {
 		return port;
 	}
 
-	public void setPort(String port) {
+	public void setPort(Long port) {
 		this.port = port;
 	}
 
@@ -145,20 +145,20 @@ public class LdapDetails {
 		this.ldapName = ldapName;
 	}
 
-	public static LdapDetails fromDomain(Ldap ldapSummary) {
+	public static LdapDetails fromDomain(Ldap ldap) {
 		LdapDetails ldapDetails = new LdapDetails();
-		ldapDetails.setId(ldapSummary.getId());
-		ldapDetails.setDirectoryContext(ldapSummary.getDirectoryContext());
-		ldapDetails.setLdapName(ldapSummary.getLdapName());
-		ldapDetails.setHost(ldapSummary.getHost());
-		ldapDetails.setPort(ldapSummary.getPort());
-		ldapDetails.setLoginName(ldapSummary.getLoginName());
-		ldapDetails.setPassword(ldapSummary.getPassword());
+		ldapDetails.setId(ldap.getId());
+		ldapDetails.setDirectoryContext(ldap.getDirectoryContext());
+		ldapDetails.setLdapName(ldap.getLdapName());
+		ldapDetails.setHost(ldap.getHost());
+		ldapDetails.setPort(ldap.getPort());
+		ldapDetails.setLoginName(ldap.getLoginName());
+		ldapDetails.setPassword(ldap.getPassword());
 
 		ldapDetails.setGivenNameField(ldapDetails.getGivenNameField());
-		ldapDetails.setIdField(ldapSummary.getIdField());
-		ldapDetails.setSurnameField(ldapSummary.getSurnameField());
-		ldapDetails.setEmailField(ldapSummary.getEmailField());
+		ldapDetails.setIdField(ldap.getIdField());
+		ldapDetails.setSurnameField(ldap.getSurnameField());
+		ldapDetails.setEmailField(ldap.getEmailField());
 		return ldapDetails;
 	}
 }

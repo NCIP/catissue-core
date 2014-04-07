@@ -29,7 +29,7 @@ public class LdapTestData {
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		LdapDetails details = new LdapDetails();
 		details.setHost("ldap.testathon.net");
-		details.setPort("389");
+		details.setPort(389l);
 		details.setIdField("cn");
 		details.setLdapName("Myldap");
 
@@ -72,10 +72,10 @@ public class LdapTestData {
 		return reqEvent;
 	}
 
-	public static AddLdapEvent getAddLdapEventWithEmptyPort() {
+	public static AddLdapEvent getAddLdapEventWithNullPort() {
 		AddLdapEvent reqEvent = getAddLdapEvent();
 		LdapDetails ldapDetails = reqEvent.getLdapDetails();
-		ldapDetails.setPort("");
+		ldapDetails.setPort(null);
 		reqEvent.setLdapDetails(ldapDetails);
 		return reqEvent;
 	}
@@ -117,7 +117,7 @@ public class LdapTestData {
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		LdapDetails details = new LdapDetails();
 		details.setHost("ldap.testathon.net");
-		details.setPort("389");
+		details.setPort(389l);
 		details.setIdField("cn");
 		details.setLdapName("Myldap");
 

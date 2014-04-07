@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -48,6 +49,8 @@ public class UserServiceImpl implements UserService {
 
 	private final String NEW_PASSWORD = "new password";
 
+	private final String LDAP_ID = "ldap id";
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
 			User user = userFactory.createUser(event.getUserDetails());
 			ensureUniqueLoginName(user.getLoginName());
 			ensureUniqueEmailAddress(user.getEmailAddress());
+			validateLdapId(user.getLdapId(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 			user.setPasswordToken(UUID.randomUUID().toString());
 			daoFactory.getUserDao().saveOrUpdate(user);
@@ -88,6 +92,7 @@ public class UserServiceImpl implements UserService {
 			}
 			User user = userFactory.createUser(event.getUserDetails());
 			validateFields(oldUser, user);
+			validateLdapId(user.getLdapId(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 
 			oldUser.update(user);
@@ -164,7 +169,7 @@ public class UserServiceImpl implements UserService {
 			return PasswordUpdatedEvent.invalidRequest(ce.getMessage());
 		}
 		catch (Exception e) {
-			return PasswordUpdatedEvent.serverError(e);
+			return PasswordUpdatedEvent.serverError(e); 
 		}
 	}
 
@@ -191,7 +196,13 @@ public class UserServiceImpl implements UserService {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
 		}
 
-		if (!daoFactory.getUserDao().isValidOldPassword(passwordDetails.getOldPassword(), passwordDetails.getId())) {
+		Boolean isValid = false;
+		List<String> results = daoFactory.getUserDao().getOldPasswords(passwordDetails.getId());
+		if (results.size() > 0) {
+			isValid = results.get(results.size() - 1).equals(passwordDetails.getOldPassword()) ? true : false;
+		}
+
+		if (!isValid) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
 		}
 	}
@@ -232,6 +243,12 @@ public class UserServiceImpl implements UserService {
 	private void ensureUniqueEmailAddress(String emailAddress) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
 			exceptionHandler.addError(UserErrorCode.DUPLICATE_EMAIL_ADDRESS, EMAIL_ADDRESS);
+		}
+	}
+	
+	private void validateLdapId(Long ldapId, ObjectCreationException exceptionHandler) {
+		if (!daoFactory.getUserDao().isValidLdapId(ldapId)) {
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, LDAP_ID);
 		}
 	}
 
