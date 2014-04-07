@@ -95,11 +95,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			formCtxt.setFormCtxtId((Long)row[0]);
 			formCtxt.setFormId((Long)row[1]);
 			formCtxt.setLevel((String)row[2]);
-			
+			formCtxt.setMultiRecord((Boolean)row[3]);
+
 			CollectionProtocolSummary cp = new CollectionProtocolSummary();
-			cp.setId((Long)row[3]);
-			cp.setShortTitle((String)row[4]);
-			cp.setTitle((String)row[5]);
+			cp.setId((Long)row[4]);
+			cp.setShortTitle((String)row[5]);
+			cp.setTitle((String)row[6]);
+
 			formCtxt.setCollectionProtocol(cp);
 			
 			formCtxts.add(formCtxt);

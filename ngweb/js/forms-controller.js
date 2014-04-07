@@ -79,12 +79,12 @@ angular.module('plus.forms', [])
         var cp = args.formCtxts[i].collectionProtocol;
         var cpId = cp.id, title = cp.shortTitle;
         var level = args.formCtxts[i].level;
-
+        var multiRecord = args.formCtxts[i].multiRecord;
         var cpFormCtxt = map[cpId];
         if (cpFormCtxt) {
           cpFormCtxt.levels.push(level);
         } else {
-          map[cpId] = {title: title ? title : "ALL", levels: [level]};
+          map[cpId] = {title: title ? title : "ALL", levels: [level], multiRecord: multiRecord};
         }
       }
 

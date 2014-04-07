@@ -86,7 +86,25 @@ angular.module('plus.dataentry', [])
       
       FormsService.deleteRecords($scope.form.formId, recIds).then(function(deletedRecIds) {
         for (var i = $scope.records.length - 1; i >= 0; --i) {
-          if (deletedRecIds.data.indexOf($scope.records[i].recordId) != -1) {
+          if (deletedRecIds.indexOf($scope.records[i].recordId) != -1) {
+            $scope.records.splice(i, 1);
+          }
+        }
+      });
+    };
+
+    $scope.deleteFormRecord = function(recordId) {
+      var recIds = [];
+      recIds.push(recordId);
+
+      FormsService.deleteRecords($scope.form.formId, recIds).then(function(deletedRecIds) {
+        if ($scope.currentView  =='forms-list') {
+          $scope.showForms();
+          return;
+        } 
+        
+        for (var i = $scope.records.length - 1; i >= 0; --i) {
+          if (deletedRecIds.indexOf($scope.records[i].recordId) != -1) {
             $scope.records.splice(i, 1);
           }
         }
@@ -95,6 +113,14 @@ angular.module('plus.dataentry', [])
       
     $scope.editFormData = function(record) {
       $scope.renderForm($scope.form, record.recordId);
+    };
+    
+    $scope.setCurrentView = function() {
+      if ($scope.form.multiRecord) {
+        $scope.currentView = 'records-list';
+      } else {
+        $scope.currentView = 'forms-list';
+      }
     };
     
     $scope.renderForm = function(form, recordId) {
@@ -120,7 +146,12 @@ angular.module('plus.dataentry', [])
 
           onSaveSuccess: function() {
             that.form.destroy();
-            $scope.displayRecords(form, false);
+            $scope.setCurrentView();
+            if ($scope.currentView  != 'forms-list') {
+              $scope.displayRecords(form, false);
+            } else {
+              $scope.showForms();
+            }
             Utility.notify($("#notifications"), "Form Data Saved", "success", true);
           },
 
@@ -134,7 +165,20 @@ angular.module('plus.dataentry', [])
 
           onCancel: function() {
             that.form.destroy();
-            $scope.displayRecords(form, false);
+            $scope.setCurrentView();
+            if ($scope.currentView  !='forms-list') {
+              $scope.displayRecords(form, false);
+            } else {
+              $scope.showForms();
+            }
+          },
+          
+          onDelete: function() {
+            that.form.destroy();
+            $scope.setCurrentView();
+            $scope.deleteFormRecord(recordId);
+            
+            Utility.notify($("#notifications"), "Form Data Deleted", "success", true);
           }
         });
         this.form.render();

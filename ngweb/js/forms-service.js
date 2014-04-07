@@ -88,7 +88,7 @@ angular.module('plus.formsServices', [])
       deleteRecords: function(formId, recIds) {
         var delUrl = baseUrl + "/" + formId + "/data";
         return  $http({method: 'DELETE', url: delUrl, data: recIds, 
-        		  headers: {'Content-Type': 'application/json;charset=utf-8'}});
+        		  headers: {'Content-Type': 'application/json;charset=utf-8'}}).then(successfn);
       }
     };
   })
