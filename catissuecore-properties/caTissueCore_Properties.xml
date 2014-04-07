@@ -963,7 +963,12 @@ Helpdesk Phone : @@contact.number@@</value>
     </property>
 
     <property>
-    	<name>extAppSchTimeIntervalInMinutes</name>
+    	<name>extApp.sch.time.interval.in.minutes</name>
+    	<value>1</value>
+    </property>
+    
+        <property>
+    	<name>extApp.fail.notification.sch.time.interval.in.minutes</name>
     	<value>1</value>
     </property>
 
@@ -971,6 +976,11 @@ Helpdesk Phone : @@contact.number@@</value>
         <name>de.fileUploadDir</name>
         <value>@@de.fileUploadDir@@</value>
     </property>
+
+	<property>
+		<name>NoOfRetriesForFailNotifications</name>
+		<value>3</value>
+	</property>
 
     
 </properties>
