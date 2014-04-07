@@ -194,13 +194,14 @@ angular.module('plus.controllers', [])
       var aql = "select " + selectList + " where " + query + " limit 0, 10000";
 
       var startTime = new Date();
+      $scope.queryData.notifs.waitRecs = true;
       QueryService.executeQuery('CollectionProtocolRegistration', aql, true).then(function(result) {
         var endTime = new Date();
         var colDefs = [];
         for (var i = 0; i < result.columnLabels.length; ++i) {
           colDefs.push({
             field: "col" + i, 
-            displayName: result.columnLabels[i].replace(":", "-"), 
+            displayName: result.columnLabels[i],
             width: 100, 
             headerCellTemplate: 'templates/grid-column-filter.html'
           });
@@ -213,9 +214,7 @@ angular.module('plus.controllers', [])
 
         
         $scope.setPagedData(1, 100);
-        /*if (!$scope.$$phase) {
-            $scope.$apply();
-        }*/
+        $scope.queryData.notifs.waitRecs = false;
       });
     };
 
@@ -349,7 +348,8 @@ angular.module('plus.controllers', [])
 
       notifs: {
         showCount: false,
-        waitCount: true
+        waitCount: true,
+        waitRecs: true
       },
 
       resultData: [],
@@ -645,9 +645,7 @@ angular.module('plus.controllers', [])
       defineViewModal.result.then(
         function(selectedFields) {
           $scope.queryData.selectedFields = selectedFields;
-          alert("Initiating get records");
           $scope.getRecords(); 
-          alert("Initiated records");
         }
       );
     }

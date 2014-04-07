@@ -305,7 +305,10 @@
           </div>
         </div>
       </div>
-      <div class="row" style="height: 90%; padding-left: 15px;">
+      <div ng-if="queryData.notifs.waitRecs" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;">
+        <span>Loading, please wait ...</span>
+      </div>
+      <div ng-if="!queryData.notifs.waitRecs" class="row" style="height: 90%; padding-left: 15px;">
         <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
       </div>
     </div>
