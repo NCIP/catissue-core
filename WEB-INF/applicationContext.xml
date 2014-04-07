@@ -111,7 +111,16 @@
   <bean id="ldapSvc" class="com.krishagni.catissueplus.core.auth.services.impl.LdapRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="ldapRegFactory" ref="ldapFact"/>	
-  </bean>	
+  </bean>
+
+  <bean id="catAuthenticationService" class="com.krishagni.catissueplus.core.auth.services.impl.CatissueAuthServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="authSvc" class="com.krishagni.catissueplus.core.auth.services.impl.UserAuthenticationServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="catissueAuthService" ref="catAuthenticationService"/>	
+  </bean>		
 
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
