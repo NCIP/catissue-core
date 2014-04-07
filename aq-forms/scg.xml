@@ -168,6 +168,7 @@
                                 <table>CATISSUE_SPECIMEN</table>
                                 <foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
                                 <parentKey>IDENTIFIER</parentKey>
+				<pathLink>true</pathLink>
 
                                 <row>
                                         <subForm>

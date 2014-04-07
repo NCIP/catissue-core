@@ -198,7 +198,12 @@ angular.module('plus.controllers', [])
         var endTime = new Date();
         var colDefs = [];
         for (var i = 0; i < result.columnLabels.length; ++i) {
-          colDefs.push({field: "col" + i, displayName: result.columnLabels[i], width: 100});
+          colDefs.push({
+            field: "col" + i, 
+            displayName: result.columnLabels[i].replace(":", "-"), 
+            width: 100, 
+            headerCellTemplate: 'templates/grid-column-filter.html'
+          });
         }
         $scope.queryData.resultData = result.rows;
         $scope.queryData.resultCols = colDefs;
@@ -358,15 +363,42 @@ angular.module('plus.controllers', [])
       }
     };
 
+    var gridFilterPlugin = {
+      init: function(scope, grid) {
+        gridFilterPlugin.scope = scope;
+        gridFilterPlugin.grid = grid;
+        $scope.$watch(
+          function() {
+            var searchQuery = "";
+            angular.forEach(gridFilterPlugin.scope.columns, function(col) {
+              if (col.visible && col.filterText) {
+                var filterText = (col.filterText.indexOf('*') == 0 ? col.filterText.replace('*', '') : "^" + col.filterText) + ";";
+                searchQuery += col.displayName + ": " + filterText;
+              }
+            });
+            return searchQuery;
+          }, 
+          function(searchQuery) {
+            console.log("Search query is: " + searchQuery);
+            gridFilterPlugin.scope.$parent.filterText = searchQuery;
+            gridFilterPlugin.grid.searchProvider.evalFilter();
+          }
+        );
+      },
+      scope: undefined,
+      grid: undefined,
+    };
+
     $scope.queryData.resultGridOpts = {
       enableColumnResize: true,
-      showFilter: true,
       columnDefs: 'queryData.resultCols',
       showFooter: true, 
       data: 'queryData.pagedData',
       enablePaging: true,
       pagingOptions: $scope.queryData.pagingOptions,
-      totalServerItems: 'queryData.resultDataSize'
+      totalServerItems: 'queryData.resultDataSize',
+      plugins: [gridFilterPlugin],
+      headerRowHeight: 70
     };
 
     FormsService.getQueryForms().then(function(forms) {

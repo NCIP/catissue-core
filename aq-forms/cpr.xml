@@ -1,7 +1,7 @@
 <form>
 	<view>
 		<name>CollectionProtocolRegistration</name>
-		<caption>Collection Protocol Registration</caption>
+		<caption>Participant</caption>
 		<table>CPR_VIEW</table>
 		<primaryKey>CPR_ID</primaryKey>
 		<row>
@@ -134,6 +134,7 @@
 				<table>CATISSUE_SPECIMEN_COLL_GROUP</table>
 				<foreignKey>COLLECTION_PROTOCOL_REG_ID</foreignKey>
 				<parentKey>CPR_ID</parentKey>
+				<pathLink>true</pathLink>
 
 				<row>
 					<subForm>
@@ -143,6 +144,7 @@
 						<table>CATISSUE_SPECIMEN</table>
 						<foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
 						<parentKey>IDENTIFIER</parentKey>
+				  		<pathLink>true</pathLink>
 
 						<row>
 							<subForm>
