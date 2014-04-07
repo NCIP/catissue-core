@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.services.testdata;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
@@ -30,6 +29,8 @@ public class UserTestData {
 	public static final String EMAIL_ADDRESS = "email address";
 	
 	public static final String DEPARTMENT = "department";
+	
+	public static final String LDAP_ID = "ldap id";
 	
 	public static List<User> getUserList() {
 		List<User> users = new ArrayList<User>();
@@ -127,6 +128,14 @@ public class UserTestData {
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
+	
+	public static UpdateUserEvent getCreateUserEventWithNonDupEmail() {
+		UpdateUserEvent reqEvent = getUpdateUserEvent();
+		UserDetails details = reqEvent.getUserDetails();
+		details.setEmailAddress("admin@admin");
+		reqEvent.setUserDetails(details);
+		return reqEvent;
+	}
 
 	public static CreateUserEvent getCreateUserEventForUserCreation() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
@@ -179,6 +188,7 @@ public class UserTestData {
 	public static UpdatePasswordEvent getUpdatePasswordEvent() {
 		PasswordDetails details = new PasswordDetails();
 		details.setId(80L);
+		details.setOldPassword("krishagni19");
 		details.setNewPassword("krishagni");
 		details.setConfirmPassword("krishagni");
 		
@@ -225,5 +235,12 @@ public class UserTestData {
 		UpdatePasswordEvent reqEvent = getUpdatePasswordEvent();
 		reqEvent.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302");
 		return reqEvent;	
+	}
+	
+	public static List<String> getOldPasswordList() {
+		List<String> Passwords = new ArrayList<String>();
+		Passwords.add("kris");
+		Passwords.add("catissue");
+		return Passwords;
 	}
 }
