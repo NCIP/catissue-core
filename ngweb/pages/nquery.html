@@ -306,9 +306,9 @@
         </div>
       </div>
       <div ng-if="queryData.notifs.waitRecs" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;">
-        <span>Loading, please wait ...</span>
+        <span>Loading, please wait for a moment ...</span>
       </div>
-      <div ng-if="!queryData.notifs.waitRecs" class="row" style="height: 90%; padding-left: 15px;">
+      <div ng-show="!queryData.notifs.waitRecs" class="row" style="height: 90%; padding-left: 15px;">
         <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
       </div>
     </div>
@@ -328,7 +328,7 @@
                   <div ng-click="onFormSelect(form)">{{form.caption}}</div>
                 </accordion-heading>
                 <div ng-show="!form.flattenedFields">
-                  Loading form fields. Please wait for a while...
+                  Loading form fields. Please wait for a moment ...
                 </div>
                 <div ng-show="form.flattenedFields">
                   <div style="margin-bottom: 3px;" 
@@ -350,7 +350,7 @@
         </div>
 
         <div class="col-xs-9" style="height: 100%;">
-          <div class="panel panel-primary" style="height: 27%;">
+          <div class="panel panel-primary" style="height: 28%;">
             <div class="panel-heading">
               <h3 class="panel-title">Query Expression</h3>
             </div>
@@ -404,7 +404,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">Current Filters</h3>
             </div>
-            <div class="panel-body" style="height: 90%; overflow: auto;">
+            <div class="panel-body" style="height: 87%; overflow: auto;">
               <div class="filter-item" style="display: table; width: 100%;" ng-repeat="filter in queryData.filters">
                 <div style="display: table-cell; vertical-align: middle;">
                   <div class="filter-item-valign pull-left" style="background-color: #cccccc; width:2.5em; border-radius: 50%; border: 1px solid #cccccc;text-align: center;margin-right: 1%;">
