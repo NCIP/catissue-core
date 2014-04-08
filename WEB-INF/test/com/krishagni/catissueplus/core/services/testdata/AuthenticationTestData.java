@@ -6,6 +6,7 @@ import java.util.List;
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.auth.events.AuthenticateUserEvent;
 import com.krishagni.catissueplus.core.auth.events.LoginDetails;
 
@@ -22,9 +23,9 @@ public class AuthenticationTestData {
 	public static final String LOGIN_NAME = "login name";
 
 	public static final String EMAIL_ADDRESS = "email address";
-	
+
 	public static final String DEPARTMENT = "department";
-	
+
 	public static SessionDataBean getSessionDataBean() {
 		SessionDataBean sessionDataBean = new SessionDataBean();
 		sessionDataBean.setAdmin(true);
@@ -37,7 +38,7 @@ public class AuthenticationTestData {
 		return sessionDataBean;
 	}
 
-	public static  AuthenticateUserEvent getAuthenticateUserEvent() {
+	public static AuthenticateUserEvent getAuthenticateUserEvent() {
 		AuthenticateUserEvent reqEvent = new AuthenticateUserEvent(null);
 		reqEvent.setSessionDataBean(getSessionDataBean());
 
@@ -48,7 +49,19 @@ public class AuthenticationTestData {
 		reqEvent.setLoginDetails(details);
 		return reqEvent;
 	}
-		
+
+	public static AuthenticateUserEvent getAuthenticateUserEventForLdap() {
+		AuthenticateUserEvent reqEvent = new AuthenticateUserEvent(null);
+		reqEvent.setSessionDataBean(getSessionDataBean());
+
+		LoginDetails details = new LoginDetails();
+		details.setLdapId(1l);
+		details.setLoginId("john");
+		details.setPassword("john");
+		reqEvent.setLoginDetails(details);
+		return reqEvent;
+	}
+
 	public static AuthenticateUserEvent getAuthenticateUserEventWithEmptyLoginID() {
 		AuthenticateUserEvent reqEvent = getAuthenticateUserEvent();
 		LoginDetails details = reqEvent.getLoginDetails();
@@ -56,7 +69,7 @@ public class AuthenticationTestData {
 		reqEvent.setLoginDetails(details);
 		return reqEvent;
 	}
-	
+
 	public static AuthenticateUserEvent getAuthenticateUserEventWithEmptyPass() {
 		AuthenticateUserEvent reqEvent = getAuthenticateUserEvent();
 		LoginDetails details = reqEvent.getLoginDetails();
@@ -71,7 +84,7 @@ public class AuthenticationTestData {
 		Passwords.add("Krishagni19");
 		return Passwords;
 	}
-	
+
 	public static User getUser(Long id) {
 		User user = new User();
 		user.setId(id);
@@ -97,5 +110,42 @@ public class AuthenticationTestData {
 		User user = getUser(id);
 		user.setActivityStatus("Closed");
 		return user;
+	}
+
+	public static Ldap getLdap(long id) {
+		Ldap ldap = new Ldap();
+		ldap.setHost("ldap.testathon.net");
+		ldap.setPort(389l);
+		ldap.setIdField("cn");
+		ldap.setLdapName("Myldap");
+		ldap.setId(id);
+		ldap.setDirectoryContext("OU=users,DC=testathon,DC=net");
+		ldap.setLoginName("john");
+		ldap.setPassword("john");
+
+		ldap.setGivenNameField("givenName");
+		ldap.setSurnameField("sn");
+		ldap.setEmailField("mail");
+
+		ldap.setSearchBaseDir("OU=users,DC=testathon,DC=net");
+		ldap.setFilterString("(&(objectClass=*)(uid={0}))");
+		return ldap;
+	}
+
+	public static User getUserForLdap(long id) {
+		User user = getUser(id);
+		user.setFirstName("john");
+		user.setLastName("shane");
+		user.setLoginName("john");
+		return user;
+
+	}
+
+	public static AuthenticateUserEvent getAuthenticateUserEventForLdapWithWrongPass() {
+		AuthenticateUserEvent reqEvent =  getAuthenticateUserEventForLdap();
+		LoginDetails details = reqEvent.getLoginDetails();
+		details.setPassword("dasd");
+		reqEvent.setLoginDetails(details);
+		return reqEvent;
 	}
 }

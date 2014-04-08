@@ -24,6 +24,10 @@ public class LdapTestData {
 
 	public final static String LDAP = "ldap";
 
+	public static final Object SEARCH_BASE_DIR = "search base dir";
+
+	public static final Object FILTER_STRING = "filter string";
+
 	public static AddLdapEvent getAddLdapEvent() {
 		AddLdapEvent reqEvent = new AddLdapEvent(null);
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -40,6 +44,9 @@ public class LdapTestData {
 		details.setGivenNameField("givenName");
 		details.setSurnameField("sn");
 		details.setEmailField("mail");
+		
+		details.setSearchBaseDir("OU=users,DC=testathon,DC=net");
+		details.setFilterString("(&(objectClass=*)(uid={0}))");
 		reqEvent.setLdapDetails(details);
 		return reqEvent;
 	}
@@ -128,7 +135,26 @@ public class LdapTestData {
 		details.setGivenNameField("givenName");
 		details.setSurnameField("sn");
 		details.setEmailField("mail");
+		
+		details.setSearchBaseDir("dc=example,dc=com");
+		details.setFilterString("(&(objectClass=*)(uid={0}))");		
 		reqEvent.setLdapDetails(details);
+		return reqEvent;
+	}
+
+	public static AddLdapEvent getAddLdapEventWithEmptySearchBaseDir() {
+		AddLdapEvent reqEvent = getAddLdapEvent();
+		LdapDetails ldapDetails = reqEvent.getLdapDetails();
+		ldapDetails.setSearchBaseDir("");
+		reqEvent.setLdapDetails(ldapDetails);
+		return reqEvent;
+	}
+
+	public static AddLdapEvent getAddLdapEventWithEmptyFilterString() {
+		AddLdapEvent reqEvent = getAddLdapEvent();
+		LdapDetails ldapDetails = reqEvent.getLdapDetails();
+		ldapDetails.setFilterString("");
+		reqEvent.setLdapDetails(ldapDetails);
 		return reqEvent;
 	}
 }

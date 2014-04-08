@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -16,6 +17,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.auth.events.AuthenticateUserEvent;
 import com.krishagni.catissueplus.core.auth.events.UserAuthenticatedEvent;
+import com.krishagni.catissueplus.core.auth.repository.LdapDao;
 import com.krishagni.catissueplus.core.auth.services.CatissueAuthService;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.auth.services.impl.CatissueAuthServiceImpl;
@@ -32,6 +34,9 @@ public class AuthenticationTest {
 	@Mock
 	UserDao userDao;
 
+	@Mock
+	LdapDao ldapDao;
+
 	private CatissueAuthService caAuthService;
 
 	private UserAuthenticationService userAuthService;
@@ -40,7 +45,8 @@ public class AuthenticationTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		when(daoFactory.getUserDao()).thenReturn(userDao);
-		
+		when(daoFactory.getLdapDao()).thenReturn(ldapDao);
+
 		caAuthService = new CatissueAuthServiceImpl();
 		((CatissueAuthServiceImpl) caAuthService).setDaoFactory(daoFactory);
 
@@ -60,7 +66,6 @@ public class AuthenticationTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertNotNull(response.getUserDetails());
-
 	}
 
 	@Test
@@ -80,44 +85,78 @@ public class AuthenticationTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(UserErrorCode.MISSING_ATTR_VALUE.message(), response.getMessage());
 	}
-	
+
 	@Test
 	public void testUserAuthenticationWithServerErr() {
 		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEvent();
 		doThrow(new RuntimeException()).when(userDao).getOldPasswordsByLoginName(anyString());
 		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
-		
+
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testUserAuthenticationWithWrongPass() {
 		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEventWrongPass();
 		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
-		
+
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_AUTHENTICATED, response.getStatus());
 	}
-	
+
 	@Test
 	public void testUserAuthenticationWithNullUser() {
 		when(userDao.getUserByLoginName(anyString())).thenReturn(null);
 		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEvent();
 		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
-		
+
 		assertNotNull("response cannot be null", response);
 		assertEquals(UserErrorCode.NOT_FOUND.message(), response.getMessage());
 	}
-	
+
 	@Test
 	public void testUserAuthenticationWithInActiveUser() {
 		when(userDao.getUserByLoginName(anyString())).thenReturn(AuthenticationTestData.getNonActiveUser(1l));
 		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEvent();
 		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
-		
+
 		assertNotNull("response cannot be null", response);
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
+	}
+
+	@Test
+	public void testSucesfullUserAuthenticationWithLDAP() {
+		when(userDao.getUserByLoginName(anyString())).thenReturn(AuthenticationTestData.getUserForLdap(1l));
+		when(ldapDao.getLdapByLdapId(anyLong())).thenReturn(AuthenticationTestData.getLdap(1l));
+		
+		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEventForLdap();
+		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testUserAuthenticationWithInvalidLDAP() {
+		when(userDao.getUserByLoginName(anyString())).thenReturn(AuthenticationTestData.getUserForLdap(1l));
+		when(ldapDao.getLdapByLdapId(anyLong())).thenReturn(null);
+		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEventForLdap();
+		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(UserErrorCode.NOT_FOUND.message(), response.getMessage());
+	}
+	
+	@Test
+	public void testUserAuthenticationWithLDAPAndWrongPass() {
+		when(userDao.getUserByLoginName(anyString())).thenReturn(AuthenticationTestData.getUserForLdap(1l));
+		when(ldapDao.getLdapByLdapId(anyLong())).thenReturn(AuthenticationTestData.getLdap(1l));
+		AuthenticateUserEvent reqEvent = AuthenticationTestData.getAuthenticateUserEventForLdapWithWrongPass();
+		UserAuthenticatedEvent response = userAuthService.authenticateUser(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
 }

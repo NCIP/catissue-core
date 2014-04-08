@@ -181,4 +181,28 @@ public class LdapTest {
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
+	@Test
+	public void testLdapAdditionWithEmptySearchBaseDir() {
+		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptySearchBaseDir();
+		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
+
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(LdapTestData.SEARCH_BASE_DIR, response.getErroneousFields()[0].getFieldName());
+		assertEquals(LdapRegistrationErrorCode.MISSING_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testLdapAdditionWithEmptyFilterString() {
+		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyFilterString();
+		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
+
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(LdapTestData.FILTER_STRING, response.getErroneousFields()[0].getFieldName());
+		assertEquals(LdapRegistrationErrorCode.MISSING_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+	}
+
 }
