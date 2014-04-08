@@ -62,7 +62,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithDuplicateLdapName() {
+	public void testLdapAdditionWithDuplicateLdapName() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEvent();
 		when(ldapDao.isUniqueLdapName("Myldap")).thenReturn(Boolean.FALSE);
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
@@ -75,7 +75,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyLdapName() {
+	public void testLdapAdditionWithEmptyLdapName() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyLdapName();
 		when(ldapDao.isUniqueLdapName("")).thenReturn(Boolean.TRUE);
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
@@ -88,7 +88,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyPassword() {
+	public void testLdapAdditionWithEmptyPassword() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyPassword();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -100,7 +100,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyIdField() {
+	public void testLdapAdditionWithEmptyIdField() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyIdField();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -112,7 +112,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyLdapPort() {
+	public void testLdapAdditionWithEmptyLdapPort() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithNullPort();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -124,7 +124,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyHost() {
+	public void testLdapAdditionWithEmptyHost() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyHost();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -136,7 +136,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyDirectory() {
+	public void testLdapAdditionWithEmptyDirectory() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyDirectoryContext();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -148,7 +148,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithEmptyLoginName() {
+	public void testLdapAdditionWithEmptyLoginName() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithEmptyLoginName();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -160,7 +160,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithWrongLdapInfo() {
+	public void testLdapAdditionWithWrongLdapInfo() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEventWithwrongLdapInfo();
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
 
@@ -172,7 +172,7 @@ public class LdapTest {
 	}
 
 	@Test
-	public void testUserCreationWithServerErr() {
+	public void testLdapAdditionWithServerErr() {
 		AddLdapEvent reqEvent = LdapTestData.getAddLdapEvent();
 		doThrow(new RuntimeException()).when(ldapDao).saveOrUpdate(any(Ldap.class));
 		LdapAddedEvent response = ldapRegService.addLdap(reqEvent);
