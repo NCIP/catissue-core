@@ -18,9 +18,7 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 
-	private static final String LOGIN_ID = "login id";
-
-	private static final String PASSWORD = "password";
+	private static final String LOGIN_ID_AND_PASS = "login id and Password";
 
 	private static final String ACTIVITY_STATUS = "activity_status";
 
@@ -43,16 +41,17 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	public UserAuthenticatedEvent authenticateUser(AuthenticateUserEvent event) {
 		try {
 			LoginDetails loginDetails = event.getLoginDetails();
+			validateTerms(loginDetails);
+			User user = daoFactory.getUserDao().getUserByLoginName(loginDetails.getLoginId());
+			ensureActiveUser(user);
+
 			if (loginDetails.getLdapId() == null) {
-				validateTerms(loginDetails);
-				User user = daoFactory.getUserDao().getUserByLoginName(loginDetails.getLoginId());
-				ensureActiveUser(user);
 				catissueAuthService.authenticateUser(loginDetails);
-				return UserAuthenticatedEvent.ok(UserDetails.fromDomain(user));
 			}
 			else {
-				return new UserAuthenticatedEvent();
+				catissueAuthService.authenticateUserByLdap(loginDetails);
 			}
+			return UserAuthenticatedEvent.ok(UserDetails.fromDomain(user));
 		}
 		catch (CatissueException ce) {
 			return UserAuthenticatedEvent.notAuthenticated(ce.getMessage());
@@ -73,12 +72,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	}
 
 	private void validateTerms(LoginDetails loginDetails) {
-		if (isBlank(loginDetails.getPassword())) {
-			reportError(UserErrorCode.MISSING_ATTR_VALUE, PASSWORD);
-		}
-
-		if (isBlank(loginDetails.getLoginId())) {
-			reportError(UserErrorCode.MISSING_ATTR_VALUE, LOGIN_ID);
+		if (isBlank(loginDetails.getPassword()) || isBlank(loginDetails.getLoginId())) {
+			reportError(UserErrorCode.MISSING_ATTR_VALUE, LOGIN_ID_AND_PASS);
 		}
 	}
 }

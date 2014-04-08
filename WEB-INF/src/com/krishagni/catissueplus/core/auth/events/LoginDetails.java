@@ -3,21 +3,11 @@ package com.krishagni.catissueplus.core.auth.events;
 
 public class LoginDetails {
 
-	private Long userId = null;
-
 	private String loginId;
 
 	private String password;
 
 	private Long ldapId = null;
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 
 	public String getLoginId() {
 		return loginId;

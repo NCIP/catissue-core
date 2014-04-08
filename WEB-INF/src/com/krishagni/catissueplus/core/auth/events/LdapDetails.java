@@ -33,6 +33,16 @@ public class LdapDetails {
 	private String directoryContext;
 
 	/**
+	* eg. OU=users,DC=testathon,DC=net
+	*/
+	private String searchBaseDir;
+
+	/**
+	* eg. (&(objectClass=*)(uid={0}))
+	*/
+	private String filterString;
+
+	/**
 	* eg. stuart, john
 	*/
 	private String password;
@@ -145,6 +155,22 @@ public class LdapDetails {
 		this.ldapName = ldapName;
 	}
 
+	public String getSearchBaseDir() {
+		return searchBaseDir;
+	}
+
+	public void setSearchBaseDir(String searchBaseDir) {
+		this.searchBaseDir = searchBaseDir;
+	}
+
+	public String getFilterString() {
+		return filterString;
+	}
+
+	public void setFilterString(String filterString) {
+		this.filterString = filterString;
+	}
+
 	public static LdapDetails fromDomain(Ldap ldap) {
 		LdapDetails ldapDetails = new LdapDetails();
 		ldapDetails.setId(ldap.getId());
@@ -159,6 +185,9 @@ public class LdapDetails {
 		ldapDetails.setIdField(ldap.getIdField());
 		ldapDetails.setSurnameField(ldap.getSurnameField());
 		ldapDetails.setEmailField(ldap.getEmailField());
+		ldapDetails.setSearchBaseDir(ldap.getSearchBaseDir());
+		ldapDetails.setFilterString(ldap.getFilterString());
+		
 		return ldapDetails;
 	}
 }

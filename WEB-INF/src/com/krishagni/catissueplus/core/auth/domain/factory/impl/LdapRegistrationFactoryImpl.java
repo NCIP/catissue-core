@@ -28,6 +28,10 @@ public class LdapRegistrationFactoryImpl implements LdapRegistrationFactory {
 	private final String ID_FIELD = "id field";
 
 	private final String LDAP_NAME = "ldap name";
+	
+	private final String SEARCH_BASE_DIR = "search base dir";
+	
+	private final String FILTER_STRING =  "filter string";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -44,7 +48,9 @@ public class LdapRegistrationFactoryImpl implements LdapRegistrationFactory {
 		setHost(ldapDetails, ldap, exceptionHandler);
 		setPort(ldapDetails, ldap, exceptionHandler);
 		setLoginName(ldapDetails, ldap, exceptionHandler);
-		setPassword(ldapDetails, ldap, exceptionHandler);;
+		setPassword(ldapDetails, ldap, exceptionHandler);
+		setFilterString(ldapDetails, ldap, exceptionHandler);
+		setSearchBaseDir(ldapDetails, ldap, exceptionHandler);
 
 		ldap.setEmailField(ldapDetails.getEmailField());
 		ldap.setGivenNameField(ldapDetails.getGivenNameField());
@@ -52,6 +58,22 @@ public class LdapRegistrationFactoryImpl implements LdapRegistrationFactory {
 		exceptionHandler.checkErrorAndThrow();
 
 		return ldap;
+	}
+
+	private void setSearchBaseDir(LdapDetails ldapDetails, Ldap ldap, ObjectCreationException exceptionHandler) {
+		if (isBlank(ldapDetails.getSearchBaseDir())) {
+			exceptionHandler.addError(LdapRegistrationErrorCode.MISSING_ATTR_VALUE, SEARCH_BASE_DIR);
+			return;
+		}
+		ldap.setSearchBaseDir(ldapDetails.getSearchBaseDir());
+	}
+
+	private void setFilterString(LdapDetails ldapDetails, Ldap ldap, ObjectCreationException exceptionHandler) {
+		if (isBlank(ldapDetails.getFilterString())) {
+			exceptionHandler.addError(LdapRegistrationErrorCode.MISSING_ATTR_VALUE, FILTER_STRING);
+			return;
+		}
+		ldap.setFilterString(ldapDetails.getFilterString());
 	}
 
 	private void setPassword(LdapDetails ldapDetails, Ldap ldap, ObjectCreationException exceptionHandler) {

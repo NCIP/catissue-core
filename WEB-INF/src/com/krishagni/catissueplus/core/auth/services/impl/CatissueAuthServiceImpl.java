@@ -6,9 +6,12 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.auth.events.LoginDetails;
 import com.krishagni.catissueplus.core.auth.services.CatissueAuthService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+
+import edu.wustl.auth.exception.AuthenticationException;
 
 public class CatissueAuthServiceImpl implements CatissueAuthService {
 
@@ -19,6 +22,8 @@ public class CatissueAuthServiceImpl implements CatissueAuthService {
 	}
 
 	private static final String USER = "user";
+	
+	private static final String LDAP = "ldap";
 
 	@Override
 	public void authenticateUser(LoginDetails loginDetails) {
@@ -28,9 +33,18 @@ public class CatissueAuthServiceImpl implements CatissueAuthService {
 			isValid = results.get(results.size() - 1).equals(loginDetails.getPassword()) ? true : false;
 		}
 
-		if (!isValid) { 
+		if (!isValid) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, USER);
 		}
+	}
+
+	@Override
+	public void authenticateUserByLdap(LoginDetails loginDetails) throws AuthenticationException {
+			Ldap ldap = daoFactory.getLdapDao().getLdapByLdapId(loginDetails.getLdapId());
+			if(ldap == null) {
+				reportError(UserErrorCode.NOT_FOUND, LDAP);
+			}
+			LdapAuthenticationManager.authenticate(loginDetails, ldap);
 	}
 
 }

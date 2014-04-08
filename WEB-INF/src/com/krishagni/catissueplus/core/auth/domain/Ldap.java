@@ -31,6 +31,16 @@ public class Ldap {
 	private String directoryContext;
 
 	/**
+	* eg. OU=users,DC=testathon,DC=net
+	*/
+	private String searchBaseDir;
+
+	/**
+	* eg. (&(objectClass=*)(uid={0}))
+	*/
+	private String filterString;
+
+	/**
 	* eg. stuart
 	*/
 	private String password;
@@ -141,6 +151,22 @@ public class Ldap {
 
 	public void setLdapName(String ldapName) {
 		this.ldapName = ldapName;
+	}
+
+	public String getSearchBaseDir() {
+		return searchBaseDir;
+	}
+
+	public void setSearchBaseDir(String searchBaseDir) {
+		this.searchBaseDir = searchBaseDir;
+	}
+
+	public String getFilterString() {
+		return filterString;
+	}
+
+	public void setFilterString(String filterString) {
+		this.filterString = filterString;
 	}
 
 }
