@@ -76,19 +76,31 @@
             column="GIVEN_NAME_FIELD"
             length="255"/>
             
-        <property
+   <property
+            name="searchBaseDir"
+            type="string"
+            column="SEARCH_BASE_DIR"
+            length="255"/>
+            
+    <property
+            name="filterString"
+            type="string"
+            column="FILTER_STRING"
+            length="255"/>
+            
+    <property
             name="emailField"
             type="string"
             column="EMAIL_FIELD"
             length="255"/>
         
-        <query name="getLdapByName">
-		SELECT ldap.ldapName FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.ldapName = :ldapName
-	</query>
-
-	<query name="getLdapByLdapId">
-		SELECT ldap.id FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.id = :ldapId
-	</query>
-    </class>
+    <query name="getLdapByName">
+    	SELECT ldap.ldapName FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.ldapName = :ldapName
+    </query>
+    
+    <query name="getLdapByLdapId">
+    	SELECT ldap FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.id = :ldapId
+    </query>
+ </class>
 
 </hibernate-mapping>
