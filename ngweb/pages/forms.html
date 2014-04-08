@@ -55,6 +55,11 @@
         padding-top: 15px;
       }
 
+      .watch-tutorial {
+        margin-top: 10px;
+        float: right;
+      }
+
     </style>
   </head>
   <body ng-controller="FormsController">
@@ -63,7 +68,12 @@
     <div id="containers-list" class="container">
       <div class="row">
         <div class="col-xs-2"><button class="btn btn-primary" ng-click="addForm()">Add Form</button></div>
-        <div class="col-xs-offset-7 col-xs-3">
+        <div class="col-xs-offset-5 col-xs-2">
+          <div class="watch-tutorial">
+            <a target="_blank" href="https://catissueplus.atlassian.net/wiki/x/MoB2AQ">Watch Tutorial</a>
+          </div>
+        </div>
+        <div class="col-xs-3">
           <div class="plus-addon plus-addon-input-right">
             <span class="glyphicon glyphicon-search"></span>
             <input type="text" class="form-control" placeholder="Search Forms" ng-model="searchFormName">
