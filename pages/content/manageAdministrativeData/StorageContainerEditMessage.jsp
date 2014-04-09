@@ -47,11 +47,20 @@
 						enabled :true
 					},
 					title: {
-						text: "Daywise Storage Container Usage Chart for '"+decodeURI(siteName)+ "' Repository"
+						text: "Daywise Storage Container Usage Chart for '"+decodeURI(siteName)+ "' Repository",
+						style:{
+												color:'#3051E6',
+												fontWeight: 'Bold'
+											}
 					},
 					xAxis: {
 						title: {
-							text: 'Date'
+							text: 'Date',
+							style:{
+												color:'#3051E6',
+												fontSize: '16px',
+												fontWeight: ''
+											}
 						},
 						type: 'datetime',
 						dateTimeLabelFormats: {
@@ -69,12 +78,14 @@
 							var xdata = eval('('+returnData.data+')');
 							var cnt =0;
 							options.series=[];
-							options.subtitle = {
-								text: 'Number Of Specimens v/s Date Stored'
-							};
 							options.yAxis= {
 								title: {
-									text: 'Number of Specimens'
+									text: 'Number of Specimens',
+									style:{
+												color:'#3051E6',
+												fontSize: '16px',
+												fontWeight: ''
+											}
 								},
 								lineWidth: 2};
 							while(xdata[cnt]!=undefined){
@@ -107,12 +118,14 @@
 							var data = eval('('+returnData.data+')');
 							var cnt =0;
 							options.series=[];
-							options.subtitle = {
-								text: 'Percentage Utilization v/s Date for '
-							};
 							options.yAxis= [{
 								title: {
-									text: 'Percentage'
+									text: 'Percentage',
+									style:{
+												color:'#3051E6',
+												fontSize: '16px',
+												fontWeight: ''
+											}
 								},
 								min:0,max:100,
 								plotLines : [ {
@@ -165,15 +178,32 @@
 										type: 'column'
 									},
 									title: {
-										text: 'Repository Utilization Chart'
+										text: 'Top 10 Repository wise Utilization Chart',
+										style:{
+											color:'#3051E6',
+											fontWeight: 'bold'
+										}
 									},
 									xAxis: {
-										categories: data.siteName
+										categories: data.siteName,
+										title:{
+											text:'Repositories',
+											style:{
+												color:'#3051E6',
+												fontSize: '16px',
+												fontWeight: ''
+											}
+										}
 									},
 									yAxis: {
 										min: 0,
 										title: {
-											text: 'Number of Specimens'
+											text: 'Number of Specimens',
+											style:{
+												color:'#3051E6',
+												fontSize: '16px',
+												fontWeight: ''
+											}
 										},
 										stackLabels: {
 											enabled: true,
@@ -215,11 +245,11 @@
 									},
 									series: [{
 										name: 'Free Positions',
-										color:'#BFDCF3',
+										color:'#36BD09',
 										data: data.availablePosition
 									}, {
 										name: 'Occupied Positions',
-										//color:'#8E9191',
+										color:'#F2181C',
 										data: data.ocupiedPosition
 									}]
 								});

@@ -15,7 +15,11 @@ import krishagni.catissueplus.dto.StorageContainerStoredSpecimenDetailsDTO;
 import krishagni.catissueplus.dto.StorageContainerUtilizationDTO;
 import krishagni.catissueplus.dto.StorageContainerUtilizationDetailsDTO;
 import edu.wustl.catissuecore.domain.Capacity;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.MySQLDAOImpl;
+import edu.wustl.dao.OracleDAOImpl;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.NamedQueryParam;
@@ -263,7 +267,18 @@ public class StorageContainerGraphDAO
     
     public List<StorageContainerStoredSpecimenDetailsDTO> getSiteUtilizationList(HibernateDAO hibernateDAO) throws DAOException, SQLException{
         List<StorageContainerStoredSpecimenDetailsDTO> storageContainerStoredSpecimenDetailsDTOList = new ArrayList<StorageContainerStoredSpecimenDetailsDTO>();
-        ResultSet resultSet = hibernateDAO.executeNamedSQLQuery("getSiteUtilization",null);
+        int noSiteToDispaly = 10;
+        Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
+        params.put("1", new NamedQueryParam(DBTypes.INTEGER, noSiteToDispaly));
+        ResultSet resultSet = null;
+        
+        if(DAOConfigFactory.getInstance().getDAOFactory(
+                Constants.APPLICATION_NAME).getDataBaseType().equals("MYSQL")){
+            resultSet =   hibernateDAO.executeNamedSQLQuery("getSiteUtilizationMysql",params);
+            
+        }else if(hibernateDAO instanceof OracleDAOImpl){
+            resultSet =   hibernateDAO.executeNamedSQLQuery("getSiteUtilizationOracle",params);
+        }
         while (resultSet.next())
         {
             StorageContainerStoredSpecimenDetailsDTO storageContainerStoredSpecimenDetailsDTO = new StorageContainerStoredSpecimenDetailsDTO();

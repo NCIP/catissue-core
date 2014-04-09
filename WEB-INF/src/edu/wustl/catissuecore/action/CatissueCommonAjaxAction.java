@@ -1017,7 +1017,7 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
             HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
             IOException
     {
-        String participantId = request.getParameter("participantID");
+        String cprID = request.getParameter("cprID");
         CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 
         HibernateDAO hibernateDAO = null;
@@ -1028,7 +1028,7 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
             SessionDataBean sessionDataBean = (SessionDataBean) request
                     .getSession().getAttribute(Constants.SESSION_DATA);
             hibernateDAO = (HibernateDAO) AppUtility.openDAOSession(sessionDataBean);
-            cprBizLogic.updateDocumentName(Long.parseLong(participantId),null,hibernateDAO);
+            cprBizLogic.updateDocumentName(Long.parseLong(cprID),null,hibernateDAO);
             successMessage = "true";
         }catch (ApplicationException e) {
             errorMessage = e.getMessage();

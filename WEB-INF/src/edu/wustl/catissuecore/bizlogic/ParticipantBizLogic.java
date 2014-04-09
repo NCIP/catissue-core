@@ -1674,15 +1674,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			//Below code is written to update all SCG under specimen.
 
-			SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
-			Iterator<SpecimenCollectionGroup> scgIterator = cprObj
-					.getSpecimenCollectionGroupCollection().iterator();
-			while (scgIterator.hasNext())
-			{
-				SpecimenCollectionGroup scgObj = scgIterator.next();
-				scgBizLogic.updateScgConsentStatus(scgObj.getId(), consentDto.getConsentTierList(),
-						disposeSpecimen, dao, sessionDataBean);
-			}
 
 		}
 		catch (DAOException e)
@@ -1780,7 +1771,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 			participantDTO.setRace(participantRaces);
 
-			String cprSql = "select cpr.protocolParticipantIdentifier,cpr.registrationDate from "
+			String cprSql = "select cpr.protocolParticipantIdentifier,cpr.registrationDate,cpr.consentDocumentName from "
 					+ CollectionProtocolRegistration.class.getName()
 					+ " as cpr where cpr.participant.id=? and cpr.collectionProtocol.id =?";
 			ColumnValueBean columnValueBeanCp = new ColumnValueBean(new Long(cpId));
@@ -1793,6 +1784,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				participantDTO.setPpid((String) protocolInfo[0]);
 
 				participantDTO.setRegistrationDate((Date) protocolInfo[1]);
+				if(protocolInfo[2]!=null){
+				    participantDTO.setIsConsented(Constants.BOOLEAN_YES);
+				}
 			}
 
 			List consentResponses = getConsentResponse(dao, columnValueBeans);

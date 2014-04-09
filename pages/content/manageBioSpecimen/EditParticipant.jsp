@@ -703,8 +703,11 @@
 						</logic:equal>						 
 						</td>
 					 </tr>
-					 
-					 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+				</table>
+				
+				 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				
 					<c:if test="${i%2 == 0}">
 					<tr class="${tr_white_color}">
 					</c:if>
@@ -713,7 +716,7 @@
 					</c:if>
 					<c:set var="i" value="${i+1}" scope="request" />
 
-						<td valign="middle" class="black_ar align_right_style" align="right">
+						<td valign="middle" class="black_ar align_right_style" align="right" width="19%">
 														<label for="activityStatus"	class="black_ar">
 								<b><bean:message
 								key="participant.consent.form" /> </b></label>
@@ -734,9 +737,10 @@
 						</td>
 						<td class="black_ar"></td>
 					</tr>
+					</table>
 				</logic:equal>
 
-				</table>
+
 			</td>
 		</tr>
 			

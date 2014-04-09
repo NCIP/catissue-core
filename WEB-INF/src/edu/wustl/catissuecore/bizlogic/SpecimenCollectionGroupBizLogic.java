@@ -3315,10 +3315,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				String CpShortTitle;
 				CpShortTitle = retrieveCpShortTitle(valArr[4]);
 				collectionProtocol.setShortTitle(CpShortTitle);
-				final Collection consentTierStatusCollection = (Collection) this
-						.retrieveAttribute(dao, SpecimenCollectionGroup.class,
-								identifier,
-								"elements(consentTierStatusCollection)");
 				absScg = (SpecimenCollectionGroup) scg;
 				absScg.setName(scg.getGroupName());
 				absScg.setId(identifier);

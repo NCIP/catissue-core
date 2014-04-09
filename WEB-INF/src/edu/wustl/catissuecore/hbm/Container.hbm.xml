@@ -429,8 +429,7 @@ UPDATE edu.wustl.catissuecore.domain.StorageContainer container SET container.si
     </query>
 
     <query name="getCPIdsbyContainerID" >
-select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left outer join  con.collectionProtocolCollection as cp where con.id = ?
-    </query>
+select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left outer join  con.collectionProtocolCollection as cp where con.id = ?    </query>
 
     <sql-query name="insertIntoStorContSpecCountsTable" >
 	INSERT INTO catissue_stor_cont_utilization(STORAGE_CONTAINER_ID, STORED_SPECIMEN_COUNT, CONT_DATE, UTILIZATION_PERCENTAGE,TOTAL_CAPACITY,SITE_ID) VALUES(?,?,?,?,?,?) 
@@ -438,18 +437,17 @@ select cp.id from edu.wustl.catissuecore.domain.StorageContainer as con left out
 
     <sql-query name="getStorContSpecCountDataById" >
 	select spec.CONT_DATE,spec.STORED_SPECIMEN_COUNT,spec.UTILIZATION_PERCENTAGE from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=?
-	 order by spec.CONT_DATE, spec.STORAGE_CONTAINER_ID asc
-    </sql-query>
+	 order by spec.CONT_DATE, spec.STORAGE_CONTAINER_ID asc    </sql-query>
 
     <sql-query name="getUtilizationCountsOfContainerById" >
-	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT,spec.total_capacity from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)
-    </sql-query>
+	select spec.UTILIZATION_PERCENTAGE,spec.STORED_SPECIMEN_COUNT,spec.total_capacity from catissue_stor_cont_utilization spec where spec.STORAGE_CONTAINER_ID=? and spec.CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization where STORAGE_CONTAINER_ID= ?)    </sql-query>
 
-    <sql-query name="getSiteUtilization" >
-   select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization 
-   left join catissue_container st_container on st_container.identifier = catissue_stor_cont_utilization.storage_container_id 
-   left join catissue_container_position pos on pos.container_id = st_container.identifier
-   left join catissue_site site on site.identifier = site_id where pos.container_id is null and CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)
+    <sql-query name="getSiteUtilizationOracle" >
+    select * from (  select total_count,total_capacity,site_name,((total_count*100)/total_capacity) persent_utilization from ( select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization    left join catissue_container st_container on st_container.identifier = catissue_stor_cont_utilization.storage_container_id    left join catissue_container_position pos on pos.container_id = st_container.identifier left join catissue_site site on site.identifier = site_id where pos.container_id is null and CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)) t1 order by persent_utilization desc ) where ROWNUM BETWEEN 0 AND ?
+    </sql-query>
+    
+    <sql-query name="getSiteUtilizationMysql">
+    select total_count,total_capacity,site_name,((total_count*100)/total_capacity) persent_utilization from ( select SUM(STORED_SPECIMEN_COUNT) total_count,SUM(total_capacity) total_capacity,site.name site_name from catissue_stor_cont_utilization  left join catissue_container st_container on st_container.identifier = catissue_stor_cont_utilization.storage_container_id  left join catissue_container_position pos on pos.container_id = st_container.identifier  left join catissue_site site on site.identifier = site_id where pos.container_id is null and CONT_DATE = (select MAX(CONT_DATE) from catissue_stor_cont_utilization) group by (site.name)) t1 order by persent_utilization desc limit 0,?
     </sql-query>
 
 </hibernate-mapping>
