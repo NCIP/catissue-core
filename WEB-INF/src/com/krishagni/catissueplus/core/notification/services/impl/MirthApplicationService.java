@@ -18,6 +18,8 @@ public class MirthApplicationService implements ExternalAppService {
 
 	private SessionFactory sessionFactory;
 
+	private static final String GET_MAPPED_STUDY = "select study_id from catissue_cp_extapp_study_rel cpstudyrel join catissue_external_application extapp on cpstudyrel.app_id = extapp.identifier where cpstudyrel.cp_id =:cpId and extapp.app_name=:appName";
+
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
@@ -31,31 +33,36 @@ public class MirthApplicationService implements ExternalAppService {
 	}
 
 	@Override
-	public String notifyInsert(ObjectType objectType, Object domainObj) {
-		String result = mirthSvcs.get(objectType).insert(domainObj);
+	public Status notifyInsert(ObjectType objectType, Object domainObj) {
+		Status result = mirthSvcs.get(objectType).insert(domainObj);
 		return result;
 	}
 
 	@Override
-	public String notifyUpdate(ObjectType objectType, Object domainObj) {
-		String studyId = "test";
-		String result = mirthSvcs.get(objectType).update(domainObj);
+	public Status notifyUpdate(ObjectType objectType, Object domainObj) {
+		Status result = mirthSvcs.get(objectType).update(domainObj);
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String getMappedStudyId(Long cpId, String appName) {
-		SQLQuery query = sessionFactory
-				.getCurrentSession()
-				.createSQLQuery(
-						"select study_id from catissue_cp_extapp_study_rel cpstudyrel join catissue_external_application extapp on cpstudyrel.app_id = extapp.identifier where cpstudyrel.cp_id =:cpId and extapp.app_name=:appName");
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(GET_MAPPED_STUDY);
 		query.setLong("cpId", cpId);
 		query.setString("appName", appName);
+
 		List<String> result = query.list();
 		String studyId = null;
 		for (String object : result) {
 			studyId = object;
 		}
 		return studyId;
+	}
+
+	@Override
+	public Status notifyDelete(ObjectType objectType, Object domainObj) {
+		//TODO: implement delte 
+
+		return Status.FAIL;
 	}
 
 }

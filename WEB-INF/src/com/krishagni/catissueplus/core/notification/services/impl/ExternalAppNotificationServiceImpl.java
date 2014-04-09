@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.notification.domain.ExternalApplication;
 import com.krishagni.catissueplus.core.notification.events.NotificationDetails;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppNotificationService;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppService;
+import com.krishagni.catissueplus.core.notification.services.ExternalAppService.Status;
 import com.krishagni.catissueplus.core.notification.util.ExternalApplications;
 
 import edu.wustl.common.util.logger.Logger;
@@ -71,14 +72,15 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 	@PlusTransactional
 	public void notifyFailedNotifications(ExtAppNotificationStatus failNotification) {
 		try {
-			NotificationDetails notifDto = new NotificationDetails();
-			notifDto.setAuditId(failNotification.getAudit().getId());
-			notifDto.setObjectId(failNotification.getAudit().getObjectId());
-			notifDto.setObjectType(ObjectType.valueOf(failNotification.getAudit().getObjectType()));
-			notifDto.setOperation(Operation.valueOf(failNotification.getAudit().getOperation()));
+			NotificationDetails notifDetail = new NotificationDetails();
+			notifDetail.setAuditId(failNotification.getAudit().getId());
+			notifDetail.setObjectId(failNotification.getAudit().getObjectId());
+			notifDetail.setObjectType(ObjectType.valueOf(failNotification.getAudit().getObjectType()));
+			notifDetail.setOperation(Operation.valueOf(failNotification.getAudit().getOperation()));
 
-			failNotification.setStatus(notify(notifDto, failNotification.getExternalApplication()));
+			Status status = notify(notifDetail, failNotification.getExternalApplication());
 
+			failNotification.setStatus(status.toString());
 			daoFactory.getExternalAppNotificationDao().saveOrUpdate(failNotification);
 		}
 		catch (Exception ex) {
@@ -89,63 +91,51 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 
 	@Override
 	@PlusTransactional
-	public void notifyExternalApps(NotificationDetails notifDto) {
+	public void notifyExternalApps(NotificationDetails notifDetail) {
 		try {
 			ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
 			ExternalApplications extAppsBean = (ExternalApplications) caTissueContext.getBean("externalApplications");
 			List<ExternalApplication> extApps = extAppsBean.getAllExternalApplications();
 
 			for (ExternalApplication externalApplication : extApps) {
-				String status = notify(notifDto, externalApplication);
+				Status status = notify(notifDetail, externalApplication);
 				ExtAppNotificationStatus extAppNotif = new ExtAppNotificationStatus();
 				Audit audit = new Audit();
-				audit.setId(notifDto.getAuditId());
+				audit.setId(notifDetail.getAuditId());
 				extAppNotif.setAudit(audit);
 				extAppNotif.setExternalApplication(externalApplication);
-				extAppNotif.setStatus(status);
+				extAppNotif.setStatus(status.toString());
 				daoFactory.getExternalAppNotificationDao().saveOrUpdate(extAppNotif);
-
 			}
 
 		}
 		catch (Exception ex) {
-			LOGGER.error(NOTIFICATION_EXCEPTION + notifDto.getObjectType() + ex.getMessage());
+			LOGGER.error(NOTIFICATION_EXCEPTION + notifDetail.getObjectType() + ex.getMessage());
 		}
 
 	}
 
-	private String notify(NotificationDetails notifDto, ExternalApplication externalApplication)
+	private Status notify(NotificationDetails notifDetail, ExternalApplication externalApplication)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		Object domainObj = getDomainObject(notifDto.getObjectType(), notifDto.getObjectId());
+		Object domainObj = getDomainObject(notifDetail.getObjectType(), notifDetail.getObjectId());
 		Class<?> externalAppClass;
 		externalAppClass = Class.forName(externalApplication.getServiceClass());
 		ExternalAppService extApplication = (ExternalAppService) externalAppClass.newInstance();
 
-		String result = null;
-		String status = null;
-		switch (notifDto.getOperation()) {
+		Status result = null;
+		switch (notifDetail.getOperation()) {
 			case INSERT :
-				result = extApplication.notifyInsert(notifDto.getObjectType(), domainObj);
+				result = extApplication.notifyInsert(notifDetail.getObjectType(), domainObj);
 				break;
 			case UPDATE :
-				result = extApplication.notifyUpdate(notifDto.getObjectType(), domainObj);
+				result = extApplication.notifyUpdate(notifDetail.getObjectType(), domainObj);
+				break;
+			case DELETE :
+				result = extApplication.notifyDelete(notifDetail.getObjectType(), domainObj);
 				break;
 		}
-		if (isSuccess(result)) {
-			status = NotificationStatus.PROCESSED.toString();
-		}
-		else {
-			status = NotificationStatus.FAIL.toString();
-		}
-		return status;
-	}
 
-	private boolean isSuccess(String result) {
-		boolean isSuccess = false;
-		if (result != null && SUCCESS.toString().equalsIgnoreCase(result)) {
-			isSuccess = true;
-		}
-		return isSuccess;
+		return result;
 	}
 
 	@Override

@@ -1,12 +1,14 @@
 
 package com.krishagni.catissueplus.core.notification.services;
 
+import com.krishagni.catissueplus.core.notification.services.ExternalAppService.Status;
+
 public interface CrudService {
 
-	public String insert(Object domainObj);
+	public Status insert(Object domainObj);
 
-	public String update(Object domainObj);
+	public Status update(Object domainObj);
 
-	public String delete(Object domainObj);
+	public Status delete(Object domainObj);
 
 }

@@ -20,7 +20,7 @@ public class ExternalApplications {
 
 	private static List<ExternalApplication> externalApplications;
 
-	public static List<ExternalApplication> getAllExternalApplications() {
+	public List<ExternalApplication> getAllExternalApplications() {
 		if (externalApplications == null) {
 			ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
 			ExternalApplications extApps = (ExternalApplications) caTissueContext.getBean("externalApplications");

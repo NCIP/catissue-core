@@ -26,7 +26,7 @@ public class ExternalAppNotificationSchedular implements Runnable {
 		String schTimeIntervalProperty = XMLPropertyHandler.getValue(SCH_TIME_INTERVAL).trim();
 		if (!schTimeIntervalProperty.isEmpty() || schTimeIntervalProperty != null)
 			schTimeInterval = Integer.parseInt(schTimeIntervalProperty);
-		executor.scheduleWithFixedDelay(new ExternalAppNotificationSchedular(), 0, schTimeInterval, TimeUnit.MINUTES);
+		executor.scheduleWithFixedDelay(new ExternalAppNotificationSchedular(), 0, 10, TimeUnit.SECONDS);
 	}
 
 	@Override

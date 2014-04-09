@@ -25,18 +25,18 @@
 		<property name="status" type="string" column="STATUS" />
 
 		<property name="comments" type="string" column="COMMENTS" />
-		
-		<property name="noOfRetries" type="integer" column="NO_OF_RETRIES" />
 
-	<query name="getFailedNotificationObjects">
-		select notifStatus from
-		com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus
-		as notifStatus inner join fetch notifStatus.audit audit where
-		notifStatus.status =:status and notifStatus.noOfRetries
-		&lt; :maxNoOfRetries
-	</query>
-		
-		
+		<property name="noOfAttempts" type="integer" column="NO_OF_ATTEMPTS" />
+
+		<query name="getFailedNotificationObjects">
+			select notifStatus from
+			com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus
+			as notifStatus inner join fetch notifStatus.audit audit where
+			notifStatus.status =:status and notifStatus.noOfAttempts
+			&lt; :maxNoOfAttempts
+		</query>
+
+
 
 
 	</class>

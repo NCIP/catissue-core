@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.notification.services.impl;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -20,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
 import com.krishagni.catissueplus.core.notification.events.SubjectDto;
 import com.krishagni.catissueplus.core.notification.services.CrudService;
+import com.krishagni.catissueplus.core.notification.services.ExternalAppService.Status;
 
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
@@ -33,8 +35,6 @@ public class MirthParticipantService implements CrudService {
 
 	private static String SUBJECT_TEMPLATE = "SubjectTemplate.vm";
 
-	private static String FAIL = "FAIL";
-
 	public static CrudService getInstance() {
 		if (mirthParticipantSvc == null) {
 			mirthParticipantSvc = new MirthParticipantService();
@@ -43,24 +43,29 @@ public class MirthParticipantService implements CrudService {
 	}
 
 	@Override
-	public String insert(Object domainObj) {
+	public Status insert(Object domainObj) {
 		SubjectDto subject = populateSubjectDto(domainObj);
 		subject.setOperation("Add");
-		String response = sendSubject(subject);
-		return response;
+		return sendSubject(subject);
 	}
 
 	@Override
-	public String update(Object domainObj) {
+	public Status update(Object domainObj) {
 		SubjectDto subject = populateSubjectDto(domainObj);
 		subject.setOperation("Update");
-		String response = sendSubject(subject);
-		return response;
+		return sendSubject(subject);
 	}
 
 	private SubjectDto populateSubjectDto(Object domainObj) {
 		Participant participant = (Participant) domainObj;
 		SubjectDto subject = new SubjectDto();
+		if (participant.getGender().equals("Male Gender")) {
+			subject.setGender("m");
+		}
+		else if (participant.getGender().equals("Female Gender")) {
+			subject.setGender("f");
+		}
+
 		subject.setGender(participant.getGender());
 		Date dob = participant.getBirthDate();
 		subject.setBirthDate(dob);
@@ -82,13 +87,14 @@ public class MirthParticipantService implements CrudService {
 		return subject;
 	}
 
-	public String sendSubject(SubjectDto subject) {
+	public Status sendSubject(SubjectDto subject) {
 		URL url;
 		HttpURLConnection connection = null;
 		try {
 			// Create connection
 			String mirthUrl = XMLPropertyHandler.getValue("MirthUrl");
 			url = new URL(mirthUrl);
+
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "application/xml");
@@ -122,29 +128,32 @@ public class MirthParticipantService implements CrudService {
 				response.append(line);
 			}
 			rd.close();
-			return response.toString();
+			String status = response.toString();
+			if (Status.SUCCESS.toString().equalsIgnoreCase(status)) {
+				return Status.SUCCESS;
+			}
+			return Status.FAIL;
 
+		}
+		catch (IOException ioException) {
+
+			return Status.FAIL;
 		}
 		catch (Exception e) {
 			logger.error("Error while sending http request to mirth of Participant with PPId " + subject.getLabel());
+			return Status.FAIL;
 		}
 		finally {
 			if (connection != null) {
 				connection.disconnect();
 			}
 		}
-		return FAIL;
+
 	}
 
 	@Override
-	public String delete(Object domainObj) {
+	public Status delete(Object domainObj) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	private String getMappedStudyId(Long cpId, String appName) {
-
-		return null;
-	}
-
 }

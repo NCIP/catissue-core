@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.notification.domain;
 
 import com.krishagni.catissueplus.core.audit.domain.Audit;
-import com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl.NotificationStatus;
 
 public class ExtAppNotificationStatus {
 
@@ -16,91 +15,59 @@ public class ExtAppNotificationStatus {
 
 	private String comments;
 
-	private int noOfRetries;
+	private int noOfAttempts;
 
-	/**
-	 * @return the id
-	 */
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the audit
-	 */
 	public Audit getAudit() {
 		return audit;
 	}
 
-	/**
-	 * @param audit the audit to set
-	 */
 	public void setAudit(Audit audit) {
 		this.audit = audit;
 	}
 
-	/**
-	 * @return the externalApplication
-	 */
 	public ExternalApplication getExternalApplication() {
 		return externalApplication;
 	}
 
-	/**
-	 * @param externalApplication the externalApplication to set
-	 */
 	public void setExternalApplication(ExternalApplication externalApplication) {
 		this.externalApplication = externalApplication;
 	}
 
-	/**
-	 * @return the status
-	 */
 	public String getStatus() {
 		return status;
 	}
 
-	/**
-	 * @param status the status to set
-	 */
 	public void setStatus(String status) {
 		this.status = status;
-		if (NotificationStatus.FAIL.toString().equals(status)) {
-			this.increaseNoOfRetries();
-		}
+		this.increaseNoAttempts();
 	}
 
-	/**
-	 * @return the comments
-	 */
 	public String getComments() {
 		return comments;
 	}
 
-	/**
-	 * @param comments the comments to set
-	 */
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
 
-	public int getNoOfRetries() {
-		return noOfRetries;
+	public int getNoOfAttempts() {
+		return noOfAttempts;
 	}
 
-	public void setNoOfRetries(int noOfRetries) {
-		this.noOfRetries = noOfRetries;
+	public void setNoOfAttempts(int noOfAttempts) {
+		this.noOfAttempts = noOfAttempts;
 	}
 
-	public void increaseNoOfRetries() {
-		this.noOfRetries = this.noOfRetries + 1;
+	public void increaseNoAttempts() {
+		this.noOfAttempts ++;
 
 	}
 

@@ -25,7 +25,7 @@ public class ExternalAppNotificationDaoImpl extends AbstractDao<ExtAppNotificati
 	private static String GET_FAILED_NOTIFICATIONS = ExtAppNotificationStatus.class.getName()
 			+ ".getFailedNotificationObjects";
 
-	private static String NO_OF_RETRIES = "NoOfRetriesForFailNotifications";
+	private static String MAX_NO_OF_ATTEMPTS = "NoOfAttemptsForFailNotifications";
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -51,8 +51,8 @@ public class ExternalAppNotificationDaoImpl extends AbstractDao<ExtAppNotificati
 
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FAILED_NOTIFICATIONS);
 		query.setString("status", "FAIL");
-		int noOfRetries = Integer.parseInt(XMLPropertyHandler.getValue(NO_OF_RETRIES).trim());
-		query.setInteger("maxNoOfRetries", noOfRetries);
+		int maxAttempts = Integer.parseInt(XMLPropertyHandler.getValue(MAX_NO_OF_ATTEMPTS).trim());
+		query.setInteger("maxNoOfAttempts", maxAttempts);
 		List<ExtAppNotificationStatus> result = query.list();
 		return result;
 

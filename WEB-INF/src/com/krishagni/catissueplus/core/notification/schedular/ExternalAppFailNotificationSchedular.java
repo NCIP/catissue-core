@@ -20,13 +20,13 @@ public class ExternalAppFailNotificationSchedular implements Runnable {
 
 	private static final String SCH_TIME_INTERVAL = "extApp.fail.notification.sch.time.interval.in.minutes";
 
-	public static void scheduleExtAppNotifSchedulerJob() throws Exception {
+	public static void scheduleExtAppFailNotifSchedulerJob() throws Exception {
 		ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(100);
 		int schTimeInterval = 60;
 		String schTimeIntervalProperty = XMLPropertyHandler.getValue(SCH_TIME_INTERVAL).trim();
 		if (!schTimeIntervalProperty.isEmpty() || schTimeIntervalProperty != null)
 			schTimeInterval = Integer.parseInt(schTimeIntervalProperty);
-		executor.scheduleWithFixedDelay(new ExternalAppFailNotificationSchedular(), 0, schTimeInterval, TimeUnit.MINUTES);
+		executor.scheduleWithFixedDelay(new ExternalAppFailNotificationSchedular(), 0, 10, TimeUnit.SECONDS);
 	}
 
 	@Override
