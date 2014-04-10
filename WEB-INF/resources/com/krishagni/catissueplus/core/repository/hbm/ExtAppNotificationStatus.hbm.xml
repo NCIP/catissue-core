@@ -27,13 +27,25 @@
 		<property name="comments" type="string" column="COMMENTS" />
 
 		<property name="noOfAttempts" type="integer" column="NO_OF_ATTEMPTS" />
+		
+		<property name="updatedDate" type="date" column="UPDATED_DATE" />
 
 		<query name="getFailedNotificationObjects">
 			select notifStatus from
 			com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus
 			as notifStatus inner join fetch notifStatus.audit audit where
 			notifStatus.status =:status and notifStatus.noOfAttempts
-			&lt; :maxNoOfAttempts
+			&lt;
+			:maxNoOfAttempts
+		</query>
+
+		<query name="getExpiredFailedNotificationObjects">
+			select notifStatus from
+			com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus
+			as notifStatus
+			inner join fetch notifStatus.audit audit where notifStatus.status =:status
+			and
+			notifStatus.noOfAttempts &gt;=:maxNoOfAttempts and notifStatus.updatedDate =:date 
 		</query>
 
 

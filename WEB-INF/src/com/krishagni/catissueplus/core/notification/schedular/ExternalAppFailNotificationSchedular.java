@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.notification.services.EmailNotificationService;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppNotificationService;
 
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -26,7 +27,7 @@ public class ExternalAppFailNotificationSchedular implements Runnable {
 		String schTimeIntervalProperty = XMLPropertyHandler.getValue(SCH_TIME_INTERVAL).trim();
 		if (!schTimeIntervalProperty.isEmpty() || schTimeIntervalProperty != null)
 			schTimeInterval = Integer.parseInt(schTimeIntervalProperty);
-		executor.scheduleWithFixedDelay(new ExternalAppFailNotificationSchedular(), 0, 10, TimeUnit.SECONDS);
+		executor.scheduleWithFixedDelay(new ExternalAppFailNotificationSchedular(), 0, schTimeInterval, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -37,11 +38,15 @@ public class ExternalAppFailNotificationSchedular implements Runnable {
 					.getBean("extAppNotificationService");
 			extApp.notifyFailedNotifications();
 
+			// Send report to Administrator for failed notifications which reaches maximum number of attempts. 
+			EmailNotificationService emailNotificationSvc = (EmailNotificationService) caTissueContext
+					.getBean("emailNotificationSvc");
+			emailNotificationSvc.sendFailedNotificationReport();
+
 		}
 		catch (Exception ex) {
 			LOGGER.error(NOTIFICATION_EXCEPTION + ex.getMessage());
 		}
 
 	}
-
 }

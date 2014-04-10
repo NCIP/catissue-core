@@ -13,4 +13,6 @@ public interface ExternalAppNotificationDao extends Dao<ExtAppNotificationStatus
 
 	public List<ExtAppNotificationStatus> getFailedNotificationObjects();
 
+	public List<ExtAppNotificationStatus> getExpiredNotificationObjects();
+
 }

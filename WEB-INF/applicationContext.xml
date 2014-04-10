@@ -163,4 +163,9 @@
 		<property name="cprSvc" ref="cprSvc" />
 	</bean>
 
+	<bean id="emailNotificationSvc"
+		class="com.krishagni.catissueplus.core.notification.services.impl.EmailNotificationServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory" />
+	</bean>
+
  </beans>

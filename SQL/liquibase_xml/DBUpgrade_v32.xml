@@ -1586,6 +1586,11 @@
 			
 			<column name="NO_OF_ATTEMPTS" type="${int.type}">
 			</column>
+			
+			<column name="UPDATED_DATE" type="${timestamp.type}">
+				<constraints nullable="false" />
+			</column>
+			
 		</createTable>
 
 		<addForeignKeyConstraint 

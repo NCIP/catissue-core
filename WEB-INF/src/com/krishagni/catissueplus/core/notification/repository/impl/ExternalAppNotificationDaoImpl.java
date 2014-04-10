@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.notification.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -25,7 +26,14 @@ public class ExternalAppNotificationDaoImpl extends AbstractDao<ExtAppNotificati
 	private static String GET_FAILED_NOTIFICATIONS = ExtAppNotificationStatus.class.getName()
 			+ ".getFailedNotificationObjects";
 
-	private static String MAX_NO_OF_ATTEMPTS = "NoOfAttemptsForFailNotifications";
+	private static String GET_EXPIRED_FAILED_NOTIFICATIONS = ExtAppNotificationStatus.class.getName()
+			+ ".getExpiredFailedNotificationObjects";
+
+	private static String MAX_NO_OF_ATTEMPTS_PROPERTY = "NoOfAttemptsForFailNotifications";
+
+	private static String STATUS = "status";
+
+	private static String MAX_NO_OF_ATTEMPTS = "maxNoOfAttempts";
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -50,9 +58,23 @@ public class ExternalAppNotificationDaoImpl extends AbstractDao<ExtAppNotificati
 	public List<ExtAppNotificationStatus> getFailedNotificationObjects() {
 
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FAILED_NOTIFICATIONS);
-		query.setString("status", "FAIL");
-		int maxAttempts = Integer.parseInt(XMLPropertyHandler.getValue(MAX_NO_OF_ATTEMPTS).trim());
-		query.setInteger("maxNoOfAttempts", maxAttempts);
+		query.setString(STATUS, "FAIL");
+		int maxAttempts = Integer.parseInt(XMLPropertyHandler.getValue(MAX_NO_OF_ATTEMPTS_PROPERTY).trim());
+		query.setInteger(MAX_NO_OF_ATTEMPTS, maxAttempts);
+		List<ExtAppNotificationStatus> result = query.list();
+		return result;
+
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ExtAppNotificationStatus> getExpiredNotificationObjects() {
+
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_EXPIRED_FAILED_NOTIFICATIONS);
+		query.setString(STATUS, "FAIL");
+		int maxAttempts = Integer.parseInt(XMLPropertyHandler.getValue(MAX_NO_OF_ATTEMPTS_PROPERTY).trim());
+		query.setInteger(MAX_NO_OF_ATTEMPTS, maxAttempts);
+		query.setDate("date", new Date());
 		List<ExtAppNotificationStatus> result = query.list();
 		return result;
 

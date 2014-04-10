@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.notification.services.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -16,9 +17,9 @@ import com.krishagni.catissueplus.core.common.util.Operation;
 import com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus;
 import com.krishagni.catissueplus.core.notification.domain.ExternalApplication;
 import com.krishagni.catissueplus.core.notification.events.NotificationDetails;
+import com.krishagni.catissueplus.core.notification.events.NotificationResponse;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppNotificationService;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppService;
-import com.krishagni.catissueplus.core.notification.services.ExternalAppService.Status;
 import com.krishagni.catissueplus.core.notification.util.ExternalApplications;
 
 import edu.wustl.common.util.logger.Logger;
@@ -78,9 +79,11 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 			notifDetail.setObjectType(ObjectType.valueOf(failNotification.getAudit().getObjectType()));
 			notifDetail.setOperation(Operation.valueOf(failNotification.getAudit().getOperation()));
 
-			Status status = notify(notifDetail, failNotification.getExternalApplication());
+			NotificationResponse notificationResponse = notify(notifDetail, failNotification.getExternalApplication());
 
-			failNotification.setStatus(status.toString());
+			failNotification.setStatus(notificationResponse.getStatus().toString());
+			failNotification.setComments(notificationResponse.getMessage());
+			failNotification.setUpdatedDate(new Date());
 			daoFactory.getExternalAppNotificationDao().saveOrUpdate(failNotification);
 		}
 		catch (Exception ex) {
@@ -98,13 +101,15 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 			List<ExternalApplication> extApps = extAppsBean.getAllExternalApplications();
 
 			for (ExternalApplication externalApplication : extApps) {
-				Status status = notify(notifDetail, externalApplication);
+				NotificationResponse notificationResponse = notify(notifDetail, externalApplication);
 				ExtAppNotificationStatus extAppNotif = new ExtAppNotificationStatus();
 				Audit audit = new Audit();
 				audit.setId(notifDetail.getAuditId());
 				extAppNotif.setAudit(audit);
 				extAppNotif.setExternalApplication(externalApplication);
-				extAppNotif.setStatus(status.toString());
+				extAppNotif.setStatus(notificationResponse.getStatus().toString());
+				extAppNotif.setComments(notificationResponse.getMessage());
+				extAppNotif.setUpdatedDate(new Date());
 				daoFactory.getExternalAppNotificationDao().saveOrUpdate(extAppNotif);
 			}
 
@@ -115,14 +120,14 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 
 	}
 
-	private Status notify(NotificationDetails notifDetail, ExternalApplication externalApplication)
+	private NotificationResponse notify(NotificationDetails notifDetail, ExternalApplication externalApplication)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		Object domainObj = getDomainObject(notifDetail.getObjectType(), notifDetail.getObjectId());
 		Class<?> externalAppClass;
 		externalAppClass = Class.forName(externalApplication.getServiceClass());
 		ExternalAppService extApplication = (ExternalAppService) externalAppClass.newInstance();
 
-		Status result = null;
+		NotificationResponse result = null;
 		switch (notifDetail.getOperation()) {
 			case INSERT :
 				result = extApplication.notifyInsert(notifDetail.getObjectType(), domainObj);

@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.notification.domain;
 
+import java.util.Date;
+
 import com.krishagni.catissueplus.core.audit.domain.Audit;
 
 public class ExtAppNotificationStatus {
@@ -16,6 +18,8 @@ public class ExtAppNotificationStatus {
 	private String comments;
 
 	private int noOfAttempts;
+
+	private Date updatedDate;
 
 	public Long getId() {
 		return id;
@@ -67,8 +71,16 @@ public class ExtAppNotificationStatus {
 	}
 
 	public void increaseNoAttempts() {
-		this.noOfAttempts ++;
+		this.noOfAttempts++;
 
+	}
+
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
 }

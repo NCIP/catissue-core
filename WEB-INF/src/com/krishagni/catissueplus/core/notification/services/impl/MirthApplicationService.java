@@ -9,6 +9,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 
 import com.krishagni.catissueplus.core.common.util.ObjectType;
+import com.krishagni.catissueplus.core.notification.events.NotificationResponse;
 import com.krishagni.catissueplus.core.notification.services.CrudService;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppService;
 
@@ -33,15 +34,13 @@ public class MirthApplicationService implements ExternalAppService {
 	}
 
 	@Override
-	public Status notifyInsert(ObjectType objectType, Object domainObj) {
-		Status result = mirthSvcs.get(objectType).insert(domainObj);
-		return result;
+	public NotificationResponse notifyInsert(ObjectType objectType, Object domainObj) {
+		return mirthSvcs.get(objectType).insert(domainObj);
 	}
 
 	@Override
-	public Status notifyUpdate(ObjectType objectType, Object domainObj) {
-		Status result = mirthSvcs.get(objectType).update(domainObj);
-		return result;
+	public NotificationResponse notifyUpdate(ObjectType objectType, Object domainObj) {
+		return mirthSvcs.get(objectType).update(domainObj);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,10 +58,9 @@ public class MirthApplicationService implements ExternalAppService {
 	}
 
 	@Override
-	public Status notifyDelete(ObjectType objectType, Object domainObj) {
-		//TODO: implement delte 
-
-		return Status.FAIL;
+	public NotificationResponse notifyDelete(ObjectType objectType, Object domainObj) {
+		//TODO: implement delete 
+		return NotificationResponse.FAIL("Delete operation is not supported");
 	}
 
 }
