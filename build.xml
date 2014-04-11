@@ -509,8 +509,6 @@
 				<include name="commons-fileupload.jar" />
 				<include name="commons-lang-2.1.jar" />
 				<include name="commons-logging-1.0.4.jar" />
-				<include name="dom4*.jar" />
-				<include name="ehcache-1.2.3.jar" />
 				<include name="freemarker.jar" />
 				<include name="jakarta-oro.jar" />
 				<include name="uml-1.3.jar" />
@@ -541,7 +539,6 @@
 				<!--<include name="ojdbc14.jar"/>-->
 				<include name="boot.jar" />
 				<include name="c3p0-0.9.0.jar" />
-				<include name="catissuecore-client.jar" />
 				<include name="experiment-client.jar" />
 				<!--<include name="jboss-client.jar" />-->
 				<include name="junit-4.1.jar" />
@@ -550,9 +547,6 @@
 				<include name="openide-util.jar" />
 				<include name="acrobat-core.jar" />
 				<!-- removed to work printwebservice -->
-				<include name="jaxrpc.jar" />
-				<include name="saaj.jar" />
-				<include name="jboss-jaxws.jar" />
 			</fileset>
 
 		</delete>
@@ -1424,6 +1418,11 @@
 		              <include name="**/*.java" />
 		          </fileset>
 		      </cobertura-report>
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="${base.dir}/Reports/Coverage" format="xml">
+		                  <fileset dir="${src.dir}">
+		                      <include name="**/*.java" />
+		                  </fileset>
+		              </cobertura-report>
 		<delete file="${base.dir}/cobertura.ser"/>
 	    </target>
 	
