@@ -118,10 +118,18 @@
       </div>
     </div>     
     <div id="form-view" style="margin-left: 1%; margin-top: 1%; margin-right: 2%;" ng-show="currentView == 'form'">
+    </div>
+    <div id="print-view" style="margin-left: 1%; margin-top: 1%; margin-right: 2%;" ng-show="currentView == 'print'">
     </div>  
     <script>
       var entity = "<%= request.getAttribute("entityType") %>"
       var entityObjId   = <%= request.getAttribute("entityRecId") %>
+      var ppId = "<%= request.getAttribute("ppId") %>"
+      var cpTitle = "<%= request.getAttribute("cpTitle") %>"
+      var scgLabel = "<%= request.getAttribute("scgLabel") %>"
+      var cpEventLabel = "<%= request.getAttribute("cpEventLabel") %>"
+      var specimenLabel = "<%= request.getAttribute("specimenLabel") %>"
+      var userName =  "<%= request.getAttribute("userName") %>"
     </script>
     <script src="ngweb/js/utility.js" type="text/javascript"></script>
     <script src="ngweb/js/wrapper.js" type="text/javascript"></script>

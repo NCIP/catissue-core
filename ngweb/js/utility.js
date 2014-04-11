@@ -43,5 +43,25 @@ Utility = {
     if (fade) {
       notifDiv.delay(3000).fadeOut(300);
     }
+  },
+  
+  printDiv : function (data, formCaption) {
+    var mywindow = window.open('', 'my div', 'height=400,width=600');
+    mywindow.document.write('<html><head><title>Form Print</title>');
+    if (formCaption != undefined) {
+    	mywindow.document.title = formCaption;
+    }
+    mywindow.document.write('<link rel="stylesheet" href="ngweb/external/bootstrap/css/bootstrap.min.css" type="text/css" />');
+    mywindow.document.write('<link rel="stylesheet" href="ngweb/external/de/css/de.css" type="text/css" />');
+    mywindow.document.write('<link rel="stylesheet" href="ngweb/css/app.css" type="text/css" />');
+
+    mywindow.document.write('</head><body >');
+    mywindow.document.write(data);
+    mywindow.document.write('</body></html>');
+
+    mywindow.print();
+    mywindow.close();
+
+    return true;
   }
 };
