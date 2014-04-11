@@ -31,8 +31,10 @@
   <bean id="biospecimenDaoFactory" class="com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
-  
-    
+
+  <bean id="deDaoFactory" class="com.krishagni.catissueplus.core.de.repository.impl.DaoFactoryImpl">
+    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
+  </bean>
     
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <!-- one of the properties available; the maximum file size in bytes, 100mb -->
@@ -135,6 +137,7 @@
   </bean>
 
   <bean id="querySvc" class="com.krishagni.catissueplus.core.de.services.impl.QueryServiceImpl">
+    <property name="daoFactory" ref="deDaoFactory"/>
   </bean>
   
   <bean id="auditFactory" class="com.krishagni.catissueplus.core.audit.domain.factory.impl.AuditFactoryImpl">

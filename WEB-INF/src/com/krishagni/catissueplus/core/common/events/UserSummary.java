@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.common.events;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
+
 public class UserSummary {
 	private Long id;
 	
@@ -30,4 +32,12 @@ public class UserSummary {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	public static UserSummary fromUser(User user){
+		UserSummary userSummary = new UserSummary();
+		userSummary.setId(user.getId());
+		userSummary.setFirstName(user.getFirstName());
+		userSummary.setLastName(user.getLastName());		
+		return userSummary;
+	}	
 }

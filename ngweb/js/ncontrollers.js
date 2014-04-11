@@ -18,23 +18,23 @@ angular.module('plus.controllers', [])
     };
 
     var ops = {
-      eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '='}, 
-      ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!='}, 
-      lt: {name: "lt", desc: "Less than", code: "&#60;", symbol: '<'}, 
-      le: {name: "le", desc: "Less than or Equals", code: "&#8804;", symbol: '<='}, 
-      gt: {name: "gt", desc: "Greater than", code: "&#62;", symbol: '>'}, 
-      ge: {name: "ge", desc: "Greater than or Equals", code:"&#8805;", symbol: '>='},
-      exists: {name: "exists", desc: "Exists", code: "&#8707;", symbol: 'exists'}, 
-      not_exists: {name: "not_exists", desc: "Not Exists", code: "&#8708;", symbol: 'not exists'}, 
-      qin: {name: "qin", desc: "Is One Of", code:"&#8712;", symbol: 'in'}, 
-      not_in: {name: "not_in", desc: "Is Not One Of", code:"&#8713;", symbol: 'not in'},
-      starts_with: {name: "starts_with", desc: "Starts With", code: "&#8963;&#61;", symbol: 'starts with'}, 
-      ends_with: {name: "ends_with", desc: "Ends With", code: "&#36;&#61;", symbol: 'ends with'}, 
-      contains: {name: "contains", desc: "Contains", code: "&#126;", symbol: 'contains'},
-      and: {name: 'and', desc: 'And', code: 'and', symbol: 'and'},
-      or: {name: 'or', desc: 'Or', code: 'or', symbol: 'or'},
-      intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand'},
-      not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not'}
+      eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
+      ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE',}, 
+      lt: {name: "lt", desc: "Less than", code: "&#60;", symbol: '<', model: 'LT'}, 
+      le: {name: "le", desc: "Less than or Equals", code: "&#8804;", symbol: '<=', model: 'LE'}, 
+      gt: {name: "gt", desc: "Greater than", code: "&#62;", symbol: '>', model: 'GT'}, 
+      ge: {name: "ge", desc: "Greater than or Equals", code:"&#8805;", symbol: '>=', model: 'GE'},
+      exists: {name: "exists", desc: "Exists", code: "&#8707;", symbol: 'exists', model: 'EXISTS'}, 
+      not_exists: {name: "not_exists", desc: "Not Exists", code: "&#8708;", symbol: 'not exists', model: 'NOT_EXISTS'}, 
+      qin: {name: "qin", desc: "Is One Of", code:"&#8712;", symbol: 'in', model: 'IN'}, 
+      not_in: {name: "not_in", desc: "Is Not One Of", code:"&#8713;", symbol: 'not in', model: 'NOT_IN'},
+      starts_with: {name: "starts_with", desc: "Starts With", code: "&#8963;&#61;", symbol: 'starts with', model: 'STARTS_WITH'}, 
+      ends_with: {name: "ends_with", desc: "Ends With", code: "&#36;&#61;", symbol: 'ends with', model: 'ENDS_WITH'}, 
+      contains: {name: "contains", desc: "Contains", code: "&#126;", symbol: 'contains', model: 'CONTAINS'},
+      and: {name: 'and', desc: 'And', code: 'and', symbol: 'and', model: 'AND'},
+      or: {name: 'or', desc: 'Or', code: 'or', symbol: 'or', model: 'OR'},
+      intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand', model: 'PAND'},
+      not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'}
     };
 
     var hidePopovers = function() {
@@ -331,6 +331,8 @@ angular.module('plus.controllers', [])
       showRecs: false,
       isValid: true,
       forms: [],
+      id: undefined,
+      drivingForm: 'CollectionProtocolRegistration',
       selectedForm: null,
       selectedFields: getDefaultSelectedFields(),
       filters: [],
@@ -630,6 +632,77 @@ angular.module('plus.controllers', [])
       $scope.queryData.exprNodes = newExprNodes;
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
     };
+
+    $scope.saveQuery = function() {
+      var saveQueryModal = $modal.open({
+        templateUrl: 'save-query.html',
+        controller: SaveQueryCtrl,
+        resolve: {
+          queryData: function() {
+            return $scope.queryData;
+          }
+        }
+      });
+
+      saveQueryModal.result.then(
+        function(queryId) { 
+          $scope.queryData.id = queryId; 
+          Utility.notify($("#notifications"), "Query Saved Successfully", "success", true)
+        });
+    };
+
+    var SaveQueryCtrl = function($scope, $modalInstance, queryData) {
+      var getQueryDef = function() {
+        var filters = [];
+        for (var i = 0; i < queryData.filters.length; ++i) {
+          var filter = queryData.filters[i];
+          var values = (filter.value instanceof Array) ? filter.value : [filter.value]
+          filters.push({id: filter.id, field: filter.form.name + "." + filter.field.name, op: filter.op.model, values: values}); 
+        }
+
+        var exprNodes = [];
+        for (var i = 0; i < queryData.exprNodes.length; ++i) {
+          var node = queryData.exprNodes[i];
+          if (node.type == 'paren') {
+            exprNodes.push({nodeType: 'PARENTHESIS', value: node.value == '(' ? 'LEFT' : 'RIGHT'});
+          } else if (node.type == 'op') {
+            exprNodes.push({nodeType: 'OPERATOR', value: ops[node.value].model});
+          } else if (node.type == 'filter') {
+            exprNodes.push({nodeType: 'FILTER', value: node.value});
+          }
+        }
+
+        return {
+          id: queryData.id,
+          title: queryData.title,
+          filters: filters, 
+          queryExpression: exprNodes, 
+          selectList: queryData.selectedFields,
+          title: queryData.title, 
+          drivingForm: queryData.drivingForm
+        };
+      };
+      
+      $scope.modalData = {
+        title: queryData.title
+      };
+   
+
+      $scope.save = function() {
+        queryData.title = $scope.modalData.title;
+        var queryDef = getQueryDef();
+        QueryService.saveOrUpdateQuery(queryDef).then(
+          function(result) {
+            $modalInstance.close(result.id);      
+          }
+        );   
+      };
+
+      $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+
 
     $scope.defineView = function() {
       var defineViewModal = $modal.open({

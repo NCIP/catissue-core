@@ -1656,5 +1656,59 @@
             incrementBy="1"
             ordered="true" />
     </changeSet>    
+
+    <changeSet author="vpawar" id="saved queries table" failOnError="true">
+     	<createTable tableName="CATISSUE_SAVED_QUERIES"> 
+          <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+            <constraints primaryKey="true" nullable="false"/>
+          </column>
+
+          <column name="TITLE" type="${text.type}(128)">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="CREATED_BY" type="${int.type}">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="LAST_UPDATED_BY" type="${int.type}">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="LAST_UPDATED_ON" type="${timestamp.type}">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="LAST_RUN_ON" type="${timestamp.type}">
+            <constraints nullable="true"/>
+          </column>
+
+          <column name="LAST_RUN_COUNT" type="${int.type}">
+            <constraints nullable="true"/>
+          </column>
+
+          <column name="QUERY_DEF" type="${blob.type}">
+            <constraints nullable="false"/>
+          </column>
+      	</createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key to saved queries (created_by)" failOnError="true">
+        <addForeignKeyConstraint 
+	  baseTableName="CATISSUE_SAVED_QUERIES"
+          baseColumnNames="CREATED_BY"
+	  referencedTableName="CATISSUE_USER"
+	  referencedColumnNames="IDENTIFIER"
+	  constraintName="FK_SAVED_QUERIES_CREATED_BY"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key to saved queries (last_updated_by)" failOnError="true">
+        <addForeignKeyConstraint 
+	  baseTableName="CATISSUE_SAVED_QUERIES"
+          baseColumnNames="LAST_UPDATED_BY"
+	  referencedTableName="CATISSUE_USER"
+	  referencedColumnNames="IDENTIFIER"
+	  constraintName="FK_SAVED_QUERIES_UPDATED_BY"/>
+    </changeSet>
     
 </databaseChangeLog>         
