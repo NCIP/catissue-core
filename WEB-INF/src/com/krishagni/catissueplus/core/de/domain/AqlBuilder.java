@@ -10,6 +10,7 @@ import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.Parenthesis
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.DataType;
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class AqlBuilder {
 	
@@ -97,7 +98,7 @@ public class AqlBuilder {
 		Container form = Container.getContainer(formName);
 		Control ctrl = form.getControlByUdn(field.substring(dotIdx + 1));
 				
-		String[] values = filter.getValues();
+		String[] values = (String[])Arrays.copyOf(filter.getValues(), filter.getValues().length);
 		if (ctrl.getDataType() == DataType.STRING || ctrl.getDataType() == DataType.DATE) {
 			for (int i = 0; i < values.length; ++i) {
 				values[i] = "\"" + values[i] + "\"";   

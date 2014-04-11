@@ -19,6 +19,14 @@ angular.module('plus.services', [])
         } else {
           return $http.post(savedQueriesUrl, queryDef).then(successfn);
         }
+      },
+
+      getQueries: function(startAt, maxRecs) {
+        return $http.get(savedQueriesUrl + '?start=' + startAt + '&max=' + maxRecs).then(successfn);
+      },
+
+      getQuery: function(queryId) {
+        return $http.get(savedQueriesUrl + queryId).then(successfn);
       }
     };
   });

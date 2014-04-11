@@ -287,21 +287,69 @@
   </head>
 
   <body ng-controller="QueryController">
-    <div style="margin-left: 2%; height: 96%; width: 96%;" ng-if="queryData.showRecs">
+    <div id="notifications" class="cp-notifs hidden"></div>
+    <div class="container" ng-if="queryData.view == 'dashboard'">
+      <div class="row">
+        <div class="col-xs-7"><h3 style="margin-bottom: 20px;">Queries Dashboard</h3></div>
+      </div>
+      <div class="row" style="margin-bottom: 10px;">
+        <div class="col-xs-3">
+          <button class="pull-left btn btn-primary" ng-click="createQuery()">Create Query</button>
+          <div class="watch-tutorial">
+            <a target="_blank" href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ">Watch Tutorial</a>
+          </div>
+        </div>
+        <div class="col-xs-offset-6 col-xs-3">
+          <div class="plus-addon plus-addon-input-right">
+            <span class="glyphicon glyphicon-search"></span>
+            <input type="text" class="form-control" placeholder="Search Query" ng-model="searchQueryTitle">
+          </div>
+        </div>
+      </div>
+      <table class="table" overflow="auto" ng-if="queryData.queries.length > 0">
+        <thead>
+          <tr>
+            <th class="col-xs-4">Title</th>
+            <th class="col-xs-3">Created By</th>
+            <th class="col-xs-2">Last Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="query in queryData.queries | filter:searchQueryTitle"
+              ng-mouseenter="query.highlight=true"
+              ng-mouseleave="query.highlight=false"> 
+              
+            <td>
+              <a style="cursor:pointer;" ng-click="editQuery(query)" tooltip-placement="right" tooltip="Click to edit query">{{query.title}}</a>
+            </td>
+            <td>{{formatUsername(query.createdBy)}}</td>
+            <td>
+              {{formatDate(query.lastModifiedOn)}}
+              <div class="pull-right" ng-if="query.highlight" style="cursor: pointer;" ng-click="runQuery(query)">
+                <span class="glyphicon glyphicon-play"></span>
+                <a>View Records</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height: 96%;" class="container" ng-if="queryData.view == 'records'">
       <div class="row" style="6%;margin-bottom: 1%;">
         <div class="pull-left" style="padding-left: 15px;">
           <div class="btn-group">
-            <div class="btn btn-default" ng-click="redefineQuery()"> 
-              <span>&larr;</span>
-              <span>Back</span> 
+            <div class="btn btn-default" ng-click="showQueries()"> 
+              <span class="glyphicon glyphicon-th-list"></span>
+              <span>Dashboard</span> 
             </div> 
             <div class="btn btn-default" ng-click="redefineQuery()"> 
               <span class="glyphicon glyphicon-wrench"></span> 
-              <span> Edit Query </span>
+              <span>Edit Query </span>
             </div> 
             <div class="btn btn-default" ng-click="defineView()"> 
               <span class="glyphicon glyphicon-eye-open"></span> 
-              <span> Define View </span>
+              <span>Define View </span>
             </div> 
           </div>
         </div>
@@ -313,15 +361,14 @@
         <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
       </div>
     </div>
-    <div style="height: 96%; margin-left: 2%; width: 96%;" ng-if="!queryData.showRecs">
-      <div id="notifications" class="cp-notifs hidden"></div>
+    <div style="height: 96%;" class="container" ng-if="queryData.view == 'query'">
       <div class="row" style="height: 100%;">
         <div class="col-xs-3" style="height: 100%;">
           <accordion ka-fix-height="100%" close-others="true"> 
             <div class="panel panel-primary">
               <div class="panel-heading clearfix">
                 <div class="panel-title pull-left">Add Filter</div>
-                <div class="pull-right"><a style="font-size: 12px; padding: 5px; background-color: #f5f5f5; border: 1px solid #dddddd; border-radius: 4px;" href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Watch Tutorial</b></a></div>
+                <!-- div class="pull-right"><a style="font-size: 12px; padding: 5px; background-color: #f5f5f5; border: 1px solid #dddddd; border-radius: 4px;" href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Watch Tutorial</b></a></div -->
               </div>
             </div>
             <div style="height: 92%; margin-top: 5px;overflow:auto;" -->
@@ -446,14 +493,15 @@
                 <span class="glyphicon glyphicon-save"></span>
                 <span>Save Query</span>
               </div>
+              <a href=#" tooltip="Cancel and go back to dashboard" tooltip-placement="top" ng-click="showQueries()" style="margin-left: 10px;">Cancel</a>
             </div>
-            <div class="pull-left" style="width: 50%; margin-left: 1%;" ng-if="queryData.notifs.showCount">
+            <div class="pull-right" style="width: 45%; margin-left: 1%;" ng-if="queryData.notifs.showCount">
               <div ng-if="queryData.notifs.waitCount" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;">
                 <span>Counting ...</span>
               </div>
 
               <div ng-if="!queryData.notifs.waitCount">
-                <div ng-if="queryData.cprCnt != 0 || queryData.specimenCnt != 0" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;">
+                <div ng-if="queryData.cprCnt != 0 || queryData.specimenCnt != 0" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 6px; background-color: #d9edf7; color: #3a87ad;">
                   <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
                   <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
                   <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>

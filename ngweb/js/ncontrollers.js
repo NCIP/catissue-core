@@ -1,22 +1,6 @@
 
 angular.module('plus.controllers', [])
   .controller('QueryController', ['$scope', '$sce', '$modal', '$q', 'CollectionProtocolService', 'FormsService', 'QueryService', function($scope, $sce, $modal, $q, CollectionProtocolService, FormsService, QueryService) {
-    var opsMap = {
-      eq: {desc: "Equals", code: "&#61;", symbol: '='}, 
-      ne: {desc: "Not Equals", code: "&#8800;", symbol: '!='}, 
-      lt: {desc: "Less than", code: "&#60;", symbol: '<'}, 
-      le: {desc: "Less than or Equals", code: "&#8804;", symbol: '<='}, 
-      gt: {desc: "Greater than", code: "&#62;", symbol: '>'}, 
-      ge: {desc: "Greater than or Equals", code:"&#8805;", symbol: '>='},
-      exists: {desc: "Exists", code: "&#8707;", symbol: 'exists'}, 
-      not_exists: {desc: "Not Exists", code: "&#8708;", symbol: 'not exists'}, 
-      qin: {desc: "In", code:"&#8712;", symbol: 'in'}, 
-      not_in: {desc: "Not In", code:"&#8713;", symbol: 'not in'},
-      starts_with: {desc: "Starts With", code: "&#8963;&#61;", symbol: 'starts with'}, 
-      ends_with: {desc: "Ends With", code: "&#36;&#61;", symbol: 'ends with'}, 
-      contains: {desc: "Contains", code: "&#126;", symbol: 'contains'},
-    };
-
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
       ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE',}, 
@@ -35,6 +19,18 @@ angular.module('plus.controllers', [])
       or: {name: 'or', desc: 'Or', code: 'or', symbol: 'or', model: 'OR'},
       intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand', model: 'PAND'},
       not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'}
+    };
+
+    var getOpByModel = function(model) {
+      var result = undefined;
+      for (var k in ops) {
+        if (ops[k].model == model) {
+          result = ops[k];
+          break;
+        }
+      }
+
+      return result;
     };
 
     var hidePopovers = function() {
@@ -187,7 +183,7 @@ angular.module('plus.controllers', [])
     }, true);
 
     $scope.getRecords = function() {
-      $scope.queryData.showRecs = true;
+      $scope.queryData.view = 'records';
 
       var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
       var selectList = $scope.queryData.selectedFields.join();
@@ -227,7 +223,7 @@ angular.module('plus.controllers', [])
       $scope.queryData.resultData = [];
       $scope.queryData.resultCols = [];
       $scope.queryData.resultDataSize = 0;
-      $scope.queryData.showRecs = false;
+      $scope.queryData.view = 'query';
     }
 
     $scope.addParen = function() {
@@ -277,7 +273,7 @@ angular.module('plus.controllers', [])
       }
 
       var desc = "Unknown";
-      if (filter) {
+      if (filter && filter.form && filter.field && filter.op) {
         desc = "<i>" + filter.form.caption + "  >> " + filter.field.caption + "</i> <b>" + filter.op.desc + "</b> ";
         if (filter.value) {
           desc += filter.value;
@@ -326,44 +322,67 @@ angular.module('plus.controllers', [])
       ];
     }
 
-    $scope.queryData = {
-      showCallout: true,
-      showRecs: false,
-      isValid: true,
-      forms: [],
-      id: undefined,
-      drivingForm: 'CollectionProtocolRegistration',
-      selectedForm: null,
-      selectedFields: getDefaultSelectedFields(),
-      filters: [],
-      joinType: 'all',
-      exprNodes: [],              //{type: filter/op/paran, val: filter id/and-or-intersect-not}
-      filterId: 0,
-      currFilter: {
-        id:null,
-        form: null,
-        field: null,
-        op: null,
-        value: null,
-        ops: null,
-      },
-
-      notifs: {
-        showCount: false,
-        waitCount: true,
-        waitRecs: true
-      },
-
-      resultData: [],
-      pagedData: [],
-      resultCols: [],
-      resultDataSize: 0,
-      pagingOptions: {
-         pageSizes: [100, 200, 500],
-         pageSize: 100,
-         currentPage: 1
-      }
+    $scope.formatDate = function(timeInMs) {
+      return Utility.formatDate(timeInMs);
     };
+
+    $scope.formatUsername = function(user) {
+      var username = user.lastName;
+      if (username && user.firstName) {
+        username += ", ";
+      }
+
+      if (user.firstName) {
+        username += user.firstName;
+      }
+
+      return username;
+    };
+
+    $scope.queryData = {
+      view: 'dashboard',
+      forms: [],
+    };
+
+    $scope.getQueryDataDefaults = function() {
+      return {
+        isValid: true,
+        id: undefined,
+        drivingForm: 'CollectionProtocolRegistration',
+        selectedForm: null,
+        selectedFields: getDefaultSelectedFields(),
+        filters: [],
+        joinType: 'all',
+        exprNodes: [],              //{type: filter/op/paran, val: filter id/and-or-intersect-not}
+        filterId: 0,
+        currFilter: {
+          id:null,
+          form: null,
+          field: null,
+          op: null,
+          value: null,
+          ops: null,
+        },
+
+        notifs: {
+          showCount: false,
+          waitCount: true,
+          waitRecs: true
+        },
+
+        resultData: [],
+        pagedData: [],
+        resultCols: [],
+        resultDataSize: 0,
+        pagingOptions: {
+          pageSizes: [100, 200, 500],
+          pageSize: 100,
+          currentPage: 1
+        }
+      };
+    };
+
+    angular.extend($scope.queryData, $scope.getQueryDataDefaults());
 
     var gridFilterPlugin = {
       init: function(scope, grid) {
@@ -381,7 +400,6 @@ angular.module('plus.controllers', [])
             return searchQuery;
           }, 
           function(searchQuery) {
-            console.log("Search query is: " + searchQuery);
             gridFilterPlugin.scope.$parent.filterText = searchQuery;
             gridFilterPlugin.grid.searchProvider.evalFilter();
           }
@@ -403,9 +421,124 @@ angular.module('plus.controllers', [])
       headerRowHeight: 70
     };
 
+    $scope.showQueries = function() {
+       $scope.queryData.queries = [];
+       $scope.queryData.view = 'dashboard';
+       QueryService.getQueries(0, 1000).then(function(queries) {
+        $scope.queryData.queries = queries;
+       });
+    };
+
+    $scope.createQuery = function() {
+      angular.extend($scope.queryData, $scope.getQueryDataDefaults());
+      $scope.queryData.view = 'query';
+    };
+
+    var getFilter = function(filterDef) {
+      var fieldName = filterDef.field;
+      var dotIdx = fieldName.indexOf(".");
+      var formName = fieldName.substr(0, dotIdx);
+
+      var op = getOpByModel(filterDef.op);
+      var value = undefined;
+      if (op.name == 'exists' || op.name == 'not_exists') {
+        value = undefined;
+      } else if (op.name != 'qin' && op.name != 'not_in') {
+        value = filterDef.values[0];
+      } else {
+        value = filterDef.values;
+      }
+
+      return {
+        id: filterDef.id,
+        op: getOpByModel(filterDef.op),
+        value: value,
+        form: $scope.getForm(formName),
+        fieldName: fieldName.substr(dotIdx + 1)
+      };
+    };
+
+    $scope.editQuery = function(query) {
+      $scope.loadQuery(query).then(function() { $scope.queryData.view = 'query'; });
+    };
+
+    $scope.runQuery = function(query) {
+      $scope.loadQuery(query).then( function() { $scope.getRecords(); });
+    };
+    
+    $scope.loadQuery = function(query) {
+      angular.extend($scope.queryData, $scope.getQueryDataDefaults());
+      return QueryService.getQuery(query.id).then(
+        function(queryDef) {
+          var filters = [];
+          for (var i = 0; i < queryDef.filters.length; ++i) {
+            filters.push(getFilter(queryDef.filters[i]));
+          }
+
+          var qs = [];
+          var uniqForms = {};
+          for (var i = 0; i < filters.length; ++i) {
+            var form = filters[i].form;
+            if (!uniqForms[form.name]) {
+              qs.push(getFormFields(form));
+              uniqForms[form.name] = true;
+            }
+          };
+
+          var filtersq = $q.all(qs).then(
+            function() {
+              for (var i = 0; i < filters.length; ++i) {
+                filters[i].field = $scope.getFormField(filters[i].form, filters[i].fieldName) 
+              }
+
+              return true;
+            }
+          );
+
+          var exprNodes = [];
+          for (var i = 0; i < queryDef.queryExpression.length; ++i) {
+            var exprNode = queryDef.queryExpression[i];
+            if (exprNode.nodeType == 'FILTER') {
+              exprNodes.push({type: 'filter', value: exprNode.value});
+            } else if (exprNode.nodeType == 'OPERATOR') {
+              exprNodes.push({type: 'op', value: getOpByModel(exprNode.value).name});
+            } else if (exprNode.nodeType == 'PARENTHESIS') {
+              exprNodes.push({type: 'paren', value: exprNode.value == 'LEFT' ? '(' : ')'});
+            }
+          }
+
+          var queryProps = {
+            selectedFields: queryDef.selectList, filters: filters, exprNodes: exprNodes, 
+            id: query.id, title: query.title
+          };
+
+          angular.extend($scope.queryData, queryProps);
+          return filtersq;
+        }
+      );
+    };
+
+    $scope.showQueries();
+
     FormsService.getQueryForms().then(function(forms) {
       $scope.queryData.forms = forms;
     });
+
+    var getFormFields = function(form) {
+      var deferred = $q.defer();
+      if (!form.fields) {
+        FormsService.getFormFields(form.formId).then(
+          function(fields) {
+            form.fields = fields;
+            deferred.resolve(form.fields);
+          }
+        );
+      } else {
+        deferred.resolve(form.fields);
+      }
+
+      return deferred.promise;
+    };
 
     $scope.showFormSelectCallout = function() {
       var qd = $scope.queryData;
@@ -491,6 +624,32 @@ angular.module('plus.controllers', [])
       }
     };
 
+    $scope.getForm = function(formName) {
+      var form = undefined;
+      for (var i = 0; i < $scope.queryData.forms.length; ++i) {
+        if (formName == $scope.queryData.forms[i].name) {
+          form = $scope.queryData.forms[i];
+          break;
+        }
+      } 
+
+      return form;
+    };
+
+    $scope.getFormField = function(form, fieldName) {
+      if (!form.flattenedFields) {
+        form.flattenedFields = flattenFields("", form.fields);
+      }
+
+      for (var i = 0; i < form.flattenedFields.length; ++i) {
+        if (fieldName == form.flattenedFields[i].name) {
+          return form.flattenedFields[i];
+        }
+      }
+ 
+      return undefined;
+    };
+         
     $scope.onFieldSelect = function(field) {
       hidePopovers();
       $scope.queryData.currFilter = {};
@@ -646,7 +805,7 @@ angular.module('plus.controllers', [])
 
       saveQueryModal.result.then(
         function(queryId) { 
-          $scope.queryData.id = queryId; 
+          $scope.showQueries();
           Utility.notify($("#notifications"), "Query Saved Successfully", "success", true)
         });
     };
@@ -758,22 +917,6 @@ angular.module('plus.controllers', [])
 
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
-      };
-
-      var getFormFields = function(form) {
-        var deferred = $q.defer();
-        if (!form.fields) {
-          FormsService.getFormFields(form.formId).then(
-            function(fields) {
-              form.fields = fields;
-              deferred.resolve(form.fields);
-            }
-          );
-        } else {
-          deferred.resolve(form.fields);
-        }
-
-        return deferred.promise;
       };
 
       var processFields = function(prefix, fields) {

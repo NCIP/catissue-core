@@ -40,7 +40,7 @@
     <property name="lastRunCount" column="LAST_RUN_COUNT"/>
 	
     <query name="getSavedQueries">
-      from SavedQuery order by identifier ASC
+      from SavedQuery order by id DESC
     </query>
   </class> 
 </hibernate-mapping>

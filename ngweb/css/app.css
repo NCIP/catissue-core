@@ -61,3 +61,25 @@
 .tooltip {
 	z-index: 9999;
 }
+
+.watch-tutorial {
+  margin-top: 10px;
+  float: left;
+  padding-left: 20px;
+}
+
+.plus-addon {
+  position: relative;
+}
+
+.plus-addon-input-right input {
+  padding-right: 30px;
+}
+
+.plus-addon-input-right span {
+  position: absolute;
+  right: 0px;
+  padding: 10px 20px;
+  pointer-events: none;
+}
+
