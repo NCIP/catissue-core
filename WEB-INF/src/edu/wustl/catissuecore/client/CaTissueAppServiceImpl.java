@@ -5,6 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.ApplicationContext;
+
+
+import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.de.events.IntegratedRecordEvent;
+import com.krishagni.catissueplus.core.de.events.IntegratorRecordEntryEvent;
+import com.krishagni.catissueplus.core.de.repository.FormDao;
+import com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl;
+import com.krishagni.catissueplus.core.de.services.FormService;
+
 //import krishagni.catissueplus.dao.FormDao;
 //import krishagni.catissueplus.dao.impl.FormDaoImpl;
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -161,9 +171,18 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 
 	protected List<Object> hookStaticDynExtObj(HookingInformation recEntryInfo, Long containerId, Long recordId)
 	throws Exception {
-//		FormDao formDao = new FormDaoImpl();
-//		formDao.insertFormRecord(containerId, recordId, recEntryInfo);
-//		return null;
+		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		FormService formSvc = (FormService) caTissueContext.getBean("formSvc");
+		Map<String,Object> recIntegrationInfo = recEntryInfo.getDataHookingInformation();
+
+		IntegratorRecordEntryEvent req = new IntegratorRecordEntryEvent();
+		req.setSessionDataBean(recEntryInfo.getSessionDataBean());
+		req.setRecIntegrationInfo(recIntegrationInfo);
+		req.setContainerId(containerId);
+		req.setRecordId(recordId);
+		
+		IntegratedRecordEvent resp = formSvc.insertFormRecord(req);
+		
 		return null;
 	}
 

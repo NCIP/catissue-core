@@ -30,6 +30,8 @@ import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.IntegratedRecordEvent;
+import com.krishagni.catissueplus.core.de.events.IntegratorRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
@@ -274,6 +276,27 @@ public class FormServiceImpl implements FormService {
 		return  RecordEntriesDeletedEvent.ok(deletedRecIds);
 	}
 		
+	@Override
+	@PlusTransactional
+	public IntegratedRecordEvent insertFormRecord(IntegratorRecordEntryEvent req) {
+		String entityType = (String) req.getRecIntegrationInfo().get("entityType");
+
+		Long objectId = formDao.getObjectId(req.getRecIntegrationInfo());
+		Long formCtxtId = formDao.getFormCtxtId(req.getContainerId(), entityType);
+
+		FormRecordEntryBean recordEntry = new FormRecordEntryBean();
+		recordEntry.setFormCtxtId(formCtxtId);
+		recordEntry.setObjectId(objectId);
+		recordEntry.setRecordId(req.getRecordId());
+		recordEntry.setUpdatedBy(req.getSessionDataBean().getUserId());
+		recordEntry.setUpdatedTime(Calendar.getInstance().getTime());
+		recordEntry.setActivityStatus(Status.ACTIVE);
+		
+		formDao.saveOrUpdateRecordEntry(recordEntry);
+		
+		return IntegratedRecordEvent.ok();
+	}
+	
 	private List<FormFieldSummary> getFormFields(Container container) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();
 

@@ -261,18 +261,62 @@
           inner join catissue_user u on u.identifier = r.updated_by 
         where 
           form_ctxt_id = :formCtxtId and object_id = :objectId and r.activity_status = 'ACTIVE'
-      </sql-query>      	  
-    </class>
+      </sql-query>    
+      
+      <sql-query name="getParticipantObjId">
+        <return-scalar column="id" type="long"/>
+       
+        select 
+          reg.identifier as id
+        from 
+          catissue_coll_prot_reg reg 
+	  inner join catissue_specimen_protocol cp on cp.identifier = reg.collection_protocol_id
+        where 
+          reg.protocol_participant_id = :ppId and cp.title = :cpTitle
+      </sql-query>
+      
+      
+      <sql-query name="getSpecimenObjId">
+        <return-scalar column="id" type="long"/>
+        
+        select 
+          sp.identifier as id
+        from 
+          catissue_coll_prot_reg reg  
+          inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier  
+          inner join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier 
+        where 
+	  sp.identifier = :specimenId or sp.label = :specimenLabel or sp.barcode = :specimenBarCode
+      </sql-query>
+
+      <sql-query name="getScgObjId">
+        <return-scalar column="id" type="long"/>
+        
+        select 
+          scg.identifier
+        from 
+          catissue_coll_prot_reg reg  
+          inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier 
+        where 
+          scg.identifier = :scgId or scg.name = :scgName or scg.barcode = :scgBarCode 
+      </sql-query>
+ 
+      <query name = "getContainerId">
+        select 
+          containerId 
+        from 
+          FormContextBean 
+        where 
+          identifier = :identifier
+      </query>
     
-    <query name = "getContainerId">
-      select containerId from 
-        krishagni.catissueplus.beans.FormContextBean 
-      where 
-        identifier = :identifier
-    </query>
-    <query name="getFormContextId">
-		select identifier 
-		  from krishagni.catissueplus.beans.FormContextBean 
-		where containerId = :containerId and entityType = :entityType
-	</query>	
+      <query name="getFormContextId">
+        select 
+          identifier 
+        from 
+          FormContextBean 
+        where 
+          containerId = :containerId and entityType = :entityType
+      </query>	
+   </class>
 </hibernate-mapping>

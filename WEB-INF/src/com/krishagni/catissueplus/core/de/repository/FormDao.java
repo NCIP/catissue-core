@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
@@ -33,4 +34,8 @@ public interface FormDao extends Dao<FormContextBean>{
 	public FormRecordEntryBean getRecordEntry(Long formCtxtId, Long objectId, Long recordId);
 
 	public FormRecordEntryBean getRecordEntry(Long recordId);
+
+	public Long getObjectId(Map<String, Object> map);
+
+	public Long getFormCtxtId(Long containerId, String entityType);
 }

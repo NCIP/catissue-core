@@ -12,6 +12,8 @@ import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.FormDataEvent;
 import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
+import com.krishagni.catissueplus.core.de.events.IntegratedRecordEvent;
+import com.krishagni.catissueplus.core.de.events.IntegratorRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
@@ -47,6 +49,8 @@ public interface FormService {
 
 	public FileUploadedEvent uploadFile(UploadFileEvent req);
 
-	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry); 
+	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry);
+
+	public IntegratedRecordEvent insertFormRecord(IntegratorRecordEntryEvent req); 
 	
 }

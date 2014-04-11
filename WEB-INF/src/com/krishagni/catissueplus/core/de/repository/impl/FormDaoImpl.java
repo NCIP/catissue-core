@@ -222,6 +222,76 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return new ArrayList<FormCtxtSummary>(formsMap.values());		
 	}
 		
+	@Override
+	public Long getObjectId(Map<String, Object> dataHookingInformation) {
+		
+		Long objectId = null;
+		if (dataHookingInformation.get("entityType").equals("Participant") ) {
+			objectId = getObjectIdForParticipant(dataHookingInformation);
+		} else if (dataHookingInformation.get("entityType").equals("Specimen") ) {
+			objectId = getObjectIdForSpecimen(dataHookingInformation);
+		} else {
+			objectId = getObjectIdForSCG(dataHookingInformation);
+		}
+		
+		return objectId;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Long getFormCtxtId(Long containerId, String entityType) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FORM_CTX_ID);
+		query.setLong("containerId", containerId);
+		query.setString("entityType", entityType);
+		List<Object> objs = query.list();
+
+		return objs != null && !objs.isEmpty() ? (Long)objs.iterator().next() : null;	
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Long getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
+		String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
+		String ppId = (String) dataHookingInformation.get("ppi");
+		
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_OBJ_ID);
+		query.setString("ppId", ppId);
+		query.setString("cpTitle", cpTitle);
+		List<Long> objs = query.list();
+
+		return objs != null && !objs.isEmpty() ? objs.get(0) : null;	
+	}
+
+	@SuppressWarnings("unchecked")
+	private Long getObjectIdForSpecimen(Map<String, Object> dataHookingInformation) {
+		String specimenId = (String) dataHookingInformation.get("specimenId");
+		String specimenLabel = (String) dataHookingInformation.get("specimenLabel");
+		String specimenBarcode = (String) dataHookingInformation.get("specimenBarcode");
+		
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_OBJ_ID);
+		query.setString("specimenId", specimenId);
+		query.setString("specimenLabel", specimenLabel);
+		query.setString("specimenBarcode", specimenBarcode);
+		List<Long> objs = query.list();
+
+		return objs != null && !objs.isEmpty() ? objs.get(0) : null;	
+	}
+
+	@SuppressWarnings("unchecked")
+	private Long getObjectIdForSCG(Map<String, Object> dataHookingInformation) {
+		String scgId = (String) dataHookingInformation.get("scgId");
+		String scgName = (String) dataHookingInformation.get("scgName");
+		String scgBarcode = (String) dataHookingInformation.get("scgBarcode");
+		
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_OBJ_ID);
+		query.setString("scgId", scgId);
+		query.setString("scgName", scgName);
+		query.setString("scgBarcode", scgBarcode);
+		List<Long> objs = query.list();
+
+		return objs != null && !objs.isEmpty() ? objs.get(0) : null;	
+	}
+
+	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
@@ -240,10 +310,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_FORM_RECORDS = FQN + ".getFormRecords";
 	
+	private static final String GET_PARTICIPANT_OBJ_ID = FQN + ".getParticipantObjId";
+
+	private static final String GET_SPECIMEN_OBJ_ID =  FQN + ".getSpecimenObjId";
+
+	private static final String GET_SCG_OBJ_ID =  FQN + ".getScgObjId";
+	
+	private static final String GET_FORM_CTX_ID = FQN + ".getFormContextId";
+
 	private static final String RE_FQN = FormRecordEntryBean.class.getName();
 	
 	private static final String GET_RECORD_ENTRY = RE_FQN + ".getRecordEntry";
 	
 	private static final String GET_RECORD_ENTRY_BY_REC_ID = RE_FQN + ".getRecordEntryByRecId";
-
+	
+	
 }
