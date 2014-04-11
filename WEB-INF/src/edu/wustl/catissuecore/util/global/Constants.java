@@ -5987,7 +5987,7 @@ public class Constants
 	
 	public static final String CONTAINER_INVALID_MESSAGE = " container cannot hold container of type ";
 	
-    public static final String SITE_NOT_TRANSFRED_MESSAGE = "Site can not be transfred.";
+    public static final String SITE_NOT_TRANSFRED_MESSAGE = "Site cannot be transferred.";
 		
 	public static final String ALIQUOTS_CREATION_SUCCESS_MSG = "Aliquots created succesfully.";
 	
