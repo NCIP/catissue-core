@@ -1673,7 +1673,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			dao.update(cprObj);
 
 			//Below code is written to update all SCG under specimen.
-
+            SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
+            Iterator<SpecimenCollectionGroup> scgIterator = cprObj.getSpecimenCollectionGroupCollection().iterator();
+            while (scgIterator.hasNext())
+            {
+                SpecimenCollectionGroup scgObj = scgIterator.next();
+                scgBizLogic.updateScgConsentStatus(scgObj.getId(), consentDto.getConsentTierList(), disposeSpecimen,
+                        dao, sessionDataBean);
+            }
 
 		}
 		catch (DAOException e)

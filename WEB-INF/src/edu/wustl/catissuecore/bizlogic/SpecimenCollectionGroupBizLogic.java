@@ -4049,30 +4049,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			//In below look updated ConsentTierStatus with new status. 
-			Iterator<ConsentTierDTO> consentTierDtoIte = consentTierDtoList
-					.iterator();
 			Map<String, NamedQueryParam> params;
-			while (consentTierDtoIte.hasNext())
-			{
-				ConsentTierDTO consentTierDto = consentTierDtoIte.next();
-
-				params = new HashMap<String, NamedQueryParam>();
-				params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
-				params.put("1", new NamedQueryParam(DBTypes.LONG,
-						consentTierDto.getId()));
-				Collection consentStatus = ((HibernateDAO) dao)
-						.executeNamedQuery("selectScgConsentStatus", params);
-				Iterator ite = consentStatus.iterator();
-				if (ite.hasNext())
-				{
-					ConsentTierStatus statusObj = (ConsentTierStatus) ite
-							.next();
-					statusObj.setStatus(consentTierDto.getStatus());
-					dao.update(statusObj);
-				}
-
-			}
 			//All specimen under scg are disabled if dispose specimen is selected from ui with consent status as Withdrawn
 			//Eles consent tier of specimens under scg are updated with new consent status.
 			if (disposeSpecimen)
@@ -4082,19 +4059,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				((HibernateDAO) dao).executeUpdateWithNamedQuery(
 						"updateAllSpecimenFromSCGToDisable", params);
 			}
-			else
-			{
-				List<Long> speciemnIdList = getSpecimenIdList(scgId, dao);
-				Iterator<Long> specimenIdItr = speciemnIdList.iterator();
-				NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
-				while (specimenIdItr.hasNext())
-				{
-					specimenBizLogic.updateSpecimenConsentStatus(
-							specimenIdItr.next(), consentTierDtoList,
-							disposeSpecimen, dao, sessionDataBean);
-				}
-			}
-
 		}
 		catch (DAOException e)
 		{
