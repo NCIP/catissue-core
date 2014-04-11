@@ -95,10 +95,7 @@
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
 		<tstamp />
-		<delete includeemptydirs="true">
-		            <fileset dir="${target.dir}">
-		                <include name="**/*" />
-		            </fileset>
+		<delete includeemptydirs="true" dir="${target.dir}" failonerror="false">
 		        </delete>
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${target.dir}" />
@@ -1362,7 +1359,7 @@
 
 	</target>
 
-	<target name="compile_mock_TestCases" depends="compile">
+	<target name="compileTestCases" depends="compile">
 	        <javac destdir="${target.dir}" includes="**/*Test.java" includeAntRuntime="false" target="1.6">
 	            <src path="./WEB-INF/test"/>
 	        	<src path="./WEB-INF/src"/>
@@ -1373,9 +1370,10 @@
 	            </classpath>
 	        </javac>
 	    </target>
-	<target name="runMockTestCases" depends="instrument-classes">
-	        <mkdir dir="${report.dir}/Nightly_Build_Report" />
-	        <mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
+	<target name="runTestCases" depends="instrument-classes">
+		<mkdir dir="${base.dir}/Reports" />
+			<mkdir dir="${base.dir}/Reports/TestCases" />
+	        <mkdir dir="${base.dir}/Reports/TestCases/Html_reports" />
 
 	        <junit printsummary="yes" fork="yes" haltonfailure="no">
 	            <formatter type="xml" />
@@ -1399,18 +1397,18 @@
 
 	            <classpath refid="junit.classpath" />
 
-	            <batchtest todir="${report.dir}/Nightly_Build_Report">
+	            <batchtest todir="${base.dir}/Reports/TestCases">
 	                <fileset dir="./WEB-INF/test">
 	                    <include name="com/**/*Test.java" />
 	                </fileset>
 	            </batchtest>
 	        </junit>
 		
-	<junitreport todir="${report.dir}/Nightly_Build_Report">
-	            <fileset dir="${report.dir}/Nightly_Build_Report">
+	<junitreport todir="${base.dir}/Reports/TestCases">
+	            <fileset dir="${base.dir}/Reports/TestCases">
 	                <include name="TEST-*.xml" />
 	            </fileset>
-	            <report todir="${report.dir}/Nightly_Build_Report/Html_reports" />
+	            <report todir="${base.dir}/Reports/TestCases/Html_reports" />
 	        </junitreport>
 	    </target>
 	
@@ -1420,8 +1418,8 @@
 	      <pathelement location="${build.dir}" />
 	  </path>
 	
-	<target name="gen_cobertura_report" depends="runMockTestCases">
-		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="./cobertura/reports/coverage" format="html">
+	<target name="gen_cobertura_report" depends="runTestCases">
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="${base.dir}/Reports/Coverage" format="html">
 		          <fileset dir="${src.dir}">
 		              <include name="**/*.java" />
 		          </fileset>
@@ -1429,7 +1427,7 @@
 		<delete file="${base.dir}/cobertura.ser"/>
 	    </target>
 	
-	<target name="instrument-classes" depends="compile_mock_TestCases">
+	<target name="instrument-classes" depends="compileTestCases">
 	        <delete dir="./cobertura/instrumented" />
 	        <mkdir dir="./cobertura/instrumented" />
 	        <!--
