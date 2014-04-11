@@ -34,6 +34,23 @@
   font-size: 14px;
 }
 
+.cp-print-label {
+  border-top: none !important;
+  vertical-align: middle;
+  width: 20%;
+  text-align: right;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.cp-print-val {
+  border-top: none !important;
+  vertical-align: middle;
+  width: 30%;
+  text-align: left;
+  padding-left: 20px;
+}
+
 .ka-tree ul {
   list-style-type: none;
   padding-left: 15px;
