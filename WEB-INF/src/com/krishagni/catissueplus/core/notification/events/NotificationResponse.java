@@ -27,14 +27,14 @@ public class NotificationResponse {
 		this.message = message;
 	}
 
-	public static NotificationResponse SUCCESS(String message) {
+	public static NotificationResponse success(String message) {
 		NotificationResponse notificationResponse = new NotificationResponse();
 		notificationResponse.setMessage(message);
 		notificationResponse.setStatus(Status.SUCCESS);
 		return notificationResponse;
 	}
 
-	public static NotificationResponse FAIL(String message) {
+	public static NotificationResponse fail(String message) {
 		NotificationResponse notificationResponse = new NotificationResponse();
 		notificationResponse.setMessage(message);
 		notificationResponse.setStatus(Status.FAIL);

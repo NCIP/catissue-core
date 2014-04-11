@@ -126,19 +126,19 @@ public class MirthParticipantService implements CrudService {
 			String status = response.toString();
 
 			if (Status.SUCCESS.toString().equalsIgnoreCase(status)) {
-				return NotificationResponse.SUCCESS("Subject Created Suceessfully");
+				return NotificationResponse.success("Subject Created Suceessfully");
 			}
 			else {
-				return NotificationResponse.FAIL("Error while inserting data into Mirth database");
+				return NotificationResponse.fail("Error while inserting data into Mirth database");
 			}
 
 		}
 		catch (IOException ioException) {
-			return NotificationResponse.FAIL("Can not connect mirth application");
+			return NotificationResponse.fail("Can not connect mirth application");
 		}
 		catch (Exception e) {
 			logger.error("Error while sending http request to mirth of Participant with PPId " + subject.getLabel());
-			return NotificationResponse.FAIL(e.getMessage());
+			return NotificationResponse.fail(e.getMessage());
 		}
 		finally {
 			if (connection != null) {

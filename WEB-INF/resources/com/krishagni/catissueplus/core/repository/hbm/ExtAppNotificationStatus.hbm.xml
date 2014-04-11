@@ -28,7 +28,7 @@
 
 		<property name="noOfAttempts" type="integer" column="NO_OF_ATTEMPTS" />
 		
-		<property name="updatedDate" type="date" column="UPDATED_DATE" />
+		<property name="updatedDate" type="timestamp" column="UPDATED_DATE" />
 
 		<query name="getFailedNotificationObjects">
 			select notifStatus from
@@ -45,7 +45,7 @@
 			as notifStatus
 			inner join fetch notifStatus.audit audit where notifStatus.status =:status
 			and
-			notifStatus.noOfAttempts &gt;=:maxNoOfAttempts and notifStatus.updatedDate =:date 
+			notifStatus.noOfAttempts &gt;=:maxNoOfAttempts and notifStatus.updatedDate &gt;=:date
 		</query>
 
 

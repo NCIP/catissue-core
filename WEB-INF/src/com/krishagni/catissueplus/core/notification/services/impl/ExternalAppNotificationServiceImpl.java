@@ -102,15 +102,15 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 
 			for (ExternalApplication externalApplication : extApps) {
 				NotificationResponse notificationResponse = notify(notifDetail, externalApplication);
-				ExtAppNotificationStatus extAppNotif = new ExtAppNotificationStatus();
+				ExtAppNotificationStatus status = new ExtAppNotificationStatus();
 				Audit audit = new Audit();
 				audit.setId(notifDetail.getAuditId());
-				extAppNotif.setAudit(audit);
-				extAppNotif.setExternalApplication(externalApplication);
-				extAppNotif.setStatus(notificationResponse.getStatus().toString());
-				extAppNotif.setComments(notificationResponse.getMessage());
-				extAppNotif.setUpdatedDate(new Date());
-				daoFactory.getExternalAppNotificationDao().saveOrUpdate(extAppNotif);
+				status.setAudit(audit);
+				status.setExternalApplication(externalApplication);
+				status.setStatus(notificationResponse.getStatus().toString());
+				status.setComments(notificationResponse.getMessage());
+				status.setUpdatedDate(new Date());
+				daoFactory.getExternalAppNotificationDao().saveOrUpdate(status);
 			}
 
 		}
@@ -121,7 +121,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 	}
 
 	private NotificationResponse notify(NotificationDetails notifDetail, ExternalApplication externalApplication)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+			throws Exception {
 		Object domainObj = getDomainObject(notifDetail.getObjectType(), notifDetail.getObjectId());
 		Class<?> externalAppClass;
 		externalAppClass = Class.forName(externalApplication.getServiceClass());

@@ -60,7 +60,7 @@ public class MirthApplicationService implements ExternalAppService {
 	@Override
 	public NotificationResponse notifyDelete(ObjectType objectType, Object domainObj) {
 		//TODO: implement delete 
-		return NotificationResponse.FAIL("Delete operation is not supported");
+		return NotificationResponse.fail("Delete operation is not supported");
 	}
 
 }

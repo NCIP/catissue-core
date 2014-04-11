@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.notification.services.EmailNotificationService;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppNotificationService;
 
@@ -25,8 +26,9 @@ public class ExternalAppFailNotificationSchedular implements Runnable {
 		ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(100);
 		int schTimeInterval = 60;
 		String schTimeIntervalProperty = XMLPropertyHandler.getValue(SCH_TIME_INTERVAL).trim();
-		if (!schTimeIntervalProperty.isEmpty() || schTimeIntervalProperty != null)
+		if (!CommonValidator.isBlank(schTimeIntervalProperty)) {
 			schTimeInterval = Integer.parseInt(schTimeIntervalProperty);
+		}
 		executor.scheduleWithFixedDelay(new ExternalAppFailNotificationSchedular(), 0, schTimeInterval, TimeUnit.MINUTES);
 	}
 

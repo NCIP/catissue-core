@@ -2,7 +2,9 @@
 package com.krishagni.catissueplus.core.notification.services.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
 
 	private static final String FAILED_NOTIFICATION_CSV_TMPL_FILE_PATH = "../resources/ng-file-templates/failed.notificationCsvTemplate.vm";
 
+	private static final String FILE_NAME = "FailedNotifications_";
+
+	private static final String FILE_EXTENTION_CSV = ".csv";
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -49,30 +55,36 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
 			List<ExtAppNotificationStatus> expiredNotifications = daoFactory.getExternalAppNotificationDao()
 					.getExpiredNotificationObjects();
 			if (expiredNotifications != null && !expiredNotifications.isEmpty()) {
-				Map<String, Object> failedNotificationDetails = new HashMap<String, Object>();
-				failedNotificationDetails.put("failedNotifications", expiredNotifications);
-				String filedata = null;
-				filedata = VelocityClassLoaderManager.getInstance().evaluate(failedNotificationDetails,
-						FAILED_NOTIFICATION_CSV_TMPL_FILE_PATH);
-				DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
-				String currentDate = dateFormat.format(new Date());
-				String filename = "FailedNotifications_" + currentDate + ".csv";
-				File file = new File(filename);
-				file.createNewFile();
-				FileOutputStream out = new FileOutputStream(file);
-				out.write(filedata.getBytes());
-				out.close();
+				File reportFile = getExpiredNotificationReportFile(expiredNotifications);
 				List<File> attachements = new ArrayList<File>();
-				attachements.add(file);
+				attachements.add(reportFile);
 				Map<String, Object> contextMap = new HashMap<String, Object>();
 				EmailClient.getInstance().sendEmailWithAttachment(FAILED_NOTIFICATION_EMAIL_TMPL,
 						new String[]{adminEmailAddress}, null, null, attachements, contextMap, null);
-				file.delete();
+				reportFile.delete();
 			}
 
 		}
 		catch (Exception ex) {
 			LOGGER.error(ERROR_WHILE_SENDING_MAIL, ex);
 		}
+	}
+
+	private File getExpiredNotificationReportFile(List<ExtAppNotificationStatus> expiredNotifications) throws Exception,
+			IOException, FileNotFoundException {
+		Map<String, Object> failedNotificationDetails = new HashMap<String, Object>();
+		failedNotificationDetails.put("failedNotifications", expiredNotifications);
+		String filedata = null;
+		filedata = VelocityClassLoaderManager.getInstance().evaluate(failedNotificationDetails,
+				FAILED_NOTIFICATION_CSV_TMPL_FILE_PATH);
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		String currentDate = dateFormat.format(new Date());
+		String filename = FILE_NAME + currentDate + FILE_EXTENTION_CSV;
+		File file = new File(filename);
+		file.createNewFile();
+		FileOutputStream out = new FileOutputStream(file);
+		out.write(filedata.getBytes());
+		out.close();
+		return file;
 	}
 }

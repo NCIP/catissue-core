@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.notification.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -69,12 +70,15 @@ public class ExternalAppNotificationDaoImpl extends AbstractDao<ExtAppNotificati
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<ExtAppNotificationStatus> getExpiredNotificationObjects() {
-
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_EXPIRED_FAILED_NOTIFICATIONS);
 		query.setString(STATUS, "FAIL");
 		int maxAttempts = Integer.parseInt(XMLPropertyHandler.getValue(MAX_NO_OF_ATTEMPTS_PROPERTY).trim());
 		query.setInteger(MAX_NO_OF_ATTEMPTS, maxAttempts);
-		query.setDate("date", new Date());
+
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -1);
+		Date startDate = cal.getTime();
+		query.setTimestamp("date", startDate);
 		List<ExtAppNotificationStatus> result = query.list();
 		return result;
 
