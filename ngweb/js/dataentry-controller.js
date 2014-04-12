@@ -1,6 +1,6 @@
 
 angular.module('plus.dataentry', [])
-  .controller('FormsDataController', ['$scope', 'FormsService', function($scope, FormsService) {
+  .controller('FormsDataController', ['$scope', '$filter', 'FormsService', function($scope, $filter, FormsService) {
 
     $scope.formatDate = function(timeInMs) {
       return Utility.formatDate(timeInMs);
@@ -181,52 +181,67 @@ angular.module('plus.dataentry', [])
             Utility.notify($("#notifications"), "Form Data Deleted", "success", true);
           },
           
+          /** TODO: Get this into a directive and template 
+           *  This is non-angularish way
+           */
           onPrint: function(printableFormHtml) {
-        	this.headerInfo = $("<label/>").append(form.formCaption).css({"font-size": "20px","text-align": "center","width": "100%"});
-        	this.headerTable = $("<table />").addClass("table");
-        	this.headerBody = $("<tbody/>");
-        	this.headerTable.append(this.headerBody);
-            var t = new Date();
-            var formattedDate = t.getDate() + "/" + t.getMonth() + "/" + t.getFullYear() + " " + t.getHours() + ":" + t.getMinutes() 
-        
-            var userEl = $("<tr/>").append($("<td/>").addClass("cp-print-label").append("Printed on : "))
-        	                       .append($("<td/>").addClass("cp-print-val").append(formattedDate))
-                                   .append($("<td/>").addClass("cp-print-label").append("Printed By : "))
-                                   .append($("<td/>").addClass("cp-print-val").append(userName));
-            
-        	var participantEl = $("<tr/>").append($("<td/>").addClass("cp-print-label").append("Participant protocol ID : "))
-        	                              .append($("<td/>").addClass("cp-print-val").append(ppId))
-        	                              .append($("<td/>").addClass("cp-print-label").append("CP Title : "))
-        	                              .append($("<td/>").addClass("cp-print-val").append(cpTitle));
+            var headerInfo = $("<label/>").append(form.formCaption).css({"font-size": "20px","text-align": "center","width": "100%"});
+            var headerTab = $("<table />").addClass("table");
+            var headerBody = $("<tbody/>");
+            headerTab.append(headerBody);
+
+            headerBody.append(that.getUserInfo()).append(that.getParticipantInfo());
+            if (entity == 'Specimen' || entity == 'SpecimenCollectionGroup') {
+              headerBody.append(that.getScgInfo());
+            } 
         	
-        	this.headerBody.append(userEl).append(participantEl);
-        	
-        	if (entity == 'Specimen' || entity == 'SpecimenCollectionGroup') {
-              var scgEl = $("<tr/>").append($("<td/>").addClass("cp-print-label").append("SCG Label : "))
-                                    .append($("<td/>").addClass("cp-print-val").append(scgLabel))
-                                    .append($("<td/>").addClass("cp-print-label").append("CP Event Label : "))
-                                    .append($("<td/>").addClass("cp-print-val").append(cpEventLabel));
-              this.headerBody.append(scgEl);
-        	} 
-        	
-        	if (entity == 'specimen') {
-              var specimenEl = $("<tr/>").append($("<td/>").addClass("cp-print-label").append("Specimen Label : "))
-                                         .append($("<td/>").addClass("cp-print-val").append(specimenLabel))
-                                         .append($("<td/>").addClass("cp-print-label"))
-                                         .append($("<td/>").addClass("cp-print-val"));
-              this.headerBody.append(specimenEl);
+            if (entity == 'specimen') {
+              headerBody.append(that.getSpecimenInfo());
             }
         	
-        	this.printView = $("#" + 'print-view');
-        	this.printView.children().remove();
-        	this.outerTable 
-            this.printView.append(this.headerInfo).append(this.headerTable)
-                          .append($("<div/>").css({"border-top": "2px solid #ccc","border-bottom": "2px solid #000", "margin-bottom": "25px"}))
-                          .append(printableFormHtml);
+            var printView = $('#print-view');
+            printView.children().remove();
+            printView.append(headerInfo).append(headerTab)
+                     .append($("<div/>").css({"border-top": "2px solid #ccc","border-bottom": "2px solid #000", "margin-bottom": "25px"}))
+                     .append(printableFormHtml);
            
-            Utility.printDiv(this.printView.html(), form.formCaption);
+            Utility.printHtml(printView.html(), form.formCaption);
           }
         });
+
+        this.getUserInfo = function() {
+          return $("<tr/>")
+            .append($("<td/>").addClass("cp-print-label").append("Printed on : "))
+            .append($("<td/>").addClass("cp-print-value").append($filter('date')(new Date().getTime(), 'MM-dd-yyyy HH:mm')))
+            .append($("<td/>").addClass("cp-print-label").append("Printed By : "))
+            .append($("<td/>").addClass("cp-print-value").append(userName));
+        };
+
+        this.getParticipantInfo = function() {
+          return $("<tr/>")
+            .append($("<td/>").addClass("cp-print-label").append("Participant protocol ID : "))
+            .append($("<td/>").addClass("cp-print-value").append(ppId))
+            .append($("<td/>").addClass("cp-print-label").append("CP Title : "))
+            .append($("<td/>").addClass("cp-print-value").append(cpTitle));
+        };
+
+        this.getScgInfo = function() {
+          return $("<tr/>")
+            .append($("<td/>").addClass("cp-print-label").append("SCG Label : "))
+            .append($("<td/>").addClass("cp-print-value").append(scgLabel))
+            .append($("<td/>").addClass("cp-print-label").append("CP Event Label : "))
+            .append($("<td/>").addClass("cp-print-value").append(cpEventLabel));
+        };
+
+        this.getSpecimenInfo = function() {
+          return $("<tr/>")
+            .append($("<td/>").addClass("cp-print-label").append("Specimen Label : "))
+            .append($("<td/>").addClass("cp-print-value").append(specimenLabel))
+            .append($("<td/>").addClass("cp-print-label"))
+            .append($("<td/>").addClass("cp-print-value"));
+        };
+       
+
         this.form.render();
       });
     }; 

@@ -45,23 +45,24 @@ Utility = {
     }
   },
   
-  printDiv : function (data, formCaption) {
-    var mywindow = window.open('', 'my div', 'height=400,width=600');
-    mywindow.document.write('<html><head><title>Form Print</title>');
-    if (formCaption != undefined) {
-    	mywindow.document.title = formCaption;
+  printHtml: function(html, title) {
+    var height = $(window).height();
+    var width = $(window).width();
+    var mywindow = window.open('', 'my div', 'height=' + height + 'width=' + width);
+    mywindow.document.write('<html><head><title>' + title + '</title>');
+    if (title) {
+    	mywindow.document.title = title;
     }
     mywindow.document.write('<link rel="stylesheet" href="ngweb/external/bootstrap/css/bootstrap.min.css" type="text/css" />');
     mywindow.document.write('<link rel="stylesheet" href="ngweb/external/de/css/de.css" type="text/css" />');
     mywindow.document.write('<link rel="stylesheet" href="ngweb/css/app.css" type="text/css" />');
 
-    mywindow.document.write('</head><body >');
-    mywindow.document.write(data);
+    mywindow.document.write('</head><body>');
+    mywindow.document.write(html);
     mywindow.document.write('</body></html>');
 
     mywindow.print();
-    mywindow.close();
-
+    //mywindow.close();
     return true;
   }
 };

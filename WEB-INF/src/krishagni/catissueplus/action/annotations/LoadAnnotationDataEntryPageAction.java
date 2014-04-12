@@ -24,85 +24,82 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String entityType = request.getParameter("staticEntityName");
+		request.setAttribute("entityType", entityType);
+		
 		String entityRecId = request.getParameter("entityRecordId");
-
+		request.setAttribute("entityRecId", entityRecId);
+		
 		HibernateDAO hibernateDao = null;
 		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 				.getAttribute(Constants.SESSION_DATA);
 		hibernateDao = (HibernateDAO)AppUtility.openDAOSession(sessionDataBean);
 		Session session = hibernateDao.getConnectionManager().getSessionFactory().getCurrentSession();
+		
 		String userName = new StringBuilder().append(sessionDataBean.getLastName()).append(", ")
 				.append(sessionDataBean.getFirstName()).toString();
+		request.setAttribute("userName", userName);
 		
-		Transaction txn = null;
 		String ppId = null;
 		String cpTitle = null; 
 
-		Object[] result = null; 
+		Object[] result = null;
+		Transaction txn = null;
 		try {
 			txn = session.beginTransaction();
+			
 			if (entityType.equals("Participant")) {
-				result = (Object[]) getParticipantInfo(session, entityRecId);
-				ppId = (String) result[0];
-				cpTitle = (String) result[1];
+				result = getParticipantInfo(session, entityRecId);
+				request.setAttribute("ppId", (String) result[0]);
+				request.setAttribute("cpTitle", (String) result[1]);				
 			} else if (entityType.equals("SpecimenCollectionGroup")) {
-				result = (Object[]) getScgInfo(session, entityRecId);
-				ppId = (String) result[0];
-				cpTitle = (String) result[1];
-				String scgLabel = (String) result[2];
-				String cpEventLabel = (String) result[3];
-				
-				request.setAttribute("scgLabel", scgLabel);
-				request.setAttribute("cpEventLabel", cpEventLabel);
+				result = getScgInfo(session, entityRecId);
+				request.setAttribute("ppId", (String) result[0]);
+				request.setAttribute("cpTitle", (String) result[1]);				
+				request.setAttribute("scgLabel", (String) result[2]);
+				request.setAttribute("cpEventLabel", (String) result[3]);
 			} else if (entityType.equals("Specimen")) {
-				result = (Object[]) getSpecimenInfo(session, entityRecId);
-				ppId = (String) result[0];
-				cpTitle = (String) result[1];
-				String scgLabel = (String) result[2];
-				String cpEventLabel = (String) result[3];
-				String specimenLabel =  (String) result[4];
-
-				request.setAttribute("scgLabel", scgLabel);
-				request.setAttribute("cpEventLabel", cpEventLabel);
-				request.setAttribute("specimenLabel", specimenLabel);
+				result = getSpecimenInfo(session, entityRecId);
+				request.setAttribute("ppId", (String) result[0]);
+				request.setAttribute("cpTitle", (String) result[1]);				
+				request.setAttribute("scgLabel", (String) result[2]);
+				request.setAttribute("cpEventLabel", (String) result[3]);
+				request.setAttribute("specimenLabel", (String) result[4]);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Exception while fetching entity related info", e);
 		} finally {
-			if (txn != null) {
-				txn.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			
+			AppUtility.closeDAOSession(hibernateDao);
 		}
-		request.setAttribute("ppId", ppId);
-		request.setAttribute("cpTitle", cpTitle);
-		request.setAttribute("userName", userName);
-		request.setAttribute("entityType", entityType);
-		request.setAttribute("entityRecId", entityRecId);
-
+		
 		return mapping.findForward(Constants.SUCCESS);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Object getParticipantInfo(Session session, String entityRecId) {
+	private Object[] getParticipantInfo(Session session, String entityRecId) {
 		Query query = session.createSQLQuery(GET_PARTICIPANT_INFO_SQL);
 		query.setLong("cprId", Long.parseLong(entityRecId));
-		List<Object> objs = query.list();
+		List<Object[]> objs = query.list();
 		return objs != null && ! objs.isEmpty() ? objs.get(0) : null;
 	}
 
 	@SuppressWarnings("unchecked")
-	private Object getScgInfo(Session session, String entityRecId) {
+	private Object[] getScgInfo(Session session, String entityRecId) {
 		Query query = session.createSQLQuery(GET_SCG_INFO_SQL);
 		query.setLong("scgId", Long.parseLong(entityRecId));
-		List<Object> objs = query.list();
+		List<Object[]> objs = query.list();
 		return objs != null && ! objs.isEmpty() ? objs.get(0) : null;
 	}
 	
 	
-	private Object getSpecimenInfo(Session session, String entityRecId) {
+	@SuppressWarnings("unchecked")
+	private Object[] getSpecimenInfo(Session session, String entityRecId) {
 		Query query = session.createSQLQuery(GET_SPECIMEN_INFO_SQL);
 		query.setLong("specimenId", Long.parseLong(entityRecId));
-		List<Object> objs = query.list();
+		List<Object[]> objs = query.list();
 		return objs != null && ! objs.isEmpty() ? objs.get(0) : null;
 	}
 	
