@@ -287,8 +287,8 @@ Ext.onReady(function(){
         id: 'menu_ng',
         items: [
           {
-            text: 'Dynamic Extensions',
-            tooltip: 'Dynamic Extensions',
+            text: 'Manage Forms',
+            tooltip: 'Manage Forms',
             href: 'ecrf.do'
           },
           {
