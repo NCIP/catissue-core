@@ -348,6 +348,7 @@ angular.module('plus.controllers', [])
       return {
         isValid: true,
         id: undefined,
+        title: undefined,
         drivingForm: 'CollectionProtocolRegistration',
         selectedForm: null,
         selectedFields: getDefaultSelectedFields(),
@@ -471,8 +472,12 @@ angular.module('plus.controllers', [])
       return QueryService.getQuery(query.id).then(
         function(queryDef) {
           var filters = [];
+          var maxFilterId = 0;
           for (var i = 0; i < queryDef.filters.length; ++i) {
             filters.push(getFilter(queryDef.filters[i]));
+            if (maxFilterId < queryDef.filters[i].id) {
+              maxFilterId = queryDef.filters[i].id;
+            }
           }
 
           var qs = [];
@@ -509,7 +514,7 @@ angular.module('plus.controllers', [])
 
           var queryProps = {
             selectedFields: queryDef.selectList, filters: filters, exprNodes: exprNodes, 
-            id: query.id, title: query.title
+            id: query.id, title: query.title, filterId: maxFilterId
           };
 
           angular.extend($scope.queryData, queryProps);
