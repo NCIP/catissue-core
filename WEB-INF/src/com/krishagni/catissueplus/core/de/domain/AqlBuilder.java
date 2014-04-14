@@ -96,7 +96,7 @@ public class AqlBuilder {
 		
 		String formName = field.substring(0, dotIdx);
 		Container form = Container.getContainer(formName);
-		Control ctrl = form.getControlByUdn(field.substring(dotIdx + 1));
+		Control ctrl = form.getControlByUdn(field.substring(dotIdx + 1), ".");
 				
 		String[] values = (String[])Arrays.copyOf(filter.getValues(), filter.getValues().length);
 		if (ctrl.getDataType() == DataType.STRING || ctrl.getDataType() == DataType.DATE) {
