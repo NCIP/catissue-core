@@ -320,7 +320,7 @@
               ng-mouseleave="query.highlight=false"> 
               
             <td>
-              <a style="cursor:pointer;" ng-click="editQuery(query)" tooltip-placement="right" tooltip="Click to edit query">{{query.title}}</a>
+              <a style="cursor:pointer;" ng-click="editQuery(query)" tooltip-placement="right" tooltip="Click to edit query">#{{query.id}} {{query.title}}</a>
             </td>
             <td>{{formatUsername(query.createdBy)}}</td>
             <td>
