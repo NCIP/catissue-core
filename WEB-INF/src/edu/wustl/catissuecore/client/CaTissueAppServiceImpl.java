@@ -7,16 +7,11 @@ import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
 
-
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
-import com.krishagni.catissueplus.core.de.events.IntegratedRecordEvent;
-import com.krishagni.catissueplus.core.de.events.IntegratorRecordEntryEvent;
-import com.krishagni.catissueplus.core.de.repository.FormDao;
-import com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl;
+import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
+import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-//import krishagni.catissueplus.dao.FormDao;
-//import krishagni.catissueplus.dao.impl.FormDaoImpl;
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
@@ -31,6 +26,8 @@ import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+//import krishagni.catissueplus.dao.FormDao;
+//import krishagni.catissueplus.dao.impl.FormDaoImpl;
 
 public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 
@@ -175,13 +172,13 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		FormService formSvc = (FormService) caTissueContext.getBean("formSvc");
 		Map<String,Object> recIntegrationInfo = recEntryInfo.getDataHookingInformation();
 
-		IntegratorRecordEntryEvent req = new IntegratorRecordEntryEvent();
+		AddRecordEntryEvent req = new AddRecordEntryEvent();
 		req.setSessionDataBean(recEntryInfo.getSessionDataBean());
 		req.setRecIntegrationInfo(recIntegrationInfo);
 		req.setContainerId(containerId);
 		req.setRecordId(recordId);
 		
-		IntegratedRecordEvent resp = formSvc.insertFormRecord(req);
+		RecordEntryEventAdded resp = formSvc.insertFormRecord(req);
 		
 		return null;
 	}

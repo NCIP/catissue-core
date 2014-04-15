@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.services;
 
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
+import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -12,9 +13,8 @@ import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.FormDataEvent;
 import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
-import com.krishagni.catissueplus.core.de.events.IntegratedRecordEvent;
-import com.krishagni.catissueplus.core.de.events.IntegratorRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
+import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -51,6 +51,6 @@ public interface FormService {
 
 	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry);
 
-	public IntegratedRecordEvent insertFormRecord(IntegratorRecordEntryEvent req); 
+	public RecordEntryEventAdded insertFormRecord(AddRecordEntryEvent req); 
 	
 }

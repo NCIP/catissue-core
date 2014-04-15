@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-public class IntegratorRecordEntryEvent extends RequestEvent{
+public class AddRecordEntryEvent extends RequestEvent{
 	
 	private	Map<String,Object> recIntegrationInfo;
 	
