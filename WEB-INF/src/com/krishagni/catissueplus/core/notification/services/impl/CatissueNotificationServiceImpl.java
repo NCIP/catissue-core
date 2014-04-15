@@ -1,12 +1,14 @@
 
 package com.krishagni.catissueplus.core.notification.services.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -15,6 +17,7 @@ import com.krishagni.catissueplus.core.notification.domain.factory.CPStudyMappin
 import com.krishagni.catissueplus.core.notification.events.RegisterParticipantEvent;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.services.CatissueNotificationService;
+import com.krishagni.catissueplus.rest.controller.PatchRegistrationEvent;
 
 public class CatissueNotificationServiceImpl implements CatissueNotificationService {
 
@@ -89,20 +92,18 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 			}
 			exception.checkErrorAndThrow();
 
-			ParticipantDetail participantDetail = new ParticipantDetail();
-			participantDetail.setBirthDate(event.getRegistrationDetails().getBirthDate());
-			participantDetail.setGender(event.getRegistrationDetails().getGender());
+			PatchRegistrationEvent patchRegistrationEvent = new PatchRegistrationEvent();
+			Map<String, Object> registrationProps = new HashMap<String, Object>();
+			registrationProps.put("registrationDate", event.getRegistrationDetails().getEnrollmentDate());
+			registrationProps.put("protocolParticipantIdentifier", event.getRegistrationDetails().getEnrollmentDate());
+			registrationProps.put("cpId", cpId);
+			Map<String, Object> participantDetails = new HashMap<String, Object>();
+			participantDetails.put("birthDate", event.getRegistrationDetails().getBirthDate());
+			participantDetails.put("gender", event.getRegistrationDetails().getGender());
+			registrationProps.put("participantDetail", participantDetails);
+			patchRegistrationEvent.setRegistrationProps(registrationProps);
 
-			CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
-			cprDetail.setParticipantDetail(participantDetail);
-			cprDetail.setPpid(event.getRegistrationDetails().getPpId());
-			cprDetail.setRegistrationDate(event.getRegistrationDetails().getEnrollmentDate());
-			cprDetail.setCpId(cpId);
-
-			UpdateRegistrationEvent updateRegEvent = new UpdateRegistrationEvent();
-			updateRegEvent.setCprDetail(cprDetail);
-
-			return cprSvc.updateRegistration(updateRegEvent);
+			return cprSvc.patchRegistration(patchRegistrationEvent);
 		}
 		catch (ObjectCreationException ce) {
 			return RegistrationUpdatedEvent.invalidRequest(CPStudyMappingErrorCode.ERRORS.message(), ce.getErroneousFields());

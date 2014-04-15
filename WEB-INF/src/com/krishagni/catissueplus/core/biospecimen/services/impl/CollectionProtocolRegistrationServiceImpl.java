@@ -16,7 +16,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsS
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
@@ -103,15 +102,13 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event) {
 		try {
 			CollectionProtocolRegistration oldCpr = null;
-			if(event.getId() != null)
-			{
+			if (event.getId() != null) {
 				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
 			}
-			else if(event.getCprDetail().getPpid() != null && event.getCprDetail().getCpId() != null)
-			{
+			else if (event.getCprDetail().getPpid() != null && event.getCprDetail().getCpId() != null) {
 				oldCpr = daoFactory.getCprDao().getCprByPpId(event.getCprDetail().getCpId(), event.getCprDetail().getPpid());
 			}
-			
+
 			if (oldCpr == null) {
 				RegistrationUpdatedEvent.notFound(event.getId());
 			}
@@ -139,20 +136,18 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		try {
 			CollectionProtocolRegistration oldCpr = null;
 			Map<String, Object> cprProps = event.getRegistrationProps();
-			if(event.getId() != null)
-			{
+			if (event.getId() != null) {
 				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
 			}
-//			else if(cprProps.get("ppId") != null && event.getCprDetail().getCpId() != null)
-//			{
-//				oldCpr = daoFactory.getCprDao().getCprByPpId(event.getCprDetail().getCpId(), event.getCprDetail().getPpid());
-//			}
-			
+			else if (cprProps.get("ppId") != null && cprProps.get("cpId") != null) {
+				oldCpr = daoFactory.getCprDao().getCprByPpId((Long) cprProps.get("cpId"), cprProps.get("ppId").toString());
+			}
+
 			if (oldCpr == null) {
 				RegistrationUpdatedEvent.notFound(event.getId());
 			}
 			ObjectCreationException errorHandler = new ObjectCreationException();
-			CollectionProtocolRegistration cpr = registrationFactory.patchCpr(oldCpr,cprProps);
+			CollectionProtocolRegistration cpr = registrationFactory.patchCpr(oldCpr, cprProps);
 
 			validatePpid(oldCpr, cpr, errorHandler);
 			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), errorHandler);
@@ -168,7 +163,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return RegistrationUpdatedEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public RegistrationDeletedEvent delete(DeleteRegistrationEvent event) {
