@@ -53,19 +53,19 @@ function submitOrderNew(consentVerifiedValues)
 		alert("Please specify Order Name.");
 		return;	
 	}	
+	var orderRejected=false;
+	for(var row=1;row<=mygrid.getRowsNum();row++)
+	{
+		var statusValue=mygrid.cellById(row,7).getValue();
+		if(statusValue == 'Rejected - Inappropriate Request' || statusValue == 'Rejected - Specimen Unavailable' || statusValue == 'Rejected - Unable to Create')
+		{
+		   orderRejected=true;	
+		}
+					
+	}	
+
 	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getActualValue()=="-1")
 	{
-		var orderRejected=false;
-		for(var row=1;row<=mygrid.getRowsNum();row++)
-		{
-			var statusValue=mygrid.cellById(row,7).getValue();
-			if(statusValue == 'Rejected - Inappropriate Request' || statusValue == 'Rejected - Specimen Unavailable' || statusValue == 'Rejected - Unable to Create')
-			{
-			   orderRejected=true;	
-			}
-						
-		}	
-	
 		if(!orderRejected)
 		{
                   alert("Please select distribution protocol.");
@@ -76,8 +76,11 @@ function submitOrderNew(consentVerifiedValues)
 	
 	if(site_combo.getActualValue()=="" || site_combo.getActualValue()=="-1")
 	{
-		alert("Please select distribution site.");
-		return;
+		if(!orderRejected)
+		{
+			alert("Please select distribution site.");
+			return;
+		}
 	}
 
 	for (var i = 0; i < consentVerifiedValues.length; ++i) 
@@ -99,10 +102,13 @@ function submitOrderNew(consentVerifiedValues)
 	tabDataJSON["orderName"]=document.getElementById('orderName').value;
 	if(distributionProtocolNameCombo.getActualValue()!="-1")
 	{
-	 tabDataJSON["disptributionProtocolId"]=distributionProtocolNameCombo.getActualValue();
+		tabDataJSON["disptributionProtocolId"]=distributionProtocolNameCombo.getActualValue();
 	}
     tabDataJSON["disptributionProtocolName"]=distributionProtocolNameCombo.getComboText();
-	tabDataJSON["site"]=site_combo.getActualValue();
+	if(site_combo.getActualValue()!="-1")
+	{
+		tabDataJSON["site"]=site_combo.getActualValue();
+	}
 	tabDataJSON["requestorEmail"]='<bean:write name="DisplayOrderDTO" property="requestorEmail" scope="request"/>';
 	tabDataJSON["requestorId"]=user_combo.getActualValue();
 	tabDataJSON["requestedDate"]=document.getElementById('requestedDate').value;

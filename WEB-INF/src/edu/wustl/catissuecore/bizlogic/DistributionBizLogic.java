@@ -1000,9 +1000,11 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		final Date date = new Date();
 		distribution.setTimestamp(date);
 
-		final Site site = new Site();
-		site.setId(siteId);
-		distribution.setToSite(site);
+		if(siteId !=null){
+    	    final Site site = new Site();
+            site.setId(siteId);
+    		distribution.setToSite(site);
+		}
 
 		final DistributionProtocol distributionProtocol = new DistributionProtocol();
 		distributionProtocol.setId(distributionProtocolId);

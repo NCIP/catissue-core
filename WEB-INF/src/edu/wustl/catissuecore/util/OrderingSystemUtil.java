@@ -199,7 +199,7 @@ public final class OrderingSystemUtil
 
 		if (order.getDistributionProtocol() != null && order.getName() != null)
 		{
-			requestViewBean.setDistributionProtocol(order.getDistributionProtocol().getTitle());
+			requestViewBean.setDistributionProtocol(order.getDistributionProtocol().getShortTitle());
 			requestViewBean.setDistributionProtocolId(order.getDistributionProtocol().getId()
 					.toString());
 			requestViewBean.setOrderName(order.getName());
