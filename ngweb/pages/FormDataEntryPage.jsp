@@ -22,6 +22,7 @@
     <script src="ngweb/external/jquery/jquery.fileupload.js" type="text/javascript"></script>
     <script src="ngweb/external/select2/select2.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/angular.min.js" type="text/javascript"></script>
+    <script src="ngweb/external/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/angular-resource.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
     <script src="ngweb/external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -120,7 +121,47 @@
     <div id="form-view" style="margin-left: 1%; margin-top: 1%; margin-right: 2%;" ng-show="currentView == 'form'">
     </div>
     <div id="print-view" style="margin-left: 1%; margin-top: 1%; margin-right: 2%;" ng-show="currentView == 'print'">
+      <label class="print-form-caption" style = "font-size: 20px; text-align: center; width: 100%"> 
+        {{printCaption}}
+      </label>
+      
+      <table class = "table" style="margin-top: 20px">
+        <tbody>
+          <tr>
+            <td class="cp-print-label"> Printed On : </td>
+            <td class="cp-print-value"> {{headerInfo.user.printedOn}}</td>
+            <td class="cp-print-label"> Printed By : </td>
+            <td class="cp-print-value"> {{headerInfo.user.printedBy}}</td>
+         </tr>
+         <tr>
+            <td class="cp-print-label"> Participant protocol ID : </td>
+            <td class="cp-print-value"> {{headerInfo.participant.ppId}}</td>
+            <td class="cp-print-label"> CP Title By : </td>
+            <td class="cp-print-value"> {{headerInfo.participant.cpTitle}}</td>
+         </tr>
+         <tr ng-if="headerInfo.scg.label != 'null'">
+            <td class="cp-print-label"> SCG Label : </td>
+            <td class="cp-print-value"> {{headerInfo.scg.label}}</td>
+            <td class="cp-print-label"> CP Event Label : </td>
+            <td class="cp-print-value"> {{headerInfo.scg.cpEventLabel}}</td>
+         </tr>
+          <tr ng-if="headerInfo.specimen.label != 'null'">
+            <td class="cp-print-label"> Specimen Label: </td>
+            <td class="cp-print-value"> {{headerInfo.specimen.label}}</td>
+            <td class="cp-print-label"></td>
+            <td class="cp-print-value"></td>
+         </tr>
+        </tbody>
+      </table> 
+      
+      <div class="header-content-hr" 
+        style="border-top: 2px solid #ccc;border-bottom: 2px solid #000; margin-bottom: 25px">
+      </div>
+     
+      <div id="de-form" ng-bind-html="printableFormHtml">
+      </div>
     </div>  
+    
     <script>
       var entity = "<%= request.getAttribute("entityType") %>"
       var entityObjId   = <%= request.getAttribute("entityRecId") %>
