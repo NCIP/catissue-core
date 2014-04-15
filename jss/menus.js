@@ -347,10 +347,7 @@ Ext.onReady(function(){
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
-                       {
-                            text: 'Specimen Report',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution'
-                        }, {
+						{
                             text: 'Array Report',
                             href:'SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array'
                         }
