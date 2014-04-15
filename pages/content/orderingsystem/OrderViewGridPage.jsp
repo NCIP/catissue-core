@@ -34,19 +34,19 @@ function init_grid()
 	mygrid = new dhtmlXGridObject('gridbox');
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
 	mygrid.setHeader(columns);
-	mygrid.attachHeader("#text_filter,#select_filter,#select_filter,#text_filter,#select_filter"); 
+	mygrid.attachHeader("#text_filter,#select_filter,#select_filter,#text_filter,#select_filter,#text_filter"); 
 	mygrid.setEditable("FALSE");
 	mygrid.enableAutoHeigth(false);
 	mygrid.enablePaging(true, 15, 5, csPagingArea, true, csInfoArea);
     mygrid.setPagingSkin("bricks");
 
     mygrid.enableRowsHover(true,'grid_hover')
-	mygrid.setInitWidthsP("20,20,20,15,*");
+	mygrid.setInitWidthsP("15,20,15,15,20,10");
 	
 	
     mygrid.setSkin("dhx_skyblue");
 	
-	mygrid.setColSorting("str,str,str,str,str");
+	mygrid.setColSorting("str,str,str,str,str,str");
 	mygrid.enableMultiselect(true);
 	mygrid.load("RequestListView.do?requestFor=gridData","", "json");
 	mygrid.init();

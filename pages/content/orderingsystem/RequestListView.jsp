@@ -59,6 +59,7 @@
 						window.dhx_globalImgPath="dhtmlx_suite/imgs/";
 						var distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
 						distributionProtocolNameCombo.setSize(301);
+						distributionProtocolNameCombo.enableFilteringMode(true);
 						distributionProtocolNameCombo.attachEvent("onChange", function(){
 							refreshGrid(distributionProtocolNameCombo.getComboText());
 						});  
@@ -75,9 +76,9 @@
 			</tr>
       
 			<tr>
-			<td colspan="7" width="100%"></td>
+			<td colspan="7" width="100%">
 			<%@ include file="/pages/content/orderingsystem/OrderViewGridPage.jsp" %>
-            
+            </td>
 			</tr>
             
         </table></td>

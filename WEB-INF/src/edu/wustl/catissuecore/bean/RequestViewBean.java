@@ -62,6 +62,8 @@ public class RequestViewBean implements Serializable
 	 * The distribution Protocol id.
 	 */
 	private String distributionProtocolId;
+	
+	private int orderItemCount;
 
 	/**
 	 * @return comments The comments associated with the request order.
@@ -221,6 +223,17 @@ public class RequestViewBean implements Serializable
 	public void setDistributionProtocolId(String distributionProtocolId)
 	{
 		this.distributionProtocolId = distributionProtocolId;
+	}
+
+	public int getOrderItemCount()
+	{
+	return orderItemCount;
+	}
+
+
+	public void setOrderItemCount(int orderItemCount)
+	{
+	this.orderItemCount = orderItemCount;
 	}
 
 }

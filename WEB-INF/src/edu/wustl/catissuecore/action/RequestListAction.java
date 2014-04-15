@@ -90,6 +90,8 @@ public class RequestListAction extends SecureAction
 		columnList.add("PI of Distribution Protocol");
 		columnList.add("Requested Date");
 		columnList.add("Order Status");
+		columnList.add("Number of Specimens ");
+		
 		
 		request.setAttribute("columns", AppUtility.getcolumns(columnList));
 		setNumberOfRequests(requestListForm);
@@ -134,6 +136,7 @@ public class RequestListAction extends SecureAction
 				dataArray.put(bean.getRequestedBy());
 				dataArray.put(bean.getRequestedDate());
 				dataArray.put(bean.getStatus());
+				dataArray.put(bean.getOrderItemCount());
 				jsonObject.put(Constants.JSON_DATA_COLUMN, dataArray);
 				jsonObject.put(Constants.ID, i++);
 				jsonDataRow.put(jsonObject);

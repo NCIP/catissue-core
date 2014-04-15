@@ -1377,6 +1377,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 				requestViewBean.setRequestId(order.getId().toString());
 				requestViewBean.setStatus(order.getStatus());
+				if(order.getOrderItemCollection()!=null)
+				{
+				requestViewBean.setOrderItemCount(order.getOrderItemCollection().size());
+				}
 
 				requestList.add(requestViewBean);
 			}

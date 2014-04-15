@@ -55,13 +55,13 @@ function submitOrderNew(consentVerifiedValues)
 	}	
 	if(distributionProtocolNameCombo.getActualValue()=="" || distributionProtocolNameCombo.getActualValue()=="-1")
 	{
-		var orderRejected=true;
+		var orderRejected=false;
 		for(var row=1;row<=mygrid.getRowsNum();row++)
 		{
 			var statusValue=mygrid.cellById(row,7).getValue();
 			if(statusValue == 'Rejected - Inappropriate Request' || statusValue == 'Rejected - Specimen Unavailable' || statusValue == 'Rejected - Unable to Create')
 			{
-			   orderRejected=false;	
+			   orderRejected=true;	
 			}
 						
 		}	
