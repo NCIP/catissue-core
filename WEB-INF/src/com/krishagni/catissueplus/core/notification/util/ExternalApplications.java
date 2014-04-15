@@ -18,7 +18,7 @@ public class ExternalApplications {
 		this.daoFactory = daoFactory;
 	}
 
-	private static List<ExternalApplication> externalApplications;
+	private List<ExternalApplication> externalApplications;
 
 	public List<ExternalApplication> getAllExternalApplications() {
 		if (externalApplications == null) {
