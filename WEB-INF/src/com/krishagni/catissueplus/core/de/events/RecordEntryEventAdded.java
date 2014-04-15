@@ -5,8 +5,19 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class RecordEntryEventAdded extends ResponseEvent {
 
-	public static RecordEntryEventAdded ok() {
+	private Long recordEntryId;
+	
+	public Long getRecordEntryId() {
+		return recordEntryId;
+	}
+
+	public void setRecordEntryId(Long recordEntryId) {
+		this.recordEntryId = recordEntryId;
+	}
+
+	public static RecordEntryEventAdded ok(Long recordEntryId) {
 		RecordEntryEventAdded resp = new RecordEntryEventAdded();
+		resp.setRecordEntryId(recordEntryId);
 		return resp;		
 	}
 	

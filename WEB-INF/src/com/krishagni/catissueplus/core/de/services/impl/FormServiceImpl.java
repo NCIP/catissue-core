@@ -278,7 +278,7 @@ public class FormServiceImpl implements FormService {
 		
 	@Override
 	@PlusTransactional
-	public RecordEntryEventAdded insertFormRecord(AddRecordEntryEvent req) {
+	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req) {
 		String entityType = (String) req.getRecIntegrationInfo().get("entityType");
 
 		Long objectId = formDao.getObjectId(req.getRecIntegrationInfo());
@@ -294,7 +294,7 @@ public class FormServiceImpl implements FormService {
 		
 		formDao.saveOrUpdateRecordEntry(recordEntry);
 		
-		return RecordEntryEventAdded.ok();
+		return RecordEntryEventAdded.ok(recordEntry.getIdentifier());
 	}
 	
 	private List<FormFieldSummary> getFormFields(Container container) {

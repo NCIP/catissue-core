@@ -176,7 +176,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		req.setContainerId(containerId);
 		req.setRecordId(recordId);
 		
-		RecordEntryEventAdded resp = formSvc.insertFormRecord(req);
+		RecordEntryEventAdded resp = formSvc.addRecordEntry(req);
 		
 		return null;
 	}

@@ -51,6 +51,6 @@ public interface FormService {
 
 	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry);
 
-	public RecordEntryEventAdded insertFormRecord(AddRecordEntryEvent req); 
+	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req); 
 	
 }
