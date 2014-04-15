@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
@@ -19,4 +20,6 @@ public interface SpecimenCollGroupService {
 	ScgCreatedEvent createScg(CreateScgEvent scgEvent);
 
 	ScgUpdatedEvent updateScg(UpdateScgEvent scgEvent);
+	
+	ScgUpdatedEvent patchScg(PatchScgEvent scgEvent);
 }

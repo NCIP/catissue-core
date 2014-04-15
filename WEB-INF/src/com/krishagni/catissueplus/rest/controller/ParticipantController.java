@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +17,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -65,6 +74,24 @@ public class ParticipantController {
 		}
 		return null;
 	}
+	
+	@RequestMapping(method = RequestMethod.PATCH, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ParticipantDetail patchParticipant(@PathVariable Long id,@RequestBody String values) {
+		PatchParticipantEvent event = new PatchParticipantEvent();
+		Gson gson = AppUtility.initGSONBuilder().create();
+		gson.fromJson(values, ParticipantDetail.class);
+//		values.entrySet()
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+//		event.setParticipantAttributes(values);
+		ParticipantUpdatedEvent response = participantSvc.patchParticipant(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getParticipantDetail();
+		}
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
@@ -77,6 +104,20 @@ public class ParticipantController {
 		ParticipantDeletedEvent resp = participantSvc.delete(event);
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getId();
+		}
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<ParticipantDetail> getMatchedParticipants(@RequestBody ParticipantDetail participantDetail) {
+		MatchParticipantEvent event = new MatchParticipantEvent();
+		event.setSessionDataBean(getSession());
+		event.setParticipantDetail(participantDetail);
+		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMatchingParticipants();
 		}
 		return null;
 	}

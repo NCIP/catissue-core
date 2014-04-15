@@ -3,13 +3,17 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -51,55 +55,87 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
 		CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
 		ObjectCreationException exception = new ObjectCreationException();
-		setBarcode(registration, detail, exception);
-		setRegistrationDate(registration, detail, exception);
-		setActivityStatus(registration, detail, exception);
+		setBarcode(registration, detail.getBarcode(), exception);
+		setRegistrationDate(registration, detail.getRegistrationDate(), exception);
+		setActivityStatus(registration, detail.getActivityStatus(), exception);
 		setCollectionProtocol(registration, detail, exception);
-		setPPId(registration, detail, exception);
+		setPPId(registration, detail.getPpid(), exception);
 		exception.checkErrorAndThrow();
 		return registration;
+	}
+
+	@Override
+	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr, Map<String, Object> cprProps) {
+		ObjectCreationException exception = new ObjectCreationException();
+		Iterator<Entry<String, Object>> entries = cprProps.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, Object> entry = entries.next();
+			if ("barcode".equals(entry.getKey())) {
+				setBarcode(oldCpr, String.valueOf(entry.getValue()), exception);
+			}
+			if ("ppId".equals(entry.getKey())) {
+				setPPId(oldCpr, String.valueOf(entry.getValue()), exception);
+			}
+			if ("activityStatus".equals(entry.getKey())) {
+				setActivityStatus(oldCpr, String.valueOf(entry.getValue()), exception);
+			}
+			if ("registrationDate".equals(entry.getKey())) {
+				setRegistrationDate(oldCpr, getDate(entry.getValue()), exception);
+			}
+		}
+		return null;
+	}
+
+	private Date getDate(Object value) {
+		SimpleDateFormat format = new SimpleDateFormat();
+		try {
+			return format.parse(String.valueOf(value));
+		}
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * Sets barcode
 	 * @param registration
-	 * @param detail
+	 * @param barcode
 	 * @param exception 
 	 */
-	private void setBarcode(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
-			ObjectCreationException exception) {
-		registration.setBarcode(detail.getBarcode());
+	private void setBarcode(CollectionProtocolRegistration registration, String barcode, ObjectCreationException exception) {
+		registration.setBarcode(barcode);
 	}
 
 	/**
 	 * Sets the registration date. If null then sets the current date as registration date
 	 * @param registration
-	 * @param detail
+	 * @param date
 	 * @param exception 
 	 */
-	private void setRegistrationDate(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
-		if (detail.getRegistrationDate() == null) {
+	private void setRegistrationDate(CollectionProtocolRegistration registration, Date date,
+			ObjectCreationException exception) {
+		if (date == null) {
 			registration.setRegistrationDate(new Date());
 		}
 		else {
-			registration.setRegistrationDate(detail.getRegistrationDate());
+			registration.setRegistrationDate(date);
 		}
 	}
 
 	/**
 	 * Sets the activity status Active
 	 * @param registration
-	 * @param detail
+	 * @param activityStatus
 	 * @param exception 
 	 */
-	private void setActivityStatus(CollectionProtocolRegistration registration,
-			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
-		if (isBlank(detail.getActivityStatus())) {
+	private void setActivityStatus(CollectionProtocolRegistration registration, String activityStatus,
+			ObjectCreationException exception) {
+		if (isBlank(activityStatus)) {
 			registration.setActive();
 		}
 		else {
-			registration.setActivityStatus(detail.getActivityStatus());
+			registration.setActivityStatus(activityStatus);
 		}
 
 	}
@@ -127,16 +163,15 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	/**
 	 * Sets the given participant protocol identifier
 	 * @param registration
-	 * @param detail
+	 * @param ppId
 	 * @param exception 
 	 */
-	private void setPPId(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
-			ObjectCreationException exception) {
-		if (StringUtils.isBlank(detail.getPpid())) {
+	private void setPPId(CollectionProtocolRegistration registration, String ppId, ObjectCreationException exception) {
+		if (StringUtils.isBlank(ppId)) {
 			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
 		}
 
-		registration.setProtocolParticipantIdentifier(detail.getPpid());
+		registration.setProtocolParticipantIdentifier(ppId);
 	}
 
 	/**

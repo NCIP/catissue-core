@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEve
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateRegistrationEvent;
+import com.krishagni.catissueplus.rest.controller.PatchRegistrationEvent;
 
 public interface CollectionProtocolRegistrationService {
 
@@ -20,5 +21,7 @@ public interface CollectionProtocolRegistrationService {
 	RegistrationDeletedEvent delete(DeleteRegistrationEvent event);
 
 	RegistrationUpdatedEvent updateRegistration(UpdateRegistrationEvent event);
+
+	RegistrationUpdatedEvent patchRegistration(PatchRegistrationEvent event);
 
 }

@@ -4,9 +4,14 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
@@ -60,23 +65,63 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		Specimen specimen = new Specimen();
 		setScg(specimenDetail, specimen, errorHandler);
 		setParentSpecimen(specimenDetail, specimen, errorHandler); //check for parent in this method
-		setActivityStatus(specimenDetail, specimen, errorHandler);
+		setActivityStatus(specimenDetail.getActivityStatus(), specimen, errorHandler);
 		setSpecimenRequirement(specimenDetail, specimen, errorHandler);
-		setCollectionStatus(specimenDetail, specimen, errorHandler);
-		setTissueSite(specimenDetail, specimen, errorHandler);
-		setTissueSide(specimenDetail, specimen, errorHandler);
-		setPathologyStatus(specimenDetail, specimen, errorHandler);
+		setCollectionStatus(specimenDetail.getCollectionStatus(), specimen, errorHandler);
+		setTissueSite(specimenDetail.getTissueSite(), specimen, errorHandler);
+		setTissueSide(specimenDetail.getTissueSide(), specimen, errorHandler);
+		setPathologyStatus(specimenDetail.getPathologicalStatus(), specimen, errorHandler);
 		setQuantity(specimenDetail, specimen, errorHandler);
 		setClassAndType(specimenDetail, specimen, errorHandler);
-		setLabel(specimenDetail, specimen, errorHandler);
-		setBarcode(specimenDetail, specimen, errorHandler);
-		setComment(specimenDetail, specimen);
-		setCreatedOn(specimenDetail, specimen, errorHandler);
+		setLabel(specimenDetail.getLabel(), specimen, errorHandler);
+		setBarcode(specimenDetail.getBarcode(), specimen, errorHandler);
+		setComment(specimenDetail.getComment(), specimen);
+		setCreatedOn(specimenDetail.getCreatedOn(), specimen, errorHandler);
 		setContainerPositions(specimenDetail, specimen, errorHandler);
 		setBiohazardCollection(specimenDetail, specimen, errorHandler);
 		setExternalIdsCollection(specimenDetail, specimen, errorHandler);
 		errorHandler.checkErrorAndThrow();
 		return specimen;
+	}
+
+	@Override
+	public Specimen patch(Specimen specimen, Map<String, Object> specimenProps) {
+		ObjectCreationException exceptionHandler = new ObjectCreationException();
+		Iterator<Entry<String, Object>> entries = specimenProps.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, Object> entry = entries.next();
+			if ("label".equals(entry.getKey())) {
+				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("barcode".equals(entry.getKey())) {
+				setBarcode(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("tissueSite".equals(entry.getKey())) {
+				setTissueSite(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("tissueSide".equals(entry.getKey())) {
+				setTissueSide(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("pathologyStatus".equals(entry.getKey())) {
+				setPathologyStatus(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("activityStatus".equals(entry.getKey())) {
+				setActivityStatus(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("collectionStatus".equals(entry.getKey())) {
+				setCollectionStatus(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("createdOn".equals(entry.getKey())) {
+				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("specimenClass".equals(entry.getKey())) {
+				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+			if ("specimenType".equals(entry.getKey())) {
+				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			}
+		}
+		return null;
 	}
 
 	private void setScg(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
@@ -119,33 +164,33 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		specimen.setSpecimenRequirement(requirement);
 	}
 
-	private void setActivityStatus(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if (isValidPv(specimenDetail.getActivityStatus(), Status.ACTIVITY_STATUS.toString())) {
-			specimen.setActivityStatus(specimenDetail.getActivityStatus());
+	private void setActivityStatus(String activityStatus, Specimen specimen, ObjectCreationException errorHandler) {
+		if (isValidPv(activityStatus, Status.ACTIVITY_STATUS.toString())) {
+			specimen.setActivityStatus(activityStatus);
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.toString());
 	}
 
-	private void setTissueSite(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if (isValidPv(specimenDetail.getTissueSite(), TISSUE_SITE)) {
-			specimen.setTissueSite(specimenDetail.getTissueSite());
+	private void setTissueSite(String tissueSite, Specimen specimen, ObjectCreationException errorHandler) {
+		if (isValidPv(tissueSite, TISSUE_SITE)) {
+			specimen.setTissueSite(tissueSite);
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, TISSUE_SITE);
 	}
 
-	private void setTissueSide(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if (isValidPv(specimenDetail.getTissueSide(), TISSUE_SIDE)) {
-			specimen.setTissueSide(specimenDetail.getTissueSide());
+	private void setTissueSide(String tissueSide, Specimen specimen, ObjectCreationException errorHandler) {
+		if (isValidPv(tissueSide, TISSUE_SIDE)) {
+			specimen.setTissueSide(tissueSide);
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, TISSUE_SIDE);
 	}
 
-	private void setPathologyStatus(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if (isValidPv(specimenDetail.getPathologicalStatus(), PATHOLOGY_STATUS)) {
-			specimen.setPathologicalStatus(specimenDetail.getPathologicalStatus());
+	private void setPathologyStatus(String pathStatus, Specimen specimen, ObjectCreationException errorHandler) {
+		if (isValidPv(pathStatus, PATHOLOGY_STATUS)) {
+			specimen.setPathologicalStatus(pathStatus);
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, TISSUE_SIDE);
@@ -168,29 +213,29 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SPECIMEN_CLASS);
 	}
 
-	private void setLabel(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if (specimen.isCollected() && isBlank(specimenDetail.getLabel())) {
+	private void setLabel(String label, Specimen specimen, ObjectCreationException errorHandler) {
+		if (specimen.isCollected() && isBlank(label)) {
 			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, LABEL);
 		}
-		specimen.setLabel(specimenDetail.getLabel());
+		specimen.setLabel(label);
 	}
 
-	private void setBarcode(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		specimen.setBarcode(specimenDetail.getBarcode());
+	private void setBarcode(String barcode, Specimen specimen, ObjectCreationException errorHandler) {
+		specimen.setBarcode(barcode);
 	}
 
-	private void setComment(SpecimenDetail specimenDetail, Specimen specimen) {
-		specimen.setComment(specimenDetail.getComment());
+	private void setComment(String comment, Specimen specimen) {
+		specimen.setComment(comment);
 	}
 
-	private void setCreatedOn(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		specimen.setCreatedOn(specimenDetail.getCreatedOn());
+	private void setCreatedOn(Date createdOn, Specimen specimen, ObjectCreationException errorHandler) {
+		specimen.setCreatedOn(createdOn);
 	}
 
-	private void setCollectionStatus(SpecimenDetail specimenDetail, Specimen specimen,
+	private void setCollectionStatus(String collectionStatus, Specimen specimen,
 			ObjectCreationException errorHandler) {
-		if (isValidPv(specimenDetail.getCollectionStatus(), COLLECTION_STATUS)) {
-			specimen.setCollectionStatus(specimenDetail.getCollectionStatus());
+		if (isValidPv(collectionStatus, COLLECTION_STATUS)) {
+			specimen.setCollectionStatus(collectionStatus);
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, COLLECTION_STATUS);

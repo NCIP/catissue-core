@@ -10,6 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactor
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
@@ -81,6 +82,30 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return SpecimenUpdatedEvent.notFound(specimenId);
 			}
 			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail());
+			ObjectCreationException errorHandler = new ObjectCreationException();
+			validateLabelBarcodeUnique(oldSpecimen, specimen, errorHandler);
+			errorHandler.checkErrorAndThrow();
+			oldSpecimen.update(specimen);
+			daoFactory.getSpecimenDao().saveOrUpdate(oldSpecimen);
+			return SpecimenUpdatedEvent.ok(SpecimenDetail.fromDomain(specimen));
+		}
+		catch (ObjectCreationException oce) {
+			return SpecimenUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
+		}
+		catch (Exception ex) {
+			return SpecimenUpdatedEvent.serverError(ex);
+		}
+	}
+	
+	@Override
+	public SpecimenUpdatedEvent patchSpecimen(PatchSpecimenEvent event) {
+		try {
+			Long specimenId = event.getId();
+			Specimen oldSpecimen = daoFactory.getSpecimenDao().getSpecimen(specimenId);
+			if (oldSpecimen == null) {
+				return SpecimenUpdatedEvent.notFound(specimenId);
+			}
+			Specimen specimen = specimenFactory.patch(oldSpecimen,event.getSpecimenProps());
 			ObjectCreationException errorHandler = new ObjectCreationException();
 			validateLabelBarcodeUnique(oldSpecimen, specimen, errorHandler);
 			errorHandler.checkErrorAndThrow();

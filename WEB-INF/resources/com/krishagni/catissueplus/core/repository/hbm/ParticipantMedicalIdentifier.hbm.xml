@@ -50,7 +50,7 @@
 
         <many-to-one
             name="participant"
-            class="edu.wustl.catissuecore.domain.Participant"
+            class="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
             cascade="none"
              
             update="true"

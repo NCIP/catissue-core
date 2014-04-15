@@ -47,6 +47,10 @@
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
   
+  <bean id="auditInterceptor" class="com.krishagni.catissueplus.core.common.AuditInterceptor">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
   <!-- bean id="collectionProtocolDao" class="com.krishagni.catissueplus.dao.impl.CollectionProtocolDaoImpl">
     <property name="daoFactory" value="daoFactory"/>  
   </bean>
@@ -62,7 +66,9 @@
   <bean id="specimenDao" class="com.krishagni.catissueplus.dao.impl.SpecimenDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>  
   </bean-->
-  
+  <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
   <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -89,6 +95,8 @@
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
+    <property name="participantLookupLogic" ref="participantLookupLogic"/>
+    
   </bean>
   
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,13 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -88,6 +96,21 @@ public class SpecimenController {
 			return resp.getFormRecords();
 		}
 
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.PATCH, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenDetail patchSpecimen(@PathVariable Long id,@RequestBody Map<String, Object> specimenProps) {
+		PatchSpecimenEvent event = new PatchSpecimenEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		event.setSpecimenProps(specimenProps);
+		SpecimenUpdatedEvent response = specimenSvc.patchSpecimen(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getSpecimenDetail();
+		}
 		return null;
 	}
 

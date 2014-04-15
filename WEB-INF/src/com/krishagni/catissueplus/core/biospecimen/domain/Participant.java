@@ -1,12 +1,18 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+
+import javax.swing.text.DateFormatter;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.MapUpdater;
@@ -226,12 +232,12 @@ public class Participant {
 		this.setEthnicity(participant.getEthnicity());
 		this.setBirthDate(participant.getBirthDate());
 		this.setDeathDate(participant.getDeathDate());
-		updateRace(participant);
+		updateRace(participant.getRaceColl());
 		updatePmi(participant);
 	}
 
-	private void updateRace(Participant participant) {
-		SetUpdater.<String> newInstance().update(this.raceColl, participant.getRaceColl());
+	private void updateRace(Set<String> raceColl) {
+		SetUpdater.<String> newInstance().update(this.raceColl, raceColl);
 	}
 
 	private void updatePmi(Participant participant) {

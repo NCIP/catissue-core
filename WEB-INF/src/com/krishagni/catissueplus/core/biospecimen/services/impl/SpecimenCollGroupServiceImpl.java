@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollec
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
@@ -83,6 +84,31 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 				ScgUpdatedEvent.notFound(scgEvent.getId());
 			}
 			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
+			ObjectCreationException errorHandler = new ObjectCreationException();
+			validateBarcode(oldScg.getBarcode(), scg.getBarcode(), errorHandler);
+			validateName(oldScg.getName(), scg.getName(), errorHandler);
+			errorHandler.checkErrorAndThrow();
+			oldScg.update(scg);
+			daoFactory.getScgDao().saveOrUpdate(oldScg);
+			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(scg));
+		}
+		catch (ObjectCreationException oce) {
+			return ScgUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
+		}
+		catch (Exception ex) {
+			return ScgUpdatedEvent.serverError(ex);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ScgUpdatedEvent patchScg(PatchScgEvent scgEvent) {
+		try {
+			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(scgEvent.getId());
+			if (oldScg == null) {
+				ScgUpdatedEvent.notFound(scgEvent.getId());
+			}
+			SpecimenCollectionGroup scg = scgFactory.patch(oldScg,scgEvent.getScgProps());
 			ObjectCreationException errorHandler = new ObjectCreationException();
 			validateBarcode(oldScg.getBarcode(), scg.getBarcode(), errorHandler);
 			validateName(oldScg.getName(), scg.getName(), errorHandler);

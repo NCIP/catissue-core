@@ -13,7 +13,7 @@ public enum ParticipantErrorCode implements CatissueErrorCode {
 	ACTIVE_CHILDREN_FOUND(1005, "Cannot be deleted, Active childrens found."),
 	DUPLICATE_SSN(1005,"Participant with the same social security number is already exists."),
 	DUPLICATE_PMI(1005,"Participant with the same mrn and site already exists."),
-	ERRORS(1009, "Please resolve the highlighted errors.");
+	ERRORS(1009, "Please resolve the errors listed in error list.");
 
 	private int code;
 

@@ -1,0 +1,21 @@
+package com.krishagni.catissueplus.core.common;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Audit {
+
+	enum Operation {
+	   INSERT, UPDATE, DELETE, QUERY
+	}
+	
+	Class object();
+	
+	Operation operation();
+}
