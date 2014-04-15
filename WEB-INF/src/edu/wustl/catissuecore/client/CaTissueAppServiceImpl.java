@@ -142,7 +142,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		for (Control ctrl : c.getControlsMap().values()) {
 			if (ctrl instanceof SubFormControl) {
 				SubFormControl sfCtrl = (SubFormControl) ctrl;
-				List<Map<String, Object>> sfDataValueList = (List<Map<String, Object>>) dataValue.get(ctrl.getName());
+				List<Map<String, Object>> sfDataValueList = (List<Map<String, Object>>) dataValue.get(ctrl.getUserDefinedName());
 				
 				if (sfDataValueList == null) {
 					formData.addFieldValue(new ControlValue(sfCtrl, null));
@@ -159,7 +159,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 				continue;
 			}
 			
-			Object value = dataValue.get(ctrl.getName());
+			Object value = dataValue.get(ctrl.getUserDefinedName());
 			if (value != null) {
 				formData.addFieldValue(new ControlValue(ctrl, value));
 			} else {
