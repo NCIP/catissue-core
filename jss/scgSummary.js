@@ -89,7 +89,7 @@ function submitSCG() {
 
 	if (response.xmlDoc.responseText == "success") {
 		document.getElementById("errorDiv").innerHTML = "";
-		window.parent.frames[1].pageSubmit();
+		pageSubmit();
 	} else {
 		var errorList = eval(response.xmlDoc.responseText);
 		var i;

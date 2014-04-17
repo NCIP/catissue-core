@@ -567,7 +567,7 @@
         </addColumn>
     </changeSet>
     
-    <changeSet id="21" author="nitesh">
+    <!-- <changeSet id="21" author="nitesh">
         <createTable tableName="CATISSUE_SPEC_EVENT_MAPPING">
 	        <column name="IDENTIFIER" type="${int.type}"/>
 	        <column name="EVENT_TYPE" type="${text.type}(50)"/>
@@ -583,7 +583,7 @@
         <addAutoIncrement columnDataType="${int.type}"
             columnName="IDENTIFIER"
             tableName="CATISSUE_SPEC_EVENT_MAPPING"/>
-    </changeSet>
+    </changeSet>-->  
 
     <changeSet id="22" author="nitesh" dbms="mysql">
         <sql>DROP PROCEDURE IF EXISTS  migrate_events_data;</sql>
@@ -641,7 +641,7 @@
     <sql>commit;</sql>
     </changeSet>
     
-    <changeSet id="25" author="nitesh">
+   <!--  <changeSet id="25" author="nitesh">
         <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
             select 'FIXED', event.identifier, event.specimen_id from CATISSUE_FIXED_EVENT_PARAM event</sql>
         <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
@@ -676,7 +676,7 @@
             select 'DISPOSAL', event.identifier, event.specimen_id from CATISSUE_DISPOSAL_EVENT_PARAM event</sql>
         <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
             select 'DISTRIBUTION', event.identifier, event.specimen_id from CATISSUE_DISTRI_EVENT_PARAM event</sql>
-    </changeSet>
+    </changeSet>-->
     <changeSet id="26" author="nitesh">
         <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
             <column name="COLLECTOR_ID" type="${int.type}" />
@@ -894,14 +894,14 @@
         <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
     </changeSet>
     
-    <changeSet author="nitesh" id="36" failOnError="false">
+    <!-- <changeSet author="nitesh" id="36" failOnError="false">
         
      <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
                baseTableName="CATISSUE_SPEC_EVENT_MAPPING"
                constraintName="FK_SPECIMEN_EVENT_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPECIMEN"/>
-    </changeSet>
+    </changeSet> -->
 
     <changeSet author="nitesh" id="enable foreign key check" failOnError="false" dbms="mysql">
         <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
@@ -934,11 +934,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_COLL_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_COLL_EVENT_PARAM"
 	               constraintName="FK_COLL_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_COLL_EVENT_PARAM"
 	               constraintName="FK_USER_COLL_EVENT"
@@ -947,11 +947,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_FIXED_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_FIXED_EVENT_PARAM"
 	               constraintName="FK_FIXED_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_FIXED_EVENT_PARAM"
 	               constraintName="FK_USER_FIXED_EVENT"
@@ -960,11 +960,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_FROZEN_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_FROZEN_EVENT_PARAM"
 	               constraintName="FK_FROZEN_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_FROZEN_EVENT_PARAM"
 	               constraintName="FK_USER_FROZEN_EVENT"
@@ -973,11 +973,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_IN_OUT_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_IN_OUT_EVENT_PARAM"
 	               constraintName="FK_INOUT_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_IN_OUT_EVENT_PARAM"
 	               constraintName="FK_USER_INOUT_EVENT"
@@ -986,11 +986,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_PROCEDURE_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_PROCEDURE_EVENT_PARAM"
 	               constraintName="FK_PROC_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_PROCEDURE_EVENT_PARAM"
 	               constraintName="FK_USER_PROC_EVENT"
@@ -999,11 +999,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_SPUN_EVENT_PARAMETERS" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_SPUN_EVENT_PARAMETERS"
 	               constraintName="FK_SPUN_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_SPUN_EVENT_PARAMETERS"
 	               constraintName="FK_USER_SPUN_EVENT"
@@ -1012,11 +1012,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_TRANSFER_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	   <!--   <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
 	               constraintName="FK_TRNSFR_EV_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
 	               constraintName="FK_USER_TRANSFER_EVENT"
@@ -1025,11 +1025,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_RECEIVED_EVENT_PARAM" failOnError="false">
-	     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
 	               baseTableName="CATISSUE_RECEIVED_EVENT_PARAM"
 	               constraintName="FK_REC_EVENT_TO_EV_MAPPING"
 	               referencedColumnNames="IDENTIFIER"
-	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>--> 
 	     <addForeignKeyConstraint baseColumnNames="USER_ID"
 	               baseTableName="CATISSUE_RECEIVED_EVENT_PARAM"
 	               constraintName="FK_USER_REC_EVENT"
@@ -1038,11 +1038,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_EMBEDDED_EVENT_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM"
                constraintName="FK_EMB_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM"
                constraintName="FK_USER_EMB_EVENT"
@@ -1051,11 +1051,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_THAW_EVENT_PARAMETERS" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_THAW_EVENT_PARAMETERS"
                constraintName="FK_THAW_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_THAW_EVENT_PARAMETERS"
                constraintName="FK_USER_THAW_EVENT"
@@ -1064,11 +1064,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_CELL_SPE_REVIEW_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
                constraintName="FK_CELL_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
                constraintName="FK_USER_CELL_EVENT"
@@ -1077,11 +1077,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_TIS_SPE_EVENT_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM"
                constraintName="FK_TISSUE_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM"
                constraintName="FK_USER_TISSUE_EVENT"
@@ -1090,11 +1090,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_FLUID_SPE_EVENT_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM"
                constraintName="FK_FLUID_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM"
                constraintName="FK_USER_FLUID_EVENT"
@@ -1103,11 +1103,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_MOL_SPE_REVIEW_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM"
                constraintName="FK_MOL_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM"
                constraintName="FK_USER_MOL_EVENT"
@@ -1116,11 +1116,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_DISPOSAL_EVENT_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM"
                constraintName="FK_DISP_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM"
                constraintName="FK_USER_DISP_EVENT"
@@ -1129,11 +1129,11 @@
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_DISTRI_EVENT_PARAM" failOnError="false">
-     <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
                baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
                constraintName="FK_DISTRI_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
-               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
                constraintName="FK_USER_DISTRI_EVENT"
