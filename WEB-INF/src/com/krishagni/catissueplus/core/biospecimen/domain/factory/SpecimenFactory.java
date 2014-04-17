@@ -9,5 +9,5 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 public interface SpecimenFactory {
 public Specimen createSpecimen(SpecimenDetail specimenDetail);
 
-public Specimen patch(Specimen oldSpecimen, Map<String, Object> specimenProps);
+public Specimen patch(Specimen oldSpecimen, SpecimenDetail specimenDetail);
 }

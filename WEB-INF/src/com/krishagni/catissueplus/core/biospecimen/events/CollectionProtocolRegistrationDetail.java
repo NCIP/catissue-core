@@ -2,12 +2,15 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
+import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 
 public class CollectionProtocolRegistrationDetail {
 
 	private ParticipantDetail participantDetail;
+
+	private List<String> modifiedAttributes;
 
 	private Long id;
 
@@ -22,6 +25,26 @@ public class CollectionProtocolRegistrationDetail {
 	private Date registrationDate;
 
 	private ConsentResponseDetail responseDetail;
+
+	public boolean isPpidModified() {
+		return modifiedAttributes.contains("ppid");
+	}
+
+	public boolean isBarcodeModified() {
+		return modifiedAttributes.contains("barcode");
+	}
+
+	public boolean isActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
+	}
+
+	public boolean isRegistrationDateModified() {
+		return modifiedAttributes.contains("registrationDate");
+	}
+
+	public boolean isParticipantModified() {
+		return modifiedAttributes.contains("participantDetail");
+	}
 
 	public String getActivityStatus() {
 		return activityStatus;
@@ -85,6 +108,10 @@ public class CollectionProtocolRegistrationDetail {
 
 	public void setParticipantDetail(ParticipantDetail participantDetail) {
 		this.participantDetail = participantDetail;
+	}
+
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
 	}
 
 	public static CollectionProtocolRegistrationDetail fromDomain(CollectionProtocolRegistration cpr) {

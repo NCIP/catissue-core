@@ -85,42 +85,38 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	@Override
-	public Specimen patch(Specimen specimen, Map<String, Object> specimenProps) {
+	public Specimen patch(Specimen specimen, SpecimenDetail detail) {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
-		Iterator<Entry<String, Object>> entries = specimenProps.entrySet().iterator();
-		while (entries.hasNext()) {
-			Entry<String, Object> entry = entries.next();
-			if ("label".equals(entry.getKey())) {
-				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isLabelModified()) {
+				setLabel(detail.getLabel(), specimen, exceptionHandler);
 			}
-			if ("barcode".equals(entry.getKey())) {
-				setBarcode(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isBarcodeModified()) {
+				setBarcode(detail.getBarcode(), specimen, exceptionHandler);
 			}
-			if ("tissueSite".equals(entry.getKey())) {
-				setTissueSite(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isTissueSiteModified()) {
+				setTissueSite(detail.getTissueSite(), specimen, exceptionHandler);
 			}
-			if ("tissueSide".equals(entry.getKey())) {
-				setTissueSide(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isTissueSideModified()) {
+				setTissueSide(detail.getTissueSide(), specimen, exceptionHandler);
 			}
-			if ("pathologyStatus".equals(entry.getKey())) {
-				setPathologyStatus(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isPathologicalStatusModified()) {
+				setPathologyStatus(detail.getPathologicalStatus(), specimen, exceptionHandler);
 			}
-			if ("activityStatus".equals(entry.getKey())) {
-				setActivityStatus(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isActivityStatusModified()) {
+				setActivityStatus(detail.getActivityStatus(), specimen, exceptionHandler);
 			}
-			if ("collectionStatus".equals(entry.getKey())) {
-				setCollectionStatus(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isCollectionStatusModified()) {
+				setCollectionStatus(detail.getCollectionStatus(), specimen, exceptionHandler);
 			}
-			if ("createdOn".equals(entry.getKey())) {
-				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+			if (detail.isCreatedOnModified()) {
+				setCreatedOn(detail.getCreatedOn(), specimen, exceptionHandler);
 			}
-			if ("specimenClass".equals(entry.getKey())) {
-				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
-			}
-			if ("specimenType".equals(entry.getKey())) {
-				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
-			}
-		}
+//			if (detail.isSpecimenClassModified()) {
+//				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+//			}
+//			if ("specimenType".equals(entry.getKey())) {
+//				setLabel(String.valueOf(entry.getValue()), specimen, exceptionHandler);
+//			}
 		return null;
 	}
 

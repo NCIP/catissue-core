@@ -1,22 +1,20 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.Map;
-
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class PatchParticipantEvent extends RequestEvent {
 
-	private Map<String, Object> participantAttributes;
+	private ParticipantDetail participantDetail;
 
 	private Long id;
 
-	public Map<String, Object> getParticipantAttributes() {
-		return participantAttributes;
+	public ParticipantDetail getParticipantDetail() {
+		return participantDetail;
 	}
 
-	public void setParticipantAttributes(Map<String, Object> participantAttributes) {
-		this.participantAttributes = participantAttributes;
+	public void setParticipantDetail(ParticipantDetail participantDetail) {
+		this.participantDetail = participantDetail;
 	}
 
 	public Long getId() {

@@ -105,7 +105,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			if (oldSpecimen == null) {
 				return SpecimenUpdatedEvent.notFound(specimenId);
 			}
-			Specimen specimen = specimenFactory.patch(oldSpecimen,event.getSpecimenProps());
+			Specimen specimen = specimenFactory.patch(oldSpecimen,event.getDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
 			validateLabelBarcodeUnique(oldSpecimen, specimen, errorHandler);
 			errorHandler.checkErrorAndThrow();

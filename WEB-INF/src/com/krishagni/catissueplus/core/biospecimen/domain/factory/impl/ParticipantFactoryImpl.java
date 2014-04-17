@@ -4,15 +4,10 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPv;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,62 +77,58 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	@Override
-	public Participant patchParticipant(Participant participant, Map<String, Object> participantProperties) {
+	public Participant patchParticipant(Participant participant, ParticipantDetail detail) {
 		ObjectCreationException exception = new ObjectCreationException();
-		Iterator<Entry<String, Object>> entries = participantProperties.entrySet().iterator();
-		while (entries.hasNext()) {
-			Entry<String, Object> entry = entries.next();
-			if ("firstName".equals(entry.getKey())) {
-				setFirstName(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if ("lastName".equals(entry.getKey())) {
-				setLastName(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if ("middleName".equals(entry.getKey())) {
-				setMiddleName(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if (GENDER.equals(entry.getKey())) {
-				setGender(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if (SEX_GENOTYPE.equals(entry.getKey())) {
-				setSexGenotype(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if (ETHNICITY.equals(entry.getKey())) {
-				setEthnicity(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if (SSN.equals(entry.getKey())) {
-				setSsn(participant, String.valueOf(entry.getValue()), exception);
-			}
-			if (Status.ACTIVITY_STATUS.getStatus().equals(entry.getKey())) {
-				setActivityStatus(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if (VITAL_STATUS.equals(entry.getKey())) {
-				setVitalStatus(participant, String.valueOf(entry.getValue()), exception);
-			}
-
-			if (BIRTH_DATE.equals(entry.getKey())) {
-				setBirthDate(participant, getDate(entry.getValue()), exception);
-			}
-
-			if (DEATH_DATE.equals(entry.getKey())) {
-				setDeathDate(participant, getDate(entry.getValue()), exception);
-			}
-
-			if (RACE.equals(entry.getKey()) && entry.getValue() != null) {
-				setRace(participant, new HashSet<String>((List) entry.getValue()), exception);
-			}
-			if("pmiCollection".equals(entry.getKey()) && entry.getValue() != null){
-				setPmi(participant, (List<ParticipantMedicalIdentifierNumberDetail>)entry.getValue(), exception);
-			}
-
+		if (detail.isFirstNameModified()) {
+			setFirstName(participant, detail.getFirstName(), exception);
 		}
+
+		if (detail.isLastNameModified()) {
+			setLastName(participant, detail.getLastName(), exception);
+		}
+
+		if (detail.isMiddleNameModified()) {
+			setMiddleName(participant, detail.getMiddleName(), exception);
+		}
+
+		if (detail.isGenderModified()) {
+			setGender(participant, detail.getGender(), exception);
+		}
+
+		if (detail.isSexGenotypeModified()) {
+			setSexGenotype(participant, detail.getSexGenotype(), exception);
+		}
+
+		if (detail.isEthnicityModified()) {
+			setEthnicity(participant, detail.getEthnicity(), exception);
+		}
+
+		if (detail.isSSNModified()) {
+			setSsn(participant, detail.getSsn(), exception);
+		}
+		if (detail.isActivityStatusModified()) {
+			setActivityStatus(participant, detail.getActivityStatus(), exception);
+		}
+
+		if (detail.isVitalSatusModified()) {
+			setVitalStatus(participant, detail.getVitalStatus(), exception);
+		}
+
+		if (detail.isBirthDateModified()) {
+			setBirthDate(participant, detail.getBirthDate(), exception);
+		}
+
+		if (detail.isDeathDateModified()) {
+			setDeathDate(participant, detail.getDeathDate(), exception);
+		}
+
+		if (detail.isRaceModified()) {
+			setRace(participant, detail.getRace(), exception);
+		}
+		if (detail.isPMIModified()) {
+			setPmi(participant, detail.getPmiCollection(), exception);
+		}
+
 		exception.checkErrorAndThrow();
 		return participant;
 	}
@@ -239,7 +230,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		participant.setEthnicity(ethnicity);
 	}
 
-	private void setPmi(Participant participant, List<ParticipantMedicalIdentifierNumberDetail> pmiCollection, ObjectCreationException exception) {
+	private void setPmi(Participant participant, List<ParticipantMedicalIdentifierNumberDetail> pmiCollection,
+			ObjectCreationException exception) {
 		List<ParticipantMedicalIdentifierNumberDetail> mrns = pmiCollection;
 		Map<String, ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
 		if (mrns != null && mrns.size() > 0) {
@@ -278,17 +270,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			result = false;
 		}
 		return result;
-	}
-
-	private Date getDate(Object value) {
-		SimpleDateFormat format = new SimpleDateFormat();
-		try {
-			return format.parse(String.valueOf(value));
-		}
-		catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	private void setSexGenotype(Participant participant, String sexGenotype, ObjectCreationException exception) {

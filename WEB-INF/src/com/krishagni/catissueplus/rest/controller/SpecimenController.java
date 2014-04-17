@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -104,9 +103,21 @@ public class SpecimenController {
 	@ResponseBody
 	public SpecimenDetail patchSpecimen(@PathVariable Long id,@RequestBody Map<String, Object> specimenProps) {
 		PatchSpecimenEvent event = new PatchSpecimenEvent();
+		SpecimenDetail detail = new SpecimenDetail();
+		try {
+			BeanUtils.populate(detail, specimenProps);
+		}
+		catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		event.setSpecimenProps(specimenProps);
+		event.setDetail(detail);
 		SpecimenUpdatedEvent response = specimenSvc.patchSpecimen(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getSpecimenDetail();

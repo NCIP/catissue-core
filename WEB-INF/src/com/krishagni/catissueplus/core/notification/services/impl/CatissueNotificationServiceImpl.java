@@ -101,7 +101,7 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 			participantDetails.put("birthDate", event.getRegistrationDetails().getBirthDate());
 			participantDetails.put("gender", event.getRegistrationDetails().getGender());
 			registrationProps.put("participantDetail", participantDetails);
-			patchRegistrationEvent.setRegistrationProps(registrationProps);
+//			patchRegistrationEvent.setRegistrationProps(registrationProps);
 
 			return cprSvc.patchRegistration(patchRegistrationEvent);
 		}

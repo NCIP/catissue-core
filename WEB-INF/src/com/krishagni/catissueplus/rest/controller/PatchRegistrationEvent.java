@@ -1,15 +1,14 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.Map;
-
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class PatchRegistrationEvent extends RequestEvent {
 
 	private Long id;
 
-	private Map<String, Object> registrationProps;
+	private CollectionProtocolRegistrationDetail collectionProtocolRegistrationDetail;
 
 	public Long getId() {
 		return id;
@@ -19,12 +18,13 @@ public class PatchRegistrationEvent extends RequestEvent {
 		this.id = id;
 	}
 
-	public Map<String, Object> getRegistrationProps() {
-		return registrationProps;
+	public CollectionProtocolRegistrationDetail getCollectionProtocolRegistrationDetail() {
+		return collectionProtocolRegistrationDetail;
 	}
 
-	public void setRegistrationProps(Map<String, Object> registrationProps) {
-		this.registrationProps = registrationProps;
+	public void setCollectionProtocolRegistrationDetail(
+			CollectionProtocolRegistrationDetail collectionProtocolRegistrationDetail) {
+		this.collectionProtocolRegistrationDetail = collectionProtocolRegistrationDetail;
 	}
 
 }

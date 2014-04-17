@@ -28,10 +28,10 @@ import com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLog
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.Audit;
+import com.krishagni.catissueplus.core.common.Audit.Operation;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.core.common.Audit.Operation;
 
 public class ParticipantServiceImpl implements ParticipantService {
 
@@ -74,8 +74,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@PlusTransactional
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
 		try {
+//			List<Participant> list = participantLookupLogic.getMatchingParticipants(event.getParticipantDetail());
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			System.out.println();
 			ObjectCreationException errorHandler = new ObjectCreationException();;
 
 			ensureUniqueSsn(participant.getSocialSecurityNumber(), errorHandler);
@@ -133,7 +133,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
-			Participant participant = participantFactory.patchParticipant(oldParticipant,event.getParticipantAttributes());
+			Participant participant = participantFactory.patchParticipant(oldParticipant,event.getParticipantDetail());
 			
 			ObjectCreationException errorHandler = new ObjectCreationException();;
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);

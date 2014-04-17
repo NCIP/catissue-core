@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
@@ -32,7 +32,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -78,14 +77,23 @@ public class ParticipantController {
 	@RequestMapping(method = RequestMethod.PATCH, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantDetail patchParticipant(@PathVariable Long id,@RequestBody String values) {
+	public ParticipantDetail patchParticipant(@PathVariable Long id,@RequestBody Map<String, Object> values) {
 		PatchParticipantEvent event = new PatchParticipantEvent();
-		Gson gson = AppUtility.initGSONBuilder().create();
-		gson.fromJson(values, ParticipantDetail.class);
-//		values.entrySet()
+		ParticipantDetail detail = new ParticipantDetail();
+		try {
+			BeanUtils.populate(detail, values);
+		}
+		catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		event.setParticipantDetail(detail);
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-//		event.setParticipantAttributes(values);
 		ParticipantUpdatedEvent response = participantSvc.patchParticipant(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getParticipantDetail();
@@ -108,7 +116,7 @@ public class ParticipantController {
 		return null;
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.POST, value="/matchParticipants")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ParticipantDetail> getMatchedParticipants(@RequestBody ParticipantDetail participantDetail) {

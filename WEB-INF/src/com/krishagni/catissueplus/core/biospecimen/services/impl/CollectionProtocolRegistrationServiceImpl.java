@@ -3,15 +3,11 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
-import java.util.Map;
-
 import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
-import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
@@ -40,12 +36,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
 
-	private ParticipantFactory participantFactory;
-
-	public void setParticipantFactory(ParticipantFactory participantFactory) {
-		this.participantFactory = participantFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -71,18 +61,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		try {
 			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
-			Long participantId = event.getCprDetail().getParticipantDetail().getId();
-			Participant participant;
-			if (participantId == null) {
-				participant = participantFactory.createParticipant(event.getCprDetail().getParticipantDetail());
-			}
-			else {
-				participant = daoFactory.getParticipantDao().getParticipant(participantId);
-			}
-			if (participant == null) {
-				errorHandler.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
-			}
-			registration.setParticipant(participant);
 			ensureUniquePpid(registration, errorHandler);
 			ensureUniqueBarcode(registration.getBarcode(), errorHandler);
 			errorHandler.checkErrorAndThrow();
@@ -135,19 +113,19 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public RegistrationUpdatedEvent patchRegistration(PatchRegistrationEvent event) {
 		try {
 			CollectionProtocolRegistration oldCpr = null;
-			Map<String, Object> cprProps = event.getRegistrationProps();
+			CollectionProtocolRegistrationDetail detail = event.getCollectionProtocolRegistrationDetail();
 			if (event.getId() != null) {
 				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
 			}
-			else if (cprProps.get("ppId") != null && cprProps.get("cpId") != null) {
-				oldCpr = daoFactory.getCprDao().getCprByPpId((Long) cprProps.get("cpId"), cprProps.get("ppId").toString());
+			else if (detail.getPpid() != null && detail.getCpId() != null) {
+				oldCpr = daoFactory.getCprDao().getCprByPpId(detail.getCpId(), detail.getPpid());
 			}
 
 			if (oldCpr == null) {
 				RegistrationUpdatedEvent.notFound(event.getId());
 			}
 			ObjectCreationException errorHandler = new ObjectCreationException();
-			CollectionProtocolRegistration cpr = registrationFactory.patchCpr(oldCpr, cprProps);
+			CollectionProtocolRegistration cpr = registrationFactory.patchCpr(oldCpr, detail);
 
 			validatePpid(oldCpr, cpr, errorHandler);
 			validateBarcode(oldCpr.getBarcode(), cpr.getBarcode(), errorHandler);

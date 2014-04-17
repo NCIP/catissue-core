@@ -7,10 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
+import edu.wustl.catissuecore.util.global.AppUtility;
+
 public class ParticipantDetail {
+
+	List<String> modifiedAttributes = new ArrayList<String>();
 
 	private String firstName;
 
@@ -39,6 +44,45 @@ public class ParticipantDetail {
 	private String activityStatus;
 
 	private Long id;
+	public boolean isFirstNameModified(){
+		return modifiedAttributes.contains("firstName");
+	}
+	public boolean isLastNameModified(){
+		return modifiedAttributes.contains("lastName");
+	}
+	public boolean isMiddleNameModified(){
+		return modifiedAttributes.contains("middleName");
+	}
+	public boolean isBirthDateModified(){
+		return modifiedAttributes.contains("birthDate");
+	}
+	public boolean isDeathDateModified(){
+		return modifiedAttributes.contains("deathDate");
+	}
+	public boolean isGenderModified(){
+		return modifiedAttributes.contains("gender");
+	}
+	public boolean isRaceModified(){
+		return modifiedAttributes.contains("race");
+	}
+	public boolean isVitalSatusModified(){
+		return modifiedAttributes.contains("vitalStatus");
+	}
+	public boolean isPMIModified(){
+		return modifiedAttributes.contains("pmiCollection");
+	}
+	public boolean isSexGenotypeModified(){
+		return modifiedAttributes.contains("sexGenoty");
+	}
+	public boolean isEthnicityModified(){
+		return modifiedAttributes.contains("ethnicity");
+	}
+	public boolean isSSNModified(){
+		return modifiedAttributes.contains("ssn");
+	}
+	public boolean isActivityStatusModified(){
+		return modifiedAttributes.contains("activityStatus");
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -152,6 +196,14 @@ public class ParticipantDetail {
 		this.id = id;
 	}
 
+	public List<String> getModifiedAttributes() {
+		return modifiedAttributes;
+	}
+
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
+	}
+
 	public static ParticipantDetail fromDomain(Participant participant) {
 		ParticipantDetail participantDetail = new ParticipantDetail();
 		participantDetail.setFirstName(participant.getFirstName());
@@ -182,4 +234,12 @@ public class ParticipantDetail {
 		return participantDetail;
 	}
 
+	public static ParticipantDetail fromMap(Map<String, Object> properties) {
+		Gson gson = AppUtility.initGSONBuilder().create();
+
+		List<String> list = new ArrayList<String>(properties.keySet());
+		ParticipantDetail detail = gson.fromJson(gson.toJson(properties), ParticipantDetail.class);
+		detail.setModifiedAttributes(list);
+		return detail;
+	}
 }

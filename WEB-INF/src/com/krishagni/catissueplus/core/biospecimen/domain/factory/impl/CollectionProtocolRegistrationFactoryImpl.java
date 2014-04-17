@@ -3,25 +3,23 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -42,6 +40,12 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	private final String CONSENT_WITNESS = "consent witness";
 
+	private ParticipantFactory participantFactory;
+
+	public void setParticipantFactory(ParticipantFactory participantFactory) {
+		this.participantFactory = participantFactory;
+	}
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -60,39 +64,40 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setActivityStatus(registration, detail.getActivityStatus(), exception);
 		setCollectionProtocol(registration, detail, exception);
 		setPPId(registration, detail.getPpid(), exception);
+		Long participantId = detail.getParticipantDetail().getId();
+		Participant participant;
+		if (participantId == null) {
+			participant = participantFactory.createParticipant(detail.getParticipantDetail());
+		}
+		else {
+			participant = daoFactory.getParticipantDao().getParticipant(participantId);
+		}
+		if (participant == null) {
+			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "participant");
+		}
+		registration.setParticipant(participant);
 		exception.checkErrorAndThrow();
 		return registration;
 	}
 
 	@Override
-	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr, Map<String, Object> cprProps) {
+	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
+			CollectionProtocolRegistrationDetail detail) {
 		ObjectCreationException exception = new ObjectCreationException();
-		Iterator<Entry<String, Object>> entries = cprProps.entrySet().iterator();
-		while (entries.hasNext()) {
-			Entry<String, Object> entry = entries.next();
-			if ("barcode".equals(entry.getKey())) {
-				setBarcode(oldCpr, String.valueOf(entry.getValue()), exception);
-			}
-			if ("ppId".equals(entry.getKey())) {
-				setPPId(oldCpr, String.valueOf(entry.getValue()), exception);
-			}
-			if ("activityStatus".equals(entry.getKey())) {
-				setActivityStatus(oldCpr, String.valueOf(entry.getValue()), exception);
-			}
-			if ("registrationDate".equals(entry.getKey())) {
-				setRegistrationDate(oldCpr, getDate(entry.getValue()), exception);
-			}
+		if (detail.isBarcodeModified()) {
+			setBarcode(oldCpr, detail.getBarcode(), exception);
 		}
-		return null;
-	}
-
-	private Date getDate(Object value) {
-		SimpleDateFormat format = new SimpleDateFormat();
-		try {
-			return format.parse(String.valueOf(value));
+		if (detail.isPpidModified()) {
+			setPPId(oldCpr, detail.getPpid(), exception);
 		}
-		catch (ParseException e) {
-			e.printStackTrace();
+		if (detail.isActivityStatusModified()) {
+			setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
+		}
+		if (detail.isRegistrationDateModified()) {
+			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
+		}
+		if (detail.isParticipantModified()) {
+			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
 		}
 		return null;
 	}

@@ -1,15 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.Map;
-
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class PatchSpecimenEvent extends RequestEvent {
 
 	private Long id;
 
-	private Map<String, Object> specimenProps;
+	private SpecimenDetail detail;
 
 	public Long getId() {
 		return id;
@@ -19,12 +17,12 @@ public class PatchSpecimenEvent extends RequestEvent {
 		this.id = id;
 	}
 
-	public Map<String, Object> getSpecimenProps() {
-		return specimenProps;
+	public SpecimenDetail getDetail() {
+		return detail;
 	}
 
-	public void setSpecimenProps(Map<String, Object> specimenProps) {
-		this.specimenProps = specimenProps;
+	public void setDetail(SpecimenDetail detail) {
+		this.detail = detail;
 	}
 
 }

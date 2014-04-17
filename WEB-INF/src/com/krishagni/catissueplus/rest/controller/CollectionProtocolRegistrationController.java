@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -122,10 +124,21 @@ public class CollectionProtocolRegistrationController {
 	public CollectionProtocolRegistrationDetail patchRegistration(@PathVariable Long id,
 			@RequestBody Map<String, Object> regProps) {
 		PatchRegistrationEvent event = new PatchRegistrationEvent();
-
+		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
+		try {
+			BeanUtils.populate(detail, regProps);
+		}
+		catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		event.setRegistrationProps(regProps);
+		event.setCollectionProtocolRegistrationDetail(detail);
 		RegistrationUpdatedEvent response = cprSvc.patchRegistration(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getCprDetail();
