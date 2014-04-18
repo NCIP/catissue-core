@@ -993,10 +993,10 @@
 		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v31.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
-       <target name="upgrade_db_plusv3.2">
+       <target name="upgrade_db_plusv4.0">
                <echo message="Upgrading DataBase with URL ${final.database.url}" />    
                <antcall target="upgrade_de_db"/>
-               <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v32.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+               <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v40.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
        </target>
 
        <target name="upgrade_de_db">
@@ -1716,7 +1716,7 @@
 		<antcall target="update_protection_element" />
 		<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 		<antcall target="upgrade_db_plusv3.1" />
-		<antcall target="upgrade_db_plusv3.2" />
+		<antcall target="upgrade_db_plusv4.0" />
 	</target>
 
 	<!--MySQL Database Creation -->
@@ -2083,7 +2083,7 @@
 						<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 						<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 						<antcall target="upgrade_db_plusv3.1" />
-						<antcall target="upgrade_db_plusv3.2" />
+						<antcall target="upgrade_db_plusv4.0" />
 					</then>
 				<elseif>
 								<equals arg1="${plus2.0.version}" arg2="${from.version}"/>
@@ -2091,7 +2091,7 @@
 									<antcall target="upgrade_db_from_plusv20_plusv2.1" />
 									<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 									<antcall target="upgrade_db_plusv3.1" />
-									<antcall target="upgrade_db_plusv3.2" />
+									<antcall target="upgrade_db_plusv4.0" />
 								</then>
 					</elseif>
 					<elseif>
@@ -2099,20 +2099,20 @@
 								<then>
 									<antcall target="upgrade_db_from_plusv2.1_plusv3.0" />
 									<antcall target="upgrade_db_plusv3.1" />
-									<antcall target="upgrade_db_plusv3.2" />
+									<antcall target="upgrade_db_plusv4.0" />
 								</then>
 						</elseif>
 						<elseif>
 								<equals arg1="${plus3.0.version}" arg2="${from.version}"/>
 								<then>
 									<antcall target="upgrade_db_plusv3.1" />
-									<antcall target="upgrade_db_plusv3.2" />
+									<antcall target="upgrade_db_plusv4.0" />
 								</then>
 							</elseif>
                                                         <elseif>
 				                                <equals arg1="${plus3.1.version}" arg2="${from.version}"/>
                                 				<then>
-				                                    <antcall target="upgrade_db_plusv3.2" />
+				                                    <antcall target="upgrade_db_plusv4.0" />
                                 				</then>
 				                        </elseif>
 							<elseif>
@@ -2120,7 +2120,7 @@
 											<then>
 												<antcall target="upgrade_db_from_plusv1.2_to_plusv3.0" />
 												<antcall target="upgrade_db_plusv3.1" />
-												<antcall target="upgrade_db_plusv3.2" />
+												<antcall target="upgrade_db_plusv4.0" />
 											</then>
 								</elseif>
 								<else>
