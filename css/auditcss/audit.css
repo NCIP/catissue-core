@@ -1,0 +1,179 @@
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    height: 22px;
+}
+.chosen-container {
+    font-size: 11px;
+}
+
+.header
+{
+	background-color:rgb(238, 245, 251);
+}
+
+.headerText
+{
+	font-size:12px;
+	font-weight:bold;
+	margin-left:15px;
+	color: rgb(7, 65, 128);
+}
+.div_class
+{  
+ height: auto; 
+ overflow: auto;
+}
+
+.select_class
+{
+	width:260px;
+	height:25px;
+}
+
+.input_class
+{
+	width: 260px;height:24px;font-size:13px
+}
+
+.panel {
+		height: auto;
+    	margin: 5% 25% 0%;
+        margin-top: 5%;
+     
+    height: auto;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+}
+.panel-heading {
+    padding: 1px 0px;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.panel-primary {
+    border-color: rgb(66, 139, 202);
+}
+
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+
+.panel-primary > .panel-heading {
+    border-color: rgb(66, 139, 202);
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+
+.button_class
+{
+	width: 80px;
+	height: 25px;
+	margin-left: 260px; 
+	margin-top: -22px;
+	width: 15%;
+	font-family: verdana;
+	font-size: 11px;
+	vertical-align: middle;
+	
+}
+
+.btn:focus {
+    
+    text-decoration: none;
+}
+
+.btn:focus {
+    
+    outline-offset: -2px;
+}
+
+btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(50, 118, 177);
+    border-color: rgb(40, 94, 142);
+}
+
+.btn:focus {
+    outline: thin dotted rgb(51, 51, 51);
+    outline-offset: -2px;
+}
+
+button, input, select, textarea {
+    margin: 0px;
+    }
+.btn {
+    display: inline-block;
+    padding: 3px 22px;
+    margin-bottom: 0px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 4px 4px;
+    -moz-user-select: none;
+}
+
+button, select {
+    text-transform: none;
+}
+
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+}
+.label{
+	
+	display: inline;
+	padding-top: 0.2em;
+	padding-bottom: 0.3em;
+	text-align: right;
+	vertical-align: baseline;
+	font-size: 11px;
+	line-height: 2em;
+	color: rgb(17, 17, 17);
+	margin-left: 1px;
+	width: 30%;
+}
+
+.field
+{
+	float:right;
+	width: 54%;
+	margin-top: -31px;
+	margin-right: 9%;
+}
+
+p{
+	margin: 2% 0% 9px 13%;
+	width: 120px;
+}
+
+body {
+    font-family: verdana;
+    font-size: 11px;
+    line-height: 1.42857;
+    color: rgb(51, 51, 51);
+}
+
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+}
+.btn-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(66, 139, 202);
+    border-color: rgb(53, 126, 189);
+}

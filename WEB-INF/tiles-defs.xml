@@ -1387,5 +1387,9 @@
 	<definition name=".catissuecore.bulkParticipantMatch" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/bulkParticipantMatch.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.AuditReportDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/audit/Audit.jsp" />
+	</definition>
 
 </tiles-definitions>

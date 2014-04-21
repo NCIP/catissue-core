@@ -1,0 +1,7 @@
+Audit,Summary,Report,
+
+UserId ,FirstName , LastName , LoginName , Event Type , Object name ,Count
+ 
+ #foreach($reportDto in $reportDetailsList)
+     $reportDto.getIdentifier(),$reportDto.getFirstName(),$reportDto.getLastName(),$reportDto.getLoginName(),$reportDto.getEventType(), $reportDto.getObjectName(),$reportDto.getCount()
+ #end

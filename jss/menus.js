@@ -256,6 +256,11 @@ Ext.onReady(function(){
                 }
             },
             {
+                text: 'Audit Report',
+   				tooltip:'Download Audit Report',
+                   href:'AuditReport.do'
+            },
+            {
                 text: 'Reported Problems',
 				tooltip:'Shows Reported Problems',
                 href:'ReportedProblemShow.do?pageNum=1'

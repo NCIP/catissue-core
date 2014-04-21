@@ -156,6 +156,10 @@
     <property name="auditFactory" ref="auditFactory"/>
   </bean>
   
+   <bean id="auditReportSvc" class="com.krishagni.catissueplus.core.audit.services.impl.AuditReportServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
   <bean id="extAppNotificationService" class="com.krishagni.catissueplus.core.notification.services.impl.ExternalAppNotificationServiceImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory" />
   </bean>

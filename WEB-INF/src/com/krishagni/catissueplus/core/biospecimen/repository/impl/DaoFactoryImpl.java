@@ -12,7 +12,9 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerD
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
+import com.krishagni.catissueplus.core.audit.repository.AuditReportDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
+import com.krishagni.catissueplus.core.audit.repository.impl.AuditReportDaoImpl;
 import com.krishagni.catissueplus.core.auth.repository.LdapDao;
 import com.krishagni.catissueplus.core.auth.repository.impl.LdapDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
@@ -108,6 +110,13 @@ public class DaoFactoryImpl implements DaoFactory {
 		return dao;
 	}
 
+	@Override
+	public AuditReportDao getAuditReportDao() {
+		AuditReportDaoImpl dao = new AuditReportDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+	
 	@Override
 	public ContainerDao getContainerDao() {
 		ContainerDaoImpl dao = new ContainerDaoImpl();
