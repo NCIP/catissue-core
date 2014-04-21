@@ -787,6 +787,26 @@
 		<put name="content" value="/pages/content/search/AdvanceQuery.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.homePageDef5" path="/pages/Layout5.jsp">
+		<put name="header" value="/pages/MainHeader.jsp" />
+		<put name="applicationheader" value="/pages/ApplicationHeader.jsp"/>
+		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
+		<put name="content" value="/pages/content/home/Home.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.csd" extends=".catissuecore.homePageDef5">
+ 		<put name="pageContentUrl" value="csd_web/pages/csdUI.html" type="string"/>
+ 	</definition>
+ 	
+ 	<definition name=".catissuecore.ecrf" extends=".catissuecore.homePageDef5">
+ 		<put name="pageContentUrl" value="ngweb/pages/forms.html" type="string"/>
+ 	</definition>
+
+        <definition name=".catissuecore.query" extends=".catissuecore.homePageDef5">
+                <put name="pageContentUrl" value="ngweb/pages/nquery.html" type="string"/>
+        </definition>
+ 	
+
 	<!--  Added By Ankush -->
 	<definition name=".catissuecore.queryParticipantViewEditDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ParticipantView.jsp" />
@@ -1311,6 +1331,10 @@
 	<definition name=".catissuecore.viewSpecimenCollectionGroupAnnotationwithMenu" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenCollectioGroupAnnotation.jsp" />
 	</definition>
+
+	<definition name=".catissuecore.loginDashboardDef" extends=".catissuecore.homePageDef">
+        <put name="content" value="/pages/content/manageAdministrativeData/LoginAuditDashboard.jsp" />
+    </definition>
 
 	<!--Annotation defs End-->
 

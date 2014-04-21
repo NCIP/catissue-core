@@ -17,8 +17,6 @@
 <%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
 
 
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
- 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 <script>
@@ -75,11 +73,10 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
-		String staticEntityName=null;
-		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY;
+		String staticEntityName="Participant";
 		//Falguni:Performance Enhancement.
 		Long participantEntityId = null;
-		participantEntityId = (Long)request.getAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
+		participantEntityId = (Long)request.getAttribute("particiapntRecordEntryEntityId");
 
 		String id = request.getParameter("id");
 

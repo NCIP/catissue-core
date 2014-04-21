@@ -5535,15 +5535,10 @@ PUBLIC
 		</action>
 
 		<action path="/LoadAnnotationDataEntryPage"
-			type="edu.wustl.catissuecore.action.annotations.LoadAnnotationDataEntryPageAction"
+			type="krishagni.catissueplus.action.annotations.LoadAnnotationDataEntryPageAction"
 			name="annotationDataEntryForm" validate="false" scope="request">
 			<forward name="success"
-				path="/pages/content/manageBioSpecimen/AnnotationDataEntryPage.jsp" />
-			<forward name="pageOfEditAnnotation"
-				path="/pages/content/manageBioSpecimen/EditAnnotationDataEntryPage.jsp" />
-			<forward name="pageOfParticipant" path="/Participant.do?operation=viewAnnotations" />
-			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=viewAnnotations" />
-
+				path="/ngweb/pages/FormDataEntryPage.jsp" />
 		</action>
 		<action path="/LoadDynamicExtentionsDataEntryPage"
 			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtentionsDataEntryPageAction"
@@ -6138,6 +6133,17 @@ PUBLIC
        <action path="/SaveScgAjaxAction"
 			type="edu.wustl.catissuecore.action.SaveSCGAjaxAction" validate="false" scope="request">
 		</action>
+
+ 		<action path="/loadcsd" type="org.apache.struts.actions.ForwardAction"
+ 			parameter=".catissuecore.csd" />
+ 
+ 		<action path="/ecrf" type="org.apache.struts.actions.ForwardAction"
+ 			parameter=".catissuecore.ecrf"/>
+
+ 		<action path="/query" type="org.apache.struts.actions.ForwardAction"
+ 			parameter=".catissuecore.query"/>
+ 
+
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

@@ -1,7 +1,0 @@
-REGEDIT4
-[HKEY_LOCAL_MACHINE\SOFTWARE\Apache Software Foundation\Jakarta Isapi Redirector\1.0]
-"extension_uri"="/jakarta/isapi_redirect.dll"
-"log_file"="@@IISSettings_HOME@@\\iis_redirect.log"
-"log_level"="emerg"
-"worker_file"="@@IISSettings_HOME@@\\worker.properties"
-"worker_mount_file"="@@IISSettings_HOME@@\\uriworkermap.properties"

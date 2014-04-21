@@ -13,7 +13,6 @@ import org.apache.struts.action.ActionMapping;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.common.dynamicextensions.ui.util.Constants;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -56,7 +55,7 @@ public class ClinicalDiagnosisDataAction extends BaseAction
 		List<NameValueBean> clinicalDiagnosisBean = new ArrayList<NameValueBean>();
 		populateQuerySpecificNameValueBeansList(clinicalDiagnosisBean, clinicalDiagnosis, query);
 		mainJsonObject.put("totalCount", clinicalDiagnosisBean.size());
-		request.setAttribute(Constants.SELECTED_VALUES, clinicalDiagnosisBean);
+		request.setAttribute("selectedCoordinators", clinicalDiagnosisBean);
 
 		for (int i = startFetch; i < total && i < clinicalDiagnosisBean.size(); i++)
 		{

@@ -13,7 +13,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,7 +36,6 @@ import com.ibm.icu.text.SimpleDateFormat;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -80,7 +78,6 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.struts.ApplicationRequestProcessor;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -94,7 +91,6 @@ import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.condition.INClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
@@ -2215,14 +2211,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 		// OrderingSystemUtil.getSpecItemDetails(orderId,dao);
 
-		String sql = "select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY "
-				+ " from catissue_abstract_specimen abs, catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where "
-				+ " spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and "
+		String sql = "select cat.identifier,spec.identifier, spec.specimen_class, spec.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY "
+				+ " from catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where "
+				+ " spec.identifier =cat.specimen_id and "
 				+ " cat.identifier=cot.identifier and order_id=? "
 				+ " union "
-				+ "select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY "
-				+ " from catissue_abstract_specimen abs, catissue_specimen spec, catissue_derieved_sp_ord_item cat,catissue_order_item cot where "
-				+ " spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and "
+				+ "select cat.identifier,spec.identifier, spec.specimen_class, spec.specimen_type, spec.label, spec.AVAILABLE_QUANTITY,cot.REQUESTED_QUANTITY "
+				+ " from catissue_specimen spec, catissue_derieved_sp_ord_item cat,catissue_order_item cot where "
+				+ " spec.identifier =cat.specimen_id and "
 				+ " cat.identifier=cot.identifier and order_id=? ";
 		ColumnValueBean bean = new ColumnValueBean(orderId);
 		List attrList = new ArrayList();

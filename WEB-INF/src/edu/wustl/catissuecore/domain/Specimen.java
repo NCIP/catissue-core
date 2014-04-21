@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
-import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -169,7 +168,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 	
 
-	protected Collection<SpecimenRecordEntry> specimenRecordEntryCollection = new HashSet<SpecimenRecordEntry>();
+	//protected Collection<SpecimenRecordEntry> specimenRecordEntryCollection = new HashSet<SpecimenRecordEntry>();
 
 	/**
 	 * Default Specimen.
@@ -443,11 +442,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			this.specimenCollectionGroup = new SpecimenCollectionGroup();
 		}
 
-		if (SearchUtil.isNullobject(this.specimenCharacteristics))
-		{
-			this.specimenCharacteristics = new SpecimenCharacteristics();
-		}
-
 		if (SearchUtil.isNullobject(this.initialQuantity))
 		{
 			this.initialQuantity = new Double(0);
@@ -605,8 +599,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					//Setting the SpecimenCharacteristics
 					this.pathologicalStatus = form.getPathologicalStatus();
-					this.specimenCharacteristics.tissueSide = form.getTissueSide();
-					this.specimenCharacteristics.tissueSite = form.getTissueSite();
+					this.tissueSide = form.getTissueSide();
+					this.tissueSite = form.getTissueSite();
 
 					//Getting the Map of External Identifiers
 					final Map extMap = form.getExternalIdentifier();
@@ -1250,11 +1244,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		this.lineage = reqSpecimen.getLineage();
 		this.pathologicalStatus = reqSpecimen.getPathologicalStatus();
 		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
-		if (reqSpecimen.getSpecimenCharacteristics() != null)
-		{
-			this.specimenCharacteristics = new SpecimenCharacteristics(reqSpecimen
-					.getSpecimenCharacteristics());
-		}
+		this.tissueSide = reqSpecimen.getTissueSide();
+		this.tissueSite = reqSpecimen.getTissueSite();
 		this.specimenType = reqSpecimen.getSpecimenType();
 		this.specimenClass = reqSpecimen.getClassName();
 		this.isAvailable = Boolean.FALSE;
@@ -1319,16 +1310,16 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		this.specimenRequirement = requirementSpecimen;
 	}
 
-	public Collection<SpecimenRecordEntry> getSpecimenRecordEntryCollection()
-	{
-		return specimenRecordEntryCollection;
-	}
-
-	public void setSpecimenRecordEntryCollection(
-			Collection<SpecimenRecordEntry> specimenRecordEntryCollection)
-	{
-		this.specimenRecordEntryCollection = specimenRecordEntryCollection;
-	}
+//	public Collection<SpecimenRecordEntry> getSpecimenRecordEntryCollection()
+//	{
+//		return specimenRecordEntryCollection;
+//	}
+//
+//	public void setSpecimenRecordEntryCollection(
+//			Collection<SpecimenRecordEntry> specimenRecordEntryCollection)
+//	{
+//		this.specimenRecordEntryCollection = specimenRecordEntryCollection;
+//	}
 
 	//bug no. 7690
 	/**

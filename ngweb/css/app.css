@@ -1,0 +1,102 @@
+
+.cp-padded-hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.cp-clear {
+  clear: both;
+}
+
+.cp-select {
+  background-color: rgb(245, 245, 245);
+}
+
+.cp-form {
+  font-size: 14px;
+}
+
+.cp-round-button-icon {
+  width: 40px;
+  height:40px;
+  border-radius:100%;
+}
+
+.cp-notifs {
+  text-align: center;
+  z-index: 100;
+  position: fixed;
+  width:100%;
+  top: 0;
+}
+
+.cp-de-form {
+  font-size: 14px;
+}
+
+.cp-print-label {
+  border-top: none !important;
+  vertical-align: middle;
+  width: 20%;
+  text-align: right;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.cp-print-value {
+  border-top: none !important;
+  vertical-align: middle;
+  width: 30%;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.ka-tree ul {
+  list-style-type: none;
+  padding-left: 15px;
+}
+
+.ka-tree-node-toggle-marker, .ka-tree-node-checkbox {
+  margin-right: 4px;
+  float: left;
+  cursor: pointer;
+}
+
+.ka-tree-node-toggle-marker {
+  margin-top: 6px;
+}
+
+.ka-tree-node-label {
+  margin-top: 2px;
+  float: left;
+}
+
+.ka-tree-node-offset {
+  padding-left: 15px;
+}
+
+.tooltip {
+	z-index: 9999;
+}
+
+.watch-tutorial {
+  margin-top: 10px;
+  float: left;
+  padding-left: 20px;
+}
+
+.plus-addon {
+  position: relative;
+}
+
+.plus-addon-input-right input {
+  padding-right: 30px;
+}
+
+.plus-addon-input-right span {
+  position: absolute;
+  right: 0px;
+  padding: 10px 20px;
+  pointer-events: none;
+}
+

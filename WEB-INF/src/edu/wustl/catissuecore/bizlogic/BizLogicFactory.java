@@ -413,7 +413,8 @@ public class BizLogicFactory implements IFactory
 						.equals("edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry")
 				|| className.equals("edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry"))
 		{
-			bizLogic = new AnnotationBizLogic();
+			//bizLogic = new AnnotationBizLogic();
+			// TODO: handle with new de service
 		}
 		else
 		{

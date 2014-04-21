@@ -1569,7 +1569,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic
 	{
 		final JDBCDAO jdbcDao = openJDBCSession();
 
-		final String queryStr = "select title from catissue_specimen_protocol where title = ?";
+		final String queryStr = "select title from catissue_collection_protocol where title = ?";
 		final ColumnValueBean columnValueBean = new ColumnValueBean(
 				protocol.getTitle());
 		final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
@@ -2122,7 +2122,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic
 	public static List getCollectionProtocolList(final String id)
 			throws ApplicationException
 	{
-		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
+		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_COLLECTION_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
 				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = ? ";
 
 		final ColumnValueBean columnValueBean = new ColumnValueBean(id);

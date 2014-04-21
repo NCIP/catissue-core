@@ -10,6 +10,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
+import edu.wustl.catissuecore.printserviceclient.PropertyHandler;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -42,11 +43,19 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress,
 			User userObj, String printerType, String printerLocation)
 	{
-
+		try {
+			System.out.println("########### Print service URL: "+PropertyHandler.getValue("printWebServiceEndPoint"));
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("############### Call to print labels from IP: "+ ipAddress);
 		final ArrayList listMap = new ArrayList();
 		//createObjectMap(abstractDomainObject,listMap);
 		this.createObjectMap(abstractDomainObject, listMap, printerType, printerLocation,
 						ipAddress);
+		System.out.println("######## calling the print service");
 		return callToPrinter(listMap);
 
 	}
@@ -82,6 +91,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 		try
 		{
 			final PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
+				System.out.println("######### Printing Labels.");
 			return objParser.callPrintService(listMap);
 		}
 		catch (final Exception exp)

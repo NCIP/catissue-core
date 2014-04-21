@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="krishagni.catissueplus.beans.FormRecordEntryBean"
+        table="CATISSUE_FORM_RECORD_ENTRY"
+        dynamic-update="false"
+        dynamic-insert="false"
+		lazy="true"
+    >
+    
+    <cache usage="read-write" />
+
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native"/>
+        </id>
+
+        <property
+            name="formCtxtId"
+            column="FORM_CTXT_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+        <property
+            name="objectId"
+            column="OBJECT_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+
+         <property
+            name="recordId"
+            column="RECORD_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+         
+          <property
+            name="updatedBy"
+            column="UPDATED_BY"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+
+         <property
+            name="updatedTime"
+            column="UPDATE_TIME"
+            type="timestamp"
+            update="true"
+            insert="true"
+            length="30"
+        />
+         
+        <property
+            name="activityStatusStr"
+            column="ACTIVITY_STATUS"
+            type="string"
+            update="true"
+            insert="true"
+            length="16"
+        />
+        
+        <query name="getRecordEntry">
+          from
+            FormRecordEntryBean
+          where
+            formCtxtId = :formCtxtId and 
+            recordId = :recordId and
+            objectId = :objectId 
+        </query>
+        
+        <query name="getRecordEntryByRecId">
+          from
+            FormRecordEntryBean
+          where
+            recordId = :recordId
+        </query>
+    </class>
+</hibernate-mapping>

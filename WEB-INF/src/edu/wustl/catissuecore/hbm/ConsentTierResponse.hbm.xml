@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping auto-import="false">
     <class
         name="edu.wustl.catissuecore.domain.ConsentTierResponse"
         table="CATISSUE_CONSENT_TIER_RESPONSE"
@@ -53,7 +53,7 @@
     </class>
       <query name="selectCprConsentResponse">
         select  consentTierResponse 
-        from  CollectionProtocolRegistration cpr  
+        from  edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr  
 	    join cpr.consentTierResponseCollection consentTierResponse  join consentTierResponse.consentTier consentTier 
 		 where cpr.id = ? and consentTier.id = ? 
 	</query>

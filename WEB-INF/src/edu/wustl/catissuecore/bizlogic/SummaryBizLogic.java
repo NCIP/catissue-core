@@ -159,9 +159,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 			ClassNotFoundException
 	{
 		String pValDNme = "0";
-		final String sql = "select count(*) from CATISSUE_SPECIMEN specimen join catissue_abstract_specimen absspec "
-				+ " on specimen.identifier=absspec.identifier where absspec.SPECIMEN_CLASS = ?"
-
+		final String sql = "select count(*) from CATISSUE_SPECIMEN specimen "
+				+ " where specimen.SPECIMEN_CLASS = ?"
 				+ " and specimen.COLLECTION_STATUS = 'Collected' and specimen"
 				+ DISABLED;
 		ColumnValueBean columnValueBean = new ColumnValueBean(specimanType);
@@ -199,11 +198,10 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	private List getSpecimenTypeDetailsCount(final String specimenType) throws BizLogicException
 
 	{
-		final String sql = "select absspec.SPECIMEN_TYPE,COUNT(*) from CATISSUE_SPECIMEN specimen "
-				+ "join catissue_abstract_specimen absspec on specimen.identifier=absspec.identifier "
-				+ "and specimen.COLLECTION_STATUS='Collected' and specimen" + DISABLED
-				+ " and absspec.SPECIMEN_CLASS = '" + specimenType
-				+ "'group by absspec.SPECIMEN_TYPE " + DESC_ORDER;
+		final String sql = "select specimen.SPECIMEN_TYPE,COUNT(*) from CATISSUE_SPECIMEN specimen "
+				+ " where specimen.COLLECTION_STATUS='Collected' and specimen" + DISABLED
+				+ " and specimen.SPECIMEN_CLASS = '" + specimenType
+				+ "' group by specimen.SPECIMEN_TYPE " + DESC_ORDER;
 		final List<NameValueBean> nameValuePairs = this.getNameValuePairs(sql);
 		return nameValuePairs;
 	}
@@ -219,9 +217,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 			ClassNotFoundException
 	{
 		String pValDNme = "0";
-		final String sql = "select sum(AVAILABLE_QUANTITY) from CATISSUE_SPECIMEN specimen join"
-				+ " catissue_abstract_specimen absspec on specimen.identifier=absspec.identifier"
-				+ " where absspec.SPECIMEN_CLASS=? and specimen" + DISABLED;
+		final String sql = "select sum(AVAILABLE_QUANTITY) from CATISSUE_SPECIMEN specimen "
+				+ " where specimen.SPECIMEN_CLASS=? and specimen" + DISABLED;
 
 		ColumnValueBean columnValueBean = new ColumnValueBean(specimanType);
 		List<ColumnValueBean> columnValueBeansList = new ArrayList<ColumnValueBean>();
@@ -258,8 +255,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	private String getTotalSpecimenCount() throws DAOException, ClassNotFoundException
 	{
 
-		final String sql = "select count(*) from CATISSUE_SPECIMEN specimen join "
-				+ "catissue_abstract_specimen absspec on specimen.identifier=absspec.identifier "
+		final String sql = "select count(*) from CATISSUE_SPECIMEN specimen "
 				+ "where specimen.COLLECTION_STATUS='Collected' and specimen" + DISABLED;
 		return this.getCount(sql);
 	}
@@ -296,8 +292,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private String getTotalCPCount() throws DAOException, ClassNotFoundException
 	{
-		final String sql = "SELECT COUNT(*) FROM CATISSUE_SPECIMEN_PROTOCOL A, CATISSUE_COLLECTION_PROTOCOL B WHERE A.IDENTIFIER = B.IDENTIFIER AND A"
-				+ DISABLED;
+		final String sql = "SELECT COUNT(*) FROM CATISSUE_COLLECTION_PROTOCOL A WHERE A"+ DISABLED;
 		return this.getCount(sql);
 	}
 
@@ -309,8 +304,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private String getTotalDPCount() throws DAOException, ClassNotFoundException
 	{
-		final String sql = "SELECT COUNT(*) FROM CATISSUE_SPECIMEN_PROTOCOL A, CATISSUE_DISTRIBUTION_PROTOCOL B WHERE A.IDENTIFIER = B.IDENTIFIER AND A"
-				+ DISABLED;
+		final String sql = "SELECT COUNT(*) FROM CATISSUE_DISTRIBUTION_PROTOCOL A WHERE A"+ DISABLED;
 		return this.getCount(sql);
 	}
 
@@ -394,8 +388,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getPathStatsWiseCount() throws BizLogicException
 	{
-		final String sql = "select PATHOLOGICAL_STATUS,count(*) from catissue_abstract_specimen abs,"
-				+ " catissue_specimen sp where abs.identifier = sp.identifier and sp.COLLECTION_STATUS "
+		final String sql = "select PATHOLOGICAL_STATUS,count(*) from "
+				+ " catissue_specimen sp where sp.COLLECTION_STATUS "
 				+ "like 'Collected' and sp"
 				+ DISABLED
 				+ " group by PATHOLOGICAL_STATUS"
@@ -411,9 +405,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getTSiteWiseCount() throws BizLogicException
 	{
-		final String sql = "SELECT TISSUE_SITE, COUNT(B.IDENTIFIER) FROM CATISSUE_SPECIMEN_CHAR A, "
-				+ "CATISSUE_ABSTRACT_SPECIMEN B, CATISSUE_SPECIMEN C WHERE "
-				+ "A.IDENTIFIER = B.SPECIMEN_CHARACTERISTICS_ID AND B.IDENTIFIER = C.IDENTIFIER AND "
+		final String sql = "SELECT C.TISSUE_SITE, COUNT(C.IDENTIFIER) FROM , "
+				+ " CATISSUE_SPECIMEN C WHERE "
 				+ "C.ACTIVITY_STATUS NOT IN ('Disabled') AND C.COLLECTION_STATUS LIKE 'Collected' GROUP BY A.TISSUE_SITE"
 				+ DESC_ORDER;
 
@@ -427,9 +420,9 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getPbyCD() throws BizLogicException
 	{
-		final String sql = "SELECT CLINICAL_DIAGNOSIS, COUNT(distinct C.PARTICIPANT_ID) FROM CATISSUE_ABS_SPECI_COLL_GROUP A,"
+		final String sql = "SELECT CLINICAL_DIAGNOSIS, COUNT(distinct C.PARTICIPANT_ID) FROM "
 				+ " CATISSUE_SPECIMEN_COLL_GROUP B, CATISSUE_COLL_PROT_REG C, CATISSUE_PARTICIPANT D WHERE"
-				+ " A.IDENTIFIER = B.IDENTIFIER AND B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
+				+ " B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
 				+ "D.IDENTIFIER = C.PARTICIPANT_ID AND D"
 				+ DISABLED
 				+ " AND "
@@ -447,9 +440,9 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getPbyCS() throws BizLogicException
 	{
-		final String sql = "SELECT CLINICAL_STATUS, COUNT(distinct C.PARTICIPANT_ID) FROM CATISSUE_ABS_SPECI_COLL_GROUP A,"
+		final String sql = "SELECT CLINICAL_STATUS, COUNT(distinct C.PARTICIPANT_ID) FROM "
 				+ " CATISSUE_SPECIMEN_COLL_GROUP B, CATISSUE_COLL_PROT_REG C, CATISSUE_PARTICIPANT D WHERE "
-				+ "A.IDENTIFIER = B.IDENTIFIER AND B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
+				+ " B.COLLECTION_PROTOCOL_REG_ID = C.IDENTIFIER AND "
 				+ "D.IDENTIFIER = C.PARTICIPANT_ID AND D"
 				+ DISABLED
 				+ " AND "

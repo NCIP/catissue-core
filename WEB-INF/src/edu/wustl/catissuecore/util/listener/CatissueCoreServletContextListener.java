@@ -16,22 +16,23 @@ import java.util.Timer;
 
 import javax.jms.JMSException;
 import javax.mail.MessagingException;
+import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.sql.DataSource;
 
+import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
 import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
-import net.sf.ehcache.CacheException;
 
 import org.apache.commons.io.FilenameUtils;
 
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
+import edu.common.dynamicextensions.nutility.DEApp;
+import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
-import edu.wustl.cab2b.server.cache.EntityCache;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
-import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -41,14 +42,12 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
 import edu.wustl.catissuecore.util.ParticipantAttributeDisplayInfoUtility;
@@ -74,9 +73,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.DAOUtility;
-import edu.wustl.query.bizlogic.QueryDataExportService;
-import edu.wustl.query.util.listener.QueryCoreServletContextListenerUtil;
-import edu.wustl.simplequery.bizlogic.QueryBizLogic;
+import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
 
 /**
  *
@@ -95,6 +92,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * DATASOURCE_JNDI_NAME.
 	 */
 	private static final String JNDI_NAME = "java:/catissuecore";
+	
+	private static final String DE_FILEUPLOAD_DIR = "de.fileUploadDir";
 
 	//class level instance to access methods for registering and unregistering queues
 	private final ParticipantManagerUtility participantManagerUtility = new ParticipantManagerUtility();
@@ -125,7 +124,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
 			initCiderIntegration();
-			QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
+			//QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
 			if (XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
 			{
 				BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
@@ -145,7 +144,16 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              */
 			
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
-            QueryDataExportService.initialize();
+            //QueryDataExportService.initialize();
+
+			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+			
+			InitialContext ic = new InitialContext();
+			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
+			
+			String deFileUploadDir = XMLPropertyHandler.getValue(DE_FILEUPLOAD_DIR);
+			DEApp.init(ds, deFileUploadDir);
+			initQueryPathsConfig();
             
 			logger.info("Initialization complete");
 		}
@@ -156,6 +164,12 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
+
+ 	private void initQueryPathsConfig() {
+ 		String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
+ 		PathConfig.intialize(path);
+	}
+
 	
 	private void initCiderIntegration()
 	{
@@ -234,16 +248,15 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	public void initCatissueParams() throws ClassNotFoundException, DAOException, ParseException,
 			IOException
 	{
-		edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
+		//edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
 		this.addDefaultProtectionGroupsToMap();
-		final QueryBizLogic bLogic = new QueryBizLogic();
-		bLogic.initializeQueryData();
+//		final QueryBizLogic bLogic = new QueryBizLogic();
+//		bLogic.initializeQueryData();
 		this.createAliasAndPageOfMap();
 		LabelAndBarcodeGeneratorInitializer.init();
 		this.initialiseVariablesForEdinburgh();
 		this.initialiseVariablesForDFCI();
 		this.initialiseVariableForAppInfo();
-		this.initEntityCache();
 		Utility.initializePrivilegesMap();
 		this.initTitliIndex();
 		this.initCDEManager();
@@ -256,6 +269,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		System.setProperty("app.propertiesDir", CommonServiceLocator.getInstance().getPropDirPath());
 	}
 	
+
 	private void initThrottlingModule() 
 	{
 		String timeIntervalInMinutes = XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT);
@@ -294,6 +308,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		final int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
+		Variables.isToDisplayAdminEmail = Boolean.parseBoolean(XMLPropertyHandler.getValue("display.admin.emails.onSummaryPage"));
+		
 		HelpXMLPropertyHandler.init(CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "help_links.xml");
 	}
@@ -305,51 +321,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		TitliResultGroup.isTitliConfigured = Boolean.parseBoolean(XMLPropertyHandler
 				.getValue(Constants.KEYWORD_CONFIGURED));
-	}
-
-	/**
-	 * Initialize Entity cache.
-	 */
-	private void initEntityCache()
-	{
-		try
-		{
-			final CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-			AnnotationUtil.getSystemEntityList();
-			final Long participantId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-			cacheManager.addObjectToCache("participantEntityId", participantId);
-			final Long scgId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
-			cacheManager.addObjectToCache("scgEntityId", scgId);
-			final Long specimenEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-			cacheManager.addObjectToCache("specimenEntityId", specimenEntityId);
-			final Long cpEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
-			cacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,
-					cpEntityId);
-
-			final Long entityId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
-			cacheManager.addObjectToCache(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
-					entityId);
-			final Long spRecEtyId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-			cacheManager.addObjectToCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
-					spRecEtyId);
-			final Long scgRecEtyId = edu.common.dynamicextensions.xmi.AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
-			cacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgRecEtyId);
-			EntityCache.getInstance();
-			logger.debug("Entity Cache is initialised");
-		}
-		catch (final Exception e)
-		{
-			CatissueCoreServletContextListener.logger.error("Exception occured while initialising "
-					+ "entity cache" + e.getMessage(), e);
-			throw new RuntimeException(e.getLocalizedMessage(), e);
-		}
 	}
 
 	/**
@@ -421,16 +392,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 		protectionGroupsForObjectTypes.put(Specimen.class.getName(),
 				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
+//		protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
 //				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-//		protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
-//				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
-		protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
-				new String[]{ProtectionGroups.PUBLIC_DATA_GROUP});
 
 		edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
 				.putAll(protectionGroupsForObjectTypes);
@@ -487,18 +450,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		try
 		{
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-					.getInstance();
-			catissueCoreCacheManager.shutdown();
 			SpecimenWmqProcessor.cleanup();
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.shutdown();
 
-		}
-		catch (final CacheException e)
-		{
-			CatissueCoreServletContextListener.logger.error("Exception occured while shutting "
-					+ "instance of CatissueCoreCacheManager" + e.getMessage(), e);
 		}
 		catch (final DAOException e)
 		{

@@ -3,6 +3,7 @@
 #################
 
 *.pydevproject
+*.html
 .project
 .metadata
 caTissueSuite_Client/
@@ -158,7 +159,6 @@ csx
 AppPackages/
 
 # Others
-
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*

@@ -28,6 +28,7 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 	protected void addDataToPrint(Specimen specimen, List listMap, String printerType,
 			String printerLocation, String ipAddress)
 	{
+		System.out.println("############### printing labels for Specimen: "+ specimen.getLabel());
 		final Map<String, String> dataMap = new LinkedHashMap<String, String>();
 		dataMap.put("class", specimen.getClassName());
 		dataMap.put("id", specimen.getId().toString());
@@ -58,10 +59,10 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 			dataMap.put(PrintWebServiceConstants.SPECIMEN_BARCODE, CommonUtilities
 					.toString(specimen.getBarcode()));
 		}
-		if (specimen.getSpecimenCharacteristics() != null)
+		if (specimen.getTissueSite() != null)
 		{
 			dataMap.put(PrintWebServiceConstants.SPECIMEN_TISSUE_SITE, CommonUtilities
-					.toString(specimen.getSpecimenCharacteristics().getTissueSite()));
+					.toString(specimen.getTissueSite()));
 		}
 		if (specimen.getCollectionStatus() != null)
 		{

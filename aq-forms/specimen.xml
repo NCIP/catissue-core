@@ -1,0 +1,167 @@
+<form>
+	<view>
+		<name>Specimen</name>
+		<caption>Specimen</caption>
+		<table>CATISSUE_SPECIMEN</table>
+		<row>
+			<numberField>
+				<name>id</name>
+				<udn>id</udn>
+				<caption>Identifier</caption>
+				<column>IDENTIFIER</column>
+			</numberField>
+		</row>
+		<row>
+			<dropDown>
+				<name>lineage</name>
+				<udn>lineage</udn>
+				<caption>Lineage</caption>
+				<column>LINEAGE</column>
+				<options>
+					<option><value>New</value></option>
+					<option><value>Derived</value></option>
+					<option><value>Aliquot</value></option>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<textField>
+				<name>label</name>
+				<udn>label</udn>
+				<caption>Label</caption>
+				<column>LABEL</column>
+			</textField>
+		</row>
+		<row>
+			<textField>
+				<name>barcode</name>
+				<udn>barcode</udn>
+				<caption>Barcode</caption>
+				<column>BARCODE</column>
+			</textField>
+		</row>
+		<row>
+			<dropDown>
+      				<name>class</name>
+                                <udn>class</udn>
+                                <caption>Class</caption>
+                                <column>SPECIMEN_CLASS</column>
+                                <options>
+					<sql>select value from catissue_permissible_value where public_id = 2003991 order by value</sql>
+                                </options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+      				<name>type</name>
+                                <udn>type</udn>
+                                <caption>Type</caption>
+                                <column>SPECIMEN_TYPE</column>
+                                <options>
+                                      <sql>select subpv.value from catissue_permissible_value subpv inner join catissue_permissible_value mainpv on subpv.parent_identifier = mainpv.identifier where mainpv.public_id = 2003991 order by subpv.value</sql>
+                                </options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>tissueSite</name>
+				<udn>tissueSite</udn>
+				<caption>Tissue Site</caption>
+				<column>TISSUE_SITE</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = 'Tissue_Site_PID' order by value</sql>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>tissueSide</name>
+				<udn>tissueSide</udn>
+				<caption>Tissue Side</caption>
+				<column>TISSUE_SIDE</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>pathologicalStatus</name>
+				<udn>pathologicalStatus</udn>
+				<caption>Pathological Status</caption>
+				<column>PATHOLOGICAL_STATUS</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = '2003993' order by value</sql>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<datePicker>
+				<name>createdOn</name>
+				<udn>createdOn</udn>
+				<caption>Created On</caption>
+				<column>CREATED_ON_DATE</column>
+			</datePicker>
+		</row>
+		<row>
+			<numberField>
+				<name>initialQty</name>
+				<udn>initialQty</udn>
+				<caption>Initial Quantity</caption>
+				<column>INITIAL_QUANTITY</column>
+			</numberField>
+		</row>
+		<row>
+			<numberField>
+				<name>availableQty</name>
+				<udn>availableQty</udn>
+				<caption>Available Quantity</caption>
+				<column>AVAILABLE_QUANTITY</column>
+			</numberField>
+		</row>
+		<row>
+			<numberField>
+				<name>concentration</name>
+				<udn>concentration</udn>
+				<caption>Concentration</caption>
+				<column>CONCENTRATION</column>
+			</numberField>
+		</row>
+		<row>
+			<dropDown>
+				<name>collectionStatus</name>
+				<udn>collectionStatus</udn>
+				<caption>Collection Status</caption>
+				<column>COLLECTION_STATUS</column>
+				<options>
+					<option><value>Pending</value></option>
+					<option><value>Collected</value></option>
+					<option><value>Not Collected</value></option>
+				</options>
+			</dropDown>
+		</row>
+		<row>
+			<dropDown>
+				<name>activityStatus</name>
+				<udn>activityStatus</udn>
+				<caption>Activity Status</caption>
+				<column>ACTIVITY_STATUS</column>
+				<options>
+					<option><value>Active</value></option>
+					<option><value>Closed</value></option>
+					<option><value>Disabled</value></option>
+				</options>
+			</dropDown>
+		</row>
+                <row>
+                        <subForm>
+                                <name>events</name>
+                                <udn>events</udn>
+                                <caption>Specimen Events</caption>
+                                <table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+                        </subForm>
+                </row>
+	</view>
+</form>

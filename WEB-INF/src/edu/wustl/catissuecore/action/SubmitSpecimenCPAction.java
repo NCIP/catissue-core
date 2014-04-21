@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
@@ -313,10 +312,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 				}
 			}
 
-			final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-			specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
-			specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
-			specimen.setSpecimenCharacteristics(specimenCharacteristics);
+			specimen.setTissueSide(specimenDataBean.getTissueSide());
+			specimen.setTissueSite(specimenDataBean.getTissueSite());
 
 			final ArrayList childSpecimenList = new ArrayList();
 
@@ -357,7 +354,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 			derivedSpecimen.setParentSpecimen(parentSpecimen);
 
 			derivedSpecimen.setLineage(Constants.DERIVED_SPECIMEN);
-			derivedSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+			derivedSpecimen.setTissueSide(parentSpecimen.getTissueSide());
+			derivedSpecimen.setTissueSite(parentSpecimen.getTissueSite());
 			childSpecimenList.add(derivedSpecimen);
 		}
 	}
@@ -382,7 +380,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 					.getSpecimenDomainObjectFromObject(aliquotSpecimenBean);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
-			aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+			aliquotSpecimen.setTissueSide(parentSpecimen.getTissueSide());
+			aliquotSpecimen.setTissueSite(parentSpecimen.getTissueSite());
 			childSpecimenList.add(aliquotSpecimen);
 		}
 	}
@@ -465,10 +464,9 @@ public class SubmitSpecimenCPAction extends BaseAction
 
 		// specimen.setStorageContainer(null);
 		specimen.setSpecimenPosition(null);
-		final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
-		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
-		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+		specimen.setTissueSide(specimenDataBean.getTissueSide());
+		specimen.setTissueSite(specimenDataBean.getTissueSite());
+		
 
 		return specimen;
 

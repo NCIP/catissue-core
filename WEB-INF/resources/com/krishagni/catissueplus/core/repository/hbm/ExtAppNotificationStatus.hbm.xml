@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+	<class
+		name="com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus"
+		table="CATISSUE_NOTIFICATION_STATUS" lazy="false">
+		<cache usage="read-write" />
+
+		<id name="id" column="AUDIT_ID">
+			<generator class="foreign">
+				<param name="property">audit</param>
+			</generator>
+		</id>
+		<one-to-one name="audit"
+			class="com.krishagni.catissueplus.core.audit.domain.Audit"
+			constrained="true" />
+
+		<many-to-one name="externalApplication"
+			class="com.krishagni.catissueplus.core.notification.domain.ExternalApplication"
+			cascade="save-update" column="APP_ID" />
+
+		<property name="status" type="string" column="STATUS" />
+
+		<property name="comments" type="string" column="COMMENTS" />
+
+		<property name="noOfAttempts" type="integer" column="NO_OF_ATTEMPTS" />
+		
+		<property name="updatedDate" type="timestamp" column="UPDATED_DATE" />
+
+		<query name="getFailedNotificationObjects">
+			select notifStatus from
+			com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus
+			as notifStatus inner join fetch notifStatus.audit audit where
+			notifStatus.status =:status and notifStatus.noOfAttempts
+			&lt;
+			:maxNoOfAttempts
+		</query>
+
+		<query name="getExpiredFailedNotificationObjects">
+			select notifStatus from
+			com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus
+			as notifStatus
+			inner join fetch notifStatus.audit audit where notifStatus.status =:status
+			and
+			notifStatus.noOfAttempts &gt;=:maxNoOfAttempts and notifStatus.updatedDate &gt;=:date
+		</query>
+
+
+
+
+	</class>
+</hibernate-mapping>

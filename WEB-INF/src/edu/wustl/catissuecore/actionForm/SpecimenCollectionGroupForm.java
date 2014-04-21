@@ -632,7 +632,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				if (tempObj instanceof CollectionEventParameters)
 				{
 					final CollectionEventParameters collectionEventParameters = (CollectionEventParameters) tempObj;
-					this.collectionEventId = collectionEventParameters.getId().longValue(); // Mandar : CollectionEvent 10-July-06
+//					this.collectionEventId = collectionEventParameters.getId().longValue(); // Mandar : CollectionEvent 10-July-06
 					//this.collectionEventSpecimenId = collectionEventParameters.getSpecimen().getId().longValue();
 					this.collectionEventUserId = collectionEventParameters.getUser().getId()
 							.longValue();
@@ -656,7 +656,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 					final ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) tempObj;
 
 					calender.setTime(receivedEventParameters.getTimestamp());
-					this.receivedEventId = receivedEventParameters.getId().longValue();
+//					this.receivedEventId = receivedEventParameters.getId().longValue();
 					//	this.receivedEventSpecimenId = receivedEventParameters.getSpecimen().getId().longValue();
 					this.receivedEventUserId = receivedEventParameters.getUser().getId()
 							.longValue();

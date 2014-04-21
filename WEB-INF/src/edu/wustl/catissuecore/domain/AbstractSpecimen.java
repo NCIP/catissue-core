@@ -51,11 +51,17 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Collection of childSpecimenCollection derived from this specimen.
 	 */
 	protected Collection<AbstractSpecimen> childSpecimenCollection = new LinkedHashSet<AbstractSpecimen>();
+
 	/**
-	 * The combined specimenCharacteristics of anatomic state and pathological
-	 * disease classification of a specimen.
+	 * The anatomical site from which a specimen is derived.
 	 */
-	protected SpecimenCharacteristics specimenCharacteristics;
+	protected String tissueSite;
+
+	/**
+	 * For bilateral sites, left or right.
+	 */
+	protected String tissueSide;
+
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen.
 	 */
@@ -146,27 +152,25 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 		this.id = identifier;
 	}
 
-	/**
-	 * Returns the combined anatomic state and pathological disease classification of a specimen.
-	 * @hibernate.many-to-one column="SPECIMEN_CHARACTERISTICS_ID"
-	 * class="edu.wustl.catissuecore.domain.SpecimenCharacteristics" constrained="true"
-	 * @return the combined anatomic state and pathological disease classification of a specimen.
-	 * @see #setSpecimenCharacteristics(SpecimenCharacteristics)
-	 */
-	public SpecimenCharacteristics getSpecimenCharacteristics()
-	{
-		return this.specimenCharacteristics;
+	
+	
+	public String getTissueSite() {
+		return tissueSite;
 	}
 
-	/**
-	 * Sets the combined anatomic state and pathological disease classification of a specimen.
-	 * @param spChar the combined anatomic state and pathological disease 
-	 * classification of a specimen.
-	 * @see #getSpecimenCharacteristics()
-	 */
-	public void setSpecimenCharacteristics(final SpecimenCharacteristics spChar)
-	{
-		this.specimenCharacteristics = spChar;
+	
+	public void setTissueSite(String tissueSite) {
+		this.tissueSite = tissueSite;
+	}
+
+	
+	public String getTissueSide() {
+		return tissueSide;
+	}
+
+	
+	public void setTissueSide(String tissueSide) {
+		this.tissueSide = tissueSide;
 	}
 
 	/**
@@ -305,7 +309,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * @hibernate.collection-key column="SPECIMEN_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 	 * @return the collection of Specimen Event Parameters associated with this specimen.
-	 * @see #setSpecimenEventCollection(Set)
+	 * @see #setEventCollection(Set)
 	 */
 	public Collection<SpecimenEventParameters> getSpecimenEventCollection()
 	{

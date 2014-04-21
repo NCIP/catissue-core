@@ -13,7 +13,6 @@ import krishagni.catissueplus.Exception.CatissueException;
 import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.bizlogic.SpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
@@ -32,7 +31,6 @@ import edu.wustl.dao.condition.NotEqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.query.generator.DBTypes;
-import edu.wustl.dao.util.DAOUtility;
 import edu.wustl.dao.util.NamedQueryParam;
 
 public class SpecimenDAO
@@ -100,10 +98,8 @@ public class SpecimenDAO
 				specimen.setSpecimenClass(valArr[5].toString());
 				specimen.setSpecimenType(valArr[6].toString());
 				specimen.setPathologicalStatus(valArr[7].toString());
-				SpecimenCharacteristics specimenChar = new SpecimenCharacteristics();
-				specimenChar.setTissueSite(valArr[8].toString());
-				specimenChar.setTissueSide(valArr[9].toString());
-				specimen.setSpecimenCharacteristics(specimenChar);
+				specimen.setTissueSite(valArr[8].toString());
+				specimen.setTissueSide(valArr[9].toString());
 				specimen.setAvailableQuantity(Double.parseDouble(valArr[10].toString()));
 				if (valArr[11] != null)
 				{

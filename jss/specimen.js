@@ -848,7 +848,7 @@ req.onreadystatechange = function() {
 					
 				
 				var nodeId= "Specimen_"+document.getElementById("id").value;
-				refreshTree(null,null,null,null,nodeId);
+//				refreshTree(null,null,null,null,nodeId);
 				document.getElementById('print-error').style.display='none';
 				document.getElementById('print-success').style.display='none';
 				document.getElementById('error').style.display='none';
@@ -1330,7 +1330,7 @@ req.onreadystatechange = function() {
 				var nodeId= "Specimen_"+specimenDto.id;
 				if(pageOf != "pageOfDeriveSpecimen")
 				{
-					refreshTree(null,null,null,null,nodeId);
+//					refreshTree(null,null,null,null,nodeId);
 				}
 
 				var addTospecListURL = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specimenDto.id+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specimenDto.id+"')";

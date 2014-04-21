@@ -61,12 +61,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
-import edu.common.dynamicextensions.domain.Category;
-import edu.common.dynamicextensions.entitymanager.EntityManager;
-import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
-import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
@@ -796,8 +790,8 @@ public class AppUtility
 		// System.out.println(AppUtility.getMonth(dt, pt) + "/" +
 		// AppUtility.getDay(dt, pt) + "/"
 		// + AppUtility.getYear(dt, pt));
-		final ArrayList<String> attributeValuesInProperOrder = getAttributeValuesInProperOrder(
-				"date", "13-02-2006", "12-02-2006");
+//		final ArrayList<String> attributeValuesInProperOrder = getAttributeValuesInProperOrder(
+//				"date", "13-02-2006", "12-02-2006");
 	}
 
 	public static List<String> getResponseList() {
@@ -1486,12 +1480,22 @@ public class AppUtility
 	public static List<Object[]> executeQuery(final String hql)
 			throws ApplicationException
 	{
-		final IDAOFactory daofactory = DAOConfigFactory.getInstance()
-				.getDAOFactory(Constants.APPLICATION_NAME);
-		final DAO dao = daofactory.getDAO();
-		dao.openSession(null);
-		final List list = dao.executeQuery(hql);
-		dao.closeSession();
+		DAO dao = null;
+		List list = new ArrayList();
+		try
+		{
+			final IDAOFactory daofactory = DAOConfigFactory.getInstance()
+					.getDAOFactory(Constants.APPLICATION_NAME);
+			dao = daofactory.getDAO();
+			dao.openSession(null);
+			list = dao.executeQuery(hql);
+		}
+		finally
+		{
+			if(dao != null)
+			dao.closeSession();
+		}
+		
 		return list;
 	}
 
@@ -1705,79 +1709,6 @@ public class AppUtility
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Adds the attribute values in the list in sorted order and returns the
-	 * list containing the attribute values in proper order
-	 * 
-	 * @param dataType
-	 *            - data type of the attribute value
-	 * @param value1
-	 *            - first attribute value
-	 * @param value2
-	 *            - second attribute value
-	 * @return List containing value1 and valu2 in sorted order
-	 */
-	public static ArrayList<String> getAttributeValuesInProperOrder(
-			final String dataType, final String value1, final String value2)
-	{
-		String val1 = value1;
-		String val2 = value2;
-		final ArrayList<String> attributeValues = new ArrayList<String>();
-		if (dataType
-				.equalsIgnoreCase(EntityManagerConstantsInterface.DATE_ATTRIBUTE_TYPE))
-		{
-			final SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-			try
-			{
-				final Date date1 = dateFormat.parse(value1);
-				final Date date2 = dateFormat.parse(value2);
-				if (date1.after(date2))
-				{
-					val1 = value2;
-					val2 = value1;
-				}
-			}
-			catch (final ParseException e)
-			{
-				AppUtility.logger
-						.error("Can not parse the given date"
-								+ " in getAttributeValuesInProperOrder() method :"
-								+ e.getMessage(), e);
-			}
-		}
-		else
-		{
-			if (dataType
-					.equalsIgnoreCase(EntityManagerConstantsInterface.INTEGER_ATTRIBUTE_TYPE)
-					|| dataType
-							.equalsIgnoreCase(EntityManagerConstantsInterface.LONG_ATTRIBUTE_TYPE))
-			{
-				if (Long.parseLong(value1) > Long.parseLong(value2))
-				{
-					val1 = value2;
-					val2 = value1;
-				}
-
-			}
-			else
-			{
-				if (dataType
-						.equalsIgnoreCase(EntityManagerConstantsInterface.DOUBLE_ATTRIBUTE_TYPE))
-				{
-					if (Double.parseDouble(value1) > Double.parseDouble(value2))
-					{
-						val1 = value2;
-						val2 = value1;
-					}
-
-				}
-			}
-		}
-		attributeValues.add(val1);
-		attributeValues.add(val2);
-		return attributeValues;
 	}
 
 	/**
@@ -2799,6 +2730,7 @@ public class AppUtility
 	}
 
 	// bug 11611 and 11659 end
+	//-- TODO need to modify this call as this is throwing the edu/wustl/cab2b/common/exception/CheckedException which was present in older DE.
 	public static boolean hasPrivilegeToView(final String objName,
 			final Long identifier, final SessionDataBean sessionDataBean,
 			final String privilegeName)
@@ -2810,9 +2742,9 @@ public class AppUtility
 
 		List cpIdsList = new ArrayList();
 		final Set<Long> cpIds = new HashSet<Long>();
-
-		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName,
-				identifier, sessionDataBean);
+		//-- TODO need to modify this call as this is throwing the edu/wustl/cab2b/common/exception/CheckedException which was present in older DE.
+//		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName,
+//				identifier, sessionDataBean);
 
 		if (cpIdsList == null)
 		{
@@ -3209,129 +3141,6 @@ public class AppUtility
 			form.setPrinterType((String) DefaultValueManager
 					.getDefaultValue(Constants.DEFAULT_PRINTER_TYPE));
 		}
-	}
-
-	// Suhas Khot : Added for show_hide_forms
-	/**
-	 * This method is used to get Object from the DE metadata
-	 * 
-	 * @param whereColumnValue
-	 *            value of where column in the query
-	 * @param selectObjName
-	 *            name of object on which the query is to fire
-	 * @param whereColumnName
-	 *            name of where column in the query
-	 * @return the identifier of the Object
-	 * @throws DAOException
-	 *             fails to do database operation
-	 */
-	public static Object getObjectIdentifier(final String whereColumnValue,
-			final String selectObjName, final String whereColumnName,
-			final String appName) throws ApplicationException
-	{
-		Object identifier = null;
-		final DefaultBizLogic defaultBizLogic = BizLogicFactory
-				.getDefaultBizLogic();
-		defaultBizLogic.setAppName(appName);
-		final String[] selectColName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
-		final String[] whereColName = {whereColumnName};
-		final Object[] whereColValue = {whereColumnValue};
-		final String[] whereColCondition = {Constants.EQUALS};
-		final String joinCondition = Constants.AND_JOIN_CONDITION;
-		final List identifierList = defaultBizLogic.retrieve(selectObjName,
-				selectColName, whereColName, whereColCondition, whereColValue,
-				joinCondition);
-		if (identifierList != null && !identifierList.isEmpty())
-		{
-			identifier = identifierList.get(0);
-		}
-		return identifier;
-	}
-
-	/**
-	 * This method return all entityId Vs containerId map.
-	 * 
-	 * @param entityGroupIds
-	 *            entityIds Collection
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DAOException
-	 *             if it fails to do database operation
-	 */
-	public static Map<Long, Long> getAllContainers()
-			throws DynamicExtensionsSystemException, ApplicationException
-	{
-		// Map for storing containers corresponding to entitiesIds
-		Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
-		final EntityManagerInterface entityManager = EntityManager
-				.getInstance();
-		final String[] colName = {Constants.NAME};
-		final Collection<NameValueBean> entityGrpBeanColl = entityManager
-				.getAllEntityGroupBeans();
-		final Set<Long> entityGroupIds = new HashSet<Long>();
-		for (final NameValueBean entityGrpBean : entityGrpBeanColl)
-		{
-			entityGroupIds.add(Long.parseLong(entityGrpBean.getValue()));
-		}
-		entityIdsVsContId = getAllContainers(entityGroupIds);
-		return entityIdsVsContId;
-	}
-
-	/**
-	 * This method return entityId Vs containerId map for selective entityGroup
-	 * and all forms.
-	 * 
-	 * @param entityGroupIds
-	 *            entityGroupIds Collection
-	 * @throws DynamicExtensionsSystemException
-	 *             fails to get forms,entity
-	 * @throws DAOException
-	 *             fail to do database operation
-	 */
-	public static Map<Long, Long> getAllContainers(
-			final Set<Long> entityGroupIds)
-			throws DynamicExtensionsSystemException, ApplicationException
-	{
-		// Map for storing containers corresponding to entitiesIds
-		final Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
-		final EntityManagerInterface entityManager = EntityManager
-				.getInstance();
-		final DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory
-				.getDefaultBizLogic();
-		for (final Long entityGroupId : entityGroupIds)
-		{
-			final Collection<Long> entityIds = entityManager
-					.getAllEntityIdsForEntityGroup(entityGroupId);
-			if (entityIds != null && !entityIds.isEmpty())
-			{
-				for (final Long entityId : entityIds)
-				{
-					final Long containerId = entityManager
-							.getContainerIdFromEntityId(entityId);
-					if (containerId != null)
-					{
-						entityIdsVsContId.put(entityId, containerId);
-					}
-				}
-			}
-		}
-		final String[] colName = {Constants.NAME};
-		final List<String> formNameColl = defaultBizLogic.retrieve(
-				Category.class.getName(), colName);
-		for (final String formName : formNameColl)
-		{
-			final Long rootCategoryEntityId = entityManager
-					.getRootCategoryEntityIdByCategoryName(formName);
-			if (rootCategoryEntityId != null)
-			{
-				final Long containerId = entityManager
-						.getContainerIdFromEntityId(rootCategoryEntityId);
-				if (containerId != null)
-				{
-					entityIdsVsContId.put(rootCategoryEntityId, containerId);
-				}
-			}
-		}
-		return entityIdsVsContId;
 	}
 
 	/**
@@ -4054,7 +3863,7 @@ public class AppUtility
 			throws ApplicationException
 	{
 		// Query to return titles of collection protocol related to given
-		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
+		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_COLLECTION_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
 				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "
 				+ id;
 		final List resultList = executeSQLQuery(sql);

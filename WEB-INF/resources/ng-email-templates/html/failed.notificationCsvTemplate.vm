@@ -1,0 +1,8 @@
+"Object Id","Object Type","Operation","Failed External Application","Status","Reason"
+#foreach($notification in $failedNotifications)
+ #set ($reason='')
+ #if($notification.comments)
+    #set ($reason=$notification.comments)
+ #end
+"${notification.audit.objectId}","${notification.audit.objectType}","${notification.audit.operation}","${notification.externalApplication.applicationName}","${notification.status}","${reason}"
+#end

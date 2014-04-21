@@ -30,6 +30,10 @@ import java.util.Set;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 
+import com.krishagni.catissueplus.core.audit.domain.Audit;
+import com.krishagni.catissueplus.core.common.util.ObjectType;
+import com.krishagni.catissueplus.core.common.util.Operation;
+
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -124,6 +128,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			Participant participant = insertParticipant(obj, dao);
 			resisterCPR(dao, sessionDataBean, participant);
+			auditParticipant(participant, dao, sessionDataBean,Operation.INSERT.toString());
 		}
 		catch (final DAOException daoExp)
 		{
@@ -362,6 +367,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				disableObject(dao, participant);
 			}
+			try {
+				auditParticipant(participant, dao, sessionDataBean,Operation.UPDATE.toString());
+			}
+			catch (DAOException e) {
+				logger.error(e.getMessage(), e);
+			}
+			
 		}
 		catch (final BizLogicException daoExp)
 		{
@@ -371,6 +383,28 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
+	private void auditParticipant(Participant participant, DAO dao, SessionDataBean sessionDataBean,String operation) throws DAOException {
+		Collection<CollectionProtocolRegistration> cprColl = participant.getCollectionProtocolRegistrationCollection();
+		if(cprColl != null){
+			for (CollectionProtocolRegistration cpr : cprColl) {
+				Audit audit = getAuditObject(cpr, sessionDataBean,operation);
+				dao.insert(audit);
+			}
+		}
+	}
+
+	private Audit getAuditObject(CollectionProtocolRegistration cpr, SessionDataBean sessionDataBean, String operation) {
+		Audit audit = new Audit();
+		audit.setCpId(cpr.getCollectionProtocol().getId());
+		audit.setObjectId(cpr.getParticipant().getId());
+		audit.setObjectType(ObjectType.PARTICIPANT.toString());
+		audit.setOperation(operation);
+		audit.setUpdatedDate(new Date());
+		audit.setIpAddress(sessionDataBean.getIpAddress());
+		audit.setUserId(sessionDataBean.getUserId());
+		audit.setReasonForChange(Operation.INSERT.toString());
+		return audit;
+	}
 	/**
 	 * This method is for Setting PMI.
 	 * 

@@ -1,0 +1,36 @@
+<paths>
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>CollectionProtocol</to>
+		<links>
+			<link>
+				<key>CP_ID</key>
+				<ref-tab-key>IDENTIFIER</ref-tab-key>
+			</link>
+		</links>
+	</path>
+
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>SpecimenCollectionGroup</to>
+		<start-field>scgs</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>Specimen</to>
+		<start-field>scgs.specimens</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>CollectionProtocolRegistration</from>
+		<to>SpecimenEvent</to>
+		<start-field>scgs.specimens.events</start-field>
+		<links>	
+		</links>
+	</path>
+</paths>

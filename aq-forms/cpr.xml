@@ -1,0 +1,164 @@
+<form>
+	<view>
+		<name>CollectionProtocolRegistration</name>
+		<caption>Participant</caption>
+		<table>CPR_VIEW</table>
+		<primaryKey>CPR_ID</primaryKey>
+		<row>
+			<numberField>
+				<name>id</name>
+				<udn>id</udn>
+				<caption>Identifier</caption>
+				<column>CPR_ID</column>
+			</numberField>
+		</row>
+		<row>
+			<numberField>
+				<name>participantId</name>
+				<udn>participantId</udn>
+				<caption>Participant Id</caption>
+				<column>PARTICIPANT_ID</column>
+			</numberField>
+			
+			<textField>
+				<name>firstName</name>
+				<udn>firstName</udn>
+				<caption>First Name</caption>
+				<column>FIRST_NAME</column>
+				<maxLength>50</maxLength>
+			</textField>
+
+			<textField>
+				<name>lastName</name>
+				<udn>lastName</udn>
+				<caption>Last Name</caption>
+				<column>LAST_NAME</column>
+			</textField>
+		</row>
+
+		<row>
+			<datePicker>
+				<name>dateOfBirth</name>
+				<udn>dateOfBirth</udn>
+				<caption>Date Of Birth</caption>
+				<column>DOB</column>
+				<format>MM-dd-yyyy</format>
+			</datePicker>
+		</row>
+		
+		<row>
+			<textField>
+				<name>ssn</name>
+				<udn>ssn</udn>
+				<caption>Social Security Number</caption>
+				<column>SSN</column>
+			</textField>
+		</row>
+		
+		<row>
+			<dropDown>
+				<name>activityStatus</name>
+				<udn>activityStatus</udn>
+				<caption>Activity Status</caption>
+				<column>ACTIVITY_STATUS</column>
+				<options>
+					<option><value>Active</value></option>
+					<option><value>Disabled</value></option>
+					<option><value>Closed</value></option>
+				</options>
+			</dropDown>
+		</row>
+		
+		<row>
+			<radioButton>
+				<name>gender</name>
+				<udn>gender</udn>
+				<caption>Gender</caption>
+				<column>GENDER</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = 2003989 order by value</sql>
+				</options>
+			</radioButton>
+		</row>
+
+		<row>
+			<dropDown>
+				<name>genotype</name>
+				<udn>genotype</udn>
+				<caption>Genotype</caption>
+				<column>GENOTYPE</column>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = 2003990 order by value</sql>
+				</options>
+			</dropDown>
+		</row>
+		
+		<row>
+			<checkBox>
+				<name>race</name>
+				<udn>race</udn>
+				<caption>Race</caption>
+				<multiSelect>true</multiSelect>
+				<table>CATISSUE_RACE</table>
+				<column>RACE_NAME</column>
+				<foreignKey>PARTICIPANT_ID</foreignKey>
+				<parentKey>PARTICIPANT_ID</parentKey>
+				<options>
+					<sql>select value from catissue_permissible_value where public_id = 'Race_PID' order by sortorder</sql>
+				</options>
+			</checkBox>
+		</row>
+
+		<row>
+			<datePicker>
+				<name>regDate</name>
+				<udn>regDate</udn>
+				<caption>Registration Date</caption>
+				<column>REGISTRATION_DATE</column>
+				<format>MM-dd-yyyy</format>
+			</datePicker>
+
+			<textField>
+				<name>ppid</name>
+				<udn>ppid</udn>
+				<caption>Protocol Participant ID</caption>
+				<column>PPID</column>
+			</textField>
+		</row>
+
+		<row>
+			<subForm>
+				<name>scgs</name>
+				<udn>scgs</udn>
+				<caption>Specimen Collection Groups</caption>
+				<table>CATISSUE_SPECIMEN_COLL_GROUP</table>
+				<foreignKey>COLLECTION_PROTOCOL_REG_ID</foreignKey>
+				<parentKey>CPR_ID</parentKey>
+				<pathLink>true</pathLink>
+
+				<row>
+					<subForm>
+						<name>specimens</name>
+						<udn>specimens</udn>
+						<caption>Specimens</caption>
+						<table>CATISSUE_SPECIMEN</table>
+						<foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
+						<parentKey>IDENTIFIER</parentKey>
+				  		<pathLink>true</pathLink>
+
+						<row>
+							<subForm>
+								<name>events</name>
+								<udn>events</udn>
+								<caption>Specimen Events</caption>
+								<table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
+								<foreignKey>SPECIMEN_ID</foreignKey>
+								<parentKey>IDENTIFIER</parentKey>
+							</subForm>
+						</row>
+					</subForm>
+				</row>
+			</subForm>
+		</row>
+	</view>
+</form>

@@ -31,9 +31,8 @@ public class PrintUtil
 			dao = AppUtility.openDAOSession(dataBean);
 			final Specimen objSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
 					specimenId);
-
+			
 			final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
-
 			printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, null, printerType,
 					printerLocation);
 

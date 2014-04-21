@@ -141,7 +141,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	protected Collection<Site> siteCollection = new HashSet<Site>();
 
-	protected Collection<StudyFormContext> studyFormContextCollection = new HashSet<StudyFormContext>();
+	//protected Collection<StudyFormContext> studyFormContextCollection = new HashSet<StudyFormContext>();
 	
 	/**
 	 * Ashraf: CP Dashboard item association collection
@@ -341,16 +341,16 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * storageContainerCollection; }
 	 */
 
-	public Collection<StudyFormContext> getStudyFormContextCollection()
-	{
-		return studyFormContextCollection;
-	}
-
-	public void setStudyFormContextCollection(
-			Collection<StudyFormContext> studyFormContextCollection)
-	{
-		this.studyFormContextCollection = studyFormContextCollection;
-	}
+//	public Collection<StudyFormContext> getStudyFormContextCollection()
+//	{
+//		return studyFormContextCollection;
+//	}
+//
+//	public void setStudyFormContextCollection(
+//			Collection<StudyFormContext> studyFormContextCollection)
+//	{
+//		this.studyFormContextCollection = studyFormContextCollection;
+//	}
 
 	/**
 	 * This function Copies the data from an CollectionProtocolForm object to a

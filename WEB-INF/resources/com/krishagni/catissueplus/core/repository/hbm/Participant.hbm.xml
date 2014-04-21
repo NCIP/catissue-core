@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+	<class name="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
+		table="CATISSUE_PARTICIPANT" lazy="true">
+
+		<cache usage="read-write" />
+
+		<id name="id" column="IDENTIFIER" type="long">
+			<generator class="native">
+				<param name="sequence">CATISSUE_PARTICIPANT_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="lastName" type="string" column="LAST_NAME" />
+
+		<property name="firstName" type="string" column="FIRST_NAME" />
+
+		<property name="middleName" type="string" column="MIDDLE_NAME" />
+
+		<property name="birthDate" type="date" column="BIRTH_DATE" />
+
+		<property name="gender" type="string" column="GENDER" />
+
+		<property name="sexGenotype" type="string" column="GENOTYPE" />
+
+		<property name="ethnicity" type="string" column="ETHNICITY" />
+
+		<property name="socialSecurityNumber" type="string"
+			column="SOCIAL_SECURITY_NUMBER" unique="true" />
+
+		<property name="activityStatus" type="string" column="ACTIVITY_STATUS" />
+
+		<property name="deathDate" type="date" column="DEATH_DATE" />
+
+		<property name="vitalStatus" type="string" column="VITAL_STATUS" />
+
+
+		<map name="pmiCollection" table="CATISSUE_PART_MEDICAL_ID"
+			cascade="all-delete-orphan">
+			<key column="PARTICIPANT_ID" />
+			<map-key
+				formula="(Select site.name from catissue_site site where site.identifier = SITE_ID)"
+				type="string" />
+			<one-to-many
+				class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier" />
+		</map>
+
+
+		<map name="cprCollection" table="catissue_coll_prot_reg" cascade="all">
+			<key column="PARTICIPANT_ID" />
+			<map-key
+				formula="(select cp.TITLE from catissue_collection_protocol cp where cp.identifier=COLLECTION_PROTOCOL_ID)"
+				type="string" />
+			<one-to-many
+				class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration" />
+		</map>
+
+		<set name="raceColl" table="CATISSUE_RACE" cascade="all-delete-orphan">
+			<key column="PARTICIPANT_ID" />
+			<element column="RACE_NAME" type="string" />
+		</set>
+
+		<query name="getParticipantIdBySSN">
+			select participant.id from
+			com.krishagni.catissueplus.core.biospecimen.domain.Participant
+			participant where participant.socialSecurityNumber = :ssn
+		</query>
+
+		<query name="getPmiIdBySiteMrn">
+			select pmi.id from
+			com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier
+			pmi where pmi.site.name=:siteName and pmi.medicalRecordNumber=:mrn
+		</query>
+	</class>
+</hibernate-mapping>

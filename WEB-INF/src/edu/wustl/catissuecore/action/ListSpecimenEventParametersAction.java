@@ -32,9 +32,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -240,19 +239,10 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							final String[] events = EventsUtil.getEvent(eventParameters);
 							rowDataMap.put(Constants.ID, String.valueOf(eventParameters.getId()));
 							rowDataMap.put(Constants.EVENT_NAME, events[0]);
+							
+							UserDAO userDAO = new UserDAO();
+							rowDataMap.put(Constants.USER_NAME, userDAO.getUserNameById(eventParameters.getUser().getId(), null));
 
-							// Ashish - 4/6/07 - retrieving User
-							// User user = eventParameters.getUser();
-							final User user = this.getUser(eventParameters.getId(), bizLogic);
-
-							rowDataMap.put(Constants.USER_NAME, user.getLastName() + ", "
-									+ user.getFirstName());
-
-							// rowDataMap.put(Constants.EVENT_DATE,
-							// Utility.parseDateToString
-							// (eventParameters.getTimestamp(),
-							// Constants.TIMESTAMP_PATTERN)); // Sri: Changed
-							// format for bug #463
 							rowDataMap.put(Constants.EVENT_DATE, eventParameters.getTimestamp());
 							rowDataMap.put(Constants.PAGE_OF, events[1]);// pageOf
 							gridData.add(rowDataMap);
@@ -309,31 +299,6 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				request.getSession().removeAttribute("CPQuery");
 			}
 		}
-		Long specimenRecEntryEntityId = null;
-		try
-		{
-			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
-			{
-				specimenRecEntryEntityId = (Long) CatissueCoreCacheManager.getInstance()
-						.getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
-			}
-			else
-			{
-				specimenRecEntryEntityId = AnnotationUtil
-						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-				CatissueCoreCacheManager.getInstance().addObjectToCache(
-						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenRecEntryEntityId);
-			}
-
-		}
-		catch (final Exception e)
-		{
-			this.logger.error(e.getMessage(), e);
-		}
-		//request.setAttribute("specimenEntityId", specimenEntityId);
-		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
-				specimenRecEntryEntityId);
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 

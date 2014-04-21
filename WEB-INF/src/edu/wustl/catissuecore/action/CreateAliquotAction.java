@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -504,10 +503,8 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			aliquotSpecimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			aliquotSpecimen.setDisposeParentSpecimen(disposeParentSpecimen);
-			final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-			specimenCharacteristics.setTissueSide(aliquotForm.getTissueSide());
-			specimenCharacteristics.setTissueSite(aliquotForm.getTissueSite());
-			aliquotSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+			aliquotSpecimen.setTissueSide(aliquotForm.getTissueSide());
+			aliquotSpecimen.setTissueSite(aliquotForm.getTissueSite());
 			// bug no. 8081 and 8083
 //			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 			if(aliquotMap.get(specimenKey + i + "_label") != null)

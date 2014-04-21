@@ -283,6 +283,21 @@ Ext.onReady(function(){
 			
 			
             // For Bio Specimen Data
+    var menu_ng = new Ext.menu.Menu({
+        id: 'menu_ng',
+        items: [
+          {
+            text: 'Manage Forms',
+            tooltip: 'Manage Forms',
+            href: 'ecrf.do'
+          },
+          {
+            text: 'Query',
+            tooltip: 'Query',
+            href: 'query.do'
+          }
+        ]
+    });
 
     var menu_bio = new Ext.menu.Menu({
         id: 'menu_bio',
@@ -404,11 +419,6 @@ Ext.onReady(function(){
 				tooltip:'Simple Search',
 			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'
             },
-			{
-                text: 'Advanced',
-				tooltip:'Advanced Search',
-			    href : 'QueryWizard.do?'
-            },
             {
                 text: 'My List View',
 				tooltip:'My List View',
@@ -506,7 +516,13 @@ Ext.onReady(function(){
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
 
-		tb.add(new Ext.Toolbar.MenuButton(
+		tb.add(
+                {
+                   text: 'NextGen',
+                   menu: menu_ng
+                },
+
+                new Ext.Toolbar.MenuButton(
 		{
 			text:'Administration',
             menu: menu 

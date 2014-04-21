@@ -49,7 +49,8 @@
 	else
 	{
 		var action="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroupCPQuery&cpId="+cpId+"&pId="+participantId+"&requestFrom=participantView&cpeId="+eventId;
-		window.parent.frames[1].location =action;
+		self.location=action;
+		
 	}
    
   }
@@ -71,7 +72,8 @@ function editScg()
  {
   action="QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=true&operation=edit&id="+scgId  
   +"&cpSearchParticipantId="+participantId+"&cpSearchCpId="+cpId;
-  window.parent.frames[1].location=action;
+  self.location=action;
+  
  }
 
  
@@ -91,7 +93,7 @@ function editSpecimen()
  else
  { 
     action = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+specimenId+"&refresh=true&cpSearchParticipantId="+participantId+"&cpSearchCpId="+cpId;
-	window.parent.frames[1].location=action;
+	self.location=action;
  }
  
 }
@@ -122,7 +124,7 @@ if((noOfAliquotes==null ||noOfAliquotes=="" || noOfAliquotes == 'Count'))
 if(isSubmit)
 {
 	action = 'GetAliquotDetails.do?pageOf=fromSpecimen&parentSpecimentLabel='+label+"&aliquotCount="+noOfAliquotes+"&quantityPerAliquot="+quantity+"&searchBasedOn=label";
-	window.parent.frames[1].location=action;
+	self.location=action;
 }
 
  
@@ -149,14 +151,14 @@ if((count==null ||count=="" || count == 'Count'))
  else if(count=="1")
  {
   action = 'CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&menuSelected=15&virtualLocated=true&requestFrom=participantView&parentLabel='+label+'&parentSpecimenId='+specimenId;
-  window.parent.frames[1].location=action;
+  self.location=action;
  }
  else if(count >= 1)//check if greater than 1
  {
-  refreshTree(null,null,null,null,nodeId);
+  //refreshTree(null,null,null,null,nodeId);
   action = "MultipleSpecimenFlexInitAction.do?operation=add&pageOf=pageOfMultipleSpWithoutMenu&parentType=Derived_Specimen&numberOfSpecimens="+count 
     +"&parentLabel="+label;
-	window.parent.frames[1].location=action;
+	self.location=action;
  }
  
  
@@ -313,8 +315,12 @@ function showEditPage()
 {
 	var participantId=document.getElementById("pId").value;
 	var cpId=document.getElementById("cpId").value;
-	action="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=search&id="+participantId+"&cpSearchCpId="+cpId;	
-	window.parent.frames[1].location=action;
+	var action="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=search&id="+participantId+"&cpSearchCpId="+cpId;
+//alert(action);	
+//$('#cpFrameNew').attr('src',action);
+//document.getElementById('cpFrameNew').contentWindow.location=action;
+self.location = action;
+	//window.parent.frames["cpFrameNew"].location=action;
 	
 }
 
@@ -330,8 +336,8 @@ else
 {
  var nodeId = "SpecimenCollectionGroup_"+scgId;
  var action = "AnticipatorySpecimenView.do?scgId="+scgId;
- window.parent.frames[1].location=action;
- refreshTree(null,null,null,null,nodeId);
+ self.location=action;
+ //refreshTree(null,null,null,null,nodeId);
 }
 }
 
@@ -439,6 +445,6 @@ else if(eventId)
 {
 	action="QueryCollectSpecimenFromDashBoard.do?operation=addSCG&cpeId="+eventId+"&cpSearchParticipantId="+participantId+"&cpSearchCpId="+cpId+"&isPlanned="+isPlanned+"&numberOfSpecimens="+specimenCount+"&pageOf=newParticipantViewPage";
 }
+self.location=action;
 
-window.parent.frames[1].location=action;
 }

@@ -4,9 +4,17 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.krishagni.catissueplus.core.biospecimen.repository.impl.DaoFactoryImpl;
 
 import edu.wustl.common.action.SecureAction;
 
@@ -57,9 +65,47 @@ public class CPBasedSearchAction extends SecureAction
 		// {
 		// request.removeAttribute("Access");
 		// }
+		
+		String specimenIdStr = request.getParameter("specimenId");
+		if (!StringUtils.isBlank(specimenIdStr)) {
+			String[] tokens = specimenIdStr.split(",");
+			if (tokens != null && tokens.length == 2 && tokens[0].equals("specimen")) {
+				Long specimenId = Long.parseLong(tokens[1]);
+				Long scgId = getScgId(specimenId);
+				request.setAttribute("scgId", "scg," + scgId);
+			}
+			
+		}
 		request.setAttribute("view","cpBasedView");
 		return mapping.findForward("success");
 
 	}
-
+	
+	/*
+	 * This is temporary solution until we rewrite CP based view 
+	 */
+	private Long getScgId(Long specimenId) {
+		ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(this.servlet.getServletContext());
+		if (appCtx == null) {
+			throw new RuntimeException("Couldn't obtain application context");
+		}
+		
+		DaoFactoryImpl daoFactory = (DaoFactoryImpl)appCtx.getBean("biospecimenDaoFactory");
+		SessionFactory sessionFactory = daoFactory.getSessionFactory();
+		
+		Session session = sessionFactory.getCurrentSession();
+		Transaction txn = session.getTransaction();
+		try {
+			txn.begin();
+			return daoFactory.getSpecimenDao().getScgId(specimenId);			
+		} finally {
+			if (txn != null && txn.isActive()) {
+				txn.rollback();
+			}
+			
+			if (session.isOpen()) {
+				session.close();
+			}			
+		}
+	}
 }

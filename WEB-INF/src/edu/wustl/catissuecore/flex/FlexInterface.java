@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.flex;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.Collections;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
@@ -24,6 +24,8 @@ import edu.wustl.catissuecore.bizlogic.CpBasedViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.dao.SCGDAO;
+import edu.wustl.catissuecore.dao.UserDAO;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -32,7 +34,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -147,9 +148,18 @@ public class FlexInterface
 					if (scg != null)
 					{
 						final SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-						final Collection eventColl = (Collection) bizLogic.retrieveAttribute(
-								SpecimenCollectionGroup.class.getName(), scg.getId(),
-								"elements(specimenEventParametersCollection)");
+						SCGDAO scgdao = new SCGDAO();
+						List<SpecimenEventParameters> events = new ArrayList<SpecimenEventParameters>();
+						try
+						{
+							events = scgdao.getSCGEvents(scg);
+						}
+						catch (ApplicationException e)
+						{
+							LOGGER.error(e);
+//							throw this.getBizLogicException(e, e.getErrorKeyAsString(), e.getLogMessage());
+						}
+						final Collection eventColl = events;
 						if (eventColl != null && !eventColl.isEmpty())
 						{
 							final Iterator itr = eventColl.iterator();
@@ -157,19 +167,16 @@ public class FlexInterface
 							{
 								final SpecimenEventParameters event = (SpecimenEventParameters) itr
 										.next();
-								final String[] selectColName = {"user"};
-								final String[] whereColName = {"id"};
-								final String[] whereColCond = {"="};
-								final Object[] whereColVal = {event.getId()};
-								final List list = bizLogic.retrieve(SpecimenEventParameters.class
-										.getName(), selectColName, whereColName, whereColCond,
-										whereColVal, Constants.AND_JOIN_CONDITION);
-								LOGGER.info("List:" + list);
-								if (list != null && !list.isEmpty())
-								{
-									final User user = (User) list.get(0);
+								UserDAO userDAO = new UserDAO();
+								
+								 
+								String userName = userDAO.getUserNameById(event.getUser().getId(), null);
+								String[] nameArr = userName.split(",");
+								
+									User user = event.getUser();
+									user.setLastName(nameArr[0]);
+									user.setFirstName(nameArr[1]);
 									event.setUser(user);
-								}
 								if (event instanceof CollectionEventParameters)
 								{
 									collEvBean.copy(event);
@@ -808,17 +815,13 @@ public class FlexInterface
 			sb.creationDate = specimen.getCreatedOn();
 		}
 
-		final SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
-		if (characteristic != null)
+		if (specimen.getTissueSide() != null)
 		{
-			if (characteristic.getTissueSide() != null)
-			{
-				sb.tissueSide = characteristic.getTissueSide();
-			}
-			if (characteristic.getTissueSite() != null)
-			{
-				sb.tissueSite = characteristic.getTissueSite();
-			}
+			sb.tissueSide = specimen.getTissueSide();
+		}
+		if (specimen.getTissueSite() != null)
+		{
+			sb.tissueSite = specimen.getTissueSite();
 		}
 		if (specimen.getComment() != null)
 		{
@@ -1078,8 +1081,8 @@ public class FlexInterface
 		specimenDataBean.setParentSpecimen(parentSpecimen);
 		specimenDataBean.setPathologicalStatus(sp.getPathologicalStatus());
 
-		specimenDataBean.setTissueSide(sp.getSpecimenCharacteristics().getTissueSide());
-		specimenDataBean.setTissueSite(sp.getSpecimenCharacteristics().getTissueSite());
+		specimenDataBean.setTissueSide(sp.getTissueSide());
+		specimenDataBean.setTissueSite(sp.getTissueSite());
 		specimenDataBean.setLineage(sp.getLineage());
 		specimenDataBean.setSpecimenCollectionGroup(sp.getSpecimenCollectionGroup());
 		specimenDataBean.setSpecimenEventCollection(sp.getSpecimenEventCollection());
@@ -1188,10 +1191,8 @@ public class FlexInterface
 
 		specimen.setPathologicalStatus(spBean.pathologicalStatus);
 
-		final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-		specimenCharacteristics.setTissueSide(spBean.tissueSide);
-		specimenCharacteristics.setTissueSite(spBean.tissueSite);
-		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+		specimen.setTissueSide(spBean.tissueSide);
+		specimen.setTissueSite(spBean.tissueSite);
 
 		if (spBean.derivedColl != null)
 		{
@@ -1205,7 +1206,8 @@ public class FlexInterface
 				derivedBean.receivedEvent = spBean.receivedEvent;
 				final Specimen derivedSp = this.prepareSpecimen(derivedBean);
 				derivedSp.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
-				derivedSp.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+				derivedSp.setTissueSide(specimen.getTissueSide());
+				derivedSp.setTissueSite(specimen.getTissueSite());
 				derivedSpecimenSet.add(derivedSp);
 				i++;
 			}

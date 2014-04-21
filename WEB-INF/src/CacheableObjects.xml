@@ -61,7 +61,6 @@
 		<Class name="edu.wustl.catissuecore.domain.SpecimenArray"/>
 		<Class name="edu.wustl.catissuecore.domain.SpecimenArrayOrderItem"/>	
 		<Class name="edu.wustl.catissuecore.domain.SpecimenArrayType"/>	
-		<Class name="edu.wustl.catissuecore.domain.SpecimenCharacteristics"/>	
 		<Class name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"/>
 		<Class name="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"/>
 		<Class name="edu.wustl.catissuecore.domain.SpecimenEventParameters"/>	

@@ -1,0 +1,1718 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <property name="text.type" value="varchar" dbms="mysql" />
+    <property name="text.type" value="varchar2" dbms="oracle" />
+
+    <property name="int.type" value="bigint(20)" dbms="mysql" />
+    <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+    <property name="smallint.type" value="smallint" dbms="mysql" />
+    <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+    
+    <property name="date.type" value="date" dbms="mysql" />
+    <property name="date.type" value="date" dbms="oracle" />
+
+    <property name="timestamp.type" value="timestamp" dbms="mysql" />
+    <property name="timestamp.type" value="timestamp" dbms="oracle" />
+    
+    <property name="boolean.type" value="boolean" dbms="mysql" />
+    <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+    
+    <property name="boolean.true" value="true" dbms="mysql" />
+    <property name="boolean.true" value="1" dbms="oracle" />
+    
+    <property name="boolean.false" value="false" dbms="mysql" />
+    <property name="boolean.false" value="0" dbms="oracle" />
+
+    <property name="autoIncrement" value="true" dbms="mysql"/>
+    <property name="autoIncrement" value="false" dbms="oracle"/>
+    
+    <property name="blob.type" value="blob" dbms="mysql" />
+    <property name="blob.type" value="blob" dbms="oracle" />
+    
+ 
+     <changeSet id="1" author="nitesh" runOnChange="true">
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="SPECIMEN_CLASS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="SPECIMEN_TYPE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="CONCENTRATION" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="INITIAL_QUANTITY" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="PATHOLOGICAL_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="LINEAGE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="COLLECTOR_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="COLLECTION_CONTAINER" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="COLLECTION_PROCEDURE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="COLLECTION_COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="COLLECTION_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="RECEIVER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="RECEIVED_COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="RECEIVED_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="RECEIVED_QUALITY" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="TISSUE_SITE" type="${text.type}(150)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+            <column name="TISSUE_SIDE" type="${text.type}(50)" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="2" author="nitesh" runOnChange="true">
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="SPECIMEN_CLASS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="SPECIMEN_TYPE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="CONCENTRATION" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="INITIAL_QUANTITY" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="PATHOLOGICAL_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="LINEAGE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="TISSUE_SITE" type="${text.type}(150)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN">
+            <column name="TISSUE_SIDE" type="${text.type}(50)" />
+        </addColumn>
+    </changeSet>
+    
+	<changeSet author="nitesh" id="3" failOnError="false">
+	    <dropForeignKeyConstraint baseTableName="CATISSUE_CP_REQ_SPECIMEN" constraintName="FK_PARENT_CP_REQ_SPECIMEN"/>
+	</changeSet>
+	
+	<changeSet author="nitesh" id="4" failOnError="false">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_SPECIMEN" constraintName="FK_PARENT_SPECIMEN"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="5" failOnError="false">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_SPECIMEN_EVENT_PARAM" constraintName="FK753F33AD60773DB2"/>
+    </changeSet>
+    
+    <changeSet id="6" author="nitesh" dbms="mysql">
+        <sql>update catissue_specimen specimen join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimen.identifier
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            set specimen.PARENT_SPECIMEN_ID = aspecimen.PARENT_SPECIMEN_ID, 
+            specimen.INITIAL_QUANTITY = aspecimen.INITIAL_QUANTITY,
+            specimen.PATHOLOGICAL_STATUS = aspecimen.PATHOLOGICAL_STATUS,
+            specimen.LINEAGE = aspecimen.LINEAGE,
+            specimen.SPECIMEN_CLASS = aspecimen.SPECIMEN_CLASS,
+            specimen.SPECIMEN_TYPE = aspecimen.SPECIMEN_TYPE,
+            specimen.CONCENTRATION = aspecimen.CONCENTRATION, 
+            specimen.tissue_side = sp_char.tissue_side, 
+            specimen.tissue_site = sp_char.tissue_site
+            where specimen.identifier is not null</sql>
+		<sql>update catissue_cp_req_specimen specimenReq join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimenReq.identifier
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            set specimenReq.PARENT_SPECIMEN_ID = aspecimen.PARENT_SPECIMEN_ID, 
+            specimenReq.INITIAL_QUANTITY = aspecimen.INITIAL_QUANTITY,
+            specimenReq.PATHOLOGICAL_STATUS = aspecimen.PATHOLOGICAL_STATUS,
+            specimenReq.LINEAGE = aspecimen.LINEAGE,
+            specimenReq.SPECIMEN_CLASS = aspecimen.SPECIMEN_CLASS,
+            specimenReq.SPECIMEN_TYPE = aspecimen.SPECIMEN_TYPE,
+            specimenReq.CONCENTRATION = aspecimen.CONCENTRATION,
+            specimenReq.tissue_side = sp_char.tissue_side, 
+            specimenReq.tissue_site = sp_char.tissue_site
+            where specimenReq.identifier is not null</sql>
+		<sql>update catissue_cp_req_specimen specimenReq join catissue_specimen_event_param event on 
+			event.specimen_id = specimenReq.identifier join catissue_coll_event_param collEvent on 
+			collEvent.identifier = event.identifier 
+			set 
+			specimenReq.COLLECTION_TIMESTAMP = event.EVENT_TIMESTAMP,
+			specimenReq.COLLECTION_COMMENTS = event.COMMENTS,
+			specimenReq.COLLECTION_PROCEDURE = collEvent.COLLECTION_PROCEDURE,
+			specimenReq.COLLECTION_CONTAINER = collEvent.CONTAINER,
+			specimenReq.COLLECTOR_ID = event.USER_ID 
+			where specimenReq.identifier is not null</sql>
+		<sql>update catissue_cp_req_specimen specimenReq join catissue_specimen_event_param event on 
+			event.specimen_id = specimenReq.identifier join catissue_received_event_param recEvent on
+			recEvent.identifier = event.identifier
+			set 
+			specimenReq.RECEIVED_QUALITY = recEvent.RECEIVED_QUALITY,
+			specimenReq.RECEIVED_TIMESTAMP = event.EVENT_TIMESTAMP,
+			specimenReq.RECEIVED_COMMENTS = event.COMMENTS,
+			specimenReq.RECEIVER_ID =  event.USER_ID where specimenReq.identifier is not null</sql>
+		<sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet id="7" author="nitesh" dbms="oracle">
+        <sql>update (
+            select specimen.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
+            specimen.INITIAL_QUANTITY as sInitQty, aspecimen.INITIAL_QUANTITY as aInitQty,
+            specimen.PATHOLOGICAL_STATUS as sPathStatus, aspecimen.PATHOLOGICAL_STATUS as aPathStatus,
+            specimen.LINEAGE as sLineage, aspecimen.LINEAGE as aLineage,
+            specimen.SPECIMEN_CLASS as sClass, aspecimen.SPECIMEN_CLASS as aClass,
+            specimen.SPECIMEN_TYPE as sType, aspecimen.SPECIMEN_TYPE as aType,
+            specimen.CONCENTRATION as sCon, aspecimen.CONCENTRATION as aCon, 
+            specimen.tissue_side as sTissueSide, sp_char.tissue_side as sp_charTissueSide,
+            specimen.tissue_site as sTissueSite, sp_char.tissue_site as sp_charTissueSite from
+            catissue_specimen specimen join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimen.identifier 
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            where specimen.identifier is not null
+            ) up
+            set up.sParentId = up.aParentId,
+            up.sInitQty = up.aInitQty,
+            up.sPathStatus = up.aPathStatus,
+            up.sLineage = up.aLineage,
+            up.sClass = up.aClass,
+            up.sType = up.aType,
+            up.sCon = up.aCon,
+            up.sTissueSide = up.sp_charTissueSide,
+            up.sTissueSite = up.sp_charTissueSite;</sql>
+		<sql>update (
+            select specimenReq.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
+            specimenReq.INITIAL_QUANTITY as sInitQty, aspecimen.INITIAL_QUANTITY as aInitQty,
+            specimenReq.PATHOLOGICAL_STATUS as sPathStatus, aspecimen.PATHOLOGICAL_STATUS as aPathStatus,
+            specimenReq.LINEAGE as sLineage, aspecimen.LINEAGE as aLineage,
+            specimenReq.SPECIMEN_CLASS as sClass, aspecimen.SPECIMEN_CLASS as aClass,
+            specimenReq.SPECIMEN_TYPE as sType, aspecimen.SPECIMEN_TYPE as aType,
+            specimenReq.CONCENTRATION as sCon, aspecimen.CONCENTRATION as aCon,
+            specimenReq.tissue_side as sTissueSide, sp_char.tissue_side as sp_charTissueSide,
+            specimenReq.tissue_site as sTissueSite, sp_char.tissue_site as sp_charTissueSite from 
+            catissue_cp_req_specimen specimenReq join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimenReq.identifier
+            left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
+            where specimenReq.identifier is not null
+            ) up
+            set up.sParentId = up.aParentId,
+            up.sInitQty = up.aInitQty,
+            up.sPathStatus = up.aPathStatus,
+            up.sLineage = up.aLineage,
+            up.sClass = up.aClass,
+            up.sType = up.aType,
+            up.sCon = up.aCon,
+            up.sTissueSide = up.sp_charTissueSide,
+            up.sTissueSite = up.sp_charTissueSite;</sql>
+		<sql>merge into catissue_cp_req_specimen t2
+			   using ( select event.EVENT_TIMESTAMP as aTime, 
+			event.COMMENTS as aComments,
+			collEvent.COLLECTION_PROCEDURE as aProcedure,
+			collEvent.CONTAINER as aContainer,
+			event.USER_ID as aCollector,
+			event.SPECIMEN_ID as specId
+			from 
+			catissue_specimen_event_param event join catissue_coll_event_param collEvent on collEvent.identifier = event.identifier  ) t1
+			      on ( t2.identifier = t1.specId AND  t2.identifier is not null)
+			    when matched
+			    then update
+			     set   t2.COLLECTION_PROCEDURE = t1.aProcedure, 
+			            t2.COLLECTION_TIMESTAMP = t1.aTime,
+			            t2.COLLECTION_COMMENTS = t1.aComments,
+			            t2.COLLECTION_CONTAINER = t1.aContainer,
+			            t2.COLLECTOR_ID = t1.aCollector;</sql>
+	   <sql>merge into catissue_cp_req_specimen t2
+			   using ( select event.EVENT_TIMESTAMP as aTime, 
+			event.COMMENTS as aComments,
+			recEvent.RECEIVED_QUALITY as aQuality,
+			event.USER_ID as aReceiver,
+			event.SPECIMEN_ID as specId
+			from 
+			catissue_specimen_event_param event join catissue_received_event_param recEvent on recEvent.identifier = event.identifier  ) t1
+			      on ( t2.identifier = t1.specId AND  t2.identifier is not null)
+			    when matched
+			    then update
+			     set   t2.RECEIVED_QUALITY = t1.aQuality, 
+			            t2.RECEIVED_TIMESTAMP = t1.aTime,
+			            t2.RECEIVED_COMMENTS = t1.aComments,
+			            t2.RECEIVER_ID = t1.aReceiver;</sql>
+	   <sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="8" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
+    </changeSet>
+
+	<changeSet author="nitesh" id="9" failOnError="false">
+	     <addForeignKeyConstraint baseColumnNames="PARENT_SPECIMEN_ID"
+	               baseTableName="CATISSUE_CP_REQ_SPECIMEN"
+	               constraintName="FK_PARENT_CP_REQ_SPECIMEN"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_CP_REQ_SPECIMEN"/>
+         <addForeignKeyConstraint baseColumnNames="COLLECTOR_ID"
+                   baseTableName="CATISSUE_CP_REQ_SPECIMEN"
+                   constraintName="FK_COLLECTOR_CP_REQ_SPECIMEN"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_USER"/>
+         <addForeignKeyConstraint baseColumnNames="RECEIVER_ID"
+                   baseTableName="CATISSUE_CP_REQ_SPECIMEN"
+                   constraintName="FK_RECEIVER_CP_REQ_SPECIMEN"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    <changeSet author="nitesh" id="10" failOnError="false">
+	     <addForeignKeyConstraint baseColumnNames="PARENT_SPECIMEN_ID"
+	               baseTableName="CATISSUE_SPECIMEN"
+	               constraintName="FK_PARENT_SPECIMEN"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
+    </changeSet>
+    
+	<changeSet author="nitesh" id="11" failOnError="false">
+	    <createIndex 
+	            indexName="idx_specimen_class"
+	            tableName="CATISSUE_SPECIMEN"
+	            unique="false">
+	        <column name="SPECIMEN_CLASS" type="varchar(50)"/>
+	    </createIndex>
+	 </changeSet>
+	<changeSet author="nitesh" id="12" failOnError="false">
+	    <createIndex 
+                indexName="idx_specimen_type"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="SPECIMEN_TYPE" type="varchar(50)"/>
+        </createIndex>
+      </changeSet>
+    <changeSet author="nitesh" id="13" failOnError="false">
+        <createIndex 
+                indexName="idx_pathology_stat"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="PATHOLOGICAL_STATUS" type="varchar(50)"/>
+        </createIndex>
+     </changeSet>
+    <changeSet author="nitesh" id="14" failOnError="false">
+        <createIndex 
+                indexName="idx_init_quantity"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="INITIAL_QUANTITY" type="varchar(50)"/>
+        </createIndex>
+      </changeSet>
+    <changeSet author="nitesh" id="15" failOnError="false">
+        <createIndex 
+                indexName="idx_specimen_lineage"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="LINEAGE" type="varchar(50)"/>
+        </createIndex>
+	</changeSet>
+	
+	<changeSet author="nitesh" id="16" failOnError="false">
+        <createIndex 
+                indexName="idx_specimen_req_class"
+                tableName="CATISSUE_CP_REQ_SPECIMEN"
+                unique="false">
+            <column name="SPECIMEN_CLASS" type="varchar(50)"/>
+        </createIndex>
+     </changeSet>
+    <changeSet author="nitesh" id="17" failOnError="false">
+        <createIndex 
+                indexName="idx_specimen_req_type"
+                tableName="CATISSUE_CP_REQ_SPECIMEN"
+                unique="false">
+            <column name="SPECIMEN_TYPE" type="varchar(50)"/>
+        </createIndex>
+     </changeSet>
+    <changeSet author="nitesh" id="18" failOnError="false">
+        <createIndex 
+                indexName="idx_spec_req_pathology_stat"
+                tableName="CATISSUE_CP_REQ_SPECIMEN"
+                unique="false">
+            <column name="PATHOLOGICAL_STATUS" type="varchar(50)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="nitesh" id="19" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+    </changeSet>
+
+        <changeSet id="20" author="nitesh" runOnChange="true">
+        <addColumn tableName="CATISSUE_COLL_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLL_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLL_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLL_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_FIXED_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FIXED_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FIXED_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FIXED_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+         <addColumn tableName="CATISSUE_IN_OUT_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_IN_OUT_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_IN_OUT_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_IN_OUT_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+         <addColumn tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+         <addColumn tableName="CATISSUE_TRANSFER_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_TRANSFER_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_TRANSFER_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_TRANSFER_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_RECEIVED_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_RECEIVED_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_RECEIVED_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_RECEIVED_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        
+        <addColumn tableName="CATISSUE_DISTRI_EVENT_PARAM">
+            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRI_EVENT_PARAM">
+            <column name="SPECIMEN_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRI_EVENT_PARAM">
+            <column name="USER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRI_EVENT_PARAM">
+            <column name="COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+    </changeSet>
+    
+    <!-- <changeSet id="21" author="nitesh">
+        <createTable tableName="CATISSUE_SPEC_EVENT_MAPPING">
+	        <column name="IDENTIFIER" type="${int.type}"/>
+	        <column name="EVENT_TYPE" type="${text.type}(50)"/>
+	        <column name="SPECIMEN_ID" type="${int.type}"/>
+        </createTable>
+        <addPrimaryKey columnNames="IDENTIFIER"
+            constraintName="PK_CATISSUE_SPEC_EVENT_MAPPING"
+            tableName="CATISSUE_SPEC_EVENT_MAPPING"
+            />
+    </changeSet>
+    
+    <changeSet id="adding autoIncrement for CATISSUE_SPEC_EVENT_MAPPING" author="nitesh" dbms="mysql">
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_SPEC_EVENT_MAPPING"/>
+    </changeSet>-->  
+
+    <changeSet id="22" author="nitesh" dbms="mysql">
+        <sql>DROP PROCEDURE IF EXISTS  migrate_events_data;</sql>
+       <sql splitStatements="false">
+       CREATE PROCEDURE migrate_events_data(eventTabName varchar(50))
+        BEGIN
+            SET @sql=CONCAT("update ", eventTabName ," collEvent join catissue_specimen_event_param event
+				on event.identifier = collEvent.identifier
+				set collEvent.EVENT_TIMESTAMP = event.EVENT_TIMESTAMP,
+				collEvent.SPECIMEN_ID = event.SPECIMEN_ID,
+				collEvent.USER_ID = event.USER_ID,
+				collEvent.COMMENTS = event.COMMENTS where collEvent.identifier is not null");
+    
+            PREPARE s1 FROM @sql;
+            EXECUTE s1;
+            DEALLOCATE PREPARE s1;
+        END
+    </sql>
+    </changeSet>
+    <changeSet id="23" author="nitesh" dbms="oracle">
+       <sql splitStatements="false" endDelimiter="$">
+       create or replace
+		PROCEDURE migrate_events_data (eventTabName varchar2) AS
+		updateQuery varchar2(1000);
+		BEGIN
+		updateQuery := 'update ( select collEvent.EVENT_TIMESTAMP as cTime, event.EVENT_TIMESTAMP as etime,
+		collEvent.SPECIMEN_ID as cSpecId, event.SPECIMEN_ID as eSpecId,
+		collEvent.USER_ID as cUserId, event.USER_ID as eUserId,
+		collEvent.COMMENTS as cComments, event.COMMENTS as eComments
+		from '|| eventTabName ||' collEvent join catissue_specimen_event_param event
+		on collEvent.identifier = event.identifier
+		)up
+		set up.cTime = up.etime,up.cSpecId = up.eSpecId,up.cUserId = up.eUserId,up.cComments = up.eComments';
+		EXECUTE IMMEDIATE updateQuery;
+		END migrate_events_data;
+    </sql>
+    </changeSet>
+    <changeSet id="24" author="nitesh">
+    <sql>call migrate_events_data('CATISSUE_FIXED_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_FROZEN_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_IN_OUT_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_PROCEDURE_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_SPUN_EVENT_PARAMETERS');</sql>
+    <sql>call migrate_events_data('CATISSUE_TRANSFER_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_COLL_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_RECEIVED_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_EMBEDDED_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_THAW_EVENT_PARAMETERS');</sql>
+    <sql>call migrate_events_data('CATISSUE_CELL_SPE_REVIEW_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_TIS_SPE_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_FLUID_SPE_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_MOL_SPE_REVIEW_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_DISPOSAL_EVENT_PARAM');</sql>
+    <sql>call migrate_events_data('CATISSUE_DISTRI_EVENT_PARAM');</sql>
+    <sql>commit;</sql>
+    </changeSet>
+    
+   <!--  <changeSet id="25" author="nitesh">
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'FIXED', event.identifier, event.specimen_id from CATISSUE_FIXED_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'FROZEN', event.identifier, event.specimen_id from CATISSUE_FROZEN_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'CHECKIN CHECKOUT', event.identifier, event.specimen_id from CATISSUE_IN_OUT_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'PROCEDURE', event.identifier, event.specimen_id from CATISSUE_PROCEDURE_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'SPUN', event.identifier, event.specimen_id from CATISSUE_SPUN_EVENT_PARAMETERS event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'TRANSFER', event.identifier, event.specimen_id from CATISSUE_TRANSFER_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'COLLECTION', event.identifier, event.specimen_id from CATISSUE_COLL_EVENT_PARAM event join 
+            catissue_specimen spec on event.specimen_id = spec.identifier</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID)
+            select 'RECEIVED', event.identifier, event.specimen_id from CATISSUE_RECEIVED_EVENT_PARAM event join 
+            catissue_specimen spec on event.specimen_id = spec.identifier</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'EMBEDDED', event.identifier, event.specimen_id from CATISSUE_EMBEDDED_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'THAW', event.identifier, event.specimen_id from CATISSUE_THAW_EVENT_PARAMETERS event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'CELL SPECIMEN REVIEW', event.identifier, event.specimen_id from CATISSUE_CELL_SPE_REVIEW_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'TISSUE SPECIMEN REVIEW', event.identifier, event.specimen_id from CATISSUE_TIS_SPE_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'FLUID SPECIMEN REVIEW', event.identifier, event.specimen_id from CATISSUE_FLUID_SPE_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'MOLECULAR SPECIMEN REVIEW', event.identifier, event.specimen_id from CATISSUE_MOL_SPE_REVIEW_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'DISPOSAL', event.identifier, event.specimen_id from CATISSUE_DISPOSAL_EVENT_PARAM event</sql>
+        <sql>insert into catissue_spec_event_mapping(EVENT_TYPE,IDENTIFIER,SPECIMEN_ID) 
+            select 'DISTRIBUTION', event.identifier, event.specimen_id from CATISSUE_DISTRI_EVENT_PARAM event</sql>
+    </changeSet>-->
+    <changeSet id="26" author="nitesh">
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="COLLECTOR_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="COLLECTION_CONTAINER" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="COLLECTION_PROCEDURE" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="COLLECTION_COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="COLLECTION_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="RECEIVER_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="RECEIVED_COMMENTS" type="${text.type}(500)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="RECEIVED_TIMESTAMP" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="RECEIVED_QUALITY" type="${text.type}(50)" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="27" author="nitesh" dbms="mysql">
+        <sql>update catissue_specimen_coll_group scg join catissue_specimen_event_param event on 
+            event.specimen_coll_grp_id = scg.identifier join catissue_coll_event_param collEvent on 
+            collEvent.identifier = event.identifier 
+            set 
+            scg.COLLECTION_TIMESTAMP = event.EVENT_TIMESTAMP,
+            scg.COLLECTION_COMMENTS = event.COMMENTS,
+            scg.COLLECTION_PROCEDURE = collEvent.COLLECTION_PROCEDURE,
+            scg.COLLECTION_CONTAINER = collEvent.CONTAINER,
+            scg.COLLECTOR_ID = event.USER_ID 
+            where scg.identifier is not null</sql>
+        <sql>update catissue_specimen_coll_group scg join catissue_specimen_event_param event on 
+            event.specimen_coll_grp_id = scg.identifier join catissue_received_event_param recEvent on
+            recEvent.identifier = event.identifier
+            set 
+            scg.RECEIVED_QUALITY = recEvent.RECEIVED_QUALITY,
+            scg.RECEIVED_TIMESTAMP = event.EVENT_TIMESTAMP,
+            scg.RECEIVED_COMMENTS = event.COMMENTS,
+            scg.RECEIVER_ID =  event.USER_ID where scg.identifier is not null</sql>
+        <sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet id="28" author="nitesh" dbms="oracle">
+        <sql>merge into catissue_specimen_coll_group t2
+               using ( select event.EVENT_TIMESTAMP as aTime, 
+            event.COMMENTS as aComments,
+            collEvent.COLLECTION_PROCEDURE as aProcedure,
+            collEvent.CONTAINER as aContainer,
+            event.USER_ID as aCollector,
+            event.specimen_coll_grp_id as specId
+            from 
+            catissue_specimen_event_param event join catissue_coll_event_param collEvent on collEvent.identifier = event.identifier  ) t1
+                  on ( t2.identifier = t1.specId AND  t2.identifier is not null)
+                when matched
+                then update
+                 set   t2.COLLECTION_PROCEDURE = t1.aProcedure, 
+                        t2.COLLECTION_TIMESTAMP = t1.aTime,
+                        t2.COLLECTION_COMMENTS = t1.aComments,
+                        t2.COLLECTION_CONTAINER = t1.aContainer,
+                        t2.COLLECTOR_ID = t1.aCollector;</sql>
+       <sql>merge into catissue_specimen_coll_group t2
+               using ( select event.EVENT_TIMESTAMP as aTime, 
+            event.COMMENTS as aComments,
+            recEvent.RECEIVED_QUALITY as aQuality,
+            event.USER_ID as aReceiver,
+            event.specimen_coll_grp_id as specId
+            from 
+            catissue_specimen_event_param event join catissue_received_event_param recEvent on recEvent.identifier = event.identifier  ) t1
+                  on ( t2.identifier = t1.specId AND  t2.identifier is not null)
+                when matched
+                then update
+                 set   t2.RECEIVED_QUALITY = t1.aQuality, 
+                        t2.RECEIVED_TIMESTAMP = t1.aTime,
+                        t2.RECEIVED_COMMENTS = t1.aComments,
+                        t2.RECEIVER_ID = t1.aReceiver;</sql>
+       <sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet id="29" author="nitesh" failOnError="false">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_RECEIVED_EVENT_PARAM" constraintName="FKA7139D06BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_COLL_EVENT_PARAM" constraintName="FKF9888F91BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM" constraintName="FK70565D20BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_SPUN_EVENT_PARAMETERS" constraintName="FK312D77BCBC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_PROCEDURE_EVENT_PARAM" constraintName="FKEC6B4260BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_FIXED_EVENT_PARAM" constraintName="FKE0F1781BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_THAW_EVENT_PARAMETERS" constraintName="FKD8890A48BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_FROZEN_EVENT_PARAM" constraintName="FK52627245BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM" constraintName="FKBB9648F4BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_TRANSFER_EVENT_PARAM" constraintName="FK71F9AC10BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM" constraintName="FK5280ECEBC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM" constraintName="FKD356182FBC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_IN_OUT_EVENT_PARAM" constraintName="FK4F0FAEB9BC7298A9"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM" constraintName="FK1BC818D6BC7298A9"/>
+    </changeSet>
+    
+    <changeSet id="30" author="nitesh" runOnChange="true">
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="CLINICAL_DIAGNOSIS" type="${text.type}(150)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="CLINICAL_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+            <column name="SITE_ID" type="${int.type}" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="31" author="nitesh" runOnChange="true">
+        <addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+            <column name="CLINICAL_DIAGNOSIS" type="${text.type}(150)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+            <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+            <column name="SITE_ID" type="${int.type}" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="32" author="nitesh">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_COLL_PROT_EVENT" constraintName="FK_PARENT_COLL_PROT_EVENT"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_SPECIMEN_COLL_GROUP" constraintName="FK_PARENT_SPEC_COLL_GROUP"/>
+    </changeSet>
+
+    <changeSet id="33" author="nitesh" dbms="mysql">
+        <sql>update catissue_specimen_coll_group scg join catissue_abs_speci_coll_group ascg on 
+            ascg.identifier = scg.identifier 
+            set 
+            scg.CLINICAL_DIAGNOSIS = ascg.CLINICAL_DIAGNOSIS,
+            scg.CLINICAL_STATUS = ascg.CLINICAL_STATUS,
+            scg.ACTIVITY_STATUS = ascg.ACTIVITY_STATUS,
+            scg.SITE_ID =  ascg.SITE_ID where scg.identifier is not null</sql>
+        <sql>update catissue_coll_prot_event cpe join catissue_abs_speci_coll_group ascg on 
+            ascg.identifier = cpe.identifier 
+            set 
+            cpe.CLINICAL_DIAGNOSIS = ascg.CLINICAL_DIAGNOSIS,
+            cpe.CLINICAL_STATUS = ascg.CLINICAL_STATUS,
+            cpe.ACTIVITY_STATUS = ascg.ACTIVITY_STATUS,
+            cpe.SITE_ID =  ascg.SITE_ID where cpe.identifier is not null</sql>
+    </changeSet>
+    
+    <changeSet id="34" author="nitesh" dbms="oracle">
+        <sql>update (
+            select scg.CLINICAL_DIAGNOSIS as sClinDiagnosis, ascg.CLINICAL_DIAGNOSIS as aClinDiagnosis, 
+            scg.CLINICAL_STATUS as sClinStatus, ascg.CLINICAL_STATUS as aClinStatus,
+            scg.ACTIVITY_STATUS as sActStatus, ascg.ACTIVITY_STATUS as aActStatus,
+            scg.SITE_ID as sSiteId, ascg.SITE_ID as aSiteId
+            from 
+            catissue_specimen_coll_group scg join catissue_abs_speci_coll_group ascg on 
+            ascg.identifier = scg.identifier 
+            where scg.identifier is not null
+            ) up
+            set up.sClinStatus = up.aClinStatus,
+            up.sClinDiagnosis = up.aClinDiagnosis,
+            up.sActStatus = up.aActStatus,
+            up.sSiteId = up.aSiteId;</sql>
+        <sql>update (
+            select cpe.CLINICAL_DIAGNOSIS as sClinDiagnosis, ascg.CLINICAL_DIAGNOSIS as aClinDiagnosis, 
+            cpe.CLINICAL_STATUS as sClinStatus, ascg.CLINICAL_STATUS as aClinStatus,
+            cpe.ACTIVITY_STATUS as sActStatus, ascg.ACTIVITY_STATUS as aActStatus,
+            cpe.SITE_ID as sSiteId, ascg.SITE_ID as aSiteId
+            from 
+            catissue_coll_prot_event cpe join catissue_abs_speci_coll_group ascg on 
+            ascg.identifier = cpe.identifier 
+            where cpe.identifier is not null
+            ) up
+            set up.sClinStatus = up.aClinStatus,
+            up.sClinDiagnosis = up.aClinDiagnosis,
+            up.sActStatus = up.aActStatus,
+            up.sSiteId = up.aSiteId;</sql>
+      </changeSet>    
+      
+      <changeSet id="35" author="nitesh" dbms="oracle">
+        <sql endDelimiter="/">BEGIN
+			DECLARE
+			reqId NUMBER;
+			cpeId NUMBER;
+			dpId NUMBER;
+			  BEGIN
+			  SELECT NVL(MAX(IDENTIFIER),0)+1
+			  INTO reqId
+			  FROM CATISSUE_CP_REQ_SPECIMEN;
+			  
+			  SELECT NVL(MAX(IDENTIFIER),0)+1
+			  INTO cpeId
+			  FROM CATISSUE_COLL_PROT_EVENT;
+			  
+			  SELECT NVL(MAX(IDENTIFIER),0)+1
+              INTO dpId
+              FROM CATISSUE_DISTRIBUTION_PROTOCOL;
+              
+			  execute immediate('CREATE SEQUENCE CATISSUE_REQ_SPECIMEN_SEQ MINVALUE 0 START WITH '||reqId||' INCREMENT BY 1 NOCACHE');
+			  execute immediate('CREATE SEQUENCE CATISSUE_COLL_PROT_EV_SEQ MINVALUE 0 START WITH '||cpeId||' INCREMENT BY 1 NOCACHE');
+			  execute immediate('CREATE SEQUENCE CATISSUE_DISTRI_PROT_SEQ MINVALUE 0 START WITH '||dpId||' INCREMENT BY 1 NOCACHE');
+			  END;
+			END;
+			/
+        </sql>
+      </changeSet>
+      
+    <changeSet author="nitesh" id="disable foreign key check" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
+    </changeSet>
+    
+    <!-- <changeSet author="nitesh" id="36" failOnError="false">
+        
+     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+               baseTableName="CATISSUE_SPEC_EVENT_MAPPING"
+               constraintName="FK_SPECIMEN_EVENT_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPECIMEN"/>
+    </changeSet> -->
+
+    <changeSet author="nitesh" id="enable foreign key check" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
+    </changeSet>
+     
+    <changeSet author="nitesh" id="37" failOnError="false">
+	     <addForeignKeyConstraint baseColumnNames="COLLECTOR_ID"
+	               baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+	               constraintName="FK_USER_EVENT_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="RECEIVER_ID"
+	               baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+	               constraintName="FK_RECEIVER_ID_SCG"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SITE_ID"
+	               baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+	               constraintName="FK_SITE_ID_SCG"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SITE"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="38" failOnError="false">
+	     <addForeignKeyConstraint baseColumnNames="SITE_ID"
+	               baseTableName="CATISSUE_COLL_PROT_EVENT"
+	               constraintName="FK_SITE_ID_CPE"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SITE"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_COLL_EVENT_PARAM" failOnError="false">
+	     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_COLL_EVENT_PARAM"
+	               constraintName="FK_COLL_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_COLL_EVENT_PARAM"
+	               constraintName="FK_USER_COLL_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_FIXED_EVENT_PARAM" failOnError="false">
+	     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_FIXED_EVENT_PARAM"
+	               constraintName="FK_FIXED_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_FIXED_EVENT_PARAM"
+	               constraintName="FK_USER_FIXED_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_FROZEN_EVENT_PARAM" failOnError="false">
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_FROZEN_EVENT_PARAM"
+	               constraintName="FK_FROZEN_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_FROZEN_EVENT_PARAM"
+	               constraintName="FK_USER_FROZEN_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_IN_OUT_EVENT_PARAM" failOnError="false">
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_IN_OUT_EVENT_PARAM"
+	               constraintName="FK_INOUT_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_IN_OUT_EVENT_PARAM"
+	               constraintName="FK_USER_INOUT_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_PROCEDURE_EVENT_PARAM" failOnError="false">
+	     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_PROCEDURE_EVENT_PARAM"
+	               constraintName="FK_PROC_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_PROCEDURE_EVENT_PARAM"
+	               constraintName="FK_USER_PROC_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_SPUN_EVENT_PARAMETERS" failOnError="false">
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_SPUN_EVENT_PARAMETERS"
+	               constraintName="FK_SPUN_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_SPUN_EVENT_PARAMETERS"
+	               constraintName="FK_USER_SPUN_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_TRANSFER_EVENT_PARAM" failOnError="false">
+	   <!--   <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
+	               constraintName="FK_TRNSFR_EV_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
+	               constraintName="FK_USER_TRANSFER_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_RECEIVED_EVENT_PARAM" failOnError="false">
+	    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+	               baseTableName="CATISSUE_RECEIVED_EVENT_PARAM"
+	               constraintName="FK_REC_EVENT_TO_EV_MAPPING"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/>--> 
+	     <addForeignKeyConstraint baseColumnNames="USER_ID"
+	               baseTableName="CATISSUE_RECEIVED_EVENT_PARAM"
+	               constraintName="FK_USER_REC_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_EMBEDDED_EVENT_PARAM" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM"
+               constraintName="FK_EMB_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM"
+               constraintName="FK_USER_EMB_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_THAW_EVENT_PARAMETERS" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_THAW_EVENT_PARAMETERS"
+               constraintName="FK_THAW_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_THAW_EVENT_PARAMETERS"
+               constraintName="FK_USER_THAW_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_CELL_SPE_REVIEW_PARAM" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
+               constraintName="FK_CELL_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
+               constraintName="FK_USER_CELL_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_TIS_SPE_EVENT_PARAM" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM"
+               constraintName="FK_TISSUE_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM"
+               constraintName="FK_USER_TISSUE_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_FLUID_SPE_EVENT_PARAM" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM"
+               constraintName="FK_FLUID_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM"
+               constraintName="FK_USER_FLUID_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_MOL_SPE_REVIEW_PARAM" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM"
+               constraintName="FK_MOL_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM"
+               constraintName="FK_USER_MOL_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_DISPOSAL_EVENT_PARAM" failOnError="false">
+    <!--  <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM"
+               constraintName="FK_DISP_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM"
+               constraintName="FK_USER_DISP_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="adding FK for CATISSUE_DISTRI_EVENT_PARAM" failOnError="false">
+     <!-- <addForeignKeyConstraint baseColumnNames="IDENTIFIER"
+               baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
+               constraintName="FK_DISTRI_EVENT_TO_EV_MAPPING"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <addForeignKeyConstraint baseColumnNames="USER_ID"
+               baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
+               constraintName="FK_USER_DISTRI_EVENT"
+               referencedColumnNames="IDENTIFIER"
+               referencedTableName="CATISSUE_USER"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="adding new form context table" failOnError="true">
+      <createTable tableName="CATISSUE_FORM_CONTEXT">
+        <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+          <constraints primaryKey="true" nullable="false"/>
+        </column>
+
+        <column name="CONTAINER_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="ENTITY_TYPE" type="${text.type}(32)">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="CP_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+ 
+        <column name="SORT_ORDER" type="${smallint.type}"/>
+        <column name="IS_MULTIRECORD" type="${boolean.type}" defaultValueBoolean="${boolean.false}"/>
+      </createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="adding FK on form context to containers table" failOnError="true">
+      <addForeignKeyConstraint 
+        constraintName="FK_FC_CNTR_ID_DC_IDENTIFIER"
+        baseTableName="CATISSUE_FORM_CONTEXT"
+        baseColumnNames="CONTAINER_ID"
+        referencedTableName="DYEXTN_CONTAINERS"
+        referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
+
+     <!-- changeSet author="vpawar" id="adding FK on form context to collection protocol table" failOnError="true">
+      <addForeignKeyConstraint 
+        constraintName="FK_FC_CP_ID_SP_IDENTIFIER"
+        baseTableName="CATISSUE_FORM_CONTEXT"
+        baseColumnNames="CP_ID"
+        referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+        referencedColumnNames="IDENTIFIER"/>
+    </changeSet --> 
+
+     <changeSet author="vpawar" id="adding new form record entries table" failOnError="true">
+      <createTable tableName="CATISSUE_FORM_RECORD_ENTRY">
+        <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+          <constraints primaryKey="true" nullable="false"/>
+        </column>
+
+        <column name="FORM_CTXT_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="OBJECT_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="RECORD_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="UPDATED_BY" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+
+        <column name="UPDATE_TIME" type="${timestamp.type}">
+          <constraints nullable="false"/>
+        </column>
+        
+         <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+          <constraints nullable="false"/>
+        </column>
+      </createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="adding FK on record entries to form context table" failOnError="true">
+      <addForeignKeyConstraint 
+        constraintName="FK_RE_CTXT_ID_FC_IDENTIFIER"
+        baseTableName="CATISSUE_FORM_RECORD_ENTRY"
+        baseColumnNames="FORM_CTXT_ID"
+        referencedTableName="CATISSUE_FORM_CONTEXT"
+        referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="adding FK on record entries to users table" failOnError="true">
+      <addForeignKeyConstraint 
+        constraintName="FK_RE_UPDATED_BY_USERS_ID"
+        baseTableName="CATISSUE_FORM_RECORD_ENTRY"
+        baseColumnNames="UPDATED_BY"
+        referencedTableName="CATISSUE_USER"
+        referencedColumnNames="IDENTIFIER"/>
+    </changeSet> 
+    
+    <changeSet id="adding columns for distribution protocol" author="nitesh">
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="SHORT_TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="START_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="END_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="ENROLLMENT" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="DESCRIPTION_URL" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+            <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="updating constraints for distribution protocol" author="nitesh">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL" constraintName="FKC8999977BC7298A9"/>
+        <createIndex 
+                indexName="idx_ditri_title"
+                tableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+                unique="true">
+            <column name="TITLE" type="varchar(255)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="adding autoIncrement for CATISSUE_DISTRIBUTION_PROTOCOL" author="nitesh" dbms="mysql">
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_DISTRIBUTION_PROTOCOL"/>
+    </changeSet>
+    <changeSet id="migrating data for distribution protocol for mysql" author="nitesh" dbms="mysql">
+        <sql>update catissue_distribution_protocol dp join catissue_specimen_protocol sp on sp.identifier = dp.identifier
+			set dp.PRINCIPAL_INVESTIGATOR_ID = sp.PRINCIPAL_INVESTIGATOR_ID,
+			dp.TITLE=sp.TITLE,
+			dp.SHORT_TITLE=sp.SHORT_TITLE,
+			dp.IRB_IDENTIFIER=sp.IRB_IDENTIFIER,
+			dp.START_DATE=sp.START_DATE,
+			dp.END_DATE=sp.END_DATE,
+			dp.ENROLLMENT=sp.ENROLLMENT,
+			dp.DESCRIPTION_URL=sp.DESCRIPTION_URL,
+			dp.ACTIVITY_STATUS=sp.ACTIVITY_STATUS where dp.identifier is not null
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet id="migrating data for CATISSUE_DISTRIBUTION_PROTOCOL for oracle" author="nitesh" dbms="oracle">
+        <sql>update (
+            select dp.TITLE as cpTitle, sp.TITLE as spTitle,
+            dp.SHORT_TITLE as cpSTitle, sp.SHORT_TITLE as spSTitle,
+            dp.IRB_IDENTIFIER as cpIrb, sp.IRB_IDENTIFIER as spIrb,
+            dp.START_DATE as cpSDate, sp.START_DATE as spSDate,
+            dp.END_DATE as cpEDate, sp.END_DATE as spEDate,
+            dp.ENROLLMENT as cpEnrol, sp.ENROLLMENT as spEnroll,
+            dp.DESCRIPTION_URL as cpUrl, sp.DESCRIPTION_URL as spUrl,
+            dp.ACTIVITY_STATUS as cpAct, sp.ACTIVITY_STATUS as spAct from 
+            CATISSUE_DISTRIBUTION_PROTOCOL dp join catissue_specimen_protocol sp on sp.identifier = dp.identifier
+            where dp.identifier is not null
+            ) up
+            set up.cpTitle = up.spTitle,
+            up.cpSTitle = up.spSTitle,
+            up.cpIrb = up.spIrb,
+            up.cpSDate = up.spSDate,
+            up.cpEDate = up.spEDate,
+            up.cpEnrol = up.spEnroll,
+            up.cpUrl = up.spUrl,
+            up.cpAct = up.spAct;</sql>
+      </changeSet>
+    
+    <changeSet id="adding columns for collection protocol" author="nitesh">
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="SHORT_TITLE" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="START_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="END_DATE" type="${date.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="ENROLLMENT" type="${int.type}" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="DESCRIPTION_URL" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="LABEL_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="DERIV_LABEL_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="ALIQUOT_LABEL_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+        <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+            <column name="PPID_FORMAT" type="${text.type}(255)" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="updating constraints for CATISSUE_COLLECTION_PROTOCOL" author="nitesh">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_COLLECTION_PROTOCOL" constraintName="FK32DC439DBC7298A9"/>
+        <createIndex 
+                indexName="idx_collection_prot_title"
+                tableName="CATISSUE_COLLECTION_PROTOCOL"
+                unique="true">
+            <column name="TITLE" type="varchar(255)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="adding autoIncrement for CATISSUE_COLLECTION_PROTOCOL" author="nitesh" dbms="mysql">
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_COLLECTION_PROTOCOL"/>
+    </changeSet>
+    
+    <changeSet id="migrating data for CATISSUE_COLLECTION_PROTOCOL for mysql" author="nitesh" dbms="mysql">
+        <sql>update catissue_collection_protocol cp join catissue_specimen_protocol sp on sp.identifier = cp.identifier
+			set cp.PRINCIPAL_INVESTIGATOR_ID = sp.PRINCIPAL_INVESTIGATOR_ID,
+			cp.TITLE=sp.TITLE,
+			cp.SHORT_TITLE=sp.SHORT_TITLE,
+			cp.IRB_IDENTIFIER=sp.IRB_IDENTIFIER,
+			cp.START_DATE=sp.START_DATE,
+			cp.END_DATE=sp.END_DATE,
+			cp.ENROLLMENT=sp.ENROLLMENT,
+			cp.DESCRIPTION_URL=sp.DESCRIPTION_URL,
+			cp.ACTIVITY_STATUS=sp.ACTIVITY_STATUS,
+			cp.LABEL_FORMAT=sp.LABEL_FORMAT,
+			cp.DERIV_LABEL_FORMAT=sp.DERIV_LABEL_FORMAT,
+			cp.ALIQUOT_LABEL_FORMAT=sp.ALIQUOT_LABEL_FORMAT,
+			cp.PPID_FORMAT=sp.PPID_FORMAT where cp.identifier is not null
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
+    <changeSet id="migrating data for CATISSUE_COLLECTION_PROTOCOL for oracle" author="nitesh" dbms="oracle">
+        <sql>update (
+            select cp.TITLE as cpTitle, sp.TITLE as spTitle,
+            cp.SHORT_TITLE as cpSTitle, sp.SHORT_TITLE as spSTitle,
+            cp.IRB_IDENTIFIER as cpIrb, sp.IRB_IDENTIFIER as spIrb,
+            cp.START_DATE as cpSDate, sp.START_DATE as spSDate,
+            cp.END_DATE as cpEDate, sp.END_DATE as spEDate,
+            cp.ENROLLMENT as cpEnrol, sp.ENROLLMENT as spEnroll,
+            cp.DESCRIPTION_URL as cpUrl, sp.DESCRIPTION_URL as spUrl,
+            cp.ACTIVITY_STATUS as cpAct, sp.ACTIVITY_STATUS as spAct,
+            cp.LABEL_FORMAT as cpLabel, sp.LABEL_FORMAT as spLabel,
+            cp.DERIV_LABEL_FORMAT as cpDLabel, sp.DERIV_LABEL_FORMAT as spDLabel,
+            cp.ALIQUOT_LABEL_FORMAT as cpALabel, sp.ALIQUOT_LABEL_FORMAT as spALabel,
+            cp.PPID_FORMAT as cpPpid, sp.PPID_FORMAT as spPpid from 
+            catissue_collection_protocol cp join catissue_specimen_protocol sp on sp.identifier = cp.identifier
+            where cp.identifier is not null
+            ) up
+            set up.cpTitle = up.spTitle,
+            up.cpSTitle = up.spSTitle,
+            up.cpIrb = up.spIrb,
+            up.cpSDate = up.spSDate,
+            up.cpEDate = up.spEDate,
+            up.cpEnrol = up.spEnroll,
+            up.cpUrl = up.spUrl,
+            up.cpAct = up.spAct,
+            up.cpLabel = up.spLabel,
+            up.cpDLabel = up.spDLabel,
+            up.cpALabel = up.spALabel,
+            up.cpPpid = up.spPpid;</sql>
+      </changeSet>
+      
+      <changeSet author="vinod" id="adding audit table"
+		failOnError="true">
+		<createTable tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false"
+					primaryKeyName="PK_CAT_NEXTGEN_AUDIT_DETAILS" />
+			</column>
+
+			<column name="OBJECT_TYPE" type="${text.type}(50)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="OBJECT_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="CP_ID" type="${int.type}">
+			</column>
+
+			<column name="OPERATION" type="${text.type}(15)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="UPDATED_DATE" type="${timestamp.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="REASON_FOR_CHANGE" type="${text.type}(500)">
+			</column>
+
+			<column name="IP_ADDRESS" type="${text.type}(15)">
+				<constraints nullable="false" />
+			</column>
+
+		</createTable>
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Sequence CATISSUE_NEXTGEN_AUDIT_DETAILS_SEQ" failOnError="true">
+		<createSequence 
+			sequenceName="CATISSUE_NEXTGEN_AUDIT_SEQ" 
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding FK on USER_ID to users table" failOnError="true">
+		<addForeignKeyConstraint 
+			constraintName="FK_RE_USER_ID_USERS_ID"
+			baseTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS" 
+			baseColumnNames="USER_ID"
+			referencedTableName="CATISSUE_USER" 
+			referencedColumnNames="IDENTIFIER" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding FK on CP_ID to COLLECTION_PROTOCOL table" failOnError="true">
+		<addForeignKeyConstraint 
+			constraintName="FK_AUDIT_CP_ID"
+			baseTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS" 
+			baseColumnNames="CP_ID"
+			referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+			referencedColumnNames="IDENTIFIER" />
+	</changeSet>
+
+	<changeSet author="vinod" id="creating index on OBJECT_TYPE" failOnError="false">
+		<createIndex indexName="idx_audit_object_type" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+			unique="false">
+			<column name="OBJECT_TYPE" type="${text.type}(50)" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="vinod" id="creating index on OBJECT_ID"
+		failOnError="false">
+		<createIndex indexName="idx_audit_object_id" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+			unique="false">
+			<column name="OBJECT_ID" type="${int.type}" />
+		</createIndex>
+	</changeSet>
+
+
+	<changeSet author="vinod" id="adding external application table" failOnError="true">
+		<createTable tableName="CATISSUE_EXTERNAL_APPLICATION">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_EXTERNAL_APPLICATION"/>
+			</column>
+
+			<column name="APP_NAME" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="SERVICE_CLASS" type="${text.type}(200)">
+				<constraints nullable="false" />
+			</column>
+
+		</createTable>
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Sequence CAT_EXTERNAL_APP_SEQ" failOnError="true">
+		<createSequence sequenceName="CAT_EXTERNAL_APP_SEQ"
+			startValue="1" incrementBy="1" ordered="true" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding CP and external app study mapping table" failOnError="true">
+		<createTable tableName="CATISSUE_CP_EXTAPP_STUDY_REL">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_CP_EXTAPP_STUDY_REL"/>
+			</column>
+
+			<column name="CP_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="APP_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="STUDY_ID" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint 
+			constraintName="FK_RE_APP_ID_FC_IDENTIFIER"
+			baseTableName="CATISSUE_CP_EXTAPP_STUDY_REL" 
+			baseColumnNames="APP_ID"
+			referencedTableName="CATISSUE_EXTERNAL_APPLICATION"
+			referencedColumnNames="IDENTIFIER" />
+
+		<addForeignKeyConstraint 
+			constraintName="FK_EXTAPP_CP_ID_FC_IDENTIFIER"
+			baseTableName="CATISSUE_CP_EXTAPP_STUDY_REL" 
+			baseColumnNames="CP_ID"
+			referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+			referencedColumnNames="IDENTIFIER" />
+
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Sequence CATISSUE_CP_EXTAPP_STUDY_REL_SEQ" failOnError="true">
+		<createSequence 
+			sequenceName="CAT_CP_EXTAPP_STUDY_REL_SEQ"
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
+	</changeSet>
+
+	<changeSet author="vinod" id="adding Notification status table" failOnError="true">
+		<createTable tableName="CATISSUE_NOTIFICATION_STATUS">
+			<column name="AUDIT_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="APP_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="STATUS" type="${text.type}(15)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="COMMENTS" type="${text.type}(500)">
+			</column>
+			
+			<column name="NO_OF_ATTEMPTS" type="${int.type}">
+			</column>
+			
+			<column name="UPDATED_DATE" type="${timestamp.type}">
+				<constraints nullable="false" />
+			</column>
+			
+		</createTable>
+
+		<addForeignKeyConstraint 
+			constraintName="FK_AUDIT_ID_FC_IDENTIFIER"
+			baseTableName="CATISSUE_NOTIFICATION_STATUS" 
+			baseColumnNames="AUDIT_ID"
+			referencedTableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"
+			referencedColumnNames="IDENTIFIER" />
+
+	</changeSet>   
+
+	<changeSet author="dpatil" id="adding CATISSUE_LDAP_DETAILS table" failOnError="true">
+        <createTable tableName="CATISSUE_LDAP_DETAILS">
+            <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_ldap_id"/>
+            </column>
+
+            <column name="NAME" type="${text.type}(100)">
+                <constraints unique="true" nullable="false" />
+            </column>
+
+            <column name="HOST" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="PORT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="LOGIN_NAME" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+   
+            <column name="PASSWORD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+            <column name="ID_FIELD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="SURNAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="GIVEN_NAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="EMAIL_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="DIRECTORY_CONTEXT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+        </createTable>
+
+    </changeSet>  
+
+    <changeSet author="dpatil" id="adding ldap sequence" failOnError="true">
+        <createSequence
+            sequenceName="CATISSUE_LDAP_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+    </changeSet>    
+
+    <changeSet author="vpawar" id="saved queries table" failOnError="true">
+     	<createTable tableName="CATISSUE_SAVED_QUERIES"> 
+          <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+            <constraints primaryKey="true" nullable="false"/>
+          </column>
+
+          <column name="TITLE" type="${text.type}(128)">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="CREATED_BY" type="${int.type}">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="LAST_UPDATED_BY" type="${int.type}">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="LAST_UPDATED_ON" type="${timestamp.type}">
+            <constraints nullable="false"/>
+          </column>
+
+          <column name="LAST_RUN_ON" type="${timestamp.type}">
+            <constraints nullable="true"/>
+          </column>
+
+          <column name="LAST_RUN_COUNT" type="${int.type}">
+            <constraints nullable="true"/>
+          </column>
+
+          <column name="QUERY_DEF" type="${blob.type}">
+            <constraints nullable="false"/>
+          </column>
+      	</createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key to saved queries (created_by)" failOnError="true">
+        <addForeignKeyConstraint 
+	  baseTableName="CATISSUE_SAVED_QUERIES"
+          baseColumnNames="CREATED_BY"
+	  referencedTableName="CATISSUE_USER"
+	  referencedColumnNames="IDENTIFIER"
+	  constraintName="FK_SAVED_QUERIES_CREATED_BY"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key to saved queries (last_updated_by)" failOnError="true">
+        <addForeignKeyConstraint 
+	  baseTableName="CATISSUE_SAVED_QUERIES"
+          baseColumnNames="LAST_UPDATED_BY"
+	  referencedTableName="CATISSUE_USER"
+	  referencedColumnNames="IDENTIFIER"
+	  constraintName="FK_SAVED_QUERIES_UPDATED_BY"/>
+    </changeSet>
+    
+</databaseChangeLog>         

@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping auto-import="false">
     <class
         name="edu.wustl.catissuecore.domain.Participant"
         table="CATISSUE_PARTICIPANT"
@@ -213,7 +213,7 @@
               />
         </set>
 
-		<set
+		<!-- set
             name="participantRecordEntryCollection"
             table="CATISSUE_PARTICIPANT_REC_NTRY"
             lazy="false"
@@ -229,7 +229,7 @@
               <one-to-many
                   class="edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry"
               />
-        </set>
+        </set -->
 
 
         <!--

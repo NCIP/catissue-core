@@ -28,6 +28,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 			Comparable
 {
 
+	private final String ACTIVITY_STATUS_ACTIVE = "Active";
 	/**
 	 * Serial Version id of the class.
 	 */
@@ -318,4 +319,11 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	public void setDefaultSite(Site defaultSite) {
 		this.defaultSite = defaultSite;
 	}
+	
+	public boolean isActive()
+	{
+		return ACTIVITY_STATUS_ACTIVE.equals(this.getActivityStatus());
+	}
+	
+
 }

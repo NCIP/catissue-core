@@ -45,7 +45,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<param-name>resourcebundleclass</param-name>
 		<param-value>ApplicationResources</param-value>
 	</context-param>
-	@@context-param@@
 	<!-- filter definition -->
 	<filter>
 		<filter-name>FlexComponentFilter</filter-name>
@@ -93,7 +92,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 <filter-mapping>
 		<filter-name>RestApiAuthFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>
+		
 	</filter-mapping>
+	<filter-mapping>
+        <filter-name>RestApiAuthFilter</filter-name>
+        <url-pattern>/rest/ng/*</url-pattern>
+        
+    </filter-mapping>
 	<filter-mapping>
 		<filter-name>FlexComponentFilter</filter-name>
 		<url-pattern>/flexclient/*</url-pattern>
@@ -170,6 +175,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
          <url-pattern>/Login.do</url-pattern>
      </filter-mapping>
 
+ <filter-mapping>
+         <filter-name>ThrottlingFilter</filter-name>
+         <url-pattern>/Login.do</url-pattern>
+     </filter-mapping>
+
+
 <!-- filter mapping ends -->
 <!-- listener definition starts -->
  	<listener>
@@ -178,7 +189,9 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	<listener>
 		<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreSessionListener</listener-class>
 	</listener>
-	@@listener@@   
+	<listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 <!-- listener definition starts -->
 <!-- servlet configuration starts -->
 	<servlet>
@@ -251,20 +264,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>AppLogout</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
    </servlet>
-	<servlet>
-		<servlet-name>context</servlet-name>
-		<servlet-class>
-			org.springframework.web.context.ContextLoaderServlet
-		</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>httpinvoker</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
-		</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
+	
+	
 	<servlet>
 		<servlet-name>sdkstartup</servlet-name>
 		<servlet-class>
@@ -352,6 +353,40 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-class>edu.wustl.query.action.ImportQueryServlet</servlet-class>
 	</servlet>
 	<servlet>
+    <servlet-name>restApi</servlet-name>
+    <servlet-class>
+      org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/restApiContext.xml</param-value>
+    </init-param>
+    
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+
+        <servlet>
+          <servlet-name>CreateFormAction</servlet-name>
+          <servlet-class>edu.common.dynamicextensions.nui.action.CreateFormAction</servlet-class>
+        </servlet>
+
+ 	    <servlet>
+          <servlet-name>ExportFormAction</servlet-name>
+          <servlet-class>edu.common.dynamicextensions.nui.action.ExportFormAction</servlet-class>
+        </servlet>
+
+
+	<servlet>
+		<servlet-name>CSD</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>edu.wustl.dynamicextensions.formdesigner.resource.Resources</param-value>
+		</init-param>
+	</servlet>
+<servlet>
 <servlet-name>caTissue REST Service</servlet-name>
 <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 <init-param>
@@ -359,9 +394,9 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 <param-value>krishagni.catissueplus.rest</param-value>
 </init-param>
 <init-param>
-		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-		<param-value>true</param-value>
-	</init-param>
+        <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+        <param-value>true</param-value>
+    </init-param>
 <!--
 <init-param>
 <param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
@@ -370,12 +405,31 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 -->
 <load-on-startup>1</load-on-startup>
 </servlet>
-	@@servlet@@
+	
 <!-- servlet configuration ends -->
 <!-- servlet mapping starts -->
 <servlet-mapping>
 <servlet-name>caTissue REST Service</servlet-name>
 <url-pattern>/rest/*</url-pattern>
+</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CSD</servlet-name>
+		<url-pattern>/csdApi/*</url-pattern>
+	</servlet-mapping>
+
+        <servlet-mapping>
+          <servlet-name>CreateFormAction</servlet-name>
+          <url-pattern>/CreateFormAction.de</url-pattern>
+        </servlet-mapping>
+         <servlet-mapping>
+          <servlet-name>ExportFormAction</servlet-name>
+          <url-pattern>/ExportFormAction.de</url-pattern>
+        </servlet-mapping>
+        
+
+<servlet-mapping>
+<servlet-name>restApi</servlet-name>
+<url-pattern>/rest/ng/*</url-pattern>
 </servlet-mapping>
 	<servlet-mapping>
 		 <servlet-name>ContainerExportServlet</servlet-name>
@@ -434,10 +488,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-name>ResponseServlet</servlet-name>
 		<url-pattern>/ResponseServlet</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>httpinvoker</servlet-name>
-		<url-pattern>/http/*</url-pattern>
-	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>sdkstartup</servlet-name>
 		<url-pattern>/server/HTTPServer</url-pattern>
@@ -494,7 +545,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-name>ImportQuery</servlet-name>
 		<url-pattern>/ImportQuery</url-pattern>
 	</servlet-mapping>
-	@@servlet-mapping@@
 <!-- servlet mapping ends -->
 <!-- session timeout -->
 	<session-config>
@@ -555,7 +605,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<taglib-uri>FlexTagLib</taglib-uri>
 		<taglib-location>/WEB-INF/lib/flex-bootstrap-jsp.jar</taglib-location>
 	</taglib>
-	@@taglib@@
 <!-- tag library configuration ends -->
 <!-- env entry starts -->
 <env-entry>

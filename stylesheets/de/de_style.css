@@ -1,0 +1,93 @@
+.font_gr_s {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.95em;
+	color: #666666;
+}
+.font_red {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 0.9em;
+	color: #FF0000;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.td_color_6e81a6 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: .8em;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #6e81a6;
+}
+.td_color_6e81a6_big {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #6e81a6;
+}
+.font_bl_nor {
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	color: #333333;
+}
+.td_color_f0f2f6 {
+
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	/*font-weight: bold;*/
+	color: #333333;
+	background-color: #f0f2f6;
+}
+.td_color_f9f9f9 {
+	background-color: #f9f9f9;
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	color: #000000;
+}
+.td_bg_bottom {
+	background-image: url(../../images/de/bg_bottom.gif);
+}
+A.set1:link {
+	color: #475b82;
+	text-decoration: underline;
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	font-weight: bold;
+}
+A.set1:active {color: #475b82; text-decoration: underline;
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	font-weight: bold;
+	}
+A.set1:visited {color: #5c5c5c; Text-Decoration: underline;
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	font-weight: bold;
+	}
+A.set1:hover {color: #c8ac1e; Text-Decoration: none;
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	font-weight: bold;
+	}
+.td_color_e3e2e7 {
+
+	background-color: #e3e2e7;
+}
+.td_color_ffffff {
+	background-color: #ffffff;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: .7em;
+	color: #000000;
+}
+.td_color_FFFFCC {
+
+	background-color: #FFFFCC;
+}
+.font_bl_s {
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .75em;*/
+	color: #333333;
+}

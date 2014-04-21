@@ -23,8 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;

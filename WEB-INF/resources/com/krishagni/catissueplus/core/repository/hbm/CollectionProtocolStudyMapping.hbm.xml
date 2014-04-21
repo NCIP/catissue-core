@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+	<class
+		name="com.krishagni.catissueplus.core.notification.domain.CollectionProtocolStudyMapping"
+		table="CATISSUE_CP_EXTAPP_STUDY_REL" lazy="true">
+
+		<id name="id" column="IDENTIFIER">
+			<generator class="native">
+				<param name="sequence">CAT_CP_EXTAPP_STUDY_REL_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="studyId" type="string" column="STUDY_ID" />
+
+		<many-to-one name="collectionProtocol"
+			class="edu.wustl.catissuecore.domain.CollectionProtocol" column="CP_ID" />
+
+		<many-to-one name="externalApplication"
+			class="com.krishagni.catissueplus.core.notification.domain.ExternalApplication"
+			cascade="save-update" column="APP_ID" />
+
+		<query name="getMappedCpId">
+			select collectionProtocol.id 
+			from com.krishagni.catissueplus.core.notification.domain.CollectionProtocolStudyMapping as cpmap 
+			where cpmap.studyId =:studyId and 
+			externalApplication.applicationName =:appName
+		</query>
+
+	</class>
+</hibernate-mapping>
+

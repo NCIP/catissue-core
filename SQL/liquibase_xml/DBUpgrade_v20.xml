@@ -152,9 +152,6 @@
 			baseTableName="QUERY_TAGS" baseColumnNames="USER_ID" 					referencedTableName="CATISSUE_USER"
 			referencedColumnNames="IDENTIFIER" />
 
-	        <addForeignKeyConstraint constraintName="FK_QUERYTAG_OBJ_ID"
-			baseTableName="QUERY_TAG_ITEMS" baseColumnNames="OBJ_ID" 					referencedTableName="QUERY_PARAMETERIZED_QUERY"
-			referencedColumnNames="IDENTIFIER" />
 
 		<addUniqueConstraint constraintName="S_TAGID_UNIQUE_KEY"
 			tableName="QUERY_TAG_ITEMS" columnNames="TAG_ID,OBJ_ID" />

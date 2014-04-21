@@ -35,7 +35,7 @@ public class CollectionProtocolDAO
 		 
    		 List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
 		 columnValueBean.add(new ColumnValueBean(specimenId));
-		 String getSiteHQL="select csp.LABEL_FORMAT,csp.DERIV_LABEL_FORMAT,csp.ALIQUOT_LABEL_FORMAT from CATISSUE_SPECIMEN_PROTOCOL as csp join CATISSUE_COLL_PROT_REG as cpr on cpr.COLLECTION_PROTOCOL_ID=csp.IDENTIFIER join CATISSUE_SPECIMEN_COLL_GROUP as cscp on cscp.COLLECTION_PROTOCOL_REG_ID=cpr.IDENTIFIER join CATISSUE_SPECIMEN as cs on cs.SPECIMEN_COLLECTION_GROUP_ID=cscp.IDENTIFIER where cs.IDENTIFIER=?";
+		 String getSiteHQL="select csp.LABEL_FORMAT,csp.DERIV_LABEL_FORMAT,csp.ALIQUOT_LABEL_FORMAT from CATISSUE_COLLECTION_PROTOCOL as csp join CATISSUE_COLL_PROT_REG as cpr on cpr.COLLECTION_PROTOCOL_ID=csp.IDENTIFIER join CATISSUE_SPECIMEN_COLL_GROUP as cscp on cscp.COLLECTION_PROTOCOL_REG_ID=cpr.IDENTIFIER join CATISSUE_SPECIMEN as cs on cs.SPECIMEN_COLLECTION_GROUP_ID=cscp.IDENTIFIER where cs.IDENTIFIER=?";
 		 List groupNames=jdbcDAO.executeQuery(getSiteHQL, columnValueBean);
 		 ArrayList<String> lableFormate=(ArrayList<String>)groupNames.get(0);
 		 lableFormates.put("LABEL_FORMAT", lableFormate.get(0));

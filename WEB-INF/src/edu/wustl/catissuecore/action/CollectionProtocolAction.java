@@ -108,7 +108,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			request.getSession().setAttribute(Constants.TREE_NODE_ID,nodeId);
 		request.setAttribute("tabSel", tabSel);
 		final List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();
-		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES,
+		request.setAttribute("selectedCoordinators",
 				clinicalDiagnosis);
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);

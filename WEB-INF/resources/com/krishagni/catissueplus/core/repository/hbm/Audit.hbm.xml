@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+	<class name="com.krishagni.catissueplus.core.audit.domain.Audit"
+		table="CATISSUE_NEXTGEN_AUDIT_DETAILS">
+
+		<id name="id" column="IDENTIFIER" type="long" length="30">
+			<generator class="native">
+				<param name="sequence">CATISSUE_NEXTGEN_AUDIT_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="objectType" type="string" column="OBJECT_TYPE" />
+
+
+		<property name="objectId" type="long" column="OBJECT_ID" />
+
+		<property name="cpId" type="long" column="CP_ID" />
+
+		<property name="operation" type="string" column="OPERATION" />
+
+		<property name="updatedDate" type="timestamp" column="UPDATED_DATE" />
+
+		<property name="reasonForChange" type="string" column="REASON_FOR_CHANGE" />
+
+		<property name="userId" type="long" column="USER_ID" />
+
+		<property name="ipAddress" type="string" column="IP_ADDRESS" />
+
+
+		<sql-query name="getNotificationObjects">
+			select
+			audit.identifier,object_type,object_id,operation
+			from
+			catissue_nextgen_audit_details audit
+			left join
+			catissue_notification_status ns on audit.identifier = ns.audit_id
+			where
+			ns.audit_id is null
+		</sql-query>
+
+
+	</class>
+
+</hibernate-mapping>
+        
+        

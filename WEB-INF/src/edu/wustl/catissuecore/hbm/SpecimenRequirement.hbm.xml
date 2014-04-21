@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- test check-in -->
+<hibernate-mapping
+>
+    <class name="edu.wustl.catissuecore.domain.SpecimenRequirement" table="CATISSUE_CP_REQ_SPECIMEN"
+        
+        lazy="true"
+    >
+        <cache usage="read-write" />
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_REQ_SPECIMEN_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one
+            name="parentSpecimen"
+            class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+            cascade="none"
+            outer-join="false"
+            update="true"
+            insert="true"
+            column="PARENT_SPECIMEN_ID"
+            lazy="false"
+        />
+        <set
+            name="childSpecimenCollection"
+            table="CATISSUE_SPECIMEN"
+            lazy="true"
+            inverse="true"
+            cascade="all"
+            sort="unsorted"
+        >
+             <cache usage="read-write" />
+            <key
+                column="PARENT_SPECIMEN_ID"
+            >
+            </key>
+
+        <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+        />
+
+        </set>
+        <property
+            name="tissueSide"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SIDE"
+            length="50"
+        />
+        <property
+            name="tissueSite"
+            type="string"
+            update="true"
+            insert="true"
+            column="TISSUE_SITE"
+            length="50"
+        />
+
+        <property
+            name="initialQuantity"
+            type="double"
+            update="true"
+            insert="true"
+            column="INITIAL_QUANTITY"
+            length="50"
+        />
+
+        <property
+            name="pathologicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="PATHOLOGICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="lineage"
+            type="string"
+            update="true"
+            insert="true"
+            column="LINEAGE"
+            length="50"
+        />
+         <property
+            name="specimenClass"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_CLASS"
+            length="50"
+        />
+         <property
+            name="specimenType"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPECIMEN_TYPE"
+            length="50"
+        />
+        <property
+                name="concentrationInMicrogramPerMicroliter"
+                type="double"
+                update="true"
+                insert="true"
+                column="CONCENTRATION"
+                length="50"
+            />
+
+       <!--  <set
+            name="specimenEventCollection"
+            table="CATISSUE_SPECIMEN_EVENT_PARAM"
+            fetch="join" lazy="false"
+            inverse="true"
+            cascade="all"
+            sort="unsorted"
+        >
+         <cache usage="read-write" />
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+            />
+
+        </set> -->
+         <set
+            name="specimenCollection"
+            table="CATISSUE_SPECIMEN"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+            sort="unsorted"
+        >
+             <cache usage="read-write" />
+              <key
+                  column="REQ_SPECIMEN_ID"
+              />
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+              />
+        </set>
+
+        <property
+            name="labelFormat"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABELFORMAT"
+            length="255"
+        />
+        <property
+            name="specimenRequirementLabel"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPEC_REQ_LABEL"
+            length="255"
+        />
+
+        <property
+                name="storageType"
+                type="string"
+                update="true"
+                insert="true"
+                column="STORAGE_TYPE"
+                length="50"
+            />
+        
+           <many-to-one
+                name="collectionProtocolEvent"
+                class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+                cascade="none"
+                outer-join="auto"
+                update="true"
+                insert="true"
+                column="COLLECTION_PROTOCOL_EVENT_ID"
+            />
+
+           <property
+                name="activityStatus"
+                type="string"
+                update="true"
+                insert="true"
+                column="ACTIVITY_STATUS"
+                length="50"
+            />
+            
+            <property
+                name="collectionTimestamp"
+                type="timestamp"
+                update="true"
+                insert="true"
+                column="COLLECTION_TIMESTAMP"
+                length="50"
+            />
+            <property
+                name="collectionComments"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_COMMENTS"
+                length="2000"
+            />
+            <property
+                name="collectionProcedure"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_PROCEDURE"
+                length="50"
+            />
+            <property
+                name="collectionContainer"
+                type="string"
+                update="true"
+                insert="true"
+                column="COLLECTION_CONTAINER"
+                length="50"
+            />
+            <many-to-one
+            name="collector"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="COLLECTOR_ID"
+        />
+        <property
+                name="receivedQuality"
+                type="string"
+                update="true"
+                insert="true"
+                column="RECEIVED_QUALITY"
+                length="50"
+            />
+        <property
+                name="receivedTimestamp"
+                type="timestamp"
+                update="true"
+                insert="true"
+                column="RECEIVED_TIMESTAMP"
+                length="50"
+            />
+            <property
+                name="receivedComments"
+                type="string"
+                update="true"
+                insert="true"
+                column="RECEIVED_COMMENTS"
+                length="2000"
+            />
+            <many-to-one
+            name="receiver"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+             
+            update="true"
+            insert="true"
+            column="RECEIVER_ID"
+        />
+
+  </class>
+  <query name="getSpecimenIdByBarcode">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.barcode = ? and spec.activityStatus= ?</query>
+    <query name="getQuantityAndAvailability">Select specimen.availableQuantity from edu.wustl.catissuecore.domain.Specimen specimen WHERE specimen.label = ? and specimen.isAvailable=? and specimen.activityStatus='Active'
+    </query>
+    <query name="updateQuantityAndAvailability">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.availableQuantity=?,specimen.isAvailable=? where specimen.label=?
+    </query>
+    <query name="updateSpecimenStatusToClose">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Closed' where specimen.label=?
+    </query>
+    
+    <query name="updateSpecimenStatusToDisable">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Disabled' where specimen.label=?
+    </query>
+    
+    <query name="getSpecimenId">Select specimen.id from edu.wustl.catissuecore.domain.Specimen specimen where specimen.label=?
+    </query>
+    <query name="getSpecimenIdByLabel">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.label = ? and spec.activityStatus= ? </query>
+    <query name="getSpecimenLabelById">select spec.label from edu.wustl.catissuecore.domain.Specimen spec where spec.id = ? and spec.activityStatus= ?</query>
+    <query name="getSpecimenLabel">select spec.label from edu.wustl.catissuecore.domain.Specimen spec where spec.id = ? </query>
+    <query name="updateAllSpecimenFromSCGToDisable">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Disabled' where specimen.specimenCollectionGroup.id=?</query>
+    <query name="getCPID">select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id=?</query>
+    <query name="getAssociatedReportId">select scg.identifiedSurgicalPathologyReport.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id = ? and specimen.id in elements(scg.specimenCollection)</query>
+    <query name="getSpecimenIdByLabelorBarcode">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.label = ? or spec.barcode = ?</query>    
+    <query name="getSCGnCPIDByLorB">select specimen.id, specimen.specimenCollectionGroup.id, specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus= ? </query>
+    <query name="getSiteIdFromContainer">select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen specimen where (specimen.id=? or specimen.label=? ) and specimen.activityStatus=?</query>
+    <query name="selectParentSpecimenDetailsForAliquot">
+                select specimen.activityStatus,scg.id, specimen.id, specimen.label,
+                specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
+                specimen.tissueSite, specimen.tissueSide,
+                specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+                 where specimen.label=?
+    </query>
+    <query name="getCpIdFromSpecimenId">
+        select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
+        specimen.id = ?
+    </query>
+    <query name="getCpIdFromSpecimenLabel">
+     select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
+        specimen.label = ?
+    </query>
+    <query name="selectParentSpecimenDetailsForAliquotByBarcode">
+                select specimen.activityStatus,scg.id, specimen.id, specimen.label,
+                specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
+                specimen.tissueSite, specimen.tissueSide,
+                specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+                 where specimen.barcode=?
+        
+    </query>
+    <query name="getCollectedSpecimenLabel">
+        select specimen.label,specimen.barcode from  edu.wustl.catissuecore.domain.Specimen as specimen  where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus = 'Active' and specimen.collectionStatus='Collected' 
+    </query>
+    
+    <query name="getSpecimenBylabel">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label = ? and specimen.activityStatus= ? </query>
+    <query name="getSpecimenByBarcode">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.barcode = ? and specimen.activityStatus= ? </query>
+    <!--  <query name="getSpChars">select specimen.specimenCharacteristics from edu.wustl.catissuecore.domain.Specimen specimen where specimen.id=?</query>-->
+    <query name="getSpecimenIdLabelPairForScg">select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label</query>
+</hibernate-mapping>

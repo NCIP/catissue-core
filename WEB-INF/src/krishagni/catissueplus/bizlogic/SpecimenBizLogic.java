@@ -30,7 +30,6 @@ import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -281,11 +280,11 @@ public class SpecimenBizLogic
 		}
 		if (!Validator.isEmpty(specimenDTO.getTissueSide()))
 		{
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSide(specimenDTO.getTissueSide());
+			oldSpecimenObj.setTissueSide(specimenDTO.getTissueSide());
 		}
 		if (!Validator.isEmpty(specimenDTO.getTissueSite()))
 		{
-			oldSpecimenObj.getSpecimenCharacteristics().setTissueSite(specimenDTO.getTissueSite());
+			oldSpecimenObj.setTissueSite(specimenDTO.getTissueSite());
 		}
 		if (!Validator.isEmpty(specimenDTO.getComments()))
 		{
@@ -635,8 +634,8 @@ public class SpecimenBizLogic
 			specimenDTO.setSpecimenCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
 			specimenDTO.setSpecimenCollectionGroupName(specimen.getSpecimenCollectionGroup().getName());
 		}
-		specimenDTO.setTissueSide(specimen.getSpecimenCharacteristics().getTissueSide());
-		specimenDTO.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
+		specimenDTO.setTissueSide(specimen.getTissueSide());
+		specimenDTO.setTissueSite(specimen.getTissueSite());
 		specimenDTO.setType(specimen.getSpecimenType());
 		if (specimen.getSpecimenPosition() != null)
 		{
@@ -926,7 +925,8 @@ public class SpecimenBizLogic
 				childColl.add(specimen);
 				parentSpecimen.setChildSpecimenCollection(childColl);
 			}
-			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+			specimen.setTissueSide(parentSpecimen.getTissueSide());
+			specimen.setTissueSite(parentSpecimen.getTissueSite());
 			specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 			Collection<Biohazard> biohazards = new HashSet<Biohazard>();
 			for (Biohazard biohazard : parentSpecimen.getBiohazardCollection())
@@ -951,10 +951,9 @@ public class SpecimenBizLogic
 					hibernateDao);
 			specimen.setSpecimenCollectionGroup(collectionGroup);
 			specimen.setPathologicalStatus(specimenDTO.getPathologicalStatus());
-			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-			specimenCharacteristics.setTissueSide(specimenDTO.getTissueSide());
-			specimenCharacteristics.setTissueSite(specimenDTO.getTissueSite());
-			specimen.setSpecimenCharacteristics(specimenCharacteristics);
+			specimen.setTissueSide(specimenDTO.getTissueSide());
+			specimen.setTissueSite(specimenDTO.getTissueSite());
+			
 			specimen.setBiohazardCollection(getBiohazardCollection(specimenDTO.getBioHazards()));
 		//	specimen.setConsentTierStatusCollectionFromSCG(collectionGroup);
 		}

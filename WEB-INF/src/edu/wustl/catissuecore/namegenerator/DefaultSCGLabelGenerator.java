@@ -57,7 +57,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	private Long getLastAvailableSCGLabel(String databaseConstant) throws ApplicationException
 	{
 		Long noOfRecords = new Long("0");
-		final String sql = "Select max(IDENTIFIER) as MAX_IDENTIFIER from CATISSUE_ABS_SPECI_COLL_GROUP";
+		final String sql = "Select max(IDENTIFIER) as MAX_IDENTIFIER from CATISSUE_SPECIMEN_COLL_GROUP";
 		noOfRecords = AppUtility.getLastAvailableValue(sql);
 		return noOfRecords;
 	}

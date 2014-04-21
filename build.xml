@@ -17,9 +17,9 @@
 	</loadfile>-->
 
 	<!--define require dir and Properties -->
-	<property file="JMeterTest.properties" />
 	<property name="base.dir" value="." />
 	<property name="src.dir" value="${base.dir}/WEB-INF/src" />
+	<property name="resources.dir" value="${base.dir}/WEB-INF/resources" />
 	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
 	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
 	<property name="applet.dir" value="${base.dir}/Applet" />
@@ -37,7 +37,6 @@
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.h3.string" value="edu.wustl.catissuecore.hibernate.dialect.MySqlCustomDialect"/>
-	<property name="client.dir" value="${base.dir}/caTissueSuite_Client" />
 	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
 	<property name="custom.impl.lib.dir" value="${base.dir}/custom_impl_lib" />
 
@@ -78,10 +77,6 @@
 
 
 	<!-- struts test case related properties -->
-	<property name="catissue.test" value="${base.dir}/CaTissue_TestCases" />
-	<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
-	<property name="cat.test.src.dir" value="${catissue.test}/src"/>
-	<property name="cat.test.lib.dir" value="${catissue.test}/lib"/>
 	<property name="cat.cobertura.dir" value="${base.dir}" />
 	<property name="cat.instrumented.dir" value="./instrument"/>
 	<property name="cobertura.lib" value="./cobertura/lib"/>
@@ -100,6 +95,8 @@
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
 		<tstamp />
+		<delete includeemptydirs="true" dir="${target.dir}" failonerror="false">
+		        </delete>
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${target.dir}" />
 		<!-- Create the temp directory for caCORE CSM war file-->
@@ -223,6 +220,7 @@
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
+					<exclude name="dynamicextensions-legacy.jar"/>
 				</fileset>
 				<fileset dir="./lib">
 					<include name="j2ee.jar" />
@@ -238,6 +236,9 @@
 				<include name="**/*.hbm.xml" />
 				<include name="**/*.ser" />
 				<include name="**/*.vm" />
+			</fileset>
+			<fileset dir="${resources.dir}">
+				<include name="**/*.hbm.xml" />
 			</fileset>
 		</copy>
 	</target>
@@ -417,6 +418,7 @@
 
 			<fileset dir="${base.dir}">
 				<!--include name="Applet/**" / -->
+				<include name="ngweb/**"/>
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
@@ -429,11 +431,12 @@
 				<include name="flexclient/**" />
 				<include name="runtime/**" />
 				<include name="WEB-INF/**" />
+				<include name="WEB-INF/lib/antlr-4.1-complete.jar" />
 				<include name="CDEConfig.xml" />
 				<include name="CDEConfig.xsd" />
-				<include name="ApplicationVersionInfo.txt" />
 				<include name="client-config.wsdd" />
 				<include name="Applet/**" />
+				<include name="ApplicationVersionInfo.txt" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
 				<include name="caTissue_Suite_User_Manual.doc" />
 				<include name="caTissueSuite_v1_2_Technical_Guide.doc" />
@@ -447,7 +450,7 @@
 				<exclude name="**/log4j.properties" />
 				<exclude name="**/WEB-INF/src*/**" />
 				<exclude name="**/WEB-INF/lib/*.zip" />
-				<exclude name="**/WEB-INF/lib/ant*.jar" />
+				<!-- exclude name="**/WEB-INF/lib/ant*.jar" / -->
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
 				<!--<exclude name="**/WEB-INF/lib/dom4*.jar" />-->
 				<exclude name="**/*servlet.jar*" />
@@ -506,8 +509,6 @@
 				<include name="commons-fileupload.jar" />
 				<include name="commons-lang-2.1.jar" />
 				<include name="commons-logging-1.0.4.jar" />
-				<include name="dom4*.jar" />
-				<include name="ehcache-1.2.3.jar" />
 				<include name="freemarker.jar" />
 				<include name="jakarta-oro.jar" />
 				<include name="uml-1.3.jar" />
@@ -538,7 +539,6 @@
 				<!--<include name="ojdbc14.jar"/>-->
 				<include name="boot.jar" />
 				<include name="c3p0-0.9.0.jar" />
-				<include name="catissuecore-client.jar" />
 				<include name="experiment-client.jar" />
 				<!--<include name="jboss-client.jar" />-->
 				<include name="junit-4.1.jar" />
@@ -547,9 +547,6 @@
 				<include name="openide-util.jar" />
 				<include name="acrobat-core.jar" />
 				<!-- removed to work printwebservice -->
-				<include name="jaxrpc.jar" />
-				<include name="saaj.jar" />
-				<include name="jboss-jaxws.jar" />
 			</fileset>
 
 		</delete>
@@ -639,160 +636,6 @@
 		</javadoc>
 	</target>
 
-	<target name="create_zip_old" depends="createJavaDoc,installable_build_war">
-		<property name="zip.dir" value="${base.dir}/caTISSUE_Plus_v${application.version}_Installable" />
-		<property name="zip.file" value="${base.dir}/caTissue_Plus_v${application.version}_Installable.zip" />
-
-		<delete file="${zip.file}" />
-		<delete dir="${zip.dir}" />
-
-		<mkdir dir="${zip.dir}" />
-
-		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="label_barcode_gen_client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="printservice_module.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
-		<!--<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />-->
-		<copy file="dynamicextensions.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="clientFormCreator.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="bulkoperator.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="bulkOperation.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}" overwrite="true" />
-		<!-- only single war file is being used so comment it -->
-		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
-		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />
-
-		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
-		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="mail.txt" todir="${zip.dir}" overwrite="true" />
-		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="performance.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="taggedvalues.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="paths.txt" todir="${zip.dir}" overwrite="true" />
-
-		<copy todir="${zip.dir}/custom_impl_lib" overwrite="true">
-			<fileset file="Default_label_barcode_gen.jar" />
-			<fileset file="label_barcode_gen_client.jar" />
-			<fileset file="${base.dir}/WEB-INF/lib/IDPAuthenticationManager0_0.jar" />
-		</copy>
-
-		<copy todir="${zip.dir}/idp" overwrite="true">
-			<fileset dir="${base.dir}/idp" />
-		</copy>
-
-		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
-			<fileset dir="${base.dir}/catissuecore-properties" />
-		</copy>
-
-		<copy todir="${zip.dir}/cacore_deployable" overwrite="true">
-			<fileset dir="${base.dir}/cacore_deployable" />
-		</copy>
-
-		<!--copy file="dbunitbuild.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="CDEConfig.xml" todir="${zip.dir}" overwrite="true" />
-		<copy todir="${zip.dir}/caTissueSuite_dbunit" overwrite="true">
-					<fileset dir="${base.dir}/caTissueSuite_dbunit" />
-		</copy -->
-
-		<copy file="dbunit_temp.xml" todir="${zip.dir}" overwrite="true" />
-		<copy todir="${zip.dir}/lib" overwrite="true">
-			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
-			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
-			<fileset file="${base.dir}/WEB-INF/lib/ojdbc14.jar" />
-			<fileset file="${base.dir}/lib/dom4j-1.6.jar" />
-			<fileset file="${base.dir}/lib/j2ee.jar" />
-			<fileset file="${base.dir}/lib/log4j.jar" />
-			<fileset file="${base.dir}/WEB-INF/lib/sqljdbc.jar" />
-		</copy>
-
-		<copy todir="${zip.dir}/SQL" overwrite="true">
-			<fileset dir="${base.dir}/SQL" >
-				<exclude name="**/Permissible_values/*.ctl"/>
-			</fileset>
-		</copy>
-
-		<!--delete dir="${zip.dir}/SQL/DBUpgrade" /-->
-
-		<copy file="MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="DBValidate_Suite1.0.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="DBValidate_V1.2.0.1.sql" todir="${zip.dir}" overwrite="true" />
-		<!-- <copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
-		<copy file="Sample-login-config.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="Sample-properties-service.xml" todir="${zip.dir}" overwrite="true" />
-
-		
-		<copy todir="${zip.dir}/images" overwrite="true">
-			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
-		</copy>
-		<copy todir="${zip.dir}/images/uIEnhancementImages" overwrite="true">
-			<fileset file="${base.dir}/images/uIEnhancementImages/siteman_logo.gif" />
-		</copy>
-		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
-			<fileset dir="${base.dir}/catissue_de_integration_client" />
-		</copy>
-
-		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
-			<fileset dir="${base.dir}/caTissueSuite_Client" />
-		</copy>
-
-		<copy todir="${zip.dir}/BulkOperations" overwrite="true">
-			<fileset dir="${base.dir}/BulkOperations" />
-		</copy>
-		<copy todir="${zip.dir}/minimalDataSharing" overwrite="true">
-			<fileset dir="${base.dir}/minimalDataSharing" />
-		</copy>
-		<copy todir="${zip.dir}/CaTissueSuite_caGrid_Service" overwrite="true">
-			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
-		</copy>
-		<!-- DE grid service is not avaialbel in this buid so commenting this target -->
-		<!--<copy todir="${zip.dir}/de_cagrid_services" overwrite="true">
-			<fileset dir="${base.dir}/de_cagrid_services" />
-		</copy>-->
-		<!--- caTIES related files  start-->
-		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
-			<fileset dir="${base.dir}/caTIES_conf" />
-		</copy>
-		<copy file="Dataset.dtd" todir="${zip.dir}" overwrite="true" />
-		<copy file="JniDeID.dll" todir="${zip.dir}" overwrite="true" />
-		<copy file="gate.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploycaties.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploycaties.properties" todir="${zip.dir}" overwrite="true" />
-		<!--- caTIES related files  end-->
-		<!-- DE conf files -->
-		<copy todir="${zip.dir}/DE_conf" overwrite="true">
-			<fileset dir="${base.dir}/DE_conf" />
-		</copy>
-		<!-- DE conf files end -->
-		<!-- Copying DEIntegration.war
-		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" /> -->
-		<!-- Copying CA model wars -->
-		<copy file="CA.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="pathologySpecimen.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" />
-		<!-- Copying private public migrator directory -->
-		<copy todir="${zip.dir}/private_public_migrator" overwrite="true">
-			<fileset dir="${base.dir}/private_public_migrator" />
-		</copy>
-		<!-- Copying IISSettings directory -->
-		<copy todir="${zip.dir}/IISSettings" overwrite="true">
-			<fileset dir="${base.dir}/IISSettings" />
-		</copy>
-		<zip destfile="${zip.file}" basedir="${zip.dir}" />
-		<delete dir="${zip.dir}" />
-		<antcall target="create_API_client_zip">
-		</antcall>
-	</target>
 
 	<target name="create_zip" depends="createJavaDoc,installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Plus_v${application.version}_Installable" />
@@ -809,7 +652,7 @@
 			<fileset file="${base.dir}/WEB-INF/lib/bulkoperator.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/DynamicExtensions*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/castor-0.9.9.jar" />
-			<fileset file="${base.dir}/caTissueSuite_Client/lib/catissuecore.jar" />
+			<fileset file="${temp.dir}/catissuecore.jar"/>
 			<fileset file="${base.dir}/WEB-INF/lib/commons-logging.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/commons-httpclient*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/commons-codec*.jar" />
@@ -830,10 +673,6 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${zip.dir}/modules/caGrid_service" overwrite="true">
-			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
-		</copy>
-
 		<!--Vivek: <copy dir="bulk_operations_upload" todir="${zip.dir}/modules/" overwrite="true" />-->
 		<copy todir="${zip.dir}/modules/bulk_operations_upload" overwrite="true">
 			<fileset dir="${base.dir}/bulk_operations_upload" />
@@ -852,16 +691,6 @@
 			<fileset file="${base.dir}/Default_cp_And_System_dashboard.csv" />
 		</copy>
 		
-
-		<copy file="gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
-		<copy todir="${zip.dir}/modules/caTIES/conf" overwrite="true">
-			<fileset dir="${base.dir}/caTIES_conf" />
-		</copy>
-		<copy file="Dataset.dtd" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
-		<copy file="JniDeID.dll" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
-		<copy file="deploycaties_zip.xml" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
-		<rename src="${zip.dir}/modules/caTIES/conf/deploycaties_zip.xml" dest="${zip.dir}/modules/caTIES/conf/deploycaties.xml"/>
-		<copy file="deploycaties.properties" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/caTissue/images" overwrite="true">
 			<fileset file="${base.dir}/images/defauleLogo.png" />
@@ -892,6 +721,10 @@
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
+		
+		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties/ng-email-templates" overwrite="true">
+			<fileset dir="${base.dir}/WEB-INF/resources/ng-email-templates"/>
+		</copy>
 		<copy file="allTokens.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
@@ -916,25 +749,13 @@
 		</copy>
 
 		<copy file="dynamicextensions.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="clientFormCreator.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/DynamicExtensions.jar"
 			todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="DEDeploy_zip.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<rename src="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy_zip.xml" dest="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy.xml"/>
-		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
-		<copy todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true">
-			<fileset dir="${base.dir}/DE_conf" />
-		</copy>
-		<copy file="CA.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="pathologySpecimen.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="pathologySCG.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/identity_provider_support/conf" overwrite="true">
 			<fileset dir="${base.dir}/idp" />
-		</copy>
-
-		<copy todir="${zip.dir}/modules/minimal_data_sharing" overwrite="true">
-			<fileset dir="${base.dir}/minimalDataSharing" />
 		</copy>
 
 		<copy file="printservice_module.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
@@ -943,13 +764,7 @@
 			todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 
-		<copy todir="${zip.dir}/modules/private_public_migrator" overwrite="true">
-			<fileset dir="${base.dir}/private_public_migrator" />
-		</copy>
-
-		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/query/conf" overwrite="true" />
-		<copy file="paths.txt" todir="${zip.dir}/modules/query/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/SQL" overwrite="true">
 			<fileset dir="${base.dir}/SQL" >
@@ -959,25 +774,7 @@
 
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
-		<antcall target="create_API_client_zip" />
 
-	</target>
-
-	<target name="create_API_client_zip">
-		<property name="APIclientzip.dir" value="${base.dir}/caTISSUE_Plus_API_Client_v${application.version}_Installable" />
-		<property name="APIclientzip.file" value="${base.dir}/caTissue_Plus_API_Client_v${application.version}_Installable.zip" />
-		<delete file="${APIclientzip.file}" />
-		<delete dir="${APIclientzip.dir}" />
-		<mkdir dir="${APIclientzip.dir}" />
-		<copy todir="${APIclientzip.dir}/caTissueSuite_Client" overwrite="true">
-			<fileset dir="${base.dir}/caTissueSuite_Client" />
-		</copy>
-		<copy todir="${APIclientzip.dir}/catissue_de_integration_client" overwrite="true">
-			<fileset dir="${base.dir}/catissue_de_integration_client" />
-		</copy>
-
-		<zip destfile="${APIclientzip.file}" basedir="${APIclientzip.dir}" />
-		<delete dir="${APIclientzip.dir}" />
 	</target>
 
 
@@ -1046,46 +843,6 @@
 	</target>
 
 
-	<target name="runJunitTestCases" depends="compile_junit_TestCases">
-		<mkdir dir="${report.dir}/Nightly_Build_Report" />
-		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
-
-		<junit printsummary="yes" fork="yes" haltonfailure="no">
-			<formatter type="xml" />
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
-			<classpath>
-				<pathelement path="${base.dir}/caTissueSuite_Client/conf" />
-				<fileset dir="./caTissueSuite_Client/lib">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-
-			<classpath>
-				<pathelement path="${cobertura.dir}" />
-				<pathelement path="${target.dir}" />
-				<pathelement path= "${test.class.dir}" />
-			</classpath>
-
-			<classpath refid="junit.classpath" />
-
-			<batchtest todir="${report.dir}/Nightly_Build_Report">
-				<fileset dir="${src.dir}">
-					<include name="**/CaTissueTestSuite.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
-
-
-	<target name="runNightlyBuild" depends="runJunitTestCases">
-
-		<junitreport todir="${report.dir}/Nightly_Build_Report">
-			<fileset dir="${report.dir}/Nightly_Build_Report">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report todir="${report.dir}/Nightly_Build_Report/Html_reports" />
-		</junitreport>
-	</target>
 
 	<!--  <property name="reportgenerator.input.jmeterfile" value="D:/Nightly_Build/XmlReport/CaTissueJMeterTests.jtl" />
 		  <property name="reportgenerator.input.junitfile" value="D:/Nightly_Build/XmlReport/TESTS-TestSuites.xml" />
@@ -1299,107 +1056,7 @@
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
-		<delete>
-			<fileset dir="${base.dir}/caTissueSuite_Client/lib">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-				<include name="bulkoperator.jar"/>
-			</fileset>
-			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service/lib">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-				<include name="ParticipantManager*.jar"/>
-			</fileset>
-			<fileset dir="${base.dir}/catissue_de_integration_client/lib">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-			</fileset>
-			<fileset dir="${base.dir}/private_public_migrator/lib">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-			</fileset>
-		</delete>
-		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
-			<fileset dir="${lib.dir}">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-				<include name="bulkoperator.jar"/>
-			</fileset>
-			<fileset dir="${temp.dir}">
-				<include name="catissuecore.jar"/>
-			</fileset>
-		</copy>
 
-		<copy todir="${base.dir}/CaTissueSuite_caGrid_Service/lib" overwrite="true">
-			<fileset dir="${lib.dir}">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-				<include name="ParticipantManager*.jar"/>
-			</fileset>
-			<fileset dir="${temp.dir}">
-				<include name="catissuecore.jar"/>
-			</fileset>
-		</copy>
-
-		<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
-			<fileset dir="${lib.dir}">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-			</fileset>
-			<fileset dir="${temp.dir}">
-				<include name="catissuecore.jar"/>
-			</fileset>
-		</copy>
-
-		<copy todir="${base.dir}/private_public_migrator/lib" overwrite="true">
-			<fileset dir="${temp.dir}">
-				<include name="catissuecore.jar"/>
-			</fileset>
-			<fileset dir="${lib.dir}">
-				<include name="commonpackage*.jar"/>
-				<include name="washu-commons*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="DynamicExtensions*.jar"/>
-				<include name="SimpleQuery*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="AdvanceQuery*.jar"/>
-			</fileset>
-		</copy>
 
 	</target>
 
@@ -1616,16 +1273,15 @@
 	<target name="check.java.version"
 	            description="checks if the version of java is the correct one">
 		<echo>${java.version}</echo>
-		<if>
+		<!-- if>
 			<contains string="${java.version}" substring="${java.required.version}"/>
-			<!--equals arg1="${java.version}" arg2="1.5"/>-->
 			<then>
 
 			</then>
 			<else>
 				<fail message="Wrong Java version! [${java.version}] Required version: ${java.required.version}"/>
 			</else>
-		</if>
+		</if -->
 	</target>
 
 	<target name="bulkoperation_integrate_app" description="deploys the Bulk Operation module">
@@ -1696,4 +1352,107 @@
 		</copy>
 
 	</target>
+
+	<target name="compileTestCases" depends="compile">
+	        <javac destdir="${target.dir}" includes="**/*Test.java" includeAntRuntime="false" target="1.6">
+	            <src path="./WEB-INF/test"/>
+	        	<src path="./WEB-INF/src"/>
+	            <classpath>
+	                <fileset dir="${lib.dir}">
+	                    <include name="**/*.jar"/>
+	                </fileset>
+	            </classpath>
+	        </javac>
+	    </target>
+	<target name="runTestCases" depends="instrument-classes">
+		<mkdir dir="${base.dir}/Reports" />
+			<mkdir dir="${base.dir}/Reports/TestCases" />
+	        <mkdir dir="${base.dir}/Reports/TestCases/Html_reports" />
+
+	        <junit printsummary="yes" fork="yes" haltonfailure="no">
+	            <formatter type="xml" />
+	        	
+	        	<sysproperty key="net.sourceforge.cobertura.datafile" file="${base.dir}/cobertura.ser" />
+
+
+	        	            <classpath>
+	        	                <pathelement path="./cobertura/instrumented" />
+	        	                <pathelement path="${target.dir}" />
+	        	            </classpath>
+
+	        	<classpath>
+	        	                     <fileset dir="${lib.dir}">
+	        	                        <include name="*.jar" />
+	        	                    </fileset>
+	        	                </classpath>
+	            <classpath>
+	                <pathelement path="${target.dir}" />
+	            </classpath>
+
+	            <classpath refid="junit.classpath" />
+
+	            <batchtest todir="${base.dir}/Reports/TestCases">
+	                <fileset dir="./WEB-INF/test">
+	                    <include name="com/**/*Test.java" />
+	                </fileset>
+	            </batchtest>
+	        </junit>
+		
+	<junitreport todir="${base.dir}/Reports/TestCases">
+	            <fileset dir="${base.dir}/Reports/TestCases">
+	                <include name="TEST-*.xml" />
+	            </fileset>
+	            <report todir="${base.dir}/Reports/TestCases/Html_reports" />
+	        </junitreport>
+	    </target>
+	
+	<path id="cover-test.classpath">
+	      <fileset dir="${lib.dir}" includes="**/*.jar" />
+	      <pathelement location="${cobertura.instrumented-classes.dir}" />
+	      <pathelement location="${build.dir}" />
+	  </path>
+	
+	<target name="gen_cobertura_report" depends="runTestCases">
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="${base.dir}/Reports/Coverage" format="html">
+		          <fileset dir="${src.dir}">
+		              <include name="**/*.java" />
+		          </fileset>
+		      </cobertura-report>
+		<cobertura-report srcdir="./cobertura/cobertura.ser" destdir="${base.dir}/Reports/Coverage" format="xml">
+		                  <fileset dir="${src.dir}">
+		                      <include name="**/*.java" />
+		                  </fileset>
+		              </cobertura-report>
+		<delete file="${base.dir}/cobertura.ser"/>
+	    </target>
+	
+	<target name="instrument-classes" depends="compileTestCases">
+	        <delete dir="./cobertura/instrumented" />
+	        <mkdir dir="./cobertura/instrumented" />
+	        <!--
+	           Instrument the application classes, writing the
+	           instrumented classes into ${build.instrumented.dir}.
+	        -->
+	        <cobertura-instrument datafile="${base.dir}/cobertura.ser"
+	            todir="./cobertura/instrumented">
+	            <!--
+	             The following line causes instrument to ignore any
+	             source line containing a reference to log4j, for the
+	             purposes of coverage reporting.
+	          -->
+	            <ignore regex="org.apache.log4j.*" />
+	            
+	            <fileset dir="./WEB-INF/classes">
+	                <include name="com/krishagni/**/*.class" />
+	            	<exclude name="**/*Test.class"/>
+	            </fileset>
+
+	        </cobertura-instrument>
+	        <echo>Copying instrumented class files to classes folder</echo>
+	        <copy todir="./WEB-INF/classes">
+	            <fileset dir="./cobertura/instrumented">
+	                <include name="**/*.class" />
+	            </fileset>
+	        </copy>
+	    </target>
 </project>

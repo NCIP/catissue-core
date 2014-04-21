@@ -659,6 +659,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final Collection pEvtPrmColl = persistentSCG
 						.getSpecimenEventParametersCollection();
 				final Iterator evntIterator = pEvtPrmColl.iterator();
+				List<SpecimenEventParameters> eventColl = new ArrayList<SpecimenEventParameters>();
 				while (evntIterator.hasNext())
 				{
 					final SpecimenEventParameters event = (SpecimenEventParameters) evntIterator
@@ -667,8 +668,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 							.getCorrespondingObject(spEventColl,
 									event.getClass());
 					this.updateEvent(event, newEvent, sessionDataBean);
+					eventColl.add(newEvent);
+
 					// spEventColl.remove(newEvent);
 				}
+				persistentSCG.setSpecimenEventParametersCollection(eventColl);
 			}
 			// Check for different closed site
 			final Site oldSite = oldspecimenCollectionGroup
@@ -2560,14 +2564,21 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				|| specimenCollGroup.getSpecimenEventParametersCollection()
 						.isEmpty())
 		{
-			final String hql = "select  scg.specimenEventParametersCollection from "
-					+ SpecimenCollectionGroup.class.getName()
-					+ " as scg where scg.id= "
-					+ specimenCollGroup.getId().toString();
-
-			final List scgEventList = this.executeQuery(hql);
-			specimenCollGroup
-					.setSpecimenEventParametersCollection(scgEventList);
+			
+			SCGDAO scgdao = new SCGDAO();
+			List<SpecimenEventParameters> events = new ArrayList<SpecimenEventParameters>();
+			try
+			{
+				events = scgdao.getSCGEvents(specimenCollGroup);
+			}
+			catch (ApplicationException e)
+			{
+				LOGGER.error(e);
+				throw this.getBizLogicException(e, e.getErrorKeyAsString(), e.getLogMessage());
+			}
+			
+				specimenCollGroup
+						.setSpecimenEventParametersCollection(events);
 		}
 		if (specimenCollGroup.getSpecimenEventParametersCollection() != null
 				&& !specimenCollGroup.getSpecimenEventParametersCollection()

@@ -26,7 +26,6 @@ import org.apache.struts.upload.FormFile;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
-import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -153,10 +152,6 @@ public class Participant extends AbstractDomainObject
 	 */
 	protected Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = new HashSet<CollectionProtocolRegistration>();
 
-	/**
-	 * A collection of record entry objects for a participant
-	 */
-	protected Collection<ParticipantRecordEntry> participantRecordEntryCollection = new HashSet<ParticipantRecordEntry>();
 	/**
 	 * metaPhone Code
 	 */
@@ -668,25 +663,6 @@ public class Participant extends AbstractDomainObject
 	// {
 	// this.empiId = empiId;
 	// }
-
-	/**
-	 *
-	 * @return
-	 */
-	public Collection<ParticipantRecordEntry> getParticipantRecordEntryCollection()
-	{
-		return participantRecordEntryCollection;
-	}
-
-	/**
-	 *
-	 * @param participantRecordEntryCollection
-	 */
-	public void setParticipantRecordEntryCollection(
-			Collection<ParticipantRecordEntry> participantRecordEntryCollection)
-	{
-		this.participantRecordEntryCollection = participantRecordEntryCollection;
-	}
 
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a

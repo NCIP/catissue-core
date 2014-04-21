@@ -13,7 +13,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.CDMSIntegrationConstants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -64,9 +63,8 @@ function updateHelpURL()
 	String clinportalUrl =(String) request.getAttribute(CDMSIntegrationConstants.CALLBACK_URL);
 	boolean isAddNew = false;
 	Long scgEntityId = null;
-	scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
-	String staticEntityName=null;
-	staticEntityName = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
+	scgEntityId = (Long)request.getAttribute("scgRecordEntryEntityId");
+	String staticEntityName="SpecimenCollectionGroup";
 	String participantId=null;
 	Object obj = request.getAttribute("specimenCollectionGroupForm");
 	SpecimenCollectionGroupForm form =null;
@@ -411,7 +409,7 @@ var consentLevelId = document.getElementById("id").value;
 
 var showViewSPRTab="ViewSurgicalPathologyReport.do?scgId="+document.getElementById("id").value+"&operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
 
-var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+scgEntityIdValue+"&entityRecordId="+idValue+"&staticEntityName="+staticEntityNameValue+"&pageOf="+pageOfValue+"&operation=viewAnnotations";
+var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId="+scgEntityIdValue+"&entityRecordId="+idValue+"&staticEntityName="+staticEntityNameValue+"&pageOf="+pageOfValue+"&operation=viewAnnotations";
 
 showPriterTypeLocation();
 if(disablePHIView)

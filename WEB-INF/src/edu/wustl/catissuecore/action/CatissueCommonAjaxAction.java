@@ -763,32 +763,6 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
 		return null;
 	}
 
-	public ActionForward getSpecimenIds(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
-			IOException
-	{
-		AddDeleteCartAction action = new AddDeleteCartAction();
-		final List<List<String>> dataList = action.getPaginationDataList(request);
-		String specIndex = request.getParameter("specIndex");
-		HttpSession session = request.getSession();
-
-		int index = 0;
-		if (!Validator.isEmpty(specIndex))
-		{
-			index = Integer.valueOf(specIndex);
-		}
-		StringBuffer responseString = new StringBuffer();
-		for (List<String> list : dataList)
-		{
-			responseString.append(list.get(index - 1));
-			responseString.append(",");
-		}
-		session.setAttribute("specIds", responseString.toString());
-		response.setContentType(Constants.CONTENT_TYPE_XML);
-		response.getWriter().write(responseString.toString());
-		return null;
-	}
-
 	public ActionForward getSummaryCount(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
 			IOException

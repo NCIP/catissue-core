@@ -704,7 +704,7 @@ var showEventsTab = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpec
 
 var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfNewSpecimenCPQuery&reportId="+reportId+"&id="+specimenId;
 
-var showAnnotationTab="DisplayAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
+var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
 
 var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
 
@@ -715,7 +715,7 @@ var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 setLabelBarcodeVisibility('${isSpecimenLabelGeneratorAvl}', '${isSpecimenBarcodeGeneratorAvl}', '${specimenDTO.collectionStatus}','${requestScope.operation}');
 doInitCal('createdDate',false,'${uiDatePattern}');
 var nodeId= "Specimen_"+document.getElementById("id").value;
-refreshTree(null,null,null,null,nodeId);
+//refreshTree(null,null,null,null,nodeId);
                 
 var tabDataJSON = {};
 var spId = document.getElementById("id").value;

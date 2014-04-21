@@ -33,8 +33,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
@@ -441,23 +439,6 @@ public class ParticipantAction extends CatissueBaseAction
 		}
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		// Falguni:Performance Enhancement.
-		Long participantEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
-		{
-			participantEntityId = (Long) CatissueCoreCacheManager
-					.getInstance()
-					.getObjectFromCache(
-							AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
-		}
-		else
-		{
-			participantEntityId = AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
-			CatissueCoreCacheManager.getInstance().addObjectToCache(
-					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
-					participantEntityId);
-		}
 		boolean hasConsents = false;
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		CollectionProtocolBizLogic collectionProtocolBizLogic = new CollectionProtocolBizLogic();
@@ -503,9 +484,6 @@ public class ParticipantAction extends CatissueBaseAction
 			request.setAttribute("ppIdFormat", "");
 		}
 
-		request.setAttribute(
-				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
-				participantEntityId);
 		final int count = participantForm
 				.getCollectionProtocolRegistrationValueCounter();
 		// amol changes

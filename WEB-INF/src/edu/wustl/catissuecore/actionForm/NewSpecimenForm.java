@@ -25,7 +25,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -555,10 +554,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 		//    	this.aliquot = specimen.getIsAliquot().booleanValue();
 
-		final SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
 		this.pathologicalStatus = specimen.getPathologicalStatus();
-		this.tissueSide = characteristic.getTissueSide();
-		this.tissueSite = characteristic.getTissueSite();
+		this.tissueSide = specimen.getTissueSide();
+		this.tissueSite = specimen.getTissueSite();
 		this.lineage = specimen.getLineage();
 
 		final Collection biohazardCollection = specimen.getBiohazardCollection();

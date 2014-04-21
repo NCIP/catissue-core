@@ -59,8 +59,8 @@ public class AliquotBizLogic
         specimenDto.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
         specimenDto.setQuantity(singleAliquotDetailsDTO.getQuantity());
         specimenDto.setSpecimenCollectionGroupId(parentSpecimen.getSpecimenCollectionGroup().getId());
-        specimenDto.setTissueSide(parentSpecimen.getSpecimenCharacteristics().getTissueSide());
-        specimenDto.setTissueSite(parentSpecimen.getSpecimenCharacteristics().getTissueSite());
+        specimenDto.setTissueSide(parentSpecimen.getTissueSide());
+        specimenDto.setTissueSite(parentSpecimen.getTissueSite());
         specimenDto.setExternalIdentifiers(new ArrayList<ExternalIdentifierDTO>());
         specimenDto.setType(parentSpecimen.getSpecimenType());
         if (!Validator.isEmpty(singleAliquotDetailsDTO.getAliqoutLabel()))
@@ -189,8 +189,8 @@ public class AliquotBizLogic
         aliquotDetailsDTO.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
         aliquotDetailsDTO.setSpecimenClass(parentSpecimen.getSpecimenClass());
         aliquotDetailsDTO.setType(parentSpecimen.getSpecimenType());
-        aliquotDetailsDTO.setTissueSide(parentSpecimen.getSpecimenCharacteristics().getTissueSide());
-        aliquotDetailsDTO.setTissueSite(parentSpecimen.getSpecimenCharacteristics().getTissueSite());
+        aliquotDetailsDTO.setTissueSide(parentSpecimen.getTissueSide());
+        aliquotDetailsDTO.setTissueSite(parentSpecimen.getTissueSite());
         aliquotDetailsDTO.setConcentration(parentSpecimen.getConcentrationInMicrogramPerMicroliter());
         List<SingleAliquotDetailsDTO> singleAliquotDetailsDTOList = new ArrayList<SingleAliquotDetailsDTO>();
 

@@ -70,13 +70,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 * Object of AbstractSpecimen.
 	 */
 	protected AbstractSpecimen specimen;
-	/**
-	 * Name : Ashish Gupta.
-	 * Reviewer Name : Sachin Lale.
-	 * Bug ID: 2741
-	 * Patch ID: 2741_5
-	 * Description: Many to 1 association between SpecimenEventParameters and SCG.
-	*/
+	
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 
 	/**
@@ -155,24 +149,6 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	public Long getId()
 	{
 		return this.id;
-	}
-
-	/**
-	 * @return the specimenCollectionGroup
-	 * @hibernate.many-to-one column="SPECIMEN_COLL_GRP_ID"
-	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-	 */
-	public SpecimenCollectionGroup getSpecimenCollectionGroup()
-	{
-		return this.specimenCollectionGroup;
-	}
-
-	/**
-	 * @param specimenCollectionGroup the specimenCollectionGroup to set
-	 */
-	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
-	{
-		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 
 	/**
@@ -288,5 +264,15 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	*/
 	public void doRoundOff()
 	{
+	}
+
+	
+	public SpecimenCollectionGroup getSpecimenCollectionGroup() {
+		return specimenCollectionGroup;
+	}
+
+	
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup) {
+		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 }

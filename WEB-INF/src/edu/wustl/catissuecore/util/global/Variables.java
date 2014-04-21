@@ -54,6 +54,7 @@ public class Variables
 	public static boolean isCollectionProtocolRegistrationBarcodeGeneratorAvl = false;
 	public static boolean isProtocolParticipantIdentifierLabelGeneratorAvl = false;
 	public static int throttlingMaxLimit;
+	public static boolean isToDisplayAdminEmail = true;
 	public static long throttlingTimeInterval;
 
 	public static boolean isPhoneNumberToBeValidated = true;
@@ -191,5 +192,6 @@ public class Variables
 
 		final String str = prepareColTypes(list);
 		System.out.println(str);
+		
 	}
 }

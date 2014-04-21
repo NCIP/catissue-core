@@ -434,14 +434,14 @@
             column="IS_EMPI_ENABLE"
         />
 
-		<set name="studyFormContextCollection" table="CATISSUE_CP_STUDYFORMCONTEXT"
+		<!--  set name="studyFormContextCollection" table="CATISSUE_CP_STUDYFORMCONTEXT"
 			 inverse="true">
 
 			<key column="COLLECTION_PROTOCOL_ID" />
 
 			<many-to-many column="STUDY_FORM_CONTEXT_ID"
 				class="edu.wustl.catissuecore.domain.StudyFormContext" />
-		</set>
+		</set -->
 		
 		<set
             name="labelSQLAssociationCollection"
@@ -460,7 +460,20 @@
                   class="edu.wustl.common.labelSQLApp.domain.LabelSQLAssociation"
               />
         </set>
-		
+        
+        <sql-query name="getAllProtocols">
+          <return-scalar column="identifier" type="long"/>
+          <return-scalar column="short_title" type="string"/>
+          <return-scalar column="title" type="string"/>
+          
+          select 
+            identifier, short_title, title 
+          from 
+            catissue_specimen_protocol 
+          where 
+            activity_status = :activityStatus
+        </sql-query>
+        		
         </joined-subclass>
 
         <joined-subclass

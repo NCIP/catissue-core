@@ -302,7 +302,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	public void setAllValues(AbstractDomainObject abstractDomain,SessionDataBean sessionDataBean)
 	{
 		 final Participant participant = (Participant) abstractDomain;
-		 
+		 //-- TODO need to modify this call in apputility.java as this is throwing the edu/wustl/cab2b/common/exception/CheckedException which was present in older DE.		 
 		 boolean isPHIView = AppUtility.hasPrivilegeToView(Participant.class.getName(), participant.getId(), sessionDataBean, Permissions.REGISTRATION);
 		 this.setId(participant.getId().longValue());
 		 this.gender = participant.getGender();

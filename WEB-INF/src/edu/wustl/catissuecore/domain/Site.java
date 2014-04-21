@@ -83,9 +83,15 @@ public class Site extends AbstractDomainObject
 	private Address address;
 
 	/**
-	 * abstractSpecimenCollectionGroupCollection.
+	 * SpecimenCollectionGroupCollection.
 	 */
-	private Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection;
+	private Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection;
+	
+	/**
+	 * CollectionProtocolEventcollection.
+	 */
+	private Collection<CollectionProtocolEvent> collectionProtocolEventcollection;
+	
 
 	/**
 	 * HashSet containing CollectionProtocol.
@@ -118,7 +124,8 @@ public class Site extends AbstractDomainObject
 		name = site.getName();
 		assignedSiteUserCollection = null;
 		collectionProtocolCollection = null;
-		abstractSpecimenCollectionGroupCollection = null;
+		specimenCollectionGroupCollection = null;
+		collectionProtocolEventcollection = null;
 		coordinator = null;
 		address = null;
 	}
@@ -350,23 +357,29 @@ public class Site extends AbstractDomainObject
 		return name;
 	}
 
-	/**
-	 * Get AbstractSpecimenCollectionGroupCollection.
-	 * @return Collection of AbstractSpecimenCollectionGroup objects.
-	 */
-	public Collection<AbstractSpecimenCollectionGroup> getAbstractSpecimenCollectionGroupCollection()
+	
+	
+	public Collection<SpecimenCollectionGroup> getSpecimenCollectionGroupCollection()
 	{
-		return abstractSpecimenCollectionGroupCollection;
+		return specimenCollectionGroupCollection;
 	}
 
-	/**
-	 * Set AbstractSpecimenCollectionGroupCollection.
-	 * @param abstractSpecimenCollectionGroupCollection Collection.
-	 */
-	public void setAbstractSpecimenCollectionGroupCollection(
-			Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection)
+	
+	public void setSpecimenCollectionGroupCollection(Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection)
 	{
-		this.abstractSpecimenCollectionGroupCollection = abstractSpecimenCollectionGroupCollection;
+		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
+	}
+
+	
+	public Collection<CollectionProtocolEvent> getCollectionProtocolEventcollection()
+	{
+		return collectionProtocolEventcollection;
+	}
+
+	
+	public void setCollectionProtocolEventcollection(Collection<CollectionProtocolEvent> collectionProtocolEventcollection)
+	{
+		this.collectionProtocolEventcollection = collectionProtocolEventcollection;
 	}
 
 	/**

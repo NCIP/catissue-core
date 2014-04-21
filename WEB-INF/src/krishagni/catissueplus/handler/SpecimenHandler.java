@@ -14,7 +14,6 @@ import krishagni.catissueplus.util.DAOUtil;
 import org.json.JSONObject;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.PrintUtil;
@@ -76,6 +75,7 @@ public class SpecimenHandler
 			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
+			
 			specimenDTO = specimenBizLogic.updateSpecimen(hibernateDao,
 					specimenDTO, sessionDataBean);
 			hibernateDao.commit();
@@ -189,25 +189,25 @@ public class SpecimenHandler
             Long cpId = Long.valueOf(objArr[0].toString());
             boolean hasConsents =specimenBizLogic.hasConsents(cpId, hibernateDao);
             Long specimenEntityId = null;
-            if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-                    AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
-            {
-                specimenEntityId = (Long) CatissueCoreCacheManager.getInstance()
-                        .getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
-            }
-            else
-            {
-                specimenEntityId = AnnotationUtil
-                        .getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-                CatissueCoreCacheManager.getInstance().addObjectToCache(
-                        AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
-            }
+//            if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+//                    AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
+//            {
+//                specimenEntityId = (Long) CatissueCoreCacheManager.getInstance()
+//                        .getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+//            }
+//            else
+//            {
+//                specimenEntityId = AnnotationUtil
+//                        .getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+//                CatissueCoreCacheManager.getInstance().addObjectToCache(
+//                        AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+//            }
             
             
             returnJsonObject.put("success", true);
             returnJsonObject.put("identifiedReportId", reportId);
-            returnJsonObject.put(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,specimenEntityId);
-            returnJsonObject.put("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+//            returnJsonObject.put(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,specimenEntityId);
+//            returnJsonObject.put("entityName", AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
             returnJsonObject.put("hasConsents", hasConsents);
             returnJsonObject.put("isImageEnabled", Variables.isImagingConfigurred);
            

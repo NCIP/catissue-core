@@ -43,25 +43,22 @@
 
     </class>
     
-   
-    
     <query name="cprConsetTierQuery">
          select consentTierResponse.consentTier.statement,consentTierResponse.response,consentTierResponse.consentTier.id 
-		 from Participant particiapant join particiapant.collectionProtocolRegistrationCollection cpr 
+		 from edu.wustl.catissuecore.domain.Participant particiapant join particiapant.collectionProtocolRegistrationCollection cpr 
 		 join cpr.consentTierResponseCollection consentTierResponse 
 		 join consentTierResponse.consentTier consentTier 
 		 where cpr.id=?  order by consentTierResponse.consentTier.id  asc 
     </query>
     
-   
     <query name="specimenConsentQuery">
         select cpr.signedConsentDocumentURL,consentWitness,cpr.consentSignatureDate 
-        from Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr left join cpr.consentWitness consentWitness where specimen.id = ?
+        from edu.wustl.catissuecore.domain.Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr left join cpr.consentWitness consentWitness where specimen.id = ?
 	
     </query>
     <query name="cprConsentQuery">
      select cpr.signedConsentDocumentURL,consentWitness,cpr.consentSignatureDate 
-	 from CollectionProtocolRegistration cpr  left join cpr.consentWitness consentWitness  where cpr.id = ?
+	 from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr  left join cpr.consentWitness consentWitness  where cpr.id = ?
     </query>
      <query name="cpConsentTierList">
      select cp.consentTierCollection from CollectionProtocolRegistration cpr  join cpr.collectionProtocol cp where cpr.id = ?
@@ -70,7 +67,7 @@
          
    <query name="scgConsentQuery">
    select cpr.signedConsentDocumentURL,consentWitness,cpr.consentSignatureDate 
-			 from SpecimenCollectionGroup scg join scg.collectionProtocolRegistration cpr left join cpr.consentWitness consentWitness where scg.id = ?
+			 from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg join scg.collectionProtocolRegistration cpr left join cpr.consentWitness consentWitness where scg.id = ?
 	</query>
     
    

@@ -11,8 +11,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -145,20 +143,20 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		request.setAttribute("specimenEntityId", specimenEntityId);*/
 
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-				AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
-		{
-			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
-		}
-		else
-		{
-			specimenEntityId = AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-			CatissueCoreCacheManager.getInstance().addObjectToCache(
-					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
-		}
-		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+//		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+//				AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
+//		{
+//			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+//					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+//		}
+//		else
+//		{
+//			specimenEntityId = AnnotationUtil
+//					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+//			CatissueCoreCacheManager.getInstance().addObjectToCache(
+//					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+//		}
+//		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
 
 		// Falguni:Performance Enhancement -User clicks on Report tab then
 		// annotation page on Edit participant page
@@ -176,21 +174,21 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 					participantEntityId);
 		}
 		request.setAttribute("participantEntityId", participantEntityId);*/
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
-				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
-		{
-			partEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
-		}
-		else
-		{
-			partEntityId = AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
-			CatissueCoreCacheManager.getInstance().addObjectToCache(
-					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, partEntityId);
-		}
-		request.setAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
-				partEntityId);
+//		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+//				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
+//		{
+//			partEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+//					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
+//		}
+//		else
+//		{
+//			partEntityId = AnnotationUtil
+//					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+//			CatissueCoreCacheManager.getInstance().addObjectToCache(
+//					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, partEntityId);
+//		}
+//		request.setAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
+//				partEntityId);
 
 		if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_NEW_SPECIMEN)
 				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))

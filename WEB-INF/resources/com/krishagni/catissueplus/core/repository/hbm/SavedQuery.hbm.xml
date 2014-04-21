@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+  <class name="com.krishagni.catissueplus.core.de.domain.SavedQuery" 
+         table="CATISSUE_SAVED_QUERIES">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native"/>
+    </id>
+
+    <property name="title" column="TITLE"/>
+
+    <many-to-one 
+      name="createdBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      update="true"
+      insert="true"
+      column="CREATED_BY"
+     />
+     
+    <many-to-one
+      name="lastUpdatedBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      update="true"
+      insert="true"
+      column="LAST_UPDATED_BY"
+    />
+
+    <property name="lastRunOn"    column="LAST_RUN_ON" type="timestamp"/>
+
+    <property name="queryDefJson" column="QUERY_DEF" type="text"/>
+	
+    <property name="lastUpdated"  column="LAST_UPDATED_ON" type="timestamp"/>
+	
+    <property name="lastRunCount" column="LAST_RUN_COUNT"/>
+	
+    <query name="getSavedQueries">
+      from SavedQuery order by id DESC
+    </query>
+  </class> 
+</hibernate-mapping>

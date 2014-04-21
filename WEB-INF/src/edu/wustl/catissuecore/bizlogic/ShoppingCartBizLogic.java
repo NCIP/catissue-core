@@ -159,14 +159,12 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 						rowList.add("");
 					}
 
-					rowList.add(specimen.getSpecimenCharacteristics().getTissueSite());
-					rowList.add(specimen.getSpecimenCharacteristics().getTissueSide());
+					rowList.add(specimen.getTissueSite());
+					rowList.add(specimen.getTissueSide());
 
 					// Bug #4554 :kalpana
 					rowList.add(specimen.getPathologicalStatus());
 					// end of bug #4554
-					// rowList.add(specimen.getSpecimenCharacteristics().
-					// getPathologicalStatus());
 
 					shoppingCartList.add(rowList);
 				}

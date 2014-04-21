@@ -382,8 +382,8 @@ public class ShoppingCartAction extends BaseAction
 						rowData.add("");
 					}
 
-					rowData.add(specimen.getSpecimenCharacteristics().getTissueSite());
-					rowData.add(specimen.getSpecimenCharacteristics().getTissueSide());
+					rowData.add(specimen.getTissueSite());
+					rowData.add(specimen.getTissueSide());
 					rowData.add(specimen.getPathologicalStatus());
 					rowData.add("1");
 

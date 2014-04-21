@@ -575,6 +575,7 @@ public class Constants
 
 	/** The Constant MAXIMUM_TREE_NODE_LIMIT. */
 	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
+	
 
 	/** The Constant MAXIMUM_TREE_NODE_LIMIT_FOR_CHILD_NODE. */
 	public static final String MAXIMUM_TREE_NODE_LIMIT_FOR_CHILD_NODE = "resultView.maximumTreeNodeLimitForChildNode";
@@ -5839,6 +5840,7 @@ public class Constants
 	public static final String HL7_LISTENER_ADMIN_USER = "HL7ListenerAdminUser";
 	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
 	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
+	public static final String ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	/**
 	 * Constant for XML extension.
