@@ -1051,7 +1051,7 @@
 				<include name="**/edu/wustl/catissuecore/caties/**"/>
 				<include name="**/edu/wustl/catissuecore/hbm/**"/>
 				<include name="**/edu/wustl/catissuecore/cdms/integrator/**"/>
-
+				<include name="**/krishagni/catissueplus/dto/**"/>
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
 			</fileset>

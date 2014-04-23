@@ -327,14 +327,14 @@ public class Biohazard extends AbstractDomainObject
 		}
 
 		Biohazard other = (Biohazard) obj;
-		if (id == null)
+		if (name == null)
 		{
-			if (other.id != null)
+			if (other.name != null)
 			{
 				return false;
 			}
 		}
-		else if (!id.equals(other.id))
+		else if (!name.equals(other.name))
 		{
 			return false;
 		}
