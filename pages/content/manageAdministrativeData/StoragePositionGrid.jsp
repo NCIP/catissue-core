@@ -146,8 +146,10 @@ var storagePositions1=fromStoragePosition1.substring(fromStoragePosition1.lastIn
 document.getElementById('pos1').value=storagePositions1[0];
 document.getElementById('pos2').value=storagePositions1[1];*/
 
+
 function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageOf)
 {
+
     //alert("elementId1:  "+elementId1+"  elementValue1:  "+elementValue1+"  elementId2:   "+elementId2+"elementValue2:   "+elementValue2);
     if(pageOf == 'pageOfSpecimen')
     {
@@ -183,6 +185,7 @@ function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageO
             updatePosition();
         }
     }
+	
 }
 
 function updatePosition()
@@ -685,9 +688,12 @@ function checkSpecimenStatus()
         else
         {
             document.getElementById("pos11").value="";
-            document.getElementById("pos22").value="";
+			document.getElementById("pos22").value="";
+			document.getElementById("pos11").style.display="none";
+            document.getElementById("pos22").style.display="none";
+		 }
         }
-        }
+		
 }
 
 var reloadGrid=true,populateValueInCombo=true;
