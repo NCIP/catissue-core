@@ -47,7 +47,7 @@
 						enabled :true
 					},
 					title: {
-						text: "Daywise Storage Container Usage Chart for '"+decodeURI(siteName)+ "' Repository",
+						text: "Usage Graph For '"+decodeURI(siteName)+ "' Repository",
 						style:{
 												color:'#3051E6',
 												fontWeight: 'Bold'
@@ -55,7 +55,7 @@
 					},
 					xAxis: {
 						title: {
-							text: 'Date',
+							text: 'Duration',
 							style:{
 												color:'#3051E6',
 												fontSize: '16px',
@@ -178,7 +178,7 @@
 										type: 'column'
 									},
 									title: {
-										text: 'Top 10 Repository wise Utilization Chart',
+										text: 'Utilization Graph For Top 10 Repositories',
 										style:{
 											color:'#3051E6',
 											fontWeight: 'bold'
@@ -276,8 +276,8 @@
 	function onGraphPageLoad(){
 		tabbar.setSkin("modern");
 		tabbar.setImagePath("dhtmlx_suite/imgs/");
-		tabbar.addTab("specimenCountTab","Specimen Count","120px");
-		tabbar.addTab("percentTab","Percent Utilization","150px");
+		tabbar.addTab("specimenCountTab","By Count","120px");
+		tabbar.addTab("percentTab","By Utilization","150px");
 		tabbar.setContentHTML("specimenCountTab",'<div style="overflow-y: scroll;width: 100%; height: 100%;"><div id="containerSpecimenGraphDiv" style="width: 100%;"></div></div>');
 		tabbar.setContentHTML("percentTab",'<div style="overflow-y: scroll;width: 100%; height: 100%;"><div id="containerPercentGraphDiv" style="width: 100%;"></div></div>');
 		tabbar.enableScroll(true);
