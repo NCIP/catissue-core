@@ -1013,7 +1013,7 @@ public class MigrateForm {
 			params.add(0);
 			params.add(true);
 			
-			Number id = JdbcDaoFactory.getJdbcDao().executeUpdateAndGetKey(INSERT_FORM_SQL, params, "identifier");
+			Number id = JdbcDaoFactory.getJdbcDao().executeUpdateAndGetKey(INSERT_FORM_CTXT_SQL, params, "identifier");
 			form.setId(id.longValue());							
 		} catch (Exception e) {
 			throw new RuntimeException("Error inserting form context", e);
@@ -1211,7 +1211,7 @@ public class MigrateForm {
 	private static final String GET_ID_FROM_ASSO_ID_SQL =
 			" select identifier from %s where %s= ?";
 	
-	private static final String INSERT_FORM_SQL = 
+	private static final String INSERT_FORM_CTXT_SQL = 
 			"insert into catissue_form_context values(default, ?, ?, ?, ?, ?)";
 	
 	private static final String INSERT_RECORD_ENTRY_SQL = 
