@@ -1,7 +1,6 @@
 package krishagni.catissueplus.upgrade;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Blob;
 import java.sql.ResultSet;
@@ -18,8 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
-import krishagni.catissueplus.dao.FormDao;
-//import krishagni.catissueplus.dao.impl.FormDaoImpl;
 import krishagni.catissueplus.dto.FormDetailsDTO;
 
 import org.apache.commons.lang.StringUtils;
@@ -97,7 +94,6 @@ import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
-import edu.common.dynamicextensions.nutility.DeleteOnCloseFileInputStream;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
 import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.common.dynamicextensions.processor.ProcessorConstants;
@@ -887,9 +883,8 @@ public class MigrateForm {
 			dto.setEntityType(entityType);
 			dto.setCpId(cpId);
 
-			// TODO: Replace this with new call
-//			FormDao formDao = new FormDaoImpl();
-//			formDao.insertForm(dto);
+			insertForm(dto);
+			
 			info.setNewFormCtxId(dto.getId());
 			migrateFormData(info);
 			
@@ -1009,6 +1004,21 @@ public class MigrateForm {
 		return recAndObjectIds;
 	}
 	
+	public void insertForm(FormDetailsDTO form) {
+		try {
+			List<Object> params = new ArrayList<Object>();
+			params.add(form.getContainerId());
+			params.add(form.getEntityType());
+			params.add(form.getCpId());
+			params.add(0);
+			params.add(true);
+			
+			Number id = JdbcDaoFactory.getJdbcDao().executeUpdateAndGetKey(INSERT_FORM_SQL, params, "identifier");
+			form.setId(id.longValue());							
+		} catch (Exception e) {
+			throw new RuntimeException("Error inserting form context", e);
+		}
+	}
 	
 	private void migrateFormData(RecordObject recObj, Map<BaseAbstractAttributeInterface, Object> oldRecord, FormInfo info) 
 	throws Exception {
@@ -1024,7 +1034,7 @@ public class MigrateForm {
 		params.add(newRecordId);
 		params.add(usrCtx.getUserId());
 		params.add(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-		params.add(Status.ACTIVE);
+		params.add(Status.ACTIVE.toString());
 
 		
 		jdbcDao.executeUpdate(INSERT_RECORD_ENTRY_SQL, params);
@@ -1200,6 +1210,9 @@ public class MigrateForm {
 	
 	private static final String GET_ID_FROM_ASSO_ID_SQL =
 			" select identifier from %s where %s= ?";
+	
+	private static final String INSERT_FORM_SQL = 
+			"insert into catissue_form_context values(default, ?, ?, ?, ?, ?)";
 	
 	private static final String INSERT_RECORD_ENTRY_SQL = 
 			"insert into catissue_form_record_entry values(default, ?, ?, ?, ?, ?, ?)";
