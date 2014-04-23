@@ -147,6 +147,21 @@ function updateHelpURL()
 <head>
 <script>
 		var operation = '<%=pageView%>';
+		var collectionStatus =  "<%=form.getCollectionStatus()%>";
+        var statusIcon = 'pending';
+        if(collectionStatus == 'Complete' || collectionStatus == 'Collected') {
+	      statusIcon = 'complete';
+	    } else if(collectionStatus == 'Not Collected') {
+	      statusIcon = 'not-collected';
+	    } else if (collectionStatus == 'Distributed') {
+	      statusIcon = 'distributed';
+	    } else {
+	      statusIcon = 'pending';
+	    } 
+	
+	    var image = top.parent.document.firstChild.getElementsByClassName('black_ar active')[0].getElementsByClassName('fa-circle')[0]
+	    image.classList.remove(image.classList[2]);
+	    image.classList.add(statusIcon);
 </script>
 	<%
 		String refreshTree = (String)request.getAttribute("refresh");
@@ -297,7 +312,14 @@ function updateHelpURL()
 		var display=document.getElementById('scgPageButtons');
 		display.style.display=tabSelected;
 
-	
+		var displayConsentTable=document.getElementById('consentTabForSCG');
+		if(displayConsentTable!=null)
+		{
+			displayConsentTable.style.display=displayTable;
+		}
+		//var collectionTab=document.getElementById('specimenCollectionGroupTab');
+		var consentTab=document.getElementById('consentTab');
+
   }
 	
 		function editSCG()
@@ -410,6 +432,8 @@ var consentLevelId = document.getElementById("id").value;
 var showViewSPRTab="ViewSurgicalPathologyReport.do?scgId="+document.getElementById("id").value+"&operation=viewSPR&pageOf="+pageOfValue+"&reportId="+reportId;
 
 var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId="+scgEntityIdValue+"&entityRecordId="+idValue+"&staticEntityName="+staticEntityNameValue+"&pageOf="+pageOfValue+"&operation=viewAnnotations";
+
+var showConsentsTab="FetchConsents.do?consentLevelId="+consentLevelId+"&consentLevel=scg&entityId="+scgEntityIdValue+"&staticEntityName="+staticEntityNameValue;
 
 showPriterTypeLocation();
 if(disablePHIView)
