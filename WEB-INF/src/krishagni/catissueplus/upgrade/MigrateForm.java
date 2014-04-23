@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 import krishagni.catissueplus.dao.FormDao;
 //import krishagni.catissueplus.dao.impl.FormDaoImpl;
 import krishagni.catissueplus.dto.FormDetailsDTO;
@@ -1023,6 +1024,8 @@ public class MigrateForm {
 		params.add(newRecordId);
 		params.add(usrCtx.getUserId());
 		params.add(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		params.add(Status.ACTIVE);
+
 		
 		jdbcDao.executeUpdate(INSERT_RECORD_ENTRY_SQL, params);
 	}
@@ -1199,7 +1202,7 @@ public class MigrateForm {
 			" select identifier from %s where %s= ?";
 	
 	private static final String INSERT_RECORD_ENTRY_SQL = 
-			"insert into catissue_form_record_entry values(default, ?, ?, ?, ?, ?)";
+			"insert into catissue_form_record_entry values(default, ?, ?, ?, ?, ?, ?)";
 	
 
 }
