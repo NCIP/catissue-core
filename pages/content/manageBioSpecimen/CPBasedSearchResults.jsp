@@ -149,23 +149,19 @@ var isParticipantUpdated = true;
     }
     
     .complete, .collected{
-      border-color: green;
-      background: green;
+      color: green;
     }
     
      .pending {
-      border-color: grey;
-      background: grey;
+      color: grey;
     }
     
     .not-collected {
-      border-color: red;
-      background: red;
+      color: red;
     }
     
     .distributed {
-      border-color: blue;
-      background: blue;
+      color: blue;
     }
    
     hr {
@@ -253,15 +249,31 @@ function showCursor(){
 function hideCursor(){
     document.body.style.cursor='default';
 }
+<div class="cp-dropdown-label" style="
+    margin-right: 3px;
+">
+    <span> Collection Protocol</span>
+  <span class="watch-tutorial pull-right">
+    <a target="_blank" href="https://catissueplus.atlassian.net/wiki/x/MoB2AQ">Watch Tutorial</a>
+  </span>
+     </div>
+     
 </script>
 <table border="1" width="100%" height="100%" cellpadding="0" cellspacing="0">
   <tr>
     <td valign="top" height="100%" id='sideMenuTd' width="25%">
       <div id="SearchLeftPart" style="overflow:auto">
-        <div ng-controller="CpViewController" class="cp-left-panel">
+        <div id="CpViewController" ng-controller="CpViewController" class="cp-left-panel">
           <div>
             <div>
-              <div class="cp-dropdown-label"> Collection Protocol </div>
+              <div class="cp-dropdown-label">
+                <span>Collection Protocol</span>
+                <span class="watch-tutorial pull-right" style="margin-right: 10px;">
+                  <a target="_blank" href="https://catissueplus.atlassian.net/wiki/display/CAT/Data+Entry+Workflow+Tutorial">
+                    Watch Tutorial
+                  </a>
+                </span> 
+              </div>
               <ka-select  data-placeholder="Select Collection Protocol" 
                           option-id="id" option-value="shortTitle" 
                           options="cps" selected="selectedCp.id"  on-select="onCpSelect" style="width:100%;" >

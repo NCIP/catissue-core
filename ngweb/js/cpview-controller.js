@@ -1,6 +1,6 @@
 angular.module('plus.cpview', [])
 
-.controller('CpViewController', ['$scope', 'repository',  function($scope, repository) {
+.controller('CpViewController', ['$scope', '$window', 'repository',  function($scope, $window, repository) {
 
   $scope.selectedCp = selectionCp;
   $scope.selectedParticipant = selParticipant;
@@ -9,7 +9,7 @@ angular.module('plus.cpview', [])
     .success(function(result) {
       $scope.cps = result;
     });
-          
+  
   $scope.participantList =[];
 
   $scope.onCpSelect = function(selected) {
@@ -233,13 +233,13 @@ angular.module('plus.cpview', [])
   $scope.getStatusIcon = function(collectionStatus) {
     var statusIcon;
     if(collectionStatus == 'Complete' || collectionStatus == 'Collected') {
-      statusIcon = 'img-circle complete';
+      statusIcon = 'fa fa-circle complete';
     } else if(collectionStatus == 'Not Collected') {
-      statusIcon = 'img-circle not-collected';
+      statusIcon = 'fa fa-circle not-collected';
     } else if (collectionStatus == 'Distributed') {
-      statusIcon = 'img-circle distributed';
+      statusIcon = 'fa fa-circle distributed';
     } else {
-      statusIcon = 'img-circle pending';
+      statusIcon = 'fa fa-circle pending';
     } 
     return statusIcon;
   };
@@ -251,9 +251,17 @@ angular.module('plus.cpview', [])
 
   $scope.getScgTooltip = function(scg) {
     var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-    return "Event Point: "+ scg.eventPoint + 
-           "; Collection point label: " + scg.collectionPointLabel + 
-           "; Received date: " + date;
+    
+    var htmlToolTip = 
+    	"<table style=\"font-size: 12px; color: rgb(205, 200, 200)\"><tbody>" +
+    	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td>"+ scg.eventPoint + "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-right\">CP label : </i></b></td><td>"+ scg.collectionPointLabel + "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td>"+ date + "</td><tr/>" +
+    	"</tbody></table>";
+    
+    console.warn("htmlTooltip : " + htmlToolTip);
+    return htmlToolTip;
+  
   }
 }]);
 
