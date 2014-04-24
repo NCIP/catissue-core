@@ -18,8 +18,8 @@
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"
 			  
 			 roleName="specimenPosition"   >
-				<attribute name="positionDimensionOne" csvColumnName="Position one"   />
-				<attribute name="positionDimensionTwo" csvColumnName="Position two"   />
+				<attribute name="positionDimensionOneString" csvColumnName="Position one"   />
+				<attribute name="positionDimensionTwoString" csvColumnName="Position two"   />
 				<referenceAssociation
 				className="edu.wustl.catissuecore.domain.StorageContainer"
 				  

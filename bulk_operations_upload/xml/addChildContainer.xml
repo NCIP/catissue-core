@@ -16,8 +16,8 @@
 		</containmentAssociation>
 
 		<referenceAssociation className="edu.wustl.catissuecore.domain.ContainerPosition"       roleName="locatedAtPosition">
-			<attribute name="positionDimensionOne" csvColumnName="Location one"   />
-			<attribute name="positionDimensionTwo" csvColumnName="Location two"   />
+			<attribute name="positionDimensionOneString" csvColumnName="Location one"   />
+			<attribute name="positionDimensionTwoString" csvColumnName="Location two"   />
 
 			<referenceAssociation className="edu.wustl.catissuecore.domain.Container"       roleName="parentContainer">
 				<attribute name="name" csvColumnName="Parent Container Name"   />
