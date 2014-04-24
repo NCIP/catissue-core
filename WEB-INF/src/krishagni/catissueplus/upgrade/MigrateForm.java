@@ -630,9 +630,10 @@ public class MigrateForm {
 
 	private String getCtrlName(ControlInterface ctrl) {
 		String name = "";
+		
 		if (ctrl instanceof LabelInterface) {
 			name = new StringBuilder("label").append(ctrl.getId()).toString();
-		} else if (ctrl instanceof AbstractContainmentControlInterface) {
+		} else {
 			name = ctrl.getBaseAbstractAttribute().getName();			
 		} 
 		return StringUtils.deleteWhitespace(name).replaceAll(specialChars, "_");
