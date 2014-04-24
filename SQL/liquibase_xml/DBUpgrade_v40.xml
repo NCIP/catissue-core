@@ -1606,61 +1606,6 @@
 
 	</changeSet>   
 
-	<changeSet author="dpatil" id="adding CATISSUE_LDAP_DETAILS table" failOnError="true">
-        <createTable tableName="CATISSUE_LDAP_DETAILS">
-            <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_ldap_id"/>
-            </column>
-
-            <column name="NAME" type="${text.type}(100)">
-                <constraints unique="true" nullable="false" />
-            </column>
-
-            <column name="HOST" type="${text.type}(100)">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="PORT" type="${text.type}(100)">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="LOGIN_NAME" type="${text.type}(100)">
-                <constraints nullable="false" />
-            </column>
-   
-            <column name="PASSWORD" type="${text.type}(100)">
-                <constraints nullable="false" />
-            </column>
-           
-            <column name="ID_FIELD" type="${text.type}(100)">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="SURNAME_FIELD" type="${text.type}(100)">
-            </column>
-
-            <column name="GIVEN_NAME_FIELD" type="${text.type}(100)">
-            </column>
-
-            <column name="EMAIL_FIELD" type="${text.type}(100)">
-            </column>
-
-            <column name="DIRECTORY_CONTEXT" type="${text.type}(100)">
-                <constraints nullable="false" />
-            </column>
-           
-        </createTable>
-
-    </changeSet>  
-
-    <changeSet author="dpatil" id="adding ldap sequence" failOnError="true">
-        <createSequence
-            sequenceName="CATISSUE_LDAP_SEQ"
-            startValue="1"
-            incrementBy="1"
-            ordered="true" />
-    </changeSet>    
-
     <changeSet author="vpawar" id="saved queries table" failOnError="true">
      	<createTable tableName="CATISSUE_SAVED_QUERIES"> 
           <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -1714,5 +1659,127 @@
 	  referencedColumnNames="IDENTIFIER"
 	  constraintName="FK_SAVED_QUERIES_UPDATED_BY"/>
     </changeSet>
+
+ <changeSet author="dpatil" id="inserting CATISSUE_AUTH_DOMAINS table" failOnError="true">
+        <createTable tableName="CATISSUE_AUTH_DOMAINS">
+            <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_DOMAIN_id"/>
+            </column>
+            <column name="DOMAIN_NAME" type="${text.type}(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="AUTH_TYPE" type="${text.type}(255)">
+            </column>
+        </createTable>
+    </changeSet>  	  
+
+    <changeSet author="dpatil" id="inserting auth domain sequence" failOnError="true">
+        <createSequence
+            sequenceName="CATISSUE_AUTH_DOMAIN_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+    </changeSet>  	    
+
+    <changeSet author="dpatil" id="inserting CATISSUE_LDAP_DETAILS table" failOnError="true">
+        <createTable tableName="CATISSUE_LDAP_DETAILS">
+            <column name="DOMAIN_ID" type="${int.type}">
+            </column>
+
+            <column name="HOST" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="PORT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="BIND_USER" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+   
+            <column name="BIND_PASSWORD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+           
+            <column name="ID_FIELD" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+	    <column name="SEARCH_BASE_DIR" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+	    <column name="DIRECTORY_CONTEXT" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>	
+
+	    <column name="FILTER_STRING" type="${text.type}(100)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="SURNAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="GIVEN_NAME_FIELD" type="${text.type}(100)">
+            </column>
+
+            <column name="EMAIL_FIELD" type="${text.type}(100)">
+            </column>
+        </createTable>
+
+	<addForeignKeyConstraint constraintName="FK_domain_ID"
+			baseTableName="CATISSUE_LDAP_DETAILS" baseColumnNames="DOMAIN_ID"
+			referencedTableName="CATISSUE_AUTH_DOMAINS"
+                        referencedColumnNames="IDENTIFIER" /> 
+
+    </changeSet>  
+    <changeSet id="inserting default catissue domain" author="dpatil" failOnError="false">
+	<sql>INSERT INTO CATISSUE_AUTH_DOMAINS VALUES( 1,'catissue', 'catissue')</sql>
+	<sql>INSERT INTO CATISSUE_AUTH_DOMAINS VALUES( 2,'ldap', 'ldap')</sql>
+    </changeSet>
+
+    <changeSet id="inserting Domain name column" author="dpatil" runOnChange="true">
+	<addColumn tableName="CATISSUE_USER">
+		<column name="DOMAIN_NAME" type="${text.type}(255)" defaultValue="catissue"/>
+	</addColumn>
+    </changeSet>
     
+    <changeSet author="dpatil" id="inserting CATISSUE AUTH_PROVIDERS table" failOnError="true">
+        
+	<createTable tableName="CATISSUE_AUTH_PROVIDERS">
+	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_Provider_id"/>
+            </column>
+	
+            <column name="AUTH_TYPE" type="${text.type}(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+
+            <column name="IMPL_CLASS" type="${text.type}(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="inserting default catissue auth providers" author="dpatil" failOnError="false">
+<sql>INSERT INTO CATISSUE_AUTH_PROVIDERS VALUES(1,'catissue','com.krishagni.catissueplus.core.auth.services.impl.CatissueAuthServiceImpl')</sql>
+<sql>INSERT INTO CATISSUE_AUTH_PROVIDERS VALUES(2,'ldap','com.krishagni.catissueplus.core.auth.services.impl.LdapAuthServiceImpl')</sql>
+    </changeSet>	
+
+    <changeSet author="dpatil" id="inserting foreignkey auth PROVIDER sequence" failOnError="true">
+	<addForeignKeyConstraint constraintName="FK_provider_ID"
+			baseTableName="CATISSUE_AUTH_DOMAINS" baseColumnNames="auth_type"
+			referencedTableName="CATISSUE_AUTH_PROVIDERS"
+                        referencedColumnNames="auth_type" /> 
+	</changeSet>
+	<changeSet author="dpatil" id="inserting auth PROVIDER sequence" failOnError="true">
+        <createSequence
+            sequenceName="CATISSUE_AUTH_PROVIDER_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+	
+    </changeSet>  	  	   
 </databaseChangeLog>         

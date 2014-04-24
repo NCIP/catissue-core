@@ -105,32 +105,35 @@
     <property name="registrationFactory" ref="cprFactory"/>
   </bean>
 
-  <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
+   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="eSender" class="com.krishagni.catissueplus.core.common.email.EmailSender">
   </bean>
 
   <bean id="userSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="userFactory" ref="userFact"/>	
+    <property name="userFactory" ref="userFact"/>
+    <property name="emailSender" ref="eSender"/>
   </bean>
 
-  <bean id="ldapFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.LdapRegistrationFactoryImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  <bean id="domainFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.DomainRegistrationFactoryImpl">
+  	<property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="ldapFactory" ref="ldapFact"/>
+  </bean>
+ 
+  <bean id="ldapFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.LdapFactoryImpl">
   </bean>
 
-  <bean id="ldapSvc" class="com.krishagni.catissueplus.core.auth.services.impl.LdapRegistrationServiceImpl">
+  <bean id="domainRegSvc" class="com.krishagni.catissueplus.core.auth.services.impl.DomainRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="ldapRegFactory" ref="ldapFact"/>	
+    <property name="domainRegFactory" ref="domainFact"/>	
   </bean>
 
-  <bean id="catAuthenticationService" class="com.krishagni.catissueplus.core.auth.services.impl.CatissueAuthServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-  
   <bean id="authSvc" class="com.krishagni.catissueplus.core.auth.services.impl.UserAuthenticationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="catissueAuthService" ref="catAuthenticationService"/>	
-  </bean>		
+  </bean>
 
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>

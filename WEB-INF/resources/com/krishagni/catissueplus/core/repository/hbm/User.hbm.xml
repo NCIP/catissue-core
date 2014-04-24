@@ -8,7 +8,7 @@
         name="com.krishagni.catissueplus.core.administrative.domain.User"
         table="CATISSUE_USER"
         lazy="true">
-
+	
     	<cache usage="read-write" />
 
         <id
@@ -53,7 +53,7 @@
             insert="true"
             column="LOGIN_NAME"
             length="255"
-            not-null="true"
+            not-null="true"	
             unique="true"/>
 
         <property
@@ -81,23 +81,56 @@
 
         <many-to-one name="address" class="com.krishagni.catissueplus.core.administrative.domain.Address" column="ADDRESS_ID" cascade="all" not-null="true" />
 
-        <property
-            name="ldapId"
-            type="long"
+		<many-to-one
+            name="authDomain"
+            class="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
+            property-ref="name"
+            cascade="none"
             update="true"
             insert="true"
-            column="LDAP_ID"
-            length="20"/>
+            column="DOMAIN_NAME"  lazy="false"/>
 
+        <set
+            name="siteCollection"
+            table="CATISSUE_SITE_USERS"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted">
+
+            <key column="USER_ID"/>
+            <many-to-many
+                class="com.krishagni.catissueplus.core.biospecimen.domain.Site"
+                column="SITE_ID"
+                outer-join="auto"/>
+        </set>
+        
+         <set
+            name="cpCollection"
+            table="CATISSUE_COLL_COORDINATORS"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted">
+
+            <key column="USER_ID"/>
+            <many-to-many
+                class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+                column="COLLECTION_PROTOCOL_ID"
+                outer-join="auto" />
+        </set>
+	
 		<set
             name="passwordCollection"
             table="CATISSUE_PASSWORD"
             inverse="true"
             cascade="save-update"
+            order-by="com.krishagni.catissueplus.core.administrative.domain.Password.Id desc"
             >
 
         	<cache usage="read-write"/>
             <key column="USER_ID"/>
+            
             <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password"/>
 
         </set>
@@ -117,13 +150,17 @@
             insert="true"
             column="FORGOT_PASSWORD_TOKEN"
             length="200"/>
-            
-    <query name="getUserByLoginName">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName
-	</query>
 
 	<query name="getUserByEmailAddress">
 		SELECT user.emailAddress FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.emailAddress = :emailAddress
+	</query>
+	
+	<query name="getUserByIdAndDomain">
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.id = :userId AND user.authDomain.name = :domainName
+	</query>
+	
+	<query name="getUserByLoginNameAndDomainName">
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName AND user.authDomain.name = :domainName
 	</query>
    </class>
 </hibernate-mapping>

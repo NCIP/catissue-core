@@ -1,16 +1,25 @@
+
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.io.Serializable;
-import java.util.Date;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
-public class Password implements Serializable {
-	
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+
+public class Password {
+
 	private Long id;
-	
+
 	private String password;
-	
+
 	private Date updateDate;
-	
+
 	private User user;
 
 	public Long getId() {
@@ -26,7 +35,10 @@ public class Password implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		if (isBlank(password) && !isValidPasswordPattern(password)) {
+			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
+		}
+		this.password = BCrypt.hashpw(password, BCrypt.gensalt(4));
 	}
 
 	public Date getUpdateDate() {
@@ -45,4 +57,15 @@ public class Password implements Serializable {
 		this.user = user;
 	}
 	
+	private final static String PASSWORD = "password";
+
+	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
+
+	public static boolean isValidPasswordPattern(String password) {
+		boolean result = false;
+		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+		Matcher mat = pattern.matcher(password);
+		result = mat.matches();
+		return result;
+	}
 }

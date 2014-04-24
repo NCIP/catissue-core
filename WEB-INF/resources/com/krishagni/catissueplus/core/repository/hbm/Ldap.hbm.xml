@@ -7,31 +7,23 @@
     <class
         name="com.krishagni.catissueplus.core.auth.domain.Ldap"
         table="CATISSUE_LDAP_DETAILS"
-	lazy="true">
+		lazy="true">
     
     	<cache usage="read-write" />
-
-        <id
-            name="id"
-            column="IDENTIFIER"
-            type="long"
-            length="30"
-            unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">CATISSUE_LDAP_SEQ</param>
-            </generator>
-        </id>
+		
+		<id name="domainId" type="long">
+			<column name="DOMAIN_ID" />
+			<generator class="foreign">
+				<param name="property">authDomain</param>
+			</generator>
+		</id>
+		<one-to-one name="authDomain" class="com.krishagni.catissueplus.core.auth.domain.AuthDomain"
+			constrained="true"></one-to-one>
 
         <property
             name="host"
             type="string"
             column="HOST"
-            length="255"/>
-            
-        <property
-            name="ldapName"
-            type="string"
-            column="NAME"
             length="255"/>
             
         <property
@@ -41,15 +33,15 @@
             length="19"/>
         
         <property
-            name="loginName"
+            name="bindUser"
             type="string"
-            column="LOGIN_NAME"
+            column="BIND_USER"
             length="255"/>
         
         <property
-            name="password"
+            name="bindPassword"
             type="string"
-            column="PASSWORD"
+            column="BIND_PASSWORD"
             length="255"/>
             
         <property
@@ -58,49 +50,42 @@
             column="ID_FIELD"
             length="50"/>
 
-	<property
+		<property
             name="directoryContext"
             type="string"
             column="DIRECTORY_CONTEXT"
             length="255"/>
 
-	<property
+		<property
             name="surnameField"
             type="string"
             column="SURNAME_FIELD"
             length="255"/>
 		
-	<property
+		<property
             name="givenNameField"
             type="string"
             column="GIVEN_NAME_FIELD"
             length="255"/>
             
-   <property
+   		<property
             name="searchBaseDir"
             type="string"
             column="SEARCH_BASE_DIR"
             length="255"/>
             
-    <property
+    	<property
             name="filterString"
             type="string"
             column="FILTER_STRING"
             length="255"/>
             
-    <property
+    	<property
             name="emailField"
             type="string"
             column="EMAIL_FIELD"
             length="255"/>
-        
-    <query name="getLdapByName">
-    	SELECT ldap.ldapName FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.ldapName = :ldapName
-    </query>
-    
-    <query name="getLdapByLdapId">
-    	SELECT ldap FROM com.krishagni.catissueplus.core.auth.domain.Ldap ldap WHERE ldap.id = :ldapId
-    </query>
+            
  </class>
 
 </hibernate-mapping>
