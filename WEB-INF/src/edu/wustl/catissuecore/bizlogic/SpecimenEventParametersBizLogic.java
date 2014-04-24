@@ -418,7 +418,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenEventParametersObject.getSpecimen().getLabel()));
 			substParams.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
-			list = ((HibernateDAO)dao).executeNamedQuery("getSpecimenIdByLabel", substParams);
+			list = ((HibernateDAO)dao).executeNamedQuery(Specimen.class.getName()+".getSpecimenIdByLabel", substParams);
 			if(list != null && !list.isEmpty())
 			{
 				Long  id = Long.valueOf(list.get(0).toString());
@@ -432,7 +432,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			substParams.put("0", new NamedQueryParam(DBTypes.STRING, ((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode()));
 			substParams.put("1", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
-			list = ((HibernateDAO)dao).executeNamedQuery("getSpecimenIdByBarcode", substParams);
+			list = ((HibernateDAO)dao).executeNamedQuery(Specimen.class.getName()+".getSpecimenIdByBarcode", substParams);
 			if(list != null && !list.isEmpty())
 			{
 				Long  id = Long.valueOf(list.get(0).toString());
@@ -1689,7 +1689,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0",	new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		List specimenIds = dao.executeNamedQuery("getSpecimenId", params);
+		List specimenIds = dao.executeNamedQuery(Specimen.class.getName()+".getSpecimenId", params);
 		String  specimenId = specimenIds.get(0).toString();
 		
 		final DisposalEventParameters disposalEvent = new DisposalEventParameters();

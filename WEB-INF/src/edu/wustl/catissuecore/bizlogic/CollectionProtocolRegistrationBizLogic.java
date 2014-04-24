@@ -1049,13 +1049,13 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		this.cntOfStudyCalEventPnt = 0;
 
 		
-		final Collection<CollectionProtocolEvent> collectionProtocolEventCollection = collectionProtocolRegistration
-				.getCollectionProtocol().getCollectionProtocolEventCollection();
-		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
-		Collection<SpecimenCollectionGroup> scgCollection =specimenCollectionGroupBizLogic.createSCGsForCPEs(collectionProtocolRegistration, dao, sessionDataBean,
-				collectionProtocolEventCollection,cntOfStudyCalEventPnt);
-		
-		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
+//		final Collection<CollectionProtocolEvent> collectionProtocolEventCollection = collectionProtocolRegistration
+//				.getCollectionProtocol().getCollectionProtocolEventCollection();
+//		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
+//		Collection<SpecimenCollectionGroup> scgCollection =specimenCollectionGroupBizLogic.createSCGsForCPEs(collectionProtocolRegistration, dao, sessionDataBean,
+//				collectionProtocolEventCollection,cntOfStudyCalEventPnt);
+//		
+//		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
 
 	}
 
@@ -2643,6 +2643,15 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	       params.put("0", new NamedQueryParam(DBTypes.LONG, cpId));
 	       params.put("1", new NamedQueryParam(DBTypes.LONG, participantId));
 	       List  list = hibernateDAO.executeNamedQuery("fetchCPRIdFromCPID", params);
+	       
+//	       hibernateDAO.executeQuery("select cpe.id,scg.id,scg.name from "+CollectionProtocolRegistration.class.getName()+" cpr left join "+ 
+//	   				" cpr.specimenCollectionGroupCollection scg join cpr.collectionProtocol cp join cp.collectionProtocolEventCollection cpe" +
+//	      		 " where cp.id="+cpId);
+////	   				"collectioncpe.specimenCollectionGroupCollection scg where cpe.collectionProtocol.id="+cpId );//+" " +
+//	   		
+//	   		hibernateDAO.executeQuery("select cpe.id from "+CollectionProtocolEvent.class.getName()+" cpe "+ 
+//	   				"  where cpe.collectionProtocol.id="+cpId );
+	   		
 	       return (Long)list.get(0);
 	}
     public void uploadConsentDocument(Long participantId, FileItem fileItem, HibernateDAO hibernateDAO)

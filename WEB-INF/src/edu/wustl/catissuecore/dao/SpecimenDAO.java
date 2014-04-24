@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
@@ -40,7 +41,7 @@ public class SpecimenDAO
 			Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 			params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
 			
-			List specimens = hibernateDAO.executeNamedQuery("getSpecimenIdLabelPairForScg", params);
+			List specimens = hibernateDAO.executeNamedQuery(Specimen.class.getName()+".getSpecimenIdLabelPairForScg", params);
 
 			for (Object specimen : specimens)
 			{
@@ -66,7 +67,7 @@ public class SpecimenDAO
 		Long cpID = 0l;
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 			substParams.put("0",new NamedQueryParam(DBTypes.LONG, specimenId));
-			list = dao.executeNamedQuery("getCPID", substParams);
+			list = dao.executeNamedQuery(Specimen.class.getName()+".getCPID", substParams);
 			if(list != null && list.size()>0)
 			{
 				cpID = Long.valueOf(list.get(0).toString());
@@ -80,7 +81,7 @@ public class SpecimenDAO
 		Long reportId = -1l;
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 		substParams.put("0",new NamedQueryParam(DBTypes.LONG, specimenId));
-		final List reportIDList = dao.executeNamedQuery("getAssociatedReportId", substParams);
+		final List reportIDList = dao.executeNamedQuery(Specimen.class.getName()+".getAssociatedReportId", substParams);
 		if (reportIDList != null && !reportIDList.isEmpty())
 		{
 			reportId = ((Long) reportIDList.get(0));

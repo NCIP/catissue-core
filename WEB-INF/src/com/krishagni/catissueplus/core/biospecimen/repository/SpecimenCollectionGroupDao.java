@@ -15,6 +15,8 @@ public interface SpecimenCollectionGroupDao extends Dao<SpecimenCollectionGroup>
 
 	public boolean isBarcodeUnique(String barcode);
 
-	public SpecimenCollectionGroup getscg(Long id);
+	public SpecimenCollectionGroup getscg(Long scgId);
+
+	public List<SpecimenInfo> getSpecimensListFromCpe(Long cpeId);
 
 }

@@ -293,7 +293,53 @@
             column="REQ_SPECIMEN_ID"
             lazy="false"
         />
+        <query name="getSpecimenIdByBarcode">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.barcode = ? and spec.activityStatus= ?</query>
+  <query name="getConsentResponseCollection">Select cpr.consentTierResponseCollection from edu.wustl.catissuecore.domain.Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr WHERE specimen.label = ?</query>
+    
+    <query name="updateSpecimenStatusToDisable">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Disabled' where specimen.label=?
+    </query>
+    
+    <query name="getSpecimenId">Select specimen.id from edu.wustl.catissuecore.domain.Specimen specimen where specimen.label=?
+    </query>
+    <query name="getSpecimenIdByLabel">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.label = ? and spec.activityStatus= ? </query>
+    <query name="getSpecimenLabel">select spec.label from edu.wustl.catissuecore.domain.Specimen spec where spec.id = ? </query>
+    <query name="updateAllSpecimenFromSCGToDisable">Update edu.wustl.catissuecore.domain.Specimen specimen SET specimen.activityStatus='Disabled' where specimen.specimenCollectionGroup.id=?</query>
+    <query name="getCPID">select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id=?</query>
+    <query name="getAssociatedReportId">select scg.identifiedSurgicalPathologyReport.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id = ? and specimen.id in elements(scg.specimenCollection)</query>
+    <query name="getSpecimenIdByLabelorBarcode">select spec.id from edu.wustl.catissuecore.domain.Specimen spec where spec.label = ? or spec.barcode = ?</query>    
+    <query name="getSiteIdFromContainer">select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen specimen where (specimen.id=? or specimen.label=? ) and specimen.activityStatus=?</query>
+    <query name="selectParentSpecimenDetailsForAliquot">
+                select specimen.activityStatus,scg.id, specimen.id, specimen.label,
+                specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
+                specimen.tissueSite, specimen.tissueSide,
+                specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg
+                where specimen.label=?
+    </query>
+    <query name="getCpIdFromSpecimenId">
+        select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
+        specimen.id = ?
+    </query>
+    <query name="getCpIdFromSpecimenLabel">
+     select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where 
+        specimen.label = ?
+    </query>
+    <query name="selectParentSpecimenDetailsForAliquotByBarcode">
+                select specimen.activityStatus,scg.id, specimen.id, specimen.label,
+                specimen.barcode, specimen.specimenClass, specimen.specimenType, specimen.pathologicalStatus,
+                specimen.tissueSite, specimen.tissueSide,
+                specimen.availableQuantity, specimen.concentrationInMicrogramPerMicroliter,specimen.initialQuantity, specimen.isAvailable from edu.wustl.catissuecore.domain.Specimen specimen left join specimen.specimenCollectionGroup scg 
+                where specimen.barcode=?
         
+    </query>
+    <query name="getCollectedSpecimenLabel">
+        select specimen.label,specimen.barcode from  edu.wustl.catissuecore.domain.Specimen as specimen  where (specimen.label = ? or specimen.barcode = ?) and specimen.activityStatus = 'Active' and specimen.collectionStatus='Collected' 
+    </query>
+    
+    <query name="getSpecimenBylabel">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label = ? and specimen.activityStatus= ? </query>
+    <query name="getSpecimenByBarcode">from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.barcode = ? and specimen.activityStatus= ? </query>
+    <query name="getSpecimenIdLabelPairForScg">select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label</query>
+    <query name="getAssociatedIdentifiedReportId"> select scg.identifiedSurgicalPathologyReport.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id = ? and specimen.id in elements(scg.specimenCollection)</query>
+    <query name="getcpIdandPartId"> select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id,specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id=?</query>
         <sql-query name="getScgIdBySpecimenId">
           <return-scalar column="scgId" type="long"/>
           

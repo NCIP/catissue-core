@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent.ObjectType;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
@@ -46,9 +47,17 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	@PlusTransactional
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
-
+System.out.println();
 		try {
-			return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensList(req.getScgId()));
+			if(ObjectType.CPE.getName().equals(req.getObjectType()))
+			{
+				return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensListFromCpe(req.getId()));
+				
+			}
+			else{
+				return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensList(req.getId()));
+			}
+			
 		}
 		catch (CatissueException e) {
 			return AllSpecimensSummaryEvent.serverError(e);

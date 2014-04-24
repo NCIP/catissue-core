@@ -4149,6 +4149,13 @@ PUBLIC
 			<forward name="pageOfCreateSpecimenCPQuery" path=".catissuecore.createCPSpecimenDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenViewDef" />
 		</action>
+		
+		<action path="/QueryCreateSpecimenFromRequirement" type="krishagni.catissueplus.action.AddSpecimenFromRequirementAction"
+            name="newSpecimenForm" validate="false" scope="request">
+            <forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
+            <forward name="failure" path=".catissuecore.specimenEditDef" />
+            <forward name="access_denied" path="/QueryManageBioSpecimen.do" />
+        </action>
 
 		<action path="/QuerySpecimenSearch" type="edu.wustl.common.action.CommonSearchAction"
 			name="newSpecimenForm" validate="false" scope="request">
@@ -6159,7 +6166,7 @@ PUBLIC
 		key="msg.shippingtracking" null="false" />
 
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
-		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 		<set-property property="definitions-parser-validate"
 			value="true" />

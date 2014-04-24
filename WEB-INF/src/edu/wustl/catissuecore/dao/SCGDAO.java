@@ -260,11 +260,11 @@ public class SCGDAO
 		return returnList;
 	}
 
-	public List<NameValueBean> getEventLabelsList(HibernateDAO hibernateDao, Long registrationId) throws DAOException
+	public List<NameValueBean> getEventLabelsList(HibernateDAO hibernateDao, Long cpId) throws DAOException
 	{
 		List<NameValueBean> returnList = new ArrayList<NameValueBean>();
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
-		params.put("0", new NamedQueryParam(DBTypes.LONG, registrationId));
+		params.put("0", new NamedQueryParam(DBTypes.LONG, cpId));
 		
 		List result = hibernateDao.executeNamedQuery("getCPENameIdPairList", params);
 		Object[] obj;

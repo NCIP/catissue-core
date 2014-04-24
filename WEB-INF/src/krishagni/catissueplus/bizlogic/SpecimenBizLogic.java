@@ -587,7 +587,7 @@ public class SpecimenBizLogic
 		{
 			params.put("0",	new NamedQueryParam(DBTypes.STRING, specimen.getLabel()==null?"":specimen.getLabel()));
 			params.put("1",	new NamedQueryParam(DBTypes.STRING, specimen.getBarcode()==null?"":specimen.getBarcode()));
-			specimenIds = hibernateDao.executeNamedQuery("getSpecimenIdByLabelorBarcode", params);
+			specimenIds = hibernateDao.executeNamedQuery(Specimen.class.getName()+".getSpecimenIdByLabelorBarcode", params);
 			if(specimen.getId() == null && specimenIds != null && specimenIds.size() >= 1)
 			{
 				throw new CatissueException(SpecimenErrorCodeEnum.DUPLICATE_LABEL_BARCODE.getCode());
@@ -1136,7 +1136,7 @@ public class SpecimenBizLogic
 	        Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
             substParams.put("0", new NamedQueryParam(DBTypes.LONG,specimenId));
 	        final List<Long> reportIDList =  hibernateDao.executeNamedQuery(
-                    "getAssociatedIdentifiedReportId", substParams);
+                    Specimen.class.getName()+".getAssociatedIdentifiedReportId", substParams);
 	      
 	        if (reportIDList != null && !reportIDList.isEmpty())
 	        {
@@ -1161,7 +1161,7 @@ public class SpecimenBizLogic
 	        Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
             substParams.put("0", new NamedQueryParam(DBTypes.LONG,specimenId));
             List<Object> list =   hibernateDao.executeNamedQuery(
-                    "getcpIdandPartId", substParams);
+                    Specimen.class.getName()+".getcpIdandPartId", substParams);
           
 	        return list;
 	    }

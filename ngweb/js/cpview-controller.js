@@ -66,6 +66,8 @@ angular.module('plus.cpview', [])
             name: $scope.getScgLabel(scg),
             collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
             tooltip: $scope.getScgTooltip(scg),
+            eventId: scg.eventId,
+			instance: scg.instanceType,
             nodes: [],
             state: 'closed'
           });
@@ -110,6 +112,7 @@ angular.module('plus.cpview', [])
 
     scgNode.state = 'opened';
     var scgId = selectedScg.id.split(',')[1];
+	
     repository.getSpecimens(scgId).success(function(result) {
       scgNode.nodes = $scope.getSpecimenTree(result);
       scgNode.childrenProbed = true;
@@ -170,6 +173,10 @@ angular.module('plus.cpview', [])
         tooltip: 'Label: ' + name + ' Type: ' + specimen.specimenType,
         collectionStatus: $scope.getStatusIcon(specimen.collectionStatus),
         type: 'specimen',
+        instance: specimen.instanceType,
+		scgId: specimen.scgId,
+		parentId: specimen.parentId,
+		requirementId: specimen.requirementId,
         nodes: $scope.getSpecimenTree(specimen.children),
         state: 'closed'
       }
@@ -199,7 +206,11 @@ angular.module('plus.cpview', [])
       if (data.childrenProbed == undefined) {
         if (data.type == 'scg') {
           var scgId = data.id.split(',')[1];
-          repository.getSpecimens(scgId).success(function(result) {
+		  var objectType="";
+	if(data.instance == 'cpe'){
+		objectType = 'cpe';
+	}
+          repository.getSpecimens(scgId,objectType).success(function(result) {
             data.nodes = $scope.getSpecimenTree(result);
             data.childrenProbed = true;
             if (data.nodes.length == 0) {
@@ -217,14 +228,23 @@ angular.module('plus.cpview', [])
     $scope.selectedNode = data;
 
     if(data.type == 'scg') {
-      var ids = data.id.split(',');
-      var url = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=false&operation=edit&id="
-        	 + ids[1] + "&cpSearchCpId=" + $scope.selectedCp.id + "&clickedNodeId="+ ids[1];
+    	var participantId = $scope.selectedParticipant.id.split(',')[0];
+        var ids = data.id.split(',');
+  	  var url="QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=false&operation=edit&id="
+          	 + ids[1] + "&cpSearchCpId=" + $scope.selectedCp.id + "&clickedNodeId="+ ids[1];
+  	  if(data.instance=='cpe')
+  	  {
+  		url="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroupCPQuery&cpId="+$scope.selectedCp.id+"&pId="+participantId+"&requestFrom=participantView&cpeId="+data.eventId;
+  	  }
       $('#cpFrameNew').attr('src',url);
     } else if(data.type == 'specimen'){
       var ids = data.id.split(',');
       var url = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id=" + ids[1] + 
-                "&refresh=false& " + "cpSearchCpId=" + $scope.selectedCp.id;
+      "&refresh=false& " + "cpSearchCpId=" + $scope.selectedCp.id;
+		if(data.instance=='requirement')
+		{
+		url="QueryCreateSpecimenFromRequirement.do?scgId="+data.scgId+"&parentId="+data.parentId+"&requirementId="+data.requirementId;
+		}		
       $('#cpFrameNew').attr('src',url);
     } 
   }

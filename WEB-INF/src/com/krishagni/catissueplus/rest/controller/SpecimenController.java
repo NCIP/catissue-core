@@ -57,7 +57,7 @@ public class SpecimenController {
 	@ResponseBody
 	public List<SpecimenInfo> getChildSpecimenList(@PathVariable("id") Long parentId) {
 		ReqSpecimenSummaryEvent event = new ReqSpecimenSummaryEvent();
-		event.setScgId(parentId);
+		event.setId(parentId);
 		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
 		return specimenSvc.getSpecimensList(event).getSpecimensInfo();
 	}

@@ -14,6 +14,7 @@ public class SpecimenDTO
 	private String operation;
 	private Long parentSpecimenId;
 	private Long specimenCollectionGroupId;
+	private Long requirementId;
 	private String specimenCollectionGroupName;
 	private String parentSpecimenName;
 	private String parentSpecimenBarcode;
@@ -264,6 +265,18 @@ public void setParentSpecimenBarcode(String parentSpecimenBarcode)
 	public void setBiohazardType(String biohazardType)
 	{
 		this.biohazardType = biohazardType;
+	}
+
+
+	
+	public Long getRequirementId() {
+		return requirementId;
+	}
+
+
+	
+	public void setRequirementId(Long requirementId) {
+		this.requirementId = requirementId;
 	}
 
 

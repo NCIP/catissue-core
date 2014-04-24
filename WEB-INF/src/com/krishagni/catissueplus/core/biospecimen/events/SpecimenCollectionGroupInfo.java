@@ -3,7 +3,14 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
-public class SpecimenCollectionGroupInfo {
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.common.util.Status;
+
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+
+import krishagni.catissueplus.dto.BiohazardDTO;
+
+public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectionGroupInfo>{
 
 	private Long id;
 
@@ -22,6 +29,18 @@ public class SpecimenCollectionGroupInfo {
 	private int parentOffset;
 
 	private boolean hasChilds;
+
+	private Long eventId;
+
+	private String instanceType;
+
+	public Long getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(Long eventId) {
+		this.eventId = eventId;
+	}
 
 	public boolean isHasChilds() {
 		return hasChilds;
@@ -93,5 +112,77 @@ public class SpecimenCollectionGroupInfo {
 
 	public void setParentOffset(int parentOffset) {
 		this.parentOffset = parentOffset;
+	}
+
+	public String getInstanceType() {
+		return instanceType;
+	}
+
+	public void setInstanceType(String instanceType) {
+		this.instanceType = instanceType;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+
+		if (obj instanceof SpecimenCollectionGroupInfo) {
+			SpecimenCollectionGroupInfo scgInfo = (SpecimenCollectionGroupInfo) obj;
+			if (scgInfo.getId() == null && scgInfo.getEventId() == null) {
+				return false;
+			}
+			else if ((this.id+"_"+this.eventId).equals(scgInfo.getId()+"_"+scgInfo.getEventId())) {
+				return true;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((eventId == null) ? 0 : eventId.hashCode());
+		return result;
+	}
+
+	public static SpecimenCollectionGroupInfo fromScg(SpecimenCollectionGroup specimenCollectionGroup, Date registrationDate) {
+		CollectionProtocolEvent event = specimenCollectionGroup.getCollectionProtocolEvent();
+		SpecimenCollectionGroupInfo scgInfo = new SpecimenCollectionGroupInfo();
+		scgInfo.setCollectionStatus(specimenCollectionGroup.getCollectionStatus());
+		scgInfo.setHasChilds(false);
+		scgInfo.setId(specimenCollectionGroup.getId());
+		scgInfo.setName(specimenCollectionGroup.getName());
+		scgInfo.setReceivedDate(specimenCollectionGroup.getReceivedTimestamp());
+		scgInfo.setRegistrationDate(registrationDate);
+		scgInfo.setCollectionPointLabel(event.getCollectionPointLabel());
+		scgInfo.setEventPoint(event.getStudyCalendarEventPoint());
+		scgInfo.setEventId(event.getId());
+		scgInfo.setInstanceType("scg");
+		return scgInfo;
+	}
+
+	public static SpecimenCollectionGroupInfo fromCpe(CollectionProtocolEvent collectionProtocolEvent,
+			Date registrationDate) {
+		SpecimenCollectionGroupInfo scgInfo = new SpecimenCollectionGroupInfo();
+		scgInfo.setId(collectionProtocolEvent.getId());
+		scgInfo.setCollectionStatus(Status.SCG_COLLECTION_STATUS_PENDING.getStatus());
+		scgInfo.setHasChilds(false);
+		scgInfo.setRegistrationDate(registrationDate);
+		scgInfo.setCollectionPointLabel(collectionProtocolEvent.getCollectionPointLabel());
+		scgInfo.setEventPoint(collectionProtocolEvent.getStudyCalendarEventPoint());
+		scgInfo.setEventId(collectionProtocolEvent.getId());
+		scgInfo.setInstanceType("cpe");
+		return scgInfo;
+	}
+
+	@Override
+	public int compareTo(SpecimenCollectionGroupInfo scgInfo) {
+		return Double.compare(eventPoint, scgInfo.getEventPoint());
 	}
 }

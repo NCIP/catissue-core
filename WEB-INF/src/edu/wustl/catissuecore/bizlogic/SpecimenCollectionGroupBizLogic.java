@@ -4068,7 +4068,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				params = new HashMap<String, NamedQueryParam>();
 				params.put("0", new NamedQueryParam(DBTypes.LONG, scgId));
 				((HibernateDAO) dao).executeUpdateWithNamedQuery(
-						"updateAllSpecimenFromSCGToDisable", params);
+						Specimen.class.getName()+".updateAllSpecimenFromSCGToDisable", params);
 			}
 		}
 		catch (DAOException e)

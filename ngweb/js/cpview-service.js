@@ -17,8 +17,8 @@ angular.module('plus.cpviewService', [])
         return $http.get(url);
       },
     
-      getSpecimens: function(scgId) {
-        var url = 'rest/ng/specimen-collection-groups/'+scgId+'/specimens';
+      getSpecimens: function(scgId,objectType) {
+        var url = 'rest/ng/specimen-collection-groups/'+scgId+'/specimens?objectType='+objectType;
         return $http.get(url);
       },
     

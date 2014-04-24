@@ -5909,14 +5909,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToDisable", params);
+		dao.executeUpdateWithNamedQuery(Specimen.class.getName()+".updateSpecimenStatusToDisable", params);
 	}
 
 	public String getSpecimenLabel(Long specimenId, DAO dao) throws DAOException
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
-		List<String> labelList = ((HibernateDAO) dao).executeNamedQuery("getSpecimenLabel", params);
+		List<String> labelList = ((HibernateDAO) dao).executeNamedQuery(Specimen.class.getName()+".getSpecimenLabel", params);
 		return labelList.get(0);
 	}
 
@@ -5939,7 +5939,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 			substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
 			List<ConsentTierResponse> consentResponses = dao.executeNamedQuery(
-					"getConsentResponseCollection", substParams);
+					Specimen.class.getName()+".getConsentResponseCollection", substParams);
 			for (ConsentTierResponse consentResponse : consentResponses)
 			{
 				ConsentTierDTO consentTierDTO = new ConsentTierDTO();
@@ -6018,7 +6018,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		dao.executeUpdateWithNamedQuery("updateSpecimenStatusToDisabled", params);
+		dao.executeUpdateWithNamedQuery(Specimen.class.getName()+".updateSpecimenStatusToDisabled", params);
 	}
 
 	public Long getAssociatedIdentifiedReportId(Long specimenId, HibernateDAO hibernateDao)

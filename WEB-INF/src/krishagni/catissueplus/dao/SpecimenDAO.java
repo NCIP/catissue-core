@@ -42,7 +42,7 @@ public class SpecimenDAO
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.LONG, specimenId==null?0l:specimenId));
-		List specimenDetailColl = hibernateDao.executeNamedQuery("getCpIdFromSpecimenId", params);
+		List specimenDetailColl = hibernateDao.executeNamedQuery(Specimen.class.getName()+".getCpIdFromSpecimenId", params);
 		if (specimenDetailColl != null && specimenDetailColl.size() > 0)
 		{
 			return Long.valueOf(specimenDetailColl.get(0).toString());
@@ -54,7 +54,7 @@ public class SpecimenDAO
 	{
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, specimenLabel));
-		List specimenDetailColl = hibernateDao.executeNamedQuery("getCpIdFromSpecimenLabel", params);
+		List specimenDetailColl = hibernateDao.executeNamedQuery(Specimen.class.getName()+".getCpIdFromSpecimenLabel", params);
 		if (specimenDetailColl != null && specimenDetailColl.size() > 0)
 		{
 			return Long.valueOf(specimenDetailColl.get(0).toString());
@@ -68,10 +68,10 @@ public class SpecimenDAO
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		Collection<?> specimenDetailColl;
 		params.put("0", new NamedQueryParam(DBTypes.STRING, label));
-		specimenDetailColl = hibernateDao.executeNamedQuery("selectParentSpecimenDetailsForAliquot", params);
+		specimenDetailColl = hibernateDao.executeNamedQuery(Specimen.class.getName()+".selectParentSpecimenDetailsForAliquot", params);
 		if (specimenDetailColl == null || specimenDetailColl.isEmpty())
 		{
-			specimenDetailColl = hibernateDao.executeNamedQuery("selectParentSpecimenDetailsForAliquotByBarcode",
+			specimenDetailColl = hibernateDao.executeNamedQuery(Specimen.class.getName()+".selectParentSpecimenDetailsForAliquotByBarcode",
 					params);
 		}
 		if (specimenDetailColl == null || specimenDetailColl.isEmpty())
@@ -123,7 +123,7 @@ public class SpecimenDAO
 		List<Specimen> specimenList;
 		try
 		{
-			specimenList = hibernateDao.executeNamedQuery("getSpecimenBylabel", substParams);
+			specimenList = hibernateDao.executeNamedQuery(Specimen.class.getName()+".getSpecimenBylabel", substParams);
 			if (specimenList != null && specimenList.size() > 0)
 			{
 				return specimenList.get(0);
@@ -154,7 +154,7 @@ public class SpecimenDAO
 		List<Specimen> specimenList;
 		try
 		{
-			specimenList = hibernateDao.executeNamedQuery("getSpecimenByBarcode", substParams);
+			specimenList = hibernateDao.executeNamedQuery(Specimen.class.getName()+".getSpecimenByBarcode", substParams);
 
 			if (specimenList != null && specimenList.size() > 0)
 			{
@@ -199,7 +199,7 @@ public class SpecimenDAO
 		substParams.put("1", new NamedQueryParam(DBTypes.STRING, specimenLabel==null?"":specimenLabel));
 		substParams.put("2", new NamedQueryParam(DBTypes.STRING, Constants.ACTIVITY_STATUS_ACTIVE));
 
-		List siteList = hibernateDAO.executeNamedQuery("getSiteIdFromContainer", substParams);
+		List siteList = hibernateDAO.executeNamedQuery(Specimen.class.getName()+".getSiteIdFromContainer", substParams);
 		if (siteList != null && siteList.size() > 0)
 		{
 			return Long.valueOf(siteList.get(0).toString());

@@ -106,6 +106,12 @@
                 <table width="100%"  border="0" cellpadding="3" cellspacing="0" >
                 <tr>
                     <td>
+                        <%@ include file="/pages/content/common/ActionErrors.jsp"%>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
                         <div id="error" class="alert alert-error" style="display:none">
                             <strong>Error!</strong> <span id="errorMsg">Change a few things up and try submitting again.</span>
                         </div>
@@ -657,7 +663,7 @@
                             <tr>
                                 <td class="buttonbg">
                                 <table><tr><td>
-                                    <input type="button" value="Submit" onclick="submitTabData('${requestScope.operation}')" class="blue_ar_b"/>
+                                    <input type="button" id="submitButton" value="Submit" onclick="submitTabData('${requestScope.operation}')" class="blue_ar_b"/>
                                     </td><td>
                                     <div id="specListDiv" style="display:none">
                                     | <input type="button" value="Add To Specimen List"
@@ -695,6 +701,9 @@ var entityId='${specimenRecordEntryEntityId}';
 var staticEntityName='${entityName}';
 <logic:equal name="operation" value="edit">
 var hasConsents = ${hasConsents};
+</logic:equal>
+<logic:equal name="hideButton" value="true">
+document.getElementById('submitButton').disabled=true;
 </logic:equal>
 var isImageEnabled = ${isImageEnabled};
 

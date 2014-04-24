@@ -5,14 +5,39 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqSpecimenSummaryEvent extends RequestEvent {
 
-	private Long scgId;
+	public enum ObjectType {
+		SCG("scg"), CPE("cpe");
 
-	public Long getScgId() {
-		return scgId;
+		private String objectType;
+
+		private ObjectType(String name) {
+			objectType = name;
+		}
+
+		public String getName() {
+			return objectType;
+		}
+
 	}
 
-	public void setScgId(Long scgId) {
-		this.scgId = scgId;
+	private String objectType;
+
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long scgId) {
+		this.id = scgId;
+	}
+
+	public String getObjectType() {
+		return objectType;
+	}
+
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
 	}
 
 }

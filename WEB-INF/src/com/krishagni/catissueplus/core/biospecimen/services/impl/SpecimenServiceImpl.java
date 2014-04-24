@@ -45,7 +45,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event) {
 		try {
-			return AllSpecimensSummaryEvent.ok(daoFactory.getSpecimenDao().getSpecimensList(event.getScgId()));
+			return AllSpecimensSummaryEvent.ok(daoFactory.getSpecimenDao().getSpecimensList(event.getId()));
 		}
 		catch (CatissueException e) {
 			return AllSpecimensSummaryEvent.serverError(e);
