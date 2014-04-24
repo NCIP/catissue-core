@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -17,9 +16,8 @@ public class PasswordForgottenEvent extends ResponseEvent {
 		this.userDetails = userDetails;
 	}
 
-	public static PasswordForgottenEvent ok(UserDetails userDetails) {
+	public static PasswordForgottenEvent ok() {
 		PasswordForgottenEvent event = new PasswordForgottenEvent();
-		event.setUserDetails(userDetails);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}
@@ -40,13 +38,7 @@ public class PasswordForgottenEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static PasswordForgottenEvent notAuthorized(UpdateParticipantEvent event1) {
-		PasswordForgottenEvent event = new PasswordForgottenEvent();
-		event.setStatus(EventStatus.NOT_AUTHORIZED);
-		return event;
-	}
-
-	public static PasswordForgottenEvent notFound(Long userId) {
+	public static PasswordForgottenEvent notFound() {
 		PasswordForgottenEvent resp = new PasswordForgottenEvent();
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;

@@ -24,12 +24,6 @@ public class UserCreatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static UserCreatedEvent notAuthorized(CreateUserEvent event1) {
-		UserCreatedEvent event = new UserCreatedEvent();
-		event.setStatus(EventStatus.NOT_AUTHORIZED);
-		return event;
-	}
-
 	public static UserCreatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
 		UserCreatedEvent resp = new UserCreatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);

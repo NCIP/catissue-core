@@ -3,12 +3,9 @@ package com.krishagni.catissueplus.core.auth.domain;
 
 public class Ldap {
 
-	private Long id;
+	private Long domainId;
 
-	/**
-	* eg. krishagni-ldap (UNIQUE)
-	*/
-	private String ldapName;
+	private AuthDomain authDomain;
 
 	/**
 	*  eg. localhost, dap.testathon.net etc
@@ -23,7 +20,7 @@ public class Ldap {
 	/**
 	* eg. stuart
 	*/
-	private String loginName;
+	private String bindUser;
 
 	/**
 	* eg. OU=users,DC=testathon,DC=net
@@ -43,7 +40,7 @@ public class Ldap {
 	/**
 	* eg. stuart
 	*/
-	private String password;
+	private String bindPassword;
 
 	/**
 	* eg. givenName
@@ -65,12 +62,20 @@ public class Ldap {
 	*/
 	private String idField;
 
-	public Long getId() {
-		return id;
+	public Long getDomainId() {
+		return domainId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setDomainId(Long domainId) {
+		this.domainId = domainId;
+	}
+
+	public AuthDomain getAuthDomain() {
+		return authDomain;
+	}
+
+	public void setAuthDomain(AuthDomain authDomain) {
+		this.authDomain = authDomain;
 	}
 
 	public String getHost() {
@@ -89,12 +94,20 @@ public class Ldap {
 		this.port = port;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getBindUser() {
+		return bindUser;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setBindUser(String bindUser) {
+		this.bindUser = bindUser;
+	}
+
+	public String getBindPassword() {
+		return bindPassword;
+	}
+
+	public void setBindPassword(String bindPassword) {
+		this.bindPassword = bindPassword;
 	}
 
 	public String getDirectoryContext() {
@@ -103,14 +116,6 @@ public class Ldap {
 
 	public void setDirectoryContext(String directoryContext) {
 		this.directoryContext = directoryContext;
-	}
-
-	public String getLoginName() {
-		return loginName;
-	}
-
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
 	}
 
 	public String getGivenNameField() {
@@ -143,14 +148,6 @@ public class Ldap {
 
 	public void setIdField(String idField) {
 		this.idField = idField;
-	}
-
-	public String getLdapName() {
-		return ldapName;
-	}
-
-	public void setLdapName(String ldapName) {
-		this.ldapName = ldapName;
 	}
 
 	public String getSearchBaseDir() {

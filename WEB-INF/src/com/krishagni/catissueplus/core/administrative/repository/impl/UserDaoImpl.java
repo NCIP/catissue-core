@@ -8,7 +8,6 @@ import org.hibernate.Query;
 import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
@@ -25,20 +24,14 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public Boolean isUniqueLoginName(String loginName) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_LOGIN_NAME);
-		query.setString("loginName", loginName);
-		return query.list().size() == 0 ? true : false;
-	}
-
-	@Override
 	public Boolean isUniqueEmailAddress(String emailAddress) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_EMAIL_ADDRESS);
 		query.setString("emailAddress", emailAddress);
-		return query.list().size() == 0 ? true : false;
+		return query.list().isEmpty() ? true : false;
 	}
 
 	@Override
+	@SuppressWarnings(value = {"unchecked"})
 	public List<String> getOldPasswords(Long id) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_OLD_PASSWORD_BY_USER_ID);
 		query.setLong("userId", id);
@@ -46,6 +39,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
+	@SuppressWarnings(value = {"unchecked"})
 	public List<String> getOldPasswordsByLoginName(String loginName) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_OLD_PASSWORD_BY_LOGIN_NAME);
 		query.setString("loginName", loginName);
@@ -53,9 +47,32 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public User getUserByLoginName(String loginName) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_LOGIN_NAME);
+	public Boolean isUniqueLoginNameInDomain(String loginName, String domainName) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_LOGIN_NAME_AND_DOMAIN);
 		query.setString("loginName", loginName);
+		query.setString("domainName", domainName);
+		return query.list().isEmpty() ? true : false;
+	}
+	
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public User getUserByLoginNameAndDomainName(String loginName, String domainName) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_LOGIN_NAME_AND_DOMAIN);
+		query.setString("loginName", loginName);
+		query.setString("domainName", domainName);
+		List<User> result = query.list();
+		if (!result.isEmpty()) {
+			return result.get(0);
+		}
+		return null;
+	}
+	
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public User getUserByIdAndDomainName(Long userId, String domainName) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_ID_AND_DOMAIN);
+		query.setLong("userId", userId);
+		query.setString("domainName", domainName);
 		List<User> result = query.list();
 		if (!result.isEmpty()) {
 			return result.get(0);
@@ -63,20 +80,14 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return null;
 	}
 
-	@Override
-	public Boolean isValidLdapId(Long ldapId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_LDAP_BY_LDAP_ID);
-		query.setLong("ldapId", ldapId);
-		return query.list().size() == 0 ? false : true;
-	}
 
 	private static final String FQN = User.class.getName();
 
-	private static final String GET_USER_BY_LOGIN_NAME = FQN + ".getUserByLoginName";
-
+	private static final String GET_USER_BY_ID_AND_DOMAIN = FQN + ".getUserByIdAndDomain";
+	
 	private static final String GET_USER_BY_EMAIL_ADDRESS = FQN + ".getUserByEmailAddress";
-
-	private static final String GET_LDAP_BY_LDAP_ID = Ldap.class.getName() + ".getLdapByLdapId";
+	
+	private static final String GET_USER_BY_LOGIN_NAME_AND_DOMAIN = FQN + ".getUserByLoginNameAndDomainName";
 
 	private static final String GET_OLD_PASSWORD_BY_USER_ID = Password.class.getName() + ".getOldPasswordByUserId";
 

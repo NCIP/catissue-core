@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -49,12 +48,6 @@ public class UserUpdatedEvent extends ResponseEvent {
 		resp.setException(t1);
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
-	}
-
-	public static UserUpdatedEvent notAuthorized(UpdateParticipantEvent event1) {
-		UserUpdatedEvent event = new UserUpdatedEvent();
-		event.setStatus(EventStatus.NOT_AUTHORIZED);
-		return event;
 	}
 
 	public static UserUpdatedEvent notFound(Long userId) {

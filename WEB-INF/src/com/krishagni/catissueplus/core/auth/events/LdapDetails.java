@@ -5,7 +5,7 @@ import com.krishagni.catissueplus.core.auth.domain.Ldap;
 
 public class LdapDetails {
 
-	private Long id;
+	private Long domainId;
 
 	/**
 	* eg. krishagni-ldap (UNIQUE)
@@ -20,12 +20,12 @@ public class LdapDetails {
 	/**
 	*  eg. 10389, 389 etc
 	*/
-	private Long port = null;
+	private Long port;
 
 	/**
 	* eg. stuart, john etc
 	*/
-	private String loginName;
+	private String bindUser;
 
 	/**
 	* eg. OU=users,DC=testathon,DC=net
@@ -45,7 +45,7 @@ public class LdapDetails {
 	/**
 	* eg. stuart, john
 	*/
-	private String password;
+	private String bindPassword;
 
 	/**
 	* eg. givenName
@@ -67,12 +67,12 @@ public class LdapDetails {
 	*/
 	private String idField;
 
-	public Long getId() {
-		return id;
+	public Long getDomainId() {
+		return domainId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setDomainId(Long domainId) {
+		this.domainId = domainId;
 	}
 
 	public String getHost() {
@@ -91,14 +91,6 @@ public class LdapDetails {
 		this.port = port;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getDirectoryContext() {
 		return directoryContext;
 	}
@@ -107,12 +99,20 @@ public class LdapDetails {
 		this.directoryContext = directoryContext;
 	}
 
-	public String getLoginName() {
-		return loginName;
+	public String getBindUser() {
+		return bindUser;
 	}
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setBindUser(String bindUser) {
+		this.bindUser = bindUser;
+	}
+
+	public String getBindPassword() {
+		return bindPassword;
+	}
+
+	public void setBindPassword(String bindPassword) {
+		this.bindPassword = bindPassword;
 	}
 
 	public String getGivenNameField() {
@@ -173,13 +173,12 @@ public class LdapDetails {
 
 	public static LdapDetails fromDomain(Ldap ldap) {
 		LdapDetails ldapDetails = new LdapDetails();
-		ldapDetails.setId(ldap.getId());
+		ldapDetails.setDomainId(ldap.getDomainId());
 		ldapDetails.setDirectoryContext(ldap.getDirectoryContext());
-		ldapDetails.setLdapName(ldap.getLdapName());
 		ldapDetails.setHost(ldap.getHost());
 		ldapDetails.setPort(ldap.getPort());
-		ldapDetails.setLoginName(ldap.getLoginName());
-		ldapDetails.setPassword(ldap.getPassword());
+		ldapDetails.setBindUser(ldap.getBindUser());
+		ldapDetails.setBindPassword(ldap.getBindPassword());
 
 		ldapDetails.setGivenNameField(ldapDetails.getGivenNameField());
 		ldapDetails.setIdField(ldap.getIdField());
@@ -187,7 +186,6 @@ public class LdapDetails {
 		ldapDetails.setEmailField(ldap.getEmailField());
 		ldapDetails.setSearchBaseDir(ldap.getSearchBaseDir());
 		ldapDetails.setFilterString(ldap.getFilterString());
-		
 		return ldapDetails;
 	}
 }

@@ -5,21 +5,13 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 
 public class PasswordUpdatedEvent extends ResponseEvent {
-	
-	private PasswordDetails  passwordDetails;
-	
-	public PasswordDetails getPasswordDetails() {
-		return passwordDetails;
-	}
 
-	public void setPasswordDetails(PasswordDetails passwordDetails) {
-		this.passwordDetails = passwordDetails;
-	}
-
-	public static PasswordUpdatedEvent ok(PasswordDetails details) {
+	private static String SUCCESS = "success";
+	
+	public static PasswordUpdatedEvent ok() {
 		PasswordUpdatedEvent event = new PasswordUpdatedEvent();
-		event.setPasswordDetails(details);
 		event.setStatus(EventStatus.OK);
+		event.setMessage(SUCCESS);
 		return event;
 	}
 
@@ -39,13 +31,7 @@ public class PasswordUpdatedEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static PasswordUpdatedEvent notAuthorized(UpdateUserEvent event1) {
-		PasswordUpdatedEvent event = new PasswordUpdatedEvent();
-		event.setStatus(EventStatus.NOT_AUTHORIZED);
-		return event;
-	}
-
-	public static PasswordUpdatedEvent notFound(Long userId) {
+	public static PasswordUpdatedEvent notFound() {
 		PasswordUpdatedEvent resp = new PasswordUpdatedEvent();
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;

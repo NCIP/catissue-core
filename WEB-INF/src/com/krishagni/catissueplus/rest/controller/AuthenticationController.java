@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.auth.events.AuthenticateUserEvent;
 import com.krishagni.catissueplus.core.auth.events.LoginDetails;
 import com.krishagni.catissueplus.core.auth.events.UserAuthenticatedEvent;
@@ -32,10 +31,10 @@ public class AuthenticationController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public UserDetails authenticateUser(@RequestBody LoginDetails loginDetails) {
+	public String authenticateUser(@RequestBody LoginDetails loginDetails) {
 		UserAuthenticatedEvent resp = userAuthService.authenticateUser(new AuthenticateUserEvent(loginDetails));
 		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUserDetails();
+			return resp.getMessage();
 		}
 		return null;
 	}

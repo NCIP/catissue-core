@@ -7,7 +7,7 @@ public class LoginDetails {
 
 	private String password;
 
-	private Long ldapId = null;
+	private String domainName;
 
 	public String getLoginId() {
 		return loginId;
@@ -25,12 +25,12 @@ public class LoginDetails {
 		this.password = password;
 	}
 
-	public Long getLdapId() {
-		return ldapId;
+	public String getDomainName() {
+		return domainName;
 	}
 
-	public void setLdapId(Long ldapId) {
-		this.ldapId = ldapId;
+	public void setDomainName(String domainName) {
+		this.domainName = domainName;
 	}
 
 }

@@ -1,15 +1,26 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.io.Serializable;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
+import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class User implements Serializable {
+public class User {
 
 	private Long id;
 
@@ -17,7 +28,11 @@ public class User implements Serializable {
 
 	private String firstName;
 
-	private Long ldapId;
+	private AuthDomain authDomain;
+
+	private Set<Site> siteCollection = new HashSet<Site>();
+
+	private Set<CollectionProtocol> cpCollection = new HashSet<CollectionProtocol>();
 
 	private String emailAddress;
 
@@ -35,7 +50,7 @@ public class User implements Serializable {
 
 	private Set<Password> passwordCollection = new HashSet<Password>();
 
-	private String passwordToken = null;
+	private String passwordToken;
 
 	public Long getId() {
 		return id;
@@ -61,14 +76,6 @@ public class User implements Serializable {
 		this.firstName = firstName;
 	}
 
-	public Long getLdapId() {
-		return ldapId;
-	}
-
-	public void setLdapId(Long ldapId) {
-		this.ldapId = ldapId;
-	}
-
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -77,11 +84,25 @@ public class User implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
+	public AuthDomain getAuthDomain() {
+		return authDomain;
+	}
+
+	public void setAuthDomain(AuthDomain authDomain) {
+		if (this.getAuthDomain() != null && !this.getAuthDomain().getId().equals(authDomain.getId())) {
+			reportError(UserErrorCode.CHANGE_IN_DOMAIN, LDAP);
+		}
+		this.authDomain = authDomain;
+	}
+
 	public String getLoginName() {
 		return loginName;
 	}
 
 	public void setLoginName(String loginName) {
+		if (!isBlank(this.getLoginName()) && !this.getLoginName().equals(loginName)) {
+			reportError(UserErrorCode.CHANGE_IN_LOGIN_NAME, LOGIN_NAME);
+		}
 		this.loginName = loginName;
 	}
 
@@ -141,22 +162,44 @@ public class User implements Serializable {
 		this.passwordToken = passwordToken;
 	}
 
+	public Set<Site> getSiteCollection() {
+		return siteCollection;
+	}
+
+	public void setSiteCollection(Set<Site> siteCollection) {
+		this.siteCollection = siteCollection;
+	}
+
+	public Set<CollectionProtocol> getCpCollection() {
+		return cpCollection;
+	}
+
+	public void setCpCollection(Set<CollectionProtocol> cpCollection) {
+		this.cpCollection = cpCollection;
+	}
+
+	private final String LOGIN_NAME = "login name";
+
+	private final String LDAP = "ldap";
+
+	public void close() {
+		this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
+	}
+
 	public void update(User user) {
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());
 		this.setActivityStatus(user.getActivityStatus());
-		this.setLdapId(user.getLdapId());
+		this.setAuthDomain(user.getAuthDomain());
 		this.setAddress(user.getAddress());
 		this.setLoginName(user.getLoginName());
 		this.setCreateDate(user.getCreateDate());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
+		this.setSiteCollection(user.getSiteCollection());
+		this.setCpCollection(user.getCpCollection());
 		updateAddressDetails(this.getAddress(), user.getAddress());
-	}
-
-	public void close() {
-		this.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
 	}
 
 	private void updateAddressDetails(Address oldAddress, Address address) {
@@ -169,16 +212,69 @@ public class User implements Serializable {
 		oldAddress.setZipCode(address.getZipCode());
 	}
 
-	public void updatePassword(PasswordDetails passwordDetails) {
+	private final static String USER = "user";
+
+	private final static String CATISSUE = "catissue";
+
+	private final static String OLD_PASSWORD = "old password";
+
+	private final static String PASSWORD_TOKEN = "password token";
+
+	public void changePassword(PasswordDetails passwordDetails) {
+		validateOldPassword(passwordDetails.getOldPassword());
+		updatePassword(passwordDetails.getNewPassword());
+	}
+
+	public void setPassword(PasswordDetails passwordDetails, String token) {
+		validatePasswordToken(token);
+		updatePassword(passwordDetails.getNewPassword());
+	}
+
+	private void updatePassword(String newPassword) {
 		Password password = new Password();
-		password.setPassword(passwordDetails.getNewPassword());
+		password.setPassword(newPassword);
 		password.setUpdateDate(new Date());
 		password.setUser(this);
 		this.passwordCollection.add(password);
 		this.setPasswordToken(null);
 	}
 
-	public boolean isActive() {
-		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus()) ? true : false;
+	public void isDefaultDomain() {
+		if (this.getAuthDomain().getName() != CATISSUE) {
+			reportError(UserErrorCode.INVALID_OPERATION, USER);
+		}
 	}
+
+	public void setPasswordToken(User user, String domainName) {
+		if (domainName == CATISSUE) {
+			user.setPasswordToken(UUID.randomUUID().toString());
+		}
+	}
+
+	private void validateOldPassword(String oldPassword) {
+		if (isBlank(oldPassword)) {
+			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
+		}
+
+		Set<Password> passwords = this.getPasswordCollection();
+		if (!passwords.isEmpty()) {
+			List<Password> passList = new ArrayList<Password>(passwords);
+			Password lastPassword = passList.get(passwords.size() - 1);
+
+			if (!BCrypt.checkpw(oldPassword, lastPassword.getPassword())) {
+				reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
+			}
+		}
+	}
+
+	private void validatePasswordToken(String token) {
+		if (isBlank(token)) {
+			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
+		}
+
+		if (!this.getPasswordToken().equals(token)) {
+			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
+		}
+	}
+
 }

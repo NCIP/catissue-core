@@ -15,8 +15,6 @@ import javax.naming.ldap.InitialLdapContext;
 import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.auth.events.LoginDetails;
 
-import edu.wustl.auth.exception.AuthenticationException;
-
 public class LdapAuthenticationManager {
 
 	private static final String INITIAL_CONTEXT_FACTORY_VALUE = "com.sun.jndi.ldap.LdapCtxFactory";
@@ -29,24 +27,16 @@ public class LdapAuthenticationManager {
 		ctx.close();
 	}
 
-	public static boolean authenticate(LoginDetails loginDetails, Ldap ldap) throws AuthenticationException {
-		boolean isSuccessful = false;
-		try {
-			Hashtable<Object, Object> env = getLdapEnvObj(ldap);
-			DirContext ctx = new InitialDirContext(env);
-			SearchResult searchResult = searchUser(loginDetails.getLoginId(), ldap, new String[0], ctx);
-			if (searchResult != null) {
-				env.put(Context.SECURITY_PRINCIPAL, searchResult.getNameInNamespace());
-				env.put(Context.SECURITY_CREDENTIALS, loginDetails.getPassword());
-				new InitialLdapContext(env, null);
-				ctx.close();
-				isSuccessful = true;
-			}
+	public static void authenticate(LoginDetails loginDetails, Ldap ldap) throws NamingException {
+		Hashtable<Object, Object> env = getLdapEnvObj(ldap);
+		DirContext ctx = new InitialDirContext(env);
+		SearchResult searchResult = searchUser(loginDetails.getLoginId(), ldap, new String[0], ctx);
+		if (searchResult != null) {
+			env.put(Context.SECURITY_PRINCIPAL, searchResult.getNameInNamespace());
+			env.put(Context.SECURITY_CREDENTIALS, loginDetails.getPassword());
+			new InitialLdapContext(env, null);
+			ctx.close();
 		}
-		catch (final NamingException e) {
-			throw new AuthenticationException(e);
-		}
-		return isSuccessful;
 	}
 
 	private static SearchResult searchUser(final String userName, Ldap ldap, final String[] returnAttributes,
@@ -76,9 +66,8 @@ public class LdapAuthenticationManager {
 		env.put(Context.INITIAL_CONTEXT_FACTORY, INITIAL_CONTEXT_FACTORY_VALUE);
 		env.put(Context.PROVIDER_URL, "ldap://" + ldap.getHost() + ":" + ldap.getPort());
 		env.put(Context.SECURITY_AUTHENTICATION, SIMPLE);
-		env.put(Context.SECURITY_PRINCIPAL,
-				ldap.getIdField() + "=" + ldap.getLoginName() + "," + ldap.getDirectoryContext());
-		env.put(Context.SECURITY_CREDENTIALS, ldap.getPassword());
+		env.put(Context.SECURITY_PRINCIPAL, ldap.getIdField() + "=" + ldap.getBindUser() + "," + ldap.getDirectoryContext());
+		env.put(Context.SECURITY_CREDENTIALS, ldap.getBindPassword());
 		return env;
 	}
 }

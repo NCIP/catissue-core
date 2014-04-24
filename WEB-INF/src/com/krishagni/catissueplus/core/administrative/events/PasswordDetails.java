@@ -1,21 +1,20 @@
+
 package com.krishagni.catissueplus.core.administrative.events;
 
 public class PasswordDetails {
 
-	protected Long id;
-	
+	protected Long userId;
+
 	protected String oldPassword;
-	
+
 	protected String newPassword;
-	
-	protected String confirmPassword;
-	
-	public Long getId() {
-		return id;
+
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getOldPassword() {
@@ -25,20 +24,13 @@ public class PasswordDetails {
 	public void setOldPassword(String oldPassword) {
 		this.oldPassword = oldPassword;
 	}
-	
+
 	public String getNewPassword() {
 		return newPassword;
 	}
-	
+
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-	
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
 }

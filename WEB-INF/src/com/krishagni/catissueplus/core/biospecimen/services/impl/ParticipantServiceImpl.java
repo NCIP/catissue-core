@@ -133,7 +133,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
-			Participant participant = participantFactory.patchParticipant(oldParticipant,event.getParticipantDetail());
+			Participant participant = participantFactory.patchParticipant(oldParticipant, event.getParticipantDetail());
 			
 			ObjectCreationException errorHandler = new ObjectCreationException();;
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);

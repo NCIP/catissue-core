@@ -15,8 +15,8 @@ import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditReportDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditReportDaoImpl;
-import com.krishagni.catissueplus.core.auth.repository.LdapDao;
-import com.krishagni.catissueplus.core.auth.repository.impl.LdapDaoImpl;
+import com.krishagni.catissueplus.core.auth.repository.DomainDao;
+import com.krishagni.catissueplus.core.auth.repository.impl.DomainDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
@@ -140,8 +140,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public LdapDao getLdapDao() {
-		LdapDaoImpl dao = new LdapDaoImpl();
+	public DomainDao getDomainDao() {
+		DomainDaoImpl dao = new DomainDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

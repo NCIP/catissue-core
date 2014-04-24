@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+    <class
+        name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+        table="CATISSUE_COLLECTION_PROTOCOL"
+        lazy="true">
+    	<cache usage="read-write" />
+
+	 	<id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null">
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
+            </generator>
+        </id>
+
+        <many-to-one
+            name="principalInvestigator"
+            class="com.krishagni.catissueplus.core.administrative.domain.User"
+            cascade="none"
+
+            column="PRINCIPAL_INVESTIGATOR_ID"
+            lazy="false"/>
+
+        <property
+            name="title"
+            type="string"
+            column="TITLE"
+            length="255"
+            not-null="true"
+            unique="true"
+        />
+
+        <property
+            name="shortTitle"
+            type="string"
+            column="SHORT_TITLE"
+            length="255"
+        />
+
+        <property
+            name="startDate"
+            type="date"
+            column="START_DATE"
+            length="50"
+        />
+
+        <property
+            name="endDate"
+            type="date"
+            column="END_DATE"
+            length="50"
+        />
+        
+        <query name="getCpByTitle">
+    		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.title = :cpTitle
+    	</query>
+	 </class>
+
+</hibernate-mapping>

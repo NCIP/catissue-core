@@ -1,27 +1,18 @@
 
 package com.krishagni.catissueplus.core.auth.events;
 
-import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class UserAuthenticatedEvent extends ResponseEvent {
 
-	private UserDetails userDetails;
+	private static String SUCCESS = "success";
 
-	public UserDetails getUserDetails() {
-		return userDetails;
-	}
-
-	public void setUserDetails(UserDetails userDetails) {
-		this.userDetails = userDetails;
-	}
-
-	public static UserAuthenticatedEvent ok(UserDetails details) {
+	public static UserAuthenticatedEvent ok() {
 		UserAuthenticatedEvent event = new UserAuthenticatedEvent();
-		event.setUserDetails(details);
 		event.setStatus(EventStatus.OK);
+		event.setMessage(SUCCESS);
 		return event;
 	}
 

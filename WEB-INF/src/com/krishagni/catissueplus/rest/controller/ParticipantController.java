@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,7 @@ public class ParticipantController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		detail.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setParticipantDetail(detail);
 		event.setId(id);
 		event.setSessionDataBean(getSession());

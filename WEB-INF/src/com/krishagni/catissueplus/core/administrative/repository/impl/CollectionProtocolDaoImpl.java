@@ -56,4 +56,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return (SpecimenRequirement) sessionFactory.getCurrentSession().get(SpecimenRequirement.class, requirementId);
 	}
 
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByTitle(String cpTitle) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CP_BY_NAME);
+		query.setString("cpTitle", cpTitle);
+		List<com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol> cpList = query.list();
+		return cpList.isEmpty() ? null : cpList.get(0);
+	}
+	
+	private static final String GET_CP_BY_NAME = 
+			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class.getName() + ".getCpByTitle";
+
 }

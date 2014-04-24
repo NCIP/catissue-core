@@ -1,23 +1,19 @@
+
 package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-
 public class UpdatePasswordEvent extends RequestEvent {
 
 	private PasswordDetails passwordDetails;
-	
+
 	private String passwordToken;
-	
-	public UpdatePasswordEvent(PasswordDetails passwordDetails, String token, Long id) {
+
+	public UpdatePasswordEvent(PasswordDetails passwordDetails, String token, Long userId) {
 		this.passwordDetails = passwordDetails;
-		if(this.passwordDetails.getId() == null ) {
-			this.passwordDetails.setId(id);
-		}
-		if(this.getPasswordToken() == null) {
-			this.passwordToken = token;
-		}
-	}	
+		this.passwordDetails.setUserId(userId);
+		this.passwordToken = token;
+	}
 
 	public PasswordDetails getPasswordDetails() {
 		return passwordDetails;
@@ -34,5 +30,5 @@ public class UpdatePasswordEvent extends RequestEvent {
 	public void setPasswordToken(String passwordToken) {
 		this.passwordToken = passwordToken;
 	}
-	
+
 }

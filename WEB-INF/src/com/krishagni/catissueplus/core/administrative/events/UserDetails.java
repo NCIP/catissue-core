@@ -1,48 +1,118 @@
+
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 
 public class UserDetails {
 
-	protected Long id;
+	private Long id;
 
-	protected String lastName;
+	private String lastName;
 
-	protected String firstName;
- 
-	protected Long ldapId;
- 
-	protected String emailAddress;
- 
-	protected String loginName;
-	
-	protected Date createDate;
-	
-	protected String activityStatus;
-	
-	protected String deptName;
-	
-	protected String comments;
+	private String firstName;
 
-	protected String street;
-	
-	protected String city;
-	
-	protected String state;
-	
-	protected String country;
-	
-	protected String zipCode;
-	
-	protected String faxNumber;
-	
-	protected String phoneNumber;
-	
-	protected String passwordToken;
-	
+	private String domainName;
+
+	private String emailAddress;
+
+	private String loginName;
+
+	private List<String> siteNames;
+
+	private List<String> cpTitles;
+
+	private Date createDate;
+
+	private String activityStatus;
+
+	private String deptName;
+
+	private String comments;
+
+	private String street;
+
+	private String city;
+
+	private String state;
+
+	private String country;
+
+	private String zipCode;
+
+	private String faxNumber;
+
+	private String phoneNumber;
+
+  List<String> modifiedAttributes = new ArrayList<String>();
+
+	public boolean isFirstNameModified() {
+		return modifiedAttributes.contains("firstName");
+	}
+
+	public boolean isLastNameModified() {
+		return modifiedAttributes.contains("lastName");
+	}
+
+	public boolean isEmailAddressModified() {
+		return modifiedAttributes.contains("emailAddress");
+	}
+
+	public boolean isSitesModified() {
+		return modifiedAttributes.contains("siteNames");
+	}
+
+	public boolean isCpsModified() {
+		return modifiedAttributes.contains("cpTitles");
+	}
+
+	public boolean isActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
+	}
+
+	public boolean isDeptNameModified() {
+		return modifiedAttributes.contains("deptName");
+	}
+
+	public boolean isCommentsModified() {
+		return modifiedAttributes.contains("comments");
+	}
+
+	public boolean isCityModified() {
+		return modifiedAttributes.contains("city");
+	}
+
+	public boolean isStreetModified() {
+		return modifiedAttributes.contains("street");
+	}
+
+	public boolean isStateModified() {
+		return modifiedAttributes.contains("state");
+	}
+
+	public boolean isCountryModified() {
+		return modifiedAttributes.contains("country");
+	}
+
+	public boolean isZipCodeModified() {
+		return modifiedAttributes.contains("zipCode");
+	}
+
+	public boolean isFaxNumberModified() {
+		return modifiedAttributes.contains("faxNumber");
+	}
+
+	public boolean isPhoneNumberModified() {
+		return modifiedAttributes.contains("phoneNumber");
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -67,14 +137,14 @@ public class UserDetails {
 		this.firstName = firstName;
 	}
 
-	public Long getLdapId() {
-		return ldapId;
+	public String getDomainName() {
+		return domainName;
 	}
 
-	public void setLdapId(Long ldapId) {
-		this.ldapId = ldapId;
+	public void setDomainName(String domainName) {
+		this.domainName = domainName;
 	}
-	
+
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -122,7 +192,7 @@ public class UserDetails {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
+
 	public String getStreet() {
 		return street;
 	}
@@ -130,7 +200,7 @@ public class UserDetails {
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	
+
 	public String getCity() {
 		return city;
 	}
@@ -179,32 +249,76 @@ public class UserDetails {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getPasswordToken() {
-		return passwordToken;
+	public List<String> getSiteNames() {
+		return siteNames;
 	}
 
-	public void setPasswordToken(String passwordToken) {
-		this.passwordToken = passwordToken;
+	public void setSiteNames(List<String> siteNames) {
+		this.siteNames = siteNames;
+	}
+
+	public List<String> getCpTitles() {
+		return cpTitles;
+	}
+
+	public void setCpTitles(List<String> cpTitles) {
+		this.cpTitles = cpTitles;
+	}
+
+  public List<String> getModifiedAttributes() {
+		return modifiedAttributes;
+	}
+
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
 	}
 
 	public static UserDetails fromDomain(User user) {
 		UserDetails userDto = new UserDetails();
-		
 		userDto.setLoginName(user.getLoginName());
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
+
 		userDto.setDeptName(user.getDepartment().getName());
 		userDto.setActivityStatus(user.getActivityStatus());
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setId(user.getId());
-		userDto.setLdapId(user.getLdapId());
 		userDto.setCreateDate(user.getCreateDate());
 		userDto.setComments(user.getComments());
-		userDto.setPasswordToken(user.getPasswordToken());
+
+		if (!user.getCpCollection().isEmpty()) {
+			userDto.setCpTitles(getCpTitles(user.getCpCollection()));
+		}
+
+		if (!user.getSiteCollection().isEmpty()) {
+			userDto.setSiteNames(getSiteNames(user.getSiteCollection()));
+		}
+
+		if (user.getAuthDomain() != null) {
+			userDto.setDomainName(user.getAuthDomain().getName());
+		}
+
 		updateAddressDetails(userDto, user.getAddress());
-		return userDto;	
+		return userDto;
 	}
-	
+
+	private static List<String> getSiteNames(Set<Site> siteCollection) {
+		List<String> siteNames = new ArrayList<String>();
+		for (Site site : siteCollection) {
+			siteNames.add(site.getName());
+		}
+		return siteNames;
+	}
+
+	private static List<String> getCpTitles(Set<CollectionProtocol> cps) {
+		List<String> cpTitles = new ArrayList<String>();
+		for (CollectionProtocol cp : cps) {
+			cpTitles.add(cp.getTitle());
+		}
+		return cpTitles;
+
+	}
+
 	private static void updateAddressDetails(UserDetails userDto, Address address) {
 		userDto.setStreet(address.getStreet());
 		userDto.setCountry(address.getCountry());
@@ -214,5 +328,5 @@ public class UserDetails {
 		userDto.setCity(address.getCity());
 		userDto.setZipCode(address.getZipCode());
 	}
-	
+
 }

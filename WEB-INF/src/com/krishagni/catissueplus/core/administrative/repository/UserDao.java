@@ -11,8 +11,8 @@ public interface UserDao extends Dao<User> {
 	User getUser(String witnessName);
 
 	User getUser(Long userId);
-
-	Boolean isUniqueLoginName(String loginName);
+	
+	User getUserByIdAndDomainName(Long userId, String domainName);
 
 	Boolean isUniqueEmailAddress(String emailAddress);
 
@@ -20,8 +20,7 @@ public interface UserDao extends Dao<User> {
 
 	List<String> getOldPasswordsByLoginName(String loginName);
 	
-	Boolean isValidLdapId(Long ldapId);
-
-	User getUserByLoginName(String loginName);
-
+	Boolean isUniqueLoginNameInDomain(String loginName, String domainName);
+	
+	User getUserByLoginNameAndDomainName(String loginName, String domainName);
 }

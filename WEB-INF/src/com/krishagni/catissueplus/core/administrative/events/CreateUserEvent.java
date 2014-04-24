@@ -6,7 +6,7 @@ public class CreateUserEvent extends RequestEvent {
 	
 	private UserDetails userDetails;
 	
-	public  CreateUserEvent(UserDetails userDetails) {
+	public CreateUserEvent(UserDetails userDetails) {
 		this.userDetails = userDetails;
 	}
 

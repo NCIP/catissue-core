@@ -1,7 +1,14 @@
+
 package com.krishagni.catissueplus.rest.controller;
+
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -9,23 +16,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
-import com.krishagni.catissueplus.core.common.email.EmailHandler;
+import com.krishagni.catissueplus.core.auth.domain.factory.PasswordActionType;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -34,88 +46,123 @@ import edu.wustl.common.beans.SessionDataBean;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+	
+	private static String PATCH_USER = "patch user";
 
-		@Autowired
-		private UserService userService;
+	@Autowired
+	private UserService userService;
 
-		@Autowired
-		private HttpServletRequest httpServletRequest;
-		
-		@RequestMapping(method = RequestMethod.POST)
-		@ResponseStatus(HttpStatus.OK)
-		@ResponseBody
-		public UserDetails createUser(@RequestBody UserDetails userDetails) {
-			UserCreatedEvent resp = userService.createUser(new CreateUserEvent(userDetails));
-			if (resp.getStatus() == EventStatus.OK) {
-				EmailHandler.sendUserCreatedEmail(resp.getUserDetails());
-				return resp.getUserDetails();
-			}		
-			return null;
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetails createUser(@RequestBody UserDetails userDetails) {
+		UserCreatedEvent resp = userService.createUser(new CreateUserEvent(userDetails));
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getUserDetails();
 		}
-		
-		@RequestMapping(method = RequestMethod.PUT, value="/{id}")
-		@ResponseBody
-		@ResponseStatus(HttpStatus.OK)
-		public UserDetails updateUser(@PathVariable Long id, @RequestBody UserDetails userDetails) {
-			UserUpdatedEvent resp = userService.updateUser(new UpdateUserEvent(userDetails, id));
-			if (resp.getStatus() == EventStatus.OK) {
-				EmailHandler.sendUserUpdatedEmail(resp.getUserDetails());
-				return resp.getUserDetails();
-			}
-			return null;
+		return null;
+	}
+ 
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public UserDetails updateUser(@PathVariable Long id, @RequestBody UserDetails userDetails) {
+		UserUpdatedEvent resp = userService.updateUser(new UpdateUserEvent(userDetails, id));
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getUserDetails();
 		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetails patchUser(@PathVariable Long id, @RequestBody Map<String, Object> values) {
+		PatchUserEvent event = new PatchUserEvent();
+		event.setUserId(id);
+		event.setSessionDataBean(getSession());
+		
+		UserDetails details = new UserDetails();
+		try {
+			BeanUtils.populate(details, values);
+		}
+		catch (Exception e) {
+			reportError(UserErrorCode.BAD_REQUEST, PATCH_USER);
+		}
+		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
+		event.setUserDetails(details);
 			
-		@RequestMapping(method = RequestMethod.PUT, value="/{id}/close")
-		@ResponseBody
-		@ResponseStatus(HttpStatus.OK)
-		public String closeUser(@PathVariable Long id) {
-			CloseUserEvent event= new CloseUserEvent();
-            event.setId(id);
-            event.setSessionDataBean(getSession());
-			UserClosedEvent resp = userService.closeUser(event);
-			if (resp.getStatus() == EventStatus.OK) {
-				return resp.getMessage();
-			}
-			return null;
+		UserUpdatedEvent response = userService.patchUser(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getUserDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String closeUser(@PathVariable Long id) {
+		CloseUserEvent event = new CloseUserEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		UserClosedEvent resp = userService.closeUser(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/password")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String setPassword(@PathVariable Long id,  
+			@RequestParam(value = "token", required = false, defaultValue = "") String token, 
+			@RequestParam(value = "type", required = false, defaultValue = "") String type,
+			@RequestBody PasswordDetails passwordDetails) {
+		UpdatePasswordEvent event  = new UpdatePasswordEvent(passwordDetails, token, id);
+		PasswordUpdatedEvent resp = null;
+		if (type == PasswordActionType.CHANGE.value()) {
+			resp = userService.changePassword(event);
+		} else {
+			resp = userService.setPassword(event);
 		}
 		
-		@RequestMapping(method = RequestMethod.PUT, value="/{id}/setPassword/{token}")
-		@ResponseBody
-		@ResponseStatus(HttpStatus.OK)
-		public PasswordDetails setPassword(@PathVariable Long id, @PathVariable String token, @RequestBody PasswordDetails passwordDetails) {
-			PasswordUpdatedEvent resp = userService.setPassword(new UpdatePasswordEvent(passwordDetails, token, id));
-			if (resp.getStatus() == EventStatus.OK) {
-				return resp.getPasswordDetails();
-			}
-			return null;
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
 		}
-		
-		@RequestMapping(method = RequestMethod.PUT, value="/{id}/resetPassword/{token}")
-		@ResponseBody
-		@ResponseStatus(HttpStatus.OK)
-		public PasswordDetails resetPassword(@PathVariable Long id, @PathVariable String token, @RequestBody PasswordDetails passwordDetails) {
-			PasswordUpdatedEvent resp = userService.resetPassword(new UpdatePasswordEvent(passwordDetails, token, id));
-			if (resp.getStatus() == EventStatus.OK) {
-				return resp.getPasswordDetails();
-			}
-			return null;
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/{loginName}/forgotPassword")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String forgotPassword(@PathVariable String loginName) {
+		ForgotPasswordEvent event = new ForgotPasswordEvent();
+		event.setName(loginName);
+		PasswordForgottenEvent resp = userService.forgotPassword(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
 		}
-		
-		@RequestMapping(method = RequestMethod.PUT, value="/{id}/forgotPassword")
-		@ResponseBody
-		@ResponseStatus(HttpStatus.OK)
-		public String forgotPassword(@PathVariable Long id) {
-			ForgotPasswordEvent event = new ForgotPasswordEvent();
-			event.setId(id);
-			PasswordForgottenEvent resp = userService.forgotPassword(event);
-			if (resp.getStatus() == EventStatus.OK) {
-				EmailHandler.sendForgotPasswordEmail(resp.getUserDetails());
-				return resp.getMessage();
-			}
-			return null;
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/validatePassword/{password}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Boolean validatePassword(@PathVariable String password) {
+		ValidatePasswordEvent event = new ValidatePasswordEvent(password);
+		PasswordValidatedEvent resp = userService.validatePassword(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.isValid();
 		}
-		
-		private SessionDataBean getSession() {
-			 return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
-		}
+		return false;
+	}
+
+	private SessionDataBean getSession() {
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
+	}
 }

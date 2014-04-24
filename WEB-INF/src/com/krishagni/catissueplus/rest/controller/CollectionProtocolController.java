@@ -67,7 +67,7 @@ public class CollectionProtocolController {
 			return result.getCollectionProtocolDetail();
 		}*/
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participants")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/participants")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ParticipantInfo> getParticipants(@PathVariable("id") Long cpId,
