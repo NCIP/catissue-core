@@ -818,6 +818,7 @@ req.onreadystatechange = function() {
     // Handle request failure here...
 	var errorMsg=req.getResponseHeader("errorMsg");
 	showErrorMessage(errorMsg);
+	document.getElementById("specimenSubmitButton").disabled = false;
     return;
   }
   document.getElementById("specimenSubmitButton").disabled = false;
