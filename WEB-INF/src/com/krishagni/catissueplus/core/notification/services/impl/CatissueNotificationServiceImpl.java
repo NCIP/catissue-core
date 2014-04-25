@@ -1,8 +1,8 @@
 
 package com.krishagni.catissueplus.core.notification.services.impl;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
@@ -91,19 +91,9 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 				exception.addError(CPStudyMappingErrorCode.PPID_NULL, PPID);
 			}
 			exception.checkErrorAndThrow();
-
-			PatchRegistrationEvent patchRegistrationEvent = new PatchRegistrationEvent();
-			Map<String, Object> registrationProps = new HashMap<String, Object>();
-			registrationProps.put("registrationDate", event.getRegistrationDetails().getEnrollmentDate());
-			registrationProps.put("protocolParticipantIdentifier", event.getRegistrationDetails().getEnrollmentDate());
-			registrationProps.put("cpId", cpId);
-			Map<String, Object> participantDetails = new HashMap<String, Object>();
-			participantDetails.put("birthDate", event.getRegistrationDetails().getBirthDate());
-			participantDetails.put("gender", event.getRegistrationDetails().getGender());
-			registrationProps.put("participantDetail", participantDetails);
-//			patchRegistrationEvent.setRegistrationProps(registrationProps);
-
-			return cprSvc.patchRegistration(patchRegistrationEvent);
+			PatchRegistrationEvent patchRegistrationEvent = createPatchRegistartionEvent(event, cpId);
+			RegistrationUpdatedEvent regUpdatedEvent = cprSvc.patchRegistration(patchRegistrationEvent);
+			return regUpdatedEvent;
 		}
 		catch (ObjectCreationException ce) {
 			return RegistrationUpdatedEvent.invalidRequest(CPStudyMappingErrorCode.ERRORS.message(), ce.getErroneousFields());
@@ -111,5 +101,32 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 		catch (Exception e) {
 			return RegistrationUpdatedEvent.serverError(e);
 		}
+	}
+
+	private PatchRegistrationEvent createPatchRegistartionEvent(RegisterParticipantEvent registerPartEvent, Long cpId) {
+		PatchRegistrationEvent patchRegistrationEvent = new PatchRegistrationEvent();
+		CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
+		cprDetail.setRegistrationDate(registerPartEvent.getRegistrationDetails().getEnrollmentDate());
+		cprDetail.setPpid(registerPartEvent.getRegistrationDetails().getPpId());
+		cprDetail.setCpId(cpId);
+		ParticipantDetail participantDetail = new ParticipantDetail();
+		participantDetail.setBirthDate(registerPartEvent.getRegistrationDetails().getBirthDate());
+		participantDetail.setGender(registerPartEvent.getRegistrationDetails().getGender());
+		cprDetail.setParticipantDetail(participantDetail);
+
+		List<String> cprModifiedAttributes = new ArrayList<String>();
+		cprModifiedAttributes.add("registrationDate");
+		cprModifiedAttributes.add("ppid");
+		cprModifiedAttributes.add("cpId");
+		cprModifiedAttributes.add("participantDetail");
+		cprDetail.setModifiedAttributes(cprModifiedAttributes);
+
+		List<String> participantModifiedAttributes = new ArrayList<String>();
+		participantModifiedAttributes.add("birthDate");
+		participantModifiedAttributes.add("gender");
+		participantDetail.setModifiedAttributes(participantModifiedAttributes);
+
+		patchRegistrationEvent.setCollectionProtocolRegistrationDetail(cprDetail);
+		return patchRegistrationEvent;
 	}
 }

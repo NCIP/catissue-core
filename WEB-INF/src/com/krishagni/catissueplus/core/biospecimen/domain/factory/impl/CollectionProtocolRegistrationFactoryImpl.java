@@ -99,7 +99,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (detail.isParticipantModified()) {
 			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
 		}
-		return null;
+		return oldCpr;
 	}
 
 	/**
