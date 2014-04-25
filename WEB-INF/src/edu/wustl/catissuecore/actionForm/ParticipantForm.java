@@ -212,7 +212,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 
 	private String consentDocumentName;
 	
-	private FormFile consentDocument;
+//	private String consentDocument;
 	
 	public String getCprActivityStatus() {
 		return cprActivityStatus;
@@ -313,10 +313,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		// this.consentDocumentName=participant.getConsentDocumentName();
 		 String consentDirectory = XMLPropertyHandler.getValue(Constants.PARTICIPANT_CONSENT_DOC_DIR_LOCATION);
 		 
-		 if(consentDocument!=null)
-		 {
-			 AppUtility.moveParticipantConsentFile(consentDocument,consentDirectory);
-		 }
+//		 if(consentDocument!=null)
+//		 {
+//			 AppUtility.moveParticipantConsentFile(consentDocument,consentDirectory);
+//		 }
 			//(Abhishek Mehta)
 			final Collection collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
@@ -1352,14 +1352,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		this.consentDocumentName = consentDocumentName;
 	}
 
-	public FormFile getConsentDocument()
-	{
-		return consentDocument;
-	}
-	
-	public void setConsentDocument(FormFile consentDocument)
-	{
-		this.consentDocument = consentDocument;
-	}
+//	public String getConsentDocument()
+//	{
+//		return consentDocument;
+//	}
+//	
+//	public void setConsentDocument(String consentDocument)
+//	{
+//		this.consentDocument = consentDocument;
+//	}
 	
 }

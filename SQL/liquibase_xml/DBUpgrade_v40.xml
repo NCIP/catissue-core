@@ -71,7 +71,7 @@
             <column name="COLLECTION_COMMENTS" type="${text.type}(500)" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-            <column name="COLLECTION_TIMESTAMP" type="${date.type}" />
+            <column name="COLLECTION_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="RECEIVER_ID" type="${int.type}" />
@@ -80,7 +80,7 @@
             <column name="RECEIVED_COMMENTS" type="${text.type}(500)" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-            <column name="RECEIVED_TIMESTAMP" type="${date.type}" />
+            <column name="RECEIVED_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="RECEIVED_QUALITY" type="${text.type}(50)" />
@@ -363,7 +363,7 @@
 
         <changeSet id="20" author="nitesh" runOnChange="true">
         <addColumn tableName="CATISSUE_COLL_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_COLL_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -376,7 +376,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_FIXED_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_FIXED_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -389,7 +389,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -402,7 +402,7 @@
         </addColumn>
         
          <addColumn tableName="CATISSUE_IN_OUT_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_IN_OUT_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -415,7 +415,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -428,7 +428,7 @@
         </addColumn>
         
          <addColumn tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -441,7 +441,7 @@
         </addColumn>
         
          <addColumn tableName="CATISSUE_TRANSFER_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_TRANSFER_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -454,7 +454,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_RECEIVED_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_RECEIVED_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -467,7 +467,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -480,7 +480,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -493,7 +493,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -506,7 +506,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -519,7 +519,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -532,7 +532,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -545,7 +545,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -558,7 +558,7 @@
         </addColumn>
         
         <addColumn tableName="CATISSUE_DISTRI_EVENT_PARAM">
-            <column name="EVENT_TIMESTAMP" type="${date.type}" />
+            <column name="EVENT_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRI_EVENT_PARAM">
             <column name="SPECIMEN_ID" type="${int.type}" />
@@ -695,7 +695,7 @@
             <column name="COLLECTION_COMMENTS" type="${text.type}(500)" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
-            <column name="COLLECTION_TIMESTAMP" type="${date.type}" />
+            <column name="COLLECTION_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
             <column name="RECEIVER_ID" type="${int.type}" />
@@ -704,7 +704,7 @@
             <column name="RECEIVED_COMMENTS" type="${text.type}(500)" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
-            <column name="RECEIVED_TIMESTAMP" type="${date.type}" />
+            <column name="RECEIVED_TIMESTAMP" type="${timestamp.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
             <column name="RECEIVED_QUALITY" type="${text.type}(50)" />

@@ -500,11 +500,11 @@ public class ParticipantAction extends CatissueBaseAction
 			request.setAttribute("consentDocumentName",
 					participantForm.getConsentDocumentName());
 		}
-		if (participantForm.getConsentDocumentName() == null
-				&& participantForm.getConsentDocument() != null)
+		if (participantForm.getConsentDocumentName() == null)
+//				&& participantForm.getConsentDocument() != null)
 		{
 			request.setAttribute("consentDocumentName", participantForm
-					.getConsentDocument().getFileName());
+					.getConsentDocumentName());
 		}
 		
 		return mapping.findForward(pageOf);
