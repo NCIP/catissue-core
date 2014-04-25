@@ -89,10 +89,10 @@ public class CaTissueNotificationTest {
 		registrationFactory = new CollectionProtocolRegistrationFactoryImpl();
 		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setDaoFactory(daoFactory);
 		((CollectionProtocolRegistrationServiceImpl) cprSvc).setRegistrationFactory(registrationFactory);
-		participantFactory = new ParticipantFactoryImpl();
-		((CollectionProtocolRegistrationServiceImpl) cprSvc).setParticipantFactory(participantFactory);
-		((ParticipantFactoryImpl) participantFactory).setDaoFactory(daoFactory);
 
+		participantFactory = new ParticipantFactoryImpl();
+		((ParticipantFactoryImpl) participantFactory).setDaoFactory(daoFactory);
+		((CollectionProtocolRegistrationFactoryImpl) registrationFactory).setParticipantFactory(participantFactory);
 		when(registrationDao.isPpidUniqueForProtocol(anyLong(), anyString())).thenReturn(true);
 		when(registrationDao.getCprByPpId(anyLong(), anyString()))
 				.thenReturn(CaTissueNotificationTestData.getCprToReturn());
