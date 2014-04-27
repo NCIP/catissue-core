@@ -133,7 +133,7 @@ public class SpecimenInfo {
 		}
 
 		if (specimen.getSpecimenRequirement() != null) {
-			specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getLabel());
+			specimenInfo.setRequirementLabel(specimen.getSpecimenRequirement().getSpecimenRequirementLabel());
 			specimenInfo.setCollectionContainer(specimen.getSpecimenRequirement().getCollectionContainer());
 			specimenInfo.setRequirementId(specimen.getSpecimenRequirement().getId());
 		}
@@ -163,7 +163,7 @@ public class SpecimenInfo {
 		specimenInfo.setSpecimenClass(requirement.getSpecimenClass());
 		specimenInfo.setSpecimenType(requirement.getSpecimenType());
 		specimenInfo.setCollectionStatus(Status.SPECIMEN_COLLECTION_STATUS_PENDING.getStatus());
-		specimenInfo.setRequirementLabel(requirement.getLabel());
+		specimenInfo.setRequirementLabel(requirement.getSpecimenRequirementLabel());
 		specimenInfo.setCollectionContainer(requirement.getCollectionContainer());
 		specimenInfo.setInstanceType("requirement");
 
