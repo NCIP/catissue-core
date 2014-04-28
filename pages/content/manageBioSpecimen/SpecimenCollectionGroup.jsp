@@ -147,7 +147,6 @@ function updateHelpURL()
 <head>
 <script>
 		var operation = '<%=pageView%>';
-		console.warn("operation " + operation);
 	    var scgId =  "<%=form.getId()%>";
 	    parent.handleCpView(null, scgId , null);
 	    
