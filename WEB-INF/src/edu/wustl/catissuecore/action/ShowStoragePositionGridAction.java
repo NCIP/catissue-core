@@ -91,6 +91,7 @@ public class ShowStoragePositionGridAction extends BaseAction
 		request.setAttribute("isVirtual", request.getParameter("isVirtual"));
 		request.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
 		request.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
+        request.setAttribute(Constants.PAGEOF,request.getParameter(Constants.PAGEOF));
 		return mapping.findForward(target);
 			}
 
