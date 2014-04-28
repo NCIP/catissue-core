@@ -20,6 +20,7 @@ public class AliquotDetailsDTO
 	private String parentLabel;
 	private String parentBarcode;
 	private Long parentId;
+	private Long scgId;
 	private Date creationDate;
 	private boolean disposeParentSpecimen;
 	private boolean printLabel;
@@ -93,6 +94,16 @@ public class AliquotDetailsDTO
 	public void setParentId(Long parentId)
 	{
 		this.parentId = parentId;
+	}
+	
+	public Long getScgId() 
+	{
+		return scgId;
+	}
+
+	public void setScgId(Long scgId) 
+	{
+		this.scgId = scgId;
 	}
 
 	public Date getCreationDate()
@@ -185,5 +196,4 @@ public class AliquotDetailsDTO
 	{
 		this.perAliquotDetailsCollection = perAliquotDetailsCollection;
 	}
-
 }

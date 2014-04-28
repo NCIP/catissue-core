@@ -114,9 +114,11 @@ public class AliquotBizLogic
         Specimen parentSpecimen = specimenDAO.getParentSpecimenByLabelOrBarcode(hibernateDao, aliquotDetailsDTO.getParentLabel());
         if(!parentSpecimen.getIsAvailable())
         {
+        	
         	throw new CatissueException(SpecimenErrorCodeEnum.SPECIMEN_NOT_AVAILABLE.getDescription(),SpecimenErrorCodeEnum.SPECIMEN_NOT_AVAILABLE.getCode());
         }
         aliquotDetailsDTO.setParentId(parentSpecimen.getId());
+        aliquotDetailsDTO.setScgId(parentSpecimen.getSpecimenCollectionGroup().getId());
         List<SingleAliquotDetailsDTO> aliquotDetailList = aliquotDetailsDTO.getPerAliquotDetailsCollection();
         double totalDistributedQuantity = getTotalDistributedQuantity(aliquotDetailList,
                 parentSpecimen.getAvailableQuantity());

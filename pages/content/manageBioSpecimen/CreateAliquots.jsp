@@ -298,6 +298,8 @@ ul li ul li a span {
                             document.getElementById('successButtonDiv').style.display='block';
                             var aliquotDetailsDTO = eval('('+response.aliquotDetailsDTO+')')
                             nodeId= "Specimen_"+aliquotDetailsDTO.parentId;
+                            parent.handleCpView(null, aliquotDetailsDTO.scgId, aliquotDetailsDTO.parentId);
+                            
                             if(aliquotGrid.getRowsNum()!=0){
                                 deleteAllRow();
                             }
