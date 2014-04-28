@@ -91,7 +91,7 @@ angular.module('plus.cpview', [])
     scgTreeQ.then(function() { $scope.handleDirectObjectLoad(); });
   } 
 
-  $scope.handleDirectObjectLoad = function() {
+  $scope.handleDirectObjectLoad = function(displayNode) {
     if (!selectedScg) {
       return;
     }
@@ -105,7 +105,7 @@ angular.module('plus.cpview', [])
       }
     }
 
-    if (!selectedSpecimen) {
+    if (!selectedSpecimen && displayNode != false) {
       $scope.displayNode(scgNode);
       return;
     } 
@@ -135,8 +135,9 @@ angular.module('plus.cpview', [])
           }
         }
       }
-
-      $scope.displayNode(currNode);
+      if (displayNode != false) {
+    	  $scope.displayNode(currNode);
+      }
     });
   };
 
@@ -273,15 +274,12 @@ angular.module('plus.cpview', [])
     var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
     
     var htmlToolTip = 
-    	"<table style=\"font-size: 12px; color: rgb(205, 200, 200)\"><tbody>" +
-    	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td>"+ scg.eventPoint + "</td><tr/>" +
-    	  "<tr><td><b><i class=\"pull-right\">CP label : </i></b></td><td>"+ scg.collectionPointLabel + "</td><tr/>" +
-    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td>"+ date + "</td><tr/>" +
+    	"<table style=\"font-size: 12px\"><tbody>" +
+    	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td class=\"pull-left\">"+ scg.eventPoint + " (" + scg.collectionPointLabel  + ") "+ "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ date + "</td><tr/>" +
     	"</tbody></table>";
-    
-    console.warn("htmlTooltip : " + htmlToolTip);
+
     return htmlToolTip;
-  
   }
 }]);
 
