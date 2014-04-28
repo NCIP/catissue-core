@@ -1073,6 +1073,7 @@
                constraintName="FK_CELL_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
+     <dropForeignKeyConstraint baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM" constraintName="FK52F40EDEBC7298A9"/>
      <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
                constraintName="FK_USER_CELL_EVENT"

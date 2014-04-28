@@ -88,23 +88,16 @@ public class UserDAO
 	 * @throws DAOException
 	 *             generic DAO Exception
 	 */
-	public String getUserNameById(final Long userId, HibernateDAO hibernateDAO)
+	public String getUserNameById(final Long userId)
 			throws BizLogicException, DAOException
 	{
-		
-		if(hibernateDAO == null)
-		{
+		HibernateDAO hibernateDAO = null;
+		StringBuffer userName = new StringBuffer(100);
 			try
 			{
 				hibernateDAO = (HibernateDAO)AppUtility.openDAOSession(null);
-			}
-			catch (ApplicationException e)
-			{
-				LOGGER.error(e);
-				throw new DAOException(e.getErrorKey(), e, e.getMsgValues());
-			}
-		}
-		StringBuffer userName = new StringBuffer(100);
+			
+		
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.LONG, userId));
 		List userNames = hibernateDAO.executeNamedQuery("getUserNameFromID", params);
@@ -121,6 +114,21 @@ public class UserDAO
 				userName.append(names[0].toString());
 			}
 		}
+			}
+			catch (ApplicationException e)
+			{
+				LOGGER.error(e);
+				throw new DAOException(e.getErrorKey(), e, e.getMsgValues());
+			}
+			finally{
+				try {
+					AppUtility.closeDAOSession(hibernateDAO);
+				}
+				catch (ApplicationException e) {
+					LOGGER.error(e);
+					throw new DAOException(e.getErrorKey(), e, e.getMsgValues());
+				}
+			}
 		return userName.toString();
 	}
 	

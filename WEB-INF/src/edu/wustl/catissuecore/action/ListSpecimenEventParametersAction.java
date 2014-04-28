@@ -241,7 +241,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							rowDataMap.put(Constants.EVENT_NAME, events[0]);
 							
 							UserDAO userDAO = new UserDAO();
-							rowDataMap.put(Constants.USER_NAME, userDAO.getUserNameById(eventParameters.getUser().getId(), null));
+							rowDataMap.put(Constants.USER_NAME, userDAO.getUserNameById(eventParameters.getUser().getId()));
 
 							rowDataMap.put(Constants.EVENT_DATE, eventParameters.getTimestamp());
 							rowDataMap.put(Constants.PAGE_OF, events[1]);// pageOf

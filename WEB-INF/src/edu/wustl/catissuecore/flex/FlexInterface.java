@@ -170,7 +170,7 @@ public class FlexInterface
 								UserDAO userDAO = new UserDAO();
 								
 								 
-								String userName = userDAO.getUserNameById(event.getUser().getId(), null);
+								String userName = userDAO.getUserNameById(event.getUser().getId());
 								String[] nameArr = userName.split(",");
 								
 									User user = event.getUser();
