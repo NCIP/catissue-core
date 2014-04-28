@@ -19,6 +19,22 @@
 	}
 %>
 <script language="JavaScript">
+		var operation =  "<%=form.getOperation()%>";
+		var ppId = "<%=form.getPpId()%>";
+		var cprId = "<%=form.getCprId()%>";
+		var firstName =  "<%=form.getFirstName()%>";
+		var lastName =   "<%=form.getLastName()%>";
+		
+		if (operation == "edit" ) {
+		  var id = "<%=form.getId()%>";
+		  var participant = {
+            id: id + "," + cprId,
+            name: lastName + "," + firstName + '(' + ppId + ')'           
+          }
+		  var newParticipant = ppId + "," + cprId;
+		  parent.handleCpView(participant, null, null);
+        }
+
 		function setSubmittedForParticipanteMPIGenerate(submittedFor,forwardTo){
 			var noOfreg = '<%=noOrRowsCollectionProtocolRegistration%>';
             var vbirthDate = document.getElementById('birthDate');

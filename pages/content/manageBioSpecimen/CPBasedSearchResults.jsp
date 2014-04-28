@@ -172,6 +172,32 @@ var isParticipantUpdated = true;
     .black_ar {
       text-overflow: ellipsis;
     }   
+    
+    .tooltip-inner {
+      background-color: #ffffcc;
+      border: 1px solid #f0c36d;
+      color: #000000;
+    }
+
+    .tooltip-arrow:after {
+      border: 1px solid #f0c36d;
+    }
+
+    .tooltip.top .tooltip-arrow {
+      border-top-color: #ffffcc;
+    }
+
+    .tooltip.bottom .tooltip-arrow {
+      border-bottom-color: #ffffcc;
+    }
+
+    .tooltip.left .tooltip-arrow {
+      border-left-color: #ffffcc;
+    }
+
+    .tooltip.right .tooltip-arrow {
+      border-right-color: #ffffcc;
+    }
     </style>
 <script>
 
@@ -343,6 +369,19 @@ function hideCursor(){
     var selectedSpecimen = undefined;
     if (specimenId != "null") {
       selectedSpecimen = {id: specimenId, type: 'specimen'};
+    }
+    
+    function handleCpView(participant, scgId, specimenId) {
+	  console.warn(" From iframe" + JSON.stringify(participant));
+      var scope = angular.element($("#CpViewController")).scope();
+
+      selParticipant = participant != null ? participant : scope.selectedParticipant;
+      selectedScg = scgId != null ? {id: "scg," + scgId, type: 'scg'} : undefined;
+      selectedSpecimen = specimenId != null ? {id: "specimen," + specimenId, type: 'specimen'} : undefined;
+      
+      scope.onCpSelect({id: scope.selectedCp.id, text: scope.selectedCp.shortTitle});
+      var scgTreeQ = scope.onParticipantSelect(selParticipant, selectedScg == undefined ? true : selectedScg);
+      scgTreeQ.then(function() { scope.handleDirectObjectLoad(false); });
     }
 </script>
 
