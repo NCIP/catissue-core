@@ -169,23 +169,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 
 <script language="JavaScript">
 var clinDataEntryURL = "<%=clinicalDataEntryURL%>";
-  var collectionStatus =  "<%=form.getCollectionProtocolStatus()%>";
-  var statusIcon = 'pending';
-	  
-  if(collectionStatus == 'Complete' || collectionStatus == 'Collected') {
-      statusIcon = 'complete';
-    } else if(collectionStatus == 'Not Collected') {
-      statusIcon = 'not-collected';
-    } else if (collectionStatus == 'Distributed') {
-      statusIcon = 'distributed';
-    } else {
-      statusIcon = 'pending';
-    } 
-  
-
-  var image = top.parent.document.firstChild.getElementsByClassName('black_ar active')[0].getElementsByClassName('fa-circle')[0]
-  image.classList.remove(image.classList[2]);
-  image.classList.add(statusIcon);
   
 if(clinDataEntryURL != null && clinDataEntryURL != "" && clinDataEntryURL != "null")
 {

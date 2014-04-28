@@ -822,24 +822,7 @@ req.onreadystatechange = function() {
   var resp = req.responseText;
   var updatedSpecimenDTO = eval('('+resp+')')
 	
-  // TODO :: Set Global variable to change the status of specimen to make impact on collection status icon.
-  var collectionStatus = updatedSpecimenDTO.collectionStatus;
-  var statusIcon = 'pending';
-	  
-  if(collectionStatus == 'Complete' || collectionStatus == 'Collected') {
-      statusIcon = 'complete';
-    } else if(collectionStatus == 'Not Collected') {
-      statusIcon = 'not-collected';
-    } else if (collectionStatus == 'Distributed') {
-      statusIcon = 'distributed';
-    } else {
-      statusIcon = 'pending';
-    } 
-  
-
-  var image = top.parent.document.firstChild.getElementsByClassName('black_ar active')[0].getElementsByClassName('fa-circle')[0]
-  image.classList.remove(image.classList[2]);
-  image.classList.add(statusIcon);
+  parent.handleCpView(null, updatedSpecimenDTO.specimenCollectionGroupId, updatedSpecimenDTO.id);
 
 				document.getElementById('available').disabled = false;
 				document.getElementById('available').checked = updatedSpecimenDTO.available;
