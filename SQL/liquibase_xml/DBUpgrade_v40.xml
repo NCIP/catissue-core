@@ -1821,13 +1821,13 @@
       <addPrimaryKey tableName="CATISSUE_QUERY_FOLDER_QUERIES" columnNames="FOLDER_ID, QUERY_ID"/>
     </changeSet>
 
-    <changeSet author="vpawar" id="add foreign key constraint on folder field of query folder queries table" failOnError="true">
+    <changeSet author="vpawar" id="add foreign key on folder field of folder queries table" failOnError="true">
       <addForeignKeyConstraint constraintName="CAT_QFQ_FOLDER_ID_CAT_QF_ID"
         baseTableName="CATISSUE_QUERY_FOLDER_QUERIES" baseColumnNames="FOLDER_ID"
         referencedTableName="CATISSUE_QUERY_FOLDERS" referencedColumnNames="IDENTIFIER"/>
     </changeSet>
 
-    <changeSet author="vpawar" id="add foreign key constraint on query field of query folder queries table" failOnError="true">
+    <changeSet author="vpawar" id="add foreign key on query field of folder queries table" failOnError="true">
       <addForeignKeyConstraint constraintName="CAT_QFQ_QUERY_ID_CAT_SQ_ID"
         baseTableName="CATISSUE_QUERY_FOLDER_QUERIES" baseColumnNames="QUERY_ID"
         referencedTableName="CATISSUE_SAVED_QUERIES" referencedColumnNames="IDENTIFIER"/>
@@ -1844,17 +1844,17 @@
       </createTable>
     </changeSet>
 
-    <changeSet author="vpawar" id="add primary key constraints on query folder share settings table" failOnError="true">
+    <changeSet author="vpawar" id="add primary key of query folder share settings table" failOnError="true">
       <addPrimaryKey tableName="CATISSUE_QFOLDER_SHARE_SETTINGS" columnNames="FOLDER_ID, USER_ID"/>
     </changeSet>
 
-    <changeSet author="vpawar" id="add foreign key constraint on folder field of query folder share settings table" failOnError="true">
+    <changeSet author="vpawar" id="add foreign key on folder field of share settings table" failOnError="true">
       <addForeignKeyConstraint constraintName="CAT_QFSS_FOLDER_ID_CAT_QF_ID"
         baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="FOLDER_ID"
         referencedTableName="CATISSUE_QUERY_FOLDERS" referencedColumnNames="IDENTIFIER"/>
     </changeSet>
 
-    <changeSet author="vpawar" id="add foreign key constraint on user field of query folder share settings table" failOnError="true">
+    <changeSet author="vpawar" id="add foreign key on user field of share settings table" failOnError="true">
       <addForeignKeyConstraint constraintName="CAT_QFSS_USER_ID_CAT_USR_ID"
         baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="USER_ID"
         referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
