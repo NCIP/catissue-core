@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -32,6 +33,7 @@ import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.ShareQueryFolderEvent;
+import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent.Operation;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
@@ -129,12 +131,16 @@ public class QueryFoldersController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{folderId}/saved-queries")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SavedQuerySummary> updateFolderQueries(@PathVariable("folderId") Long folderId, @RequestBody List<Long> queries) {
+	public List<SavedQuerySummary> updateFolderQueries(
+			@PathVariable("folderId") Long folderId,
+			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
+			@RequestBody List<Long> queries) {
 		UpdateFolderQueriesEvent req = new UpdateFolderQueriesEvent();
 		req.setFolderId(folderId);
 		req.setQueries(queries);
+		req.setOp(Operation.valueOf(operation));
 		req.setSessionDataBean(getSession());
-
+		
 		FolderQueriesUpdatedEvent resp = querySvc.updateFolderQueries(req);
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getQueries();
@@ -146,7 +152,10 @@ public class QueryFoldersController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{folderId}/users")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<UserSummary> shareFolder(@PathVariable("folderId") Long folderId, @RequestBody List<Long> userIds){
+	public List<UserSummary> shareFolder(
+			@PathVariable("folderId") Long folderId,
+			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
+			@RequestBody List<Long> userIds){
 		ShareQueryFolderEvent req = new ShareQueryFolderEvent();
 		req.setFolderId(folderId);
 		req.setUserIds(userIds);

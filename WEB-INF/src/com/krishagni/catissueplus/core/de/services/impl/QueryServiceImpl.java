@@ -354,15 +354,28 @@ public class QueryServiceImpl implements QueryService {
 			
 			List<SavedQuery> savedQueries = null;
 			List<Long> queryIds = req.getQueries();
+			
 			if (queryIds == null || queryIds.isEmpty()) {
 				savedQueries = new ArrayList<SavedQuery>();
 			} else {
 				savedQueries = daoFactory.getSavedQueryDao().getQueriesByIds(queryIds);
-			}			
-			queryFolder.updateQueries(savedQueries);
+			}
 			
-			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);
+			switch (req.getOp()) {
+				case ADD:
+					queryFolder.addQueries(savedQueries);
+					break;
+				
+				case UPDATE:
+					queryFolder.updateQueries(savedQueries);
+					break;
+				
+				case REMOVE:
+					queryFolder.removeQueries(savedQueries);
+					break;				
+			}
 			
+			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
 			for (SavedQuery query : savedQueries) {
 				result.add(SavedQuerySummary.fromSavedQuery(query));
@@ -400,10 +413,22 @@ public class QueryServiceImpl implements QueryService {
 			} else {
 				users = userDao.getUsersById(userIds);
 			}
-			queryFolder.updateSharedUsers(users);
 			
-			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);
-			
+			switch (req.getOp()) {
+				case ADD:
+					queryFolder.addSharedUsers(users);
+					break;
+					
+				case UPDATE:
+					queryFolder.updateSharedUsers(users);
+					break;
+					
+				case REMOVE:
+					queryFolder.removeSharedUsers(users);
+					break;					
+			}
+						
+			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<UserSummary> result = new ArrayList<UserSummary>();
 			for (User user : queryFolder.getSharedWith()) {
 				result.add(UserSummary.fromUser(user));

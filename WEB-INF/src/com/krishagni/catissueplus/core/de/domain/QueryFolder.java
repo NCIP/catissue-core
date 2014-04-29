@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.domain;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -58,6 +59,10 @@ public class QueryFolder {
 		this.owner = owner;
 	}
 
+	public void addQueries(List<SavedQuery> queries) {
+		savedQueries.addAll(queries);
+	}
+	
 	public void updateQueries(List<SavedQuery> queries) {
 		savedQueries.retainAll(queries);
 
@@ -67,7 +72,29 @@ public class QueryFolder {
 			}
 		}
 	}
+	
+	public void removeQueries(List<SavedQuery> queries) {
+		savedQueries.removeAll(queries);
+	}
+	
+	public void removeQueriesById(List<Long> queryIds) {
+		Iterator<SavedQuery> iterator = savedQueries.iterator();
+		while (iterator.hasNext()) {
+			SavedQuery query = iterator.next();
+			if (queryIds.contains(query.getId())) {
+				iterator.remove();
+			}
+		}		
+	}
 
+	public void addSharedUsers(List<User> users) {
+		sharedWith.addAll(users);
+	}
+	
+	public void removeSharedUsers(List<User> users) {
+		sharedWith.removeAll(users);
+	}
+	
 	public void updateSharedUsers(List<User> users) {
 		sharedWith.retainAll(users);
 

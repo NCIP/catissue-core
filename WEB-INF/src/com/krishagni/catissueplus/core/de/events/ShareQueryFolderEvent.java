@@ -5,10 +5,17 @@ import java.util.List;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ShareQueryFolderEvent extends RequestEvent {
+	public enum Operation {
+		ADD,
+		UPDATE,
+		REMOVE
+	};
 	
 	private Long folderId;
 	
 	private List<Long> userIds;
+	
+	private Operation op;
 	
 	public Long getFolderId() {
 		return folderId;
@@ -24,5 +31,13 @@ public class ShareQueryFolderEvent extends RequestEvent {
 
 	public void setUserIds(List<Long> userIds) {
 		this.userIds = userIds;
+	}
+
+	public Operation getOp() {
+		return op;
+	}
+
+	public void setOp(Operation op) {
+		this.op = op;
 	}
 }
