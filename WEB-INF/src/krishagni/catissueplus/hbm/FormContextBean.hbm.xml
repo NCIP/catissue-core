@@ -21,7 +21,9 @@
             length="30"
             unsaved-value="null"
         >
-            <generator class="native"/>
+        <generator class="native">
+          <param name="sequence">CATISSUE_FORM_CONTEXT_SEQ</param>
+        </generator>
         </id>
 
         <property
@@ -108,7 +110,7 @@
 	        where
 	          ctxt.entity_type is null or ctxt.entity_type != 'Query'
 	        group by
-	          formId	      
+	          ic.identifier	      
 	      ) derived on derived.formId = c.identifier
 	    order by
 	      modificationTime desc	    	    
@@ -142,14 +144,14 @@
 	  <sql-query name="getFormContexts">
 	    <return-scalar column="ctxtId"        type="long"/>
 	    <return-scalar column="formId"        type="long"/>
-	    <return-scalar column="level"         type="string"/>
+	    <return-scalar column="entityLevel"   type="string"/>
 	    <return-scalar column="isMultirecord" type="boolean"/>
 	    <return-scalar column="cpId"          type="long"/>
 	    <return-scalar column="shortTitle"    type="string"/>
 	    <return-scalar column="title"         type="string"/>
 	    
 	    select
-	      fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as level, fctxt.is_multirecord as isMultirecord,
+	      fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as entityLevel, fctxt.is_multirecord as isMultirecord,
 	      cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
 	    from
 	      catissue_form_context fctxt
@@ -188,7 +190,7 @@
 		where
 			fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)  
 		group by
-			formCtxtId, formId, formCaption, cpId
+			fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
       </sql-query>
       
       <sql-query name="getSpecimenForms">
@@ -215,7 +217,8 @@
 		where 
 			fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1) 
 		group by 
-			formCtxtId, formId, formCaption, cpId
+			fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
+			
       </sql-query>      
 
       <sql-query name="getScgForms">
@@ -241,7 +244,7 @@
 		where 
 			fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1) 
 		group by 
-			formCtxtId, formId, formCaption, cpId
+			fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
       </sql-query>      
       
       <sql-query name="getFormRecords">

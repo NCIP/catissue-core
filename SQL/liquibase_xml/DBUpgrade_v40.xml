@@ -1859,4 +1859,12 @@
         baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="USER_ID"
         referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
     </changeSet>
+    
+    <changeSet author="ka" id="adding Sequence CATISSUE_FORM_CONTEXT" failOnError="true">
+	  <createSequence 
+        sequenceName="CATISSUE_FORM_CONTEXT_SEQ" 
+        startValue="1" 
+        incrementBy="1" 
+        ordered="true" />
+    </changeSet>
 </databaseChangeLog>         
