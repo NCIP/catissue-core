@@ -1783,4 +1783,80 @@
             ordered="true" />
 	
     </changeSet>  	  	   
+
+    <changeSet author="vpawar" id="table for query folders" failOnError="true">
+      <createTable tableName="CATISSUE_QUERY_FOLDERS">
+        <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+          <constraints primaryKey="true" nullable="false"/>
+        </column>
+
+        <column name="NAME" type="${text.type}(64)">
+          <constraints unique="true" nullable="false"/>
+        </column>
+ 
+        <column name="OWNER" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+      </createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key constraint on owner field of query folders" failOnError="true">
+      <addForeignKeyConstraint constraintName="CAT_QF_OWNER_CAT_USR_ID"
+        baseTableName="CATISSUE_QUERY_FOLDERS" baseColumnNames="OWNER"
+        referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER" />
+    </changeSet>
+
+    <changeSet author="vpawar" id="table for mapping queries in folder" failOnError="true">
+      <createTable tableName="CATISSUE_QUERY_FOLDER_QUERIES">
+        <column name="FOLDER_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+        <column name="QUERY_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+      </createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add primary key constraints on query folder queries table" failOnError="true">
+      <addPrimaryKey tableName="CATISSUE_QUERY_FOLDER_QUERIES" columnNames="FOLDER_ID, QUERY_ID"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key constraint on folder field of query folder queries table" failOnError="true">
+      <addForeignKeyConstraint constraintName="CAT_QFQ_FOLDER_ID_CAT_QF_ID"
+        baseTableName="CATISSUE_QUERY_FOLDER_QUERIES" baseColumnNames="FOLDER_ID"
+        referencedTableName="CATISSUE_QUERY_FOLDERS" referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key constraint on query field of query folder queries table" failOnError="true">
+      <addForeignKeyConstraint constraintName="CAT_QFQ_QUERY_ID_CAT_SQ_ID"
+        baseTableName="CATISSUE_QUERY_FOLDER_QUERIES" baseColumnNames="QUERY_ID"
+        referencedTableName="CATISSUE_SAVED_QUERIES" referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="table for mapping users sharing folder" failOnError="true">
+      <createTable tableName="CATISSUE_QFOLDER_SHARE_SETTINGS">
+        <column name="FOLDER_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+        <column name="USER_ID" type="${int.type}">
+          <constraints nullable="false"/>
+        </column>
+      </createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add primary key constraints on query folder share settings table" failOnError="true">
+      <addPrimaryKey tableName="CATISSUE_QFOLDER_SHARE_SETTINGS" columnNames="FOLDER_ID, USER_ID"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key constraint on folder field of query folder share settings table" failOnError="true">
+      <addForeignKeyConstraint constraintName="CAT_QFSS_FOLDER_ID_CAT_QF_ID"
+        baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="FOLDER_ID"
+        referencedTableName="CATISSUE_QUERY_FOLDERS" referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="add foreign key constraint on user field of query folder share settings table" failOnError="true">
+      <addForeignKeyConstraint constraintName="CAT_QFSS_USER_ID_CAT_USR_ID"
+        baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="USER_ID"
+        referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
+    </changeSet>
 </databaseChangeLog>         

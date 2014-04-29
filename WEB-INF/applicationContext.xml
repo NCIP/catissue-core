@@ -147,10 +147,21 @@
     <property name="formDao" ref="formDao"/>
   </bean>
 
-  <bean id="querySvc" class="com.krishagni.catissueplus.core.de.services.impl.QueryServiceImpl">
-    <property name="daoFactory" ref="deDaoFactory"/>
+  <bean id="userDao" class="com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl">
+    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
   
+  <bean id="queryFolderFactory" class="com.krishagni.catissueplus.core.de.domain.factory.impl.QueryFolderFactoryImpl">
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="userDao" ref="userDao"/>
+  </bean>
+
+  <bean id="querySvc" class="com.krishagni.catissueplus.core.de.services.impl.QueryServiceImpl">
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="queryFolderFactory" ref="queryFolderFactory"/>
+  </bean>
+
   <bean id="auditFactory" class="com.krishagni.catissueplus.core.audit.domain.factory.impl.AuditFactoryImpl">
   </bean>
   

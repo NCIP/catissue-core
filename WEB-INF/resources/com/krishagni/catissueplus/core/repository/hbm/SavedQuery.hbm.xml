@@ -39,8 +39,46 @@
 	
     <property name="lastRunCount" column="LAST_RUN_COUNT"/>
 	
-    <query name="getSavedQueries">
-      from SavedQuery order by id DESC
+    <set 
+      name="folders" 
+      table="CATISSUE_QUERY_FOLDER_QUERIES">
+      <key column="QUERY_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.de.domain.QueryFolder" column="FOLDER_ID" />
+    </set>
+	
+    <query name="getQueriesByIds">
+      from SavedQuery where id IN (:queryIds)
     </query>
+
+    <query name="getSavedQueries">
+      select distinct q from SavedQuery q left join q.folders f left join f.sharedWith u where u.id = :userId or q.createdBy = :userId order by q.id DESC
+    </query>
+    
+    
+    <sql-query name="getQueriesByFolderId">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="title" type="string"/>
+      <return-scalar column="cUserId" type="long"/>
+      <return-scalar column="cFirstName" type="string"/>
+      <return-scalar column="cLastName" type="string"/>
+      <return-scalar column="mUserId" type="long"/>
+      <return-scalar column="mFirstName" type="string"/>
+      <return-scalar column="mLastName" type="string"/>
+      <return-scalar column="lastUpdated" type="timestamp"/>
+      <return-scalar column="lastRunCount" type="long"/>
+      <return-scalar column="lastRunOn" type="timestamp"/>
+
+      select
+        s.identifier as id, s.title as title, c.identifier as cUserId, c.first_name as cFirstName, c.last_name as cLastName,
+        m.identifier as mUserId, m.first_name as mFirstName, m.last_name as mLastName, 
+        last_updated_on as lastUpdated, last_run_count as lastRunCount, last_run_on as lastRunOn
+      from
+        catissue_query_folder_queries f
+        inner join catissue_saved_queries s on s.identifier = f.query_id
+        inner join catissue_user c on s.created_by = c.identifier
+        left join catissue_user m on s.last_updated_by = m.identifier
+      where 
+        f.folder_id = :folderId
+    </sql-query>
   </class> 
 </hibernate-mapping>

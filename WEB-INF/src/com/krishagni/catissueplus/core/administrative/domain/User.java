@@ -211,7 +211,37 @@ public class User {
 		oldAddress.setCity(address.getCity());
 		oldAddress.setZipCode(address.getZipCode());
 	}
+	
+	@Override
+	public int hashCode() {
+		return 31 * 1 + ((id == null) ? 0 : id.hashCode());
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		
+		if (obj == null) {
+			return false;
+		}
+		
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		User other = (User) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
+	}
+	
 	private final static String USER = "user";
 
 	private final static String CATISSUE = "catissue";

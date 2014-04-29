@@ -4,4 +4,6 @@ public interface DaoFactory {
 	public FormDao getFormDao();
 	
 	public SavedQueryDao getSavedQueryDao();
+	
+	public QueryFolderDao getQueryFolderDao();
 }

@@ -3,8 +3,6 @@ package com.krishagni.catissueplus.core.common.repository;
 
 import org.hibernate.SessionFactory;
 
-
-
 public class AbstractDao<T> implements Dao<T> {
 
 	protected SessionFactory sessionFactory;
@@ -21,5 +19,4 @@ public class AbstractDao<T> implements Dao<T> {
 	public void saveOrUpdate(T obj) {
 		sessionFactory.getCurrentSession().saveOrUpdate(obj);
 	}
-
 }

@@ -23,4 +23,6 @@ public interface UserDao extends Dao<User> {
 	Boolean isUniqueLoginNameInDomain(String loginName, String domainName);
 	
 	User getUserByLoginNameAndDomainName(String loginName, String domainName);
+
+	List<User> getUsersById(List<Long> userIds);
 }

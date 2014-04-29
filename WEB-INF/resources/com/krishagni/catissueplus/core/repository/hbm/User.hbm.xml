@@ -162,5 +162,11 @@
 	<query name="getUserByLoginNameAndDomainName">
 		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName AND user.authDomain.name = :domainName
 	</query>
+
+	<query name="getUsersById">
+		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds)
+        </query>
+
+
    </class>
 </hibernate-mapping>

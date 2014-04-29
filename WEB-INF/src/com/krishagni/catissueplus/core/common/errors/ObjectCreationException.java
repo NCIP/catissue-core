@@ -32,7 +32,12 @@ public class ObjectCreationException extends RuntimeException {
 	}
 
 	public String getMessage() {
-		return errorCode.message();
+		StringBuilder str = new StringBuilder();
+		for (ErroneousField field : fields) {
+			str.append(field.getFieldName() + ":" + field.getErrorMessage()).append("\n");
+		}
+		
+		return str.toString();
 	}
 
 	public void addError(CatissueErrorCode errorCode, String field) {
@@ -53,5 +58,8 @@ public class ObjectCreationException extends RuntimeException {
 		}
 
 	}
-
+	
+	public boolean hasErrors() {
+		return !fields.isEmpty();
+	}
 }

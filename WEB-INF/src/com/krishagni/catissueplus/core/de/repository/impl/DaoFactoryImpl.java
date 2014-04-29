@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
+import com.krishagni.catissueplus.core.de.repository.QueryFolderDao;
 import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
 
 public class DaoFactoryImpl implements DaoFactory {
@@ -29,5 +30,12 @@ public class DaoFactoryImpl implements DaoFactory {
 		SavedQueryDaoImpl savedQueryDao = new SavedQueryDaoImpl();
 		savedQueryDao.setSessionFactory(sessionFactory);
 		return savedQueryDao;
+	}
+	
+	@Override
+	public QueryFolderDao getQueryFolderDao() {
+		QueryFolderDaoImpl queryFolderDao = new QueryFolderDaoImpl();
+		queryFolderDao.setSessionFactory(sessionFactory);
+		return queryFolderDao;
 	}
 }

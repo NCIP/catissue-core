@@ -1,0 +1,27 @@
+package com.krishagni.catissueplus.core.de.events;
+
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import java.util.*;
+
+public class UpdateFolderQueriesEvent extends RequestEvent {
+
+	private Long folderId;
+	
+	private List<Long> queries;
+
+	public Long getFolderId() {
+		return folderId;
+	}
+
+	public void setFolderId(Long folderId) {
+		this.folderId = folderId;
+	}
+
+	public List<Long> getQueries() {
+		return queries;
+	}
+
+	public void setQueries(List<Long> queries) {
+		this.queries = queries;
+	}
+}

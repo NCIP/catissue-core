@@ -1,12 +1,13 @@
 package com.krishagni.catissueplus.core.de.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class SavedQuery {
-
 	private Long id;
 
 	private String title;
@@ -28,6 +29,8 @@ public class SavedQuery {
 	private QueryExpressionNode[] queryExpression;
 
 	private String[] selectList;
+	
+	private Set<QueryFolder> folders = new HashSet<QueryFolder>();
 
 	public Long getId() {
 		return id;
@@ -116,6 +119,14 @@ public class SavedQuery {
 	public void setSelectList(String[] selectList) {
 		this.selectList = selectList;
 	}
+	
+	public Set<QueryFolder> getFolders() {
+		return folders;
+	}
+
+	public void setFolders(Set<QueryFolder> folders) {
+		this.folders = folders;
+	}
 
 	public String getQueryDefJson() {
 		SavedQuery query = new SavedQuery();
@@ -123,6 +134,7 @@ public class SavedQuery {
 		query.filters = filters;
 		query.queryExpression = queryExpression;
 		query.drivingForm = drivingForm;
+		query.folders = null;
 		return new Gson().toJson(query);
 	}
 
@@ -148,4 +160,35 @@ public class SavedQuery {
 		setFilters(query.getFilters());
 		setQueryExpression(query.getQueryExpression());
 	}
+	
+	@Override
+	public int hashCode() {
+		return 31 * 1 + ((id == null) ? 0 : id.hashCode());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		
+		if (obj == null) {
+			return false;
+		}
+		
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		SavedQuery other = (SavedQuery) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
+	}
+	
 }

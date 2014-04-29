@@ -80,6 +80,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return null;
 	}
 
+	@Override
+	public List<User> getUsersById(List<Long> userIds) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USERS_BY_ID);
+		return query.setParameterList("userIds", userIds).list();
+	}
+
 
 	private static final String FQN = User.class.getName();
 
@@ -92,5 +98,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_OLD_PASSWORD_BY_USER_ID = Password.class.getName() + ".getOldPasswordByUserId";
 
 	private static final String GET_OLD_PASSWORD_BY_LOGIN_NAME = Password.class.getName() + ".getOldPasswordByLoginId";
+
+	private static final String GET_USERS_BY_ID = FQN + ".getUsersById";
 
 }

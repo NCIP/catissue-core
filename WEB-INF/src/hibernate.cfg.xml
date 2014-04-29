@@ -166,6 +166,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExtAppNotificationStatus.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolStudyMapping.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SavedQuery.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Ldap.hbm.xml" />		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Site.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />

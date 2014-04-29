@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.de.domain;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,6 @@ import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.Parenthesis
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.DataType;
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class AqlBuilder {
 	
@@ -93,11 +93,11 @@ public class AqlBuilder {
 		if (filter.getOp() == Op.EXISTS || filter.getOp() == Op.NOT_EXISTS) {
 			return filterExpr.toString();
 		}
-		
+
 		String formName = field.substring(0, dotIdx);
-		Container form = Container.getContainer(formName);
+		Container form = getContainer(formName);
 		Control ctrl = form.getControlByUdn(field.substring(dotIdx + 1), "\\.");
-				
+		
 		String[] values = (String[])Arrays.copyOf(filter.getValues(), filter.getValues().length);
 		if (ctrl.getDataType() == DataType.STRING || ctrl.getDataType() == DataType.DATE) {
 			for (int i = 0; i < values.length; ++i) {
@@ -107,7 +107,7 @@ public class AqlBuilder {
 		
 		String value = values[0];
 		if (filter.getOp() == Op.IN || filter.getOp() == Op.NOT_IN) {
-			value = join(values);
+			value = "(" + join(values) + ")";
 		} 
 		
 		return filterExpr.append(value).toString();
@@ -118,8 +118,12 @@ public class AqlBuilder {
 		for (String val : values) {
 			result.append(val).append(", ");
 		}
-		
+        
 		int endIdx = result.length() - 2;
 		return result.substring(0, endIdx < 0 ? 0 : endIdx);
+	}
+	
+	public Container getContainer(String formName){
+		return Container.getContainer(formName);
 	}
 }

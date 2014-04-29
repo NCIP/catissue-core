@@ -50,6 +50,7 @@ public class SavedQueriesController {
 		ReqSavedQueriesSummaryEvent req = new ReqSavedQueriesSummaryEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
+		req.setSessionDataBean(getSession());
 		
 		SavedQueriesSummaryEvent resp = querySvc.getSavedQueries(req);
 		if (resp.getStatus() == EventStatus.OK) {
