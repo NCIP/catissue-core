@@ -70,12 +70,13 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			//				saveErrors(request, errors);
 			//				request.setAttribute("hideButton", true);
 			//			}
-
+//boolean flag = true;
 			if (!StringUtils.isBlank(request.getParameter("scgId")) && !"null".equals(request.getParameter("scgId"))) {
 				Long scgId = Long.valueOf(request.getParameter("scgId"));
 				scg = (SpecimenCollectionGroup) hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(), scgId);
 			}
 			else {
+//				flag = false;
 				ActionErrors errors = new ActionErrors();
 				//			You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
 				//Error
@@ -92,16 +93,16 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 				specimenDTO.setParentSpecimenBarcode(parentSpecimen.getBarcode());
 				specimenDTO.setParentSpecimenName(parentSpecimen.getLabel());
 			}
-			else if (Constants.NEW_SPECIMEN.equals(requirement.getLineage())) {
-				ActionErrors errors = new ActionErrors();
-
-				//			You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
-				//Error
-				ActionError error = new ActionError("errors.parent.collect");
-				errors.add("errors.parent.collect", error);
-				saveErrors(request, errors);
-				request.setAttribute("hideButton", true);
-			}
+//			else if (Constants.NEW_SPECIMEN.equals(requirement.getLineage()) && flag) {
+//				ActionErrors errors = new ActionErrors();
+//
+//				//			You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
+//				//Error
+//				ActionError error = new ActionError("errors.parent.collect");
+//				errors.add("errors.parent.collect", error);
+//				saveErrors(request, errors);
+//				request.setAttribute("hideButton", true);
+//			}
 
 			if (scg != null) {
 				specimenDTO.setSpecimenCollectionGroupId(scg.getId());
@@ -112,7 +113,7 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			}
 			specimenDTO.setRequirementId(requirementId);
 			specimenDTO.setLineage(requirement.getLineage());
-			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
+			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 			specimenDTO.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			specimenDTO.setAvailable(Boolean.FALSE);
 			specimenDTO.setIsVirtual(Boolean.TRUE);

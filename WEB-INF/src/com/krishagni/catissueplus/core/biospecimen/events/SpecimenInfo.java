@@ -9,7 +9,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
-public class SpecimenInfo {
+public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 
 	private Long id;
 
@@ -184,10 +184,18 @@ public class SpecimenInfo {
 			if (specimenInfo.getId() == null && specimenInfo.getRequirementId() == null) {
 				return false;
 			}
-			else if ((this.id + "_" + this.requirementId)
-					.equals(specimenInfo.getId() + "_" + specimenInfo.getRequirementId())) {
-				return true;
+			else if(this.requirementId == null && specimenInfo.getRequirementId() == null)
+			{
+				return false;
 			}
+			else if(this.requirementId !=null && specimenInfo.getRequirementId() != null)
+			{
+				return this.requirementId.equals(specimenInfo.getRequirementId());
+			}
+//			else if ((this.id + "_" + this.requirementId)
+//					.equals(specimenInfo.getId() + "_" + specimenInfo.getRequirementId())) {
+//				return true;
+//			}
 		}
 		return true;
 	}
@@ -198,5 +206,14 @@ public class SpecimenInfo {
 		int result = 1;
 		result = prime * result + ((requirementId == null) ? 0 : requirementId.hashCode());
 		return result;
+	}
+	
+	@Override
+	public int compareTo(SpecimenInfo specimenInfo) {
+		if(requirementId != null && specimenInfo.getRequirementId() != null)
+		{
+			return requirementId.compareTo(specimenInfo.getRequirementId());
+		}
+		return 1;
 	}
 }

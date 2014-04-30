@@ -85,6 +85,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   <bean id="specimenFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   <bean id="scgFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -137,6 +138,7 @@
 
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="specimenFactory" ref="specimenFactory"/>
   </bean>
 
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">

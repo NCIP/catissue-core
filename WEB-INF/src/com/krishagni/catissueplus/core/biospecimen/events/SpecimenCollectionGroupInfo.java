@@ -1,16 +1,19 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 import krishagni.catissueplus.dto.BiohazardDTO;
 
-public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectionGroupInfo>{
+public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectionGroupInfo> {
 
 	private Long id;
 
@@ -136,9 +139,24 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 			if (scgInfo.getId() == null && scgInfo.getEventId() == null) {
 				return false;
 			}
-			else if ((this.id+"_"+this.eventId).equals(scgInfo.getId()+"_"+scgInfo.getEventId())) {
-				return true;
+			if (scgInfo.getId() == null && this.id == null) {
+				return this.eventId.equals(scgInfo.getEventId());
 			}
+			else if (this.id != null && scgInfo.getId() == null) {
+				return this.eventId.equals(scgInfo.getEventId());
+			}
+			else if (scgInfo.getId() != null && this.id == null) {
+				return this.eventId.equals(scgInfo.getEventId());
+			}
+			else {
+				return this.id.equals(scgInfo.getId());
+			}
+			//			else if (scgInfo.getId() == null ) {
+			//				return this.eventId.equals(scgInfo.getEventId());
+			//			}
+			//			else {
+			//				return ((this.id+"_"+this.eventId).equals(scgInfo.getId()+"_"+scgInfo.getEventId()));
+			//			}
 		}
 		return true;
 	}
@@ -151,7 +169,8 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 		return result;
 	}
 
-	public static SpecimenCollectionGroupInfo fromScg(SpecimenCollectionGroup specimenCollectionGroup, Date registrationDate) {
+	public static SpecimenCollectionGroupInfo fromScg(SpecimenCollectionGroup specimenCollectionGroup,
+			Date registrationDate) {
 		CollectionProtocolEvent event = specimenCollectionGroup.getCollectionProtocolEvent();
 		SpecimenCollectionGroupInfo scgInfo = new SpecimenCollectionGroupInfo();
 		scgInfo.setCollectionStatus(specimenCollectionGroup.getCollectionStatus());
@@ -170,7 +189,8 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 	public static SpecimenCollectionGroupInfo fromCpe(CollectionProtocolEvent collectionProtocolEvent,
 			Date registrationDate) {
 		SpecimenCollectionGroupInfo scgInfo = new SpecimenCollectionGroupInfo();
-		scgInfo.setId(collectionProtocolEvent.getId());
+		System.out.println();
+		//		scgInfo.setId(collectionProtocolEvent.getId());
 		scgInfo.setCollectionStatus(Status.SCG_COLLECTION_STATUS_PENDING.getStatus());
 		scgInfo.setHasChilds(false);
 		scgInfo.setRegistrationDate(registrationDate);
@@ -183,6 +203,15 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 
 	@Override
 	public int compareTo(SpecimenCollectionGroupInfo scgInfo) {
-		return Double.compare(eventPoint, scgInfo.getEventPoint());
+		int result = Double.compare(eventPoint, scgInfo.getEventPoint());
+		if (result != 0) {
+			return result;
+		}
+		if (receivedDate != null && scgInfo.getReceivedDate() != null) {
+			return receivedDate.compareTo(scgInfo.getReceivedDate());
+		}
+		else {
+			return registrationDate.compareTo(scgInfo.getRegistrationDate());
+		}
 	}
 }

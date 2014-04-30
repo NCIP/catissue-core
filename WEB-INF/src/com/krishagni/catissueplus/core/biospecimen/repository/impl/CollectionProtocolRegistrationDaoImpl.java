@@ -8,6 +8,7 @@ import gov.nih.nci.logging.api.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,49 +69,52 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	@SuppressWarnings("unchecked")
 	public List<SpecimenCollectionGroupInfo> getScgList(Long cprId) {
 
-		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)sessionFactory.getCurrentSession().get(CollectionProtocolRegistration.class, cprId);
+		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
+				CollectionProtocolRegistration.class, cprId);
 		Set<SpecimenCollectionGroupInfo> scgsInfo = new HashSet<SpecimenCollectionGroupInfo>();
 		Collection<SpecimenCollectionGroup> groups = cpr.getScgCollection();
 		for (SpecimenCollectionGroup specimenCollectionGroup : groups) {
-			scgsInfo.add(SpecimenCollectionGroupInfo.fromScg(specimenCollectionGroup,cpr.getRegistrationDate()));
+			scgsInfo.add(SpecimenCollectionGroupInfo.fromScg(specimenCollectionGroup, cpr.getRegistrationDate()));
 		}
 		Collection<CollectionProtocolEvent> cpes = cpr.getCollectionProtocol().getCollectionProtocolEventCollection();
 		for (CollectionProtocolEvent collectionProtocolEvent : cpes) {
-				scgsInfo.add(SpecimenCollectionGroupInfo.fromCpe(collectionProtocolEvent,cpr.getRegistrationDate()));
+			scgsInfo.add(SpecimenCollectionGroupInfo.fromCpe(collectionProtocolEvent, cpr.getRegistrationDate()));
 		}
-		
-		
-//				" ";
-//				"scg.collectionProtocolEvent cpe " +
-//				"where cpr.id=:cprId";
-//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_COLLECTION_GROUPSBY_CPR_ID);
-//		Query query = sessionFactory.getCurrentSession().createQuery(hhhh);
-//		
-//		query.setLong("cprId", cprId);
-////		query.setLong("cprId2", cprId);
-//		List<Object[]> results = query.list();
-//		
-//Query query1 = sessionFactory.getCurrentSession().createQuery(hql3);
-//		
-//		query.setLong("cprId", cprId);
-//		List<Object[]> results1 = query.list();
-//
-////		List<SpecimenCollectionGroupInfo> scgs = new ArrayList<SpecimenCollectionGroupInfo>();
-//		for (Object[] object : results) {
-//			SpecimenCollectionGroupInfo scg = new SpecimenCollectionGroupInfo();
-//			scg.setId(object[0]==null?0l:Long.valueOf(object[0].toString()));
-//			scg.setName(object[1] == null ? "" : object[1].toString());
-//			scg.setCollectionStatus(object[2]==null?"pending":object[2].toString());
-//			if (object[3] != null) {
-//				scg.setReceivedDate((Date) object[7]);
-//			}
-//			scg.setEventPoint(Double.parseDouble(object[5].toString()));
-//			scg.setCollectionPointLabel(object[6].toString());
-////			scg.setRegistrationDate((Date) object[7]);
-//			scgs.add(scg);
-//		}
 
-		return new ArrayList<SpecimenCollectionGroupInfo>(scgsInfo);
+		//				" ";
+		//				"scg.collectionProtocolEvent cpe " +
+		//				"where cpr.id=:cprId";
+		//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_COLLECTION_GROUPSBY_CPR_ID);
+		//		Query query = sessionFactory.getCurrentSession().createQuery(hhhh);
+		//		
+		//		query.setLong("cprId", cprId);
+		////		query.setLong("cprId2", cprId);
+		//		List<Object[]> results = query.list();
+		//		
+		//Query query1 = sessionFactory.getCurrentSession().createQuery(hql3);
+		//		
+		//		query.setLong("cprId", cprId);
+		//		List<Object[]> results1 = query.list();
+		//
+		////		List<SpecimenCollectionGroupInfo> scgs = new ArrayList<SpecimenCollectionGroupInfo>();
+		//		for (Object[] object : results) {
+		//			SpecimenCollectionGroupInfo scg = new SpecimenCollectionGroupInfo();
+		//			scg.setId(object[0]==null?0l:Long.valueOf(object[0].toString()));
+		//			scg.setName(object[1] == null ? "" : object[1].toString());
+		//			scg.setCollectionStatus(object[2]==null?"pending":object[2].toString());
+		//			if (object[3] != null) {
+		//				scg.setReceivedDate((Date) object[7]);
+		//			}
+		//			scg.setEventPoint(Double.parseDouble(object[5].toString()));
+		//			scg.setCollectionPointLabel(object[6].toString());
+		////			scg.setRegistrationDate((Date) object[7]);
+		//			scgs.add(scg);
+		//		}
+		List<SpecimenCollectionGroupInfo> list = new ArrayList<SpecimenCollectionGroupInfo>(scgsInfo);
+		if (list != null) {
+			Collections.sort(list);
+		}
+		return list;
 	}
 
 	@Override
@@ -126,7 +130,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		return (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
 				CollectionProtocolRegistration.class, cprId);
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public CollectionProtocolRegistration getCprByPpId(Long cpId, String protocolParticipantIdentifier) {
@@ -135,7 +139,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		query.setString("ppid", protocolParticipantIdentifier);
 		query.setLong("cpId", cpId);
 		List<CollectionProtocolRegistration> result = query.list();
-		return result.isEmpty()?null:result.get(0);
+		return result.isEmpty() ? null : result.get(0);
 	}
 
 	@Override
@@ -143,8 +147,8 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CPID_BY_PPID_AND_CPID);
 		query.setString("ppid", protocolParticipantIdentifier);
 		query.setLong("cpId", cpId);
-		 boolean isUnique =query.list().isEmpty() ? true : false;
-		 return isUnique;
+		boolean isUnique = query.list().isEmpty() ? true : false;
+		return isUnique;
 	}
 
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
@@ -158,7 +162,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	private static final String GET_CPR_ID_BY_BARCODE = FQN + ".getCprIdByBarcode";
 
 	private static final String GET_CPID_BY_PPID_AND_CPID = FQN + ".getCprIdByPpid";
-	
+
 	private static final String GET_CPR_BY_PPID_AND_CPID = FQN + ".getCprByPpid";
 
 	//	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "

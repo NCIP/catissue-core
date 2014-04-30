@@ -60,16 +60,17 @@ angular.module('plus.cpview', [])
         var scg = scgs[i];
         tree.push(
           {
-            id: 'scg,'+ scg.id, 
-            level: 1, 
-            type: 'scg',
-            name: $scope.getScgLabel(scg),
-            collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
-            tooltip: $scope.getScgTooltip(scg),
-            eventId: scg.eventId,
-			instance: scg.instanceType,
-            nodes: [],
-            state: 'closed'
+        	  id: 'scg.instanceType,'+ scg.id + scg.eventId, 
+              level: 1, 
+  			scgId: scg.id,
+              type: 'scg',
+              name: $scope.getScgLabel(scg),
+              collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
+              tooltip: $scope.getScgTooltip(scg),
+              eventId: scg.eventId,
+  			instance: scg.instanceType,
+              nodes: [],
+              state: 'closed'
           });
       }
       $scope.tree = tree;
@@ -169,17 +170,18 @@ angular.module('plus.cpview', [])
       var specimen = specimens[i];
       var name = $scope.getSpecimenName(specimen);
       var specimenNode = {
-        id: 'specimen,' + specimen.id,
-        name: name,
-        tooltip: 'Label: ' + name + ' Type: ' + specimen.specimenType,
-        collectionStatus: $scope.getStatusIcon(specimen.collectionStatus),
-        type: 'specimen',
-        instance: specimen.instanceType,
-		scgId: specimen.scgId,
-		parentId: specimen.parentId,
-		requirementId: specimen.requirementId,
-        nodes: $scope.getSpecimenTree(specimen.children),
-        state: 'closed'
+    		  id: specimen.instanceType + specimen.id + specimen.requirementId,
+    	        name: name,
+    	        tooltip: 'Label: ' + name + ' Type: ' + specimen.specimenType,
+    	        collectionStatus: $scope.getStatusIcon(specimen.collectionStatus),
+    	        type: 'specimen',
+    	        instance: specimen.instanceType,
+    			specimenId: specimen.id,
+    			scgId: specimen.scgId,
+    			parentId: specimen.parentId,
+    			requirementId: specimen.requirementId,
+    	        nodes: $scope.getSpecimenTree(specimen.children),
+    	        state: 'closed'
       }
 
       specimenNode.childrenProbed = true;
@@ -205,12 +207,14 @@ angular.module('plus.cpview', [])
       data.state = 'opened';
 
       if (data.childrenProbed == undefined) {
-        if (data.type == 'scg') {
-          var scgId = data.id.split(',')[1];
-		  var objectType="";
-	if(data.instance == 'cpe'){
-		objectType = 'cpe';
-	}
+    	  var scgId = data.scgId;
+          if (data.type == 'scg') {
+  		  var objectType="";
+  		  
+  	if(data.instance == 'cpe'){
+  		objectType = 'cpe';
+  		scgId = data.eventId;
+  	}
           repository.getSpecimens(scgId,objectType).success(function(result) {
             data.nodes = $scope.getSpecimenTree(result);
             data.childrenProbed = true;
@@ -232,7 +236,7 @@ angular.module('plus.cpview', [])
     	var participantId = $scope.selectedParticipant.id.split(',')[0];
         var ids = data.id.split(',');
   	  var url="QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=false&operation=edit&id="
-          	 + ids[1] + "&cpSearchCpId=" + $scope.selectedCp.id + "&clickedNodeId="+ ids[1];
+          	 + data.scgId + "&cpSearchCpId=" + $scope.selectedCp.id + "&clickedNodeId="+ data.scgId;
   	  if(data.instance=='cpe')
   	  {
   		url="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroupCPQuery&cpId="+$scope.selectedCp.id+"&pId="+participantId+"&requestFrom=participantView&cpeId="+data.eventId;
@@ -240,7 +244,7 @@ angular.module('plus.cpview', [])
       $('#cpFrameNew').attr('src',url);
     } else if(data.type == 'specimen'){
       var ids = data.id.split(',');
-      var url = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id=" + ids[1] + 
+      var url = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id=" + data.specimenId + 
       "&refresh=false& " + "cpSearchCpId=" + $scope.selectedCp.id;
 		if(data.instance=='requirement')
 		{
@@ -266,17 +270,18 @@ angular.module('plus.cpview', [])
   };
 
   $scope.getScgLabel = function(scg) {
-    var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + date;
+    var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
+	var date = new Date(date1);
+    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + date.format("d-m-Y");
   }
 
   $scope.getScgTooltip = function(scg) {
-    var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-    
+    var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
+    var date = new Date(date1);
     var htmlToolTip = 
     	"<table style=\"font-size: 12px\"><tbody>" +
     	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td class=\"pull-left\">"+ scg.eventPoint + " (" + scg.collectionPointLabel  + ") "+ "</td><tr/>" +
-    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ date + "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ date.format("d-m-Y") + "</td><tr/>" +
     	"</tbody></table>";
 
     return htmlToolTip;
