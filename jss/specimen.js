@@ -778,6 +778,11 @@ function submitTabData(operation)
 		{
 			tabDataJSON['label']=obj.value;
 		}
+		if(operation = "add")
+		{
+			tabDataJSON['className']=classNameCombo.getSelectedText();
+			tabDataJSON['type']=typeCombo.getComboText();
+		}
 		//var loader = dhtmlxAjax.postSync("SpecimenAjaxAction.do","type=updateSpecimen&dataJSON="+JSON.stringify(tabDataJSON)+"&extidJSON="+JSON.stringify(extidJSON)+"&biohazardJSON="+JSON.stringify(biohazardJSON)+"&printLabel="+printFlag);
 		tabDataJSON["externalIdentifiers"]=extidJSON;
 		tabDataJSON["bioHazards"]=biohazardJSON;
@@ -794,6 +799,11 @@ function submitTabData(operation)
 		if(scgId != null && scgId != "")
 		{
 			tabDataJSON["specimenCollectionGroupId"] = document.getElementById("scgId").value; 
+		}
+		var requirementId = document.getElementById("requirementId").value;
+		if(requirementId != null && requirementId != "")
+		{
+			tabDataJSON["requirementId"] = document.getElementById("requirementId").value; 
 		}
 	
 		createRESTSpec(tabDataJSON,printFlag,operation);

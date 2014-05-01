@@ -14,6 +14,7 @@ public class SpecimenDTO
 	private String generateLabel;
 	private String operation;
 	private Long parentSpecimenId;
+	private Long requirementId;
 	private Long specimenCollectionGroupId;
 	private String specimenCollectionGroupName;
 	private String parentSpecimenName;
@@ -252,6 +253,16 @@ public class SpecimenDTO
 	public void setBiohazardType(String biohazardType)
 	{
 		this.biohazardType = biohazardType;
+	}
+
+	
+	public Long getRequirementId() {
+		return requirementId;
+	}
+
+	
+	public void setRequirementId(Long requirementId) {
+		this.requirementId = requirementId;
 	}
 
 

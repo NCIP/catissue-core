@@ -71,11 +71,13 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			//				request.setAttribute("hideButton", true);
 			//			}
 //boolean flag = true;
+			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			if (!StringUtils.isBlank(request.getParameter("scgId")) && !"null".equals(request.getParameter("scgId"))) {
 				Long scgId = Long.valueOf(request.getParameter("scgId"));
 				scg = (SpecimenCollectionGroup) hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(), scgId);
 			}
 			else {
+				specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 //				flag = false;
 				ActionErrors errors = new ActionErrors();
 				//			You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
@@ -113,7 +115,7 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			}
 			specimenDTO.setRequirementId(requirementId);
 			specimenDTO.setLineage(requirement.getLineage());
-			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+//			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 			specimenDTO.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			specimenDTO.setAvailable(Boolean.FALSE);
 			specimenDTO.setIsVirtual(Boolean.TRUE);

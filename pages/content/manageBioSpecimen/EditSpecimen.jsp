@@ -92,6 +92,7 @@
 <html:hidden name="specimenDTO" property="operation"/>
 <html:hidden name="specimenDTO" property="parentSpecimenId"/>
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
+<html:hidden name="specimenDTO" property="requirementId" styleId="requirementId"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
                                 
     <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">

@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
@@ -895,6 +896,11 @@ public class SpecimenBizLogic
 		specimen.setLabel(specimenDTO.getLabel());
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimen.setAvailableQuantity(specimen.getInitialQuantity());
+		if(specimenDTO.getRequirementId()!=null)
+		{
+			SpecimenRequirement sr = (SpecimenRequirement)hibernateDao.retrieveById(SpecimenRequirement.class.getName(), specimenDTO.getRequirementId());
+			specimen.setSpecimenRequirement(sr);
+		}
 		if (Constants.ALIQUOT.equals(specimenDTO.getLineage())
 				|| Constants.DERIVED_SPECIMEN.equals(specimenDTO.getLineage()))
 		{

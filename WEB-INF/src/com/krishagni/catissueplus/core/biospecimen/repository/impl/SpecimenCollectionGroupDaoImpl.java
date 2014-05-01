@@ -69,7 +69,12 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 			String parentKey = "-1";
 			if(parentSpecimen != null){
 				SpecimenRequirement psr = parentSpecimen.getSpecimenRequirement();
-				parentKey = parentSpecimen.getId()+"_"+psr.getId();
+				if(psr==null){  
+				parentKey = parentSpecimen.getId()+"_-1";
+				} 
+				else{ 
+					parentKey = parentSpecimen.getId()+"_"+psr.getId();
+				}
 			}			
 			Set<SpecimenInfo> specimenInfoList = specimensMap.get(parentKey);
 			if (specimenInfoList == null) {
