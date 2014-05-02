@@ -31,6 +31,7 @@ angular.module('plus.cpview', [])
   };
 
   $scope.registerParticipant = function() {
+    $scope.selectedParticipant={};
     $scope.tree = [];
     var url = "QueryParticipant.do?operation=add&pageOf=pageOfParticipantCPQuery&clearConsentSession=true&cpSearchCpId=" +
                $scope.selectedCp.id + "&refresh=true";
