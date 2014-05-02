@@ -1837,7 +1837,7 @@
     </changeSet>
 
     <changeSet author="vpawar" id="table for mapping users sharing folder" failOnError="true">
-      <createTable tableName="CATISSUE_QFOLDER_SHARE_SETTINGS">
+      <createTable tableName="CATISSUE_QFOLDER_SHARE_SETTING">
         <column name="FOLDER_ID" type="${int.type}">
           <constraints nullable="false"/>
         </column>
@@ -1848,24 +1848,32 @@
     </changeSet>
 
     <changeSet author="vpawar" id="add primary key of query folder share settings table" failOnError="true">
-      <addPrimaryKey tableName="CATISSUE_QFOLDER_SHARE_SETTINGS" columnNames="FOLDER_ID, USER_ID"/>
+      <addPrimaryKey tableName="CATISSUE_QFOLDER_SHARE_SETTING" columnNames="FOLDER_ID, USER_ID"/>
     </changeSet>
 
     <changeSet author="vpawar" id="add foreign key on folder field of share settings table" failOnError="true">
       <addForeignKeyConstraint constraintName="CAT_QFSS_FOLDER_ID_CAT_QF_ID"
-        baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="FOLDER_ID"
+        baseTableName="CATISSUE_QFOLDER_SHARE_SETTING" baseColumnNames="FOLDER_ID"
         referencedTableName="CATISSUE_QUERY_FOLDERS" referencedColumnNames="IDENTIFIER"/>
     </changeSet>
 
     <changeSet author="vpawar" id="add foreign key on user field of share settings table" failOnError="true">
       <addForeignKeyConstraint constraintName="CAT_QFSS_USER_ID_CAT_USR_ID"
-        baseTableName="CATISSUE_QFOLDER_SHARE_SETTINGS" baseColumnNames="USER_ID"
+        baseTableName="CATISSUE_QFOLDER_SHARE_SETTING" baseColumnNames="USER_ID"
         referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
     </changeSet>
     
     <changeSet author="ka" id="adding Sequence CATISSUE_FORM_CONTEXT" failOnError="true">
 	  <createSequence 
         sequenceName="CATISSUE_FORM_CONTEXT_SEQ" 
+        startValue="1" 
+        incrementBy="1" 
+        ordered="true" />
+    </changeSet>
+    
+     <changeSet author="ka" id="adding Sequence CATISSUE_FORM_REC_ENTRY_SEQ" failOnError="true">
+	  <createSequence 
+        sequenceName="CATISSUE_FORM_REC_ENTRY_SEQ" 
         startValue="1" 
         incrementBy="1" 
         ordered="true" />

@@ -91,6 +91,7 @@ import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
+import edu.common.dynamicextensions.ndao.DbSettingsFactory;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
@@ -1014,7 +1015,10 @@ public class MigrateForm {
 			params.add(0);
 			params.add(true);
 			
-			Number id = JdbcDaoFactory.getJdbcDao().executeUpdateAndGetKey(INSERT_FORM_CTXT_SQL, params, "identifier");
+			String query = DbSettingsFactory.getProduct().equals("Oracle") ? INSERT_FORM_CTXT_SQL_ORACLE 
+							: INSERT_FORM_CTXT_SQL_MYSQL;
+			Number id = JdbcDaoFactory.getJdbcDao().executeUpdateAndGetKey(query, params, "identifier");
+		
 			form.setId(id.longValue());							
 		} catch (Exception e) {
 			throw new RuntimeException("Error inserting form context", e);
@@ -1037,8 +1041,9 @@ public class MigrateForm {
 		params.add(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 		params.add(Status.ACTIVE.toString());
 
-		
-		jdbcDao.executeUpdate(INSERT_RECORD_ENTRY_SQL, params);
+		String query = DbSettingsFactory.getProduct().equals("Oracle") ? INSERT_RECORD_ENTRY_SQL_ORACLE 
+						: INSERT_RECORD_ENTRY_SQL_MYSQL;
+		jdbcDao.executeUpdate(query, params);
 	}
 	
 	
@@ -1212,11 +1217,18 @@ public class MigrateForm {
 	private static final String GET_ID_FROM_ASSO_ID_SQL =
 			" select identifier from %s where %s= ?";
 	
-	private static final String INSERT_FORM_CTXT_SQL = 
+	private static final String INSERT_FORM_CTXT_SQL_MYSQL = 
 			"insert into catissue_form_context values(default, ?, ?, ?, ?, ?)";
 	
-	private static final String INSERT_RECORD_ENTRY_SQL = 
+	
+	private static final String INSERT_FORM_CTXT_SQL_ORACLE = 
+			"insert into catissue_form_context values(CATISSUE_FORM_CONTEXT_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
+	
+	
+	private static final String INSERT_RECORD_ENTRY_SQL_MYSQL = 
 			"insert into catissue_form_record_entry values(default, ?, ?, ?, ?, ?, ?)";
 	
-
+	private static final String INSERT_RECORD_ENTRY_SQL_ORACLE = 
+			"insert into catissue_form_record_entry values(CATISSUE_FORM_REC_ENTRY_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+	
 }
