@@ -23,7 +23,7 @@
      
     <set 
       name="sharedWith" 
-      table="CATISSUE_QFOLDER_SHARE_SETTINGS">
+      table="CATISSUE_QFOLDER_SHARE_SETTING">
       <key column="FOLDER_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
