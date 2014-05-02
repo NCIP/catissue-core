@@ -439,21 +439,10 @@
                                 <input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)' readonly style="border:0px" id="storageContainerPosition" title='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)'/>
                                     
                                 </logic:equal>
-                                <logic:equal name="operation" value="add">
                                 <a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
                             <img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
                                     
-                                </logic:equal>
-                                <logic:equal name="operation" value="edit">
-                                <logic:equal name="specimenDTO" property="collectionStatus" value="Collected">
-                                    <a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
-                            <img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
-                                </logic:equal>
-                                </logic:equal>
-                                <logic:equal name="specimenDTO" property="collectionStatus" value="Pending">
-                                    <a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
-                            <img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
-                                </logic:equal>
+                                
                                 <span style="left-padding:5px">
                                 <a href="#" onclick="javascript:openViewMap();return false">
             <img src="images/uIEnhancementImages/Tree.gif" border="0" width="16" height="16" style="vertical-align: bottom" title="select positions from hierarchical view"/>

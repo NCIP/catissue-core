@@ -737,6 +737,13 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 				if (cPEObject != null)
 				{
 					this.setCalendarEventPoint(cPEObject, request, specimenCollectionGroupForm);
+					if("add".equals(operation))
+					{
+						specimenCollectionGroupForm.setClinicalDiagnosis(((CollectionProtocolEvent)cPEObject).getClinicalDiagnosis());
+						specimenCollectionGroupForm.setClinicalStatus(((CollectionProtocolEvent)cPEObject).getClinicalStatus());
+						request.setAttribute("clinicalDiagnosis", specimenCollectionGroupForm
+								.getClinicalDiagnosis());
+					}
 				}
 
 				LOGGER.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"
