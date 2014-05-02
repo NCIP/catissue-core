@@ -182,6 +182,7 @@ angular.module('plus.cpview', [])
     			parentId: specimen.parentId,
     			requirementId: specimen.requirementId,
     	        nodes: $scope.getSpecimenTree(specimen.children),
+    	        specimenType: specimen.specimenType,
     	        state: 'closed'
       }
 
@@ -199,6 +200,8 @@ angular.module('plus.cpview', [])
     var name = specimen.label ? specimen.label : specimen.specimenClass;
     if (specimen.requirementLabel) {
       name = name + "(" + specimen.requirementLabel + ")";
+    } else {
+        name = name + "(" + specimen.specimenType + ")";
     }
     return name;
   };
