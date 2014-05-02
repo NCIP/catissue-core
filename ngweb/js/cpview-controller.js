@@ -60,16 +60,16 @@ angular.module('plus.cpview', [])
       for (var i = 0; i < scgs.length; ++i) {
         var scg = scgs[i];
         tree.push(
-          {
-        	  id: 'scg.instanceType,'+ scg.id + scg.eventId, 
+          {    		 
+        	  id: scg.instanceType + scg.id + scg.eventId, 
               level: 1, 
-  			scgId: scg.id,
+  			  scgId: scg.id,
               type: 'scg',
               name: $scope.getScgLabel(scg),
               collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
               tooltip: $scope.getScgTooltip(scg),
               eventId: scg.eventId,
-  			instance: scg.instanceType,
+  			  instance: scg.instanceType,
               nodes: [],
               state: 'closed'
           });
@@ -101,7 +101,7 @@ angular.module('plus.cpview', [])
     var scgNode = null;
     var tree = $scope.tree;
     for (var i = 0; i < tree.length; i++) {
-      if (tree[i].id == selectedScg.id) {
+      if (tree[i].scgId == selectedScg.id) {
         scgNode = tree[i];
         break;
       }
@@ -113,7 +113,7 @@ angular.module('plus.cpview', [])
     } 
 
     scgNode.state = 'opened';
-    var scgId = selectedScg.id.split(',')[1];
+    var scgId = selectedScg.id;
 	
     repository.getSpecimens(scgId).success(function(result) {
       scgNode.nodes = $scope.getSpecimenTree(result);
@@ -146,7 +146,7 @@ angular.module('plus.cpview', [])
   $scope.getSpecimenNodePath = function(specimen, specimens, path) {
     for (var i = 0; i < specimens.length; ++i) {
       path.push(specimens[i].id);
-      if (specimen.id == specimens[i].id) {
+      if (specimen.id == specimens[i].specimenId) {
         return true;
       }
 

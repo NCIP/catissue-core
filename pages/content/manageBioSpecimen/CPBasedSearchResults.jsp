@@ -372,12 +372,11 @@ function hideCursor(){
     }
     
     function handleCpView(participant, scgId, specimenId) {
-	  console.warn(" From iframe" + JSON.stringify(participant));
       var scope = angular.element($("#CpViewController")).scope();
 
       selParticipant = participant != null ? participant : scope.selectedParticipant;
-      selectedScg = scgId != null ? {id: "scg," + scgId, type: 'scg'} : undefined;
-      selectedSpecimen = specimenId != null ? {id: "specimen," + specimenId, type: 'specimen'} : undefined;
+      selectedScg = scgId != null ? {id: scgId, type: 'scg'} : undefined;
+      selectedSpecimen = specimenId != null ? {id: specimenId, type: 'specimen'} : undefined;
       
       scope.onCpSelect({id: scope.selectedCp.id, text: scope.selectedCp.shortTitle});
       var scgTreeQ = scope.onParticipantSelect(selParticipant, selectedScg == undefined ? true : selectedScg);
