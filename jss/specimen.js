@@ -1364,6 +1364,7 @@ req.onreadystatechange = function() {
 					}
 					document.forms[0].action = action;
 					document.forms[0].submit();
+					parent.handleCpView(null, specimenDto.specimenCollectionGroupId, specimenDto.id);
 				}
 			/*}
 			else
