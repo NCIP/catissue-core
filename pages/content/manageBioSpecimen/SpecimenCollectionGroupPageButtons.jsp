@@ -129,7 +129,7 @@ if(operation == "add")
              }
         }
 }
-else
+/*else
 {
     if(collectionStatus == "Pending")
     {
@@ -153,5 +153,5 @@ else
              }
         }
     }
-}
+}*/
 </script>
