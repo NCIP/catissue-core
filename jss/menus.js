@@ -57,7 +57,7 @@ Ext.onReady(function(){
                             text: 'Approve New Users',
                             href:'ApproveUserShow.do?pageNum=1'
 	                    }, {
-                            text: 'Login Dashboard',
+                            text: 'Login Audit Log',
                             href:'LoginAuditDashboard.do?operation=init&recordPerPage=200000&startIndex=1'
 	                       }
                     ]
