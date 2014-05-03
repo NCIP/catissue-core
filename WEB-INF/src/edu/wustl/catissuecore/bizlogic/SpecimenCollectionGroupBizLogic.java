@@ -675,13 +675,15 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					.getSpecimenCollectionSite();
 			final Site site = specimenCollectionGroup
 					.getSpecimenCollectionSite();
-			if (oldSite == null && site != null)
-			{
-				this.checkStatus(dao, site, "Site");
-			}
-			else if (!site.getId().equals(oldSite.getId()))
-			{
-				this.checkStatus(dao, site, "Site");
+			if(!specimenCollectionGroup.getCollectionStatus().equals("Not Collected") || site != null){
+    			if (oldSite == null && site != null)
+    			{
+    				this.checkStatus(dao, site, "Site");
+    			}
+    			else if (!site.getId().equals(oldSite.getId()))
+    			{
+    				this.checkStatus(dao, site, "Site");
+    			}
 			}
 			// site check complete
 			final Long oldEventId = oldspecimenCollectionGroup
@@ -1723,11 +1725,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						}
 				}
 			}
-			if (group.getSpecimenCollectionSite() == null
+			if(!group.getCollectionStatus().equalsIgnoreCase("Not Collected")){
+			if ((group.getSpecimenCollectionSite() == null
 					|| ((group.getSpecimenCollectionSite().getId() == null || group.getSpecimenCollectionSite().getId() == 0) 
-					&& Validator.isEmpty(group.getSpecimenCollectionSite().getName())))
+					&& Validator.isEmpty(group.getSpecimenCollectionSite().getName()))))
 			{
-				message = ApplicationProperties
+			   	message = ApplicationProperties
 						.getValue("specimenCollectionGroup.site");
 				throw this.getBizLogicException(null, "errors.item.invalid",
 						message);
@@ -1742,6 +1745,18 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					throw this.getBizLogicException(null,
 							"errors.item.invalid", message);
 				}
+			}
+			}else{
+			    SiteDAO siteDAO = new SiteDAO();
+                if(group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == -1)
+                {
+                    group.setSpecimenCollectionSite(null);
+                }else if(!siteDAO.isSitePresent((HibernateDAO)dao, group.getSpecimenCollectionSite().getName(), group.getSpecimenCollectionSite().getId())){
+                    message = ApplicationProperties
+                            .getValue("specimenCollectionGroup.site");
+                    throw this.getBizLogicException(null,
+                            "errors.item.invalid", message);
+                }
 			}
 			if (validator.isEmpty(group.getName()))
 			{
