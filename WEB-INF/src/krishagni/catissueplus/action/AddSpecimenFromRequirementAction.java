@@ -88,7 +88,7 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 				request.setAttribute("hideButton", true);
 			}
 			if (!StringUtils.isBlank(request.getParameter("parentId")) && !"null".equals(request.getParameter("parentId"))) {
-				Long parentId = (Long) request.getAttribute("parentId");
+				Long parentId = Long.valueOf(request.getParameter("parentId"));
 				parentSpecimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(), parentId);
 				scg = parentSpecimen.getSpecimenCollectionGroup();
 				specimenDTO.setParentSpecimenId(parentId);

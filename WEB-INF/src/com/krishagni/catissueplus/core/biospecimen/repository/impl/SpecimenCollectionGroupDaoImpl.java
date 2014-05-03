@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -60,7 +61,7 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		Map<Long,Long> specimenReqMapping = new HashMap<Long, Long>();
 		
 		for (Specimen specimen : specimens) {
-			
+			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimen.getActivityStatus())){
 			SpecimenRequirement sr = specimen.getSpecimenRequirement();
 			if(sr!=null){
 				specimenReqMapping.put(sr.getId(), specimen.getId());
@@ -70,7 +71,7 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 			if(parentSpecimen != null){
 				SpecimenRequirement psr = parentSpecimen.getSpecimenRequirement();
 				if(psr==null){  
-				parentKey = parentSpecimen.getId()+"_-1";
+				parentKey = parentSpecimen.getId()+"_null";
 				} 
 				else{ 
 					parentKey = parentSpecimen.getId()+"_"+psr.getId();
@@ -83,9 +84,11 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 			}
 
 			specimenInfoList.add(SpecimenInfo.fromSpecimen(specimen));
+			}
 		}
 		
 		for (SpecimenRequirement requirement : requirementColl) {
+			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(requirement.getActivityStatus())){
 			SpecimenRequirement parentSpecimenReq = (SpecimenRequirement) requirement.getParentSpecimen();
 			
 			String parentKey = "-1";
@@ -107,12 +110,12 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 				}
 				specimenInfoList.add(sr);
 			}
-
+			}
 		}
 
 		Set<SpecimenInfo> specimensList = specimensMap.get("-1");
 		linkParentChildSpecimens(specimensMap, specimensList);
-		List<SpecimenInfo> result = new ArrayList<SpecimenInfo>(specimensList);
+		List<SpecimenInfo> result = specimensList==null?Collections.<SpecimenInfo>emptyList(): new ArrayList<SpecimenInfo>(specimensList);
 		if(specimensList!=null){
 		Collections.sort(result);
 		}
@@ -132,7 +135,10 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 				Collections.sort(childList);
 			}
 			
-			specimen.setChildren(childList);
+			for (SpecimenInfo specimenInfo : childList) {
+				specimenInfo.setParentId(specimen.getId());
+			}
+			specimen.setChildren(childList); 
 			linkParentChildSpecimens(specimensMap, childSpecimens);
 		}
 	}
