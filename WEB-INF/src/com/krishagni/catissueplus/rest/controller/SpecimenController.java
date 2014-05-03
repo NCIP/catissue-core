@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -51,7 +54,7 @@ public class SpecimenController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/child-specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -97,11 +100,11 @@ public class SpecimenController {
 
 		return null;
 	}
-	
-	@RequestMapping(method = RequestMethod.PATCH, value="/{id}")
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenDetail patchSpecimen(@PathVariable Long id,@RequestBody Map<String, Object> specimenProps) {
+	public SpecimenDetail patchSpecimen(@PathVariable Long id, @RequestBody Map<String, Object> specimenProps) {
 		PatchSpecimenEvent event = new PatchSpecimenEvent();
 		SpecimenDetail detail = new SpecimenDetail();
 		try {
@@ -121,6 +124,21 @@ public class SpecimenController {
 		SpecimenUpdatedEvent response = specimenSvc.patchSpecimen(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getSpecimenDetail();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/aliquots")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenDetail> createAliquot(@PathVariable Long id, @RequestBody AliquotDetail aliquotDetail) {
+		CreateAliquotEvent createAliquotEvent = new CreateAliquotEvent();
+		createAliquotEvent.setAliquotDetail(aliquotDetail);
+		createAliquotEvent.setSpecimenId(id);
+
+		AliquotCreatedEvent response = specimenSvc.createAliquot(createAliquotEvent);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getAliquots();
 		}
 		return null;
 	}

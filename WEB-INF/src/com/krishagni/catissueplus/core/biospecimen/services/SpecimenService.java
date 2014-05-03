@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
@@ -22,4 +24,6 @@ public interface SpecimenService {
 	SpecimenUpdatedEvent updateSpecimen(UpdateSpecimenEvent event);
 
 	public SpecimenUpdatedEvent patchSpecimen(PatchSpecimenEvent event);
+
+	public AliquotCreatedEvent createAliquot(CreateAliquotEvent event);
 }

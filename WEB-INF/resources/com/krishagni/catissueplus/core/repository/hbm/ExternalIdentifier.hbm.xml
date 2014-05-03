@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+	<class
+		name="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier"
+		table="CATISSUE_EXTERNAL_IDENTIFIER" lazy="true">
+
+		<id name="id" column="IDENTIFIER" type="long">
+			<generator class="native">
+				<param name="sequence">CATISSUE_EXTERNAL_ID_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="name" type="string" column="NAME" length="255" />
+
+		<property name="value" type="string" column="VALUE" length="255" />
+
+
+		<many-to-one name="specimen" class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+			column="SPECIMEN_ID" />
+
+
+	</class>
+</hibernate-mapping>

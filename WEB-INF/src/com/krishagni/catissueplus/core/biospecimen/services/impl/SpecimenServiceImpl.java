@@ -3,11 +3,17 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
@@ -28,6 +34,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private static final String LABEL = "label";
 
 	private static final String BARCODE = "barcode";
+
+	private static final String ALIQUOT_COUNT = "Aliquot Count";
+
+	private static final String SPECIMEN_AVAILABLE_QUANTITY = "Specimen available quantity ";
 
 	private DaoFactory daoFactory;
 
@@ -96,7 +106,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return SpecimenUpdatedEvent.serverError(ex);
 		}
 	}
-	
+
 	@Override
 	public SpecimenUpdatedEvent patchSpecimen(PatchSpecimenEvent event) {
 		try {
@@ -105,7 +115,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			if (oldSpecimen == null) {
 				return SpecimenUpdatedEvent.notFound(specimenId);
 			}
-			Specimen specimen = specimenFactory.patch(oldSpecimen,event.getDetail());
+			Specimen specimen = specimenFactory.patch(oldSpecimen, event.getDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
 			validateLabelBarcodeUnique(oldSpecimen, specimen, errorHandler);
 			errorHandler.checkErrorAndThrow();
@@ -139,6 +149,41 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		catch (Exception e) {
 			return SpecimenDeletedEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public AliquotCreatedEvent createAliquot(CreateAliquotEvent createAliquotEvent) {
+
+		try {
+			if (createAliquotEvent.getAliquotDetail().getNoOfAliquots() < 1) {
+				ObjectCreationException.raiseError(SpecimenErrorCode.INVALID_ALIQUOT_COUNT, ALIQUOT_COUNT);
+			}
+			Specimen specimen = daoFactory.getSpecimenDao().getSpecimen(createAliquotEvent.getSpecimenId());
+			if (specimen == null) {
+				return AliquotCreatedEvent.notFound(createAliquotEvent.getSpecimenId());
+			}
+			if (specimen.getAvailableQuantity() == 0) {
+				ObjectCreationException.raiseError(SpecimenErrorCode.INSUFFICIENT_SPECIMEN_QTY, SPECIMEN_AVAILABLE_QUANTITY);
+			}
+
+			Set<Specimen> aliquots = specimenFactory.createAliquots(specimen, createAliquotEvent.getAliquotDetail());
+			Set<Specimen> childCollection = specimen.getChildCollection();
+			childCollection.addAll(aliquots);
+			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+
+			List<SpecimenDetail> aliquotList = new ArrayList<SpecimenDetail>();
+			for (Specimen aliquot : aliquots) {
+				aliquotList.add(SpecimenDetail.fromDomain(aliquot));
+			}
+			return AliquotCreatedEvent.ok(aliquotList);
+		}
+		catch (ObjectCreationException oce) {
+			return AliquotCreatedEvent.invalidRequest(SpecimenErrorCode.ERRORS.message(), oce.getErroneousFields());
+		}
+		catch (Exception ex) {
+			return AliquotCreatedEvent.serverError(ex);
 		}
 	}
 

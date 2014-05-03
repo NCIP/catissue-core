@@ -61,7 +61,7 @@
 			<key column="SPECIMEN_ID">
 			</key>
 
-			<one-to-many class="edu.wustl.catissuecore.domain.ExternalIdentifier" />
+			<one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
 
 		</set>
 

@@ -11,7 +11,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -153,20 +152,19 @@ public class Specimen {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
-		{
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
 			delete(false);
 		}
 		this.activityStatus = activityStatus;
 	}
-	
-//	public void setActivityStatus(String activityStatus,boolean isToIncludeChildren) {
-//		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
-//		{
-//			delete(isToIncludeChildren);
-//		}
-//		this.activityStatus = activityStatus;
-//	}
+
+	//	public void setActivityStatus(String activityStatus,boolean isToIncludeChildren) {
+	//		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
+	//		{
+	//			delete(isToIncludeChildren);
+	//		}
+	//		this.activityStatus = activityStatus;
+	//	}
 
 	public Boolean getIsAvailable() {
 		return isAvailable;
@@ -287,7 +285,7 @@ public class Specimen {
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
 	}
-	
+
 	public boolean isCollected() {
 		return Status.SPECIMEN_COLLECTION_STATUS_COLLECTED.getStatus().equals(this.collectionStatus);
 	}
@@ -301,12 +299,11 @@ public class Specimen {
 		else {
 			checkActiveDependents();
 		}
-		if(this.specimenPosition!=null)
-		{
-//			this.specimenPosition.setSpecimen(null);
+		if (this.specimenPosition != null) {
+			//			this.specimenPosition.setSpecimen(null);
 			this.setSpecimenPosition(null);
 		}
-		
+
 		this.barcode = Utility.getDisabledValue(barcode);
 		this.label = Utility.getDisabledValue(label);
 		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
@@ -321,7 +318,7 @@ public class Specimen {
 	}
 
 	public void update(Specimen specimen) {
-		
+
 	}
 
 }
