@@ -1,22 +1,27 @@
+
 package com.krishagni.catissueplus.core.services.testdata;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ExternalIdentifierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.StorageLocation;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.common.beans.SessionDataBean;
-
 
 public class SpecimenTestData {
 
@@ -29,7 +34,7 @@ public class SpecimenTestData {
 		event.setSpecimenDetail(detail);
 		return event;
 	}
-	
+
 	public static CreateSpecimenEvent getCreateChildEventInvalidParentData() {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
@@ -50,17 +55,26 @@ public class SpecimenTestData {
 		return event;
 	}
 
-	
-
 	public static Specimen getSpecimenToReturn() {
 		Specimen specimen = new Specimen();
 		specimen.setLabel("new label");
 		specimen.setBarcode("new barcode");
+		specimen.setAvailableQuantity((double) 10);
+		specimen.setInitialQuantity((double) 10);
+
+		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+		externalIdentifier.setId(1L);
+		externalIdentifier.setName("new External Id");
+		externalIdentifier.setValue("1");
+		externalIdentifier.setSpecimen(specimen);
+		HashSet<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
+		externalIdentifierCollection.add(externalIdentifier);
+		specimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		return specimen;
 	}
 
 	public static StorageContainer getContainerToReturn() {
-		StorageContainer container  = new StorageContainer();
+		StorageContainer container = new StorageContainer();
 		return container;
 	}
 
@@ -75,6 +89,7 @@ public class SpecimenTestData {
 		scg.setName("newName");
 		return scg;
 	}
+
 	public static UpdateSpecimenEvent getUpdateSpecimenEvent() {
 		UpdateSpecimenEvent event = new UpdateSpecimenEvent();
 		event.setId(1l);
@@ -109,14 +124,14 @@ public class SpecimenTestData {
 		detail.setSpecimenType("Feces");
 		detail.setTissueSide("Not Specified");
 		detail.setTissueSite("Not Specified");
-		
+
 		List<ExternalIdentifierDetail> identifierDetails = new ArrayList<ExternalIdentifierDetail>();
 		ExternalIdentifierDetail identifierDetail = new ExternalIdentifierDetail();
 		identifierDetail.setName("nnn");
 		identifierDetail.setValue("vvv");
 		identifierDetails.add(identifierDetail);
 		detail.setExternalIdentifierDetails(identifierDetails);
-		
+
 		return detail;
 	}
 
@@ -124,7 +139,6 @@ public class SpecimenTestData {
 		User user = new User();
 		return user;
 	}
-
 
 	private static SessionDataBean getSessionDataBean() {
 		SessionDataBean sessionDataBean = new SessionDataBean();
@@ -137,7 +151,7 @@ public class SpecimenTestData {
 		sessionDataBean.setUserName("admin@admin.com");
 		return sessionDataBean;
 	}
-	
+
 	public static CreateSpecimenEvent getCreateChildSpecimenEvent() {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
@@ -147,4 +161,69 @@ public class SpecimenTestData {
 		event.setSpecimenDetail(detail);
 		return event;
 	}
+
+	public static CreateAliquotEvent getCreateAliquotEvent() {
+		CreateAliquotEvent event = new CreateAliquotEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		event.setAliquotDetail(getAliquotDetail());
+		return event;
+	}
+
+	public static CreateAliquotEvent getCreateAliquotToTestInsufficientSpecimenCount() {
+		CreateAliquotEvent event = new CreateAliquotEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		AliquotDetail aliquotDetail = getAliquotDetail();
+		aliquotDetail.setNoOfAliquots(100);
+		event.setAliquotDetail(aliquotDetail);
+		return event;
+	}
+
+	public static CreateAliquotEvent getCreateAliquotWithCountZero() {
+		CreateAliquotEvent event = new CreateAliquotEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		AliquotDetail aliquotDetail = getAliquotDetail();
+		aliquotDetail.setNoOfAliquots(0);
+		event.setAliquotDetail(aliquotDetail);
+		return event;
+	}
+
+	public static AliquotDetail getAliquotDetail() {
+		AliquotDetail aliquotDetail = new AliquotDetail();
+
+		List<StorageLocation> storageLocationList = new ArrayList<StorageLocation>();
+		StorageLocation location = new StorageLocation();
+		location.setContainerName("New Container");
+		location.setPositionX("X");
+		location.setPositionY("Y");
+		storageLocationList.add(location);
+
+		aliquotDetail.setStorageLocations(storageLocationList);
+		aliquotDetail.setNoOfAliquots(1);
+		aliquotDetail.setQuantityPerAliquot((double) 1);
+		return aliquotDetail;
+	}
+
+	public static CreateAliquotEvent getCreateAliquotWithFullContainer() {
+		CreateAliquotEvent event = new CreateAliquotEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		AliquotDetail aliquotDetail = getAliquotWithFullContainer();
+		event.setAliquotDetail(aliquotDetail);
+		return event;
+	}
+
+	public static AliquotDetail getAliquotWithFullContainer() {
+		AliquotDetail aliquotDetail = new AliquotDetail();
+		List<StorageLocation> storageLocationList = new ArrayList<StorageLocation>();
+		StorageLocation location = new StorageLocation();
+		location.setContainerName("New Container");
+		location.setPositionX("X");
+		location.setPositionY("Y");
+		storageLocationList.add(location);
+
+		aliquotDetail.setNoOfAliquots(1);
+		aliquotDetail.setQuantityPerAliquot((double) 1);
+		aliquotDetail.setStorageLocations(storageLocationList);
+		return aliquotDetail;
+	}
+
 }

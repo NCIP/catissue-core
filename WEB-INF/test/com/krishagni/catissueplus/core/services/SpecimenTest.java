@@ -21,6 +21,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl;
+import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
@@ -76,7 +78,7 @@ public class SpecimenTest {
 		when(userDao.getUser(anyString())).thenReturn(SpecimenTestData.getUser());
 		when(scgDao.getscg(anyLong())).thenReturn(SpecimenTestData.getScgToReturn());
 		when(containerDao.getContainer(anyString())).thenReturn(SpecimenTestData.getContainerToReturn());
-		
+
 		when(specimenDao.isBarcodeUnique(anyString())).thenReturn(true);
 		when(specimenDao.isLabelUnique(anyString())).thenReturn(true);
 		when(specimenDao.getSpecimen(anyLong())).thenReturn(SpecimenTestData.getSpecimenToReturn());
@@ -89,9 +91,7 @@ public class SpecimenTest {
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
-	
-	
+
 	@Test
 	public void testSuccessfullChildSpecimenCreation() {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateChildSpecimenEvent();
@@ -99,30 +99,30 @@ public class SpecimenTest {
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSpecimenCreateWithVirtualContainer() {
-		
+
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSpecimenCreateInvaliContainer() {
 		when(containerDao.getContainer(anyString())).thenReturn(null);
-		
+
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		
+
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals("container name", response.getErroneousFields()[0].getFieldName());
 		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testSpecimenCreateEmptyLabel() {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEventEmptyLabel();
@@ -133,7 +133,7 @@ public class SpecimenTest {
 		assertEquals("label", response.getErroneousFields()[0].getFieldName());
 		assertEquals(SpecimenErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void tesChildCreationInvalidParent() {
 		when(specimenDao.getSpecimen(anyLong())).thenReturn(null);
@@ -145,7 +145,7 @@ public class SpecimenTest {
 		assertEquals("parent specimen", response.getErroneousFields()[0].getFieldName());
 		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void tesChildCreationInvalidParentData() {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateChildEventInvalidParentData();
@@ -156,7 +156,7 @@ public class SpecimenTest {
 		assertEquals("parent", response.getErroneousFields()[0].getFieldName());
 		assertEquals(SpecimenErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testSpecimenCreationServerErr() {
 		doThrow(new RuntimeException()).when(specimenDao).saveOrUpdate(any(Specimen.class));
@@ -165,22 +165,22 @@ public class SpecimenTest {
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSpecimenCreateInvalidScg() {
 		when(scgDao.getscg(anyLong())).thenReturn(null);
-		
+
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-		
+
 	}
-	
+
 	@Test
 	public void testSpecimenCreateInvalidRequirement() {
-		when(collectionProtocolDao.getSpecimenRequirement(anyLong())).thenReturn(null);		
+		when(collectionProtocolDao.getSpecimenRequirement(anyLong())).thenReturn(null);
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
@@ -189,7 +189,7 @@ public class SpecimenTest {
 		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 		assertEquals("specimen requirement", response.getErroneousFields()[0].getFieldName());
 	}
-	
+
 	@Test
 	public void testSpecimenCreationDuplicateLabelBarcode() {
 		when(specimenDao.isBarcodeUnique(anyString())).thenReturn(false);
@@ -202,12 +202,11 @@ public class SpecimenTest {
 
 		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
 		assertEquals(SpecimenErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
-		
+
 		assertEquals("label", response.getErroneousFields()[1].getFieldName());
 		assertEquals(SpecimenErrorCode.DUPLICATE_LABEL.message(), response.getErroneousFields()[1].getErrorMessage());
 	}
-	
-	
+
 	@Test
 	public void testSuccessfullSpecimenUpdation() {
 		UpdateSpecimenEvent event = SpecimenTestData.getUpdateSpecimenEvent();
@@ -215,7 +214,7 @@ public class SpecimenTest {
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSpecimenUpdateDuplicateLabelBarcode() {
 		when(specimenDao.isBarcodeUnique(anyString())).thenReturn(false);
@@ -228,11 +227,11 @@ public class SpecimenTest {
 
 		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
 		assertEquals(SpecimenErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
-		
+
 		assertEquals("label", response.getErroneousFields()[1].getFieldName());
 		assertEquals(SpecimenErrorCode.DUPLICATE_LABEL.message(), response.getErroneousFields()[1].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testSpecimenUpdationServerErr() {
 		doThrow(new RuntimeException()).when(specimenDao).saveOrUpdate(any(Specimen.class));
@@ -240,6 +239,43 @@ public class SpecimenTest {
 		SpecimenUpdatedEvent response = service.updateSpecimen(event);
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
+	public void testSuccessfullAliquotCreation() {
+		CreateAliquotEvent event = SpecimenTestData.getCreateAliquotEvent();
+		AliquotCreatedEvent response = service.createAliquot(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testCreateAliquotInsufficientSpecimenCount() {
+		CreateAliquotEvent event = SpecimenTestData.getCreateAliquotToTestInsufficientSpecimenCount();
+		AliquotCreatedEvent response = service.createAliquot(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(SpecimenErrorCode.INSUFFICIENT_SPECIMEN_QTY.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+	}
+
+	@Test
+	public void testCreateAliquotCountGreterThanZero() {
+		CreateAliquotEvent event = SpecimenTestData.getCreateAliquotWithCountZero();
+		AliquotCreatedEvent response = service.createAliquot(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(SpecimenErrorCode.INVALID_ALIQUOT_COUNT.message(), response.getErroneousFields()[0].getErrorMessage());
+	}
+
+	@Test
+	public void testCreateAliquotWithFullContainer() {
+		CreateAliquotEvent event = SpecimenTestData.getCreateAliquotWithFullContainer();
+		AliquotCreatedEvent response = service.createAliquot(event);
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(SpecimenErrorCode.CONTAINER_FULL.message(), response.getErroneousFields()[0].getErrorMessage());
+
 	}
 
 }
