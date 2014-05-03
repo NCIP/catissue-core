@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
+import edu.common.dynamicextensions.domain.CategoryEntity;
 import edu.common.dynamicextensions.domain.EntityRecord;
 import edu.common.dynamicextensions.domain.nui.CheckBox;
 import edu.common.dynamicextensions.domain.nui.ComboBox;
@@ -56,6 +57,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeMetadataInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.BaseAbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.BooleanTypeInformationInterface;
+import edu.common.dynamicextensions.domaininterface.CategoryAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.DateTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.DoubleTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -244,7 +246,13 @@ public class MigrateForm {
 	throws Exception {
 
 		FormMigrationCtxt formMigrationCtxt = new FormMigrationCtxt();
-		EntityInterface entity = (EntityInterface)oldForm.getAbstractEntity();
+		EntityInterface entity = null;
+		if (oldForm instanceof CategoryEntity) {
+			CategoryEntity catEntity = (CategoryEntity)oldForm;
+			entity = catEntity.getEntity();
+		} else {
+			entity = (EntityInterface)oldForm.getAbstractEntity();
+		}
 		String entityName = entity.getName();
 		
 		Container newForm = new Container();
@@ -700,7 +708,23 @@ public class MigrateForm {
 		BaseAbstractAttributeInterface baseAttr = ctrl.getBaseAbstractAttribute();
 		AttributeInterface attr = null;
 
-		if (baseAttr instanceof AttributeInterface) {
+		if (baseAttr instanceof CategoryAttributeInterface) {
+			CategoryAttributeInterface catAttr = (CategoryAttributeInterface)baseAttr;
+			
+			if (catAttr.getAbstractAttribute() instanceof AttributeInterface) {
+				attr = (AttributeInterface)catAttr.getAbstractAttribute();
+			} else if (catAttr.getAbstractAttribute() instanceof AssociationInterface) { // case of multi-select control
+				AssociationInterface association = (AssociationInterface)catAttr.getAbstractAttribute();
+				for (AbstractAttributeInterface attr1 : association.getTargetEntity().getAllAbstractAttributes()) {
+					if (attr1.getName().equals("id")) {
+						continue;
+					}
+					
+					attr = (AttributeInterface)attr1;
+					break;
+				}
+			}			
+		} else if (baseAttr instanceof AttributeInterface) {
 			attr = (AttributeInterface)baseAttr;
 		} else {
 			throw new RuntimeException(ctrl.getCaption() + " is neither category attribute nor simple attribute");
