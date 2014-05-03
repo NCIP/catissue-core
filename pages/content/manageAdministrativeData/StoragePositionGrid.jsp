@@ -698,16 +698,7 @@ function checkSpecimenStatus()
 		var controlName = "<%=controlName%>";
 		var pos1 = "${requestScope.pos1}";
 		var pos2 = "${requestScope.pos2}";;
-
-		if(pageOf == 'pageOfAntispec')
-        {
-            if(parent.window.document.getElementById(controlName).value == "Virtual"){
-				document.getElementById("pos11").style.display="none";
-				document.getElementById("pos22").style.display="none";
-			}
-            
-        }
-        else if(pageOf == 'pageOfNewAliquot'){
+		if(pageOf == 'pageOfNewAliquot'){
              var retValue =  parent.getValueStoragePositionForAliquot(controlName);
 			 var objArr = retValue.split(",");
 			 if(objArr[0]=="Virtual"){
@@ -718,33 +709,16 @@ function checkSpecimenStatus()
 				document.getElementById("pos22").value=objArr[2];
 			
 			 }
-        }
-        else if(pageOf == 'pageOfShipping')
-        {
+        } else {
             if(parent.window.document.getElementById(controlName).value == "Virtual"){
 				document.getElementById("pos11").style.display="none";
 				document.getElementById("pos22").style.display="none";
 			}
             
         }
-        else if(pageOf == 'pageOfBulkEvent')
-        {
-		   if( parent.window.document.getElementById(controlName).value == "Virtual"){
-				document.getElementById("pos11").style.display="none";
-				document.getElementById("pos22").style.display="none";
-			}
-         
-        }
-        else if(pageOf == 'pageOfTransfer')
-        {
-		    if( parent.window.document.getElementById(controlName).value == "Virtual"){
-				document.getElementById("pos11").style.display="none";
-				document.getElementById("pos22").style.display="none";
-			}
-        }
 		var id1 = parent.window.document.getElementById(pos1); 
         if(id1 != null || id1 != undefined){
-				    document.getElementById("pos11").value= id1.value;
+		    document.getElementById("pos11").value= id1.value;
         }
         
         var id2 = parent.window.document.getElementById(pos2);
@@ -761,7 +735,8 @@ var reloadGrid=true,populateValueInCombo=true;
 var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",250);
 var url=getActionToDoURL();
 var containerName="${requestScope.containerName}";
-if(containerName && containerName != "Virtual")
+
+if(containerName && containerName != "Virtual" && containerName != "Virtually Located")
 {
     dhtmlxCombo.loadXML(url);
 }
