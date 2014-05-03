@@ -800,10 +800,30 @@ function submitTabData(operation)
 		{
 			tabDataJSON["specimenCollectionGroupId"] = document.getElementById("scgId").value; 
 		}
+		var psId = document.getElementById("parentSpecimenId").value;
+		if(psId != null && psId != "")
+		{
+			tabDataJSON["parentSpecimenId"] = document.getElementById("parentSpecimenId").value; 
+		}
 		var requirementId = document.getElementById("requirementId").value;
 		if(requirementId != null && requirementId != "")
 		{
 			tabDataJSON["requirementId"] = document.getElementById("requirementId").value; 
+		}
+		var initQty = document.getElementById("quantity").value;
+		if(initQty != null && initQty != "")
+		{
+			tabDataJSON["quantity"] = document.getElementById("quantity").value; 
+		}
+		var cDate = document.getElementById("createdDate").value;
+		if(cDate != null && cDate != "")
+		{
+			tabDataJSON["createdDate"] = document.getElementById("createdDate").value; 
+		}
+		var concen = document.getElementById("concentration").value;
+		if(concen != null && concen != "")
+		{
+			tabDataJSON["concentration"] = document.getElementById("concentration").value; 
 		}
 	
 		createRESTSpec(tabDataJSON,printFlag,operation);

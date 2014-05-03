@@ -422,6 +422,7 @@
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
+				<include name="javascripts/**" />
 				<include name="deploytempCatissuecore/AdvanceQuery/dhtml/**"/>
 				<include name="dhtml_comp/**" />
 				<include name="newDhtmlx/**" />

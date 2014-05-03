@@ -1,19 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import gov.nih.nci.logging.api.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Query;
@@ -74,11 +69,15 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		Set<SpecimenCollectionGroupInfo> scgsInfo = new HashSet<SpecimenCollectionGroupInfo>();
 		Collection<SpecimenCollectionGroup> groups = cpr.getScgCollection();
 		for (SpecimenCollectionGroup specimenCollectionGroup : groups) {
+			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimenCollectionGroup.getActivityStatus())){
 			scgsInfo.add(SpecimenCollectionGroupInfo.fromScg(specimenCollectionGroup, cpr.getRegistrationDate()));
+			}
 		}
 		Collection<CollectionProtocolEvent> cpes = cpr.getCollectionProtocol().getCollectionProtocolEventCollection();
 		for (CollectionProtocolEvent collectionProtocolEvent : cpes) {
+			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(collectionProtocolEvent.getActivityStatus())){
 			scgsInfo.add(SpecimenCollectionGroupInfo.fromCpe(collectionProtocolEvent, cpr.getRegistrationDate()));
+			}
 		}
 
 		//				" ";

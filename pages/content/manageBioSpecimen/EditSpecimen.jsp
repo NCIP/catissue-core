@@ -90,7 +90,7 @@
 
 <html:hidden name="specimenDTO" property="generateLabel"/>
 <html:hidden name="specimenDTO" property="operation"/>
-<html:hidden name="specimenDTO" property="parentSpecimenId"/>
+<html:hidden name="specimenDTO" property="parentSpecimenId" styleId="parentSpecimenId"/>
 <html:hidden name="specimenDTO" property="id" styleId="id"/>
 <html:hidden name="specimenDTO" property="requirementId" styleId="requirementId"/>
 <html:hidden name="specimenDTO" property="specimenCollectionGroupId" styleId="scgId"/>
