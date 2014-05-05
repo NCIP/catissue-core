@@ -5,9 +5,13 @@
   </div>
 
   <div class="black_ar" ng-click="displayNode(data)" ng-class="{'active': (data.id == selectedNode.id)}">
-    <div class="pull-left" tooltip-placement="right" data-tooltip-html-unsafe="{{data.tooltip}}" tooltip-append-to-body="true">
+    <div class="pull-left" tooltip-placement="right" data-tooltip-html-unsafe="{{data.tooltip}}" 
+    tooltip-append-to-body="true" style="display: inline-flex;" >
       <i class="{{data.collectionStatus}}"/>
-      <span class="black_ar">{{data.name}}</span>
+      <div class="pull-left black_ar"
+      style= "text-overflow: ellipsis; white-space: nowrap; width: 18em; overflow: hidden;">
+        {{data.name}}
+      </div>
     </div>
     <div class="clear"></div>
   </div>
