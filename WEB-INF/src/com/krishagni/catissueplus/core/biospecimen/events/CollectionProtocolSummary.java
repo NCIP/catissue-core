@@ -1,11 +1,15 @@
+
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 public class CollectionProtocolSummary {
+
 	private Long id;
-	
+
 	private String shortTitle;
-	
+
 	private String title;
+
+	private String ppidFormat;
 
 	public Long getId() {
 		return id;
@@ -30,4 +34,13 @@ public class CollectionProtocolSummary {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public String getPpidFormat() {
+		return ppidFormat;
+	}
+
+	public void setPpidFormat(String ppidFormat) {
+		this.ppidFormat = ppidFormat;
+	}
+
 }
