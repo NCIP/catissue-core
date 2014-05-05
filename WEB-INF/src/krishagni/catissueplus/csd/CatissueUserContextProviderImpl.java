@@ -36,6 +36,27 @@ public class CatissueUserContextProviderImpl implements AppUserContextProvider {
 			}
 		};
 	}
+	
+	@Override
+	public UserContext getUserContext(final String userName) {
+		
+		return new UserContext() {	
+			@Override
+			public String getUserName() {
+				return null;
+			}
+
+			@Override
+			public Long getUserId() {
+				return getUserIdByName(userName);
+			}
+
+			@Override
+			public String getIpAddress() {
+				return null;
+			}
+		};
+	}
 
 	@Override
 	public String getUserNameById(Long id) {
@@ -53,6 +74,26 @@ public class CatissueUserContextProviderImpl implements AppUserContextProvider {
 			}
 		});
 	}
+	
+	private Long getUserIdByName(String loginName) {
+		List<Object> params = new ArrayList<Object>();
+		params.add(loginName);
+		
+		return JdbcDaoFactory.getJdbcDao().getResultSet(GET_USER_ID_SQL, params, new ResultExtractor<Long>() {
+			@Override
+			public Long extract(ResultSet rs) throws SQLException {
+				if(rs.next()) {
+					return rs.getLong(1);
+				}
+				return null;
+			}
+		});
+	}
+	
+	
+	private static final String GET_USER_ID_SQL = 
+			"select	identifier from catissue_user " +
+			"where login_name = ? AND activity_status = 'Active'";
 	
 	private static String GET_USER_NAME_SQL = "select last_name, first_name from catissue_user where identifier = ?";
 }
