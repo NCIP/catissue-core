@@ -135,6 +135,7 @@ import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.query.executor.AbstractQueryExecutor;
+import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
@@ -4816,5 +4817,129 @@ public class AppUtility
 			}
 		}
 	}
+	
+	
+	public static List getCPIdsList(String objName, Long identifier, SessionDataBean sessionDataBean)
+  {
+      List cpIdsList = new ArrayList();
+      if (objName != null && !objName.equalsIgnoreCase
+      		(edu.wustl.query.util.global.Variables.mainProtocolObject))
+      {
+          String cpQuery = getQueryStringForCP(objName, Integer.valueOf(identifier.toString()));
+          JDBCDAO jdbcDao = null;
 
+          try
+          {
+              jdbcDao = AppUtility.openJDBCSession();
+              List<Object> list = jdbcDao.executeQuery(cpQuery);
+        			if (list != null && !list.isEmpty())
+        			{
+        				for(Object obj : list)
+            		{
+            		    List list1 = (List)obj;
+            		    cpIdsList.add(Long.valueOf(list1.get(0).toString()));
+            		}
+        			}
+          }
+          catch (Exception e)
+          {
+              return null;
+          }
+          finally
+          {
+              try {
+								closeDAOSession(jdbcDao);
+							}
+							catch (ApplicationException e) {
+								Logger.out.debug("Error while closing the connection.");
+							}
+          }
+      }
+      else
+      {
+          cpIdsList.add(identifier);
+      }
+      return cpIdsList;
+  }
+
+	public static String getQueryStringForCP(String entityName, int entityId)
+	{
+		StringBuffer queryString = new StringBuffer();
+		String str;
+		if (entityName == null || entityId == 0)
+		{
+			str = null;
+		}
+		else
+		{
+			queryString.append(getQuery(entityName));
+			queryString.append(entityId);
+			str = queryString.toString();
+		}
+		return str;
+	}
+	public static String getQuery(String entityName)
+  {
+		if(!Variables.cpQueryMap.isEmpty()){
+			return Variables.cpQueryMap.get(entityName);
+		}
+			
+      List<String> readDeniedObjList = new ArrayList<String>();
+      Map<String,String> entityCSSqlMap = new HashMap<String, String>();
+      String appName = CommonServiceLocator.getInstance().getAppHome();
+      File file = new File(appName+ System.getProperty("file.separator")+"WEB-INF"+
+      		System.getProperty("file.separator")+"classes"+System.getProperty("file.separator")
+      		+edu.wustl.security.global.Constants.CSM_PROPERTY_FILE);
+      FileInputStream inputStream = null;
+      if(file.exists())
+      {
+         Properties csmPropertyFile = new Properties();
+         try
+         {
+      	    inputStream = new FileInputStream(file);
+              csmPropertyFile.load(inputStream);
+              if(csmPropertyFile!=null){
+              for (Map.Entry property : csmPropertyFile.entrySet()) {
+								Variables.cpQueryMap.put(String.valueOf(property.getKey()), String.valueOf(property.getValue()));
+							}
+              }
+          }
+          catch (FileNotFoundException e)
+          {
+              Logger.out.debug("csm.properties not found");
+              Logger.out.info(e.getMessage(), e);
+          }
+          catch (IOException e)
+          {
+              Logger.out.debug("Exception occured while reading csm.properties");
+              Logger.out.info(e.getMessage(), e);
+          }
+          finally
+          {
+          	closeFile(inputStream);
+          }
+         
+//         edu.wustl.query.util.global.Variables.mainProtocolObject = mainPrtclClassNm;
+//         edu.wustl.query.util.global.Variables.queryReadDeniedObjectList.addAll(readDeniedObjList);
+//         edu.wustl.query.util.global.Variables.entityCPSqlMap.putAll(entityCSSqlMap);
+//         edu.wustl.query.util.global.Variables.validatorClassname = validatorClassNm;
+//         edu.wustl.query.util.global.Variables.mainProtocolQuery = mainProtocolQuery;
+      }
+      return Variables.cpQueryMap.get(entityName);
+  }
+	
+	private static void closeFile(FileInputStream inputStream)
+	{
+		if(inputStream != null)
+		{
+			try
+			{
+				inputStream.close();
+			}
+			catch (IOException e)
+			{
+				logger.error(e.getMessage(), e);
+			}
+		}
+	}
 }
