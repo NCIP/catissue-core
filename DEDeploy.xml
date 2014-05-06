@@ -1611,6 +1611,7 @@
                      <arg value="${Application.url}" />
                      <arg value="${filename}" />
                      <arg value="${create_tables}" />
+                     <arg value="${username}" />
                      <classpath>
                        <fileset dir="${de.temp.dir}/binaries/DynamicExtensionsInterface">
                          <include name="DynamicExtensions.jar" />
