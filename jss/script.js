@@ -537,5 +537,6 @@ function doInitCal(objName, defaultDate,format) {
 	{
 		cal.setDate (new Date());
 	}
+	return cal;
 }
 

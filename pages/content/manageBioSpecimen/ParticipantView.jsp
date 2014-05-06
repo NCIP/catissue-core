@@ -4,7 +4,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
@@ -13,10 +12,23 @@
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/participantView.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <style type="text/css">
     #myoutercontainer { text-align: center;display:block;float: left; }
-    #myinnercontainer { display: block; vertical-align: middle;*overflow: hidden;}    
+    #myinnercontainer { display: block; vertical-align: middle;*overflow: hidden;}   
+	.cprHeadingMargin {margin-left:50px;}
+	.windowElementPaddingLeft {padding-left:10px}
+	.windowElementPaddingTop {padding-top:30px;}
 </style>
 <script>
       window.dhx_globalImgPath="dhtmlx_suite/imgs/";
@@ -123,7 +135,14 @@
             <b><bean:message key="participant.view.profile.associated.cp"/></b>
         </td>
         <td colspan="3"  width="70%"  class="black_ar" > 
-            ${cpTitleList}
+			<div style="width : 100%;">
+			<div style="float:left;height:100%;max-width:70%;">
+            <span id="cpTitleList">${cpTitleList}</span>
+			</div>
+			<div style="float:left;margin-left:25px;;height:100%;">
+			   <input type="button" class="blue_ar_b" value="Register New" onclick="createNewCPR()" />
+			</div>
+                
         </td>
     </tr>
     <!--tr class="tr_alternate_color_lightGrey">
@@ -295,7 +314,6 @@
 </html>
 <script>
 
-                
 var summaryFirstName = '<bean:write name="participantDto" property="firstName" />';
 var summaryLastName = '<bean:write name="participantDto" property="lastName" />';
 function disableButtonsOnCheck(chkbox)
@@ -315,6 +333,7 @@ function disableButtonsOnCheck(chkbox)
     }
 }
 
+var dhxWins;
 function isNumeric(number) {
 value = number.value;
 if(value==Number(value))
@@ -326,4 +345,120 @@ else
     setTimeout(function(){number.focus();}, 1);
 }
 }
+var popupCPCombo;
+var cprDateCal;
+function createNewCPR(){
+	if(dhxWins == undefined){
+		dhxWins = new dhtmlXWindows();
+		dhxWins.setSkin("dhx_skyblue");
+		dhxWins.enableAutoViewport(true);
+	}
+	dhxWins.setImagePath("");
+	if(dhxWins.window("registerCPRPopUP")==null){
+			var w =500;
+			var h =170;
+			var x = (screen.width / 3) - (w / 2);
+			var y = 0;
+			dhxWins.createWindow("registerCPRPopUP", x, y, w, h);
+			dhxWins.window("registerCPRPopUP").center();
+			dhxWins.window("registerCPRPopUP").setModal(true);
+			dhxWins.window("registerCPRPopUP").setText("Register to additional protocol");
+			dhxWins.window("registerCPRPopUP").button("minmax1").hide();
+			dhxWins.window("registerCPRPopUP").button("park").hide();
+			dhxWins.window("registerCPRPopUP").button("close").hide();
+			 //dhxWins.window("containerPositionPopUp").setModal(false);
+			
+		}else{
+			dhxWins.window("registerCPRPopUP").show();
+		}
+		var div = document.createElement("div");
+		div.id = "popupDiv";
+		//var div = document.getElementById("popupDiv");
+		div.innerHTML = "<div class='black_ar windowElementPaddingLeft  windowElementPaddingtop'>  <div style='float:left;'><b>Collection Protocol</b> <div id='popupCpList' style='margin-top:4px;'> </div></div>  <div style='float:left; margin-left: 21px;'> <b>Participant Protocol ID</b><div style='margin-top:4px;'><input type='text' id='popupPPID' style = 'font-size: 12px;width:148px;'/></div></div>  <div style='float:left;margin-left: 21px;'><b>Registration Date</b> <div style='margin-top:4px;'><input type='text' id='popupCPRDate' style = 'font-size: 12px;'/></div></div> </div>"
+		
+		+"<div class='black_ar windowElementPaddingLeft windowElementPaddingtop'>"+
+		
+		"<input type='button'  value='Register' onClick='registerParticipant()' style='margin-left:12px;margin-top:16px;'> <input type='button'  value='Cancel'  onClick='closeMultipleCprWindow()' style='margin-left:12px;margin-top:16px;'></div>";
+		
+
+		document.body.appendChild(div);
+		dhxWins.window("registerCPRPopUP").attachObject("popupDiv");
+		popupCPCombo = new dhtmlXCombo("popupCpList", "popupCpList", 150);
+		popupCPCombo.attachEvent("onSelectionChange",checkPPIDFormat);
+		cprDateCal = doInitCal('popupCPRDate',false,'${uiDatePattern}');
+		loadCpList(popupCPCombo);
+}
+function checkPPIDFormat(){
+	var cpID = popupCPCombo.getSelectedValue()
+	if(cpID ==2){
+		document.getElementById("popupPPID").disabled = true;
+	}else{
+			document.getElementById("popupPPID").disabled = false;
+	}
+}
+function registerParticipant(){
+	//var cprDate = new Date(document.getElementById("popupCPRDate").value);
+	//var cprDateStr = cprDate.format("Y-m-d");
+	var jsonDetail = {};
+	var participantDetail = {};
+	participantDetail.id = '${participantDto.participantId}';
+	jsonDetail.participantDetail= participantDetail
+	jsonDetail.cpId = popupCPCombo.getSelectedValue();
+	jsonDetail.ppid = document.getElementById("popupPPID").value;
+	jsonDetail.registrationDate = cprDateCal.getDate();
+	var req = createRequest(); // defined above
+	// Create the callback:
+	req.onreadystatechange = function() {
+		if (req.readyState != 4) return; // Not there yet
+		if (req.status == 200) {
+			document.getElementById("cpTitleList").value = document.getElementById("cpTitleList").value + ","+popupCPCombo.getSelectedText();
+		}
+	}
+	req.open("POST", "rest/ng/collection-protocols/"+jsonDetail.cpId+"/registrations", false);
+	req.setRequestHeader("Content-Type",
+                     "application/json");
+	req.send(JSON.stringify(jsonDetail));
+	
+}
+function createRequest() {
+  var result = null;
+  if (window.XMLHttpRequest) {
+    // FireFox, Safari, etc.
+    result = new XMLHttpRequest();
+   
+  }
+  else if (window.ActiveXObject) {
+    // MSIE
+    result = new ActiveXObject("Microsoft.XMLHTTP");
+  } 
+  else {
+    // No known mechanism -- consider aborting the application
+  }
+  return result;
+}
+
+
+function loadCpList(popupCPCombo)
+{
+	var req = createRequest(); // defined above
+	// Create the callback:
+	req.onreadystatechange = function() {
+		if (req.readyState != 4) return; // Not there yet
+		var resp = req.responseText;
+		var cpList = eval('('+resp+')');
+		for(var cnt = 0;cnt < cpList.length;cnt++){
+			popupCPCombo.addOption(cpList[cnt].id,cpList[cnt].shortTitle)
+		}
+		
+	}
+	req.open("GET", "rest/ng/collection-protocols", false);
+	req.setRequestHeader("Content-Type",
+                     "application/json");
+	req.send();
+}
+
+function closeMultipleCprWindow(){
+	dhxWins.window("registerCPRPopUP").close();
+}
+
 </script>

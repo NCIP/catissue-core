@@ -367,13 +367,36 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				disableObject(dao, participant);
 			}
-			try {
-				auditParticipant(participant, dao, sessionDataBean,Operation.UPDATE.toString());
-			}
-			catch (DAOException e) {
-				logger.error(e.getMessage(), e);
-			}
+
+            Iterator<ParticipantMedicalIdentifier> oldMrnitr = oldParticipant.getParticipantMedicalIdentifierCollection().iterator();
+               while (oldMrnitr.hasNext())
+               {
+                   ParticipantMedicalIdentifier oldMRNObj = oldMrnitr.next();
+                   boolean mrnFoundFlag = false;
+                   Iterator<ParticipantMedicalIdentifier> newMrnitr = participant.getParticipantMedicalIdentifierCollection().iterator();
+                  while(newMrnitr.hasNext())
+                   {
+                      ParticipantMedicalIdentifier newMRNObj = newMrnitr.next();
+                       if (oldMRNObj!=null && newMRNObj!=null && oldMRNObj.getId().compareTo(newMRNObj.getId())==0)
+                       {
+                           mrnFoundFlag = true;
+                           break;
+                       }
+                   }
+                   if (!mrnFoundFlag)
+                   {  
+                           dao.delete(oldMRNObj);
+                      
+                   }
+
+               }
+     		   auditParticipant(participant, dao, sessionDataBean,Operation.UPDATE.toString());
 			
+			
+		}catch (DAOException daoExp) {
+		    logger.error(daoExp.getMessage(), daoExp);
+            throw this
+                    .getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final BizLogicException daoExp)
 		{
@@ -660,6 +683,31 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 
 		}
+		final Collection paticipantMedCol = participant.getParticipantMedicalIdentifierCollection();
+        
+        if (paticipantMedCol != null && !paticipantMedCol.isEmpty())
+        {
+	            final Iterator itr = paticipantMedCol.iterator();
+	            java.util.HashSet<Long> siteNameset = new java.util.HashSet<Long>();
+	            while (itr.hasNext())
+	            {
+	                ParticipantMedicalIdentifier partiMedobj = (ParticipantMedicalIdentifier) itr
+	                        .next();
+	                Site site = partiMedobj.getSite();
+	                if (site != null)
+	                {
+	                   
+	                    boolean checkDuplicate = siteNameset.add(site.getId());
+	                    if (!checkDuplicate)
+	                    {
+	                        //duplicate site present in collection , so find old one delete that one as well.
+	                        throw new BizLogicException(null, null,
+	                            "errors.participant.mediden.duplicate", "");
+	                    }
+	                }
+	            }
+        }
+
 		return true;
 	}
 
