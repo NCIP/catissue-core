@@ -43,7 +43,7 @@ public class CatissueUserContextProviderImpl implements AppUserContextProvider {
 		return new UserContext() {	
 			@Override
 			public String getUserName() {
-				return null;
+				return userName;
 			}
 
 			@Override
