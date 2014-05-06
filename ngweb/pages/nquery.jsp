@@ -348,11 +348,13 @@
         </div>
         <div class="col-xs-4">
           <div ng-class="{'btn-group': queryData.selectedFolderId != -1}"  ng-if="queryData.selectedQueries.length > 0">
-            <button ng-if="queryData.selectedFolderId != -1" class="btn btn-default" ng-click="removeQueriesFromFolder()">
+            <button ng-if="queryData.selectedFolderId != -1" class="btn btn-default" ng-click="removeQueriesFromFolder()"
+              tooltip-placement="bottom" tooltip="Remove queries from folder" tooltip-append-to-body="true">
               <span class="glyphicon glyphicon-trash"></span>
             </button>
             <div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="searchQueryFolder = ''">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="searchQueryFolder = ''"
+                tooltip-placement="bottom" tooltip="Assign queries to folder" tooltip-append-to-body="true">
                 <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
                 <span class="caret"></span>
               </button>
@@ -409,10 +411,12 @@
                   <td class="item clearfix"> 
                     <div class="pull-left" ng-click="selectFolder(folder.id)">{{folder.name}}</div>
                     <div class="btn-group pull-right">
-                      <button type="button" class="btn btn-default" ng-click="editFolder(folder)">
+                      <button type="button" class="btn btn-default" ng-click="editFolder(folder)"
+                        tooltip-placement="bottom" tooltip="Edit folder settings" tooltip-append-to-body="true">
                         <span class="fa fa-cog"></span>
                       </button>
-                      <button type="button" class="btn btn-default" ng-click="deleteFolder(folder)">
+                      <button type="button" class="btn btn-default" ng-click="deleteFolder(folder)"
+                        tooltip-placement="bottom" tooltip="Delete folder" tooltip-append-to-body="true">
                         <span class="fa fa-trash-o"></span>
                       </button>
                     </div>
@@ -467,14 +471,15 @@
                   <input type="checkbox" checklist-model="queryData.selectedQueries" checklist-value="query">
                 </td>
                 <td>
-                  <a style="cursor:pointer;" ng-click="editQuery(query)" tooltip-placement="right" tooltip="Click to edit query">#{{query.id}} {{query.title}}</a>
+                  <a style="cursor:pointer;" ng-click="editQuery(query)" 
+                    tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">#{{query.id}} {{query.title}}</a>
                 </td>
                 <td>{{formatUsername(query.createdBy)}}</td>
                 <td>
                   {{formatDate(query.lastModifiedOn)}}
-                  <div class="pull-right" ng-if="query.highlight" style="cursor: pointer;" ng-click="runQuery(query)">
+                  <div class="pull-right" ng-if="query.highlight" style="cursor: pointer;" ng-click="runQuery(query)"
+                    tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
                     <span class="glyphicon glyphicon-play"></span>
-                    <a>View Records</a>
                   </div>
                 </td>
               </tr>
@@ -759,7 +764,10 @@
             <tbody>
               <tr ng-repeat="query in modalData.queries">
                 <td class="col-xs-11">{{query.title}}</td>
-                <td class="col-xs-1"><span ng-click="removeQuery(query, $index)" class="glyphicon glyphicon-trash" style="cursor: pointer;"></span></td>
+                <td class="col-xs-1">
+                  <span ng-click="removeQuery(query, $index)" class="glyphicon glyphicon-trash" style="cursor: pointer;"
+                    tooltip-placement="bottom" tooltip-append-to-body="true" tooltip="Remove query from folder"></span>
+                </td>
               </tr>
             </tbody>
           </table>
