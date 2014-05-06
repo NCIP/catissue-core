@@ -44,12 +44,7 @@ var  downloadUrl= "";
         <table width="95%" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td  valign="top">
-                    <div style="width:500px;">
-                    <span class="black_ar version-header-font theam-font-color"><bean:message key="login.welcome.to" /> <bean:message key="display.app.name" /> <bean:message key="app.version" />
-                    </span></br>
-                    <a href="" id = "whatsNew" style="text-decoration: none"  target="_blank">
-                    <span  class="black_ar theam-font-color-orange" style="font-size:10;margin-left:250;float:left"><bean:message key="login.new.release" /></span></a>
-                    </div></br>
+                    
                     </br>
                     </br>
                     
@@ -279,10 +274,7 @@ login.forgot.password=Forgot password?
                     <tr>
 
                         <td align="left" width="70%">
-                        <a href="http://www.cancer.gov/"  target="_blank"><img height="80px"
-                            src="images/uIEnhancementImages/US-NIH-NCI-Logo.png"
-                            alt="National Cancer Institute Logo"  
-                            border="0" /></a>
+                        
                             <!--a  class="logo-margin"  href="https://cabig.nci.nih.gov/"><img
                             src="images/uIEnhancementImages/CaBIGLogo.JPG"
                             alt="National Institues of Health" 
@@ -319,8 +311,7 @@ login.forgot.password=Forgot password?
 </table>
 <br/>
 <div class="footer-class black_ar">
-        <div style="padding-top:18px;"><span>caTissue Plus is an open source project with many new features and improvements over caTissue Suite v1.2. For more details, visit <a href="http://www.catissueplus.org">www.catissueplus.org</a> or mail us at <a href="mailto:catissueplus@krishagni.com">catissueplus@krishagni.com</a></span></div>
-    
+        <div style="padding-top:18px;"><span>OpenSpecimen is an open source biobanking software built on top of NCI caTissue. For more details visit <a href="http://www.catissueplus.org">www.openspecimen.org</a> or mail us at <a href="mailto:support@krishagni.com">support@krishagni.com</a></span></div>
 </div>
 <script>
 
@@ -329,10 +320,10 @@ window.onload = homePageLoad();
 function homePageLoad(){
     loadSummaryCount();
     loadInstituteLogo();
-	var rv = getInternetExplorerVersion();
-	if(rv>9){
-		alert("WARNING! Browser version not supported. Use IE9 or lower.");
-	}
+    var rv = getInternetExplorerVersion();
+    if(rv>9){
+        alert("WARNING! Browser version not supported. Use IE9 or lower.");
+    }
 }
 function getInternetExplorerVersion()
 // Returns the version of Windows Internet Explorer or a -1

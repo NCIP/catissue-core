@@ -4,7 +4,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td width="1px"></td>
-        <td style="left-padding:5px">
+        <td style="padding-left:6px;padding-top:6px">
             <img src="images/uIEnhancementImages/caTissue_logo_wo.png" />
             
         </td>
