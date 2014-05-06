@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
+import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
@@ -16,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEv
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
@@ -29,6 +33,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class UserServiceImpl implements UserService {
 
@@ -59,6 +64,20 @@ public class UserServiceImpl implements UserService {
 		this.emailSender = emailSender;
 	}
 
+	@Override
+	@PlusTransactional
+	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
+		List<User> users = daoFactory.getUserDao().getAllUsers();		
+		List<UserSummary> result = new ArrayList<UserSummary>();
+		
+		for (User user : users) {
+			result.add(UserSummary.fromUser(user));
+		}
+		
+		return AllUsersEvent.ok(result);
+	}
+
+	
 	@Override
 	@PlusTransactional
 	public UserCreatedEvent createUser(CreateUserEvent event) {

@@ -36,7 +36,12 @@
     </set>
 	
     <query name="getQueryFoldersByUser">
-      select distinct f from QueryFolder f where f.owner.id = :userId or f.sharedWith.id = :userId
+      select 
+        distinct f 
+      from 
+        QueryFolder f inner join f.owner owner left join f.sharedWith sharedWith 
+      where 
+        owner.id = :userId or sharedWith.id = :userId
     </query>
   </class> 
 </hibernate-mapping>

@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
+import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
@@ -7,6 +8,7 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEv
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
@@ -16,6 +18,8 @@ import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEve
 
 public interface UserService {
  
+	public AllUsersEvent getAllUsers(ReqAllUsersEvent req);
+	
 	public UserCreatedEvent createUser(CreateUserEvent event);
 
 	public UserUpdatedEvent updateUser(UpdateUserEvent event);

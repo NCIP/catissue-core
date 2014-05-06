@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderSummary;
+import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
@@ -64,6 +66,22 @@ public class QueryFoldersController {
 		return null;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/{folderId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public QueryFolderDetails getFolder(@PathVariable Long folderId) {
+		ReqQueryFolderDetailEvent req = new ReqQueryFolderDetailEvent();
+		req.setFolderId(folderId);
+		req.setSessionDataBean(getSession());
+		
+		QueryFolderDetailEvent resp = querySvc.getFolder(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		
+		return null;
+	}
+		
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

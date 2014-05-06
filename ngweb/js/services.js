@@ -1,9 +1,9 @@
 
 angular.module('plus.services', [])
   .factory('QueryService', function($http) {
-    var baseUrl = '/catissuecore/rest/ng/query/';
-
+    var baseUrl         = '/catissuecore/rest/ng/query/';
     var savedQueriesUrl = '/catissuecore/rest/ng/saved-queries/';
+    var foldersUrl      = '/catissuecore/rest/ng/query-folders/';
 
     var successfn = function(result) { return result.data; };
 
@@ -27,6 +27,51 @@ angular.module('plus.services', [])
 
       getQuery: function(queryId) {
         return $http.get(savedQueriesUrl + queryId).then(successfn);
+      },
+
+      getFolder: function(folderId) {
+        return $http.get(foldersUrl + folderId).then(successfn);
+      },
+
+      getFolders: function() {
+	return $http.get(foldersUrl).then(successfn);
+      },
+
+      getFolderQueries: function(folderId) {
+        return $http.get(foldersUrl + folderId + "/saved-queries").then(successfn);
+      },
+
+      addQueriesToFolder: function(folderId, queries) {
+        return $http.put(foldersUrl + folderId + "/saved-queries?operation=ADD", queries).then(successfn); 
+      },
+
+      removeQueriesFromFolder: function(folderId, queries) {
+        if (folderId != -1) {
+          return $http.put(foldersUrl + folderId + "/saved-queries?operation=REMOVE", queries).then(successfn);
+        } else {
+        }
+      },
+
+      saveOrUpdateQueryFolder: function(folderDetail) {
+        if (folderDetail.id) {
+          return $http.put(foldersUrl + folderDetail.id, folderDetail).then(successfn);
+        } else {
+          return $http.post(foldersUrl, folderDetail).then(successfn);
+        }
+      },
+
+      deleteFolder: function(folderId) {
+        return $http.delete(foldersUrl + folderId).then(successfn);
+      }
+    };
+  })
+  .factory('UsersService', function($http) {
+    var baseUrl         = '/catissuecore/rest/ng/users/';
+    var successfn = function(result) { return result.data; };
+
+    return {
+      getAllUsers: function() {
+        return $http.get(baseUrl).then(successfn); 
       }
     };
   });

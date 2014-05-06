@@ -1,6 +1,6 @@
 
-angular.module('plus.controllers', [])
-  .controller('QueryController', ['$scope', '$sce', '$modal', '$q', 'CollectionProtocolService', 'FormsService', 'QueryService', function($scope, $sce, $modal, $q, CollectionProtocolService, FormsService, QueryService) {
+angular.module('plus.controllers', ['checklist-model'])
+  .controller('QueryController', ['$scope', '$sce', '$modal', '$q', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, CollectionProtocolService, FormsService, QueryService, UsersService) {
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
       ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE',}, 
@@ -342,6 +342,7 @@ angular.module('plus.controllers', [])
     $scope.queryData = {
       view: 'dashboard',
       forms: [],
+      selectedFolderId: -1
     };
 
     $scope.getQueryDataDefaults = function() {
@@ -422,12 +423,77 @@ angular.module('plus.controllers', [])
       headerRowHeight: 70
     };
 
+    $scope.loadFolders = function() {
+      QueryService.getFolders().then(function(folders) {
+        var my = [], shared = [];
+        for (var i = 0; i < folders.length; ++i) {
+          if (folders[i].owner.id == query.global.userId) {
+            my.push(folders[i]);
+          } else {
+            shared.push(folders[i]);
+          }
+        }
+        $scope.queryData.myFolders = my;
+        $scope.queryData.sharedFolders = shared;
+      });
+    };
+
     $scope.showQueries = function() {
-       $scope.queryData.queries = [];
-       $scope.queryData.view = 'dashboard';
-       QueryService.getQueries(0, 1000).then(function(queries) {
+      $scope.queryData.queries = [];
+      $scope.queryData.selectedQueries = [];
+      $scope.queryData.selectedFolderId = -1;
+      $scope.queryData.myFolders = [];
+      $scope.queryData.sharedFolders = [];
+      $scope.queryData.view = 'dashboard';
+      QueryService.getQueries(0, 1000).then(function(queries) {
         $scope.queryData.queries = queries;
-       });
+      });
+
+      $scope.loadFolders();
+    };
+
+    $scope.addQueriesToFolder = function(folder) {
+      var queryIds = [];
+      for (var i = 0; i < $scope.queryData.selectedQueries.length; ++i) {
+        queryIds.push($scope.queryData.selectedQueries[i].id);
+      }
+
+      QueryService.addQueriesToFolder(folder.id, queryIds).then(
+        function(data) {
+          if ($scope.queryData.selectedQueries.length == 1) {
+            Utility.notify($("#notifications"), "Query successfully assigned to " + folder.name, "success", true);
+          } else {
+            Utility.notify($("#notifications"), "Queries successfully assigned to " + folder.name, "success", true);
+          }
+        });
+    };
+
+    $scope.removeQueriesFromFolder = function() {
+      var queryIds = [];
+      for (var i = 0; i < $scope.queryData.selectedQueries.length; ++i) {
+        queryIds.push($scope.queryData.selectedQueries[i].id);
+      }
+
+      QueryService.removeQueriesFromFolder($scope.queryData.selectedFolderId, queryIds).then(
+        function(data) {
+          $scope.selectFolder($scope.queryData.selectedFolderId);
+          Utility.notify($("#notifications"), "Queries successfully deleted from folder", "success", "true");
+        }
+      );
+    };
+
+    $scope.selectFolder = function(folderId) {
+      $scope.queryData.selectedQueries = [];
+      $scope.queryData.selectedFolderId = folderId;
+      if (folderId != -1) {
+        QueryService.getFolderQueries(folderId).then(function(queries) {
+	  $scope.queryData.queries = queries;
+	});
+      } else {
+        QueryService.getQueries(0, 1000).then(function(queries) {
+          $scope.queryData.queries = queries;
+        });
+      }
     };
 
     $scope.createQuery = function() {
@@ -521,6 +587,139 @@ angular.module('plus.controllers', [])
           return filtersq;
         }
       );
+    };
+
+    $scope.getUsers = function() {
+      var deferred = $q.defer();
+      if ($scope.queryData.users) {
+        deferred.resolve($scope.queryData.users);
+      } else {
+        UsersService.getAllUsers().then(
+          function(users) {
+            for (var i = 0; i < users.length; ++i) {
+              users[i].userName = users[i].firstName + " " + users[i].lastName;
+            }
+            $scope.queryData.users = users;
+            deferred.resolve(users);
+          }
+        );
+      }
+
+      return deferred.promise;
+    };
+
+    $scope.createFolder = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'addedit-query-folder.html',
+        controller: AddEditQueryFolderCtrl,
+        resolve: {
+          users: function() {
+            return $scope.getUsers();
+          },
+          queries: function() {
+            return $scope.queryData.selectedQueries;
+          },
+          folderId: undefined
+        }   
+      });
+      
+      modalInstance.result.then(
+        function(folderDetail) { 
+          $scope.loadFolders();
+          Utility.notify($("#notifications"), "Query Folder Created Successfully", "success", true);
+        });
+    };
+
+    $scope.editFolder = function(folder) {
+      var modalInstance = $modal.open({
+        templateUrl: 'addedit-query-folder.html',
+        controller: AddEditQueryFolderCtrl,
+        resolve: {
+          users: function() {
+            return $scope.getUsers();
+          },
+          queries: function() {
+            return [];
+          },
+          folderId: function() {
+            return folder.id;
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function(folderDetail) { 
+          $scope.loadFolders();
+          if (folderDetail.id == $scope.queryData.selectedFolderId) {
+            $scope.selectFolder(folderDetail.id);
+          }
+
+          Utility.notify($("#notifications"), "Query Folder Updated Successfully", "success", true);
+        });
+    };
+
+    $scope.deleteFolder = function(folder) {
+      QueryService.deleteFolder(folder.id).then(
+        function() {
+          $scope.loadFolders();
+          if ($scope.queryData.selectedFolderId == folder.id) {
+            $scope.selectFolder(-1);
+          }
+
+          Utility.notify($("#notifications"), "Query Folder Deleted Successfully", "success", true);
+        });
+    };
+
+    var AddEditQueryFolderCtrl = function($scope, $modalInstance, users, queries, folderId) {
+      $scope.modalData = {
+        users: users,
+        queries: queries,
+        sharedWith: [],
+        folderId: folderId
+      };
+
+      if (folderId) {
+        QueryService.getFolder(folderId).then(
+          function(folderDetail) {
+            $scope.modalData.folderName = folderDetail.name,
+            $scope.modalData.sharedWith = folderDetail.sharedWith,
+            $scope.modalData.queries = folderDetail.queries
+          }
+        );
+      }
+
+      $scope.saveOrUpdateFolder = function () {
+        var sharedWith = [];
+        for (var i = 0; i < $scope.modalData.sharedWith.length; ++i) {
+          sharedWith.push({id: $scope.modalData.sharedWith[i].id});
+        }
+
+        var queries = [];
+        for (var i = 0; i < $scope.modalData.queries.length; ++i) {
+          queries.push({id: $scope.modalData.queries[i].id});
+        }
+
+        var folderDetail = {
+          id: folderId,
+          name: $scope.modalData.folderName,
+          sharedWith: sharedWith,
+          queries: queries
+        };
+        
+        QueryService.saveOrUpdateQueryFolder(folderDetail).then(
+          function(resp) {
+            $modalInstance.close(resp);
+          }
+        );
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+
+      $scope.removeQuery = function(query, idx) {
+        $scope.modalData.queries.splice(idx, 1);
+      };
     };
 
     $scope.showQueries();

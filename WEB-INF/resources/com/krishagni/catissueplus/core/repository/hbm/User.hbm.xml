@@ -167,6 +167,8 @@
 		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds)
         </query>
 
-
+        <query name="getAllUsers">
+          from com.krishagni.catissueplus.core.administrative.domain.User
+        </query>
    </class>
 </hibernate-mapping>

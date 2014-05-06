@@ -5,6 +5,7 @@ import com.krishagni.catissueplus.core.de.events.DeleteQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
@@ -14,6 +15,7 @@ import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
@@ -41,6 +43,8 @@ public interface QueryService {
 	//
 	
 	public QueryFoldersEvent getUserFolders(ReqQueryFoldersEvent req);
+	
+	public QueryFolderDetailEvent getFolder(ReqQueryFolderDetailEvent req);
 	
 	public QueryFolderCreatedEvent createFolder(CreateQueryFolderEvent req);
 	

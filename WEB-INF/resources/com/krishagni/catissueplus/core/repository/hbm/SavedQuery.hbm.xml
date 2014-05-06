@@ -79,6 +79,8 @@
         left join catissue_user m on s.last_updated_by = m.identifier
       where 
         f.folder_id = :folderId
+      order by
+        s.last_updated_on desc
     </sql-query>
   </class> 
 </hibernate-mapping>

@@ -12,6 +12,13 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getAllUsers() {
+		return sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_USERS).list();
+	}
+
+	
 	@Override
 	public User getUser(Long id) {
 		return (User) sessionFactory.getCurrentSession().get(User.class, id);
@@ -100,5 +107,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_OLD_PASSWORD_BY_LOGIN_NAME = Password.class.getName() + ".getOldPasswordByLoginId";
 
 	private static final String GET_USERS_BY_ID = FQN + ".getUsersById";
-
+	
+	private static final String GET_ALL_USERS = FQN + ".getAllUsers";
 }
