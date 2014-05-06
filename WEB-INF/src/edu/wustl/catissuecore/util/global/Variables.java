@@ -84,6 +84,8 @@ public class Variables
 
 	// Patch ID: SimpleSearchEdit_7
 	public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
+	
+	public static Map<String, String> cpQueryMap = new HashMap<String, String>();
 
 	public static List<String> queryReadDeniedObjectList = new ArrayList<String>();
 

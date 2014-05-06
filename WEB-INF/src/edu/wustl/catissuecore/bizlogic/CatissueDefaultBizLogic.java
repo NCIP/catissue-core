@@ -284,7 +284,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		List cpIdsList = new ArrayList();
 		final Set<Long> cpIds = new HashSet<Long>();
 
-		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName, identifier,
+		cpIdsList = AppUtility.getCPIdsList(objName, identifier,
 				sessionDataBean);
 
 		if (cpIdsList == null)
