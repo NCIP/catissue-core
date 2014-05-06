@@ -805,7 +805,7 @@
 							%>
 							<td align="left" class="black_ar"><html:hidden
 								property="<%=identifier%>" /> <input type="checkbox"
-								name="<%=check%>" id="<%=check%>" <%=condition%>
+								name="<%=check%>" id="<%=check%>" 
 								onClick="enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')">
 							</td>
 							<td nowrap class="black_ar"><html:select
