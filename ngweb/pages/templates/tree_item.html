@@ -5,13 +5,12 @@
   </div>
 
   <div class="black_ar" ng-click="displayNode(data)" ng-class="{'active': (data.id == selectedNode.id)}">
-    <div class="pull-left" tooltip-placement="right" data-tooltip-html-unsafe="{{data.tooltip}}" 
-    tooltip-append-to-body="true" style="display: inline-flex;" >
-      <i class="{{data.collectionStatus}}"/>
-      <div class="pull-left black_ar"
-      style= "text-overflow: ellipsis; white-space: nowrap; width: 18em; overflow: hidden;">
-        {{data.name}}
-      </div>
+    <div class="tooltip-data" tooltip-placement="right" data-tooltip-html-unsafe="{{data.tooltip}}" 
+      tooltip-append-to-body="true">
+        <i class="pull-left {{data.collectionStatus}}"/>
+        <div class="tree-data black_ar">
+          {{data.name}}
+        </div>
     </div>
     <div class="clear"></div>
   </div>
@@ -21,3 +20,18 @@
   <li ng-repeat="data in data.nodes" ng-include="'ngweb/pages/templates/tree_item.html'"></li>
 </ul>
 
+<style type="text/css">
+  .tree-data {
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    width: 15em; 
+    overflow: hidden;
+  }
+    
+  .tooptip-data {
+    float: left;
+    display: inline-flex;
+  }
+ </style>
+ 
+ 
