@@ -16,6 +16,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
@@ -1551,9 +1553,10 @@ public class FlexInterface
 	private User getUser(String userName) throws BizLogicException
 	{
 		User user = new User();
-		final int index = userName.indexOf(",");
-		final String lastName = userName.substring(0, index);
-		final String firstName = userName.substring(index + 3);
+		if(!StringUtils.isBlank(userName)){
+		String[] names = userName.split(",");
+		final String lastName = names[0].trim();
+		final String firstName = names[1].trim();
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory
 				.getBizLogic(Constants.USER_FORM_ID);
@@ -1567,6 +1570,7 @@ public class FlexInterface
 		if (list != null && !list.isEmpty())
 		{
 			user = (User) list.get(0);
+		}
 		}
 		return user;
 	}
