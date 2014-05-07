@@ -1878,4 +1878,10 @@
         incrementBy="1" 
         ordered="true" />
     </changeSet>
+    <changeSet author="ka" id="updating FK for specimen list to refer specimen table" failOnError="false">
+    <dropForeignKeyConstraint baseTableName="catissue_spec_tag_items" constraintName="FK_SPECLIST_OBJ_ID"/>
+    <addForeignKeyConstraint constraintName="FK_SPECLIST_OBJ_ID"
+            baseTableName="catissue_spec_tag_items" baseColumnNames="OBJ_ID" referencedTableName="catissue_specimen"
+            referencedColumnNames="IDENTIFIER" />
+    </changeSet>
 </databaseChangeLog>         

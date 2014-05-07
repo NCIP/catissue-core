@@ -26,25 +26,25 @@ public class CollectionProtocolRegistrationDetail {
 
 	private ConsentResponseDetail responseDetail;
 
-	public boolean isPpidModified() {
-		return modifiedAttributes.contains("ppid");
-	}
-
-	public boolean isBarcodeModified() {
-		return modifiedAttributes.contains("barcode");
-	}
-
-	public boolean isActivityStatusModified() {
-		return modifiedAttributes.contains("activityStatus");
-	}
-
-	public boolean isRegistrationDateModified() {
-		return modifiedAttributes.contains("registrationDate");
-	}
-
-	public boolean isParticipantModified() {
-		return modifiedAttributes.contains("participantDetail");
-	}
+//	public Boolean isPpidModified() {
+//		return modifiedAttributes.contains("ppid");
+//	}
+//
+//	public Boolean isBarcodeModified() {
+//		return modifiedAttributes.contains("barcode");
+//	}
+//
+//	public Boolean isActivityStatusModified() {
+//		return modifiedAttributes.contains("activityStatus");
+//	}
+//
+//	public Boolean isRegistrationDateModified() {
+//		return modifiedAttributes.contains("registrationDate");
+//	}
+//
+//	public Boolean isParticipantModified() {
+//		return modifiedAttributes.contains("participantDetail");
+//	}
 
 	public String getActivityStatus() {
 		return activityStatus;

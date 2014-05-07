@@ -86,7 +86,8 @@ public class CollectionProtocolController {
 	public CollectionProtocolRegistrationDetail register(@PathVariable("id") Long cpId,
 			@RequestBody CollectionProtocolRegistrationDetail cprDetails) {
 		CreateRegistrationEvent event = new CreateRegistrationEvent();
-		event.setCpId(cpId);
+		event.setCpId(cpId); 
+		cprDetails.setCpId(cpId);
 		event.setCprDetail(cprDetails);
 		event.setSessionDataBean(getSession());
 		RegistrationCreatedEvent result = cprSvc.createRegistration(event);
@@ -95,7 +96,7 @@ public class CollectionProtocolController {
 		}
 		return null;
 	}
-
+	
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

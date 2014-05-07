@@ -220,10 +220,10 @@
         <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <!--bgcolor="#D0DCBD"-->
                 <tr>
-                <td width="30%" rowspan="2" ><tiles:insert
+                <td><tiles:insert
                     attribute="applicationheader">
                 </tiles:insert></td>
-                <td valign="top"><tiles:insert attribute="header"></tiles:insert></td>
+                
             </tr>
             <tr>
                 <td width="70%" align="right" valign="top"><tiles:insert

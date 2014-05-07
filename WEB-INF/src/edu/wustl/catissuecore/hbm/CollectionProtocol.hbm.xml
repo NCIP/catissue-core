@@ -436,8 +436,9 @@
           <return-scalar column="identifier" type="long"/>
           <return-scalar column="short_title" type="string"/>
           <return-scalar column="title" type="string"/>
+          <return-scalar column="PPID_FORMAT" type="string"/>
           select 
-            identifier, short_title, title 
+            identifier, short_title, title, PPID_FORMAT
           from 
             catissue_collection_protocol 
           where 

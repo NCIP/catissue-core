@@ -172,7 +172,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 
 	private void ensureUniqueBarcode(String barcode, ObjectCreationException errorHandler) {
-		if (!CommonValidator.isBlank(barcode) && daoFactory.getCprDao().isBacodeUnique(barcode)) {
+		if (!CommonValidator.isBlank(barcode) && !daoFactory.getCprDao().isBacodeUnique(barcode)) {
 			errorHandler.addError(ParticipantErrorCode.DUPLICATE_BARCODE, BARCODE);
 		}
 	}

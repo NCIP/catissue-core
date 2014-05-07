@@ -63,7 +63,7 @@ function editScg()
   var scgId = scgCombo.getSelectedValue();
   var action="";
  
- if(scgId == null)
+ if(scgId == null && !scgId)
  {
   alert("Please select a SCG to edit.");
   return;

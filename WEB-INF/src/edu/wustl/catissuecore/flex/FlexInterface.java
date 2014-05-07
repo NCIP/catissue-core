@@ -1553,7 +1553,7 @@ public class FlexInterface
 		User user = new User();
 		final int index = userName.indexOf(",");
 		final String lastName = userName.substring(0, index);
-		final String firstName = userName.substring(index + 2);
+		final String firstName = userName.substring(index + 3);
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory
 				.getBizLogic(Constants.USER_FORM_ID);

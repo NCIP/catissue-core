@@ -84,21 +84,21 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
 			CollectionProtocolRegistrationDetail detail) {
 		ObjectCreationException exception = new ObjectCreationException();
-		if (detail.isBarcodeModified()) {
-			setBarcode(oldCpr, detail.getBarcode(), exception);
-		}
-		if (detail.isPpidModified()) {
-			setPPId(oldCpr, detail.getPpid(), exception);
-		}
-		if (detail.isActivityStatusModified()) {
-			setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
-		}
-		if (detail.isRegistrationDateModified()) {
-			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-		}
-		if (detail.isParticipantModified()) {
-			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-		}
+//		if (detail.isBarcodeModified()) {
+//			setBarcode(oldCpr, detail.getBarcode(), exception);
+//		}
+//		if (detail.isPpidModified()) {
+//			setPPId(oldCpr, detail.getPpid(), exception);
+//		}
+//		if (detail.isActivityStatusModified()) {
+//			setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
+//		}
+//		if (detail.isRegistrationDateModified()) {
+//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
+//		}
+//		if (detail.isParticipantModified()) {
+//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
+//		}
 		return oldCpr;
 	}
 
