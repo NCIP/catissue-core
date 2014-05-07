@@ -147,6 +147,7 @@ angular.module('plus.cpview', [])
     for (var i = 0; i < specimens.length; ++i) {
       path.push(specimens[i].id);
       if (specimen.id == specimens[i].specimenId) {
+    	specimens[i].state = 'opened';
         return true;
       }
 
