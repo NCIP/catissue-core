@@ -1,6 +1,6 @@
 
 angular.module('plus.services', [])
-  .factory('QueryService', function($http) {
+  .factory('QueryService', function($http, $document) {
     var baseUrl         = '/catissuecore/rest/ng/query/';
     var savedQueriesUrl = '/catissuecore/rest/ng/saved-queries/';
     var foldersUrl      = '/catissuecore/rest/ng/query-folders/';
@@ -11,6 +11,22 @@ angular.module('plus.services', [])
       executeQuery: function(drivingForm, aql, wideRows) {
         var req = {drivingForm: drivingForm, aql: aql, wideRows: wideRows};
         return $http.post(baseUrl, req).then(successfn);
+      },
+
+      exportQueryData: function(drivingForm, aql, wideRows) {
+        var req = {drivingForm: drivingForm, aql: aql, wideRows: wideRows};
+        return $http.post(baseUrl + 'export', req).then(successfn);
+      },
+
+      downloadQueryData: function(fileId) {
+        var link = angular.element('<a/>')
+          .attr({
+            href: '/catissuecore/rest/ng/query/export?fileId=' + fileId, 
+            target: '_blank'});
+
+        angular.element($document[0].body).append(link);
+        link[0].click();
+        link.remove();
       },
 
       saveOrUpdateQuery: function(queryDef) {

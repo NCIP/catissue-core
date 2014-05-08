@@ -214,6 +214,33 @@ angular.module('plus.controllers', ['checklist-model'])
       });
     };
 
+    $scope.exportRecords = function() {
+      var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
+      var selectList = $scope.queryData.selectedFields.join();
+      var aql = "select " + selectList + " where " + query;
+
+      Utility.notify(
+        $("#notifications"), 
+        "Query results export has been initiated. Export file download should start in few moments...", 
+        "success", 
+        false);
+
+      QueryService.exportQueryData('CollectionProtocolRegistration', aql, true).then(
+        function(result) {
+          if (result.completed) {
+            Utility.notify($("#notifications"), "Downloading query results export data file.", "success", true);
+            QueryService.downloadQueryData(result.dataFile);
+          } else {
+            Utility.notify(
+              $("#notifications"),
+              "Export is taking longer time to finish. Link to download exported data will be sent to you by e-mail.",
+              "info",
+              true);
+          }
+        });
+    };
+         
+
     $scope.closeNotif = function(type) {
       $scope.queryData.notifs[type] = false;
     };
@@ -532,7 +559,7 @@ angular.module('plus.controllers', ['checklist-model'])
     $scope.runQuery = function(query) {
       $scope.loadQuery(query).then( function() { $scope.getRecords(); });
     };
-    
+
     $scope.loadQuery = function(query) {
       angular.extend($scope.queryData, $scope.getQueryDataDefaults());
       return QueryService.getQuery(query.id).then(

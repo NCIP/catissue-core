@@ -372,8 +372,8 @@
                     </li>
                   </ul>
                 </li>
-                <li class="divider" ng-if="queryData.myFolders.length > 0"></li>
-                <li><a ng-click="createFolder()">New Folder</a></li>
+                <li class="divider"></li>
+                <li><a ng-click="createFolder()">Create New Folder</a></li>
               </ul>
             </div>
           </div>
@@ -477,9 +477,11 @@
                 <td>{{formatUsername(query.createdBy)}}</td>
                 <td>
                   {{formatDate(query.lastModifiedOn)}}
-                  <div class="pull-right" ng-if="query.highlight" style="cursor: pointer;" ng-click="runQuery(query)"
-                    tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
-                    <span class="glyphicon glyphicon-play"></span>
+                  <div class="pull-right btn-group-xs" ng-if="query.highlight">
+                    <button type="button" class="btn btn-default" ng-click="runQuery(query)"
+                      tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
+                      <span class="glyphicon glyphicon-play"></span>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -509,6 +511,10 @@
               <span class="glyphicon glyphicon-eye-open"></span> 
               <span>Define View </span>
             </div> 
+            <div class="btn btn-default" ng-click="exportRecords()"> 
+              <span class="glyphicon glyphicon-export"></span>
+              <span>Export CSV</span> 
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,18 @@
 package com.krishagni.catissueplus.core.de.services.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -16,8 +26,11 @@ import com.krishagni.catissueplus.core.de.domain.factory.QueryFolderFactory;
 import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
+import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
+import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDeletedEvent;
@@ -29,6 +42,7 @@ import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
@@ -49,8 +63,11 @@ import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 import edu.common.dynamicextensions.query.Query;
 import edu.common.dynamicextensions.query.QueryParserException;
+import edu.common.dynamicextensions.query.QueryResultCsvExporter;
 import edu.common.dynamicextensions.query.QueryResultData;
+import edu.common.dynamicextensions.query.QueryResultExporter;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.XMLPropertyHandler;
 
 public class QueryServiceImpl implements QueryService {
 	private static final String cpForm = "CollectionProtocol";
@@ -58,7 +75,15 @@ public class QueryServiceImpl implements QueryService {
 	private static final String cprForm = "CollectionProtocolRegistration";
 
 	private static final String dateFormat = "MM/dd/yyyy";
-
+	
+	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
+	
+	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
+	
+	private static final String EXPORT_DATA_DIR = getExportDataDir();
+	
+	private static ExecutorService exportThreadPool = Executors.newFixedThreadPool(EXPORT_THREAD_POOL_SIZE);
+	
 	private DaoFactory daoFactory;
 
 	private UserDao userDao;
@@ -196,7 +221,37 @@ public class QueryServiceImpl implements QueryService {
 			return QueryExecutedEvent.serverError(message, e);
 		}
 	}
+
+	@Override
+	@PlusTransactional
+	public QueryDataExportedEvent exportQueryData(ExportQueryDataEvent req) {
+		try {
+			Query query = Query.createQuery();
+			query.wideRows(req.isWideRows()).ic(true).dateFormat(dateFormat).compile(cprForm, req.getAql());
+			String filename = UUID.randomUUID().toString();
+			boolean completed = exportData(filename, query);
+			return QueryDataExportedEvent.ok(filename, completed);
+		} catch (Exception e) {
+			return QueryDataExportedEvent.serverError("Error exporting data", e);
+		}
+	}
 	
+	@Override
+	public ExportDataFileEvent getExportDataFile(ReqExportDataFileEvent req) {
+		String fileId = req.getFileId();
+		try {
+			String path = EXPORT_DATA_DIR + File.separator + fileId;
+			File f = new File(path);
+			if (f.exists()) {
+				return ExportDataFileEvent.ok(fileId, f);
+			} else {
+				return ExportDataFileEvent.notFound(fileId);
+			}
+		} catch (Exception e) {
+			return ExportDataFileEvent.serverError(fileId, e.getMessage(), e);
+		}
+	}
+		
 	@Override
 	@PlusTransactional
 	public QueryFoldersEvent getUserFolders(ReqQueryFoldersEvent req) {
@@ -506,5 +561,43 @@ public class QueryServiceImpl implements QueryService {
 				queryDetail.getSelectList(),
 				queryDetail.getFilters(),
 				queryDetail.getQueryExpression());
+	}
+	
+	private boolean exportData(final String filename, final Query query) 
+	throws ExecutionException, InterruptedException, CancellationException {
+		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				QueryResultExporter exporter = new QueryResultCsvExporter();
+				String path = EXPORT_DATA_DIR + File.separator + filename;
+				exporter.export(path, query);
+				return true;
+			}
+		});
+		
+		try {
+			return result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);
+		} catch (TimeoutException te) {
+			return false;
+		}		
+	}
+	
+	
+	private static int getThreadPoolSize() {
+		String poolSize = XMLPropertyHandler.getValue("query.exportThreadPoolSize");
+		if (poolSize == null || poolSize.isEmpty()) {
+			return 5;
+		}
+		
+		return Integer.parseInt(poolSize);
+	}
+	
+	private static String getExportDataDir() {
+		String dir = XMLPropertyHandler.getValue("query.exportDataDir");
+		if (dir == null || dir.isEmpty()) {
+			return ".";
+		}
+		
+		return dir;
 	}
 }
