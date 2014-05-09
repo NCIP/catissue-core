@@ -264,7 +264,12 @@ ul li ul li a span {
             aliquotGrid.cellByIndex(rowNum,4).setValue(pos1);
             aliquotGrid.cellByIndex(rowNum,5).setValue(pos2);
         }
-        
+        function getValueStoragePositionForAliquot(rowNum,containerName,pos1,pos2){
+			return aliquotGrid.cellByIndex(rowNum,3).getValue()+","+
+            aliquotGrid.cellByIndex(rowNum,4).getValue()+","+
+            aliquotGrid.cellByIndex(rowNum,5).getValue();
+			
+		}
         function submitAliquot(){
             var tabDataJSON = {};
             var aliquotsXml = aliquotGrid.serialize();

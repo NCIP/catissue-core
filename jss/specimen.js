@@ -581,7 +581,8 @@ function organizeTarget()
 
 function scrollToTop()
 {
-	document.body.scrollTop = document.documentElement.scrollTop = 0;
+	//document.body.scrollTop = document.documentElement.scrollTop = 0;
+	document.getElementById("specimenDetailsDiv").scrollTop = 0;
 }
 
 var labelSubmit = true;
@@ -840,14 +841,17 @@ function createRESTSpec(specimenData,printFlag,operation)
 {
 var req = createRequest(); // defined above
 // Create the callback:
+document.getElementById("specimenSubmitButton").disabled = true;
 req.onreadystatechange = function() {
   if (req.readyState != 4) return; // Not there yet
   if (req.status != 201) {
     // Handle request failure here...
 	var errorMsg=req.getResponseHeader("errorMsg");
 	showErrorMessage(errorMsg);
+	document.getElementById("specimenSubmitButton").disabled = false;
     return;
   }
+  document.getElementById("specimenSubmitButton").disabled = false;
   // Request successful, read the response
   var resp = req.responseText;
   var updatedSpecimenDTO = eval('('+resp+')')
@@ -1320,7 +1324,7 @@ function submitDeriveData()
 		document.getElementById('errorMsg').style.display='block';
 	document.getElementById('errorMsg').innerHTML = msg;
 	document.getElementById('errorMsg').className = 'alert alert-error';
-		//scrollToTop();
+		scrollToTop();
 	}
 }
 function testREST(dataderive)

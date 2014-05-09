@@ -653,7 +653,7 @@
                             <tr>
                                 <td class="buttonbg">
                                 <table><tr><td>
-                                    <input type="button" id="submitButton" value="Submit" onclick="submitTabData('${requestScope.operation}')" class="blue_ar_b"/>
+                                    <input type="button" id="specimenSubmitButton" value="Submit" onclick="submitTabData('${requestScope.operation}')" class="blue_ar_b"/>
                                     </td><td>
                                     <div id="specListDiv" style="display:none">
                                     | <input type="button" value="Add To Specimen List"

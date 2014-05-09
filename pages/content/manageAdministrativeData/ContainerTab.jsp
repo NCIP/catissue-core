@@ -25,8 +25,8 @@ var tabbar = new dhtmlXTabBar("a_tabbar", "top");
 tabbar.setHrefMode("iframes-on-demand");
 tabbar.setSkin("dhx_skyblue");
 tabbar.setImagePath("dhtmlx_suite/imgs/");
-tabbar.addTab("a1", "Container Map", "100px");
-tabbar.addTab("a2", "Container Info", "100px");
+tabbar.addTab("a1", "Map", "100px");
+tabbar.addTab("a2", "Edit", "100px");
 
 var nodeId = window.parent.idForSCTab;//read from parent global variable
 

@@ -841,7 +841,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimenCollectionGroup.protocolTitle")));
 			}
 
-			if (this.siteId == -1)
+			if (this.siteId == -1 && !this.collectionStatus.equals("Not Collected"))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("specimenCollectionGroup.site")));

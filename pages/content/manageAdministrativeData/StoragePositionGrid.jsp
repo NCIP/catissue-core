@@ -37,6 +37,7 @@ td {
          collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
 
     String storageContainerName =(String) request.getAttribute(Constants.CONTAINER_NAME);
+	String pageOf = (String) request.getAttribute("pageOf");
 
     String controlName =(String) request.getAttribute("controlName");
     System.out.println("Control name :: "+controlName);
@@ -146,10 +147,12 @@ var storagePositions1=fromStoragePosition1.substring(fromStoragePosition1.lastIn
 document.getElementById('pos1').value=storagePositions1[0];
 document.getElementById('pos2').value=storagePositions1[1];*/
 
+
 function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageOf)
 {
+
     //alert("elementId1:  "+elementId1+"  elementValue1:  "+elementValue1+"  elementId2:   "+elementId2+"elementValue2:   "+elementValue2);
-    if(pageOf == 'pageOfSpecimen')
+	if(pageOf == 'pageOfSpecimen')
     {
         var id1 = document.getElementById("pos1");  
         id1.value = elementValue1;
@@ -183,6 +186,7 @@ function setTextBoxValue(elementId1,elementValue1,elementId2,elementValue2,pageO
             updatePosition();
         }
     }
+	
 }
 
 function updatePosition()
@@ -590,8 +594,8 @@ function setVirtual()
 }
 function setTextBoxValueInParent(elementId1,elementValue1,elementId2,elementValue2,pageOf,controlName)
 {
-    //alert("elementId1:  "+elementId1+"  elementValue1:  "+elementValue1+"  elementId2:   "+elementId2+"elementValue2:   "+elementValue2);
-    var id1 = parent.window.document.getElementById(elementId1);    
+ 
+	var id1 = parent.window.document.getElementById(elementId1);    
     if(id1 != null || id1 != undefined){
         id1.value = elementValue1;
     }
@@ -668,7 +672,7 @@ function checkSpecimenStatus()
 {
     var temp=parent.window.document.getElementById('storageContainerPosition');
     var fromStoragePosition;
-    if(temp!=null)
+	if(temp!=null)
     {
         document.getElementById("storageContainerNameDiv").style.display="none";
         fromStoragePosition=parent.window.document.getElementById('storageContainerPosition').value;
@@ -685,16 +689,54 @@ function checkSpecimenStatus()
         else
         {
             document.getElementById("pos11").value="";
-            document.getElementById("pos22").value="";
+			document.getElementById("pos22").value="";
+			document.getElementById("pos11").style.display="none";
+            document.getElementById("pos22").style.display="none";
+		 }
+    }else{
+		var pageOf = "<%=pageOf%>";
+		var controlName = "<%=controlName%>";
+		var pos1 = "${requestScope.pos1}";
+		var pos2 = "${requestScope.pos2}";;
+		if(pageOf == 'pageOfNewAliquot'){
+             var retValue =  parent.getValueStoragePositionForAliquot(controlName);
+			 var objArr = retValue.split(",");
+			 if(objArr[0]=="Virtual"){
+				document.getElementById("pos11").style.display="none";
+				document.getElementById("pos22").style.display="none";
+			 }else{
+				document.getElementById("pos11").value=objArr[1];
+				document.getElementById("pos22").value=objArr[2];
+			
+			 }
+        } else {
+            if(parent.window.document.getElementById(controlName).value == "Virtual"){
+				document.getElementById("pos11").style.display="none";
+				document.getElementById("pos22").style.display="none";
+			}
+            
         }
+		var id1 = parent.window.document.getElementById(pos1); 
+        if(id1 != null || id1 != undefined){
+		    document.getElementById("pos11").value= id1.value;
         }
+        
+        var id2 = parent.window.document.getElementById(pos2);
+        if(id2 != null || id2 != undefined){
+            document.getElementById("pos22").value=id2.value;		
+        }
+	
+	}
+	
+		
 }
 
 var reloadGrid=true,populateValueInCombo=true;
 var dhtmlxCombo=new dhtmlXCombo("comboDiv","storageContainerDropDown",250);
 var url=getActionToDoURL();
 var containerName="${requestScope.containerName}";
-if(containerName)
+
+if(containerName && containerName != "Virtual" && containerName != "Virtually Located")
 {
     dhtmlxCombo.loadXML(url);
 }

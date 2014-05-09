@@ -2,6 +2,7 @@ package krishagni.catissueplus.util;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.global.Validator;
@@ -17,10 +18,9 @@ public class SpecimenUtil
 
 		if (Variables.isTemplateBasedLblGeneratorAvl)
 		{
-				Specimen specimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(), identifier);
+		    SpecimenCollectionGroup scg = (SpecimenCollectionGroup) hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(), identifier);
 
-				final CollectionProtocolRegistration collectionProtocolRegistration = specimen
-						.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+				final CollectionProtocolRegistration collectionProtocolRegistration = scg.getCollectionProtocolRegistration();
 
 				String parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol()
 						.getSpecimenLabelFormat();
@@ -31,14 +31,8 @@ public class SpecimenUtil
 				String aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol()
 						.getAliquotLabelFormat();
 
-				String lineage = specimen.getLineage();
-				if (lineage == null || "".equals(lineage))
-				{
-					lineage = Constants.NEW_SPECIMEN;
-				}
-
 				generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat, derivativeLabelFormat,
-						aliquotLabelFormat, lineage);
+						aliquotLabelFormat, Constants.NEW_SPECIMEN);
 		}
 		return generateLabel;
 	}

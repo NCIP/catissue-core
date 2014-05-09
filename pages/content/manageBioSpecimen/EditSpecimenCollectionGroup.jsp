@@ -420,11 +420,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
             <tr>
                 <div id="myoutercontainer">
                   <div id="myinnercontainer">
-                    &nbsp;<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" style="vertical-align:middle;"/>
-                                <span style="display:inline-block; vertical-align:middle;font-family: verdana;font-size: 11px;">
-                                <bean:message key="label.justSubmit"/>
-                                </span>
-                                <span style="margin-left:30px;">
+                    &nbsp;
+                             
                      <input type="radio" value="1" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" checked="true" style="vertical-align:middle;"/>
                                 <span style="display:inline-block; vertical-align:middle;font-family: verdana;font-size: 11px;">
                                 <bean:message key="label.collect.perCP"/>
@@ -435,7 +432,12 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                                 <span style="display:inline-block; vertical-align:middle;font-family: verdana;font-size: 11px;">
                                 <bean:message key="label.adhocSpecimen"/>
                         </span></span>
-                        &nbsp;<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/>                      
+                        &nbsp;<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/>   <span style="margin-left:30px;">  
+							
+						<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" style="vertical-align:middle;"/>
+                                <span style="display:inline-block; vertical-align:middle;font-family: verdana;font-size: 11px;">
+                                <bean:message key="label.justSubmit"/>
+                                </span>
                 </div>      
                   </div>
             </tr>

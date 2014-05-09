@@ -511,6 +511,12 @@ function doInitCalendar(objName, defaultDate,format) {
  	cal.setYearsRange(1901, 2500);
 	cal.setDateFormat(format);
 	cal.setSkin("dhx_skyblue");
+	try {
+       cal.hideTime();
+    }
+    catch(err) {
+        // Handle error(s) here
+    }
 	if (date.length > 0) {
 		cal.setDate(date);
 	}
@@ -530,6 +536,12 @@ function doInitCal(objName, defaultDate,format) {
  	cal.setYearsRange(1901, 2500);
 	cal.setDateFormat(format);
 	cal.setSkin("dhx_skyblue");
+	try {
+       cal.hideTime();
+    }
+    catch(err) {
+        // Handle error(s) here
+    }
 	if (date.length > 0) {
 		cal.setDate(date);
 	}
