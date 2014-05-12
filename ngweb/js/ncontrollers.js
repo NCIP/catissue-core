@@ -582,6 +582,8 @@ angular.module('plus.controllers', ['checklist-model'])
       angular.extend($scope.queryData, $scope.getQueryDataDefaults());
       return QueryService.getQuery(query.id).then(
         function(queryDef) {
+          queryDef.cpId = queryDef.cpId || -1;
+
           var cpList = $scope.queryData.cpList;
           var selectedCp = undefined;
           for (var i = 0; i < cpList.length; ++i) {
