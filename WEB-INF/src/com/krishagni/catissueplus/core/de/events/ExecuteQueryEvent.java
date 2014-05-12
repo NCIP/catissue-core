@@ -4,11 +4,21 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ExecuteQueryEvent extends RequestEvent {
 	
+	private Long cpId;
+	
 	private String drivingForm;
 
 	private String aql;
 	
 	private boolean wideRows = false;
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
 
 	public String getDrivingForm() {
 		return drivingForm;

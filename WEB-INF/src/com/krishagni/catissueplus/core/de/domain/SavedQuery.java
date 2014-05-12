@@ -22,6 +22,8 @@ public class SavedQuery {
 
 	private Long lastRunCount;
 	
+	private Long cpId;
+	
 	private String drivingForm;
 
 	private Filter[] filters;
@@ -88,6 +90,14 @@ public class SavedQuery {
 		this.lastRunCount = lastRunCount;
 	}
 
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
 	public String getDrivingForm() {
 		return drivingForm;
 	}
@@ -130,6 +140,7 @@ public class SavedQuery {
 
 	public String getQueryDefJson() {
 		SavedQuery query = new SavedQuery();
+		query.cpId = cpId;
 		query.selectList = selectList;
 		query.filters = filters;
 		query.queryExpression = queryExpression;
@@ -140,7 +151,8 @@ public class SavedQuery {
 
 	public void setQueryDefJson(String queryDefJson) {
 		Gson gson = new Gson();
-		SavedQuery query = gson.fromJson(queryDefJson, SavedQuery.class);		
+		SavedQuery query = gson.fromJson(queryDefJson, SavedQuery.class);
+		this.cpId = query.cpId;
 		this.selectList = query.selectList;
 		this.filters = query.filters;		
 		this.queryExpression = query.queryExpression;
@@ -153,6 +165,7 @@ public class SavedQuery {
 	
 	public void update(SavedQuery query) {
 		setTitle(query.getTitle());
+		setCpId(query.getCpId());
 		setDrivingForm(query.getDrivingForm());
 		setLastUpdatedBy(query.getLastUpdatedBy());
 		setLastUpdated(query.getLastUpdated());

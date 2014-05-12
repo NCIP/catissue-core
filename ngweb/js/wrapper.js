@@ -117,5 +117,9 @@ var Select2 = function(element, config) {
       this.element.select2('val', '');
     }
   };
+
+  this.enable = function(enable) {
+    this.element.select2('enable', enable);
+  };
 };
 

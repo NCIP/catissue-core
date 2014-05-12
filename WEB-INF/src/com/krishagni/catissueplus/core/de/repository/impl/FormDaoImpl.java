@@ -248,6 +248,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return objs != null && !objs.isEmpty() ? (Long)objs.iterator().next() : null;	
 	}
 	
+	@Override
+	public List<Long> getFormIds(Long cpId, String entityType) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FORM_IDS);
+		query.setLong("cpId", cpId).setString("entityType", entityType);
+		
+		List<Long> formIds = new ArrayList<Long>();
+		for (Object id : query.list()) {
+			formIds.add((Long)id);
+		}
+		
+		return formIds;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private Long getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
 		String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
@@ -324,5 +337,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_RECORD_ENTRY_BY_REC_ID = RE_FQN + ".getRecordEntryByRecId";
 	
+	private static final String GET_FORM_IDS = FQN + ".getFormIds";
+
 	
 }

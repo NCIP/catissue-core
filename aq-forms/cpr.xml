@@ -1,6 +1,6 @@
 <form>
 	<view>
-		<name>CollectionProtocolRegistration</name>
+		<name>Participant</name>
 		<caption>Participant</caption>
 		<table>CPR_VIEW</table>
 		<primaryKey>CPR_ID</primaryKey>
@@ -158,6 +158,19 @@
 						</row>
 					</subForm>
 				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<subForm>
+				<name>extensions</name>
+				<udn>extensions</udn>
+				<caption>Extensions</caption>
+				<table>CPR_EXTENSION_RECORDS_VIEW</table>
+				<foreignKey>CPR_ID</foreignKey>
+				<parentKey>CPR_ID</parentKey>
+				<pathLink>true</pathLink>
+				<extnFkCol>RECORD_ID</extnFkCol>
 			</subForm>
 		</row>
 	</view>

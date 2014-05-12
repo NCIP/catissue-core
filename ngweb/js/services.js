@@ -8,13 +8,13 @@ angular.module('plus.services', [])
     var successfn = function(result) { return result.data; };
 
     return {
-      executeQuery: function(drivingForm, aql, wideRows) {
-        var req = {drivingForm: drivingForm, aql: aql, wideRows: wideRows};
+      executeQuery: function(cpId, drivingForm, aql, wideRows) {
+        var req = {cpId: cpId, drivingForm: drivingForm, aql: aql, wideRows: wideRows};
         return $http.post(baseUrl, req).then(successfn);
       },
 
-      exportQueryData: function(drivingForm, aql, wideRows) {
-        var req = {drivingForm: drivingForm, aql: aql, wideRows: wideRows};
+      exportQueryData: function(cpId, drivingForm, aql, wideRows) {
+        var req = {cpId: cpId, drivingForm: drivingForm, aql: aql, wideRows: wideRows};
         return $http.post(baseUrl + 'export', req).then(successfn);
       },
 

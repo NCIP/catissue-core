@@ -32,6 +32,10 @@ angular.module('plus.formsServices', [])
         return $http.get(baseUrl + "/" + formId + "/fields").then(successfn);
       },
 
+      getQueryFormFields: function(cpId, formId) {
+        return $http.get(baseUrl + "/" + formId + "/fields?formType=query&extendedFields=true&cpId=" + cpId).then(successfn);
+      },
+
       getFormData: function(formId, recordId) {
         return $http.get(baseUrl + "/" + formId + "/data/" + recordId).then(successfn); 
       },

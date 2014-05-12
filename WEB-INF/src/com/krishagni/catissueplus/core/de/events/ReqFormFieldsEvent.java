@@ -5,6 +5,10 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 public class ReqFormFieldsEvent extends RequestEvent {
 	private Long formId;
 	
+	private Long cpId;
+	
+	private boolean extendedFields;
+	
 	private boolean prefixParentFormCaption = false;
 
 	public Long getFormId() {
@@ -21,5 +25,21 @@ public class ReqFormFieldsEvent extends RequestEvent {
 
 	public void setPrefixParentFormCaption(boolean prefixParentFormCaption) {
 		this.prefixParentFormCaption = prefixParentFormCaption;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
+	public boolean isExtendedFields() {
+		return extendedFields;
+	}
+
+	public void setExtendedFields(boolean extendedFields) {
+		this.extendedFields = extendedFields;
 	}
 }

@@ -148,16 +148,23 @@ angular.module('plus.controllers', ['checklist-model'])
       return result;
     }
 
+    $scope.nonCpForm = function(form) {
+      return form.name != 'CollectionProtocol';
+    };
+
     $scope.getCount= function() {
       var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
-      var aql = "select count(distinct CollectionProtocolRegistration.id) as \"cprCnt\", count(distinct Specimen.id) as \"specimenCnt\" where " + query;
+      var aql = "select count(distinct Participant.id) as \"cprCnt\", count(distinct Specimen.id) as \"specimenCnt\" where " + query;
       $scope.queryData.notifs.showCount = true;
       $scope.queryData.notifs.waitCount = true;
-      QueryService.executeQuery('CollectionProtoocolRegistration', aql).then(function(result) {
-        $scope.queryData.cprCnt  = result.rows[0][0];
-        $scope.queryData.specimenCnt = result.rows[0][1];
-        $scope.queryData.notifs.waitCount = false;
-      });
+
+      var cpId = $scope.queryData.selectedCp.id;
+      QueryService.executeQuery(cpId, 'Participant', aql).then(
+        function(result) {
+          $scope.queryData.cprCnt  = result.rows[0][0];
+          $scope.queryData.specimenCnt = result.rows[0][1];
+          $scope.queryData.notifs.waitCount = false;
+        });
     };
 
 
@@ -191,7 +198,8 @@ angular.module('plus.controllers', ['checklist-model'])
 
       var startTime = new Date();
       $scope.queryData.notifs.waitRecs = true;
-      QueryService.executeQuery('CollectionProtocolRegistration', aql, true).then(function(result) {
+      var cpId = $scope.queryData.selectedCp.id;
+      QueryService.executeQuery(cpId, 'Participant', aql, true).then(function(result) {
         var endTime = new Date();
         var colDefs = [];
         for (var i = 0; i < result.columnLabels.length; ++i) {
@@ -225,16 +233,23 @@ angular.module('plus.controllers', ['checklist-model'])
         "success", 
         false);
 
-      QueryService.exportQueryData('CollectionProtocolRegistration', aql, true).then(
+      var cpId = $scope.queryData.selectedCp.id;
+      QueryService.exportQueryData(cpId, 'Participant', aql, true).then(
         function(result) {
           if (result.completed) {
             Utility.notify($("#notifications"), "Downloading query results export data file.", "success", true);
             QueryService.downloadQueryData(result.dataFile);
-          } else {
+          } else if (result.dataFile) {
             Utility.notify(
               $("#notifications"),
               "Export is taking longer time to finish. Link to download exported data will be sent to you by e-mail.",
               "info",
+              true);
+          } else {
+            Utility.notify(
+              $("#notifications"),
+              "Error initiating export of query results. Please consult system administrator.",
+              "error",
               true);
           }
         });
@@ -342,10 +357,10 @@ angular.module('plus.controllers', ['checklist-model'])
 
     var getDefaultSelectedFields = function() {
       return [
-        "CollectionProtocolRegistration.id", "CollectionProtocolRegistration.firstName", "CollectionProtocolRegistration.lastName", 
-        "CollectionProtocolRegistration.dateOfBirth", "CollectionProtocolRegistration.ssn", "CollectionProtocolRegistration.gender",
-        "CollectionProtocolRegistration.genotype", "CollectionProtocolRegistration.race", "CollectionProtocolRegistration.regDate",
-        "CollectionProtocolRegistration.ppid", "CollectionProtocolRegistration.activityStatus"
+        "Participant.id", "Participant.firstName", "Participant.lastName", 
+        "Participant.dateOfBirth", "Participant.ssn", "Participant.gender",
+        "Participant.genotype", "Participant.race", "Participant.regDate",
+        "Participant.ppid", "Participant.activityStatus"
       ];
     }
 
@@ -368,7 +383,8 @@ angular.module('plus.controllers', ['checklist-model'])
 
     $scope.queryData = {
       view: 'dashboard',
-      forms: [],
+      cpList: [],
+      forms: undefined,
       selectedFolderId: -1
     };
 
@@ -377,7 +393,8 @@ angular.module('plus.controllers', ['checklist-model'])
         isValid: true,
         id: undefined,
         title: undefined,
-        drivingForm: 'CollectionProtocolRegistration',
+        drivingForm: 'Participant',
+        selectedCp: undefined,
         selectedForm: null,
         selectedFields: getDefaultSelectedFields(),
         filters: [],
@@ -564,54 +581,67 @@ angular.module('plus.controllers', ['checklist-model'])
       angular.extend($scope.queryData, $scope.getQueryDataDefaults());
       return QueryService.getQuery(query.id).then(
         function(queryDef) {
-          var filters = [];
-          var maxFilterId = 0;
-          for (var i = 0; i < queryDef.filters.length; ++i) {
-            filters.push(getFilter(queryDef.filters[i]));
-            if (maxFilterId < queryDef.filters[i].id) {
-              maxFilterId = queryDef.filters[i].id;
+          var cpList = $scope.queryData.cpList;
+          var selectedCp = undefined;
+          for (var i = 0; i < cpList.length; ++i) {
+            if (cpList[i].id == queryDef.cpId) {
+              selectedCp = cpList[i];
+              break;
             }
           }
 
-          var qs = [];
-          var uniqForms = {};
-          for (var i = 0; i < filters.length; ++i) {
-            var form = filters[i].form;
-            if (!uniqForms[form.name]) {
-              qs.push(getFormFields(form));
-              uniqForms[form.name] = true;
-            }
-          };
-
-          var filtersq = $q.all(qs).then(
-            function() {
-              for (var i = 0; i < filters.length; ++i) {
-                filters[i].field = $scope.getFormField(filters[i].form, filters[i].fieldName) 
+          return $scope.onCpSelect(selectedCp).then(
+            function(forms) {
+              var filters = [];
+              var maxFilterId = 0;
+              for (var i = 0; i < queryDef.filters.length; ++i) {
+                filters.push(getFilter(queryDef.filters[i]));
+                if (maxFilterId < queryDef.filters[i].id) {
+                  maxFilterId = queryDef.filters[i].id;
+                }
               }
 
-              return true;
+              var qs = [];
+              var uniqForms = {};
+              for (var i = 0; i < filters.length; ++i) {
+                var form = filters[i].form;
+                if (!uniqForms[form.name]) {
+                  qs.push(getFormFields(selectedCp.id, form));
+                  uniqForms[form.name] = true;
+                }
+              };
+
+              var filtersq = $q.all(qs).then(
+                function() {
+                  for (var i = 0; i < filters.length; ++i) {
+                    filters[i].field = $scope.getFormField(filters[i].form, filters[i].fieldName) 
+                  }
+
+                  return true;
+                }
+              );
+
+              var exprNodes = [];
+              for (var i = 0; i < queryDef.queryExpression.length; ++i) {
+                var exprNode = queryDef.queryExpression[i];
+                if (exprNode.nodeType == 'FILTER') {
+                  exprNodes.push({type: 'filter', value: exprNode.value});
+                } else if (exprNode.nodeType == 'OPERATOR') {
+                  exprNodes.push({type: 'op', value: getOpByModel(exprNode.value).name});
+                } else if (exprNode.nodeType == 'PARENTHESIS') {
+                  exprNodes.push({type: 'paren', value: exprNode.value == 'LEFT' ? '(' : ')'});
+                }
+              }
+
+              var queryProps = {
+                selectedFields: queryDef.selectList, filters: filters, exprNodes: exprNodes, 
+                id: query.id, title: query.title, filterId: maxFilterId, selectedCp: selectedCp
+              };
+
+              angular.extend($scope.queryData, queryProps);
+              return filtersq;
             }
           );
-
-          var exprNodes = [];
-          for (var i = 0; i < queryDef.queryExpression.length; ++i) {
-            var exprNode = queryDef.queryExpression[i];
-            if (exprNode.nodeType == 'FILTER') {
-              exprNodes.push({type: 'filter', value: exprNode.value});
-            } else if (exprNode.nodeType == 'OPERATOR') {
-              exprNodes.push({type: 'op', value: getOpByModel(exprNode.value).name});
-            } else if (exprNode.nodeType == 'PARENTHESIS') {
-              exprNodes.push({type: 'paren', value: exprNode.value == 'LEFT' ? '(' : ')'});
-            }
-          }
-
-          var queryProps = {
-            selectedFields: queryDef.selectList, filters: filters, exprNodes: exprNodes, 
-            id: query.id, title: query.title, filterId: maxFilterId
-          };
-
-          angular.extend($scope.queryData, queryProps);
-          return filtersq;
         }
       );
     };
@@ -751,14 +781,53 @@ angular.module('plus.controllers', ['checklist-model'])
 
     $scope.showQueries();
 
-    FormsService.getQueryForms().then(function(forms) {
+    /*FormsService.getQueryForms().then(function(forms) {
       $scope.queryData.forms = forms;
-    });
+    });*/
+    CollectionProtocolService.getCpList().then(
+      function(cpList) {
+        $scope.queryData.cpList = cpList;
+      }
+    );
 
-    var getFormFields = function(form) {
+    $scope.getCp = function(cpId) {
+      for (var i = 0; i < $scope.queryData.cpList.length; ++i) {
+        if ($scope.queryData.cpList[i].id == cpId) {
+          return $scope.queryData.cpList[i];
+        }
+      }
+
+      return null;
+    };
+
+    $scope.onCpSelect = function(cp) {
+      var deferred = $q.defer();
+
+      $scope.queryData.selectedCp = cp;
+      if (!$scope.queryData.forms) {
+        FormsService.getQueryForms().then(
+          function(forms) {
+            $scope.queryData.forms = forms;
+            if (!cp.forms) {
+              cp.forms = angular.copy(forms);
+            }
+            deferred.resolve(cp.forms);
+          }
+        );
+      } else {
+        if (!cp.forms) {
+          cp.forms = angular.copy($scope.queryData.forms);
+        }
+        deferred.resolve(cp.forms);
+      }
+
+      return deferred.promise;
+    };
+
+    var getFormFields = function(cpId, form) {
       var deferred = $q.defer();
       if (!form.fields) {
-        FormsService.getFormFields(form.formId).then(
+        FormsService.getQueryFormFields(cpId, form.formId).then(
           function(fields) {
             form.fields = fields;
             deferred.resolve(form.fields);
@@ -838,28 +907,61 @@ angular.module('plus.controllers', ['checklist-model'])
       return result;
     };
 
+    var filterAndFlattenFields = function(fqn, fields, filterfn) {
+      var result = [];
+      for (var i = 0; i < fields.length; ++i) {
+        if (filterfn(fields[i])) {
+          result.push(fields[i]);
+        }
+      }
+
+      return flattenFields(fqn, result);
+    };
+      
+    var flattenStaticFields = function(fqn, fields) {
+      return filterAndFlattenFields(fqn, fields, 
+        function(field) {
+          return field.type != 'SUBFORM' || field.name != 'extensions';
+        });
+    };
+
+    var flattenExtnFields = function(fqn, fields) {
+      return filterAndFlattenFields(fqn, fields,
+        function(field) {
+          return field.type == 'SUBFORM' && field.name == 'extensions';
+        });
+    };
+      
     $scope.onFormSelect = function(form) {
       hidePopovers();
+      if ($scope.queryData.openForm) {
+        $scope.queryData.openForm.showExtnFields = false; // previously selected form
+      }
+
       $scope.queryData.openForm = form;
       $scope.queryData.currFilter.form = form;
       $scope.queryData.currFilter.field = null;
       $scope.queryData.currFilter.op = null;
       $scope.queryData.currFilter.value = null;
       if (!form.fields) {
-        FormsService.getFormFields(form.formId).then(function(fields) {
+        var cpId = $scope.queryData.selectedCp.id;
+        FormsService.getQueryFormFields(cpId, form.formId).then(function(fields) {
           form.fields = fields;
-          form.flattenedFields = flattenFields("", fields);
+          form.staticFields = flattenStaticFields("", fields);
+          form.extnFields = flattenExtnFields("", fields);
         });
-      } else if (!form.flattenedFields) {
-        form.flattenedFields = flattenFields("", form.fields);
+      } else if (!form.staticFields) {
+        form.staticFields = flattenStaticFields("", fields);
+        form.extnFields = flattenExtnFields("", fields);
       }
     };
 
     $scope.getForm = function(formName) {
       var form = undefined;
-      for (var i = 0; i < $scope.queryData.forms.length; ++i) {
-        if (formName == $scope.queryData.forms[i].name) {
-          form = $scope.queryData.forms[i];
+      var cpForms = $scope.queryData.selectedCp.forms;
+      for (var i = 0; i < cpForms.length; ++i) {
+        if (formName == cpForms[i].name) {
+          form = cpForms[i];
           break;
         }
       } 
@@ -868,13 +970,20 @@ angular.module('plus.controllers', ['checklist-model'])
     };
 
     $scope.getFormField = function(form, fieldName) {
-      if (!form.flattenedFields) {
-        form.flattenedFields = flattenFields("", form.fields);
+      if (!form.staticFields) {
+        form.staticFields = flattenStaticFields("", form.fields);
+        form.extnFields = flattenExtnFields("", form.fields);
       }
 
-      for (var i = 0; i < form.flattenedFields.length; ++i) {
-        if (fieldName == form.flattenedFields[i].name) {
-          return form.flattenedFields[i];
+      for (var i = 0; i < form.staticFields.length; ++i) {
+        if (fieldName == form.staticFields[i].name) {
+          return form.staticFields[i];
+        }
+      }
+
+      for (var i = 0; i < form.extnFields.length; ++i) {
+        if (fieldName == form.extnFields[i].name) {
+          return form.extnFields[i];
         }
       }
  
@@ -1067,6 +1176,7 @@ angular.module('plus.controllers', ['checklist-model'])
           title: queryData.title,
           filters: filters, 
           queryExpression: exprNodes, 
+          cpId: queryData.selectedCp.id,
           selectList: queryData.selectedFields,
           title: queryData.title, 
           drivingForm: queryData.drivingForm
@@ -1173,7 +1283,7 @@ angular.module('plus.controllers', ['checklist-model'])
           return deferred.promise;
         }
 
-        getFormFields(node.form).then(
+        getFormFields($scope.queryData.selectedCp.id, node.form).then(
           function(fields) {
             node.children = processFields(node.form.name + ".", fields);
             deferred.resolve(node.children);

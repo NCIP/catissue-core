@@ -94,10 +94,14 @@ public class FormsController {
 	@ResponseBody
 	public List<FormFieldSummary> getFormFields(
 			@PathVariable("id") Long formId,
-			@RequestParam(value="prefixParentCaption", required=false, defaultValue="false") boolean prefixParentCaption) {
+			@RequestParam(value="prefixParentCaption", required=false, defaultValue="false") boolean prefixParentCaption,
+			@RequestParam(value="cpId", required=false, defaultValue="-1") Long cpId,
+			@RequestParam(value="extendedFields", required=false, defaultValue="false") boolean extendedFields) {
 		ReqFormFieldsEvent req = new ReqFormFieldsEvent();
 		req.setFormId(formId);
 		req.setPrefixParentFormCaption(prefixParentCaption);
+		req.setCpId(cpId);
+		req.setExtendedFields(extendedFields);
 		
 		FormFieldsEvent resp = formSvc.getFormFields(req);
 		if (resp.getStatus() == EventStatus.OK) {

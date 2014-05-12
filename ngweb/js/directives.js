@@ -40,6 +40,7 @@ angular.module("plus.directives", [])
         });
 
         scope.$watch('disabled', function(disabled) {
+          scope.select.enable(!disabled);
         });
       }
     };
@@ -268,6 +269,10 @@ angular.module("plus.directives", [])
         this.isNodeChecked = function(node) {
           if (node.checked) {
             return true;
+          }
+
+          if (!node.children) {
+            return false;
           }
 
           for (var i = 0; i < node.children.length; ++i) {

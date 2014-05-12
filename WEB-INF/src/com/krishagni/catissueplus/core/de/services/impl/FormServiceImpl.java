@@ -3,8 +3,10 @@ package com.krishagni.catissueplus.core.de.services.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
@@ -63,6 +65,13 @@ import edu.common.dynamicextensions.nutility.FileUploadMgr;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class FormServiceImpl implements FormService {
+	private static Set<String> staticExtendedForms = new HashSet<String>();
+	
+	static {
+		staticExtendedForms.add("Participant");
+		staticExtendedForms.add("SpecimenCollectionGroup");
+		staticExtendedForms.add("Specimen");
+	}
 	
 	private FormDao formDao;
 
@@ -106,8 +115,40 @@ public class FormServiceImpl implements FormService {
 		if (form == null) {
 			return FormFieldsEvent.notFound(formId);
 		}
+		
+		List<FormFieldSummary> fields = getFormFields(form);
+		Long cpId = req.getCpId();
+		if (!req.isExtendedFields() || cpId == null || cpId < 0) {
+			return FormFieldsEvent.ok(formId, fields);
+		}
+		
+		String formName = form.getName();
+		if (staticExtendedForms.contains(formName)) {				
+			List<Long> extendedFormIds = formDao.getFormIds(cpId, formName);
+
+			FormFieldSummary field = new FormFieldSummary();
+			field.setName("extensions");
+			field.setCaption("Extensions");
+			field.setType("SUBFORM");
+			
+			List<FormFieldSummary> extensionFields = new ArrayList<FormFieldSummary>();
+			for (Long extendedFormId : extendedFormIds) {				
+				form = Container.getContainer(extendedFormId);
 				
-		return FormFieldsEvent.ok(formId, getFormFields(form));
+				FormFieldSummary extensionField = new FormFieldSummary();
+				extensionField.setName(form.getName());
+				extensionField.setCaption(form.getCaption());
+				extensionField.setType("SUBFORM");
+				extensionField.setSubFields(getFormFields(form));
+				
+				extensionFields.add(extensionField);				
+			}
+			
+			field.setSubFields(extensionFields);
+			fields.add(field);
+		}
+
+		return FormFieldsEvent.ok(formId, fields);
 	}
 	
 	@Override
@@ -307,9 +348,11 @@ public class FormServiceImpl implements FormService {
 
             if (control instanceof SubFormControl) {
             	SubFormControl sfCtrl = (SubFormControl)control;
-            	field.setType("SUBFORM");
-            	field.setSubFields(getFormFields(sfCtrl.getSubContainer()));
-            	fields.add(field);
+            	if (!sfCtrl.isPathLink()) {
+                	field.setType("SUBFORM");
+                	field.setSubFields(getFormFields(sfCtrl.getSubContainer()));
+                	fields.add(field);            		
+            	}
             } else if (!(control instanceof Label || control instanceof PageBreak)) {
             	DataType dataType = (control instanceof FileUploadControl) ? DataType.STRING : control.getDataType();
             	field.setType(dataType.name());

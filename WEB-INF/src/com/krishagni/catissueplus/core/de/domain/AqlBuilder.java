@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.de.domain.Filter.Op;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.LogicalOp;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.Parenthesis;
@@ -83,8 +85,9 @@ public class AqlBuilder {
 	
 	private String buildFilterExpr(Filter filter) {		
 		String field = filter.getField();
-		int dotIdx = field.indexOf(".");
-		if (dotIdx == -1) {
+		String[] fieldParts = field.split("\\.");
+		
+		if (fieldParts.length <= 1) {
 			throw new RuntimeException("Invalid field name"); // need to replace with better exception type
 		}
 				
@@ -94,10 +97,22 @@ public class AqlBuilder {
 			return filterExpr.toString();
 		}
 
-		String formName = field.substring(0, dotIdx);
-		Container form = getContainer(formName);
-		Control ctrl = form.getControlByUdn(field.substring(dotIdx + 1), "\\.");
+		Container form = null;
+		String ctrlName = null;
+		Control ctrl = null;
+		if (fieldParts[1].equals("extensions")) {
+			if (fieldParts.length < 4) {
+				return "";
+			}
+			
+			form = getContainer(fieldParts[2]);
+			ctrlName = StringUtils.join(fieldParts, ".", 3, fieldParts.length);
+		} else {
+			form = getContainer(fieldParts[0]);
+			ctrlName = StringUtils.join(fieldParts, ".", 1, fieldParts.length);
+		}
 		
+		ctrl = form.getControlByUdn(ctrlName, "\\.");				
 		String[] values = (String[])Arrays.copyOf(filter.getValues(), filter.getValues().length);
 		if (ctrl.getDataType() == DataType.STRING || ctrl.getDataType() == DataType.DATE) {
 			for (int i = 0; i < values.length; ++i) {

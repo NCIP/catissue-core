@@ -1,6 +1,6 @@
 <paths>
 	<path>
-		<from>CollectionProtocolRegistration</from>
+		<from>Participant</from>
 		<to>CollectionProtocol</to>
 		<links>
 			<link>
@@ -11,7 +11,7 @@
 	</path>
 
 	<path>
-		<from>CollectionProtocolRegistration</from>
+		<from>Participant</from>
 		<to>SpecimenCollectionGroup</to>
 		<start-field>scgs</start-field>
 		<links>
@@ -19,7 +19,7 @@
 	</path>
 
 	<path>
-		<from>CollectionProtocolRegistration</from>
+		<from>Participant</from>
 		<to>Specimen</to>
 		<start-field>scgs.specimens</start-field>
 		<links>
@@ -27,7 +27,7 @@
 	</path>
 
 	<path>
-		<from>CollectionProtocolRegistration</from>
+		<from>Participant</from>
 		<to>SpecimenEvent</to>
 		<start-field>scgs.specimens.events</start-field>
 		<links>	

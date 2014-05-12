@@ -321,5 +321,16 @@
         where 
           containerId = :containerId and entityType = :entityType
       </query>	
+      
+      <sql-query name="getFormIds">
+        <return-scalar column="formId" type="long"/>
+        
+        select 
+          container_id as formId 
+        from 
+          catissue_form_context 
+        where 
+          (cp_id = :cpId or cp_id = -1) and entity_type = :entityType
+      </sql-query>
    </class>
 </hibernate-mapping>

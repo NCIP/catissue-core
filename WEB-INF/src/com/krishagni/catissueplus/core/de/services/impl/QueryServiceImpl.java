@@ -72,7 +72,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
 public class QueryServiceImpl implements QueryService {
 	private static final String cpForm = "CollectionProtocol";
 
-	private static final String cprForm = "CollectionProtocolRegistration";
+	private static final String cprForm = "Participant";
 
 	private static final String dateFormat = "MM/dd/yyyy";
 	
@@ -208,7 +208,10 @@ public class QueryServiceImpl implements QueryService {
 	public QueryExecutedEvent executeQuery(ExecuteQueryEvent req) {
 		try {
 			Query query = Query.createQuery();
-			query.wideRows(req.isWideRows()).ic(true).dateFormat(dateFormat).compile(cprForm, req.getAql());
+			query.wideRows(req.isWideRows())
+			 	.ic(true)
+			 	.dateFormat(dateFormat)
+			 	.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
 			QueryResultData queryResult = query.getData();
 			return QueryExecutedEvent.ok(queryResult.getColumnLabels(),queryResult.getRows());
 		} catch (QueryParserException qpe) {
@@ -227,7 +230,10 @@ public class QueryServiceImpl implements QueryService {
 	public QueryDataExportedEvent exportQueryData(ExportQueryDataEvent req) {
 		try {
 			Query query = Query.createQuery();
-			query.wideRows(req.isWideRows()).ic(true).dateFormat(dateFormat).compile(cprForm, req.getAql());
+			query.wideRows(req.isWideRows())
+				.ic(true)
+				.dateFormat(dateFormat)
+				.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
 			String filename = UUID.randomUUID().toString();
 			boolean completed = exportData(filename, query);
 			return QueryDataExportedEvent.ok(filename, completed);
@@ -541,8 +547,9 @@ public class QueryServiceImpl implements QueryService {
 		User user = new User();
 		user.setId(sdb.getUserId());
 		
-		SavedQuery savedQuery = new SavedQuery();
+		SavedQuery savedQuery = new SavedQuery();		
 		savedQuery.setTitle(detail.getTitle());
+		savedQuery.setCpId(detail.getCpId());
 		savedQuery.setSelectList(detail.getSelectList());
 		savedQuery.setFilters(detail.getFilters());
 		savedQuery.setQueryExpression(detail.getQueryExpression());
@@ -582,6 +589,13 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 	
+	private String getRestriction(Long cpId) {
+		if (cpId != null && cpId != -1) {
+			return cpForm + ".id = " + cpId;
+		}
+		
+		return null;
+	}
 	
 	private static int getThreadPoolSize() {
 		String poolSize = XMLPropertyHandler.getValue("query.exportThreadPoolSize");
@@ -600,4 +614,6 @@ public class QueryServiceImpl implements QueryService {
 		
 		return dir;
 	}
+	
+	
 }

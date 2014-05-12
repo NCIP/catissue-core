@@ -254,7 +254,7 @@
         }
 
         .filter-box {
-          height: 92%; 
+          height: 85%; 
           margin-top: 5px;
           overflow:auto;
         }
@@ -532,29 +532,60 @@
             <div class="panel panel-primary">
               <div class="panel-heading clearfix">
                 <div class="panel-title pull-left">Add Filter</div>
-                <!-- div class="pull-right"><a style="font-size: 12px; padding: 5px; background-color: #f5f5f5; border: 1px solid #dddddd; border-radius: 4px;" href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Watch Tutorial</b></a></div -->
               </div>
             </div>
+            <div style="margin-top:5px;">
+              <ka-select id="cps" style="width: 100%;"
+                data-placeholder="Select Collection Protocol"
+                options="queryData.cpList" option-id="id" option-value="shortTitle"
+                on-select="onCpSelect"
+                selected="queryData.selectedCp.id"
+                disabled="queryData.filters && queryData.filters.length != 0">
+              </ka-select>
+            </div>
             <div class="filter-box">
-              <accordion-group ng-repeat="form in queryData.forms" is-open="false">
+              <accordion-group ng-repeat="form in queryData.selectedCp.forms | filter: nonCpForm" is-open="form.open">
                 <accordion-heading>
                   <div ng-click="onFormSelect(form)">{{form.caption}}</div>
                 </accordion-heading>
-                <div ng-show="!form.flattenedFields">
+                <div ng-show="!form.staticFields">
                   Loading form fields. Please wait for a moment ...
                 </div>
-                <div ng-show="form.flattenedFields">
+                <div ng-show="form.staticFields">
                   <div style="margin-bottom: 3px;" 
                        class="field" 
                        id="{{form.name}}.{{field.name}}" 
                        data-arg="{{form.name}}.{{field.name}}"
-                       ng-repeat="field in form.flattenedFields">
+                       ng-repeat="field in form.staticFields">
                     <span style="cursor: pointer" 
                           ng-click="onFieldSelect(field)"
                           popover-title="Add Filter"
                           popover-placement="right" ka-popover-template="filter-popover-tmpl.html">
                       {{field.caption}}
                     </span>
+                  </div>
+                  <div ng-if="form.extnFields"
+                       style="margin-bottom: 3px; cursor:pointer; font-weight: bold; font-size: 11px; color: #a0a0a0" 
+                       ng-click="form.showExtnFields = !form.showExtnFields">
+                    <span>
+                      Extension Fields 
+                      <i ng-if="!form.showExtnFields" class="glyphicon glyphicon-chevron-right"></i> 
+                      <i ng-if="form.showExtnFields" class="glyphicon glyphicon-chevron-down"></i> 
+                    </span>
+                  </div>
+                  <div ng-if="form.showExtnFields && form.extnFields">
+                    <div style="margin-bottom: 3px;" 
+                         class="field" 
+                         id="{{form.name}}.{{field.name}}" 
+                         data-arg="{{form.name}}.{{field.name}}"
+                         ng-repeat="field in form.extnFields">
+                      <span style="cursor: pointer" 
+                            ng-click="onFieldSelect(field)"
+                            popover-title="Add Filter"
+                            popover-placement="right" ka-popover-template="filter-popover-tmpl.html">
+                        {{field.caption}}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </accordion-group>

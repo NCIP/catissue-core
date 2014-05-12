@@ -38,4 +38,6 @@ public interface FormDao extends Dao<FormContextBean>{
 	public Long getObjectId(Map<String, Object> map);
 
 	public Long getFormCtxtId(Long containerId, String entityType);
+	
+	public List<Long> getFormIds(Long cpId, String entityType);
 }
