@@ -1884,4 +1884,36 @@
             baseTableName="catissue_spec_tag_items" baseColumnNames="OBJ_ID" referencedTableName="catissue_specimen"
             referencedColumnNames="IDENTIFIER" />
     </changeSet>
+	<changeSet  author="Mosin" id="Updating SQ metadata" failOnError="true">
+		<sql>delete from CATISSUE_QUERY_TABLE_DATA where table_id = 9</sql>
+		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id =10 where table_id = 9</sql>
+		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 10 and child_table_id = 9</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 12 where relationship_id = 13</sql>
+		<sql>delete from CATISSUE_TABLE_RELATION where relationship_id = 40</sql>
+		<sql>delete from  CATISSUE_SEARCH_DISPLAY_DATA where relationship_id = 40</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (347,19,'TITLE','varchar')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (348,19,'SHORT_TITLE','varchar')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (349,19,'IRB_IDENTIFIER','varchar')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (350,19,'START_DATE','date')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (351,19,'END_DATE','date')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (352,19,'ENROLLMENT','integer')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (353,19,'DESCRIPTION_URL','varchar')</sql>
+		<sql>insert into CATISSUE_INTERFACE_COLUMN_DATA values (354,19,'ACTIVITY_STATUS','varchar')</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 347,RELATIONSHIP_ID = 17 where  RELATIONSHIP_ID = 18 and COL_ID = 224</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 348,RELATIONSHIP_ID = 17  where  RELATIONSHIP_ID = 18 and COL_ID = 225</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 349,RELATIONSHIP_ID = 17  where  RELATIONSHIP_ID = 18 and COL_ID = 226</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 350,RELATIONSHIP_ID = 17  where  RELATIONSHIP_ID = 18 and COL_ID = 227</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 351,RELATIONSHIP_ID = 17  where  RELATIONSHIP_ID = 18 and COL_ID = 228</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 352,RELATIONSHIP_ID = 17  where  RELATIONSHIP_ID = 18 and COL_ID = 229</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set COL_ID = 353,RELATIONSHIP_ID = 17  where  RELATIONSHIP_ID = 18 and COL_ID = 230</sql>
+		<sql>delete from CATISSUE_TABLE_RELATION where relationship_id = 43</sql>
+		<sql>delete from  CATISSUE_SEARCH_DISPLAY_DATA where relationship_id = 43</sql>
+		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id =33 where table_id in (100,99,34)</sql>
+		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 33 and child_table_id in (100,99,34)</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 34 where relationship_id in (146,147,35)</sql>
+		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id = 35 where table_id = 92</sql>
+		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 35 and child_table_id = 92</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 30 where relationship_id = 137</sql>
+	</changesSet>
+
 </databaseChangeLog>         
