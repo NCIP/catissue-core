@@ -540,11 +540,11 @@
                 options="queryData.cpList" option-id="id" option-value="shortTitle"
                 on-select="onCpSelect"
                 selected="queryData.selectedCp.id"
-                disabled="queryData.filters && queryData.filters.length != 0">
+                disabled="queryData.disableCpSelection">
               </ka-select>
             </div>
             <div class="filter-box">
-              <accordion-group ng-repeat="form in queryData.selectedCp.forms | filter: nonCpForm" is-open="form.open">
+              <accordion-group ng-repeat="form in queryData.selectedCp.forms | filter: filterCpForm">
                 <accordion-heading>
                   <div ng-click="onFormSelect(form)">{{form.caption}}</div>
                 </accordion-heading>
