@@ -1302,6 +1302,7 @@
         <sql>update (
             select dp.TITLE as cpTitle, sp.TITLE as spTitle,
             dp.SHORT_TITLE as cpSTitle, sp.SHORT_TITLE as spSTitle,
+            dp.PRINCIPAL_INVESTIGATOR_ID as cpPID, sp.PRINCIPAL_INVESTIGATOR_ID as spPID,
             dp.IRB_IDENTIFIER as cpIrb, sp.IRB_IDENTIFIER as spIrb,
             dp.START_DATE as cpSDate, sp.START_DATE as spSDate,
             dp.END_DATE as cpEDate, sp.END_DATE as spEDate,
@@ -1313,6 +1314,7 @@
             ) up
             set up.cpTitle = up.spTitle,
             up.cpSTitle = up.spSTitle,
+            up.cpPID = up.spPID,
             up.cpIrb = up.spIrb,
             up.cpSDate = up.spSDate,
             up.cpEDate = up.spEDate,
@@ -1400,6 +1402,7 @@
         <sql>update (
             select cp.TITLE as cpTitle, sp.TITLE as spTitle,
             cp.SHORT_TITLE as cpSTitle, sp.SHORT_TITLE as spSTitle,
+            cp.PRINCIPAL_INVESTIGATOR_ID as cpPID, sp.PRINCIPAL_INVESTIGATOR_ID as spPID,
             cp.IRB_IDENTIFIER as cpIrb, sp.IRB_IDENTIFIER as spIrb,
             cp.START_DATE as cpSDate, sp.START_DATE as spSDate,
             cp.END_DATE as cpEDate, sp.END_DATE as spEDate,
@@ -1415,6 +1418,7 @@
             ) up
             set up.cpTitle = up.spTitle,
             up.cpSTitle = up.spSTitle,
+            up.cpPID = up.spPID,
             up.cpIrb = up.spIrb,
             up.cpSDate = up.spSDate,
             up.cpEDate = up.spEDate,
@@ -1914,6 +1918,11 @@
 		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id = 35 where table_id = 92</sql>
 		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 35 and child_table_id = 92</sql>
 		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 30 where relationship_id = 137</sql>
-	</changesSet>
-
+    </changeSet>
+    <changeSet id="droping unused tables" author="nitesh" failOnError="false">
+        <dropTable cascadeConstraints="true" tableName="catissue_specimen_protocol"/>
+        <dropTable cascadeConstraints="true" tableName="catissue_abstract_specimen"/>
+        <dropTable cascadeConstraints="true" tableName="catissue_abs_speci_coll_group"/>
+        <dropTable cascadeConstraints="true" tableName="catissue_specimen_char"/>
+    </changeSet>
 </databaseChangeLog>         
