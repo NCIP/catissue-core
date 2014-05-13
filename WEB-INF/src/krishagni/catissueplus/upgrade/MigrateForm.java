@@ -773,38 +773,42 @@ public class MigrateForm {
 		}
 
 		BaseAbstractAttributeInterface baseAttr = oldCtrl.getBaseAbstractAttribute();
-		List<PermissibleValue> pvs = null;
-		Collection<PermissibleValueInterface> defPvs = null;
-		boolean isOrdered = false;
-		if (baseAttr instanceof CategoryAttributeInterface) {
-			CategoryAttribute cattr = (CategoryAttribute)baseAttr;
-			UserDefinedDE ude = (UserDefinedDE)cattr.getDataElement();
-			pvs = getPvs(ude);
-			defPvs = ude.getPermissibleValueCollection();
-			isOrdered = ude.getIsOrdered();
+		try {
+			List<PermissibleValue> pvs = null;
+			Collection<PermissibleValueInterface> defPvs = null;
+			boolean isOrdered = false;
+			if (baseAttr instanceof CategoryAttributeInterface) {
+				CategoryAttribute cattr = (CategoryAttribute)baseAttr;
+				UserDefinedDE ude = (UserDefinedDE)cattr.getDataElement();
+				pvs = getPvs(ude);
+				defPvs = ude.getPermissibleValueCollection();
+				isOrdered = ude.getIsOrdered();
+				
+			} else {
+				UserDefinedDEInterface userDataElement = (UserDefinedDEInterface) oldCtrl.getAttibuteMetadataInterface().getDataElement();
+				pvs = getPvs(userDataElement);
+				defPvs = userDataElement.getPermissibleValueCollection();
+				isOrdered = userDataElement.getIsOrdered();
+			}
+			PvVersion pvVersion = new PvVersion();
+			pvVersion.setPermissibleValues(pvs);
+				
 			
-		} else {
-			UserDefinedDEInterface userDataElement = (UserDefinedDEInterface) oldCtrl.getAttibuteMetadataInterface().getDataElement();
-			pvs = getPvs(userDataElement);
-			defPvs = userDataElement.getPermissibleValueCollection();
-			isOrdered = userDataElement.getIsOrdered();
-		}
-		PvVersion pvVersion = new PvVersion();
-		pvVersion.setPermissibleValues(pvs);
+			if (defPvs != null && defPvs.size() > 0) {				
+				pvVersion.setDefaultValue(getPv(defPvs.iterator().next()));								
+			}
 			
-		
-		if (defPvs != null && defPvs.size() > 0) {				
-			pvVersion.setDefaultValue(getPv(defPvs.iterator().next()));								
+			pvDataSource.setDataType(dataType);
+			pvDataSource.setDateFormat(dateFormat);
+			pvDataSource.getPvVersions().add(pvVersion);
+			
+			if (isOrdered) {
+				pvDataSource.setOrdering(Ordering.ASC);
+			}
+		} catch (Exception e) {
+			logger.error(" Base attr class : " + baseAttr.getClass());
+			e.printStackTrace();
 		}
-		
-		pvDataSource.setDataType(dataType);
-		pvDataSource.setDateFormat(dateFormat);
-		pvDataSource.getPvVersions().add(pvVersion);
-		
-		if (isOrdered) {
-			pvDataSource.setOrdering(Ordering.ASC);
-		}
-
 		return pvDataSource;
 	}
 	
