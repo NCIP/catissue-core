@@ -175,10 +175,9 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
 		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CPSiteRole.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/UserSiteRole.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/UserCPRole.hbm.xml" />		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Role.hbm.xml" />
-			<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Privilege.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Privilege.hbm.xml" />
 		
     </session-factory>
 

@@ -1926,183 +1926,156 @@
         <dropTable cascadeConstraints="true" tableName="catissue_specimen_char"/>
     </changeSet>
 
-    
     <changeSet author="dpatil" id="table for catissue_roles" failOnError="true">
-	<createTable tableName="CATISSUE_ROLES">
-       	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-               <constraints primaryKey="true" nullable="false" primaryKeyName="PK_role_id"/>
-            </column>
-	
-            <column name="NAME" type="${text.type}(255)">
-                <constraints unique="true" nullable="false" />
-            </column>
+   	<createTable tableName="CATISSUE_ROLES">
+            	<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+               		<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_ROLE_ID"/>
+            	</column>
+   
+            	<column name="NAME" type="${text.type}(64)">
+                	<constraints unique="true" nullable="false" />
+            	</column>
 
-            <column name="DESCRIPTION" type="${text.type}(255)">
-            </column>
-      	</createTable>
+        	<column name="DESCRIPTION" type="${text.type}(255)">
+     	       	</column>
+         </createTable>
     </changeSet>
 
-    <changeSet author="dpatil" id="table for catissue role privileges" failOnError="true">
+    <changeSet author="dpatil" id="table for catissue privileges" failOnError="true">
 	<createTable tableName="CATISSUE_PRIVILEGES">
-       	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-               <constraints primaryKey="true" nullable="false" primaryKeyName="PK_privilege_id"/>
-            </column>
-	
-            <column name="PRIVILEGE" type="${text.type}(255)">
-                <constraints unique="true" nullable="false" />
-            </column>
-      	</createTable>
+		<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+			<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_PRIVILEGE_ID"/>
+		</column>
+	   
+		<column name="PRIVILEGE" type="${text.type}(64)">
+			<constraints unique="true" nullable="false" />
+		</column>
+	</createTable>
     </changeSet>
 
     <changeSet author="dpatil" id="table for catissue collection protocol site roles" failOnError="true">
 	<createTable tableName="CATISSUE_CP_SITE_ROLES">
-       	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-               <constraints primaryKey="true" nullable="false" primaryKeyName="PK_cp_site_role_id"/>
-            </column>
-	
-	    <column name="CP_ID" type="${int.type}">
-	    </column>
+	       	<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+	       		<constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_CPSITEROLE_ID"/>
+	    	</column>
+	   
+		<column name="CP_ID" type="${int.type}">
+		</column>
 
-	    <column name="SITE_ID" type="${int.type}">
-	    </column>
-	
-            <column name="ROLE_ID" type="${int.type}">
-	    </column>
+		<column name="SITE_ID" type="${int.type}">
+		</column>
+	   
+		    <column name="ROLE_ID" type="${int.type}">
+		</column>
 	</createTable>
- 	
-	<addForeignKeyConstraint 
-			constraintName="FK_CP-SITE-ROLE_CP_ID"
-			baseTableName="CATISSUE_CP_SITE_ROLES" 
-			baseColumnNames="CP_ID"
-			referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
-			referencedColumnNames="IDENTIFIER" />
-	<addForeignKeyConstraint 
-			constraintName="FK_CP-SITE-ROLE_SITE_ID"
-			baseTableName="CATISSUE_CP_SITE_ROLES" 
-			baseColumnNames="SITE_ID"
-			referencedTableName="CATISSUE_SITE"
-			referencedColumnNames="IDENTIFIER" />
-
-	<addForeignKeyConstraint 
-			constraintName="FK_CP-SITE-ROLE_ROLE_ID"
-			baseTableName="CATISSUE_CP_SITE_ROLES" 
-			baseColumnNames="ROLE_ID"
-			referencedTableName="CATISSUE_ROLES"
-			referencedColumnNames="IDENTIFIER" />
+	    
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_CSR_CPID_CAT_CP_ID"
+		baseTableName="CATISSUE_CP_SITE_ROLES"
+		baseColumnNames="CP_ID"
+		referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+		referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_CSR_SITEID_CAT_SITE_ID"
+		baseTableName="CATISSUE_CP_SITE_ROLES"
+		baseColumnNames="SITE_ID"
+		referencedTableName="CATISSUE_SITE"
+		referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_CSR_ROLEID_CAT_ROLE_ID"
+		baseTableName="CATISSUE_CP_SITE_ROLES"
+		baseColumnNames="ROLE_ID"
+		referencedTableName="CATISSUE_ROLES"
+		referencedColumnNames="IDENTIFIER" />
     </changeSet>
 
     <changeSet author="dpatil" id="table for catissue user site roles" failOnError="true">
-	<createTable tableName="CATISSUE_USER_SITE_ROLES">
-       	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-               <constraints primaryKey="true" nullable="false" primaryKeyName="PK_user_site_role_id"/>
-            </column>
-	
-	    <column name="USER_ID" type="${int.type}">
-	    </column>
+	<createTable tableName="CATISSUE_USER_SITES">
+		<column name="USER_ID" type="${int.type}">
+		</column>
 
-	    <column name="SITE_ID" type="${int.type}">
-	    </column>
-	
-            <column name="ROLE_ID" type="${int.type}">
-	    </column>
+		<column name="SITE_ID" type="${int.type}">
+		</column>
 	</createTable>
- 	
-	<addForeignKeyConstraint 
-			constraintName="FK_USER-SITE-ROLE_USER_ID"
-			baseTableName="CATISSUE_USER_SITE_ROLES" 
-			baseColumnNames="USER_ID"
-			referencedTableName="CATISSUE_USER"
-			referencedColumnNames="IDENTIFIER" />
-	<addForeignKeyConstraint 
-			constraintName="FK_USER-SITE-ROLE_SITE_ID"
-			baseTableName="CATISSUE_USER_SITE_ROLES" 
-			baseColumnNames="SITE_ID"
-			referencedTableName="CATISSUE_SITE"
-			referencedColumnNames="IDENTIFIER" />
-
-	<addForeignKeyConstraint 
-			constraintName="FK_USER-SITE-ROLE_ROLE_ID"
-			baseTableName="CATISSUE_USER_SITE_ROLES" 
-			baseColumnNames="ROLE_ID"
-			referencedTableName="CATISSUE_ROLES"
-			referencedColumnNames="IDENTIFIER" />
+    
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_US_USERID_CAT_USER_ID"
+		baseTableName="CATISSUE_USER_SITES"
+		baseColumnNames="USER_ID"
+		referencedTableName="CATISSUE_USER"
+		referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_US_SITEID_CAT_SITE_ID"
+		baseTableName="CATISSUE_USER_SITES"
+		baseColumnNames="SITE_ID"
+		referencedTableName="CATISSUE_SITE"
+		referencedColumnNames="IDENTIFIER" />
     </changeSet>
 
     <changeSet author="dpatil" id="table for catissue cp user roles" failOnError="true">
 	<createTable tableName="CATISSUE_CP_USER_ROLES">
-       	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-               <constraints primaryKey="true" nullable="false" primaryKeyName="PK_cp_user_role_id"/>
-            </column>
-	
-	    <column name="CP_ID" type="${int.type}">
-	    </column>
+		<column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+		       <constraints primaryKey="true" nullable="false" primaryKeyName="PK_CAT_CPUSERROLE_ID"/>
+		</column>
+	   
+		<column name="CP_ID" type="${int.type}">
+		</column>
 
-	    <column name="USER_ID" type="${int.type}">
-	    </column>
-	
-            <column name="ROLE_ID" type="${int.type}">
-	    </column>
+		<column name="USER_ID" type="${int.type}">
+		</column>
+	   
+		<column name="ROLE_ID" type="${int.type}">
+		</column>
 	</createTable>
- 	
-	<addForeignKeyConstraint 
-			constraintName="FK_CP-USER-ROLE_CP_ID"
-			baseTableName="CATISSUE_CP_USER_ROLES" 
-			baseColumnNames="CP_ID"
-			referencedTableName="CATISSUE_USER"
-			referencedColumnNames="IDENTIFIER" />
-	<addForeignKeyConstraint 
-			constraintName="FK_CP-USER-ROLE_USER_ID"
-			baseTableName="CATISSUE_CP_USER_ROLES" 
-			baseColumnNames="USER_ID"
-			referencedTableName="CATISSUE_USER"
-			referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_CUR_CPID_CAT_CP_ID"
+		baseTableName="CATISSUE_CP_USER_ROLES"
+		baseColumnNames="CP_ID"
+		referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+		referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_CUR_USERID_CAT_USER_ID"
+		baseTableName="CATISSUE_CP_USER_ROLES"
+		baseColumnNames="USER_ID"
+		referencedTableName="CATISSUE_USER"
+		referencedColumnNames="IDENTIFIER" />
 
-	<addForeignKeyConstraint 
-			constraintName="FK_CP-USER-ROLE_ROLE_ID"
-			baseTableName="CATISSUE_CP_USER_ROLES" 
-			baseColumnNames="ROLE_ID"
-			referencedTableName="CATISSUE_ROLES"
-			referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_CUR_ROLEID_CAT_ROLES_ID"
+		baseTableName="CATISSUE_CP_USER_ROLES"
+		baseColumnNames="ROLE_ID"
+		referencedTableName="CATISSUE_ROLES"
+		referencedColumnNames="IDENTIFIER" />
     </changeSet>
 
     <changeSet author="dpatil" id="table for role privilege mappings" failOnError="true">
 	<createTable tableName="CATISSUE_ROLE_PRIVILEGES">
-	    <column name="PRIVILEGE_ID" type="${int.type}">
-	    </column>
-	
-            <column name="ROLE_ID" type="${int.type}">
-	    </column>
+		<column name="PRIVILEGE_ID" type="${int.type}">
+		</column>
+
+		<column name="ROLE_ID" type="${int.type}">
+		</column>
 	</createTable>
 
 	<addPrimaryKey
-			columnNames="PRIVILEGE_ID, ROLE_ID"
-			constraintName="PK_ROLE_PRIVILEGE_ID"
-			tableName="CATISSUE_ROLE_PRIVILEGES"/>
- 
-	<addForeignKeyConstraint 
-			constraintName="FK_PRIV_ROLE_ID"
-			baseTableName="CATISSUE_ROLE_PRIVILEGES" 
-			baseColumnNames="ROLE_ID"
-			referencedTableName="CATISSUE_ROLES"
-			referencedColumnNames="IDENTIFIER" />
+		columnNames="PRIVILEGE_ID, ROLE_ID"
+		constraintName="PK_CAT_RP_ROLEID_PRIVID"
+		tableName="CATISSUE_ROLE_PRIVILEGES"/>
 
-	<addForeignKeyConstraint 
-			constraintName="FK_PRIVilege_Role_ID"
-			baseTableName="CATISSUE_ROLE_PRIVILEGES" 
-			baseColumnNames="PRIVILEGE_ID"
-			referencedTableName="CATISSUE_ROLE_PRIVILEGES"
-			referencedColumnNames="IDENTIFIER" />
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_RP_ROLEID_CAT_ROLES_ID"
+		baseTableName="CATISSUE_ROLE_PRIVILEGES"
+		baseColumnNames="ROLE_ID"
+		referencedTableName="CATISSUE_ROLES"
+		referencedColumnNames="IDENTIFIER" />
+
+	<addForeignKeyConstraint
+		constraintName="FK_CAT_RP_PRIVID_CAT_PRIV_ID"
+		baseTableName="CATISSUE_ROLE_PRIVILEGES"
+		baseColumnNames="PRIVILEGE_ID"
+		referencedTableName="CATISSUE_PRIVILEGES"
+		referencedColumnNames="IDENTIFIER" />
     </changeSet>
-
-
-    <changeSet author="dpatil" id="inserting user site role sequence" failOnError="true">
-        <createSequence
-            sequenceName="CATISSUE_USER_SITE_ROLE_SEQ"
-            startValue="1"
-            incrementBy="1"
-            ordered="true" />
-	
-    </changeSet>  
 
     <changeSet author="dpatil" id="inserting user cp role sequence" failOnError="true">
         <createSequence
@@ -2110,9 +2083,9 @@
             startValue="1"
             incrementBy="1"
             ordered="true" />
-    </changeSet>  
+    </changeSet> 
 
-     <changeSet author="dpatil" id="inserting cp site role sequence" failOnError="true">
+    <changeSet author="dpatil" id="inserting cp site role sequence" failOnError="true">
         <createSequence
             sequenceName="CATISSUE_CP_SITE_ROLE_SEQ"
             startValue="1"
@@ -2120,51 +2093,51 @@
             ordered="true" />
     </changeSet>
 
-   <changeSet author="dpatil" id="inserting role sequence" failOnError="true">
+    <changeSet author="dpatil" id="inserting role sequence" failOnError="true">
         <createSequence
             sequenceName="CATISSUE_ROLE_SEQ"
             startValue="1"
             incrementBy="1"
             ordered="true" />
-    </changeSet>  
+    </changeSet> 
 
-   <changeSet author="dpatil" id="inserting privilege sequence" failOnError="true">
+    <changeSet author="dpatil" id="inserting privilege sequence" failOnError="true">
         <createSequence
             sequenceName="CATISSUE_PRIVILEGE_SEQ"
             startValue="1"
             incrementBy="1"
             ordered="true" />
-    </changeSet>   
+    </changeSet>  
 
    <changeSet id="sqls to add default privileges" author="dpatil" failOnError="false">
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("ACCESS") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("ASSIGN_READ") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("ASSIGN_USE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("CREATE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("DEFINE_ANNOTATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("DELETE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("DISTRIBUTION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("EXECUTE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("GENERAL_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("GENERAL_SITE_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("IDENTIFIED_DATA_ACCESS") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("PARTICIPANT_SCG_ANNOTATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("PHI_ACCESS") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("PROTOCOL_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("QUERY") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("READ") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("READ_DENIED") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("REGISTRATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("REPOSITORY_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SHIPMENT_PROCESSING") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_ACCESSION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_ANNOTATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_PROCESSING") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_STORAGE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("STORAGE_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("UPDATE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("USE") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("USER_PROVISIONING") </sql> 
-	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("WRITE") </sql> 	
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (1,'ACCESS') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (2,'ASSIGN_READ') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (3,'ASSIGN_USE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (4,'CREATE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (5,'DEFINE_ANNOTATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (6,'DELETE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (7,'EXECUTE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (8,'GENERAL_ADMINISTRATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (9,'DISTRIBUTION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (10,'GENERAL_SITE_ADMINISTRATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (11,'IDENTIFIED_DATA_ACCESS') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (12,'PARTICIPANT_SCG_ANNOTATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (13,'PHI_ACCESS') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (14,'PROTOCOL_ADMINISTRATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (15,'QUERY') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (16,'READ') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (17,'READ_DENIED') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (18,'REGISTRATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (19,'REPOSITORY_ADMINISTRATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (20,'SHIPMENT_PROCESSING') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (21,'SPECIMEN_ACCESSION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (22,'SPECIMEN_ANNOTATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (23,'SPECIMEN_PROCESSING') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (24,'SPECIMEN_STORAGE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (25,'STORAGE_ADMINISTRATION') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (26,'UPDATE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (27,'USE') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (28,'USER_PROVISIONING') </sql>
+    <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (29,'WRITE') </sql>    
    </changeSet>
 </databaseChangeLog>         

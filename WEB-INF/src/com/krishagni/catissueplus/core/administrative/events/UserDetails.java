@@ -4,12 +4,9 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 
 public class UserDetails {
 
@@ -25,7 +22,7 @@ public class UserDetails {
 
 	private String loginName;
 
-	private List<UserSiteRoleDetails> userSiteRoles = new ArrayList<UserSiteRoleDetails>();
+	private List<String> userSiteNames = new ArrayList<String>();
 
 	private List<UserCPRoleDetails> userCPRoles = new ArrayList<UserCPRoleDetails>();
 
@@ -53,19 +50,22 @@ public class UserDetails {
 
 	private List<String> modifiedAttributes = new ArrayList<String>();
 
-	
 	public void setModifiedAttributes(List<String> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 	}
-	public boolean isUserSiteRolesModified(){
-		return modifiedAttributes.contains("userSiteRoles");
+
+	public boolean isUserSitesModified() {
+		return modifiedAttributes.contains("userSites");
 	}
-	public boolean isUserCPRolesModified(){
+
+	public boolean isUserCPRolesModified() {
 		return modifiedAttributes.contains("userCPRoles");
 	}
+
 	public boolean isFirstNameModified() {
 		return modifiedAttributes.contains("firstName");
-	}	
+	}
+
 	public boolean isLastNameModified() {
 		return modifiedAttributes.contains("lastName");
 	}
@@ -254,12 +254,12 @@ public class UserDetails {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public List<UserSiteRoleDetails> getUserSiteRoles() {
-		return userSiteRoles;
+	public List<String> getUserSiteNames() {
+		return userSiteNames;
 	}
 
-	public void setUserSiteRoles(List<UserSiteRoleDetails> userSiteRoles) {
-		this.userSiteRoles = userSiteRoles;
+	public void setUserSiteNames(List<String> userSiteNames) {
+		this.userSiteNames = userSiteNames;
 	}
 
 	public List<UserCPRoleDetails> getUserCPRoles() {

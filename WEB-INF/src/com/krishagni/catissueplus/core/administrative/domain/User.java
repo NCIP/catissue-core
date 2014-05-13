@@ -16,10 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
+import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
-import com.krishagni.catissueplus.core.privileges.domain.UserSiteRole;
 
 public class User {
 
@@ -31,7 +31,7 @@ public class User {
 
 	private AuthDomain authDomain;
 
-	private Set<UserSiteRole> userSiteRoles = new HashSet<UserSiteRole>();
+	private Set<Site> userSites = new HashSet<Site>();
 
 	private Set<UserCPRole> userCPRoles = new HashSet<UserCPRole>();
 
@@ -87,6 +87,14 @@ public class User {
 
 	public AuthDomain getAuthDomain() {
 		return authDomain;
+	}
+
+	public Set<Site> getUserSites() {
+		return userSites;
+	}
+
+	public void setUserSites(Set<Site> userSites) {
+		this.userSites = userSites;
 	}
 
 	public void setAuthDomain(AuthDomain authDomain) {
@@ -163,14 +171,6 @@ public class User {
 		this.passwordToken = passwordToken;
 	}
 
-	public Set<UserSiteRole> getUserSiteRoles() {
-		return userSiteRoles;
-	}
-
-	public void setUserSiteRoles(Set<UserSiteRole> userSiteRoles) {
-		this.userSiteRoles = userSiteRoles;
-	}
-
 	public Set<UserCPRole> getUserCPRoles() {
 		return userCPRoles;
 	}
@@ -193,21 +193,20 @@ public class User {
 		this.setActivityStatus(user.getActivityStatus());
 		this.setAuthDomain(user.getAuthDomain());
 		this.setAddress(user.getAddress());
-		this.setLoginName(user.getLoginName()); 
+		this.setLoginName(user.getLoginName());
 		this.setCreateDate(user.getCreateDate());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
-		this.setComments(user.getComments()); 
-		for (UserSiteRole userSite : user.getUserSiteRoles()) {
-			userSite.setUser(this); 
-		}
+		this.setComments(user.getComments());
+		this.setUserSites(user.getUserSites());
+	
 		for (UserCPRole userCP : user.getUserCPRoles()) {
-			userCP.setUser(this); 
-		}System.out.println("ddd");
-		SetUpdater.<UserSiteRole> newInstance().update(this.getUserSiteRoles(), user.getUserSiteRoles());
-//		this.setUserSiteRoles(user.getUserSiteRoles());
+			userCP.setUser(this);
+		}
+		System.out.println("ddd");
+		//		this.setUserSiteRoles(user.getUserSiteRoles());
 		SetUpdater.<UserCPRole> newInstance().update(this.getUserCPRoles(), user.getUserCPRoles());
-//		this.setUserCPRoles(user.getUserCPRoles());
+		//		this.setUserCPRoles(user.getUserCPRoles());
 		updateAddressDetails(this.getAddress(), user.getAddress());
 	}
 

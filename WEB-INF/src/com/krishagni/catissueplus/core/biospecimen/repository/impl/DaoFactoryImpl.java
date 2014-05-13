@@ -33,11 +33,9 @@ import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppl
 import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
 import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
 import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
-import com.krishagni.catissueplus.core.privileges.repository.UserSiteRoleDao;
 import com.krishagni.catissueplus.core.privileges.repository.impl.PrivilegeDaoImpl;
 import com.krishagni.catissueplus.core.privileges.repository.impl.RoleDaoImpl;
 import com.krishagni.catissueplus.core.privileges.repository.impl.UserCPRoleDaoImpl;
-import com.krishagni.catissueplus.core.privileges.repository.impl.UserSiteRoleDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -177,13 +175,6 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public UserCPRoleDao getCPUserRoleDao() {
 		UserCPRoleDaoImpl dao = new UserCPRoleDaoImpl();
-		setSessionFactory(dao);
-		return dao;
-	}
-
-	@Override
-	public UserSiteRoleDao getUserSiteRoleDao() {
-		UserSiteRoleDaoImpl dao = new UserSiteRoleDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

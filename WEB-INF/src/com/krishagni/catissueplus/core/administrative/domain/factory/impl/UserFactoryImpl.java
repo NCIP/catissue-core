@@ -16,16 +16,14 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.events.UserCPRoleDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
-import com.krishagni.catissueplus.core.administrative.events.UserSiteRoleDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
-import com.krishagni.catissueplus.core.privileges.domain.UserSiteRole;
+import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
 public class UserFactoryImpl implements UserFactory {
 
@@ -62,7 +60,7 @@ public class UserFactoryImpl implements UserFactory {
 
 		User user = new User();
 		setComments(user, details.getComments());
-		setUserSiteRoles(user, details.getUserSiteRoles(), exceptionHandler);
+		setUserSites(user, details.getUserSiteNames(), exceptionHandler);
 		setUserCPRoles(user, details.getUserCPRoles(), exceptionHandler);
 		setLoginName(user, details.getLoginName(), exceptionHandler);
 		setFirstName(user, details.getFirstName(), exceptionHandler);
@@ -88,13 +86,13 @@ public class UserFactoryImpl implements UserFactory {
 			setLastName(user, details.getLastName(), exception);
 		}
 
-		if (details.isUserSiteRolesModified()) {
-			setUserSiteRoles(user, details.getUserSiteRoles(), exception);
+		if (details.isUserSitesModified()) {
+			setUserSites(user, details.getUserSiteNames(), exception);
 		}
 
-			if (details.isUserCPRolesModified()) {
-				setUserCPRoles(user, details.getUserCPRoles(), exception);
-			}
+		if (details.isUserCPRolesModified()) {
+			setUserCPRoles(user, details.getUserCPRoles(), exception);
+		}
 
 		if (details.isActivityStatusModified()) {
 			setActivityStatus(user, details.getActivityStatus(), exception);
@@ -172,32 +170,22 @@ public class UserFactoryImpl implements UserFactory {
 		user.setUserCPRoles(userCpRoles);
 	}
 
-	private void setUserSiteRoles(User user, List<UserSiteRoleDetails> userSiteRoleDetails,
-			ObjectCreationException exceptionHandler) {
-		if (userSiteRoleDetails.isEmpty()) {
+	private void setUserSites(User user, List<String> userSiteNames, ObjectCreationException exceptionHandler) {
+		if (userSiteNames.isEmpty()) {
 			return;
 		}
-		Set<UserSiteRole> userSiteRoles = new HashSet<UserSiteRole>();
-		for (UserSiteRoleDetails usrDetails : userSiteRoleDetails) {
-			UserSiteRole userSiteRole = new UserSiteRole();
+		Set<Site> userSites = new HashSet<Site>();
+		for (String siteName : userSiteNames) {
 
-			Site site = daoFactory.getSiteDao().getSiteByName(usrDetails.getSiteName());
+			Site site = daoFactory.getSiteDao().getSiteByName(siteName);
 			if (site == null) {
 				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, SITE);
 				return;
 			}
-			userSiteRole.setSite(site);
-			userSiteRole.setUser(user);
 
-			Role role = daoFactory.getRoleDao().getRoleByName(usrDetails.getRoleName());
-			if (role == null) {
-				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, ROLE);
-				return;
-			}
-			userSiteRole.setRole(role);
-			userSiteRoles.add(userSiteRole);
+			userSites.add(site);
 		}
-		user.setUserSiteRoles(userSiteRoles);
+		user.setUserSites(userSites);
 	}
 
 	private void setComments(User user, String comments) {
@@ -232,7 +220,7 @@ public class UserFactoryImpl implements UserFactory {
 		Department department = daoFactory.getDepartmentDao().getDepartment(departmentName);
 
 		if (department == null) {
-//			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT);
+			//			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT);
 			return;
 		}
 		user.setDepartment(department);

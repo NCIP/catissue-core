@@ -101,13 +101,15 @@
          </set>
         
          <set
-            name="userSiteRoles"
-            table="CATISSUE_USER_GROUP_ROLES"
-            cascade="all-delete-orphan"
-            inverse="true">
+            name="userSites"
+            table="CATISSUE_USER_SITES"
+            inverse="false"
+            cascade="save-update">
+
             <key column="USER_ID"/>
-            <one-to-many
-                class="com.krishagni.catissueplus.core.privileges.domain.UserSiteRole"/>
+            <many-to-many
+                class="com.krishagni.catissueplus.core.biospecimen.domain.Site"
+                column="SITE_ID"/>
          </set>
         
 	

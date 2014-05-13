@@ -14,7 +14,6 @@ import com.krishagni.catissueplus.core.notification.repository.ExternalApplicati
 import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
 import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
 import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
-import com.krishagni.catissueplus.core.privileges.repository.UserSiteRoleDao;
 
 public interface DaoFactory {
 
@@ -53,7 +52,5 @@ public interface DaoFactory {
 	public PrivilegeDao getPrivilegeDao();
 
 	public UserCPRoleDao getCPUserRoleDao();
-
-	public UserSiteRoleDao getUserSiteRoleDao();
 
 }

@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.rest.controller;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
