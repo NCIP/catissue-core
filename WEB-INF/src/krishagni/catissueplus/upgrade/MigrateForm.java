@@ -22,10 +22,11 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import edu.common.dynamicextensions.domain.Association;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
+import edu.common.dynamicextensions.domain.CategoryAttribute;
 import edu.common.dynamicextensions.domain.CategoryEntity;
 import edu.common.dynamicextensions.domain.EntityRecord;
+import edu.common.dynamicextensions.domain.UserDefinedDE;
 import edu.common.dynamicextensions.domain.nui.CheckBox;
 import edu.common.dynamicextensions.domain.nui.ComboBox;
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -771,12 +772,27 @@ public class MigrateForm {
 			dataType = DataType.INTEGER;
 		}
 
-		UserDefinedDEInterface userDataElement = (UserDefinedDEInterface) oldCtrl.getAttibuteMetadataInterface().getDataElement();
-		List<PermissibleValue> pvs = getPvs(userDataElement);
+		BaseAbstractAttributeInterface baseAttr = oldCtrl.getBaseAbstractAttribute();
+		List<PermissibleValue> pvs = null;
+		Collection<PermissibleValueInterface> defPvs = null;
+		boolean isOrdered = false;
+		if (baseAttr instanceof CategoryAttributeInterface) {
+			CategoryAttribute cattr = (CategoryAttribute)baseAttr;
+			UserDefinedDE ude = (UserDefinedDE)cattr.getDataElement();
+			pvs = getPvs(ude);
+			defPvs = ude.getPermissibleValueCollection();
+			isOrdered = ude.getIsOrdered();
+			
+		} else {
+			UserDefinedDEInterface userDataElement = (UserDefinedDEInterface) oldCtrl.getAttibuteMetadataInterface().getDataElement();
+			pvs = getPvs(userDataElement);
+			defPvs = userDataElement.getPermissibleValueCollection();
+			isOrdered = userDataElement.getIsOrdered();
+		}
 		PvVersion pvVersion = new PvVersion();
 		pvVersion.setPermissibleValues(pvs);
 			
-		Collection<PermissibleValueInterface> defPvs = userDataElement.getPermissibleValueCollection();
+		
 		if (defPvs != null && defPvs.size() > 0) {				
 			pvVersion.setDefaultValue(getPv(defPvs.iterator().next()));								
 		}
@@ -785,7 +801,7 @@ public class MigrateForm {
 		pvDataSource.setDateFormat(dateFormat);
 		pvDataSource.getPvVersions().add(pvVersion);
 		
-		if (bool(userDataElement.getIsOrdered())) {
+		if (isOrdered) {
 			pvDataSource.setOrdering(Ordering.ASC);
 		}
 
