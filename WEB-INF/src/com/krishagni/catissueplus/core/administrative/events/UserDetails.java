@@ -25,9 +25,9 @@ public class UserDetails {
 
 	private String loginName;
 
-	private List<String> siteNames;
+	private List<UserSiteRoleDetails> userSiteRoles = new ArrayList<UserSiteRoleDetails>();
 
-	private List<String> cpTitles;
+	private List<UserCPRoleDetails> userCPRoles = new ArrayList<UserCPRoleDetails>();
 
 	private Date createDate;
 
@@ -51,22 +51,27 @@ public class UserDetails {
 
 	private String phoneNumber;
 
-  List<String> modifiedAttributes = new ArrayList<String>();
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
+	
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
+	}
+	public boolean isUserSiteRolesModified(){
+		return modifiedAttributes.contains("userSiteRoles");
+	}
+	public boolean isUserCPRolesModified(){
+		return modifiedAttributes.contains("userCPRoles");
+	}
 	public boolean isFirstNameModified() {
 		return modifiedAttributes.contains("firstName");
-	}
-
+	}	
 	public boolean isLastNameModified() {
 		return modifiedAttributes.contains("lastName");
 	}
 
 	public boolean isEmailAddressModified() {
 		return modifiedAttributes.contains("emailAddress");
-	}
-
-	public boolean isSitesModified() {
-		return modifiedAttributes.contains("siteNames");
 	}
 
 	public boolean isCpsModified() {
@@ -249,30 +254,30 @@ public class UserDetails {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public List<String> getSiteNames() {
-		return siteNames;
+	public List<UserSiteRoleDetails> getUserSiteRoles() {
+		return userSiteRoles;
 	}
 
-	public void setSiteNames(List<String> siteNames) {
-		this.siteNames = siteNames;
+	public void setUserSiteRoles(List<UserSiteRoleDetails> userSiteRoles) {
+		this.userSiteRoles = userSiteRoles;
 	}
 
-	public List<String> getCpTitles() {
-		return cpTitles;
+	public List<UserCPRoleDetails> getUserCPRoles() {
+		return userCPRoles;
 	}
 
-	public void setCpTitles(List<String> cpTitles) {
-		this.cpTitles = cpTitles;
+	public void setUserCPRoles(List<UserCPRoleDetails> userCPRoles) {
+		this.userCPRoles = userCPRoles;
 	}
 
-  public List<String> getModifiedAttributes() {
+	/*public List<String> getModifiedAttributes() {
 		return modifiedAttributes;
 	}
 
 	public void setModifiedAttributes(List<String> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 	}
-
+	*/
 	public static UserDetails fromDomain(User user) {
 		UserDetails userDto = new UserDetails();
 		userDto.setLoginName(user.getLoginName());
@@ -286,37 +291,12 @@ public class UserDetails {
 		userDto.setCreateDate(user.getCreateDate());
 		userDto.setComments(user.getComments());
 
-		if (!user.getCpCollection().isEmpty()) {
-			userDto.setCpTitles(getCpTitles(user.getCpCollection()));
-		}
-
-		if (!user.getSiteCollection().isEmpty()) {
-			userDto.setSiteNames(getSiteNames(user.getSiteCollection()));
-		}
-
 		if (user.getAuthDomain() != null) {
 			userDto.setDomainName(user.getAuthDomain().getName());
 		}
 
 		updateAddressDetails(userDto, user.getAddress());
 		return userDto;
-	}
-
-	private static List<String> getSiteNames(Set<Site> siteCollection) {
-		List<String> siteNames = new ArrayList<String>();
-		for (Site site : siteCollection) {
-			siteNames.add(site.getName());
-		}
-		return siteNames;
-	}
-
-	private static List<String> getCpTitles(Set<CollectionProtocol> cps) {
-		List<String> cpTitles = new ArrayList<String>();
-		for (CollectionProtocol cp : cps) {
-			cpTitles.add(cp.getTitle());
-		}
-		return cpTitles;
-
 	}
 
 	private static void updateAddressDetails(UserDetails userDto, Address address) {

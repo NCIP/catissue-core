@@ -33,7 +33,7 @@ public class TransactionalInterceptor {
 	@Around("anyPublicMethod() && @annotation(plusTransactional)")
 	public Object startTransaction(ProceedingJoinPoint pjp, PlusTransactional plusTransactional) {
 		boolean isTransactionStarted = false;
-		boolean isSessionStarted = ManagedSessionContext.hasBind(sessionFactory);
+		boolean isSessionStarted = !ManagedSessionContext.hasBind(sessionFactory);
 
 		Session session = sessionFactory.getCurrentSession();
  
@@ -47,6 +47,10 @@ public class TransactionalInterceptor {
 		Object object = null;
 		try {
 			object = pjp.proceed();
+			if (isTransactionStarted && tx != null) {
+				tx.commit();
+				LOGGER.info("Transaction commited.");
+			}
 		}
 		catch (Throwable e) {
 			LOGGER.error(e.getCause(), e);
@@ -58,10 +62,7 @@ public class TransactionalInterceptor {
 			throw new CatissueException(ErrorCodeEnum.QUERY_EXECUTION_ERROR);
 		}
 		finally {
-			if (isTransactionStarted && tx != null) {
-				tx.commit();
-				LOGGER.info("Transaction commited.");
-			}
+			
 			if (session != null && session.isOpen() && isSessionStarted) {
 				session.close();
 				LOGGER.info("Session closed.");

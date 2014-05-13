@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class Site {
 
@@ -9,12 +8,8 @@ public class Site {
 
 	private String name;
 
-	private String activityStatus;
+	private String description;
 
-	private String type;
-
-	private User coordinator;
-	
 	public Long getId() {
 		return id;
 	}
@@ -31,28 +26,12 @@ public class Site {
 		this.name = name;
 	}
 
-	public String getActivityStatus() {
-		return activityStatus;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setActivityStatus(String activityStatus) {
-		this.activityStatus = activityStatus;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public User getCoordinator() {
-		return coordinator;
-	}
-
-	public void setCoordinator(User coordinator) {
-		this.coordinator = coordinator;
-	}
-
+	
 }

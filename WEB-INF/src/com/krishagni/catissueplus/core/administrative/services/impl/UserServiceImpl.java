@@ -229,8 +229,8 @@ public class UserServiceImpl implements UserService {
 			if (oldUser == null) {
 				return UserUpdatedEvent.notFound(userId);
 			}
-
-			User user = userFactory.patchUser(oldUser, event.getUserDetails());
+			User newUser = new User();
+			User user = userFactory.patchUser(newUser, event.getUserDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();

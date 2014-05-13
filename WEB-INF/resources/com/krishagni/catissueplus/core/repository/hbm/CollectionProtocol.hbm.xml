@@ -26,8 +26,7 @@
             class="com.krishagni.catissueplus.core.administrative.domain.User"
             cascade="none"
 
-            column="PRINCIPAL_INVESTIGATOR_ID"
-            lazy="false"/>
+            column="PRINCIPAL_INVESTIGATOR_ID"/>
 
         <property
             name="title"
@@ -59,6 +58,16 @@
             length="50"
         />
         
+         <set
+            name="cpSiteRoles"
+            table="CATISSUE_CP_GROUP_ROLES"
+            cascade="save-update"
+            inverse="false">
+            <key column="CP_ID"/>
+            <one-to-many
+                class="com.krishagni.catissueplus.core.privileges.domain.CPSiteRole"/>
+         </set>
+         
         <query name="getCpByTitle">
     		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.title = :cpTitle
     	</query>

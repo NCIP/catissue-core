@@ -109,7 +109,7 @@ public class UserController {
 		catch (Exception e) {
 			reportError(UserErrorCode.BAD_REQUEST, PATCH_USER);
 		}
-		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
+		//details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setUserDetails(details);
 			
 		UserUpdatedEvent response = userService.patchUser(event);

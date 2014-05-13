@@ -6,8 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.biospecimen.domain.Site"
-        table="CATISSUE_SITE"
-	lazy="true">
+        table="CATISSUE_SITE" lazy="true">
     
     	<cache usage="read-write" />
 
@@ -18,7 +17,7 @@
             length="30"
             unsaved-value="null">
             <generator class="native">
-                <param name="sequence">CATISSUE_SITE_SEQ</param>
+                <param name="sequence">CATISSUE_GROUP_SEQ</param>
             </generator>
         </id>
 
@@ -30,27 +29,7 @@
             not-null="true"
             unique="true"/>
 
-        <property
-            name="type"
-            type="string"
-            column="TYPE"
-            length="50"/>
 
-        <many-to-one
-            name="coordinator"
-            class="com.krishagni.catissueplus.core.administrative.domain.User"
-            cascade="none"
-             
-            update="true"
-            insert="true"
-            column="USER_ID" lazy="false"/>
-
-        <property
-            name="activityStatus"
-            type="string"
-            column="ACTIVITY_STATUS"
-            length="50"/>
-        
     <query name="getSiteByName">
     	SELECT site FROM com.krishagni.catissueplus.core.biospecimen.domain.Site site WHERE site.name = :siteName
     </query>

@@ -16,9 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
+import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
+import com.krishagni.catissueplus.core.privileges.domain.UserSiteRole;
 
 public class User {
 
@@ -30,9 +31,9 @@ public class User {
 
 	private AuthDomain authDomain;
 
-	private Set<Site> siteCollection = new HashSet<Site>();
+	private Set<UserSiteRole> userSiteRoles = new HashSet<UserSiteRole>();
 
-	private Set<CollectionProtocol> cpCollection = new HashSet<CollectionProtocol>();
+	private Set<UserCPRole> userCPRoles = new HashSet<UserCPRole>();
 
 	private String emailAddress;
 
@@ -162,20 +163,20 @@ public class User {
 		this.passwordToken = passwordToken;
 	}
 
-	public Set<Site> getSiteCollection() {
-		return siteCollection;
+	public Set<UserSiteRole> getUserSiteRoles() {
+		return userSiteRoles;
 	}
 
-	public void setSiteCollection(Set<Site> siteCollection) {
-		this.siteCollection = siteCollection;
+	public void setUserSiteRoles(Set<UserSiteRole> userSiteRoles) {
+		this.userSiteRoles = userSiteRoles;
 	}
 
-	public Set<CollectionProtocol> getCpCollection() {
-		return cpCollection;
+	public Set<UserCPRole> getUserCPRoles() {
+		return userCPRoles;
 	}
 
-	public void setCpCollection(Set<CollectionProtocol> cpCollection) {
-		this.cpCollection = cpCollection;
+	public void setUserCPRoles(Set<UserCPRole> userCPRoles) {
+		this.userCPRoles = userCPRoles;
 	}
 
 	private final String LOGIN_NAME = "login name";
@@ -192,13 +193,21 @@ public class User {
 		this.setActivityStatus(user.getActivityStatus());
 		this.setAuthDomain(user.getAuthDomain());
 		this.setAddress(user.getAddress());
-		this.setLoginName(user.getLoginName());
+		this.setLoginName(user.getLoginName()); 
 		this.setCreateDate(user.getCreateDate());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
-		this.setComments(user.getComments());
-		this.setSiteCollection(user.getSiteCollection());
-		this.setCpCollection(user.getCpCollection());
+		this.setComments(user.getComments()); 
+		for (UserSiteRole userSite : user.getUserSiteRoles()) {
+			userSite.setUser(this); 
+		}
+		for (UserCPRole userCP : user.getUserCPRoles()) {
+			userCP.setUser(this); 
+		}System.out.println("ddd");
+		SetUpdater.<UserSiteRole> newInstance().update(this.getUserSiteRoles(), user.getUserSiteRoles());
+//		this.setUserSiteRoles(user.getUserSiteRoles());
+		SetUpdater.<UserCPRole> newInstance().update(this.getUserCPRoles(), user.getUserCPRoles());
+//		this.setUserCPRoles(user.getUserCPRoles());
 		updateAddressDetails(this.getAddress(), user.getAddress());
 	}
 
@@ -211,7 +220,7 @@ public class User {
 		oldAddress.setCity(address.getCity());
 		oldAddress.setZipCode(address.getZipCode());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return 31 * 1 + ((id == null) ? 0 : id.hashCode());
@@ -222,26 +231,27 @@ public class User {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (obj == null) {
 			return false;
 		}
-		
+
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		
+
 		User other = (User) obj;
 		if (id == null) {
 			if (other.id != null) {
 				return false;
 			}
-		} else if (!id.equals(other.id)) {
+		}
+		else if (!id.equals(other.id)) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	private final static String USER = "user";
 
 	private final static String CATISSUE = "catissue";
