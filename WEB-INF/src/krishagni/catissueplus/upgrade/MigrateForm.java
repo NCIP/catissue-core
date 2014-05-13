@@ -22,6 +22,7 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import edu.common.dynamicextensions.domain.Association;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
 import edu.common.dynamicextensions.domain.CategoryEntity;
 import edu.common.dynamicextensions.domain.EntityRecord;
@@ -711,28 +712,43 @@ public class MigrateForm {
 
 		if (baseAttr instanceof CategoryAttributeInterface) {
 			CategoryAttributeInterface catAttr = (CategoryAttributeInterface)baseAttr;
+			baseAttr = catAttr.getAbstractAttribute();
 			
-			if (catAttr.getAbstractAttribute() instanceof AttributeInterface) {
-				attr = (AttributeInterface)catAttr.getAbstractAttribute();
-			} else if (catAttr.getAbstractAttribute() instanceof AssociationInterface) { // case of multi-select control
-				AssociationInterface association = (AssociationInterface)catAttr.getAbstractAttribute();
-				for (AbstractAttributeInterface attr1 : association.getTargetEntity().getAllAbstractAttributes()) {
-					if (attr1.getName().equals("id")) {
-						continue;
-					}
-					
-					attr = (AttributeInterface)attr1;
-					break;
-				}
-			}			
-		} else if (baseAttr instanceof AttributeInterface) {
+//			if (catAttr.getAbstractAttribute() instanceof AttributeInterface) {
+//				attr = (AttributeInterface)catAttr.getAbstractAttribute();
+//			} else if (catAttr.getAbstractAttribute() instanceof AssociationInterface) { // case of multi-select control
+//				attr = getMultiSelectAttr((AssociationInterface)catAttr.getAbstractAttribute());
+//			}			
+		} 
+		
+		if (baseAttr instanceof AttributeInterface) {
 			attr = (AttributeInterface)baseAttr;
+		} else if (baseAttr instanceof AssociationInterface) {
+			attr = getMultiSelectAttr((AssociationInterface)baseAttr);			
 		} else {
-			logger.error("baseAttr class : "+ baseAttr.getClass());
+			if (baseAttr != null) {
+				logger.error("Unknown attribute type: " + baseAttr.getClass());
+			}
+			
 			throw new RuntimeException(ctrl.getCaption() + " is neither category attribute nor simple attribute");
 		}
 		
 		return attr.getAttributeTypeInformation();
+	}
+	
+	private AttributeInterface getMultiSelectAttr(AssociationInterface association) {
+		AttributeInterface attr = null;
+		
+		for (AbstractAttributeInterface attr1 : association.getTargetEntity().getAllAbstractAttributes()) {
+			if (attr1.getName().equals("id")) {
+				continue;
+			}
+			
+			attr = (AttributeInterface)attr1;
+			break;
+		}
+		
+		return attr;
 	}
 	
 	private PvDataSource getPvDataSource(SelectControl newSelectCtrl, ControlInterface oldCtrl) {
