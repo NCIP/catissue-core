@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.privileges.domain.CPSiteRole"
-        table="CATISSUE_CP_GROUP_ROLES"
+        table="CATISSUE_CP_SITE_ROLES"
         lazy="true">
 	
     	<cache usage="read-write" />
@@ -17,7 +17,7 @@
             length="30"
             unsaved-value="null">
             <generator class="native">
-                <param name="sequence">CATISSUE_CP_GROUP_ROLE_SEQ</param>
+                <param name="sequence">CATISSUE_CP_SITE_ROLE_SEQ</param>
             </generator>
         </id>
 
