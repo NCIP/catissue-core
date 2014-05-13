@@ -2,8 +2,10 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Date;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.privileges.domain.CPSiteRole;
 
 public class CollectionProtocol {
 
@@ -18,6 +20,8 @@ public class CollectionProtocol {
 	private Date endDate;
 
 	private User principalInvestigator;
+
+	private Set<CPSiteRole> cpSiteRoles;
 
 	public Long getId() {
 		return id;
@@ -65,6 +69,14 @@ public class CollectionProtocol {
 
 	public void setPrincipalInvestigator(User principalInvestigator) {
 		this.principalInvestigator = principalInvestigator;
+	}
+
+	public Set<CPSiteRole> getCpSiteRoles() {
+		return cpSiteRoles;
+	}
+
+	public void setCpSiteRoles(Set<CPSiteRole> cpSiteRoles) {
+		this.cpSiteRoles = cpSiteRoles;
 	}
 
 }

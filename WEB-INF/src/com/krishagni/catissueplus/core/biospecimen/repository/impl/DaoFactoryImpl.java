@@ -30,6 +30,14 @@ import com.krishagni.catissueplus.core.notification.repository.ExternalApplicati
 import com.krishagni.catissueplus.core.notification.repository.impl.CPStudyMappingDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
+import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
+import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
+import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
+import com.krishagni.catissueplus.core.privileges.repository.UserSiteRoleDao;
+import com.krishagni.catissueplus.core.privileges.repository.impl.PrivilegeDaoImpl;
+import com.krishagni.catissueplus.core.privileges.repository.impl.RoleDaoImpl;
+import com.krishagni.catissueplus.core.privileges.repository.impl.UserCPRoleDaoImpl;
+import com.krishagni.catissueplus.core.privileges.repository.impl.UserSiteRoleDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 
@@ -116,14 +124,13 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-	
+
 	@Override
 	public ContainerDao getContainerDao() {
 		ContainerDaoImpl dao = new ContainerDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}
-	
 
 	@Override
 	public ExternalAppNotificationDao getExternalAppNotificationDao() {
@@ -145,10 +152,38 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-	
+
 	@Override
 	public CPStudyMappingDao getCPStudyMappingDao() {
 		CPStudyMappingDaoImpl dao = new CPStudyMappingDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public RoleDao getRoleDao() {
+		RoleDaoImpl dao = new RoleDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public PrivilegeDao getPrivilegeDao() {
+		PrivilegeDaoImpl dao = new PrivilegeDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public UserCPRoleDao getCPUserRoleDao() {
+		UserCPRoleDaoImpl dao = new UserCPRoleDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public UserSiteRoleDao getUserSiteRoleDao() {
+		UserSiteRoleDaoImpl dao = new UserSiteRoleDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

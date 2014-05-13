@@ -123,6 +123,19 @@
   	<property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="ldapFactory" ref="ldapFact"/>
   </bean>
+  
+  <bean id="privSvc" class="com.krishagni.catissueplus.core.privileges.services.impl.PrivilegeServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="roleFact" class="com.krishagni.catissueplus.core.privileges.domain.factory.impl.RoleFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
+  <bean id="roleSvc" class="com.krishagni.catissueplus.core.privileges.services.impl.RoleServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="roleFactory" ref="roleFact"/>
+  </bean>
  
   <bean id="ldapFact" class="com.krishagni.catissueplus.core.auth.domain.factory.impl.LdapFactoryImpl">
   </bean>

@@ -6,6 +6,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class PasswordForgottenEvent extends ResponseEvent {
 	
+	private static final String SUCCESS = "succcess";
 	private UserDetails userDetails;
 
 	public UserDetails getUserDetails() {
@@ -19,6 +20,7 @@ public class PasswordForgottenEvent extends ResponseEvent {
 	public static PasswordForgottenEvent ok() {
 		PasswordForgottenEvent event = new PasswordForgottenEvent();
 		event.setStatus(EventStatus.OK);
+		event.setMessage(SUCCESS);
 		return event;
 	}
 

@@ -11,6 +11,10 @@ import com.krishagni.catissueplus.core.auth.repository.DomainDao;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
+import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
+import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
+import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
+import com.krishagni.catissueplus.core.privileges.repository.UserSiteRoleDao;
 
 public interface DaoFactory {
 
@@ -31,16 +35,25 @@ public interface DaoFactory {
 	public UserDao getUserDao();
 
 	public ContainerDao getContainerDao();
-	
+
 	public AuditDao getAuditDao();
 
 	public AuditReportDao getAuditReportDao();
-	
+
 	public ExternalAppNotificationDao getExternalAppNotificationDao();
 
 	public ExternalApplicationDao getExternalApplicationDao();
 
 	public DomainDao getDomainDao();
-	
+
 	public CPStudyMappingDao getCPStudyMappingDao();
+
+	public RoleDao getRoleDao();
+
+	public PrivilegeDao getPrivilegeDao();
+
+	public UserCPRoleDao getCPUserRoleDao();
+
+	public UserSiteRoleDao getUserSiteRoleDao();
+
 }

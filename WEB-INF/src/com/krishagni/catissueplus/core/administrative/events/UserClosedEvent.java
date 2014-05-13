@@ -6,6 +6,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class UserClosedEvent extends ResponseEvent{
 	
+	private static final String SUCCESS = "success";
+	
 	private Long id;
 
 	public Long getId() {
@@ -19,6 +21,7 @@ public class UserClosedEvent extends ResponseEvent{
 	public static UserClosedEvent ok() {
 		UserClosedEvent event = new UserClosedEvent();
 		event.setStatus(EventStatus.OK);
+		event.setMessage(SUCCESS);
 		return event;
 	}
 

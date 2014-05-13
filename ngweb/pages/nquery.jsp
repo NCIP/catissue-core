@@ -530,11 +530,11 @@
         <div class="col-xs-3 content-left">
           <accordion ka-fix-height="100%" close-others="true"> 
             <div class="panel panel-primary">
-              <div class="panel-heading clearfix">
-                <div class="panel-title pull-left">Add Filter</div>
+              <div class="panel-heading">
+                <h3 class="panel-title">Select a Collection Protocol</h3>
               </div>
             </div>
-            <div style="margin-top:5px;">
+            <div style="margin:7px 0px;">
               <ka-select id="cps" style="width: 100%;"
                 data-placeholder="Select Collection Protocol"
                 options="queryData.cpList" option-id="id" option-value="shortTitle"
@@ -542,6 +542,11 @@
                 selected="queryData.selectedCp.id"
                 disabled="queryData.disableCpSelection">
               </ka-select>
+            </div>
+            <div class="panel panel-primary">
+              <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left">Add Filter</h3>
+              </div>
             </div>
             <div class="filter-box">
               <accordion-group ng-repeat="form in queryData.selectedCp.forms | filter: filterCpForm">
