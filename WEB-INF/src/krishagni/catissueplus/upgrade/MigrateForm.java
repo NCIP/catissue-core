@@ -728,6 +728,7 @@ public class MigrateForm {
 		} else if (baseAttr instanceof AttributeInterface) {
 			attr = (AttributeInterface)baseAttr;
 		} else {
+			logger.error("baseAttr class : "+ baseAttr.getClass());
 			throw new RuntimeException(ctrl.getCaption() + " is neither category attribute nor simple attribute");
 		}
 		
@@ -937,7 +938,14 @@ public class MigrateForm {
 				" with form context id : " + info.getOldFormCtxId() + " is : " + recAndObjectIds.size());
 	
 		EntityManagerInterface entityManager = EntityManager.getInstance();
-		EntityInterface entity = (EntityInterface) oldForm.getAbstractEntity();
+		EntityInterface entity = null; 
+		if (oldForm.getAbstractEntity() instanceof CategoryEntity) {
+			CategoryEntity catEntity = (CategoryEntity)oldForm.getAbstractEntity();
+			entity = catEntity.getEntity();
+		} else {
+			entity = (EntityInterface)oldForm.getAbstractEntity();
+		}
+		
 		String tableName = entity.getTableProperties().getName();
 	
 		if (recAndObjectIds.size() == 0) {
