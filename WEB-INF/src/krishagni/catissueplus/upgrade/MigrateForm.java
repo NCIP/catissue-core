@@ -247,8 +247,9 @@ public class MigrateForm {
 
 		FormMigrationCtxt formMigrationCtxt = new FormMigrationCtxt();
 		EntityInterface entity = null;
-		if (oldForm instanceof CategoryEntity) {
-			CategoryEntity catEntity = (CategoryEntity)oldForm;
+		
+		if (oldForm.getAbstractEntity() instanceof CategoryEntity) {
+			CategoryEntity catEntity = (CategoryEntity)oldForm.getAbstractEntity();
 			entity = catEntity.getEntity();
 		} else {
 			entity = (EntityInterface)oldForm.getAbstractEntity();
