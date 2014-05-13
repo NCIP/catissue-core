@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.privileges.domain.Privilege"
-        table="CATISSUE_ROLE_PRIVILEGES"
+        table="CATISSUE_PRIVILEGES"
         lazy="true">
         
         <cache usage="read-write" />

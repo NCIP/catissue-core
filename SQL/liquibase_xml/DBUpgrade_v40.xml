@@ -1943,7 +1943,7 @@
     </changeSet>
 
     <changeSet author="dpatil" id="table for catissue role privileges" failOnError="true">
-	<createTable tableName="CATISSUE_ROLE_PRIVILEGES">
+	<createTable tableName="CATISSUE_PRIVILEGES">
        	    <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
                <constraints primaryKey="true" nullable="false" primaryKeyName="PK_privilege_id"/>
             </column>
@@ -2066,7 +2066,7 @@
     </changeSet>
 
     <changeSet author="dpatil" id="table for role privilege mappings" failOnError="true">
-	<createTable tableName="PRIVILEGE_ROLE_MAPPING">
+	<createTable tableName="CATISSUE_ROLE_PRIVILEGES">
 	    <column name="PRIVILEGE_ID" type="${int.type}">
 	    </column>
 	
@@ -2077,18 +2077,18 @@
 	<addPrimaryKey
 			columnNames="PRIVILEGE_ID, ROLE_ID"
 			constraintName="PK_ROLE_PRIVILEGE_ID"
-			tableName="PRIVILEGE_ROLE_MAPPING"/>
+			tableName="CATISSUE_ROLE_PRIVILEGES"/>
  
 	<addForeignKeyConstraint 
 			constraintName="FK_PRIV_ROLE_ID"
-			baseTableName="PRIVILEGE_ROLE_MAPPING" 
+			baseTableName="CATISSUE_ROLE_PRIVILEGES" 
 			baseColumnNames="ROLE_ID"
 			referencedTableName="CATISSUE_ROLES"
 			referencedColumnNames="IDENTIFIER" />
 
 	<addForeignKeyConstraint 
 			constraintName="FK_PRIVilege_Role_ID"
-			baseTableName="PRIVILEGE_ROLE_MAPPING" 
+			baseTableName="CATISSUE_ROLE_PRIVILEGES" 
 			baseColumnNames="PRIVILEGE_ID"
 			referencedTableName="CATISSUE_ROLE_PRIVILEGES"
 			referencedColumnNames="IDENTIFIER" />
@@ -2136,35 +2136,35 @@
             ordered="true" />
     </changeSet>   
 
-   <changeSet id="4" author="dpatil" failOnError="false">
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("ACCESS") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("ASSIGN_READ") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("ASSIGN_USE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("CREATE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("DEFINE_ANNOTATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("DELETE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("DISTRIBUTION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("EXECUTE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("GENERAL_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("GENERAL_SITE_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("IDENTIFIED_DATA_ACCESS") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("PARTICIPANT_SCG_ANNOTATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("PHI_ACCESS") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("PROTOCOL_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("QUERY") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("READ") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("READ_DENIED") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("REGISTRATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("REPOSITORY_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("SHIPMENT_PROCESSING") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("SPECIMEN_ACCESSION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("SPECIMEN_ANNOTATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("SPECIMEN_PROCESSING") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("SPECIMEN_STORAGE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("STORAGE_ADMINISTRATION") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("UPDATE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("USE") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("USER_PROVISIONING") </sql> 
-	<sql> insert into CATISSUE_ROLE_PRIVILEGES (privilege) values ("WRITE") </sql> 	
+   <changeSet id="sqls to add default privileges" author="dpatil" failOnError="false">
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("ACCESS") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("ASSIGN_READ") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("ASSIGN_USE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("CREATE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("DEFINE_ANNOTATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("DELETE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("DISTRIBUTION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("EXECUTE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("GENERAL_ADMINISTRATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("GENERAL_SITE_ADMINISTRATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("IDENTIFIED_DATA_ACCESS") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("PARTICIPANT_SCG_ANNOTATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("PHI_ACCESS") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("PROTOCOL_ADMINISTRATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("QUERY") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("READ") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("READ_DENIED") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("REGISTRATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("REPOSITORY_ADMINISTRATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SHIPMENT_PROCESSING") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_ACCESSION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_ANNOTATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_PROCESSING") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("SPECIMEN_STORAGE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("STORAGE_ADMINISTRATION") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("UPDATE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("USE") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("USER_PROVISIONING") </sql> 
+	<sql> insert into CATISSUE_PRIVILEGES (privilege) values ("WRITE") </sql> 	
    </changeSet>
 </databaseChangeLog>         

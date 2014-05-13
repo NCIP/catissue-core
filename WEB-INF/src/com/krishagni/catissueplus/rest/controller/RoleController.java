@@ -46,12 +46,12 @@ public class RoleController {
 		CreateRoleEvent event = new CreateRoleEvent();
 		event.setSessionDataBean(getSession());
 		event.setRoleDetails(roleDetails);
-		privService.getCpList(115l, PrivilegeType.USER_PROVISIONING.value());		
-		//RoleCreatedEvent resp = roleService.createRole(event);
-		/*if (resp.getStatus() == EventStatus.OK) {
+		//privService.getCpList(115l, PrivilegeType.USER_PROVISIONING.value());		
+		RoleCreatedEvent resp = roleService.createRole(event);
+		if (resp.getStatus() == EventStatus.OK) {
 			
 			return resp.getRoleDetails();
-		}*/
+		}
 		return null;
 	}
 

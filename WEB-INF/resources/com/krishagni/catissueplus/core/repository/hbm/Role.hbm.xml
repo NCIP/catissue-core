@@ -39,7 +39,7 @@
             
         <set
             name="privileges"
-            table="PRIVILEGE_ROLE_MAPPING"
+            table="CATISSUE_ROLE_PRIVILEGES"
             inverse="false"
             cascade="save-update">
 
