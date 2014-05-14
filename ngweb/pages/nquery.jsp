@@ -21,6 +21,7 @@
     <script src="../external/angularjs/sortable.js" type="text/javascript"></script>
     <script src="../external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/checklist-model.js" type="text/javascript"></script>
+    <script src="../external/angularjs/autocomplete.js"></script>
     <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
 
     <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
@@ -326,6 +327,16 @@
           color: #262626;
           text-decoration: none;
         }
+
+        .ui-autocomplete {
+          max-height: 100px;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+
+        .ui-front {
+          z-index: 10000;
+        }
     </style>
   </head>
 
@@ -546,6 +557,15 @@
             <div class="panel panel-primary">
               <div class="panel-heading clearfix">
                 <h3 class="panel-title pull-left">Add Filter</h3>
+                <div class="pull-right" tooltip-placement="bottom" tooltip="Click to add temporal filter" tooltip-append-to-body="true">
+                  <button type="button" class="btn btn-default btn-xs"
+                          popover-title="Add Temporal Filter"
+                          popover-placement="bottom"
+                          popover-append-to-body="true"
+                          ka-popover-template="temporal-filter-popover-tmpl.html">
+                    <span style="font-family: icon;"><i>f(x) = x&sup2; + &zeta;&rho;&beta;</i></span>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="filter-box">
@@ -660,17 +680,30 @@
                     <div><b>{{filter.id}}</b></div>
                   </div>
                 </div>
-                <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;"> 
+                <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="!filter.expr"> 
                   <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i> <b> {{filter.op.desc}} </b> <i>{{filter.value}}</i>
+                </div>
+                <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="filter.expr"> 
+                  <i>{{filter.desc}}</i>
                 </div>
                 <div style="display: table-cell; vertical-align: middle;">
                   <div class="btn-group pull-right">
                     <button class="btn btn-default" 
+                            ng-if="!filter.expr"
                             ng-click="displayFilter(filter)"
                             popover-placement="left" 
                             popover-append-to-body="true"
                             popover-title="Edit Filter"
                             ka-popover-template="filter-popover-tmpl.html">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button class="btn btn-default" 
+                            ng-if="filter.expr"
+                            ng-click="displayFilter(filter)"
+                            popover-placement="left" 
+                            popover-append-to-body="true"
+                            popover-title="Edit Filter"
+                            ka-popover-template="temporal-filter-popover-tmpl.html">
                       <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                     <button class="btn btn-default" ng-click="deleteFilter(filter)"><span class="glyphicon glyphicon-trash"></span></button>
@@ -696,19 +729,35 @@
               <a href=#" tooltip="Cancel and go back to dashboard" tooltip-placement="top" ng-click="showQueries()" style="margin-left: 10px;">Cancel</a>
             </div>
             <div class="pull-right" style="width: 45%; margin-left: 1%;" ng-if="queryData.notifs.showCount">
-              <div ng-if="queryData.notifs.waitCount" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;">
+              <!-- div ng-if="queryData.notifs.waitCount" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;" -->
+              <div ng-if="queryData.notifs.waitCount" class="alert alert-info" style="padding: 5px 12px;">
                 <span>Counting ...</span>
               </div>
 
               <div ng-if="!queryData.notifs.waitCount">
-                <div ng-if="queryData.cprCnt != 0 || queryData.specimenCnt != 0" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 6px; background-color: #d9edf7; color: #3a87ad;">
-                  <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
-                  <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
-                  <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+                <div ng-if="!queryData.notifs.error">
+                  <div ng-if="queryData.cprCnt != 0 || queryData.specimenCnt != 0" 
+                       class="alert alert-info" style="padding: 5px 12px;">
+                    <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
+                    <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
+                    <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+                  </div>
+                  <div ng-if="queryData.cprCnt == 0 && queryData.specimenCnt == 0" 
+                       class="alert alert-warning" style="padding: 5px 12px;">
+                    <span>Zaarooo records found! <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial</span>
+                    <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+                  </div>
                 </div>
-                <div ng-if="queryData.cprCnt == 0 && queryData.specimenCnt == 0" style="border-radius: 4px; border: 1px solid #fbeed5; padding: 6px 12px 5px 12px; background-color:#fcf8e3; color: #c09853;">
-                  <span>Zaarooo records found! <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial</span>
-                  <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+                <div ng-if="queryData.notifs.error">
+                  <div class="alert alert-danger" style="padding: 5px 12px;" ng-switch on="queryData.notifs.error">
+                    <span ng-switch-when="BAD_REQUEST">
+                      Query is malformed! <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial
+                    </span>
+                    <span ng-switch-when="INTERNAL_SERVER_ERROR">
+                      Internal Server Error. Contact system admin.
+                    </span>
+                    <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -718,48 +767,70 @@
     </div>
 
     <script type="text/ng-template" id="filter-popover-tmpl.html">
-    <div style="width: 300px;">
-      <div class="form-group">
-        <label for="operator">Operator</label>
-        <ka-select id="operator" style="width: 100%;"
-          data-placeholder="Select Operator"
-          options="queryData.currFilter.ops" option-id="name" option-value="desc"
-          on-select="onOpSelect"
-          selected="queryData.currFilter.op">
-        </ka-select>
-      </div>
-      <div class="form-group" ng-hide="isUnaryOpSelected()">
-        <label for="value">Condition Value</label>
-        <div id="value" ng-switch="getValueType()">
-          <div ng-switch-when="select">
-            <ka-select data-placeholder="Select Condition Value"
-                       options="queryData.currFilter.field.pvs"
-                       selected="queryData.currFilter.value" style="width: 100%">
-            </ka-select>
+      <div style="width: 300px;">
+        <div class="form-group">
+          <label for="operator">Operator</label>
+          <ka-select id="operator" style="width: 100%;"
+            data-placeholder="Select Operator"
+            options="queryData.currFilter.ops" option-id="name" option-value="desc"
+            on-select="onOpSelect"
+            selected="queryData.currFilter.op">
+          </ka-select>
+        </div>
+        <div class="form-group" ng-hide="isUnaryOpSelected()">
+          <label for="value">Condition Value</label>
+          <div id="value" ng-switch="getValueType()">
+            <div ng-switch-when="select">
+              <ka-select data-placeholder="Select Condition Value"
+                         options="queryData.currFilter.field.pvs"
+                         selected="queryData.currFilter.value" style="width: 100%">
+              </ka-select>
+            </div>
+            <div ng-switch-when="multiSelect">
+              <ka-select multiple
+                         data-placeholder="Select Condition Values"
+                         options="queryData.currFilter.field.pvs"
+                         selected="queryData.currFilter.value" style="width: 100%"></ka-select>
+            </div>
+            <input ng-switch-when="datePicker" class="form-control"
+                   data-placeholder="Select Date"
+                   type="text" ka-date-picker
+                   ng-model="queryData.currFilter.value"></input>
+            <input ng-switch-default class="form-control"
+                   placeholder="Specify Condition Value"
+                   type="text" ng-model="queryData.currFilter.value"></input>
           </div>
-          <div ng-switch-when="multiSelect">
-            <ka-select multiple
-                       data-placeholder="Select Condition Values"
-                       options="queryData.currFilter.field.pvs"
-                       selected="queryData.currFilter.value" style="width: 100%"></ka-select>
-          </div>
-          <input ng-switch-when="datePicker" class="form-control"
-                 data-placeholder="Select Date"
-                 type="text" ka-date-picker
-                 ng-model="queryData.currFilter.value"></input>
-          <input ng-switch-default class="form-control"
-                 placeholder="Specify Condition Value"
-                 type="text" ng-model="queryData.currFilter.value"></input>
+        </div>
+        <div class="form-group"> 
+          <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
+          <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
+          <button class="btn btn-default" ng-click="cancelFilter()">Cancel</button>
         </div>
       </div>
-      <div class="form-group"> 
-        <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
-        <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
-        <button class="btn btn-default" ng-click="cancelFilter()">Cancel</button>
-      </div>
-    </div>
     </script>
 
+    <script type="text/ng-template" id="temporal-filter-popover-tmpl.html">
+      <div style="width: 300px;">
+        <div class="form-group">
+          <label>Temporal Expression</label>
+          <textarea class="form-control" 
+                    ng-model="queryData.currFilter.expr" 
+                    ui-event="{keydown: 'handleAutocompleteKeyDown($event)'}" 
+                    ui-autocomplete="temporalFilterOpts">
+          </textarea>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" ng-model="queryData.currFilter.desc" class="form-control">
+        </div>
+        <div class="form-group"> 
+          <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
+          <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
+          <button class="btn btn-default" ng-click="cancelFilter()">Cancel</button>
+        </div>
+      </div>
+    </script>
+          
     <script type="text/ng-template" id="define-view.html">
       <div class="modal-header" style="height: 10%">
         <h4>Define Results View</h4>

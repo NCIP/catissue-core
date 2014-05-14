@@ -83,7 +83,11 @@ public class AqlBuilder {
 		return whereClause.toString();
 	}
 	
-	private String buildFilterExpr(Filter filter) {		
+	private String buildFilterExpr(Filter filter) {
+		if (filter.getExpr() != null) {
+			return filter.getExpr();
+		}
+		
 		String field = filter.getField();
 		String[] fieldParts = field.split("\\.");
 		

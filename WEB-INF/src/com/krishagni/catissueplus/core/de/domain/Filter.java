@@ -36,6 +36,10 @@ public class Filter {
 	private Op op;
 	
 	private String[] values;
+	
+	private String expr;
+	
+	private String desc;
 
 	public int getId() {
 		return id;
@@ -67,5 +71,21 @@ public class Filter {
 
 	public void setValues(String[] values) {
 		this.values = values;
+	}
+
+	public String getExpr() {
+		return expr;
+	}
+
+	public void setExpr(String expr) {
+		this.expr = expr;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 }
