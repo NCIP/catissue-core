@@ -22,6 +22,8 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import edu.common.dynamicextensions.domain.Association;
+import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
 import edu.common.dynamicextensions.domain.CategoryAttribute;
 import edu.common.dynamicextensions.domain.CategoryEntity;
@@ -780,6 +782,13 @@ public class MigrateForm {
 			if (baseAttr instanceof CategoryAttributeInterface) {
 				CategoryAttribute cattr = (CategoryAttribute)baseAttr;
 				UserDefinedDE ude = (UserDefinedDE)cattr.getDataElement();
+				pvs = getPvs(ude);
+				defPvs = ude.getPermissibleValueCollection();
+				isOrdered = ude.getIsOrdered();
+				
+			} else if (baseAttr instanceof AssociationInterface) {
+				Attribute mattr = (Attribute)getMultiSelectAttr((AssociationInterface)baseAttr);
+				UserDefinedDE ude = (UserDefinedDE)mattr.getDataElement();
 				pvs = getPvs(ude);
 				defPvs = ude.getPermissibleValueCollection();
 				isOrdered = ude.getIsOrdered();
