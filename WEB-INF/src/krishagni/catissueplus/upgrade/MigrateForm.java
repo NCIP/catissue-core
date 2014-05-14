@@ -22,6 +22,7 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import edu.common.dynamicextensions.domain.Association;
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
 import edu.common.dynamicextensions.domain.CategoryAttribute;
@@ -774,49 +775,46 @@ public class MigrateForm {
 		}
 
 		BaseAbstractAttributeInterface baseAttr = oldCtrl.getBaseAbstractAttribute();
-		try {
-			List<PermissibleValue> pvs = null;
-			Collection<PermissibleValueInterface> defPvs = null;
-			boolean isOrdered = false;
-			if (baseAttr instanceof CategoryAttributeInterface) {
-				CategoryAttribute cattr = (CategoryAttribute)baseAttr;
-				UserDefinedDE ude = (UserDefinedDE)cattr.getDataElement();
-				pvs = getPvs(ude);
-				defPvs = ude.getPermissibleValueCollection();
-				isOrdered = ude.getIsOrdered();
-				
-			} else if (baseAttr instanceof AssociationInterface) {
-				Attribute mattr = (Attribute)getMultiSelectAttr((AssociationInterface)baseAttr);
-				UserDefinedDE ude = (UserDefinedDE)mattr.getDataElement();
-				pvs = getPvs(ude);
-				defPvs = ude.getPermissibleValueCollection();
-				isOrdered = ude.getIsOrdered();
-				
-			} else {
-				UserDefinedDEInterface userDataElement = (UserDefinedDEInterface) oldCtrl.getAttibuteMetadataInterface().getDataElement();
-				pvs = getPvs(userDataElement);
-				defPvs = userDataElement.getPermissibleValueCollection();
-				isOrdered = userDataElement.getIsOrdered();
-			}
-			PvVersion pvVersion = new PvVersion();
-			pvVersion.setPermissibleValues(pvs);
-				
+
+		List<PermissibleValue> pvs = null;
+		Collection<PermissibleValueInterface> defPvs = null;
+		boolean isOrdered = false;
+		if (baseAttr instanceof CategoryAttributeInterface) {
+			CategoryAttribute cattr = (CategoryAttribute)baseAttr;
+			UserDefinedDE ude = (UserDefinedDE)cattr.getDataElement();
+			pvs = getPvs(ude);
+			defPvs = ude.getPermissibleValueCollection();
+			isOrdered = ude.getIsOrdered();
 			
-			if (defPvs != null && defPvs.size() > 0) {				
-				pvVersion.setDefaultValue(getPv(defPvs.iterator().next()));								
-			}
+		} else if (baseAttr instanceof AssociationInterface) {
+			Attribute mattr = (Attribute)getMultiSelectAttr((AssociationInterface)baseAttr);
+			UserDefinedDE ude = (UserDefinedDE)mattr.getDataElement();
+			pvs = getPvs(ude);
+			defPvs = ude.getPermissibleValueCollection();
+			isOrdered = ude.getIsOrdered();
 			
-			pvDataSource.setDataType(dataType);
-			pvDataSource.setDateFormat(dateFormat);
-			pvDataSource.getPvVersions().add(pvVersion);
-			
-			if (isOrdered) {
-				pvDataSource.setOrdering(Ordering.ASC);
-			}
-		} catch (Exception e) {
-			logger.error(" Base attr class : " + baseAttr.getClass());
-			e.printStackTrace();
+		} else {
+			UserDefinedDEInterface userDataElement = (UserDefinedDEInterface) oldCtrl.getAttibuteMetadataInterface().getDataElement();
+			pvs = getPvs(userDataElement);
+			defPvs = userDataElement.getPermissibleValueCollection();
+			isOrdered = userDataElement.getIsOrdered();
 		}
+		PvVersion pvVersion = new PvVersion();
+		pvVersion.setPermissibleValues(pvs);
+			
+		
+		if (defPvs != null && defPvs.size() > 0) {				
+			pvVersion.setDefaultValue(getPv(defPvs.iterator().next()));								
+		}
+		
+		pvDataSource.setDataType(dataType);
+		pvDataSource.setDateFormat(dateFormat);
+		pvDataSource.getPvVersions().add(pvVersion);
+		
+		if (isOrdered) {
+			pvDataSource.setOrdering(Ordering.ASC);
+		}
+
 		return pvDataSource;
 	}
 	
@@ -1149,7 +1147,7 @@ public class MigrateForm {
 
 				ControlValue cv = new ControlValue(newControl, newValue);
 				formData.addFieldValue(cv);				
-			} else if (oldAttr instanceof AssociationInterface && getMultiSelectAttr((AssociationInterface)oldAttr) == null) {
+			} else if (oldAttr instanceof AssociationInterface && oldCtrl instanceof AbstractContainmentControlInterface) {
 				FormMigrationCtxt sfMigrationCtxt = (FormMigrationCtxt)fieldMap.get(oldAttr);				
 				Control newSfCtrl = sfMigrationCtxt.sfCtrl;
 				
@@ -1163,17 +1161,7 @@ public class MigrateForm {
 				
 				ControlValue cv = new ControlValue(newSfCtrl, newSfData);
 				formData.addFieldValue(cv);
-			} else {
-				// Its a MultiSelect Attr
-				Control newControl = (Control)fieldMap.get(oldAttr);
-				Object oldValue = oldFormData.get(oldAttr);
-				
-				if (oldValue instanceof List) {
-					newValue = getMultiSelectValues((List<Map<BaseAbstractAttributeInterface, Object>>)oldValue); 
-				} 
-				ControlValue cv = new ControlValue(newControl, newValue);
-				formData.addFieldValue(cv);		
-			}
+			} 
 		}
 		
 		return formData;
