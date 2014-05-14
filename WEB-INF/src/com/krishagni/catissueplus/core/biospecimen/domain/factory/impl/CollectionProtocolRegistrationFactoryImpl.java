@@ -23,7 +23,10 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFac
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.util.PpidGenerator;
+import com.krishagni.catissueplus.core.biospecimen.util.impl.PpidGeneratorImpl;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -41,6 +44,12 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private final String CONSENT_WITNESS = "consent witness";
 
 	private ParticipantFactory participantFactory;
+
+	private KeyGenFactory keyFactory;
+
+	public void setKeyFactory(KeyGenFactory keyFactory) {
+		this.keyFactory = keyFactory;
+	}
 
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
 		this.participantFactory = participantFactory;
@@ -64,6 +73,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		setActivityStatus(registration, detail.getActivityStatus(), exception);
 		setCollectionProtocol(registration, detail, exception);
 		setPPId(registration, detail.getPpid(), exception);
+
 		Long participantId = detail.getParticipantDetail().getId();
 		Participant participant;
 		if (participantId == null) {
@@ -80,27 +90,27 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		return registration;
 	}
 
-	@Override
-	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
-			CollectionProtocolRegistrationDetail detail) {
-		ObjectCreationException exception = new ObjectCreationException();
-//		if (detail.isBarcodeModified()) {
-//			setBarcode(oldCpr, detail.getBarcode(), exception);
-//		}
-//		if (detail.isPpidModified()) {
-//			setPPId(oldCpr, detail.getPpid(), exception);
-//		}
-//		if (detail.isActivityStatusModified()) {
-//			setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
-//		}
-//		if (detail.isRegistrationDateModified()) {
-//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-//		}
-//		if (detail.isParticipantModified()) {
-//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
-//		}
-		return oldCpr;
-	}
+	//	@Override
+	//	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
+	//			CollectionProtocolRegistrationDetail detail) {
+	//		ObjectCreationException exception = new ObjectCreationException();
+	//		if (detail.isBarcodeModified()) {
+	//			setBarcode(oldCpr, detail.getBarcode(), exception);
+	//		}
+	//		if (detail.isPpidModified()) {
+	//			setPPId(oldCpr, detail.getPpid(), exception);
+	//		}
+	//		if (detail.isActivityStatusModified()) {
+	//			setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
+	//		}
+	//		if (detail.isRegistrationDateModified()) {
+	//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
+	//		}
+	//		if (detail.isParticipantModified()) {
+	//			setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
+	//		}
+	//		return null;
+	//	}
 
 	/**
 	 * Sets barcode
@@ -172,11 +182,18 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * @param exception 
 	 */
 	private void setPPId(CollectionProtocolRegistration registration, String ppId, ObjectCreationException exception) {
-		if (StringUtils.isBlank(ppId)) {
+		if (StringUtils.isBlank(ppId) && registration.getCollectionProtocol() != null
+				&& StringUtils.isEmpty(registration.getCollectionProtocol().getPpidFormat())) {
 			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
+			return;
 		}
+		String ppidFormat = registration.getCollectionProtocol().getPpidFormat();
 
-		registration.setProtocolParticipantIdentifier(ppId);
+		Long value = keyFactory.getValueByKey(registration.getCollectionProtocol().getId().toString(),
+				CollectionProtocol.class.getName());
+		PpidGenerator generator = new PpidGeneratorImpl();
+		registration.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
+
 	}
 
 	/**
@@ -262,6 +279,13 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		if (consentDate != null) {
 			registration.setConsentSignatureDate(consentDate);
 		}
+	}
+
+	@Override
+	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
+			CollectionProtocolRegistrationDetail detail) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	//	private void addError(CatissueErrorCode event, String field) {

@@ -24,6 +24,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
+import com.krishagni.catissueplus.core.common.repository.impl.KeyGeneratorDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
@@ -175,6 +177,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public UserCPRoleDao getCPUserRoleDao() {
 		UserCPRoleDaoImpl dao = new UserCPRoleDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+	
+	@Override
+	public KeyGeneratorDao getKeyGeneratorDao() {
+		KeyGeneratorDaoImpl dao = new KeyGeneratorDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

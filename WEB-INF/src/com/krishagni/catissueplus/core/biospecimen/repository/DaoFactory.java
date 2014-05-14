@@ -8,6 +8,7 @@ import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditReportDao;
 import com.krishagni.catissueplus.core.auth.repository.DomainDao;
+import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
@@ -52,5 +53,7 @@ public interface DaoFactory {
 	public PrivilegeDao getPrivilegeDao();
 
 	public UserCPRoleDao getCPUserRoleDao();
+	
+	public KeyGeneratorDao getKeyGeneratorDao();
 
 }

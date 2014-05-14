@@ -81,9 +81,14 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
+ <bean id="keyFactory" class="com.krishagni.catissueplus.core.keygenerator.factory.impl.KeyGenFactoryImpl">
+    	<property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+  
   <bean id="participantFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+  
   <bean id="specimenFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
@@ -93,6 +98,7 @@
   <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
+    <property name="keyFactory" ref="keyFactory"/>
   </bean>
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>

@@ -2140,4 +2140,8 @@
     <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (28,'USER_PROVISIONING') </sql>
     <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (29,'WRITE') </sql>    
    </changeSet>
+   
+    <changeSet author="ajay" id="modify data type for sequence ID column">
+		<modifyDataType columnName="KEY_SEQUENCE_ID" newDataType="${int.type}" tableName="key_seq_generator"/>
+	</changeSet>
 </databaseChangeLog>         

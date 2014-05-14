@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class
+        name="com.krishagni.catissueplus.core.common.util.KeyGenerator"
+        table="key_seq_generator"
+		lazy="true">
+		
+		 <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="20"
+            unsaved-value="null">
+         
+         	<generator class="native">
+            	    <param name="sequence">KEY_GENERATOR_SEQ</param>
+              	<!--  
+                	To add non XDoclet generator parameters, create a file named 
+                  	hibernate-generator-params-Site.xml 
+                  	containing the additional parameters and place it in your merge dir. 
+              	--> 
+         	</generator>
+		 </id>
+		 
+		 <property
+            name="value"
+            type="long"
+            update="true"
+            insert="true"
+            column="KEY_SEQUENCE_ID"
+            length="20"
+            not-null="true"
+        />
+        
+        <property
+            name="key"
+            type="string"
+            update="true"
+            insert="true"
+            column="KEY_VALUE"
+            length="255"
+            not-null="true"
+        />
+        
+         <property
+            name="keyType"
+            type="string"
+            update="true"
+            insert="true"
+            column="KEY_TYPE"
+            length="255"
+            not-null="true"
+        />
+        
+     <query name="getValueByKey">
+		FROM  com.krishagni.catissueplus.core.common.util.KeyGenerator WHERE key = :key
+	</query>
+	</class>      
+</hibernate-mapping>

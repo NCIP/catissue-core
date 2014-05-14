@@ -178,6 +178,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/UserCPRole.hbm.xml" />		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Role.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Privilege.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeyGenerator.hbm.xml" />
 		
     </session-factory>
 
