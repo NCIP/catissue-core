@@ -22,7 +22,6 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import edu.common.dynamicextensions.domain.Association;
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
 import edu.common.dynamicextensions.domain.CategoryAttribute;
@@ -1150,7 +1149,7 @@ public class MigrateForm {
 
 				ControlValue cv = new ControlValue(newControl, newValue);
 				formData.addFieldValue(cv);				
-			} else if (oldAttr instanceof AssociationInterface) {
+			} else if (oldAttr instanceof AssociationInterface && getMultiSelectAttr((AssociationInterface)oldAttr) == null) {
 				FormMigrationCtxt sfMigrationCtxt = (FormMigrationCtxt)fieldMap.get(oldAttr);				
 				Control newSfCtrl = sfMigrationCtxt.sfCtrl;
 				
@@ -1164,6 +1163,16 @@ public class MigrateForm {
 				
 				ControlValue cv = new ControlValue(newSfCtrl, newSfData);
 				formData.addFieldValue(cv);
+			} else {
+				// Its a MultiSelect Attr
+				Control newControl = (Control)fieldMap.get(oldAttr);
+				Object oldValue = oldFormData.get(oldAttr);
+				
+				if (oldValue instanceof List) {
+					newValue = getMultiSelectValues((List<Map<BaseAbstractAttributeInterface, Object>>)oldValue); 
+				} 
+				ControlValue cv = new ControlValue(newControl, newValue);
+				formData.addFieldValue(cv);		
 			}
 		}
 		
