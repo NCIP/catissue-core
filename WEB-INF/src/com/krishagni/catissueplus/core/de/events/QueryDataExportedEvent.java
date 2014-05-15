@@ -32,9 +32,11 @@ public class QueryDataExportedEvent extends ResponseEvent {
 		return resp;
 	}
 	
-	public static QueryDataExportedEvent badRequest() {
+	public static QueryDataExportedEvent badRequest(String msg, Throwable e) {
 		QueryDataExportedEvent resp = new QueryDataExportedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
+		resp.setMessage(msg);
+		resp.setException(e);
 		return resp;
 	}
 	

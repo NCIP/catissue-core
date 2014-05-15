@@ -168,6 +168,8 @@ public class QueryServiceImpl implements QueryService {
 			return QuerySavedEvent.ok(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
 			return QuerySavedEvent.badRequest(qpe.getMessage(), qpe);
+		} catch (IllegalArgumentException iae) {
+			return QuerySavedEvent.badRequest(iae.getMessage(), iae);		
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -194,6 +196,8 @@ public class QueryServiceImpl implements QueryService {
 			return QueryUpdatedEvent.ok(SavedQueryDetail.fromSavedQuery(existing));
 		} catch (QueryParserException qpe) {
 			return QueryUpdatedEvent.badRequest(qpe.getMessage(), qpe);
+		} catch (IllegalArgumentException iae) {
+			return QueryUpdatedEvent.badRequest(iae.getMessage(), iae);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -216,6 +220,8 @@ public class QueryServiceImpl implements QueryService {
 			return QueryExecutedEvent.ok(queryResult.getColumnLabels(),queryResult.getRows());
 		} catch (QueryParserException qpe) {
 			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
+		} catch (IllegalArgumentException iae) {
+			return QueryExecutedEvent.badRequest(iae.getMessage(), iae);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -237,6 +243,10 @@ public class QueryServiceImpl implements QueryService {
 			String filename = UUID.randomUUID().toString();
 			boolean completed = exportData(filename, query);
 			return QueryDataExportedEvent.ok(filename, completed);
+		} catch (QueryParserException qpe) {
+			return QueryDataExportedEvent.badRequest(qpe.getMessage(), qpe);		
+		} catch (IllegalArgumentException iae) {
+			return QueryDataExportedEvent.badRequest(iae.getMessage(), iae);
 		} catch (Exception e) {
 			return QueryDataExportedEvent.serverError("Error exporting data", e);
 		}

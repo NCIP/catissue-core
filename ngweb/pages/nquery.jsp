@@ -529,10 +529,14 @@
           </div>
         </div>
       </div>
-      <div ng-if="queryData.notifs.waitRecs" class="loading-box">
+      <div ng-if="queryData.notifs.waitRecs" class="alert alert-info">
         <span>Loading, please wait for a moment ...</span>
       </div>
-      <div ng-show="!queryData.notifs.waitRecs" class="row" style="height: 90%; padding-left: 15px;">
+      <div ng-if="!queryData.notifs.waitRecs && queryData.notifs.error" class="alert alert-danger">
+        <span ng-if="queryData.notifs.error == 'BAD_REQUEST'">Malformed Query. Please go back and edit query. <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial</span>
+        <span ng-if="queryData.notifs.error == 'INTERNAL_SERVER_ERROR'">Internal Server Error. Please retry after some time or contact system admin</span>
+      </div>
+      <div ng-show="!queryData.notifs.waitRecs && !queryData.notifs.error" class="row" style="height: 90%; padding-left: 15px;">
         <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
       </div>
     </div>

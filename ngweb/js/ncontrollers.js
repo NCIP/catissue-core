@@ -210,7 +210,12 @@ angular.module('plus.controllers', ['checklist-model'])
       $scope.queryData.notifs.waitRecs = true;
       var cpId = $scope.queryData.selectedCp.id;
       QueryService.executeQuery(cpId, 'Participant', aql, true).then(function(result) {
-        var endTime = new Date();
+        if (result.status != 'OK') {
+          $scope.queryData.notifs.error = result.status;
+          $scope.queryData.notifs.waitRecs = false;
+          return;
+        }
+
         var colDefs = [];
         for (var i = 0; i < result.columnLabels.length; ++i) {
           colDefs.push({
@@ -229,6 +234,7 @@ angular.module('plus.controllers', ['checklist-model'])
         
         $scope.setPagedData(1, 100);
         $scope.queryData.notifs.waitRecs = false;
+        $scope.queryData.notifs.error = '';
       });
     };
 
