@@ -12,7 +12,12 @@ angular.module('plus.cpview', [])
   
   $scope.participantList =[];
 
-  $scope.onCpSelect = function(selected) {
+  $scope.onCpSelect = function(selected, redirect) {
+    if ($scope.selectedCp.id != "null" && redirect != false ) {
+      var url = "CPDashboardAction.do?isSystemDashboard=true";
+      $('#cpFrameNew').attr('src',url);
+	}
+	
     $scope.selectedCp = {id: selected.id, shortTitle: selected.text};
       
     repository.getRegisteredParticipants(selected.id, "").success(function(result) {

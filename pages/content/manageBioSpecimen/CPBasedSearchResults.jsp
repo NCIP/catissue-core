@@ -378,7 +378,7 @@ function hideCursor(){
       selectedScg = scgId != null ? {id: scgId, type: 'scg'} : undefined;
       selectedSpecimen = specimenId != null ? {id: specimenId, type: 'specimen'} : undefined;
       
-      scope.onCpSelect({id: scope.selectedCp.id, text: scope.selectedCp.shortTitle});
+      scope.onCpSelect({id: scope.selectedCp.id, text: scope.selectedCp.shortTitle}, false);
       var scgTreeQ = scope.onParticipantSelect(selParticipant, selectedScg == undefined ? true : selectedScg);
       scgTreeQ.then(function() { scope.handleDirectObjectLoad(false); });
     }
