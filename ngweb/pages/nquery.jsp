@@ -563,6 +563,7 @@
                 <h3 class="panel-title pull-left">Add Filter</h3>
                 <div class="pull-right" tooltip-placement="bottom" tooltip="Click to add temporal filter" tooltip-append-to-body="true">
                   <button type="button" class="btn btn-default btn-xs"
+                          ng-click="onTemporalFilterSelect()"
                           popover-title="Add Temporal Filter"
                           popover-placement="bottom"
                           popover-append-to-body="true"
@@ -818,6 +819,7 @@
         <div class="form-group">
           <label>Temporal Expression</label>
           <textarea class="form-control" 
+                    rows="5"
                     ng-model="queryData.currFilter.expr" 
                     ui-event="{keydown: 'handleAutocompleteKeyDown($event)'}" 
                     ui-autocomplete="temporalFilterOpts">

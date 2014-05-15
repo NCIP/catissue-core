@@ -968,6 +968,10 @@ angular.module('plus.controllers', ['checklist-model'])
         });
     };
       
+    $scope.onTemporalFilterSelect = function() {
+      hidePopovers();
+    };
+
     $scope.onFormSelect = function(form) {
       hidePopovers();
       if ($scope.queryData.openForm) {
@@ -1134,7 +1138,7 @@ angular.module('plus.controllers', ['checklist-model'])
 
       if ($scope.queryData.currFilter.expr) {
         filter = {
-          id: $scope.queryData.filterId,
+          id: $scope.queryData.currFilter.id,
           expr: $scope.queryData.currFilter.expr,
           desc: $scope.queryData.currFilter.desc
         };
@@ -1333,7 +1337,10 @@ angular.module('plus.controllers', ['checklist-model'])
       var result = [];
       var fields = [].concat(form.staticFields).concat(form.extnFields);
       for (var i = 0; i < fields.length; ++i) {
-        result.push({label: fields[i].caption, value: fields[i].name});
+        var field = fields[i];
+        if (field.type == 'DATE' || field.type == 'INTEGER' || field.type == 'FLOAT') {
+          result.push({label: field.caption, value: field.name});
+        }
       }
 
       return result;
