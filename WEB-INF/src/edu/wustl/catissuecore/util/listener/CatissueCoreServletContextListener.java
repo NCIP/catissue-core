@@ -74,6 +74,7 @@ import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.DAOUtility;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 /**
  *
@@ -250,8 +251,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		//edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
 		this.addDefaultProtectionGroupsToMap();
-//		final QueryBizLogic bLogic = new QueryBizLogic();
-//		bLogic.initializeQueryData();
+		final QueryBizLogic bLogic = new QueryBizLogic();
+		bLogic.initializeQueryData();
 		this.createAliasAndPageOfMap();
 		LabelAndBarcodeGeneratorInitializer.init();
 		this.initialiseVariablesForEdinburgh();

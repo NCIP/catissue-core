@@ -287,7 +287,7 @@ function hideCursor(){
 </script>
 <table border="1" width="100%" height="100%" cellpadding="0" cellspacing="0">
   <tr>
-    <td valign="top" height="100%" id='sideMenuTd' width="25%">
+    <td valign="top" height="100%" id='sideMenuTd' width="25%" style="max-width:1em;">
       <div id="SearchLeftPart" style="overflow:auto">
         <div id="CpViewController" ng-controller="CpViewController" class="cp-left-panel">
           <div>
