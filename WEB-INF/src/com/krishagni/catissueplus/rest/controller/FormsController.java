@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.java.common.CacheControl;
+import com.java.common.CachePolicy;
+
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
@@ -59,6 +62,7 @@ public class FormsController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<FormSummary> getAllFormsSummary(
 			@RequestParam(value="formType", required=false, defaultValue="dataEntry") String formType) {
@@ -75,6 +79,7 @@ public class FormsController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/definition")
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseStatus(HttpStatus.OK)
 	public void getFormDefinition(@PathVariable("id") Long formId, Writer writer) 
 	throws IOException {
@@ -91,6 +96,7 @@ public class FormsController {
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/fields")
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<FormFieldSummary> getFormFields(
 			@PathVariable("id") Long formId,
@@ -113,6 +119,7 @@ public class FormsController {
 		
 	@RequestMapping(method = RequestMethod.GET, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public String getFormData(@PathVariable("id") Long formId, @PathVariable("recordId") Long recordId) {
 		ReqFormDataEvent req = new ReqFormDataEvent();
@@ -146,6 +153,7 @@ public class FormsController {
 		
 	@RequestMapping(method = RequestMethod.GET, value="{id}/contexts")	
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<FormContextDetail> getFormContexts(@PathVariable("id") Long formId) {
 		ReqFormContextsEvent req = new ReqFormContextsEvent();
