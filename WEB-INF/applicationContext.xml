@@ -218,4 +218,20 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory" />
 	</bean>
 
+	<bean id="departmentFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+	</bean>
+
+	<bean id="deptSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.DepartmentServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+		<property name="departmentFactory" ref="departmentFact"/>
+	</bean>
+
+	<bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
+	</bean>
+
+	<bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+		<property name="instituteFactory" ref="instituteFact"/>
+	</bean>
  </beans>
