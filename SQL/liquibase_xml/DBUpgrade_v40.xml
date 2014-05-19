@@ -10,6 +10,9 @@
 
     <property name="int.type" value="bigint(20)" dbms="mysql" />
     <property name="int.type" value="number(19,0)" dbms="oracle" />
+    
+    <property name="double.type" value="bigint(20)" dbms="mysql" />
+    <property name="double.type" value="double" dbms="oracle" />
 
     <property name="smallint.type" value="smallint" dbms="mysql" />
     <property name="smallint.type" value="number(5,0)" dbms="oracle" />
@@ -47,13 +50,13 @@
             <column name="SPECIMEN_TYPE" type="${text.type}(50)" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-            <column name="CONCENTRATION" type="${int.type}" />
+            <column name="CONCENTRATION" type="${double.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-            <column name="INITIAL_QUANTITY" type="double" />
+            <column name="INITIAL_QUANTITY" type="${double.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="PATHOLOGICAL_STATUS" type="${text.type}(50)" />
@@ -110,7 +113,7 @@
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
-            <column name="INITIAL_QUANTITY" type="double" />
+            <column name="INITIAL_QUANTITY" type="${double.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
             <column name="PATHOLOGICAL_STATUS" type="${text.type}(50)" />
