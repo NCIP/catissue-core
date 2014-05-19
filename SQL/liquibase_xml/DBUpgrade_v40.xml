@@ -53,7 +53,7 @@
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
-            <column name="INITIAL_QUANTITY" type="${int.type}" />
+            <column name="INITIAL_QUANTITY" type="double" />
         </addColumn>
         <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="PATHOLOGICAL_STATUS" type="${text.type}(50)" />
@@ -110,7 +110,7 @@
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
-            <column name="INITIAL_QUANTITY" type="${int.type}" />
+            <column name="INITIAL_QUANTITY" type="double" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
             <column name="PATHOLOGICAL_STATUS" type="${text.type}(50)" />
@@ -137,7 +137,71 @@
     <changeSet author="nitesh" id="5" failOnError="false">
         <dropForeignKeyConstraint baseTableName="CATISSUE_SPECIMEN_EVENT_PARAM" constraintName="FK753F33AD60773DB2"/>
     </changeSet>
-    
+    <changeSet id="creating procedure for duplicate specimen event deletion" author="nitesh" dbms="oracle">
+        <sql splitStatements="false" endDelimiter="$">
+            CREATE OR REPLACE
+            PROCEDURE DEL_DUP_SPE_COLL_EVENTS 
+            IS
+               cnt number;
+               scgId number;
+               cnumber number;
+               eventId number;
+            BEGIN   
+			for d in (select cnt, scgId from (select count(*) as cnt, event.specimen_id as scgId 
+			    from catissue_specimen t2 join catissue_specimen_event_param event on 
+			    event.specimen_id = t2.identifier
+			    inner join catissue_coll_event_param collEvent on collEvent.identifier = event.identifier 
+			    group by event.specimen_id) t1 where t1.cnt > 1)
+			   loop
+			   cnt:=d.cnt;
+			    for e in (select identifier from catissue_coll_event_param where specimen_id = d.scgId)
+			    loop
+			            
+			        if(cnt != 1) then
+			                
+			            delete from catissue_coll_event_param where identifier = e.identifier;
+			            delete from catissue_specimen_event_param where identifier = e.identifier;
+			        end if;
+			                cnt:=cnt-1;
+			    end loop;
+			    end loop;
+            commit;   
+            END DEL_DUP_SPE_COLL_EVENTS;
+    </sql>
+    <sql splitStatements="false" endDelimiter="$">
+            CREATE OR REPLACE
+            PROCEDURE DEL_DUP_SPE_REC_EVENTS 
+            IS
+               cnt number;
+               scgId number;
+               cnumber number;
+               eventId number;
+            BEGIN   
+            for d in (select cnt, scgId from (select count(*) as cnt, event.specimen_id as scgId 
+                from catissue_specimen t2 join catissue_specimen_event_param event on 
+                event.specimen_id = t2.identifier
+                inner join catissue_received_event_param collEvent on collEvent.identifier = event.identifier 
+                group by event.specimen_id) t1 where t1.cnt > 1)
+               loop
+               cnt:=d.cnt;
+                for e in (select identifier from catissue_received_event_param where specimen_id = d.scgId)
+                loop
+                        
+                    if(cnt != 1) then
+                            
+                        delete from catissue_received_event_param where identifier = e.identifier;
+                        delete from catissue_specimen_event_param where identifier = e.identifier;
+                    end if;
+                            cnt:=cnt-1;
+                end loop;
+                end loop;
+            commit;   
+            END DEL_DUP_SPE_REC_EVENTS;
+    </sql>
+    <sql>call DEL_DUP_SPE_COLL_EVENTS();</sql>
+    <sql>call DEL_DUP_SCG_REC_EVENTS();</sql>
+    <sql>commit;</sql>
+    </changeSet>
     <changeSet id="6" author="nitesh" dbms="mysql">
         <sql>update catissue_specimen specimen join catissue_abstract_specimen aspecimen on aspecimen.identifier = specimen.identifier
             left join catissue_specimen_char sp_char on sp_char.identifier = aspecimen.SPECIMEN_CHARACTERISTICS_ID
@@ -735,8 +799,69 @@
             scg.RECEIVER_ID =  event.USER_ID where scg.identifier is not null</sql>
         <sql>commit;</sql>
     </changeSet>
+    <changeSet id="creating procedure for duplicate SCG event deletion" author="nitesh" dbms="oracle">
+        <sql splitStatements="false" endDelimiter="$">
+            CREATE OR REPLACE
+			PROCEDURE DEL_DUP_SCG_COLL_EVENTS 
+			IS
+			   cnt number;
+			   scgId number;
+			   cnumber number;
+			   eventId number;
+			BEGIN   
+			for d in (select cnt, scgId from (select count(*) as cnt, event.specimen_coll_grp_id as scgId 
+			    from catissue_specimen_coll_group t2 join catissue_specimen_event_param event on 
+			    event.specimen_coll_grp_id = t2.identifier
+			    inner join catissue_coll_event_param collEvent on collEvent.identifier = event.identifier 
+			    group by event.specimen_coll_grp_id) t1 where t1.cnt > 1)
+			   loop
+			   cnt:=d.cnt;
+			    for e in (select identifier from catissue_coll_event_param where specimen_coll_grp_id = d.scgId)
+			    loop
+			        if(cnt != 1) then
+			            delete from catissue_coll_event_param where identifier = e.identifier;
+			            delete from catissue_specimen_event_param where identifier = e.identifier;
+			        end if;
+			        cnt:=cnt-1;
+			    end loop;
+			    end loop;
+			commit;   
+			END DEL_DUP_SCG_COLL_EVENTS;
+    </sql>
+    <sql splitStatements="false" endDelimiter="$">
+            CREATE OR REPLACE
+            PROCEDURE DEL_DUP_SCG_REC_EVENTS 
+            IS
+               cnt number;
+               scgId number;
+               cnumber number;
+               eventId number;
+            BEGIN   
+            for d in (select cnt, scgId from (select count(*) as cnt, event.specimen_coll_grp_id as scgId 
+                from catissue_specimen_coll_group t2 join catissue_specimen_event_param event on 
+                event.specimen_coll_grp_id = t2.identifier
+                inner join catissue_received_event_param collEvent on collEvent.identifier = event.identifier 
+                group by event.specimen_coll_grp_id) t1 where t1.cnt > 1)
+               loop
+               cnt:=d.cnt;
+                for e in (select identifier from catissue_received_event_param where specimen_coll_grp_id = d.scgId)
+                loop
+                    if(cnt != 1) then
+                        delete from catissue_received_event_param where identifier = e.identifier;
+                        delete from catissue_specimen_event_param where identifier = e.identifier;
+                    end if;
+                end loop;
+                end loop;
+            commit;   
+            END DEL_DUP_SCG_REC_EVENTS;
+    </sql>
+    <sql>call DEL_DUP_SCG_COLL_EVENTS();</sql>
+    <sql>call DEL_DUP_SCG_REC_EVENTS();</sql>
+    <sql>commit;</sql>
+    </changeSet>
     
     <changeSet id="28" author="nitesh" dbms="oracle">
+    
         <sql>merge into catissue_specimen_coll_group t2
                using ( select event.EVENT_TIMESTAMP as aTime, 
             event.COMMENTS as aComments,
@@ -1245,10 +1370,10 @@
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
-            <column name="TITLE" type="${text.type}(255)" />
+            <column name="TITLE" type="${text.type}(4000)" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
-            <column name="SHORT_TITLE" type="${text.type}(255)" />
+            <column name="SHORT_TITLE" type="${text.type}(4000)" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
             <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
@@ -1915,9 +2040,9 @@
 		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id =33 where table_id in (100,99,34)</sql>
 		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 33 and child_table_id in (100,99,34)</sql>
 		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 34 where relationship_id in (146,147,35)</sql>
+		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 30 where relationship_id = 137</sql>
 		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id = 35 where table_id = 92</sql>
 		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 35 and child_table_id = 92</sql>
-		<sql>update CATISSUE_SEARCH_DISPLAY_DATA set relationship_id = 30 where relationship_id = 137</sql>
     </changeSet>
     <changeSet id="droping unused tables" author="nitesh" failOnError="false">
         <dropTable cascadeConstraints="true" tableName="catissue_specimen_protocol"/>
@@ -2141,7 +2266,41 @@
     <sql> insert into CATISSUE_PRIVILEGES (IDENTIFIER, PRIVILEGE) values (29,'WRITE') </sql>    
    </changeSet>
    
-    <changeSet author="ajay" id="modify data type for sequence ID column">
+    <changeSet author="ajay" id="modify data type for sequence ID column" dbms="mysql">
 		<modifyDataType columnName="KEY_SEQUENCE_ID" newDataType="${int.type}" tableName="key_seq_generator"/>
 	</changeSet>
+	<changeSet author="nitesh" id="modify data type for sequence ID column" dbms="oracle">
+        <addColumn tableName="key_seq_generator">
+            <column name="KEY_SEQUENCE_ID_TMP" type="${int.type}" />
+        </addColumn>
+        <sql>
+            update key_seq_generator set KEY_SEQUENCE_ID_TMP=KEY_SEQUENCE_ID;
+        </sql>
+        <sql>commit;</sql>
+        <dropColumn columnName="KEY_SEQUENCE_ID" tableName="key_seq_generator"/>
+        <renameColumn columnDataType="${int.type}" newColumnName="KEY_SEQUENCE_ID" oldColumnName="KEY_SEQUENCE_ID_TMP" tableName="key_seq_generator"/>
+    </changeSet>
+    
+    <changeSet author="dpatil" id="table for catissue department institutes mapping" failOnError="true">
+       <createTable tableName="CATISSUE_DEPARTMENT_INSTITUTES">
+               <column name="DEPARTMENT_ID" type="${int.type}">
+               </column>
+
+               <column name="INSTITUTE_ID" type="${int.type}">
+               </column>
+       </createTable>
+   
+       <addForeignKeyConstraint
+               constraintName="FK_CAT_DEPTID_CAT_DEPAT_ID"
+               baseTableName="CATISSUE_DEPARTMENT_INSTITUTES"
+               baseColumnNames="DEPARTMENT_ID"
+               referencedTableName="CATISSUE_DEPARTMENT"
+               referencedColumnNames="IDENTIFIER" />
+       <addForeignKeyConstraint
+               constraintName="FK_CAT_INSTID_CAT_INST_ID"
+               baseTableName="CATISSUE_DEPARTMENT_INSTITUTES"
+               baseColumnNames="INSTITUTE_ID"
+               referencedTableName="CATISSUE_INSTITUTION"
+               referencedColumnNames="IDENTIFIER" />
+    </changeSet> 
 </databaseChangeLog>         
