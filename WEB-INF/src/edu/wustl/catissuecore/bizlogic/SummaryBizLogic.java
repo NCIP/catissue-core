@@ -42,7 +42,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * JDBCDAO object
 	 */
-	private static JDBCDAO jdbcDAO = null;
+	private JDBCDAO jdbcDAO = null;
 	
 	public Map<String,String> getSummaryCount() throws  BizLogicException{
 		Map<String, String> summaryDataMap = new HashMap<String, String>();

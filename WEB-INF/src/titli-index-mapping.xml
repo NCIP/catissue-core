@@ -3,15 +3,11 @@
 <titli>
 		
 	<tablejoinmapping>
-		<table name="CATISSUE_SPECIMEN" alias="s" keyColumn="IDENTIFIER" selectColumns="LABEL,BARCODE,COLLECTION_STATUS" activityStatus="ACTIVITY_STATUS">
-			<join tableName="CATISSUE_ABSTRACT_SPECIMEN" alias="a" keyColumn="IDENTIFIER" joinColumn="IDENTIFIER" selectColumns="SPECIMEN_CLASS,SPECIMEN_TYPE,LINEAGE,PATHOLOGICAL_STATUS,TISSUE_SITE,TISSUE_SIDE">
-			</join>		
+		<table name="CATISSUE_SPECIMEN" alias="s" keyColumn="IDENTIFIER" selectColumns="LABEL,BARCODE,COLLECTION_STATUS,SPECIMEN_CLASS,SPECIMEN_TYPE,LINEAGE,PATHOLOGICAL_STATUS,TISSUE_SITE,TISSUE_SIDE" activityStatus="ACTIVITY_STATUS">
 			<leftJoin tableName="CATISSUE_EXTERNAL_IDENTIFIER" alias="ext" keyColumn="SPECIMEN_ID" joinColumn="IDENTIFIER" selectColumns="NAME,VALUE">
 			</leftJoin>	
 		</table>
-		<table name="CATISSUE_SPECIMEN_COLL_GROUP" alias="scg" keyColumn="IDENTIFIER" selectColumns="NAME,BARCODE,COLLECTION_STATUS">
-			<join tableName="CATISSUE_ABS_SPECI_COLL_GROUP" alias="ascg" keyColumn="IDENTIFIER" joinColumn="IDENTIFIER" selectColumns="CLINICAL_DIAGNOSIS,CLINICAL_STATUS">
-			</join>
+		<table name="CATISSUE_SPECIMEN_COLL_GROUP" alias="scg" keyColumn="IDENTIFIER" selectColumns="NAME,BARCODE,COLLECTION_STATUS,CLINICAL_DIAGNOSIS,CLINICAL_STATUS">
 		</table>
 		<table name="CATISSUE_USER" alias="u" keyColumn="IDENTIFIER" selectColumns="FIRST_NAME,LAST_NAME,EMAIL_ADDRESS" activityStatus="ACTIVITY_STATUS">
 			<leftJoin tableName="CATISSUE_ADDRESS" alias="addr" keyColumn="IDENTIFIER" joinColumn="ADDRESS_ID" selectColumns="STREET,CITY,STATE,COUNTRY,ZIPCODE,PHONE_NUMBER">
