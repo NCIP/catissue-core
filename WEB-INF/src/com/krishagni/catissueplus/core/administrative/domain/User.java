@@ -198,15 +198,12 @@ public class User {
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
-		this.setUserSites(user.getUserSites());
-	
+		SetUpdater.<Site> newInstance().update(this.getUserSites(), user.getUserSites());
+		
 		for (UserCPRole userCP : user.getUserCPRoles()) {
 			userCP.setUser(this);
 		}
-		System.out.println("ddd");
-		//		this.setUserSiteRoles(user.getUserSiteRoles());
 		SetUpdater.<UserCPRole> newInstance().update(this.getUserCPRoles(), user.getUserCPRoles());
-		//		this.setUserCPRoles(user.getUserCPRoles());
 		updateAddressDetails(this.getAddress(), user.getAddress());
 	}
 

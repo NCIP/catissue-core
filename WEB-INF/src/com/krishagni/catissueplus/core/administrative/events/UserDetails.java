@@ -50,10 +50,6 @@ public class UserDetails {
 
 	private List<String> modifiedAttributes = new ArrayList<String>();
 
-	public void setModifiedAttributes(List<String> modifiedAttributes) {
-		this.modifiedAttributes = modifiedAttributes;
-	}
-
 	public boolean isUserSitesModified() {
 		return modifiedAttributes.contains("userSites");
 	}
@@ -61,21 +57,17 @@ public class UserDetails {
 	public boolean isUserCPRolesModified() {
 		return modifiedAttributes.contains("userCPRoles");
 	}
-
+	
+	public boolean isLastNameModified() {
+		return modifiedAttributes.contains("lastName");
+	}
+	
 	public boolean isFirstNameModified() {
 		return modifiedAttributes.contains("firstName");
 	}
 
-	public boolean isLastNameModified() {
-		return modifiedAttributes.contains("lastName");
-	}
-
 	public boolean isEmailAddressModified() {
 		return modifiedAttributes.contains("emailAddress");
-	}
-
-	public boolean isCpsModified() {
-		return modifiedAttributes.contains("cpTitles");
 	}
 
 	public boolean isActivityStatusModified() {
@@ -270,14 +262,14 @@ public class UserDetails {
 		this.userCPRoles = userCPRoles;
 	}
 
-	/*public List<String> getModifiedAttributes() {
+	public List<String> getModifiedAttributes() {
 		return modifiedAttributes;
 	}
 
 	public void setModifiedAttributes(List<String> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 	}
-	*/
+
 	public static UserDetails fromDomain(User user) {
 		UserDetails userDto = new UserDetails();
 		userDto.setLoginName(user.getLoginName());

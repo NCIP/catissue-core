@@ -31,9 +31,27 @@
             length="255"
             not-null="true"
             unique="true"/>
+            
+        <set
+            name="institutes"
+            table="CATISSUE_DEPARTMENT_INSTITUTES"
+            inverse="false"
+            cascade="save-update">
+
+            <key column="DEPARTMENT_ID"/>
+            <many-to-many
+                class="com.krishagni.catissueplus.core.administrative.domain.Institute"
+                column="INSTITUTE_ID"/>
+         </set>
+      
 
 	<query name="getDepartmentByName">
 		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name
+	</query>
+	
+	<query name="getDepartmentById">
+		FROM com.krishagni.catissueplus.core.administrative.domain.Department department 
+		JOIN fetch department.institutes WHERE department.id = :id
 	</query>
     </class>
 </hibernate-mapping>

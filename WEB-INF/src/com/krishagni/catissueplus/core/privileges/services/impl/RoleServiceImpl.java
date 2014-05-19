@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
@@ -49,8 +51,8 @@ public class RoleServiceImpl implements RoleService {
 			daoFactory.getRoleDao().saveOrUpdate(role);
 			return RoleCreatedEvent.ok(RoleDetails.fromDomain(role));
 		}
-		catch (CatissueException ce) {
-			return RoleCreatedEvent.invalidRequest(ce.getMessage());
+		catch (ObjectCreationException ce) {
+			return RoleCreatedEvent.invalidRequest(PrivilegeErrorCode.ERRORS.message(), ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return RoleCreatedEvent.serverError(e);

@@ -67,23 +67,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
-		List<User> users = daoFactory.getUserDao().getAllUsers();		
+		List<User> users = daoFactory.getUserDao().getAllUsers();
 		List<UserSummary> result = new ArrayList<UserSummary>();
-		
+
 		for (User user : users) {
 			result.add(UserSummary.fromUser(user));
 		}
-		
+
 		return AllUsersEvent.ok(result);
 	}
 
-	
 	@Override
 	@PlusTransactional
 	public UserCreatedEvent createUser(CreateUserEvent event) {
 		try {
 			User user = userFactory.createUser(event.getUserDetails());
-
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), exceptionHandler);
 			ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
@@ -229,8 +227,7 @@ public class UserServiceImpl implements UserService {
 			if (oldUser == null) {
 				return UserUpdatedEvent.notFound(userId);
 			}
-			User newUser = new User();
-			User user = userFactory.patchUser(newUser, event.getUserDetails());
+			User user = userFactory.patchUser(oldUser, event.getUserDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();

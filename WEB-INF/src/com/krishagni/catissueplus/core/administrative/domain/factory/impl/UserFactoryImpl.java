@@ -35,8 +35,6 @@ public class UserFactoryImpl implements UserFactory {
 
 	private final String LOGIN_NAME = "login name";
 
-	private final String DEPARTMENT = "department";
-
 	private final String AUTH_DOMAIN = "auth domain";
 
 	private final String EMAIL_ADDRESS = "email address";
@@ -45,9 +43,9 @@ public class UserFactoryImpl implements UserFactory {
 
 	private final String SITE = "site";
 
-	private static final String USER = "user";
-
 	private static final String ROLE = "role";
+
+	private static final String DEPARTMENT = "department";
 
 	private final String COLLECTION_PROTOCOL = "collection protocol";
 
@@ -217,10 +215,10 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setDepartment(User user, String departmentName, ObjectCreationException exceptionHandler) {
-		Department department = daoFactory.getDepartmentDao().getDepartment(departmentName);
+		Department department = daoFactory.getDepartmentDao().getDepartmentByName(departmentName);
 
 		if (department == null) {
-			//			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT);
 			return;
 		}
 		user.setDepartment(department);

@@ -22,7 +22,7 @@ public class RoleFactoryImpl implements RoleFactory {
 
 	private static final String PRIVILEGE = "privilege";
 
-	private static final String ROLE_NAME = null;
+	private static final String ROLE_NAME = "role name";
 
 	@Autowired
 	private DaoFactory daoFactory;
@@ -50,9 +50,9 @@ public class RoleFactoryImpl implements RoleFactory {
 		Set<Privilege> privileges = new HashSet<Privilege>();
 
 		for (String privilegeName : privilegeNames) {
-//			if (!PrivilegeType.isValidPrivilegeType(privilegeName)) {
-//				exceptionHandler.addError(PrivilegeErrorCode.NOT_FOUND, PRIVILEGE);
-//			}
+			if (!PrivilegeType.isValidPrivilegeType(privilegeName)) {
+				exceptionHandler.addError(PrivilegeErrorCode.NOT_FOUND, PRIVILEGE);
+			}
 			Privilege privilege = daoFactory.getPrivilegeDao().getPrivilegeByName(privilegeName);
 			privileges.add(privilege);
 		}

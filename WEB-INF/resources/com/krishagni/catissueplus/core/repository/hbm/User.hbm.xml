@@ -102,7 +102,7 @@
         
          <set
             name="userSites"
-            table="CATISSUE_USER_SITES"
+            table="CATISSUE_SITE_USERS"
             inverse="false"
             cascade="save-update">
 

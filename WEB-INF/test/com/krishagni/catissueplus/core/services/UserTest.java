@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
@@ -25,6 +26,7 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEv
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
@@ -42,6 +44,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
 import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
 public class UserTest {
@@ -65,6 +68,9 @@ public class UserTest {
 	SiteDao siteDao;
 	
 	@Mock
+	RoleDao roleDao;
+	
+	@Mock
 	EmailSender emailSender;
 	
 	private UserFactory userFactory;
@@ -78,6 +84,7 @@ public class UserTest {
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(daoFactory.getDomainDao()).thenReturn(domainDao);
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
+		when(daoFactory.getRoleDao()).thenReturn(roleDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);
 
 		userService = new UserServiceImpl();
@@ -88,7 +95,8 @@ public class UserTest {
 		((UserServiceImpl) userService).setEmailSender(emailSender);
 
 		when(daoFactory.getDepartmentDao()).thenReturn(departmentDao);
-		when(departmentDao.getDepartment(anyString())).thenReturn(UserTestData.getDeparment("Chemical"));
+		when(roleDao.getRoleByName(anyString())).thenReturn(UserTestData.getRole(1l));
+		when(departmentDao.getDepartmentByName(anyString())).thenReturn(UserTestData.getDeparment("Chemical"));
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(siteDao.getSiteByName(anyString())).thenReturn(UserTestData.getSite());
 		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(UserTestData.getCp());
@@ -355,7 +363,7 @@ public class UserTest {
 	@Test
 	public void testUserCreationWithInvalidDepartment() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
-		when(departmentDao.getDepartment(anyString())).thenReturn(null);
+		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
 
 		UserCreatedEvent response = userService.createUser(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
@@ -577,6 +585,14 @@ public class UserTest {
 		UserUpdatedEvent response = userService.patchUser(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testGetAllUsers() {
+		when(userDao.getAllUsers()).thenReturn(UserTestData.getUsers());
+		ReqAllUsersEvent req = new ReqAllUsersEvent();
+		AllUsersEvent resp = userService.getAllUsers(req);
+		assertNotNull("response cannot be null", resp.getUsers());
 	}
 	
 	@Test
