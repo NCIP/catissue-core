@@ -1376,10 +1376,10 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
-            <column name="TITLE" type="${text.type}(4000)" />
+            <column name="TITLE" type="${text.type}(512)" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
-            <column name="SHORT_TITLE" type="${text.type}(4000)" />
+            <column name="SHORT_TITLE" type="${text.type}(512)" />
         </addColumn>
         <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
             <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
@@ -1406,7 +1406,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                 indexName="idx_ditri_title"
                 tableName="CATISSUE_DISTRIBUTION_PROTOCOL"
                 unique="true">
-            <column name="TITLE" type="varchar(255)"/>
+            <column name="TITLE" type="varchar(512)"/>
         </createIndex>
     </changeSet>
     <changeSet id="adding autoIncrement for CATISSUE_DISTRIBUTION_PROTOCOL" author="nitesh" dbms="mysql">
@@ -1459,10 +1459,10 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
-            <column name="TITLE" type="${text.type}(255)" />
+            <column name="TITLE" type="${text.type}(512)" />
         </addColumn>
         <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
-            <column name="SHORT_TITLE" type="${text.type}(255)" />
+            <column name="SHORT_TITLE" type="${text.type}(512)" />
         </addColumn>
         <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
             <column name="IRB_IDENTIFIER" type="${text.type}(255)" />
@@ -1502,7 +1502,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                 indexName="idx_collection_prot_title"
                 tableName="CATISSUE_COLLECTION_PROTOCOL"
                 unique="true">
-            <column name="TITLE" type="varchar(255)"/>
+            <column name="TITLE" type="varchar(512)"/>
         </createIndex>
     </changeSet>
     <changeSet id="adding autoIncrement for CATISSUE_COLLECTION_PROTOCOL" author="nitesh" dbms="mysql">
