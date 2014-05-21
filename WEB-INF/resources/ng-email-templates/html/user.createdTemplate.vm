@@ -2,16 +2,10 @@ Dear $user.lastName, $user.firstName<br>
 <br>
 Congratulations! You are now a member of caTissue. Your registration details are as follows:<br> 
 <table> 
-#if ($user.ldap == '$user.ldap') 
+
 	<tr>
 		<td> Login Name  </td> <td>: #if ($user.loginName != '$user.loginName') $user.loginName #end </td>
-	</tr>
-#else
-	<tr>
-		<td> Ldap Id </td> : #if ($user.loginName != '$user.loginName') $user.loginName #end </td>
-	</tr>
-#end
-	
+	</tr>	
 	<tr>	
 		<td>Last Name </td> <td> : #if ($user.lastName != '$user.lastName') $user.lastName #end</td>
 	</tr>
@@ -44,11 +38,11 @@ Congratulations! You are now a member of caTissue. Your registration details are
 	</tr>
 
 </table>
-	#if ($user.ldap == '$user.ldap') 
+	#if ($user.authDomain.name == 'catissue') 
 		<br>
 			Please click the below link to set your password:
 		<br>
-			$appUrl/rest/ng/users/$user.id/setPassword/$user.passwordToken<br>
+			$appUrl/rest/ng/users/$user.id/password?token=$user.passwordToken<br>
 		<br>
 	#else
 		To login into caTissue use your LDAP credentials   

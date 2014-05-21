@@ -153,6 +153,7 @@ public class UserServiceImpl implements UserService {
 			if (user == null) {
 				return PasswordUpdatedEvent.notFound();
 			}
+
 			user.changePassword(event.getPasswordDetails());
 			daoFactory.getUserDao().saveOrUpdate(user);
 			return PasswordUpdatedEvent.ok();
@@ -220,6 +221,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@PlusTransactional
 	public UserUpdatedEvent patchUser(PatchUserEvent event) {
 		try {
 			Long userId = event.getUserId();
@@ -228,9 +230,12 @@ public class UserServiceImpl implements UserService {
 				return UserUpdatedEvent.notFound(userId);
 			}
 			User user = userFactory.patchUser(oldUser, event.getUserDetails());
-			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
-			exceptionHandler.checkErrorAndThrow();
+			
+			if(event.getUserDetails().isEmailAddressModified()) {
+				ObjectCreationException exceptionHandler = new ObjectCreationException();
+				ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
+				exceptionHandler.checkErrorAndThrow();
+			}
 
 			daoFactory.getUserDao().saveOrUpdate(user);
 			return UserUpdatedEvent.ok(UserDetails.fromDomain(user));

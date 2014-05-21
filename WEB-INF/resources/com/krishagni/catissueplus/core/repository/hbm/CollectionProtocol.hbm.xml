@@ -61,7 +61,7 @@
          <set
             name="cpSiteRoles"
             table="CATISSUE_CP_GROUP_ROLES"
-            cascade="save-update"
+            cascade="all-delete-orphan"
             inverse="false">
             <key column="CP_ID"/>
             <one-to-many

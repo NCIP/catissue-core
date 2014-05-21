@@ -248,8 +248,6 @@ public class User {
 		return true;
 	}
 
-	private final static String USER = "user";
-
 	private final static String CATISSUE = "catissue";
 
 	private final static String OLD_PASSWORD = "old password";
@@ -268,21 +266,15 @@ public class User {
 
 	private void updatePassword(String newPassword) {
 		Password password = new Password();
-		password.setPassword(newPassword);
+		password.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt(4)));
 		password.setUpdateDate(new Date());
 		password.setUser(this);
 		this.passwordCollection.add(password);
 		this.setPasswordToken(null);
 	}
 
-	public void isDefaultDomain() {
-		if (this.getAuthDomain().getName() != CATISSUE) {
-			reportError(UserErrorCode.INVALID_OPERATION, USER);
-		}
-	}
-
 	public void setPasswordToken(User user, String domainName) {
-		if (domainName == CATISSUE) {
+		if (CATISSUE.equalsIgnoreCase(domainName)) {
 			user.setPasswordToken(UUID.randomUUID().toString());
 		}
 	}
@@ -292,10 +284,10 @@ public class User {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
 		}
 
-		Set<Password> passwords = this.getPasswordCollection();
+		Set<Password> passwords = this.passwordCollection;
 		if (!passwords.isEmpty()) {
 			List<Password> passList = new ArrayList<Password>(passwords);
-			Password lastPassword = passList.get(passwords.size() - 1);
+			Password lastPassword = passList.get(0);
 
 			if (!BCrypt.checkpw(oldPassword, lastPassword.getPassword())) {
 				reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);

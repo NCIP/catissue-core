@@ -68,7 +68,7 @@ public class UserFactoryImpl implements UserFactory {
 		setEmailAddress(user, details.getEmailAddress(), exceptionHandler);
 		setDepartment(user, details.getDeptName(), exceptionHandler);
 		setAuthDomain(user, details.getDomainName(), exceptionHandler);
-
+	
 		exceptionHandler.checkErrorAndThrow();
 		return user;
 	}

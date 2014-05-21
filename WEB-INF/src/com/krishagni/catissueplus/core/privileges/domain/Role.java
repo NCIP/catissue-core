@@ -4,6 +4,8 @@ package com.krishagni.catissueplus.core.privileges.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.common.SetUpdater;
+
 public class Role {
 
 	private Long id;
@@ -48,7 +50,10 @@ public class Role {
 
 	public void update(Role role) {
 		this.setName(role.getName());
-		this.setPrivileges(role.getPrivileges());
+		setAllPrivileges(role.getPrivileges());
 	}
 
+	private void setAllPrivileges(Set<Privilege> privCollection) {
+		SetUpdater.<Privilege> newInstance().update(this.getPrivileges(), privCollection);
+	}
 }

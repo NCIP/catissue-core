@@ -16,7 +16,7 @@ public enum AuthenticationType {
 
 	public static Boolean isValidAuthType (String authType) {
 		for (AuthenticationType type : AuthenticationType.values()) {
-			if (type.value == authType) {
+			if (type.value().equalsIgnoreCase(authType)) {
 				return true;
 			}
 		}
