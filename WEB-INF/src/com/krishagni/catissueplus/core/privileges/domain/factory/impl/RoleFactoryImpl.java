@@ -53,7 +53,8 @@ public class RoleFactoryImpl implements RoleFactory {
 			if (!PrivilegeType.isValidPrivilegeType(privilegeName)) {
 				exceptionHandler.addError(PrivilegeErrorCode.NOT_FOUND, PRIVILEGE);
 			}
-			Privilege privilege = daoFactory.getPrivilegeDao().getPrivilegeByName(privilegeName);
+			
+			Privilege privilege = daoFactory.getPrivilegeDao().getPrivilegeByName(PrivilegeType.getEnumNameForValue(privilegeName));
 			privileges.add(privilege);
 		}
 		role.setPrivileges(privileges);
