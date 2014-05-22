@@ -6,4 +6,6 @@ public interface DaoFactory {
 	public SavedQueryDao getSavedQueryDao();
 	
 	public QueryFolderDao getQueryFolderDao();
+	
+	public QueryAuditLogDao getQueryAuditLogDao();
 }

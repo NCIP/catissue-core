@@ -11,6 +11,10 @@ public class ExecuteQueryEvent extends RequestEvent {
 	private String aql;
 	
 	private boolean wideRows = false;
+	
+	private Long savedQueryId;
+	
+	private String runType;
 
 	public Long getCpId() {
 		return cpId;
@@ -42,5 +46,22 @@ public class ExecuteQueryEvent extends RequestEvent {
 
 	public void setWideRows(boolean wideRows) {
 		this.wideRows = wideRows;
-	}	
+	}
+
+	public Long getSavedQueryId() {
+		return savedQueryId;
+	}
+
+	public void setSavedQueryId(Long savedQueryId) {
+		this.savedQueryId = savedQueryId;
+	}
+
+	public String getRunType() {
+		return runType;
+	}
+
+	public void setRunType(String runType) {
+		this.runType = runType;
+	}
+	
 }

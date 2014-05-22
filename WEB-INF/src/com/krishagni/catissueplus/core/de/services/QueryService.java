@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
@@ -22,9 +23,12 @@ import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.SaveQueryEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ShareQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
@@ -64,5 +68,12 @@ public interface QueryService {
 	
 	public FolderQueriesUpdatedEvent updateFolderQueries(UpdateFolderQueriesEvent req);
 	
-	public QueryFolderSharedEvent shareFolder(ShareQueryFolderEvent req);			
+	public QueryFolderSharedEvent shareFolder(ShareQueryFolderEvent req);
+	
+	//
+	// query audit logs related APIs
+	//	
+	public QueryAuditLogsEvent getAuditLogs(ReqQueryAuditLogsEvent req);
+	
+	public QueryAuditLogEvent getAuditLog(ReqQueryAuditLogEvent req);
 }

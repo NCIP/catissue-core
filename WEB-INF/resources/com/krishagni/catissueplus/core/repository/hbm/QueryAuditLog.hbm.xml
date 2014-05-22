@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+  <class name="com.krishagni.catissueplus.core.de.domain.QueryAuditLog" 
+         table="CATISSUE_QUERY_AUDIT_LOGS">
+         
+    <id name="id" column="IDENTIFIER">
+      <generator class="native"/>
+    </id>
+    
+    <property name="queryId" column="QUERY_ID" type="long"/>
+
+    <many-to-one 
+      name="runBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      update="true"
+      insert="true"
+      column="RUN_BY"
+    />
+    
+    <property name="timeOfExecution" column="TIME_OF_EXEC" type="timestamp"/>
+     
+    <property name="timeToFinish" column="TIME_TO_FINISH" type="long"/>
+     
+    <property name="runType" column="RUN_TYPE" type="string"/>
+     
+    <property name="recordCount" column="RECORD_COUNT" type="long"/>
+      
+    <property name="sql" column="QUERY_SQL" type="string"/>
+     
+    <query name="getAuditLogs">
+      from QueryAuditLog where queryId = :queryId order by id desc
+    </query>
+
+    <query name="getAuditLog">
+      from QueryAuditLog where queryId = :queryId and id = :auditLogId
+    </query>
+  </class>
+</hibernate-mapping>

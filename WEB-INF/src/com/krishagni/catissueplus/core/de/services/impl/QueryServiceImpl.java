@@ -14,12 +14,17 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
+import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.domain.factory.QueryFolderFactory;
@@ -30,6 +35,10 @@ import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
@@ -44,6 +53,8 @@ import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
@@ -63,6 +74,7 @@ import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 import edu.common.dynamicextensions.query.Query;
 import edu.common.dynamicextensions.query.QueryParserException;
+import edu.common.dynamicextensions.query.QueryResponse;
 import edu.common.dynamicextensions.query.QueryResultCsvExporter;
 import edu.common.dynamicextensions.query.QueryResultData;
 import edu.common.dynamicextensions.query.QueryResultExporter;
@@ -216,8 +228,12 @@ public class QueryServiceImpl implements QueryService {
 			 	.ic(true)
 			 	.dateFormat(dateFormat)
 			 	.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
-			QueryResultData queryResult = query.getData();
-			return QueryExecutedEvent.ok(queryResult.getColumnLabels(),queryResult.getRows());
+			
+			QueryResponse resp = query.getData();
+			insertAuditLog(req, resp);
+			
+			QueryResultData queryResult = resp.getResultData();
+			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getRows());
 		} catch (QueryParserException qpe) {
 			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
 		} catch (IllegalArgumentException iae) {
@@ -240,8 +256,9 @@ public class QueryServiceImpl implements QueryService {
 				.ic(true)
 				.dateFormat(dateFormat)
 				.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
+			
 			String filename = UUID.randomUUID().toString();
-			boolean completed = exportData(filename, query);
+			boolean completed = exportData(filename, query, req);
 			return QueryDataExportedEvent.ok(filename, completed);
 		} catch (QueryParserException qpe) {
 			return QueryDataExportedEvent.badRequest(qpe.getMessage(), qpe);		
@@ -543,6 +560,50 @@ public class QueryServiceImpl implements QueryService {
 		}
 	}
 	
+    @Override
+    @PlusTransactional
+    public QueryAuditLogsEvent getAuditLogs(ReqQueryAuditLogsEvent req){
+		try {
+			Long savedQueryId = req.getSavedQueryId();
+			int startAt = req.getStartAt() < 0 ? 0 : req.getStartAt();
+			int maxRecs = req.getMaxRecords() < 0 ? 0 : req.getMaxRecords();
+
+			List<QueryAuditLog> auditLogs = daoFactory.getQueryAuditLogDao()
+					.getAuditLogs(savedQueryId, startAt, maxRecs);
+
+			List<QueryAuditLogSummary> result = new ArrayList<QueryAuditLogSummary>();
+			for (QueryAuditLog auditLog : auditLogs) {
+				result.add(QueryAuditLogSummary.from(auditLog));
+			}
+
+			return QueryAuditLogsEvent.ok(result);
+		} catch (Exception e) {
+			String message = e.getMessage();
+			if (message == null) {
+				message = "Internal Server Error";
+			}
+
+			return QueryAuditLogsEvent.serverError(message, e);
+		}
+    }
+    
+    @Override
+    @PlusTransactional
+    public QueryAuditLogEvent getAuditLog(ReqQueryAuditLogEvent req) {
+		try {
+			Long queryId = req.getSavedQueryId(), auditLogId = req.getAuditLogId();
+			QueryAuditLog queryAuditLog = daoFactory.getQueryAuditLogDao().getAuditLog(queryId, auditLogId);
+			return QueryAuditLogEvent.ok(QueryAuditLogDetail.from(queryAuditLog));
+		} catch (Exception e) {
+			String message = e.getMessage();
+			if (message == null) {
+				message = "Internal Server Error";
+			}
+
+			return QueryAuditLogEvent.serverError(message, e);
+		}
+    }
+     
 	private List<SavedQuerySummary> toQuerySummaryList(List<SavedQuery> queries) {
 		List<SavedQuerySummary> querySummaries = new ArrayList<SavedQuerySummary>();
 		
@@ -580,14 +641,25 @@ public class QueryServiceImpl implements QueryService {
 				queryDetail.getQueryExpression());
 	}
 	
-	private boolean exportData(final String filename, final Query query) 
+	private boolean exportData(final String filename, final Query query, final ExportQueryDataEvent req) 
 	throws ExecutionException, InterruptedException, CancellationException {
 		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				QueryResultExporter exporter = new QueryResultCsvExporter();
 				String path = EXPORT_DATA_DIR + File.separator + filename;
-				exporter.export(path, query);
+				QueryResponse resp = exporter.export(path, query);
+                
+				Transaction txn = startTxn();
+				try {
+					insertAuditLog(req, resp);
+					txn.commit();
+				} catch (Exception e) {
+					if (txn != null) {
+						txn.rollback();
+					}
+				}
+                
 				return true;
 			}
 		});
@@ -624,6 +696,30 @@ public class QueryServiceImpl implements QueryService {
 		
 		return dir;
 	}
+
+	private void insertAuditLog(ExecuteQueryEvent req, QueryResponse resp) {
+		User user = new User();
+		user.setId(req.getSessionDataBean().getUserId());
+
+		QueryAuditLog auditLog = new QueryAuditLog();
+		auditLog.setQueryId(req.getSavedQueryId());
+		auditLog.setRunBy(user);
+		auditLog.setTimeOfExecution(resp.getTimeOfExecution());
+		auditLog.setTimeToFinish(resp.getExecutionTime());
+		auditLog.setRunType(req.getRunType());
+		auditLog.setSql(resp.getSql());
+		daoFactory.getQueryAuditLogDao().saveOrUpdate(auditLog);
+	}
 	
+	private Transaction startTxn() {
+		AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getQueryAuditLogDao();
+		Session session = dao.getSessionFactory().getCurrentSession();
+		Transaction txn = session.getTransaction();
+		if (txn == null || !txn.isActive()) {
+			txn = session.beginTransaction();			
+		}
+		
+		return txn;
+	}
 	
 }

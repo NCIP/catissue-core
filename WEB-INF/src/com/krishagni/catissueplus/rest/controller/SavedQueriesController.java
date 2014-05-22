@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
+import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
 import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
@@ -74,6 +80,7 @@ public class SavedQueriesController {
 		
 		return null;
 	}
+
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -107,6 +114,44 @@ public class SavedQueriesController {
 		return null;
 	}
 
+	@RequestMapping(method = RequestMethod.GET,  value = "/{id}/audit-logs")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<QueryAuditLogSummary> getQueryAuditLogs(
+			@PathVariable("id") Long savedQueryId,
+			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+			@RequestParam(value = "max", required = false, defaultValue = "25") int max) {
+		ReqQueryAuditLogsEvent req = new ReqQueryAuditLogsEvent();
+		req.setStartAt(start);
+		req.setMaxRecords(max);
+		req.setSavedQueryId(savedQueryId);
+		
+		QueryAuditLogsEvent resp = querySvc.getAuditLogs(req);
+		if(resp.getStatus() != EventStatus.OK) {
+			return null;			
+		}
+		
+		return resp.getAuditLogs();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET,  value = "/{id}//audit-logs/{auditLogId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public QueryAuditLogDetail getQueryAuditLog(
+			@PathVariable("id") Long savedQueryId,
+			@PathVariable("auditLogId") Long auditLogId){
+		ReqQueryAuditLogEvent req = new ReqQueryAuditLogEvent();
+		req.setSavedQueryId(savedQueryId);
+		req.setAuditLogId(auditLogId);
+		
+		QueryAuditLogEvent resp = querySvc.getAuditLog(req);
+		if (resp.getStatus() != EventStatus.OK) {
+			return null;
+		}
+		
+		return resp.getAuditLog();
+	}
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
 				Constants.SESSION_DATA);
