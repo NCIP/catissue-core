@@ -2309,4 +2309,29 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                referencedTableName="CATISSUE_INSTITUTION"
                referencedColumnNames="IDENTIFIER" />
     </changeSet> 
+
+    <changeSet author="vpawar" id="adding saved queries sequence" failOnError="true">
+      <createSequence 
+        sequenceName="CATISSUE_SAVED_QUERIES_SEQ" 
+        startValue="1" 
+        incrementBy="1" 
+        ordered="true"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="adding query folders sequence" failOnError="true">
+      <createSequence 
+        sequenceName="CATISSUE_QUERY_FOLDERS_SEQ" 
+        startValue="1" 
+        incrementBy="1" 
+        ordered="true"/>
+    </changeSet>
+
+    <changeSet author="vpawar" id="query audit logs sequence" failOnError="true">
+      <createSequence 
+        sequenceName="CATISSUE_QUERY_AUDIT_LOGS_SEQ" 
+        startValue="1" 
+        incrementBy="1" 
+        ordered="true"/>
+    </changeSet>
+
 </databaseChangeLog>         

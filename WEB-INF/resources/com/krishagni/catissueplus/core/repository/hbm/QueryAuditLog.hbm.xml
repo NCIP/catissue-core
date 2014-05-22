@@ -8,7 +8,9 @@
          table="CATISSUE_QUERY_AUDIT_LOGS">
          
     <id name="id" column="IDENTIFIER">
-      <generator class="native"/>
+      <generator class="native">
+        <param name="sequence">CATISSUE_QUERY_AUDIT_LOGS_SEQ</param>
+      </generator>
     </id>
     
     <property name="queryId" column="QUERY_ID" type="long"/>
