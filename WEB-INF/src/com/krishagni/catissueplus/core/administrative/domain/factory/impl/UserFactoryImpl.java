@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
@@ -68,7 +69,7 @@ public class UserFactoryImpl implements UserFactory {
 		setEmailAddress(user, details.getEmailAddress(), exceptionHandler);
 		setDepartment(user, details.getDeptName(), exceptionHandler);
 		setAuthDomain(user, details.getDomainName(), exceptionHandler);
-	
+
 		exceptionHandler.checkErrorAndThrow();
 		return user;
 	}
@@ -162,10 +163,11 @@ public class UserFactoryImpl implements UserFactory {
 				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, ROLE);
 				return;
 			}
+			userCpRole.setId(ucrDetails.getId());
 			userCpRole.setRole(role);
 			userCpRoles.add(userCpRole);
 		}
-		user.setUserCPRoles(userCpRoles);
+		SetUpdater.<UserCPRole> newInstance().update(user.getUserCPRoles(), userCpRoles);
 	}
 
 	private void setUserSites(User user, List<String> userSiteNames, ObjectCreationException exceptionHandler) {

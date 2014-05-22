@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
+import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
+
 public class UserCPRoleDetails {
 
 	private Long id;
@@ -31,6 +33,14 @@ public class UserCPRoleDetails {
 
 	public void setCpTitle(String cpTitle) {
 		this.cpTitle = cpTitle;
+	}
+
+	public static UserCPRoleDetails fromDomain(UserCPRole userCpRole) {
+		UserCPRoleDetails userCpRoleDetails = new UserCPRoleDetails();
+		userCpRoleDetails.setCpTitle(userCpRole.getCollectionProtocol().getTitle());
+		userCpRoleDetails.setId(userCpRole.getId());
+		userCpRoleDetails.setRoleName(userCpRole.getRole().getName());
+		return userCpRoleDetails;
 	}
 
 }

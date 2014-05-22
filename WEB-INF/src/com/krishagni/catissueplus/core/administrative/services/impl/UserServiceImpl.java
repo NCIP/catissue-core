@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
@@ -230,8 +231,8 @@ public class UserServiceImpl implements UserService {
 				return UserUpdatedEvent.notFound(userId);
 			}
 			User user = userFactory.patchUser(oldUser, event.getUserDetails());
-			
-			if(event.getUserDetails().isEmailAddressModified()) {
+
+			if (event.getUserDetails().isEmailAddressModified()) {
 				ObjectCreationException exceptionHandler = new ObjectCreationException();
 				ensureUniqueEmailAddress(user.getEmailAddress(), exceptionHandler);
 				exceptionHandler.checkErrorAndThrow();
@@ -265,6 +266,14 @@ public class UserServiceImpl implements UserService {
 		if (!oldUser.getEmailAddress().equals(newUser.getEmailAddress())) {
 			ensureUniqueEmailAddress(newUser.getEmailAddress(), exceptionHandler);
 		}
+	}
+
+	@Override
+	@PlusTransactional
+	public GetUserEvent getUser(Long userId) {
+		User user = daoFactory.getUserDao().getUser(userId);
+		UserDetails userDetails = UserDetails.fromDomain(user);
+		return GetUserEvent.ok(userDetails);
 	}
 
 }
