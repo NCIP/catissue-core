@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public interface SavedQueryDao extends Dao<SavedQuery>{
 	
-	public List<SavedQuery> getQueries(Long userId, int startAt, int maxRecords);
+	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords);
 		
 	public SavedQuery getQuery(Long queryId);
 	

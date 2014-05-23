@@ -137,8 +137,9 @@ public class QueryServiceImpl implements QueryService {
 			}
 
 			Long userId = req.getSessionDataBean().getUserId();
-			List<SavedQuery> queries = daoFactory.getSavedQueryDao().getQueries(userId, req.getStartAt(), req.getMaxRecords());
-			return SavedQueriesSummaryEvent.ok(toQuerySummaryList(queries));
+			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao()
+					.getQueries(userId, req.getStartAt(), req.getMaxRecords()); 
+			return SavedQueriesSummaryEvent.ok(queries);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {

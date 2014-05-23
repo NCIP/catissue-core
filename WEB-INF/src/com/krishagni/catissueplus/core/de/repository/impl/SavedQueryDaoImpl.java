@@ -24,9 +24,18 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<SavedQuery> getQueries(Long userId, int startAt, int maxRecords) {
+	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords) {
+		List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
+		
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SAVED_QUERIES);
-		return query.setLong("userId", userId).setFirstResult(startAt).setMaxResults(maxRecords).list();
+		query.setLong("userId", userId).setFirstResult(startAt).setMaxResults(maxRecords).list();
+		
+		List<Object[]> rows = query.list();
+		for (Object[] row : rows) {
+			result.add(getSavedQuerySummary(row));
+		}
+		
+		return result;		
 	}
 	
 	@Override
@@ -50,30 +59,34 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		query.setLong("folderId", folderId);
 				
 		List<Object[]> rows = query.list();				
-		for (Object[] row : rows) {
-			SavedQuerySummary savedQuery = new SavedQuerySummary();
-			savedQuery.setId((Long)row[0]);
-			savedQuery.setTitle((String)row[1]);
-			
-			UserSummary createdBy = new UserSummary();
-			createdBy.setId((Long)row[2]);
-			createdBy.setFirstName((String)row[3]);
-			createdBy.setLastName((String)row[4]);
-			savedQuery.setCreatedBy(createdBy);
-			
-			UserSummary modifiedBy = new UserSummary();
-			modifiedBy.setId((Long)row[5]);
-			modifiedBy.setFirstName((String)row[6]);
-			modifiedBy.setLastName((String)row[7]);
-			savedQuery.setLastModifiedBy(modifiedBy);
-			
-			savedQuery.setLastModifiedOn((Date)row[8]);
-			savedQuery.setLastRunCount((Long)row[9]);
-			savedQuery.setLastRunOn((Date)row[10]);
-			
-			result.add(savedQuery);			
+		for (Object[] row : rows) {			
+			result.add(getSavedQuerySummary(row));			
 		}
 		
 		return result;
+	}
+	
+	private SavedQuerySummary getSavedQuerySummary(Object[] row) {
+		SavedQuerySummary savedQuery = new SavedQuerySummary();
+		savedQuery.setId((Long)row[0]);
+		savedQuery.setTitle((String)row[1]);
+		
+		UserSummary createdBy = new UserSummary();
+		createdBy.setId((Long)row[2]);
+		createdBy.setFirstName((String)row[3]);
+		createdBy.setLastName((String)row[4]);
+		savedQuery.setCreatedBy(createdBy);
+		
+		UserSummary modifiedBy = new UserSummary();
+		modifiedBy.setId((Long)row[5]);
+		modifiedBy.setFirstName((String)row[6]);
+		modifiedBy.setLastName((String)row[7]);
+		savedQuery.setLastModifiedBy(modifiedBy);
+		
+		savedQuery.setLastModifiedOn((Date)row[8]);
+		savedQuery.setLastRunCount((Long)row[9]);
+		savedQuery.setLastRunOn((Date)row[10]);
+		
+		return savedQuery;		
 	}
 }
