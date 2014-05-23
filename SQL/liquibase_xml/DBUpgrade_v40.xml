@@ -16,6 +16,12 @@
 
     <property name="smallint.type" value="smallint" dbms="mysql" />
     <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+    <property name="smallint.type" value="smallint" dbms="mysql" />
+    <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+    <property name="mediumint.type" value="int" dbms="mysql"/>
+    <property name="mediumint.type" value="number(11, 0)" dbms="oracle"/>
     
     <property name="date.type" value="date" dbms="mysql" />
     <property name="date.type" value="date" dbms="oracle" />
@@ -2334,4 +2340,55 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         ordered="true"/>
     </changeSet>
 
+    <changeSet author="vpawar" id="query audit logs table" failOnError="true">
+       <createTable tableName="CATISSUE_QUERY_AUDIT_LOGS">
+         <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+           <constraints primaryKey="true" nullable="false"/>
+         </column>
+
+         <column name="QUERY_ID" type="${int.type}">
+         </column>
+
+         <column name="RUN_BY" type="${int.type}">
+           <constraints nullable="false"/>
+         </column>
+
+         <column name="TIME_OF_EXEC" type="${timestamp.type}">
+           <constraints nullable="false"/>
+         </column>
+
+         <column name="TIME_TO_FINISH" type="${mediumint.type}">
+           <constraints nullable="false"/>
+         </column>
+
+         <column name="RUN_TYPE" type="${text.type}(16)">
+           <constraints nullable="false"/>
+         </column>
+
+         <column name="RECORD_COUNT" type="${int.type}">
+         </column>
+
+         <column name="QUERY_SQL" type="${blob.type}">
+           <constraints nullable="false"/>
+         </column>
+       </createTable>
+    </changeSet>
+
+    <changeSet author="vpawar" id="fk on query id of audit log" failOnError="true">
+       <addForeignKeyConstraint
+               constraintName="FK_QAUDIT_LOG_QID_QUERIES_ID"
+               baseTableName="CATISSUE_QUERY_AUDIT_LOGS"
+               baseColumnNames="QUERY_ID"
+               referencedTableName="CATISSUE_SAVED_QUERIES"
+               referencedColumnNames="IDENTIFIER" />
+    </changeSet>
+
+    <changeSet author="vpawar" id="fk on run by of audit log" failOnError="true">
+       <addForeignKeyConstraint
+               constraintName="FK_QAUDIT_LOG_RUN_BY_USERS_ID"
+               baseTableName="CATISSUE_QUERY_AUDIT_LOGS"
+               baseColumnNames="RUN_BY"
+               referencedTableName="CATISSUE_USERS"
+               referencedColumnNames="IDENTIFIER" />
+    </changeSet>
 </databaseChangeLog>         
