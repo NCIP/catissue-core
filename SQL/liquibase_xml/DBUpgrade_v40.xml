@@ -2388,7 +2388,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_QAUDIT_LOG_RUN_BY_USERS_ID"
                baseTableName="CATISSUE_QUERY_AUDIT_LOGS"
                baseColumnNames="RUN_BY"
-               referencedTableName="CATISSUE_USERS"
+               referencedTableName="CATISSUE_USER"
                referencedColumnNames="IDENTIFIER" />
     </changeSet>
 </databaseChangeLog>         
