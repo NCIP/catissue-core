@@ -138,7 +138,7 @@
 	    where
 	      ctxt.entity_type = 'Query'
 	    order by
-	      ctxt.sort_order;
+	      ctxt.sort_order
 	  </sql-query>
 	  
 	  <sql-query name="getFormContexts">
