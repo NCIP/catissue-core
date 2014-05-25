@@ -32,7 +32,7 @@
      
     <property name="recordCount" column="RECORD_COUNT" type="long"/>
       
-    <property name="sql" column="QUERY_SQL" type="string"/>
+    <property name="sql" column="QUERY_SQL"/>
      
     <query name="getAuditLogs">
       from QueryAuditLog where queryId = :queryId order by id desc

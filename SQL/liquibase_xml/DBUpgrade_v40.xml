@@ -46,6 +46,9 @@
     
     <property name="blob.type" value="blob" dbms="mysql" />
     <property name="blob.type" value="blob" dbms="oracle" />
+
+    <property name="clob.type" value="text" dbms="mysql"/>
+    <property name="clob.type" value="clob" dbms="oracle"/>
     
  
      <changeSet id="1" author="nitesh" runOnChange="true">
@@ -1781,7 +1784,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <constraints nullable="true"/>
           </column>
 
-          <column name="QUERY_DEF" type="${blob.type}">
+          <column name="QUERY_DEF" type="${clob.type}">
             <constraints nullable="false"/>
           </column>
       	</createTable>
@@ -2368,7 +2371,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
          <column name="RECORD_COUNT" type="${int.type}">
          </column>
 
-         <column name="QUERY_SQL" type="${blob.type}">
+         <column name="QUERY_SQL" type="${clob.type}">
            <constraints nullable="false"/>
          </column>
        </createTable>
