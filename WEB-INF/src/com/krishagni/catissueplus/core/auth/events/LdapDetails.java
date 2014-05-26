@@ -180,7 +180,7 @@ public class LdapDetails {
 		ldapDetails.setBindUser(ldap.getBindUser());
 		ldapDetails.setBindPassword(ldap.getBindPassword());
 
-		ldapDetails.setGivenNameField(ldapDetails.getGivenNameField());
+		ldapDetails.setGivenNameField(ldap.getGivenNameField());
 		ldapDetails.setIdField(ldap.getIdField());
 		ldapDetails.setSurnameField(ldap.getSurnameField());
 		ldapDetails.setEmailField(ldap.getEmailField());

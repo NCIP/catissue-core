@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,15 @@ import com.krishagni.catissueplus.core.de.events.ReqFileDetailEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
 
 @Controller
 @RequestMapping("/query")
 public class QueryController {
+	
+	@Autowired
+	private HttpServletRequest httpServletRequest;
 	
 	@Autowired
 	private QueryService querySvc;
@@ -42,6 +48,7 @@ public class QueryController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public QueryExecutedEvent executeQuery(@RequestBody ExecuteQueryEvent req) {
+		req.setSessionDataBean(getSession());
 		return querySvc.executeQuery(req);
 	}
 	
@@ -49,6 +56,7 @@ public class QueryController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryDataExportedEvent exportQueryData(@RequestBody ExportQueryDataEvent req) {
+		req.setSessionDataBean(getSession());
 		return querySvc.exportQueryData(req);
 	}	
 	
@@ -79,6 +87,11 @@ public class QueryController {
 		} finally {
 			IoUtil.close(in);
 		}
+	}
+	
+	private SessionDataBean getSession() {
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
+				Constants.SESSION_DATA);
 	}
 }
 																																																																																																																																						

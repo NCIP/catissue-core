@@ -164,7 +164,8 @@ angular.module('plus.controllers', ['checklist-model'])
       $scope.queryData.notifs.waitCount = true;
 
       var cpId = $scope.queryData.selectedCp.id;
-      QueryService.executeQuery(cpId, 'Participant', aql).then(
+      var queryId = $scope.queryData.id;
+      QueryService.executeQuery(queryId, cpId, 'Participant', aql, 'Count').then(
         function(result) {
           if (result.status != 'OK') {
             $scope.queryData.notifs.error = result.status;
@@ -209,7 +210,8 @@ angular.module('plus.controllers', ['checklist-model'])
       var startTime = new Date();
       $scope.queryData.notifs.waitRecs = true;
       var cpId = $scope.queryData.selectedCp.id;
-      QueryService.executeQuery(cpId, 'Participant', aql, true).then(function(result) {
+      var queryId = $scope.queryData.id;
+      QueryService.executeQuery(queryId, cpId, 'Participant', aql, 'Data', true).then(function(result) {
         if (result.status != 'OK') {
           $scope.queryData.notifs.error = result.status;
           $scope.queryData.notifs.waitRecs = false;
@@ -250,7 +252,8 @@ angular.module('plus.controllers', ['checklist-model'])
         false);
 
       var cpId = $scope.queryData.selectedCp.id;
-      QueryService.exportQueryData(cpId, 'Participant', aql, true).then(
+      var queryId = $scope.queryData.id;
+      QueryService.exportQueryData(queryId, cpId, 'Participant', aql, 'Export', true).then(
         function(result) {
           if (result.completed) {
             Utility.notify($("#notifications"), "Downloading query results export data file.", "success", true);
@@ -557,6 +560,57 @@ angular.module('plus.controllers', ['checklist-model'])
           $scope.queryData.queries = queries;
         });
       }
+    };
+
+    $scope.viewAuditLog = function(query) {
+      $scope.query = query;
+      $scope.getAuditLogs(query);
+    };
+ 
+    $scope.getAuditLogs = function(query) {
+      QueryService.getAuditLogs(query.id, 0, 100).then(
+        function(auditLogs) {
+          $scope.auditLogs = auditLogs;
+          if (auditLogs.length > 0) {
+            $scope.queryData.view = 'log';
+          } else {
+            Utility.notify(
+              $("#notifications"),
+              "No audit logs for the selected query",
+              "info",
+              true);
+          }
+        });
+    };
+ 
+    $scope.viewQuerySql = function(auditLog) {
+      var modalInstance = $modal.open({
+        templateUrl: 'view-query-sql.html',
+        controller: ViewQuerySqlCtrl,
+        windowClass: 'view-query-sql',
+        resolve: {
+          queryId: function() {
+            return $scope.query.id;
+          },
+
+          auditLogId: function () {
+            return auditLog.id;
+          }
+        }
+      });
+    };
+ 
+    ViewQuerySqlCtrl = function($scope, $modalInstance, queryId, auditLogId) {
+      $scope.auditLog = null;
+ 
+      QueryService.getAuditLog(queryId, auditLogId).then(
+        function(auditLog) {
+          $scope.auditLog = auditLog;
+        });
+ 
+      $scope.close = function () {
+         $modalInstance.dismiss('cancel');
+      };
     };
 
     $scope.createQuery = function() {

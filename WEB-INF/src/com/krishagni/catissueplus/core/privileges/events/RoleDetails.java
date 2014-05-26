@@ -52,6 +52,7 @@ public class RoleDetails {
 
 	public static RoleDetails fromDomain(Role role) {
 		RoleDetails roleDetails = new RoleDetails();
+		roleDetails.setId(role.getId());
 		roleDetails.setName(role.getName());
 		roleDetails.setDescription(role.getDescription());
 		setPrivileges(roleDetails, role.getPrivileges());

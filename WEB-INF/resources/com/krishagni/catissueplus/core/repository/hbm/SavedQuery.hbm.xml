@@ -8,7 +8,9 @@
          table="CATISSUE_SAVED_QUERIES">
 
     <id name="id" column="IDENTIFIER">
-      <generator class="native"/>
+      <generator class="native">
+        <param name="sequence">CATISSUE_SAVED_QUERIES_SEQ</param>
+      </generator>      
     </id>
 
     <property name="title" column="TITLE"/>
@@ -33,7 +35,7 @@
 
     <property name="lastRunOn"    column="LAST_RUN_ON" type="timestamp"/>
 
-    <property name="queryDefJson" column="QUERY_DEF" type="text"/>
+    <property name="queryDefJson" column="QUERY_DEF"/>
 	
     <property name="lastUpdated"  column="LAST_UPDATED_ON" type="timestamp"/>
 	
@@ -50,9 +52,36 @@
       from SavedQuery where id IN (:queryIds)
     </query>
 
-    <query name="getSavedQueries">
-      select distinct q from SavedQuery q left join q.folders f left join f.sharedWith u where u.id = :userId or q.createdBy = :userId order by q.id DESC
-    </query>
+    <sql-query name="getSavedQueries">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="title" type="string"/>
+      <return-scalar column="cUserId" type="long"/>
+      <return-scalar column="cFirstName" type="string"/>
+      <return-scalar column="cLastName" type="string"/>
+      <return-scalar column="mUserId" type="long"/>
+      <return-scalar column="mFirstName" type="string"/>
+      <return-scalar column="mLastName" type="string"/>
+      <return-scalar column="lastUpdated" type="timestamp"/>
+      <return-scalar column="lastRunCount" type="long"/>
+      <return-scalar column="lastRunOn" type="timestamp"/>
+
+      select distinct        
+        s.identifier as id, s.title as title, c.identifier as cUserId, c.first_name as cFirstName, c.last_name as cLastName,
+        m.identifier as mUserId, m.first_name as mFirstName, m.last_name as mLastName, 
+        last_updated_on as lastUpdated, last_run_count as lastRunCount, last_run_on as lastRunOn
+      from
+    	catissue_saved_queries s
+    	inner join catissue_user c on s.created_by = c.identifier
+    	left join catissue_user m on s.last_updated_by = m.identifier
+    	left join catissue_query_folder_queries fq on fq.query_id = s.identifier
+    	left join catissue_query_folders f on f.identifier = fq.folder_id
+    	left join catissue_qfolder_share_setting ss on ss.folder_id = f.identifier
+    	left join catissue_user su on su.identifier = ss.user_id
+      where
+    	su.identifier = :userId or s.created_by = :userId
+      order by
+    	s.identifier desc
+    </sql-query>
     
     
     <sql-query name="getQueriesByFolderId">

@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
-
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 
 public class Password {
@@ -38,7 +36,7 @@ public class Password {
 		if (isBlank(password) && !isValidPasswordPattern(password)) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
 		}
-		this.password = BCrypt.hashpw(password, BCrypt.gensalt(4));
+		this.password = password;
 	}
 
 	public Date getUpdateDate() {

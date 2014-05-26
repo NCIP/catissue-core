@@ -59,6 +59,7 @@ public class DomainDetails {
 		DomainDetails details = new DomainDetails();
 		details.setId(authDomain.getId());
 		details.setName(authDomain.getName());
+		details.setAuthType(authDomain.getAuthProvider().getAuthType());
 		details.setImplClass(details.getImplClass());
 		if (authDomain.getLdap() != null) {
 			details.setLdapDetails(LdapDetails.fromDomain(authDomain.getLdap()));

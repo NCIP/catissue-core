@@ -49,16 +49,16 @@
           /*letter-spacing: 1px;
           text-transform: uppercase;*/
           padding-bottom: 16px;
-        }
+       }
 
-        .plus-panel-title-addendum {
+       .plus-panel-title-addendum {
           font-size: 16px; /*12px;*/
           left: 15px;
           /*letter-spacing: 1px;*/
           padding-bottom: 16px;
-        }
+       }
 
-        @media (min-width: 768px) {
+       @media (min-width: 768px) {
           .plus-panel {
             background-color: #FFFFFF;
             border-color: #DDDDDD;
@@ -70,249 +70,267 @@
           }
         }
 
-        .plus-panel .container {
+       .plus-panel .container {
           width: auto;
         }
 
-        .sortablePlaceholder {
+       .sortablePlaceholder {
           float: left;
           width: 2.5em;
           height: 2.5em;
-        }
+       }
 
-        .focus {
+       .focus {
           border-color: #66AFE9;
           box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
           outline: 0 none;
-        }
+       }
 
-        .op-btn {
+       .op-btn {
           background-color: #f5f5f5;
           margin-bottom: 2%;
-        }  
+       }  
 
-        .droppable {
+       .droppable {
           background-color: #ffffff;
           border: 1px dashed #cccccc;
-        }
+       }
 
-        .dropped {
+       .dropped {
           background-color: #ffffff;
           border: 1px solid #cccccc;
-        }
+       }
 
-        .tool-box-panel {
+       .tool-box-panel {
           height: 17%;
-        }
+       }
 
-        .z-up {
+       .z-up {
           z-index: 100;
-        }
+       }
 
-        .filter-item {
+       .filter-item {
           padding: 10px 15px;
           display: block;
           border: 1px solid #DDDDDD;
           border-radius: 4px;
           margin-bottom: 1%;
-        }
+       }
 
-        .filter-item-error {
+       .filter-item-error {
           border: 1px solid red;
-        }
+       }
 
-        .filter-item-valign {
+       .filter-item-valign {
           height: 2.5em;
           list-style-type: none;
           margin-right: 0.7em;
           padding-top: 0.5em;
           vertical-align: middle;
-        }
+       }
 
-        .filter-node {
+       .filter-node {
           background-color: #cccccc; 
           width:2.5em; 
           border-radius: 50%; 
           border: 1px solid #cccccc;
           text-align: center;
-        }
+       }
 
-        .op-node {
+       .op-node {
           background-color: #f5f5f5; 
           width:2.5em; 
           border: 1px solid #cccccc;
           text-align: center;
           cursor: pointer;
-        }
+       }
 
-        .clickable-node {
+       .clickable-node {
           cursor: pointer;
-        }
+       }
 
-        .paren-node {
+       .paren-node {
           background-color: #ffffff;
           width:1.5em;
           border: 1px solid #cccccc;
           text-align: center;
-        }
+       }
 
-        span.glyphicon-remove {
+       span.glyphicon-remove {
           font-size: 0.5em;
           color: #cccccc;
-        }
+       }
 
-        .data-grid {
+       .data-grid {
           border: 1px solid #428BCA;
           width: 100%;
           border-radius: 4px;
-        }
+       }
 
-        .tooltip-inner {
+       .tooltip-inner {
           background-color: #ffffcc;
           border: 1px solid #f0c36d;
           color: #000000;
-        }
+       }
 
-        .tooltip-arrow:after {
+       .tooltip-arrow:after {
           border: 1px solid #f0c36d;
-        }
+       }
 
-        .tooltip.top .tooltip-arrow {
+       .tooltip.top .tooltip-arrow {
           border-top-color: #ffffcc;
-        }
+       }
 
-        .tooltip.bottom .tooltip-arrow {
+       .tooltip.bottom .tooltip-arrow {
           border-bottom-color: #ffffcc;
-        }
+       }
 
-        .tooltip.left .tooltip-arrow {
+       .tooltip.left .tooltip-arrow {
           border-left-color: #ffffcc;
-        }
+       }
 
-        .tooltip.right .tooltip-arrow {
+       .tooltip.right .tooltip-arrow {
           border-right-color: #ffffcc;
-        }
+       }
 
-        .popover {
+       .popover {
           max-width: 350px;
-        }
+       }
 
-        .nav-pills > li {
+       .nav-pills > li {
           background-color: #f5f5f5;
           border-radius: 4px;
-        }
+       }
 
-        .ngRow.odd {
+       .ngRow.odd {
           background-color: #ffffff;
-        }
+       }
 
-        .ngRow.even {
+       .ngRow.even {
           background-color: #f9f9f9;
-        }
+       }
 
-        .ngRow.selected {
+       .ngRow.selected {
           background-color: #BFDCF3;
-        }
+       }
 
-
-        .ngTopPanel {
+       .ngTopPanel {
           background-color: #428BCA; 
           color: #ffffff;
-        }
+       }
 
-        .ngFooterPanel {
+       .ngFooterPanel {
           background-color: #428BCA; 
           color: #ffffff;
-        }
+       }
 
-        .ngSortButtonDown, .ngSortButtonUp {
+       .ngSortButtonDown, .ngSortButtonUp {
           border-color: #ffffff rgba(0, 0, 0, 0);
-        }
+       }
 
-        .modal-content {
+       .modal-content {
           height: 550px;
-        }
+       }
 
-
-        html, body {
+       html, body {
           height: 100%;
-        }
+       }
 
-        .container {
+       .header h3 {
+          margin-bottom: 20px;
+       }
+ 
+       .header .btn {
+          margin-top: 20px;
+       }
+
+       .container {
           height: 96%;
-        }
+       }
 
-        .loading-box {
-          border-radius: 4px; 
-          border: 1px solid #bce8f1; 
-          padding: 6px 12px 5px 12px; 
-          background-color: #d9edf7; 
-          color: #3a87ad;
-        }
-
-        .content-left, .content-right {
+       .content-left, .content-right {
           height: 100%;
-        }
+       }
 
-        .filter-box {
+       .filter-box {
           height: 85%; 
           margin-top: 5px;
           overflow:auto;
-        }
+       }
 
-        .folders .item {
+       .folders .item {
           padding: 2px 8px;
         } 
 
-        .folders .item:hover {
+       .folders .item div:first-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100px;
+          white-space: nowrap;
+       }
+
+       .folders .item:hover {
           background-color: #eee;
           cursor: pointer;
-        }
+       }
 
-        .folders .item .btn {
+       .list tr:hover td:first-child {
+          background: url(../images/grippy_large.png) no-repeat 1px 50%;
+       }
+
+       .list tr th:first-child, .list tr td:first-child {
+          padding-left: 12px;  
+       }
+ 
+       .query-select-cb {
+          margin-right: 10px;
+          margin-left: 5px;
+       }
+
+       .folders .item .btn {
           visibility: hidden;
           padding: 0px 4px;
-        }
+       }
 
-        .folders .item:hover .btn {
+       .folders .item:hover .btn {
           visibility: visible;
-        }
+       }
 
-        .selected {
+       .selected {
           background-color: #ffc; 
-        }
+       }
 
-        .watch-tutorial {
+       .watch-tutorial {
           margin-top: 27px;
-        }
+       }
 
-        .query-folder-modal .modal-header {
+       .query-folder-modal .modal-header {
           height: 15%;
-        }
+       }
 
-        .query-folder-modal .modal-content {
+       .query-folder-modal .modal-content {
 	  height: 300px;
-	}
+       }
 
-	.query-folder-modal .modal-header h3 {
-	  margin-top: 0;
-	}
+       .query-folder-modal .modal-header h3 {
+          margin-top: 0;
+       }
 
-        .table.borderless > tbody > tr > td, .table.borderless > thead > tr > th {
+       .table.borderless > tbody > tr > td, .table.borderless > thead > tr > th {
           border: none;
-        }
+       }
 
-        .selected-folder {
+       .selected-folder {
           color: #DD4B39;
           border-left: 3px solid #DD4B39;
-        }
+       }
 
-        .dropdown-menu-subgroup {
+       .dropdown-menu-subgroup {
           list-style: none;
           padding: 0px;
-        }
+       }
 
-        .dropdown-menu-subgroup > li > a {
+       .dropdown-menu-subgroup > li > a {
           clear: both;
           color: #333333;
           display: block;
@@ -320,23 +338,27 @@
           line-height: 1.42857;
           padding: 3px 20px;
           white-space: nowrap;
-        }
+       }
 
-        .dropdown-menu-subgroup > li > a:hover,  .dropdown-menu-subgroup > li > a:focus {
+       .dropdown-menu-subgroup > li > a:hover,  .dropdown-menu-subgroup > li > a:focus {
           background: #f5f5f5;
           color: #262626;
           text-decoration: none;
-        }
+       }
 
-        .ui-autocomplete {
+       .ui-autocomplete {
           max-height: 100px;
           overflow-y: auto;
           overflow-x: hidden;
-        }
+       }
 
-        .ui-front {
+       .ui-front {
           z-index: 10000;
-        }
+       }
+ 
+       .view-query-sql .modal-content {
+           height: 400px;
+       }
     </style>
   </head>
 
@@ -353,7 +375,7 @@
       </div>
       <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-2">
-          <button class="btn btn-primary" ng-click="createQuery()">
+          <button class="btn btn-primary" ng-click="createQuery()" ng-disabled="queryData.cpList.length == 0">
             Create Query
           </button>
         </div>
@@ -420,7 +442,11 @@
               <tbody>
                 <tr ng-repeat="folder in queryData.myFolders" ng-class="{'selected-folder': queryData.selectedFolderId == folder.id}">
                   <td class="item clearfix"> 
-                    <div class="pull-left" ng-click="selectFolder(folder.id)">{{folder.name}}</div>
+                    <div class="pull-left" ng-click="selectFolder(folder.id)" 
+                      tooltip-placement="bottom" tooltip="{{folder.name}}" tooltip-append-to-body="true">
+                        {{folder.name}}
+                    </div>
+
                     <div class="btn-group pull-right">
                       <button type="button" class="btn btn-default" ng-click="editFolder(folder)"
                         tooltip-placement="bottom" tooltip="Edit folder settings" tooltip-append-to-body="true">
@@ -464,11 +490,10 @@
           </div>
         </div>
         <div class="col-xs-10">
-          <table class="table" overflow="auto" ng-if="queryData.queries.length > 0">
+          <table class="table list" overflow="auto" ng-if="queryData.queries.length > 0">
             <thead>
               <tr>
-               <th class="col-xs-1">&nbsp;</th>
-               <th class="col-xs-3">Title</th>
+               <th class="col-xs-4" style="padding-left: 35px;">Title</th>
                <th class="col-xs-3">Created By</th>
                <th class="col-xs-2">Last Updated</th>
               </tr>
@@ -479,19 +504,29 @@
                   ng-mouseleave="query.highlight=false" 
                   ng-class="{selected: queryData.selectedQueries.indexOf(query) > -1}"> 
                 <td>
-                  <input type="checkbox" checklist-model="queryData.selectedQueries" checklist-value="query">
-                </td>
-                <td>
+                  <div class="pull-left query-select-cb">
+                    <input type="checkbox" checklist-model="queryData.selectedQueries" checklist-value="query">
+                  </div>
                   <a style="cursor:pointer;" ng-click="editQuery(query)" 
-                    tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">#{{query.id}} {{query.title}}</a>
+                    tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">
+                    #{{query.id}} {{query.title}}
+                  </a>
                 </td>
                 <td>{{formatUsername(query.createdBy)}}</td>
                 <td>
                   {{formatDate(query.lastModifiedOn)}}
-                  <div class="pull-right btn-group-xs" ng-if="query.highlight">
+                  <div class="pull-right btn-group btn-group-xs" ng-if="query.highlight">
                     <button type="button" class="btn btn-default" ng-click="runQuery(query)"
                       tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
                       <span class="glyphicon glyphicon-play"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" 
+                      tooltip-placement="bottom" tooltip="Download Query Definition XML" tooltip-append-to-body="true">
+                      <span class="glyphicon glyphicon-download-alt"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="viewAuditLog(query)" 
+                      tooltip-placement="bottom" tooltip="View Query Run Log" tooltip-append-to-body="true">
+                      <i class="fa fa-bars"></i> 
                     </button>
                   </div>
                 </td>
@@ -506,6 +541,59 @@
       </div>
     </div>
 
+    <div class="container" ng-if="queryData.view == 'log'">
+      <div class="row header">
+        <div class="col-xs-7">
+          <h3 class="pull-left">Audit Log</h3>
+          <div class="pull-left" style="margin-top: 20px; margin-left: 10px; font-size: 20px;" ng-click="queryData.view = 'dashboard'">
+            <a style="cursor: pointer;" 
+              tooltip="Go back to previous page" tooltip-placement="bottom" tooltip-append-to-body="true">
+              &#8630;
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-7"><h4>Query #{{query.id}}: {{query.title}}</h4></div>
+      </div>
+      <!-- div class="row">
+        <div class="col-xs-7"><h3>{{query.title}}</h3></div>
+      </div -->
+      <div class="row">
+        <div class="col-xs-11">
+          <div ng-if="!auditLogs || auditLogs == 0">No audit logs for this query</div>
+          <table class="table list" overflow="auto" ng-if="auditLogs && auditLogs.length > 0">
+            <thead>
+              <tr>
+                <th class="col-xs-3">Executed By</th>
+                <th class="col-xs-3">Time</th>
+                <th class="col-xs-2">Run Time (in ms)</th>
+                <th class="col-xs-2">Type</th>
+                <th class="col-xs-1">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="auditLog in auditLogs"
+                  ng-mouseenter="auditLog.highlight=true"
+                  ng-mouseleave="auditLog.highlight=false" style="height:41px;">
+                <td>{{formatUsername(auditLog.runBy)}}</td>
+                <td>{{formatDate(auditLog.timeOfExecution)}}</td>
+                <td>{{auditLog.timeToFinish}}</td>
+                <td>{{auditLog.runType}}</td>
+                <td>
+                  <button type="button" class="btn btn-xs btn-default" ng-click="viewQuerySql(auditLog)"
+                    tooltip-placement="bottom" tooltip="View Generated SQL" tooltip-append-to-body="true"
+                    ng-if="auditLog.highlight">
+                    <i class="fa fa-code"></i> 
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+ 
     <div class="container" ng-if="queryData.view == 'records'">
       <div class="row" style="margin-bottom: 1%;">
         <div class="pull-left" style="padding-left: 15px;">
@@ -918,6 +1006,20 @@
       </div> 
     </script>
 
+    <script type="text/ng-template" id="view-query-sql.html">
+      <div class="modal-header">
+        <h3 class="modal-title">Generated SQL</h3> 
+      </div>
+      <div class="modal-body" style="height: 220px; overflow: auto;">
+        <div style="text-align: justify;">
+          <code style="white-space: normal;">{{auditLog.sql}}</code>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="close()">Close</button>
+      </div>
+    </script>
+ 
     <script>
       var query = query || {};
       query.global = query.global || {};

@@ -8,13 +8,13 @@ angular.module('plus.services', [])
     var successfn = function(result) { return result.data; };
 
     return {
-      executeQuery: function(cpId, drivingForm, aql, wideRows) {
-        var req = {cpId: cpId, drivingForm: drivingForm, aql: aql, wideRows: wideRows};
+      executeQuery: function(id, cpId, drivingForm, aql, runType, wideRows) {
+        var req = {savedQueryId: id, cpId: cpId, drivingForm: drivingForm, aql: aql, runType: runType, wideRows: wideRows};
         return $http.post(baseUrl, req).then(successfn);
       },
 
-      exportQueryData: function(cpId, drivingForm, aql, wideRows) {
-        var req = {cpId: cpId, drivingForm: drivingForm, aql: aql, wideRows: wideRows};
+      exportQueryData: function(id, cpId, drivingForm, aql, runType, wideRows) {
+        var req = {savedQueryId: id, cpId: cpId, drivingForm: drivingForm, aql: aql, runType: runType, wideRows: wideRows};
         return $http.post(baseUrl + 'export', req).then(successfn);
       },
 
@@ -50,7 +50,7 @@ angular.module('plus.services', [])
       },
 
       getFolders: function() {
-	return $http.get(foldersUrl).then(successfn);
+        return $http.get(foldersUrl).then(successfn);
       },
 
       getFolderQueries: function(folderId) {
@@ -78,6 +78,14 @@ angular.module('plus.services', [])
 
       deleteFolder: function(folderId) {
         return $http.delete(foldersUrl + folderId).then(successfn);
+      },
+
+      getAuditLogs: function(queryId, startAt, maxRecs) {
+        return $http.get(savedQueriesUrl + queryId + "/audit-logs" + '?start=' + startAt + '&max=' + maxRecs).then(successfn);
+      },
+
+      getAuditLog: function(queryId, auditLogId) {
+        return $http.get(savedQueriesUrl + queryId + "/audit-logs/" + auditLogId).then(successfn);
       }
     };
   })

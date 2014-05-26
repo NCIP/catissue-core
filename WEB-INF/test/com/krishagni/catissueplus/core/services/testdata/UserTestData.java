@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -22,6 +23,7 @@ import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserCPRoleDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
@@ -29,6 +31,10 @@ import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.privileges.domain.Privilege;
+import com.krishagni.catissueplus.core.privileges.domain.Role;
+import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
+import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeType;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -45,7 +51,7 @@ public class UserTestData {
 	public static final String EMAIL_ADDRESS = "email address";
 
 	public static final String DEPARTMENT = "department";
-	
+
 	public static final String AUTH_DOMAIN = "auth domain";
 
 	public static final String LDAP = "ldap";
@@ -57,6 +63,27 @@ public class UserTestData {
 		users.add(new User());
 		users.add(new User());
 		return users;
+	}
+
+	public static Role getRole(long id) {
+		Role role = new Role();
+		role.setId(id);
+		role.setName("My Role" + id);
+		role.setPrivileges(getPrivileges());
+		return role;
+	}
+
+	private static Set<Privilege> getPrivileges() {
+		Set<Privilege> privileges = new HashSet<Privilege>();
+		privileges.add(getPrivilege(1l));
+		return privileges;
+	}
+
+	public static Privilege getPrivilege(long id) {
+		Privilege privilege = new Privilege();
+		privilege.setId(id);
+		privilege.setName(PrivilegeType.DISTRIBUTION.value());
+		return privilege;
 	}
 
 	public static SessionDataBean getSessionDataBean() {
@@ -82,8 +109,8 @@ public class UserTestData {
 		user.setDepartment(new Department());
 		user.setAddress(new Address());
 		user.setAuthDomain(getAuthDomain(id));
-		user.setSiteCollection(new HashSet<Site>());
-		user.setCpCollection(new HashSet<CollectionProtocol>());
+		user.setUserSites(new HashSet<Site>());
+		user.setUserCPRoles(new HashSet<UserCPRole>());
 		return user;
 	}
 
@@ -111,8 +138,8 @@ public class UserTestData {
 		details.setEmailAddress("sci@sci.com");
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("MyLdap");
-		details.setSiteNames(getSites());
-		details.setCpTitles(getCpTitles());
+		details.setUserSiteNames(getSites());
+		details.setUserCPRoles(getUserCpRolesDetails());
 
 		UpdateUserEvent reqEvent = new UpdateUserEvent(details, 1L);
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -154,7 +181,7 @@ public class UserTestData {
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
-	
+
 	public static CreateUserEvent getCreateUserEvent() {
 		CreateUserEvent reqEvent = new CreateUserEvent(null);
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -172,11 +199,11 @@ public class UserTestData {
 		details.setEmailAddress("sci@sci.com");
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("myLdap");
-		details.setSiteNames(getSites());
-		details.setCpTitles(getCpTitles());
+		details.setUserSiteNames(getSites());
+		details.setUserCPRoles(getUserCpRolesDetails());
 		return details;
 	}
-	
+
 	public static CreateUserEvent getCreateUserEventWithInvalidEmail() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
 		UserDetails details = reqEvent.getUserDetails();
@@ -203,7 +230,7 @@ public class UserTestData {
 	public static CreateUserEvent getCreateUserEventWithNullSite() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
 		UserDetails details = reqEvent.getUserDetails();
-		details.setSiteNames(null);
+		details.setUserSiteNames(null);
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
@@ -211,7 +238,7 @@ public class UserTestData {
 	public static CreateUserEvent getCreateUserEventWithNullCP() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
 		UserDetails details = reqEvent.getUserDetails();
-		details.setCpTitles(null);
+		details.setUserCPRoles(null);
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
@@ -223,7 +250,7 @@ public class UserTestData {
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
-	
+
 	public static CreateUserEvent getCreateUserEventWithEmptyDomainName() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
 		UserDetails details = reqEvent.getUserDetails();
@@ -276,7 +303,7 @@ public class UserTestData {
 		reqEvent.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
 		return reqEvent;
 	}
-	
+
 	public static UpdatePasswordEvent getUpdatePasswordEventInvalid() {
 		PasswordDetails details = new PasswordDetails();
 		details.setUserId(80L);
@@ -337,7 +364,6 @@ public class UserTestData {
 		Site site = new Site();
 		site.setName("LABS");
 		site.setId(1l);
-		site.setType("My type");
 		return site;
 	}
 
@@ -349,10 +375,13 @@ public class UserTestData {
 		return collectionProtocol;
 	}
 
-	private static List<String> getCpTitles() {
-		List<String> cpTitles = new ArrayList<String>();
-		cpTitles.add("Query CP");
-		return cpTitles;
+	private static List<UserCPRoleDetails> getUserCpRolesDetails() {
+		List<UserCPRoleDetails> cpUserRoles = new ArrayList<UserCPRoleDetails>();
+		UserCPRoleDetails curDetails = new UserCPRoleDetails();
+		curDetails.setRoleName("Registrar and distributor");
+		curDetails.setCpTitle("Test new CP");
+		cpUserRoles.add(curDetails);
+		return cpUserRoles;
 	}
 
 	private static List<String> getSites() {
@@ -376,7 +405,7 @@ public class UserTestData {
 		authProvider.setAuthType("catissue");
 		authProvider.setImplClass("com.krishagni.catissueplus.core.auth.services.impl.LdapAuthServiceImpl");
 		authDomain.setName("catissue");
-		
+
 		user.setAuthDomain(authDomain);
 		return user;
 	}
@@ -405,7 +434,7 @@ public class UserTestData {
 		catch (Exception e) {
 			reportError(UserErrorCode.BAD_REQUEST, PATCH_USER);
 		}
-		//details.setModifiedAttributes(new ArrayList<String>(getUserPatchAttributes().keySet()));
+		details.setModifiedAttributes(new ArrayList<String>(getUserPatchAttributes().keySet()));
 		event.setUserDetails(details);
 		return event;
 	}
@@ -414,8 +443,8 @@ public class UserTestData {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("firstName", "daresh");
 		attributes.put("lastName", "patil");
-		attributes.put("siteNames", getSites());
-		attributes.put("cpTitles", getCpTitles());
+		attributes.put("userSiteNames", getSites());
+		attributes.put("userCPRoles", getUserCpRolesDetails());
 		attributes.put("activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		attributes.put("comments", "blah blah");
 		attributes.put("loginName", "dpatil");
@@ -431,5 +460,12 @@ public class UserTestData {
 		attributes.put("street", "john road");
 		attributes.put("zipCode", "76543");
 		return attributes;
+	}
+
+	public static List<User> getUsers() {
+		List<User> users = new ArrayList<User>();
+		users.add(getUser(2l));
+		users.add(getUser(3l));
+		return users;
 	}
 }

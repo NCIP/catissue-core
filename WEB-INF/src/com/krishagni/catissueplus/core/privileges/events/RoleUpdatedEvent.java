@@ -43,7 +43,6 @@ public class RoleUpdatedEvent extends ResponseEvent {
 
 	public static RoleUpdatedEvent notFound(Long roleId) {
 		RoleUpdatedEvent resp = new RoleUpdatedEvent();
-		resp.getRoleDetails().setId(roleId);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

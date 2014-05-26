@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
@@ -35,8 +36,6 @@ public class UserFactoryImpl implements UserFactory {
 
 	private final String LOGIN_NAME = "login name";
 
-	private final String DEPARTMENT = "department";
-
 	private final String AUTH_DOMAIN = "auth domain";
 
 	private final String EMAIL_ADDRESS = "email address";
@@ -45,9 +44,9 @@ public class UserFactoryImpl implements UserFactory {
 
 	private final String SITE = "site";
 
-	private static final String USER = "user";
-
 	private static final String ROLE = "role";
+
+	private static final String DEPARTMENT = "department";
 
 	private final String COLLECTION_PROTOCOL = "collection protocol";
 
@@ -164,10 +163,11 @@ public class UserFactoryImpl implements UserFactory {
 				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, ROLE);
 				return;
 			}
+			userCpRole.setId(ucrDetails.getId());
 			userCpRole.setRole(role);
 			userCpRoles.add(userCpRole);
 		}
-		user.setUserCPRoles(userCpRoles);
+		SetUpdater.<UserCPRole> newInstance().update(user.getUserCPRoles(), userCpRoles);
 	}
 
 	private void setUserSites(User user, List<String> userSiteNames, ObjectCreationException exceptionHandler) {
@@ -217,10 +217,10 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setDepartment(User user, String departmentName, ObjectCreationException exceptionHandler) {
-		Department department = daoFactory.getDepartmentDao().getDepartment(departmentName);
+		Department department = daoFactory.getDepartmentDao().getDepartmentByName(departmentName);
 
 		if (department == null) {
-			//			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT);
+			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, DEPARTMENT);
 			return;
 		}
 		user.setDepartment(department);

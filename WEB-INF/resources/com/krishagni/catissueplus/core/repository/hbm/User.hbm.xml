@@ -93,7 +93,7 @@
       	<set
             name="userCPRoles"
             table="CATISSUE_CP_USER_ROLES"
-            cascade="save-update"
+            cascade="all-delete-orphan"
             inverse="false">
             <key column="USER_ID"/>
             <one-to-many
@@ -102,7 +102,7 @@
         
          <set
             name="userSites"
-            table="CATISSUE_USER_SITES"
+            table="CATISSUE_SITE_USERS"
             inverse="false"
             cascade="save-update">
 
@@ -118,12 +118,12 @@
             table="CATISSUE_PASSWORD"
             inverse="true"
             cascade="save-update"
-            order-by="com.krishagni.catissueplus.core.administrative.domain.Password.Id desc"
+            order-by="identifier desc"
             >
 
         	<cache usage="read-write"/>
             <key column="USER_ID"/>
-            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password"/>
+            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password" />
 
         </set>
 		

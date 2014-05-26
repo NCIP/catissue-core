@@ -63,7 +63,7 @@ public class TransactionalInterceptor {
 		}
 		finally {
 			
-			if (session != null && session.isOpen() && isSessionStarted) {
+			if (session != null && session.isOpen() && isSessionStarted && isTransactionStarted) {
 				session.close();
 				LOGGER.info("Session closed.");
 			}

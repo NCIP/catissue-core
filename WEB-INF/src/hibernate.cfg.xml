@@ -166,6 +166,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExtAppNotificationStatus.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolStudyMapping.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SavedQuery.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryAuditLog.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Ldap.hbm.xml" />		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Site.hbm.xml" />
@@ -178,6 +179,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/UserCPRole.hbm.xml" />		
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Role.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Privilege.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Institute.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeyGenerator.hbm.xml" />
 		
     </session-factory>

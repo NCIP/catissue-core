@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.rest.controller;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ import edu.wustl.common.beans.SessionDataBean;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-	
+
 	private static String PATCH_USER = "patch user";
 
 	@Autowired
@@ -67,10 +68,10 @@ public class UserController {
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getUsers();
 		}
-		
+
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -81,7 +82,7 @@ public class UserController {
 		}
 		return null;
 	}
- 
+
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
@@ -100,7 +101,7 @@ public class UserController {
 		PatchUserEvent event = new PatchUserEvent();
 		event.setUserId(id);
 		event.setSessionDataBean(getSession());
-		
+
 		UserDetails details = new UserDetails();
 		try {
 			BeanUtils.populate(details, values);
@@ -108,9 +109,9 @@ public class UserController {
 		catch (Exception e) {
 			reportError(UserErrorCode.BAD_REQUEST, PATCH_USER);
 		}
-		//details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
+		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setUserDetails(details);
-			
+
 		UserUpdatedEvent response = userService.patchUser(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getUserDetails();
@@ -135,18 +136,19 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String setPassword(@PathVariable Long id,  
-			@RequestParam(value = "token", required = false, defaultValue = "") String token, 
+	public String setPassword(@PathVariable Long id,
+			@RequestParam(value = "token", required = false, defaultValue = "") String token,
 			@RequestParam(value = "type", required = false, defaultValue = "") String type,
 			@RequestBody PasswordDetails passwordDetails) {
-		UpdatePasswordEvent event  = new UpdatePasswordEvent(passwordDetails, token, id);
+		UpdatePasswordEvent event = new UpdatePasswordEvent(passwordDetails, token, id);
 		PasswordUpdatedEvent resp = null;
-		if (type == PasswordActionType.CHANGE.value()) {
+		if (PasswordActionType.CHANGE.value().equalsIgnoreCase(type)) {
 			resp = userService.changePassword(event);
-		} else {
+		}
+		else {
 			resp = userService.setPassword(event);
 		}
-		
+
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getMessage();
 		}

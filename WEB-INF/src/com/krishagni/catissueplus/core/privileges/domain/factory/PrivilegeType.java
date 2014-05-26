@@ -43,12 +43,22 @@ public enum PrivilegeType {
 	}
 
 	public String value() {
-		return value;
+		return this.value;
 	}
-
+	
+	public static String getEnumNameForValue(String privType){
+		String enumValue = null;
+		for (PrivilegeType type : PrivilegeType.values()) {
+			if( type.value.equalsIgnoreCase(privType)){
+				return type.name();
+			}
+		}
+		return enumValue;
+	}
+	
 	public static Boolean isValidPrivilegeType (String privType) {
 		for (PrivilegeType type : PrivilegeType.values()) {
-			if (type.value.equals(privType)) {
+			if (type.value().equalsIgnoreCase(privType)) {
 				return true;
 			}
 		}

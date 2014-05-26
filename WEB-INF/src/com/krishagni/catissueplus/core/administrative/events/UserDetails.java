@@ -4,9 +4,12 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.Site;
+import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
 public class UserDetails {
 
@@ -50,10 +53,6 @@ public class UserDetails {
 
 	private List<String> modifiedAttributes = new ArrayList<String>();
 
-	public void setModifiedAttributes(List<String> modifiedAttributes) {
-		this.modifiedAttributes = modifiedAttributes;
-	}
-
 	public boolean isUserSitesModified() {
 		return modifiedAttributes.contains("userSites");
 	}
@@ -61,21 +60,17 @@ public class UserDetails {
 	public boolean isUserCPRolesModified() {
 		return modifiedAttributes.contains("userCPRoles");
 	}
-
+	
+	public boolean isLastNameModified() {
+		return modifiedAttributes.contains("lastName");
+	}
+	
 	public boolean isFirstNameModified() {
 		return modifiedAttributes.contains("firstName");
 	}
 
-	public boolean isLastNameModified() {
-		return modifiedAttributes.contains("lastName");
-	}
-
 	public boolean isEmailAddressModified() {
 		return modifiedAttributes.contains("emailAddress");
-	}
-
-	public boolean isCpsModified() {
-		return modifiedAttributes.contains("cpTitles");
 	}
 
 	public boolean isActivityStatusModified() {
@@ -270,14 +265,14 @@ public class UserDetails {
 		this.userCPRoles = userCPRoles;
 	}
 
-	/*public List<String> getModifiedAttributes() {
+	public List<String> getModifiedAttributes() {
 		return modifiedAttributes;
 	}
 
 	public void setModifiedAttributes(List<String> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;
 	}
-	*/
+
 	public static UserDetails fromDomain(User user) {
 		UserDetails userDto = new UserDetails();
 		userDto.setLoginName(user.getLoginName());
@@ -294,9 +289,18 @@ public class UserDetails {
 		if (user.getAuthDomain() != null) {
 			userDto.setDomainName(user.getAuthDomain().getName());
 		}
-
+		setUserCPRoles(userDto, user.getUserCPRoles());
+		setUserSiteNames(userDto, user.getUserSites());	
 		updateAddressDetails(userDto, user.getAddress());
 		return userDto;
+	}
+
+	private static void setUserSiteNames(UserDetails userDto, Set<Site> userSites) {
+		List<String> siteNames = new ArrayList<String>();
+		for (Site site : userSites) {
+			siteNames.add(site.getName());
+		}
+		userDto.setUserSiteNames(siteNames);
 	}
 
 	private static void updateAddressDetails(UserDetails userDto, Address address) {
@@ -309,4 +313,15 @@ public class UserDetails {
 		userDto.setZipCode(address.getZipCode());
 	}
 
+	private static void setUserCPRoles(UserDetails userDto, Set<UserCPRole> userCPRoles) {
+		List<UserCPRoleDetails> userCPRoleDetailsList = new ArrayList<UserCPRoleDetails>();
+		for (UserCPRole userCPRole : userCPRoles) {
+			UserCPRoleDetails userCPRoleDetails = new UserCPRoleDetails();
+			userCPRoleDetails.setCpTitle(userCPRole.getCollectionProtocol().getTitle());
+			userCPRoleDetails.setRoleName(userCPRole.getRole().getName());
+			userCPRoleDetails.setId(userCPRole.getId());
+			userCPRoleDetailsList.add(userCPRoleDetails);
+		}
+		userDto.setUserCPRoles(userCPRoleDetailsList);
+	}
 }
