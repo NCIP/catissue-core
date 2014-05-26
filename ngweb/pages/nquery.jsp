@@ -375,7 +375,7 @@
       </div>
       <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-2">
-          <button class="btn btn-primary" ng-click="createQuery()">
+          <button class="btn btn-primary" ng-click="createQuery()" ng-disabled="queryData.cpList.length == 0">
             Create Query
           </button>
         </div>
