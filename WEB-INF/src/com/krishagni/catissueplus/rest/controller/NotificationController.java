@@ -31,7 +31,7 @@ public class NotificationController {
 	@Autowired
 	private CatissueNotificationService catissueNotificationSvc;
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, value = "/registration")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public RegistrationCreatedEvent registerParticipant(@RequestBody NotifiedRegistrationDetail registrationDetails) {
@@ -41,7 +41,7 @@ public class NotificationController {
 		return catissueNotificationSvc.registerParticipant(event);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT, value= "/registration")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public RegistrationUpdatedEvent updateParticipantRegistartion(
