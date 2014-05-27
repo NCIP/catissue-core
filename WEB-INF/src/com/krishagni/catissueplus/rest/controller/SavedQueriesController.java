@@ -1,8 +1,13 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +21,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.de.events.FileDetail;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
+import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
 import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
@@ -34,6 +42,7 @@ import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
+import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -79,6 +88,32 @@ public class SavedQueriesController {
 		}
 		
 		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/definition-file")
+	@ResponseStatus(HttpStatus.OK)	
+	public void getQueryDefFile(@PathVariable("id") Long queryId, HttpServletResponse response) {
+		ReqQueryDefEvent req = new ReqQueryDefEvent();
+		req.setQueryId(queryId);
+		req.setSessionDataBean(getSession());
+		
+		QueryDefEvent resp = querySvc.getQueryDef(req);
+		if (resp.getStatus() != EventStatus.OK) {
+			return;
+		}
+		
+		response.setContentType("application/json");
+		response.setHeader("Content-Disposition", "attachment;filename=QueryDef_" + queryId + ".json");
+			
+		InputStream in = null;
+		try {
+			in = new ByteArrayInputStream(resp.getQueryDef().getBytes());
+			IoUtil.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IoUtil.close(in);
+		}				
 	}
 
 	

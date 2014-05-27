@@ -139,14 +139,23 @@ public class SavedQuery {
 	}
 
 	public String getQueryDefJson() {
+		return getQueryDefJson(false);
+	}
+	
+	public String getQueryDefJson(boolean includeTitle) {
 		SavedQuery query = new SavedQuery();
+		
+		if (includeTitle) {
+			query.title = title;
+		}
+		
 		query.cpId = cpId;
 		query.selectList = selectList;
 		query.filters = filters;
 		query.queryExpression = queryExpression;
 		query.drivingForm = drivingForm;
 		query.folders = null;
-		return new Gson().toJson(query);
+		return new Gson().toJson(query);		
 	}
 
 	public void setQueryDefJson(String queryDefJson) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -40,6 +41,7 @@ import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDeletedEvent;
@@ -55,6 +57,7 @@ import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
@@ -69,6 +72,7 @@ import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
+import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
@@ -604,6 +608,37 @@ public class QueryServiceImpl implements QueryService {
 			return QueryAuditLogEvent.serverError(message, e);
 		}
     }
+    
+	@Override
+	@PlusTransactional
+	public QueryDefEvent getQueryDef(ReqQueryDefEvent req) {
+		try {
+			SavedQueryDao queryDao = daoFactory.getSavedQueryDao();
+			
+			Long queryId = req.getQueryId();			
+			SavedQuery query = queryDao.getQuery(queryId);			
+			if (query == null) {
+				return QueryDefEvent.notFound(queryId);
+			}
+			
+			Long userId = req.getSessionDataBean().getUserId();
+			if (!query.getCreatedBy().getId().equals(userId) && 
+					!queryDao.isQuerySharedWithUser(queryId, userId)) {
+				return QueryDefEvent.forbidden(queryId);
+			}
+			
+			String queryDef = query.getQueryDefJson(true);
+			return QueryDefEvent.ok(queryId, queryDef);			
+		} catch (Exception e) {
+			String message = e.getMessage();
+			if (message == null) {
+				message = "Internal Server Error";				
+			}
+			
+			return QueryDefEvent.serverError(message, e);
+		}
+	}
+    
      
 	private List<SavedQuerySummary> toQuerySummaryList(List<SavedQuery> queries) {
 		List<SavedQuerySummary> querySummaries = new ArrayList<SavedQuerySummary>();
@@ -721,6 +756,5 @@ public class QueryServiceImpl implements QueryService {
 		}
 		
 		return txn;
-	}
-	
+	}	
 }
