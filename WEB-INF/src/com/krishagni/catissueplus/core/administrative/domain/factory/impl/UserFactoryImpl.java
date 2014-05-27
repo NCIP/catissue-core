@@ -185,7 +185,7 @@ public class UserFactoryImpl implements UserFactory {
 
 			userSites.add(site);
 		}
-		user.setUserSites(userSites);
+		SetUpdater.<Site> newInstance().update(user.getUserSites(), userSites);
 	}
 
 	private void setComments(User user, String comments) {
