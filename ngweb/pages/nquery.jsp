@@ -12,6 +12,9 @@
 
     <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../external/jquery/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../external/jquery/jquery.ui.widget.js" type="text/javascript"></script>
+    <script src="../external/jquery/jquery.iframe-transport.js" type="text/javascript"></script>
+    <script src="../external/jquery/jquery.fileupload.js" type="text/javascript"></script>
     <script src="../external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="../external/select2/select2.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/angular.min.js" type="text/javascript"></script>
@@ -232,6 +235,10 @@
           height: 550px;
        }
 
+       .import-query .modal-content {
+          height: 300px;
+       }
+
        html, body {
           height: 100%;
        }
@@ -359,6 +366,10 @@
        .view-query-sql .modal-content {
            height: 400px;
        }
+
+       input[type='file'] {
+         color: transparent;
+       }
     </style>
   </head>
 
@@ -375,9 +386,17 @@
       </div>
       <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-2">
-          <button class="btn btn-primary" ng-click="createQuery()" ng-disabled="queryData.cpList.length == 0">
-            Create Query
-          </button>
+          <div class="btn-group" dropdown>
+            <button class="btn btn-primary">New Query</button>
+            <button class="btn btn-primary dropdown-toggle" ng-disabled="queryData.cpList.length == 0">
+              <span class="caret"></span>
+              <span class="sr-only"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" ng-click="createQuery()">Create</a></li>
+              <li><a href="#" ng-click="importQuery()">Import</a></li>
+            </ul>
+          </div>
         </div>
         <div class="col-xs-4">
           <div ng-class="{'btn-group': queryData.selectedFolderId != -1}"  ng-if="queryData.selectedQueries.length > 0">
@@ -940,6 +959,28 @@
       </div>
     </script>
 
+    <script type="text/ng-template" id="import-query.html">
+      <div class="modal-header" style="height: 20%">
+        <h4>Import Query</h4>
+      </div>
+      <div class="modal-body" style="height: 50%">
+        <form action="/catissuecore/rest/ng/saved-queries/definition-file">
+          <div class="form-group">
+            <label>Select Query Definition File</label>
+            <div style="position:relative;">
+              <input id="uploadQueryDef" class="form-control" name="file" type="file" style="height: auto!important;">
+              <span id="queryDefFilename" style="position:absolute; top:10px; left: 110px; min-width: 150px; background: white;">No File Selected</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" style="height: 20%">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" id="importQuery">Import</button>
+      </div>
+    </script>
+      
+    </script>
     <script type="text/ng-template" id="save-query.html">
       <div class="modal-header" style="height: 10%">
         <h4>Save Query</h4>
