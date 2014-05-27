@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.FileDetail;
+import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
@@ -40,6 +43,7 @@ import com.krishagni.catissueplus.core.de.events.SaveQueryEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
+import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -115,7 +119,16 @@ public class SavedQueriesController {
 			IoUtil.close(in);
 		}				
 	}
-
+	
+	@RequestMapping(method = RequestMethod.POST, value="/definition-file")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody	
+	public SavedQueryDetail importQuery(@PathVariable("file") MultipartFile file) 
+	throws IOException {
+		String json = new String(file.getBytes());
+		SavedQueryDetail detail = new Gson().fromJson(json, SavedQueryDetail.class);
+		return saveQuery(detail);
+	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)

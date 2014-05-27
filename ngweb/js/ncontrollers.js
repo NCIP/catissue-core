@@ -1,6 +1,6 @@
 
 angular.module('plus.controllers', ['checklist-model'])
-  .controller('QueryController', ['$scope', '$sce', '$modal', '$q', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, CollectionProtocolService, FormsService, QueryService, UsersService) {
+  .controller('QueryController', ['$scope', '$sce', '$modal', '$q', '$timeout', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, $timeout, CollectionProtocolService, FormsService, QueryService, UsersService) {
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
       ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE',}, 
@@ -617,6 +617,25 @@ angular.module('plus.controllers', ['checklist-model'])
       angular.extend($scope.queryData, $scope.getQueryDataDefaults());
       $scope.queryData.view = 'query';
     };
+
+    $scope.importQuery = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'import-query.html',
+        windowClass: 'import-query',
+        controller: ImportQueryCtrl
+      });
+
+      modalInstance.result.then(
+        function(queryId) {
+          if (queryId > 0) {
+            $scope.showQueries();
+            Utility.notify($("#notifications"), "Query Imported Successfully", "success", true)
+          } else {
+            Utility.notify($("#notifications"), "Query Import Failed", "error", true);
+          }
+        });
+    };
+
 
     var getFilter = function(filterDef) {
       if (filterDef.expr) {
@@ -1295,6 +1314,30 @@ angular.module('plus.controllers', ['checklist-model'])
           $scope.showQueries();
           Utility.notify($("#notifications"), "Query Saved Successfully", "success", true)
         });
+    };
+
+    var ImportQueryCtrl = function($scope, $modalInstance) {
+      $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+      };
+
+      $timeout(function() {
+        $("#uploadQueryDef").fileupload({
+          dataType: 'json',
+          add: function (e, data) {            
+            $("#queryDefFilename").text(data.files[0].name);
+            $("#importQuery").on('click', function () {
+              data.submit();
+            });
+          },
+          done: function(e, data) { 
+            $modalInstance.close(data.result.id);
+          },
+          fail: function(e, data) { 
+            $modalInstance.close(-1);
+          }
+        });
+      });
     };
 
     var SaveQueryCtrl = function($scope, $modalInstance, queryData) {

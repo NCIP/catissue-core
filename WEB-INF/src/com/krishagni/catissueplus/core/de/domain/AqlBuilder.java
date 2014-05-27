@@ -51,7 +51,14 @@ public class AqlBuilder {
 		for (QueryExpressionNode node : queryExprNodes) {
 			switch (node.getNodeType()) {
 			  case FILTER:
-				  Filter filter = filterMap.get((Integer)node.getValue());
+				  int filterId;
+				  if (node.getValue() instanceof Double) {
+					  filterId = ((Double)node.getValue()).intValue();
+				  } else {
+					  filterId = (Integer)node.getValue();
+				  }
+				  
+				  Filter filter = filterMap.get(filterId);
 				  String filterExpr = buildFilterExpr(filter);
 				  whereClause.append(filterExpr);				  				  
 				  break;
