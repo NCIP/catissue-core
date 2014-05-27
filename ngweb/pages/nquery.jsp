@@ -520,10 +520,11 @@
                       tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
                       <span class="glyphicon glyphicon-play"></span>
                     </button>
-                    <button type="button" class="btn btn-default" 
-                      tooltip-placement="bottom" tooltip="Download Query Definition XML" tooltip-append-to-body="true">
+                    <a type="button" class="btn btn-default" 
+                      tooltip-placement="bottom" tooltip="Download Query Definition" tooltip-append-to-body="true"
+                      href="/catissuecore/rest/ng/saved-queries/{{query.id}}/definition-file" target="_blank">
                       <span class="glyphicon glyphicon-download-alt"></span>
-                    </button>
+                    </a>
                     <button type="button" class="btn btn-default" ng-click="viewAuditLog(query)" 
                       tooltip-placement="bottom" tooltip="View Query Run Log" tooltip-append-to-body="true">
                       <i class="fa fa-bars"></i> 

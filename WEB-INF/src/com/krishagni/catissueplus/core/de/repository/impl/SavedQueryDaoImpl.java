@@ -22,6 +22,8 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	
 	private static final String GET_QUERIES_BY_FOLDER_ID = FQN + ".getQueriesByFolderId";
 	
+	private static final String IS_QUERY_SHARED_WITH_USER = FQN + ".isQuerySharedWithUser";
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords) {
@@ -65,6 +67,22 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isQuerySharedWithUser(Long queryId, Long userId) {
+		List<Number> count = sessionFactory.getCurrentSession()
+			.getNamedQuery(IS_QUERY_SHARED_WITH_USER)
+			.setLong("userId", userId)
+			.setLong("queryId", queryId)
+			.list();
+		
+		if (count == null || count.isEmpty()) {
+			return false;
+		}
+		
+		return count.iterator().next().intValue() != 0;
+	}	
 	
 	private SavedQuerySummary getSavedQuerySummary(Object[] row) {
 		SavedQuerySummary savedQuery = new SavedQuerySummary();

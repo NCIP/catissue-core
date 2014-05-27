@@ -15,5 +15,7 @@ public interface SavedQueryDao extends Dao<SavedQuery>{
 	public List<SavedQuery> getQueriesByIds(List<Long> queries);
 	
 	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId);
+	
+	public boolean isQuerySharedWithUser(Long queryId, Long userId);
 
 }

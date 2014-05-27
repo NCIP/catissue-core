@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
@@ -20,6 +21,7 @@ import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
@@ -76,4 +78,9 @@ public interface QueryService {
 	public QueryAuditLogsEvent getAuditLogs(ReqQueryAuditLogsEvent req);
 	
 	public QueryAuditLogEvent getAuditLog(ReqQueryAuditLogEvent req);
+	
+	//
+	// query export APIs
+	//
+	public QueryDefEvent getQueryDef(ReqQueryDefEvent req);
 }
