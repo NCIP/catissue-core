@@ -76,7 +76,7 @@
 				<caption>Gender</caption>
 				<column>GENDER</column>
 				<options>
-					<sql>select value from catissue_permissible_value where public_id = 2003989 order by value</sql>
+					<sql>select value from catissue_permissible_value where public_id = '2003989' order by value</sql>
 				</options>
 			</radioButton>
 		</row>
@@ -88,7 +88,7 @@
 				<caption>Genotype</caption>
 				<column>GENOTYPE</column>
 				<options>
-					<sql>select value from catissue_permissible_value where public_id = 2003990 order by value</sql>
+					<sql>select value from catissue_permissible_value where public_id = '2003990' order by value</sql>
 				</options>
 			</dropDown>
 		</row>

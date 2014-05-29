@@ -97,7 +97,7 @@
 				<caption>Clinical Status</caption>
 				<column>CLINICAL_STATUS</column>
 				<options>
-					<sql>select value from catissue_permissible_value where PUBLIC_ID = 2003988 order by value</sql>
+					<sql>select value from catissue_permissible_value where PUBLIC_ID = '2003988' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -127,7 +127,7 @@
 				<caption>Collection Procedure</caption>
 				<column>COLLECTION_PROCEDURE</column>
 				<options>
-					<sql>select value from catissue_permissible_value where public_id = 2003996 order by value</sql>
+					<sql>select value from catissue_permissible_value where public_id = '2003996' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -138,7 +138,7 @@
 				<caption>Collection Container</caption>
 				<column>COLLECTION_CONTAINER</column>
 				<options>
-					<sql>select value from catissue_permissible_value where public_id = 2003997 order by value</sql>
+					<sql>select value from catissue_permissible_value where public_id = '2003997' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -157,7 +157,7 @@
 				<caption>Received Quality</caption>
 				<column>RECEIVED_QUALITY</column>
 				<options>
-					<sql>select value from catissue_permissible_value where public_id = 2003994 order by value</sql>
+					<sql>select value from catissue_permissible_value where public_id = '2003994' order by value</sql>
 				</options>
 			</dropDown>
 		</row>
