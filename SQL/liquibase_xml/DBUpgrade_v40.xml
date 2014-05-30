@@ -2394,4 +2394,265 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                referencedTableName="CATISSUE_USER"
                referencedColumnNames="IDENTIFIER" />
     </changeSet>
+        <changeSet author="nitesh" id="drop foreign key constraint from CATISSUE_CONSENT_TIER_STATUS" failOnError="false">
+        <dropForeignKeyConstraint baseTableName="CATISSUE_CONSENT_TIER_STATUS" constraintName="FKF74E94AEF69249F7"/>
+        <dropForeignKeyConstraint baseTableName="CATISSUE_CONSENT_TIER_STATUS" constraintName="FKF74E94AE60773DB2"/>
+    </changeSet>
+    <changeSet id="procedure to enable/disable foreign key constraints" author="nitesh" dbms="oracle">
+      <sql splitStatements="false" endDelimiter="$">
+       CREATE OR REPLACE
+        PROCEDURE DISABLECONSTRAINT AS
+        cnt number:=0;
+        BEGIN
+          
+          FOR c IN
+          (SELECT c.owner, c.table_name, c.constraint_name, c.CONSTRAINT_TYPE
+           FROM user_constraints c, user_tables t
+           WHERE c.table_name = t.table_name
+           AND c.status = 'ENABLED' and c.constraint_type='R')
+          LOOP
+          cnt:=cnt+1;
+            dbms_output.put_line(cnt||' Constraint:   '||c.constraint_name ||' Table'|| c.table_name);
+            execute immediate 'alter table '||c.table_name||' disable constraint '||c.constraint_name||'';
+          END LOOP;
+          commit;
+        END DISABLECONSTRAINT;
+    </sql>
+    <sql splitStatements="false" endDelimiter="$">
+       CREATE OR REPLACE
+        PROCEDURE ENABLECONSTRAINT AS
+        cnt number:=0;
+        BEGIN
+          
+          FOR c IN
+          (SELECT c.owner, c.table_name, c.constraint_name, c.CONSTRAINT_TYPE
+           FROM user_constraints c, user_tables t
+           WHERE c.table_name = t.table_name
+           AND c.status = 'DISABLED' and c.constraint_type='R')
+          LOOP
+          cnt:=cnt+1;
+            dbms_output.put_line(cnt||' Constraint:   '||c.constraint_name ||' Table'|| c.table_name);
+            execute immediate 'alter table '||c.table_name||' enable constraint '||c.constraint_name||'';
+          END LOOP;
+          commit;
+        END ENABLECONSTRAINT;
+    </sql>
+    </changeSet>
+    <changeSet id="for deleting the anticipated SCG's having anticipated specimens" author="nitesh">
+
+       <sql>
+            create table catissue_tmp_scg as select * from (
+            select * from catissue_specimen_coll_group where identifier 
+                        
+            NOT IN
+            
+            (select distinct scg.identifier from catissue_specimen_coll_group scg join catissue_specimen sp on sp.SPECIMEN_COLLECTION_GROUP_ID = scg.identifier
+            where scg.COLLECTION_STATUS = 'Pending' and sp.COLLECTION_STATUS ='Pending'
+            and scg.identifier not in (select SPECIMEN_COLLECTION_GROUP_ID from catissue_specimen where COLLECTION_STATUS = 'Collected')
+            ))t1
+       </sql>
+      <!--  <sql>create table catissue_tmp_scg as select * from catissue_specimen_coll_group where identifier in(
+            select identifier from catissue_specimen_coll_group
+            
+            MINUS
+
+            select distinct scg.identifier from catissue_specimen_coll_group scg join catissue_specimen sp on sp.SPECIMEN_COLLECTION_GROUP_ID = scg.identifier
+            where scg.COLLECTION_STATUS = 'Pending' and sp.COLLECTION_STATUS ='Pending'
+            and scg.identifier not in (select SPECIMEN_COLLECTION_GROUP_ID from catissue_specimen where COLLECTION_STATUS = 'Collected'))
+       </sql> -->
+       <sql>
+            create table catissue_tmp_specimen  as select * from catissue_specimen  where SPECIMEN_COLLECTION_GROUP_ID in(
+            select identifier from catissue_tmp_scg)
+       </sql>
+       <sql>
+            create table catissue_tmp_ex_id as select ex.* from CATISSUE_EXTERNAL_IDENTIFIER ex join 
+            catissue_tmp_specimen sp on ex.specimen_id = sp.identifier where sp.identifier is not null
+       </sql>
+       <sql>commit;</sql>
+    </changeSet>
+    <changeSet id="disable constraints" author="nitesh" dbms="oracle">   
+        <sql>call DISABLECONSTRAINT()</sql>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="disable constraints" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
+    </changeSet>
+    
+    <changeSet id="Delete original scg/specimen tables and rename the temp" author="nitesh" >
+        <dropTable tableName="catissue_specimen" cascadeConstraints="true"/>
+        <dropTable tableName="catissue_specimen_coll_group" cascadeConstraints="true"/>
+        <dropTable tableName="CATISSUE_EXTERNAL_IDENTIFIER" cascadeConstraints="true"/>
+
+        <addPrimaryKey tableName="catissue_tmp_specimen" columnNames="IDENTIFIER"/>
+     
+        <addPrimaryKey tableName="catissue_tmp_scg" columnNames="IDENTIFIER"/>
+            
+        <renameTable newTableName="catissue_specimen_coll_group" oldTableName="catissue_tmp_scg" />
+        <renameTable newTableName="catissue_specimen" oldTableName="catissue_tmp_specimen" />
+        <renameTable newTableName="CATISSUE_EXTERNAL_IDENTIFIER" oldTableName="catissue_tmp_ex_id" />
+    </changeSet>
+    
+    <changeSet id="enable constraints" author="nitesh" dbms="oracle">
+        <sql>call ENABLECONSTRAINT()</sql>
+    </changeSet>
+    
+    <changeSet author="nitesh" id="enable constraints" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+    </changeSet>
+    
+    <changeSet id="creating constraints for specimen table" author="nitesh">
+     
+    <addForeignKeyConstraint baseColumnNames="SPECIMEN_COLLECTION_GROUP_ID"
+                   baseTableName="CATISSUE_SPECIMEN"
+                   constraintName="FK1674810433BF33C5"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
+                           
+     <addForeignKeyConstraint baseColumnNames="REQ_SPECIMEN_ID"
+                   baseTableName="CATISSUE_SPECIMEN"
+                   constraintName="FK_REQ_SPECIMEN_ID"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_CP_REQ_SPECIMEN"/>
+     <addForeignKeyConstraint baseColumnNames="PARENT_SPECIMEN_ID"
+                   baseTableName="CATISSUE_SPECIMEN"
+                   constraintName="FK_PARENT_SPECIMEN"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_SPECIMEN"/>
+     
+        <createIndex 
+                indexName="idx_specimen_class"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="SPECIMEN_CLASS" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_specimen_type"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="SPECIMEN_TYPE" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_pathology_stat"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="PATHOLOGICAL_STATUS" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_init_quantity"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="INITIAL_QUANTITY" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_specimen_lineage"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="LINEAGE" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_unq_specimen_label"
+                tableName="CATISSUE_SPECIMEN"
+                unique="true">
+            <column name="LABEL" type="varchar(255)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_unq_specimen_barcode"
+                tableName="CATISSUE_SPECIMEN"
+                unique="true">
+            <column name="BARCODE" type="varchar(255)"/>
+        </createIndex>
+        <createIndex 
+                indexName="CATISSUE_SPECIMEN_ACT_STAT"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="ACTIVITY_STATUS" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="CATISSUE_SPECIMEN_COLL_STAT"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="COLLECTION_STATUS" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="INDX_CATISSUE_SPECIMEN_AVQTY"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="AVAILABLE_QUANTITY" type="varchar(50)"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="creating constraints for SCG table" author="nitesh">
+    
+    <addForeignKeyConstraint baseColumnNames="COLLECTION_PROTOCOL_REG_ID"
+                   baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                   constraintName="FKDEBAF1677E07C4AC"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_COLL_PROT_REG"/>
+                           
+     <addForeignKeyConstraint baseColumnNames="COLLECTION_PROTOCOL_EVENT_ID"
+                   baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                   constraintName="FKDEBAF16753B01F66"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_COLL_PROT_EVENT"/>
+     <addForeignKeyConstraint baseColumnNames="COLLECTOR_ID"
+                   baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                   constraintName="FK_USER_EVENT_MAPPING"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_USER"/>
+     <addForeignKeyConstraint baseColumnNames="RECEIVER_ID"
+                   baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                   constraintName="FK_RECEIVER_ID_SCG"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_USER"/>
+     <addForeignKeyConstraint baseColumnNames="SITE_ID"
+                   baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                   constraintName="FK_SITE_ID_SCG"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="CATISSUE_SITE"/>
+     
+        <createIndex 
+                indexName="idx_unique_scg_name"
+                tableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                unique="true">
+            <column name="NAME" type="varchar(255)"/>
+        </createIndex>
+        <createIndex 
+                indexName="idx_unique_scg_barcode"
+                tableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                unique="true">
+            <column name="BARCODE" type="varchar(255)"/>
+        </createIndex>
+        
+        <createIndex 
+                indexName="CATISSUE_SPC_COL_GRP_COL_STAT"
+                tableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                unique="false">
+            <column name="COLLECTION_STATUS" type="varchar(50)"/>
+        </createIndex>
+        <createIndex 
+                indexName="CATISSUE_SPEC_COLL_GRP_CPE_ID"
+                tableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                unique="false">
+            <column name="COLLECTION_PROTOCOL_EVENT_ID" type="varchar(50)"/>
+        </createIndex>            
+        <createIndex 
+                indexName="CATISSUE_SPEC_COLL_GRP_CPR_ID"
+                tableName="CATISSUE_SPECIMEN_COLL_GROUP"
+                unique="false">
+            <column name="COLLECTION_PROTOCOL_REG_ID" type="varchar(50)"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="creating constraints for external identifier" author="nitesh">
+        
+        <addPrimaryKey tableName="catissue_external_identifier" columnNames="IDENTIFIER"/>
+    
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+                   baseTableName="catissue_external_identifier"
+                   constraintName="FK5CF2FA2160773DB2"
+                   referencedColumnNames="IDENTIFIER"
+                   referencedTableName="catissue_specimen"/>
+    </changeSet>    
 </databaseChangeLog>         
+
+
