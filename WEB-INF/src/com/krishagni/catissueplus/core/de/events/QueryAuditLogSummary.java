@@ -2,11 +2,17 @@ package com.krishagni.catissueplus.core.de.events;
 
 import java.util.Date;
 
-import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class QueryAuditLogSummary {	
 	private Long id;
+	
+	private Long queryId;
+	
+	private String queryTitle;
 	
 	private UserSummary runBy;
 	
@@ -24,6 +30,22 @@ public class QueryAuditLogSummary {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getQueryId() {
+		return queryId;
+	}
+
+	public void setQueryId(Long queryId) {
+		this.queryId = queryId;
+	}
+
+	public String getQueryTitle() {
+		return queryTitle;
+	}
+
+	public void setQueryTitle(String queryTitle) {
+		this.queryTitle = queryTitle;
 	}
 
 	public UserSummary getRunBy() {
@@ -64,18 +86,5 @@ public class QueryAuditLogSummary {
 
 	public void setRecordCount(Long recordCount) {
 		this.recordCount = recordCount;
-	}
-	
-	public static QueryAuditLogSummary from(QueryAuditLog auditLog){
-		QueryAuditLogSummary summary = new QueryAuditLogSummary();
-		
-		summary.setId(auditLog.getId());
-		summary.setRunBy(UserSummary.fromUser(auditLog.getRunBy()));
-		summary.setTimeOfExecution(auditLog.getTimeOfExecution());
-		summary.setTimeToFinish(auditLog.getTimeToFinish());
-		summary.setRunType(auditLog.getRunType());
-		summary.setRecordCount(auditLog.getRecordCount());
-		
-		return summary;
-	}
+	}	
 }

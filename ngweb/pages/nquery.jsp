@@ -507,6 +507,27 @@
               </tbody>
             </table>
           </div>
+          <table class="table" style="margin-top: 5px; margin-bottom: 0px;" ng-if="queryData.isAdmin">
+            <thead>
+              <tr><th>Audit Logs</th></tr>
+            </thead>
+          </table>
+          <div style="max-height: 150px; overflow: auto" ng-if="queryData.isAdmin">
+            <table class="table table-condensed borderless">
+              <tbody>
+                <tr>
+                  <td class="item clearfix">
+                    <span ng-click="viewAllAuditLogs('LAST_24')">Last 24 Hrs</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="item clearfix">
+                    <span ng-click="viewAllAuditLogs('ALL')">ALL</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="col-xs-10">
           <table class="table list" overflow="auto" ng-if="queryData.queries.length > 0">
@@ -531,9 +552,9 @@
                     #{{query.id}} {{query.title}}
                   </a>
                 </td>
-                <td>{{formatUsername(query.createdBy)}}</td>
+                <td>{{query.createdBy | formatUsername}}</td>
                 <td>
-                  {{formatDate(query.lastModifiedOn)}}
+                  {{query.lastModifiedOn | formatDate}}
                   <div class="pull-right btn-group btn-group-xs" ng-if="query.highlight">
                     <button type="button" class="btn btn-default" ng-click="runQuery(query)"
                       tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
@@ -574,38 +595,41 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-7"><h4>Query #{{query.id}}: {{query.title}}</h4></div>
-      </div>
-      <!-- div class="row">
-        <div class="col-xs-7"><h3>{{query.title}}</h3></div>
-      </div -->
-      <div class="row">
-        <div class="col-xs-11">
-          <div ng-if="!auditLogs || auditLogs == 0">No audit logs for this query</div>
+        <div class="col-xs-12">
+          <div ng-if="!auditLogs || auditLogs == 0">No audit logs to show</div>
           <table class="table list" overflow="auto" ng-if="auditLogs && auditLogs.length > 0">
             <thead>
               <tr>
-                <th class="col-xs-3">Executed By</th>
-                <th class="col-xs-3">Time</th>
-                <th class="col-xs-2">Run Time (in ms)</th>
+                <th class="col-xs-4">Title</th>
+                <th class="col-xs-2">Executed By</th>
+                <th class="col-xs-2">Execution Time</th>
+                <th class="col-xs-2">Run Time</th>
                 <th class="col-xs-2">Type</th>
-                <th class="col-xs-1">&nbsp;</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="auditLog in auditLogs"
                   ng-mouseenter="auditLog.highlight=true"
                   ng-mouseleave="auditLog.highlight=false" style="height:41px;">
-                <td>{{formatUsername(auditLog.runBy)}}</td>
-                <td>{{formatDate(auditLog.timeOfExecution)}}</td>
-                <td>{{auditLog.timeToFinish}}</td>
-                <td>{{auditLog.runType}}</td>
-                <td>
-                  <button type="button" class="btn btn-xs btn-default" ng-click="viewQuerySql(auditLog)"
-                    tooltip-placement="bottom" tooltip="View Generated SQL" tooltip-append-to-body="true"
-                    ng-if="auditLog.highlight">
-                    <i class="fa fa-code"></i> 
-                  </button>
+                <td ng-if="auditLog.queryId">
+                  <a style="cursor:pointer;" ng-click="editQuery({id: auditLog.queryId})" 
+                    tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">
+                    #{{auditLog.queryId}} {{auditLog.queryTitle}}
+                  </a>
+                </td>
+                <td ng-if="!auditLog.queryId">Unsaved Query</td>
+                <td>{{auditLog.runBy | formatUsername}}</td>
+                <td>{{auditLog.timeOfExecution | formatDate}}</td>
+                <td>{{auditLog.timeToFinish | formatDuration}}</td>
+                <td class="clearfix">
+                  {{auditLog.runType}}
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-xs btn-default" ng-click="viewQuerySql(auditLog)"
+                      tooltip-placement="bottom" tooltip="View Generated SQL" tooltip-append-to-body="true"
+                      ng-if="auditLog.highlight">
+                      <i class="fa fa-code"></i> 
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -1061,15 +1085,48 @@
         <button class="btn btn-primary" ng-click="close()">Close</button>
       </div>
     </script>
- 
+
+    <script type="text/ng-template" id="view-audit-logs.html">
+      <div class="modal-header" style="height: 10%">
+        <h3 class="modal-title">Audit Log of #{{query.id}}</h3> 
+      </div>
+      <div class="modal-body" style="height: 75%">
+        <table class="table" style="margin-bottom: 0px;">
+          <thead>
+            <tr>
+              <th class="col-xs-3">Execution Time</th>
+              <th class="col-xs-3">Time to Finish</th>
+              <th class="col-xs-3">Run Type</th>
+            </tr>
+          </thead>
+        </table>
+        <div style="height:90%; width: 100%; overflow:auto;">
+          <table class="table list">
+            <tbody>
+              <tr ng-repeat="auditLog in auditLogs">
+                <td class="col-xs-3">{{auditLog.timeOfExecution | formatDate}}</td>
+                <td class="col-xs-3">{{auditLog.timeToFinish | formatDuration}}</td>
+                <td class="col-xs-3">{{auditLog.runType}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer" style="height:12%">
+        <button class="btn btn-primary" ng-click="close()">Close</button>
+      </div>
+    </script>
+    
     <script>
       var query = query || {};
       query.global = query.global || {};
       query.global.userId = <%= ((edu.wustl.common.beans.SessionDataBean)session.getAttribute("sessionData")).getUserId() %>
+      query.global.isAdmin = <%= ((edu.wustl.common.beans.SessionDataBean)session.getAttribute("sessionData")).isAdmin() %>
     </script>
 
     <script src="../js/utility.js" type="text/javascript"></script>
     <script src="../js/wrapper.js" type="text/javascript"></script>
+    <script src="../js/filters.js" type="text/javascript"></script>
     <script src="../js/services.js" type="text/javascript"></script>
     <script src="../js/forms-service.js" type="text/javascript"></script>
     <script src="../js/ncontrollers.js" type="text/javascript"></script>

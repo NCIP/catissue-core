@@ -3,12 +3,18 @@ package com.krishagni.catissueplus.core.de.events;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqQueryAuditLogsEvent extends RequestEvent {
+	public static enum Type {
+		ALL,
+		LAST_24
+	};
 	
 	private Long savedQueryId;
 	
 	private int startAt;
 	
-	private int maxRecords;	
+	private int maxRecords;
+	
+	private Type type;
 
 	public Long getSavedQueryId() {
 		return savedQueryId;
@@ -32,5 +38,13 @@ public class ReqQueryAuditLogsEvent extends RequestEvent {
 
 	public void setMaxRecords(int maxRecords) {
 		this.maxRecords = maxRecords;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 }

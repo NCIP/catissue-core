@@ -1,5 +1,5 @@
 
-angular.module('plus.controllers', ['checklist-model'])
+angular.module('plus.controllers', ['checklist-model', 'ui.app'])
   .controller('QueryController', ['$scope', '$sce', '$modal', '$q', '$timeout', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, $timeout, CollectionProtocolService, FormsService, QueryService, UsersService) {
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
@@ -403,6 +403,7 @@ angular.module('plus.controllers', ['checklist-model'])
     };
 
     $scope.queryData = {
+      isAdmin: query.global.isAdmin,
       view: 'dashboard',
       cpList: [],
       forms: undefined,
@@ -567,12 +568,30 @@ angular.module('plus.controllers', ['checklist-model'])
       $scope.getAuditLogs(query);
     };
  
+    $scope.viewAllAuditLogs = function(type) {
+      if (!type) { type = 'ALL'; }
+      QueryService.getAllAuditLogs(type, 0, 500).then(
+        function(auditLogs) {
+          $scope.auditLogs = auditLogs;
+          if (auditLogs.length > 0) {
+            $scope.queryData.view = 'log';
+          } else {
+            Utility.notify(
+              $("#notifications"),
+              "No audit logs to show for the selected period",
+              "info",
+              true);
+          }
+        }
+      );
+    };
+
     $scope.getAuditLogs = function(query) {
       QueryService.getAuditLogs(query.id, 0, 100).then(
         function(auditLogs) {
           $scope.auditLogs = auditLogs;
           if (auditLogs.length > 0) {
-            $scope.queryData.view = 'log';
+            $scope.displayAuditLogs(auditLogs);
           } else {
             Utility.notify(
               $("#notifications"),
@@ -582,6 +601,31 @@ angular.module('plus.controllers', ['checklist-model'])
           }
         });
     };
+
+    $scope.displayAuditLogs = function(auditLogs) {
+      var modalInstance = $modal.open({
+        templateUrl: 'view-audit-logs.html',
+        controller: DisplayAuditLogsCtrl,
+        resolve: {
+          query: function() {
+            return $scope.query;
+          },
+
+          auditLogs: function() {
+            return auditLogs;
+          }
+        }
+      });
+    };
+
+    var DisplayAuditLogsCtrl = function($scope, $modalInstance, query, auditLogs) {
+      $scope.query = query;
+      $scope.auditLogs = auditLogs;
+      
+      $scope.close = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
  
     $scope.viewQuerySql = function(auditLog) {
       var modalInstance = $modal.open({
@@ -589,10 +633,6 @@ angular.module('plus.controllers', ['checklist-model'])
         controller: ViewQuerySqlCtrl,
         windowClass: 'view-query-sql',
         resolve: {
-          queryId: function() {
-            return $scope.query.id;
-          },
-
           auditLogId: function () {
             return auditLog.id;
           }
@@ -600,10 +640,10 @@ angular.module('plus.controllers', ['checklist-model'])
       });
     };
  
-    ViewQuerySqlCtrl = function($scope, $modalInstance, queryId, auditLogId) {
+    ViewQuerySqlCtrl = function($scope, $modalInstance, auditLogId) {
       $scope.auditLog = null;
  
-      QueryService.getAuditLog(queryId, auditLogId).then(
+      QueryService.getAuditLog(auditLogId).then(
         function(auditLog) {
           $scope.auditLog = auditLog;
         });

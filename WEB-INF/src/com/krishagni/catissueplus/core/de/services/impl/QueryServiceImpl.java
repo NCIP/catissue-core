@@ -3,8 +3,8 @@ package com.krishagni.catissueplus.core.de.services.impl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -72,6 +72,7 @@ import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
+import com.krishagni.catissueplus.core.de.repository.QueryAuditLogDao;
 import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
@@ -569,18 +570,38 @@ public class QueryServiceImpl implements QueryService {
     @PlusTransactional
     public QueryAuditLogsEvent getAuditLogs(ReqQueryAuditLogsEvent req){
 		try {
+			SessionDataBean session = req.getSessionDataBean();			
+			Long userId = session.getUserId();
+			
 			Long savedQueryId = req.getSavedQueryId();
 			int startAt = req.getStartAt() < 0 ? 0 : req.getStartAt();
 			int maxRecs = req.getMaxRecords() < 0 ? 0 : req.getMaxRecords();
 
-			List<QueryAuditLog> auditLogs = daoFactory.getQueryAuditLogDao()
-					.getAuditLogs(savedQueryId, startAt, maxRecs);
-
-			List<QueryAuditLogSummary> result = new ArrayList<QueryAuditLogSummary>();
-			for (QueryAuditLog auditLog : auditLogs) {
-				result.add(QueryAuditLogSummary.from(auditLog));
+			QueryAuditLogDao logDao = daoFactory.getQueryAuditLogDao();
+			List<QueryAuditLogSummary> result = null;			
+			if (savedQueryId == null || savedQueryId == -1) {
+				if (!session.isAdmin()) {
+					return QueryAuditLogsEvent.forbidden();
+				}
+				
+				switch (req.getType()) {
+					case ALL:
+						result = logDao.getAuditLogs(startAt, maxRecs);
+						break;
+						
+					case LAST_24:
+						Calendar cal = Calendar.getInstance();
+						cal.add(Calendar.DAY_OF_MONTH, -1);
+						Date intervalSt = cal.getTime();						
+						Date intervalEnd = Calendar.getInstance().getTime();
+						result = logDao.getAuditLogs(intervalSt, intervalEnd, startAt, maxRecs);
+						break;
+				}
+								
+			} else {
+				result = logDao.getAuditLogs(savedQueryId, userId, startAt, maxRecs);
 			}
-
+			
 			return QueryAuditLogsEvent.ok(result);
 		} catch (Exception e) {
 			String message = e.getMessage();
@@ -596,8 +617,8 @@ public class QueryServiceImpl implements QueryService {
     @PlusTransactional
     public QueryAuditLogEvent getAuditLog(ReqQueryAuditLogEvent req) {
 		try {
-			Long queryId = req.getSavedQueryId(), auditLogId = req.getAuditLogId();
-			QueryAuditLog queryAuditLog = daoFactory.getQueryAuditLogDao().getAuditLog(queryId, auditLogId);
+			Long auditLogId = req.getAuditLogId();
+			QueryAuditLog queryAuditLog = daoFactory.getQueryAuditLogDao().getAuditLog(auditLogId);
 			return QueryAuditLogEvent.ok(QueryAuditLogDetail.from(queryAuditLog));
 		} catch (Exception e) {
 			String message = e.getMessage();
