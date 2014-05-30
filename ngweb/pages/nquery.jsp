@@ -543,14 +543,16 @@
                   ng-mouseenter="query.highlight=true"
                   ng-mouseleave="query.highlight=false" 
                   ng-class="{selected: queryData.selectedQueries.indexOf(query) > -1}"> 
-                <td>
+                <td class="clearfix">
                   <div class="pull-left query-select-cb">
                     <input type="checkbox" checklist-model="queryData.selectedQueries" checklist-value="query">
                   </div>
-                  <a style="cursor:pointer;" ng-click="editQuery(query)" 
-                    tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">
-                    #{{query.id}} {{query.title}}
-                  </a>
+                  <div class="pull-left" style="width: 90%;">
+                    <a style="cursor:pointer;" ng-click="editQuery(query)" 
+                      tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">
+                      #{{query.id}} {{query.title}}
+                    </a>
+                  </div>
                 </td>
                 <td>{{query.createdBy | formatUsername}}</td>
                 <td>
