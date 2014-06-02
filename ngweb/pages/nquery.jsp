@@ -8,7 +8,7 @@
     <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/jquery/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/angularjs/css/ng-grid.min.css" rel="stylesheet" type="text/css"></link>
-    <link href="../external/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/font-awesome-4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"></link>
 
     <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="../external/jquery/jquery-ui.min.js" type="text/javascript"></script>
@@ -777,6 +777,11 @@
                   <div class="btn btn-sm btn-default" 
                        ng-click="addOp('not')"
                        ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="not">NOT</div>
+                  <div class="btn btn-sm btn-default"
+                       ng-click="addOp('nthchild')"
+                       ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="nthchild">
+                       <span class="fa fa-share-alt"></span>
+                  </div>
                 </div>
 
                 <div class="btn-group">
@@ -797,7 +802,7 @@
                   <div ng-switch-when="op" ng-click="toggleOp($index)" 
                        class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;"
                        tooltip="Click to toggle operator" tooltip-placement="bottom">
-                    <span ng-bind-html="getOpCode(node.value)"></span>
+                    <span class="fa" ng-bind-html="getOpCode(node.value)"></span>
                     <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
                   </div>
                   <div ng-switch-when="paren" class="filter-item-valign paren-node" style="position: relative;">

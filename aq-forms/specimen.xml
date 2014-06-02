@@ -3,6 +3,10 @@
 		<name>Specimen</name>
 		<caption>Specimen</caption>
 		<table>CATISSUE_SPECIMEN</table>
+		<hierarchyTable>CATISSUE_SPECIMEN_HIERARCHY</hierarchyTable>
+		<hierarchyAncestorColumn>ANCESTOR_ID</hierarchyAncestorColumn>
+		<hierarchyDescendentColumn>DESCENDENT_ID</hierarchyDescendentColumn>
+
 		<row>
 			<numberField>
 				<name>id</name>
@@ -176,6 +180,5 @@
                                 <extnFkCol>RECORD_ID</extnFkCol>
                         </subForm>
                 </row>
-
 	</view>
 </form>

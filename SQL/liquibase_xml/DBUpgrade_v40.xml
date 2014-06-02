@@ -2653,6 +2653,26 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                    referencedColumnNames="IDENTIFIER"
                    referencedTableName="catissue_specimen"/>
     </changeSet>    
+
+     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
+       <sqlFile 
+            encoding="utf8"
+            path="create_specimen_hierarchy_mysql.sql"
+            relativeToChangelogFile="true"
+            endDelimiter="//"
+            splitStatements="true"
+            stripComments="true"/>
+     </changeSet>
+
+     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="oracle">
+       <sqlFile 
+            encoding="utf8"
+            path="create_specimen_hierarchy_oracle.sql"
+            relativeToChangelogFile="true"
+            endDelimiter="/"
+            splitStatements="true"
+            stripComments="true"/>
+     </changeSet>
 </databaseChangeLog>         
 
 

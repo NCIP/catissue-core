@@ -18,7 +18,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       and: {name: 'and', desc: 'And', code: 'and', symbol: 'and', model: 'AND'},
       or: {name: 'or', desc: 'Or', code: 'or', symbol: 'or', model: 'OR'},
       intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand', model: 'PAND'},
-      not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'}
+      not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'},
+      nthchild: {name: 'nthchild', desc: 'Any child', code: '&#xf1e0;', symbol: 'nthchild', model: 'NTHCHILD'}
     };
 
     var getOpByModel = function(model) {
@@ -114,44 +115,55 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       return query;
     };
 
-    var getQueryExprForValidation = function(exprNodes) {
-      var expr = [];
-      var success = true, parenCnt = 0;
-      for (var i = 0; i < exprNodes.length; ++i) {
-        if (exprNodes[i].type == 'paren') {
-          if (exprNodes[i].value == '(') {
-            parenCnt++;
-          } else if (exprNodes[i].value == ')') {
-            parenCnt--;
+    var isValidQueryExpr = function(exprNodes) {
+      var parenCnt = 0, next = 'filter', last = 'filter';
 
-            if (parenCnt < 0) {
-              success = false;
-              break;
+      for (var i = 0; i < exprNodes.length; ++i) {
+        var exprNode = exprNodes[i];
+
+        if (exprNode.type == 'paren' && exprNode.value == '(') {
+          ++parenCnt;  
+          continue;
+        } else if (exprNode.type == 'paren' && exprNode.value == ')') {
+          --parenCnt;
+          if (parenCnt < 0) {
+            return false;
+          }
+          continue;
+        } else if (exprNode.type == 'op' && exprNode.value == 'nthchild' && next == 'filter') { 
+          if (i + 1 < exprNodes.length) {
+            var nextToken = exprNodes[i + 1];
+            if (nextToken.type == 'paren' && nextToken.value == '(') {
+              ++parenCnt;
+              ++i;
+              last = 'op';
+              continue;
             }
           }
+
+          return false; 
+        } else if (exprNode.type == 'op' && exprNode.value == 'not' && next == 'filter') {
+          last = 'op';
+          continue;
+        } else if (exprNode.type == 'op' && next != 'op') {
+          return false;
+        } else if (exprNode.type == 'filter' && next != 'filter') {
+          return false;
+        } else if (exprNode.type == 'op' && next == 'op' && exprNode.value != 'not' && exprNode.value != 'nthchild') {
+          next = 'filter';
+          last = 'op';
+          continue;
+        } else if (exprNode.type == 'filter' && next == 'filter') {
+          next = 'op';
+          last = 'filter';
+          continue;
+        } else {
+          return false;
         }
-
-        expr.push(exprNodes[i].value)
       }
 
-      if (success && parenCnt == 0) {
-        return {status: true, expr: expr.join(" ")};
-      } else {
-        return {status: false};
-      }
+      return parenCnt == 0 && last == 'filter';
     };
-
-    var isValidQueryExpr = function(exprNodes) {
-      var result = getQueryExprForValidation(exprNodes);
-
-      if (!result.status) {
-        return false;
-      }
-
-      var qre = /^(\(*\s*)*(not)?\s*(\(*\s*)*\d+\s*(\)*\s*)*((and|or|intersect)\s*(\(*\s*)*(not)?\s*(\(*\s*)*\d+(\s*\)*)*\s*)*$/
-      var result = qre.test(result.expr);
-      return result;
-    }
 
     $scope.filterCpForm = function(form) {
       return $scope.queryData.selectedCp.id == -1 || form.name != 'CollectionProtocol';
@@ -320,7 +332,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         node.value = 'intersect';
       } else if (node.value == 'intersect') {
         node.value = 'and';
-      }
+      } 
     };
 
     $scope.getFilterDesc = function(filterId) {
