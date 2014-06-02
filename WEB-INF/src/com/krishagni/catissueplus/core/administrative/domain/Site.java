@@ -1,11 +1,9 @@
 
-package com.krishagni.catissueplus.core.biospecimen.domain;
+package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.Address;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 
 public class Site {

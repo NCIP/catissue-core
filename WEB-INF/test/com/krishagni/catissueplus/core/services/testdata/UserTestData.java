@@ -14,6 +14,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
@@ -29,7 +30,6 @@ import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
 import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.Privilege;
 import com.krishagni.catissueplus.core.privileges.domain.Role;

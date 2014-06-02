@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
 public class UserDetails {

@@ -234,4 +234,13 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
 		<property name="instituteFactory" ref="instituteFact"/>
 	</bean>
+	<bean id="siteFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SiteFactoryImpl">
+        <property name="daoFactory" ref="biospecimenDaoFactory"/>       
+	</bean>
+    
+	<bean id="siteService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SiteServiceImpl">
+        <property name="daoFactory" ref="biospecimenDaoFactory"/>
+        <property name="siteFactory" ref="siteFactory" />
+	</bean>
+	
  </beans>

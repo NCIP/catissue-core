@@ -108,7 +108,7 @@
 
             <key column="USER_ID"/>
             <many-to-many
-                class="com.krishagni.catissueplus.core.biospecimen.domain.Site"
+                class="com.krishagni.catissueplus.core.administrative.domain.Site"
                 column="SITE_ID"/>
          </set>
         

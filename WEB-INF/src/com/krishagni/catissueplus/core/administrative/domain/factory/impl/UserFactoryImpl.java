@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
@@ -18,7 +19,6 @@ import com.krishagni.catissueplus.core.administrative.events.UserCPRoleDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.SetUpdater;

@@ -1,8 +1,8 @@
 
 package com.krishagni.catissueplus.core.privileges.domain;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 
 public class CPSiteRole { 
 

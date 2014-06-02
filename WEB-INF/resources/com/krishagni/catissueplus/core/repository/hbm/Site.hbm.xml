@@ -5,7 +5,7 @@
 
 <hibernate-mapping auto-import="false">
     <class
-        name="com.krishagni.catissueplus.core.biospecimen.domain.Site"
+        name="com.krishagni.catissueplus.core.administrative.domain.Site"
         table="CATISSUE_SITE" lazy="true">
     
     	<cache usage="read-write" />
@@ -28,12 +28,55 @@
             length="255"
             not-null="true"
             unique="true"/>
-
-
+            
+        <property
+            name="type"
+            type="string"
+            update="true"
+            insert="true"
+            column="TYPE"
+            length="50"
+        />
+        
+         <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+        
+         <property
+            name="emailAddress"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMAIL_ADDRESS"
+            length="255"
+         />
+            
+        <set name="coordinatorCollection"  table="CATISSUE_SITE_USER">
+         <key column="SITE_ID"/>
+         <many-to-many 
+         	column="USER_ID" 
+         	class="com.krishagni.catissueplus.core.administrative.domain.User"/>
+       </set>
+        
+        <many-to-one name="address" 
+            class="com.krishagni.catissueplus.core.administrative.domain.Address" 
+            column="ADDRESS_ID" 
+            cascade="all" 
+            not-null="true" />
+           
     <query name="getSiteByName">
-    	SELECT site FROM com.krishagni.catissueplus.core.biospecimen.domain.Site site WHERE site.name = :siteName
+    	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.name = :siteName
+    </query>
+     <query name="getSiteById">
+    	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.id = :siteId
     </query>
  
  </class>
 
 </hibernate-mapping>
+ 	

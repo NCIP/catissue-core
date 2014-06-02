@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
-import com.krishagni.catissueplus.core.biospecimen.domain.Site;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;

@@ -2673,6 +2673,36 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             splitStatements="true"
             stripComments="true"/>
      </changeSet>
+     
+      <changeSet author="ajaysamgir" id="Create table CATISSUE_SITE_USER " failOnError="true">
+       <createTable tableName="CATISSUE_SITE_USER">
+         <column name="SITE_ID" type="${int.type}">
+         </column>
+         
+         <column name="USER_ID" type="${int.type}">
+         </column>
+         
+       </createTable>
+       
+       <addForeignKeyConstraint
+               constraintName="FK_SITE_ID_BY_CAT_SITE_ID"
+               baseTableName="CATISSUE_SITE_USER"
+               baseColumnNames="SITE_ID"
+               referencedTableName="CATISSUE_SITE"
+               referencedColumnNames="IDENTIFIER" />
+               
+       <addForeignKeyConstraint
+               constraintName="FK_USER_ID_BY_CAT_USER_ID"
+               baseTableName="CATISSUE_SITE_USER"
+               baseColumnNames="USER_ID"
+               referencedTableName="CATISSUE_USER"
+               referencedColumnNames="IDENTIFIER" />
+       
+ 	</changeSet>
+    
+	<changeSet author="ajaysamgir" id="Migrate CATISSUE_SITE table data to CATISSUE_SITE_USER " failOnError="true">
+   		<sql>INSERT INTO Catissue_Site_User(select Identifier,User_ID from Catissue_Site where Identifier IS NOT NULL AND USER_ID IS NOT NULL)</sql>
+	</changeSet>
 </databaseChangeLog>         
 
 

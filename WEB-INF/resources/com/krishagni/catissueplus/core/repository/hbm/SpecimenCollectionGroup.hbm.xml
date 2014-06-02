@@ -64,7 +64,7 @@
 		<many-to-one name="collectionProtocolEvent"
 			class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" column="COLLECTION_PROTOCOL_EVENT_ID" />
 
-		<many-to-one name="collectionSite" class="edu.wustl.catissuecore.domain.Site"
+		<many-to-one name="collectionSite" class="com.krishagni.catissueplus.core.administrative.domain.Site"
 			column="SITE_ID" />
 
 		<set name="specimenCollection" table="CATISSUE_SPECIMEN" inverse="true"

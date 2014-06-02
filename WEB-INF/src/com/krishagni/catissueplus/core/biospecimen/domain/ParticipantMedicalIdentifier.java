@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import edu.wustl.catissuecore.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class ParticipantMedicalIdentifier {
 

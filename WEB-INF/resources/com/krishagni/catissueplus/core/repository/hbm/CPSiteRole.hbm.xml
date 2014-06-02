@@ -23,7 +23,7 @@
 
         <many-to-one
             name="site"
-            class="com.krishagni.catissueplus.core.biospecimen.domain.Site"
+            class="com.krishagni.catissueplus.core.administrative.domain.Site"
             cascade="none"
             update="true"
             insert="true"

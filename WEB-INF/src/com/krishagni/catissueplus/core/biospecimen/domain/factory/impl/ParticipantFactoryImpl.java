@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -21,8 +22,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIden
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
-
-import edu.wustl.catissuecore.domain.Site;
 
 public class ParticipantFactoryImpl implements ParticipantFactory {
 

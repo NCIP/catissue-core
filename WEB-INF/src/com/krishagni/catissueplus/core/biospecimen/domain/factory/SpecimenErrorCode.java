@@ -16,7 +16,7 @@ public enum SpecimenErrorCode implements CatissueErrorCode {
 	INSUFFICIENT_SPECIMEN_QTY(1008,"Cannot distribute available specimen quantity among the aliquots due to insufficient amount."),
 	INVALID_ALIQUOT_COUNT(1009, "Aliquot count should be greter than 0"),
 	CONTAINER_FULL(1010,"Cannot store all the aliquots in the same container at this time due to insufficient number of storage locations"),
-	ERRORS(1011, "Please resolve the highlighted errors.");
+	ERRORS(1011, "Please resolve the errors listed in error list.");
 
 	private int code;
 

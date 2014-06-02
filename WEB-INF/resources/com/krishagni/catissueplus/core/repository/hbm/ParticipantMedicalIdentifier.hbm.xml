@@ -40,7 +40,7 @@
 
         <many-to-one
             name="site"
-            class="edu.wustl.catissuecore.domain.Site"
+            class="com.krishagni.catissueplus.core.administrative.domain.Site"
             cascade="none"
              
             update="true"

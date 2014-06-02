@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
@@ -19,7 +20,7 @@ import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.Site;
+
 
 public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGroupFactory {
 
