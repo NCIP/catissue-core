@@ -124,7 +124,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         if (exprNode.type == 'paren' && exprNode.value == '(') {
           ++parenCnt;  
           continue;
-        } else if (exprNode.type == 'paren' && exprNode.value == ')') {
+        } else if (exprNode.type == 'paren' && exprNode.value == ')' && last != 'op') {
           --parenCnt;
           if (parenCnt < 0) {
             return false;
