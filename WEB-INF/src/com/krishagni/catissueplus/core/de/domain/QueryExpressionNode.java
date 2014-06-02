@@ -13,6 +13,7 @@ public class QueryExpressionNode {
 		AND ("and"), 
 		OR ("or"),
 		PAND ("pand"),
+		NTHCHILD("nthchild"),
 		NOT ("not");
 		
 		private String symbol;

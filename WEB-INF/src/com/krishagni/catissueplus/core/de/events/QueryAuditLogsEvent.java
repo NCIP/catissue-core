@@ -31,6 +31,10 @@ public class QueryAuditLogsEvent extends ResponseEvent {
 		return errorResp(EventStatus.INTERNAL_SERVER_ERROR, message, t);
 	}
 	
+	public static QueryAuditLogsEvent forbidden() {
+		return errorResp(EventStatus.NOT_AUTHORIZED, null, null);
+	}
+	
 	private static QueryAuditLogsEvent errorResp(EventStatus status, String message, Throwable t) {
 		QueryAuditLogsEvent resp = new QueryAuditLogsEvent();
 		resp.setStatus(status);

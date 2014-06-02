@@ -4,6 +4,7 @@ angular.module('plus.services', [])
     var baseUrl         = '/catissuecore/rest/ng/query/';
     var savedQueriesUrl = '/catissuecore/rest/ng/saved-queries/';
     var foldersUrl      = '/catissuecore/rest/ng/query-folders/';
+    var auditLogsUrl    = '/catissuecore/rest/ng/query-audit-logs/';
 
     var successfn = function(result) { return result.data; };
 
@@ -84,8 +85,12 @@ angular.module('plus.services', [])
         return $http.get(savedQueriesUrl + queryId + "/audit-logs" + '?start=' + startAt + '&max=' + maxRecs).then(successfn);
       },
 
-      getAuditLog: function(queryId, auditLogId) {
-        return $http.get(savedQueriesUrl + queryId + "/audit-logs/" + auditLogId).then(successfn);
+      getAllAuditLogs: function(type, startAt, maxRecs) {
+        return $http.get(auditLogsUrl + '?type=' + type + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
+      },
+
+      getAuditLog: function(auditLogId) {
+        return $http.get(auditLogsUrl + auditLogId).then(successfn);
       }
     };
   })

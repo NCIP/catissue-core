@@ -173,6 +173,7 @@ public class SavedQueriesController {
 		req.setStartAt(start);
 		req.setMaxRecords(max);
 		req.setSavedQueryId(savedQueryId);
+		req.setSessionDataBean(getSession());
 		
 		QueryAuditLogsEvent resp = querySvc.getAuditLogs(req);
 		if(resp.getStatus() != EventStatus.OK) {
@@ -180,24 +181,6 @@ public class SavedQueriesController {
 		}
 		
 		return resp.getAuditLogs();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET,  value = "/{id}//audit-logs/{auditLogId}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public QueryAuditLogDetail getQueryAuditLog(
-			@PathVariable("id") Long savedQueryId,
-			@PathVariable("auditLogId") Long auditLogId){
-		ReqQueryAuditLogEvent req = new ReqQueryAuditLogEvent();
-		req.setSavedQueryId(savedQueryId);
-		req.setAuditLogId(auditLogId);
-		
-		QueryAuditLogEvent resp = querySvc.getAuditLog(req);
-		if (resp.getStatus() != EventStatus.OK) {
-			return null;
-		}
-		
-		return resp.getAuditLog();
 	}
 	
 	private SessionDataBean getSession() {

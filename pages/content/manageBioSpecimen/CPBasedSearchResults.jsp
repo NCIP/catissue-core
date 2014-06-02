@@ -51,7 +51,7 @@
     <link rel="stylesheet" type="text/css" href="ngweb/external/select2/css/select2.css"></link>
     <link href="ngweb/external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
     <link rel="stylesheet" type="text/css" href="jss/app/css/tree.css"></link> 
-    <link href="ngweb/external/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet"/>
+    <link href="ngweb/external/font-awesome-4.1.0/css/font-awesome.css" rel="stylesheet"/>
     <link href="ngweb/external/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     
     <script type="text/javascript" src="ngweb/external/jquery/jquery.min.js"></script>

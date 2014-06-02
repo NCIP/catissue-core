@@ -34,12 +34,77 @@
       
     <property name="sql" column="QUERY_SQL"/>
      
-    <query name="getAuditLogs">
-      from QueryAuditLog where queryId = :queryId order by id desc
-    </query>
+    <sql-query name="getAuditLogs">
+      <return-scalar column="logId" type="long"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="firstName" type="string"/>
+      <return-scalar column="lastName" type="string"/>
+      <return-scalar column="queryId" type="long"/>
+      <return-scalar column="queryTitle" type="string"/>
+      <return-scalar column="executionTime" type="timestamp"/>
+      <return-scalar column="runTime" type="long"/>
+      <return-scalar column="runType" type="string"/>
+     
+      select
+        al.identifier as logId, u.identifier as userId, 
+        u.first_name as firstName, u.last_name as lastName,
+        q.identifier as queryId, q.title as queryTitle,
+        al.time_of_exec as executionTime, al.time_to_finish as runTime, 
+        al.run_type as runType
+      from
+        catissue_query_audit_logs al
+        inner join catissue_user u on u.identifier = al.run_by
+        left join catissue_saved_queries q on q.identifier = al.query_id
+      order by
+        al.identifier desc
+    </sql-query>
+
+    <sql-query name="getAuditLogsBtwn">
+      <return-scalar column="logId" type="long"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="firstName" type="string"/>
+      <return-scalar column="lastName" type="string"/>
+      <return-scalar column="queryId" type="long"/>
+      <return-scalar column="queryTitle" type="string"/>
+      <return-scalar column="executionTime" type="timestamp"/>
+      <return-scalar column="runTime" type="long"/>
+      <return-scalar column="runType" type="string"/>
+     
+      select
+        al.identifier as logId, u.identifier as userId, 
+        u.first_name as firstName, u.last_name as lastName,
+        q.identifier as queryId, q.title as queryTitle,
+        al.time_of_exec as executionTime, al.time_to_finish as runTime, 
+        al.run_type as runType
+      from
+        catissue_query_audit_logs al
+        inner join catissue_user u on u.identifier = al.run_by
+        left join catissue_saved_queries q on q.identifier = al.query_id
+      where
+        al.time_of_exec between :intervalSt and :intervalEnd
+      order by
+        al.identifier desc
+    </sql-query>
+
+    <sql-query name="getAuditLogsByQueryAndUser">
+      <return-scalar column="identifier" type="long"/>
+      <return-scalar column="time_of_exec" type="timestamp"/>
+      <return-scalar column="time_to_finish" type="long"/>
+      <return-scalar column="run_type" type="string"/>
+
+      select 
+        identifier, time_of_exec, time_to_finish, run_type
+      from
+        catissue_query_audit_logs 
+      where
+        query_id = :queryId and
+        run_by = :userId
+      order by
+        identifier desc
+    </sql-query>
 
     <query name="getAuditLog">
-      from QueryAuditLog where queryId = :queryId and id = :auditLogId
+      from QueryAuditLog where id = :auditLogId
     </query>
   </class>
 </hibernate-mapping>

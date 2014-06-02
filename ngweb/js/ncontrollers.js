@@ -1,5 +1,5 @@
 
-angular.module('plus.controllers', ['checklist-model'])
+angular.module('plus.controllers', ['checklist-model', 'ui.app'])
   .controller('QueryController', ['$scope', '$sce', '$modal', '$q', '$timeout', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, $timeout, CollectionProtocolService, FormsService, QueryService, UsersService) {
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
@@ -18,7 +18,8 @@ angular.module('plus.controllers', ['checklist-model'])
       and: {name: 'and', desc: 'And', code: 'and', symbol: 'and', model: 'AND'},
       or: {name: 'or', desc: 'Or', code: 'or', symbol: 'or', model: 'OR'},
       intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand', model: 'PAND'},
-      not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'}
+      not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'},
+      nthchild: {name: 'nthchild', desc: 'Any child', code: '&#xf1e0;', symbol: 'nthchild', model: 'NTHCHILD'}
     };
 
     var getOpByModel = function(model) {
@@ -114,44 +115,55 @@ angular.module('plus.controllers', ['checklist-model'])
       return query;
     };
 
-    var getQueryExprForValidation = function(exprNodes) {
-      var expr = [];
-      var success = true, parenCnt = 0;
-      for (var i = 0; i < exprNodes.length; ++i) {
-        if (exprNodes[i].type == 'paren') {
-          if (exprNodes[i].value == '(') {
-            parenCnt++;
-          } else if (exprNodes[i].value == ')') {
-            parenCnt--;
+    var isValidQueryExpr = function(exprNodes) {
+      var parenCnt = 0, next = 'filter', last = 'filter';
 
-            if (parenCnt < 0) {
-              success = false;
-              break;
+      for (var i = 0; i < exprNodes.length; ++i) {
+        var exprNode = exprNodes[i];
+
+        if (exprNode.type == 'paren' && exprNode.value == '(') {
+          ++parenCnt;  
+          continue;
+        } else if (exprNode.type == 'paren' && exprNode.value == ')' && last != 'op') {
+          --parenCnt;
+          if (parenCnt < 0) {
+            return false;
+          }
+          continue;
+        } else if (exprNode.type == 'op' && exprNode.value == 'nthchild' && next == 'filter') { 
+          if (i + 1 < exprNodes.length) {
+            var nextToken = exprNodes[i + 1];
+            if (nextToken.type == 'paren' && nextToken.value == '(') {
+              ++parenCnt;
+              ++i;
+              last = 'op';
+              continue;
             }
           }
+
+          return false; 
+        } else if (exprNode.type == 'op' && exprNode.value == 'not' && next == 'filter') {
+          last = 'op';
+          continue;
+        } else if (exprNode.type == 'op' && next != 'op') {
+          return false;
+        } else if (exprNode.type == 'filter' && next != 'filter') {
+          return false;
+        } else if (exprNode.type == 'op' && next == 'op' && exprNode.value != 'not' && exprNode.value != 'nthchild') {
+          next = 'filter';
+          last = 'op';
+          continue;
+        } else if (exprNode.type == 'filter' && next == 'filter') {
+          next = 'op';
+          last = 'filter';
+          continue;
+        } else {
+          return false;
         }
-
-        expr.push(exprNodes[i].value)
       }
 
-      if (success && parenCnt == 0) {
-        return {status: true, expr: expr.join(" ")};
-      } else {
-        return {status: false};
-      }
+      return parenCnt == 0 && last == 'filter';
     };
-
-    var isValidQueryExpr = function(exprNodes) {
-      var result = getQueryExprForValidation(exprNodes);
-
-      if (!result.status) {
-        return false;
-      }
-
-      var qre = /^(\(*\s*)*(not)?\s*(\(*\s*)*\d+\s*(\)*\s*)*((and|or|intersect)\s*(\(*\s*)*(not)?\s*(\(*\s*)*\d+(\s*\)*)*\s*)*$/
-      var result = qre.test(result.expr);
-      return result;
-    }
 
     $scope.filterCpForm = function(form) {
       return $scope.queryData.selectedCp.id == -1 || form.name != 'CollectionProtocol';
@@ -320,7 +332,7 @@ angular.module('plus.controllers', ['checklist-model'])
         node.value = 'intersect';
       } else if (node.value == 'intersect') {
         node.value = 'and';
-      }
+      } 
     };
 
     $scope.getFilterDesc = function(filterId) {
@@ -403,6 +415,7 @@ angular.module('plus.controllers', ['checklist-model'])
     };
 
     $scope.queryData = {
+      isAdmin: query.global.isAdmin,
       view: 'dashboard',
       cpList: [],
       forms: undefined,
@@ -567,12 +580,30 @@ angular.module('plus.controllers', ['checklist-model'])
       $scope.getAuditLogs(query);
     };
  
+    $scope.viewAllAuditLogs = function(type) {
+      if (!type) { type = 'ALL'; }
+      QueryService.getAllAuditLogs(type, 0, 500).then(
+        function(auditLogs) {
+          $scope.auditLogs = auditLogs;
+          if (auditLogs.length > 0) {
+            $scope.queryData.view = 'log';
+          } else {
+            Utility.notify(
+              $("#notifications"),
+              "No audit logs to show for the selected period",
+              "info",
+              true);
+          }
+        }
+      );
+    };
+
     $scope.getAuditLogs = function(query) {
       QueryService.getAuditLogs(query.id, 0, 100).then(
         function(auditLogs) {
           $scope.auditLogs = auditLogs;
           if (auditLogs.length > 0) {
-            $scope.queryData.view = 'log';
+            $scope.displayAuditLogs(auditLogs);
           } else {
             Utility.notify(
               $("#notifications"),
@@ -582,6 +613,31 @@ angular.module('plus.controllers', ['checklist-model'])
           }
         });
     };
+
+    $scope.displayAuditLogs = function(auditLogs) {
+      var modalInstance = $modal.open({
+        templateUrl: 'view-audit-logs.html',
+        controller: DisplayAuditLogsCtrl,
+        resolve: {
+          query: function() {
+            return $scope.query;
+          },
+
+          auditLogs: function() {
+            return auditLogs;
+          }
+        }
+      });
+    };
+
+    var DisplayAuditLogsCtrl = function($scope, $modalInstance, query, auditLogs) {
+      $scope.query = query;
+      $scope.auditLogs = auditLogs;
+      
+      $scope.close = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
  
     $scope.viewQuerySql = function(auditLog) {
       var modalInstance = $modal.open({
@@ -589,10 +645,6 @@ angular.module('plus.controllers', ['checklist-model'])
         controller: ViewQuerySqlCtrl,
         windowClass: 'view-query-sql',
         resolve: {
-          queryId: function() {
-            return $scope.query.id;
-          },
-
           auditLogId: function () {
             return auditLog.id;
           }
@@ -600,10 +652,10 @@ angular.module('plus.controllers', ['checklist-model'])
       });
     };
  
-    ViewQuerySqlCtrl = function($scope, $modalInstance, queryId, auditLogId) {
+    ViewQuerySqlCtrl = function($scope, $modalInstance, auditLogId) {
       $scope.auditLog = null;
  
-      QueryService.getAuditLog(queryId, auditLogId).then(
+      QueryService.getAuditLog(auditLogId).then(
         function(auditLog) {
           $scope.auditLog = auditLog;
         });
