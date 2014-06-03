@@ -56,7 +56,7 @@
             length="255"
          />
             
-        <set name="coordinatorCollection"  table="CATISSUE_SITE_USER">
+        <set name="coordinatorCollection"  table="CATISSUE_SITE_COORDINATORS">
          <key column="SITE_ID"/>
          <many-to-many 
          	column="USER_ID" 

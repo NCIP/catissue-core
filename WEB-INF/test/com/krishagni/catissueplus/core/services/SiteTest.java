@@ -16,14 +16,11 @@ import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SiteFactoryImpl;
@@ -34,7 +31,6 @@ import com.krishagni.catissueplus.core.biospecimen.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.SiteServiceImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.SiteTestData;
-import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
 public class SiteTest {
 

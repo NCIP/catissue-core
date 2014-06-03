@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals; 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -38,7 +38,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProto
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.CprTestData;
 
-import edu.wustl.catissuecore.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class CollectionProtocolRegTest {
 

@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.services.testdata;
 
-import java.util.ArrayList;
+import java.util.ArrayList;  
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -23,7 +23,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEv
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import edu.wustl.common.beans.SessionDataBean;
 
 
