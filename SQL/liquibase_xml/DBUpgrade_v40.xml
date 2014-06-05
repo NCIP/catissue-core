@@ -196,6 +196,71 @@
 		<sql>commit;</sql>
     </changeSet>
     
+    <changeSet id="Delete duplicate events for specimen requirement" author="nitesh" dbms="oracle">
+        <sql splitStatements="false" endDelimiter="$">
+            create or replace
+            PROCEDURE DEL_DUP_REQ_COLL_EVENTS 
+            IS
+               cnt number;
+               scgId number;
+               cnumber number;
+               eventId number;
+            BEGIN   
+            for d in (select cnt, scgId from (select count(*) as cnt, event.specimen_id as scgId 
+                from catissue_cp_req_specimen t2 join catissue_specimen_event_param event on 
+                event.specimen_id = t2.identifier
+                inner join catissue_coll_event_param collEvent on collEvent.identifier = event.identifier 
+                group by event.specimen_id) t1 where t1.cnt > 1)
+               loop
+               cnt:=d.cnt;
+                for e in (select ep.identifier as id from catissue_specimen_event_param ep join 
+                            catissue_coll_event_param cep on ep.identifier = cep.identifier where ep.specimen_id = d.scgId)
+                loop
+                        
+                    if(cnt != 1) then
+                            
+                        delete from catissue_coll_event_param where identifier = e.id;
+                        delete from catissue_specimen_event_param where identifier = e.id;
+                    end if;
+                            cnt:=cnt-1;
+                end loop;
+                end loop;
+            commit;     
+            END DEL_DUP_REQ_COLL_EVENTS;
+    </sql>
+    <sql splitStatements="false" endDelimiter="$">
+            create or replace
+            PROCEDURE DEL_DUP_REQ_REC_EVENTS 
+            IS
+               cnt number;
+               scgId number;
+               cnumber number;
+               eventId number;
+            BEGIN   
+            for d in (select cnt, scgId from (select count(*) as cnt, event.specimen_id as scgId 
+                from catissue_cp_req_specimen t2 join catissue_specimen_event_param event on 
+                event.specimen_id = t2.identifier
+                inner join catissue_received_event_param collEvent on collEvent.identifier = event.identifier 
+                group by event.specimen_id) t1 where t1.cnt > 1)
+               loop
+               cnt:=d.cnt;
+                for e in (select ep.identifier as id from catissue_specimen_event_param ep join 
+                            catissue_received_event_param cep on ep.identifier = cep.identifier where ep.specimen_id = d.scgId)
+                loop
+                    if(cnt != 1) then
+                        delete from catissue_received_event_param where identifier = e.id;
+                        delete from catissue_specimen_event_param where identifier = e.id;
+                    end if;
+                end loop;
+                end loop;
+            commit;   
+            END DEL_DUP_REQ_REC_EVENTS;
+    </sql>
+    <sql>call DEL_DUP_REQ_COLL_EVENTS();</sql>
+    <sql>call DEL_DUP_REQ_REC_EVENTS();</sql>
+    <sql>commit;</sql>
+    </changeSet>
+    
     <changeSet id="7" author="nitesh" dbms="oracle">
         <sql>update (
             select specimen.PARENT_SPECIMEN_ID as sParentId, aspecimen.PARENT_SPECIMEN_ID as aParentId, 
@@ -2652,6 +2717,18 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                    constraintName="FK5CF2FA2160773DB2"
                    referencedColumnNames="IDENTIFIER"
                    referencedTableName="catissue_specimen"/>
+    </changeSet>
+    
+    <changeSet id="adding autoIncrement for specimen, SCG and external-id" author="nitesh" dbms="mysql">
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="catissue_external_identifier"/>
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_SPECIMEN_COLL_GROUP"/>
+        <addAutoIncrement columnDataType="${int.type}"
+            columnName="IDENTIFIER"
+            tableName="CATISSUE_SPECIMEN"/>
     </changeSet>    
 
      <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
