@@ -2731,55 +2731,67 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             tableName="CATISSUE_SPECIMEN"/>
     </changeSet>    
 
-     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
-       <sqlFile 
-            encoding="utf8"
-            path="create_specimen_hierarchy_mysql.sql"
-            relativeToChangelogFile="true"
-            endDelimiter="//"
-            splitStatements="true"
-            stripComments="true"/>
-     </changeSet>
+    <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
+      <sqlFile 
+        encoding="utf8"
+        path="create_specimen_hierarchy_mysql.sql"
+        relativeToChangelogFile="true"
+        endDelimiter="//"
+        splitStatements="true"
+        stripComments="true"/>
+    </changeSet>
 
-     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="oracle">
-       <sqlFile 
-            encoding="utf8"
-            path="create_specimen_hierarchy_oracle.sql"
-            relativeToChangelogFile="true"
-            endDelimiter="/"
-            splitStatements="true"
-            stripComments="true"/>
-     </changeSet>
-     
-      <changeSet author="ajaysamgir" id="Create table CATISSUE_SITE_COORDINATORS " failOnError="true">
-       <createTable tableName="CATISSUE_SITE_COORDINATORS">
-         <column name="SITE_ID" type="${int.type}">
-         </column>
-         
-         <column name="USER_ID" type="${int.type}">
-         </column>
-         
-       </createTable>
-       
-       <addForeignKeyConstraint
-               constraintName="FK_SITE_ID_BY_CAT_SITE_ID"
-               baseTableName="CATISSUE_SITE_COORDINATORS"
-               baseColumnNames="SITE_ID"
-               referencedTableName="CATISSUE_SITE"
-               referencedColumnNames="IDENTIFIER" />
-               
-       <addForeignKeyConstraint
-               constraintName="FK_USER_ID_BY_CAT_USER_ID"
-               baseTableName="CATISSUE_SITE_COORDINATORS"
-               baseColumnNames="USER_ID"
-               referencedTableName="CATISSUE_USER"
-               referencedColumnNames="IDENTIFIER" />
-       
- 	</changeSet>
-    
-	<changeSet author="ajaysamgir" id="Migrate CATISSUE_SITE table data to CATISSUE_SITE_COORDINATORS " failOnError="true">
-   		<sql>INSERT INTO CATISSUE_SITE_COORDINATORS(select Identifier,User_ID from Catissue_Site where Identifier IS NOT NULL AND USER_ID IS NOT NULL)</sql>
-	</changeSet>
+    <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="oracle">
+      <sqlFile 
+        encoding="utf8"
+        path="create_specimen_hierarchy_oracle.sql"
+        relativeToChangelogFile="true"
+        endDelimiter="/"
+        splitStatements="true"
+        stripComments="true"/>
+
+      <sql>call migrate()</sql>
+
+      <sqlFile
+        encoding="utf8"
+        path="specimen_hierarchy_constraints_trigger_oracle.sql"
+        relativeToChangelogFile="true"
+        endDelimiter="/"
+        splitStatements="true"
+        stripComments="true"/>
+
+      <sql>call addCSHConstraints()</sql>
+    </changeSet>
+
+    <changeSet author="ajaysamgir" id="Create table CATISSUE_SITE_COORDINATORS " failOnError="true">
+      <createTable tableName="CATISSUE_SITE_COORDINATORS">
+        <column name="SITE_ID" type="${int.type}">
+        </column>
+        
+        <column name="USER_ID" type="${int.type}">
+        </column>
+        
+      </createTable>
+      
+      <addForeignKeyConstraint
+              constraintName="FK_SITE_ID_BY_CAT_SITE_ID"
+              baseTableName="CATISSUE_SITE_COORDINATORS"
+              baseColumnNames="SITE_ID"
+              referencedTableName="CATISSUE_SITE"
+              referencedColumnNames="IDENTIFIER" />
+              
+      <addForeignKeyConstraint
+              constraintName="FK_USER_ID_BY_CAT_USER_ID"
+              baseTableName="CATISSUE_SITE_COORDINATORS"
+              baseColumnNames="USER_ID"
+              referencedTableName="CATISSUE_USER"
+              referencedColumnNames="IDENTIFIER" />
+      
+    </changeSet>
+   
+    <changeSet author="ajaysamgir" id="Migrate CATISSUE_SITE table data to CATISSUE_SITE_COORDINATORS " failOnError="true">
+      <sql>INSERT INTO CATISSUE_SITE_COORDINATORS(select Identifier,User_ID from Catissue_Site where Identifier IS NOT NULL AND USER_ID IS NOT NULL)</sql>
+    </changeSet>
 </databaseChangeLog>         
 
 
