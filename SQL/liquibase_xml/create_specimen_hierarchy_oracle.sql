@@ -21,8 +21,8 @@ BEGIN
  finalStatement := '';
  sqlStatement := '';
 
- EXECUTE IMMEDIATE 'truncate table CATISSUE_SPECIMEN_HIERARCHY';
- 
+ safeDropTable('CATISSUE_SPECIMEN_HIERARCHY');
+ EXECUTE IMMEDIATE 'CREATE TABLE CATISSUE_SPECIMEN_HIERARCHY (ANCESTOR_ID NUMBER(20) , DESCENDENT_ID NUMBER(20))';
 
  FOR nodes IN (SELECT identifier FROM catissue_specimen where PARENT_SPECIMEN_ID IS NULL)
  LOOP
@@ -42,6 +42,7 @@ BEGIN
     finalStatement := 'INSERT ALL ' || sqlStatement ;
     finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
     EXECUTE IMMEDIATE finalStatement;
+    COMMIT;
     sqlStatement := '';
    END IF;
  
@@ -57,12 +58,33 @@ BEGIN
   finalStatement := 'INSERT ALL ' || sqlStatement ;
   finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
   EXECUTE IMMEDIATE finalStatement;
+  COMMIT;
   sqlStatement := '';
  END IF;
 
  SELECT TO_CHAR(SYSTIMESTAMP) INTO currentTime FROM dual;
  DBMS_OUTPUT.put_line('EXECUTION COMPLETE AT: ' || currentTime );
+ COMMIT;
+END;
+/
 
+
+
+CREATE OR REPLACE PROCEDURE safeDropTable(tableName IN varchar2)
+IS
+  tableDoesntExists exception;
+  pragma exception_init(tableDoesntExists, -942);
+  tab varchar2(32);
+BEGIN
+  
+  tab := dbms_assert.simple_sql_name(tableName);
+
+  EXECUTE IMMEDIATE 'DROP TABLE ' || tab;
+  DBMS_OUTPUT.put_line('THE TABLE ' || tab || ' HAS BEEN DROPPED SUCCESSFULLY!' );
+
+EXCEPTION
+  WHEN tableDoesntExists
+  THEN DBMS_OUTPUT.put_line('TABLE ' || tab || ' DOESNT EXIST, DROPPING NOT REQUIRED!');
 END;
 /
 
@@ -153,6 +175,7 @@ BEGIN
     finalStatement := 'INSERT ALL ' || sqlStatement ;
     finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
     EXECUTE IMMEDIATE finalStatement;
+    COMMIT;
     sqlStatement := '';
    END IF;
 
@@ -202,23 +225,4 @@ BEGIN
 END; 
 /
 
-autocommit on
-/
 
-migrate()
-/
-
-CREATE OR REPLACE TRIGGER TGR_SPECIMEN_REPLICATION 
-AFTER INSERT 
-ON SYS.CATISSUE_SPECIMEN
-BEGIN
- 
- IF (NEW.PARENT_SPECIMEN_ID IS NOT NULL ) THEN
-  INSERT INTO SYS.CATISSUE_SPECIMEN_HIERARCHY(ANCESTOR_ID,DESCENDENT_ID) 
-    (SELECT CSH.ANCESTOR_ID, NEW.IDENTIFIER FROM SYS.CATISSUE_SPECIMEN_HIERARCHY CSH WHERE (CSH.DESCENDENT_ID = NEW.PARENT_SPECIMEN_ID));
- END IF;
- 
- INSERT INTO SYS.CATISSUE_SPECIMEN_HIERARCHY(ANCESTOR_ID, DESCENDENT_ID) VALUES (NEW.IDENTIFIER,NEW.IDENTIFIER);
-
-END;
-/
