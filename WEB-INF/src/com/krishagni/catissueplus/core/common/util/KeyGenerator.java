@@ -3,13 +3,13 @@ package com.krishagni.catissueplus.core.common.util;
 
 public class KeyGenerator {
 
-	Long id;
+	private Long id;
 
-	String key;
+	private String key;
 
-	Long value = 0L;
+	private Long value = 0L;
 
-	String keyType;
+	private String keyType;
 
 	public String getKeyType() {
 		return keyType;

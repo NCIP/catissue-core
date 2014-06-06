@@ -60,9 +60,6 @@
 	 <query name="getBiohazardByName">
     	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard WHERE biohazard.name = :biohazardName
      </query>
-     <query name="getBiohazardById">
-    	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard WHERE biohazard.id = :biohazardId
-     </query>
     </class>
 
 </hibernate-mapping>

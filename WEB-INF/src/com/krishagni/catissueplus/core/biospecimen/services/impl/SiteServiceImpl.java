@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
@@ -21,10 +19,8 @@ public class SiteServiceImpl implements SiteService {
 
 	private static final String SITE_NAME = "site name";
 
-	@Autowired
 	private SiteFactory siteFactory;
 
-	@Autowired
 	private DaoFactory daoFactory;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -66,7 +62,7 @@ public class SiteServiceImpl implements SiteService {
 	public SiteUpdatedEvent updateSite(UpdateSiteEvent updateEvent) {
 		try {
 			Long siteId = updateEvent.getSiteDetails().getId();
-			Site oldSite = daoFactory.getSiteDao().getSiteById(siteId);
+			Site oldSite = daoFactory.getSiteDao().getSite(siteId);
 			if (oldSite == null) {
 				return SiteUpdatedEvent.notFound(siteId);
 			}
@@ -93,13 +89,13 @@ public class SiteServiceImpl implements SiteService {
 	public SiteUpdatedEvent patchSite(PatchSiteEvent event) {
 		try {
 			Long siteId = event.getSiteId();
-			Site oldSite = daoFactory.getSiteDao().getSiteById(siteId);
+			Site oldSite = daoFactory.getSiteDao().getSite(siteId);
 			if (oldSite == null) {
 				return SiteUpdatedEvent.notFound(siteId);
 			}
 
 			Site site = siteFactory.patchSite(oldSite, event.getSiteDetails());
-			if (event.getSiteDetails().isSiteNameModified() && !site.getName().equals(event.getSiteDetails().getName())) {
+			if (event.getSiteDetails().isSiteNameModified() && !(site.getName().equals(event.getSiteDetails().getName()))) {
 				ObjectCreationException exceptionHandler = new ObjectCreationException();
 				ensureUniqueSiteName(site.getName(), exceptionHandler);
 				exceptionHandler.checkErrorAndThrow();

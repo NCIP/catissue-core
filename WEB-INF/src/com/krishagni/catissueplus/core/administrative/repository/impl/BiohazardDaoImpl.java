@@ -15,8 +15,6 @@ public class BiohazardDaoImpl extends AbstractDao<Biohazard> implements Biohazar
 
 	private static final String GET_BIOHAZARD_BY_NAME = FQN + ".getBiohazardByName";
 
-	private static final String GET_BIOHAZARD_BY_ID = FQN + ".getBiohazardById";
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Biohazard getBiohazard(String name) {
@@ -36,13 +34,8 @@ public class BiohazardDaoImpl extends AbstractDao<Biohazard> implements Biohazar
 		return list.isEmpty() ? true : false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Biohazard getBiohazard(long id) {
-		Query query = getSessionFactory().getCurrentSession().getNamedQuery(GET_BIOHAZARD_BY_ID);
-		query.setLong("biohazardId", id);
-
-		List<Biohazard> list = query.list();
-		return list.get(0);
+		return (Biohazard)sessionFactory.getCurrentSession().get(Biohazard.class, id);
 	}
 }

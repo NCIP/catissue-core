@@ -9,9 +9,7 @@ public interface SiteDao extends Dao<Site> {
 
 	public Site getSite(Long Id);
 
-	public Site getSiteByName(String name);
-
-	public Site getSiteById(Long id);
+	public Site getSite(String name);
 
 	public Boolean isUniqueSiteName(String siteName);
 

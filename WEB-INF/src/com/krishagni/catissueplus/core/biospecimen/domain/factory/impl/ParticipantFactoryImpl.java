@@ -245,7 +245,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private ParticipantMedicalIdentifier getMedicalIdentifier(
 			ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail, ObjectCreationException exception) {
-		Site site = daoFactory.getSiteDao().getSiteByName(medicalRecordNumberDetail.getSiteName());
+		Site site = daoFactory.getSiteDao().getSite(medicalRecordNumberDetail.getSiteName());
 		if (site == null) {
 			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, SITE);
 		}

@@ -29,7 +29,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SiteDao;
 import com.krishagni.catissueplus.core.biospecimen.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.SiteServiceImpl;
-import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.SiteTestData;
 
@@ -61,7 +60,7 @@ public class SiteTest {
 		((SiteServiceImpl) siteService).setSiteFactory(siteFactory);
 		((SiteFactoryImpl) siteFactory).setDaoFactory(daoFactory);
 
-		when(siteDao.getSiteByName(anyString())).thenReturn(SiteTestData.getSite());
+		when(siteDao.getSite(anyString())).thenReturn(SiteTestData.getSite());
 		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(
 				SiteTestData.getUser("admin@admin.com"));
 
@@ -70,7 +69,6 @@ public class SiteTest {
 		@Test
 		public void testForSuccessfulSiteCreation() {
 			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEvent();
-			when(siteDao.getSiteByName(anyString())).thenReturn(null);
 			when(siteDao.isUniqueSiteName(anyString())).thenReturn(Boolean.TRUE);
 			SiteCreatedEvent response = siteService.createSite(reqEvent);
 	
@@ -86,6 +84,7 @@ public class SiteTest {
 			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEvent();
 			SiteCreatedEvent response = siteService.createSite(reqEvent);
 	
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.SITE_NAME, response.getErroneousFields()[0].getFieldName());
@@ -97,6 +96,7 @@ public class SiteTest {
 			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptySiteName();
 			SiteCreatedEvent response = siteService.createSite(reqEvent);
 	
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.SITE_NAME, response.getErroneousFields()[0].getFieldName());
@@ -108,6 +108,7 @@ public class SiteTest {
 			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptySiteType();
 			SiteCreatedEvent response = siteService.createSite(reqEvent);
 	
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.SITE_TYPE, response.getErroneousFields()[0].getFieldName());
@@ -120,6 +121,7 @@ public class SiteTest {
 			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEvent();
 			SiteCreatedEvent response = siteService.createSite(reqEvent);
 	
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.USER_NAME, response.getErroneousFields()[0].getFieldName());
@@ -139,14 +141,75 @@ public class SiteTest {
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 		}
+		
+		@Test
+		public void testSiteCreationWithEmptyStreet() {
+			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyStreet();
+			SiteCreatedEvent response = siteService.createSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.STREET, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
 	
+		@Test
+		public void testSiteCreationWithEmptyZipCode() {
+			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyZipCode();
+			SiteCreatedEvent response = siteService.createSite(reqEvent);
+	
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.ZIPCODE, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
+		@Test
+		public void testSiteCreationWithEmptyCityName() {
+			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyCityName();
+			SiteCreatedEvent response = siteService.createSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.CITY, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
+		@Test
+		public void testSiteCreationWithEmptyCountryName() {
+			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyCountryName();
+			SiteCreatedEvent response = siteService.createSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.COUNTRY, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
+		@Test
+		public void testSiteCreationWithInvalidEmailAddress() {
+			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithInvalidEmail();
+			SiteCreatedEvent response = siteService.createSite(reqEvent);
+	
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.EMAIL_ADDRESS, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+		
 		@Test
 		public void testForSuccessfulSiteUpdate() {
 			when(siteDao.isUniqueSiteName(anyString())).thenReturn(Boolean.TRUE);
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
 	
 			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEvent();
 			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 			SiteDetails createSite = response.getSiteDetails();
 	
@@ -155,12 +218,13 @@ public class SiteTest {
 	
 		@Test
 		public void testSiteUpdationWithDuplicateSiteName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
 			when(siteDao.isUniqueSiteName(anyString())).thenReturn(Boolean.FALSE);
 	
 			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEvent();
 			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
 	
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.SITE_NAME, response.getErroneousFields()[0].getFieldName());
@@ -169,11 +233,12 @@ public class SiteTest {
 	
 		@Test
 		public void testSiteUpdationWithEmptySiteName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
 	
 			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptySiteName();
 			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
 	
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.SITE_NAME, response.getErroneousFields()[0].getFieldName());
@@ -182,11 +247,12 @@ public class SiteTest {
 	
 		@Test
 		public void testSiteUpdationWithEmptySiteType() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
 	
 			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptySiteType();
 			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
-	
+			
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.SITE_TYPE, response.getErroneousFields()[0].getFieldName());
@@ -195,7 +261,7 @@ public class SiteTest {
 	
 		@Test
 		public void testSiteUpdationWithServerErr() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
 			when(siteDao.isUniqueSiteName(anyString())).thenReturn(Boolean.TRUE);
 			doThrow(new RuntimeException()).when(siteDao).saveOrUpdate(any(Site.class));
 	
@@ -208,7 +274,7 @@ public class SiteTest {
 	
 		@Test
 		public void testSiteUpdationNullSite() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(null);
+			when(siteDao.getSite(anyLong())).thenReturn(null);
 	
 			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEvent();
 			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
@@ -219,11 +285,13 @@ public class SiteTest {
 	
 		@Test
 		public void testUserUpdationWithInvalidUser() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
-			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEvent();
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
 			when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(null);
-	
+			
+			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEvent();
 			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.USER_NAME, response.getErroneousFields()[0].getFieldName());
@@ -231,9 +299,65 @@ public class SiteTest {
 	
 		}
 	
+
+		@Test
+		public void testSiteUpdationWithEmptyStreet() {
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyStreet();
+			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.STREET, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
+		@Test
+		public void testSiteUpdationWithEmptyZipCode() {
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
+			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyZipCode();
+			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.ZIPCODE, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
+		@Test
+		public void testSiteUpdationWithEmptyCityName() {
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
+			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyCityName();
+			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.CITY, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
+		@Test
+		public void testSiteUpdationWithEmptyCountryName() {
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
+			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyCountryName();
+			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+			assertEquals(1, response.getErroneousFields().length);
+			assertEquals(SiteTestData.COUNTRY, response.getErroneousFields()[0].getFieldName());
+			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		}
+	
 		@Test
 		public void testSuccessfullPatchSite() {
-			when(daoFactory.getSiteDao().getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
 			when(daoFactory.getSiteDao().isUniqueSiteName(anyString())).thenReturn(true);
 			PatchSiteEvent reqEvent = SiteTestData.getPatchData();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
@@ -243,7 +367,7 @@ public class SiteTest {
 
 	@Test
 	public void testPatchSiteWithInvalidAttribute() {
-		when(daoFactory.getSiteDao().getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
 		when(daoFactory.getSiteDao().isUniqueSiteName(anyString())).thenReturn(false);
 		
 		PatchSiteEvent reqEvent = SiteTestData.getPatchDataWithInavalidAttribute();
@@ -255,7 +379,7 @@ public class SiteTest {
 
 		@Test
 		public void testSitePatchNullSite() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(null);
+			when(siteDao.getSite(anyLong())).thenReturn(null);
 	
 			PatchSiteEvent reqEvent = SiteTestData.getPatchData();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
@@ -266,7 +390,7 @@ public class SiteTest {
 	
 		@Test
 		public void testPatchSiteServerError() {
-			when(daoFactory.getSiteDao().getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
 			when(daoFactory.getSiteDao().isUniqueSiteName(anyString())).thenReturn(true);
 			PatchSiteEvent reqEvent = SiteTestData.getPatchData();
 			doThrow(new RuntimeException()).when(siteDao).saveOrUpdate(any(Site.class));
@@ -275,104 +399,15 @@ public class SiteTest {
 			assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 		}
 	
-		@Test
-		public void testSiteCreationWithEmptyStreet() {
-			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyStreet();
-	
-			SiteCreatedEvent response = siteService.createSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.STREET, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteCreationWithEmptyZipCode() {
-			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyZipCode();
-	
-			SiteCreatedEvent response = siteService.createSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.ZIPCODE, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteCreationWithEmptyCityName() {
-			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyCityName();
-	
-			SiteCreatedEvent response = siteService.createSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.CITY, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteCreationWithEmptyCountryName() {
-			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithEmptyCountryName();
-	
-			SiteCreatedEvent response = siteService.createSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.COUNTRY, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteUpdationWithEmptyStreet() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
-			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyStreet();
-	
-			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.STREET, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteUpdationWithEmptyZipCode() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
-			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyZipCode();
-	
-			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.ZIPCODE, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteUpdationWithEmptyCityName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
-			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyCityName();
-	
-			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.CITY, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
-	
-		@Test
-		public void testSiteUpdationWithEmptyCountryName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
-			UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithEmptyCountryName();
-	
-			SiteUpdatedEvent response = siteService.updateSite(reqEvent);
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.COUNTRY, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
 	
 		@Test
 		public void testSitePatchWithEmptyStreet() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithEmptyStreet();
-	
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.STREET, response.getErroneousFields()[0].getFieldName());
@@ -381,10 +416,12 @@ public class SiteTest {
 	
 		@Test
 		public void testSitePatchWithEmptyZipCode() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithEmptyZipCode();
-	
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.ZIPCODE, response.getErroneousFields()[0].getFieldName());
@@ -393,10 +430,12 @@ public class SiteTest {
 	
 		@Test
 		public void testSitePatchWithEmptyCityName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithEmptyCityName();
-	
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.CITY, response.getErroneousFields()[0].getFieldName());
@@ -405,10 +444,12 @@ public class SiteTest {
 	
 		@Test
 		public void testSitePatchWithEmptyCountryName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithEmptyCountryName();
-	
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
+			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 			assertEquals(1, response.getErroneousFields().length);
 			assertEquals(SiteTestData.COUNTRY, response.getErroneousFields()[0].getFieldName());
@@ -417,112 +458,126 @@ public class SiteTest {
 	
 		@Test
 		public void testSitePatchWithModifiedSiteName() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedName();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteType() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedType();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedActivityStatus() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedActivityStatus();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteCity() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+		
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedCity();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteCountry() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+				
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedCountry();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteState() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedState();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteStreet() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedStreet();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteZipCode() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedZipCode();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSiteFaxNumber() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedFaxNumber();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 	
 		@Test
 		public void testSitePatchWithModifiedSitePhoneNumber() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedPhoneNumber();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 		
 		@Test
 		public void testSitePatchWithModifiedSiteCoordinators() {
-			when(siteDao.getSiteById(anyLong())).thenReturn(SiteTestData.getSite());
+			when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+			
 			PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedCoordinatorCollection();
 			SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+			
 			assertNotNull("response cannot be null", response);
 			assertEquals(EventStatus.OK, response.getStatus());
 		}
 		
-		@Test
-		public void testSiteCreationWithInvalidEmailAddress() {
-			CreateSiteEvent reqEvent = SiteTestData.getCreateSiteEventWithInvalidEmail();
-			SiteCreatedEvent response = siteService.createSite(reqEvent);
 	
-			assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-			assertEquals(1, response.getErroneousFields().length);
-			assertEquals(SiteTestData.EMAIL_ADDRESS, response.getErroneousFields()[0].getFieldName());
-			assertEquals(SiteErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-		}
 
 }

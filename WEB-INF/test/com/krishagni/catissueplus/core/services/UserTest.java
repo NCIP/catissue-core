@@ -98,7 +98,7 @@ public class UserTest {
 		when(roleDao.getRoleByName(anyString())).thenReturn(UserTestData.getRole(1l));
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(UserTestData.getDeparment("Chemical"));
 		when(daoFactory.getUserDao()).thenReturn(userDao);
-		when(siteDao.getSiteByName(anyString())).thenReturn(UserTestData.getSite());
+		when(siteDao.getSite(anyString())).thenReturn(UserTestData.getSite());
 		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(UserTestData.getCp());
 		when(domainDao.isUniqueAuthDomainName(anyString())).thenReturn(Boolean.FALSE);
 		when(userDao.isUniqueEmailAddress(anyString())).thenReturn(Boolean.TRUE);
@@ -146,7 +146,7 @@ public class UserTest {
 	@Test
 	public void testForSuccessfulUserCreationWithNullSite() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
-		when(siteDao.getSiteByName(anyString())).thenReturn(null);
+		when(siteDao.getSite(anyString())).thenReturn(null);
 		UserCreatedEvent response = userService.createUser(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());

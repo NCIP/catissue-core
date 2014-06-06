@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals; 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -35,7 +35,7 @@ import com.krishagni.catissueplus.core.notification.services.impl.CatissueNotifi
 import com.krishagni.catissueplus.core.services.testdata.CaTissueNotificationTestData;
 import com.krishagni.catissueplus.core.services.testdata.CprTestData;
 
-import edu.wustl.catissuecore.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 public class CaTissueNotificationTest {
 
