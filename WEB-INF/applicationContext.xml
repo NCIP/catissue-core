@@ -243,4 +243,12 @@
         <property name="siteFactory" ref="siteFactory" />
 	</bean>
 	
+	<bean id="biohazardFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.BiohazardFactoryImpl">
+	</bean>
+	<bean id="biohazardService" class="com.krishagni.catissueplus.core.administrative.services.impl.BiohazardServiceImpl">
+        <property name="daoFactory" ref="biospecimenDaoFactory"/>
+        <property name="biohazardFactory" ref="biohazardFactory" />
+	</bean>
+	
+	
  </beans>

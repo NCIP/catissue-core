@@ -43,6 +43,8 @@ public class SiteTestData {
 	public static final String PATCH_SITE = "patch site";
 	
 	public static final String EMAIL_ADDRESS = "email address";
+
+	public static final String SITE_TYPE = "site type";
 	
 	public static Site getSite() {
 		Site site = new Site();
@@ -339,6 +341,13 @@ public class SiteTestData {
 		details.setEmailAddress("admin");
 		reqEvent.setSiteDetails(details);
 		return reqEvent;
-	}	
+	}
+
+	public static PatchSiteEvent getPatchDataWithInavalidAttribute() {
+		PatchSiteEvent event = getEmptyPatchData();
+		event.getSiteDetails().setType("");
+		event.getSiteDetails().getModifiedAttributes().add("type");
+		return event;
+	}
 
 }

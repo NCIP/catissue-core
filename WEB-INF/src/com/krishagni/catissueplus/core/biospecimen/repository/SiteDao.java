@@ -7,8 +7,6 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface SiteDao extends Dao<Site> {
 
-	public Site getSite(String name);
-
 	public Site getSite(Long Id);
 
 	public Site getSiteByName(String name);

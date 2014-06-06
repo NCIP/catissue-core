@@ -8,6 +8,7 @@ public class BiohazardDetail
 	private Long id;
 	private String name;
 	private String type;
+	private String comment;
 
 	/**
 	 * @return the id
@@ -57,4 +58,15 @@ public class BiohazardDetail
 		this.type = type;
 	}
 
+	
+	public String getComment() {
+		return comment;
+	}
+
+	
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	
 }

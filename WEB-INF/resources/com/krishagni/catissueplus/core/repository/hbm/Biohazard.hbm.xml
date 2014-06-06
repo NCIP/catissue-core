@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping auto-import="false">
+    <class
+        name="com.krishagni.catissueplus.core.administrative.domain.Biohazard"
+        table="CATISSUE_BIOHAZARD"
+		lazy="true" >
+    
+    <cache usage="read-write" />
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null">
+            
+            <generator class="native">
+                <param name="sequence">CATISSUE_BIOHAZARD_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Biohazard.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="name"
+            type="string"
+            update="true"
+            insert="true"
+            column="NAME"
+            length="255"
+            not-null="true"
+            unique="true"/>
+
+        <property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
+
+        <property
+            name="type"
+            type="string"
+            update="true"
+            insert="true"
+            column="TYPE"
+            length="50"
+        />
+
+
+	 <query name="getBiohazardByName">
+    	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard WHERE biohazard.name = :biohazardName
+     </query>
+     <query name="getBiohazardById">
+    	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard WHERE biohazard.id = :biohazardId
+     </query>
+    </class>
+
+</hibernate-mapping>

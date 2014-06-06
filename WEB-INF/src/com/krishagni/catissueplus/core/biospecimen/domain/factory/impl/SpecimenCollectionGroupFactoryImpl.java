@@ -159,7 +159,7 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 			return;
 		}
 		else {
-			Site site = daoFactory.getSiteDao().getSite(siteName);
+			Site site = daoFactory.getSiteDao().getSiteByName(siteName);
 			if (site == null) {
 				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SITE);
 				return;
