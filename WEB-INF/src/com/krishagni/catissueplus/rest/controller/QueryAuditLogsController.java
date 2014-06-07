@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
@@ -40,11 +40,12 @@ public class QueryAuditLogsController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public List<QueryAuditLogSummary> getAuditLogs(
+	public Map<String, Object> getAuditLogs(
 			@RequestParam(value = "type", required = false, defaultValue = "LAST_24") String type,
 			@RequestParam(value = "queryId", required = false, defaultValue = "-1") Long queryId,
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "25") int max) {
+			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq) {
 		
 		ReqQueryAuditLogsEvent req = new ReqQueryAuditLogsEvent();
 		req.setType(Type.valueOf(type));
@@ -52,13 +53,20 @@ public class QueryAuditLogsController {
 		req.setSavedQueryId(queryId);
 		req.setStartAt(start < 0 ? 0 : start);
 		req.setMaxRecords(max < 0 ? 25 : max);
+		req.setCountReq(countReq);
 		
 		QueryAuditLogsEvent resp = querySvc.getAuditLogs(req);
 		if (resp.getStatus() != EventStatus.OK) {
 			return null;
 		}
 		
-		return resp.getAuditLogs();
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (resp.getCount() != null) {
+			result.put("count", resp.getCount());
+		}
+		
+		result.put("auditLogs", resp.getAuditLogs());
+		return result;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="{id}")

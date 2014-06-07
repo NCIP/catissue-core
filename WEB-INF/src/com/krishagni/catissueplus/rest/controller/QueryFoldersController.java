@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,24 +19,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderSummary;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
-import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDetails;
-import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryFolderDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
+import com.krishagni.catissueplus.core.de.events.QueryFolderDetails;
 import com.krishagni.catissueplus.core.de.events.QueryFolderSharedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
+import com.krishagni.catissueplus.core.de.events.QueryFolderSummary;
 import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
+import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
+import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
 import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
+import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.events.ShareQueryFolderEvent;
+import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent.Operation;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
@@ -130,20 +132,32 @@ public class QueryFoldersController {
 		
 		return null;
 	}
-		
+			
 	@RequestMapping(method = RequestMethod.GET, value="/{folderId}/saved-queries")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SavedQuerySummary> getFolderQueries(@PathVariable("folderId") Long folderId) {
+	public Map<String, Object> getFolderQueries(@PathVariable("folderId") Long folderId,
+			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq) {
 		ReqFolderQueriesEvent req = new ReqFolderQueriesEvent(folderId);
+		req.setStartAt(start);
+		req.setMaxRecords(max);
 		req.setSessionDataBean(getSession());
+		req.setCountReq(countReq);
 		
 		FolderQueriesEvent resp = querySvc.getFolderQueries(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSavedQueries();
+		if (resp.getStatus() != EventStatus.OK) {
+			return null;
 		}
 		
-		return null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (resp.getCount() != null) {
+			result.put("count", resp.getCount());
+		}
+		
+		result.put("queries", resp.getSavedQueries());		
+		return result;
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{folderId}/saved-queries")

@@ -7,7 +7,17 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class SavedQueriesSummaryEvent extends ResponseEvent {
 	
+	private Long count;
+	
 	private List<SavedQuerySummary> savedQueries;
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
 
 	public List<SavedQuerySummary> getSavedQueries() {
 		return savedQueries;
@@ -17,10 +27,11 @@ public class SavedQueriesSummaryEvent extends ResponseEvent {
 		this.savedQueries = savedQueries;
 	}
 	
-	public static SavedQueriesSummaryEvent ok(List<SavedQuerySummary> queries) {
+	public static SavedQueriesSummaryEvent ok(List<SavedQuerySummary> queries, Long count) {
 		SavedQueriesSummaryEvent resp = new SavedQueriesSummaryEvent();
 		resp.setStatus(EventStatus.OK);
 		resp.setSavedQueries(queries);
+		resp.setCount(count);
 		return resp;
 	}
 	

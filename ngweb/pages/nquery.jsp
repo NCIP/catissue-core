@@ -22,7 +22,7 @@
     <script src="../external/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/ng-grid-2.0.7.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/sortable.js" type="text/javascript"></script>
-    <script src="../external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/ui-bootstrap-tpls-0.11.0.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/checklist-model.js" type="text/javascript"></script>
     <script src="../external/angularjs/autocomplete.js"></script>
     <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
@@ -316,7 +316,7 @@
        }
 
        .query-folder-modal .modal-content {
-	  height: 300px;
+         height: 300px;
        }
 
        .query-folder-modal .modal-header h3 {
@@ -398,6 +398,11 @@
             </ul>
           </div>
         </div>
+        <div class="col-xs-2" style="padding-top: 8px; font-size: 14px;">
+          <div ng-if="queryData.queries.length > 0">
+            Queries ({{queryData.startAt + 1}} - {{queryData.startAt + queryData.queries.length}} of {{queryData.totalQueries}})
+          </div>
+        </div>
         <div class="col-xs-4">
           <div ng-class="{'btn-group': queryData.selectedFolderId != -1}"  ng-if="queryData.selectedQueries.length > 0">
             <button ng-if="queryData.selectedFolderId != -1" class="btn btn-default" ng-click="removeQueriesFromFolder()"
@@ -430,7 +435,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-offset-3 col-xs-3">
+        <div class="col-xs-offset-1 col-xs-3">
           <div class="plus-addon plus-addon-input-right">
             <span class="glyphicon glyphicon-search"></span>
             <input type="text" class="form-control" placeholder="Search Query" ng-model="searchQueryTitle">
@@ -580,6 +585,15 @@
             <thead><tr><th>Information</th></tr></thead>
             <tbody><tr><td>There are no queries to show in selected folder</td></tr></tbody>
           </table>
+          <div ng-if="queryData.totalQueries > queryData.pageSize">
+            <pagination class="pagination-sm"
+              total-items="queryData.totalQueries" 
+              items-per-page="queryData.pageSize"  
+              max-size="5" 
+              ng-model="queryData.currentPage" 
+              ng-change="changeQueriesPage(false)">
+            </pagination>
+          </div>
         </div>
       </div>
     </div>
@@ -587,7 +601,9 @@
     <div class="container" ng-if="queryData.view == 'log'">
       <div class="row header">
         <div class="col-xs-7">
-          <h3 class="pull-left">Audit Log</h3>
+          <h3 class="pull-left">
+            Audit Log ({{auditData.startAt + 1}} - {{auditData.startAt + auditData.auditLogs.length}} of {{auditData.logCount}})
+          </h3>
           <div class="pull-left" style="margin-top: 20px; margin-left: 10px; font-size: 20px;" ng-click="queryData.view = 'dashboard'">
             <a style="cursor: pointer;" 
               tooltip="Go back to previous page" tooltip-placement="bottom" tooltip-append-to-body="true">
@@ -598,8 +614,8 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <div ng-if="!auditLogs || auditLogs == 0">No audit logs to show</div>
-          <table class="table list" overflow="auto" ng-if="auditLogs && auditLogs.length > 0">
+          <div ng-if="auditData.auditLogs.length == 0">No audit logs to show</div>
+          <table class="table list" overflow="auto" ng-if="auditData.auditLogs.length > 0">
             <thead>
               <tr>
                 <th class="col-xs-4">Title</th>
@@ -610,7 +626,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="auditLog in auditLogs"
+              <tr ng-repeat="auditLog in auditData.auditLogs"
                   ng-mouseenter="auditLog.highlight=true"
                   ng-mouseleave="auditLog.highlight=false" style="height:41px;">
                 <td ng-if="auditLog.queryId">
@@ -636,6 +652,15 @@
               </tr>
             </tbody>
           </table>
+          <div ng-if="auditData.logCount > auditData.pageSize">
+            <pagination class="pagination-sm"
+              total-items="auditData.logCount" 
+              items-per-page="auditData.pageSize"  
+              max-size="5" 
+              ng-model="auditData.currentPage" 
+              ng-change="changeAuditLogPage(false)">
+            </pagination>
+          </div>
         </div>
       </div>
     </div>

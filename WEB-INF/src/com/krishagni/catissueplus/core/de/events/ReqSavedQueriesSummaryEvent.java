@@ -6,6 +6,8 @@ public class ReqSavedQueriesSummaryEvent extends RequestEvent {
 	private int startAt;
 	
 	private int maxRecords;
+	
+	private boolean countReq;
 
 	public int getStartAt() {
 		return startAt;
@@ -21,5 +23,13 @@ public class ReqSavedQueriesSummaryEvent extends RequestEvent {
 
 	public void setMaxRecords(int maxRecords) {
 		this.maxRecords = maxRecords;
+	}
+
+	public boolean isCountReq() {
+		return countReq;
+	}
+
+	public void setCountReq(boolean countReq) {
+		this.countReq = countReq;
 	}		
 }

@@ -15,6 +15,8 @@ public class ReqQueryAuditLogsEvent extends RequestEvent {
 	private int maxRecords;
 	
 	private Type type;
+	
+	private boolean countReq;
 
 	public Long getSavedQueryId() {
 		return savedQueryId;
@@ -46,5 +48,13 @@ public class ReqQueryAuditLogsEvent extends RequestEvent {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public boolean isCountReq() {
+		return countReq;
+	}
+
+	public void setCountReq(boolean countReq) {
+		this.countReq = countReq;
 	}
 }

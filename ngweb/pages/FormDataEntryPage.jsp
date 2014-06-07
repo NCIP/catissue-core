@@ -24,7 +24,7 @@
     <script src="ngweb/external/angularjs/angular.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
     <script src="ngweb/external/angularjs/angular-resource.min.js" type="text/javascript"></script>
-    <script src="ngweb/external/angularjs/ui-bootstrap-tpls-0.10.0.min.js" type="text/javascript"></script>
+    <script src="ngweb/external/angularjs/ui-bootstrap-tpls-0.11.0.min.js" type="text/javascript"></script>
     <script src="ngweb/external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="ngweb/external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
 

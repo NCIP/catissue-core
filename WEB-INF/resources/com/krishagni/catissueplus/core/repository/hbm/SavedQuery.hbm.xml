@@ -51,6 +51,18 @@
     <query name="getQueriesByIds">
       from SavedQuery where id IN (:queryIds)
     </query>
+    
+    <query name="getSavedQueriesCount">
+      select 
+        count(distinct s.id) 
+      from
+        SavedQuery s 
+        inner join s.createdBy u
+        left join s.folders f
+        left join f.sharedWith su
+      where
+        u.id = :userId or su.id = :userId
+    </query>
 
     <sql-query name="getSavedQueries">
       <return-scalar column="id" type="long"/>
@@ -83,6 +95,15 @@
     	s.identifier desc
     </sql-query>
     
+    <query  name="getQueriesCountByFolderId">
+      select
+        count(s)
+      from
+        SavedQuery s
+        inner join s.folders f
+      where
+        f.id = :folderId
+    </query>
     
     <sql-query name="getQueriesByFolderId">
       <return-scalar column="id" type="long"/>

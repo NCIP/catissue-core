@@ -8,6 +8,9 @@ import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 
 public interface QueryAuditLogDao extends Dao<QueryAuditLog>{
+	public Long getAuditLogsCount();
+	
+	public Long getAuditLogsCount(Date start, Date end);
 	
 	public List<QueryAuditLogSummary> getAuditLogs(int startAt, int maxRecords);
 	
