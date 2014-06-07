@@ -1,10 +1,11 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,27 +24,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.de.events.FileDetail;
-import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
+import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
 import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.SaveQueryEvent;
 import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
+import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
+import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
 import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
-import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -59,24 +53,31 @@ public class SavedQueriesController {
 
 	@Autowired
 	private QueryService querySvc;
-
+	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SavedQuerySummary> getSavedQueries(
+	public Map<String, Object> getSavedQueries(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-			@RequestParam(value = "max", required = false, defaultValue = "25") int max) {
+			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq) {
 		ReqSavedQueriesSummaryEvent req = new ReqSavedQueriesSummaryEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
+		req.setCountReq(countReq);
 		req.setSessionDataBean(getSession());
 		
 		SavedQueriesSummaryEvent resp = querySvc.getSavedQueries(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSavedQueries();
+		if (resp.getStatus() != EventStatus.OK) {
+			return null;
 		}
 		
-		return null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (resp.getCount() != null) {
+			result.put("count", resp.getCount());
+		}
+		result.put("queries", resp.getSavedQueries());
+		return result;		
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

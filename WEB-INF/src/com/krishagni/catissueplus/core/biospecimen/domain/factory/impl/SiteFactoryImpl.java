@@ -95,7 +95,7 @@ public class SiteFactoryImpl implements SiteFactory {
 
 	private void setActivityStatus(Site site, String activityStatus, ObjectCreationException exceptionHandler) {
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
-			exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, COUNTRY);
+			exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
 		}
 		site.setActivityStatus(activityStatus);
 	}
@@ -103,11 +103,11 @@ public class SiteFactoryImpl implements SiteFactory {
 	private void setType(Site site, String siteType, ObjectCreationException exceptionHandler) {
 
 		if (isBlank(siteType)) {
-			exceptionHandler.addError(SiteErrorCode.MISSING_ATTR_VALUE, SITE_NAME);
+			exceptionHandler.addError(SiteErrorCode.MISSING_ATTR_VALUE, SITE_TYPE);
 			return;
 		}
 		if (!CommonValidator.isValidPv(siteType, SITE_TYPE)) {
-			exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, COUNTRY);
+			exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, SITE_TYPE);
 		}
 		site.setType(siteType);
 	}

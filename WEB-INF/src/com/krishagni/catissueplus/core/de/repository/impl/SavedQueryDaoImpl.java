@@ -16,13 +16,26 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 
 	private static final String FQN = SavedQuery.class.getName();
 	
+	private static final String GET_SAVED_QUERIES_COUNT = FQN + ".getSavedQueriesCount";
+	
 	private static final String GET_SAVED_QUERIES = FQN + ".getSavedQueries";
 
 	private static final String GET_QUERIES_BY_ID = FQN + ".getQueriesByIds";
 	
+	private static final String GET_QUERIES_COUNT_BY_FOLDER_ID = FQN + ".getQueriesCountByFolderId";
+	
 	private static final String GET_QUERIES_BY_FOLDER_ID = FQN + ".getQueriesByFolderId";
 	
 	private static final String IS_QUERY_SHARED_WITH_USER = FQN + ".isQuerySharedWithUser";
+	
+	@Override
+	public Long getQueriesCount(Long userId) {
+		return ((Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_SAVED_QUERIES_COUNT)
+			.setLong("userId", userId)
+			.uniqueResult())
+			.longValue();		
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -51,16 +64,24 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_QUERIES_BY_ID);
 		return query.setParameterList("queryIds", queries).list();
 	}
+	
+	@Override
+	public Long getQueriesCountByFolderId(Long folderId) {
+		return ((Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_QUERIES_COUNT_BY_FOLDER_ID)
+			.setLong("folderId", folderId)
+			.uniqueResult()).longValue();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId) {
+	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId, int startAt, int maxRecords) {
 		List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
 		
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_QUERIES_BY_FOLDER_ID);
 		query.setLong("folderId", folderId);
-				
-		List<Object[]> rows = query.list();				
+		
+		List<Object[]> rows = query.setFirstResult(startAt).setMaxResults(maxRecords).list();				
 		for (Object[] row : rows) {			
 			result.add(getSavedQuerySummary(row));			
 		}

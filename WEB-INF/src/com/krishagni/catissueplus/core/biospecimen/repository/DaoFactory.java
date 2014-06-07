@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
+import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao; 
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
@@ -58,5 +59,7 @@ public interface DaoFactory {
 	public KeyGeneratorDao getKeyGeneratorDao();
 	
 	public InstituteDao getInstituteDao();
+	
+	public BiohazardDao getBiohazardDao();
 
 }

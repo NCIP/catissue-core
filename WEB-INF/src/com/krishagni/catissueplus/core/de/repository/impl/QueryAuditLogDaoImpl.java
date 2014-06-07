@@ -16,6 +16,10 @@ public class QueryAuditLogDaoImpl extends AbstractDao<QueryAuditLog> implements 
 
 	private static final String FQN = QueryAuditLog.class.getName();
 	
+	private static final String GET_AUDIT_LOGS_COUNT = FQN + ".getAuditLogsCount";
+	
+	private static final String GET_AUDIT_LOGS_BTWN_COUNT = FQN + ".getAuditLogsBtwnCount";
+	
 	private static final String GET_AUDIT_LOGS = FQN + ".getAuditLogs";
 	
 	private static final String GET_AUDIT_LOGS_BTWN = FQN + ".getAuditLogsBtwn";
@@ -23,6 +27,22 @@ public class QueryAuditLogDaoImpl extends AbstractDao<QueryAuditLog> implements 
 	private static final String GET_AUDIT_LOGS_BY_QUERY_N_USER = FQN + ".getAuditLogsByQueryAndUser";
 	
 	private static final String GET_AUDIT_LOG = FQN + ".getAuditLog";
+	
+	@Override
+	public Long getAuditLogsCount() {
+		return ((Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_AUDIT_LOGS_COUNT)
+			.uniqueResult()).longValue();
+	}
+	
+	@Override
+	public Long getAuditLogsCount(Date intervalSt, Date intervalEnd) {
+		return ((Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_AUDIT_LOGS_BTWN_COUNT)
+			.setTimestamp("intervalSt", intervalSt)
+			.setTimestamp("intervalEnd", intervalEnd)
+			.uniqueResult()).longValue();
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override

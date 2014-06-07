@@ -33,7 +33,15 @@
     <property name="recordCount" column="RECORD_COUNT" type="long"/>
       
     <property name="sql" column="QUERY_SQL"/>
-     
+
+    <query name="getAuditLogsCount">
+      select count(al) from QueryAuditLog al
+    </query>
+
+    <query name="getAuditLogsBtwnCount">
+      select count(al) from QueryAuditLog al where al.timeOfExecution between :intervalSt and :intervalEnd
+    </query>
+	
     <sql-query name="getAuditLogs">
       <return-scalar column="logId" type="long"/>
       <return-scalar column="userId" type="long"/>

@@ -177,7 +177,7 @@ public class UserFactoryImpl implements UserFactory {
 		Set<Site> userSites = new HashSet<Site>();
 		for (String siteName : userSiteNames) {
 
-			Site site = daoFactory.getSiteDao().getSiteByName(siteName);
+			Site site = daoFactory.getSiteDao().getSite(siteName);
 			if (site == null) {
 				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, SITE);
 				return;

@@ -143,8 +143,14 @@ public class QueryServiceImpl implements QueryService {
 
 			Long userId = req.getSessionDataBean().getUserId();
 			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao()
-					.getQueries(userId, req.getStartAt(), req.getMaxRecords()); 
-			return SavedQueriesSummaryEvent.ok(queries);
+					.getQueries(userId, req.getStartAt(), req.getMaxRecords());
+			
+			Long count = null;
+			if (req.isCountReq()) {
+				count = daoFactory.getSavedQueryDao().getQueriesCount(userId);
+			}
+			
+			return SavedQueriesSummaryEvent.ok(queries, count);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -449,7 +455,15 @@ public class QueryServiceImpl implements QueryService {
 				return FolderQueriesEvent.notAuthorized(folderId);
 			}
 			
-			return FolderQueriesEvent.ok(daoFactory.getSavedQueryDao().getQueriesByFolderId(folderId));
+			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao()
+					.getQueriesByFolderId(folderId, req.getStartAt(), req.getMaxRecords());
+			
+			Long count = null;
+			if (req.isCountReq()) {
+				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(folderId);
+			}
+			
+			return FolderQueriesEvent.ok(queries, count);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -578,7 +592,8 @@ public class QueryServiceImpl implements QueryService {
 			int maxRecs = req.getMaxRecords() < 0 ? 0 : req.getMaxRecords();
 
 			QueryAuditLogDao logDao = daoFactory.getQueryAuditLogDao();
-			List<QueryAuditLogSummary> result = null;			
+			List<QueryAuditLogSummary> auditLogs = null;
+			Long count = null;
 			if (savedQueryId == null || savedQueryId == -1) {
 				if (!session.isAdmin()) {
 					return QueryAuditLogsEvent.forbidden();
@@ -586,7 +601,10 @@ public class QueryServiceImpl implements QueryService {
 				
 				switch (req.getType()) {
 					case ALL:
-						result = logDao.getAuditLogs(startAt, maxRecs);
+						auditLogs = logDao.getAuditLogs(startAt, maxRecs);
+						if (req.isCountReq()) {
+							count = logDao.getAuditLogsCount();
+						}
 						break;
 						
 					case LAST_24:
@@ -594,15 +612,18 @@ public class QueryServiceImpl implements QueryService {
 						cal.add(Calendar.DAY_OF_MONTH, -1);
 						Date intervalSt = cal.getTime();						
 						Date intervalEnd = Calendar.getInstance().getTime();
-						result = logDao.getAuditLogs(intervalSt, intervalEnd, startAt, maxRecs);
+						auditLogs = logDao.getAuditLogs(intervalSt, intervalEnd, startAt, maxRecs);
+						if (req.isCountReq()) {
+							count = logDao.getAuditLogsCount(intervalSt, intervalEnd);
+						}						
 						break;
 				}
 								
 			} else {
-				result = logDao.getAuditLogs(savedQueryId, userId, startAt, maxRecs);
+				auditLogs = logDao.getAuditLogs(savedQueryId, userId, startAt, maxRecs);
 			}
 			
-			return QueryAuditLogsEvent.ok(result);
+			return QueryAuditLogsEvent.ok(auditLogs, count);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -777,5 +798,6 @@ public class QueryServiceImpl implements QueryService {
 		}
 		
 		return txn;
-	}	
+	}
+
 }

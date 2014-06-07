@@ -7,6 +7,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class FolderQueriesEvent extends ResponseEvent {
 	private Long folderId;
+	
+	private Long count;
 
 	private List<SavedQuerySummary> savedQueries;
 
@@ -18,6 +20,14 @@ public class FolderQueriesEvent extends ResponseEvent {
 		this.folderId = folderId;
 	}
 
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
+
 	public List<SavedQuerySummary> getSavedQueries() {
 		return savedQueries;
 	}
@@ -26,10 +36,11 @@ public class FolderQueriesEvent extends ResponseEvent {
 		this.savedQueries = savedQueries;
 	}
 	
-	public static FolderQueriesEvent ok(List<SavedQuerySummary> queries) {
+	public static FolderQueriesEvent ok(List<SavedQuerySummary> queries, Long count) {
 		FolderQueriesEvent resp = new FolderQueriesEvent();
 		resp.setStatus(EventStatus.OK);
 		resp.setSavedQueries(queries);
+		resp.setCount(count);
 		return resp;
 	}
 	

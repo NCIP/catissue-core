@@ -38,8 +38,9 @@ angular.module('plus.services', [])
         }
       },
 
-      getQueries: function(startAt, maxRecs) {
-        return $http.get(savedQueriesUrl + '?start=' + startAt + '&max=' + maxRecs).then(successfn);
+      getQueries: function(countReq, startAt, maxRecs) {
+        if (!countReq) { countReq = false; }
+        return $http.get(savedQueriesUrl + '?countReq=' + countReq + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
       },
 
       getQuery: function(queryId) {
@@ -54,8 +55,9 @@ angular.module('plus.services', [])
         return $http.get(foldersUrl).then(successfn);
       },
 
-      getFolderQueries: function(folderId) {
-        return $http.get(foldersUrl + folderId + "/saved-queries").then(successfn);
+      getFolderQueries: function(folderId, countReq, startAt, maxRecs) {
+        if (!countReq) { countReq = false; }
+        return $http.get(foldersUrl + folderId + "/saved-queries" + '?countReq=' + countReq + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
       },
 
       addQueriesToFolder: function(folderId, queries) {
@@ -85,8 +87,9 @@ angular.module('plus.services', [])
         return $http.get(savedQueriesUrl + queryId + "/audit-logs" + '?start=' + startAt + '&max=' + maxRecs).then(successfn);
       },
 
-      getAllAuditLogs: function(type, startAt, maxRecs) {
-        return $http.get(auditLogsUrl + '?type=' + type + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
+      getAllAuditLogs: function(type, countReq, startAt, maxRecs) {
+        if (!countReq) { countReq = false; }
+        return $http.get(auditLogsUrl + '?type=' + type + '&countReq=' + countReq + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
       },
 
       getAuditLog: function(auditLogId) {

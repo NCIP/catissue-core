@@ -72,10 +72,7 @@
     <query name="getSiteByName">
     	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.name = :siteName
     </query>
-     <query name="getSiteById">
-    	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.id = :siteId
-    </query>
- 
+    
  </class>
 
 </hibernate-mapping>

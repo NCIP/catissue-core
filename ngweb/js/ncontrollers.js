@@ -518,18 +518,16 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.showQueries = function() {
-      $scope.queryData.queries = [];
-      $scope.queryData.selectedQueries = [];
-      $scope.queryData.selectedFolderId = -1;
-      $scope.queryData.myFolders = [];
-      $scope.queryData.sharedFolders = [];
-      $scope.queryData.view = 'dashboard';
-      QueryService.getQueries(0, 1000).then(function(queries) {
-        $scope.queryData.queries = queries;
-      });
+      $scope.queryData = angular.extend(
+        $scope.queryData, 
+        {queries: [], selectedQueries: [], selectedFolderId: -1,
+         myFolders: [], sharedFolders: [], 
+         pageSize: 25, currentPage: 1, view: 'dashboard'});
 
+      $scope.selectFolder(-1);
       $scope.loadFolders();
     };
+
 
     $scope.addQueriesToFolder = function(folder) {
       var queryIds = [];
@@ -563,16 +561,29 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
     $scope.selectFolder = function(folderId) {
       $scope.queryData.selectedQueries = [];
+      $scope.queryData.currentPage = 1;
       $scope.queryData.selectedFolderId = folderId;
-      if (folderId != -1) {
-        QueryService.getFolderQueries(folderId).then(function(queries) {
-	  $scope.queryData.queries = queries;
-	});
+      $scope.changeQueriesPage(true);
+    };
+    
+    $scope.changeQueriesPage = function(countReq) {
+      folderId = $scope.queryData.selectedFolderId;
+      $scope.queryData.startAt = ($scope.queryData.currentPage - 1) * $scope.queryData.pageSize;
+      
+      var q;
+      if(folderId == -1) {
+        q = QueryService.getQueries(countReq, $scope.queryData.startAt, $scope.queryData.pageSize);
       } else {
-        QueryService.getQueries(0, 1000).then(function(queries) {
-          $scope.queryData.queries = queries;
-        });
+        q = QueryService.getFolderQueries(folderId, countReq, $scope.queryData.startAt, $scope.queryData.pageSize);
       }
+
+      q.then(
+        function(result) {
+          if (result.count) {
+            $scope.queryData.totalQueries = result.count;
+          }
+          $scope.queryData.queries = result.queries;
+        });
     };
 
     $scope.viewAuditLog = function(query) {
@@ -581,18 +592,31 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
  
     $scope.viewAllAuditLogs = function(type) {
-      if (!type) { type = 'ALL'; }
-      QueryService.getAllAuditLogs(type, 0, 500).then(
-        function(auditLogs) {
-          $scope.auditLogs = auditLogs;
-          if (auditLogs.length > 0) {
-            $scope.queryData.view = 'log';
-          } else {
+      $scope.auditData = {auditLogs: [], pageSize: 25, currentPage: 1, type: type};
+      if (!type) { $scope.auditData.type = 'ALL'; }
+      $scope.changeAuditLogPage(true);
+    };
+
+    $scope.changeAuditLogPage = function(countReq) {
+      var type = $scope.auditData.type;
+      $scope.auditData.startAt = ($scope.auditData.currentPage - 1) * $scope.auditData.pageSize;
+
+      var q = QueryService.getAllAuditLogs(type, countReq, $scope.auditData.startAt, $scope.auditData.pageSize);
+      q.then(
+        function(result) {
+          if (result.count) {
+            $scope.auditData.logCount = result.count;
+          }
+          $scope.auditData.auditLogs = result.auditLogs;
+
+          if (!result.auditLogs || result.auditLogs.length == 0) {
             Utility.notify(
               $("#notifications"),
               "No audit logs to show for the selected period",
               "info",
               true);
+          } else {
+            $scope.queryData.view = 'log';
           }
         }
       );
