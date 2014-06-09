@@ -1,9 +1,11 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
@@ -12,13 +14,21 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
+import com.krishagni.catissueplus.core.privileges.services.impl.PrivilegeServiceImpl;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
 	private DaoFactory daoFactory;
 
+	private PrivilegeService privilegeSvc;
+
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
+	}
+
+	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
+		this.privilegeSvc = privilegeSvc;
 	}
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -28,7 +38,15 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@Override
 	@PlusTransactional
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req) {
-		return AllCollectionProtocolsEvent.ok(daoFactory.getCollectionProtocolDao().getAllCollectionProtocols());
+		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getAllCollectionProtocols();
+		List<CollectionProtocolSummary> listToReturn = new ArrayList<CollectionProtocolSummary>();
+//		List<Long> cpList = privilegeSvc.getCpList(req.getSessionDataBean().getUserId(), "QUERY");
+//		for (CollectionProtocolSummary collectionProtocolSummary : list) {
+//			if(cpList.contains(collectionProtocolSummary.getId())){
+//				listToReturn.add(collectionProtocolSummary);
+//			}
+//		}
+		return AllCollectionProtocolsEvent.ok(list);
 	}
 
 	@Override

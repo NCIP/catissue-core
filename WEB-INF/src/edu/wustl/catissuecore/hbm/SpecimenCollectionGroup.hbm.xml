@@ -286,10 +286,11 @@
 </query>
 <query name="getScgSummary">select scg.name,scg.specimenCollectionSite.id,scg.collectionStatus,scg.collectionProtocolEvent.id, scg.collectionTimestamp, scg.collector.id, scg.receivedTimestamp, scg.receiver.id from edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg,edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where ascg.id=scg.id and ascg.activityStatus = 'Active' and scg.id = ?</query> 
 <query name="getSpecimenEventCollFromSCGID">select scg.collectionTimestamp from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id=?</query>
-<query name="getSCGNameIdPairList">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolRegistration.id = ? and scg.name != null and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
+<query name="getSCGNameIdPairList">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.collectionProtocolRegistration.id = ? and scg.name != null and 
+scg.activityStatus = 'Active' order by scg.name</query>
 
 <query name="getCPENameIdPairList">select DISTINCT cpe.collectionPointLabel,cpe.studyCalendarEventPoint,cpe.id 
-from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.collectionProtocol.id= ? order by cpe.studyCalendarEventPoint</query>
+from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe where cpe.collectionProtocol.id= ? and cpe.activityStatus = 'Active' order by cpe.studyCalendarEventPoint</query>
 
 <query name="getSCGListFromCPE">select scg.id,scg.name from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg, edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup ascg where scg.collectionProtocolEvent.id = ? and scg.collectionProtocolRegistration.id = ? and ascg.activityStatus = 'Active' and ascg.id=scg.id order by scg.name</query>
 
