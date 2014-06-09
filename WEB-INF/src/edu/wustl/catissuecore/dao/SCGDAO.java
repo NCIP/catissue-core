@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.dao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,7 +22,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
@@ -310,7 +308,7 @@ public class SCGDAO
 
 	public List<NameValueBean> getspecimenLabelsList(HibernateDAO hibernateDao, Long registrationId) throws DAOException
 	{
-		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label";
+		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' and specimen.label is not null order by specimen.label";
 		ColumnValueBean bean = new ColumnValueBean(registrationId);
 		List list = hibernateDao.executeQuery(hql, Arrays.asList(bean));
 		List<NameValueBean> beans = new ArrayList<NameValueBean>();
@@ -322,13 +320,12 @@ public class SCGDAO
 				beans.add(new NameValueBean(obj[1].toString(), Long.valueOf(obj[0].toString())));
 			}
 		}
-		// TODO Auto-generated method stub
 		return beans;
 	}
 
 	public List<NameValueBean> getSpecimenFromCPE(HibernateDAO hibernateDAO, Long cpId, Long registrationId) throws DAOException
 	{
-		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.specimenCollectionGroup.collectionProtocolEvent.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label";
+		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.specimenCollectionGroup.collectionProtocolEvent.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' specimen.label is not null order by specimen.label";
 		List<ColumnValueBean> valueBeans = new ArrayList<ColumnValueBean>();
 		valueBeans.add(new ColumnValueBean(registrationId));
 		valueBeans.add(new ColumnValueBean(cpId));
@@ -342,7 +339,6 @@ public class SCGDAO
 				beans.add(new NameValueBean(obj[1].toString(), Long.valueOf(obj[0].toString())));
 			}
 		}
-		// TODO Auto-generated method stub
 		return beans;
 	}
 	
