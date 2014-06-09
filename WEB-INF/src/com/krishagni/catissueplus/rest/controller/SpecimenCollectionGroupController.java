@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -90,6 +94,21 @@ public class SpecimenCollectionGroupController {
 		}
 
 		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ScgDetail createSCG(@RequestBody ScgDetail scgDetail) {
+		CreateScgEvent createScgEvent = new CreateScgEvent();
+		createScgEvent.setScgDetail(scgDetail);
+		createScgEvent.setSessionDataBean(getSession());
+		ScgCreatedEvent scgCreated = specimenCollGroupService.createScg(createScgEvent);
+		if (scgCreated.getStatus().equals(EventStatus.OK)) {
+			return scgCreated.getDetail();
+		}
+		return null;
+
 	}
 
 	private SessionDataBean getSession() {
