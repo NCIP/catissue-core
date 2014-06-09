@@ -325,7 +325,7 @@ public class SCGDAO
 
 	public List<NameValueBean> getSpecimenFromCPE(HibernateDAO hibernateDAO, Long cpId, Long registrationId) throws DAOException
 	{
-		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.specimenCollectionGroup.collectionProtocolEvent.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' specimen.label is not null order by specimen.label";
+		String hql = "select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.collectionProtocolRegistration.id = ? and specimen.specimenCollectionGroup.collectionProtocolEvent.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' and specimen.label is not null order by specimen.label";
 		List<ColumnValueBean> valueBeans = new ArrayList<ColumnValueBean>();
 		valueBeans.add(new ColumnValueBean(registrationId));
 		valueBeans.add(new ColumnValueBean(cpId));
