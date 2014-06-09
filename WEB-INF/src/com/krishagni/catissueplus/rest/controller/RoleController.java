@@ -1,4 +1,4 @@
-
+		
 package com.krishagni.catissueplus.rest.controller;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.events.CreateRoleEvent;
 import com.krishagni.catissueplus.core.privileges.events.RoleCreatedEvent;
 import com.krishagni.catissueplus.core.privileges.events.RoleDetails;

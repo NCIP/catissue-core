@@ -27,7 +27,7 @@
             cascade="none"
             update="true"
             insert="true"
-            column="USER_GROUP_ID"  />
+            column="SITE_ID"  />
 
         <many-to-one
             name="role"

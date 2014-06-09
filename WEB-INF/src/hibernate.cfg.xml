@@ -182,6 +182,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Institute.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeyGenerator.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Biohazard.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainer.hbm.xml" />
     </session-factory>
 
 </hibernate-configuration>

@@ -6,6 +6,7 @@ import com.krishagni.catissueplus.core.administrative.repository.CollectionProto
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditReportDao;
@@ -61,5 +62,7 @@ public interface DaoFactory {
 	public InstituteDao getInstituteDao();
 	
 	public BiohazardDao getBiohazardDao();
+	
+	public StorageContainerDao getStorageContainerDao();
 
 }

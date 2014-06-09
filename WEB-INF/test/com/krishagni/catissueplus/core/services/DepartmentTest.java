@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
-import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DepartmentFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.DepartmentFactoryImpl;
@@ -128,6 +127,16 @@ public class DepartmentTest {
 		assertEquals(reqEvent.getDepartmentDetails().getName(), createdDepartment.getName());
 	}
 
+	@Test
+	public void testDepartmentUpdationWithEmptyDepartmentName() {
+		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartment(1L));
+		UpdateDepartmentEvent reqEvent = DepartmentTestData.getUpdateDepartmentEventWithEmptyDepartmentName();
+		DepartmentUpdatedEvent response = departmentService.updateDepartment(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(DepartmentTestData.DEPARTMENT_NAME, response.getErroneousFields()[0].getFieldName());
+		assertEquals(PrivilegeErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+	}
 	@Test
 	public void testForInvalidDepartmentUpdate() {
 		when(departmentDao.getDepartment(anyLong())).thenReturn(null);

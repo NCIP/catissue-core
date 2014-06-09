@@ -8,12 +8,14 @@ import com.krishagni.catissueplus.core.administrative.repository.CollectionProto
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.BiohazardDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.CollectionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditReportDao;
@@ -184,7 +186,7 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-	
+
 	@Override
 	public KeyGeneratorDao getKeyGeneratorDao() {
 		KeyGeneratorDaoImpl dao = new KeyGeneratorDaoImpl();
@@ -205,6 +207,12 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-	
-	
+
+	@Override
+	public StorageContainerDao getStorageContainerDao() {
+		StorageContainerDaoImpl dao = new StorageContainerDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
 }

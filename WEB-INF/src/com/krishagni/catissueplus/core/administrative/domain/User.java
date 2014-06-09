@@ -253,6 +253,8 @@ public class User {
 
 	private final static String PASSWORD_TOKEN = "password token";
 
+	private static final String PASSWORD = "password";
+
 	public void changePassword(PasswordDetails passwordDetails) {
 		validateOldPassword(passwordDetails.getOldPassword());
 		updatePassword(passwordDetails.getNewPassword());
@@ -265,6 +267,9 @@ public class User {
 
 	private void updatePassword(String newPassword) {
 		Password password = new Password();
+		if (isBlank(newPassword)) {
+			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
+		}
 		password.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt(4)));
 		password.setUpdateDate(new Date());
 		password.setUser(this);

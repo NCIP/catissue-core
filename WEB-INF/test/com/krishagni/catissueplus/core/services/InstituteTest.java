@@ -60,7 +60,6 @@ public class InstituteTest {
 		InstituteCreatedEvent response = instituteService.createInstitute(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertNotNull(response.getInstituteDetails().getId());
 		assertEquals(reqEvent.getInstituteDetails().getName(), response.getInstituteDetails().getName());
 	}
 
@@ -123,5 +122,16 @@ public class InstituteTest {
 		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+	
+	@Test
+	public void testInstituteUpdationWithEmptyInstituteName() {
+		when(instituteDao.getInstitute(anyLong())).thenReturn(InstituteTestData.getInstitute(1L));
+		UpdateInstituteEvent reqEvent = InstituteTestData.getUpdateInstituteEventForEmptyName();
+		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(InstituteTestData.INSTITUTE_NAME, response.getErroneousFields()[0].getFieldName());
+		assertEquals(PrivilegeErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 }

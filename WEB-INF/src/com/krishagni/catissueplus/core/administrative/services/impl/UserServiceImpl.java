@@ -202,9 +202,6 @@ public class UserServiceImpl implements UserService {
 			emailSender.sendForgotPasswordEmail(user);
 			return PasswordForgottenEvent.ok();
 		}
-		catch (CatissueException ce) {
-			return PasswordForgottenEvent.invalidRequest(ce.getMessage());
-		}
 		catch (Exception e) {
 			return PasswordForgottenEvent.serverError(e);
 		}
@@ -212,13 +209,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PasswordValidatedEvent validatePassword(ValidatePasswordEvent event) {
-		try {
 			Boolean isValid = Password.isValidPasswordPattern(event.getPassword());
 			return PasswordValidatedEvent.ok(isValid);
-		}
-		catch (CatissueException ce) {
-			return PasswordValidatedEvent.invalidRequest(ce.getMessage());
-		}
 	}
 
 	@Override

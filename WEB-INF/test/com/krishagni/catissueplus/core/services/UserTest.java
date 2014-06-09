@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordValidatedEvent;
@@ -395,7 +396,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void testPasswordReSetWithBlankOldPassword() {
+	public void testPasswordChangeWithBlankOldPassword() {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(UserTestData.getUserWithCatissueDomain(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventForBlankOldPass();
 
@@ -403,6 +404,16 @@ public class UserTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
+	}
+	
+	@Test
+	public void testForSuccessfulUserCreationWithNullRole() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
+		when(roleDao.getRoleByName(anyString())).thenReturn(null);
+		UserCreatedEvent response = userService.createUser(reqEvent);
+
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -606,4 +617,21 @@ public class UserTest {
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 	
+	@Test
+	public void testForSuccessfulUserCreationWithoutPrivilege() {
+		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreationWithoutPrev();
+		UserCreatedEvent response = userService.createUser(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		UserDetails createdUserDto = response.getUserDetails();
+		assertEquals(reqEvent.getUserDetails().getFirstName(), createdUserDto.getFirstName());
+	}
+
+	@Test
+	public void testForSuccessfulgetUser() {
+		when(daoFactory.getUserDao().getUser(anyLong())).thenReturn(UserTestData.getUser(1l));
+		GetUserEvent event = userService.getUser(1l);
+		assertNotNull(event.getUserDetails());
+	}
 }

@@ -468,4 +468,13 @@ public class UserTestData {
 		users.add(getUser(3l));
 		return users;
 	}
+
+	public static CreateUserEvent getCreateUserEventForUserCreationWithoutPrev() {
+		CreateUserEvent event = getCreateUserEvent();
+		event.getUserDetails().setUserCPRoles(new ArrayList<UserCPRoleDetails>());
+		event.getUserDetails().setUserSiteNames(new ArrayList<String>());
+		return event;
+	}
+	
+	
 }

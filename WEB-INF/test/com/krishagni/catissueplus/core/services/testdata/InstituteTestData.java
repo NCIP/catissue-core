@@ -12,8 +12,9 @@ public class InstituteTestData {
 
 	public static CreateInstituteEvent getCreateInstituteEvent() {
 		CreateInstituteEvent event = new CreateInstituteEvent();
-		InstituteDetails details = event.getInstituteDetails();
+		InstituteDetails details = new InstituteDetails();
 		details.setName("My Inst");
+		event.setInstituteDetails(details);
 		return event;
 	}
 
@@ -26,13 +27,20 @@ public class InstituteTestData {
 
 	public static UpdateInstituteEvent getUpdateInstituteEvent() {
 		UpdateInstituteEvent event = new UpdateInstituteEvent();
-		InstituteDetails details = event.getInstituteDetails();
+		InstituteDetails details = new InstituteDetails();
 		details.setName("My Inst");
+		event.setInstituteDetails(details);
 		return event;
 	}
 
 	public static CreateInstituteEvent getCreateInstituteEventForEmptyName() {
 		CreateInstituteEvent event = getCreateInstituteEvent();
+		event.getInstituteDetails().setName(null);
+		return event;
+	}
+
+	public static UpdateInstituteEvent getUpdateInstituteEventForEmptyName() {
+		UpdateInstituteEvent event = getUpdateInstituteEvent();
 		event.getInstituteDetails().setName(null);
 		return event;
 	}

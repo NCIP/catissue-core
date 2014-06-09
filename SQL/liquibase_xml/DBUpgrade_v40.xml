@@ -2791,7 +2791,104 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
    
     <changeSet author="ajaysamgir" id="Migrate CATISSUE_SITE table data to CATISSUE_SITE_COORDINATORS " failOnError="true">
       <sql>INSERT INTO CATISSUE_SITE_COORDINATORS(select Identifier,User_ID from Catissue_Site where Identifier IS NOT NULL AND USER_ID IS NOT NULL)</sql>
-    </changeSet>
+    </changeSet>   
+        
+    <changeSet author="dpatil" id="new storage container table" failOnError="true">
+	   <createTable tableName="CATISSUE_STORAGE_CONTAINERS">
+		 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+		   <constraints primaryKey="true" nullable="false"/>
+		 </column>
+
+		 <column name="NAME" type="${text.type}(64)">
+		     <constraints unique="true" nullable="false" />
+		 </column>
+		 
+		 <column name="BARCODE" type="${text.type}(64)">
+		 	<constraints unique="true" />
+		 </column>
+
+		 <column name="TEMPERATURE" type="${double.type}">
+		 </column>
+		 
+		 <column name="ONE_DIMENSION_CAPACITY" type="${int.type}">
+		 </column>
+		 
+		 <column name="TWO_DIMENSION_CAPACITY" type="${int.type}">
+		 </column>
+		 
+		 <column name="PARENT_CONTAINER_ID" type="${int.type}">
+		 </column>
+
+		 <column name="CREATED_BY" type="${int.type}">
+		   	<constraints nullable="false"/>
+		 </column>
+		          
+		 <column name="SITE_ID" type="${int.type}">
+		   	<constraints nullable="false"/>
+		 </column>
+
+		 <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+		 </column>
+		 
+		 <column name="COMMENTS" type="${text.type}(255)">
+		 </column>
+	   </createTable>
+	
+	   <addForeignKeyConstraint
+				constraintName="FK_CAT_STOCON_USERID_USER_ID"
+				baseTableName="CATISSUE_STORAGE_CONTAINERS"
+				baseColumnNames="CREATED_BY"
+				referencedTableName="CATISSUE_USER"
+				referencedColumnNames="IDENTIFIER" />
+			
+	   <addForeignKeyConstraint
+				constraintName="FK_CAT_STOCON_SITEID_SITE_IDs"
+				baseTableName="CATISSUE_STORAGE_CONTAINERS"
+				baseColumnNames="SITE_ID"
+				referencedTableName="CATISSUE_SITE"
+				referencedColumnNames="IDENTIFIER" />
+	</changeSet>
+	    
+	<changeSet author="dpatil" id="holds specimen type table" failOnError="true">
+	   <createTable tableName="CAT_STOR_CONT_SPEC_TYPES">
+		 <column name="STORAGE_CONTAINER_ID" type="${int.type}">
+		 </column>
+
+		 <column name="SPECIMEN_TYPE" type="${text.type}(64)">
+		 </column>  
+	   </createTable>
+	
+	   <addForeignKeyConstraint
+				constraintName="FK_CAT_SCST_SCID_CONTAINER_IDs"
+				baseTableName="CAT_STOR_CONT_SPEC_TYPES"
+				baseColumnNames="STORAGE_CONTAINER_ID"
+				referencedTableName="CATISSUE_STORAGE_CONTAINERS"
+				referencedColumnNames="IDENTIFIER" />
+				
+	</changeSet>
+	    
+	<changeSet author="dpatil" id="table for catissue container cp mapping" failOnError="true">
+       <createTable tableName="CATISSUE_CONTAINER_CPS">
+               <column name="CONTAINER_ID" type="${int.type}">
+               </column>
+
+               <column name="CP_ID" type="${int.type}">
+               </column>
+       </createTable>
+   
+       <addForeignKeyConstraint
+               constraintName="FK_CAT_CC_CID_CAT_SC_ID"
+               baseTableName="CATISSUE_CONTAINER_CPS"
+               baseColumnNames="CONTAINER_ID"
+               referencedTableName="CATISSUE_STORAGE_CONTAINERS"
+               referencedColumnNames="IDENTIFIER" />
+       <addForeignKeyConstraint
+               constraintName="FK_CAT_CC_CPID_CAT_CP_ID"
+               baseTableName="CATISSUE_CONTAINER_CPS"
+               baseColumnNames="CP_ID"
+               referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+               referencedColumnNames="IDENTIFIER" />
+    </changeSet> 
 </databaseChangeLog>         
 
 

@@ -66,4 +66,11 @@ public class DepartmentTestData {
 		return event;
 	}
 
+	public static UpdateDepartmentEvent getUpdateDepartmentEventWithEmptyDepartmentName() {
+		UpdateDepartmentEvent event = getUpdateDepartmentEvent();
+		DepartmentDetails departmentDetails = event.getDepartmentDetails();
+		departmentDetails.setName(null);
+		return event;
+	}
+
 }
