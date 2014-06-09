@@ -77,7 +77,19 @@
 		<query name="getScgById">
               from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
               where scg.id = :scgId
-            </query>
+        </query>
+        
+        <query name="getScgIdByBarcode">
+        	select scg.id from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
+              where scg.barcode = :barcode
+        </query>
+        
+        <query name="getScgIdByName">
+        	select scg.id from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
+              where scg.name = :name
+        </query>
+            
+            
 
 	</class>
 </hibernate-mapping>

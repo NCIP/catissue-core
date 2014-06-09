@@ -76,6 +76,7 @@
   
   <bean id="specimenCollGroupService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+	<property name="scgFactory" ref="scgFactory"/>
   </bean>
   
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
@@ -90,12 +91,24 @@
   <bean id="participantFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
+  <!--  Token Based Specimen label Generator -->
+	<!-- <bean id="specimenLabelGenerator" class="com.krishagni.catissueplus.labelgenerator.impl.TokenBasedSpecimenLabelGenerator">
+		<property name="tokenFactory" ref="tokenFactory" />
+	</bean>  -->
+	
+	<bean id="specimenLabelGenerator" class="com.krishagni.catissueplus.labelgenerator.impl.DefaultSpecimenLabelGenerator">
+	</bean>
+
+	<bean id="scgLabelGenerator" class="com.krishagni.catissueplus.labelgenerator.impl.SCGLabelGenerator">
+	</bean>
   
   <bean id="specimenFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
   </bean>
   <bean id="scgFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="scgLabelGenerator" ref="scgLabelGenerator"/>
   </bean>
   <bean id="cprFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolRegistrationFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -260,5 +273,13 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
 		<property name="storageContainerFactory" ref="storageContainerFact"/>
 	</bean>
+	
+	<bean id="bucketPool" class="com.krishagni.catissueplus.core.common.util.BucketPool">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+ 	</bean>
+ 	
+	<bean id="tokenFactory" class="com.krishagni.catissueplus.labelgenerator.impl.TokenFactory">
+ 	</bean>
+
 	
  </beans>

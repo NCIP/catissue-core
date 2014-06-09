@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
@@ -140,6 +142,23 @@ public class SpecimenController {
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getAliquots();
 		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenDetail createSpecimen(@RequestBody SpecimenDetail specimenDetail) {
+		CreateSpecimenEvent createSpecimenEvent = new CreateSpecimenEvent();
+		createSpecimenEvent.setSpecimenDetail(specimenDetail);
+		createSpecimenEvent.setSessionDataBean(getSession());
+		createSpecimenEvent.setScgId(specimenDetail.getScgId());
+
+		SpecimenCreatedEvent response = specimenSvc.createSpecimen(createSpecimenEvent);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getSpecimenDetail();
+		}
+
 		return null;
 	}
 

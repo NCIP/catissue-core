@@ -182,17 +182,24 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * @param exception 
 	 */
 	private void setPPId(CollectionProtocolRegistration registration, String ppId, ObjectCreationException exception) {
-		if (StringUtils.isBlank(ppId) && registration.getCollectionProtocol() != null
-				&& StringUtils.isEmpty(registration.getCollectionProtocol().getPpidFormat())) {
-			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
-			return;
-		}
-		String ppidFormat = registration.getCollectionProtocol().getPpidFormat();
-
-		Long value = keyFactory.getValueByKey(registration.getCollectionProtocol().getId().toString(),
-				CollectionProtocol.class.getName());
-		PpidGenerator generator = new PpidGeneratorImpl();
-		registration.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
+	    String ppidFormat = registration.getCollectionProtocol().getPpidFormat();
+	   if (StringUtils.isBlank(ppId)){
+	        if(StringUtils.isBlank(ppidFormat)){
+	            exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
+	            return;
+	        }
+	        
+	        Long value = keyFactory.getValueByKey(registration.getCollectionProtocol().getId().toString(),
+	                CollectionProtocol.class.getName());
+	        PpidGenerator generator = new PpidGeneratorImpl();
+	        registration.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
+	    }
+	    else{
+	        registration.setProtocolParticipantIdentifier(ppId);
+	    }
+		
+	    
+		
 
 	}
 

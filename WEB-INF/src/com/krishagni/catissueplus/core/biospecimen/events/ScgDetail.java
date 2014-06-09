@@ -219,6 +219,27 @@ public class ScgDetail {
 
 	public static ScgDetail fromDomain(SpecimenCollectionGroup scg) {
 		ScgDetail detail = new ScgDetail();
+		detail.setActivityStatus(scg.getActivityStatus());
+		detail.setBarcode(scg.getBarcode());
+		detail.setClinicalDiagnosis(scg.getClinicalDiagnosis());
+		detail.setClinicalStatus(scg.getClinicalStatus());
+		detail.setCollectionComments(scg.getCollectionComments());
+		detail.setCollectionContainer(scg.getCollectionContainer());
+		detail.setCollectionProcedure(scg.getCollectionProcedure());
+		detail.setCollectionSiteName(scg.getCollectionSite().getName());
+		detail.setCollectionStatus(scg.getCollectionStatus());
+		detail.setCollectionTimestamp(scg.getCollectionTimestamp());
+		detail.setCollectorName(scg.getCollector().getLastName() + ", " + scg.getCollector().getFirstName());
+		detail.setComment(scg.getComment());
+		detail.setCpeId(scg.getCollectionProtocolEvent().getId());
+		detail.setCprId(scg.getCollectionProtocolRegistration().getId());
+		detail.setId(scg.getId());
+		detail.setName(scg.getName());
+		detail.setReceivedComments(scg.getReceivedComments());
+		detail.setReceivedQuality(scg.getReceivedQuality());
+		detail.setReceivedTimestamp(scg.getReceivedTimestamp());
+		detail.setReceiverName(scg.getReceiver().getLastName() + ", " + scg.getReceiver().getFirstName());
+		detail.setSurgicalPathologyNumber(scg.getSurgicalPathologyNumber());
 		return detail;
 	}
 
