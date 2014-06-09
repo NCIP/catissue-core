@@ -13,7 +13,6 @@
 <%@page import="java.util.*"%>
 <%@page import="java.util.HashMap"%>
 
-
 <head>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <link rel="STYLESHEET" type="text/css" href="css/alretmessages.css">
@@ -34,6 +33,12 @@
 
 <script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
+	
+<style>
+html, body {
+  height: 100%
+}
+</style>
 	</head>
 
 <script>

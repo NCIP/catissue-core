@@ -3,7 +3,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
   .controller('QueryController', ['$scope', '$sce', '$modal', '$q', '$timeout', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, $timeout, CollectionProtocolService, FormsService, QueryService, UsersService) {
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
-      ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE',}, 
+      ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE'}, 
       lt: {name: "lt", desc: "Less than", code: "&#60;", symbol: '<', model: 'LT'}, 
       le: {name: "le", desc: "Less than or Equals", code: "&#8804;", symbol: '<=', model: 'LE'}, 
       gt: {name: "gt", desc: "Greater than", code: "&#62;", symbol: '>', model: 'GT'}, 
@@ -442,7 +442,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           field: null,
           op: null,
           value: null,
-          ops: null,
+          ops: null
         },
 
         notifs: {
@@ -487,7 +487,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         );
       },
       scope: undefined,
-      grid: undefined,
+      grid: undefined
     };
 
     $scope.queryData.resultGridOpts = {

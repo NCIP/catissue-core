@@ -22,7 +22,8 @@ Ext.onReady(function(){
 
     // Menus can be prebuilt and passed by reference
     var menuHome = new Ext.menu.Menu({
-        id: 'menuHome',
+    	autoWidth: true,
+    	id: 'menuHome',
          items: [
 			{
                 text: 'My Profile',
@@ -38,7 +39,8 @@ Ext.onReady(function(){
     });
 
     var menu = new Ext.menu.Menu({
-        id: 'mainMenu',
+    	autoWidth: true,
+    	id: 'mainMenu',
         items: [
             {
                 text: 'User',
@@ -114,7 +116,6 @@ Ext.onReady(function(){
                     ]
                 }
             },
-
 			  {
                 text: 'Site',
 				tooltip:'Add Site',
@@ -289,6 +290,7 @@ Ext.onReady(function(){
 			
             // For Bio Specimen Data
     var menu_ng = new Ext.menu.Menu({
+    	autoWidth: true,
         id: 'menu_ng',
         items: [
           {
@@ -305,6 +307,7 @@ Ext.onReady(function(){
     });
 
     var menu_bio = new Ext.menu.Menu({
+    	autoWidth: true,
         id: 'menu_bio',
         items: [
             {
@@ -412,6 +415,7 @@ Ext.onReady(function(){
             // For Search link
 
     var menu_search = new Ext.menu.Menu({
+    	autoWidth: true,
         id: 'menu_search',
         items: [
 			{
@@ -438,6 +442,7 @@ Ext.onReady(function(){
     });
 
 	    var logout_menu = new Ext.menu.Menu({
+    	autoWidth: true,
         id: 'logout_menu',
 		items: [
 			{
@@ -496,6 +501,7 @@ Ext.onReady(function(){
 	//For Help Tab
 
 	var helpMenu = new Ext.menu.Menu({
+		autoWidth: true,
         id: 'helpMenu',
          items: [
 			{

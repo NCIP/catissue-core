@@ -1,5 +1,4 @@
 <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" isELIgnored="false"%>
@@ -47,7 +46,7 @@
     }
 
 %>
-<html ng-app="cpview-app">
+<html>
     <link rel="stylesheet" type="text/css" href="ngweb/external/select2/css/select2.css"></link>
     <link href="ngweb/external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
     <link rel="stylesheet" type="text/css" href="jss/app/css/tree.css"></link> 
@@ -65,7 +64,9 @@
     
     <script type="text/javascript" src="ngweb/external/angularjs/ui-bootstrap-tpls-0.11.0.min.js"></script>
     
-
+    <script>
+      document.createElement('ka-select');
+    </script>
 <script type="text/javascript">
 var isParticipantUpdated = true;
 </script>
@@ -275,15 +276,7 @@ function showCursor(){
 function hideCursor(){
     document.body.style.cursor='default';
 }
-<div class="cp-dropdown-label" style="
-    margin-right: 3px;
-">
-    <span> Collection Protocol</span>
-  <span class="watch-tutorial pull-right">
-    <a target="_blank" href="https://catissueplus.atlassian.net/wiki/x/MoB2AQ">Watch Tutorial</a>
-  </span>
-     </div>
-     
+   
 </script>
 <table border="1" width="100%" height="100%" cellpadding="0" cellspacing="0">
   <tr>

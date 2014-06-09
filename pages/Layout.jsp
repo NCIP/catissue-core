@@ -9,22 +9,12 @@
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="java.text.MessageFormat"%>
 
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
-<style>
-#loginMessage {
-    position: fixed;
-    bottom: 0;
-    text-align:right;
-    z-index: 150;
-    width:100%;
-}
 
-
-</style>
-<html>
-<tiles:importAttribute />
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" ng-app="cpview-app" id="ng-app">
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=IE9">
+<tiles:importAttribute />
 <title><bean:message key="display.app.name"/> <bean:message key="app.version"/></title>
     <%
     String URLKey=(String)request.getAttribute("helpURLKey");
@@ -45,6 +35,19 @@
         }
     }
     %>
+    <style>
+      html, body {
+        height: 100%;
+      }
+      #loginMessage {
+        position: fixed;
+        bottom: 0;
+        text-align:right;
+        z-index: 150;
+        width:100%;
+      }
+    </style>
+
 <!--Jitendra -->
 <script language="JavaScript">
         var timeOut;
@@ -253,9 +256,6 @@
     </tr>
     <tr height="88%">
         <td>
-        <!--
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" height="475">
-        -->
             <table width="100%" border="0" cellspacing="0" cellpadding="0"  height="100%">
                 <tr height="100%">
                     <td colspan="2" width="100%" valign="top" height="100%"><!-- target of anchor to skip menus -->
@@ -276,7 +276,6 @@
         </td>
     </tr>
 </table>
-</body>
 <script>
 
 showsuccessMessageStrip();
@@ -316,4 +315,8 @@ function fade(element) {
 <script type="text/javascript" src="jss/dhtmlwindow.js"></script>
 <script type="text/javascript" src="jss/modal.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script>
+<script type="text/javascript" src="jss/IE9-Prototypes.js"></script>
+
+
+</body>
 </html>

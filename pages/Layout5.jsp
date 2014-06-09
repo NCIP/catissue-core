@@ -9,12 +9,10 @@
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="java.text.MessageFormat"%>
 
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
-
-<html>
+<!doctype html>
 <tiles:importAttribute />
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title><bean:message key="display.app.name"/> <bean:message key="app.version"/></title>
 	<%
 	String URLKey=(String)request.getAttribute("helpURLKey");
@@ -37,6 +35,12 @@
 
 	%>
 <!--Jitendra -->
+<style>
+    html, body {
+      height: 100%;
+    }
+</style>
+
 <script language="JavaScript">
 		var timeOut;
 		var advanceTime;
@@ -242,10 +246,7 @@
 		</td>
 	</tr>
 	<tr height="88%">
-		<td>
-		<!--
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="475">
-		-->
+		<td height="100%">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0"  height="100%">
 				<tr height="100%">
 					<td colspan="2" width="100%" valign="top" height="100%"><!-- target of anchor to skip menus -->
@@ -268,4 +269,6 @@
 <script type="text/javascript" src="jss/dhtmlwindow.js"></script>
 <script type="text/javascript" src="jss/modal.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script>
+<script type="text/javascript" src="jss/IE9-Prototypes.js"></script>
+
 </html>
