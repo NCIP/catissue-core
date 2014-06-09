@@ -29,7 +29,7 @@
 
 		<property name="activityStatus" type="string" column="ACTIVITY_STATUS" />
 
-		<many-to-one name="consentWitness" class="edu.wustl.catissuecore.domain.User"
+		<many-to-one name="consentWitness" class="com.krishagni.catissueplus.core.administrative.domain.User"
 			column="CONSENT_WITNESS" />
 
 		<many-to-one name="participant"
