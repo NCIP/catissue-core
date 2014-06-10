@@ -138,6 +138,8 @@ public class StorageContainerTestData {
 		details.setSiteName("My Site");
 		details.setTempratureInCentigrade(22.22);
 		details.setCreatedBy(1l);
+		details.setOneDimentionLabelingScheme("Numbers");
+		details.setTwoDimentionLabelingScheme("Numbers");
 		return details;
 	}
 
@@ -150,6 +152,8 @@ public class StorageContainerTestData {
 		container.setName("Container1");
 		container.setComments("Blah blah blah");
 		container.setSite(getSite());
+		container.setOneDimentionLabelingScheme("Numbers");
+		container.setTwoDimentionLabelingScheme("Numbers");
 		container.setTempratureInCentigrade(22.22);
 		container.setCreatedBy(getUser(1l));
 		return container;

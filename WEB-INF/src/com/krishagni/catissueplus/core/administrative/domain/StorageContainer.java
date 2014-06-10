@@ -10,6 +10,8 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 public class StorageContainer {
 
+	private static final String NUMBERS = "Numbers";
+
 	private Long id;
 
 	private String name;
@@ -35,6 +37,10 @@ public class StorageContainer {
 	private Integer oneDimensionCapacity;
 
 	private Integer twoDimensionCapacity;
+
+	private String oneDimentionLabelingScheme = NUMBERS;
+
+	private String twoDimentionLabelingScheme = NUMBERS;
 
 	public Long getId() {
 		return id;
@@ -140,6 +146,22 @@ public class StorageContainer {
 		this.holdsSpecimenTypes = holdsSpecimenTypes;
 	}
 
+	public String getOneDimentionLabelingScheme() {
+		return oneDimentionLabelingScheme;
+	}
+
+	public void setOneDimentionLabelingScheme(String oneDimentionLabelingScheme) {
+		this.oneDimentionLabelingScheme = oneDimentionLabelingScheme;
+	}
+
+	public String getTwoDimentionLabelingScheme() {
+		return twoDimentionLabelingScheme;
+	}
+
+	public void setTwoDimentionLabelingScheme(String twoDimentionLabelingScheme) {
+		this.twoDimentionLabelingScheme = twoDimentionLabelingScheme;
+	}
+
 	public void update(StorageContainer storageContainer) {
 		this.setActivityStatus(storageContainer.getActivityStatus());
 		this.setBarcode(storageContainer.getBarcode());
@@ -152,10 +174,10 @@ public class StorageContainer {
 		this.setOneDimensionCapacity(storageContainer.getOneDimensionCapacity());
 		this.setParentContainer(storageContainer.getParentContainer());
 		this.setSite(storageContainer.getSite());
-
-		SetUpdater.<CollectionProtocol> newInstance().update(this.getHoldsCPs(),
-				storageContainer.getHoldsCPs());
-
+		this.setOneDimentionLabelingScheme(storageContainer.getOneDimentionLabelingScheme());
+		this.setTwoDimentionLabelingScheme(storageContainer.getTwoDimentionLabelingScheme());
+		
+		SetUpdater.<CollectionProtocol> newInstance().update(this.getHoldsCPs(), storageContainer.getHoldsCPs());
 		SetUpdater.<String> newInstance().update(this.getHoldsSpecimenTypes(), storageContainer.getHoldsSpecimenTypes());
 	}
 
@@ -167,7 +189,6 @@ public class StorageContainer {
 		if (!this.getActivityStatus().equals(storageContainer.getActivityStatus())) {
 			this.setActivityStatus(storageContainer.getActivityStatus());
 		}
-
 	}
 
 }

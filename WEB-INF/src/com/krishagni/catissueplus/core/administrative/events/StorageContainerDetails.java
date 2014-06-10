@@ -38,6 +38,10 @@ public class StorageContainerDetails {
 
 	private Integer twoDimensionCapacity;
 
+	private String oneDimentionLabelingScheme;
+
+	private String twoDimentionLabelingScheme;
+
 	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public boolean isNameModified() {
@@ -91,7 +95,15 @@ public class StorageContainerDetails {
 	public boolean isTwoDimensionCapacityModified() {
 		return modifiedAttributes.contains("twoDimensionCapacity");
 	}
-
+	
+	public boolean isTwoDimentionLabelingSchemeModified() {
+		return modifiedAttributes.contains("twoDimentionLabelingScheme");
+	}
+	
+	public boolean isOneDimentionLabelingSchemeModified() {
+		return modifiedAttributes.contains("oneDimentionLabelingScheme");
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -204,6 +216,22 @@ public class StorageContainerDetails {
 		this.modifiedAttributes = modifiedAttributes;
 	}
 
+	public String getOneDimentionLabelingScheme() {
+		return oneDimentionLabelingScheme;
+	}
+
+	public void setOneDimentionLabelingScheme(String oneDimentionLabelingScheme) {
+		this.oneDimentionLabelingScheme = oneDimentionLabelingScheme;
+	}
+
+	public String getTwoDimentionLabelingScheme() {
+		return twoDimentionLabelingScheme;
+	}
+
+	public void setTwoDimentionLabelingScheme(String twoDimentionLabelingScheme) {
+		this.twoDimentionLabelingScheme = twoDimentionLabelingScheme;
+	}
+
 	public static StorageContainerDetails fromDomain(StorageContainer storageContainer) {
 		StorageContainerDetails details = new StorageContainerDetails();
 		details.setId(storageContainer.getId());
@@ -217,6 +245,8 @@ public class StorageContainerDetails {
 		details.setTempratureInCentigrade(storageContainer.getTempratureInCentigrade());
 		details.setTwoDimensionCapacity(storageContainer.getTwoDimensionCapacity());
 		details.setOneDimensionCapacity(storageContainer.getOneDimensionCapacity());
+		details.setOneDimentionLabelingScheme(storageContainer.getOneDimentionLabelingScheme());
+		details.setTwoDimentionLabelingScheme(storageContainer.getTwoDimentionLabelingScheme());
 		if (storageContainer.getParentContainer() != null) {
 			details.setParentContainerName(storageContainer.getParentContainer().getName());
 		}
@@ -239,5 +269,5 @@ public class StorageContainerDetails {
 		}
 		return cpTitles;
 	}
-	
+
 }

@@ -286,7 +286,7 @@ public class ShowStorageGridViewAction extends BaseAction
 				}
 			}
 			final IBizLogic specimenBizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			String sourceObjectName = Specimen.class.getName();
+			String sourceObjectName = Specimen.class.getName();	
 			final String[] selectColumnName = {"id", "specimenPosition.positionDimensionOne",
 					"specimenPosition.positionDimensionTwo", "label"};
 			final String[] whereColumnName = {"specimenPosition.storageContainer.id"};

@@ -2826,9 +2826,15 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 		 <column name="SITE_ID" type="${int.type}">
 		   	<constraints nullable="false"/>
 		 </column>
+		 
+		 <column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+		 </column>
+		 
+		 <column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+		 </column>
 
 		 <column name="ACTIVITY_STATUS" type="${text.type}(16)">
-		 </column>
+			 </column>
 		 
 		 <column name="COMMENTS" type="${text.type}(255)">
 		 </column>

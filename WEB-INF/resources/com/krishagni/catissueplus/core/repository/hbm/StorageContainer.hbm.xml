@@ -51,6 +51,18 @@
     		column="ONE_DIMENSION_CAPACITY"
     		length="16"
     		type="int" />
+    		
+    	<property
+            name="oneDimentionLabelingScheme"
+            column="ONE_DIMENSION_LABELLING_SCHEME"
+            length="16"
+            type="string"/>
+            
+        <property
+            name="twoDimentionLabelingScheme"
+            column="TWO_DIMENSION_LABELLING_SCHEME"
+            length="16"
+            type="string"/>
 
 		<property
     		name="twoDimensionCapacity"

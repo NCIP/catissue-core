@@ -10,6 +10,7 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.ContainerLabelSchemeType;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
@@ -61,6 +62,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setTwoDimensionCapacity(storageContainer, details.getTwoDimensionCapacity(), exceptionHandler);
 		setParentContainer(storageContainer, details.getParentContainerName(), exceptionHandler);
 		setTempratureInCentigrade(storageContainer, details.getTempratureInCentigrade());
+		setOneDimensionLabelingScheme(storageContainer, details.getOneDimentionLabelingScheme(), exceptionHandler);
+		setTwoDimensionLabelingScheme(storageContainer, details.getTwoDimentionLabelingScheme(), exceptionHandler);
 		exceptionHandler.checkErrorAndThrow();
 		return storageContainer;
 	}
@@ -116,8 +119,30 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			setTempratureInCentigrade(storageContainer, details.getTempratureInCentigrade());
 		}
 
+		if (details.isOneDimentionLabelingSchemeModified()) {
+			setOneDimensionLabelingScheme(storageContainer, details.getOneDimentionLabelingScheme(), exception);
+		}
+
+		if (details.isTwoDimensionCapacityModified()) {
+			setTwoDimensionLabelingScheme(storageContainer, details.getTwoDimentionLabelingScheme(), exception);
+		}
+
 		exception.checkErrorAndThrow();
 		return storageContainer;
+	}
+
+	private void setTwoDimensionLabelingScheme(StorageContainer storageContainer, String twoDimentionLabelingScheme,
+			ObjectCreationException exception) {
+		if(!isBlank(twoDimentionLabelingScheme) && ContainerLabelSchemeType.getEnumNameForValue(twoDimentionLabelingScheme) != null) {
+			storageContainer.setTwoDimentionLabelingScheme(twoDimentionLabelingScheme);
+		}
+	}
+
+	private void setOneDimensionLabelingScheme(StorageContainer storageContainer, String oneDimentionLabelingScheme,
+			ObjectCreationException exception) {
+		if(!isBlank(oneDimentionLabelingScheme) && ContainerLabelSchemeType.getEnumNameForValue(oneDimentionLabelingScheme) != null) {
+			storageContainer.setOneDimentionLabelingScheme(oneDimentionLabelingScheme);
+		}
 	}
 
 	private void setHoldsSpecimenTypes(StorageContainer storageContainer, Set<String> holdsSpecimenTypes,
@@ -196,7 +221,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setOneDimensionCapacity(StorageContainer storageContainer, Integer oneDimensionCapacity,
 			ObjectCreationException exceptionHandler) {
-		if (! isValidNumber(oneDimensionCapacity)) {
+		if (!isValidNumber(oneDimensionCapacity)) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, ONE_DIMENSION_CAPACITY);
 			return;
 		}
@@ -205,7 +230,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setTwoDimensionCapacity(StorageContainer storageContainer, Integer twoDimensionCapacity,
 			ObjectCreationException exceptionHandler) {
-		if (! isValidNumber(twoDimensionCapacity)) {
+		if (!isValidNumber(twoDimensionCapacity)) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, TWO_DIMENSION_CAPACITY);
 			return;
 		}
@@ -213,10 +238,10 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 
 	private boolean isValidNumber(Integer capacity) {
-		if(capacity == null || capacity <= 0) {
-			return false; 
+		if (capacity == null || capacity <= 0) {
+			return false;
 		}
-	  return true;
+		return true;
 	}
 
 	private void setParentContainer(StorageContainer storageContainer, String parentContainerName,
