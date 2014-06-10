@@ -2731,6 +2731,13 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             tableName="CATISSUE_SPECIMEN"/>
     </changeSet>    
 
+    <changeSet id="delete orphan references from specimen list table" author="nitesh">
+        <sql>
+            delete from CATISSUE_SPEC_TAG_ITEMS where obj_id not in (select identifier from catissue_specimen)
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
+
     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
       <sqlFile 
         encoding="utf8"
