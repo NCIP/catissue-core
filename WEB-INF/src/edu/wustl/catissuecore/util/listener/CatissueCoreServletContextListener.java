@@ -23,6 +23,7 @@ import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
 import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
+import krishagni.catissueplus.util.FormProcessor;
 import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
 
 import org.apache.commons.io.FilenameUtils;
@@ -30,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
 import edu.common.dynamicextensions.nutility.DEApp;
+import edu.common.dynamicextensions.nutility.FormProperties;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
@@ -148,6 +150,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             //QueryDataExportService.initialize();
 
 			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+			
+			FormProperties.getInstance().setPostProcessor(new FormProcessor());
 			
 			InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);

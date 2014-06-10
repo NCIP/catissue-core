@@ -167,16 +167,19 @@ public class FormServiceImpl implements FormService {
 			Long formId = formCtxtDetail.getFormId();
 			Long cpId = formCtxtDetail.getCollectionProtocol().getId();
 			String entity = formCtxtDetail.getLevel();
+			Integer sortOrder = formCtxtDetail.getSortOrder();
 			boolean isMultiRecord = formCtxtDetail.isMultiRecord();
 			FormContextBean formCtxt = formDao.getFormContext(formId, cpId, entity);
 			if (formCtxt == null) {
 				formCtxt = new FormContextBean();
 				formCtxt.setContainerId(formId);
 				formCtxt.setCpId(cpId);
-				formCtxt.setEntityType(entity);
+				formCtxt.setEntityType(entity); 
 				formCtxt.setMultiRecord(isMultiRecord);
-				formDao.saveOrUpdate(formCtxt);
 			}
+			
+			formCtxt.setSortOrder(sortOrder);
+			formDao.saveOrUpdate(formCtxt);
 			
 			formCtxtDetail.setFormCtxtId(formCtxt.getIdentifier());
 		}

@@ -11,6 +11,8 @@ public class FormContextDetail {
 	
 	private Long formId;
 	
+	private Integer sortOrder;
+
 	private boolean isMultiRecord;
 
 	public Long getFormCtxtId() {
@@ -43,6 +45,14 @@ public class FormContextDetail {
 
 	public void setFormId(Long formId) {
 		this.formId = formId;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	public boolean isMultiRecord() {

@@ -53,6 +53,15 @@
         />
          
         <property
+            name="sortOrder"
+            column="SORT_ORDER"
+            type="int"
+            update="true"
+            insert="true"
+            length="15"
+        />
+         
+        <property
             name="multiRecord"
             column="IS_MULTIRECORD"
             type="boolean"

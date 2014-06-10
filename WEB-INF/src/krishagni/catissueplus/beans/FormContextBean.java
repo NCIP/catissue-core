@@ -10,6 +10,8 @@ public class FormContextBean {
 	
 	private Long cpId;
 	
+	private Integer sortOrder;
+	
 	private boolean multiRecord;
 
 	public Long getIdentifier() {
@@ -42,6 +44,14 @@ public class FormContextBean {
 
 	public void setCpId(Long cpId) {
 		this.cpId = cpId;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	public boolean isMultiRecord() {
