@@ -20,7 +20,7 @@
     <script src="../external/angularjs/angular.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/angular-resource.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
-    <script src="../external/angularjs/ng-grid-2.0.7.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/ng-grid-2.0.11.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/sortable.js" type="text/javascript"></script>
     <script src="../external/angularjs/ui-bootstrap-tpls-0.11.0.min.js" type="text/javascript"></script>
     <script src="../external/angularjs/checklist-model.js" type="text/javascript"></script>
