@@ -315,7 +315,7 @@ function fade(element) {
 <script type="text/javascript" src="jss/dhtmlwindow.js"></script>
 <script type="text/javascript" src="jss/modal.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script>
-<script type="text/javascript" src="jss/IE9-Prototypes.js"></script>
+<script type="text/javascript" src="jss/ie9-prototypes.js"></script>
 
 
 </body>
