@@ -265,8 +265,11 @@
         <property name="biohazardFactory" ref="biohazardFactory" />
 	</bean>
 	
+	<bean id="containerLabelGenerator" class="com.krishagni.catissueplus.labelgenerator.impl.StorageContainerLabelGenerator"></bean>
+	
 	<bean id="storageContainerFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+		<property name="containerLabelGenerator" ref="containerLabelGenerator"/>
 	</bean>
 
 	<bean id="storageContainerSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl">

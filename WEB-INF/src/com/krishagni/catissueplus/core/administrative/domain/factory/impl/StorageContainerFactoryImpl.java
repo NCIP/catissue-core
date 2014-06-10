@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.labelgenerator.impl.StorageContainerLabelGenerator;
 
 public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
@@ -40,10 +41,18 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private static final String TWO_DIMENSION_CAPACITY = "two dimension capacity";
 
+	private static final String BARCODE = "barcode";
+
 	private DaoFactory daoFactory;
+
+	private StorageContainerLabelGenerator containerLabelGenerator;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public void setContainerLabelGenerator(StorageContainerLabelGenerator containerLabelGenerator) {
+		this.containerLabelGenerator = containerLabelGenerator;
 	}
 
 	@Override
@@ -133,14 +142,16 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setTwoDimensionLabelingScheme(StorageContainer storageContainer, String twoDimentionLabelingScheme,
 			ObjectCreationException exception) {
-		if(!isBlank(twoDimentionLabelingScheme) && ContainerLabelSchemeType.getEnumNameForValue(twoDimentionLabelingScheme) != null) {
+		if (!isBlank(twoDimentionLabelingScheme)
+				&& ContainerLabelSchemeType.getEnumNameForValue(twoDimentionLabelingScheme) != null) {
 			storageContainer.setTwoDimentionLabelingScheme(twoDimentionLabelingScheme);
 		}
 	}
 
 	private void setOneDimensionLabelingScheme(StorageContainer storageContainer, String oneDimentionLabelingScheme,
 			ObjectCreationException exception) {
-		if(!isBlank(oneDimentionLabelingScheme) && ContainerLabelSchemeType.getEnumNameForValue(oneDimentionLabelingScheme) != null) {
+		if (!isBlank(oneDimentionLabelingScheme)
+				&& ContainerLabelSchemeType.getEnumNameForValue(oneDimentionLabelingScheme) != null) {
 			storageContainer.setOneDimentionLabelingScheme(oneDimentionLabelingScheme);
 		}
 	}
@@ -158,11 +169,16 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 
 	private void setName(StorageContainer storageContainer, String name, ObjectCreationException exceptionHandler) {
-		if (isBlank(name)) {
-			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, CONTAINER_NAME);
-			return;
+		if (containerLabelGenerator != null) {
+			storageContainer.setName(containerLabelGenerator.generateLabel(storageContainer));
 		}
-		storageContainer.setName(name);
+		else {
+			if (isBlank(name)) {
+				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, CONTAINER_NAME);
+				return;
+			}
+			storageContainer.setName(name);
+		}
 	}
 
 	private void setComments(StorageContainer storageContainer, String comments) {
@@ -188,7 +204,17 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 
 	private void setBarcode(StorageContainer storageContainer, String barcode, ObjectCreationException exceptionHandler) {
-		storageContainer.setBarcode(barcode);
+		if (!isBlank(barcode)) {
+			storageContainer.setBarcode(barcode);
+		}
+		else {
+			if (isBlank(storageContainer.getName())) {
+				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, BARCODE);
+				return;
+			}
+			storageContainer.setBarcode(storageContainer.getName());
+
+		}
 	}
 
 	private void setCollectionProtocols(StorageContainer storageContainer, Collection<String> cpTitleCollection,
