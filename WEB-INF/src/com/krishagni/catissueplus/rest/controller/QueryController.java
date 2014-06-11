@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.java.common.CacheControl;
+import com.java.common.CachePolicy;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
 import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
@@ -62,6 +64,7 @@ public class QueryController {
 	
 	@RequestMapping(method = RequestMethod.GET, value="/export")
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	public void downloadExportDataFile(
 			@RequestParam(value="fileId", required=true) String fileId,
 			HttpServletResponse response) {
