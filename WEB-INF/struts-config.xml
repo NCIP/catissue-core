@@ -6147,16 +6147,17 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SaveSCGAjaxAction" validate="false" scope="request">
 		</action>
 
- 		<action path="/loadcsd" type="org.apache.struts.actions.ForwardAction"
- 			parameter=".catissuecore.csd" />
+ 		<action path="/loadcsd" type="edu.wustl.catissuecore.action.ForwardAction">
+ 			<forward name="success" path=".catissuecore.csd" />
+                </action>
  
- 		<action path="/ecrf" type="org.apache.struts.actions.ForwardAction"
- 			parameter=".catissuecore.ecrf"/>
+ 		<action path="/ecrf" type="edu.wustl.catissuecore.action.ForwardAction">
+  			<forward name="success" path=".catissuecore.ecrf"/>
+  		</action>
 
- 		<action path="/query" type="org.apache.struts.actions.ForwardAction"
- 			parameter=".catissuecore.query"/>
- 
-
+  		<action path="/query" type="edu.wustl.catissuecore.action.ForwardAction">
+  		    <forward name="success" path=".catissuecore.query" />	
+  		</action>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
