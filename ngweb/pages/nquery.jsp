@@ -272,7 +272,7 @@
        .folders .item div:first-child {
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 100px;
+          width: 90px;
           white-space: nowrap;
        }
 
