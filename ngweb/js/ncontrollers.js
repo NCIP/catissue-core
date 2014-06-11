@@ -1122,6 +1122,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.onFormSelect = function(form) {
+      form.searchField = '';
       hidePopovers();
       if ($scope.queryData.openForm) {
         $scope.queryData.openForm.showExtnFields = false; // previously selected form

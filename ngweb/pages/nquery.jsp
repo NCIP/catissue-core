@@ -741,11 +741,16 @@
                   Loading form fields. Please wait for a moment ...
                 </div>
                 <div ng-show="form.staticFields">
+                  <div class="plus-addon plus-addon-input-right" style="margin: 0 -5px 5px;">
+                    <span class="glyphicon glyphicon-search"></span>
+                    <input type="text" class="form-control" placeholder="Search Field" ng-model="form.searchField" 
+                      ng-keyup="form.showExtnFields = (form.searchField != '' )" >
+                  </div>
                   <div style="margin-bottom: 3px;" 
                        class="field" 
                        id="{{form.name}}.{{field.name}}" 
                        data-arg="{{form.name}}.{{field.name}}"
-                       ng-repeat="field in form.staticFields">
+                       ng-repeat="field in form.staticFields | filter: {caption: form.searchField}">
                     <span style="cursor: pointer" 
                           ng-click="onFieldSelect(field)"
                           popover-title="Add Filter"
@@ -767,7 +772,7 @@
                          class="field" 
                          id="{{form.name}}.{{field.name}}" 
                          data-arg="{{form.name}}.{{field.name}}"
-                         ng-repeat="field in form.extnFields">
+                         ng-repeat="field in form.extnFields | filter: {caption: form.searchField}">
                       <span style="cursor: pointer" 
                             ng-click="onFieldSelect(field)"
                             popover-title="Add Filter"
