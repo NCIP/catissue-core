@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
+import com.java.common.CacheControl;
+import com.java.common.CachePolicy;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
 import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
@@ -56,6 +58,7 @@ public class SavedQueriesController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public Map<String, Object> getSavedQueries(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
@@ -82,6 +85,7 @@ public class SavedQueriesController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public SavedQueryDetail getQueryDetails(@PathVariable("id") Long queryId) {
 		ReqSavedQueryDetailEvent req = new ReqSavedQueryDetailEvent();
@@ -97,6 +101,7 @@ public class SavedQueriesController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/definition-file")
 	@ResponseStatus(HttpStatus.OK)	
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	public void getQueryDefFile(@PathVariable("id") Long queryId, HttpServletResponse response) {
 		ReqQueryDefEvent req = new ReqQueryDefEvent();
 		req.setQueryId(queryId);
@@ -165,6 +170,7 @@ public class SavedQueriesController {
 
 	@RequestMapping(method = RequestMethod.GET,  value = "/{id}/audit-logs")
 	@ResponseStatus(HttpStatus.OK)
+	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<QueryAuditLogSummary> getQueryAuditLogs(
 			@PathVariable("id") Long savedQueryId,
