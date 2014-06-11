@@ -26,7 +26,14 @@ angular.module('plus.services', [])
             target: '_blank'});
 
         angular.element($document[0].body).append(link);
-        link[0].click();
+
+        if (typeof link[0].click == "function") {
+          link[0].click();
+        } else { // Safari fix
+          var dispatch = document.createEvent("HTMLEvents");
+          dispatch.initEvent("click", true, true);
+          link[0].dispatchEvent(dispatch);
+        }
         link.remove();
       },
 
