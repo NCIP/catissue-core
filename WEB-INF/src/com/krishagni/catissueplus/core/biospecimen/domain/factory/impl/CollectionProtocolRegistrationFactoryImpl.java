@@ -291,8 +291,24 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	@Override
 	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
 			CollectionProtocolRegistrationDetail detail) {
-		// TODO Auto-generated method stub
-		return null;
+		ObjectCreationException exception = new ObjectCreationException();
+	if(detail.isActivityStatusModified()){
+		setActivityStatus(oldCpr, detail.getActivityStatus(), exception);
+	}
+	if(detail.isBarcodeModified()){
+		setBarcode(oldCpr, detail.getBarcode(), exception);
+	}
+	if(detail.isPpidModified()){
+		setPPId(oldCpr, detail.getPpid(), exception);
+	}
+	if(detail.isRegistrationDateModified()){
+		setRegistrationDate(oldCpr, detail.getRegistrationDate(), exception);
+	}
+//	if(detail.isParticipantModified()){
+//		participantFactory.
+//	}
+	exception.checkErrorAndThrow();
+		return oldCpr;
 	}
 
 	//	private void addError(CatissueErrorCode event, String field) {

@@ -2737,6 +2737,52 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         </sql>
         <sql>commit;</sql>
     </changeSet>
+    
+    <changeSet id="delete entries from event tables for SCG" author="nitesh">
+        <sql>
+            delete from catissue_received_event_param where identifier in(
+                select identifier from (
+                    select sep.identifier as identifier from catissue_specimen_event_param sep join catissue_received_event_param cpe on cpe.identifier = sep.identifier
+                    where sep.specimen_coll_grp_id in (select identifier from catissue_specimen_coll_group)
+                )t
+            )
+        </sql>
+        <sql>
+            delete from catissue_coll_event_param where identifier in(
+                select identifier from (
+                    select sep.identifier as identifier from catissue_specimen_event_param sep join catissue_coll_event_param cpe on cpe.identifier = sep.identifier
+                    where sep.specimen_coll_grp_id in (select identifier from catissue_specimen_coll_group)
+                )t
+            )
+        </sql>
+        <sql>
+            delete from catissue_specimen_event_param where specimen_coll_grp_id in (select identifier from catissue_specimen_coll_group)
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
+    
+    <changeSet id="delete entries from event tables for Specimen requirement" author="nitesh">
+        <sql>
+            delete from catissue_received_event_param where identifier in(
+                select identifier from (
+                    select sep.identifier as identifier from catissue_specimen_event_param sep join catissue_received_event_param cpe on cpe.identifier = sep.identifier
+                    where sep.specimen_id in (select identifier from catissue_cp_req_specimen)
+                )t
+            )
+        </sql>
+        <sql>
+            delete from catissue_coll_event_param where identifier in(
+                select identifier from (
+                    select sep.identifier as identifier from catissue_specimen_event_param sep join catissue_coll_event_param cpe on cpe.identifier = sep.identifier
+                    where sep.specimen_id in (select identifier from catissue_cp_req_specimen)
+                )t
+            )
+        </sql>
+        <sql>
+            delete from catissue_specimen_event_param where specimen_id in (select identifier from catissue_cp_req_specimen)
+        </sql>
+        <sql>commit;</sql>
+    </changeSet>
 
     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
       <sqlFile 
