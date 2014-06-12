@@ -44,7 +44,7 @@ angular.module('plus.forms', [])
     };
 
     $scope.editForm = function(form) {
-      window.top.location.href = "/catissuecore/loadcsd.do#loadCachedForm/" + form.formId + "/true";
+      window.top.location.href = "/catissuecore/loadcsd.do#loadCachedForm/" + form.formId + "/true ?_reqTime=" +  new Date().getTime();
     };
 
     $scope.showFormContexts = function(form) {
