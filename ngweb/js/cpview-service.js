@@ -4,18 +4,12 @@ angular.module('plus.cpviewService', [])
      
      getAllCps: function() {
         var url = 'rest/ng/collection-protocols';
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: url, params: params});
+        return Utility.get($http, url);
       },
     
       getCollectionGroups: function(cprId){
         var url = 'rest/ng/collection-protocol-registrations/'+cprId+'/specimen-collection-groups';
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: url, params: params});
+        return Utility.get($http, url);
       },
     
       getRegisteredParticipants: function(cpId,query) {//alert('d');
@@ -24,7 +18,7 @@ angular.module('plus.cpviewService', [])
           query : query,
           '_reqTime' : new Date().getTime()
         }
-        return $http({method: 'GET', url: url, params: params});
+        return Utility.get($http, url, undefined, params);
       },
     
       getSpecimens: function(scgId,objectType) {
@@ -33,23 +27,17 @@ angular.module('plus.cpviewService', [])
           objectType : objectType,
           '_reqTime' : new Date().getTime()
         }
-        return $http({method: 'GET', url: url, params: params});
+        return Utility.get($http, url, undefined, params);
       },
     
       getChildSpecimens: function(parentId) {
         var url = 'rest/ng/specimens/'+parentId+'/child-specimens';
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: url, params: params});
+        return Utility.get($http, url);
       },
       
       getScgId: function(specimenId) {
         var url = 'rest/ng/specimens/'+specimenId+'/scgId';
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: url, params: params});
+        return Utility.get($http, url);
       }
     };
  });

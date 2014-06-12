@@ -17,10 +17,7 @@ angular.module('plus.formsServices', [])
 
     return {
       getAllForms: function() {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: baseUrl, params: params}).then(successfn);
+        return Utility.get($http, baseUrl, successfn);
       },
 
       getQueryForms: function() {
@@ -28,25 +25,17 @@ angular.module('plus.formsServices', [])
           formType : 'query',
     	  '_reqTime' : new Date().getTime()
     	}
-    	return $http({method: 'GET', url: baseUrl , params: params}).then(successfn);
-
+        return Utility.get($http, baseUrl, successfn, params);
       },
 
       getFormDef: function(formId) {
     	var url = baseUrl + "/" + formId + "/definition";
-    	var params = {
-    	  '_reqTime' : new Date().getTime()
-    	}
-        return $http({method: 'GET', url: url, params: params}).then(successfn);
-
+        return Utility.get($http, url, successfn);
       },
 
       getFormFields: function(formId) {
         var url = baseUrl + "/" + formId + "/fields";
-        var params = {
-    	  '_reqTime' : new Date().getTime()
-    	}
-        return $http({method: 'GET', url: url, params: params}).then(successfn);
+        return Utility.get($http, url, successfn);
       },
 
       getQueryFormFields: function(cpId, formId) {
@@ -57,15 +46,12 @@ angular.module('plus.formsServices', [])
           cpId : cpId,
           '_reqTime' : new Date().getTime()
         }
-        return $http({method: 'GET', url: url, params: params}).then(successfn);
+        return Utility.get($http, url, successfn, params);
       },
 
       getFormData: function(formId, recordId) {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }    	  
         var url = baseUrl + "/" + formId + "/data/" + recordId;
-        return $http({method: 'GET', url: url, params: params}).then(successfn);
+        return Utility.get($http, url, successfn);
       },
 
       saveFormData: function(formId, recordId, formDataJson) {
@@ -81,11 +67,8 @@ angular.module('plus.formsServices', [])
       },
 
       getFormContexts: function(formId) {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
         var url = baseUrl + "/" + formId + "/contexts";
-        return $http({method: 'GET', url: url, params: params}).then(successfn);
+        return Utility.get($http, url, successfn);
       },
 
       addFormContexts: function(formId, cpIds, entity, isMultiRecord) {
@@ -98,49 +81,30 @@ angular.module('plus.formsServices', [])
       },
 
       getCprForms: function(cprId) {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        
-        return $http({method: 'GET', url: getFormsUrl('collection-protocol-registrations', cprId), params: params}).then(successfn);
+        return Utility.get($http, getFormsUrl('collection-protocol-registrations', cprId), successfn);
       },
 
       getSpecimenForms: function(specimenId) {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: getFormsUrl('specimens', specimenId), params: params}).then(successfn);
-
+        return Utility.get($http, getFormsUrl('specimens', specimenId), successfn);
       },
 
       getScgForms: function(scgId) {
-        var params = {
-           '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: getFormsUrl('specimen-collection-groups', scgId), params: params}).then(successfn);
-
+        return Utility.get($http, getFormsUrl('specimen-collection-groups', scgId), successfn);
       },
 
       getCprFormRecords: function(cprId, formCtxtId) {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: getRecordsUrl('collection-protocol-registrations', cprId, formCtxtId), params: params}).then(successfn);
+        return Utility.get($http, getRecordsUrl('collection-protocol-registrations', cprId, formCtxtId), successfn);
       },
 
       getSpecimenFormRecords: function(specimenId, formCtxtId) {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: getRecordsUrl('specimens', specimenId, formCtxtId), params: params}).then(successfn);
-
+        return Utility.get($http, getRecordsUrl('specimens', specimenId, formCtxtId), successfn);
       },
 
       getScgFormRecords: function(scgId, formCtxtId) {
         var params = {
           '_reqTime' : new Date().getTime()
         }
-        return $http({method: 'GET', url: getRecordsUrl('specimen-collection-groups', scgId, formCtxtId), params: params}).then(successfn);
+        return Utility.get($http, getRecordsUrl('specimen-collection-groups', scgId, formCtxtId), successfn);
       },
       
       deleteRecords: function(formId, recIds) {
@@ -154,14 +118,11 @@ angular.module('plus.formsServices', [])
   /** Need to merge this with rest of services **/
   .factory('CollectionProtocolService', function($http) {
     var baseUrl = '/catissuecore/rest/ng/collection-protocols/';
+    var successfn = function(result) { return result.data; };
 
     return {
       getCpList: function() {
-        var params = {
-          '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: baseUrl, params: params}).then(function(result) { return result.data; });
-
+        return Utility.get($http, baseUrl, successfn);
       }
     }
   });

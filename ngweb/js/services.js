@@ -53,28 +53,19 @@ angular.module('plus.services', [])
             max : maxRecs,
       	  '_reqTime' : new Date().getTime()
         }
-        return $http({method: 'GET', url: savedQueriesUrl, params: params}).then(successfn);
+        return Utility.get($http, savedQueriesUrl, successfn, params);
       },
 
       getQuery: function(queryId) {
-        var params = {
-  	      '_reqTime' : new Date().getTime()
-    	}
-        return $http({method: 'GET', url: savedQueriesUrl + queryId, params: params}).then(successfn);
+        return Utility.get($http, savedQueriesUrl + queryId, successfn);
       },
 
       getFolder: function(folderId) {
-        var params = {
-    	  '_reqTime' : new Date().getTime()
-        }
-    	return $http({method: 'GET', url: foldersUrl + folderId, params: params}).then(successfn);
+        return Utility.get($http, foldersUrl + folderId, successfn);
       },
 
       getFolders: function() {
-	    var params = {
-	      '_reqTime' : new Date().getTime()
-	    }
-	    return $http({method: 'GET', url: foldersUrl, params: params}).then(successfn);
+        return Utility.get($http, foldersUrl, successfn);
       },
 
       getFolderQueries: function(folderId, countReq, startAt, maxRecs) {
@@ -85,7 +76,7 @@ angular.module('plus.services', [])
           max : maxRecs,
           '_reqTime' : new Date().getTime()
         }
-        return $http({method: 'GET', url: foldersUrl + folderId + "/saved-queries", params: params}).then(successfn);
+        return Utility.get($http, foldersUrl + folderId + "/saved-queries", successfn, params);
       },
 
       addQueriesToFolder: function(folderId, queries) {
@@ -112,12 +103,7 @@ angular.module('plus.services', [])
       },
 
       getAuditLogs: function(queryId, startAt, maxRecs) {
-        var params = {
-    	  start : startAt,
-    	  max : maxRecs,
-    	  '_reqTime' : new Date().getTime()
-    	}
-    	return $http({method: 'GET', url: savedQueriesUrl + queryId + "/audit-logs", params: params}).then(successfn);
+        return Utility.get($http, savedQueriesUrl + queryId + "/audit-logs", successfn, params);
       },
 
       getAllAuditLogs: function(type, countReq, startAt, maxRecs) {
@@ -130,14 +116,11 @@ angular.module('plus.services', [])
           type: type,
           '_reqTime' : new Date().getTime()
        	}
-        return $http({method: 'GET', url: auditLogsUrl, params: params}).then(successfn);
+        return Utility.get($http, auditLogsUrl, successfn, params);
       },
 
       getAuditLog: function(auditLogId) {
-    	var params = {
-    	  '_reqTime' : new Date().getTime()
-        }
-        return $http({method: 'GET', url: auditLogsUrl + auditLogId, params: params}).then(successfn);
+        return Utility.get($http, auditLogsUrl + auditLogId, successfn);
       }
     };
   })
@@ -147,10 +130,7 @@ angular.module('plus.services', [])
 
     return {
       getAllUsers: function() {
-        var params = {
-    	  '_reqTime' : new Date().getTime()
-    	}
-    	return $http({method: 'GET', url: baseUrl, params: params}).then(successfn);
+        return Utility.get($http, baseUrl, successfn);
       }
     };
   });

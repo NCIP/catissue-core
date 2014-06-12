@@ -376,7 +376,7 @@ function hideCursor(){
       scgTreeQ.then(function() { scope.handleDirectObjectLoad(false); });
     }
 </script>
-
+<script type="text/javascript" src="ngweb/js/utility.js"></script>
 <script type="text/javascript" src="ngweb/js/wrapper.js"></script>
 <script type="text/javascript" src="ngweb/js/directives.js"></script>
 <script type="text/javascript" src="ngweb/js/cpview-service.js"></script>

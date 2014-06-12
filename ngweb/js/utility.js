@@ -64,5 +64,21 @@ Utility = {
     mywindow.print();
     //mywindow.close();
     return true;
+  },
+  
+  get: function(http, url, successfn, params) {
+    if (params == undefined) {
+      params = {
+        '_reqTime' : new Date().getTime()
+      }
+    } else {
+    	params['_reqTime'] = new Date().getTime();
+    }
+	if (successfn == undefined){
+	  return http({method: 'GET', url: url, params: params});
+	}
+	else {
+      return http({method: 'GET', url: url, params: params}).then(successfn);
+	}
   }
 };
