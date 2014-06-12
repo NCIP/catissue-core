@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.java.common.CacheControl;
-import com.java.common.CachePolicy;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
@@ -58,7 +56,6 @@ public class QueryFoldersController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<QueryFolderSummary> getFoldersForUser(){
 		ReqQueryFoldersEvent req = new ReqQueryFoldersEvent();
@@ -73,7 +70,6 @@ public class QueryFoldersController {
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{folderId}")
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public QueryFolderDetails getFolder(@PathVariable Long folderId) {
 		ReqQueryFolderDetailEvent req = new ReqQueryFolderDetailEvent();
@@ -90,7 +86,6 @@ public class QueryFoldersController {
 		
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public QueryFolderDetails createFolder(@RequestBody QueryFolderDetails folderDetails) {
 		CreateQueryFolderEvent req = new CreateQueryFolderEvent();
@@ -140,7 +135,6 @@ public class QueryFoldersController {
 			
 	@RequestMapping(method = RequestMethod.GET, value="/{folderId}/saved-queries")
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public Map<String, Object> getFolderQueries(@PathVariable("folderId") Long folderId,
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,

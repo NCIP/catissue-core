@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jdbm.helper.CachePolicy;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.java.common.CacheControl;
-import com.java.common.CachePolicy;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -49,7 +49,6 @@ public class CollectionProtocolController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<CollectionProtocolSummary> getCollectionProtocolList() {
 		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
@@ -72,7 +71,6 @@ public class CollectionProtocolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participants")
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public List<ParticipantInfo> getParticipants(@PathVariable("id") Long cpId,
 			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr) {

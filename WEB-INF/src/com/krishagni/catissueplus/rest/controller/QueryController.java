@@ -18,18 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.java.common.CacheControl;
-import com.java.common.CachePolicy;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
 import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
 import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
-import com.krishagni.catissueplus.core.de.events.FileDetail;
-import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
 import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
 import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFileDetailEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -64,7 +59,6 @@ public class QueryController {
 	
 	@RequestMapping(method = RequestMethod.GET, value="/export")
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	public void downloadExportDataFile(
 			@RequestParam(value="fileId", required=true) String fileId,
 			HttpServletResponse response) {

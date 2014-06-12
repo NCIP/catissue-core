@@ -47,24 +47,45 @@ angular.module('plus.services', [])
 
       getQueries: function(countReq, startAt, maxRecs) {
         if (!countReq) { countReq = false; }
-        return $http.get(savedQueriesUrl + '?countReq=' + countReq + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
+          var params = {
+            countReq : countReq, 
+            start : startAt,
+            max : maxRecs,
+      	  '_reqTime' : new Date().getTime()
+        }
+        return $http({method: 'GET', url: savedQueriesUrl, params: params}).then(successfn);
       },
 
       getQuery: function(queryId) {
-        return $http.get(savedQueriesUrl + queryId).then(successfn);
+        var params = {
+  	      '_reqTime' : new Date().getTime()
+    	}
+        return $http({method: 'GET', url: savedQueriesUrl + queryId, params: params}).then(successfn);
       },
 
       getFolder: function(folderId) {
-        return $http.get(foldersUrl + folderId).then(successfn);
+        var params = {
+    	  '_reqTime' : new Date().getTime()
+        }
+    	return $http({method: 'GET', url: foldersUrl + folderId, params: params}).then(successfn);
       },
 
       getFolders: function() {
-        return $http.get(foldersUrl).then(successfn);
+	    var params = {
+	      '_reqTime' : new Date().getTime()
+	    }
+	    return $http({method: 'GET', url: foldersUrl, params: params}).then(successfn);
       },
 
       getFolderQueries: function(folderId, countReq, startAt, maxRecs) {
         if (!countReq) { countReq = false; }
-        return $http.get(foldersUrl + folderId + "/saved-queries" + '?countReq=' + countReq + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
+        var params = {
+          countReq : countReq, 
+          start : startAt,
+          max : maxRecs,
+          '_reqTime' : new Date().getTime()
+        }
+        return $http({method: 'GET', url: foldersUrl + folderId + "/saved-queries", params: params}).then(successfn);
       },
 
       addQueriesToFolder: function(folderId, queries) {
@@ -91,16 +112,32 @@ angular.module('plus.services', [])
       },
 
       getAuditLogs: function(queryId, startAt, maxRecs) {
-        return $http.get(savedQueriesUrl + queryId + "/audit-logs" + '?start=' + startAt + '&max=' + maxRecs).then(successfn);
+        var params = {
+    	  start : startAt,
+    	  max : maxRecs,
+    	  '_reqTime' : new Date().getTime()
+    	}
+    	return $http({method: 'GET', url: savedQueriesUrl + queryId + "/audit-logs", params: params}).then(successfn);
       },
 
       getAllAuditLogs: function(type, countReq, startAt, maxRecs) {
         if (!countReq) { countReq = false; }
-        return $http.get(auditLogsUrl + '?type=' + type + '&countReq=' + countReq + '&start=' + startAt + '&max=' + maxRecs).then(successfn);
+        
+        var params = {
+          countReq : countReq, 
+          start : startAt,
+          max : maxRecs,
+          type: type,
+          '_reqTime' : new Date().getTime()
+       	}
+        return $http({method: 'GET', url: auditLogsUrl, params: params}).then(successfn);
       },
 
       getAuditLog: function(auditLogId) {
-        return $http.get(auditLogsUrl + auditLogId).then(successfn);
+    	var params = {
+    	  '_reqTime' : new Date().getTime()
+        }
+        return $http({method: 'GET', url: auditLogsUrl + auditLogId, params: params}).then(successfn);
       }
     };
   })
@@ -110,7 +147,10 @@ angular.module('plus.services', [])
 
     return {
       getAllUsers: function() {
-        return $http.get(baseUrl).then(successfn); 
+        var params = {
+    	  '_reqTime' : new Date().getTime()
+    	}
+    	return $http({method: 'GET', url: baseUrl, params: params}).then(successfn);
       }
     };
   });
