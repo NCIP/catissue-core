@@ -2516,6 +2516,8 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             and scg.identifier not in (select SPECIMEN_COLLECTION_GROUP_ID from catissue_specimen where COLLECTION_STATUS = 'Collected')
             ))t1
        </sql>
+        <addPrimaryKey tableName="catissue_tmp_scg" columnNames="IDENTIFIER"/>
+     
       <!--  <sql>create table catissue_tmp_scg as select * from catissue_specimen_coll_group where identifier in(
             select identifier from catissue_specimen_coll_group
             
@@ -2529,6 +2531,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             create table catissue_tmp_specimen  as select * from catissue_specimen  where SPECIMEN_COLLECTION_GROUP_ID in(
             select identifier from catissue_tmp_scg)
        </sql>
+         <addPrimaryKey tableName="catissue_tmp_specimen" columnNames="IDENTIFIER"/>
        <sql>
             create table catissue_tmp_ex_id as select ex.* from CATISSUE_EXTERNAL_IDENTIFIER ex join 
             catissue_tmp_specimen sp on ex.specimen_id = sp.identifier where sp.identifier is not null
@@ -2548,10 +2551,6 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         <dropTable tableName="catissue_specimen_coll_group" cascadeConstraints="true"/>
         <dropTable tableName="CATISSUE_EXTERNAL_IDENTIFIER" cascadeConstraints="true"/>
 
-        <addPrimaryKey tableName="catissue_tmp_specimen" columnNames="IDENTIFIER"/>
-     
-        <addPrimaryKey tableName="catissue_tmp_scg" columnNames="IDENTIFIER"/>
-            
         <renameTable newTableName="catissue_specimen_coll_group" oldTableName="catissue_tmp_scg" />
         <renameTable newTableName="catissue_specimen" oldTableName="catissue_tmp_specimen" />
         <renameTable newTableName="CATISSUE_EXTERNAL_IDENTIFIER" oldTableName="catissue_tmp_ex_id" />
