@@ -132,16 +132,17 @@ angular.module('plus.dataentry', [])
       $scope.currentView = 'form';
       FormsService.getFormDef(form.formId).then(function(data) {
         var that = this;
+        var _reqTime = new Date().getTime();
         this.form = new edu.common.de.Form({
           id           : form.formId,
           formDef      : data,
           recordId     : recordId,
           formDiv      : 'form-view',
           appData      : {formCtxtId: form.formCtxtId, objectId: entityObjId},
-          formDataUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId',
-          fileUploadUrl : '/catissuecore/rest/ng/form-files',
+          formDataUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId?_reqTime='+_reqTime,
+          fileUploadUrl : '/catissuecore/rest/ng/form-files?_reqTime='+_reqTime,
           fileDownloadUrl: function(formId, recordId, ctrlName) {
-            return '/catissuecore/rest/ng/form-files?formId=' + formId + '&recordId=' + recordId + '&ctrlName=' + ctrlName;
+            return '/catissuecore/rest/ng/form-files?formId=' + formId + '&recordId=' + recordId + '&ctrlName=' + ctrlName + '&_reqTime='+_reqTime;
           },
 
           onSaveSuccess: function() {
