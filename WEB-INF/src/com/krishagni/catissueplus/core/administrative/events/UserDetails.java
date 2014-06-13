@@ -54,7 +54,7 @@ public class UserDetails {
 	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public boolean isUserSitesModified() {
-		return modifiedAttributes.contains("userSites");
+		return modifiedAttributes.contains("userSiteNames");
 	}
 
 	public boolean isUserCPRolesModified() {

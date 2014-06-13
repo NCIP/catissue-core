@@ -475,6 +475,13 @@ public class UserTestData {
 		event.getUserDetails().setUserSiteNames(new ArrayList<String>());
 		return event;
 	}
-	
-	
+
+	public static PatchUserEvent nonPatchData() {
+		PatchUserEvent event = new PatchUserEvent();
+		event.setUserId(1l);
+		UserDetails details = new UserDetails();
+		event.setUserDetails(details);
+		return event;
+	}
+
 }

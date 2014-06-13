@@ -407,6 +407,16 @@ public class UserTest {
 	}
 	
 	@Test
+	public void testPatchUser() {
+		when(daoFactory.getUserDao().getUser(anyLong())).thenReturn(UserTestData.getUser(1l));
+		when(daoFactory.getUserDao().isUniqueEmailAddress(anyString())).thenReturn(true);
+		PatchUserEvent reqEvent = UserTestData.nonPatchData();
+		UserUpdatedEvent response = userService.patchUser(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
 	public void testForSuccessfulUserCreationWithNullRole() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
 		when(roleDao.getRoleByName(anyString())).thenReturn(null);

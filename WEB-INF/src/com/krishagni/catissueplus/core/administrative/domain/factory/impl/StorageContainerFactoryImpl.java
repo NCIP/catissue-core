@@ -43,6 +43,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private static final String BARCODE = "barcode";
 
+	private static final String SITE_CONTAINER = "site container";
+
 	private DaoFactory daoFactory;
 
 	private StorageContainerLabelGenerator containerLabelGenerator;
@@ -62,14 +64,13 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setName(storageContainer, details.getName(), exceptionHandler);
 		setComments(storageContainer, details.getComments());
 		setActivityStatus(storageContainer, details.getActivityStatus(), exceptionHandler);
-		setSiteName(storageContainer, details.getSiteName(), exceptionHandler);
+		setSiteOrParent(storageContainer, details, exceptionHandler);
 		setBarcode(storageContainer, details.getBarcode(), exceptionHandler);
-		setCollectionProtocols(storageContainer, details.getCpTitleCollection(), exceptionHandler);
+		setCollectionProtocols(storageContainer, details.getHoldsCPTitles(), exceptionHandler);
 		setCreatedByUser(storageContainer, details.getCreatedBy(), exceptionHandler);
 		setHoldsSpecimenTypes(storageContainer, details.getHoldsSpecimenTypes(), exceptionHandler);
 		setOneDimensionCapacity(storageContainer, details.getOneDimensionCapacity(), exceptionHandler);
 		setTwoDimensionCapacity(storageContainer, details.getTwoDimensionCapacity(), exceptionHandler);
-		setParentContainer(storageContainer, details.getParentContainerName(), exceptionHandler);
 		setTempratureInCentigrade(storageContainer, details.getTempratureInCentigrade());
 		setOneDimensionLabelingScheme(storageContainer, details.getOneDimentionLabelingScheme(), exceptionHandler);
 		setTwoDimensionLabelingScheme(storageContainer, details.getTwoDimentionLabelingScheme(), exceptionHandler);
@@ -88,8 +89,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			setComments(storageContainer, details.getComments());
 		}
 
-		if (details.isSiteNameModified()) {
-			setSiteName(storageContainer, details.getSiteName(), exception);
+		if (details.isSiteNameModified() || details.isParentContainerNameModified()) {
+			setSiteOrParent(storageContainer, details, exception);
 		}
 
 		if (details.isBarcodeModified()) {
@@ -104,16 +105,12 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			setActivityStatus(storageContainer, details.getActivityStatus(), exception);
 		}
 
-		if (details.isCpTitleCollectionModified()) {
-			setCollectionProtocols(storageContainer, details.getCpTitleCollection(), exception);
+		if (details.isHoldsCPTitlesModified()) {
+			setCollectionProtocols(storageContainer, details.getHoldsCPTitles(), exception);
 		}
 
 		if (details.isCreatedByModified()) {
 			setCreatedByUser(storageContainer, details.getCreatedBy(), exception);
-		}
-
-		if (details.isParentContainerNameModified()) {
-			setParentContainer(storageContainer, details.getParentContainerName(), exception);
 		}
 
 		if (details.isOneDimensionCapacityModified()) {
@@ -194,15 +191,6 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		storageContainer.setActivityStatus(activityStatus);
 	}
 
-	private void setSiteName(StorageContainer storageContainer, String siteName, ObjectCreationException exceptionHandler) {
-		Site site = daoFactory.getSiteDao().getSite(siteName);
-		if (site == null) {
-			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, SITE);
-			return;
-		}
-		storageContainer.setSite(site);
-	}
-
 	private void setBarcode(StorageContainer storageContainer, String barcode, ObjectCreationException exceptionHandler) {
 		if (!isBlank(barcode)) {
 			storageContainer.setBarcode(barcode);
@@ -247,7 +235,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setOneDimensionCapacity(StorageContainer storageContainer, Integer oneDimensionCapacity,
 			ObjectCreationException exceptionHandler) {
-		if (!isValidNumber(oneDimensionCapacity)) {
+		if (!isValidPositiveNumber(oneDimensionCapacity)) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, ONE_DIMENSION_CAPACITY);
 			return;
 		}
@@ -256,35 +244,56 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setTwoDimensionCapacity(StorageContainer storageContainer, Integer twoDimensionCapacity,
 			ObjectCreationException exceptionHandler) {
-		if (!isValidNumber(twoDimensionCapacity)) {
+		if (!isValidPositiveNumber(twoDimensionCapacity)) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, TWO_DIMENSION_CAPACITY);
 			return;
 		}
 		storageContainer.setTwoDimensionCapacity(twoDimensionCapacity);
 	}
 
-	private boolean isValidNumber(Integer capacity) {
+	private boolean isValidPositiveNumber(Integer capacity) {
 		if (capacity == null || capacity <= 0) {
 			return false;
 		}
 		return true;
 	}
 
-	private void setParentContainer(StorageContainer storageContainer, String parentContainerName,
+	private void setSiteOrParent(StorageContainer storageContainer, StorageContainerDetails details,
 			ObjectCreationException exceptionHandler) {
+		
+		String siteName = details.getSiteName();
+		String parentContainerName = details.getParentContainerName();
+		
+		if (parentContainerName == null &&  siteName == null) {
+			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, SITE_CONTAINER);
+			return;
+		}
+		
 		if (parentContainerName != null) {
-			StorageContainer parentContainer = daoFactory.getStorageContainerDao().getStorageContainerByName(
-					parentContainerName);
+			StorageContainer parentContainer = daoFactory.getStorageContainerDao().getStorageContainerByName(parentContainerName);
 			if (parentContainer == null) {
 				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, STORAGE_CONTAINER);
 				return;
 			}
 			storageContainer.setParentContainer(parentContainer);
+			if(siteName != null && !parentContainer.getSite().getName().equals(siteName)) {
+				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, SITE);
+				return;
+			}
+			storageContainer.setSite(parentContainer.getSite());
+		
+		}	else {
+
+			Site site = daoFactory.getSiteDao().getSite(siteName);
+			if (site == null) {
+				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, SITE);
+				return;
+			}
+			storageContainer.setSite(site);
 		}
 	}
 
 	private void setTempratureInCentigrade(StorageContainer storageContainer, Double tempratureInCentigrade) {
 		storageContainer.setTempratureInCentigrade(tempratureInCentigrade);
 	}
-
 }

@@ -28,7 +28,7 @@ public class StorageContainerDetails {
 
 	private Long createdBy;
 
-	private Collection<String> cpTitleCollection = new HashSet<String>();
+	private Set<String> holdsCPTitles = new HashSet<String>();
 
 	private Set<String> holdsSpecimenTypes = new HashSet<String>();
 
@@ -68,16 +68,12 @@ public class StorageContainerDetails {
 		return modifiedAttributes.contains("parentContainerName");
 	}
 
-	public boolean isHoldingContainerNamesModified() {
-		return modifiedAttributes.contains("holdingContainerNames");
-	}
-
 	public boolean isCreatedByModified() {
 		return modifiedAttributes.contains("createdBy");
 	}
 
-	public boolean isCpTitleCollectionModified() {
-		return modifiedAttributes.contains("cpTitleCollection");
+	public boolean isHoldsCPTitlesModified() {
+		return modifiedAttributes.contains("holdsCPTitles");
 	}
 
 	public boolean isHoldsSpecimenTypesModified() {
@@ -95,15 +91,15 @@ public class StorageContainerDetails {
 	public boolean isTwoDimensionCapacityModified() {
 		return modifiedAttributes.contains("twoDimensionCapacity");
 	}
-	
+
 	public boolean isTwoDimentionLabelingSchemeModified() {
 		return modifiedAttributes.contains("twoDimentionLabelingScheme");
 	}
-	
+
 	public boolean isOneDimentionLabelingSchemeModified() {
 		return modifiedAttributes.contains("oneDimentionLabelingScheme");
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -160,12 +156,12 @@ public class StorageContainerDetails {
 		this.parentContainerName = parentContainerName;
 	}
 
-	public Collection<String> getCpTitleCollection() {
-		return cpTitleCollection;
+	public Set<String> getHoldsCPTitles() {
+		return holdsCPTitles;
 	}
 
-	public void setCpTitleCollection(Collection<String> cpTitleCollection) {
-		this.cpTitleCollection = cpTitleCollection;
+	public void setHoldsCPTitles(Set<String> holdsCPTitles) {
+		this.holdsCPTitles = holdsCPTitles;
 	}
 
 	public Set<String> getHoldsSpecimenTypes() {
@@ -237,13 +233,13 @@ public class StorageContainerDetails {
 		details.setId(storageContainer.getId());
 		details.setActivityStatus(storageContainer.getActivityStatus());
 		details.setBarcode(storageContainer.getBarcode());
-		details.setCpTitleCollection(getCpTitileCollection(storageContainer.getHoldsCPs()));
+		details.setHoldsCPTitles(getCpTitileCollection(storageContainer.getHoldsCPs()));
 		details.setHoldsSpecimenTypes(getHoldsSpecimenTypes(storageContainer.getHoldsSpecimenTypes()));
 		details.setComments(storageContainer.getComments());
 		details.setCreatedBy(storageContainer.getCreatedBy().getId());
 		details.setName(storageContainer.getName());
 		details.setTempratureInCentigrade(storageContainer.getTempratureInCentigrade());
-		details.setTwoDimensionCapacity(storageContainer.getTwoDimensionCapacity());
+		details.setTwoDimensionCapacity(storageContainer.getTwoDimensionCapacity());	
 		details.setOneDimensionCapacity(storageContainer.getOneDimensionCapacity());
 		details.setOneDimentionLabelingScheme(storageContainer.getOneDimentionLabelingScheme());
 		details.setTwoDimentionLabelingScheme(storageContainer.getTwoDimentionLabelingScheme());
@@ -262,8 +258,8 @@ public class StorageContainerDetails {
 		return specTypes;
 	}
 
-	private static Collection<String> getCpTitileCollection(Collection<CollectionProtocol> collectionProtocols) {
-		Collection<String> cpTitles = new HashSet<String>();
+	private static Set<String> getCpTitileCollection(Collection<CollectionProtocol> collectionProtocols) {
+		Set<String> cpTitles = new HashSet<String>();
 		for (CollectionProtocol cp : collectionProtocols) {
 			cpTitles.add(cp.getTitle());
 		}

@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.core.services.testdata;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,8 +18,8 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
@@ -52,6 +51,8 @@ public class StorageContainerTestData {
 
 	public static final String TWO_DIMENSION_CAPACITY = "two dimension capacity";
 
+	public static final Object SITE_CONTAINER = "site container";
+
 	public static List<User> getUserList() {
 		List<User> users = new ArrayList<User>();
 		users.add(new User());
@@ -71,8 +72,8 @@ public class StorageContainerTestData {
 		return sessionDataBean;
 	}
 
-	private static Collection<String> getCpNames() {
-		Collection<String> cpNames = new HashSet<String>();
+	private static Set<String> getCpNames() {
+		Set<String> cpNames = new HashSet<String>();
 		cpNames.add("My CP");
 		cpNames.add("Cp1");
 		return cpNames;
@@ -113,22 +114,41 @@ public class StorageContainerTestData {
 		return event;
 	}
 	
+	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullSite() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setParentContainerName(null);
+		return event;
+	}
+	
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithoutCpRestrict() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
-		event.getDetails().setCpTitleCollection(new HashSet<String>());
+		event.getDetails().setHoldsCPTitles(new HashSet<String>());
+		return event;
+	}
+	
+	public static CreateStorageContainerEvent getCreateStorageContainerEventWithWrongOneDimensionLabel() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setOneDimentionLabelingScheme("Roman");
+		return event;
+	}
+	
+	public static CreateStorageContainerEvent getCreateStorageContainerEventWithWrongTwoDimensionLabel() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setTwoDimentionLabelingScheme("Alphbets");
 		return event;
 	}
 
-	public static CreateStorageContainerEvent getCreateStorageContainerEventWithEmptyName() {
+	public static CreateStorageContainerEvent getCreateStorageContainerEventWithNullSiteNameAndParent() {
 		CreateStorageContainerEvent event = getCreateStorageContainerEvent();
-		event.getDetails().setName("");
+		event.getDetails().setSiteName(null);
+		event.getDetails().setParentContainerName(null);
 		return event;
 	}
 
 	public static StorageContainerDetails getStorageContainerDetails() {
 		StorageContainerDetails details = new StorageContainerDetails();
 		details.setActivityStatus("Active");
-		details.setCpTitleCollection(getCpNames());
+		details.setHoldsCPTitles(getCpNames());
 		details.setBarcode("2-edpwesdadas-343");
 		details.setOneDimensionCapacity(10);
 		details.setTwoDimensionCapacity(10);
@@ -138,6 +158,8 @@ public class StorageContainerTestData {
 		details.setSiteName("My Site");
 		details.setTempratureInCentigrade(22.22);
 		details.setCreatedBy(1l);
+		details.setOneDimensionCapacity(20);
+		details.setTwoDimensionCapacity(20);
 		details.setOneDimentionLabelingScheme("Numbers");
 		details.setTwoDimentionLabelingScheme("Numbers");
 		return details;
@@ -155,7 +177,15 @@ public class StorageContainerTestData {
 		container.setOneDimentionLabelingScheme("Numbers");
 		container.setTwoDimentionLabelingScheme("Numbers");
 		container.setTempratureInCentigrade(22.22);
+		container.setOneDimensionCapacity(20);
+		container.setTwoDimensionCapacity(20);
 		container.setCreatedBy(getUser(1l));
+		return container;
+	}
+	
+	public static StorageContainer getStorageContainerWithDiffSite(Long l) {
+		StorageContainer container = getStorageContainer(1l);
+		container.getSite().setName("abc");
 		return container;
 	}
 
@@ -185,12 +215,37 @@ public class StorageContainerTestData {
 		return event;
 	}
 
+	public static PatchStorageContainerEvent getPatchDataToSetParentContainer() {
+		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
+		event.setStorageContainerId(1l);
+		StorageContainerDetails details = new StorageContainerDetails();
+		Map<String, Object> attributes = new HashMap<String, Object>();
+		attributes.put("parentContainerName", "Freezer");
+		try {
+			BeanUtils.populate(details, attributes);
+		}
+		catch (Exception e) {
+			reportError(UserErrorCode.BAD_REQUEST, PATCH_CONTAINER);
+		}
+		details.setModifiedAttributes(new ArrayList<String>(attributes.keySet()));
+		event.setStorageContainerDetails(details);
+		return event;
+	}
+	
+	public static PatchStorageContainerEvent nonPatchData() {
+		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
+		event.setStorageContainerId(1l);
+		StorageContainerDetails details = new StorageContainerDetails();
+		event.setStorageContainerDetails(details);
+		return event;
+	}
+
 	private static Map<String, Object> getStorageContainerPatchAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("name", "Container");
 		attributes.put("barcode", "a-essdsds-222");
-		attributes.put("siteName", "mySite");
-		attributes.put("cpTitleCollection", getCpNames());
+		attributes.put("siteName", "My Site");
+		attributes.put("holdsCPTitles", getCpNames());
 		attributes.put("activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		attributes.put("comments", "blah blah");
 		attributes.put("tempratureInCentigrade", 22.22);
@@ -198,7 +253,9 @@ public class StorageContainerTestData {
 		attributes.put("holdsSpecimenTypes", getSpecimenTypes());	
 		attributes.put("createdBy", 1l);
 		attributes.put("oneDimensionCapacity", 20);
-		attributes.put("oneDimensionCapacity", 20);
+		attributes.put("twoDimensionCapacity", 20);
+		attributes.put("oneDimentionLabelingScheme", "Numbers");
+		attributes.put("twoDimentionLabelingScheme", "Numbers");
 		return attributes;
 	}
 
@@ -238,6 +295,37 @@ public class StorageContainerTestData {
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEventForTwoDimentionCapacity() {
 		UpdateStorageContainerEvent event = getUpdateStorageContainerEvent();
 		event.getDetails().setTwoDimensionCapacity(-1);
+		return event;
+	}
+
+	public static CreateStorageContainerEvent getCreateStorageContainerEventWithEmptyName() {
+		CreateStorageContainerEvent event = getCreateStorageContainerEvent();
+		event.getDetails().setName("");
+		return event;
+	}
+
+	public static CreateStorageContainerEvent getUpdateStorageContainerEventForNullTwoDimentionCapacity() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setTwoDimentionLabelingScheme(null);
+		return event;
+	}
+	
+	public static CreateStorageContainerEvent getUpdateStorageContainerEventForNullOneDimentionCapacity() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setOneDimentionLabelingScheme(null);
+		return event;
+	}
+
+	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullBarcode() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setBarcode(null);
+		return event;
+	}
+
+	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullBarcodeAndName() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setBarcode(null);
+		event.getDetails().setName(null);
 		return event;
 	}
 }
