@@ -1366,7 +1366,7 @@ req.onreadystatechange = function() {
   // ... and use it as needed by your app.
 }//alert(dataderive[parentSpecimenLabel]);
 
-req.open("POST", "rest/specimens/"+dataderive.parentSpecimenLabel+"/derivatives/", false);
+req.open("POST", "rest/specimens/1/derivatives/", false);
 req.setRequestHeader("Content-Type",
                      "application/json");
 req.send(JSON.stringify(dataderive));
@@ -1404,10 +1404,9 @@ req.onreadystatechange = function() {
 	
   // ... and use it as needed by your app.
 }
-req.open("GET", "rest/specimens/"+caption+"="+label.value, false);
-req.setRequestHeader("Content-Type",
-                     "application/json");
-req.send();
+var paramStr = {label:label.value};
+req.open("POST", "rest/specimens/getDetail/", false);
+req.send(JSON.stringify(paramStr));
 }
 function createRequest() {
   var result = null;

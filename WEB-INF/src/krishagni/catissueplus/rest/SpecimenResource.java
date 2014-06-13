@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.JSONObject;
+
 import krishagni.catissueplus.Exception.CatissueException;
 import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.dto.DerivedDTO;
@@ -37,11 +39,11 @@ public class SpecimenResource
 
     private static final Logger LOGGER = Logger.getCommonLogger(SpecimenResource.class);
 
-    @Path("/{label}/derivatives")
+    @Path("/{id}/derivatives")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response createDerive(@PathParam("label") String label, String derivedDetails)
+    public Response createDerive(@PathParam("id") Long id, String derivedDetails)
     {
         Gson gson = AppUtility.initGSONBuilder().create();
         Response response = null;
@@ -73,10 +75,36 @@ public class SpecimenResource
                 edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
     }
 
-    @Path("{label}")
-    @GET
+//    @Path("{label}")
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getSpecimenDetails(@PathParam("label") String label)
+//    {
+//        Response response = null;
+//        try
+//        {
+//            SpecimenHandler specimenHandler = new SpecimenHandler();
+//            SpecimenDTO specimenDTO = specimenHandler.getSpecimenDetails(label, getSessionDataBean());
+//            response = Response.ok(specimenDTO, MediaType.APPLICATION_JSON).build();
+//        }
+//        catch (CatissueException e)
+//        {
+//            LOGGER.error(e);
+//            response = getResponse(e);
+//        }
+//        catch (Exception e)
+//        {
+//            LOGGER.error(e);
+//            response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage())
+//                    .header("errorMsg", e.getMessage()).type(MediaType.APPLICATION_JSON).build();
+//        }
+//        return response;
+//    }
+    
+    @Path("/getDetail")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSpecimenDetails(@PathParam("label") String label)
+    public Response getSpecimenDetailsByLabel(String label)
     {
         Response response = null;
         try
@@ -187,17 +215,18 @@ public class SpecimenResource
         return response;
     }
 
-    @Path("{label}/aliquots/{paramJson}")
-    @GET
+    @Path("{id}/fetchAliquots/")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAliquotsDetails(@PathParam("label") String label, @PathParam("paramJson") String paramJson)
+    public Response getAliquotsDetails(String paramJson)
     {
         String aliquotDetailJOSNString = null;
         Response response = null;
         try
         {
+        	JSONObject object = new JSONObject(paramJson);
             AliquotHandler aliquotHandler = new AliquotHandler();
-            aliquotDetailJOSNString = aliquotHandler.getAliquotDetails(getSessionDataBean(), label, paramJson);
+            aliquotDetailJOSNString = aliquotHandler.getAliquotDetails(getSessionDataBean(), object.getString("label"), paramJson);
             response = Response.status(Status.CREATED.getStatusCode()).entity(aliquotDetailJOSNString)
                     .type(MediaType.APPLICATION_JSON).build();
         }
@@ -215,7 +244,7 @@ public class SpecimenResource
         return response;
     }
 
-    @Path("{label}/aliquots")
+    @Path("{id}/aliquots")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})

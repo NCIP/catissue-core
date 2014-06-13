@@ -11,6 +11,7 @@ import krishagni.catissueplus.dto.SpecimenDTO;
 import krishagni.catissueplus.util.CommonUtil;
 import krishagni.catissueplus.util.DAOUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
@@ -76,6 +77,7 @@ public class SpecimenHandler
 			hibernateDao = DAOUtil
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
+			
 			specimenDTO = specimenBizLogic.updateSpecimen(hibernateDao,
 					specimenDTO, sessionDataBean);
 			hibernateDao.commit();
@@ -146,15 +148,17 @@ public class SpecimenHandler
 					.openDAOSession(sessionDataBean);
 			SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
 			SpecimenDAO specimenDAO = new SpecimenDAO();
+			JSONObject jsonObject = new JSONObject(label);
+			String caption = String.valueOf(jsonObject.keys().next());
 			String[] arr = label.split("=");
-			if("label".equals(arr[0]))
+			if("label".equals(caption))
 			{
-				specimenDTO = specimenBizLogic.getSpecimenDTOFromSpecimen(specimenDAO.getSpecimenByLabelOrBarcode(arr[1], null, hibernateDao));
+				specimenDTO = specimenBizLogic.getSpecimenDTOFromSpecimen(specimenDAO.getSpecimenByLabelOrBarcode(jsonObject.getString(caption), null, hibernateDao));
 			}
-			else if("barcode".equals(arr[0]))
+			else if("barcode".equals(caption))
 			{
 				specimenDTO = specimenBizLogic.getSpecimenDTOFromSpecimen(specimenDAO.getSpecimenByLabelOrBarcode(null,
-						arr[1], hibernateDao));
+						jsonObject.getString(caption), hibernateDao));
 			}
 		}
 		catch (ApplicationException exception)
@@ -164,6 +168,10 @@ public class SpecimenHandler
 			throw new BizLogicException(exception.getErrorKey(),
 					exception,exception.getMsgValues(),errMssg);
 			
+		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally
 		{

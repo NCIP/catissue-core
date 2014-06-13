@@ -330,7 +330,7 @@ ul li ul li a span {
                     
                 }   
             };
-            request.open("POST","rest/specimens/"+document.getElementById("parentSpecimentLabel").value+"/aliquots",true);
+            request.open("POST","rest/specimens/1/aliquots",true);
             request.setRequestHeader("Content-Type","application/json");
             request.send(JSON.stringify(tabDataJSON));
             
@@ -470,9 +470,9 @@ var request = newXMLHTTPReq();
                 }
                 }
             };
-            request.open("GET","rest/specimens/"+specimenLabel+"/aliquots/"+encodeURIComponent(JSON.stringify(paramStr)),true);
-            request.setRequestHeader("Content-Type"," text/html");
-            request.send();
+            request.open("POST","rest/specimens/1/fetchAliquots",true);
+            request.setRequestHeader("Content-Type","application/json");
+            request.send(JSON.stringify(paramStr));
 
     /*var loader=dhtmlxAjax.getSync("rest/specimens/"+specimenLabel+"/aliquots/"+JSON.stringify(paramStr));
         
