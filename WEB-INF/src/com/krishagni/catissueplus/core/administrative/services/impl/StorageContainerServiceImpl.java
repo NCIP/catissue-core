@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
-import com.krishagni.catissueplus.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
@@ -16,10 +15,11 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDis
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
+import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 
 public class StorageContainerServiceImpl implements StorageContainerService {
 
@@ -194,7 +194,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 
 	private void setName(String name, StorageContainer container, ObjectCreationException exceptionHandler) {
 
-		String labelFormat = "CONTAINER_UNIQUE_ID";
+		String labelFormat = "CONTAINER_UID";
 		if (isBlank(labelFormat)) {
 			if (isBlank(name)) {
 				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, CONTAINER_NAME);
@@ -214,7 +214,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	private void updateName(String name, StorageContainer container, StorageContainer oldContainer,
 			ObjectCreationException exceptionHandler) {
 
-		String labelFormat = "CONTAINER_UNIQUE_ID";
+		String labelFormat = "CONTAINER_UID";
 		if (isBlank(labelFormat)) {
 			if (isBlank(name)) {
 				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, CONTAINER_NAME);
@@ -234,6 +234,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		if (isBlank(barcodeFormat)) {
 			if (isBlank(barcode)) {
 				container.setBarcode(containerBarcodeGenerator.generateBarcode(DEFAULT_BARCODE_TOKEN, container));
+				return;
 			}
 			container.setBarcode(barcode);
 		}

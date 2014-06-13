@@ -1,8 +1,8 @@
 
-package com.krishagni.catissueplus.tokens.impl;
+package com.krishagni.catissueplus.core.tokens.impl;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.tokens.LabelToken;
+import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class LabelTokenForPPI implements LabelToken<Specimen> {
 

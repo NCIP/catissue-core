@@ -5,7 +5,7 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import org.springframework.stereotype.Service;
 
-import com.krishagni.catissueplus.barcodegenerator.BarcodeGenerator;
+import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
@@ -26,7 +26,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupSer
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
-import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
+import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 
 @Service(value = "specimenCollGroupService")
 public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {

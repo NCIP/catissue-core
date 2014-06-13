@@ -1,10 +1,10 @@
 
-package com.krishagni.catissueplus.labelgenerator.impl;
+package com.krishagni.catissueplus.core.labelgenerator.impl;
 
 import java.util.StringTokenizer;
 
-import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
-import com.krishagni.catissueplus.tokens.factory.TokenFactory;
+import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
+import com.krishagni.catissueplus.core.tokens.factory.TokenFactory;
 
 public class AbstractLabelGenerator<T> implements LabelGenerator<T> {
 

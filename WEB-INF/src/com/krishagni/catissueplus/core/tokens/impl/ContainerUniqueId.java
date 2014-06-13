@@ -1,12 +1,12 @@
 
-package com.krishagni.catissueplus.tokens.impl;
+package com.krishagni.catissueplus.core.tokens.impl;
 
 import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
 import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
-import com.krishagni.catissueplus.tokens.LabelToken;
+import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class ContainerUniqueId implements LabelToken<StorageContainer> {
 

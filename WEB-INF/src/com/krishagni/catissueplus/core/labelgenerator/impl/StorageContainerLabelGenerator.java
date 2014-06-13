@@ -1,8 +1,8 @@
 
-package com.krishagni.catissueplus.labelgenerator.impl;
+package com.krishagni.catissueplus.core.labelgenerator.impl;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
+import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 
 public class StorageContainerLabelGenerator extends AbstractLabelGenerator<StorageContainer>
 		implements

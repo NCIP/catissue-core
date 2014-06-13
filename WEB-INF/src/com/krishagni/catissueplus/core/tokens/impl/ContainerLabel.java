@@ -1,8 +1,8 @@
 
-package com.krishagni.catissueplus.tokens.impl;
+package com.krishagni.catissueplus.core.tokens.impl;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.tokens.LabelToken;
+import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class ContainerLabel implements LabelToken<StorageContainer> {
 

@@ -1,12 +1,12 @@
 
-package com.krishagni.catissueplus.tokens.impl;
+package com.krishagni.catissueplus.core.tokens.impl;
 
 import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
 import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
-import com.krishagni.catissueplus.tokens.LabelToken;
+import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class SCGSystemUniqueId implements LabelToken<SpecimenCollectionGroup> {
 

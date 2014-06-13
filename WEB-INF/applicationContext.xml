@@ -74,11 +74,11 @@
     <property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
-	<bean id="scgLabelGenerator" class="com.krishagni.catissueplus.labelgenerator.impl.SCGLabelGenerator">
+	<bean id="scgLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.SCGLabelGenerator">
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 	
-	<bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.barcodegenerator.impl.SpecimenBarcodeGenerator">
+	<bean id="scgBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 	
@@ -172,12 +172,12 @@
   </bean>
 
 	<bean id="specimenLabelGenerator"
-		class="com.krishagni.catissueplus.labelgenerator.impl.SpecimenLabelGenerator">
+		class="com.krishagni.catissueplus.core.labelgenerator.impl.SpecimenLabelGenerator">
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 
 	<bean id="specimenBarcodeGenerator"
-		class="com.krishagni.catissueplus.barcodegenerator.impl.SpecimenBarcodeGenerator">
+		class="com.krishagni.catissueplus.core.barcodegenerator.impl.SpecimenBarcodeGenerator">
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 
@@ -278,11 +278,11 @@
         <property name="biohazardFactory" ref="biohazardFactory" />
 	</bean>
 	
-	<bean id="containerLabelGenerator" class="com.krishagni.catissueplus.labelgenerator.impl.StorageContainerLabelGenerator">
+	<bean id="containerLabelGenerator" class="com.krishagni.catissueplus.core.labelgenerator.impl.StorageContainerLabelGenerator">
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 	
-	<bean id="containerBarcodeGenerator" class="com.krishagni.catissueplus.barcodegenerator.impl.StorageContainerBarcodeGenerator">
+	<bean id="containerBarcodeGenerator" class="com.krishagni.catissueplus.core.barcodegenerator.impl.StorageContainerBarcodeGenerator">
 		<property name="tokenFactory" ref="tokenFactory" />
 	</bean>
 	
@@ -301,7 +301,7 @@
 		<property name="daoFactory" ref="biospecimenDaoFactory"/>
  	</bean>
  	
-	<bean id="tokenFactory" class="com.krishagni.catissueplus.tokens.factory.TokenFactory">
+	<bean id="tokenFactory" class="com.krishagni.catissueplus.core.tokens.factory.TokenFactory">
  	</bean>
 
 	

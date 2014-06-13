@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.tokens;
+package com.krishagni.catissueplus.core.tokens;
 
 public interface LabelToken<T> {
 

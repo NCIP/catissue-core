@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.labelgenerator;
+package com.krishagni.catissueplus.core.labelgenerator;
 
 public interface LabelGenerator<T> {
 

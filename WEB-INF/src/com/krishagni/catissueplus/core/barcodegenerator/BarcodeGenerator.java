@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.barcodegenerator;
+package com.krishagni.catissueplus.core.barcodegenerator;
 
 public interface BarcodeGenerator<T> {
 

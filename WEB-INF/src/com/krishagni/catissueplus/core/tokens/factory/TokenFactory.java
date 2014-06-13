@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.tokens.factory;
+package com.krishagni.catissueplus.core.tokens.factory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.krishagni.catissueplus.tokens.LabelToken;
+import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
 

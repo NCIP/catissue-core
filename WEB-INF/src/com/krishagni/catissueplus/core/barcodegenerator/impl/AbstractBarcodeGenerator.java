@@ -1,10 +1,10 @@
 
-package com.krishagni.catissueplus.barcodegenerator.impl;
+package com.krishagni.catissueplus.core.barcodegenerator.impl;
 
 import java.util.StringTokenizer;
 
-import com.krishagni.catissueplus.barcodegenerator.BarcodeGenerator;
-import com.krishagni.catissueplus.tokens.factory.TokenFactory;
+import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
+import com.krishagni.catissueplus.core.tokens.factory.TokenFactory;
 
 public class AbstractBarcodeGenerator<T> implements BarcodeGenerator<T> {
 
