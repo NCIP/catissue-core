@@ -21,7 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
 
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -30,10 +29,6 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private static final String SCG = "specimen collection group";
-
-	private static final String LABEL = "label";
-
-	private static final String BARCODE = "barcode";
 
 	private static final String PARENT = "parent";
 
@@ -63,14 +58,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private DaoFactory daoFactory;
 
-	private LabelGenerator<Specimen> specimenLabelGenerator;
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
-	}
-
-	public void setSpecimenLabelGenerator(LabelGenerator<Specimen> specimenLabelGenerator) {
-		this.specimenLabelGenerator = specimenLabelGenerator;
 	}
 
 	@Override
@@ -92,8 +81,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setContainerPositions(specimenDetail, specimen, errorHandler);
 		setBiohazardCollection(specimenDetail, specimen, errorHandler);
 		setExternalIdsCollection(specimenDetail, specimen, errorHandler);
-		setLabel(specimenDetail.getLabel(), specimen, errorHandler);
-		setBarcode(specimenDetail.getBarcode(), specimen, errorHandler);
 		errorHandler.checkErrorAndThrow();
 		return specimen;
 	}
@@ -101,12 +88,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	@Override
 	public Specimen patch(Specimen specimen, SpecimenDetail detail) {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
-		if (detail.isLabelModified()) {
-			setLabel(detail.getLabel(), specimen, exceptionHandler);
-		}
-		if (detail.isBarcodeModified()) {
-			setBarcode(detail.getBarcode(), specimen, exceptionHandler);
-		}
 		if (detail.isTissueSiteModified()) {
 			setTissueSite(detail.getTissueSite(), specimen, exceptionHandler);
 		}
@@ -283,32 +264,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			externalIdentifiers.add(identifier);
 		}
 		specimen.setExternalIdentifierCollection(externalIdentifiers);
-	}
-
-	private void setLabel(String label, Specimen specimen, ObjectCreationException errorHandler) {
-
-		//TODO: Which label to use if user has already provided the label
-		if (specimenLabelGenerator != null) {
-			specimen.setLabel(specimenLabelGenerator.generateLabel(specimen));
-		}
-		else {
-			if (specimen.isCollected() && isBlank(label)) {
-				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, LABEL);
-			}
-			specimen.setLabel(label);
-		}
-	}
-
-	private void setBarcode(String barcode, Specimen specimen, ObjectCreationException errorHandler) {
-		if (!isBlank(barcode)) {
-			specimen.setBarcode(barcode);
-		}
-		else {
-			if (isBlank(specimen.getLabel())) {
-				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, BARCODE);
-			}
-			specimen.setBarcode(specimen.getLabel());
-		}
 	}
 
 	//	private void addError(CatissueErrorCode event, String field) {

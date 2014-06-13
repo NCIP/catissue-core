@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.krishagni.catissueplus.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -28,6 +29,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -39,9 +41,15 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	private static final String SPECIMEN_AVAILABLE_QUANTITY = "Specimen available quantity ";
 
+	private static final String DEFAULT_BARCODE_TOKEN = "SPECIMEN_LABEL";
+
 	private DaoFactory daoFactory;
 
 	private SpecimenFactory specimenFactory;
+
+	private LabelGenerator<Specimen> specimenLabelGenerator;
+
+	private BarcodeGenerator<Specimen> specimenBarcodeGenerator;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -49,6 +57,14 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	public void setSpecimenFactory(SpecimenFactory specimenFactory) {
 		this.specimenFactory = specimenFactory;
+	}
+
+	public void setSpecimenLabelGenerator(LabelGenerator<Specimen> specimenLabelGenerator) {
+		this.specimenLabelGenerator = specimenLabelGenerator;
+	}
+
+	public void setSpecimenBarcodeGenerator(BarcodeGenerator<Specimen> specimenBarcodeGenerator) {
+		this.specimenBarcodeGenerator = specimenBarcodeGenerator;
 	}
 
 	@Override
@@ -68,6 +84,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 		try {
 			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
+			setLabel(event.getSpecimenDetail().getLabel(), specimen, errorHandler);
+			setBarcode(event.getSpecimenDetail().getBarcode(), specimen, errorHandler);
 			ensureUniqueBarocde(specimen.getBarcode(), errorHandler);
 			ensureUniqueLabel(specimen.getLabel(), errorHandler);
 			errorHandler.checkErrorAndThrow();
@@ -93,6 +111,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 			}
 			Specimen specimen = specimenFactory.createSpecimen(event.getSpecimenDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
+			updateLabel(event.getSpecimenDetail().getLabel(), specimen, oldSpecimen, errorHandler);
+			updateBarcode(event.getSpecimenDetail().getBarcode(), specimen, oldSpecimen, errorHandler);
 			validateLabelBarcodeUnique(oldSpecimen, specimen, errorHandler);
 			errorHandler.checkErrorAndThrow();
 			oldSpecimen.update(specimen);
@@ -108,6 +128,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 
 	@Override
+	@PlusTransactional
 	public SpecimenUpdatedEvent patchSpecimen(PatchSpecimenEvent event) {
 		try {
 			Long specimenId = event.getId();
@@ -116,7 +137,15 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return SpecimenUpdatedEvent.notFound(specimenId);
 			}
 			Specimen specimen = specimenFactory.patch(oldSpecimen, event.getDetail());
+
 			ObjectCreationException errorHandler = new ObjectCreationException();
+			if (event.getDetail().isLabelModified()) {
+				updateLabel(event.getDetail().getLabel(), specimen, oldSpecimen, errorHandler);
+
+			}
+			if (event.getDetail().isBarcodeModified()) {
+				updateBarcode(event.getDetail().getBarcode(), specimen, oldSpecimen, errorHandler);
+			}
 			validateLabelBarcodeUnique(oldSpecimen, specimen, errorHandler);
 			errorHandler.checkErrorAndThrow();
 			oldSpecimen.update(specimen);
@@ -210,4 +239,93 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 	}
 
+	private void setLabel(String label, Specimen specimen, ObjectCreationException errorHandler) {
+		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getCollectionProtocol().getSpecimenLabelFormat();
+		if (isBlank(specimenLabelFormat)) {
+			if (isBlank(label)) {
+				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
+				return;
+			}
+			specimen.setLabel(label);
+		}
+		else {
+			if (!isBlank(label)) {
+				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
+				return;
+			}
+			specimen.setLabel(specimenLabelGenerator.generateLabel(specimenLabelFormat, specimen));
+		}
+	}
+
+	private void updateLabel(String label, Specimen specimen, Specimen oldSpecimen, ObjectCreationException errorHandler) {
+		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getCollectionProtocol().getSpecimenLabelFormat();
+
+		if (isBlank(specimenLabelFormat)) {
+			if (isBlank(label)) {
+				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
+				return;
+			}
+			specimen.setLabel(label);
+		}
+		else if (!oldSpecimen.getLabel().equalsIgnoreCase(label)) {
+			errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
+			return;
+		}
+
+	}
+
+	/**
+	 * If Barcode Format is null then set user provided barcode & if user does not provided barcode then 
+	 * set Specimen Label as barcode.
+	 * 
+	 * @param barcode
+	 * @param specimen
+	 * @param errorHandler
+	 */
+	private void setBarcode(String barcode, Specimen specimen, ObjectCreationException errorHandler) {
+		//TODO: Get Barcode Format 
+		//		String barcodeFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+		//				.getCollectionProtocol();
+
+		String barcodeFormat = null;
+		if (isBlank(barcodeFormat)) {
+			if (isBlank(barcode)) {
+				specimen.setBarcode(specimenBarcodeGenerator.generateBarcode(DEFAULT_BARCODE_TOKEN, specimen));
+				return;
+			}
+			else {
+				specimen.setBarcode(barcode);
+			}
+		}
+		else {
+			if (!isBlank(barcode)) {
+				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
+				return;
+			}
+			specimen.setBarcode(specimenBarcodeGenerator.generateBarcode(barcodeFormat, specimen));
+		}
+
+	}
+
+	private void updateBarcode(String barcode, Specimen specimen, Specimen oldSpecimen,
+			ObjectCreationException errorHandler) {
+		//TODO: Get Barcode Format 
+		//		String barcodeFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+		//				.getCollectionProtocol();
+
+		String barcodeFormat = null;
+		if (isBlank(barcodeFormat)) {
+			if (isBlank(barcode)) {
+				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, BARCODE);
+				return;
+			}
+			specimen.setBarcode(barcode);
+		}
+		else if (!specimen.getBarcode().equalsIgnoreCase(oldSpecimen.getBarcode())) {
+			errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
+			return;
+		}
+	}
 }

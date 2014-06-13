@@ -8,10 +8,10 @@ public class StorageContainerLabelGenerator extends AbstractLabelGenerator<Stora
 		implements
 			LabelGenerator<StorageContainer> {
 
-	private static String CONTAINER_UNIQUE_NUMBER = "CONTAINER_UNIQUE_NUMBER";
+	/*private static String CONTAINER_UNIQUE_NUMBER = "CONTAINER_UNIQUE_NUMBER";
 
 	@Override
-	public String generateLabel(StorageContainer container) {
+	public String generateLabel(String labelFormat, StorageContainer container) {
 		return getUniqueId(CONTAINER_UNIQUE_NUMBER);
-	}
+	}*/
 }

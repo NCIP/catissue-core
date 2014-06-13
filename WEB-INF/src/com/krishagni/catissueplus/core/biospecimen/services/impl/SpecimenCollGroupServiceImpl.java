@@ -5,9 +5,11 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import org.springframework.stereotype.Service;
 
+import com.krishagni.catissueplus.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
@@ -24,6 +26,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupSer
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
 
 @Service(value = "specimenCollGroupService")
 public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
@@ -32,9 +35,15 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 	private SpecimenCollectionGroupFactory scgFactory;
 
+	private LabelGenerator<SpecimenCollectionGroup> scgLabelGenerator;
+
+	private BarcodeGenerator<SpecimenCollectionGroup> scgBarcodeGenerator;
+
 	private static final String NAME = "name";
 
 	private static final String BARCODE = "barcode";
+
+	private static final String DEFAULT_BARCODE_TOKEN = "SCG_LABEL";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -44,20 +53,27 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 		this.scgFactory = scgFactory;
 	}
 
+	public void setScgLabelGenerator(LabelGenerator<SpecimenCollectionGroup> scgLabelGenerator) {
+		this.scgLabelGenerator = scgLabelGenerator;
+	}
+
+	public void setScgBarcodeGenerator(BarcodeGenerator<SpecimenCollectionGroup> scgBarcodeGenerator) {
+		this.scgBarcodeGenerator = scgBarcodeGenerator;
+	}
+
 	@Override
 	@PlusTransactional
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
-System.out.println();
+		System.out.println();
 		try {
-			if(ObjectType.CPE.getName().equals(req.getObjectType()))
-			{
+			if (ObjectType.CPE.getName().equals(req.getObjectType())) {
 				return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensListFromCpe(req.getId()));
-				
+
 			}
-			else{
+			else {
 				return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensList(req.getId()));
 			}
-			
+
 		}
 		catch (CatissueException e) {
 			return AllSpecimensSummaryEvent.serverError(e);
@@ -70,6 +86,8 @@ System.out.println();
 		try {
 			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
+			setName(scgEvent.getScgDetail().getName(), scg, errorHandler);
+			setBarcode(scgEvent.getScgDetail().getBarcode(), scg, errorHandler);
 			ensureUniqueBarcode(scg.getBarcode(), errorHandler);
 			ensureUniqueName(scg.getName(), errorHandler);
 			errorHandler.checkErrorAndThrow();
@@ -94,6 +112,8 @@ System.out.println();
 			}
 			SpecimenCollectionGroup scg = scgFactory.createScg(scgEvent.getScgDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
+			updateName(scgEvent.getScgDetail().getName(), scg, oldScg, errorHandler);
+			updateBarcode(scgEvent.getScgDetail().getBarcode(), scg, oldScg, errorHandler);
 			validateBarcode(oldScg.getBarcode(), scg.getBarcode(), errorHandler);
 			validateName(oldScg.getName(), scg.getName(), errorHandler);
 			errorHandler.checkErrorAndThrow();
@@ -108,7 +128,7 @@ System.out.println();
 			return ScgUpdatedEvent.serverError(ex);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ScgUpdatedEvent patchScg(PatchScgEvent scgEvent) {
@@ -117,8 +137,16 @@ System.out.println();
 			if (oldScg == null) {
 				ScgUpdatedEvent.notFound(scgEvent.getId());
 			}
-			SpecimenCollectionGroup scg = scgFactory.patch(oldScg,scgEvent.getScgProps());
+			SpecimenCollectionGroup scg = scgFactory.patch(oldScg, scgEvent.getScgProps());
 			ObjectCreationException errorHandler = new ObjectCreationException();
+			if (scgEvent.getScgProps().containsKey("name")) {
+				String name = (String) scgEvent.getScgProps().get("name");
+				updateName(name, scg, oldScg, errorHandler);
+			}
+			if (scgEvent.getScgProps().containsKey("barcode")) {
+				String barcode = (String) scgEvent.getScgProps().get("barcode");
+				updateBarcode(barcode, scg, oldScg, errorHandler);
+			}
 			validateBarcode(oldScg.getBarcode(), scg.getBarcode(), errorHandler);
 			validateName(oldScg.getName(), scg.getName(), errorHandler);
 			errorHandler.checkErrorAndThrow();
@@ -177,4 +205,88 @@ System.out.println();
 			ensureUniqueBarcode(newBarcode, errorHandler);
 		}
 	}
+
+	private void setName(String name, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
+		//TODO: get SCG Label Format 
+		String scgLabelFormat = null;
+		if (isBlank(scgLabelFormat)) {
+			if (!scg.isCompleted() && isBlank(name)) {
+				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
+				return;
+			}
+			scg.setName(name);
+		}
+		else {
+			if (!isBlank(name)) {
+				errorHandler.addError(ScgErrorCode.AUTO_GENERATED_LABEL, NAME);
+			}
+			scg.setName(scgLabelGenerator.generateLabel(scgLabelFormat, scg));
+		}
+	}
+
+	/**
+	 * If Barcode Format is null then set user provided barcode & if user does not provided barcode then 
+	 * set Specimen Label as barcode.
+	 * @param barcode
+	 * @param scg
+	 * @param errorHandler
+	 */
+	private void setBarcode(String barcode, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
+		//TODO:get Barcode Format from CP.
+		String barcodeFormat = null;
+		if (isBlank(barcodeFormat)) {
+			if (isBlank(barcode)) {
+				scg.setBarcode(scgBarcodeGenerator.generateBarcode(DEFAULT_BARCODE_TOKEN, scg));
+			}
+			else {
+				scg.setBarcode(barcode);
+			}
+		}
+		else {
+			if (!isBlank(barcode)) {
+				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
+				return;
+			}
+			scg.setBarcode(scgBarcodeGenerator.generateBarcode(barcodeFormat, scg));
+		}
+
+	}
+
+	private void updateName(String name, SpecimenCollectionGroup scg, SpecimenCollectionGroup oldScg,
+			ObjectCreationException errorHandler) {
+		//TODO: get SCG Label Format
+		String scgLabelFormat = null;
+		if (isBlank(scgLabelFormat)) {
+			if (isBlank(name)) {
+				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
+				return;
+			}
+			scg.setName(name);
+
+		}
+		else if (oldScg.getName().equalsIgnoreCase(scg.getName())) {
+			errorHandler.addError(ScgErrorCode.AUTO_GENERATED_LABEL, NAME);
+			return;
+		}
+
+	}
+
+	private void updateBarcode(String barcode, SpecimenCollectionGroup scg, SpecimenCollectionGroup oldScg,
+			ObjectCreationException errorHandler) {
+		//TODO:get Barcode Format
+		String barcodeFormat = null;
+		if (isBlank(barcodeFormat)) {
+			if (isBlank(barcode)) {
+				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, BARCODE);
+				return;
+			}
+			scg.setBarcode(barcode);
+		}
+		else if (oldScg.getBarcode().equals(scg.getBarcode())) {
+			errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
+			return;
+		}
+
+	}
+
 }

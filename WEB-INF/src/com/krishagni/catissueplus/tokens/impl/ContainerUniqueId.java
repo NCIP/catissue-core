@@ -1,0 +1,23 @@
+
+package com.krishagni.catissueplus.tokens.impl;
+
+import org.springframework.context.ApplicationContext;
+
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
+import com.krishagni.catissueplus.tokens.LabelToken;
+
+public class ContainerUniqueId implements LabelToken<StorageContainer> {
+
+	private static String CONTAINER_UNIQUE_ID = "CONTAINER_UNIQUE_ID";
+
+	@Override
+	public String getTokenValue(StorageContainer t) {
+		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		KeyGenFactory keyFactory = (KeyGenFactory) caTissueContext.getBean("keyFactory");
+		Long value = keyFactory.getValueByKey(CONTAINER_UNIQUE_ID, CONTAINER_UNIQUE_ID);
+		return value.toString();
+	}
+
+}

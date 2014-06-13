@@ -28,6 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -155,6 +156,22 @@ public class SpecimenController {
 		createSpecimenEvent.setScgId(specimenDetail.getScgId());
 
 		SpecimenCreatedEvent response = specimenSvc.createSpecimen(createSpecimenEvent);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getSpecimenDetail();
+		}
+
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenDetail updateSpecimen(@PathVariable Long id, @RequestBody SpecimenDetail specimenDetail) {
+		UpdateSpecimenEvent event = new UpdateSpecimenEvent();
+		event.setId(id);
+		event.setSpecimenDetail(specimenDetail);
+		event.setSessionDataBean(getSession());
+		SpecimenUpdatedEvent response = specimenSvc.updateSpecimen(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getSpecimenDetail();
 		}

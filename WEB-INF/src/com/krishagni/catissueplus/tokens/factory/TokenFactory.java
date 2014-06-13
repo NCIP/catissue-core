@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.labelgenerator.impl;
+package com.krishagni.catissueplus.tokens.factory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.krishagni.catissueplus.labelgenerator.LabelToken;
+import com.krishagni.catissueplus.tokens.LabelToken;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
 
@@ -18,7 +18,7 @@ public class TokenFactory {
 
 	private static final String ERROR_IN_CLASS_INITIALIZATION = "Error while initializing Label generator class";
 
-	private static final String LABEL_TOKEN_PROP_FILE_NAME = "LabelTokens.Properties";
+	private static final String LABEL_TOKEN_PROP_FILE_NAME = "Tokens.properties";
 
 	private static Map<String, String> tokenMap;
 
@@ -49,8 +49,8 @@ public class TokenFactory {
 			}
 			if (isToken(tokenKey)) {
 				String className = tokenMap.get(tokenKey);
-				LabelToken labelTokens = (LabelToken) Class.forName(className).newInstance();
-				return labelTokens.getTokenValue(object);
+				LabelToken labelToken = (LabelToken) Class.forName(className).newInstance();
+				return labelToken.getTokenValue(object);
 			}
 			else {
 				return tokenKey;

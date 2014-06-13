@@ -10,10 +10,12 @@ public enum ScgErrorCode implements CatissueErrorCode {
 	DUPLICATE_PPID(1003, "Same protocol participant identifier is already exists with this collection protocol."),
 	DUPLICATE_BARCODE(1004, "Registration is already present with same barcode."),
 	ACTIVE_CHILDREN_FOUND(1005, "Cannot be deleted, Active childrens found."),
-	DUPLICATE_SSN(1005,"Participant with the same social security number is already exists."),
-	DUPLICATE_NAME(1105,"specimen collection group with same already exists."),
-	ERRORS(1009, "Please resolve the highlighted errors."),
-	INVALID_CPR_CPE(1106,"registraion and event point refering to different protocols.");
+	DUPLICATE_SSN(1006,"Participant with the same social security number is already exists."),
+	DUPLICATE_NAME(1107,"specimen collection group with same already exists."),
+	ERRORS(1008, "Please resolve the highlighted errors."),
+	INVALID_CPR_CPE(1109,"registraion and event point refering to different protocols."),
+	AUTO_GENERATED_LABEL(1110,"Please do not specify label,it is auto generated.")
+	;
 
 	private int code;
 

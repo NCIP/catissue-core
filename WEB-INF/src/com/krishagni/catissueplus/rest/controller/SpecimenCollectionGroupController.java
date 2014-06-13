@@ -20,7 +20,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -106,6 +108,22 @@ public class SpecimenCollectionGroupController {
 		ScgCreatedEvent scgCreated = specimenCollGroupService.createScg(createScgEvent);
 		if (scgCreated.getStatus().equals(EventStatus.OK)) {
 			return scgCreated.getDetail();
+		}
+		return null;
+
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ScgDetail updateSCG(@PathVariable Long id, @RequestBody ScgDetail scgDetail) {
+		UpdateScgEvent event = new UpdateScgEvent();
+		event.setId(id);
+		event.setScgDetail(scgDetail);
+		event.setSessionDataBean(getSession());
+		ScgUpdatedEvent response = specimenCollGroupService.updateScg(event);
+		if (response.getStatus().equals(EventStatus.OK)) {
+			return response.getDetail();
 		}
 		return null;
 

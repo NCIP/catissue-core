@@ -19,15 +19,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGroupFactory {
 
 	private DaoFactory daoFactory;
-
-	private LabelGenerator<SpecimenCollectionGroup> scgLabelGenerator;
 
 	private static final String CLINICAL_DIAGNOSIS = "clinical diagnosis";
 
@@ -40,8 +37,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	private static final String CPR = "collection protocol registration";
 
 	private static final String SITE = "site name";
-
-	private static final String NAME = "name";
 
 	private static final String BARCODE = "barcode";
 
@@ -61,10 +56,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		this.daoFactory = daoFactory;
 	}
 
-	public void setScgLabelGenerator(LabelGenerator<SpecimenCollectionGroup> scgLabelGenerator) {
-		this.scgLabelGenerator = scgLabelGenerator;
-	}
-
 	@Override
 	public SpecimenCollectionGroup createScg(ScgDetail scgDetail) {
 		ObjectCreationException errorHandler = new ObjectCreationException();
@@ -80,8 +71,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		setReceivedEventDetails(scgDetail, scg, errorHandler);
 		setComments(scgDetail.getComment(), scg, errorHandler);
 		setSprNumber(scgDetail.getSurgicalPathologyNumber(), scg);
-		setName(scgDetail.getName(), scg, errorHandler);
-		setBarcode(scgDetail.getBarcode(), scg, errorHandler);
 		validateCprAndCpe(scg, errorHandler);//this should be part of factory
 		errorHandler.checkErrorAndThrow();
 		return scg;
@@ -93,12 +82,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		Iterator<Entry<String, Object>> entries = scgProps.entrySet().iterator();
 		while (entries.hasNext()) {
 			Entry<String, Object> entry = entries.next();
-			if ("name".equals(entry.getKey())) {
-				setName(String.valueOf(entry.getValue()), scg, errorHandler);
-			}
-			if ("barcode".equals(entry.getKey())) {
-				setBarcode(String.valueOf(entry.getValue()), scg, errorHandler);
-			}
 			if ("comment".equals(entry.getKey())) {
 				setComments(String.valueOf(entry.getValue()), scg, errorHandler);
 			}
@@ -186,32 +169,6 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 			return;
 		}
 		errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, Status.ACTIVITY_STATUS.getStatus());
-	}
-
-	private void setName(String name, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		if (scgLabelGenerator != null) {
-			scg.setName(scgLabelGenerator.generateLabel(scg));
-		}
-		else {
-			if (!scg.isCompleted() && isBlank(name)) {
-				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, NAME);
-				return;
-			}
-			scg.setName(name);
-		}
-
-	}
-
-	private void setBarcode(String barcode, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		if (isBlank(barcode)) {
-			scg.setBarcode(scg.getName());
-		}
-		else {
-			if (isBlank(scg.getName())) {
-				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, BARCODE);
-			}
-			scg.setBarcode(barcode);
-		}
 	}
 
 	private void setClinicalDiagnosis(String clinicalDiagnosis, SpecimenCollectionGroup scg,

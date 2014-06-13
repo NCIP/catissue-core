@@ -1,10 +1,14 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
+import com.krishagni.catissueplus.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
@@ -12,10 +16,10 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDis
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
-import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.labelgenerator.LabelGenerator;
 
 public class StorageContainerServiceImpl implements StorageContainerService {
 
@@ -23,9 +27,17 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 
 	private static final String BARCODE = "barcode";
 
+	private static final String CONTAINER_NAME = "name";
+
+	private static final String DEFAULT_BARCODE_TOKEN = "CONTAINER_LABEL";
+
 	private DaoFactory daoFactory;
 
 	private StorageContainerFactory storageContainerFactory;
+
+	private LabelGenerator<StorageContainer> containerLabelGenerator;
+
+	private BarcodeGenerator<StorageContainer> containerBarcodeGenerator;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -35,12 +47,22 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		this.storageContainerFactory = storageContainerFactory;
 	}
 
+	public void setContainerLabelGenerator(LabelGenerator<StorageContainer> containerLabelGenerator) {
+		this.containerLabelGenerator = containerLabelGenerator;
+	}
+
+	public void setContainerBarcodeGenerator(BarcodeGenerator<StorageContainer> containerBarcodeGenerator) {
+		this.containerBarcodeGenerator = containerBarcodeGenerator;
+	}
+
 	@Override
 	@PlusTransactional
 	public StorageContainerCreatedEvent createStorageContainer(CreateStorageContainerEvent event) {
 		try {
 			StorageContainer storageContainer = storageContainerFactory.createStorageContainer(event.getDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
+			setName(event.getDetails().getName(), storageContainer, exceptionHandler);
+			setBarcode(event.getDetails().getBarcode(), storageContainer, exceptionHandler);
 			ensureUniqueName(storageContainer.getName(), exceptionHandler);
 			ensureUniqueBarcode(storageContainer.getBarcode(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
@@ -48,7 +70,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return StorageContainerCreatedEvent.ok(StorageContainerDetails.fromDomain(storageContainer));
 		}
 		catch (ObjectCreationException ce) {
-			return StorageContainerCreatedEvent.invalidRequest(StorageContainerErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return StorageContainerCreatedEvent.invalidRequest(StorageContainerErrorCode.ERRORS.message(),
+					ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return StorageContainerCreatedEvent.serverError(e);
@@ -81,6 +104,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			StorageContainer storageContainer = storageContainerFactory.createStorageContainer(event.getDetails());
 
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
+			updateName(event.getDetails().getName(), storageContainer, oldStorageContainer, exceptionHandler);
+			updateBarcode(event.getDetails().getBarcode(), storageContainer, oldStorageContainer, exceptionHandler);
 			checkUniqueName(oldStorageContainer, storageContainer, exceptionHandler);
 			checkUniqueBarcode(oldStorageContainer, storageContainer, exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
@@ -90,7 +115,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return StorageContainerUpdatedEvent.ok(StorageContainerDetails.fromDomain(oldStorageContainer));
 		}
 		catch (ObjectCreationException ce) {
-			return StorageContainerUpdatedEvent.invalidRequest(StorageContainerErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return StorageContainerUpdatedEvent.invalidRequest(StorageContainerErrorCode.ERRORS.message(),
+					ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return StorageContainerUpdatedEvent.serverError(e);
@@ -133,13 +159,23 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	public StorageContainerUpdatedEvent patchStorageContainer(PatchStorageContainerEvent event) {
 		try {
 			Long storageContainerId = event.getStorageContainerId();
-			StorageContainer oldStorageContainer = daoFactory.getStorageContainerDao().getStorageContainer(storageContainerId);
+			StorageContainer oldStorageContainer = daoFactory.getStorageContainerDao()
+					.getStorageContainer(storageContainerId);
 			if (oldStorageContainer == null) {
 				return StorageContainerUpdatedEvent.notFound(storageContainerId);
 			}
-			StorageContainer storageContainer = storageContainerFactory.patchStorageContainer(oldStorageContainer, event.getStorageContainerDetails());
+			StorageContainer storageContainer = storageContainerFactory.patchStorageContainer(oldStorageContainer,
+					event.getStorageContainerDetails());
 
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
+			if (event.getStorageContainerDetails().isNameModified()) {
+				updateName(event.getStorageContainerDetails().getName(), storageContainer, oldStorageContainer,
+						exceptionHandler);
+			}
+			if (event.getStorageContainerDetails().isBarcodeModified()) {
+				updateBarcode(event.getStorageContainerDetails().getBarcode(), storageContainer, oldStorageContainer,
+						exceptionHandler);
+			}
 			checkUniqueName(oldStorageContainer, storageContainer, exceptionHandler);
 			checkUniqueBarcode(oldStorageContainer, storageContainer, exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
@@ -148,11 +184,86 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return StorageContainerUpdatedEvent.ok(StorageContainerDetails.fromDomain(storageContainer));
 		}
 		catch (ObjectCreationException ce) {
-			return StorageContainerUpdatedEvent.invalidRequest(StorageContainerErrorCode.ERRORS.message(), ce.getErroneousFields());
+			return StorageContainerUpdatedEvent.invalidRequest(StorageContainerErrorCode.ERRORS.message(),
+					ce.getErroneousFields());
 		}
 		catch (Exception e) {
 			return StorageContainerUpdatedEvent.serverError(e);
 		}
+	}
+
+	private void setName(String name, StorageContainer container, ObjectCreationException exceptionHandler) {
+
+		String labelFormat = "CONTAINER_UNIQUE_ID";
+		if (isBlank(labelFormat)) {
+			if (isBlank(name)) {
+				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, CONTAINER_NAME);
+				return;
+			}
+			container.setName(name);
+		}
+		else {
+			if (!isBlank(name)) {
+				exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_LABEL, CONTAINER_NAME);
+				return;
+			}
+			container.setName(containerLabelGenerator.generateLabel(labelFormat, container));
+		}
+	}
+
+	private void updateName(String name, StorageContainer container, StorageContainer oldContainer,
+			ObjectCreationException exceptionHandler) {
+
+		String labelFormat = "CONTAINER_UNIQUE_ID";
+		if (isBlank(labelFormat)) {
+			if (isBlank(name)) {
+				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, CONTAINER_NAME);
+				return;
+			}
+			container.setName(name);
+		}
+		else if (!oldContainer.getName().equalsIgnoreCase(container.getName())) {
+			exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_LABEL, CONTAINER_NAME);
+			return;
+		}
+	}
+
+	private void setBarcode(String barcode, StorageContainer container, ObjectCreationException exceptionHandler) {
+		//TODO: Get Barcode Format
+		String barcodeFormat = null;
+		if (isBlank(barcodeFormat)) {
+			if (isBlank(barcode)) {
+				container.setBarcode(containerBarcodeGenerator.generateBarcode(DEFAULT_BARCODE_TOKEN, container));
+			}
+			container.setBarcode(barcode);
+		}
+		else {
+			if (!isBlank(container.getName())) {
+				exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
+				return;
+			}
+			container.setBarcode(containerBarcodeGenerator.generateBarcode(barcodeFormat, container));
+		}
+	}
+
+	private void updateBarcode(String barcode, StorageContainer container, StorageContainer oldContainer,
+			ObjectCreationException exceptionHandler) {
+		//TODO: Get Barcode Format
+		String barcodeFormat = null;
+
+		if (isBlank(barcodeFormat)) {
+			if (isBlank(barcode)) {
+				exceptionHandler.addError(StorageContainerErrorCode.MISSING_ATTR_VALUE, BARCODE);
+				return;
+			}
+			container.setBarcode(barcode);
+		}
+
+		else if (!oldContainer.getBarcode().equals(container.getBarcode())) {
+			exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
+			return;
+		}
+
 	}
 
 }
