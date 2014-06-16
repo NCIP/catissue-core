@@ -8,8 +8,23 @@
 <%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="java.text.MessageFormat"%>
+
+<%@ page
+    import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
+
+
+
+<%
+String ua = request.getHeader("User-Agent");
+Object form = request.getAttribute("formName");
+if(!ua.contains("MSIE 9.0") || form instanceof CollectionProtocolForm){
+
+%>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+<%
+}
+%>
 
 <!doctype html>
 <html xmlns:ng="http://angularjs.org" ng-app="cpview-app" id="ng-app">
