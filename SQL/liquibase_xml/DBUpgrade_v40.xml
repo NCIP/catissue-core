@@ -2947,6 +2947,55 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
                referencedColumnNames="IDENTIFIER" />
     </changeSet> 
+    
+    
+ <changeSet author="ajaysamgir" id="table for distribution protocol" failOnError="true">
+       <createTable tableName="OS_DISTRIBUTION_PROTOCOL">
+    	 
+    	 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+          	<constraints primaryKey="true" nullable="false"/>
+        </column>
+         
+         <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}">
+         </column>
+         
+         <column name="TITLE" type="${text.type}(255)">
+         </column>
+         
+          <column name="SHORT_TITLE" type="${text.type}(255)">
+         </column>
+         
+         <column name="ACTIVITY_STATUS" type="${text.type}(30)">
+         </column>
+         
+         <column name="IRB_IDENTIFIER" type="${text.type}(255)">
+         </column>
+         
+         <column name="START_DATE" type="${date.type}">
+         </column>
+         
+         <column name="ANTICIPATED_SPECIMEN_COUNT" type="${int.type}">
+         </column>
+         
+         <column name="DESCRIPTION_URL" type="${text.type}(255)">
+         </column>
+     
+        </createTable>
+ 
+        <addForeignKeyConstraint
+               constraintName="FK_PI_ID_BY_CAT_USER_ID"
+               baseTableName="OS_DISTRIBUTION_PROTOCOL"
+               baseColumnNames="PRINCIPAL_INVESTIGATOR_ID"
+               referencedTableName="CATISSUE_USER"
+               referencedColumnNames="IDENTIFIER" />
+               
+        <createSequence
+            sequenceName="OS_DISTRIBUTION_PROTOCOL_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+            
+    </changeSet>
 </databaseChangeLog>         
 
 

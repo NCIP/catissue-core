@@ -1,0 +1,28 @@
+
+package com.krishagni.catissueplus.core.administrative.events;
+
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+
+public class PatchDistributionProtocolEvent extends RequestEvent {
+
+	private DistributionProtocolDetails details;
+
+	private Long id;
+
+	public DistributionProtocolDetails getDetails() {
+		return details;
+	}
+
+	public void setDetails(DistributionProtocolDetails details) {
+		this.details = details;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+}

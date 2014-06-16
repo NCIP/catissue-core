@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+	name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
+	table="OS_DISTRIBUTION_PROTOCOL">
+	
+	<cache usage="read-write"/>
+	
+	<id
+		name="id"
+		column="IDENTIFIER"
+		type="long"
+		length="30"
+		unsaved-value="null">
+		
+	 	<generator class="native">
+	 		<param name="sequence">OS_DISTRIBUTION_PROTOCOL_SEQ</param>
+        </generator>
+        	
+    </id>
+    
+    <many-to-one
+    	name="principalInvestigator"
+    	class="com.krishagni.catissueplus.core.administrative.domain.User"
+    	insert="true"
+    	update="true"
+    	column="PRINCIPAL_INVESTIGATOR_ID"/>
+    
+     <property
+            name="title"
+            type="string"
+            column="TITLE"
+            length="255"
+            not-null="true"
+            unique="true"/>
+      
+      <property
+            name="shortTitle"
+            type="string"
+            column="SHORT_TITLE"
+            length="255" />
+        
+     <property
+            name="irbId"
+            type="string"
+            column="IRB_IDENTIFIER"
+            length="255" />
+        
+     <property
+            name="startDate"
+            type="date"
+            column="START_DATE"
+            length="50" />
+    
+     <property
+            name="descriptionUrl"
+            type="string"
+            column="DESCRIPTION_URL"
+            length="255" />
+        
+      <property
+            name="anticipatedSpecimenCount"
+            type="long"
+            column="ANTICIPATED_SPECIMEN_COUNT"
+            length="30" />
+            
+     <property
+            name="activityStatus"
+            type="string"
+            column="ACTIVITY_STATUS"
+            length="30" />
+      
+      <query name="getDistributionProtocolTitle">
+      	Select distributionProtocol.title FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.title=:title 
+      </query>
+      
+       <query name="getDistributionProtocolShortTitle">
+      	Select distributionProtocol.shortTitle FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.shortTitle=:shortTitle 
+      </query>
+      
+ </class>
+</hibernate-mapping>

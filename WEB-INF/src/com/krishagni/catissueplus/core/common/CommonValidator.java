@@ -36,5 +36,14 @@ public class CommonValidator {
 		}
 		return false;
 //		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
+	
+	}
+	
+	
+	public static boolean isValidPositiveNumber(Long capacity) {
+		if (capacity == null || capacity <= 0) {
+			return false;
+		}
+		return true;
 	}
 }

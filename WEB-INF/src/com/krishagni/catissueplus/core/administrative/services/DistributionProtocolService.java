@@ -1,0 +1,19 @@
+package com.krishagni.catissueplus.core.administrative.services;
+
+import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
+
+
+public interface DistributionProtocolService {
+
+	public DistributionProtocolCreatedEvent createDistributionProtocol(CreateDistributionProtocolEvent event);
+
+	public DistributionProtocolUpdatedEvent updateDistributionProtocol(UpdateDistributionProtocolEvent reqEvent);
+
+	public DistributionProtocolPatchedEvent patchDistributionProtocol(PatchDistributionProtocolEvent reqEvent);
+
+}

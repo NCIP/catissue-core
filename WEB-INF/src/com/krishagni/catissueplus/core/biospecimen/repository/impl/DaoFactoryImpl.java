@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
+import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -14,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.BiohazardD
 import com.krishagni.catissueplus.core.administrative.repository.impl.CollectionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
@@ -211,6 +213,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public StorageContainerDao getStorageContainerDao() {
 		StorageContainerDaoImpl dao = new StorageContainerDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public DistributionProtocolDao getDistributionProtocolDao() {
+		DistributionProtocolDaoImpl dao = new DistributionProtocolDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

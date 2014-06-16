@@ -304,5 +304,12 @@
 	<bean id="tokenFactory" class="com.krishagni.catissueplus.core.tokens.factory.TokenFactory">
  	</bean>
 
-	
+	<bean id="distributionProtocolFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl">
+	<property name="daoFactory" ref="biospecimenDaoFactory"/>
+	</bean>
+
+	<bean id="distributionProtocolService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolServiceImpl">
+        <property name="daoFactory" ref="biospecimenDaoFactory"/>
+        <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
+	</bean>
  </beans>
