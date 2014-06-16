@@ -8,7 +8,8 @@
 <%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="java.text.MessageFormat"%>
-
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 
 <!doctype html>
 <html xmlns:ng="http://angularjs.org" ng-app="cpview-app" id="ng-app">
