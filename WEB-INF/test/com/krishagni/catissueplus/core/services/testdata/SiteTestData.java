@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SiteDetails;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -114,11 +115,13 @@ public class SiteTestData {
 		return reqEvent;
 	}
 
-	private static List<String> getCoordinatorNameCollection() {
-		List<String> loginNames = new ArrayList<String>();
-		loginNames.add("admin@admin.com");
-		loginNames.add("ajay@ajay.com");
-		return loginNames;
+	private static List<UserInfo> getCoordinatorNameCollection() {
+		List<UserInfo> userInfos = new ArrayList<UserInfo>();
+		UserInfo userInfo = new UserInfo();
+		userInfo.setDomainName("catissue");
+		userInfo.setLoginName("admin@admin.com");
+		userInfos.add(userInfo);
+		return userInfos;
 	}
 
 	private static SiteDetails getDetails() {
@@ -329,8 +332,11 @@ public class SiteTestData {
 	
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCoordinatorCollection() {
 		PatchSiteEvent event = getEmptyPatchData();
-		List<String> coordinatorCollection = new ArrayList<String>();
-		coordinatorCollection.add("site_admin@washu.com");
+		List<UserInfo> coordinatorCollection = new ArrayList<UserInfo>();
+		UserInfo userInfo = new UserInfo();
+		userInfo.setDomainName("catissue");
+		userInfo.setLoginName("admin@admin.com");
+		coordinatorCollection.add(userInfo);
 		event.getSiteDetails().setCoordinatorCollection(coordinatorCollection);
 		return event;
 	}
@@ -340,7 +346,7 @@ public class SiteTestData {
 		SiteDetails details = reqEvent.getSiteDetails();
 		details.setEmailAddress("admin");
 		reqEvent.setSiteDetails(details);
-		return reqEvent;
+		return reqEvent;	
 	}
 
 	public static PatchSiteEvent getPatchDataWithInavalidAttribute() {

@@ -23,6 +23,7 @@ import com.krishagni.catissueplus.core.administrative.events.DisableStorageConta
 import com.krishagni.catissueplus.core.administrative.events.PatchStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
@@ -157,12 +158,19 @@ public class StorageContainerTestData {
 		details.setParentContainerName("Freezer");
 		details.setSiteName("My Site");
 		details.setTempratureInCentigrade(22.22);
-		details.setCreatedBy(1l);
+		details.setCreatedBy(getUserInfo());
 		details.setOneDimensionCapacity(20);
 		details.setTwoDimensionCapacity(20);
 		details.setOneDimentionLabelingScheme("Numbers");
 		details.setTwoDimentionLabelingScheme("Numbers");
 		return details;
+	}
+	
+	private static UserInfo getUserInfo() {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setLoginName("admin@admin.com");
+		userInfo.setDomainName("catissue");
+		return userInfo;
 	}
 
 	public static StorageContainer getStorageContainer(Long l) {
@@ -251,7 +259,7 @@ public class StorageContainerTestData {
 		attributes.put("tempratureInCentigrade", 22.22);
 		attributes.put("parentContainerName", "Freezer");
 		attributes.put("holdsSpecimenTypes", getSpecimenTypes());	
-		attributes.put("createdBy", 1l);
+		attributes.put("createdBy", getUserInfo());
 		attributes.put("oneDimensionCapacity", 20);
 		attributes.put("twoDimensionCapacity", 20);
 		attributes.put("oneDimentionLabelingScheme", "Numbers");

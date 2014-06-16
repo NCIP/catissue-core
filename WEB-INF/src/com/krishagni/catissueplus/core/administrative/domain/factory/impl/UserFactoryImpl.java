@@ -195,7 +195,7 @@ public class UserFactoryImpl implements UserFactory {
 	private void setFirstName(User user, String firstName, ObjectCreationException exceptionHandler) {
 		if (isBlank(firstName)) {
 			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, FIRST_NAME);
-			return;
+			return; 
 		}
 		user.setFirstName(firstName);
 	}

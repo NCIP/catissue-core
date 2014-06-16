@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 
 public class StorageContainerDetails {
@@ -26,7 +27,7 @@ public class StorageContainerDetails {
 
 	private String parentContainerName;
 
-	private Long createdBy;
+	private UserInfo createdBy;
 
 	private Set<String> holdsCPTitles = new HashSet<String>();
 
@@ -196,11 +197,11 @@ public class StorageContainerDetails {
 		this.twoDimensionCapacity = twoDimensionCapacity;
 	}
 
-	public Long getCreatedBy() {
+	public UserInfo getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Long createdBy) {
+	public void setCreatedBy(UserInfo createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -236,10 +237,10 @@ public class StorageContainerDetails {
 		details.setHoldsCPTitles(getCpTitileCollection(storageContainer.getHoldsCPs()));
 		details.setHoldsSpecimenTypes(getHoldsSpecimenTypes(storageContainer.getHoldsSpecimenTypes()));
 		details.setComments(storageContainer.getComments());
-		details.setCreatedBy(storageContainer.getCreatedBy().getId());
+		details.setCreatedBy(getUserInfo(storageContainer.getCreatedBy()));
 		details.setName(storageContainer.getName());
 		details.setTempratureInCentigrade(storageContainer.getTempratureInCentigrade());
-		details.setTwoDimensionCapacity(storageContainer.getTwoDimensionCapacity());	
+		details.setTwoDimensionCapacity(storageContainer.getTwoDimensionCapacity());
 		details.setOneDimensionCapacity(storageContainer.getOneDimensionCapacity());
 		details.setOneDimentionLabelingScheme(storageContainer.getOneDimentionLabelingScheme());
 		details.setTwoDimentionLabelingScheme(storageContainer.getTwoDimentionLabelingScheme());
@@ -248,6 +249,15 @@ public class StorageContainerDetails {
 		}
 		details.setSiteName(storageContainer.getSite().getName());
 		return details;
+	}
+
+	private static UserInfo getUserInfo(User user) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setLoginName(user.getLoginName());
+		if (user.getAuthDomain() != null) {
+			userInfo.setDomainName(user.getAuthDomain().getName());
+		}
+		return userInfo;
 	}
 
 	private static Set<String> getHoldsSpecimenTypes(Set<String> holdsSpecimenTypes) {

@@ -49,7 +49,7 @@ public class UserTestData {
 	public static final String LOGIN_NAME = "login name";
 
 	public static final String EMAIL_ADDRESS = "email address";
-
+	
 	public static final String DEPARTMENT = "department";
 
 	public static final String AUTH_DOMAIN = "auth domain";

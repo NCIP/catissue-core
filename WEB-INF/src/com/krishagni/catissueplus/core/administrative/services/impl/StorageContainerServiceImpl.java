@@ -85,7 +85,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	}
 
 	private void ensureUniqueBarcode(String barcode, ObjectCreationException exceptionHandler) {
-		if (barcode != null && !daoFactory.getStorageContainerDao().isUniqueBarcode(barcode)) {
+		if (!daoFactory.getStorageContainerDao().isUniqueBarcode(barcode)) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, BARCODE);
 			return;
 		}
@@ -126,14 +126,15 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	private void checkUniqueBarcode(StorageContainer oldStorageContainer, StorageContainer storageContainer,
 			ObjectCreationException exceptionHandler) {
 		if (!oldStorageContainer.getBarcode().equals(storageContainer.getBarcode())) {
-			ensureUniqueName(storageContainer.getName(), exceptionHandler);
+			ensureUniqueBarcode(storageContainer.getBarcode(), exceptionHandler);
 		}
 	}
 
 	private void checkUniqueName(StorageContainer oldStorageContainer, StorageContainer storageContainer,
 			ObjectCreationException exceptionHandler) {
-		if (!oldStorageContainer.getName().equals(storageContainer.getName())) {
-			ensureUniqueBarcode(storageContainer.getBarcode(), exceptionHandler);
+		if (oldStorageContainer.getBarcode() != null && !oldStorageContainer.getName().equals(storageContainer.getName())) {
+			ensureUniqueName(storageContainer.getName(), exceptionHandler);
+			
 		}
 	}
 

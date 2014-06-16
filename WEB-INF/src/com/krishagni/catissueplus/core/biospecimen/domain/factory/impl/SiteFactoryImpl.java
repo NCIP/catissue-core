@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.SiteDetails;
@@ -112,13 +113,12 @@ public class SiteFactoryImpl implements SiteFactory {
 		site.setType(siteType);
 	}
 
-	private void setCoordinatorCollection(Site site, List<String> coordinatorCollection,
+	private void setCoordinatorCollection(Site site, List<UserInfo> coordinatorCollection,
 			ObjectCreationException exceptionHandler) {
 		Set<User> userCollection = new HashSet<User>();
-		for (String loginName : coordinatorCollection) {
+		for (UserInfo userInfo : coordinatorCollection) {
 
-			User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(loginName,
-					AuthenticationType.CATISSUE.value());
+			User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(userInfo.getLoginName(), userInfo.getDomainName());
 			if (user == null) {
 				exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, USER_NAME);
 				return;
@@ -127,7 +127,6 @@ public class SiteFactoryImpl implements SiteFactory {
 		}
 
 		site.setCoordinatorCollection(userCollection);
-
 	}
 
 	private void setSiteAddress(Site site, Address address) {

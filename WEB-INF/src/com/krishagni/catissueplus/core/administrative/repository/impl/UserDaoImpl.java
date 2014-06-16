@@ -33,7 +33,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	@Override
 	public Boolean isUniqueEmailAddress(String emailAddress) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_EMAIL_ADDRESS);
-		query.setString("emailAddress", emailAddress);
+		query.setString("emailAddress", emailAddress);	
 		return query.list().isEmpty() ? true : false;
 	}
 
@@ -104,7 +104,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 	private static final String GET_OLD_PASSWORD_BY_USER_ID = Password.class.getName() + ".getOldPasswordByUserId";
 
-	private static final String GET_OLD_PASSWORD_BY_LOGIN_NAME = Password.class.getName() + ".getOldPasswordByLoginId";
+	private static final String GET_OLD_PASSWORD_BY_LOGIN_NAME = Password.class.getName() + ".getOldPasswordByLoginName";
 
 	private static final String GET_USERS_BY_ID = FQN + ".getUsersById";
 	

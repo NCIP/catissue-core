@@ -73,7 +73,7 @@ public class StorageContainerTest {
 
 		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
 		when(siteDao.getSite(anyString())).thenReturn(StorageContainerTestData.getSite());
-		when(userDao.getUser(anyLong())).thenReturn(StorageContainerTestData.getUser(1l));
+		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(StorageContainerTestData.getUser(1l));
 		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(StorageContainerTestData.getCp());
 		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
 		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
@@ -84,6 +84,18 @@ public class StorageContainerTest {
 	@Test
 	public void testForSuccessfulStorageContainerCreation() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
+		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
+		assertEquals(reqEvent.getDetails().getName(), createdStorageContainerDto.getName());
+	}
+	
+	@Test
+	public void testForSuccessfulStorageContainerCreationWithNullParent() {
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
+		reqEvent.getDetails().setParentContainerName(null);
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertNotNull("response cannot be null", response);
@@ -184,7 +196,7 @@ public class StorageContainerTest {
 	@Test
 	public void testStorageContainerCreationWithInvalidUser() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
-		when(userDao.getUser(anyLong())).thenReturn(null);
+		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(null);
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
@@ -205,6 +217,7 @@ public class StorageContainerTest {
 		assertEquals(StorageContainerTestData.COLLECTION_PROTOCOL, response.getErroneousFields()[0].getFieldName());
 		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
+	
 	@Test
 	public void testStorageContainerCreationWithInvalidStorageContainer() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();

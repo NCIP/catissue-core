@@ -8,12 +8,13 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 
 public class SiteDetails {
 
 	private String name;
 
-	private List<String> coordinatorCollection = new ArrayList<String>();
+	private List<UserInfo> coordinatorCollection = new ArrayList<UserInfo>();
 
 	private Long id;
 
@@ -46,12 +47,13 @@ public class SiteDetails {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<String> getCoordinatorCollection() {
+	
+	public List<UserInfo> getCoordinatorCollection() {
 		return coordinatorCollection;
 	}
 
-	public void setCoordinatorCollection(List<String> coordinatorCollection) {
+	
+	public void setCoordinatorCollection(List<UserInfo> coordinatorCollection) {
 		this.coordinatorCollection = coordinatorCollection;
 	}
 
@@ -224,12 +226,17 @@ public class SiteDetails {
 		siteDto.setZipCode(address.getZipCode());
 	}
 
-	private static List<String> getCoordinatorList(Set<User> coordinatorCollection) {
-		List<String> loginNames = new ArrayList<String>();
+	private static List<UserInfo> getCoordinatorList(Set<User> coordinatorCollection) {
+		List<UserInfo> userInfos = new ArrayList<UserInfo>();
 		for (User user : coordinatorCollection) {
-			loginNames.add(user.getLoginName());
+			UserInfo  userInfo = new UserInfo();
+			userInfo.setLoginName(user.getLoginName());
+			if (user.getAuthDomain() != null) {
+				userInfo.setDomainName(user.getAuthDomain().getName());
+			}
+			userInfos.add(userInfo);
 		}
-		return loginNames;
+		return userInfos;
 	}
 
 }

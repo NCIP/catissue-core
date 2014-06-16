@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.StorageCont
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
@@ -176,9 +177,10 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		storageContainer.setHoldsCPs(collectionProtocols);
 	}
 
-	private void setCreatedByUser(StorageContainer storageContainer, Long createdBy,
+	private void setCreatedByUser(StorageContainer storageContainer, UserInfo createdBy,
 			ObjectCreationException exceptionHandler) {
-		User user = daoFactory.getUserDao().getUser(createdBy);
+		User user = daoFactory.getUserDao().getUserByLoginNameAndDomainName(createdBy.getLoginName(),
+				createdBy.getDomainName());
 		if (user == null) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, USER);
 			return;
