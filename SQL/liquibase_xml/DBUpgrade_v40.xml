@@ -2804,6 +2804,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 
       <sql>call migrate()</sql>
 
+      <sql>commit;</sql>
       <sqlFile
         encoding="utf8"
         path="specimen_hierarchy_constraints_trigger_oracle.sql"
@@ -2812,7 +2813,9 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         splitStatements="true"
         stripComments="true"/>
 
+      <sql>commit;</sql>
       <sql>call addCSHConstraints()</sql>
+      <sql>commit;</sql>
     </changeSet>
 
     <changeSet author="ajaysamgir" id="Create table CATISSUE_SITE_COORDINATORS " failOnError="true">

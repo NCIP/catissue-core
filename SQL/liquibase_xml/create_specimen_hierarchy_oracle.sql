@@ -36,7 +36,7 @@ BEGIN
   
   IF (pageIterator > pageSize) THEN 
    pageIterator := 1;
-   createHierarchy(ancestors, pageContent, sqlValues , sqlStatement);	
+   createHierarchy(ancestors, pageContent, sqlValues , sqlStatement);   
   
    IF (DBMS_LOB.GETLENGTH(sqlStatement) IS NOT NULL ) THEN
     finalStatement := 'INSERT ALL ' || sqlStatement ;
@@ -52,14 +52,15 @@ BEGIN
 
  END LOOP;
 
-
  IF (DBMS_LOB.GETLENGTH(pageContent) IS NOT NULL ) THEN
-  createHierarchy(ancestors, pageContent, sqlValues , sqlStatement);	
-  finalStatement := 'INSERT ALL ' || sqlStatement ;
-  finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
-  EXECUTE IMMEDIATE finalStatement;
-  COMMIT;
-  sqlStatement := '';
+  createHierarchy(ancestors, pageContent, sqlValues , sqlStatement);
+  IF (DBMS_LOB.GETLENGTH(sqlStatement) IS NOT NULL ) THEN
+   finalStatement := 'INSERT ALL ' || sqlStatement ;
+   finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
+   EXECUTE IMMEDIATE finalStatement;
+   COMMIT;
+   sqlStatement := '';
+  END IF;
  END IF;
 
  SELECT TO_CHAR(SYSTIMESTAMP) INTO currentTime FROM dual;
@@ -113,7 +114,7 @@ BEGIN
  endPos := instr(str,',',1,pos);
  len := endPos - startPos;
 
- IF (endPos < startPos) THEN	
+ IF (endPos < startPos) THEN    
   len := DBMS_LOB.GETLENGTH(str) - startPos + 1;
  END IF;
  
@@ -182,7 +183,7 @@ BEGIN
    sqlValues := '';
   END IF;
 
-  nodeIterator := nodeIterator 	+ 1;
+  nodeIterator := nodeIterator  + 1;
  END LOOP;
  
 END;
