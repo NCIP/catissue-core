@@ -265,11 +265,11 @@ ul li ul li a span {
             aliquotGrid.cellByIndex(rowNum,5).setValue(pos2);
         }
         function getValueStoragePositionForAliquot(rowNum,containerName,pos1,pos2){
-			return aliquotGrid.cellByIndex(rowNum,3).getValue()+","+
+            return aliquotGrid.cellByIndex(rowNum,3).getValue()+","+
             aliquotGrid.cellByIndex(rowNum,4).getValue()+","+
             aliquotGrid.cellByIndex(rowNum,5).getValue();
-			
-		}
+            
+        }
         function submitAliquot(){
             var tabDataJSON = {};
             var aliquotsXml = aliquotGrid.serialize();
@@ -338,7 +338,7 @@ ul li ul li a span {
                     
                 }   
             };
-            request.open("POST","rest/specimens/"+document.getElementById("parentSpecimentLabel").value+"/aliquots",true);
+            request.open("POST","rest/specimens/1/aliquots",true);
             request.setRequestHeader("Content-Type","application/json");
             request.send(JSON.stringify(tabDataJSON));
             
@@ -478,9 +478,10 @@ var request = newXMLHTTPReq();
                 }
                 }
             };
-            request.open("GET","rest/specimens/"+specimenLabel+"/aliquots/"+encodeURIComponent(JSON.stringify(paramStr)),true);
-            request.setRequestHeader("Content-Type"," text/html");
-            request.send();
+            request.open("POST","rest/specimens/1/fetchAliquots",true);
+            request.setRequestHeader("Content-Type","application/json");
+            request.send(JSON.stringify(paramStr));
+            //request.send();
 
     /*var loader=dhtmlxAjax.getSync("rest/specimens/"+specimenLabel+"/aliquots/"+JSON.stringify(paramStr));
         
