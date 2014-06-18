@@ -13,8 +13,8 @@ angular.module('plus.cpview', [])
   $scope.participantList =[];
 
   $scope.onCpSelect = function(selected, redirect) {
-    if ($scope.selectedCp.id != "null" && redirect != false ) {
-      var url = "CPDashboardAction.do?isSystemDashboard=true";
+    if (selected.id != "null" && redirect != false ) {
+      var url = "CPDashboardAction.do?isSystemDashboard=false&cpSearchCpId="+selected.id;
       $('#cpFrameNew').attr('src',url);
 	}
 	
@@ -297,4 +297,3 @@ angular.module('plus.cpview', [])
     return htmlToolTip;
   }
 }]);
-
