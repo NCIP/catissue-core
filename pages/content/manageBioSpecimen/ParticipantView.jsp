@@ -387,6 +387,7 @@ function createNewCPR(){
 		document.body.appendChild(div);
 		dhxWins.window("registerCPRPopUP").attachObject("popupDiv");
 		popupCPCombo = new dhtmlXCombo("popupCpList", "popupCpList", 150);
+		popupCPCombo.enableFilteringMode(true);
 		popupCPCombo.attachEvent("onSelectionChange",checkPPIDFormat);
 		cprDateCal = doInitCal('popupCPRDate',false,'${uiDatePattern}');
 		loadCpList(popupCPCombo);
