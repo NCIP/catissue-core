@@ -251,6 +251,7 @@
                         delete from catissue_received_event_param where identifier = e.id;
                         delete from catissue_specimen_event_param where identifier = e.id;
                     end if;
+                    cnt:=cnt-1;
                 end loop;
                 end loop;
             commit;   
@@ -930,6 +931,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                         delete from catissue_received_event_param where identifier = e.id;
                         delete from catissue_specimen_event_param where identifier = e.id;
                     end if;
+                    cnt:=cnt-1;
                 end loop;
                 end loop;
             commit;   
