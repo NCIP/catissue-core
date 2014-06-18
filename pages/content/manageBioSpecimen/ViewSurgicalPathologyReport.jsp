@@ -25,7 +25,7 @@
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-
+<script src="jss/SPRConfirmationBox.js"></script>
 <%
 	Map mapPMI = null;
 	int noOfRowsPMI=0;
@@ -104,7 +104,7 @@
 	}
 	var dhxWins;
 	var interVeil;
-	function downloadReport(reportType){
+	function downloadReport1(reportType){
 		
 		if(hasUploadedReport=="true"){
 			reportType = "uploadedFile";
@@ -118,7 +118,7 @@
 			reportType :reportType
 		}
 		var termsConditionURL = "${termsConditionUrl}";
-		window.parent.parent.downloadReport(reportType,options,termsConditionURL);
+		window.downloadReport(reportType,options,termsConditionURL);
 		
 	}
 	function downloadSpr(reportType){
@@ -420,7 +420,7 @@ if(!hasAccess)
 		  <td colspan="5" class="tr_bg_blue1">
 		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.identifiedReportInformation.title"/> </span>
 		 
-		  <a href="#" onClick="downloadReport('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
+		  <a href="#" onClick="downloadReport1('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
 		  Download
 		  </a> 
 		   <!--a href="#" onClick="deleteReport('Identified')" title="Click to download SPR" class="blue_ar_b" style="float:right; margin-right: 8px;">
@@ -461,7 +461,7 @@ if(!hasAccess)
 			<tr>
 		  <td class="tr_bg_blue1">
 		  <span class="blue_ar_b"> &nbsp;<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>&nbsp;</span>
-		  <a href="#" onClick="downloadReport('Deidentified')" title="Click to download SPR" class="blue_ar_b"  style="float:right; margin-right: 8px;">
+		  <a href="#" onClick="downloadReport1('Deidentified')" title="Click to download SPR" class="blue_ar_b"  style="float:right; margin-right: 8px;">
 		  Download
 		  </a> 
 		  </td>

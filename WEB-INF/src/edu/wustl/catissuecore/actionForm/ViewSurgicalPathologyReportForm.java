@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
@@ -584,7 +585,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			final StringBuffer tempStr = new StringBuffer();
 			while (raceIter.hasNext())
 			{
-				tempStr.append((String) raceIter.next() + ", ");
+				tempStr.append(((Race) raceIter.next()).getRaceName() + ", ");
 			}
 			this.race = tempStr.toString();
 			this.gender = participant.getGender();
