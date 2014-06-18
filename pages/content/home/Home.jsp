@@ -82,7 +82,7 @@ var  downloadUrl= "";
                         
                     </div>
                     
-                    <div class="black_ar box-border box-content box-class" style="width:400px;">
+                     <div class="black_ar box-border box-content box-class" style="width:400px;display:none;" id="dataAtGlanceDiv" >
                         <div class="help-header theam-font-color container-header-spacing" >
                             <span><bean:message key="login.data.at.glance" /></span>
                         </div>
@@ -318,7 +318,7 @@ login.forgot.password=Forgot password?
 window.onload = homePageLoad();
 
 function homePageLoad(){
-    loadSummaryCount();
+  //  loadSummaryCount();
     loadInstituteLogo();
     var rv = getInternetExplorerVersion();
     if(rv>9){
@@ -355,6 +355,13 @@ function loadInstituteLogo(){
                 document.getElementById("userManual").href =  myJsonResponse.userManual;
                 document.getElementById("contactNumber").innerHTML = myJsonResponse.contactNumber;
                 document.getElementById("whatsNew").href =  myJsonResponse.whatsNew;
+				
+				if(myJsonResponse.dataAtGlanceDiv != undefined && myJsonResponse.dataAtGlanceDiv == "true"){
+					document.getElementById("dataAtGlanceDiv").style.display="";
+					loadSummaryCount();
+				}else{
+					document.getElementById("dataAtGlanceDiv").innerHTML = "";
+				}
                 
                 
             }
