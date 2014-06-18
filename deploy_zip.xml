@@ -4460,6 +4460,17 @@
                             </classpath>
                             insert into labelsql values(NULL,'${arg1}',${arg2});
                             </sql>  
+                        	<sql driver="${mysql.driver.string}" 
+                            url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
+                            userid="${database.username}" 
+                            password="${database.password}" onerror="continue">
+                            <classpath>
+                                <fileset dir="${lib.dir}">
+                                    <include name="*.jar" />
+                                </fileset>
+                            </classpath>
+                        		 update labelsql set QUERY = '${arg2}' where LABEL = '${arg1}';
+                            </sql> 
                         </then>
                         
                     <elseif >
@@ -4476,6 +4487,18 @@
                                 </fileset>
                             </classpath>
                             insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}',${arg2});
+                            </sql>
+                        	<sql driver="${oracle.driver.string}"
+                            url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+                            userid="${database.username}"
+                            password="${database.password}"
+                            rdbms="oracle" onerror="continue">
+                            <classpath>
+                                <fileset dir="${lib.dir}">
+                                    <include name="*.jar" />
+                                </fileset>
+                            </classpath>
+                        		update labelsql set QUERY = '${arg2}' where LABEL = '${arg1}';
                             </sql>
                         </then>
                     </elseif>
