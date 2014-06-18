@@ -2951,8 +2951,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                referencedColumnNames="IDENTIFIER" />
     </changeSet> 
     
-    
- <changeSet author="ajaysamgir" id="table for distribution protocol" failOnError="true">
+   <changeSet author="ajaysamgir" id="table for distribution_protocol" failOnError="true">
        <createTable tableName="OS_DISTRIBUTION_PROTOCOL">
     	 
     	 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
@@ -2991,14 +2990,24 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                baseColumnNames="PRINCIPAL_INVESTIGATOR_ID"
                referencedTableName="CATISSUE_USER"
                referencedColumnNames="IDENTIFIER" />
-               
-        <createSequence
-            sequenceName="OS_DISTRIBUTION_PROTOCOL_SEQ"
-            startValue="1"
-            incrementBy="1"
-            ordered="true" />
-            
+       <createSequence 
+			sequenceName="OS_DISTRIBUTION_PROTOCOL_SEQ" 
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
     </changeSet>
-</databaseChangeLog>         
-
-
+        
+     <changeSet author="ajaysamgir" id="Migrate CATISSUE_D_P table data to OS_D_P table for mysql" failOnError="true" dbms="mysql">
+         <sql> insert into OS_DISTRIBUTION_PROTOCOL(PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE, IRB_IDENTIFIER, START_DATE, DESCRIPTION_URL, ACTIVITY_STATUS) 
+         select PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE, IRB_IDENTIFIER, START_DATE, DESCRIPTION_URL, ACTIVITY_STATUS from CATISSUE_DISTRIBUTION_PROTOCOL 
+ 		</sql>
+    </changeSet> 
+    
+     <changeSet author="ajaysamgir" id="Migrate CATISSUE_D_P table data to OS_D_P table for oracle" failOnError="true" dbms="oracle">
+         <sql> insert into OS_DISTRIBUTION_PROTOCOL(IDENTIFIER,PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE, IRB_IDENTIFIER, START_DATE, DESCRIPTION_URL, ACTIVITY_STATUS) 
+         select OS_DISTRIBUTION_PROTOCOL_SEQ.nextVal,PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE, IRB_IDENTIFIER, START_DATE, DESCRIPTION_URL, ACTIVITY_STATUS from CATISSUE_DISTRIBUTION_PROTOCOL 
+ 		</sql>
+ 		
+    </changeSet> 
+        
+</databaseChangeLog>

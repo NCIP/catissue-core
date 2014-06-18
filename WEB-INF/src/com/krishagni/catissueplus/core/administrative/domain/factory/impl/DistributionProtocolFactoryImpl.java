@@ -1,7 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank; 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPositiveNumber;
 
 import java.util.Date;
 
@@ -131,7 +132,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 
 	private void setAnticipatedSpecimenCount(DistributionProtocol distributionProtocol, Long anticipatedSpecimenCount,
 			ObjectCreationException exceptionHandler) {
-		if (!CommonValidator.isValidPositiveNumber(anticipatedSpecimenCount)) {
+		if (!isValidPositiveNumber(anticipatedSpecimenCount)) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, ANTICIPANTED_SPECIMEN_COUNT);
 			return;
 		}

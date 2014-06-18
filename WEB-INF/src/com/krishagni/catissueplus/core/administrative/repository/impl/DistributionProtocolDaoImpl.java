@@ -19,8 +19,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 
 	@Override
 	public DistributionProtocol getDistributionProtocol(Long id) {
-		return (DistributionProtocol) sessionFactory.getCurrentSession().get(
-				com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol.class, id);
+		return (DistributionProtocol) sessionFactory.getCurrentSession().get(DistributionProtocol.class, id);
 	}
 
 	@SuppressWarnings("unchecked")

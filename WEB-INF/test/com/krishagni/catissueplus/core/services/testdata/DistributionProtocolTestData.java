@@ -249,4 +249,28 @@ public class DistributionProtocolTestData {
 		return event;
 	}
 
+	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
+		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
+		event.getDistributionProtocolDetails().setAnticipatedSpecimenCount(-2L);
+		return event;
+	}
+	
+	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
+		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
+		event.getDetails().setAnticipatedSpecimenCount(-2L);
+		return event;
+	}
+	
+	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
+		PatchDistributionProtocolEvent event = getPatchDistributionProtocolEvent();
+		event.getDetails().setAnticipatedSpecimenCount(-2L);
+		return event;
+	}
+
+	public static PatchDistributionProtocolEvent getEmptyPatchData() {
+		PatchDistributionProtocolEvent event = new PatchDistributionProtocolEvent();
+		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		event.setDetails(details);
+		return event;
+	}
 }

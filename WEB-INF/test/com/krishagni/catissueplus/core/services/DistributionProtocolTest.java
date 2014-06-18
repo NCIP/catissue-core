@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -29,7 +29,6 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionPro
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolServiceImpl;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.DistributionProtocolTestData;
@@ -192,7 +191,7 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(START_DATE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -207,6 +206,20 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
+	@Test
+	public void testCreationforDistributionProtocolWithNegativeAnticipatedSpecimenCountNumber() {
+		CreateDistributionProtocolEvent event = DistributionProtocolTestData
+				.getCreateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber();
+		DistributionProtocolCreatedEvent response = distributionProtocolSvc.createDistributionProtocol(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+
+	}
+	
 	@Test
 	public void testForSuccessfulDistributionProtocolUpdate() {
 		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
@@ -335,7 +348,7 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(START_DATE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -361,6 +374,19 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 
+	@Test
+	public void testUpdationforDistributionProtocolWithNegativeAnticipatedSpecimenCountNumber() {
+		UpdateDistributionProtocolEvent event = DistributionProtocolTestData
+				.getUpdateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber();
+		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+
+	}
 	@Test
 	public void testForSuccessfulDistributionProtocolPatch() {
 		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
@@ -484,7 +510,7 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(START_DATE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -510,6 +536,19 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 
+	@Test
+	public void testPatchforDistributionProtocolWithNegativeAnticipatedSpecimenCountNumber() {
+		PatchDistributionProtocolEvent event = DistributionProtocolTestData
+				.getPatchDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber();
+		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+	}
+	
 	@Test
 	public void testDistributionProtocolUpdationNullDateAndInvestigator() {
 
