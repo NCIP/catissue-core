@@ -437,9 +437,10 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 					"||' )',"+
 					" ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.gender, " +
 					" ispr.textContent.data,ispr.reportSource.id," +
-					" mri.medicalRecordNumber, "  + " ispr.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier "+ 
-					" from IdentifiedSurgicalPathologyReport as ispr, ParticipantMedicalIdentifier as mri " +
-					" where ispr.id=? and mri.participant.id = ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.id and mri.site.id = ispr.reportSource.id";
+					" ispr.reportSource.id,"  + " ispr.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier"
+							+ ", ispr.specimenCollectionGroup.collectionProtocolRegistration.participant.id "+ 
+					" from IdentifiedSurgicalPathologyReport as ispr " +
+					" where ispr.id=? ";
 			
 			ColumnValueBean columnValueBean = new ColumnValueBean(reportId);
 			List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
@@ -460,9 +461,23 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 				dto.setMrnString(obj[6].toString());
 				dto.setConceptReferentMap(getConceptReferentMap(deReportId));
 				dto.setPpid(obj[7]!=null?obj[7].toString():"");
-				
 				dto.setAge(obj[1]!=null?getAge((Date)obj[1]):0);
+				String query = "select medicalRecordNumber from com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier pmi "
+						+ "where pmi.participant.id = ? and pmi.site.id = ?";
+				
+				columnValueBeanList = new ArrayList<ColumnValueBean>();
+				columnValueBeanList.add(new ColumnValueBean(obj[8]));
+				columnValueBeanList.add(new ColumnValueBean(obj[6]));
+				List mrnList = AppUtility.executeHqlQuery(query,
+						columnValueBeanList);
+				Iterator mrnItr = mrnList.iterator();
+				if (mrnItr.hasNext()) {
+					
+					String mrnValue = (String) mrnItr.next();
+					dto.setMrnString(mrnValue);
+				}
 			}
+			
 		} catch (ApplicationException ex) {
 			throw new BizLogicException(ex.getErrorKey(), ex, ex.getMessage());
 			

@@ -121,20 +121,7 @@
 		window.downloadReport(reportType,options,termsConditionURL);
 		
 	}
-	function downloadSpr(reportType){
-		if(document.getElementById("termCheckbox").checked){
-			var dwdIframe = document.getElementById("sprExportFrame");
-			var sprNumber = '<%=formSPR.getSurgicalPathologyNumber()%>';
-			var identifiedId = document.getElementsByName("identifiedReportId")[0].value;
-			var deIdentifiedId = document.getElementsByName("deIdentifiedReportId")[0].value;
-			var hasUploadedReport = document.getElementsByName("hasUploadedReport")[0].value;
-			if(hasUploadedReport=="true"){
-				reportType = "uploadedFile";
-			}
-			dwdIframe.src = "ExportSprAction.do?scgId=<%=request.getParameter("id")%>&sprNumber="+sprNumber+"&reportId="+identifiedId+"&deIdentifiedId="+deIdentifiedId+"&reportType="+reportType;
-			closeTermWindow();
-		}
-	}
+	
 	function closeTermWindow(){
 		dhxWins.window("containerPositionPopUp").close();
 	}
