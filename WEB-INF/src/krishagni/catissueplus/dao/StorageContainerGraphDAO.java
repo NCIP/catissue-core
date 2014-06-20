@@ -276,7 +276,8 @@ public class StorageContainerGraphDAO
                 Constants.APPLICATION_NAME).getDataBaseType().equals("MYSQL")){
             resultSet =   hibernateDAO.executeNamedSQLQuery("getSiteUtilizationMysql",params);
             
-        }else if(hibernateDAO instanceof OracleDAOImpl){
+        }else if(DAOConfigFactory.getInstance().getDAOFactory(
+                Constants.APPLICATION_NAME).getDataBaseType().equals("ORACLE")){
             resultSet =   hibernateDAO.executeNamedSQLQuery("getSiteUtilizationOracle",params);
         }
         while (resultSet.next())
