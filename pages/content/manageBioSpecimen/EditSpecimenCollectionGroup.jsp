@@ -8,6 +8,7 @@
 <style type="text/css">
     #myoutercontainer { text-align: center;display:block;float: left; }
     #myinnercontainer { display: table-cell; vertical-align: middle;}
+    .countTxt {text-align: right;border:0px;}
 </style>
 <%
     /**
@@ -432,9 +433,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                                 <span style="display:inline-block; vertical-align:middle;font-family: verdana;font-size: 11px;">
                                 <bean:message key="label.adhocSpecimen"/>
                         </span></span>
-                        &nbsp;<html:text styleClass="black_ar" style="text-align:right;border:0px;" maxlength="3" size="1" styleId="numberOfSpecimens" property="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/>   <span style="margin-left:30px;">  
-							
-						<input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" style="vertical-align:middle;"/>
+                        &nbsp;<input type="text" class="black_ar countTxt" maxlength="3" size="1" id="numberOfSpecimens" name="numberOfSpecimens" readonly="true" onblur="isNumeric(this)"/>   <span style="margin-left:30px;">  
+                            
+                        <input type="radio" value="3" id="multipleChk" name="specimenChild" onclick="disableButtonsOnCheck(this)" style="vertical-align:middle;"/>
                                 <span style="display:inline-block; vertical-align:middle;font-family: verdana;font-size: 11px;">
                                 <bean:message key="label.justSubmit"/>
                                 </span>
@@ -447,7 +448,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                         
                     
                         </td>
-            </tr>
+                        </tr>
             </table></td>
              </tr>
         
