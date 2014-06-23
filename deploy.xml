@@ -5113,7 +5113,7 @@
                                         <include name="*.jar" />
                                     </fileset>
                                 </classpath>
-                                update labelsql set QUERY = '${arg2}' where LABEL = '${arg1}';   
+                                update labelsql set QUERY = ${arg2} where LABEL = '${arg1}';   
                                 </sql>
 							</then>
 							
@@ -5143,7 +5143,7 @@
                                         <include name="*.jar" />
                                     </fileset>
                                 </classpath>
-                                    update labelsql set QUERY = '${arg2}' where LABEL = '${arg1}';
+                                    update labelsql set QUERY = ${arg2} where LABEL = '${arg1}';
                                 </sql>
 							</then>
 						</elseif>

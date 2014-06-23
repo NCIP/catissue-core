@@ -437,7 +437,7 @@ if(!scgId && !eventId)
 	alert('Please select Event Label Point or SCG from the dropdown.');
 	return;
 }
-if(scgId)
+if(scgId && scgId != '')
 {
 	action="QueryCollectSpecimenFromDashBoard.do?operation=editSCG&scgId="+scgId+"&cpSearchParticipantId="+participantId+"&cpSearchCpId="+cpId+"&isPlanned="+isPlanned+"&numberOfSpecimens="+specimenCount+"&pageOf=newParticipantViewPage";
 }
