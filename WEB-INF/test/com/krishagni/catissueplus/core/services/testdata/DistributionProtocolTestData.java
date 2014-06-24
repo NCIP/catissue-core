@@ -19,6 +19,8 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDistributionP
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -38,6 +40,26 @@ public class DistributionProtocolTestData {
 		protocol.setPrincipalInvestigator(getUserDetails());
 		protocol.setActivityStatus("Active");
 		return protocol;
+	}
+	
+	public static DistributionProtocol getDistributionProtocolWithNullAuthDomain() {
+		DistributionProtocol protocol = new DistributionProtocol();
+		protocol.setId(1L);
+		protocol.setIrbId("IRB4444");
+		protocol.setTitle("DPProtocol");
+		protocol.setShortTitle("DPP");
+		protocol.setStartDate(new Date());
+		protocol.setDescriptionUrl("www.distributionprotocol.com");
+		protocol.setAnticipatedSpecimenCount(50L);
+		protocol.setPrincipalInvestigator(getUserDetailsWithNullAuthDomain());
+		protocol.setActivityStatus("Active");
+		return protocol;
+	}
+
+	public static User getUserDetailsWithNullAuthDomain() {
+		User user = getUserDetails();
+		user.setAuthDomain(null);
+		return user;
 	}
 
 	public static User getUserDetails() {
@@ -61,10 +83,19 @@ public class DistributionProtocolTestData {
 		return event;
 	}
 
+	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithTitle() {
+		UpdateDistributionProtocolEvent event = new UpdateDistributionProtocolEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		DistributionProtocolDetails details = getDistributionProtocolDetails();
+		details.setId(null);
+		event.setDetails(details);
+		return event;
+	}
+	
 	private static DistributionProtocolDetails getDistributionProtocolDetails() {
 		DistributionProtocolDetails details = new DistributionProtocolDetails();
 		details.setIrbId("IRB333");
-		details.setPrincipalInvestigator("admin@admin.com");
+		details.setPrincipalInvestigator(getPrincipalInvestigator());
 		details.setDescriptionUrl("www.simpleurl.com");
 		details.setAnticipatedSpecimenCount(56L);
 		details.setShortTitle("CPP");
@@ -72,6 +103,13 @@ public class DistributionProtocolTestData {
 		details.setStartDate(new Date(10 - 06 - 2014));
 		details.setActivityStatus("Active");
 		return details;
+	}
+
+	private static UserInfo getPrincipalInvestigator() {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setLoginName("admin@admin.com");
+		userInfo.setDomainName(AuthenticationType.CATISSUE.value());
+		return userInfo; 
 	}
 
 	public static SessionDataBean getSessionDataBean() {
@@ -88,8 +126,15 @@ public class DistributionProtocolTestData {
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithEmptyInvestigatorName() {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
-		event.getDistributionProtocolDetails().setPrincipalInvestigator("");
+		event.getDistributionProtocolDetails().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
 		return event;
+	}
+
+	private static UserInfo getEmptyPrincipalInvestigator() {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setLoginName("");
+		userInfo.setDomainName("");
+		return userInfo;
 	}
 
 	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventEmptyTitle() {
@@ -120,13 +165,19 @@ public class DistributionProtocolTestData {
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithInvalidInvestigator() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setPrincipalInvestigator("adam@adam.com");
+		event.getDetails().setPrincipalInvestigator(getInvalidPrincipalInvestigator());
 		return event;
+	}
+
+	private static UserInfo getInvalidPrincipalInvestigator() {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setLoginName("adam@adam.com");
+		return userInfo;
 	}
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithEmptyInvestigatorName() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
-		event.getDetails().setPrincipalInvestigator("");
+		event.getDetails().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
 		return event;
 	}
 
@@ -162,7 +213,7 @@ public class DistributionProtocolTestData {
 		attributes.put("title", "CPProtocol");
 		attributes.put("shortTitle", "CPP");
 		attributes.put("irbId", "IRB555");
-		attributes.put("principalInvestigator", "Super Admin");
+		attributes.put("principalInvestigator", getPrincipalInvestigator());
 		attributes.put("startDate", new Date());
 		attributes.put("anticipatedSpecimenCount", 50L);
 		attributes.put("descriptionUrl", "www.modifiedProtocol.com");
@@ -178,7 +229,7 @@ public class DistributionProtocolTestData {
 
 	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithEmptyInvestigatorName() {
 		PatchDistributionProtocolEvent event = getPatchData();
-		event.getDetails().setPrincipalInvestigator("");
+		event.getDetails().setPrincipalInvestigator(getEmptyPrincipalInvestigator());
 		return event;
 	}
 
@@ -273,4 +324,23 @@ public class DistributionProtocolTestData {
 		event.setDetails(details);
 		return event;
 	}
+
+	public static CreateDistributionProtocolEvent getCreateDistributionProtocolEventWithNullAuthDomain() {
+		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
+		User principalInvestigator = new User();
+		principalInvestigator.setAuthDomain(null);
+		
+		return event;
+	}
+
+	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithTitle() {
+		PatchDistributionProtocolEvent event = getPatchData();
+		event.setId(null);
+		DistributionProtocolDetails details = getDistributionProtocolDetails();
+		event.setTitle("CPProtocol");
+		event.setDetails(details);
+		return event;
+	}
+
+	
 }

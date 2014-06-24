@@ -918,7 +918,7 @@ function onRadioButtonGroupClick(element)
 
    		     //Changes made related to flex ....By Baljeet
 
-   		     top.frames["cpAndParticipantView"].pageInit(nodeId);
+   		     //top.frames["cpAndParticipantView"].pageInit(nodeId);
     	}
 
 		function trim(inputString) {

@@ -3,6 +3,9 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
 
+import com.ibm.icu.util.Calendar;
+import com.krishagni.catissueplus.core.common.util.Status;
+
 public class DistributionProtocol {
 
 	private Long id;
@@ -96,14 +99,27 @@ public class DistributionProtocol {
 	}
 
 	public void update(DistributionProtocol distributionProtocol) {
-		this.setShortTitle(distributionProtocol.getShortTitle());
-		this.setTitle(distributionProtocol.getTitle());
+		if (activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			this.setShortTitle(appendTimestamp(distributionProtocol.getActivityStatus(), distributionProtocol.getShortTitle()));
+			this.setTitle(appendTimestamp(distributionProtocol.getActivityStatus(), distributionProtocol.getTitle()));
+		}
+		else {
+			this.setShortTitle(distributionProtocol.getShortTitle());
+			this.setTitle(distributionProtocol.getTitle());
+		}
 		this.setIrbId(distributionProtocol.getIrbId());
 		this.setAnticipatedSpecimenCount(distributionProtocol.getAnticipatedSpecimenCount());
 		this.setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
 		this.setDescriptionUrl(distributionProtocol.getDescriptionUrl());
 		this.setStartDate(distributionProtocol.getStartDate());
-    this.setActivityStatus(distributionProtocol.getActivityStatus());
+		this.setActivityStatus(distributionProtocol.getActivityStatus());
+	}
+
+	private String appendTimestamp(String activityStatus, String title) {
+		Calendar cal = Calendar.getInstance();
+		title = title + "_" + cal.getTimeInMillis();
+
+		return title;
 	}
 
 }

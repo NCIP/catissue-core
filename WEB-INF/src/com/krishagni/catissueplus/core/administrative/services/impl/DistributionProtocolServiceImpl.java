@@ -60,19 +60,30 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public DistributionProtocolUpdatedEvent updateDistributionProtocol(UpdateDistributionProtocolEvent event) {
 		try {
-			Long id = event.getId();
-			DistributionProtocol oldDistributionProtocol = daoFactory.getDistributionProtocolDao()
-					.getDistributionProtocol(id);
+			DistributionProtocol oldDistributionProtocol;
 
-			if (oldDistributionProtocol == null) {
-				return DistributionProtocolUpdatedEvent.notFound(id);
+			if (event.getId() != null) {
+				Long id = event.getId();
+				oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(id);
+
+				if (oldDistributionProtocol == null) {
+					return DistributionProtocolUpdatedEvent.notFound(id);
+				}
+			}
+			else {
+				String title = event.getTitle();
+				oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(title);
+
+				if (oldDistributionProtocol == null) {
+					return DistributionProtocolUpdatedEvent.notFound(title);
+				}
+
 			}
 
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			DistributionProtocol distributionProtocol = distributionProtocolFactory.create(event.getDetails());
-			validateShortTitle(oldDistributionProtocol.getShortTitle(), distributionProtocol.getShortTitle(),
-					exceptionHandler);
-			validateTitle(oldDistributionProtocol.getTitle(), distributionProtocol.getTitle(), exceptionHandler);
+			checkShortTitle(oldDistributionProtocol.getShortTitle(), distributionProtocol.getShortTitle(), exceptionHandler);
+			checkTitle(oldDistributionProtocol.getTitle(), distributionProtocol.getTitle(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 			oldDistributionProtocol.update(distributionProtocol);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(oldDistributionProtocol);
@@ -92,11 +103,21 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public DistributionProtocolPatchedEvent patchDistributionProtocol(PatchDistributionProtocolEvent reqEvent) {
 		try {
-			Long id = reqEvent.getId();
-			DistributionProtocol oldDistributionProtocol = daoFactory.getDistributionProtocolDao()
-					.getDistributionProtocol(id);
-			if (oldDistributionProtocol == null) {
-				return DistributionProtocolPatchedEvent.notFound(id);
+			DistributionProtocol oldDistributionProtocol;
+
+			if (reqEvent.getId() != null) {
+				Long id = reqEvent.getId();
+				oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(id);
+				if (oldDistributionProtocol == null) {
+					return DistributionProtocolPatchedEvent.notFound(id);
+				}
+			}
+			else {
+				String title = reqEvent.getTitle();
+				oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(title);
+				if (oldDistributionProtocol == null) {
+					return DistributionProtocolPatchedEvent.notFound(title);
+				}
 			}
 			String oldShortTitle = oldDistributionProtocol.getShortTitle();
 			String oldTitle = oldDistributionProtocol.getTitle();
@@ -105,8 +126,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 
-			validateShortTitle(oldShortTitle, reqEvent.getDetails().getShortTitle(), exceptionHandler);
-			validateTitle(oldTitle, reqEvent.getDetails().getTitle(), exceptionHandler);
+			checkShortTitle(oldShortTitle, reqEvent.getDetails().getShortTitle(), exceptionHandler);
+			checkTitle(oldTitle, reqEvent.getDetails().getTitle(), exceptionHandler);
 
 			exceptionHandler.checkErrorAndThrow();
 
@@ -122,14 +143,14 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 	}
 
-	private void validateTitle(String oldTitle, String newTitle, ObjectCreationException exceptionHandler) {
-		if (!oldTitle.equalsIgnoreCase(newTitle)) {
+	private void checkTitle(String oldTitle, String newTitle, ObjectCreationException exceptionHandler) {
+		if (!oldTitle.equals(newTitle)) {
 			ensureUniqueTitle(newTitle, exceptionHandler);
 		}
 	}
 
-	private void validateShortTitle(String oldShortTitle, String newShortTitle, ObjectCreationException exceptionHandler) {
-		if (!oldShortTitle.equalsIgnoreCase(newShortTitle)) {
+	private void checkShortTitle(String oldShortTitle, String newShortTitle, ObjectCreationException exceptionHandler) {
+		if (!oldShortTitle.equals(newShortTitle)) {
 			ensureUniqueShortTitle(newShortTitle, exceptionHandler);
 		}
 	}

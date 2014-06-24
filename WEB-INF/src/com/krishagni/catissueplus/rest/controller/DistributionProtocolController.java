@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError; 
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -76,6 +76,22 @@ public class DistributionProtocolController {
 		return null;
 	}
 
+	@RequestMapping(method = RequestMethod.PUT, value = "/title={title}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public DistributionProtocolDetails updateDistributionProtocol(@PathVariable String title,
+			@RequestBody DistributionProtocolDetails details) {
+		UpdateDistributionProtocolEvent event = new UpdateDistributionProtocolEvent();
+		event.setTitle(title);
+		event.setDetails(details);
+		event.setSessionDataBean(getSession());
+		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getDetails();
+		}
+		return null;
+	}
+
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
@@ -83,6 +99,32 @@ public class DistributionProtocolController {
 			@RequestBody Map<String, Object> values) {
 		PatchDistributionProtocolEvent event = new PatchDistributionProtocolEvent();
 		event.setId(id);
+		event.setSessionDataBean(getSession());
+
+		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		try {
+			BeanUtils.populate(details, values);
+		}
+		catch (Exception e) {
+			reportError(DistributionProtocolErrorCode.BAD_REQUEST, PATCH_DISTRIBUTION_PROTOCOL);
+		}
+		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
+		event.setDetails(details);
+
+		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/title={title}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public DistributionProtocolDetails patchDistributionProtocolByTitle(@PathVariable String title,
+			@RequestBody Map<String, Object> values) {
+		PatchDistributionProtocolEvent event = new PatchDistributionProtocolEvent();
+		event.setTitle(title);
 		event.setSessionDataBean(getSession());
 
 		DistributionProtocolDetails details = new DistributionProtocolDetails();

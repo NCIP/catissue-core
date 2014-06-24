@@ -74,12 +74,12 @@
             column="ACTIVITY_STATUS"
             length="30" />
       
-      <query name="getDistributionProtocolTitle">
-      	Select distributionProtocol.title FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.title=:title 
+      <query name="getDistributionProtocolByTitle">
+      	Select distributionProtocol FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.title=:title 
       </query>
       
-       <query name="getDistributionProtocolShortTitle">
-      	Select distributionProtocol.shortTitle FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.shortTitle=:shortTitle 
+       <query name="getDistributionProtocolByShortTitle">
+      	Select distributionProtocol FROM com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol distributionProtocol where distributionProtocol.shortTitle=:shortTitle 
       </query>
       
  </class>

@@ -1,24 +1,32 @@
+
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.biospecimen.events.SiteDetails;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
+public class SiteUpdatedEvent extends ResponseEvent {
 
-public class SiteUpdatedEvent extends ResponseEvent{
-	
 	private SiteDetails siteDetails;
+
 	private Long id;
 
-	
+	private String siteName;
+
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long siteId) {
 		this.id = siteId;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 	public SiteDetails getSiteDetails() {
@@ -36,6 +44,12 @@ public class SiteUpdatedEvent extends ResponseEvent{
 		return resp;
 	}
 
+	public static SiteUpdatedEvent notFound(String name) {
+		SiteUpdatedEvent resp = new SiteUpdatedEvent();
+		resp.setSiteName(name);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
 
 	public static SiteUpdatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
 		SiteUpdatedEvent resp = new SiteUpdatedEvent();

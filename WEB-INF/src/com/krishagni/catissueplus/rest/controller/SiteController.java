@@ -23,10 +23,10 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SiteDetails;
-import com.krishagni.catissueplus.core.biospecimen.services.SiteService;
+import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -41,9 +41,9 @@ public class SiteController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-	
+
 	private static String PATCH_SITE = "patch site";
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -69,16 +69,53 @@ public class SiteController {
 		}
 		return null;
 	}
-	
-	@RequestMapping(method = RequestMethod.PATCH,value = "/{id}")
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/name={name}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public SiteDetails PatchSite(@PathVariable Long id,@RequestBody Map<String, Object> values)
-	{
+	public SiteDetails updateSite(@PathVariable String name, @RequestBody SiteDetails siteDetails) {
+		UpdateSiteEvent event = new UpdateSiteEvent(siteDetails, name);
+		event.setSessionDataBean(getSession());
+		SiteUpdatedEvent resp = siteService.updateSite(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getSiteDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetails PatchSite(@PathVariable Long id, @RequestBody Map<String, Object> values) {
 		PatchSiteEvent event = new PatchSiteEvent();
 		event.setSiteId(id);
 		event.setSessionDataBean(getSession());
-		
+
+		SiteDetails details = new SiteDetails();
+		try {
+			BeanUtils.populate(details, values);
+		}
+		catch (Exception e) {
+			reportError(SiteErrorCode.BAD_REQUEST, PATCH_SITE);
+		}
+		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
+		event.setSiteDetails(details);
+
+		SiteUpdatedEvent response = siteService.patchSite(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getSiteDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/name={name}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetails PatchSite(@PathVariable String name, @RequestBody Map<String, Object> values) {
+		PatchSiteEvent event = new PatchSiteEvent();
+		event.setSiteName(name);
+		event.setSessionDataBean(getSession());
+
 		SiteDetails details = new SiteDetails();
 		try {
 			BeanUtils.populate(details, values);

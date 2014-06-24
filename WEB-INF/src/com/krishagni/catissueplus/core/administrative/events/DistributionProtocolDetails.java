@@ -6,12 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class DistributionProtocolDetails {
 
 	private Long id;
 
-	private String principalInvestigator;
+	private UserInfo principalInvestigator;
 
 	private String title;
 
@@ -37,11 +38,11 @@ public class DistributionProtocolDetails {
 		this.id = id;
 	}
 
-	public String getPrincipalInvestigator() {
+	public UserInfo getPrincipalInvestigator() {
 		return principalInvestigator;
 	}
 
-	public void setPrincipalInvestigator(String principalInvestigator) {
+	public void setPrincipalInvestigator(UserInfo principalInvestigator) {
 		this.principalInvestigator = principalInvestigator;
 	}
 
@@ -119,9 +120,19 @@ public class DistributionProtocolDetails {
 		details.setStartDate(distributionProtocol.getStartDate());
 		details.setAnticipatedSpecimenCount(distributionProtocol.getAnticipatedSpecimenCount());
 		details.setDescriptionUrl(distributionProtocol.getDescriptionUrl());
-		details.setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator().getLoginName());
+		details.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
 		details.setActivityStatus(distributionProtocol.getActivityStatus());
 		return details;
+	}
+
+	private static UserInfo getPrincipleInvestigatorInfo(User principleInvestigator) {
+		UserInfo piInfo = new UserInfo();
+		piInfo.setLoginName(principleInvestigator.getLoginName());
+		if (principleInvestigator.getAuthDomain() != null) {
+			piInfo.setDomainName(principleInvestigator.getAuthDomain().getName());
+		}
+
+		return piInfo;
 	}
 
 	public boolean isDistributionProtocolPrincipalInvestigatorModified() {

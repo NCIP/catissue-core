@@ -12,4 +12,6 @@ public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
 
 	public Boolean isUniqueShortTitle(String shortTitle);
 
+	public DistributionProtocol getDistributionProtocol(String title);
+
 }

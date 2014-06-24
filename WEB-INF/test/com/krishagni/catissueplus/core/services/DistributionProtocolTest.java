@@ -68,7 +68,8 @@ public class DistributionProtocolTest {
 		distributionProtocolSvc = new DistributionProtocolServiceImpl();
 		distributionProtocolFactory = new DistributionProtocolFactoryImpl();
 		((DistributionProtocolServiceImpl) distributionProtocolSvc).setDaoFactory(daoFactory);
-		((DistributionProtocolServiceImpl) distributionProtocolSvc).setDistributionProtocolFactory(distributionProtocolFactory);
+		((DistributionProtocolServiceImpl) distributionProtocolSvc)
+				.setDistributionProtocolFactory(distributionProtocolFactory);
 		((DistributionProtocolFactoryImpl) distributionProtocolFactory).setDaoFactory(daoFactory);
 
 	}
@@ -98,19 +99,32 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
-//	@Test
-//	public void testDistributionProtocolCreationWithInvalidActivityStatus() {
-//
-//		CreateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
-//				.getCreateDistributionProtocolEventWithInvalidActivityStatus();
-//		DistributionProtocolCreatedEvent response = distributionProtocolSvc.createDistributionProtocol(reqEvent);
-//
-//		assertNotNull("response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
-//				response.getErroneousFields()[0].getErrorMessage());
-//
-//	}
+	@Test
+	public void testForDistributionProtocolCreationWithNullAuthDomainOfInvestigator() {
+		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolWithNullAuthDomain());
+		CreateDistributionProtocolEvent event = DistributionProtocolTestData
+				.getCreateDistributionProtocolEventWithNullAuthDomain();
+
+		DistributionProtocolCreatedEvent response = distributionProtocolSvc.createDistributionProtocol(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	//	@Test
+	//	public void testDistributionProtocolCreationWithInvalidActivityStatus() {
+	//
+	//		CreateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+	//				.getCreateDistributionProtocolEventWithInvalidActivityStatus();
+	//		DistributionProtocolCreatedEvent response = distributionProtocolSvc.createDistributionProtocol(reqEvent);
+	//
+	//		assertNotNull("response cannot be null", response);
+	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	//		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+	//				response.getErroneousFields()[0].getErrorMessage());
+	//
+	//	}
 
 	@Test
 	public void testCreationforDistributionProtocolWithEmptyInvestigatorName() {
@@ -191,7 +205,8 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(START_DATE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -219,7 +234,7 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[0].getErrorMessage());
 
 	}
-	
+
 	@Test
 	public void testForSuccessfulDistributionProtocolUpdate() {
 		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
@@ -232,6 +247,20 @@ public class DistributionProtocolTest {
 		DistributionProtocolDetails createdDistributionProtocol = response.getDetails();
 		assertEquals(reqEvent.getDetails().getTitle(), createdDistributionProtocol.getTitle());
 
+	}
+
+	@Test
+	public void testForSuccessfulDistributionProtocolUpdationWithTitle() {
+		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+
+		UpdateDistributionProtocolEvent event = DistributionProtocolTestData.getUpdateDistributionProtocolEventWithTitle();
+		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		DistributionProtocolDetails details = response.getDetails();
+		assertEquals(event.getDetails().getTitle(), details.getTitle());
 	}
 
 	@Test
@@ -251,19 +280,19 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
-//	@Test
-//	public void testUpdationWithInvalidActivityStatus() {
-//
-//		UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
-//				.getUpdateDistributionProtocolEventWithInvalidActivityStatus();
-//		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
-//
-//		assertNotNull("response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
-//				response.getErroneousFields()[0].getErrorMessage());
-//
-//	}
+	//	@Test
+	//	public void testUpdationWithInvalidActivityStatus() {
+	//
+	//		UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+	//				.getUpdateDistributionProtocolEventWithInvalidActivityStatus();
+	//		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
+	//
+	//		assertNotNull("response cannot be null", response);
+	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	//		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+	//				response.getErroneousFields()[0].getErrorMessage());
+	//
+	//	}
 
 	@Test
 	public void testUpdationforDistributionProtocolWithEmptyInvestigatorName() {
@@ -348,13 +377,24 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(START_DATE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
 	public void testDistributionProtocolUpdateNullOldDistributionProtocol() {
 		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(null);
 		UpdateDistributionProtocolEvent event = DistributionProtocolTestData.getUpdateDistributionProtocolEvent();
+		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testDistributionProtocolUpdateNullOldDistributionProtocolUsingTitle() {
+
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(null);
+		UpdateDistributionProtocolEvent event = DistributionProtocolTestData.getUpdateDistributionProtocolEventWithTitle();
 		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
@@ -387,6 +427,7 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[0].getErrorMessage());
 
 	}
+
 	@Test
 	public void testForSuccessfulDistributionProtocolPatch() {
 		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
@@ -399,6 +440,17 @@ public class DistributionProtocolTest {
 		DistributionProtocolDetails createdDistributionProtocol = response.getDetails();
 		assertEquals(reqEvent.getDetails().getTitle(), createdDistributionProtocol.getTitle());
 
+	}
+
+	@Test
+	public void testForSuccessfulDistributionProtocolPatchWithTitle() {
+		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+
+		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getPatchDistributionProtocolEventWithTitle();
+		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
+
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
@@ -416,20 +468,20 @@ public class DistributionProtocolTest {
 		assertEquals(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR.message(),
 				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
-//	@Test
-//	public void testPatchWithInvalidActivityStatus() {
-//
-//		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData
-//				.getPatchDistributionProtocolEventWithInvalidActivityStatus();
-//		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
-//
-//		assertNotNull("response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
-//				response.getErroneousFields()[0].getErrorMessage());
-//
-//	}
+
+	//	@Test
+	//	public void testPatchWithInvalidActivityStatus() {
+	//
+	//		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+	//				.getPatchDistributionProtocolEventWithInvalidActivityStatus();
+	//		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
+	//
+	//		assertNotNull("response cannot be null", response);
+	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	//		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+	//				response.getErroneousFields()[0].getErrorMessage());
+	//
+	//	}
 
 	@Test
 	public void testPatchforDistributionProtocolWithEmptyInvestigatorName() {
@@ -468,7 +520,8 @@ public class DistributionProtocolTest {
 				DistributionProtocolTestData.getDistributionProtocolToReturn());
 		when(distributionProtocolDao.isUniqueShortTitle(anyString())).thenReturn(Boolean.FALSE);
 
-		PatchDistributionProtocolEvent event = DistributionProtocolTestData.getPatchDistributionProtocolEventWithDiffTitles();
+		PatchDistributionProtocolEvent event = DistributionProtocolTestData
+				.getPatchDistributionProtocolEventWithDiffTitles();
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
 
 		assertNotNull("Response cannot be null", response);
@@ -510,7 +563,8 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(START_DATE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -537,6 +591,15 @@ public class DistributionProtocolTest {
 	}
 
 	@Test
+	public void testDistributionProtocolPatchNullOldDistributionProtocolUsingTitle() {
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(null);
+		PatchDistributionProtocolEvent event = DistributionProtocolTestData.getPatchDistributionProtocolEventWithTitle();
+		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
 	public void testPatchforDistributionProtocolWithNegativeAnticipatedSpecimenCountNumber() {
 		PatchDistributionProtocolEvent event = DistributionProtocolTestData
 				.getPatchDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber();
@@ -548,7 +611,7 @@ public class DistributionProtocolTest {
 		assertEquals(DistributionProtocolErrorCode.INVALID_ATTR_VALUE.message(),
 				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testDistributionProtocolUpdationNullDateAndInvestigator() {
 

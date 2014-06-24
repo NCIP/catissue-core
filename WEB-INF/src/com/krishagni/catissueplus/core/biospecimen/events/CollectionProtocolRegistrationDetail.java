@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class CollectionProtocolRegistrationDetail {
 
 	private ParticipantDetail participantDetail;
 
-	private List<String> modifiedAttributes;
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	private Long id;
 
