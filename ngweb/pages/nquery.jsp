@@ -724,6 +724,7 @@
                 <div class="pull-right" tooltip-placement="bottom" tooltip="Click to add temporal filter" tooltip-append-to-body="true">
                   <button type="button" class="btn btn-default btn-xs"
                           ng-click="onTemporalFilterSelect()"
+                          info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
                           popover-title="Add Temporal Filter"
                           popover-placement="bottom"
                           popover-append-to-body="true"
@@ -875,6 +876,7 @@
                     <button class="btn btn-default" 
                             ng-if="filter.expr"
                             ng-click="displayFilter(filter)"
+                            info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
                             popover-placement="left" 
                             popover-append-to-body="true"
                             popover-title="Edit Filter"
