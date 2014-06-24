@@ -728,7 +728,7 @@
                           popover-placement="bottom"
                           popover-append-to-body="true"
                           ka-popover-template="temporal-filter-popover-tmpl.html">
-                    <span style="font-family: icon;"><i>f(x) = x&sup2; + &zeta;&rho;&beta;</i></span>
+                    <span class="glyphicon glyphicon-time"></span>
                   </button>
                 </div>
               </div>
