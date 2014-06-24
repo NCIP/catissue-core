@@ -832,7 +832,7 @@
                   </div>
                   <div ng-switch-when="op" ng-click="toggleOp($index)" 
                        class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;"
-                       tooltip="Click to toggle operator" tooltip-placement="bottom">
+                       tooltip="{{node.value != 'not' && node.value != 'nthchild' ? 'Click to toggle operator' : ''}}" tooltip-placement="bottom">
                     <span class="fa" ng-bind-html="getOpCode(node.value)"></span>
                     <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
                   </div>
