@@ -334,29 +334,59 @@ function checkDisable(){
 				
 				var consentLevelId = document.getElementById("consentLevelId").value;
 				var disposeSpecimen = document.getElementsByName("disableConsentCheckbox")[0].checked ;
-				var lodder = dhtmlxAjax.postSync("CatissueCommonAjaxAction.do","type=updateConsentTierStatus&consentLevel="+consentLevel+"&consentLevelId="+consentLevelId+"&dataJSON="+JSON.stringify(tabDataJSON)+"&disposeSpecimen="+disposeSpecimen+"&consentDto="+JSON.stringify(consentDto));
-				if(lodder.xmlDoc.responseText != null)
-				{
-					var response = eval('('+lodder.xmlDoc.responseText+')')
-					if(response.success == "success")
-					{
-						document.getElementById('success').style.display='block';
-						var nodeId= "";
-						if(consentLevel=="specimen"){
-							nodeId= "Specimen_"+consentLevelId;
-							refreshTree(null,null,null,null,nodeId);
-						}else if(consentLevel=="scg"){
-							nodeId= "SpecimenCollectionGroup_"+consentLevelId;
-							refreshTree(null,null,null,null,nodeId);
-						}
-						
-					}
-					else
-					{
-						document.getElementById('error').style.display='block';
-						document.getElementById('errorMsg').innerHTML=response.msg;
-					}
-				}
+				
+					var req = createRequest(); // defined above
+	// Create the callback:
+	req.onreadystatechange = function() {
+		if (req.readyState != 4) return; // Not there yet
+		alert(req.responseText);
+		var response = eval('('+ req.responseText+')');
+		if(response.success == "success")
+		{
+			document.getElementById('success').style.display='block';
+			var nodeId= "";
+			if(consentLevel=="specimen"){
+				nodeId= "Specimen_"+consentLevelId;
+				refreshTree(null,null,null,null,nodeId);
+			}else if(consentLevel=="scg"){
+				nodeId= "SpecimenCollectionGroup_"+consentLevelId;
+				refreshTree(null,null,null,null,nodeId);
+			}
+			
 		}
+		else
+		{
+			document.getElementById('error').style.display='block';
+			document.getElementById('errorMsg').innerHTML=response.msg;
+		}
+	}
+	var param = "consentLevel="+consentLevel+"&consentLevelId="+consentLevelId+"&dataJSON="+JSON.stringify(tabDataJSON)+"&disposeSpecimen="+disposeSpecimen+"&consentDto="+JSON.stringify(consentDto);
+	req.open("GET", "CatissueCommonAjaxAction.do?type=updateConsentTierStatus&"+param);
+	req.send();
+
+				
+		}
+		
+		
+		function createRequest() {
+  var result = null;
+  if (window.XMLHttpRequest) {
+    // FireFox, Safari, etc.
+    result = new XMLHttpRequest();
+   
+  }
+  else if (window.ActiveXObject) {
+    // MSIE
+    result = new ActiveXObject("Microsoft.XMLHTTP");
+  } 
+  else {
+    // No known mechanism -- consider aborting the application
+  }
+  return result;
+}
+
+
+
+		
 		</script>
 	
