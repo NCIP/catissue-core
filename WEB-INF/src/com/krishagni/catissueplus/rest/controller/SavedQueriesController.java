@@ -60,11 +60,13 @@ public class SavedQueriesController {
 	public Map<String, Object> getSavedQueries(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
-			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq) {
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString) {
 		ReqSavedQueriesSummaryEvent req = new ReqSavedQueriesSummaryEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
 		req.setCountReq(countReq);
+		req.setSearchString(searchString);
 		req.setSessionDataBean(getSession());
 		
 		SavedQueriesSummaryEvent resp = querySvc.getSavedQueries(req);

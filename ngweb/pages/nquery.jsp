@@ -438,7 +438,8 @@
         <div class="col-xs-offset-1 col-xs-3">
           <div class="plus-addon plus-addon-input-right">
             <span class="glyphicon glyphicon-search"></span>
-            <input type="text" class="form-control" placeholder="Search Query" ng-model="searchQueryTitle">
+            <input type="text" class="form-control" placeholder="Search Query" 
+              ng-model="queryData.tempSearchString" ng-model-options="{debounce: 1000}" ng-change="searchQueries()">
           </div>
         </div>
       </div>

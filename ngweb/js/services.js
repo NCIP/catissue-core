@@ -45,12 +45,13 @@ angular.module('plus.services', [])
         }
       },
 
-      getQueries: function(countReq, startAt, maxRecs) {
+      getQueries: function(countReq, startAt, maxRecs, searchString) {
         if (!countReq) { countReq = false; }
           var params = {
             countReq : countReq, 
             start : startAt,
             max : maxRecs,
+            searchString: searchString,
       	  '_reqTime' : new Date().getTime()
         }
         return Utility.get($http, savedQueriesUrl, successfn, params);
@@ -68,12 +69,13 @@ angular.module('plus.services', [])
         return Utility.get($http, foldersUrl, successfn);
       },
 
-      getFolderQueries: function(folderId, countReq, startAt, maxRecs) {
+      getFolderQueries: function(folderId, countReq, startAt, maxRecs, searchString) {
         if (!countReq) { countReq = false; }
         var params = {
           countReq : countReq, 
           start : startAt,
           max : maxRecs,
+          searchString: searchString,
           '_reqTime' : new Date().getTime()
         }
         return Utility.get($http, foldersUrl + folderId + "/saved-queries", successfn, params);

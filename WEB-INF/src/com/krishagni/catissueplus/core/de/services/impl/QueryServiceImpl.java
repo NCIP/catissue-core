@@ -142,12 +142,14 @@ public class QueryServiceImpl implements QueryService {
 			}
 
 			Long userId = req.getSessionDataBean().getUserId();
-			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao()
-					.getQueries(userId, req.getStartAt(), req.getMaxRecords());
+			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao().getQueries(
+							userId, 
+							req.getStartAt(), req.getMaxRecords(), 
+							req.getSearchString());
 			
 			Long count = null;
 			if (req.isCountReq()) {
-				count = daoFactory.getSavedQueryDao().getQueriesCount(userId);
+				count = daoFactory.getSavedQueryDao().getQueriesCount(userId, req.getSearchString());
 			}
 			
 			return SavedQueriesSummaryEvent.ok(queries, count);
@@ -455,12 +457,15 @@ public class QueryServiceImpl implements QueryService {
 				return FolderQueriesEvent.notAuthorized(folderId);
 			}
 			
-			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao()
-					.getQueriesByFolderId(folderId, req.getStartAt(), req.getMaxRecords());
+			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao().getQueriesByFolderId(
+					folderId, 
+					req.getStartAt(), 
+					req.getMaxRecords(),
+					req.getSearchString());
 			
 			Long count = null;
 			if (req.isCountReq()) {
-				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(folderId);
+				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(folderId, req.getSearchString());
 			}
 			
 			return FolderQueriesEvent.ok(queries, count);

@@ -4,7 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -16,41 +23,43 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 
 	private static final String FQN = SavedQuery.class.getName();
 	
-	private static final String GET_SAVED_QUERIES_COUNT = FQN + ".getSavedQueriesCount";
-	
-	private static final String GET_SAVED_QUERIES = FQN + ".getSavedQueries";
-
 	private static final String GET_QUERIES_BY_ID = FQN + ".getQueriesByIds";
-	
-	private static final String GET_QUERIES_COUNT_BY_FOLDER_ID = FQN + ".getQueriesCountByFolderId";
-	
-	private static final String GET_QUERIES_BY_FOLDER_ID = FQN + ".getQueriesByFolderId";
-	
+		
 	private static final String IS_QUERY_SHARED_WITH_USER = FQN + ".isQuerySharedWithUser";
 	
 	@Override
-	public Long getQueriesCount(Long userId) {
-		return ((Number)sessionFactory.getCurrentSession()
-			.getNamedQuery(GET_SAVED_QUERIES_COUNT)
-			.setLong("userId", userId)
-			.uniqueResult())
-			.longValue();		
+	public Long getQueriesCount(Long userId, String ... searchString) {		
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(SavedQuery.class, "s")
+				.createAlias("createdBy", "c")
+				.createAlias("folders", "f", Criteria.LEFT_JOIN)
+				.createAlias("f.sharedWith", "su", Criteria.LEFT_JOIN)
+				.add(Restrictions.or(
+						Restrictions.eq("c.id", userId), 
+						Restrictions.eq("su.id", userId)))
+				.setProjection(Projections.countDistinct("s.id"));
+		
+		addSearchConditions(criteria, searchString);
+		return ((Number)criteria.uniqueResult()).longValue();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords) {
-		List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
+	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords, String ... searchString) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(SavedQuery.class, "s")
+				.createAlias("createdBy", "c")
+				.createAlias("lastUpdatedBy", "m", Criteria.LEFT_JOIN)				
+				.createAlias("folders", "f", Criteria.LEFT_JOIN)
+				.createAlias("f.sharedWith", "su", Criteria.LEFT_JOIN)
+				.add(Restrictions.or(
+						Restrictions.eq("c.id", userId), 
+						Restrictions.eq("su.id", userId)));
 		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SAVED_QUERIES);
-		query.setLong("userId", userId).setFirstResult(startAt).setMaxResults(maxRecords).list();
-		
-		List<Object[]> rows = query.list();
-		for (Object[] row : rows) {
-			result.add(getSavedQuerySummary(row));
-		}
-		
-		return result;		
+		addSearchConditions(criteria, searchString);
+		addProjectionFields(criteria);
+		criteria.addOrder(Order.desc("s.id"));
+		addLimits(criteria, startAt, maxRecords);
+		return getSavedQueries(criteria);
 	}
 	
 	@Override
@@ -66,27 +75,31 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 	}
 	
 	@Override
-	public Long getQueriesCountByFolderId(Long folderId) {
-		return ((Number)sessionFactory.getCurrentSession()
-			.getNamedQuery(GET_QUERIES_COUNT_BY_FOLDER_ID)
-			.setLong("folderId", folderId)
-			.uniqueResult()).longValue();
+	public Long getQueriesCountByFolderId(Long folderId, String ... searchString) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(SavedQuery.class, "s")
+				.createAlias("folders", "f", Criteria.INNER_JOIN)
+				.add(Restrictions.eq("f.id", folderId))
+				.setProjection(Projections.countDistinct("s.id"));
+		
+		addSearchConditions(criteria, searchString);
+		return ((Number)criteria.uniqueResult()).longValue();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId, int startAt, int maxRecords) {
-		List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
-		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_QUERIES_BY_FOLDER_ID);
-		query.setLong("folderId", folderId);
-		
-		List<Object[]> rows = query.setFirstResult(startAt).setMaxResults(maxRecords).list();				
-		for (Object[] row : rows) {			
-			result.add(getSavedQuerySummary(row));			
-		}
-		
-		return result;
+	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId, int startAt, int maxRecords, String ... searchString) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(SavedQuery.class, "s")
+				.createAlias("createdBy", "c")
+				.createAlias("folders", "f", Criteria.INNER_JOIN)
+				.createAlias("lastUpdatedBy", "m", Criteria.LEFT_JOIN)
+				.add(Restrictions.eq("f.id", folderId));
+
+		addSearchConditions(criteria, searchString);
+		addProjectionFields(criteria);
+		criteria.addOrder(Order.desc("s.id"));
+		addLimits(criteria, startAt, maxRecords);
+		return getSavedQueries(criteria);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -127,5 +140,54 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 		savedQuery.setLastRunOn((Date)row[10]);
 		
 		return savedQuery;		
+	}
+		
+	private void addLimits(Criteria criteria, int start, int maxRecords) {
+		criteria.setFirstResult(start <= 0 ? 0 : start);
+		if (maxRecords > 0) {
+			criteria.setMaxResults(maxRecords);
+		}
+	}
+	
+	private void addSearchConditions(Criteria criteria, String[] searchString) {
+		if (searchString == null || searchString.length == 0 || StringUtils.isBlank(searchString[0])) {
+			return;
+		}
+		
+		Disjunction srchCond = Restrictions.disjunction();
+		if (StringUtils.isNumeric(searchString[0])) {
+			srchCond.add(Restrictions.eq("s.id", Long.parseLong(searchString[0])));
+		}
+		
+		srchCond.add(Restrictions.ilike("s.title", searchString[0], MatchMode.ANYWHERE));
+		criteria.add(srchCond);
+	}
+	
+	private void addProjectionFields(Criteria criteria) {
+		criteria.setProjection(Projections.distinct(
+				Projections.projectionList()
+					.add(Projections.property("s.id"), "id")
+					.add(Projections.property("s.title"), "title")
+					.add(Projections.property("c.id"), "cUserId")
+					.add(Projections.property("c.firstName"), "cFirstName")
+					.add(Projections.property("c.lastName"), "cLastName")
+					.add(Projections.property("m.id"), "mUserId")
+					.add(Projections.property("m.firstName"), "mFirstName")
+					.add(Projections.property("m.lastName"), "mLastName")
+					.add(Projections.property("lastUpdated"), "lastUpdated")
+					.add(Projections.property("lastRunCount"), "lastRunCount")
+					.add(Projections.property("lastRunOn"), "lastRunOn")
+		));		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<SavedQuerySummary> getSavedQueries(Criteria criteria) {
+		List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
+		List<Object[]> rows = criteria.list();				
+		for (Object[] row : rows) {			
+			result.add(getSavedQuerySummary(row));			
+		}
+		
+		return result;		
 	}
 }

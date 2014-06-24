@@ -565,21 +565,38 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.queryData.selectedFolderId = folderId;
       $scope.changeQueriesPage(true);
     };
+
+    var srchTimeout = undefined;
+    $scope.searchQueries = function() {
+      if (srchTimeout) {
+        $timeout.cancel(srchTimeout);
+      }
+
+      srchTimeout = $timeout(function() {
+        if ($scope.queryData.searchQueryTitle == $scope.queryData.tempSearchString) {
+          return;
+        }
+
+        $scope.queryData.searchQueryTitle = $scope.queryData.tempSearchString;
+        $scope.changeQueriesPage(true);
+      }, 1000);
+    };
     
     $scope.changeQueriesPage = function(countReq) {
-      folderId = $scope.queryData.selectedFolderId;
+      var folderId = $scope.queryData.selectedFolderId;
+      var searchString = $scope.queryData.searchQueryTitle
       $scope.queryData.startAt = ($scope.queryData.currentPage - 1) * $scope.queryData.pageSize;
       
       var q;
       if(folderId == -1) {
-        q = QueryService.getQueries(countReq, $scope.queryData.startAt, $scope.queryData.pageSize);
+        q = QueryService.getQueries(countReq, $scope.queryData.startAt, $scope.queryData.pageSize, searchString);
       } else {
-        q = QueryService.getFolderQueries(folderId, countReq, $scope.queryData.startAt, $scope.queryData.pageSize);
+        q = QueryService.getFolderQueries(folderId, countReq, $scope.queryData.startAt, $scope.queryData.pageSize, searchString);
       }
 
       q.then(
         function(result) {
-          if (result.count) {
+          if (countReq) {
             $scope.queryData.totalQueries = result.count;
           }
           $scope.queryData.queries = result.queries;
@@ -590,6 +607,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.query = query;
       $scope.getAuditLogs(query);
     };
+
  
     $scope.viewAllAuditLogs = function(type) {
       $scope.auditData = {auditLogs: [], pageSize: 25, currentPage: 1, type: type};
