@@ -11,6 +11,8 @@ public class DistributionProtocolPatchedEvent extends ResponseEvent {
 
 	private long id;
 
+	private String title;
+
 	public DistributionProtocolDetails getDetails() {
 		return details;
 	}
@@ -27,9 +29,24 @@ public class DistributionProtocolPatchedEvent extends ResponseEvent {
 		this.id = id;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public static DistributionProtocolPatchedEvent notFound(Long id) {
 		DistributionProtocolPatchedEvent resp = new DistributionProtocolPatchedEvent();
 		resp.setId(id);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
+
+	public static DistributionProtocolPatchedEvent notFound(String title) {
+		DistributionProtocolPatchedEvent resp = new DistributionProtocolPatchedEvent();
+		resp.setTitle(title);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

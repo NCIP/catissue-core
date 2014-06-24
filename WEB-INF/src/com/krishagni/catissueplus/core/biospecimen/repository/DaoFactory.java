@@ -1,12 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
-import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao; 
+import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
@@ -57,13 +58,13 @@ public interface DaoFactory {
 	public PrivilegeDao getPrivilegeDao();
 
 	public UserCPRoleDao getCPUserRoleDao();
-	
+
 	public KeyGeneratorDao getKeyGeneratorDao();
-	
+
 	public InstituteDao getInstituteDao();
-	
+
 	public BiohazardDao getBiohazardDao();
-	
+
 	public StorageContainerDao getStorageContainerDao();
 
 	public DistributionProtocolDao getDistributionProtocolDao();

@@ -17,12 +17,11 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SiteDetails;
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.common.beans.SessionDataBean;
@@ -51,12 +50,14 @@ public class SiteTestData {
 		Site site = new Site();
 		site.setId(46L);
 		site.setName("Nagpur");
+		site.setEmailAddress("admin@admin.com");
 		Address address = new Address();
 		address.setCity("pune");
 		address.setCountry("india");
 		address.setStreet("SB Road");
 		address.setZipCode("412312");
 		site.setAddress(address);
+		site.setActivityStatus("Active");
 		site.setCoordinatorCollection(getCoordinatorCollection());
 		return site;
 	}
@@ -115,6 +116,14 @@ public class SiteTestData {
 		return reqEvent;
 	}
 
+	public static UpdateSiteEvent getUpdateSiteEventWithSiteName() {
+		SiteDetails details = getDetails();
+		details.setId(null);
+		UpdateSiteEvent reqEvent = new UpdateSiteEvent(details, details.getName());
+		reqEvent.setSessionDataBean(getSessionDataBean());
+		reqEvent.setSiteDetails(details);
+		return reqEvent;
+	}
 	private static List<UserInfo> getCoordinatorNameCollection() {
 		List<UserInfo> userInfos = new ArrayList<UserInfo>();
 		UserInfo userInfo = new UserInfo();
@@ -126,9 +135,11 @@ public class SiteTestData {
 
 	private static SiteDetails getDetails() {
 		SiteDetails details = new SiteDetails();
+		details.setId(1L);
 		details.setCity("Pune");
 		details.setCountry("india");
 		details.setFaxNumber("333111");
+		details.setEmailAddress("admin@admin.com");
 		details.setPhoneNumber("9103201122");
 		details.setState("Maharashtra");
 		details.setStreet("MyStreet");
@@ -140,9 +151,12 @@ public class SiteTestData {
 		return details;
 	}
 
-	private static List<String> getCoordinatorCollectionList() {
-		List<String> users=new ArrayList<String>();
-		users.add("admin@admin.com");
+	private static List<UserInfo> getCoordinatorCollectionList() {
+		List<UserInfo> users=new ArrayList<UserInfo>();
+		UserInfo userInfo = new UserInfo();
+		userInfo.setDomainName(AuthenticationType.CATISSUE.value());
+		userInfo.setLoginName("admin@admin.com");
+		users.add(userInfo);
 		return users;
 	}
 
@@ -178,6 +192,7 @@ public class SiteTestData {
 		attributes.put("name", "pune");
 	  attributes.put("type", "Collection Site");
 	  attributes.put("coordinatorCollection", getCoordinatorCollectionList());
+	  attributes.put("emailAddress", "admin@admin.com");
 		attributes.put("activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		attributes.put("country", "india");
 		attributes.put("state", "maharashtra");
@@ -330,6 +345,12 @@ public class SiteTestData {
 		return event;
 	}	
 	
+	public static PatchSiteEvent getPatchSiteEventWithModifiedEmailAddress() {
+		PatchSiteEvent event = getEmptyPatchData();
+		event.getSiteDetails().setEmailAddress("admin@admin.com");
+		return event;
+	}	
+	
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCoordinatorCollection() {
 		PatchSiteEvent event = getEmptyPatchData();
 		List<UserInfo> coordinatorCollection = new ArrayList<UserInfo>();
@@ -356,4 +377,13 @@ public class SiteTestData {
 		return event;
 	}
 
+	public static PatchSiteEvent getPatchDataWithSiteName() {
+		SiteDetails details = getDetails();
+		details.setId(null);
+		PatchSiteEvent reqEvent = new PatchSiteEvent();
+		reqEvent.setSessionDataBean(getSessionDataBean());
+		reqEvent.setSiteDetails(details);
+		reqEvent.setSiteName(details.getName());
+		return reqEvent;
+	}
 }

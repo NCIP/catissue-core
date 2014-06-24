@@ -13,9 +13,9 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 
 	private static final String FQN = DistributionProtocol.class.getName();
 
-	private static final String GET_DISTRIBUTION_PROTOCOL_TITLE = FQN + ".getDistributionProtocolTitle";
+	private static final String GET_DISTRIBUTION_PROTOCOL_TITLE = FQN + ".getDistributionProtocolByTitle";
 
-	private static final String GET_DISTRIBUTION_PROTOCOL_SHORT_TITLE = FQN + ".getDistributionProtocolShortTitle";
+	private static final String GET_DISTRIBUTION_PROTOCOL_SHORT_TITLE = FQN + ".getDistributionProtocolByShortTitle";
 
 	@Override
 	public DistributionProtocol getDistributionProtocol(Long id) {
@@ -38,5 +38,14 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		query.setString("shortTitle", shortTitle);
 		List<DistributionProtocol> list = query.list();
 		return list.isEmpty() ? true : false;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DistributionProtocol getDistributionProtocol(String title) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DISTRIBUTION_PROTOCOL_TITLE);
+		query.setString("title", title);
+		List<DistributionProtocol> list = query.list();
+		return list.isEmpty() ? null : list.get(0);
 	}
 }

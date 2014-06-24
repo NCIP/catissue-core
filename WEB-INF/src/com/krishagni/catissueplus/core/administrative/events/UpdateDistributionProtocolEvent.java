@@ -9,6 +9,8 @@ public class UpdateDistributionProtocolEvent extends RequestEvent {
 
 	private Long id;
 
+	private String title;
+
 	public DistributionProtocolDetails getDetails() {
 		return details;
 	}
@@ -23,6 +25,14 @@ public class UpdateDistributionProtocolEvent extends RequestEvent {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

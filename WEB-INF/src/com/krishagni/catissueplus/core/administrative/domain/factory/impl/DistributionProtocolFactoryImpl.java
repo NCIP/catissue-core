@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank; 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isValidPositiveNumber;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
-import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
@@ -26,7 +26,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	private static final String PRINCIPLE_INVESTIGATOR = "principle investigator";
 
 	private static final String TITLE = "title";
-	
+
 	private static final String ACTIVITY_STATUS = "activity status";
 
 	private static final String ANTICIPANTED_SPECIMEN_COUNT = "anticipated specimen count";
@@ -84,7 +84,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		if (details.isDistributionProtocolStartDateModified()) {
 			setStartDate(distributionProtocol, details.getStartDate(), exceptionHandler);
 		}
-		
+
 		if (details.isDistributionProtocolActivityStatusModified()) {
 			setActivityStatus(distributionProtocol, details.getActivityStatus(), exceptionHandler);
 		}
@@ -115,14 +115,16 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setShortTitle(shortTitle);
 	}
 
-	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, String principalInvestigator,
+	private void setPrincipalInvestigator(DistributionProtocol distributionProtocol, UserInfo principalInvestigator,
 			ObjectCreationException exceptionHandler) {
-		if (isBlank(principalInvestigator)) {
+
+		if (isBlank(principalInvestigator.getLoginName())) {
 			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, PRINCIPLE_INVESTIGATOR);
 			return;
 		}
-		User pi = daoFactory.getUserDao().getUserByLoginNameAndDomainName(principalInvestigator,
-				AuthenticationType.CATISSUE.value());
+
+		User pi = daoFactory.getUserDao().getUserByLoginNameAndDomainName(principalInvestigator.getLoginName(),
+				principalInvestigator.getDomainName());
 		if (pi == null) {
 			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_PRINCIPAL_INVESTIGATOR, PRINCIPLE_INVESTIGATOR);
 			return;
@@ -146,7 +148,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 
 	}
 
-	private void setTitle(DistributionProtocol distributionProtocol, String title, 
+	private void setTitle(DistributionProtocol distributionProtocol, String title,
 			ObjectCreationException exceptionHandler) {
 		if (isBlank(title)) {
 			exceptionHandler.addError(DistributionProtocolErrorCode.MISSING_ATTR_VALUE, TITLE);
@@ -156,7 +158,8 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 
 	}
 
-	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus, ObjectCreationException exceptionHandler) {
+	private void setActivityStatus(DistributionProtocol distributionProtocol, String activityStatus,
+			ObjectCreationException exceptionHandler) {
 		if (!CommonValidator.isValidPv(activityStatus, ACTIVITY_STATUS)) {
 			exceptionHandler.addError(DistributionProtocolErrorCode.INVALID_ATTR_VALUE, ACTIVITY_STATUS);
 		}

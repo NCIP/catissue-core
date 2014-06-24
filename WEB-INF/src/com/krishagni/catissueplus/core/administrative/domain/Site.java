@@ -4,7 +4,9 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.ibm.icu.util.Calendar;
 import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class Site {
 
@@ -79,12 +81,23 @@ public class Site {
 	}
 
 	public void update(Site site) {
-		this.setName(site.getName());
+		if (activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			this.setName(appendTimestamp(site.getActivityStatus(), site.getName()));
+		}
+		else {
+			this.setName(site.getName());
+		}
 		this.setType(site.getType());
 		this.setActivityStatus(site.getActivityStatus());
 		this.setEmailAddress(site.getEmailAddress());
 		SetUpdater.<User> newInstance().update(this.getCoordinatorCollection(), site.getCoordinatorCollection());
 		updateAddressDetails(this.getAddress(), site.getAddress());
+	}
+
+	private String appendTimestamp(String activityStatus, String name) {
+		Calendar cal = Calendar.getInstance();
+		name = name + "_" + cal.getTimeInMillis();
+		return name;
 	}
 
 	private void updateAddressDetails(Address oldAddress, Address address) {
@@ -95,7 +108,6 @@ public class Site {
 		oldAddress.setState(address.getState());
 		oldAddress.setCity(address.getCity());
 		oldAddress.setZipCode(address.getZipCode());
-
 	}
 
 }
