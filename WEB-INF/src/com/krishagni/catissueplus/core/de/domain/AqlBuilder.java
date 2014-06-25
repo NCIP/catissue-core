@@ -25,14 +25,25 @@ public class AqlBuilder {
 	}
 	
 	public String getQuery(String[] selectList, Filter[] filters, QueryExpressionNode[] queryExprNodes) {
-		String selectClause = buildSelectClause(selectList);
-		String whereClause = buildWhereClause(filters, queryExprNodes);
+		Map<Integer, Filter> filterMap = new HashMap<Integer, Filter>();
+		for (Filter filter : filters) {
+			filterMap.put(filter.getId(), filter);
+		}
+		
+		String selectClause = buildSelectClause(filterMap, selectList);
+		String whereClause = buildWhereClause(filterMap, queryExprNodes);
 		return "select " + selectClause + " where " + whereClause;		
 	}
 	
-	private String buildSelectClause(String[] selectList) {
+	private String buildSelectClause(Map<Integer, Filter> filterMap, String[] selectList) {
 		StringBuilder select = new StringBuilder();
 		for (String field : selectList) {
+			if (field.startsWith("$temporal.")) {				
+				Integer filterId = Integer.parseInt(field.substring("$temporal.".length()));
+				Filter filter = filterMap.get(filterId);
+				field = getLhs(filter.getExpr()) + " as \"" + filter.getDesc() + " \""; 
+			}
+			
 			select.append(field).append(", ");
 		}
 		
@@ -40,12 +51,7 @@ public class AqlBuilder {
 		return select.substring(0, endIdx < 0 ? 0 : endIdx);
 	}
 	
-	private String buildWhereClause(Filter[] filters, QueryExpressionNode[] queryExprNodes) {
-		Map<Integer, Filter> filterMap = new HashMap<Integer, Filter>();
-		for (Filter filter : filters) {
-			filterMap.put(filter.getId(), filter);
-		}
-		
+	private String buildWhereClause(Map<Integer, Filter> filterMap, QueryExpressionNode[] queryExprNodes) {		
 		StringBuilder whereClause = new StringBuilder();
 		
 		for (QueryExpressionNode node : queryExprNodes) {
@@ -147,6 +153,11 @@ public class AqlBuilder {
         
 		int endIdx = result.length() - 2;
 		return result.substring(0, endIdx < 0 ? 0 : endIdx);
+	}
+	
+	private String getLhs(String temporalExpr) {
+		String[] parts = temporalExpr.split("[<=>!]");
+		return parts[0];
 	}
 	
 	public Container getContainer(String formName){

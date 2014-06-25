@@ -66,12 +66,16 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       return [ops.eq, ops.ne, ops.lt, ops.le, ops.gt, ops.ge, ops.exists, ops.not_exists];
     };
 
-    var getWhereExpr = function(filters, exprNodes) {
+    var getFilterMap = function(filters) {
       var filterMap = {};
       for (var i = 0; i < filters.length; ++i) {
         filterMap[filters[i].id] = filters[i];
       }
 
+      return filterMap;
+    };
+
+    var getWhereExpr = function(filterMap, exprNodes) {
       var query = "";
       for (var i = 0; i < exprNodes.length; ++i) {
         if (exprNodes[i].type == 'paren') {
@@ -170,7 +174,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.getCount= function() {
-      var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
+      var query = getWhereExpr(getFilterMap($scope.queryData.filters), $scope.queryData.exprNodes);
       var aql = "select count(distinct Participant.id) as \"cprCnt\", count(distinct Specimen.id) as \"specimenCnt\" where " + query;
       $scope.queryData.notifs.showCount = true;
       $scope.queryData.notifs.waitCount = true;
@@ -212,11 +216,46 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       }
     }, true);
 
+    var getLhs = function(temporalExpr) {
+      var re = /[<=>!]/g;
+      var matches = undefined;
+      if ((matches = re.exec(temporalExpr))) {
+        return temporalExpr.substring(0, matches.index);
+      } 
+
+      return undefined;
+    };
+
+    var getSelectList = function(filterMap, selectedFields) {
+      var temporalMarker = '$temporal.';
+      var result = "";
+
+      for (var i = 0; i < selectedFields.length; ++i) {
+        var field = selectedFields[i];
+
+        if (field.indexOf(temporalMarker) == 0) {
+          var filterId = field.substring(temporalMarker.length);
+          var filter = filterMap[filterId];
+          field = getLhs(filter.expr);
+          field += " as \"" + filter.desc + "\"";
+        }
+
+        result += field + ", ";
+      }
+
+      if (result) {
+        result = result.substring(0, result.length - 2);
+      }
+
+      return result;
+    };
+
     $scope.getRecords = function() {
       $scope.queryData.view = 'records';
 
-      var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
-      var selectList = $scope.queryData.selectedFields.join();
+      var filterMap = getFilterMap($scope.queryData.filters);
+      var query = getWhereExpr(filterMap, $scope.queryData.exprNodes);
+      var selectList = getSelectList(filterMap, $scope.queryData.selectedFields);
       var aql = "select " + selectList + " where " + query + " limit 0, 10000";
 
       var startTime = new Date();
@@ -253,8 +292,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.exportRecords = function() {
-      var query = getWhereExpr($scope.queryData.filters, $scope.queryData.exprNodes);
-      var selectList = $scope.queryData.selectedFields.join();
+      var filterMap = getFilterMap($scope.queryData.filters);
+      var query = getWhereExpr(filterMap, $scope.queryData.exprNodes);
+      var selectList = getSelectList(filterMap, $scope.queryData.selectedFields);
       var aql = "select " + selectList + " where " + query;
 
       Utility.notify(
@@ -1349,6 +1389,14 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
       }
 
+      var selectField = '$temporal.' + filter.id;
+      for (var i = 0; i < $scope.queryData.selectedFields.length; ++i) {
+        if ($scope.queryData.selectedFields[i] == selectField) {
+          $scope.queryData.selectedFields.splice(i, 1);
+          break;
+        }
+      }
+
       var exprNodes = $scope.queryData.exprNodes;
       for (var i = 0; i < exprNodes.length; ++i) {
         var exprNode = exprNodes[i];
@@ -1619,6 +1667,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var form = { type: 'form', val: queryData.selectedCp.forms[i].caption, form: queryData.selectedCp.forms[i] };
         forms.push(form);
       }
+ 
+      for (var i = 0; i < queryData.filters.length; ++i) {
+        var filter = queryData.filters[i];
+        if (filter.expr) {
+          forms.push({type: 'temporal', val: filter.desc, form: filter, children: []});
+        }
+      }
 
       $scope.treeOpts = {
         treeData: forms,
@@ -1694,14 +1749,25 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var selectFields = function(selectedFieldsMap, nodes) {
         var i = 0;
         for (var formName in selectedFieldsMap) {
+          var filterId = undefined;
+          if (formName.indexOf('$temporal.') == 0) {
+            filterId = formName.split('.')[1];
+          }
+
           for (var j = 0; j < nodes.length; j++) {
-            if (formName == nodes[j].form.name) {
+            if (filterId && nodes[j].form.id == filterId) {
+              var node = nodes.splice(j, 1)[0]; // removes node 
+              nodes.splice(i, 0, node); // inserts node
+              node.checked = true;
+              break;
+            } else if (formName == nodes[j].form.name) {
               var node = nodes.splice(j, 1)[0]; // removes node 
               nodes.splice(i, 0, node); // inserts node
               selectFormFields(selectedFieldsMap[formName], node);
               break;
             }
           } 
+
           ++i;
         }
       };
@@ -1777,6 +1843,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       };
 
       var getAllFormFields = function(form) {
+        if (form.type == 'temporal') {
+          return ['$temporal.' + form.form.id];
+        }
+
         var result = [];
         for (var i = 0; i < form.children.length; ++i) {
           var field = form.children[i];
@@ -1793,6 +1863,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var selectedFieldsMap = {};
       for (var i = 0; i < queryData.selectedFields.length; ++i) {
         var selectedField = queryData.selectedFields[i];
+        if (selectedField.indexOf("$temporal.") == 0) {
+          selectedFieldsMap[selectedField] = selectedField;
+          continue;
+        }
+
         var form = selectedField.split(".", 1);
         if (!selectedFieldsMap[form]) {
           selectedFieldsMap[form] = [];
