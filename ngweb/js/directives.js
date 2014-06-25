@@ -195,9 +195,9 @@ angular.module("plus.directives", [])
       scope: { title: '@', content: '@', placement: '@', animation: '&', isOpen: '&' },
       templateUrl: 'templates/popover-template.html',
       link: function(scope, iElement) {
-        var content = angular.fromJson(scope.content),
-        template = $templateCache.get(content.templateUrl),
-        templateScope = scope,
+        var content = angular.fromJson(scope.content);
+        template = $templateCache.get(content.templateUrl);
+        templateScope = scope;
         scopeElements = document.getElementsByClassName('ng-scope');
  
         angular.forEach(scopeElements, function(element) {
@@ -207,6 +207,7 @@ angular.module("plus.directives", [])
           }
         });
  
+        scope.infoLink = content.infoLink;
         iElement.find('div.popover-content').html($compile(template)(templateScope));
       }
     };
@@ -219,7 +220,7 @@ angular.module("plus.directives", [])
     tooltip.compile = function(tElem, tAttrs) {
       return {
         'pre': function(scope, iElement, iAttrs) {
-          iAttrs.$set('kaPopoverTemplate', {templateUrl: iAttrs.kaPopoverTemplate, scopeId: scope.$id});
+          iAttrs.$set('kaPopoverTemplate', {templateUrl: iAttrs.kaPopoverTemplate, scopeId: scope.$id, infoLink: iAttrs.infoLink});
         },
         'post': linker(tElem, tAttrs)
       };

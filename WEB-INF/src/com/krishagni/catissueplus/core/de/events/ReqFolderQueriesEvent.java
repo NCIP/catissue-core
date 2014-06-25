@@ -6,6 +6,8 @@ public class ReqFolderQueriesEvent extends RequestEvent {
 
 	private Long folderId;
 	
+	private String searchString;
+	
 	private int startAt;
 	
 	private int maxRecords;
@@ -22,6 +24,14 @@ public class ReqFolderQueriesEvent extends RequestEvent {
 
 	public void setFolderId(Long folderId) {
 		this.folderId = folderId;
+	}
+
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
 	}
 
 	public int getStartAt() {

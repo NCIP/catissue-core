@@ -2,12 +2,22 @@ package com.krishagni.catissueplus.core.de.events;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-public class ReqSavedQueriesSummaryEvent extends RequestEvent {	
+public class ReqSavedQueriesSummaryEvent extends RequestEvent {
+	private String searchString;
+	
 	private int startAt;
 	
 	private int maxRecords;
 	
 	private boolean countReq;
+
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
 
 	public int getStartAt() {
 		return startAt;

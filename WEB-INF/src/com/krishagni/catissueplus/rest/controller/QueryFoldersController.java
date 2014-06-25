@@ -139,10 +139,12 @@ public class QueryFoldersController {
 	public Map<String, Object> getFolderQueries(@PathVariable("folderId") Long folderId,
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 			@RequestParam(value = "max", required = false, defaultValue = "25") int max,
-			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq) {
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString) {
 		ReqFolderQueriesEvent req = new ReqFolderQueriesEvent(folderId);
 		req.setStartAt(start);
 		req.setMaxRecords(max);
+		req.setSearchString(searchString);
 		req.setSessionDataBean(getSession());
 		req.setCountReq(countReq);
 		

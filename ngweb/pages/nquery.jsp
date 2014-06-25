@@ -438,7 +438,8 @@
         <div class="col-xs-offset-1 col-xs-3">
           <div class="plus-addon plus-addon-input-right">
             <span class="glyphicon glyphicon-search"></span>
-            <input type="text" class="form-control" placeholder="Search Query" ng-model="searchQueryTitle">
+            <input type="text" class="form-control" placeholder="Search Query" 
+              ng-model="queryData.tempSearchString" ng-model-options="{debounce: 1000}" ng-change="searchQueries()">
           </div>
         </div>
       </div>
@@ -723,11 +724,12 @@
                 <div class="pull-right" tooltip-placement="bottom" tooltip="Click to add temporal filter" tooltip-append-to-body="true">
                   <button type="button" class="btn btn-default btn-xs"
                           ng-click="onTemporalFilterSelect()"
+                          info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
                           popover-title="Add Temporal Filter"
                           popover-placement="bottom"
                           popover-append-to-body="true"
                           ka-popover-template="temporal-filter-popover-tmpl.html">
-                    <span style="font-family: icon;"><i>f(x) = x&sup2; + &zeta;&rho;&beta;</i></span>
+                    <span class="glyphicon glyphicon-time"></span>
                   </button>
                 </div>
               </div>
@@ -831,7 +833,7 @@
                   </div>
                   <div ng-switch-when="op" ng-click="toggleOp($index)" 
                        class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;"
-                       tooltip="Click to toggle operator" tooltip-placement="bottom">
+                       tooltip="{{node.value != 'not' && node.value != 'nthchild' ? 'Click to toggle operator' : ''}}" tooltip-placement="bottom">
                     <span class="fa" ng-bind-html="getOpCode(node.value)"></span>
                     <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
                   </div>
@@ -874,6 +876,7 @@
                     <button class="btn btn-default" 
                             ng-if="filter.expr"
                             ng-click="displayFilter(filter)"
+                            info-link="https://catissueplus.atlassian.net/wiki/x/O4BLAQ"
                             popover-placement="left" 
                             popover-append-to-body="true"
                             popover-title="Edit Filter"

@@ -7,17 +7,17 @@ import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public interface SavedQueryDao extends Dao<SavedQuery>{
-	public Long getQueriesCount(Long userId);
+	public Long getQueriesCount(Long userId, String ... searchString);
 	
-	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords);
+	public List<SavedQuerySummary> getQueries(Long userId, int startAt, int maxRecords, String ... searchString);
 		
 	public SavedQuery getQuery(Long queryId);
 	
 	public List<SavedQuery> getQueriesByIds(List<Long> queries);
 	
-	public Long getQueriesCountByFolderId(Long folderId);
+	public Long getQueriesCountByFolderId(Long folderId, String ... searchString);
 	
-	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId, int startAt, int maxRecords);
+	public List<SavedQuerySummary> getQueriesByFolderId(Long folderId, int startAt, int maxRecords, String ... searchString);
 	
 	public boolean isQuerySharedWithUser(Long queryId, Long userId);
 
