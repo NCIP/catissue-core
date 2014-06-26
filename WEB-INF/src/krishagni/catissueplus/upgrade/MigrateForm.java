@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
@@ -1133,10 +1134,22 @@ public class MigrateForm {
 			BaseAbstractAttributeInterface oldAttr = oldCtrl.getBaseAbstractAttribute();
 
 			Object newValue = null;
-			if (oldAttr instanceof AttributeInterface) {
+			if (oldAttr instanceof CategoryAttributeInterface) {
+				AbstractAttributeInterface abstAttr = ((CategoryAttributeInterface) oldAttr).getAbstractAttribute();
+				Control newControl = (Control)fieldMap.get(oldAttr);
+				Object oldValue = oldFormData.get(abstAttr);
+				if (oldValue instanceof List) {
+					newValue = getMultiSelectValues((List<Map<BaseAbstractAttributeInterface, Object>>)oldValue); 
+				} else if (oldCtrl instanceof FileUploadInterface){
+					newValue = getNewFileControlValue(jdbcDao, oldFormData, (AttributeInterface)abstAttr);
+				} else {
+					newValue = oldValue;
+				}
+				ControlValue cv = new ControlValue(newControl, newValue);
+				formData.addFieldValue(cv);				
+			} else if (oldAttr instanceof AttributeInterface) {
 				Control newControl = (Control)fieldMap.get(oldAttr);
 				Object oldValue = oldFormData.get(oldAttr);
-				
 				if (oldValue instanceof List) {
 					newValue = getMultiSelectValues((List<Map<BaseAbstractAttributeInterface, Object>>)oldValue); 
 				} else if (oldCtrl instanceof FileUploadInterface){
@@ -1144,7 +1157,6 @@ public class MigrateForm {
 				} else {
 					newValue = oldValue;
 				}
-
 				ControlValue cv = new ControlValue(newControl, newValue);
 				formData.addFieldValue(cv);				
 			} else if (oldAttr instanceof AssociationInterface && oldCtrl instanceof AbstractContainmentControlInterface) {
