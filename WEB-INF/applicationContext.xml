@@ -186,6 +186,7 @@
     <property name="specimenFactory" ref="specimenFactory"/>
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="specimenBarcodeGenerator" ref="specimenBarcodeGenerator"/>
+  	<property name="specLabelPrinterFact" ref="specimenLabelPrinterFact"/>
   </bean>
 
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">
@@ -312,4 +313,22 @@
         <property name="daoFactory" ref="biospecimenDaoFactory"/>
         <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
 	</bean>
+	
+	<bean id="specimenPrintRuleFact" class="com.krishagni.catissueplus.core.printer.printRule.domain.factory.impl.SpecimenPrintRuleFactoryImpl">
+	</bean>
+	
+	<bean id="specimenLabelPrinterFact" class="com.krishagni.catissueplus.core.printer.printService.factory.impl.SpecimenLabelPrinterFactoryImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+	</bean>
+
+	<bean id="specimenPrinterSvc" class="com.krishagni.catissueplus.core.printer.printService.services.impl.SpecimenLabelPrinterService">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+		<property name="specLabelPrinterFact" ref="specimenLabelPrinterFact"/>
+	</bean>
+	
+	<bean id="specimenPrintRuleSvc" class="com.krishagni.catissueplus.core.printer.printRule.services.impl.SpecimenPrintRuleServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+		<property name="specimenPrintRuleFactory" ref="specimenPrintRuleFact"/>
+	</bean>
+	
  </beans>

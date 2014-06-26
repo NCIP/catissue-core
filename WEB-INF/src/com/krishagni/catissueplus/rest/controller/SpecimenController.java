@@ -39,6 +39,9 @@ import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent.EntityType;
 import com.krishagni.catissueplus.core.de.services.FormService;
+import com.krishagni.catissueplus.core.printer.printService.events.CreateLabelPrintEvent;
+import com.krishagni.catissueplus.core.printer.printService.events.LabelPrintCreatedEvent;
+import com.krishagni.catissueplus.core.printer.printService.services.PrintService;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -54,6 +57,9 @@ public class SpecimenController {
 
 	@Autowired
 	private FormService formSvc;
+	
+	@Autowired
+	private PrintService specimenLabelPrintSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -176,6 +182,34 @@ public class SpecimenController {
 			return response.getSpecimenDetail();
 		}
 
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String printLabel(@PathVariable Long id) {
+		CreateLabelPrintEvent event = new CreateLabelPrintEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		LabelPrintCreatedEvent resp = specimenLabelPrintSvc.print(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/name={name}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String printLabel(@PathVariable String name) {
+		CreateLabelPrintEvent event = new CreateLabelPrintEvent();
+		event.setName(name);
+		event.setSessionDataBean(getSession());
+		LabelPrintCreatedEvent resp = specimenLabelPrintSvc.print(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
 		return null;
 	}
 

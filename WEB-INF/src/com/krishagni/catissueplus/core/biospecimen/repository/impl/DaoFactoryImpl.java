@@ -41,6 +41,8 @@ import com.krishagni.catissueplus.core.notification.repository.ExternalApplicati
 import com.krishagni.catissueplus.core.notification.repository.impl.CPStudyMappingDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalAppNotificationDaoImpl;
 import com.krishagni.catissueplus.core.notification.repository.impl.ExternalApplicationDaoImpl;
+import com.krishagni.catissueplus.core.printer.printRule.repository.SpecimenPrintRuleDao;
+import com.krishagni.catissueplus.core.printer.printRule.repository.impl.SpecimenPrintRuleDaoImpl;
 import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
 import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
 import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
@@ -221,6 +223,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public DistributionProtocolDao getDistributionProtocolDao() {
 		DistributionProtocolDaoImpl dao = new DistributionProtocolDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public SpecimenPrintRuleDao getSpecimenPrintRuleDao() {
+		SpecimenPrintRuleDaoImpl dao = new SpecimenPrintRuleDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

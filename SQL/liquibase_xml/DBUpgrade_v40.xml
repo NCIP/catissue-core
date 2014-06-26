@@ -3012,4 +3012,46 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
  		
     </changeSet> 
         
+    <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
+	   <createTable tableName="CATISSUE_SPECIMEN_PRINT_RULE">
+		 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+		   <constraints primaryKey="true" nullable="false"/>
+		 </column>
+
+		 <column name="NAME" type="${text.type}(255)">
+		     <constraints unique="true" nullable="false" />
+		 </column>
+		 
+		 <column name="SPECIMEN_CLASS" type="${text.type}(255)" defaultValue="Any">
+		 </column>
+
+		 <column name="SPECIMEN_TYPE" type="${text.type}(255)" defaultValue="Any">
+		 </column>
+		 
+		 <column name="LABEL_TYPE" type="${text.type}(255)" >
+		 	<constraints nullable="false"/>
+		 </column>
+		 
+		 <column name="DATA_ON_LABEL" type="${text.type}(1000)">
+		 	<constraints nullable="false"/>
+		 </column>
+		 
+		 <column name="PRINTER_NAME" type="${text.type}(255)">
+		 	<constraints nullable="false"/>
+		 </column>
+
+		 <column name="WORKSTATION_IP" type="${text.type}(64)" defaultValue="Any">
+		 </column>
+		 
+	   </createTable>
+	   
+	   <addUniqueConstraint constraintName="SPEC_CLASS_TYPE_ID_UNIQUE_KEY"
+			tableName="CATISSUE_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP" />
+	   
+	   <createSequence
+            sequenceName="CATISSUE_PRINT_RULE_SEQ"
+            startValue="1"
+            incrementBy="1"
+            ordered="true" />
+	</changeSet>
 </databaseChangeLog>

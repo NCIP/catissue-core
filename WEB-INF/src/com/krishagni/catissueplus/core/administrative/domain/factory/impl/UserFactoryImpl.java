@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.mail.internet.InternetAddress;
-
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -279,23 +277,11 @@ public class UserFactoryImpl implements UserFactory {
 			return;
 		}
 
-		if (!isEmailValid(email)) {
+		if (!CommonValidator.isEmailValid(email)) {
 			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, EMAIL_ADDRESS);
 			return;
 		}
 		user.setEmailAddress(email);
-	}
-
-	private boolean isEmailValid(String emailAddress) {
-		boolean result = true;
-		try {
-			InternetAddress emailAddr = new InternetAddress(emailAddress);
-			emailAddr.validate();
-		}
-		catch (Exception exp) {
-			result = false;
-		}
-		return result;
 	}
 
 	private void setAuthDomain(User user, String domainName, ObjectCreationException exceptionHandler) {

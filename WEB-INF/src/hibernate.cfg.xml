@@ -184,6 +184,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Biohazard.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainer.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionProtocol.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenPrintRule.hbm.xml" />
     </session-factory>
 
 </hibernate-configuration>
