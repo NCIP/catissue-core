@@ -1015,4 +1015,9 @@ Helpdesk Phone : @@contact.number@@</value>
         <name>display.admin.emails.onSummaryPage</name>
         <value>false</value>
     </property>
+    <property>
+        <name>label.print.file.dir</name>
+        <value>/printer</value>
+    </property>
+    
 </properties>

@@ -26,7 +26,7 @@ public class TransactionalInterceptor {
 		this.sessionFactory = sessionFactory;
 	}
 
-	@Pointcut("within(com.krishagni.catissueplus.service.impl.* || com.krishagni.catissueplus.core.*.services.impl.*)")
+	@Pointcut("within(com.krishagni.catissueplus.service.impl.* || com.krishagni.catissueplus.core.*.services.impl.* || com.krishagni.catissueplus.core.*.*.services.impl.*)")
 	public void anyPublicMethod() {
 	}
 

@@ -61,6 +61,8 @@ public class SpecimenDetail {
 
 	private String pos2;
 
+	private Boolean enablePrintLabels = false;
+
 	private Set<SpecimenEventParameters> eventCollection = new HashSet<SpecimenEventParameters>();
 
 	private List<ExternalIdentifierDetail> externalIdentifierDetails = new ArrayList<ExternalIdentifierDetail>();
@@ -317,6 +319,14 @@ public class SpecimenDetail {
 		return modifiedAttributes.contains("specimenType");
 	}
 
+	public Boolean isPrintLabelsEnabled() {
+		return enablePrintLabels;
+	}
+
+	public void setEnablePrintLabels(Boolean enablePrintLabels) {
+		this.enablePrintLabels = enablePrintLabels;
+	}
+
 	public boolean isLabelModified() {
 		return modifiedAttributes.contains("label");
 	}
@@ -336,8 +346,8 @@ public class SpecimenDetail {
 	public boolean isCommentModified() {
 		return modifiedAttributes.contains("comment");
 	}
-	
-	public boolean isCollectionStatusModified(){
+
+	public boolean isCollectionStatusModified() {
 		return modifiedAttributes.contains("collectionStatus");
 	}
 

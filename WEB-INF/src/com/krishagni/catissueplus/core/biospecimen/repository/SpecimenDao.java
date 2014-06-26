@@ -14,6 +14,8 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public Long getScgId(Long specimenId);
 
 	public Specimen getSpecimen(Long id);
+	
+	public Specimen getSpecimenByLabel(String label);
 
 	public boolean isLabelUnique(String label);
 

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
@@ -30,6 +32,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
+import com.krishagni.catissueplus.core.printer.printService.factory.SpecimenLabelPrinterFactory;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -59,6 +62,13 @@ public class SpecimenServiceImpl implements SpecimenService {
 		this.specimenFactory = specimenFactory;
 	}
 
+	@Autowired
+	private SpecimenLabelPrinterFactory specLabelPrinterFact;
+
+	public void setSpecLabelPrinterFact(SpecimenLabelPrinterFactory specLabelPrinterFact) {
+		this.specLabelPrinterFact = specLabelPrinterFact;
+	}
+	
 	public void setSpecimenLabelGenerator(LabelGenerator<Specimen> specimenLabelGenerator) {
 		this.specimenLabelGenerator = specimenLabelGenerator;
 	}
@@ -90,6 +100,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 			ensureUniqueLabel(specimen.getLabel(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+			if(event.getSpecimenDetail().isPrintLabelsEnabled()){
+				specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress());
+			}
 			return SpecimenCreatedEvent.ok(SpecimenDetail.fromDomain(specimen));
 		}
 		catch (ObjectCreationException oce) {

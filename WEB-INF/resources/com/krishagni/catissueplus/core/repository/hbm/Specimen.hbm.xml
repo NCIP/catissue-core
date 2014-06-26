@@ -107,8 +107,8 @@
 			select sp.id from Specimen sp where
 			sp.barcode=:barcode
 		</query>
-		<query name="getSpecimenIdByLabel">
-			select sp.id from Specimen sp where sp.label=:label
+		<query name="getSpecimenByLabel">
+			select sp from com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp where sp.label=:label
 		</query>
 		<sql-query name="getScgIdBySpecimenId">
 			<return-scalar column="scgId" type="long" />

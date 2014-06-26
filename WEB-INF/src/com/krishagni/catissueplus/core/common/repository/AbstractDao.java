@@ -19,4 +19,9 @@ public class AbstractDao<T> implements Dao<T> {
 	public void saveOrUpdate(T obj) {
 		sessionFactory.getCurrentSession().saveOrUpdate(obj);
 	}
+
+	@Override
+	public void delete(T obj) {
+		sessionFactory.getCurrentSession().delete(obj);
+	}
 }

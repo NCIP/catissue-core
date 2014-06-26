@@ -17,6 +17,7 @@ import com.krishagni.catissueplus.core.common.repository.KeyGeneratorDao;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalAppNotificationDao;
 import com.krishagni.catissueplus.core.notification.repository.ExternalApplicationDao;
+import com.krishagni.catissueplus.core.printer.printRule.repository.SpecimenPrintRuleDao;
 import com.krishagni.catissueplus.core.privileges.repository.PrivilegeDao;
 import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
 import com.krishagni.catissueplus.core.privileges.repository.UserCPRoleDao;
@@ -68,5 +69,7 @@ public interface DaoFactory {
 	public StorageContainerDao getStorageContainerDao();
 
 	public DistributionProtocolDao getDistributionProtocolDao();
+	
+	public SpecimenPrintRuleDao getSpecimenPrintRuleDao();
 
 }

@@ -56,8 +56,16 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	}
 	
 	@Override
+	public Specimen getSpecimenByLabel(String label) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_BY_LABEL);
+		query.setString("label", label);
+		List<Specimen> results = query.list();
+		return results.isEmpty()? null: results.get(0);
+	}
+	
+	@Override
 	public boolean isLabelUnique(String label) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_ID_BY_LABEL);
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_BY_LABEL);
 		query.setString("label", label);
 		return query.list().isEmpty()?true:false;
 	}
@@ -76,6 +84,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_SPECIMEN_DETAILS_DY_SCG_ID = FQN + ".getSpecimenDetailsByScgId";
 	
 	private static final String GET_SPECIMEN_ID_BY_BARCODE = FQN +".getSpecimenIdByBarcode";
-	private static final String GET_SPECIMEN_ID_BY_LABEL = FQN +".getSpecimenIdByLabel";
+	private static final String GET_SPECIMEN_BY_LABEL = FQN +".getSpecimenByLabel";
 
 }
