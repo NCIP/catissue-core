@@ -59,6 +59,15 @@
 				<column>END_DATE</column>
 			</datePicker>
 		</row>
+		
+		<row>
+                        <booleanCheckBox>
+                                <name>consentWaived</name>
+                                <udn>consentWaived</udn>
+                                <caption>Consent Waived</caption>
+                                <column>CONSENTS_WAIVED</column>
+                        </booleanCheckBox>
+                </row>
 				
 		<row>
 			<dropDown>

@@ -50,15 +50,17 @@
                                 <foreignKey>IDENTIFIER</foreignKey>
                                 <parentKey>SITE_ID</parentKey>
 			
-				<dropDown>
-					<name>name</name>
-					<udn>name</udn>
-					<caption>Collection Site Name</caption>
-					<column>NAME</column>
-					<options>
-						<sql>select distinct name from CATISSUE_SITE</sql>
-					</options>
-				</dropDown>
+				<row>
+					<dropDown>
+						<name>name</name>
+						<udn>name</udn>
+						<caption>Collection Site Name</caption>
+						<column>NAME</column>
+						<options>
+							<sql>select distinct name from CATISSUE_SITE</sql>
+						</options>
+					</dropDown>
+				</row>
 			</subForm>
 		</row>
 
@@ -183,6 +185,15 @@
                                 </row>
                         </subForm>
                 </row>
+		
+		<row>
+			<textField>
+				<name>comments</name>
+				<udn>comments</udn>
+				<caption>Comments</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
 
                 <row>
                         <subForm>
@@ -196,6 +207,5 @@
                                 <extnFkCol>RECORD_ID</extnFkCol>
                         </subForm>
                 </row>
-
 	</view>
 </form>
