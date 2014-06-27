@@ -34,7 +34,7 @@ public class BiohazardServiceImpl implements BiohazardService {
 	@Override
 	@PlusTransactional
 	public BiohazardCreatedEvent createBiohazard(CreateBiohazardEvent reqEvent) {
-		
+
 		try {
 			Biohazard biohazard = biohazardFactory.createBiohazard(reqEvent.getBiohazardDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
@@ -61,16 +61,24 @@ public class BiohazardServiceImpl implements BiohazardService {
 	@PlusTransactional
 	public BiohazardUpdatedEvent updateBiohazard(UpdateBiohazardEvent updateEvent) {
 		try {
-			Long biohazardId = updateEvent.getId();
-			Biohazard oldBiohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardId);
-			if (oldBiohazard == null) {
-				return BiohazardUpdatedEvent.notFound(biohazardId);
+			Biohazard oldBiohazard = null;
+			if (updateEvent.getId() != null) {
+				Long biohazardId = updateEvent.getId();
+				oldBiohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardId);
+				if (oldBiohazard == null) {
+					return BiohazardUpdatedEvent.notFound(biohazardId);
+				}
+			}
+			else {
+				String biohazardName = updateEvent.getName();
+				oldBiohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardName);
+				if (oldBiohazard == null) {
+					return BiohazardUpdatedEvent.notFound(biohazardName);
+				}
 			}
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			Biohazard biohazard = biohazardFactory.createBiohazard(updateEvent.getBiohazardDetails());
-			if (!(oldBiohazard.getName().equals(biohazard.getName()))) {
-				ensureUniqueBiohazardName(biohazard.getName(), exceptionHandler);
-			}
+			checkBiohazardName(oldBiohazard.getName(),biohazard.getName(),exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 			oldBiohazard.update(biohazard);
 			daoFactory.getBiohazardDao().saveOrUpdate(oldBiohazard);
@@ -88,18 +96,26 @@ public class BiohazardServiceImpl implements BiohazardService {
 	@PlusTransactional
 	public BiohazardUpdatedEvent patchBiohazard(PatchBiohazardEvent event) {
 		try {
-			Long biohazardId = event.getId();
-			Biohazard oldBiohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardId);
-			if (oldBiohazard == null) {
-				return BiohazardUpdatedEvent.notFound(biohazardId);
+			Biohazard oldBiohazard = null;
+			if (event.getId() != null) {
+				Long biohazardId = event.getId();
+				oldBiohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardId);
+				if (oldBiohazard == null) {
+					return BiohazardUpdatedEvent.notFound(biohazardId);
+				}
+			}
+			else {
+				String biohazardName = event.getName();
+				oldBiohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardName);
+				if (oldBiohazard == null) {
+					return BiohazardUpdatedEvent.notFound(biohazardName);
+				}
 			}
 			String oldName = oldBiohazard.getName();
+			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			Biohazard biohazard = biohazardFactory.patchBiohazard(oldBiohazard, event.getDetails());
-			if (event.getDetails().isBiohazardNameModified() && !(oldName.equals(event.getDetails().getName()))) {
-				ObjectCreationException exceptionHandler = new ObjectCreationException();
-				ensureUniqueBiohazardName(biohazard.getName(), exceptionHandler);
-				exceptionHandler.checkErrorAndThrow();
-			}
+			checkBiohazardName(oldName,event.getDetails().getName(),exceptionHandler);
+			exceptionHandler.checkErrorAndThrow();
 			daoFactory.getBiohazardDao().saveOrUpdate(biohazard);
 			return BiohazardUpdatedEvent.ok(BiohazardDetails.fromDomain(biohazard));
 		}
@@ -110,5 +126,13 @@ public class BiohazardServiceImpl implements BiohazardService {
 			return BiohazardUpdatedEvent.serverError(e);
 		}
 	}
+	
+	private void checkBiohazardName(String oldName, String newName,ObjectCreationException exceptionHandler) {
+		if (!(oldName.equals(newName))) {
+			ensureUniqueBiohazardName(newName, exceptionHandler);
+		}
+		
+	}
+
 
 }

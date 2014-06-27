@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services.testdata;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError; 
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.events.PatchDistributionPr
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
+import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -247,6 +248,8 @@ public class DistributionProtocolTestData {
 
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventNullDate() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
+		event.getDetails().setTitle("DPProtocol");
+		event.getDetails().setShortTitle("DPP");
 		event.getDetails().setStartDate(null);
 		return event;
 	}
@@ -342,5 +345,35 @@ public class DistributionProtocolTestData {
 		return event;
 	}
 
+	public static DeleteDistributionProtocolEvent getDeleteDistributionProtocolEvent() {
+		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
+		event.setId(1L);
+		
+		return event;
+	}
+
+	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithDisableActivityStatus() {
+		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
+		event.getDetails().setActivityStatus("Disabled");
+		return event;
+	}
+	
+	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithoutDisableActivityStatus() {
+		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
+		event.getDetails().setActivityStatus("Active");
+		return event;
+	}
+
+	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithDisableActivityStatus() {
+		PatchDistributionProtocolEvent event = getPatchDistributionProtocolEvent();
+		event.getDetails().setActivityStatus("Disabled");
+		return event;
+	}
+
+	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithoutDisableActivityStatus() {
+		PatchDistributionProtocolEvent event = getPatchDistributionProtocolEvent();
+		event.getDetails().setActivityStatus("Active");
+		return event;
+	}
 	
 }

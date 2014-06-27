@@ -3,7 +3,8 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
 
-import com.ibm.icu.util.Calendar;
+import krishagni.catissueplus.util.CommonUtil;
+
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocol {
@@ -99,9 +100,9 @@ public class DistributionProtocol {
 	}
 
 	public void update(DistributionProtocol distributionProtocol) {
-		if (activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			this.setShortTitle(appendTimestamp(distributionProtocol.getActivityStatus(), distributionProtocol.getShortTitle()));
-			this.setTitle(appendTimestamp(distributionProtocol.getActivityStatus(), distributionProtocol.getTitle()));
+		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			this.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
+			this.setTitle(CommonUtil.appendTimestamp(distributionProtocol.getTitle()));
 		}
 		else {
 			this.setShortTitle(distributionProtocol.getShortTitle());
@@ -115,11 +116,7 @@ public class DistributionProtocol {
 		this.setActivityStatus(distributionProtocol.getActivityStatus());
 	}
 
-	private String appendTimestamp(String activityStatus, String title) {
-		Calendar cal = Calendar.getInstance();
-		title = title + "_" + cal.getTimeInMillis();
-
-		return title;
+	public void delete() {
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
-
 }

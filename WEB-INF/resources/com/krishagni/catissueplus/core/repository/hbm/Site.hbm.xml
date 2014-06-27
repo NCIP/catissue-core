@@ -32,8 +32,6 @@
         <property
             name="type"
             type="string"
-            update="true"
-            insert="true"
             column="TYPE"
             length="50"
         />
@@ -41,8 +39,6 @@
          <property
             name="activityStatus"
             type="string"
-            update="true"
-            insert="true"
             column="ACTIVITY_STATUS"
             length="50"
         />
@@ -50,8 +46,6 @@
          <property
             name="emailAddress"
             type="string"
-            update="true"
-            insert="true"
             column="EMAIL_ADDRESS"
             length="255"
          />

@@ -11,6 +11,8 @@ public class Biohazard {
 
 	private String type;
 
+	private String activityStatus;
+
 	public Long getId() {
 		return id;
 	}
@@ -43,10 +45,19 @@ public class Biohazard {
 		this.type = type;
 	}
 
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
+	}
+
 	public void update(Biohazard biohazard) {
 		this.setName(biohazard.getName());
 		this.setType(biohazard.getType());
 		this.setComment(biohazard.getComment());
+		this.setActivityStatus(biohazard.getActivityStatus());
 	}
 
 }

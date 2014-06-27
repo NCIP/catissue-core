@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.administrative.domain.Biohazard"
-        table="CATISSUE_BIOHAZARD"
+        table="OS_BIOHAZARD"
 		lazy="true" >
     
     <cache usage="read-write" />
@@ -19,20 +19,13 @@
             unsaved-value="null">
             
             <generator class="native">
-                <param name="sequence">CATISSUE_BIOHAZARD_SEQ</param>
-              <!--  
-                  To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-Biohazard.xml 
-                  containing the additional parameters and place it in your merge dir. 
-              --> 
+                <param name="sequence">OS_BIOHAZARD_SEQ</param>
             </generator>
         </id>
 
         <property
             name="name"
             type="string"
-            update="true"
-            insert="true"
             column="NAME"
             length="255"
             not-null="true"
@@ -41,8 +34,6 @@
         <property
             name="comment"
             type="string"
-            update="true"
-            insert="true"
             column="COMMENTS"
             length="500"
         />
@@ -50,10 +41,15 @@
         <property
             name="type"
             type="string"
-            update="true"
-            insert="true"
             column="TYPE"
             length="50"
+        />
+        
+          <property
+            name="activityStatus"
+            type="string"
+            column="ACTIVITY_STATUS"
+            length="20"
         />
 
 

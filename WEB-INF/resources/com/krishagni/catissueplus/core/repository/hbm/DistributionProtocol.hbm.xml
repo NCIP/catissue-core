@@ -26,8 +26,6 @@
     <many-to-one
     	name="principalInvestigator"
     	class="com.krishagni.catissueplus.core.administrative.domain.User"
-    	insert="true"
-    	update="true"
     	column="PRINCIPAL_INVESTIGATOR_ID"/>
     
      <property

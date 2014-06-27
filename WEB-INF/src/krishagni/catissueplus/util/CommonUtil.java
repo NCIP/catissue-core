@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import krishagni.catissueplus.handler.SpecimenHandler;
+import com.ibm.icu.util.Calendar;
 
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -144,4 +144,10 @@ public class CommonUtil
 		}
     	return (Exception)rootException;
     }
+    
+   public static String appendTimestamp(String name) {
+  		Calendar cal = Calendar.getInstance();
+  		name = name + "_" + cal.getTimeInMillis();
+  		return name;
+  	}
 }

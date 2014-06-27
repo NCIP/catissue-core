@@ -71,7 +71,7 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 
 	private void setEmailAddress(Site site, String email, ObjectCreationException exceptionHandler) {
-		
+
 		if (!isEmailValid(email)) {
 			exceptionHandler.addError(SiteErrorCode.INVALID_ATTR_VALUE, EMAIL_ADDRESS);
 			return;

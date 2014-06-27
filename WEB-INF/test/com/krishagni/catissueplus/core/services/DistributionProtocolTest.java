@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals; 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -19,7 +19,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
@@ -293,6 +295,34 @@ public class DistributionProtocolTest {
 	//				response.getErroneousFields()[0].getErrorMessage());
 	//
 	//	}
+
+	@Test
+		public void testUpdationWithDisabledActivityStatus() {
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+			UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+					.getUpdateDistributionProtocolEventWithDisableActivityStatus();
+			DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
+	
+			assertNotNull("response cannot be null", response);
+			assertEquals(EventStatus.OK, response.getStatus());
+	
+		}
+	
+	@Test
+	public void testUpdationWithoutDisabledActivityStatus() {
+	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+		UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+				.getUpdateDistributionProtocolEventWithoutDisableActivityStatus();
+		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+
+	}
+	
+	
 
 	@Test
 	public void testUpdationforDistributionProtocolWithEmptyInvestigatorName() {
@@ -612,6 +642,7 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
+	
 	@Test
 	public void testDistributionProtocolUpdationNullDateAndInvestigator() {
 
@@ -629,4 +660,61 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[1].getErrorMessage());
 	}
 
+	@Test
+	public void testForSuccessfulDistributionProtocolDeletion() {
+		DeleteDistributionProtocolEvent event = DistributionProtocolTestData.getDeleteDistributionProtocolEvent();
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testDistributionProtocolDeleteNullOldDistributionProtocolUsingTitle() {
+
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(null);
+		DeleteDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDeleteDistributionProtocolEvent();
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testPatchWithDisabledActivityStatus() {
+	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+				.getPatchDistributionProtocolEventWithDisableActivityStatus();
+		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+
+	}
+	
+	@Test
+	public void testPatchWithoutDisabledActivityStatus() {
+	
+	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+				.getPatchDistributionProtocolEventWithoutDisableActivityStatus();
+		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+
+	}
+	
+	@Test
+	public void testDistributionProtocolDeletionWithServerErr() {
+
+		doThrow(new RuntimeException()).when(distributionProtocolDao).saveOrUpdate(any(DistributionProtocol.class));
+
+		DeleteDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDeleteDistributionProtocolEvent();
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
 }

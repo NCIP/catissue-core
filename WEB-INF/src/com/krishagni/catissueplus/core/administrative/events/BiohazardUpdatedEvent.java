@@ -9,6 +9,8 @@ public class BiohazardUpdatedEvent extends ResponseEvent {
 
 	private Long id;
 
+	private String name;
+
 	private BiohazardDetails biohazardDetails;
 
 	public Long getId() {
@@ -17,6 +19,14 @@ public class BiohazardUpdatedEvent extends ResponseEvent {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public BiohazardDetails getBiohazardDetails() {
@@ -33,7 +43,14 @@ public class BiohazardUpdatedEvent extends ResponseEvent {
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}
-	
+
+	public static BiohazardUpdatedEvent notFound(String name) {
+		BiohazardUpdatedEvent resp = new BiohazardUpdatedEvent();
+		resp.setName(name);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
+
 	public static BiohazardUpdatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
 		BiohazardUpdatedEvent resp = new BiohazardUpdatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);

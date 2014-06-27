@@ -9,6 +9,8 @@ public class UpdateBiohazardEvent extends RequestEvent {
 
 	private Long id;
 
+	private String name;
+
 	public BiohazardDetails getBiohazardDetails() {
 		return biohazardDetails;
 	}
@@ -23,6 +25,14 @@ public class UpdateBiohazardEvent extends RequestEvent {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

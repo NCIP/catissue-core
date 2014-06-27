@@ -1,3 +1,4 @@
+
 package com.krishagni.catissueplus.rest.controller;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
@@ -31,58 +32,67 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
-
 @Controller
 @RequestMapping("/biohazards")
 public class BiohazardController {
-	
+
 	private static final String PATCH_BIOHAZARD = "patch biohazard";
 
 	@Autowired
-	private BiohazardService biohazardService;
-	
+	private BiohazardService biohazardService; //Svc
+
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-  @ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public BiohazardDetails createBiohazard(@RequestBody BiohazardDetails biohazardDetails)
-	{
+	public BiohazardDetails createBiohazard(@RequestBody BiohazardDetails biohazardDetails) {
 		CreateBiohazardEvent biohazardEvent = new CreateBiohazardEvent();
 		biohazardEvent.setBiohazardDetails(biohazardDetails);
 		biohazardEvent.setSessionDataBean(getSession());
 		BiohazardCreatedEvent response = biohazardService.createBiohazard(biohazardEvent);
-		
-		if(response.getStatus().equals(EventStatus.OK))
-		{
+
+		if (response.getStatus().equals(EventStatus.OK)) {
 			return response.getBiohazardDetails();
 		}
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public BiohazardDetails updateBiohazard(@PathVariable Long id, @RequestBody BiohazardDetails details )
-	{
+	public BiohazardDetails updateBiohazard(@PathVariable Long id, @RequestBody BiohazardDetails details) {
 		UpdateBiohazardEvent event = new UpdateBiohazardEvent();
 		event.setBiohazardDetails(details);
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(event);
-		if(response != null)
-		{
+		if (response != null) {
 			return response.getBiohazardDetails();
 		}
 		return null;
 	}
-	
-	@RequestMapping(method = RequestMethod.PATCH,value="/{id}")
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/name={name}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public BiohazardDetails patchBiohazard(@PathVariable long id,@RequestBody Map<String,Object> values)
-	{
+	public BiohazardDetails updateBiohazard(@PathVariable String name, @RequestBody BiohazardDetails details) {
+		UpdateBiohazardEvent event = new UpdateBiohazardEvent();
+		event.setBiohazardDetails(details);
+		event.setName(name);
+		event.setSessionDataBean(getSession());
+		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(event);
+		if (response != null) {
+			return response.getBiohazardDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public BiohazardDetails patchBiohazard(@PathVariable long id, @RequestBody Map<String, Object> values) {
 		PatchBiohazardEvent event = new PatchBiohazardEvent();
 		event.setId(id);
 		event.setSessionDataBean(getSession());
@@ -102,8 +112,33 @@ public class BiohazardController {
 		}
 		return null;
 	}
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public BiohazardDetails patchBiohazard(@PathVariable String name, @RequestBody Map<String, Object> values) {
+		PatchBiohazardEvent event = new PatchBiohazardEvent();
+		event.setName(name);
+		event.setSessionDataBean(getSession());
+		BiohazardDetails details = new BiohazardDetails();
+		try {
+			BeanUtils.populate(details, values);
+		}
+		catch (Exception e) {
+			reportError(BiohazardErrorCode.BAD_REQUEST, PATCH_BIOHAZARD);
+		}
+		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
+		event.setDetails(details);
+
+		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getBiohazardDetails();
+		}
+		return null;
+	}
+
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}
-  
+
 }

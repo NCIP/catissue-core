@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import krishagni.catissueplus.util.CommonUtil;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
@@ -14,6 +16,7 @@ import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SiteServiceImpl implements SiteService {
 
@@ -113,6 +116,11 @@ public class SiteServiceImpl implements SiteService {
 			Site site = siteFactory.patchSite(oldSite, event.getSiteDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			checkSiteName(site.getName(), event.getSiteDetails().getName(), exceptionHandler);
+			
+			if (event.getSiteDetails().isActivityStatusModified()) {
+				checkActivityStatus(site);
+			}
+			
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getSiteDao().saveOrUpdate(site);
@@ -123,6 +131,13 @@ public class SiteServiceImpl implements SiteService {
 		}
 		catch (Exception e) {
 			return SiteUpdatedEvent.serverError(e);
+		}
+	}
+
+	private void checkActivityStatus(Site site) {
+		if(site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus()))
+		{
+			site.setName(CommonUtil.appendTimestamp(site.getName()));
 		}
 	}
 

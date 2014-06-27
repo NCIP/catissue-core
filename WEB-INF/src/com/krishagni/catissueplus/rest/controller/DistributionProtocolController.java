@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
@@ -140,6 +142,20 @@ public class DistributionProtocolController {
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteDistributionProtocol(@PathVariable Long id) {
+		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getMessage();
 		}
 		return null;
 	}

@@ -1,11 +1,15 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import krishagni.catissueplus.util.CommonUtil;
+
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
@@ -15,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.services.DistributionProto
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
 
@@ -128,7 +133,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 			checkShortTitle(oldShortTitle, reqEvent.getDetails().getShortTitle(), exceptionHandler);
 			checkTitle(oldTitle, reqEvent.getDetails().getTitle(), exceptionHandler);
-
+			if(reqEvent.getDetails().isDistributionProtocolActivityStatusModified())
+			{
+				checkActivityStatus(distributionProtocol);
+			}
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(distributionProtocol);
@@ -141,6 +149,34 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		catch (Exception ex) {
 			return DistributionProtocolPatchedEvent.serverError(ex);
 		}
+	}
+	
+
+	@Override
+	@PlusTransactional
+	public DistributionProtocolDeletedEvent deleteDistributionProtocol(DeleteDistributionProtocolEvent event) {
+		try {
+			DistributionProtocol oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(event.getId());
+			if (oldDistributionProtocol == null) {
+				return DistributionProtocolDeletedEvent.notFound(event.getId());
+			}
+			oldDistributionProtocol.delete();
+			daoFactory.getDistributionProtocolDao().saveOrUpdate(oldDistributionProtocol);
+			return DistributionProtocolDeletedEvent.ok();
+		}
+		catch (Exception e) {
+			return DistributionProtocolDeletedEvent.serverError(e);
+		}
+	}
+
+
+	private void checkActivityStatus(DistributionProtocol distributionProtocol) {
+		if(distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus()))
+		{
+			distributionProtocol.setTitle(CommonUtil.appendTimestamp(distributionProtocol.getTitle()));
+			distributionProtocol.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
+		}
+		
 	}
 
 	private void checkTitle(String oldTitle, String newTitle, ObjectCreationException exceptionHandler) {
