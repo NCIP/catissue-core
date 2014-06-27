@@ -47,7 +47,7 @@ public class StorageContainerTestData {
 	public static final String STORAGE_CONTAINER = "storage container";
 
 	public static final String PATCH_CONTAINER = "patch container";
-	
+
 	public static final String ONE_DIMENSION_CAPACITY = "one dimension capacity";
 
 	public static final String TWO_DIMENSION_CAPACITY = "two dimension capacity";
@@ -114,25 +114,31 @@ public class StorageContainerTestData {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		return event;
 	}
-	
+
+	public static CreateStorageContainerEvent getCreateStorageContainerEventWithName() {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
+		event.getDetails().setName("Container1");
+		return event;
+	}
+
 	public static CreateStorageContainerEvent getCreateStorageContainerEventForNullSite() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		event.getDetails().setParentContainerName(null);
 		return event;
 	}
-	
+
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithoutCpRestrict() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		event.getDetails().setHoldsCPTitles(new HashSet<String>());
 		return event;
 	}
-	
+
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithWrongOneDimensionLabel() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		event.getDetails().setOneDimentionLabelingScheme("Roman");
 		return event;
 	}
-	
+
 	public static CreateStorageContainerEvent getCreateStorageContainerEventWithWrongTwoDimensionLabel() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		event.getDetails().setTwoDimentionLabelingScheme("Alphbets");
@@ -153,7 +159,6 @@ public class StorageContainerTestData {
 		details.setBarcode("2-edpwesdadas-343");
 		details.setOneDimensionCapacity(10);
 		details.setTwoDimensionCapacity(10);
-		details.setName("Container1");
 		details.setComments("Blah blah blah");
 		details.setParentContainerName("Freezer");
 		details.setSiteName("My Site");
@@ -165,7 +170,7 @@ public class StorageContainerTestData {
 		details.setTwoDimentionLabelingScheme("Numbers");
 		return details;
 	}
-	
+
 	private static UserInfo getUserInfo() {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setLoginName("admin@admin.com");
@@ -190,7 +195,7 @@ public class StorageContainerTestData {
 		container.setCreatedBy(getUser(1l));
 		return container;
 	}
-	
+
 	public static StorageContainer getStorageContainerWithDiffSite(Long l) {
 		StorageContainer container = getStorageContainer(1l);
 		container.getSite().setName("abc");
@@ -205,6 +210,14 @@ public class StorageContainerTestData {
 
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEvent() {
 		UpdateStorageContainerEvent event = new UpdateStorageContainerEvent(getStorageContainerDetails(), 1l);
+		event.getDetails().setName("Container1");
+		return event;
+	}
+
+	public static UpdateStorageContainerEvent getUpdateStorageContainerEventWithNullBarcode() {
+		UpdateStorageContainerEvent event = new UpdateStorageContainerEvent(getStorageContainerDetails(), 1l);
+		event.getDetails().setName("Container1");
+		event.getDetails().setBarcode(null);
 		return event;
 	}
 
@@ -239,7 +252,7 @@ public class StorageContainerTestData {
 		event.setStorageContainerDetails(details);
 		return event;
 	}
-	
+
 	public static PatchStorageContainerEvent nonPatchData() {
 		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
 		event.setStorageContainerId(1l);
@@ -250,7 +263,7 @@ public class StorageContainerTestData {
 
 	private static Map<String, Object> getStorageContainerPatchAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
-		attributes.put("name", "Container");
+		//	attributes.put("name", "Container");
 		attributes.put("barcode", "a-essdsds-222");
 		attributes.put("siteName", "My Site");
 		attributes.put("holdsCPTitles", getCpNames());
@@ -258,7 +271,7 @@ public class StorageContainerTestData {
 		attributes.put("comments", "blah blah");
 		attributes.put("tempratureInCentigrade", 22.22);
 		attributes.put("parentContainerName", "Freezer");
-		attributes.put("holdsSpecimenTypes", getSpecimenTypes());	
+		attributes.put("holdsSpecimenTypes", getSpecimenTypes());
 		attributes.put("createdBy", getUserInfo());
 		attributes.put("oneDimensionCapacity", 20);
 		attributes.put("twoDimensionCapacity", 20);
@@ -296,7 +309,7 @@ public class StorageContainerTestData {
 	public static UpdateStorageContainerEvent getUpdateStorageContainerEventWithChangeInName() {
 		UpdateStorageContainerEvent event = getUpdateStorageContainerEvent();
 		event.getDetails().setName("Dsda");
-		event.getDetails().setBarcode("sda434-434");		
+		event.getDetails().setBarcode("sda434-434");
 		return event;
 	}
 
@@ -317,7 +330,7 @@ public class StorageContainerTestData {
 		event.getDetails().setTwoDimentionLabelingScheme(null);
 		return event;
 	}
-	
+
 	public static CreateStorageContainerEvent getUpdateStorageContainerEventForNullOneDimentionCapacity() {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		event.getDetails().setOneDimentionLabelingScheme(null);
