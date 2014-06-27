@@ -1,10 +1,11 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -27,14 +28,19 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDis
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
 import com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl;
+import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
+import com.krishagni.catissueplus.core.barcodegenerator.impl.StorageContainerBarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
+import com.krishagni.catissueplus.core.labelgenerator.impl.StorageContainerLabelGenerator;
 import com.krishagni.catissueplus.core.services.testdata.StorageContainerTestData;
+import com.krishagni.catissueplus.core.tokens.factory.TokenFactory;
 
 public class StorageContainerTest {
 
@@ -52,15 +58,22 @@ public class StorageContainerTest {
 
 	@Mock
 	SiteDao siteDao;
-	
+
 	private StorageContainerFactory storageContainerFactory;
 
 	private StorageContainerService storageContainerService;
 
+	private LabelGenerator<StorageContainer> containerLabelGenerator;
+
+	private BarcodeGenerator<StorageContainer> containerBarcodeGenerator;
+
+	@Mock
+	TokenFactory tokenFactory;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		
+
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);
@@ -70,13 +83,25 @@ public class StorageContainerTest {
 		storageContainerFactory = new StorageContainerFactoryImpl();
 		((StorageContainerFactoryImpl) storageContainerFactory).setDaoFactory(daoFactory);
 		((StorageContainerServiceImpl) storageContainerService).setStorageContainerFactory(storageContainerFactory);
+		containerLabelGenerator = new StorageContainerLabelGenerator();
+		((StorageContainerLabelGenerator) containerLabelGenerator).setTokenFactory(tokenFactory);
+		((StorageContainerServiceImpl) storageContainerService).setContainerLabelGenerator(containerLabelGenerator);
 
-		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
+		containerBarcodeGenerator = new StorageContainerBarcodeGenerator();
+		((StorageContainerBarcodeGenerator) containerBarcodeGenerator).setTokenFactory(tokenFactory);
+		((StorageContainerServiceImpl) storageContainerService).setContainerBarcodeGenerator(containerBarcodeGenerator);
+
+		when(tokenFactory.getTokenValue(anyString(), anyObject())).thenReturn("1");
+		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(
+				StorageContainerTestData.getStorageContainer(1l));
 		when(siteDao.getSite(anyString())).thenReturn(StorageContainerTestData.getSite());
-		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(StorageContainerTestData.getUser(1l));
+		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(
+				StorageContainerTestData.getUser(1l));
 		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(StorageContainerTestData.getCp());
-		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
-		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
+		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(
+				StorageContainerTestData.getStorageContainer(1l));
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(
+				StorageContainerTestData.getStorageContainer(1l));
 		when(storageContainerDao.isUniqueBarcode(anyString())).thenReturn(Boolean.TRUE);
 		when(storageContainerDao.isUniqueContainerName(anyString())).thenReturn(Boolean.TRUE);
 	}
@@ -89,9 +114,20 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainerDto.getName());
+		assertEquals(reqEvent.getDetails().getBarcode(), createdStorageContainerDto.getBarcode());
 	}
-	
+
+	@Test
+	public void testStorageContainerAutoGenLabel() {
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventWithName();
+		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(StorageContainerErrorCode.AUTO_GENERATED_LABEL.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+	}
+
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithNullParent() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -101,7 +137,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainerDto.getName());
+		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
 	}
 
 	@Test
@@ -111,9 +147,10 @@ public class StorageContainerTest {
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithNullCp() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -121,9 +158,10 @@ public class StorageContainerTest {
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithIsEmptyCp() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventWithoutCpRestrict();
@@ -132,29 +170,31 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainerDto.getName());	
+		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
 	}
-	
+
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithEmptyOneDimensionalLabel() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventWithWrongOneDimensionLabel();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getCreateStorageContainerEventWithWrongOneDimensionLabel();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainerDto.getName());	
+		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
 	}
-	
+
 	@Test
 	public void testForSuccessfulStorageContainerCreationWithEmptyTwoDimensionalLabel() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventWithWrongTwoDimensionLabel();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getCreateStorageContainerEventWithWrongTwoDimensionLabel();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainerDto = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainerDto.getName());	
+		assertEquals(reqEvent.getDetails().getId(), createdStorageContainerDto.getId());
 	}
 
 	@Test
@@ -162,37 +202,39 @@ public class StorageContainerTest {
 		when(storageContainerDao.isUniqueContainerName(anyString())).thenReturn(Boolean.FALSE);
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
-		
+
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.STORAGE_CONTAINER, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.DUPLICATE_CONTAINER_NAME.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.DUPLICATE_CONTAINER_NAME.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
-	public void testStorageContainerCreationWithEmptyName() {
+	public void testStorageContainerCreationWithDefaultName() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventWithEmptyName();
 		when(storageContainerDao.isUniqueContainerName(anyString())).thenReturn(Boolean.TRUE);
 
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
-		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(1, response.getErroneousFields().length);
-		assertEquals(StorageContainerTestData.CONTAINER_NAME, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(response.getStorageContainerDetails().getName(), "1");
+
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithNullSiteNameAndParent() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventWithNullSiteNameAndParent();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getCreateStorageContainerEventWithNullSiteNameAndParent();
 		when(storageContainerDao.isUniqueContainerName(anyString())).thenReturn(Boolean.TRUE);
 
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.SITE_CONTAINER, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidUser() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -202,9 +244,10 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.USER, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidCP() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -213,11 +256,12 @@ public class StorageContainerTest {
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-		
+
 		assertEquals(StorageContainerTestData.COLLECTION_PROTOCOL, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidStorageContainer() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -227,9 +271,10 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.STORAGE_CONTAINER, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithDuplicateBarcode() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -239,9 +284,10 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.BARCODE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidParent() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
@@ -251,55 +297,63 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.STORAGE_CONTAINER, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidOneDimentionCapcity() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventForOneDimentionCapacity();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getCreateStorageContainerEventForOneDimentionCapacity();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.ONE_DIMENSION_CAPACITY, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidTwoDimentionCapcity() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventForTwoDimentionCapacity();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getCreateStorageContainerEventForTwoDimentionCapacity();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.TWO_DIMENSION_CAPACITY, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithInvalidParentSiteCombination() {
-		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(StorageContainerTestData.getStorageContainerWithDiffSite(1l));
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(
+				StorageContainerTestData.getStorageContainerWithDiffSite(1l));
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(StorageContainerTestData.SITE, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithNullbarcodeAndName() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEventForNullBarcodeAndName();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getCreateStorageContainerEventForNullBarcodeAndName();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 
-		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(response.getStorageContainerDetails().getName(), response.getStorageContainerDetails().getBarcode());
 	}
 
 	@Test
 	public void testStorageContainerCreationWithServerErr() {
 		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getCreateStorageContainerEvent();
-		
+
 		doThrow(new RuntimeException()).when(storageContainerDao).saveOrUpdate(any(StorageContainer.class));
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
@@ -313,10 +367,32 @@ public class StorageContainerTest {
 		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 		StorageContainerDetails createdStorageContainer = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainer.getName());
+		assertEquals(reqEvent.getDetails().getBarcode(), createdStorageContainer.getBarcode());
 		assertNotNull(createdStorageContainer.getSiteName());
 	}
-	
+
+	@Test
+	public void testForUpdateStorageContainerErrorAutoGenLabel() {
+		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEvent();
+		// update name with new as name is auto generated it throws error 
+		reqEvent.getDetails().setName("con1");
+		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(StorageContainerErrorCode.AUTO_GENERATED_LABEL.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+
+	}
+
+	@Test
+	public void testForUpdateStorageContainerWithBlankBarcode() {
+		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEventWithNullBarcode();
+		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(StorageContainerErrorCode.MISSING_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
+
+	}
+
 	@Test
 	public void testForStorageContainerUpdateWithInvalidContainer() {
 		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEvent();
@@ -325,40 +401,33 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
-	@Test
-	public void testForSuccessfulStorageContainerUpdateWithChangeInName() {
-		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEventWithChangeInName();
-
-		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
-		assertEquals(EventStatus.OK, response.getStatus());
-		StorageContainerDetails createdStorageContainer = response.getStorageContainerDetails();
-		assertEquals(reqEvent.getDetails().getName(), createdStorageContainer.getName());
-		assertNotNull(createdStorageContainer.getSiteName());
-	}
 
 	@Test
 	public void testStorageContainerUpdationWithInvalidTwoDimentionCapcity() {
-		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEventForTwoDimentionCapacity();
+		UpdateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getUpdateStorageContainerEventForTwoDimentionCapacity();
 		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
 
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(StorageContainerTestData.TWO_DIMENSION_CAPACITY, response.getErroneousFields()[0].getFieldName());
-		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(StorageContainerErrorCode.INVALID_ATTR_VALUE.message(),
+				response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithNullTwoDimentionCapcity() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEventForNullTwoDimentionCapacity();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getUpdateStorageContainerEventForNullTwoDimentionCapacity();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testStorageContainerCreationWithNullOneDimentionCapcity() {
-		CreateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEventForNullOneDimentionCapacity();
+		CreateStorageContainerEvent reqEvent = StorageContainerTestData
+				.getUpdateStorageContainerEventForNullOneDimentionCapacity();
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
@@ -370,8 +439,9 @@ public class StorageContainerTest {
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
+
 	}
-	
+
 	@Test
 	public void testSuccessfullPatchStorageContainer() {
 		PatchStorageContainerEvent reqEvent = StorageContainerTestData.getPatchData();
@@ -379,7 +449,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSuccessfullPatchStorageContainerForParentContainer() {
 		PatchStorageContainerEvent reqEvent = StorageContainerTestData.getPatchDataToSetParentContainer();
@@ -387,7 +457,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPatchStorageContainer() {
 		PatchStorageContainerEvent reqEvent = StorageContainerTestData.nonPatchData();
@@ -395,7 +465,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPatchStorageContainerWithInvalidAttribute() {
 		when(collectionProtocolDao.getCPByTitle(anyString())).thenReturn(null);
@@ -404,7 +474,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals("Please resolve the highlighted errors.", response.getMessage());
 	}
-	
+
 	@Test
 	public void testPatchStorageContainerInvalidStorageContainer() {
 		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(null);
@@ -413,7 +483,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPatchStorageContainerServerError() {
 		PatchStorageContainerEvent reqEvent = StorageContainerTestData.getPatchData();
@@ -422,7 +492,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testUpdatetorageContainerServerError() {
 		UpdateStorageContainerEvent reqEvent = StorageContainerTestData.getUpdateStorageContainerEvent();
@@ -431,7 +501,7 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testForInvalidStorageContainerDisable() {
 		when(daoFactory.getStorageContainerDao().getStorageContainer(anyLong())).thenReturn(null);
@@ -463,4 +533,3 @@ public class StorageContainerTest {
 	}
 
 }
-	

@@ -258,6 +258,28 @@
 								</row>
 							</subForm>
 						</row>
+
+						<row>
+							<subForm>
+								<name>specimenShipment</name>
+								<udn>specimenShipment</udn>
+								<caption>Specimen Shipment</caption>
+								<table>SPECIMEN_SHIPMENT_VIEW</table>
+								<foreignKey>SPECIMEN_ID</foreignKey>
+								<parentKey>IDENTIFIER</parentKey>
+
+								<row>
+									<subForm>
+										<name>shipment</name>
+										<udn>shipment</udn>
+										<caption>Shipment</caption>
+										<table>CATISSUE_BASE_SHIPMENT</table>
+										<foreignKey>IDENTIFIER</foreignKey>
+										<parentKey>SHIPMENT_ID</parentKey>
+									</subForm>
+								</row>
+							</subForm>
+						</row>
 					</subForm>
 				</row>
 			</subForm>

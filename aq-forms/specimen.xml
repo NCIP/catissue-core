@@ -167,8 +167,203 @@
                                 <parentKey>IDENTIFIER</parentKey>
                         </subForm>
                 </row>
+		<row>
+                        <subForm>
+                                <name>specimenOrders</name>
+                                <udn>specimenOrders</udn>
+                                <caption>Specimen Orders</caption>
+                                <table>SPECIMEN_ORDER_VIEW</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>order</name>
+						<udn>order</udn>
+						<caption>Orders</caption>
+						<table>CATISSUE_ORDER</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>ORDER_ID</parentKey>
+					</subForm>
+				</row>
+                        </subForm>
+                </row>
+		<row>
+			<subForm>
+				<name>specimenShipment</name>
+				<udn>specimenShipment</udn>
+				<caption>Specimen Shipment</caption>
+				<table>SPECIMEN_SHIPMENT_VIEW</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>shipment</name>
+						<udn>shipment</udn>
+						<caption>Shipment</caption>
+						<table>CATISSUE_BASE_SHIPMENT</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>SHIPMENT_ID</parentKey>
+					</subForm>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+                                <name>parentSpecimen</name>
+                                <udn>parentSpecimen</udn>
+                                <caption>Parent Specimens</caption>
+                                <table>CATISSUE_SPECIMEN</table>
+                                <foreignKey>IDENTIFIER</foreignKey>
+                                <parentKey>PARENT_SPECIMEN_ID</parentKey>
 
-                <row>
+                                <row>
+					<textField>
+						<name>parentLabel</name>
+						<udn>parentLabel</udn>
+						<caption>Parent Specimen Label</caption>
+						<column>LABEL</column>
+					</textField>	
+                                </row>
+                        </subForm>
+                </row>
+		<row>
+			<textField>
+				<name>comments</name>
+				<udn>comments</udn>
+				<caption>Comments</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
+		<row>
+			<subForm>
+                                <name>externalIdentifiers</name>
+                                <udn>externalIdentifiers</udn>
+                                <caption>External Identifiers</caption>
+                                <table>CATISSUE_EXTERNAL_IDENTIFIER</table>
+                                <foreignKey>SPECIMEN_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+
+                                <row>
+					<textField>
+						<name>externalIdentifierName</name>
+						<udn>externalIdentifierName</udn>
+						<caption>External Identifier Name</caption>
+						<column>NAME</column>
+						<maxLength>255</maxLength>
+					</textField>	
+                                </row>
+                                <row>
+					<textField>
+						<name>externalIdentifierValue</name>
+						<udn>externalIdentifierValue</udn>
+						<caption>External Identifier Value</caption>
+						<column>VALUE</column>
+						<maxLength>255</maxLength>
+					</textField>	
+                                </row>
+                        </subForm>
+                </row>
+		<row>
+                        <booleanCheckBox>
+                                <name>isAvailable</name>
+                                <udn>isAvailable</udn>
+                                <caption>Is Availabe</caption>
+                                <column>AVAILABLE</column>
+                        </booleanCheckBox>
+                </row>
+		<row>
+			<subForm>
+				<name>specimenPosition</name>
+				<udn>specimenPosition</udn>
+				<caption>Specimen Position</caption>
+				<table>CATISSUE_SPECIMEN_POSITION</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>containers</name>
+						<udn>containers</udn>
+						<caption>Containers</caption>
+						<table>CATISSUE_CONTAINER</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>CONTAINER_ID</parentKey>
+						<row>
+							<textField>
+								<name>containerName</name>
+								<udn>containerName</udn>
+								<caption>Container Name</caption>
+								<column>NAME</column>
+								<maxLength>255</maxLength>
+							</textField>							
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<subForm>
+						<name>abstractPosition</name>
+						<udn>abstractPosition</udn>
+						<caption>Abstract Position</caption>
+						<table>CATISSUE_ABSTRACT_POSITION</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>IDENTIFIER</parentKey>
+						<row>
+							<textField>
+								<name>positionDimentionOneString</name>
+								<udn>positionDimentionOneString</udn>
+								<caption>Position Dimention One</caption>
+								<column>POSITION_DIMENSION_ONE_STRING</column>
+								<maxLength>255</maxLength>
+							</textField>							
+							<textField>
+								<name>positionDimentionTwoString</name>
+								<udn>positionDimentionTwoString</udn>
+								<caption>Position Dimention Two</caption>
+								<column>POSITION_DIMENSION_TWO_STRING</column>
+								<maxLength>255</maxLength>
+							</textField>							
+						</row>
+					</subForm>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>specimenBiohazard</name>
+				<udn>specimenBiohazard</udn>
+				<caption>Specimen Biohazard</caption>
+				<table>CATISSUE_SPECIMEN_BIOHZ_REL</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>biohazard</name>
+						<udn>biohazard</udn>
+						<caption>Biohazard</caption>
+						<table>CATISSUE_BIOHAZARD</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>BIOHAZARD_ID</parentKey>
+						<row>
+							<textField>
+								<name>biohazardName</name>
+								<udn>biohazardName</udn>
+								<caption>Biohazard Name</caption>
+								<column>NAME</column>
+								<maxLength>255</maxLength>
+							</textField>
+
+							<textField>
+								<name>biohazardType</name>
+								<udn>biohazardType</udn>
+								<caption>Biohazard Type</caption>
+								<column>TYPE</column>
+								<maxLength>50</maxLength>
+							</textField>							
+						</row>
+					</subForm>
+				</row>
+			</subForm>
+		</row>
+  		<row>
                         <subForm>
                                 <name>extensions</name>
                                 <udn>extensions</udn>

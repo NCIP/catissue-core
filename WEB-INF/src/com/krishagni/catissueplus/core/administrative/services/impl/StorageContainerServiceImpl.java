@@ -134,7 +134,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			ObjectCreationException exceptionHandler) {
 		if (oldStorageContainer.getBarcode() != null && !oldStorageContainer.getName().equals(storageContainer.getName())) {
 			ensureUniqueName(storageContainer.getName(), exceptionHandler);
-			
+
 		}
 	}
 
@@ -223,7 +223,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			}
 			container.setName(name);
 		}
-		else if (!oldContainer.getName().equalsIgnoreCase(container.getName())) {
+		else if (!oldContainer.getName().equalsIgnoreCase(name)) {
 			exceptionHandler.addError(StorageContainerErrorCode.AUTO_GENERATED_LABEL, CONTAINER_NAME);
 			return;
 		}
