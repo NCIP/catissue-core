@@ -105,7 +105,7 @@ angular.module('plus.services', [])
       },
 
       getAuditLogs: function(queryId, startAt, maxRecs) {
-        return Utility.get($http, savedQueriesUrl + queryId + "/audit-logs", successfn, params);
+        return Utility.get($http, savedQueriesUrl + queryId + "/audit-logs", successfn);
       },
 
       getAllAuditLogs: function(type, countReq, startAt, maxRecs) {
