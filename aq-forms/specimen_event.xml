@@ -5,6 +5,51 @@
 		<table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
 		<row>
 			<subForm>
+				<name>collectedBy</name>
+				<udn>collectedBy</udn>
+				<caption>Collected By</caption>
+				<table>USER_VIEW</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>USER_ID</parentKey>
+
+				<row>					
+					<textField>
+						<name>collectorEmailAddress</name>
+						<udn>collectorEmailAddress</udn>
+						<caption>Collector Email Address</caption>
+						<column>EMAIL_ADDRESS</column>
+					</textField>
+
+					
+					<textField>
+						<name>collectorFirstName</name>
+						<udn>collectorFirstName</udn>
+						<caption>Collector First Name</caption>
+						<column>FIRST_NAME</column>
+					</textField>
+					
+					<textField>
+						<name>collectorLastName</name>
+						<udn>collectorLastName</udn>
+						<caption>Collector Last Name</caption>
+						<column>LAST_NAME</column>
+					</textField>
+										
+					<dropDown>
+						<name>department</name>
+						<udn>department</udn>
+						<caption>Department</caption>
+						<column>DEPARTMENT_NAME</column>
+						<options>
+							<sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<subForm>
 				<name>FixedEvent</name>
 				<udn>FixedEvent</udn>
 				<caption>Fixed Event</caption>
@@ -39,6 +84,34 @@
 				</row>
 			</subForm>
 		</row>
+
+		<row>
+			<textField>
+				<name>comments</name>
+				<udn>comments</udn>
+				<caption>Comments</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
+
+		<row>
+			<datePicker>
+				<name>specimenTransferTime</name>
+				<udn>specimenTransferTime</udn>
+				<caption>Specimen Transfer Time</caption>
+				<column>EVENT_TIMESTAMP</column>
+			</datePicker>
+		</row>
+
+		<row>
+			<datePicker>
+				<name>specimenThawTime</name>
+				<udn>specimenThawTime</udn>
+				<caption>Specimen Thaw Time</caption>
+				<column>EVENT_TIMESTAMP</column>
+			</datePicker>
+		</row>
+
 		<row>
 			<subForm>
 				<name>FrozenEvent</name>

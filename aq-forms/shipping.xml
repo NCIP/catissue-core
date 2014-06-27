@@ -1,0 +1,149 @@
+<form>
+	<view>
+		<name>Shipping</name>
+		<caption>Shipping</caption>
+		<table>CATISSUE_BASE_SHIPMENT</table>
+		
+		<row>
+			<numberField>
+				<name>id</name>
+				<udn>id</udn>
+				<caption>Identifier</caption>
+				<column>IDENTIFIER</column>
+			</numberField>
+		</row>
+
+		<row>
+			<textField>
+				<name>label</name>
+				<udn>label</udn>
+				<caption>Label</caption>
+				<column>LABEL</column>
+			</textField>
+		</row>
+		
+		<row>
+			<subForm>
+				<name>sites</name>
+				<udn>sites</udn>
+				<caption>Sites</caption>
+				<table>CATISSUE_SITE</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>SENDER_SITE_ID</parentKey>
+
+				<row>					
+					<dropDown>
+						<name>senderSiteName</name>
+						<udn>senderSiteName</udn>
+						<caption>Sender Site Name</caption>
+						<column>NAME</column>
+						<options>
+							<sql>select distinct name from CATISSUE_SITE</sql>
+						</options>
+					</dropDown>
+	
+					<dropDown>
+						<name>recieverSiteName</name>
+						<udn>recieverSiteName</udn>
+						<caption>Reciever Site Name</caption>
+						<column>NAME</column>
+						<options>
+							<sql>select distinct name from CATISSUE_SITE</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		
+		<row>
+			<subForm>
+				<name>sender</name>
+				<udn>sender</udn>
+				<caption>Sender</caption>
+				<table>USER_VIEW</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>SENDER_USER_ID</parentKey>
+
+				<row>					
+		
+					<textField>
+						<name>firstName</name>
+						<udn>firstName</udn>
+						<caption>Sender First Name</caption>
+						<column>FIRST_NAME</column>
+					</textField>
+					
+					<textField>
+						<name>lastName</name>
+						<udn>lastName</udn>
+						<caption>Sender Last Name</caption>
+						<column>LAST_NAME</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<datePicker>
+				<name>sendDate</name>
+				<udn>sendDate</udn>
+				<caption>Sent On</caption>
+				<column>SEND_DATE</column>
+			</datePicker>
+		</row>
+
+		<row>
+			<subForm>
+				<name>shipment</name>
+				<udn>shipment</udn>
+				<caption>Shipment</caption>
+				<table>CATISSUE_SHIPMENT</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>							
+					<textField>
+						<name>barcode</name>
+						<udn>barcode</udn>
+						<caption>Barcode</caption>
+						<column>BARCODE</column>
+						<maxLength>255</maxLength>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+		
+		<row>
+			<textField>
+				<name>senderComments</name>
+				<udn>senderComments</udn>
+				<caption>Sender Comments</caption>
+				<column>SENDER_COMMENTS</column>
+			</textField>
+		</row>
+
+				<row>
+			<textField>
+				<name>recieverComments</name>
+				<udn>recieverComments</udn>
+				<caption>Reciever Comments</caption>
+				<column>RECEIVER_COMMENTS</column>
+			</textField>
+		</row>
+
+		<row>
+			<dropDown>
+				<name>status</name>
+				<udn>status</udn>
+				<caption>Status</caption>
+				<column>ACTIVITY_STATUS</column>
+				<options>
+					<option><value>Processed</value></option>
+					<option><value>Received</value></option>
+					<option><value>In Transit</value></option>
+					<option><value>In Progress</value></option>
+				</options>
+			</dropDown>
+		</row>
+	</view>
+</form>

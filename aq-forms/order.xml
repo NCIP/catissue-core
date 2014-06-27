@@ -1,0 +1,195 @@
+<form>
+	<view>
+		<name>Order</name>
+		<caption>Order</caption>
+		<table>CATISSUE_ORDER</table>
+		
+		<row>
+			<numberField>
+				<name>id</name>
+				<udn>id</udn>
+				<caption>Identifier</caption>
+				<column>IDENTIFIER</column>
+			</numberField>
+		</row>
+
+		<row>
+			<textField>
+				<name>orderName</name>
+				<udn>orderName</udn>
+				<caption>Name</caption>
+				<column>NAME</column>
+			</textField>
+		</row>
+		
+		<row>
+			<subForm>
+				<name>distributionProtocol</name>
+				<udn>distributionProtocol</udn>
+				<caption>Distribution Protocol</caption>
+				<table>CATISSUE_DISTRIBUTION_PROTOCOL</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>DISTRIBUTION_PROTOCOL_ID</parentKey>
+
+				<row>					
+					<textField>
+						<name>distributionProtocolTitle</name>
+						<udn>distributionProtocolTitle</udn>
+						<caption>Distribution Protocol Title</caption>
+						<column>TITLE</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+		
+		<row>
+			<subForm>
+				<name>orderDistribution</name>
+				<udn>orderDistribution</udn>
+				<caption>Order Distribution</caption>
+				<table>CATISSUE_DISTRIBUTION</table>
+				<foreignKey>ORDER_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>distributionSites</name>
+						<udn>distributionSites</udn>
+						<caption>Sites</caption>
+						<table>CATISSUE_SITE</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>TO_SITE_ID</parentKey>
+						<row>
+							<dropDown>
+								<name>distributionSiteName</name>
+								<udn>distributionSiteName</udn>
+								<caption>Distribution Site Name</caption>
+								<column>NAME</column>
+								<options>
+									<sql>select distinct name from CATISSUE_SITE</sql>
+								</options>
+							</dropDown>							
+						</row>
+					</subForm>
+				</row>
+				
+				<row>
+					<subForm>
+						<name>distributionItem</name>
+						<udn>distributionItem</udn>
+						<caption>Distribution Item</caption>
+						<table>CATISSUE_DISTRIBUTED_ITEM</table>
+						<foreignKey>DISTRIBUTION_ID</foreignKey>
+						<parentKey>IDENTIFIER</parentKey>
+						<row>
+							<numberField>
+								<name>distributedQuantity</name>
+								<udn>distributedQuantity</udn>
+								<caption>Distributed Quantity</caption>
+								<column>QUANTITY</column>
+							</numberField>						
+						</row>
+					</subForm>
+				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<textField>
+				<name>comments</name>
+				<udn>comments</udn>
+				<caption>Comments</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
+
+		<row>
+			<subForm>
+				<name>requester</name>
+				<udn>requester</udn>
+				<caption>Requester</caption>
+				<table>USER_VIEW</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>REQUESTER_ID</parentKey>
+
+				<row>										
+					<textField>
+						<name>requesterFirstName</name>
+						<udn>requesterFirstName</udn>
+						<caption>Requester First Name</caption>
+						<column>FIRST_NAME</column>
+					</textField>
+					
+					<textField>
+						<name>requesterLastName</name>
+						<udn>requesterLastName</udn>
+						<caption>Requester Last Name</caption>
+						<column>LAST_NAME</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<datePicker>
+				<name>requestedDate</name>
+				<udn>requestedDate</udn>
+				<caption>Requested Date</caption>
+				<column>REQUESTED_DATE</column>
+				<format>MM-dd-yyyy</format>
+			</datePicker>
+
+		</row>
+
+		<row>
+			<textField>
+				<name>requestersComment</name>
+				<udn>requestersComment</udn>
+				<caption>Requesters Commment</caption>
+				<column>COMMENTS</column>
+			</textField>
+		</row>
+
+		<row>
+			<subForm>
+				<name>orderItems</name>
+				<udn>orderItems</udn>
+				<caption>Order Items</caption>
+				<table>CATISSUE_ORDER_ITEM</table>
+				<foreignKey>ORDER_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+
+				<row>					
+					<numberField>
+						<name>requestedQuantity</name>
+						<udn>requestedQuantity</udn>
+						<caption>Requested Quantity</caption>
+						<column>REQUESTED_QUANTITY</column>
+					</numberField>
+				</row>
+
+				<row>					
+					<numberField>
+						<name>distributedQuantity</name>
+						<udn>distributedQuantity</udn>
+						<caption>Distributed Quantity</caption>
+						<column>DISTRIBUTED_QUANTITY</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+
+		<row>
+			<dropDown>
+				<name>orderStatus</name>
+				<udn>orderStatus</udn>
+				<caption>Order Status</caption>
+				<column>STATUS</column>
+				<options>
+					<option><value>Completed</value></option>
+					<option><value>New</value></option>
+					<option><value>Pending</value></option>
+				</options>
+			</dropDown>
+		</row>
+	</view>
+</form>
