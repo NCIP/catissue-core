@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.common.dynamicextensions.domain.nui.*;
 import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
@@ -12,10 +13,6 @@ import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-import edu.common.dynamicextensions.domain.nui.Container;
-import edu.common.dynamicextensions.domain.nui.Control;
-import edu.common.dynamicextensions.domain.nui.SubFormControl;
-import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
@@ -137,7 +134,9 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		for (Control ctrl : c.getControlsMap().values()) {
 			if (ctrl instanceof SubFormControl) {
 				SubFormControl sfCtrl = (SubFormControl) ctrl;
-				List<Map<String, Object>> sfDataValueList = (List<Map<String, Object>>) dataValue.get(ctrl.getUserDefinedName());
+                String sfKey = new StringBuilder(c.getName()).append("->")
+                                .append(sfCtrl.getSubContainer().getName()).toString();
+                List<Map<String, Object>> sfDataValueList = (List<Map<String, Object>>) dataValue.get(sfKey);
 				
 				if (sfDataValueList == null) {
 					formData.addFieldValue(new ControlValue(sfCtrl, null));
@@ -146,15 +145,28 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 				
 				List<FormData> subFormsData = new ArrayList<FormData>();
 				for (Map<String, Object> sfDataValue : sfDataValueList) {
-					FormData sfFormData = new FormData(sfCtrl.getContainer());
-					sfFormData.addFieldValue(new ControlValue(sfCtrl, getFormData(sfCtrl.getContainer(), sfDataValue)));
-					subFormsData.add(sfFormData);
+//					FormData sfFormData = new FormData(sfCtrl.getSubContainer());
+                    subFormsData.add(getFormData(sfCtrl.getSubContainer(), sfDataValue));
+//					sfFormData.addFieldValue(new ControlValue(sfCtrl, getFormData(sfCtrl.getSubContainer(), sfDataValue)));
+//					subFormsData.add(sfFormData);
 				}
 				formData.addFieldValue(new ControlValue(sfCtrl, subFormsData));
 				continue;
 			}
-			
-			Object value = dataValue.get(ctrl.getUserDefinedName());
+
+            Object value = null;
+            if (ctrl instanceof MultiSelectControl) {
+                List<Map<String, String>> msList = (List<Map<String, String>>) dataValue.get(ctrl.getUserDefinedName());
+                value = new String[msList.size()];
+                int i = 0;
+                String[] msVal = new String[msList.size()];
+                for (Map<String, String> msMap : msList) {
+                    msVal[i++] = msMap.get(ctrl.getUserDefinedName());
+                }
+                value = msVal;
+            } else {
+                value = dataValue.get(ctrl.getUserDefinedName());
+            }
 			if (value != null) {
 				formData.addFieldValue(new ControlValue(ctrl, value));
 			} else {

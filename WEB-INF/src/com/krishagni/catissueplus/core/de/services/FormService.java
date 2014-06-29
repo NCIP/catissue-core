@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.de.services;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
+import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -51,6 +53,8 @@ public interface FormService {
 
 	public RecordEntriesDeletedEvent deleteRecords(DeleteRecordEntriesEvent delRecEntry);
 
-	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req); 
+	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req);
+
+	public BOTemplateGeneratedEvent genereateBoTemplate(BOTemplateGenerationEvent boReq); 
 	
 }

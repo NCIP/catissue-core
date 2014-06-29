@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
+import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
@@ -172,7 +174,19 @@ public class FormsController {
 		
 		FormContextsAddedEvent resp = formSvc.addFormContexts(req);
 		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormCtxts();
+			BOTemplateGenerationEvent boReq = new BOTemplateGenerationEvent();
+			boReq.setFormId(formCtxts.get(0).getFormId());
+
+			for (FormContextDetail ctxt : formCtxts) {
+				boReq.setFormId(ctxt.getFormId());
+				boReq.addEntityLevel(ctxt.getLevel());
+			}
+
+			BOTemplateGeneratedEvent boResp = formSvc.genereateBoTemplate(boReq);
+            if (boResp.getStatus() != EventStatus.NOT_FOUND) {
+				resp.setMessage("Error in generating BO templates");
+			}
+			return resp.getFormCtxts();				
 		}
 		
 		return null;
@@ -187,7 +201,7 @@ public class FormsController {
 		delRecEntry.setFormId(formId);
 		delRecEntry.setRecordIds(recIds);
 		RecordEntriesDeletedEvent resp = formSvc.deleteRecords(delRecEntry);
-		
+
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getDeletedRecIds();
 		}

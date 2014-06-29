@@ -18,6 +18,8 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
+import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -62,6 +64,7 @@ import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
+import edu.wustl.catissuecore.action.bulkOperations.BOTemplateGeneratorUtil;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class FormServiceImpl implements FormService {
@@ -83,7 +86,6 @@ public class FormServiceImpl implements FormService {
 		this.formDao = formDao;
 	}
 
-	@Override
 	@PlusTransactional
 	public AllFormsSummaryEvent getForms(ReqAllFormsSummaryEvent req) {
 		switch (req.getFormType()) {
@@ -96,7 +98,7 @@ public class FormServiceImpl implements FormService {
 		}		
 	}
 	
-	@Override
+	
 	@PlusTransactional
 	public FormDefinitionEvent getFormDefinition(ReqFormDefinitionEvent req) {
 		Container container = Container.getContainer(req.getFormId());
@@ -107,7 +109,7 @@ public class FormServiceImpl implements FormService {
 		}
 	}
 	
-	@Override
+	
 	@PlusTransactional
 	public FormFieldsEvent getFormFields(ReqFormFieldsEvent req) {
 		Long formId = req.getFormId();
@@ -341,6 +343,19 @@ public class FormServiceImpl implements FormService {
 		return RecordEntryEventAdded.ok(recordEntry.getIdentifier());
 	}
 	
+	@Override
+	public BOTemplateGeneratedEvent genereateBoTemplate(BOTemplateGenerationEvent req) {
+		Long formId = req.getFormId();
+		BOTemplateGeneratorUtil generator = new BOTemplateGeneratorUtil();
+		try {
+			for (String level : req.getEntityLevels()) {
+				generator.generateAndUploadTemplate(formId, level);
+			}
+		} catch (Exception e) {
+			BOTemplateGeneratedEvent.not_ok();
+		}
+		return BOTemplateGeneratedEvent.ok(null);
+	}
 	private List<FormFieldSummary> getFormFields(Container container) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();
 

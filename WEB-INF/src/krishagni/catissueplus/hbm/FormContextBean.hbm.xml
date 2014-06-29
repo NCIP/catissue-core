@@ -282,7 +282,7 @@
           reg.identifier as id
         from 
           catissue_coll_prot_reg reg 
-	  inner join catissue_specimen_protocol cp on cp.identifier = reg.collection_protocol_id
+	  inner join catissue_collection_protocol cp on cp.identifier = reg.collection_protocol_id
         where 
           reg.protocol_participant_id = :ppId and cp.title = :cpTitle
       </sql-query>
