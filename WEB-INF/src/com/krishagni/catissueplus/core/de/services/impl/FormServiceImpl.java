@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.de.events.*;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
@@ -15,38 +16,6 @@ import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.common.PlusTransactional;
-import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
-import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
-import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.FileDetail;
-import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
-import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextDetail;
-import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
-import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormDataEvent;
-import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
-import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
-import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
-import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
-import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
-import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFileDetailEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormDefinitionEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFormFieldsEvent;
-import com.krishagni.catissueplus.core.de.events.SaveFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -86,7 +55,8 @@ public class FormServiceImpl implements FormService {
 		this.formDao = formDao;
 	}
 
-	@PlusTransactional
+    @Override
+    @PlusTransactional
 	public AllFormsSummaryEvent getForms(ReqAllFormsSummaryEvent req) {
 		switch (req.getFormType()) {
 		    case DATA_ENTRY_FORMS:
@@ -97,9 +67,9 @@ public class FormServiceImpl implements FormService {
 		    	return AllFormsSummaryEvent.ok(formDao.getQueryForms());		
 		}		
 	}
-	
-	
-	@PlusTransactional
+
+    @Override
+    @PlusTransactional
 	public FormDefinitionEvent getFormDefinition(ReqFormDefinitionEvent req) {
 		Container container = Container.getContainer(req.getFormId());
 		if (container == null) {
@@ -108,9 +78,9 @@ public class FormServiceImpl implements FormService {
 			return FormDefinitionEvent.ok(container);
 		}
 	}
-	
-	
-	@PlusTransactional
+
+    @Override
+    @PlusTransactional
 	public FormFieldsEvent getFormFields(ReqFormFieldsEvent req) {
 		Long formId = req.getFormId();
 		Container form = Container.getContainer(formId);
@@ -327,17 +297,17 @@ public class FormServiceImpl implements FormService {
 	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req) {
 		String entityType = (String) req.getRecIntegrationInfo().get("entityType");
 
-		Long objectId = formDao.getObjectId(req.getRecIntegrationInfo());
-		Long formCtxtId = formDao.getFormCtxtId(req.getContainerId(), entityType);
+		ObjectCpDetail objCp = formDao.getObjectCpDetail(req.getRecIntegrationInfo());
+		Long formCtxtId = formDao.getFormCtxtId(req.getContainerId(), entityType, objCp.getCpId());
 
 		FormRecordEntryBean recordEntry = new FormRecordEntryBean();
 		recordEntry.setFormCtxtId(formCtxtId);
-		recordEntry.setObjectId(objectId);
+		recordEntry.setObjectId(objCp.getObjectId());
 		recordEntry.setRecordId(req.getRecordId());
 		recordEntry.setUpdatedBy(req.getSessionDataBean().getUserId());
 		recordEntry.setUpdatedTime(Calendar.getInstance().getTime());
 		recordEntry.setActivityStatus(Status.ACTIVE);
-		
+
 		formDao.saveOrUpdateRecordEntry(recordEntry);
 		
 		return RecordEntryEventAdded.ok(recordEntry.getIdentifier());

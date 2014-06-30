@@ -1,8 +1,5 @@
 package edu.wustl.catissuecore.action.bulkOperations;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.ndao.DbSettingsFactory;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
@@ -10,6 +7,9 @@ import edu.wustl.bulkoperator.dao.BulkOperationDao;
 import edu.wustl.bulkoperator.generatetemplate.BOTemplateGenerator;
 import edu.wustl.bulkoperator.generatetemplate.BulkOperationTemplate;
 import edu.wustl.bulkoperator.util.BulkOperationConstants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BOTemplateGeneratorUtil {
 	 private static Map<String, String> participantIntegratorFields = new HashMap<String, String>();
@@ -19,12 +19,14 @@ public class BOTemplateGeneratorUtil {
 	 private static Map<String, String> scgIntegratorFields = new HashMap<String, String>();
 
 	    static {
-	    	participantIntegratorFields.put("Collection Protocol Title", "collectionProtocol");
+            participantIntegratorFields.put("Collection Protocol Title", "collectionProtocol");
 	    	participantIntegratorFields.put("Participant Protcol ID", "ppi");
 
-	    	specimenIntegratorFields.put("Specimen ID", "specimenId");
-	    	
-	    	scgIntegratorFields.put("SCG Name", "scgName");
+            specimenIntegratorFields.put("Specimen Name", "scgName");
+            specimenIntegratorFields.put("Specimen ID", "specimenId");
+            specimenIntegratorFields.put("Specimen Barcode", "specimenBarcode");
+
+            scgIntegratorFields.put("SCG Name", "scgName");
 	    	scgIntegratorFields.put("SCG ID", "scgId");
 	    	scgIntegratorFields.put("SCG Barcode", "scgBarcode");
 	    }

@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.krishagni.catissueplus.core.de.events.*;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
@@ -14,10 +15,6 @@ import org.hibernate.Query;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.de.events.FormContextDetail;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
-import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 
 public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao {
@@ -223,29 +220,44 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 		
 	@Override
-	public Long getObjectId(Map<String, Object> dataHookingInformation) {
-		
-		Long objectId = null;
+	public ObjectCpDetail getObjectCpDetail(Map<String, Object> dataHookingInformation) {
+
+		ObjectCpDetail objCp = null;
 		if (dataHookingInformation.get("entityType").equals("Participant") ) {
-			objectId = getObjectIdForParticipant(dataHookingInformation);
+			objCp = getObjectIdForParticipant(dataHookingInformation);
 		} else if (dataHookingInformation.get("entityType").equals("Specimen") ) {
-			objectId = getObjectIdForSpecimen(dataHookingInformation);
+			objCp = getObjectIdForSpecimen(dataHookingInformation);
 		} else {
-			objectId = getObjectIdForSCG(dataHookingInformation);
+			objCp = getObjectIdForSCG(dataHookingInformation);
 		}
 		
-		return objectId;
+		return objCp;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Long getFormCtxtId(Long containerId, String entityType) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FORM_CTX_ID);
+	public Long getFormCtxtId(Long containerId, String entityType, Long cpId) {
+        Long formCtxtId = null;
+
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FORM_CTX_ID);
 		query.setLong("containerId", containerId);
 		query.setString("entityType", entityType);
-		List<Object> objs = query.list();
+        query.setLong("cpId", cpId);
 
-		return objs != null && !objs.isEmpty() ? (Long)objs.iterator().next() : null;	
+        List<Object[]> rows = query.list();
+
+        if (rows == null || rows.isEmpty()) {
+            return null;
+        }
+
+        for (Object[] row : rows) {
+            formCtxtId = (Long) row[0];
+            if (cpId.equals((Long) row[1])) {
+                break;
+            }
+        }
+
+		return formCtxtId;
 	}
 	
 	@Override
@@ -262,21 +274,30 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Long getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
-		String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
+	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
+        ObjectCpDetail objCp = new ObjectCpDetail();
+        String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
 		String ppId = (String) dataHookingInformation.get("ppi");
 		
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_OBJ_ID);
 		query.setString("ppId", ppId);
 		query.setString("cpTitle", cpTitle);
-		List<Long> objs = query.list();
+        List<Object[]> objs = query.list();
 
-		return objs != null && !objs.isEmpty() ? objs.get(0) : null;	
+        if (objs == null || objs.isEmpty()) {
+            return null;
+        }
+
+        objCp.setObjectId((Long)objs.get(0)[0]);
+        objCp.setCpId((Long) objs.get(0)[1]);
+
+        return objCp;
 	}
 
 	@SuppressWarnings("unchecked")
-	private Long getObjectIdForSpecimen(Map<String, Object> dataHookingInformation) {
-		String specimenId = (String) dataHookingInformation.get("specimenId");
+	private ObjectCpDetail getObjectIdForSpecimen(Map<String, Object> dataHookingInformation) {
+        ObjectCpDetail objCp = new ObjectCpDetail();
+        String specimenId = (String) dataHookingInformation.get("specimenId");
 		String specimenLabel = (String) dataHookingInformation.get("specimenLabel");
 		String specimenBarcode = (String) dataHookingInformation.get("specimenBarcode");
 		
@@ -284,14 +305,22 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		query.setString("specimenId", specimenId);
 		query.setString("specimenLabel", specimenLabel);
 		query.setString("specimenBarcode", specimenBarcode);
-		List<Long> objs = query.list();
+        List<Object[]> objs = query.list();
 
-		return objs != null && !objs.isEmpty() ? objs.get(0) : null;	
+        if (objs == null || objs.isEmpty()) {
+            return null;
+        }
+
+        objCp.setObjectId((Long)objs.get(0)[0]);
+        objCp.setCpId((Long)objs.get(0)[1]);
+
+        return objCp;
 	}
 
 	@SuppressWarnings("unchecked")
-	private Long getObjectIdForSCG(Map<String, Object> dataHookingInformation) {
-		String scgId = (String) dataHookingInformation.get("scgId");
+	private ObjectCpDetail getObjectIdForSCG(Map<String, Object> dataHookingInformation) {
+        ObjectCpDetail objCp = new ObjectCpDetail();
+        String scgId = (String) dataHookingInformation.get("scgId");
 		String scgName = (String) dataHookingInformation.get("scgName");
 		String scgBarcode = (String) dataHookingInformation.get("scgBarcode");
 		
@@ -299,9 +328,16 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		query.setString("scgId", scgId);
 		query.setString("scgName", scgName);
 		query.setString("scgBarcode", scgBarcode);
-		List<Long> objs = query.list();
+        List<Object[]> objs = query.list();
 
-		return objs != null && !objs.isEmpty() ? objs.get(0) : null;	
+        if (objs == null || objs.isEmpty()) {
+            return null;
+        }
+
+        objCp.setObjectId((Long)objs.get(0)[0]);
+        objCp.setCpId((Long)objs.get(0)[1]);
+
+        return objCp;
 	}
 
 	

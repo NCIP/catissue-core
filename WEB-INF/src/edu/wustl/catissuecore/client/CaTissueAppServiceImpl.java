@@ -107,17 +107,17 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		FormData formData = getFormData(c, dataValue);
 		final SessionDataBean sessionDataBean = recEntryInfo.getSessionDataBean();
 
-		UserContext ctxt =  new UserContext() {				
+		UserContext ctxt =  new UserContext() {
 			@Override
 			public String getUserName() {
 				return sessionDataBean.getUserName();
 			}
-			
+
 			@Override
 			public Long getUserId() {
 				return sessionDataBean.getUserId();
 			}
-			
+
 			@Override
 			public String getIpAddress() {
 				return sessionDataBean.getIpAddress();
@@ -145,10 +145,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 				
 				List<FormData> subFormsData = new ArrayList<FormData>();
 				for (Map<String, Object> sfDataValue : sfDataValueList) {
-//					FormData sfFormData = new FormData(sfCtrl.getSubContainer());
                     subFormsData.add(getFormData(sfCtrl.getSubContainer(), sfDataValue));
-//					sfFormData.addFieldValue(new ControlValue(sfCtrl, getFormData(sfCtrl.getSubContainer(), sfDataValue)));
-//					subFormsData.add(sfFormData);
 				}
 				formData.addFieldValue(new ControlValue(sfCtrl, subFormsData));
 				continue;
@@ -187,9 +184,9 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 		req.setRecIntegrationInfo(recIntegrationInfo);
 		req.setContainerId(containerId);
 		req.setRecordId(recordId);
-		
+
 		RecordEntryEventAdded resp = formSvc.addRecordEntry(req);
-		
+
 		return null;
 	}
 
