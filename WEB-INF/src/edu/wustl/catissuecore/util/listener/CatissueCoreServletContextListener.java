@@ -22,6 +22,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
+import edu.common.dynamicextensions.nutility.BOUtil;
+import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
 import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
 import krishagni.catissueplus.util.FormProcessor;
 import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
@@ -152,8 +154,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 			
 			FormProperties.getInstance().setPostProcessor(new FormProcessor());
-			
-			InitialContext ic = new InitialContext();
+
+            CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
+            BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
+            InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
 			
 			String deFileUploadDir = XMLPropertyHandler.getValue(DE_FILEUPLOAD_DIR);
