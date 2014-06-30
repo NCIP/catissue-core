@@ -339,7 +339,6 @@ function checkDisable(){
 	// Create the callback:
 	req.onreadystatechange = function() {
 		if (req.readyState != 4) return; // Not there yet
-		alert(req.responseText);
 		var response = eval('('+ req.responseText+')');
 		if(response.success == "success")
 		{
