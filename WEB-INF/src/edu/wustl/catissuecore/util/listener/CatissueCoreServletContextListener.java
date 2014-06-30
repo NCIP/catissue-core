@@ -155,8 +155,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			
 			FormProperties.getInstance().setPostProcessor(new FormProcessor());
 
-            CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
             BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
+
             InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
 			
