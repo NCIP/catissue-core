@@ -40,5 +40,12 @@ public class RegistrationCreatedEvent extends ResponseEvent {
 		resp.setMessage(t1 != null ? t1.getMessage() : null);
 		return resp;
 	}
+
+	public static RegistrationCreatedEvent accessDenied(String registration, Long cpId) {
+		RegistrationCreatedEvent resp = new RegistrationCreatedEvent();
+		resp.setStatus(EventStatus.NOT_AUTHORIZED);
+		resp.setMessage("User doens't have "+registration+" privileges.");
+		return resp;
+	}
 	
 }

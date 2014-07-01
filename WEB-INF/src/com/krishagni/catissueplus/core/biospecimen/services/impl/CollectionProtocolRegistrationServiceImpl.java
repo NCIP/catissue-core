@@ -23,7 +23,10 @@ import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 import com.krishagni.catissueplus.rest.controller.PatchRegistrationEvent;
+
+import edu.wustl.security.global.Permissions;
 
 @Service(value = "CollectionProtocolRegistrationServiceImpl")
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
@@ -35,6 +38,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory registrationFactory;
+
+	private PrivilegeService privilegeSvc;
+
+	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
+		this.privilegeSvc = privilegeSvc;
+	}
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -59,6 +68,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
 		try {
+			if(!privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), event.getCpId(), Permissions.REGISTRATION)){
+				return RegistrationCreatedEvent.accessDenied(Permissions.REGISTRATION,event.getCpId());
+			}
+				
 			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail());
 			ObjectCreationException errorHandler = new ObjectCreationException();
 			ensureUniquePpid(registration, errorHandler);

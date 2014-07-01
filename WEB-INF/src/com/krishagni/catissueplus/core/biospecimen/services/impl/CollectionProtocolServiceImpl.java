@@ -57,7 +57,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			Long cpId = req.getCpId();
 			String searchStr = req.getSearchString();
 			List<ParticipantInfo> participants;
-			if(privilegeSvc.hasPhiAccess(req.getSessionDataBean().getUserId(), cpId)){
+			if(privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId,Permissions.REGISTRATION)){
 				participants = daoFactory.getCprDao().getPhiParticipants(cpId, searchStr);
 			}
 			else{

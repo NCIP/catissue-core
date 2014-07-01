@@ -125,7 +125,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	public boolean hasPhiAccess(Long userId, Long cpId){
+	public boolean hasPrivilege(Long userId, Long cpId,String privilegeConstant){
 		UserPrivDetail privDetail = daoFactory.getCPUserRoleDao().getUserPrivDetail(userId);
 		String roleId = getRole(privDetail.getCsmUserId());
 		boolean isPhiView = false;
@@ -137,7 +137,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		try {
 			privilegeManager = PrivilegeManager.getInstance();
 		final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(privDetail.getLoginName());
-		if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cpId, Permissions.REGISTRATION)){
+		if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cpId, privilegeConstant)){
 			isPhiView = true;
 		}
 		else{
@@ -145,8 +145,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			for (final Long siteId : siteIds)
 			{
 				final String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
-				edu.wustl.common.util.global.Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE);
-				if (privilegeCache.hasPrivilege(peName,Permissions.REGISTRATION))
+				if (privilegeCache.hasPrivilege(peName,privilegeConstant))
 				{
 					isPhiView = true;
 				}
