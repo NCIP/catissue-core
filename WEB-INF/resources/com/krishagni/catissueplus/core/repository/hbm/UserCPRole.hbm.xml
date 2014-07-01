@@ -57,5 +57,26 @@
 			WHERE user.id = :userId  AND privileges.name = :privilegeConst
 		</query>
 		
+		<sql-query name="getUserPrivDetail">
+		  select CSM_USER_ID, LOGIN_NAME from catissue_user where identifier=:userId
+		</sql-query>
+		
+		<sql-query name="getSiteIdsByCPId">
+		  select SITE_ID from catissue_site_cp where COLLECTION_PROTOCOL_ID = :cpId
+		</sql-query>
+		
+		<sql-query name="getCPIdBySiteId">
+		  select COLLECTION_PROTOCOL_ID from catissue_site_cp where SITE_ID = :siteId
+		</sql-query>
+		
+		<sql-query name="getAllCpIds">
+		  select cp.identifier from catissue_collection_protocol cp where cp.activity_status = 'Active'
+		</sql-query>
+		
+		<sql-query name="getCPIdsByUserId">
+		  select collection_protocol_id from CATISSUE_COLL_COORDINATORS where user_id = :userId 
+		      union 
+		  select collection_protocol_id from CATISSUE_USER_CP where user_id = :userId
+		</sql-query>
    </class>
 </hibernate-mapping>

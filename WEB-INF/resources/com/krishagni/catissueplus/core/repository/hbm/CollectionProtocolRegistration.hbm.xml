@@ -61,6 +61,17 @@
 		        <query name="getParticipantsByCpId">
             select cpr.id, participant.id,  
             case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , 
+            ' ', ' ' 
+            from CollectionProtocolRegistration cpr inner join 
+            cpr.participant participant 
+            inner join cpr.collectionProtocol cp 
+            where cp.id = :cpId and cpr.activityStatus != 'Disabled' and 
+            participant.activityStatus != 'Disabled'
+        </query>
+        
+        <query name="getPhiParticipantsByCpId">
+            select cpr.id, participant.id,  
+            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , 
             case when participant.lastName is null then ' ' else participant.lastName end , 
             case when participant.firstName is null then ' ' else participant.firstName end 
             from CollectionProtocolRegistration cpr inner join 
@@ -71,6 +82,26 @@
         </query>
 
         <query name="getParticipantsByCpIdAndSearchTerm">
+            select
+            cpr.id, participant.id,
+            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,
+            ' ', ' ' 
+            from
+            CollectionProtocolRegistration cpr
+            inner join
+            cpr.participant participant
+            inner join cpr.collectionProtocol cp
+            where
+            cp.id = :cpId
+            and (
+            lower(cpr.protocolParticipantIdentifier) like :searchTerm
+            )
+            and
+            cpr.activityStatus != 'Disabled' and participant.activityStatus !=
+            'Disabled'
+        </query>
+        
+        <query name="getPhiParticipantsByCpIdAndSearchTerm">
             select
             cpr.id, participant.id,
             case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,

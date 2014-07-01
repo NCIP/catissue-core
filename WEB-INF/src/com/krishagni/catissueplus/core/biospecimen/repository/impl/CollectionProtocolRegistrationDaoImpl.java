@@ -32,10 +32,69 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	public List<ParticipantInfo> getParticipants(Long cpId, String searchString) {
 		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
 
+//		String qName = "select cpr.id, participant.id, "+
+//			" case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , "+
+//			" case when participant.lastName is null then ' ' else participant.lastName end , " +
+//			" case when participant.firstName is null then ' ' else participant.firstName end "+
+//			" from "+
+//			" CollectionProtocolRegistration cpr "+
+//			" inner join "+
+//			" cpr.participant participant "+
+//			" inner join cpr.collectionProtocol cp "+
+//			" where "+
+//			" cp.id = "+cpId+" and cpr.activityStatus != 'Disabled' and "+
+//			" participant.activityStatus != 'Disabled'";
 		String queryName = GET_PARTICIPANTS_BY_CP_ID;
 		if (isSearchTermSpecified) {
 			queryName = GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
 		}
+		
+
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
+		query.setLong("cpId", cpId);
+
+		if (isSearchTermSpecified) {
+			query.setString("searchTerm", searchString.toLowerCase() + "%");
+		}
+
+		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
+		List<Object[]> rows = query.list();
+		for (Object[] row : rows) {
+			ParticipantInfo participant = new ParticipantInfo();
+			participant.setCprId((Long) row[0]);
+			participant.setId((Long) row[1]);
+			participant.setPpId((String) row[2]);
+			participant.setFirstName((String) row[3]);
+			participant.setLastName((String) row[4]);
+
+			result.add(participant);
+		}
+
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ParticipantInfo> getPhiParticipants(Long cpId, String searchString) {
+		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
+
+//		String qName = "select cpr.id, participant.id, "+
+//			" case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , "+
+//			" case when participant.lastName is null then ' ' else participant.lastName end , " +
+//			" case when participant.firstName is null then ' ' else participant.firstName end "+
+//			" from "+
+//			" CollectionProtocolRegistration cpr "+
+//			" inner join "+
+//			" cpr.participant participant "+
+//			" inner join cpr.collectionProtocol cp "+
+//			" where "+
+//			" cp.id = "+cpId+" and cpr.activityStatus != 'Disabled' and "+
+//			" participant.activityStatus != 'Disabled'";
+		String queryName = GET_PHI_PARTICIPANTS_BY_CP_ID;
+		if (isSearchTermSpecified) {
+			queryName = GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
+		}
+		
 
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
 		query.setLong("cpId", cpId);
@@ -155,6 +214,10 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	private static final String GET_PARTICIPANTS_BY_CP_ID = FQN + ".getParticipantsByCpId";
 
 	private static final String GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getParticipantsByCpIdAndSearchTerm";
+	
+	private static final String GET_PHI_PARTICIPANTS_BY_CP_ID = FQN + ".getPhiParticipantsByCpId";
+
+	private static final String GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM = FQN + ".getPhiParticipantsByCpIdAndSearchTerm";
 
 	private static final String GET_COLLECTION_GROUPSBY_CPR_ID = FQN + ".getCollectionGroupsByCprId";
 

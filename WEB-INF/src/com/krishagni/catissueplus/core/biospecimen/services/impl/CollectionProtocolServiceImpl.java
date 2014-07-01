@@ -15,7 +15,8 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolSe
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
-import com.krishagni.catissueplus.core.privileges.services.impl.PrivilegeServiceImpl;
+
+import edu.wustl.security.global.Permissions;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
@@ -40,13 +41,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req) {
 		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getAllCollectionProtocols();
 		List<CollectionProtocolSummary> listToReturn = new ArrayList<CollectionProtocolSummary>();
-//		List<Long> cpList = privilegeSvc.getCpList(req.getSessionDataBean().getUserId(), "QUERY");
-//		for (CollectionProtocolSummary collectionProtocolSummary : list) {
-//			if(cpList.contains(collectionProtocolSummary.getId())){
-//				listToReturn.add(collectionProtocolSummary);
-//			}
-//		}
-		return AllCollectionProtocolsEvent.ok(list);
+		List<Long> cpList = privilegeSvc.getCpList(req.getSessionDataBean().getUserId(), Permissions.REGISTRATION);
+		for (CollectionProtocolSummary collectionProtocolSummary : list) {
+			if(cpList.contains(collectionProtocolSummary.getId())){
+				listToReturn.add(collectionProtocolSummary);
+			}
+		}
+		return AllCollectionProtocolsEvent.ok(listToReturn);
 	}
 
 	@Override
@@ -55,8 +56,14 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		try {
 			Long cpId = req.getCpId();
 			String searchStr = req.getSearchString();
-
-			List<ParticipantInfo> participants = daoFactory.getCprDao().getParticipants(cpId, searchStr);
+			List<ParticipantInfo> participants;
+			if(privilegeSvc.hasPhiAccess(req.getSessionDataBean().getUserId(), cpId)){
+				participants = daoFactory.getCprDao().getPhiParticipants(cpId, searchStr);
+			}
+			else{
+				participants = daoFactory.getCprDao().getParticipants(cpId, searchStr);
+			}
+			
 			return ParticipantsSummaryEvent.ok(participants);
 		}
 		catch (CatissueException e) {

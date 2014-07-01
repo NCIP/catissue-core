@@ -10,4 +10,6 @@ public interface PrivilegeService {
 	
 	public Map<Long, Boolean> getCPPrivileges(Long userId, List<Long> cpIds, String privlege);
 	
+	public boolean hasPhiAccess(Long userId, Long cpId);
+	
 }

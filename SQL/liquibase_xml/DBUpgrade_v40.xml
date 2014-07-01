@@ -1478,6 +1478,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </changeSet>
     <changeSet id="updating constraints for distribution protocol" author="nitesh">
         <dropForeignKeyConstraint baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL" constraintName="FKC8999977BC7298A9"/>
+    </changeSet>
+    <changeSet id="add unique constraint" author="nitesh" dbms="mysql">
+     <sql>ALTER TABLE catissue_distribution_protocol ADD CONSTRAINT idx_ditri_title UNIQUE (TITLE(255))</sql>
+     </changeSet>
+     <changeSet id="add unique constraint" author="nitesh" dbms="oracle">
         <createIndex 
                 indexName="idx_ditri_title"
                 tableName="CATISSUE_DISTRIBUTION_PROTOCOL"
@@ -1574,6 +1579,13 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     
     <changeSet id="updating constraints for CATISSUE_COLLECTION_PROTOCOL" author="nitesh">
         <dropForeignKeyConstraint baseTableName="CATISSUE_COLLECTION_PROTOCOL" constraintName="FK32DC439DBC7298A9"/>
+    </changeSet>
+    
+    <changeSet id="adding unique constraint for CP title" author="nitesh" dbms="mysql">
+        <sql>ALTER TABLE CATISSUE_COLLECTION_PROTOCOL ADD CONSTRAINT idx_collection_prot_title UNIQUE (TITLE(255))</sql>
+     </changeSet>
+     
+    <changeSet id="adding unique constraint for CP title" author="nitesh" dbms="oracle">
         <createIndex 
                 indexName="idx_collection_prot_title"
                 tableName="CATISSUE_COLLECTION_PROTOCOL"
@@ -1581,6 +1593,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <column name="TITLE" type="varchar(512)"/>
         </createIndex>
     </changeSet>
+    
     <changeSet id="adding autoIncrement for CATISSUE_COLLECTION_PROTOCOL" author="nitesh" dbms="mysql">
         <addAutoIncrement columnDataType="${int.type}"
             columnName="IDENTIFIER"
