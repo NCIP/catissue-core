@@ -73,7 +73,7 @@
 				<caption>Tissue Site</caption>
 				<column>TISSUE_SITE</column>
 				<options>
-					<sql>select value from catissue_permissible_value where public_id = 'Tissue_Site_PID' order by value</sql>
+					<sql>select subpv.value from catissue_permissible_value pv inner join catissue_permissible_value subpv on subpv.parent_identifier = pv.identifier where pv.public_id = 'Tissue_Site_PID' order by subpv.value</sql>
 				</options>
 			</dropDown>
 		</row>
