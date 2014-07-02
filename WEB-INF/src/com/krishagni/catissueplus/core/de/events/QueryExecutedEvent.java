@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public class QueryExecutedEvent extends ResponseEvent {
 	private String[] columnLabels;
 	
-	private List<Object[]> rows;
+	private List<String[]> rows;
 
 	public String[] getColumnLabels() {
 		return columnLabels;
@@ -18,15 +18,15 @@ public class QueryExecutedEvent extends ResponseEvent {
 		this.columnLabels = columnLabels;
 	}
 
-	public List<Object[]> getRows() {
+	public List<String[]> getRows() {
 		return rows;
 	}
 
-	public void setRows(List<Object[]> rows) {
+	public void setRows(List<String[]> rows) {
 		this.rows = rows;
 	}
 	
-	public static QueryExecutedEvent ok(String[] labels, List<Object[]> rows) {
+	public static QueryExecutedEvent ok(String[] labels, List<String[]> rows) {
 		QueryExecutedEvent resp = new QueryExecutedEvent();
 		resp.setColumnLabels(labels);
 		resp.setRows(rows);

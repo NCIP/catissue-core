@@ -91,7 +91,11 @@ angular.module("plus.directives", [])
     return {
       restrict: "A",
       link: function(scope, element, attrs) {
-        element.datepicker({autoclose: true});
+        var options = {format: 'mm-dd-yyyy'};
+        if (attrs.kaDatePicker) {
+          options = JSON.parse(attrs.kaDatePicker);
+        }
+        element.datepicker({format: options.format, autoclose: true});
       }
     };
   })

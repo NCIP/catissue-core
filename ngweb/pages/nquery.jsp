@@ -970,7 +970,7 @@
             </div>
             <input ng-switch-when="datePicker" class="form-control"
                    data-placeholder="Select Date"
-                   type="text" ka-date-picker
+                   type="text" ka-date-picker="{{queryData.datePickerOpts}}"
                    ng-model="queryData.currFilter.value"></input>
             <input ng-switch-default class="form-control"
                    placeholder="Specify Condition Value"
@@ -1162,6 +1162,7 @@
       query.global = query.global || {};
       query.global.userId = <%= ((edu.wustl.common.beans.SessionDataBean)session.getAttribute("sessionData")).getUserId() %>
       query.global.isAdmin = <%= ((edu.wustl.common.beans.SessionDataBean)session.getAttribute("sessionData")).isAdmin() %>
+      query.global.dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
     </script>
 
     <script src="../js/utility.js" type="text/javascript"></script>

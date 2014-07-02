@@ -456,6 +456,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
     $scope.queryData = {
       isAdmin: query.global.isAdmin,
+      datePickerOpts: {format: query.global.dateFormat},
       view: 'dashboard',
       cpList: [],
       forms: undefined,

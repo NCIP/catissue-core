@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import edu.wustl.common.util.global.CommonServiceLocator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -91,7 +92,7 @@ public class QueryServiceImpl implements QueryService {
 
 	private static final String cprForm = "Participant";
 
-	private static final String dateFormat = "MM/dd/yyyy";
+	private static final String dateFormat = CommonServiceLocator.getInstance().getDatePattern();
 	
 	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
 	
@@ -247,7 +248,7 @@ public class QueryServiceImpl implements QueryService {
 			insertAuditLog(req, resp);
 			
 			QueryResultData queryResult = resp.getResultData();
-			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getRows());
+			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getStringifiedRows());
 		} catch (QueryParserException qpe) {
 			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
 		} catch (IllegalArgumentException iae) {
