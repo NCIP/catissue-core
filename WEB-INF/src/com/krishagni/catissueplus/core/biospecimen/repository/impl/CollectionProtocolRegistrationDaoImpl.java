@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.common.util.XMLPropertyHandler;
 import gov.nih.nci.logging.api.util.StringUtils;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +23,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Repository("collectionProtocolRegistrationDao")
 public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<CollectionProtocolRegistration>
@@ -32,31 +35,18 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	public List<ParticipantInfo> getParticipants(Long cpId, String searchString) {
 		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
 
-//		String qName = "select cpr.id, participant.id, "+
-//			" case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , "+
-//			" case when participant.lastName is null then ' ' else participant.lastName end , " +
-//			" case when participant.firstName is null then ' ' else participant.firstName end "+
-//			" from "+
-//			" CollectionProtocolRegistration cpr "+
-//			" inner join "+
-//			" cpr.participant participant "+
-//			" inner join cpr.collectionProtocol cp "+
-//			" where "+
-//			" cp.id = "+cpId+" and cpr.activityStatus != 'Disabled' and "+
-//			" participant.activityStatus != 'Disabled'";
 		String queryName = GET_PARTICIPANTS_BY_CP_ID;
 		if (isSearchTermSpecified) {
 			queryName = GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
 		}
 		
-
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
 		query.setLong("cpId", cpId);
 
 		if (isSearchTermSpecified) {
 			query.setString("searchTerm", searchString.toLowerCase() + "%");
 		}
-
+		query.setMaxResults(Utility.getMaxParticipantCnt());
 		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
 		List<Object[]> rows = query.list();
 		for (Object[] row : rows) {
@@ -78,18 +68,6 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	public List<ParticipantInfo> getPhiParticipants(Long cpId, String searchString) {
 		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
 
-//		String qName = "select cpr.id, participant.id, "+
-//			" case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , "+
-//			" case when participant.lastName is null then ' ' else participant.lastName end , " +
-//			" case when participant.firstName is null then ' ' else participant.firstName end "+
-//			" from "+
-//			" CollectionProtocolRegistration cpr "+
-//			" inner join "+
-//			" cpr.participant participant "+
-//			" inner join cpr.collectionProtocol cp "+
-//			" where "+
-//			" cp.id = "+cpId+" and cpr.activityStatus != 'Disabled' and "+
-//			" participant.activityStatus != 'Disabled'";
 		String queryName = GET_PHI_PARTICIPANTS_BY_CP_ID;
 		if (isSearchTermSpecified) {
 			queryName = GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
@@ -98,11 +76,10 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
 		query.setLong("cpId", cpId);
-
 		if (isSearchTermSpecified) {
 			query.setString("searchTerm", searchString.toLowerCase() + "%");
 		}
-
+		query.setMaxResults(Utility.getMaxParticipantCnt());
 		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
 		List<Object[]> rows = query.list();
 		for (Object[] row : rows) {
