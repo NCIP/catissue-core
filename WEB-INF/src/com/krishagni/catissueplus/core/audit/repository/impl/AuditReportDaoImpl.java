@@ -21,29 +21,28 @@ public class AuditReportDaoImpl extends AbstractDao implements AuditReportDao {
 	 * @throws Exception 
 	 * 
 	 */
-	private static String GET_USERS = "select distinct user.IDENTIFIER,user.FIRST_NAME,user.LAST_NAME from "
-			+ "catissue_user user left join catissue_audit_event audit on user.IDENTIFIER = audit.USER_ID";
+	private static String GET_USERS = "select distinct usr.IDENTIFIER,usr.FIRST_NAME,usr.LAST_NAME from "
+			+ "catissue_user usr left join catissue_audit_event auditEvent on usr.IDENTIFIER = auditEvent.USER_ID";
 
 	@SuppressWarnings("unchecked")
 	public List<ReportDetail> getAuditDetails(StringBuffer auditQuery, Map<String, Object> queryParameters) {
 
 		Query query = sessionFactory.getCurrentSession().createSQLQuery(auditQuery.toString());
-		for (String  element : queryParameters.keySet()) {
+		for (String element : queryParameters.keySet()) {
 			query.setParameter(element, queryParameters.get(element));
 		}
-		
 		List<Object[]> result = query.list();
 		List<ReportDetail> reportDataList = new ArrayList<ReportDetail>();
 		for (Object[] row : result) {
 
 			ReportDetail reportDetail = new ReportDetail();
 			reportDetail.setIdentifier((Long.parseLong(row[0].toString())));
-			reportDetail.setFirstName((String) row[1]);
-			reportDetail.setLastName((String) row[2]);
-			reportDetail.setLoginName((String) row[3]);
-			reportDetail.setEventType((String) row[4]);
-			reportDetail.setCount((Integer.parseInt(row[5].toString())));
-			reportDetail.setObjectName((String) row[6]);
+			reportDetail.setObjectName((String) row[1]);
+			reportDetail.setEventType((String) row[2]);
+			reportDetail.setFirstName((String) row[3]);
+			reportDetail.setLastName((String) row[4]);
+			reportDetail.setLoginName((String) row[5]);
+			reportDetail.setCount((Integer.parseInt(row[6].toString())));
 
 			reportDataList.add(reportDetail);
 		}

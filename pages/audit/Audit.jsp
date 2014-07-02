@@ -47,7 +47,7 @@
 		       </div>
 		  
 		      <div class="field">
-			  <input type="text" id="datefrom" class ="input_class"  />
+			  <input type="text" id="datefrom" readonly='true' class ="input_class"  />
 		      </div>
 			<div style="clear: both;"></div>
      			<div class="label">
@@ -55,7 +55,7 @@
 		    	</div>
 			 
 			<div class="field" class ="">
-			<input type="text" id="dateto" class ="input_class" />
+			<input type="text" id="dateto" readonly='true' class ="input_class" />
 			</div>
 			<div style="clear: both;"></div>
 			<div style="height:50px"></div>

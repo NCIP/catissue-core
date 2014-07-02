@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.audit.services.impl;
 
-import java.io.File; 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,9 +17,9 @@ import java.util.TreeMap;
 import com.krishagni.catissueplus.core.audit.events.AuditReportCreatedEvent;
 import com.krishagni.catissueplus.core.audit.events.AuditReportDetail;
 import com.krishagni.catissueplus.core.audit.events.CreateAuditReportEvent;
-import com.krishagni.catissueplus.core.audit.events.GetUsersInfoEvent;
-import com.krishagni.catissueplus.core.audit.events.GetOperationEvent;
 import com.krishagni.catissueplus.core.audit.events.GetObjectNameEvent;
+import com.krishagni.catissueplus.core.audit.events.GetOperationEvent;
+import com.krishagni.catissueplus.core.audit.events.GetUsersInfoEvent;
 import com.krishagni.catissueplus.core.audit.events.ReportDetail;
 import com.krishagni.catissueplus.core.audit.events.UserInfo;
 import com.krishagni.catissueplus.core.audit.services.AuditReportService;
@@ -27,9 +27,9 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.VelocityClassLoaderManager;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 public class AuditReportServiceImpl implements AuditReportService {
 
@@ -40,7 +40,7 @@ public class AuditReportServiceImpl implements AuditReportService {
 	private Map<String, String> objectNameMap = new TreeMap<String, String>();
 
 	public enum Operation {
-		INSERT("Insert"), UPDATE("Update"), DELETE("Delete");
+		INSERT("INSERT"), UPDATE("UPDATE"), DELETE("DELETE");
 
 		private String operation;
 
@@ -54,18 +54,23 @@ public class AuditReportServiceImpl implements AuditReportService {
 
 	}
 
-	private static final String SELECT_CLAUSE = "SELECT user.identifier,user.first_name,user.last_name,user.login_name,auditEvent.event_type,"
-			+ " COUNT(dataLogEvent.identifier) count, dataLogEvent.object_name "
-			+ " FROM catissue_user user, catissue_data_audit_event_log dataLogEvent, catissue_audit_event_log auditEventLog, "
+	private static final String SELECT_CLAUSE = "SELECT usr.identifier,dataLogEvent.object_name,auditEvent.event_type,usr.first_name,usr.last_name,usr.login_name,";
+
+	private static final String COUNT_MYSQL = " COUNT(dataLogEvent.identifier) TotalCount";
+
+	private static final String COUNT_ORACLE = " COUNT(dataLogEvent.identifier) AS \"TOTALCOUNT\"";
+
+	private static final String FROM = " FROM catissue_user usr, catissue_data_audit_event_log dataLogEvent, catissue_audit_event_log auditEventLog, "
 			+ "catissue_audit_event auditEvent ";
 
 	private static final String WHERE_CLAUSE = ("WHERE  dataLogEvent.identifier = auditEventLog.identifier AND auditEventLog.audit_event_id = auditEvent.identifier "
-			+ "AND user.identifier = auditEvent.user_id ");
+			+ "AND usr.identifier = auditEvent.user_id ");
 
-	private static final String GROUP_BY_CLAUSE = "GROUP BY dataLogEvent.object_name, auditEvent.event_type, user.first_name,"
-			+ "user.last_name, user.login_name ";
+	private static final String GROUP_BY_CLAUSE = "GROUP BY dataLogEvent.object_name, auditEvent.event_type, usr.first_name, usr.last_name, usr.login_name ";
 
-	private static final String ORDER_BY_CLAUSE = "ORDER BY user.identifier";
+	private static final String GROUP_BY_CLAUSE_ORCL = "GROUP BY usr.identifier,dataLogEvent.object_name,auditEvent.event_type,usr.first_name,usr.last_name,usr.login_name ";
+
+	private static final String ORDER_BY_CLAUSE = "ORDER BY usr.identifier";
 
 	private DaoFactory daoFactory;
 
@@ -106,58 +111,115 @@ public class AuditReportServiceImpl implements AuditReportService {
 	private StringBuffer createAuditQuery(AuditReportDetail reportDetailEvent, Map<String, Object> queryParameters)
 			throws ParseException {
 
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		String databaseName = DAOConfigFactory.getInstance().getDAOFactory(appName).getDataBaseType();
+
 		// get User Ids from reportDetailEvent and set '?' into IN() clause as per number of values
-		StringBuffer conditions = new StringBuffer();
-		List<Long> userIds = reportDetailEvent.getUserIds();
-		if (!(userIds.isEmpty())) {
+		if (databaseName.equalsIgnoreCase("mysql")) {
+			StringBuffer conditions = new StringBuffer();
+			List<Long> userIds = reportDetailEvent.getUserIds();
+			if (!(userIds.isEmpty())) {
 
-			conditions.append("AND user.identifier IN(");
-			addNamedParameters(conditions, userIds, queryParameters, "user");
-		}
-
-		// get Object Names from reportDetailEvent and set '?' into IN() clause as per number of values
-		List<String> objectNames = reportDetailEvent.getObjectTypes();
-		if (!(objectNames.isEmpty())) {
-			conditions.append("AND dataLogEvent.object_name IN(");
-			addNamedParameters(conditions, objectNames, queryParameters, "object");
-		}
-
-		// get Event Types from reportDetailEvent
-		List<String> eventTypes = reportDetailEvent.getOperations();
-		if (!(eventTypes.isEmpty())) {
-
-			conditions.append("AND auditEvent.event_type IN(");
-			addNamedParameters(conditions, eventTypes, queryParameters, "event");
-		}
-
-		if (reportDetailEvent.getStartDate() != null || reportDetailEvent.getEndDate() != null) {
-			if (reportDetailEvent.getStartDate() != null) {
-				queryParameters.put("startDate", new java.sql.Date(reportDetailEvent.getStartDate().getTime()));
-
-			}
-			else {
-				Date startDate = new Date(Long.MIN_VALUE);
-				queryParameters.put("startDate", new java.sql.Date(startDate.getTime()));
+				conditions.append("AND usr.identifier IN(");
+				addNamedParameters(conditions, userIds, queryParameters, "user");
 			}
 
-			if (reportDetailEvent.getEndDate() != null) {
-				queryParameters.put("endDate", new java.sql.Date(reportDetailEvent.getEndDate().getTime()));
+			// get Object Names from reportDetailEvent and set '?' into IN() clause as per number of values
+			List<String> objectNames = reportDetailEvent.getObjectTypes();
+			if (!(objectNames.isEmpty())) {
+				conditions.append("AND dataLogEvent.object_name IN(");
+				addNamedParameters(conditions, objectNames, queryParameters, "object");
 			}
-			else {
-				Date endDate = new Date();
-				queryParameters.put("endDate", new java.sql.Date(endDate.getTime()));
-			}
-			conditions.append("AND EVENT_TIMESTAMP  between (:startDate) ");
-			conditions.append(" AND (:endDate) + INTERVAL 1 DAY ");
-		}
 
-		StringBuffer auditQuery = new StringBuffer();
-		auditQuery.append(SELECT_CLAUSE);
-		auditQuery.append(WHERE_CLAUSE);
-		auditQuery.append(conditions);
-		auditQuery.append(GROUP_BY_CLAUSE);
-		auditQuery.append(ORDER_BY_CLAUSE);
-		return auditQuery;
+			// get Event Types from reportDetailEvent
+			List<String> eventTypes = reportDetailEvent.getOperations();
+			if (!(eventTypes.isEmpty())) {
+
+				conditions.append("AND auditEvent.event_type IN(");
+				addNamedParameters(conditions, eventTypes, queryParameters, "event");
+			}
+
+			if (reportDetailEvent.getStartDate() != null || reportDetailEvent.getEndDate() != null) {
+				if (reportDetailEvent.getStartDate() != null) {
+					queryParameters.put("startDate", new java.sql.Date(reportDetailEvent.getStartDate().getTime()));
+
+				}
+				else {
+					Date startDate = new Date(Long.MIN_VALUE);
+					queryParameters.put("startDate", new java.sql.Date(startDate.getTime()));
+				}
+
+				if (reportDetailEvent.getEndDate() != null) {
+					queryParameters.put("endDate", new java.sql.Date(reportDetailEvent.getEndDate().getTime()));
+				}
+				else {
+					Date endDate = new Date();
+					queryParameters.put("endDate", new java.sql.Date(endDate.getTime()));
+				}
+				conditions.append("AND EVENT_TIMESTAMP  between (:startDate) ");
+				conditions.append(" AND (:endDate) + INTERVAL 1 DAY ");
+			}
+
+			StringBuffer auditQuery = new StringBuffer();
+			auditQuery.append(SELECT_CLAUSE);
+			auditQuery.append(COUNT_MYSQL);
+			auditQuery.append(FROM);
+			auditQuery.append(WHERE_CLAUSE);
+			auditQuery.append(conditions);
+			auditQuery.append(GROUP_BY_CLAUSE);
+			auditQuery.append(ORDER_BY_CLAUSE);
+			return auditQuery;
+		}
+		else {
+			StringBuffer conditions = new StringBuffer();
+			List<Long> userIds = reportDetailEvent.getUserIds();
+			if (!(userIds.isEmpty())) {
+
+				conditions.append("AND usr.identifier IN(");
+				addNamedParameters(conditions, userIds, queryParameters, "user");
+			}
+
+			// get Object Names from reportDetailEvent and set '?' into IN() clause as per number of values
+			List<String> objectNames = reportDetailEvent.getObjectTypes();
+			if (!(objectNames.isEmpty())) {
+				conditions.append("AND dataLogEvent.object_name IN(");
+				addNamedParameters(conditions, objectNames, queryParameters, "object");
+			}
+
+			// get Event Types from reportDetailEvent
+			List<String> eventTypes = reportDetailEvent.getOperations();
+			if (!(eventTypes.isEmpty())) {
+
+				conditions.append("AND auditEvent.event_type IN(");
+				addNamedParameters(conditions, eventTypes, queryParameters, "event");
+			}
+
+			if (reportDetailEvent.getStartDate() != null && reportDetailEvent.getEndDate() != null) {
+				conditions.append("AND EVENT_TIMESTAMP  >= to_date('"
+						+ new java.sql.Date(reportDetailEvent.getStartDate().getTime()) + "',\'yyyy-mm-dd\') ");
+				conditions.append(" AND EVENT_TIMESTAMP  <= to_date('"
+						+ new java.sql.Date(reportDetailEvent.getEndDate().getTime()) + "',\'yyyy-mm-dd\') + INTERVAL '1' DAY ");
+			}
+
+			else if (reportDetailEvent.getStartDate() == null && reportDetailEvent.getEndDate() != null) {
+				conditions.append("AND EVENT_TIMESTAMP <=  to_date('"
+						+ new java.sql.Date(reportDetailEvent.getEndDate().getTime()) + "',\'yyyy-mm-dd\')");
+			}
+			else if (reportDetailEvent.getEndDate() == null && reportDetailEvent.getStartDate() != null) {
+				conditions.append("AND EVENT_TIMESTAMP >=  to_date('"
+						+ new java.sql.Date(reportDetailEvent.getStartDate().getTime()) + "',\'yyyy-mm-dd\')");
+			}
+
+			StringBuffer auditQuery = new StringBuffer();
+			auditQuery.append(SELECT_CLAUSE);
+			auditQuery.append(COUNT_ORACLE);
+			auditQuery.append(FROM);
+			auditQuery.append(WHERE_CLAUSE);
+			auditQuery.append(conditions);
+			auditQuery.append(GROUP_BY_CLAUSE_ORCL);
+			auditQuery.append(ORDER_BY_CLAUSE);
+			return auditQuery;
+		}
 	}
 
 	// generic method to set placeholder into IN() clause as per number of  values
@@ -207,7 +269,7 @@ public class AuditReportServiceImpl implements AuditReportService {
 			if (objectNameMap.size() == 0) {
 				populateObjectsInMap();
 			}
-			
+
 			objectDetailsEvent.setObjectNameMap(objectNameMap);
 			return GetObjectNameEvent.ok(objectDetailsEvent.getObjectNameMap());
 		}
@@ -225,10 +287,10 @@ public class AuditReportServiceImpl implements AuditReportService {
 		InputStream inputStream = new FileInputStream(new File(actualPath));
 		properties.load(inputStream);
 		inputStream.close();
-		
+
 		for (String key : properties.stringPropertyNames()) {
-	    objectNameMap.put(key,properties.getProperty(key));
-	}
+			objectNameMap.put(key, properties.getProperty(key));
+		}
 	}
 
 	/**
