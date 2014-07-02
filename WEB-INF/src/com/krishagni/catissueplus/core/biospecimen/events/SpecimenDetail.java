@@ -69,7 +69,7 @@ public class SpecimenDetail {
 
 	private List<BiohazardDetail> biohazardDetails = new ArrayList<BiohazardDetail>();
 
-	private List<String> modifiedAttributes;
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public void setModifiedAttributes(List<String> modifiedAttributes) {
 		this.modifiedAttributes = modifiedAttributes;

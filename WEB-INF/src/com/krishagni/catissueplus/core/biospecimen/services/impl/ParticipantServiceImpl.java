@@ -70,13 +70,13 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	@Override
-	@Audit(operation=Operation.INSERT,object=ParticipantServiceImpl.class)
+//	@Audit(operation=Operation.INSERT,object=ParticipantServiceImpl.class)
 	@PlusTransactional
 	public ParticipantCreatedEvent createParticipant(CreateParticipantEvent event) {
 		try {
 //			List<Participant> list = participantLookupLogic.getMatchingParticipants(event.getParticipantDetail());
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			ObjectCreationException errorHandler = new ObjectCreationException();;
+			ObjectCreationException errorHandler = new ObjectCreationException();
 
 			ensureUniqueSsn(participant.getSocialSecurityNumber(), errorHandler);
 			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
@@ -97,7 +97,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	 * @see com.krishagni.catissueplus.core.services.ParticipantService#updateParticipant(com.krishagni.catissueplus.core.events.participants.UpdateParticipantEvent)
 	 */
 	@Override
-	@Audit(operation=Operation.INSERT,object=ParticipantServiceImpl.class)
+//	@Audit(operation=Operation.INSERT,object=ParticipantServiceImpl.class)
 	@PlusTransactional
 	public ParticipantUpdatedEvent updateParticipant(UpdateParticipantEvent event) {
 		try {
