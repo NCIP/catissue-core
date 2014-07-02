@@ -906,7 +906,6 @@
               <a href=#" tooltip="Cancel and go back to dashboard" tooltip-placement="top" ng-click="showQueries()" style="margin-left: 10px;">Cancel</a>
             </div>
             <div class="pull-right" style="width: 45%; margin-left: 1%;" ng-if="queryData.notifs.showCount">
-              <!-- div ng-if="queryData.notifs.waitCount" style="border-radius: 4px; border: 1px solid #bce8f1; padding: 6px 12px 5px 12px; background-color: #d9edf7; color: #3a87ad;" -->
               <div ng-if="queryData.notifs.waitCount" class="alert alert-info" style="padding: 5px 12px;">
                 <span>Counting ...</span>
               </div>
@@ -1057,7 +1056,8 @@
       </div>
       <div class="modal-footer" style="height: 12%">
         <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-        <button class="btn btn-primary" ng-click="save()">Save</button>
+        <button class="btn btn-primary" ng-click="save(true)" ng-if="modalData.id">Save a Copy</button>
+        <button class="btn btn-primary" ng-click="save(false)">Save</button>
       </div>
     </script>
 

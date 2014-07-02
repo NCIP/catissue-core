@@ -1521,13 +1521,18 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       };
       
       $scope.modalData = {
-        title: queryData.title
+        title: queryData.title,
+        id: queryData.id
       };
    
 
-      $scope.save = function() {
+      $scope.save = function(overwrite) {
+        if (overwrite) {
+          queryData.id = undefined;
+        }
         queryData.title = $scope.modalData.title;
         var queryDef = getQueryDef();
+        
         QueryService.saveOrUpdateQuery(queryDef).then(
           function(result) {
             $modalInstance.close(result.id);      
