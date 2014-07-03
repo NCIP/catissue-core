@@ -22,7 +22,7 @@ public class BOTemplateGeneratorUtil {
             participantIntegratorFields.put("Collection Protocol Title", "collectionProtocol");
             participantIntegratorFields.put("Participant Protcol ID", "ppi");
 
-            specimenIntegratorFields.put("Specimen Name", "scgName");
+            specimenIntegratorFields.put("Specimen Name", "specimenLabel");
             specimenIntegratorFields.put("Specimen ID", "specimenId");
             specimenIntegratorFields.put("Specimen Barcode", "specimenBarcode");
 
