@@ -93,6 +93,8 @@ public class QueryServiceImpl implements QueryService {
 	private static final String cprForm = "Participant";
 
 	private static final String dateFormat = CommonServiceLocator.getInstance().getDatePattern();
+
+	private static final String timeFormat = CommonServiceLocator.getInstance().getTimePattern();
 	
 	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
 	
@@ -187,10 +189,10 @@ public class QueryServiceImpl implements QueryService {
 				return QuerySavedEvent.badRequest(SavedQueryErrorCode.QUERY_ID_FOUND.message(), null);
 			}
 
-			Query query = Query.createQuery();
-			query.wideRows(true).ic(true).dateFormat(dateFormat).compile(cprForm, getAql(queryDetail));
-
-			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);	
+			Query.createQuery().wideRows(true).ic(true)
+					.dateFormat(dateFormat).timeFormat(timeFormat)
+					.compile(cprForm, getAql(queryDetail));
+			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
 			return QuerySavedEvent.ok(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
@@ -212,9 +214,9 @@ public class QueryServiceImpl implements QueryService {
 		try {
 			SavedQueryDetail queryDetail = req.getSavedQueryDetail();
 
-			Query query = Query.createQuery();
-			query.wideRows(true).ic(true).dateFormat(dateFormat).compile(cprForm, getAql(queryDetail));
-
+			Query.createQuery().wideRows(true).ic(true)
+					.dateFormat(dateFormat).timeFormat(timeFormat)
+					.compile(cprForm, getAql(queryDetail));
 			SavedQuery savedQuery = getSavedQuery(req.getSessionDataBean(), queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
 			existing.update(savedQuery);
@@ -238,12 +240,10 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public QueryExecutedEvent executeQuery(ExecuteQueryEvent req) {
 		try {
-			Query query = Query.createQuery();
-			query.wideRows(req.isWideRows())
-			 	.ic(true)
-			 	.dateFormat(dateFormat)
-			 	.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
-			
+			Query query = Query.createQuery()
+					.wideRows(req.isWideRows()).ic(true)
+					.dateFormat(dateFormat).timeFormat(timeFormat);
+			query.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
 			QueryResponse resp = query.getData();
 			insertAuditLog(req, resp);
 			
