@@ -50,20 +50,15 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       } else {
         result = getNumericOps();
       } 
-
-      if (field.pvs && field.pvs.length > 0) {
-        result.push(ops.qin, ops.not_in);
-      }
-
       return result;
     };
 
     var getStringOps = function() {
-      return [ops.eq, ops.ne, ops.exists, ops.not_exists, ops.starts_with, ops.ends_with, ops.contains];
+      return [ops.eq, ops.ne, ops.exists, ops.not_exists, ops.starts_with, ops.ends_with, ops.contains, ops.qin, ops.not_in];
     };
 
     var getNumericOps = function() {
-      return [ops.eq, ops.ne, ops.lt, ops.le, ops.gt, ops.ge, ops.exists, ops.not_exists];
+      return [ops.eq, ops.ne, ops.lt, ops.le, ops.gt, ops.ge, ops.exists, ops.not_exists, ops.qin, ops.not_in];
     };
 
     var getFilterMap = function(filters) {
@@ -1264,8 +1259,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
       if (!field || !op) {
         return "text";
-      } else if (field.pvs && op && (op.name == "qin" || op.name == "not_in")) {
-        return "multiSelect";
+      } else if (op && (op.name == "qin" || op.name == "not_in")) {
+        return field.pvs ? "multiSelect" : "tagsSelect";
       } else if (field.pvs && !(op.name == 'contains' || op.name == 'starts_with' || op.name == 'ends_with')) {
         return "select";
       } else if (field.type == "DATE") {

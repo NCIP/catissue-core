@@ -968,6 +968,10 @@
                          options="queryData.currFilter.field.pvs"
                          selected="queryData.currFilter.value" style="width: 100%"></ka-select>
             </div>
+            <div ng-switch-when="tagsSelect">
+              <ka-tags tags="queryData.currFilter.value" 
+                placeholder="Specify Condition Value & then hit enter key"/>
+            </div>
             <input ng-switch-when="datePicker" class="form-control"
                    data-placeholder="Select Date"
                    type="text" ka-date-picker="{{queryData.datePickerOpts}}"
