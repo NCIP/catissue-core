@@ -11,7 +11,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
 
-public class UserDetails {
+public class UserPatchDetails {
 
 	private Long id;
 
@@ -50,6 +50,68 @@ public class UserDetails {
 	private String faxNumber;
 
 	private String phoneNumber;
+
+	private List<String> modifiedAttributes = new ArrayList<String>();
+
+	public boolean isUserSitesModified() {
+		return modifiedAttributes.contains("userSiteNames");
+	}
+
+	public boolean isUserCPRolesModified() {
+		return modifiedAttributes.contains("userCPRoles");
+	}
+	
+	public boolean isLastNameModified() {
+		return modifiedAttributes.contains("lastName");
+	}
+	
+	public boolean isFirstNameModified() {
+		return modifiedAttributes.contains("firstName");
+	}
+
+	public boolean isEmailAddressModified() {
+		return modifiedAttributes.contains("emailAddress");
+	}
+
+	public boolean isActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
+	}
+
+	public boolean isDeptNameModified() {
+		return modifiedAttributes.contains("deptName");
+	}
+
+	public boolean isCommentsModified() {
+		return modifiedAttributes.contains("comments");
+	}
+
+	public boolean isCityModified() {
+		return modifiedAttributes.contains("city");
+	}
+
+	public boolean isStreetModified() {
+		return modifiedAttributes.contains("street");
+	}
+
+	public boolean isStateModified() {
+		return modifiedAttributes.contains("state");
+	}
+
+	public boolean isCountryModified() {
+		return modifiedAttributes.contains("country");
+	}
+
+	public boolean isZipCodeModified() {
+		return modifiedAttributes.contains("zipCode");
+	}
+
+	public boolean isFaxNumberModified() {
+		return modifiedAttributes.contains("faxNumber");
+	}
+
+	public boolean isPhoneNumberModified() {
+		return modifiedAttributes.contains("phoneNumber");
+	}
 
 	public Long getId() {
 		return id;
@@ -203,8 +265,16 @@ public class UserDetails {
 		this.userCPRoles = userCPRoles;
 	}
 
-	public static UserDetails fromDomain(User user) {
-		UserDetails userDto = new UserDetails();
+	public List<String> getModifiedAttributes() {
+		return modifiedAttributes;
+	}
+
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
+	}
+
+	public static UserPatchDetails fromDomain(User user) {
+		UserPatchDetails userDto = new UserPatchDetails();
 		userDto.setLoginName(user.getLoginName());
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
@@ -225,7 +295,7 @@ public class UserDetails {
 		return userDto;
 	}
 
-	private static void setUserSiteNames(UserDetails userDto, Set<Site> userSites) {
+	private static void setUserSiteNames(UserPatchDetails userDto, Set<Site> userSites) {
 		List<String> siteNames = new ArrayList<String>();
 		for (Site site : userSites) {
 			siteNames.add(site.getName());
@@ -233,7 +303,7 @@ public class UserDetails {
 		userDto.setUserSiteNames(siteNames);
 	}
 
-	private static void updateAddressDetails(UserDetails userDto, Address address) {
+	private static void updateAddressDetails(UserPatchDetails userDto, Address address) {
 		userDto.setStreet(address.getStreet());
 		userDto.setCountry(address.getCountry());
 		userDto.setFaxNumber(address.getFaxNumber());
@@ -243,7 +313,7 @@ public class UserDetails {
 		userDto.setZipCode(address.getZipCode());
 	}
 
-	private static void setUserCPRoles(UserDetails userDto, Set<UserCPRole> userCPRoles) {
+	private static void setUserCPRoles(UserPatchDetails userDto, Set<UserCPRole> userCPRoles) {
 		List<UserCPRoleDetails> userCPRoleDetailsList = new ArrayList<UserCPRoleDetails>();
 		for (UserCPRole userCPRole : userCPRoles) {
 			UserCPRoleDetails userCPRoleDetails = new UserCPRoleDetails();

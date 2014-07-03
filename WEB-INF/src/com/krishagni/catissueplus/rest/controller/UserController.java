@@ -28,6 +28,7 @@ import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordUpdatedEvent;
@@ -39,6 +40,7 @@ import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
@@ -74,6 +76,17 @@ public class UserController {
 
 		return null;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetails getUser(@PathVariable Long id) {	
+		GetUserEvent resp = userService.getUser(id);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getUserDetails();
+		}
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -105,7 +118,7 @@ public class UserController {
 		event.setUserId(id);
 		event.setSessionDataBean(getSession());
 
-		UserDetails details = new UserDetails();
+		UserPatchDetails details = new UserPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -135,7 +148,7 @@ public class UserController {
 		}
 		return null;
 	}
-
+	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

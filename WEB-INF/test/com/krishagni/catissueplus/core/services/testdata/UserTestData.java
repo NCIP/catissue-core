@@ -26,6 +26,7 @@ import com.krishagni.catissueplus.core.administrative.events.UpdatePasswordEvent
 import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCPRoleDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
 import com.krishagni.catissueplus.core.auth.domain.Ldap;
@@ -427,7 +428,7 @@ public class UserTestData {
 	public static PatchUserEvent getPatchData() {
 		PatchUserEvent event = new PatchUserEvent();
 		event.setUserId(1l);
-		UserDetails details = new UserDetails();
+		UserPatchDetails details = new UserPatchDetails();
 		try {
 			BeanUtils.populate(details, getUserPatchAttributes());
 		}
@@ -479,7 +480,7 @@ public class UserTestData {
 	public static PatchUserEvent nonPatchData() {
 		PatchUserEvent event = new PatchUserEvent();
 		event.setUserId(1l);
-		UserDetails details = new UserDetails();
+		UserPatchDetails details = new UserPatchDetails();
 		event.setUserDetails(details);
 		return event;
 	}

@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
 import com.krishagni.catissueplus.core.administrative.events.UserCPRoleDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -73,7 +74,7 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	@Override
-	public User patchUser(User user, UserDetails details) {
+	public User patchUser(User user, UserPatchDetails details) {
 		ObjectCreationException exception = new ObjectCreationException();
 		if (details.isFirstNameModified()) {
 			setFirstName(user, details.getFirstName(), exception);

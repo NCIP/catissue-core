@@ -7,7 +7,7 @@ public class PatchUserEvent extends RequestEvent {
 
 	private Long userId;
 
-	private UserDetails userDetails;
+	private UserPatchDetails userDetails;
 
 	public Long getUserId() {
 		return userId;
@@ -16,13 +16,12 @@ public class PatchUserEvent extends RequestEvent {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-	public UserDetails getUserDetails() {
+	
+	public UserPatchDetails getUserDetails() {
 		return userDetails;
 	}
-
-	public void setUserDetails(UserDetails userDetails) {
+	
+	public void setUserDetails(UserPatchDetails userDetails) {
 		this.userDetails = userDetails;
 	}
-
 }

@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqAllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCPRoleDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.common.CaTissueAppContext;
@@ -230,7 +231,7 @@ public class MigratePrivileges {
 			List<UserCPRoleDetails> userCPRoles = oldUserDetails.getUserCPRoles();
 			userCPRoles.addAll(userCPRoleDetailsList);
 
-			UserDetails userDetails = new UserDetails();
+			UserPatchDetails userDetails = new UserPatchDetails();
 			userDetails.setUserCPRoles(userCPRoles);
 
 			PatchUserEvent patchUserEvent = new PatchUserEvent();
