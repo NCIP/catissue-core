@@ -19,7 +19,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       or: {name: 'or', desc: 'Or', code: 'or', symbol: 'or', model: 'OR'},
       intersect: {name: 'intersect', desc: 'Intersection', code: '&#8745;', symbol: 'pand', model: 'PAND'},
       not: {name: 'not', desc: 'Not', code: 'not', symbol: 'not', model: 'NOT'},
-      nthchild: {name: 'nthchild', desc: 'Any child', code: '&#xf1e0;', symbol: 'nthchild', model: 'NTHCHILD'}
+      nthchild: {name: 'nthchild', desc: 'Any child', code: '&#xf1e0;', symbol: 'nthchild', model: 'NTHCHILD'},
+      between: {name: 'between', desc: 'Between', code: '&#xf1e0;', symbol: 'between', model: 'BETWEEN'}
     };
 
     var getOpByModel = function(model) {
@@ -58,7 +59,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     var getNumericOps = function() {
-      return [ops.eq, ops.ne, ops.lt, ops.le, ops.gt, ops.ge, ops.exists, ops.not_exists, ops.qin, ops.not_in];
+      return [ops.eq, ops.ne, ops.lt, ops.le, ops.gt, ops.ge, ops.exists, ops.not_exists, ops.qin, ops.not_in, ops.between];
     };
 
     var getFilterMap = function(filters) {
@@ -93,7 +94,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
           var queryVal = filter.value;
           if (filter.field.type == "STRING" || filter.field.type == "DATE") {
-            if (filter.op.name == 'qin' || filter.op.name == 'not_in') {
+            if (filter.op.name == 'qin' || filter.op.name == 'not_in' || filter.op.name == 'between') {
               var quotedValues = [];
               for (var j = 0; j < queryVal.length; ++j) {
                 quotedValues.push("\"" + queryVal[j] + "\"");
@@ -104,7 +105,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             }
           }
 
-          if (filter.op.name == 'qin' || filter.op.name == 'not_in') {
+          if (filter.op.name == 'qin' || filter.op.name == 'not_in' || filter.op.name == 'between') {
             queryVal = "(" + queryVal.join() + ")";
           }
 
@@ -815,7 +816,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var value = undefined;
       if (op.name == 'exists' || op.name == 'not_exists') {
         value = undefined;
-      } else if (op.name != 'qin' && op.name != 'not_in') {
+      } else if (op.name != 'qin' && op.name != 'not_in' && op.name != 'between') {
         value = filterDef.values[0];
       } else {
         value = filterDef.values;
@@ -1280,7 +1281,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
     $scope.onOpSelect = function(op) {
       $scope.queryData.currFilter.op = op;
-      $scope.queryData.currFilter.value = null;
+      if (op.name == "between") {
+        $scope.queryData.currFilter.value = [null, null];
+      } else {
+        $scope.queryData.currFilter.value = null;
+      }
     };
 
     $scope.isUnaryOpSelected = function() {
@@ -1296,6 +1301,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return "text";
       } else if (op && (op.name == "qin" || op.name == "not_in")) {
         return field.pvs ? "multiSelect" : "tagsSelect";
+      } else if (op && op.name == "between") {
+        return field.type == "DATE" ? "betweenDate" : "betweenNumeric"; 
       } else if (field.pvs && !(op.name == 'contains' || op.name == 'starts_with' || op.name == 'ends_with')) {
         return "select";
       } else if (field.type == "DATE") {

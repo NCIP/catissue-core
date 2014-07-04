@@ -16,7 +16,8 @@ public class Filter {
 		IN ("in"),
 		NOT_IN ("not_in"),
 		EXISTS ("exists"),
-		NOT_EXISTS ("not_exists");
+		NOT_EXISTS ("not_exists"),
+		BETWEEN("between");
 		
 		private String symbol;
 		

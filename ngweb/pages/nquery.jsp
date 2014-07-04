@@ -862,7 +862,10 @@
                   </div>
                 </div>
                 <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="!filter.expr"> 
-                  <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i> <b> {{filter.op.desc}} </b> <i>{{filter.value}}</i>
+                  <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i> 
+                  <b> {{filter.op.desc}} </b> 
+                  <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
+                  <i ng-if="filter.op.name != 'between'">{{filter.value}}</i>
                 </div>
                 <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="filter.expr"> 
                   <i>{{filter.desc}}</i>
@@ -976,6 +979,26 @@
             <div ng-switch-when="tagsSelect">
               <ka-tags tags="queryData.currFilter.value" 
                 placeholder="Specify Condition Value & then hit enter key"/>
+            </div>
+            <div ng-switch-when="betweenDate" class="clearfix">
+              <input class="pull-left form-control" placeholder="Range Min" type="text" 
+                     ka-date-picker="{{queryData.datePickerOpts}}"
+                     ng-model="queryData.currFilter.value[0]"
+                     style="width:42%;">
+              <span class="pull-left" style="width:15%;text-align:center;padding: 4px;">and</span>
+              <input class="pull-left form-control" placeholder="Range Max" type="text" 
+                     ka-date-picker="{{queryData.datePickerOpts}}"
+                     ng-model="queryData.currFilter.value[1]"
+                     style="width:42%;">
+            </div>
+            <div ng-switch-when="betweenNumeric" class="clearfix">
+              <input class="pull-left form-control" placeholder="Range Min" type="text" 
+                     ng-model="queryData.currFilter.value[0]"
+                     style="width:42%;">
+              <span class="pull-left" style="width:15%;text-align:center;padding: 4px;">and</span>
+              <input class="pull-left form-control" placeholder="Range Max" type="text" 
+                     ng-model="queryData.currFilter.value[1]"
+                     style="width:42%;">
             </div>
             <input ng-switch-when="datePicker" class="form-control"
                    data-placeholder="Select Date"

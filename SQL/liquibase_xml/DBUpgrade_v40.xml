@@ -3203,7 +3203,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         indexName="IDX_QUERY_DELETED_ON"
         tableName="CATISSUE_SAVED_QUERIES"
         unique="false">
-        <column name="" type="${timestamp.type}"/>
+        <column name="DELETED_ON" type="${timestamp.type}"/>
       </createIndex>
     </changeSet>
 </databaseChangeLog>

@@ -140,7 +140,9 @@ public class AqlBuilder {
 		String value = values[0];
 		if (filter.getOp() == Op.IN || filter.getOp() == Op.NOT_IN) {
 			value = "(" + join(values) + ")";
-		} 
+		} else if (filter.getOp() == Op.BETWEEN) {
+			value =  "(" + values[0] + ", " + values[1] + ")";
+		}
 		
 		return filterExpr.append(value).toString();
 	}
