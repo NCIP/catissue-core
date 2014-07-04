@@ -2752,7 +2752,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         <sql>commit;</sql>
     </changeSet>
     
-    <changeSet id="delete entries from event tables for SCG" author="nitesh">
+    <!-- <changeSet id="delete entries from event tables for SCG" author="nitesh">
         <sql>
             delete from catissue_received_event_param where identifier in(
                 select identifier from (
@@ -2796,7 +2796,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             delete from catissue_specimen_event_param where specimen_id in (select identifier from catissue_cp_req_specimen)
         </sql>
         <sql>commit;</sql>
-    </changeSet>
+    </changeSet> -->
 
     <changeSet id="create specimen hierarchy table" author="mibrahim" runOnChange="true" dbms="mysql">
       <sqlFile 
@@ -3190,7 +3190,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
  		
     </changeSet> 
 
-    <changetSet author="vpawar" id="Add column to soft delete a query" dbms="mysql">
+    <changeSet author="vpawar" id="Add column to soft delete a query" dbms="mysql">
       <sql>alter table CATISSUE_SAVED_QUERIES add column DELETED_ON TIMESTAMP NULL DEFAULT NULL</sql>
     </changeSet>
 
