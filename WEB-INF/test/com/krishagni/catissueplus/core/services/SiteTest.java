@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -16,19 +16,21 @@ import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
-import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
-import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.SiteTestData;
 
@@ -65,6 +67,8 @@ public class SiteTest {
 		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(
 				SiteTestData.getUser("admin@admin.com"));
 
+		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
+		when(daoFactory.getSiteDao().getSite(anyString())).thenReturn(SiteTestData.getSite());
 	}
 
 	@Test
@@ -380,7 +384,7 @@ public class SiteTest {
 
 	@Test
 	public void testSuccessfullPatchSite() {
-		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
+
 		when(daoFactory.getSiteDao().isUniqueSiteName(anyString())).thenReturn(true);
 		PatchSiteEvent reqEvent = SiteTestData.getPatchData();
 		SiteUpdatedEvent response = siteService.patchSite(reqEvent);
@@ -390,7 +394,7 @@ public class SiteTest {
 
 	@Test
 	public void testPatchSiteWithInvalidAttribute() {
-		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
+
 		when(daoFactory.getSiteDao().isUniqueSiteName(anyString())).thenReturn(false);
 
 		PatchSiteEvent reqEvent = SiteTestData.getPatchDataWithInavalidAttribute();
@@ -424,7 +428,7 @@ public class SiteTest {
 
 	@Test
 	public void testPatchSiteServerError() {
-		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
+
 		when(daoFactory.getSiteDao().isUniqueSiteName(anyString())).thenReturn(true);
 		PatchSiteEvent reqEvent = SiteTestData.getPatchData();
 		doThrow(new RuntimeException()).when(siteDao).saveOrUpdate(any(Site.class));
@@ -517,6 +521,17 @@ public class SiteTest {
 
 		PatchSiteEvent reqEvent = SiteTestData.getPatchSiteEventWithModifiedActivityStatus();
 		SiteUpdatedEvent response = siteService.patchSite(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testSiteUpdateWithDisabledActivityStatus() {
+		when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+
+		UpdateSiteEvent reqEvent = SiteTestData.getUpdateSiteEventWithDisabledActvityStatus();
+		SiteUpdatedEvent response = siteService.updateSite(reqEvent);
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
@@ -622,4 +637,57 @@ public class SiteTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
+	@Test
+	public void testForSuccessfulBiohazardDeletion() {
+
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEvent();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testSiteDeleteWithNullOldSiteObject() {
+
+		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(null);
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEvent();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testSiteDeleteWithActiveScgChildren() {
+
+		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSiteWithscgCollection());
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEvent();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
+	public void testSiteDeleteWithActiveStorageContainerChildren() {
+
+		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSiteWithStorageContainerCollection());
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEvent();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
+	public void testSiteDeleteWithoutActiveChildren() {
+
+		when(daoFactory.getSiteDao().getSite(anyLong())).thenReturn(SiteTestData.getSite());
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEvent();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
 }

@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.services.testdata;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,14 +15,18 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
+import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.common.beans.SessionDataBean;
@@ -41,11 +46,11 @@ public class SiteTestData {
 	public static final String CITY = "city";
 
 	public static final String PATCH_SITE = "patch site";
-	
+
 	public static final String EMAIL_ADDRESS = "email address";
 
 	public static final String SITE_TYPE = "site type";
-	
+
 	public static Site getSite() {
 		Site site = new Site();
 		site.setId(46L);
@@ -59,7 +64,31 @@ public class SiteTestData {
 		site.setAddress(address);
 		site.setActivityStatus("Active");
 		site.setCoordinatorCollection(getCoordinatorCollection());
+		site.setScgCollection(new HashSet<SpecimenCollectionGroup>());
+		site.setStorageContainerCollection(new HashSet<StorageContainer>());
 		return site;
+	}
+
+	public static Site getSiteWithscgCollection() {
+		Site site = getSite();
+		site.setScgCollection(SiteTestData.getScgCollection());
+		return site;
+	}
+
+	public static Site getSiteWithStorageContainerCollection() {
+		Site site = getSite();
+		site.setStorageContainerCollection(SiteTestData.getStorageContainerCollection());
+		return site;
+	}
+
+	private static Set<StorageContainer> getStorageContainerCollection() {
+		Set<StorageContainer> storageContainerCollection = new HashSet<StorageContainer>();
+		StorageContainer storageContainer = new StorageContainer();
+		storageContainer.setActivityStatus("Active");
+		storageContainer.setId(1L);
+		storageContainer.setName("ST");
+		storageContainerCollection.add(storageContainer);
+		return storageContainerCollection;
 	}
 
 	private static Set<User> getCoordinatorCollection() {
@@ -89,6 +118,26 @@ public class SiteTestData {
 		return sessionDataBean;
 	}
 
+	public static HashSet<SpecimenCollectionGroup> getScgCollection() {
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg.setId(1L);
+		scg.setName("SCGCollection");
+		scg.setClinicalDiagnosis("");
+		scg.setActivityStatus("Active");
+		scg.setClinicalStatus("");
+		scg.setCollectionComments("");
+		scg.setCollectionSite(SiteTestData.getSite());
+		scg.setCollectionStatus("");
+		scg.setBarcode("dsdds3333");
+		scg.setCollectionTimestamp(new Date());
+		scg.setCollector(getUser("admin@admin.com"));
+		scg.setReceiver(getUser("admin@admin.com"));
+
+		HashSet<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+		scgCollection.add(scg);
+		return scgCollection;
+	}
+
 	public static CreateSiteEvent getCreateSiteEventWithEmptySiteName() {
 		CreateSiteEvent reqEvent = getCreateSiteEvent();
 		reqEvent.getSiteDetails().setName("");
@@ -109,7 +158,7 @@ public class SiteTestData {
 
 	public static UpdateSiteEvent getUpdateSiteEvent() {
 		SiteDetails details = getDetails();
-		
+
 		UpdateSiteEvent reqEvent = new UpdateSiteEvent(details, details.getId());
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		reqEvent.setSiteDetails(details);
@@ -124,6 +173,7 @@ public class SiteTestData {
 		reqEvent.setSiteDetails(details);
 		return reqEvent;
 	}
+
 	private static List<UserInfo> getCoordinatorNameCollection() {
 		List<UserInfo> userInfos = new ArrayList<UserInfo>();
 		UserInfo userInfo = new UserInfo();
@@ -151,8 +201,26 @@ public class SiteTestData {
 		return details;
 	}
 
+	private static SitePatchDetails getPatchSiteDetails() {
+		SitePatchDetails details = new SitePatchDetails();
+		details.setId(1L);
+		details.setCity("Pune");
+		details.setCountry("india");
+		details.setFaxNumber("333111");
+		details.setEmailAddress("admin@admin.com");
+		details.setPhoneNumber("9103201122");
+		details.setState("Maharashtra");
+		details.setStreet("MyStreet");
+		details.setZipCode("412312");
+		details.setName("DSD");
+		details.setType("Not Specified");
+		details.setCoordinatorCollection(getCoordinatorNameCollection());
+		details.setActivityStatus("Active");
+		return details;
+	}
+
 	private static List<UserInfo> getCoordinatorCollectionList() {
-		List<UserInfo> users=new ArrayList<UserInfo>();
+		List<UserInfo> users = new ArrayList<UserInfo>();
 		UserInfo userInfo = new UserInfo();
 		userInfo.setDomainName(AuthenticationType.CATISSUE.value());
 		userInfo.setLoginName("admin@admin.com");
@@ -175,7 +243,7 @@ public class SiteTestData {
 	public static PatchSiteEvent getPatchData() {
 		PatchSiteEvent event = new PatchSiteEvent();
 		event.setSiteId(48L);
-		SiteDetails details = new SiteDetails();
+		SitePatchDetails details = new SitePatchDetails();
 		try {
 			BeanUtils.populate(details, getSitePatchAttributes());
 		}
@@ -183,16 +251,16 @@ public class SiteTestData {
 			reportError(SiteErrorCode.BAD_REQUEST, PATCH_SITE);
 		}
 		details.setModifiedAttributes(new ArrayList<String>(getSitePatchAttributes().keySet()));
-		event.setSiteDetails(details);
+		event.setDetails(details);
 		return event;
 	}
 
 	private static Map<String, Object> getSitePatchAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("name", "pune");
-	  attributes.put("type", "Collection Site");
-	  attributes.put("coordinatorCollection", getCoordinatorCollectionList());
-	  attributes.put("emailAddress", "admin@admin.com");
+		attributes.put("type", "Collection Site");
+		attributes.put("coordinatorCollection", getCoordinatorCollectionList());
+		attributes.put("emailAddress", "admin@admin.com");
 		attributes.put("activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		attributes.put("country", "india");
 		attributes.put("state", "maharashtra");
@@ -227,7 +295,6 @@ public class SiteTestData {
 		reqEvent.getSiteDetails().setZipCode("");
 		return reqEvent;
 	}
-	
 
 	public static UpdateSiteEvent getUpdateSiteEventWithEmptyCityName() {
 		UpdateSiteEvent reqEvent = getUpdateSiteEvent();
@@ -252,105 +319,104 @@ public class SiteTestData {
 		reqEvent.getSiteDetails().setZipCode("");
 		return reqEvent;
 	}
-	
-	
+
 	public static PatchSiteEvent getPatchSiteEventWithEmptyCityName() {
 		PatchSiteEvent reqEvent = getPatchData();
-		reqEvent.getSiteDetails().setCity("");
+		reqEvent.getDetails().setCity("");
 		return reqEvent;
 	}
 
 	private static PatchSiteEvent getEmptyPatchData() {
 		PatchSiteEvent event = new PatchSiteEvent();
-		SiteDetails details = new SiteDetails();
-		event.setSiteDetails(details);
+		SitePatchDetails details = new SitePatchDetails();
+		event.setDetails(details);
 		return event;
 	}
 
 	public static PatchSiteEvent getPatchSiteEventWithEmptyCountryName() {
 		PatchSiteEvent reqEvent = getPatchData();
-		reqEvent.getSiteDetails().setCountry("");
+		reqEvent.getDetails().setCountry("");
 		return reqEvent;
 	}
 
 	public static PatchSiteEvent getPatchSiteEventWithEmptyStreet() {
 		PatchSiteEvent reqEvent = getPatchData();
-		reqEvent.getSiteDetails().setStreet("");
+		reqEvent.getDetails().setStreet("");
 		return reqEvent;
 	}
 
 	public static PatchSiteEvent getPatchSiteEventWithEmptyZipCode() {
 		PatchSiteEvent reqEvent = getPatchData();
-		reqEvent.getSiteDetails().setZipCode("");
+		reqEvent.getDetails().setZipCode("");
 		return reqEvent;
 	}
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedName() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setName("Patana");
+		event.getDetails().setName("Patana");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedType() {
-		PatchSiteEvent event =  getEmptyPatchData();
-		event.getSiteDetails().setType("Collection Site");
+		PatchSiteEvent event = getEmptyPatchData();
+		event.getDetails().setType("Collection Site");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedActivityStatus() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setActivityStatus("Active");
+		event.getDetails().setActivityStatus("Active");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCountry() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setCountry("india");
+		event.getDetails().setCountry("india");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCity() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setCity("india");
+		event.getDetails().setCity("india");
 		return event;
-	}	
+	}
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedStreet() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setStreet("SB Road");
+		event.getDetails().setStreet("SB Road");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedState() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setState("Maharashtra");
+		event.getDetails().setState("Maharashtra");
 		return event;
-	}	
+	}
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedFaxNumber() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setFaxNumber("2344324");
+		event.getDetails().setFaxNumber("2344324");
 		return event;
-	}	
+	}
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedZipCode() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setZipCode("412312");
+		event.getDetails().setZipCode("412312");
 		return event;
-	}	
+	}
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedPhoneNumber() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setPhoneNumber("913433434232");
+		event.getDetails().setPhoneNumber("913433434232");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedEmailAddress() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setEmailAddress("admin@admin.com");
+		event.getDetails().setEmailAddress("admin@admin.com");
 		return event;
-	}	
-	
+	}
+
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCoordinatorCollection() {
 		PatchSiteEvent event = getEmptyPatchData();
 		List<UserInfo> coordinatorCollection = new ArrayList<UserInfo>();
@@ -358,7 +424,7 @@ public class SiteTestData {
 		userInfo.setDomainName("catissue");
 		userInfo.setLoginName("admin@admin.com");
 		coordinatorCollection.add(userInfo);
-		event.getSiteDetails().setCoordinatorCollection(coordinatorCollection);
+		event.getDetails().setCoordinatorCollection(coordinatorCollection);
 		return event;
 	}
 
@@ -367,23 +433,41 @@ public class SiteTestData {
 		SiteDetails details = reqEvent.getSiteDetails();
 		details.setEmailAddress("admin");
 		reqEvent.setSiteDetails(details);
-		return reqEvent;	
+		return reqEvent;
 	}
 
 	public static PatchSiteEvent getPatchDataWithInavalidAttribute() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getSiteDetails().setType("");
-		event.getSiteDetails().getModifiedAttributes().add("type");
+		event.getDetails().setType("");
+		event.getDetails().getModifiedAttributes().add("type");
 		return event;
 	}
 
 	public static PatchSiteEvent getPatchDataWithSiteName() {
-		SiteDetails details = getDetails();
+		SitePatchDetails details = getPatchSiteDetails();
 		details.setId(null);
 		PatchSiteEvent reqEvent = new PatchSiteEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
-		reqEvent.setSiteDetails(details);
+		reqEvent.setDetails(details);
 		reqEvent.setSiteName(details.getName());
+		return reqEvent;
+	}
+
+	public static DeleteSiteEvent getDeleteSiteEvent() {
+		DeleteSiteEvent event = new DeleteSiteEvent();
+		event.setId(1L);
+		return event;
+	}
+
+	public static UpdateSiteEvent getUpdateSiteEventWithDisabledActvityStatus() {
+		UpdateSiteEvent reqEvent = getUpdateSiteEvent();
+		reqEvent.getSiteDetails().setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		return reqEvent;
+	}
+
+	public static UpdateSiteEvent getDeleteSiteEventWithDisabledActvityStatus() {
+		UpdateSiteEvent reqEvent = getUpdateSiteEvent();
+		reqEvent.getSiteDetails().setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		return reqEvent;
 	}
 }

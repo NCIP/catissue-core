@@ -117,6 +117,8 @@ public class DistributionProtocol {
 	}
 
 	public void delete() {
+		//need to check whether its referenced by any order
+		//
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 }

@@ -133,8 +133,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 			checkShortTitle(oldShortTitle, reqEvent.getDetails().getShortTitle(), exceptionHandler);
 			checkTitle(oldTitle, reqEvent.getDetails().getTitle(), exceptionHandler);
-			if(reqEvent.getDetails().isDistributionProtocolActivityStatusModified())
-			{
+			if (reqEvent.getDetails().isDistributionProtocolActivityStatusModified()) {
 				checkActivityStatus(distributionProtocol);
 			}
 			exceptionHandler.checkErrorAndThrow();
@@ -150,13 +149,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return DistributionProtocolPatchedEvent.serverError(ex);
 		}
 	}
-	
 
 	@Override
 	@PlusTransactional
 	public DistributionProtocolDeletedEvent deleteDistributionProtocol(DeleteDistributionProtocolEvent event) {
 		try {
-			DistributionProtocol oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(event.getId());
+			DistributionProtocol oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(
+					event.getId());
 			if (oldDistributionProtocol == null) {
 				return DistributionProtocolDeletedEvent.notFound(event.getId());
 			}
@@ -169,14 +168,12 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 	}
 
-
 	private void checkActivityStatus(DistributionProtocol distributionProtocol) {
-		if(distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-		{
+		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			distributionProtocol.setTitle(CommonUtil.appendTimestamp(distributionProtocol.getTitle()));
 			distributionProtocol.setShortTitle(CommonUtil.appendTimestamp(distributionProtocol.getShortTitle()));
 		}
-		
+
 	}
 
 	private void checkTitle(String oldTitle, String newTitle, ObjectCreationException exceptionHandler) {

@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.BiohazardDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
+import com.krishagni.catissueplus.core.administrative.events.BiohazardPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.services.BiohazardService;
@@ -39,7 +42,7 @@ public class BiohazardController {
 	private static final String PATCH_BIOHAZARD = "patch biohazard";
 
 	@Autowired
-	private BiohazardService biohazardService; //Svc
+	private BiohazardService biohazardSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -51,7 +54,7 @@ public class BiohazardController {
 		CreateBiohazardEvent biohazardEvent = new CreateBiohazardEvent();
 		biohazardEvent.setBiohazardDetails(biohazardDetails);
 		biohazardEvent.setSessionDataBean(getSession());
-		BiohazardCreatedEvent response = biohazardService.createBiohazard(biohazardEvent);
+		BiohazardCreatedEvent response = biohazardSvc.createBiohazard(biohazardEvent);
 
 		if (response.getStatus().equals(EventStatus.OK)) {
 			return response.getBiohazardDetails();
@@ -67,7 +70,7 @@ public class BiohazardController {
 		event.setBiohazardDetails(details);
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(event);
+		BiohazardUpdatedEvent response = biohazardSvc.updateBiohazard(event);
 		if (response != null) {
 			return response.getBiohazardDetails();
 		}
@@ -82,7 +85,7 @@ public class BiohazardController {
 		event.setBiohazardDetails(details);
 		event.setName(name);
 		event.setSessionDataBean(getSession());
-		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(event);
+		BiohazardUpdatedEvent response = biohazardSvc.updateBiohazard(event);
 		if (response != null) {
 			return response.getBiohazardDetails();
 		}
@@ -96,7 +99,7 @@ public class BiohazardController {
 		PatchBiohazardEvent event = new PatchBiohazardEvent();
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		BiohazardDetails details = new BiohazardDetails();
+		BiohazardPatchDetails details = new BiohazardPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -106,7 +109,7 @@ public class BiohazardController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(event);
+		BiohazardUpdatedEvent response = biohazardSvc.patchBiohazard(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getBiohazardDetails();
 		}
@@ -120,7 +123,7 @@ public class BiohazardController {
 		PatchBiohazardEvent event = new PatchBiohazardEvent();
 		event.setName(name);
 		event.setSessionDataBean(getSession());
-		BiohazardDetails details = new BiohazardDetails();
+		BiohazardPatchDetails details = new BiohazardPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -130,9 +133,23 @@ public class BiohazardController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(event);
+		BiohazardUpdatedEvent response = biohazardSvc.patchBiohazard(event);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getBiohazardDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String deleteBiohazard(@PathVariable Long id) {
+		DeleteBiohazardEvent reqEvent = new DeleteBiohazardEvent();
+		reqEvent.setId(id);
+		reqEvent.setSessionDataBean(getSession());
+		BiohazardDeletedEvent response = biohazardSvc.deteteBiohazard(reqEvent);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getMessage();
 		}
 		return null;
 	}

@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services.testdata;
 
-import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError; 
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,12 +16,13 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
-import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -42,7 +43,7 @@ public class DistributionProtocolTestData {
 		protocol.setActivityStatus("Active");
 		return protocol;
 	}
-	
+
 	public static DistributionProtocol getDistributionProtocolWithNullAuthDomain() {
 		DistributionProtocol protocol = new DistributionProtocol();
 		protocol.setId(1L);
@@ -92,9 +93,22 @@ public class DistributionProtocolTestData {
 		event.setDetails(details);
 		return event;
 	}
-	
+
 	private static DistributionProtocolDetails getDistributionProtocolDetails() {
 		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		details.setIrbId("IRB333");
+		details.setPrincipalInvestigator(getPrincipalInvestigator());
+		details.setDescriptionUrl("www.simpleurl.com");
+		details.setAnticipatedSpecimenCount(56L);
+		details.setShortTitle("CPP");
+		details.setTitle("CPProtocol");
+		details.setStartDate(new Date(10 - 06 - 2014));
+		details.setActivityStatus("Active");
+		return details;
+	}
+
+	private static DistributionProtocolPatchDetails getDistributionProtocolPatchDetails() {
+		DistributionProtocolPatchDetails details = new DistributionProtocolPatchDetails();
 		details.setIrbId("IRB333");
 		details.setPrincipalInvestigator(getPrincipalInvestigator());
 		details.setDescriptionUrl("www.simpleurl.com");
@@ -110,7 +124,7 @@ public class DistributionProtocolTestData {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setLoginName("admin@admin.com");
 		userInfo.setDomainName(AuthenticationType.CATISSUE.value());
-		return userInfo; 
+		return userInfo;
 	}
 
 	public static SessionDataBean getSessionDataBean() {
@@ -197,7 +211,7 @@ public class DistributionProtocolTestData {
 	public static PatchDistributionProtocolEvent getPatchData() {
 		PatchDistributionProtocolEvent event = new PatchDistributionProtocolEvent();
 		event.setId(1L);
-		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		DistributionProtocolPatchDetails details = new DistributionProtocolPatchDetails();
 		try {
 			BeanUtils.populate(details, getDistributionProtocolPatchAttributes());
 		}
@@ -218,7 +232,7 @@ public class DistributionProtocolTestData {
 		attributes.put("startDate", new Date());
 		attributes.put("anticipatedSpecimenCount", 50L);
 		attributes.put("descriptionUrl", "www.modifiedProtocol.com");
-		attributes.put("activityStatus","Active");
+		attributes.put("activityStatus", "Active");
 		return attributes;
 	}
 
@@ -308,13 +322,13 @@ public class DistributionProtocolTestData {
 		event.getDistributionProtocolDetails().setAnticipatedSpecimenCount(-2L);
 		return event;
 	}
-	
+
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
 		event.getDetails().setAnticipatedSpecimenCount(-2L);
 		return event;
 	}
-	
+
 	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithNegativeAnticipatedSpecimenCountNumber() {
 		PatchDistributionProtocolEvent event = getPatchDistributionProtocolEvent();
 		event.getDetails().setAnticipatedSpecimenCount(-2L);
@@ -323,7 +337,7 @@ public class DistributionProtocolTestData {
 
 	public static PatchDistributionProtocolEvent getEmptyPatchData() {
 		PatchDistributionProtocolEvent event = new PatchDistributionProtocolEvent();
-		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		DistributionProtocolPatchDetails details = new DistributionProtocolPatchDetails();
 		event.setDetails(details);
 		return event;
 	}
@@ -332,14 +346,14 @@ public class DistributionProtocolTestData {
 		CreateDistributionProtocolEvent event = getCreateDistributionProtocolEvent();
 		User principalInvestigator = new User();
 		principalInvestigator.setAuthDomain(null);
-		
+
 		return event;
 	}
 
 	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithTitle() {
 		PatchDistributionProtocolEvent event = getPatchData();
 		event.setId(null);
-		DistributionProtocolDetails details = getDistributionProtocolDetails();
+		DistributionProtocolPatchDetails details = getDistributionProtocolPatchDetails();
 		event.setTitle("CPProtocol");
 		event.setDetails(details);
 		return event;
@@ -348,7 +362,7 @@ public class DistributionProtocolTestData {
 	public static DeleteDistributionProtocolEvent getDeleteDistributionProtocolEvent() {
 		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
 		event.setId(1L);
-		
+
 		return event;
 	}
 
@@ -357,7 +371,7 @@ public class DistributionProtocolTestData {
 		event.getDetails().setActivityStatus("Disabled");
 		return event;
 	}
-	
+
 	public static UpdateDistributionProtocolEvent getUpdateDistributionProtocolEventWithoutDisableActivityStatus() {
 		UpdateDistributionProtocolEvent event = getUpdateDistributionProtocolEvent();
 		event.getDetails().setActivityStatus("Active");
@@ -375,5 +389,4 @@ public class DistributionProtocolTestData {
 		event.getDetails().setActivityStatus("Active");
 		return event;
 	}
-	
 }

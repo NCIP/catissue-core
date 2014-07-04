@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.services;
 
-import static org.junit.Assert.assertEquals; 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -297,22 +297,26 @@ public class DistributionProtocolTest {
 	//	}
 
 	@Test
-		public void testUpdationWithDisabledActivityStatus() {
-		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
-		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
-			UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
-					.getUpdateDistributionProtocolEventWithDisableActivityStatus();
-			DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
-	
-			assertNotNull("response cannot be null", response);
-			assertEquals(EventStatus.OK, response.getStatus());
-	
-		}
-	
+	public void testUpdationWithDisabledActivityStatus() {
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+				.getUpdateDistributionProtocolEventWithDisableActivityStatus();
+		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+
+	}
+
 	@Test
 	public void testUpdationWithoutDisabledActivityStatus() {
-	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
-	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
 		UpdateDistributionProtocolEvent reqEvent = DistributionProtocolTestData
 				.getUpdateDistributionProtocolEventWithoutDisableActivityStatus();
 		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(reqEvent);
@@ -321,8 +325,6 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 
 	}
-	
-	
 
 	@Test
 	public void testUpdationforDistributionProtocolWithEmptyInvestigatorName() {
@@ -642,7 +644,6 @@ public class DistributionProtocolTest {
 				response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	
 	@Test
 	public void testDistributionProtocolUpdationNullDateAndInvestigator() {
 
@@ -668,7 +669,7 @@ public class DistributionProtocolTest {
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testDistributionProtocolDeleteNullOldDistributionProtocolUsingTitle() {
 
@@ -679,11 +680,13 @@ public class DistributionProtocolTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPatchWithDisabledActivityStatus() {
-	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
-	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
 		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData
 				.getPatchDistributionProtocolEventWithDisableActivityStatus();
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
@@ -692,11 +695,12 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 
 	}
-	
+
 	@Test
 	public void testPatchWithoutDisabledActivityStatus() {
-	
-	when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(DistributionProtocolTestData.getDistributionProtocolToReturn());
+
+		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
 		PatchDistributionProtocolEvent reqEvent = DistributionProtocolTestData
 				.getPatchDistributionProtocolEventWithoutDisableActivityStatus();
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(reqEvent);
@@ -705,7 +709,7 @@ public class DistributionProtocolTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 
 	}
-	
+
 	@Test
 	public void testDistributionProtocolDeletionWithServerErr() {
 

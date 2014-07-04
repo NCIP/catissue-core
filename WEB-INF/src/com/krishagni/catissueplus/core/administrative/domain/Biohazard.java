@@ -1,6 +1,14 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.util.Status;
+
 public class Biohazard {
 
 	private Long id;
@@ -12,6 +20,8 @@ public class Biohazard {
 	private String type;
 
 	private String activityStatus;
+
+	private Set<Specimen> specimenCollection = new HashSet<Specimen>();
 
 	public Long getId() {
 		return id;
@@ -53,11 +63,29 @@ public class Biohazard {
 		this.activityStatus = activityStatus;
 	}
 
+	public Set<Specimen> getSpecimenCollection() {
+		return specimenCollection;
+	}
+
+	public void setSpecimenCollection(Set<Specimen> specimenCollection) {
+		this.specimenCollection = specimenCollection;
+	}
+
 	public void update(Biohazard biohazard) {
 		this.setName(biohazard.getName());
 		this.setType(biohazard.getType());
 		this.setComment(biohazard.getComment());
 		this.setActivityStatus(biohazard.getActivityStatus());
+	}
+
+	public void delete() {
+		if (!this.getSpecimenCollection().isEmpty()) {
+			throw new CatissueException(BiohazardErrorCode.ACTIVE_CHILDREN_FOUND);
+		}
+		else {
+			this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		}
+
 	}
 
 }

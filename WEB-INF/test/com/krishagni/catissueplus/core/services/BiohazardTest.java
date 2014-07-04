@@ -19,9 +19,11 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardEr
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.BiohazardFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.BiohazardDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
@@ -47,7 +49,8 @@ public class BiohazardTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		when(daoFactory.getBiohazardDao()).thenReturn(biohazardDao);
-
+		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
+		when(daoFactory.getBiohazardDao().getBiohazard(anyString())).thenReturn(BiohazardTestData.getBiohazard());
 		biohazardFactory = new BiohazardFactoryImpl();
 		biohazardService = new BiohazardServiceImpl();
 
@@ -108,33 +111,37 @@ public class BiohazardTest {
 		assertEquals(BiohazardErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	//	@Test
-	//	public void testBiohazardCreationWithInvalidBiohazardType() {
-	//		when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
-	//		
-	//		CreateBiohazardEvent reqEvent = BiohazardTestData.getCreateEventWithInvalidBiohazardType();
-	//		BiohazardCreatedEvent response = biohazardService.createBiohazard(reqEvent);
+	// @Test
+	// public void testBiohazardCreationWithInvalidBiohazardType() {
+	// when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
 	//
-	//		assertNotNull("response cannot be null", response);
-	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-	//		assertEquals(1, response.getErroneousFields().length);
-	//		assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-	//	}
-	
-//@Test
-//	public void testBiohazardCreationWithInvalidActivityStatus() {
-//		when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
-//		
-//		CreateBiohazardEvent reqEvent = BiohazardTestData.getCreateEventWithInvalidActivityStatus();
-//		BiohazardCreatedEvent response = biohazardService.createBiohazard(reqEvent);
-//
-//		assertNotNull("response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-//	}
-	
-	
+	// CreateBiohazardEvent reqEvent =
+	// BiohazardTestData.getCreateEventWithInvalidBiohazardType();
+	// BiohazardCreatedEvent response =
+	// biohazardService.createBiohazard(reqEvent);
+	//
+	// assertNotNull("response cannot be null", response);
+	// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	// assertEquals(1, response.getErroneousFields().length);
+	// assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(),
+	// response.getErroneousFields()[0].getErrorMessage());
+	// }
+
+	// @Test
+	// public void testBiohazardCreationWithInvalidActivityStatus() {
+	// when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
+	//
+	// CreateBiohazardEvent reqEvent =
+	// BiohazardTestData.getCreateEventWithInvalidActivityStatus();
+	// BiohazardCreatedEvent response =
+	// biohazardService.createBiohazard(reqEvent);
+	//
+	// assertNotNull("response cannot be null", response);
+	// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	// assertEquals(1, response.getErroneousFields().length);
+	// assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(),
+	// response.getErroneousFields()[0].getErrorMessage());
+	// }
 
 	@Test
 	public void testBiohazardCreationWithServerErr() {
@@ -164,7 +171,7 @@ public class BiohazardTest {
 
 		assertEquals(reqEvent.getBiohazardDetails().getName(), createBiohazard.getName());
 	}
-	
+
 	@Test
 	public void testForSuccessfulBiohazardUpdationWithName() {
 		when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
@@ -199,7 +206,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testBiohazardUpdationWithEmptyBiohazardName() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 
 		UpdateBiohazardEvent reqEvent = BiohazardTestData.getUpdateBiohazardEventWithEmptyName();
 		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(reqEvent);
@@ -213,7 +219,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testBiohazardUpdationWithEmptyBiohazardType() {
-		when(biohazardDao.getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 
 		UpdateBiohazardEvent reqEvent = BiohazardTestData.getUpdateBiohazardEventWithEmptyType();
 		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(reqEvent);
@@ -225,24 +230,25 @@ public class BiohazardTest {
 		assertEquals(BiohazardErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	//	@Test
-	//	public void testBiohazardUpdationWithInvalidBiohazardType() {
-	//		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
-	//		when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
-	//		
-	//		UpdateBiohazardEvent reqEvent = BiohazardTestData.getUpdateEventWithInvalidBiohazardType();
-	//		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(reqEvent);
-	//		
-	//		assertNotNull("response cannot be null", response);
-	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-	//		assertEquals(1, response.getErroneousFields().length);
-	//		assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-	//		
-	//	}
+	// @Test
+	// public void testBiohazardUpdationWithInvalidBiohazardType() {
+	// when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
+	//
+	// UpdateBiohazardEvent reqEvent =
+	// BiohazardTestData.getUpdateEventWithInvalidBiohazardType();
+	// BiohazardUpdatedEvent response =
+	// biohazardService.updateBiohazard(reqEvent);
+	//
+	// assertNotNull("response cannot be null", response);
+	// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	// assertEquals(1, response.getErroneousFields().length);
+	// assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(),
+	// response.getErroneousFields()[0].getErrorMessage());
+	//
+	// }
 
 	@Test
 	public void testBiohazardUpdationWithServerErr() {
-		when(biohazardDao.getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 		when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
 		doThrow(new RuntimeException()).when(biohazardDao).saveOrUpdate(any(Biohazard.class));
 
@@ -263,10 +269,10 @@ public class BiohazardTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testUpdationWithNullBiohazardWithName() {
-		when(biohazardDao.getBiohazard(anyLong())).thenReturn(null);
+		when(biohazardDao.getBiohazard(anyString())).thenReturn(null);
 
 		UpdateBiohazardEvent reqEvent = BiohazardTestData.getUpdateBiohazardEventWithName();
 		BiohazardUpdatedEvent response = biohazardService.updateBiohazard(reqEvent);
@@ -277,7 +283,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testSuccessfullPatchBiohazard() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 		when(daoFactory.getBiohazardDao().isUniqueBiohazardName(anyString())).thenReturn(true);
 
 		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchData();
@@ -286,12 +291,11 @@ public class BiohazardTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSuccessfullPatchBiohazardWithName() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyString())).thenReturn(BiohazardTestData.getBiohazard());
-		when(daoFactory.getBiohazardDao().isUniqueBiohazardName(anyString())).thenReturn(true);
 
+		when(daoFactory.getBiohazardDao().isUniqueBiohazardName(anyString())).thenReturn(true);
 		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchDataWithName();
 		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(reqEvent);
 
@@ -301,7 +305,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testPatchBiohazardWithInvalidAttribute() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 		when(daoFactory.getBiohazardDao().isUniqueBiohazardName(anyString())).thenReturn(false);
 
 		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchDataWithInavalidAttribute();
@@ -322,11 +325,10 @@ public class BiohazardTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testBiohazardPatchNullBiohazardWithName() {
-		when(biohazardDao.getBiohazard(anyString())).thenReturn(null);
-
+		when(daoFactory.getBiohazardDao().getBiohazard(anyString())).thenReturn(null);
 		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchDataWithName();
 		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(reqEvent);
 
@@ -336,7 +338,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testPatchBiohazardServerError() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 		when(daoFactory.getBiohazardDao().isUniqueBiohazardName(anyString())).thenReturn(true);
 		doThrow(new RuntimeException()).when(biohazardDao).saveOrUpdate(any(Biohazard.class));
 
@@ -349,7 +350,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testBiohazardPatchWithEmptyName() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 
 		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchDataWithEmptyName();
 		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(reqEvent);
@@ -363,7 +363,6 @@ public class BiohazardTest {
 
 	@Test
 	public void testBiohazardPatchWithEmptyType() {
-		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 
 		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchDataWithEmptyType();
 		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(reqEvent);
@@ -375,18 +374,66 @@ public class BiohazardTest {
 		assertEquals(BiohazardErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
-	//	@Test
-	//	public void testBiohazardPatchWithInvalidBiohazardType() {
-	//		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
-	//		when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
-	//		
-	//		PatchBiohazardEvent reqEvent = BiohazardTestData.getPatchEventWithInvalidBiohazardType();
-	//		BiohazardUpdatedEvent response = biohazardService.patchBiohazard(reqEvent);
-	//		
-	//		assertNotNull("response cannot be null", response);
-	//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-	//		assertEquals(1, response.getErroneousFields().length);
-	//		assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
-	//		
-	//	}
+	@Test
+	public void testForSuccessfulBiohazardDeletion() {
+
+		DeleteBiohazardEvent event = BiohazardTestData.getDeleteBiohazardEvent();
+		BiohazardDeletedEvent response = biohazardService.deteteBiohazard(event);
+
+		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testDistributionProtocolDeleteNullOldDistributionProtocol() {
+
+		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(null);
+		DeleteBiohazardEvent reqEvent = BiohazardTestData.getDeleteBiohazardEvent();
+		BiohazardDeletedEvent response = biohazardService.deteteBiohazard(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	// @Test
+	// public void testBiohazardPatchWithInvalidBiohazardType() {
+	// 
+	// when(biohazardDao.isUniqueBiohazardName(anyString())).thenReturn(Boolean.TRUE);
+	//
+	// PatchBiohazardEvent reqEvent =
+	// BiohazardTestData.getPatchEventWithInvalidBiohazardType();
+	// BiohazardUpdatedEvent response =
+	// biohazardService.patchBiohazard(reqEvent);
+	//
+	// assertNotNull("response cannot be null", response);
+	// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	// assertEquals(1, response.getErroneousFields().length);
+	// assertEquals(BiohazardErrorCode.INVALID_ATTR_VALUE.message(),
+	// response.getErroneousFields()[0].getErrorMessage());
+	//
+	// }
+
+	@Test
+	public void testBiohazatdDeleteWithActiveSpecimenChildren() {
+
+		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(
+				BiohazardTestData.getBiohazardWithSpecimenCollection());
+		DeleteBiohazardEvent reqEvent = BiohazardTestData.getDeleteBiohazardEvent();
+		BiohazardDeletedEvent response = biohazardService.deteteBiohazard(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
+	public void testBiohazatdDeleteWithoutActiveChildrens() {
+
+		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
+		DeleteBiohazardEvent reqEvent = BiohazardTestData.getDeleteBiohazardEvent();
+		BiohazardDeletedEvent response = biohazardService.deteteBiohazard(reqEvent);
+
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
 }

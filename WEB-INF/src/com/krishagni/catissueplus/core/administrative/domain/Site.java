@@ -6,7 +6,10 @@ import java.util.Set;
 
 import krishagni.catissueplus.util.CommonUtil;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.common.SetUpdater;
+import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class Site {
@@ -23,7 +26,11 @@ public class Site {
 
 	private String emailAddress;
 
-	protected Set<User> coordinatorCollection = new HashSet<User>();
+	private Set<User> coordinatorCollection = new HashSet<User>();
+
+	private Set<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+
+	private Set<StorageContainer> storageContainerCollection = new HashSet<StorageContainer>();
 
 	public Long getId() {
 		return id;
@@ -81,6 +88,22 @@ public class Site {
 		this.coordinatorCollection = coordinatorCollection;
 	}
 
+	public Set<SpecimenCollectionGroup> getScgCollection() {
+		return scgCollection;
+	}
+
+	public void setScgCollection(Set<SpecimenCollectionGroup> scgCollection) {
+		this.scgCollection = scgCollection;
+	}
+
+	public Set<StorageContainer> getStorageContainerCollection() {
+		return storageContainerCollection;
+	}
+
+	public void setStorageContainerCollection(Set<StorageContainer> storageContainerCollection) {
+		this.storageContainerCollection = storageContainerCollection;
+	}
+
 	public void update(Site site) {
 		if (site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			this.setName(CommonUtil.appendTimestamp(site.getName()));
@@ -105,4 +128,14 @@ public class Site {
 		oldAddress.setZipCode(address.getZipCode());
 	}
 
+	public void delete() {
+
+		if (!this.getScgCollection().isEmpty()) {
+			throw new CatissueException(SiteErrorCode.ACTIVE_CHILDREN_FOUND);
+		}
+		if (!this.getStorageContainerCollection().isEmpty()) {
+			throw new CatissueException(SiteErrorCode.ACTIVE_CHILDREN_FOUND);
+		}
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+	}
 }

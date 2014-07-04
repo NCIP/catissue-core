@@ -5,9 +5,11 @@ import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardFactory;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.BiohazardDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.services.BiohazardService;
@@ -78,7 +80,7 @@ public class BiohazardServiceImpl implements BiohazardService {
 			}
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			Biohazard biohazard = biohazardFactory.createBiohazard(updateEvent.getBiohazardDetails());
-			checkBiohazardName(oldBiohazard.getName(),biohazard.getName(),exceptionHandler);
+			checkBiohazardName(oldBiohazard.getName(), biohazard.getName(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 			oldBiohazard.update(biohazard);
 			daoFactory.getBiohazardDao().saveOrUpdate(oldBiohazard);
@@ -114,7 +116,7 @@ public class BiohazardServiceImpl implements BiohazardService {
 			String oldName = oldBiohazard.getName();
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			Biohazard biohazard = biohazardFactory.patchBiohazard(oldBiohazard, event.getDetails());
-			checkBiohazardName(oldName,event.getDetails().getName(),exceptionHandler);
+			checkBiohazardName(oldName, event.getDetails().getName(), exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 			daoFactory.getBiohazardDao().saveOrUpdate(biohazard);
 			return BiohazardUpdatedEvent.ok(BiohazardDetails.fromDomain(biohazard));
@@ -126,13 +128,34 @@ public class BiohazardServiceImpl implements BiohazardService {
 			return BiohazardUpdatedEvent.serverError(e);
 		}
 	}
-	
-	private void checkBiohazardName(String oldName, String newName,ObjectCreationException exceptionHandler) {
+
+	private void checkBiohazardName(String oldName, String newName, ObjectCreationException exceptionHandler) {
 		if (!(oldName.equals(newName))) {
 			ensureUniqueBiohazardName(newName, exceptionHandler);
 		}
-		
+
 	}
 
+	@Override
+	@PlusTransactional
+	public BiohazardDeletedEvent deteteBiohazard(DeleteBiohazardEvent reqEvent) {
+		try {
+			Biohazard biohazard;
 
+			Long biohazardId = reqEvent.getId();
+
+			biohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardId);
+			if (biohazard == null) {
+				return BiohazardDeletedEvent.notFound(biohazardId);
+			}
+
+			biohazard.delete();
+			daoFactory.getBiohazardDao().saveOrUpdate(biohazard);
+
+			return BiohazardDeletedEvent.ok();
+		}
+		catch (Exception e) {
+			return BiohazardDeletedEvent.serverError(e);
+		}
+	}
 }

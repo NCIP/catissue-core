@@ -1,17 +1,18 @@
+
 package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
+public class DistributionProtocolDeletedEvent extends ResponseEvent {
 
-public class DistributionProtocolDeletedEvent extends ResponseEvent{
 	private DistributionProtocolDetails details = new DistributionProtocolDetails();
 
 	private long id;
 
 	private String title;
-	
+
 	private static final String SUCCESS = "success";
 
 	public DistributionProtocolDetails getDetails() {
@@ -75,6 +76,5 @@ public class DistributionProtocolDeletedEvent extends ResponseEvent{
 		resp.setErroneousFields(erroneousField);
 		return resp;
 	}
-
 
 }

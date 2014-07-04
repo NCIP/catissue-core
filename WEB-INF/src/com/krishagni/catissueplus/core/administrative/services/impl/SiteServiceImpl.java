@@ -7,8 +7,10 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
@@ -52,7 +54,6 @@ public class SiteServiceImpl implements SiteService {
 		catch (Exception e) {
 			return SiteCreatedEvent.serverError(e);
 		}
-
 	}
 
 	@Override
@@ -113,14 +114,14 @@ public class SiteServiceImpl implements SiteService {
 				}
 			}
 
-			Site site = siteFactory.patchSite(oldSite, event.getSiteDetails());
+			Site site = siteFactory.patchSite(oldSite, event.getDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			checkSiteName(site.getName(), event.getSiteDetails().getName(), exceptionHandler);
-			
-			if (event.getSiteDetails().isActivityStatusModified()) {
+			checkSiteName(site.getName(), event.getSiteName(), exceptionHandler);
+
+			if (event.getDetails().isActivityStatusModified()) {
 				checkActivityStatus(site);
 			}
-			
+
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getSiteDao().saveOrUpdate(site);
@@ -134,9 +135,29 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public SiteDeletedEvent deleteSite(DeleteSiteEvent event) {
+		try {
+			Site site;
+
+			Long siteId = event.getId();
+			site = daoFactory.getSiteDao().getSite(siteId);
+			if (site == null) {
+				return SiteDeletedEvent.notFound(siteId);
+			}
+
+			site.delete();
+			daoFactory.getSiteDao().saveOrUpdate(site);
+			return SiteDeletedEvent.ok();
+		}
+		catch (Exception e) {
+			return SiteDeletedEvent.serverError(e);
+		}
+	}
+
 	private void checkActivityStatus(Site site) {
-		if(site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus()))
-		{
+		if (site.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			site.setName(CommonUtil.appendTimestamp(site.getName()));
 		}
 	}
@@ -153,4 +174,5 @@ public class SiteServiceImpl implements SiteService {
 			exceptionHandler.addError(SiteErrorCode.DUPLICATE_SITE_NAME, SITE_NAME);
 		}
 	}
+
 }

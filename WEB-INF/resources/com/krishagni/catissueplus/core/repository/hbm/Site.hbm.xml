@@ -57,12 +57,31 @@
          	class="com.krishagni.catissueplus.core.administrative.domain.User"/>
        </set>
         
+       <set
+            name="storageContainerCollection"
+            table="CATISSUE_STORAGE_CONTAINERS">
+			      
+            <key column="SITE_ID"/>
+            <one-to-many
+                class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"/>
+         </set>
+         
+         <set
+            name="scgCollection"
+            table="CATISSUE_SPECIMEN_COLL_GROUP">
+			
+            <key column="SITE_ID"/>
+            <one-to-many
+                class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"/>
+         </set>
+      
+      
         <many-to-one name="address" 
             class="com.krishagni.catissueplus.core.administrative.domain.Address" 
             column="ADDRESS_ID" 
             cascade="all" 
             not-null="true" />
-           
+          
     <query name="getSiteByName">
     	SELECT site FROM com.krishagni.catissueplus.core.administrative.domain.Site site WHERE site.name = :siteName
     </query>

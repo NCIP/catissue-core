@@ -5,16 +5,21 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
+import com.krishagni.catissueplus.core.administrative.events.BiohazardPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -33,7 +38,22 @@ public class BiohazardTestData {
 		biohazard.setComment("zsasasa");
 		biohazard.setType("Not Specified");
 		biohazard.setActivityStatus("Active");
+		biohazard.setSpecimenCollection(new HashSet<Specimen>());
 		return biohazard;
+	}
+
+	public static Biohazard getBiohazardWithSpecimenCollection() {
+		Biohazard biohazard = getBiohazard();
+		biohazard.setSpecimenCollection(getSpecimenCollection());
+		return biohazard;
+	}
+
+	private static Set<Specimen> getSpecimenCollection() {
+		Specimen specimen = new Specimen();
+		Set<Specimen> specimenSet = new HashSet<Specimen>();
+		specimen.setId(1L);
+		specimenSet.add(specimen);
+		return specimenSet;
 	}
 
 	public static CreateBiohazardEvent setCreateBiohazardEvent() {
@@ -50,6 +70,7 @@ public class BiohazardTestData {
 		details.setType("Not Specified");
 		details.setComment("Something");
 		details.setActivityStatus("Active");
+
 		return details;
 	}
 
@@ -149,7 +170,7 @@ public class BiohazardTestData {
 	public static PatchBiohazardEvent getPatchData() {
 		PatchBiohazardEvent event = new PatchBiohazardEvent();
 		event.setId(5L);
-		BiohazardDetails details = new BiohazardDetails();
+		BiohazardPatchDetails details = new BiohazardPatchDetails();
 		try {
 			BeanUtils.populate(details, getBiohazardPatchAttributes());
 		}
@@ -180,7 +201,7 @@ public class BiohazardTestData {
 
 	private static PatchBiohazardEvent getEmptyPatchData() {
 		PatchBiohazardEvent event = new PatchBiohazardEvent();
-		BiohazardDetails details = new BiohazardDetails();
+		BiohazardPatchDetails details = new BiohazardPatchDetails();
 		event.setDetails(details);
 		return event;
 	}
@@ -221,7 +242,7 @@ public class BiohazardTestData {
 	public static PatchBiohazardEvent getPatchDataWithName() {
 		PatchBiohazardEvent event = new PatchBiohazardEvent();
 		event.setName("Cr-61");
-		BiohazardDetails details = new BiohazardDetails();
+		BiohazardPatchDetails details = new BiohazardPatchDetails();
 		try {
 			BeanUtils.populate(details, getBiohazardPatchAttributes());
 		}
@@ -230,6 +251,12 @@ public class BiohazardTestData {
 		}
 		details.setModifiedAttributes(new ArrayList<String>(getBiohazardPatchAttributes().keySet()));
 		event.setDetails(details);
+		return event;
+	}
+
+	public static DeleteBiohazardEvent getDeleteBiohazardEvent() {
+		DeleteBiohazardEvent event = new DeleteBiohazardEvent();
+		event.setId(1L);
 		return event;
 	}
 

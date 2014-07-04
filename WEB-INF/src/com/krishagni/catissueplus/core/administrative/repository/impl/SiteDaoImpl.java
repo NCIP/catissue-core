@@ -11,7 +11,7 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 
-	private static final String FQN = Site.class.getName(); 
+	private static final String FQN = Site.class.getName();
 
 	private static final String GET_SITE_BY_NAME = FQN + ".getSiteByName";
 

@@ -51,7 +51,19 @@
             column="ACTIVITY_STATUS"
             length="20"
         />
+		
+		<set
+            name="specimenCollection"
+            table="CATISSUE_SPECIMEN_BIOHZ_REL">
+			      
+            <key column="BIOHAZARD_ID"/>
+            <many-to-many
+                class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+                column="SPECIMEN_ID"
+                />
+                
 
+         </set>
 
 	 <query name="getBiohazardByName">
     	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard WHERE biohazard.name = :biohazardName

@@ -9,7 +9,7 @@ public class PatchBiohazardEvent extends RequestEvent {
 
 	private String name;
 
-	private BiohazardDetails details;
+	private BiohazardPatchDetails details;
 
 	public Long getId() {
 		return id;
@@ -27,11 +27,11 @@ public class PatchBiohazardEvent extends RequestEvent {
 		this.name = name;
 	}
 
-	public BiohazardDetails getDetails() {
+	public BiohazardPatchDetails getDetails() {
 		return details;
 	}
 
-	public void setDetails(BiohazardDetails details) {
+	public void setDetails(BiohazardPatchDetails details) {
 		this.details = details;
 	}
 

@@ -1,9 +1,10 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BiohazardDetails {
+public class BiohazardPatchDetails {
 
 	private Long id;
 
@@ -14,6 +15,8 @@ public class BiohazardDetails {
 	private String comment;
 
 	private String activityStatus;
+
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public String getName() {
 		return name;
@@ -55,15 +58,27 @@ public class BiohazardDetails {
 		this.activityStatus = activityStatus;
 	}
 
-	public static BiohazardDetails fromDomain(Biohazard biohazard) {
-		BiohazardDetails biohazardDto = new BiohazardDetails();
-		biohazardDto.setId(biohazard.getId());
-		biohazardDto.setName(biohazard.getName());
-		biohazardDto.setType(biohazard.getType());
-		biohazardDto.setComment(biohazard.getComment());
-		biohazardDto.setActivityStatus(biohazard.getActivityStatus());
-		return biohazardDto;
-
+	public List<String> getModifiedAttributes() {
+		return modifiedAttributes;
 	}
 
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
+	}
+
+	public boolean isBiohazardNameModified() {
+		return modifiedAttributes.contains("name");
+	}
+
+	public boolean isCommentModified() {
+		return modifiedAttributes.contains("comment");
+	}
+
+	public boolean isBiohazardTypeModified() {
+		return modifiedAttributes.contains("type");
+	}
+
+	public boolean isActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
+	}
 }

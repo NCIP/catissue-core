@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionP
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
@@ -103,7 +104,7 @@ public class DistributionProtocolController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 
-		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		DistributionProtocolPatchDetails details = new DistributionProtocolPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -129,7 +130,7 @@ public class DistributionProtocolController {
 		event.setTitle(title);
 		event.setSessionDataBean(getSession());
 
-		DistributionProtocolDetails details = new DistributionProtocolDetails();
+		DistributionProtocolPatchDetails details = new DistributionProtocolPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}

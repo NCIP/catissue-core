@@ -5,17 +5,17 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class PatchDistributionProtocolEvent extends RequestEvent {
 
-	private DistributionProtocolDetails details;
+	private DistributionProtocolPatchDetails details;
 
 	private Long id;
 
 	private String title;
 
-	public DistributionProtocolDetails getDetails() {
+	public DistributionProtocolPatchDetails getDetails() {
 		return details;
 	}
 
-	public void setDetails(DistributionProtocolDetails details) {
+	public void setDetails(DistributionProtocolPatchDetails details) {
 		this.details = details;
 	}
 

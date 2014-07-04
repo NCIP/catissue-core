@@ -52,7 +52,7 @@
 			<key column="SPECIMEN_ID">
 			</key>
 
-			<many-to-many class="edu.wustl.catissuecore.domain.Biohazard"
+			<many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Biohazard"
 				column="BIOHAZARD_ID" />
 
 		</set>

@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
+import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
@@ -140,7 +141,7 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 
 	@Override
-	public Site patchSite(Site site, SiteDetails details) {
+	public Site patchSite(Site site, SitePatchDetails details) {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 		if (details.isSiteNameModified()) {
 			setName(site, details.getName(), exceptionHandler);

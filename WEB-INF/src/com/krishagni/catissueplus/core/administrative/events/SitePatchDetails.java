@@ -3,13 +3,8 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import com.krishagni.catissueplus.core.administrative.domain.Address;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.User;
-
-public class SiteDetails {
+public class SitePatchDetails {
 
 	private String name;
 
@@ -36,6 +31,8 @@ public class SiteDetails {
 	private String faxNumber;
 
 	private String phoneNumber;
+
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public String getName() {
 		return name;
@@ -141,40 +138,62 @@ public class SiteDetails {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public static SiteDetails fromDomain(Site site) {
-		SiteDetails siteDto = new SiteDetails();
-		siteDto.setId(site.getId());
-		siteDto.setName(site.getName());
-		siteDto.setType(site.getType());
-		siteDto.setActivityStatus(site.getActivityStatus());
-		siteDto.setEmailAddress(site.getEmailAddress());
-		populateAddress(siteDto, site.getAddress());
-		siteDto.setCoordinatorCollection(getCoordinatorList(site.getCoordinatorCollection()));
-
-		return siteDto;
+	public List<String> getModifiedAttributes() {
+		return modifiedAttributes;
 	}
 
-	private static void populateAddress(SiteDetails siteDto, Address address) {
-		siteDto.setStreet(address.getStreet());
-		siteDto.setCountry(address.getCountry());
-		siteDto.setFaxNumber(address.getFaxNumber());
-		siteDto.setPhoneNumber(address.getPhoneNumber());
-		siteDto.setState(address.getState());
-		siteDto.setCity(address.getCity());
-		siteDto.setZipCode(address.getZipCode());
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
 	}
 
-	private static List<UserInfo> getCoordinatorList(Set<User> coordinatorCollection) {
-		List<UserInfo> userInfos = new ArrayList<UserInfo>();
-		for (User user : coordinatorCollection) {
-			UserInfo userInfo = new UserInfo();
-			userInfo.setLoginName(user.getLoginName());
-			if (user.getAuthDomain() != null) {
-				userInfo.setDomainName(user.getAuthDomain().getName());
-			}
-			userInfos.add(userInfo);
-		}
-		return userInfos;
+	//following methods verify the modified attributes
+
+	public boolean isSiteNameModified() {
+		return modifiedAttributes.contains("name");
+	}
+
+	public boolean isCoordinatorCollectionModified() {
+		return modifiedAttributes.contains("coordinatorCollection");
+	}
+
+	public boolean isSiteTypeModified() {
+		return modifiedAttributes.contains("type");
+	}
+
+	public boolean isActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
+	}
+
+	public boolean isEmailAddressModified() {
+		return modifiedAttributes.contains("emailAddress");
+	}
+
+	public boolean isCityModified() {
+		return modifiedAttributes.contains("city");
+	}
+
+	public boolean isStreetModified() {
+		return modifiedAttributes.contains("street");
+	}
+
+	public boolean isStateModified() {
+		return modifiedAttributes.contains("state");
+	}
+
+	public boolean isCountryModified() {
+		return modifiedAttributes.contains("country");
+	}
+
+	public boolean isZipCodeModified() {
+		return modifiedAttributes.contains("zipCode");
+	}
+
+	public boolean isFaxNumberModified() {
+		return modifiedAttributes.contains("faxNumber");
+	}
+
+	public boolean isPhoneNumberModified() {
+		return modifiedAttributes.contains("phoneNumber");
 	}
 
 }

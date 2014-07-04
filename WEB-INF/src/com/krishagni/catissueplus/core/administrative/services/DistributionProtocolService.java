@@ -1,3 +1,4 @@
+
 package com.krishagni.catissueplus.core.administrative.services;
 
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
@@ -8,7 +9,6 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
-
 
 public interface DistributionProtocolService {
 

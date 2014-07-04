@@ -7,7 +7,7 @@ public class PatchSiteEvent extends RequestEvent {
 
 	private Long siteId;
 
-	private SiteDetails details;
+	private SitePatchDetails details;
 
 	private String siteName;
 
@@ -27,11 +27,11 @@ public class PatchSiteEvent extends RequestEvent {
 		this.siteName = siteName;
 	}
 
-	public SiteDetails getSiteDetails() {
+	public SitePatchDetails getDetails() {
 		return details;
 	}
 
-	public void setSiteDetails(SiteDetails details) {
+	public void setDetails(SitePatchDetails details) {
 		this.details = details;
 	}
 

@@ -1,12 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.User;
-
-public class DistributionProtocolDetails {
+public class DistributionProtocolPatchDetails {
 
 	private Long id;
 
@@ -25,6 +24,8 @@ public class DistributionProtocolDetails {
 	private String descriptionUrl;
 
 	private String activityStatus;
+
+	private List<String> modifiedAttributes = new ArrayList<String>();
 
 	public Long getId() {
 		return id;
@@ -98,29 +99,44 @@ public class DistributionProtocolDetails {
 		this.activityStatus = activityStatus;
 	}
 
-	public static DistributionProtocolDetails fromDomain(DistributionProtocol distributionProtocol) {
-
-		DistributionProtocolDetails details = new DistributionProtocolDetails();
-		details.setShortTitle(distributionProtocol.getShortTitle());
-		details.setId(distributionProtocol.getId());
-		details.setTitle(distributionProtocol.getTitle());
-		details.setIrbId(distributionProtocol.getIrbId());
-		details.setStartDate(distributionProtocol.getStartDate());
-		details.setAnticipatedSpecimenCount(distributionProtocol.getAnticipatedSpecimenCount());
-		details.setDescriptionUrl(distributionProtocol.getDescriptionUrl());
-		details.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
-		details.setActivityStatus(distributionProtocol.getActivityStatus());
-		return details;
+	public List<String> getModifiedAttributes() {
+		return modifiedAttributes;
 	}
 
-	private static UserInfo getPrincipleInvestigatorInfo(User principleInvestigator) {
-		UserInfo piInfo = new UserInfo();
-		piInfo.setLoginName(principleInvestigator.getLoginName());
-		if (principleInvestigator.getAuthDomain() != null) {
-			piInfo.setDomainName(principleInvestigator.getAuthDomain().getName());
-		}
+	public void setModifiedAttributes(List<String> modifiedAttributes) {
+		this.modifiedAttributes = modifiedAttributes;
+	}
 
-		return piInfo;
+	public boolean isDistributionProtocolPrincipalInvestigatorModified() {
+		return modifiedAttributes.contains("principalInvestigator");
+	}
+
+	public boolean isDistributionProtocolTitleModified() {
+		return modifiedAttributes.contains("title");
+	}
+
+	public boolean isDistributionProtocolShortTitleModified() {
+		return modifiedAttributes.contains("shortTitle");
+	}
+
+	public boolean isDistributionProtocolIrbIdModified() {
+		return modifiedAttributes.contains("irbId");
+	}
+
+	public boolean isDistributionProtocolStartDateModified() {
+		return modifiedAttributes.contains("startDate");
+	}
+
+	public boolean isDistributionProtocolAnticipatedSpecimenCountModified() {
+		return modifiedAttributes.contains("anticipatedSpecimenCount");
+	}
+
+	public boolean isDistributionProtocolDescriptionUrlModified() {
+		return modifiedAttributes.contains("descriptionUrl");
+	}
+
+	public boolean isDistributionProtocolActivityStatusModified() {
+		return modifiedAttributes.contains("activityStatus");
 	}
 
 }

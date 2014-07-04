@@ -12,6 +12,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
@@ -54,7 +55,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 
 	@Override
-	public DistributionProtocol patch(DistributionProtocol distributionProtocol, DistributionProtocolDetails details) {
+	public DistributionProtocol patch(DistributionProtocol distributionProtocol, DistributionProtocolPatchDetails details) {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 
 		if (details.isDistributionProtocolTitleModified()) {

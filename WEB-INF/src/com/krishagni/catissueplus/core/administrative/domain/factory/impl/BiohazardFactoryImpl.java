@@ -8,6 +8,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardEr
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
+import com.krishagni.catissueplus.core.administrative.events.BiohazardPatchDetails;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 
@@ -34,7 +35,7 @@ public class BiohazardFactoryImpl implements BiohazardFactory {
 	}
 
 	@Override
-	public Biohazard patchBiohazard(Biohazard biohazard, BiohazardDetails details) {
+	public Biohazard patchBiohazard(Biohazard biohazard, BiohazardPatchDetails details) {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 		if (details.isBiohazardNameModified()) {
 			setName(biohazard, details.getName(), exceptionHandler);
@@ -47,11 +48,11 @@ public class BiohazardFactoryImpl implements BiohazardFactory {
 		if (details.isCommentModified()) {
 			setComment(biohazard, details.getComment(), exceptionHandler);
 		}
-		
+
 		if (details.isActivityStatusModified()) {
 			setActivityStatus(biohazard, details.getActivityStatus(), exceptionHandler);
 		}
-		
+
 		exceptionHandler.checkErrorAndThrow();
 		return biohazard;
 	}
