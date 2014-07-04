@@ -255,7 +255,7 @@
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.ConsentTier"
 			relationShipType="containment"
-			roleName="trutsTierCollection">
+			roleName="consentTierCollection">
 		</containmentAssociationCollection>
 
 	</AuditableClass>
