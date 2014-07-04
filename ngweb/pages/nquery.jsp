@@ -577,6 +577,11 @@
                       tooltip-placement="bottom" tooltip="View Query Run Log" tooltip-append-to-body="true">
                       <i class="fa fa-bars"></i> 
                     </button>
+                    <button type="button" class="btn btn-default" ng-click="deleteQuery(query)"
+                      tooltip-placement="bottom" tooltip="Delete Query" tooltip-append-to-body="true"
+                      ng-if="queryData.userId == query.createdBy.id || queryData.isAdmin">
+                      <span class="fa fa-trash-o"></span>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -1158,6 +1163,20 @@
       </div>
       <div class="modal-footer" style="height:12%">
         <button class="btn btn-primary" ng-click="close()">Close</button>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="delete-query-confirm.html">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Query</h4>
+      </div>
+      <div class="modal-body">
+        <p> Are you sure you want to delete following query? </p>
+        <p> <i> {{query.title}} </i> </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">No</button>
+        <button class="btn btn-primary" ng-click="ok()">Yes</button>
       </div>
     </script>
     

@@ -45,6 +45,10 @@ angular.module('plus.services', [])
         }
       },
 
+      deleteQuery: function(query) {
+        return $http.delete(savedQueriesUrl + query.id).then(successfn);
+      },
+
       getQueries: function(countReq, startAt, maxRecs, searchString) {
         if (!countReq) { countReq = false; }
           var params = {

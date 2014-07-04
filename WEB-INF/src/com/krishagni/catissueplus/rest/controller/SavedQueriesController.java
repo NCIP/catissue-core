@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.krishagni.catissueplus.core.de.events.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,20 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
-import com.krishagni.catissueplus.core.de.events.SaveQueryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
@@ -162,6 +149,22 @@ public class SavedQueriesController {
 			return resp.getSavedQueryDetail();
 		}
 		
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Long deleteQuery(@PathVariable("id") Long id) {
+		DeleteQueryEvent req = new DeleteQueryEvent();
+		req.setQueryId(id);
+		req.setSessionDataBean(getSession());
+
+		QueryDeletedEvent resp = querySvc.deleteQuery(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getQueryId();
+		}
+
 		return null;
 	}
 

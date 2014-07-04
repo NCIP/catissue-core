@@ -167,3 +167,6 @@
   width: 100%;
 }
 
+.ka-confirm-modal .modal-content {
+  height: 250px!important;
+}

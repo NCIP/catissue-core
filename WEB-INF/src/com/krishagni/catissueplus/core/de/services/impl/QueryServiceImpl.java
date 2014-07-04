@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.krishagni.catissueplus.core.de.events.*;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -30,48 +31,6 @@ import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.domain.factory.QueryFolderFactory;
-import com.krishagni.catissueplus.core.de.events.CreateQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.ExecuteQueryEvent;
-import com.krishagni.catissueplus.core.de.events.ExportDataFileEvent;
-import com.krishagni.catissueplus.core.de.events.ExportQueryDataEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.FolderQueriesUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogDetail;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogEvent;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogSummary;
-import com.krishagni.catissueplus.core.de.events.QueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDataExportedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.QueryExecutedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderCreatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDeletedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDetailEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderDetails;
-import com.krishagni.catissueplus.core.de.events.QueryFolderSharedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFolderSummary;
-import com.krishagni.catissueplus.core.de.events.QueryFolderUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFoldersEvent;
-import com.krishagni.catissueplus.core.de.events.QuerySavedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryUpdatedEvent;
-import com.krishagni.catissueplus.core.de.events.ReqExportDataFileEvent;
-import com.krishagni.catissueplus.core.de.events.ReqFolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryAuditLogsEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryDefEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFolderDetailEvent;
-import com.krishagni.catissueplus.core.de.events.ReqQueryFoldersEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.ReqSavedQueryDetailEvent;
-import com.krishagni.catissueplus.core.de.events.SaveQueryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetail;
-import com.krishagni.catissueplus.core.de.events.SavedQueryDetailEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
-import com.krishagni.catissueplus.core.de.events.ShareQueryFolderEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateFolderQueriesEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateQueryEvent;
-import com.krishagni.catissueplus.core.de.events.UpdateQueryFolderEvent;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 import com.krishagni.catissueplus.core.de.repository.QueryAuditLogDao;
 import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
@@ -233,6 +192,30 @@ public class QueryServiceImpl implements QueryService {
 				message = "Internal Server Error";
 			}
 			return QueryUpdatedEvent.serverError(message, e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public QueryDeletedEvent deleteQuery(DeleteQueryEvent req) {
+		try {
+			Long queryId = req.getQueryId();
+			SavedQuery query = daoFactory.getSavedQueryDao().getQuery(queryId);
+			if (query == null) {
+				return QueryDeletedEvent.notFound(queryId);
+			}
+
+			boolean isAdmin = req.getSessionDataBean().isAdmin();
+			Long userId = req.getSessionDataBean().getUserId();
+			if (!isAdmin && !query.getCreatedBy().getId().equals(userId)) {
+				return QueryDeletedEvent.notAuthorized(queryId);
+			}
+
+			query.setDeletedOn(Calendar.getInstance().getTime());
+			daoFactory.getSavedQueryDao().saveOrUpdate(query);
+			return QueryDeletedEvent.ok(queryId);
+		} catch (Exception e) {
+			return QueryDeletedEvent.serverError(e.getMessage(), e);
 		}
 	}
 

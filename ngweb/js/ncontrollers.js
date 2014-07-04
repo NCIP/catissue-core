@@ -450,6 +450,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.queryData = {
+      userId: query.global.userId,
       isAdmin: query.global.isAdmin,
       datePickerOpts: {format: query.global.dateFormat},
       view: 'dashboard',
@@ -637,6 +638,40 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
           $scope.queryData.queries = result.queries;
         });
+    };
+
+    $scope.deleteQuery = function(query) {
+      var modalInstance = $modal.open({
+        templateUrl: 'delete-query-confirm.html',
+        controller: function($scope, $modalInstance, query) {
+          $scope.query = query;
+
+          $scope.ok = function() { 
+            $modalInstance.close('ok');
+          },
+
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        },
+        resolve: {
+          query: function() {
+            return query;
+          }
+        },
+        windowClass: 'ka-confirm-modal'
+      });
+
+      modalInstance.result.then(
+        function() {
+          QueryService.deleteQuery(query).then(
+            function() {
+              Utility.notify($("#notifications"), "Query deleted!", "success", true);
+              $scope.changeQueriesPage(true);
+            }
+          )
+        }
+      );
     };
 
     $scope.viewAuditLog = function(query) {
@@ -1562,7 +1597,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       return [
         {label:'current_date', value: 'current_date()'},
         {label:'months_between', value: 'months_between('},
-        {label:'years_between', value: 'years_between('}
+        {label:'years_between', value: 'years_between('},
+        {label:'minutes_between', value: 'minutes_between('}
       ];
     };
 

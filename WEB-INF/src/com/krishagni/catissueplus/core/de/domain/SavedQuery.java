@@ -34,6 +34,8 @@ public class SavedQuery {
 	
 	private Set<QueryFolder> folders = new HashSet<QueryFolder>();
 
+	private Date deletedOn;
+
 	public Long getId() {
 		return id;
 	}
@@ -136,6 +138,14 @@ public class SavedQuery {
 
 	public void setFolders(Set<QueryFolder> folders) {
 		this.folders = folders;
+	}
+
+	public Date getDeletedOn() {
+		return deletedOn;
+	}
+
+	public void setDeletedOn(Date deletedOn) {
+		this.deletedOn = deletedOn;
 	}
 
 	public String getQueryDefJson() {
