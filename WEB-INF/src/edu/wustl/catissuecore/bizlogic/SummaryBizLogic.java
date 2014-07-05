@@ -405,9 +405,9 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List getTSiteWiseCount() throws BizLogicException
 	{
-		final String sql = "SELECT C.TISSUE_SITE, COUNT(C.IDENTIFIER) FROM , "
+		final String sql = "SELECT C.TISSUE_SITE, COUNT(C.IDENTIFIER) FROM "
 				+ " CATISSUE_SPECIMEN C WHERE "
-				+ "C.ACTIVITY_STATUS NOT IN ('Disabled') AND C.COLLECTION_STATUS LIKE 'Collected' GROUP BY A.TISSUE_SITE"
+				+ "C.ACTIVITY_STATUS NOT IN ('Disabled') AND C.COLLECTION_STATUS LIKE 'Collected' GROUP BY C.TISSUE_SITE"
 				+ DESC_ORDER;
 
 		return this.executeSQL(sql);
@@ -473,7 +473,6 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List<NameValueBean> getNameValuePairs(final String sql) throws BizLogicException
 	{
-
 		final List<NameValueBean> nameValuePairs = new ArrayList<NameValueBean>();
 		try
 		{
