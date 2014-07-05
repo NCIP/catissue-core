@@ -3025,7 +3025,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
  		
     </changeSet> 
         
-    <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
+    <!-- <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
 	   <createTable tableName="CATISSUE_SPECIMEN_PRINT_RULE">
 		 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
 		   <constraints primaryKey="true" nullable="false"/>
@@ -3067,7 +3067,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             incrementBy="1"
             ordered="true" />
 	</changeSet>
-
+-->
 
 
     <changeSet id="Create SPECIMEN_ORDER_VIEW" author="mibrahim" runOnChange="true" dbms="mysql">
