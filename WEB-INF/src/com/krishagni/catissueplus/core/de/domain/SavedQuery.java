@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class SavedQuery {
@@ -165,12 +166,22 @@ public class SavedQuery {
 		query.queryExpression = queryExpression;
 		query.drivingForm = drivingForm;
 		query.folders = null;
-		return new Gson().toJson(query);		
+		
+		try {
+			return getObjectMapper().writeValueAsString(query);
+		} catch (Exception e) {
+			throw new RuntimeException("Error marshalling saved query to JSON", e);
+		}				
 	}
 
 	public void setQueryDefJson(String queryDefJson) {
-		Gson gson = new Gson();
-		SavedQuery query = gson.fromJson(queryDefJson, SavedQuery.class);
+		SavedQuery query = null;
+		try {
+			query = getObjectMapper().readValue(queryDefJson, SavedQuery.class);
+		} catch (Exception e) {
+			throw new RuntimeException("Error marshalling JSON to saved query", e);
+		}
+		
 		this.cpId = query.cpId;
 		this.selectList = query.selectList;
 		this.filters = query.filters;		
@@ -221,6 +232,18 @@ public class SavedQuery {
 			return false;
 		}
 		return true;
+	}
+	
+	
+	private ObjectMapper getObjectMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setVisibilityChecker(
+			mapper.getSerializationConfig().getDefaultVisibilityChecker()
+				.withFieldVisibility(Visibility.ANY)
+				.withGetterVisibility(Visibility.NONE)
+				.withSetterVisibility(Visibility.NONE)
+				.withCreatorVisibility(Visibility.NONE));
+		return mapper;		
 	}
 	
 }

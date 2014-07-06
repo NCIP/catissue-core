@@ -4,6 +4,7 @@
 		<caption>Participant</caption>
 		<table>CPR_VIEW</table>
 		<primaryKey>CPR_ID</primaryKey>
+		<activeCondition>ACTIVITY_STATUS = 'Active'</activeCondition>  
 		<row>
 			<numberField>
 				<name>id</name>
@@ -397,7 +398,7 @@
 			</subForm>
 		</row>
 
-<row>
+		<row>
 			<subForm>
 				<name>extensions</name>
 				<udn>extensions</udn>

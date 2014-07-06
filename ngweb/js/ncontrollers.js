@@ -183,7 +183,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             $scope.queryData.notifs.error = result.status;
           } else {
             $scope.queryData.cprCnt  = result.rows[0][0];
-            $scope.queryData.specimenCnt = result.rows[0][1];
+            $scope.queryData.specimenCnt = 0;
+            for (var i = 1; i < result.rows[0].length; ++i) {
+              $scope.queryData.specimenCnt += parseInt(result.rows[0][i]);
+            }
             $scope.queryData.notifs.error = "";
           }
           $scope.queryData.notifs.waitCount = false;
@@ -1098,13 +1101,15 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           function(fields) {
             form.fields = fields;
             form.staticFields = flattenStaticFields("", fields);
-            form.extnFields = flattenExtnFields("", fields);
+            form.extnForms = getExtnForms("", fields);
+            form.extnFields = flattenExtnFields(form.extnForms);
             deferred.resolve(form.fields);
           }
         );
       } else if (!form.staticFields) {
         form.staticFields = flattenStaticFields("", fields);
-        form.extnFields = flattenExtnFields("", fields);
+        form.extnForms = getExtnForms("", fields);
+        form.extnFields = flattenExtnFields(form.extnForms);
         deferred.resolve(form.fields);
       } else {
         deferred.resolve(form.fields);
@@ -1200,11 +1205,45 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         });
     };
 
-    var flattenExtnFields = function(fqn, fields) {
+    /*var flattenExtnFields = function(fqn, fields) {
       return filterAndFlattenFields(fqn, fields,
         function(field) {
           return field.type == 'SUBFORM' && field.name == 'extensions';
         });
+    };*/
+
+    var flattenExtnFields = function(extnForms) {
+      var fields = [];
+      for (var i = 0; i < extnForms.length; ++i) {
+        fields = fields.concat(extnForms[i].fields);
+      }
+
+      return fields;
+    };
+
+    var getExtnForms = function(fqn, fields) {
+      var extnSubForm = undefined;
+      for (var i = 0; i < fields.length; ++i) {
+        if (fields[i].type != 'SUBFORM' || fields[i].name != 'extensions') {
+          continue;
+        }
+
+        extnSubForm = fields[i];
+        break;
+      }
+
+      if (!extnSubForm) {
+        return [];
+      }
+
+      var extnForms = [];
+      for (var i = 0; i < extnSubForm.subFields.length; ++i) {
+        var subForm = extnSubForm.subFields[i];
+        var extnFields = flattenFields(fqn + "extensions." + subForm.name + ".", subForm.subFields);
+        extnForms.push({name: subForm.name, caption: subForm.caption, fields: extnFields});
+      }
+
+      return extnForms;
     };
       
     $scope.onTemporalFilterSelect = function() {
@@ -1228,11 +1267,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         FormsService.getQueryFormFields(cpId, form.formId).then(function(fields) {
           form.fields = fields;
           form.staticFields = flattenStaticFields("", fields);
-          form.extnFields = flattenExtnFields("", fields);
+          form.extnForms = getExtnForms("", fields);
+          form.extnFields = flattenExtnFields(form.extnForms);
         });
       } else if (!form.staticFields) {
         form.staticFields = flattenStaticFields("", fields);
-        form.extnFields = flattenExtnFields("", fields);
+        form.extnForms = getExtnForms("", fields);
+        form.extnFields = flattenExtnFields(form.extnForms);
       }
     };
 
@@ -1252,7 +1293,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     $scope.getFormField = function(form, fieldName) {
       if (!form.staticFields) {
         form.staticFields = flattenStaticFields("", form.fields);
-        form.extnFields = flattenExtnFields("", form.fields);
+        form.extnForms = getExtnForms("", fields);
+        form.extnFields = flattenExtnFields(form.extnForms);
       }
 
       for (var i = 0; i < form.staticFields.length; ++i) {
@@ -1749,16 +1791,18 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var processFields = function(prefix, fields) {
         var result = [];
         for (var i = 0; i < fields.length; ++i) {
-          var field = {type: 'field', val: fields[i].caption, name: prefix + fields[i].name};
-          if (fields[i].type == 'SUBFORM') {
-            field.type = 'subform';
+          if (fields[i].type == 'SUBFORM' && fields[i].name == 'extensions') {
+            var extnForms = processFields(prefix + fields[i].name + ".", fields[i].subFields);
+            result = result.concat(extnForms);
+          } else if (fields[i].type == 'SUBFORM') {
+            var field = {type: 'subform', val: fields[i].caption, name: prefix + fields[i].name};
             field.children = processFields(prefix + fields[i].name + ".", fields[i].subFields);
+            result.push(field);
           } else {
-            field.children = [];
+            result.push({type: 'field', val: fields[i].caption, name: prefix + fields[i].name, children: []});
           }
-          result.push(field);
         }
-      
+
         return result;
       };
 
@@ -1829,7 +1873,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var pos = 0;
         var fields = node.children;
         while (i < selectedFields.length) {
-          var nodeIdx = getMatchingNodeIdx(selectedFields[i], fields, level);
+          var currLevel = level;
+          var fieldParts = selectedFields[i].split(".", 2);
+          if (fieldParts[1] == "extensions") {
+            currLevel++;
+          }
+
+          var nodeIdx = getMatchingNodeIdx(selectedFields[i], fields, currLevel);
           var fieldNode = fields.splice(nodeIdx, 1)[0];
           fields.splice(pos, 0, fieldNode);
           pos++;
@@ -1837,7 +1887,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           if (fieldNode.type == 'subform') {
             var sfSelectedFields = [];
             while (i < selectedFields.length) {
-              var name = selectedFields[i].split(".", level + 1).join(".");
+              var name = selectedFields[i].split(".", currLevel + 1).join(".");
               if (name != fieldNode.name) {
                 break;
               }

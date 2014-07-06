@@ -765,27 +765,30 @@
                       {{field.caption}}
                     </span>
                   </div>
-                  <div ng-if="form.extnFields"
-                       style="margin-bottom: 3px; cursor:pointer; font-weight: bold; font-size: 11px; color: #a0a0a0" 
-                       ng-click="form.showExtnFields = !form.showExtnFields">
-                    <span>
-                      Extension Fields 
-                      <i ng-if="!form.showExtnFields" class="glyphicon glyphicon-chevron-right"></i> 
-                      <i ng-if="form.showExtnFields" class="glyphicon glyphicon-chevron-down"></i> 
+                  <div style="margin-bottom: 3px;"
+                       ng-repeat="extnForm in form.extnForms">
+                    <span style="cursor:pointer; color: #666666; font-size: 14px; font-weight: bold;" 
+                          ng-click="extnForm.showExtnFields = !extnForm.showExtnFields" 
+                          ng-show="filteredExtnFields.length > 0">
+                      {{extnForm.caption}}
+                      <i ng-if="form.showExtnFields || extnForm.showExtnFields" class="fa fa-caret-down"></i>
+                      <i ng-if="!form.showExtnFields && !extnForm.showExtnFields" class="fa fa-caret-right"></i>
                     </span>
-                  </div>
-                  <div ng-if="form.showExtnFields && form.extnFields">
-                    <div style="margin-bottom: 3px;" 
-                         class="field" 
-                         id="{{form.name}}.{{field.name}}" 
-                         data-arg="{{form.name}}.{{field.name}}"
-                         ng-repeat="field in form.extnFields | filter: {caption: form.searchField}">
-                      <span style="cursor: pointer" 
-                            ng-click="onFieldSelect(field)"
-                            popover-title="Add Filter"
-                            popover-placement="right" ka-popover-template="filter-popover-tmpl.html">
-                        {{field.caption}}
-                      </span>
+
+                    <div ng-show="(form.showExtnFields || extnForm.showExtnFields) && filteredExtnFields.length > 0" 
+                         style="border-bottom: 1px dashed #ddd;">
+                      <div style="margin-bottom: 3px;" 
+                           class="field" 
+                           id="{{form.name}}.{{field.name}}" 
+                           data-arg="{{form.name}}.{{field.name}}"
+                           ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: form.searchField})">
+                        <span style="cursor: pointer" 
+                              ng-click="onFieldSelect(field)"
+                              popover-title="Add Filter"
+                              popover-placement="right" ka-popover-template="filter-popover-tmpl.html">
+                          {{field.caption}}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>

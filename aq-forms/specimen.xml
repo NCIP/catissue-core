@@ -6,7 +6,7 @@
 		<hierarchyTable>CATISSUE_SPECIMEN_HIERARCHY</hierarchyTable>
 		<hierarchyAncestorColumn>ANCESTOR_ID</hierarchyAncestorColumn>
 		<hierarchyDescendentColumn>DESCENDENT_ID</hierarchyDescendentColumn>
-
+		<activeCondition>ACTIVITY_STATUS = 'Active'</activeCondition>
 		<row>
 			<numberField>
 				<name>id</name>
