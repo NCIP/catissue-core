@@ -20,4 +20,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public boolean isLabelUnique(String label);
 
 	public boolean isBarcodeUnique(String barcode);
+	
+	public List<Specimen> getSpecimensByLabel(List<String> labels);
 }

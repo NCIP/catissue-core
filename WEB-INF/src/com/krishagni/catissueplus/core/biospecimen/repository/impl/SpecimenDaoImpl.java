@@ -76,6 +76,16 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		query.setString("barcode", barcode);
 		return query.list().isEmpty()?true:false;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Specimen> getSpecimensByLabel(List<String> labels) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SPECIMENS_BY_LABEL)
+				.setParameterList("labels", labels)
+				.list();
+	}
+	
 
 	private static final String FQN = Specimen.class.getName();
 
@@ -84,6 +94,10 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_SPECIMEN_DETAILS_DY_SCG_ID = FQN + ".getSpecimenDetailsByScgId";
 	
 	private static final String GET_SPECIMEN_ID_BY_BARCODE = FQN +".getSpecimenIdByBarcode";
+	
 	private static final String GET_SPECIMEN_BY_LABEL = FQN +".getSpecimenByLabel";
+	
+	private static final String GET_SPECIMENS_BY_LABEL = FQN + ".getSpecimensByLabel";
+
 
 }

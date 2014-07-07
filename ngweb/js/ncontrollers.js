@@ -1,6 +1,10 @@
 
 angular.module('plus.controllers', ['checklist-model', 'ui.app'])
-  .controller('QueryController', ['$scope', '$sce', '$modal', '$q', '$timeout', 'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', function($scope, $sce, $modal, $q, $timeout, CollectionProtocolService, FormsService, QueryService, UsersService) {
+  .controller('QueryController', 
+    ['$scope', '$sce', '$modal', '$q', '$timeout', 
+     'CollectionProtocolService', 'FormsService', 'QueryService', 'UsersService', 'SpecimenListsService', 
+     function($scope, $sce, $modal, $q, $timeout, CollectionProtocolService, FormsService, QueryService, UsersService, SpecimenListsService) {
+
     var ops = {
       eq: {name: "eq", desc: "Equals", code: "&#61;", symbol: '=', model: 'EQ'}, 
       ne: {name: "ne", desc: "Not Equals", code: "&#8800;", symbol: '!=', model: 'NE',},
@@ -249,6 +253,15 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       return result;
     };
 
+    var showAddToSpecimenList = function(selectList) {
+      for (var i = 0; i < $scope.queryData.selectedFields.length; ++i) {
+        if ($scope.queryData.selectedFields[i] === 'Specimen.label') {
+          return true;
+        }
+      }
+      return false;
+    };
+
     $scope.getRecords = function() {
       $scope.queryData.view = 'records';
 
@@ -257,6 +270,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var selectList = getSelectList(filterMap, $scope.queryData.selectedFields);
       var aql = "select " + selectList + " where " + query + " limit 0, 10000";
 
+      $scope.showAddToSpecimenList = showAddToSpecimenList(selectList);
       var startTime = new Date();
       $scope.queryData.notifs.waitRecs = true;
       var cpId = $scope.queryData.selectedCp.id;
@@ -287,7 +301,62 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         $scope.setPagedData(1, 100);
         $scope.queryData.notifs.waitRecs = false;
         $scope.queryData.notifs.error = '';
+        $scope.selectedRows.splice(0, $scope.selectedRows.length);
       });
+
+      if ($scope.showAddToSpecimenList && $scope.queryData.myLists === undefined) {
+        SpecimenListsService.getSpecimenLists().then(
+          function(lists) {
+            $scope.queryData.myLists = lists;
+          }
+        );
+      }
+    };
+
+    $scope.addSpecimensToList = function(list) {
+      var colDefs = $scope.queryData.resultCols;
+      var labelIndices = [], colLabel = "Specimen# Label";
+      for (var i = 0; i < colDefs.length; ++i) {
+        if (colDefs[i].displayName === colLabel) {
+          labelIndices.push(i);
+          colLabel = "Specimen# Label# " + labelIndices.length;
+        }
+      }
+
+      var specimenLabels = [];
+      var selectedRows = $scope.selectedRows;
+      for (var i = 0; i < selectedRows.length; ++i) {
+        var selectedRow = selectedRows[i];
+        for (var j = 0; j < labelIndices.length; ++j) {
+          var label = selectedRow["col" + labelIndices[j]];
+          if (label == '' || specimenLabels.indexOf(label) != -1) {
+            continue;
+          }
+
+          specimenLabels.push(label);
+        }
+      }
+
+      if (specimenLabels.length == 0) {
+        return;
+      }
+
+      SpecimenListsService.addSpecimensToList(list.id, specimenLabels).then(
+        function(labels) {
+          if (!labels) {
+            Utility.notify($("#notifications"), "Failed to add specimens to list: " + list.name, "error", true);
+            return;
+          }
+
+          Utility.notify(
+            $("#notifications"), 
+            labels.length + " specimens added to list: " + list.name, 
+            "success", true);
+
+          $scope.selectedRows.splice(0, $scope.selectedRows.length);
+          $scope.queryData.resultGridOpts.selectAll(false);
+        }
+      );
     };
 
     $scope.exportRecords = function() {
@@ -465,8 +534,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         pageSizes: [100, 200, 500],
         pageSize: 100,
         currentPage: 1
-      }
+      },
+      myLists: undefined
     };
+    $scope.selectedRows = [];
 
     $scope.getQueryDataDefaults = function() {
       return {
@@ -540,7 +611,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       pagingOptions: $scope.queryData.pagingOptions,
       totalServerItems: 'queryData.resultDataSize',
       plugins: [gridFilterPlugin],
-      headerRowHeight: 70
+      headerRowHeight: 70,
+      selectedItems: $scope.selectedRows
     };
 
     $scope.loadFolders = function() {

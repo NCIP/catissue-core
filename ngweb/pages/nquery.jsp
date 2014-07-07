@@ -673,7 +673,7 @@
  
     <div class="container" ng-if="queryData.view == 'records'">
       <div class="row" style="margin-bottom: 1%;">
-        <div class="pull-left" style="padding-left: 15px;">
+        <div class="col-xs-12" style="padding-left: 15px;">
           <div class="btn-group">
             <div class="btn btn-default" ng-click="showQueries()"> 
               <span class="glyphicon glyphicon-th-list"></span>
@@ -691,6 +691,27 @@
               <span class="glyphicon glyphicon-export"></span>
               <span>Export CSV</span> 
             </div>
+          </div>
+          <div class="btn-group" ng-if="queryData.resultGridOpts.selectedItems.length > 0 && showAddToSpecimenList">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="searchSpecimenList = ''"
+              tooltip-placement="bottom" tooltip="Assign specimens to list" tooltip-append-to-body="true">
+              <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" style="width: 200px;">
+              <li>
+                <input ng-model="searchSpecimenList" 
+                  type="text" class="form-control" style="width: 160px; margin: 3px 20px" 
+                  ng-click="$event.stopPropagation()">
+              </li>
+              <li>
+                <ul class="dropdown-menu-subgroup" style="max-height: 150px; overflow: auto;">
+                  <li ng-repeat="list in queryData.myLists | filter: searchSpecimenList" ng-click="addSpecimensToList(list)">
+                    <a href="#">{{ list.name }}</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

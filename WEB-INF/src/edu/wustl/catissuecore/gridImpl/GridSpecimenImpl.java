@@ -32,7 +32,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 				"Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID  AND "+
 				" Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID   AND atg.tag_id= "+ jsonString +" and "+ 
 				"( ( Specimen1.IDENTIFIER  =atg.obj_id  )   AND UPPER(Specimen1.ACTIVITY_STATUS ) != UPPER('Disabled')  ) "+
-				" ORDER BY atg.IDENTIFIER,Specimen1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER "; 
+				" ORDER BY Specimen1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER "; 
 		
 		
 

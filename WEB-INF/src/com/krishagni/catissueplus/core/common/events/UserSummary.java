@@ -1,6 +1,10 @@
 
 package com.krishagni.catissueplus.core.common.events;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class UserSummary {
@@ -52,5 +56,14 @@ public class UserSummary {
 		userSummary.setLastName(user.getLastName());
 		userSummary.setLoginName(user.getLoginName());
 		return userSummary;
+	}
+	
+	public static List<UserSummary> fromUsers(Collection<User> users) {
+		List<UserSummary> summaries = new ArrayList<UserSummary>();
+		for (User user : users) {
+			summaries.add(UserSummary.fromUser(user));
+		}
+		
+		return summaries;
 	}
 }

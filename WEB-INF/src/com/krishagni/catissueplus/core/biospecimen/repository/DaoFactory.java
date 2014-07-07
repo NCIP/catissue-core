@@ -71,5 +71,7 @@ public interface DaoFactory {
 	public DistributionProtocolDao getDistributionProtocolDao();
 	
 	public SpecimenPrintRuleDao getSpecimenPrintRuleDao();
+	
+	public SpecimenListDao getSpecimenListDao();
 
 }

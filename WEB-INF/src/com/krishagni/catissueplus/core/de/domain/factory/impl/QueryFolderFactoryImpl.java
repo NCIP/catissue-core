@@ -39,22 +39,6 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 		this.userDao = userDao;
 	}
 
-//	@Override
-//	public QueryFolder createQueryFolder(Long userId, String name,	List<Long> queryIds) {
-//		ObjectCreationException oce = new ObjectCreationException();				
-//		QueryFolder queryFolder = new QueryFolder();
-//		
-//		setOwner(queryFolder, userId, oce);
-//		setName(queryFolder, name, oce);
-//		setQueries(queryFolder, queryIds, oce);
-//						
-//		if (oce.hasErrors()) {
-//			throw oce;
-//		}
-//		
-//		return queryFolder;
-//	}
-
 	@Override
 	public QueryFolder createQueryFolder(QueryFolderDetails details) {
 		ObjectCreationException oce = new ObjectCreationException();

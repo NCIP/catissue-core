@@ -139,4 +139,19 @@ angular.module('plus.services', [])
         return Utility.get($http, baseUrl, successfn);
       }
     };
+  })
+
+  .factory('SpecimenListsService', function($http) {
+    var baseUrl = '/catissuecore/rest/ng/specimen-lists/';
+    var successfn = function(result) { return result.data; };
+
+    return {
+      getSpecimenLists: function() {
+        return Utility.get($http, baseUrl, successfn);
+      },
+
+      addSpecimensToList: function(listId, specimens) {
+        return $http.put(baseUrl + listId + '/specimens?operation=ADD', specimens).then(successfn);
+      }
+    };
   });

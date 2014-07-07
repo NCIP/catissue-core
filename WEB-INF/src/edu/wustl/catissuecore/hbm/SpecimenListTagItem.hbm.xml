@@ -5,13 +5,12 @@
 
 <hibernate-mapping>
 	<class name="edu.wustl.common.tags.domain.TagItem" entity-name="SpecimenListTagItem" table="catissue_spec_tag_items">
-		<id name="identifier" type="java.lang.Long" column="identifier">
-			<generator class="increment" />
-		</id>
-		<many-to-one entity-name="SpecimenListTag" name="tag">
-			<column name="TAG_ID" not-null="true" />
-		</many-to-one>
-
-		<property name="objId" type="java.lang.Long" column="OBJ_ID"/>
+		<composite-id>
+			<key-many-to-one entity-name="SpecimenListTag" name="tag">
+				<column name="TAG_ID" not-null="true"/>
+			</key-many-to-one>
+			
+			<key-property name="objId" type="java.lang.Long" column="OBJ_ID"/>
+		</composite-id>
 	</class>
 </hibernate-mapping>

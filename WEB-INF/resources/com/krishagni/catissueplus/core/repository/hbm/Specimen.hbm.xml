@@ -117,5 +117,13 @@
 			where IDENTIFIER = :specimenId
 		</sql-query>
 
+                <query name="getSpecimensByLabel">
+                  select 
+                    sp 
+                  from 
+                    com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp 
+                  where 
+                    sp.label in (:labels)
+                </query>
 	</class>
 </hibernate-mapping>

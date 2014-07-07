@@ -316,7 +316,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
-			if (!folder.canUserAccess(userId)) {
+			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
 				return QueryFolderDetailEvent.notAuthorized(folderId);
 			}
 			
@@ -372,12 +372,12 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
-			if (!existing.getOwner().getId().equals(userId)) {
+			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
 				return QueryFolderUpdatedEvent.badRequest(SavedQueryErrorCode.USER_NOT_AUTHORISED);
 			}
 			
 			UserSummary owner = new UserSummary();
-			owner.setId(userId);
+			owner.setId(existing.getOwner().getId());
 			folderDetails.setOwner(owner);
 			
 			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);
@@ -411,7 +411,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
-			if (!existing.getOwner().getId().equals(userId)) {
+			if (!req.getSessionDataBean().isAdmin() && !existing.getOwner().getId().equals(userId)) {
 				return QueryFolderDeletedEvent.notAuthorized(folderId);
 			}
 			
@@ -437,7 +437,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
-			if (!folder.canUserAccess(userId)) {
+			if (!req.getSessionDataBean().isAdmin() && !folder.canUserAccess(userId)) {
 				return FolderQueriesEvent.notAuthorized(folderId);
 			}
 			
@@ -473,7 +473,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
-			if (!queryFolder.getOwner().getId().equals(userId)) {
+			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
 				return FolderQueriesUpdatedEvent.notAuthorized(folderId);
 			}
 			
@@ -527,7 +527,7 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			Long userId = req.getSessionDataBean().getUserId();
-			if (!queryFolder.getOwner().getId().equals(userId)) {
+			if (!req.getSessionDataBean().isAdmin() && !queryFolder.getOwner().getId().equals(userId)) {
 				return QueryFolderSharedEvent.notAuthorized(folderId);
 			}
 			
