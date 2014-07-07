@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.privileges.domain.factory.impl;
 
+import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,14 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.domain.Privilege;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeErrorCode;
-import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.domain.factory.RoleFactory;
 import com.krishagni.catissueplus.core.privileges.events.RoleDetails;
-
-import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 public class RoleFactoryImpl implements RoleFactory {
 
@@ -53,8 +53,7 @@ public class RoleFactoryImpl implements RoleFactory {
 			if (!PrivilegeType.isValidPrivilegeType(privilegeName)) {
 				exceptionHandler.addError(PrivilegeErrorCode.NOT_FOUND, PRIVILEGE);
 			}
-			
-			Privilege privilege = daoFactory.getPrivilegeDao().getPrivilegeByName(PrivilegeType.getEnumNameForValue(privilegeName));
+			Privilege privilege = daoFactory.getPrivilegeDao().getPrivilegeByName(privilegeName);
 			privileges.add(privilege);
 		}
 		role.setPrivileges(privileges);

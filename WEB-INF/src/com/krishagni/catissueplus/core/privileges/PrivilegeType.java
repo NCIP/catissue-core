@@ -1,5 +1,6 @@
+package com.krishagni.catissueplus.core.privileges;
 
-package com.krishagni.catissueplus.core.privileges.domain.factory;
+
 
 public enum PrivilegeType {
 
@@ -65,3 +66,4 @@ public enum PrivilegeType {
 		return false;
 	}
 }
+

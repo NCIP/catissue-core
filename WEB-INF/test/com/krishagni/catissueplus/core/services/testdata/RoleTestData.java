@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.domain.Privilege;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
-import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.events.CreateRoleEvent;
 import com.krishagni.catissueplus.core.privileges.events.RoleDetails;
 import com.krishagni.catissueplus.core.privileges.events.UpdateRoleEvent;

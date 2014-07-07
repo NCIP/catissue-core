@@ -32,10 +32,10 @@ import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
 import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.domain.Privilege;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
-import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeType;
 
 import edu.wustl.common.beans.SessionDataBean;
 

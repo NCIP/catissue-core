@@ -18,8 +18,8 @@ import com.krishagni.catissueplus.core.printer.printRule.events.DeletePrintRuleE
 import com.krishagni.catissueplus.core.printer.printRule.events.PatchPrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRuleDetails;
 import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleEvent;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.domain.Privilege;
-import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeType;
 
 import edu.wustl.common.beans.SessionDataBean;
 
