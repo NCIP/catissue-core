@@ -111,6 +111,7 @@
 				<udn>surgicalPathologyNo</udn>
 				<caption>Surgical Pathology Number</caption>
 				<column>SURGICAL_PATHOLOGY_NUMBER</column>
+				<phi>true</phi>
 			</textField>
 		</row>
 
@@ -144,6 +145,27 @@
 					<sql>select value from catissue_permissible_value where public_id = '2003997' order by value</sql>
 				</options>
 			</dropDown>
+		</row>
+		<row>
+			
+			<subForm>
+		                <name>collectionProtocolEvent</name>
+		                <udn>collectionProtocolEvent</udn>
+		                <caption>Collection Protocol Event</caption>
+		                <table>CATISSUE_COLL_PROT_EVENT</table>
+		                <foreignKey>IDENTIFIER</foreignKey>
+		                <parentKey>COLLECTION_PROTOCOL_EVENT_ID</parentKey>
+
+				<row>
+					<textField>
+						<name>collectionPointLabel</name>
+						<udn>collectionPointLabel</udn>
+						<caption>Collection Point Label</caption>
+						<column>COLLECTION_POINT_LABEL</column>
+					</textField>
+				</row>
+			</subForm>
+	
 		</row>
 		<row>
 			<datePicker>
@@ -196,6 +218,25 @@
 			</textField>
 		</row>
 
+		<row>
+			<subForm>
+                                <name>surgicalPathologyReport</name>
+                                <udn>surgicalPathologyReport</udn>
+                                <caption>Surgical Pathology Report</caption>
+                                <table>CATISSUE_IDENTIFIED_REPORT</table>
+                                <foreignKey>SCG_ID</foreignKey>
+                                <parentKey>IDENTIFIER</parentKey>
+			
+				<row>
+					<numberField>
+						<name>surgicalPathologyReportId</name>
+						<udn>surgicalPathologyReportId</udn>
+						<caption>Surgical Pathology Report Identifier</caption>
+						<column>IDENTIFIER</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
                 <row>
                         <subForm>
                                 <name>extensions</name>

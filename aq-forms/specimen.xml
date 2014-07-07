@@ -165,6 +165,7 @@
                                 <table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
                                 <foreignKey>SPECIMEN_ID</foreignKey>
                                 <parentKey>IDENTIFIER</parentKey>
+								<pathLink>true</pathLink>
                         </subForm>
                 </row>
 		<row>
@@ -175,6 +176,7 @@
                                 <table>SPECIMEN_ORDER_VIEW</table>
                                 <foreignKey>SPECIMEN_ID</foreignKey>
                                 <parentKey>IDENTIFIER</parentKey>
+				<pathLink>true</pathLink>
 				<row>
 					<subForm>
 						<name>order</name>
@@ -195,6 +197,7 @@
 				<table>SPECIMEN_SHIPMENT_VIEW</table>
 				<foreignKey>SPECIMEN_ID</foreignKey>
 				<parentKey>IDENTIFIER</parentKey>
+				<pathLink>true</pathLink>
 				<row>
 					<subForm>
 						<name>shipment</name>
