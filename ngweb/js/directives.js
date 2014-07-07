@@ -47,7 +47,7 @@ angular.module("plus.directives", [])
   })
 
 
-  .directive('kaSearch', function() {
+  .directive('kaSearch', function($timeout) {
     return {
       restrict: "E",
       replace : "true",
@@ -60,12 +60,19 @@ angular.module("plus.directives", [])
       },
 
       link: function(scope, element, attrs) {
+        var timeout = undefined;
         control = new Select2Search(element);
 
         scope.select = control;//new Select2Search(element);
         control
           .onQuery(function(qTerm, qCallback) {
-            return scope.query()(undefined, qTerm, qCallback);
+            if (timeout != undefined) {
+              $timeout.cancel(timeout);
+            }
+
+            timeout = $timeout(function() {
+              return scope.query()(undefined, qTerm, qCallback);
+            }, 1000);
           })
           .onChange(function(option) {
             scope.onSelect({selected: option});
