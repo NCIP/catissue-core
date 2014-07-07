@@ -907,11 +907,19 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.editQuery = function(query) {
-      $scope.loadQuery(query).then(function() { $scope.queryData.view = 'query'; });
+      $scope.loadQuery(query).then(function(result) { 
+        if (!result) { return; }
+
+        $scope.queryData.view = 'query'; 
+      });
     };
 
     $scope.runQuery = function(query) {
-      $scope.loadQuery(query).then( function() { $scope.getRecords(); });
+      $scope.loadQuery(query).then( function(result) { 
+        if (!result) { return; }
+
+        $scope.getRecords(); 
+      });
     };
 
     $scope.loadQuery = function(query) {
@@ -927,6 +935,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
               selectedCp = cpList[i];
               break;
             }
+          }
+
+          if (!selectedCp) {
+            Utility.notify($("#notifications"), "Permission Denied", "error", true);
+            return false;
           }
 
           $scope.onCpSelect(selectedCp);

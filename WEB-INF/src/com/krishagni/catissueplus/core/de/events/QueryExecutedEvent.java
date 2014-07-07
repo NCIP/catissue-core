@@ -38,6 +38,10 @@ public class QueryExecutedEvent extends ResponseEvent {
 		return errorResp(EventStatus.BAD_REQUEST, message, t);
 	}
 	
+	public static QueryExecutedEvent notAuthorized(String message, Throwable t) {
+		return errorResp(EventStatus.NOT_AUTHORIZED, message, t);
+	}
+	
 	public static QueryExecutedEvent serverError(String message, Throwable t) {
 		return errorResp(EventStatus.INTERNAL_SERVER_ERROR, message, t);
 	}

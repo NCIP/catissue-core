@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -16,7 +18,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.krishagni.catissueplus.core.de.events.*;
+
 import edu.wustl.common.util.global.CommonServiceLocator;
+
+import org.apache.commons.lang.ArrayUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -36,6 +41,8 @@ import com.krishagni.catissueplus.core.de.repository.QueryAuditLogDao;
 import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
+import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
 import edu.common.dynamicextensions.query.Query;
 import edu.common.dynamicextensions.query.QueryParserException;
@@ -43,6 +50,8 @@ import edu.common.dynamicextensions.query.QueryResponse;
 import edu.common.dynamicextensions.query.QueryResultCsvExporter;
 import edu.common.dynamicextensions.query.QueryResultData;
 import edu.common.dynamicextensions.query.QueryResultExporter;
+import edu.common.dynamicextensions.query.QueryResultScreener;
+import edu.common.dynamicextensions.query.ResultColumn;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.XMLPropertyHandler;
 
@@ -68,6 +77,8 @@ public class QueryServiceImpl implements QueryService {
 	private UserDao userDao;
 	
 	private QueryFolderFactory queryFolderFactory;
+	
+	private PrivilegeService privilegeSvc;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -92,6 +103,14 @@ public class QueryServiceImpl implements QueryService {
 
 	public void setQueryFolderFactory(QueryFolderFactory queryFolderFactory) {
 		this.queryFolderFactory = queryFolderFactory;
+	}
+
+	public PrivilegeService getPrivilegeSvc() {
+		return privilegeSvc;
+	}
+
+	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
+		this.privilegeSvc = privilegeSvc;
 	}
 
 	@Override
@@ -223,19 +242,30 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public QueryExecutedEvent executeQuery(ExecuteQueryEvent req) {
 		try {
+			SessionDataBean sdb = req.getSessionDataBean();
+			boolean countQuery = req.getRunType().equals("Count");
+			
 			Query query = Query.createQuery()
 					.wideRows(req.isWideRows()).ic(true)
 					.dateFormat(dateFormat).timeFormat(timeFormat);
-			query.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
+			query.compile(
+					cprForm, 
+					getAqlWithCpId(sdb, countQuery, req.getAql()), 
+					getRestriction(sdb, req.getCpId()));
+			
 			QueryResponse resp = query.getData();
 			insertAuditLog(req, resp);
 			
 			QueryResultData queryResult = resp.getResultData();
+			queryResult.setScreener(new QueryResultScreenerImpl(sdb, countQuery));
+			
 			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getStringifiedRows());
 		} catch (QueryParserException qpe) {
 			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
 		} catch (IllegalArgumentException iae) {
 			return QueryExecutedEvent.badRequest(iae.getMessage(), iae);
+		} catch (IllegalAccessError iae) {
+			return QueryExecutedEvent.notAuthorized(iae.getMessage(), iae);
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (message == null) {
@@ -249,11 +279,18 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public QueryDataExportedEvent exportQueryData(ExportQueryDataEvent req) {
 		try {
+			SessionDataBean sdb = req.getSessionDataBean();
+			boolean countQuery = req.getRunType().equals("Count");
+			
+			
 			Query query = Query.createQuery();
 			query.wideRows(req.isWideRows())
 				.ic(true)
-				.dateFormat(dateFormat)
-				.compile(cprForm, req.getAql(), getRestriction(req.getCpId()));
+				.dateFormat(dateFormat).timeFormat(timeFormat)
+				.compile(
+						cprForm, 
+						getAqlWithCpId(sdb, countQuery, req.getAql()), 
+						getRestriction(sdb, req.getCpId()));
 			
 			String filename = UUID.randomUUID().toString();
 			boolean completed = exportData(filename, query, req);
@@ -262,6 +299,8 @@ public class QueryServiceImpl implements QueryService {
 			return QueryDataExportedEvent.badRequest(qpe.getMessage(), qpe);		
 		} catch (IllegalArgumentException iae) {
 			return QueryDataExportedEvent.badRequest(iae.getMessage(), iae);
+		} catch (IllegalAccessError iae) {
+			return QueryDataExportedEvent.notAuthorized(iae.getMessage(), iae);
 		} catch (Exception e) {
 			return QueryDataExportedEvent.serverError("Error exporting data", e);
 		}
@@ -712,12 +751,13 @@ public class QueryServiceImpl implements QueryService {
 	throws ExecutionException, InterruptedException, CancellationException {
 		Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 			@Override
-			public Boolean call() throws Exception {
+			public Boolean call() throws Exception {				
 				QueryResultExporter exporter = new QueryResultCsvExporter();
 				String path = EXPORT_DATA_DIR + File.separator + filename;
-				QueryResponse resp = exporter.export(path, query);
-                
+				
 				Transaction txn = startTxn();
+				QueryResponse resp = exporter.export(
+						path, query, new QueryResultScreenerImpl(req.getSessionDataBean(), false));
 				try {
 					insertAuditLog(req, resp);
 					txn.commit();
@@ -738,12 +778,46 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 	
-	private String getRestriction(Long cpId) {
-		if (cpId != null && cpId != -1) {
-			return cpForm + ".id = " + cpId;
+	private String getRestriction(SessionDataBean sdb, Long cpId) {
+		if (sdb.isAdmin()) {
+			if (cpId != null && cpId != -1) {
+				return cpForm + ".id = " + cpId;
+			}
+		} else {
+			List<Long> cpIds = privilegeSvc.getCpList(sdb.getUserId(), PrivilegeType.READ.value());
+			if (cpIds == null || cpIds.isEmpty()) {
+				throw new IllegalAccessError("User does not have access to any CP");
+			}
+			
+			if (cpId != null && cpId != -1) {
+				if (cpIds.contains(cpId)) {
+					return cpForm + ".id = " + cpId; 
+				}
+				
+				throw new IllegalAccessError("Access to cp is not permitted: " + cpId);
+			} else {
+				StringBuilder joinedCps = new StringBuilder(cpForm).append(".id in (");
+				
+				String delim = "";
+				for (Long cp : cpIds) {
+					joinedCps.append(delim).append(cp);
+					delim = ",";
+				}
+				
+				return joinedCps.append(")").toString();				
+			}
 		}
 		
 		return null;
+	}
+	
+	private String getAqlWithCpId(SessionDataBean sdb, boolean isCount, String aql) {
+		if (sdb.isAdmin() || isCount) {
+			return aql;
+		} else {
+			String afterSelect = aql.trim().substring(6);
+			return "select " + cpForm + ".id, " + afterSelect;
+		}
 	}
 	
 	private static int getThreadPoolSize() {
@@ -788,5 +862,61 @@ public class QueryServiceImpl implements QueryService {
 		
 		return txn;
 	}
+		
+	private class QueryResultScreenerImpl implements QueryResultScreener {
+		private SessionDataBean sdb;
+		
+		private boolean countQuery;
+		
+		private Map<Long, Boolean> phiAccessMap = new HashMap<Long, Boolean>();
+		
+		private static final String mask = "##########";
+		
+		public QueryResultScreenerImpl(SessionDataBean sdb, boolean countQuery) {
+			this.sdb = sdb;
+			this.countQuery = countQuery;
+		}
 
+		@Override
+		public List<ResultColumn> getScreenedResultColumns(List<ResultColumn> preScreenedResultCols) {
+			if (sdb.isAdmin() || this.countQuery) {
+				return preScreenedResultCols;
+			}
+			
+			preScreenedResultCols.remove(0);
+			return preScreenedResultCols;
+		}
+
+		@Override
+		public Object[] getScreenedRowData(List<ResultColumn> preScreenedResultCols, Object[] rowData) {
+			if (sdb.isAdmin() || this.countQuery || rowData.length == 0) {
+				return rowData;
+			}
+			
+			Long cpId = (Long)rowData[0];
+			Object[] screenedData = ArrayUtils.remove(rowData, 0);
+			
+			Boolean phiAccess = phiAccessMap.get(cpId);
+			if (phiAccess == null) {
+				phiAccess = privilegeSvc.hasPrivilege(sdb.getUserId(), cpId, PrivilegeType.PHI_ACCESS.value());
+				phiAccess = phiAccess != null && phiAccess.equals(true);
+				phiAccessMap.put(cpId, phiAccess);
+			}
+			
+			if (phiAccess) {
+				return screenedData;
+			}
+			
+			int i = 0; 
+			for (ResultColumn col : preScreenedResultCols) {
+				if (col.isPhi()) {
+					screenedData[i] = mask;
+				}
+				
+				++i;
+			}
+			
+			return screenedData;
+		}		
+	}
 }
