@@ -300,10 +300,10 @@ function hideCursor(){
             </div>
             <div style="margin-top: 20px">
               <div class="cp-dropdown-label"> Participant </div>
-              <ka-select data-placeholder="Select Participant" 
-                         option-id="id" option-value="name" 
-                         options="participantList"  selected="selectedParticipant.id" on-select="onParticipantSelect" style="width:100%;">
-              </ka-select>
+                <ka-search ng-model="SelectedParticipant" data-placeholder="Select Participant"
+                  on-initselectionfn="initSel" on-query="searchParticipant"
+                  on-select="onParticipantSelect(selected)" style="width:100%;">
+                </ka-search>
             </div>
             <div class="btn-group" style="margin-top: 10px; width: 100%;">
               <button class="btn btn-default btn-sm" ng-click="registerParticipant()" ng-disabled="selectedCp.id == -1" style="width: 50%">

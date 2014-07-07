@@ -1,15 +1,16 @@
 angular.module('plus.cpview', [])
 
-.controller('CpViewController', ['$scope', '$window', 'repository',  function($scope, $window, repository) {
+.controller('CpViewController', ['$scope', '$window', '$timeout', 'repository',  function($scope, $window, $timeout, repository) {
 
+  $scope.initSel = function(elem, callback){ callback(elem); }
   $scope.selectedCp = selectionCp;
   $scope.selectedParticipant = selParticipant;
-    
+  $scope.initialTime = undefined;
   repository.getAllCps()           // TODO: Revisit
     .success(function(result) {
       $scope.cps = result;
     });
-  
+
   $scope.participantList =[];
 
   $scope.onCpSelect = function(selected, redirect) {
@@ -19,18 +20,9 @@ angular.module('plus.cpview', [])
 	}
 	
     $scope.selectedCp = {id: selected.id, shortTitle: selected.text};
-      
-    repository.getRegisteredParticipants(selected.id, "").success(function(result) {
-      $scope.participantList = [];
-      for (var i = 0; i < result.length; ++i) {
-        var participant = {
-          id: result[i].id + "," + result[i].cprId,
-          name: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'           
-        }
-        $scope.participantList.push(participant);
-      }
-    });
-      
+
+    $scope.searchParticipant(selected.id, "", undefined);
+
     $scope.selectedParticipant={};
     $scope.tree=[];
   };
@@ -41,6 +33,30 @@ angular.module('plus.cpview', [])
     var url = "QueryParticipant.do?operation=add&pageOf=pageOfParticipantCPQuery&clearConsentSession=true&cpSearchCpId=" +
                $scope.selectedCp.id + "&refresh=true";
     $('#cpFrameNew').attr('src',url);
+  }
+
+  $scope.searchParticipant = function (id, query, callback) {
+    if (id == undefined && query.length == 0 && $scope.participantList .length > 0) {
+      callback($scope.participantList);
+    } else {
+      if (id == undefined) {
+        id = $scope.selectedCp.id;
+      }
+
+      repository.getRegisteredParticipants(id, query).success(function(result) {
+        $scope.participantList = [];
+        for (var i = 0; i < result.length; ++i) {
+          var participant = {
+            id: result[i].id + "," + result[i].cprId,
+            text: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'
+          }
+          $scope.participantList.push(participant);
+        }
+        if (callback != undefined) {
+          callback($scope.participantList);
+        }
+      });
+    }
   }
 
   $scope.onParticipantSelect = function(selected, selectedScg) {

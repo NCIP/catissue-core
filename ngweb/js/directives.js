@@ -29,7 +29,7 @@ angular.module("plus.directives", [])
             }
           }
         };
- 
+
         scope.select = new Select2(element, config).render();
         scope.$watch('selected', function(selected) {
           scope.select.selectedOpts(selected);
@@ -46,6 +46,37 @@ angular.module("plus.directives", [])
     };
   })
 
+
+  .directive('kaSearch', function() {
+    return {
+      restrict: "E",
+      replace : "true",
+      template: "<input type='hidden'>",
+      scope   : {
+        query         : "&onQuery",
+        onSelect      : "&onSelect",
+        initSelection : "&onInitselectionfn",
+	elem          : "=ngModel"
+      },
+
+      link: function(scope, element, attrs) {
+        control = new Select2Search(element);
+
+        scope.select = control;//new Select2Search(element);
+        control
+          .onQuery(function(qTerm, qCallback) {
+            return scope.query()(undefined, qTerm, qCallback);
+          })
+          .onChange(function(option) {
+            scope.onSelect({selected: option});
+          })
+	  .onInitSelection(function(elem, callback) {
+            scope.initSelection()(scope.elem, callback);
+          })
+          .render();
+      }
+    }
+})
   .directive("kaDraggable", function() {
     return {
       restrict: "A",
@@ -86,7 +117,7 @@ angular.module("plus.directives", [])
       }
     };
   })
-      
+
   .directive('kaDatePicker', function() {
     return {
       restrict: "A",
@@ -103,7 +134,7 @@ angular.module("plus.directives", [])
   .directive('kaJqGrid', function() {
     return {
       restrict: "E",
-      scope: { 
+      scope: {
         config: "=",
         data: "="
       },
@@ -180,7 +211,7 @@ angular.module("plus.directives", [])
       }
     };
   })
-  
+
   .directive("kaFixHeight", function() {
     return {
       restrict: "A",
@@ -203,14 +234,14 @@ angular.module("plus.directives", [])
         template = $templateCache.get(content.templateUrl);
         templateScope = scope;
         scopeElements = document.getElementsByClassName('ng-scope');
- 
+
         angular.forEach(scopeElements, function(element) {
           var aScope = angular.element(element).scope();
           if (aScope.$id == content.scopeId) {
             templateScope = aScope;
           }
         });
- 
+
         scope.infoLink = content.infoLink;
         iElement.find('div.popover-content').html($compile(template)(templateScope));
       }
@@ -220,7 +251,7 @@ angular.module("plus.directives", [])
   .directive('kaPopoverTemplate', ['$tooltip', function($tooltip) {
     var tooltip = $tooltip('kaPopoverTemplate', 'popover', 'click');
     var linker = tooltip.compile;
- 
+
     tooltip.compile = function(tElem, tAttrs) {
       return {
         'pre': function(scope, iElement, iAttrs) {
@@ -229,10 +260,10 @@ angular.module("plus.directives", [])
         'post': linker(tElem, tAttrs)
       };
     };
- 
+
     return tooltip;
   }])
-  
+
   .directive('treeView', function() {
     return {
       restrict: "E",
@@ -245,7 +276,7 @@ angular.module("plus.directives", [])
     return {
       restrict: 'E',
       replace: true,
-      template: 
+      template:
         '<div class="ka-tree">' +
         '  <ul ui-sortable ng-model="opts.treeData"> <ka-tree-node ng-repeat="node in opts.treeData" node="node"></ka-tree-item></ul> ' +
         '</div>',
@@ -303,7 +334,7 @@ angular.module("plus.directives", [])
       link: function(scope, element, attrs, ctrl) {
         element.append($compile(
           '<ul ui-sortable ng-model="node.children" ng-if="node.expanded"> ' +
-          '  <ka-tree-node ng-repeat="child in node.children" node="child"></ka-tree-node> ' + 
+          '  <ka-tree-node ng-repeat="child in node.children" node="child"></ka-tree-node> ' +
           '</ul>')(scope));
 
         scope.nodeChecked = ctrl.nodeChecked;
