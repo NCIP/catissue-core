@@ -1,9 +1,9 @@
 
 package com.krishagni.catissueplus.core.audit.events;
 
-import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-public class CreateAuditReportEvent extends ResponseEvent {
+public class CreateAuditReportEvent extends RequestEvent {
 
 	private AuditReportDetail auditReportDetail;
 

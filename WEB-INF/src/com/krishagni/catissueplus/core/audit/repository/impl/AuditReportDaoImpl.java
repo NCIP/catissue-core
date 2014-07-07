@@ -66,4 +66,23 @@ public class AuditReportDaoImpl extends AbstractDao implements AuditReportDao {
 		return usersDetails;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> getSelectedUserList(StringBuffer userQuery, Map<String, Object> queryParameters) {
+		List<UserInfo> userDetails = new ArrayList<UserInfo>();
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(userQuery.toString());
+
+		for (String element : queryParameters.keySet()) {
+			query.setParameter(element, queryParameters.get(element));
+		}
+
+		List<Object[]> users = query.list();
+		for (Object[] user : users) {
+			UserInfo userDetailsEvent = new UserInfo();
+			userDetailsEvent.setFirstName((String) user[0]);
+			userDetailsEvent.setLastName((String) user[1]);
+			userDetails.add(userDetailsEvent);
+		}
+		return userDetails;
+	}
 }
