@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
+	
+	<property name="double.type" value="double" dbms="mysql" />
+	<property name="double.type" value="double" dbms="oracle" />
+	
+	<property name="timestamp.type" value="timestamp" dbms="oracle" />
+	
+	<property name="longblob.type" value="longblob" dbms="mysql" />
+
+	
+	<changeSet id="1" author="catissuecore" runOnChange="true">
+		<createTable tableName="STAGING_CATISSUE_PATIENT">
+			<column name="PART_SOURCE_ID" type="${text.type}(250)" >
+			</column>
+			<column name="PART_SOURCE" type="${text.type}(250)" >
+			</column>
+			<column name="FIRST_NAME" type="${text.type}(250)">
+			</column>			
+			<column name="MIDDLE_NAME" type="${text.type}(250)">
+			</column>			
+			<column name="LAST_NAME" type="${text.type}(250)">
+			</column>			
+			<column name="DATE_OF_BIRTH" type="${date.type}">
+			</column>			
+			<column name="ETHNICITY" type="${text.type}(250)">
+			</column>			
+			<column name="GENDER" type="${text.type}(250)">
+			</column>			
+			<column name="VITAL_STATUS" type="${text.type}(250)">
+			</column>			
+			<column name="DEATH_DATE" type="${date.type}">
+			</column>	
+			<column name="STATUS" type="${text.type}(250)">
+			</column>	
+			<column name="PAT_UPDATE_DATE" type="${date.type}">
+			</column>	
+			<column name="Update_Flag" type="${boolean.type}">
+			</column>					
+	</createTable>
+	
+	<createTable tableName="STAGING_CATISSUE_PAT_ENROLL">
+		<column name="PART_SOURCE_ID" type="${text.type}(250)" >
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)" >
+		</column>
+		<column name="IRB_ID" type="${text.type}(250)" >
+		</column>
+		<column name="REGISTRATION_DATE" type="${date.type}" >
+		</column>
+		<column name="CONSENT_RECV_DATE" type="${date.type}" >
+		</column>
+		<column name="CONSENT_DATE" type="${date.type}">
+		</column>
+		<column name="RSH_PROJECT" type="${text.type}(250)">
+		</column>
+		<column name="Update_Flag" type="${boolean.type}">
+		</column>					
+	</createTable>
+	
+	
+	<createTable tableName="STAGING_CATISSUE_RACE">
+		<column name="PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)">
+		</column>
+		<column name="RACE_VALUE" type="${text.type}(250)">
+		</column>
+	</createTable>
+	
+	
+	<createTable tableName="STAGING_CATISSUE_MRN">
+		<column name="PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)">
+		</column>
+		<column name="FACILITY_TYPE_ID" type="${int.type}">
+		</column>
+		<column name="SITE_NAME" type="${text.type}(250)">
+		</column>
+		<column name="MRN_VALUE" type="${text.type}(250)">
+		</column>
+	</createTable>
+	
+	
+	<createTable tableName="STAGING_CATISSUE_CONSENTS">
+		<column name="PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)">
+		</column>
+		<column name="CONSENT_TYPE" type="${text.type}(250)">
+		</column>
+		<column name="CONSENT_STAT_CODE" type="${int.type}">
+		</column>
+		<column name="CONSENT_STATEMENT" type="${text.type}(2000)" >
+		</column>
+			<column name="CONSENT_RESPONSE" type="${text.type}(250)">
+		</column>
+			<column name="IRB_ID" type="${text.type}(250)">
+		</column>
+		<column name="Update_Flag" type="${boolean.type}">
+		</column>	
+	</createTable>
+	
+	<createTable tableName="STAGING_PART_ID_HISTORY">
+		<column name="PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)">
+		</column>
+		<column name="NEW_PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="CHANGE_TYPE" type="${text.type}(250)">
+		</column>
+	</createTable>
+	
+	<createTable tableName="STAGING_PARTICIPANT_AUDIT">
+		<column name="PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)">
+		</column>
+		<column name="UPDATED_ON" type="${date.type}" >
+		</column>
+		<column name="STATUS" type="${text.type}(250)">
+		</column>
+		<column name="COMMENTs" type="${text.type}(2000)">
+		</column>
+	</createTable>
+		
+	<createTable tableName="STAGING_JOB_AUDIT">
+		<column name="RUN_ON" type="${date.type}">
+		</column>
+		<column name="ADDED_COUNT" type="${int.type}">
+		</column>
+		<column name="EDITED_COUNT" type="${int.type}">
+		</column>
+		<column name="FAILED_COUNT" type="${int.type}">
+		</column>
+	</createTable>
+	
+	<createTable tableName="STAGING_PART_INFO_MAPPING">
+		<column name="CATISSUE_PART_ID" type="${int.type}">
+		</column>
+		<column name="PART_SOURCE_ID" type="${text.type}(250)">
+		</column>
+		<column name="PART_SOURCE" type="${text.type}(250)">
+		</column>
+	</createTable>
+	
+	
+	</changeSet>	
+	
+</databaseChangeLog>         

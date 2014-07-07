@@ -174,5 +174,11 @@
 <query name="selectCPIDfromIRBID">select cp.id from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.irbIdentifier = ? </query>
 <query name="getParticipantSpecimenCount">select count(specimen.id) from Specimen specimen join specimen.specimenCollectionGroup scg join scg.collectionProtocolRegistration cpr join cpr.participant participant where participant.id =? </query>
 <query name="getCPTiltePPIDfromPID">select cpr.protocolParticipantIdentifier, cpr.collectionProtocol.title from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.participant.id=? </query>
+<sql-query name="getNewCpConsent">select catissue_consent_tier.identifier as ct_id,catissue_consent_tier.statement as ct_stmt,
+catissue_consent_tier_response.identifier as ctr_id
+, cpr.identifier as cpr_id from catissue_consent_tier
+left join CATISSUE_CONSENT_TIER_RESPONSE  on CATISSUE_CONSENT_TIER.identifier = catissue_consent_tier_response.consent_tier_id 
+left join catissue_coll_prot_reg cpr on cpr.collection_protocol_id = catissue_consent_tier.coll_protocol_id
+where catissue_consent_tier.coll_protocol_id = 323 and catissue_consent_tier_response.identifier is null</sql-query>
 </hibernate-mapping>
 

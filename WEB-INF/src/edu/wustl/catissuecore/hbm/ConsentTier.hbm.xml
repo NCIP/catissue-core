@@ -90,7 +90,15 @@
 	</query>
     
    
-
+   <query name="cpConsentSelectQuery">
+ select cp.consentTierCollection from CollectionProtocol cp where cp.shortTitle = ?
+	</query>
+   
+   
+      <query name="getCPRFromCPShortTitleandPARTID">
+   select cpr from CollectionProtocolRegistration cpr join cpr.collectionProtocol cp join cpr.participant part where cp.shortTitle = ? and part.id = ? 
+	</query>
+   
         
           
            

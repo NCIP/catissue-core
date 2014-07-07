@@ -1,0 +1,44 @@
+"Participant Source","MRN Change Type","Participant_Source_ID_1","caTissue Participant Id_1","caTissue_PPID_1","last_name_1","First_name_1","collection_protocol_1","Participant_Source_Id_2","caTissue_Participant_Id_2","caTissue_PPID_2","last_name_2","First_name_2","collection_protocol_2"
+#foreach( $epicMergeFailedDTO in $epicMergeFailedDTOList )
+#set ($oldCatId='')
+#if($epicMergeFailedDTO.oldParticipantDetailsDTO.id)
+#set ($oldCatId=$epicMergeFailedDTO.oldParticipantDetailsDTO.id)
+#end
+#set ($catId='')
+#if($epicMergeFailedDTO.participantDetailsDTO.id)
+#set ($catId=$epicMergeFailedDTO.participantDetailsDTO.id)
+#end
+#set ($oldppidsString='')
+#if($epicMergeFailedDTO.oldParticipantDetailsDTO.ppidsString)
+#set ($oldppidsString=$epicMergeFailedDTO.oldParticipantDetailsDTO.ppidsString)
+#end
+#set ($ppidsString='')
+#if($epicMergeFailedDTO.participantDetailsDTO.ppidsString)
+#set ($ppidsString=$epicMergeFailedDTO.participantDetailsDTO.ppidsString)
+#end
+#set ($cpTitles='')
+#if($epicMergeFailedDTO.participantDetailsDTO.cpTitles)
+#set ($cpTitles=$epicMergeFailedDTO.participantDetailsDTO.cpTitles)
+#end
+#set ($oldCPTitles='')
+#if($epicMergeFailedDTO.oldParticipantDetailsDTO.cpTitles)
+#set ($oldCPTitles=$epicMergeFailedDTO.oldParticipantDetailsDTO.cpTitles)
+#end
+#set ($lastName='')
+#if($epicMergeFailedDTO.participantDetailsDTO.lastName)
+#set ($lastName=$epicMergeFailedDTO.participantDetailsDTO.lastName)
+#end
+#set ($oldLastName='')
+#if($epicMergeFailedDTO.oldParticipantDetailsDTO.lastName)
+#set ($oldLastName=$epicMergeFailedDTO.oldParticipantDetailsDTO.lastName)
+#end
+#set ($firstName='')
+#if($epicMergeFailedDTO.participantDetailsDTO.firstName)
+#set ($firstName=$epicMergeFailedDTO.participantDetailsDTO.firstName)
+#end
+#set ($oldFirstName='')
+#if($epicMergeFailedDTO.participantDetailsDTO.firstName)
+#set ($oldFirstName=$epicMergeFailedDTO.oldParticipantDetailsDTO.firstName)
+#end
+"${epicMergeFailedDTO.partSource}","${epicMergeFailedDTO.changeType}","${epicMergeFailedDTO.oldPartSourceID}","${oldCatId}","${oldppidsString}","${oldLastName}","${oldFirstName}","${oldCPTitles}","${epicMergeFailedDTO.partSourceID}","${catId}","${ppidsString}","${lastName}","${firstName}","${cpTitles}"
+#end

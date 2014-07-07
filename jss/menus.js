@@ -265,6 +265,12 @@ Ext.onReady(function(){
 				tooltip:'Shows Conflicting Surgical Pathology Reports',
                 href:'ConflictView.do?pageNum=1'
             }
+			,
+			{
+                text: 'Upload Consents',
+				tooltip:'Upload Consents Statement Response',
+                href:'UploadConsent.do'
+            }
 		]
     });
     

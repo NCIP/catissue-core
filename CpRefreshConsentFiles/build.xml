@@ -1,0 +1,35 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+<project name="Apply Epic Integration Patch">
+        
+        <!--define require dir and Properties for <if> </if> tag-->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	<classpath>
+	   <pathelement location="../modules/caTissue/lib/ant-contrib.jar" />
+	  </classpath>
+	</taskdef>
+
+	<property name="current.dir" value="." />
+	<property name="parent.dir" location=".." />
+	
+	<target name="apply_patch" description="Apply CP consent refresh patch">
+			 <delete dir="${current.dir}/catissuecore" />
+			<mkdir dir="${current.dir}/catissuecore" />
+			<unwar src="${parent.dir}/modules/caTissue/lib/catissuecore.war" dest="${current.dir}/catissuecore" />
+		   
+		   <copy overwrite="true" todir="${current.dir}/catissuecore/WEB-INF/classes"> 
+				<fileset dir="${current.dir}/classes"/> 
+			</copy>
+			
+			<war destfile="catissuecore.war" webxml="${current.dir}/catissuecore/WEB-INF/web.xml"
+					duplicate="preserve" manifest="${current.dir}/catissuecore/META-INF/MANIFEST.MF" >
+					<fileset dir="${current.dir}/catissuecore">
+					</fileset>
+			</war>
+			<delete file="${parent.dir}/modules/caTissue/lib/catissuecore.war" />
+			<copy file="${current.dir}/catissuecore.war" todir="${parent.dir}/modules/caTissue/lib"/>
+			<ant dir=".." target="deploy_app" antfile="${parent.dir}/build.xml"/>
+
+	</target>
+</project>

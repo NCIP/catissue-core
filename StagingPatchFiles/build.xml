@@ -1,0 +1,54 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+<project name="Apply Epic Integration Patch">
+        
+        <!--define require dir and Properties for <if> </if> tag-->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	<classpath>
+	   <pathelement location="../modules/caTissue/lib/ant-contrib.jar" />
+	  </classpath>
+	</taskdef>
+
+	<property name="current.dir" value="." />
+	<property name="parent.dir" location=".." />
+	
+	<target name="apply_epic_integration_Patch" description="Apply epic Integration Patch">
+			 <delete dir="${current.dir}/catissuecore" />
+			<mkdir dir="${current.dir}/catissuecore" />
+			<unwar src="${parent.dir}/modules/caTissue/lib/catissuecore.war" dest="${current.dir}/catissuecore" />
+		   
+		   <copy overwrite="true" todir="${current.dir}/catissuecore/WEB-INF/classes"> 
+				<fileset dir="${current.dir}/classes"/> 
+			</copy>
+			<copy file="${current.dir}/emailTemplate/html/epic.participantIntegrationJobTemplate.vm" todir="${parent.dir}/modules/caTissue/conf/catissuecore-properties/email-templates/html"/>
+			<copy file="${current.dir}/emailTemplate/html/epic.mergeParticipantFailedTemplate.vm" todir="${parent.dir}/modules/caTissue/conf/catissuecore-properties/email-templates/html"/>
+			
+			<copy file="${current.dir}/emailTemplate/emailSubjects.properties" todir="${parent.dir}/modules/caTissue/conf/catissuecore-properties/email-templates"/>
+			
+			<copy file="${current.dir}/emailTemplate/emailTemplates.properties" todir="${parent.dir}/modules/caTissue/conf/catissuecore-properties/email-templates"/>
+			
+			<war destfile="catissuecore.war" webxml="${current.dir}/catissuecore/WEB-INF/web.xml"
+					duplicate="preserve" manifest="${current.dir}/catissuecore/META-INF/MANIFEST.MF" >
+					<fileset dir="${current.dir}/catissuecore">
+					</fileset>
+			</war>
+			<delete file="${parent.dir}/modules/caTissue/lib/catissuecore.war" />
+			<copy file="${current.dir}/catissuecore.war" todir="${parent.dir}/modules/caTissue/lib"/>
+			<ant dir=".." target="deploy_app" antfile="${parent.dir}/build.xml"/>
+
+	</target>
+	
+	<property file="../caTissueInstall.properties" />
+	    <path id="liquibaseClasspath">
+                <fileset dir="../modules/caTissue/lib" includes="*.jar" />
+        </path>
+        <taskdef resource="liquibasetasks.properties">
+                <classpath>
+                        <pathelement location="../modules/caTissue/lib/liquibase.jar" />
+                </classpath>
+        </taskdef>
+         <target name="alter_db">
+		    <updateDatabase changeLogFile="./EpicStagingSchema.xml" driver="oracle.jdbc.driver.OracleDriver" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" username="${database.username}" password="${database.password}" classpathref="liquibaseClasspath"/>
+	    </target>
+</project>

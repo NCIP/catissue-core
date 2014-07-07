@@ -157,7 +157,7 @@ public class ParticipantBizLogic
             {
                 cprObj.setRegistrationDate(cprDTOObj.getRegistrationDate());
                 cprObj.setConsentSignatureDate(cprDTOObj.getConsentSignatureDate());
-                updateConsentTierResponseCollection(cprObj.getConsentTierResponseCollection(), cprDTOObj);
+                updateConsentTierResponseCollection(cprObj, cprDTOObj);
                 result = true;
                 break;
             }
@@ -167,23 +167,43 @@ public class ParticipantBizLogic
 
     }
 
-    private void updateConsentTierResponseCollection(Collection consentTierResponseCollection,
+    private void updateConsentTierResponseCollection(CollectionProtocolRegistration cprObj,
             CollectionProtocolRegistrationDTO cprDTOObj) throws DAOException, SQLException
     {
-        final Iterator iter = consentTierResponseCollection.iterator();
-        while (iter.hasNext())
-        {
-            final ConsentTierResponse consentTierRespone = (ConsentTierResponse) iter.next();
-            List<ConsentResponseDTO> responseDtoList = cprDTOObj.getConsentResponseDTOList();
+        Collection consentTierResponseCollection = cprObj.getConsentTierResponseCollection();
+        List<ConsentResponseDTO> responseDtoList = cprDTOObj.getConsentResponseDTOList();
 
-            for (int j = 0; j < responseDtoList.size(); j++)
+        for (int j = 0; j < responseDtoList.size(); j++)
+        {
+
+            final Iterator iter = consentTierResponseCollection.iterator();
+            boolean updated = false;
+            while (iter.hasNext())
             {
+                final ConsentTierResponse consentTierRespone = (ConsentTierResponse) iter.next();
+
                 if (responseDtoList.get(j).getConsentStatment()
                         .equals(consentTierRespone.getConsentTier().getStatement()))
                 {
                     consentTierRespone.setResponse(responseDtoList.get(j).getParticipantResponses());
+                    updated = true;
                     break;
                 }
+            }
+            if(!updated){
+                Collection<ConsentTier> consnetTierColl = cprObj.getCollectionProtocol().getConsentTierCollection();
+                Iterator<ConsentTier> consentTireItr = consnetTierColl.iterator();
+                while(consentTireItr.hasNext()){
+                    ConsentTier consentTier = consentTireItr.next();
+                    if(consentTier.getStatement().equals(responseDtoList.get(j).getConsentStatment())){
+                        ConsentTierResponse responseObj = new ConsentTierResponse(); 
+                        responseObj.setResponse(responseDtoList.get(j).getParticipantResponses());
+                        responseObj.setConsentTier(consentTier);
+                        cprObj.getConsentTierResponseCollection().add(responseObj);
+                    }
+                        
+                }
+                
             }
 
         }
@@ -253,12 +273,15 @@ public class ParticipantBizLogic
     {
 
         Collection<Race> participantRaceCollection = participant.getRaceCollection();
+        if(raceCollection!=null && !raceCollection.isEmpty()){
+            participantRaceCollection.clear();
+        }else{
+            return;
+        }
         for (int i = 0; i < raceCollection.size(); i++)
         {
-            if (raceCollection.isEmpty() || !checkForRace(participantRaceCollection, raceCollection.get(i)))
-            {
-                participantRaceCollection.add(getRaceObject(raceCollection.get(i), participant));
-            }
+            participantRaceCollection.add(getRaceObject(raceCollection.get(i), participant));
+          
         }
     }
 

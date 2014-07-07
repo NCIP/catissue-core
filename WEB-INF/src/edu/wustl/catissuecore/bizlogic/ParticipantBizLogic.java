@@ -1669,6 +1669,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				Iterator ite = consentResponse.iterator();
 				if (ite.hasNext())
 				{
+
 					ConsentTierResponse responseObj = (ConsentTierResponse) ite.next();
 					responseObj.setResponse(consentTierDto.getParticipantResponses());
 					dao.update(responseObj);
@@ -1723,7 +1724,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException e)
 		{
+		    logger.error(e.getMsgValues(),e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
+			
 		}
 
 	}

@@ -30,7 +30,7 @@ import edu.wustl.dao.DAO;
 public class FetchConsentsAction  extends SecureAction {
 
 	private transient final Logger logger = Logger
-			.getCommonLogger(ExportCollectionProtocolAction.class);
+			.getCommonLogger(FetchConsentsAction.class);
 
 	@Override
 	/**
@@ -84,9 +84,9 @@ public class FetchConsentsAction  extends SecureAction {
 			}
 			
 			
-		}/*catch(Exception ex){
-			System.out.println("");
-		}*/
+		}catch(Exception ex){
+		    logger.error(ex.getMessage(),ex);
+		}
 		finally{
 			AppUtility.closeDAOSession(dao);
 		}

@@ -1309,12 +1309,18 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			Collection<ConsentTierResponse> consentTierResponseCollection=persistentCPR.getConsentTierResponseCollection();
 			Collection<ConsentTierResponse> newConsentTierResponseCollection=collectionProtocolRegistration.getConsentTierResponseCollection();
 			for (ConsentTierResponse newConsentTierResponse : newConsentTierResponseCollection) {
+			    boolean updated =false;
 				 for (ConsentTierResponse consentTierResponse : consentTierResponseCollection) {
 				  if(consentTierResponse.getConsentTier().getId().equals(newConsentTierResponse.getConsentTier().getId())){	 
 					  consentTierResponse.setConsentTier(newConsentTierResponse.getConsentTier());
 				      consentTierResponse.setResponse(newConsentTierResponse.getResponse());
-				  }   
+				      updated = true;
+				      break;
+				  }
 				}
+				 if(!updated){
+				     consentTierResponseCollection.add(newConsentTierResponse);
+				 }
 			}
 			
 	}

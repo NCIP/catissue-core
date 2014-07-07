@@ -1694,6 +1694,169 @@
 			</fileset>
 
 		</copy>
+		
+	</target>
+	<target name="create_staging_integration_patch" depends="compile" description="This target will create staging integraion patch.">	
+		<property name="zip.dir" value="${base.dir}/StagingParticipantIntegrationPatch" />
+		<property name="zip.file" value="${base.dir}/StagingParticipantIntegrationPatch.zip" />
+		<delete file="${zip.file}" />
+		<delete dir="${zip.dir}" />
+		<mkdir dir="${zip.dir}" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/bizlogic" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/hbm" />
+		
+		<mkdir dir="${zip.dir}/classes/krishagni/catissueplus/bizlogic" />
+		
+		<mkdir dir="${zip.dir}/classes/krishagni/catissueplus/dao" />
+		
+		<mkdir dir="${zip.dir}/classes/krishagni/catissueplus/dto" />
+		<mkdir dir="${zip.dir}/classes/krishagni/catissueplus/scheduler" />
+		<mkdir dir="${zip.dir}/classes/krishagni/plugin/dao" />
+		<mkdir dir="${zip.dir}/classes/krishagni/plugin/dto" />
+		<mkdir dir="${zip.dir}/classes/krishagni/plugin/scheduler" />
+		
+		<mkdir dir="${zip.dir}/emailTemplate/html"/>
+		
+		<copy todir="${zip.dir}/emailTemplate/html" overwrite="true">
+				<fileset file="${base.dir}/catissuecore-properties/email-templates/html/epic.mergeParticipantFailedTemplate.vm" />
+				<fileset file="${base.dir}/catissuecore-properties/email-templates/html/epic.participantIntegrationJobTemplate.vm" />
+		</copy>
+		
+		<copy todir="${zip.dir}/emailTemplate" overwrite="true">
+				<fileset file="${base.dir}/catissuecore-properties/email-templates/emailSubjects.properties" />
+				<fileset file="${base.dir}/catissuecore-properties/email-templates/emailTemplates.properties" />
+		</copy>
+		
+		<copy todir="${zip.dir}/" overwrite="true">
+				<fileset file="${base.dir}/StagingPatchFiles/build.xml" />
+				<fileset file="${base.dir}/StagingPatchFiles/EpicStagingSchema.xml" />
+		</copy>
+		
+		<copy todir="${zip.dir}/classes" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/EpicMergeFailed.vm" />
+		</copy>
+		
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/bizlogic" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/CollectionProtocolRegistrationBizLogic.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/ParticipantBizLogic.class" />
+				
+		</copy>
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/hbm" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.xml" />
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/hbm/Participant.hbm.xml" />
+		</copy>
+		<copy todir="${zip.dir}/classes/krishagni/catissueplus/bizlogic" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/bizlogic/ParticipantBizLogic.class" />
+				
+		</copy>
+		<copy todir="${zip.dir}/classes/krishagni/catissueplus/dao" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/CollectionProtocolDAO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/CollectionProtocolRegistrationDAO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/ParticipantDAO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/SCGDAO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/SiteDAO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/SpecimenDAO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dao/StorageContainerDAO.class" />
+		</copy>
+		
+		<copy todir="${zip.dir}/classes/krishagni/catissueplus/dto" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/CollectionProtocolRegistrationDTO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/ConsentResponseDTO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/ConsentTierDTO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/MedicalIdentifierDTO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/ParticipantDetailsDTO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/ParticpantResponseDTO.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/dto/ParticipantResponseStatusEnum.class" />
+		</copy>
+		
+		<copy todir="${zip.dir}/classes/krishagni/catissueplus/scheduler" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/catissueplus/scheduler/QuartzSchedulerJob.class" />
+				
+		</copy>
+		
+		<copy todir="${zip.dir}/classes/krishagni/plugin/dao" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/plugin/dao/StagingParticipantDAO.class" />
+		</copy>
+		<copy todir="${zip.dir}/classes/krishagni/plugin/dto" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/plugin/dto/EpicMergeFailedDTO.class" />
+		</copy>
+		<copy todir="${zip.dir}/classes/krishagni/plugin/scheduler" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/krishagni/plugin/scheduler/StagingParticipantRegistration.class" />
+				
+		</copy>
+		
+		<zip destfile="${zip.file}" basedir="${zip.dir}" />
+		<delete dir="${zip.dir}" />	
+	</target>
 
+	<target name="create_cp_consent_refresh_patch" depends="compile" description="This target will create cp refresh consent patch.">	
+		<property name="zip.dir" value="${base.dir}/CpConsentRefreshPatch" />
+		<property name="zip.file" value="${base.dir}/CpConsentRefreshPatch.zip" />
+		<delete file="${zip.file}" />
+		<delete dir="${zip.dir}" />
+		<mkdir dir="${zip.dir}" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/bizlogic" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/hbm" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/action" />
+		
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/bizlogic" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/ConsentTrackingBizLogic.class" />
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/ParticipantBizLogic.class" />
+					
+		</copy>
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/action" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/action/FetchConsentsAction.class" />
+		</copy>
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/hbm" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml" />
+		</copy>
+		<copy todir="${zip.dir}/" overwrite="true">
+				<fileset file="${base.dir}/CpRefreshConsentFiles/build.xml" />
+		</copy>
+		<zip destfile="${zip.file}" basedir="${zip.dir}" />
+		<delete dir="${zip.dir}" />	
+	</target>
+
+	
+	<target name="create_cpr_consent_response_upload_patch" depends="compile" description="This target will create cpr consent respone upload patch.">	
+		<property name="zip.dir" value="${base.dir}/CprConsentResponsePatch" />
+		<property name="zip.file" value="${base.dir}/CprConsentResponsePatch.zip" />
+		<delete file="${zip.file}" />
+		<delete dir="${zip.dir}" />
+		<mkdir dir="${zip.dir}" />
+		<mkdir dir="${zip.dir}/WEB-INF"/>
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/bizlogic" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/hbm" />
+		<mkdir dir="${zip.dir}/classes/edu/wustl/catissuecore/action" />
+		<mkdir dir="${zip.dir}/pages" />
+		<mkdir dir="${zip.dir}/jss" />
+		
+		<copy todir="${zip.dir}/pages" overwrite="true">
+				<fileset file="${base.dir}/pages/ConsentUpload.jsp" />
+		</copy>
+		<copy todir="${zip.dir}/jss" overwrite="true">
+				<fileset file="${base.dir}/jss/menus.js" />
+					
+		</copy>
+		<copy todir="${zip.dir}/WEB-INF" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/stinger.xml" />
+				<fileset file="${base.dir}/WEB-INF/struts-config.xml" />
+				<fileset file="${base.dir}/WEB-INF/tiles-defs.xml" />
+		</copy>
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/bizlogic" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/ConsentTrackingBizLogic.class" />
+					
+		</copy>
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/action" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/action/CatissueCommonAjaxAction.class" />
+		</copy>
+		<copy todir="${zip.dir}/classes/edu/wustl/catissuecore/hbm" overwrite="true">
+				<fileset file="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml" />
+		</copy>
+		<copy todir="${zip.dir}/" overwrite="true">
+				<fileset file="${base.dir}/cprConsentUpload/build.xml" />
+		</copy>
+		<zip destfile="${zip.file}" basedir="${zip.dir}" />
+		<delete dir="${zip.dir}" />	
 	</target>
 </project>

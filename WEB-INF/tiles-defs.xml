@@ -71,6 +71,11 @@
 	<definition name=".catissuecore.userProfileDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.uploadConsent" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/ConsentUpload.jsp" />
+	</definition>
+	
 
 	<definition name=".catissuecore.changePasswordDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/home/ChangePassword.jsp" />

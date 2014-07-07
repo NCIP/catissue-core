@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,6 +38,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.text.log.SysoLogger;
 
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
@@ -70,6 +77,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -1008,4 +1016,85 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
 		response.getWriter().write(responseString.toString());
 		return null;
 	}
+	
+	 private static final Logger logger = Logger.getCommonLogger(CatissueCommonAjaxAction.class);
+
+	public ActionForward uploadConsent(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
+            IOException
+    {
+	    DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+        logger.error("In Consent Upload");
+        /*
+         * Set the size threshold, above which content will be stored on disk.
+         */
+        fileItemFactory.setSizeThreshold(1 * 1024 * 1024); // 1 MB
+        /*
+         * Set the temporary directory to store the uploaded files of size above
+         * threshold.
+         */
+        JSONObject returnedJObject= new JSONObject();
+        String successMessage = "";
+        String errorMessage = "";
+        try {
+            fileItemFactory.setRepository(new File(""));
+            logger.error("In Consent Upload File Created");
+            
+            ServletFileUpload uploadHandler = new ServletFileUpload(
+                    fileItemFactory);
+            List items = uploadHandler.parseRequest(request);
+            Iterator itr = items.iterator();
+            SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
+                    Constants.SESSION_DATA);
+            
+            while (itr.hasNext()) {
+                FileItem item = (FileItem) itr.next();
+                /*
+                 * Handle Form Fields.
+                 */
+                if (item.isFormField()) {
+
+                } else {
+                    ConsentTrackingBizLogic bizLogic = new ConsentTrackingBizLogic();
+                    bizLogic.uploadConsentResponse( item.get());
+                }
+            }
+            successMessage = "true";
+        }catch(Exception ex){
+            errorMessage = "true";
+            logger.error(ex.getMessage(), ex);
+        }
+        try {
+            if(!"".equals(successMessage)){
+                returnedJObject.put("message", successMessage);
+            }else{
+                returnedJObject.put("errorMessage", errorMessage);
+                
+            }
+            
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+        response.setContentType("text/html");
+        response.getWriter().write(returnedJObject.toString());
+
+	    return null;
+    }
+	
+	   public ActionForward downloadConsentTemplate(ActionMapping mapping, ActionForm form,
+	            HttpServletRequest request, HttpServletResponse response) throws ApplicationException,
+	            IOException
+	    {
+	       String csvHeaderString = "CP Short Title,PARTICIPANT ID,Consent STAEMENT,RESPONSE";
+	       response.setHeader("Content-Disposition", "attachment;"
+                   + "filename=\"consentCSVTemplate.csv\"");
+           byte[] byteArr = csvHeaderString.getBytes();
+
+           response.getOutputStream().write(byteArr);
+
+	       return null;
+	    }
+	
 }
