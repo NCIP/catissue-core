@@ -1,21 +1,19 @@
 
 package com.krishagni.catissueplus.core.audit.services.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TreeMap;
 
 import com.krishagni.catissueplus.core.audit.events.AuditReportCreatedEvent;
 import com.krishagni.catissueplus.core.audit.events.AuditReportDetail;
+import com.krishagni.catissueplus.core.audit.events.AuditReportExportEvent;
 import com.krishagni.catissueplus.core.audit.events.CreateAuditReportEvent;
 import com.krishagni.catissueplus.core.audit.events.GetObjectNameEvent;
 import com.krishagni.catissueplus.core.audit.events.GetOperationEvent;
@@ -23,10 +21,13 @@ import com.krishagni.catissueplus.core.audit.events.GetUsersInfoEvent;
 import com.krishagni.catissueplus.core.audit.events.ReportDetail;
 import com.krishagni.catissueplus.core.audit.events.UserInfo;
 import com.krishagni.catissueplus.core.audit.services.AuditReportService;
+import com.krishagni.catissueplus.core.audit.util.AuditUtil;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.VelocityClassLoaderManager;
 
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -34,10 +35,6 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 public class AuditReportServiceImpl implements AuditReportService {
 
 	private static final String USER_REPORT_VELOCITY_TEMPLETE_FILE = "../resources/ng-file-templates/auditReport.vm";
-
-	private static final String AUDIT_REPORT_PROPERTY_FILE = "/AuditReportProperties.properties";
-
-	private Map<String, String> objectNameMap = new TreeMap<String, String>();
 
 	public enum Operation {
 		INSERT("INSERT"), UPDATE("UPDATE"), DELETE("DELETE");
@@ -64,7 +61,7 @@ public class AuditReportServiceImpl implements AuditReportService {
 			+ "catissue_audit_event auditEvent ";
 
 	private static final String WHERE_CLAUSE = ("WHERE  dataLogEvent.identifier = auditEventLog.identifier AND auditEventLog.audit_event_id = auditEvent.identifier "
-			+ "AND usr.identifier = auditEvent.user_id ");
+			+ "AND usr.identifier = auditEvent.user_id  AND dataLogEvent.PARENT_LOG_ID is null ");
 
 	private static final String GROUP_BY_CLAUSE = "GROUP BY dataLogEvent.object_name, auditEvent.event_type, usr.first_name, usr.last_name, usr.login_name ";
 
@@ -84,6 +81,8 @@ public class AuditReportServiceImpl implements AuditReportService {
 	@Override
 	public AuditReportCreatedEvent getAuditReport(CreateAuditReportEvent auditReportEvent) {
 
+		SessionDataBean sessionBean = auditReportEvent.getSessionDataBean();
+
 		try {
 
 			Map<String, Object> queryParameters = new HashMap<String, Object>();
@@ -92,7 +91,8 @@ public class AuditReportServiceImpl implements AuditReportService {
 			List<ReportDetail> reportDetailsList = daoFactory.getAuditReportDao()
 					.getAuditDetails(auditQuery, queryParameters);
 
-			String reportData = generateAuditReport(reportDetailsList);
+			String reportData = generateAuditReport(reportDetailsList, auditReportEvent.getAuditReportDetail(),
+					sessionBean.getFirstName() + " " + sessionBean.getLastName());
 
 			return AuditReportCreatedEvent.ok(reportData);
 		}
@@ -103,13 +103,15 @@ public class AuditReportServiceImpl implements AuditReportService {
 	}
 
 	/**
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 * @throws ParseException 
 	 * create query as per user requirement.
 	 * @throws  
 	 */
 
 	private StringBuffer createAuditQuery(AuditReportDetail reportDetailEvent, Map<String, Object> queryParameters)
-			throws ParseException {
+			throws ParseException, IOException {
 
 		String appName = CommonServiceLocator.getInstance().getAppName();
 		String databaseName = DAOConfigFactory.getInstance().getDAOFactory(appName).getDataBaseType();
@@ -127,6 +129,12 @@ public class AuditReportServiceImpl implements AuditReportService {
 			// get Object Names from reportDetailEvent and set '?' into IN() clause as per number of values
 			List<String> objectNames = reportDetailEvent.getObjectTypes();
 			if (!(objectNames.isEmpty())) {
+				conditions.append("AND dataLogEvent.object_name IN(");
+				addNamedParameters(conditions, objectNames, queryParameters, "object");
+			}
+			else {
+
+				objectNames = AuditUtil.getObjectList();
 				conditions.append("AND dataLogEvent.object_name IN(");
 				addNamedParameters(conditions, objectNames, queryParameters, "object");
 			}
@@ -185,6 +193,12 @@ public class AuditReportServiceImpl implements AuditReportService {
 				conditions.append("AND dataLogEvent.object_name IN(");
 				addNamedParameters(conditions, objectNames, queryParameters, "object");
 			}
+			else {
+
+				objectNames = AuditUtil.getObjectList();
+				conditions.append("AND dataLogEvent.object_name IN(");
+				addNamedParameters(conditions, objectNames, queryParameters, "object");
+			}
 
 			// get Event Types from reportDetailEvent
 			List<String> eventTypes = reportDetailEvent.getOperations();
@@ -197,17 +211,21 @@ public class AuditReportServiceImpl implements AuditReportService {
 			if (reportDetailEvent.getStartDate() != null && reportDetailEvent.getEndDate() != null) {
 				conditions.append("AND EVENT_TIMESTAMP  >= to_date('"
 						+ new java.sql.Date(reportDetailEvent.getStartDate().getTime()) + "',\'yyyy-mm-dd\') ");
+
 				conditions.append(" AND EVENT_TIMESTAMP  <= to_date('"
 						+ new java.sql.Date(reportDetailEvent.getEndDate().getTime()) + "',\'yyyy-mm-dd\') + INTERVAL '1' DAY ");
+
 			}
 
 			else if (reportDetailEvent.getStartDate() == null && reportDetailEvent.getEndDate() != null) {
 				conditions.append("AND EVENT_TIMESTAMP <=  to_date('"
 						+ new java.sql.Date(reportDetailEvent.getEndDate().getTime()) + "',\'yyyy-mm-dd\')");
+
 			}
 			else if (reportDetailEvent.getEndDate() == null && reportDetailEvent.getStartDate() != null) {
 				conditions.append("AND EVENT_TIMESTAMP >=  to_date('"
 						+ new java.sql.Date(reportDetailEvent.getStartDate().getTime()) + "',\'yyyy-mm-dd\')");
+
 			}
 
 			StringBuffer auditQuery = new StringBuffer();
@@ -236,20 +254,85 @@ public class AuditReportServiceImpl implements AuditReportService {
 	}
 
 	/**
+	 * @param userName 
+	 * @param auditReportDetail 
 	 * @throws Exception 
 	 * this method use to generate report data using velocity manager
 	 * @throws  
 	 */
 
-	private String generateAuditReport(List<ReportDetail> reportDetailsList) throws Exception {
+	private String generateAuditReport(List<ReportDetail> reportDetailsList, AuditReportDetail auditReportDetail,
+			String userName) throws Exception {
 
+		SimpleDateFormat format = new SimpleDateFormat(ApplicationProperties.getValue("date.pattern"));
+
+		AuditReportExportEvent exportEvent = new AuditReportExportEvent();
+		Date fromDate = auditReportDetail.getStartDate();
+
+		if (fromDate != null) {
+			String from = format.format(fromDate);
+			exportEvent.setDateFrom(from);
+		}
+		else {
+			exportEvent.setDateFrom("");
+		}
+
+		Date toDate = auditReportDetail.getEndDate();
+		if (toDate != null) {
+			String endDate = format.format(toDate);
+			exportEvent.setDateTo(endDate);
+		}
+		else {
+			exportEvent.setDateTo("");
+		}
+
+		exportEvent.setExportBy(userName);
+
+		exportEvent.setReportDetailsList(reportDetailsList);
+
+		List<String> users = getUserList(auditReportDetail.getUserIds());
+		String user = users.toString();
+		String usersString = user.substring(1, user.length() - 1);
+
+		exportEvent.setUserList(usersString);
+
+		String objects = auditReportDetail.getObjectTypes().toString();
+		String objetTypes = objects.substring(1, objects.length() - 1);
+		exportEvent.setObjectTypes(objetTypes);
+
+		String operation = auditReportDetail.getOperations().toString();
+		String operations = operation.substring(1, operation.length() - 1);
+		exportEvent.setOperations(operations);
+
+		Date exportDate = new Date();
+		String strDate = format.format(exportDate);
+
+		exportEvent.setExportOn(strDate);
 		Map<String, Object> contextMap = new HashMap<String, Object>();
-		contextMap.put("reportDetailsList", reportDetailsList);
+
+		contextMap.put("exportEvent", exportEvent);
 		String auditReport = VelocityClassLoaderManager.getInstance().evaluate(contextMap,
 				USER_REPORT_VELOCITY_TEMPLETE_FILE);
 
 		return auditReport;
 
+	}
+
+	private List<String> getUserList(List<Long> list) {
+		List<String> fullNames = new ArrayList<String>();
+		StringBuffer query = new StringBuffer();
+		if (!list.isEmpty()) {
+			Map<String, Object> queryParameters = new HashMap<String, Object>();
+			query.append("select distinct usr.FIRST_NAME,usr.LAST_NAME from catissue_user usr where usr.IDENTIFIER IN(");
+			addNamedParameters(query, list, queryParameters, "user");
+			List<UserInfo> userDetails = daoFactory.getAuditReportDao().getSelectedUserList(query, queryParameters);
+
+			for (UserInfo user : userDetails) {
+				fullNames.add(user.getLastName() + " " + user.getFirstName());
+
+			}
+		}
+		return fullNames;
 	}
 
 	@PlusTransactional
@@ -266,31 +349,13 @@ public class AuditReportServiceImpl implements AuditReportService {
 		GetObjectNameEvent objectDetailsEvent = new GetObjectNameEvent();
 		try {
 
-			if (objectNameMap.size() == 0) {
-				populateObjectsInMap();
-			}
-
-			objectDetailsEvent.setObjectNameMap(objectNameMap);
+			objectDetailsEvent.setObjectNameMap(AuditUtil.getAuditObjectDataMap());
 			return GetObjectNameEvent.ok(objectDetailsEvent.getObjectNameMap());
 		}
 		catch (Exception e) {
 			return GetObjectNameEvent.serverError(e);
 		}
 
-	}
-
-	private void populateObjectsInMap() throws FileNotFoundException, IOException {
-		final String path = CommonServiceLocator.getInstance().getPropDirPath();
-
-		Properties properties = new Properties();
-		String actualPath = path + AUDIT_REPORT_PROPERTY_FILE;
-		InputStream inputStream = new FileInputStream(new File(actualPath));
-		properties.load(inputStream);
-		inputStream.close();
-
-		for (String key : properties.stringPropertyNames()) {
-			objectNameMap.put(key, properties.getProperty(key));
-		}
 	}
 
 	/**

@@ -39,6 +39,14 @@ public class QueryDataExportedEvent extends ResponseEvent {
 		resp.setException(e);
 		return resp;
 	}
+
+	public static QueryDataExportedEvent notAuthorized(String msg, Throwable e) {
+		QueryDataExportedEvent resp = new QueryDataExportedEvent();
+		resp.setStatus(EventStatus.NOT_AUTHORIZED);
+		resp.setMessage(msg);
+		resp.setException(e);
+		return resp;
+	}
 	
 	public static QueryDataExportedEvent serverError(String msg, Throwable e) {
 		QueryDataExportedEvent resp = new QueryDataExportedEvent();

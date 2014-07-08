@@ -679,6 +679,10 @@
 			<fileset dir="${base.dir}/bulk_operations_upload" />
 		</copy>
 
+		<copy todir="${zip.dir}" overwrite="true">
+			<fileset dir="${base.dir}" includes="aq-forms/**"/>
+		</copy>
+
 		<copy todir="${zip.dir}/modules/report_scripts" overwrite="true">
 			<fileset dir="${base.dir}/report_scripts" />
 		</copy>

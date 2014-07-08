@@ -71,25 +71,7 @@
 						</row>
 					</subForm>
 				</row>
-				
-				<row>
-					<subForm>
-						<name>distributionItem</name>
-						<udn>distributionItem</udn>
-						<caption>Distribution Item</caption>
-						<table>CATISSUE_DISTRIBUTED_ITEM</table>
-						<foreignKey>DISTRIBUTION_ID</foreignKey>
-						<parentKey>IDENTIFIER</parentKey>
-						<row>
-							<numberField>
-								<name>distributedQuantity</name>
-								<udn>distributedQuantity</udn>
-								<caption>Distributed Quantity</caption>
-								<column>QUANTITY</column>
-							</numberField>						
-						</row>
-					</subForm>
-				</row>
+
 			</subForm>
 		</row>
 
@@ -106,7 +88,7 @@
 			<subForm>
 				<name>requester</name>
 				<udn>requester</udn>
-				<caption>Requester</caption>
+				<caption>Requestor</caption>
 				<table>USER_VIEW</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>REQUESTER_ID</parentKey>
@@ -115,14 +97,14 @@
 					<textField>
 						<name>requesterFirstName</name>
 						<udn>requesterFirstName</udn>
-						<caption>Requester First Name</caption>
+						<caption>Requestor First Name</caption>
 						<column>FIRST_NAME</column>
 					</textField>
 					
 					<textField>
 						<name>requesterLastName</name>
 						<udn>requesterLastName</udn>
-						<caption>Requester Last Name</caption>
+						<caption> Requestor Last Name</caption>
 						<column>LAST_NAME</column>
 					</textField>
 				</row>
@@ -144,39 +126,12 @@
 			<textField>
 				<name>requestersComment</name>
 				<udn>requestersComment</udn>
-				<caption>Requesters Commment</caption>
+				<caption>Requestors Comment</caption>
 				<column>COMMENTS</column>
 			</textField>
 		</row>
 
-		<row>
-			<subForm>
-				<name>orderItems</name>
-				<udn>orderItems</udn>
-				<caption>Order Items</caption>
-				<table>CATISSUE_ORDER_ITEM</table>
-				<foreignKey>ORDER_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
 
-				<row>					
-					<numberField>
-						<name>requestedQuantity</name>
-						<udn>requestedQuantity</udn>
-						<caption>Requested Quantity</caption>
-						<column>REQUESTED_QUANTITY</column>
-					</numberField>
-				</row>
-
-				<row>					
-					<numberField>
-						<name>distributedQuantity</name>
-						<udn>distributedQuantity</udn>
-						<caption>Distributed Quantity</caption>
-						<column>DISTRIBUTED_QUANTITY</column>
-					</numberField>
-				</row>
-			</subForm>
-		</row>
 
 		<row>
 			<dropDown>
@@ -185,9 +140,7 @@
 				<caption>Order Status</caption>
 				<column>STATUS</column>
 				<options>
-					<option><value>Completed</value></option>
-					<option><value>New</value></option>
-					<option><value>Pending</value></option>
+					<sql>select value from catissue_permissible_value where public_id = 'order_status'</sql>
 				</options>
 			</dropDown>
 		</row>

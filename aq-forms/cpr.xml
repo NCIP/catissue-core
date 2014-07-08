@@ -10,16 +10,10 @@
 				<name>id</name>
 				<udn>id</udn>
 				<caption>Identifier</caption>
-				<column>CPR_ID</column>
+				<column>PARTICIPANT_ID</column>
 			</numberField>
 		</row>
 		<row>
-			<numberField>
-				<name>participantId</name>
-				<udn>participantId</udn>
-				<caption>Participant Id</caption>
-				<column>PARTICIPANT_ID</column>
-			</numberField>
 			
 			<textField>
 				<name>firstName</name>
@@ -27,6 +21,7 @@
 				<caption>First Name</caption>
 				<column>FIRST_NAME</column>
 				<maxLength>50</maxLength>
+				<phi>true</phi>
 			</textField>
 
 			<textField>
@@ -35,6 +30,7 @@
 				<caption>Middle Name</caption>
 				<column>MIDDLE_NAME</column>
 				<maxLength>50</maxLength>
+				<phi>true</phi>
 			</textField>
 
 			<textField>
@@ -42,6 +38,7 @@
 				<udn>lastName</udn>
 				<caption>Last Name</caption>
 				<column>LAST_NAME</column>
+				<phi>true</phi>
 			</textField>
 		</row>
 
@@ -52,6 +49,7 @@
 				<caption>Date Of Birth</caption>
 				<column>DOB</column>
 				<format>MM-dd-yyyy</format>
+				<phi>true</phi>
 			</datePicker>
 		</row>
 		
@@ -61,6 +59,7 @@
 				<udn>ssn</udn>
 				<caption>Social Security Number</caption>
 				<column>SSN</column>
+				<phi>true</phi>
 			</textField>
 		</row>
 		
@@ -146,44 +145,13 @@
 		</row>
 
 		<row>
-			<subForm>
-				<name>collectionProtocolSites</name>
-				<udn>collectionProtocolSites</udn>
-				<caption>Site CP</caption>
-				<table>CATISSUE_SITE_CP</table>
-				<foreignKey>COLLECTION_PROTOCOL_ID</foreignKey>
-				<parentKey>CP_ID</parentKey>
-				<row>
-					<subForm>
-						<name>sites</name>
-						<udn>sites</udn>
-						<caption>Sites</caption>
-						<table>CATISSUE_SITE</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>SITE_ID</parentKey>
-						<row>
-							<dropDown>
-								<name>siteName</name>
-								<udn>siteName</udn>
-								<caption>Collection Site Name</caption>
-								<column>NAME</column>
-								<options>
-									<sql>select distinct name from CATISSUE_SITE</sql>
-								</options>
-							</dropDown>							
-						</row>
-					</subForm>
-				</row>
-			</subForm>
-		</row>
-
-		<row>
 			<datePicker>
 				<name>regDate</name>
 				<udn>regDate</udn>
 				<caption>Registration Date</caption>
 				<column>REGISTRATION_DATE</column>
 				<format>MM-dd-yyyy</format>
+				<phi>true</phi>
 			</datePicker>
 
 		</row>
@@ -195,6 +163,7 @@
 				<caption>Death Date</caption>
 				<column>DEATH_DATE</column>
 				<format>MM-dd-yyyy</format>
+				<phi>true</phi>
 			</datePicker>
 		</row>
 
@@ -291,7 +260,7 @@
 				<name>medicalRecord</name>
 				<udn>medicalRecord</udn>
 				<caption>Medical Record</caption>
-				<table>CATISSUE_PART_MEDICAL_ID</table>
+				<table>PART_MED_REC_VIEW</table>
 				<foreignKey>PARTICIPANT_ID</foreignKey>
 				<parentKey>PARTICIPANT_ID</parentKey>
 				<row>
@@ -302,8 +271,18 @@
 						<caption>Medical Record Number</caption>
 						<column>MEDICAL_RECORD_NUMBER</column>
 						<maxLength>255</maxLength>
+						<phi>true</phi>
 					</textField>
 		
+					<dropDown>
+						<name>mrnSiteName</name>
+						<udn>mrnSiteName</udn>
+						<caption>MRN Site</caption>
+						<column>SITE_NAME</column>
+						<options>
+							<sql>select distinct name from CATISSUE_SITE</sql>
+						</options>
+					</dropDown>
 				</row>
 			</subForm>
 		</row>
@@ -313,35 +292,21 @@
 				<name>consentTier</name>
 				<udn>consentTier</udn>
 				<caption>Consent Tier</caption>
-				<table>CATISSUE_CONSENT_TIER</table>
-				<foreignKey>COLL_PROTOCOL_ID</foreignKey>
-				<parentKey>CP_ID</parentKey>
+				<table>CONSENT_TIER_VIEW</table>
+				<foreignKey>CPR_ID</foreignKey>
+				<parentKey>CPR_ID</parentKey>
 				<row>
-		
 					<textField>
 						<name>consentTierStatement</name>
 						<udn>consentTierStatement</udn>
 						<caption>Consent Tier Statement</caption>
 						<column>STATEMENT</column>
 					</textField>
-		
-				</row>
-			</subForm>
-		</row>
-	
-		<row>
-			<subForm>
-				<name>consentResponse</name>
-				<udn>consentResponse</udn>
-				<caption>Consent Response</caption>
-				<table>CATISSUE_CONSENT_TIER_RESPONSE</table>
-				<foreignKey>COLL_PROT_REG_ID</foreignKey>
-				<parentKey>CPR_ID</parentKey>
-				<row>
+
 					<dropDown>
 						<name>consentResponseStatement</name>
 						<udn>consentResponseStatement</udn>
-						<caption>Consent Response Statement</caption>
+						<caption>Consent Response</caption>
 						<column>RESPONSE</column>
 						<options>
 							<option><value>Yes</value></option>
@@ -364,10 +329,19 @@
 		</row>
 
 		<row>
+			<textField>
+				<name>consentDocUrl</name>
+				<udn>consentDocUrl</udn>
+				<caption>Consent Document Url</caption>
+				<column>CONSENT_DOC_URL</column>
+			</textField>
+		</row>
+
+		<row>
 			<subForm>
 				<name>consentWitness</name>
 				<udn>consentWitness</udn>
-				<caption>consentWitness</caption>
+				<caption>Consent Witness</caption>
 				<table>USER_VIEW</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>CONSENT_WITNESS</parentKey>

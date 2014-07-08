@@ -1,3 +1,4 @@
+<%@ page language="java" isELIgnored="false"%>
 <!DOCTYPE html>
 
 <html>
@@ -12,7 +13,7 @@
 <script type="text/javascript" src="ngweb/external/jquery/jquery-ui.min.js"> </script>
 </head>
 
-<body onload="javascript : onAuditPageLoad()">
+<body onload="javascript : onAuditPageLoad('${auditDtPattern}')">
   <div class="panel panel-primary">
 		<div class="panel-heading header" >
                   <h5 align="left" class="headerText" >Audit Report</h5>

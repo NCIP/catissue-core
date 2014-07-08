@@ -199,7 +199,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
 
     $scope.setPagedData = function(pageNo, recCnt) {
+      /* Commented out as end users do not like pagination enabled 
       var pageRows = $scope.queryData.resultData.slice((pageNo - 1) * recCnt, pageNo * recCnt);
+      */
+      var pageRows = $scope.queryData.resultData;
       var formatedRows = [];
        
       for (var i = 0; i < pageRows.length; ++i) {
@@ -612,7 +615,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       totalServerItems: 'queryData.resultDataSize',
       plugins: [gridFilterPlugin],
       headerRowHeight: 70,
-      selectedItems: $scope.selectedRows
+      selectedItems: $scope.selectedRows,
+      enablePaging: false
     };
 
     $scope.loadFolders = function() {
@@ -907,11 +911,19 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.editQuery = function(query) {
-      $scope.loadQuery(query).then(function() { $scope.queryData.view = 'query'; });
+      $scope.loadQuery(query).then(function(result) { 
+        if (!result) { return; }
+
+        $scope.queryData.view = 'query'; 
+      });
     };
 
     $scope.runQuery = function(query) {
-      $scope.loadQuery(query).then( function() { $scope.getRecords(); });
+      $scope.loadQuery(query).then( function(result) { 
+        if (!result) { return; }
+
+        $scope.getRecords(); 
+      });
     };
 
     $scope.loadQuery = function(query) {
@@ -927,6 +939,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
               selectedCp = cpList[i];
               break;
             }
+          }
+
+          if (!selectedCp) {
+            Utility.notify($("#notifications"), "Permission Denied", "error", true);
+            return false;
           }
 
           $scope.onCpSelect(selectedCp);
