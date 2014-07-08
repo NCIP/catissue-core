@@ -66,13 +66,17 @@ angular.module("plus.directives", [])
         scope.select = control;//new Select2Search(element);
         control
           .onQuery(function(qTerm, qCallback) {
+            var timeInterval = 500;
+            if (qTerm.length == 0) {
+              timeInterval = 0;
+            }
             if (timeout != undefined) {
               $timeout.cancel(timeout);
             }
 
             timeout = $timeout(function() {
               return scope.query()(undefined, qTerm, qCallback);
-            }, 1000);
+            }, timeInterval);
           })
           .onChange(function(option) {
             scope.onSelect({selected: option});

@@ -12,6 +12,7 @@ angular.module('plus.cpview', [])
     });
 
   $scope.participantList =[];
+  $scope.defaultParticipantList = [];
 
   $scope.onCpSelect = function(selected, redirect) {
     if (selected.id != "null" && redirect != false ) {
@@ -24,6 +25,7 @@ angular.module('plus.cpview', [])
     $scope.searchParticipant(selected.id, "", undefined);
 
     $scope.selectedParticipant={};
+    
     $scope.tree=[];
   };
 
@@ -36,8 +38,8 @@ angular.module('plus.cpview', [])
   }
 
   $scope.searchParticipant = function (id, query, callback) {
-    if (id == undefined && query.length == 0 && $scope.participantList .length > 0) {
-      callback($scope.participantList);
+    if (id == undefined  && query.length == 0 && $scope.defaultParticipantList .length > 0) {
+      callback($scope.defaultParticipantList);
     } else {
       if (id == undefined) {
         id = $scope.selectedCp.id;
@@ -51,6 +53,9 @@ angular.module('plus.cpview', [])
             text: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'
           }
           $scope.participantList.push(participant);
+        }
+        if (query.length == 0) {
+          $scope.defaultParticipantList = $scope.participantList;
         }
         if (callback != undefined) {
           callback($scope.participantList);
