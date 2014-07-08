@@ -340,10 +340,12 @@
     <query name="getSpecimenIdLabelPairForScg">select specimen.id,specimen.label from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.specimenCollectionGroup.id = ? and specimen.collectionStatus='Collected' and specimen.activityStatus = 'Active' order by specimen.label</query>
     <query name="getAssociatedIdentifiedReportId"> select scg.identifiedSurgicalPathologyReport.id from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id = ? and specimen.id in elements(scg.specimenCollection)</query>
     <query name="getcpIdandPartId"> select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id,specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id=?</query>
+  
         <sql-query name="getScgIdBySpecimenId">
           <return-scalar column="scgId" type="long"/>
           
           select SPECIMEN_COLLECTION_GROUP_ID as scgId from CATISSUE_SPECIMEN where IDENTIFIER = :specimenId
         </sql-query>      
   </class>
+    <query name="getChildSpecimenCountByLabel"> select count(specimen.id) from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.parentSpecimen.id =? and specimen.collectionStatus = ?</query>
 </hibernate-mapping>

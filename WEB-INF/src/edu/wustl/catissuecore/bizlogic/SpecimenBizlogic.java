@@ -871,4 +871,25 @@ public class SpecimenBizlogic
 		return collection;
 	}
 
+	public int getCollectedChildSpecimenCountByLabel(Long id, HibernateDAO hibernateDao) throws ParseException, ApplicationException,
+            CloneNotSupportedException
+    {
+
+                Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+                substParams.put("0",
+                        new NamedQueryParam(DBTypes.LONG, id));
+                substParams.put("1",
+                        new NamedQueryParam(DBTypes.STRING, Constants.COLLECTION_STATUS_COLLECTED));
+                
+                final List list = hibernateDao.executeNamedQuery(
+                        "getChildSpecimenCountByLabel", substParams);
+                int count = 0;
+                if (!list.isEmpty())
+                {
+                    count = (Integer)list.get(0);
+                }
+                return count;
+    }
+
+
 }
