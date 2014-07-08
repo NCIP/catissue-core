@@ -298,7 +298,7 @@ angular.module('plus.cpview', [])
   $scope.getScgLabel = function(scg) {
     var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
 	var date = new Date(date1);
-    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + date.format("d-m-Y");
+    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + date.format("m-d-Y");
   }
 
   $scope.getScgTooltip = function(scg) {
