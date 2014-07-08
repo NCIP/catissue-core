@@ -199,7 +199,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
 
     $scope.setPagedData = function(pageNo, recCnt) {
+      /* Commented out as end users do not like pagination enabled 
       var pageRows = $scope.queryData.resultData.slice((pageNo - 1) * recCnt, pageNo * recCnt);
+      */
+      var pageRows = $scope.queryData.resultData;
       var formatedRows = [];
        
       for (var i = 0; i < pageRows.length; ++i) {
@@ -612,7 +615,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       totalServerItems: 'queryData.resultDataSize',
       plugins: [gridFilterPlugin],
       headerRowHeight: 70,
-      selectedItems: $scope.selectedRows
+      selectedItems: $scope.selectedRows,
+      enablePaging: false
     };
 
     $scope.loadFolders = function() {
