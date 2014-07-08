@@ -5566,6 +5566,7 @@
 	                        <echo message="Upgrading DataBase with URL ${final.database.url}" /> 
                                 <antcall target="upgrade_de_db"/>   
 	                        <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v40.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+				<antcall target="migrate_forms"/>
 	    </target>
 
 		<target name="upgrade_de_db">
