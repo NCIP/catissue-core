@@ -30,6 +30,7 @@
 <script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
 
 <script src="jss/json2.js" type="text/javascript"></script>
+<script src="jss/ajax.js" type="text/javascript"></script>
 
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script src="jss/calendarComponent.js"></script>
@@ -65,6 +66,8 @@ ul li ul li a span {
         var aliquotGrid;
         var aliquotPopUpParam = {};
         var aliquotNameSpace = {};
+		var parentSpeCildCount = 0;
+		var parentLabel = "";
         function showConflictSpecimenWindow(conflictingSpecimens){
             if(aliquotNameSpace.dhxWins == undefined){
                 aliquotNameSpace.dhxWins = new dhtmlXWindows();
@@ -193,6 +196,11 @@ ul li ul li a span {
             else
             {
                 aliquotGrid.setColumnExcellType(0,"ed");
+				for(var cnt=1;cnt<grid_obj.getRowsNum();cnt++)
+                {
+					parentSpeCildCount = parentSpeCildCount+1;
+                    grid_obj.cellByIndex(cnt,0).setValue(parentLabel+"_"+parentSpeCildCount);
+                }
             }
             if(isBarGenerationOn=="true" || isBarGenerationOn){
             aliquotGrid.setColumnExcellType(1,"ro");
@@ -338,13 +346,14 @@ ul li ul li a span {
             
         }
 function loadaliquotDetail(){
-    init_grid();
+    
     if('${pageOf}'!='fromMenu'){
         //onResubmit();
         onResubmit(true,document.getElementById("parentSpecimentLabel").value)
     }else{
         document.getElementById("resubmitButton").value = "Submit";
     }
+	init_grid();
 }
 function getJsonFromGrid(){
 //"Label,Barcode,Quantity,Storage Container,Position 1,Position 2,Container Map,"
@@ -429,8 +438,9 @@ var request = newXMLHTTPReq();
                         document.getElementById("ali_tissueSite").innerHTML = aliquotDetailsDTO.tissueSite;
                         document.getElementById("ali_pathologicalStatus").innerHTML = aliquotDetailsDTO.pathologicalStatus;
                         document.getElementById("ali_initialAvailableQuantity").innerHTML = aliquotDetailsDTO.initialAvailableQuantity+" "+ response.unit;
-                        
-                        if(aliquotDetailsDTO.creationDate!=undefined && aliquotDetailsDTO.creationDate!=""){
+                        parentSpeCildCount = response.specimenChildCount;
+						parentLabel= response.parentLabel
+						if(aliquotDetailsDTO.creationDate!=undefined && aliquotDetailsDTO.creationDate!=""){
                 //          document.getElementById("creationDate").value = aliquotDetailsDTO.creationDate;
                         }
                         if(aliquotGrid.getRowsNum()!=0){
@@ -473,6 +483,7 @@ var request = newXMLHTTPReq();
             request.open("POST","rest/specimens/1/fetchAliquots",true);
             request.setRequestHeader("Content-Type","application/json");
             request.send(JSON.stringify(paramStr));
+            //request.send();
 
     /*var loader=dhtmlxAjax.getSync("rest/specimens/"+specimenLabel+"/aliquots/"+JSON.stringify(paramStr));
         

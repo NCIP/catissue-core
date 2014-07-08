@@ -129,11 +129,13 @@ public class AliquotHandler
                     isLabelGenerationOn = true;
                 }
                 returnJsonObject.put("isLabelGenerationOn", isLabelGenerationOn);
+                returnJsonObject.put("parentLabel", aliquotDetailsDTO.getParentLabel());
                 boolean isBarGenerationOn = false;
                 if ((Variables.isSpecimenBarcodeGeneratorAvl))
                 {
                     isBarGenerationOn = true;
                 }
+                returnJsonObject.put("specimenChildCount",new SpecimenBizlogic().getCollectedChildSpecimenCountByLabel(aliquotDetailsDTO.getParentId(),hibernateDAO));
                 returnJsonObject.put("isBarGenerationOn", isBarGenerationOn);
                 returnJsonObject.put("unit",
                         AppUtility.getUnit(aliquotDetailsDTO.getSpecimenClass(), aliquotDetailsDTO.getType()));
