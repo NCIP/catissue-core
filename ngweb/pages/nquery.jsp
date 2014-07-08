@@ -370,6 +370,21 @@
        input[type='file'] {
          color: transparent;
        }
+
+       .plus-heading {
+         display: block;
+         width: 100%;
+         font-weight: bold;
+       }
+
+       .plus-note {
+         display:block;
+         font-style: italic;
+       }
+
+       .plus-margin-bottom {
+         margin-bottom: 5px;
+       }
     </style>
   </head>
 
@@ -1069,7 +1084,8 @@
         <h4>Define Results View</h4>
       </div>
       <div class="modal-body" style="height: 75%;overflow:auto">
-        <label>Please select the fields that you wish to view in results table</label>
+        <span class="plus-heading">Please select the fields that you wish to view in results table</span>
+        <span class="plus-note plus-margin-bottom">Drag and drop fields to reorder the view</span>
         <ka-tree opts='treeOpts'></ka-tree>
       </div>
       <div class="modal-footer" style="height: 12%">
