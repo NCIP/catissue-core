@@ -827,12 +827,7 @@ PUBLIC
 			</action>
 		-->
 
-		<action path="/ViewCart" type="edu.wustl.catissuecore.action.ViewCartAction"
-			name="advanceSearchForm" validate="false" scope="request">
-			<forward name="view" path=".catissuecore.shoppingCartDef" />
-			<forward name="differentCartView" path=".catissuecore.queryResultsSpreadsheetViewDef" />
-			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-		</action>
+		
 		<action path="/ViewSpecimenList" type="edu.wustl.catissuecore.action.ViewSpecimenList"
 			name="advanceSearchForm" validate="false" scope="request">
 			<forward name="view" path=".catissuecore.specimenShoppingCartDef" />

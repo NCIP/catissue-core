@@ -429,11 +429,6 @@ Ext.onReady(function(){
 			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'
             },
             {
-                text: 'My List View',
-				tooltip:'My List View',
-                href:'ViewCart.do?operation=view'
-            },
-            {
                 text: 'Specimen List View',
 				tooltip:'Specimen List View',
                 href:'ViewSpecimenList.do?operation=view'
