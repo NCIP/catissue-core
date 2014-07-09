@@ -3205,7 +3205,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 
     <changeSet author="vpawar" id="Add auto increment to specimen lists table" dbms="mysql">
       <sql>
-        select max(IDENTIFIER) + 1 INTO @max_list_id from CATISSUE_SPECIMENLIST_TAGS;
+        select IFNULL(max(IDENTIFIER), 0) + 1 INTO @max_list_id from CATISSUE_SPECIMENLIST_TAGS;
         set @sql = 'alter table CATISSUE_SPECIMENLIST_TAGS modify column IDENTIFIER BIGINT AUTO_INCREMENT';
         prepare stmt from @sql;
         execute stmt;
