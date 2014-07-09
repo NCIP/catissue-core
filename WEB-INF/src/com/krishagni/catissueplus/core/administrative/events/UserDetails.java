@@ -223,7 +223,10 @@ public class UserDetails {
 		}
 		setUserCPRoles(userDto, user.getUserCPRoles());
 		setUserSiteNames(userDto, user.getUserSites());	
-		updateAddressDetails(userDto, user.getAddress());
+		
+		if(user.getAddress() != null){ 
+			updateAddressDetails(userDto, user.getAddress());
+		}
 		return userDto;
 	}
 
