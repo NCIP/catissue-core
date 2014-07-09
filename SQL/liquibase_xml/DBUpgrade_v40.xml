@@ -3026,7 +3026,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </changeSet> 
         
     <!-- <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
-	   <createTable tableName="CATISSUE_SPECIMEN_PRINT_RULE">
+	   <createTable tableName="OS_SPECIMEN_PRINT_RULE">
 		 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
 		   <constraints primaryKey="true" nullable="false"/>
 		 </column>
@@ -3059,16 +3059,14 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	   </createTable>
 	   
 	   <addUniqueConstraint constraintName="SPEC_CLASS_TYPE_ID_UNIQUE_KEY"
-			tableName="CATISSUE_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP" />
+			tableName="OS_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP" />
 	   
 	   <createSequence
-            sequenceName="CATISSUE_PRINT_RULE_SEQ"
+            sequenceName="OS_PRINT_RULE_SEQ"
             startValue="1"
             incrementBy="1"
             ordered="true" />
 	</changeSet>
--->
-
 
     <changeSet id="Create SPECIMEN_ORDER_VIEW" author="mibrahim" runOnChange="true" dbms="mysql">
        <sql>CREATE OR REPLACE VIEW SPECIMEN_ORDER_VIEW AS 
