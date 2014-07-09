@@ -26,6 +26,7 @@ import com.krishagni.catissueplus.core.administrative.events.PatchStorageContain
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDisabledEvent;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
@@ -82,7 +83,7 @@ public class StorageContainerController {
 		event.setStorageContainerId(id);
 		event.setSessionDataBean(getSession());
 
-		StorageContainerDetails details = new StorageContainerDetails();
+		StorageContainerPatchDetails details = new StorageContainerPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -105,6 +106,20 @@ public class StorageContainerController {
 	public String disableStorageContainer(@PathVariable Long id) {
 		DisableStorageContainerEvent event = new DisableStorageContainerEvent();
 		event.setId(id);
+		event.setSessionDataBean(getSession());
+		StorageContainerDisabledEvent resp = storageContainerSvc.disableStorageContainer(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String disableStorageContainer(@PathVariable String name) {
+		DisableStorageContainerEvent event = new DisableStorageContainerEvent();
+		event.setName(name);
 		event.setSessionDataBean(getSession());
 		StorageContainerDisabledEvent resp = storageContainerSvc.disableStorageContainer(event);
 		if (resp.getStatus() == EventStatus.OK) {

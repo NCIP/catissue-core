@@ -21,7 +21,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.impl.Depart
 import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
+import com.krishagni.catissueplus.core.administrative.events.DepartmentDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
@@ -63,6 +65,7 @@ public class DepartmentTest {
 		
 		when(instituteDao.getInstituteByName(anyString())).thenReturn(InstituteTestData.getInstitute(1l));
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
+		when(departmentDao.isUniqueDepartmentInInstitute(anyString(), anyString())).thenReturn(Boolean.TRUE);
 	}
 
 	@Test
@@ -76,7 +79,7 @@ public class DepartmentTest {
 
 	@Test
 	public void testDepartmentCreationWithDuplicateDepartmentName() {
-		when(departmentDao.getDepartmentByName(anyString())).thenReturn(DepartmentTestData.getDepartment(1l));
+		when(departmentDao.isUniqueDepartmentInInstitute(anyString(), anyString())).thenReturn(Boolean.FALSE);
 		CreateDepartmentEvent reqEvent = DepartmentTestData.getCreateDepartmentEvent();
 		DepartmentCreatedEvent response = departmentService.createDepartment(reqEvent);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
@@ -126,6 +129,17 @@ public class DepartmentTest {
 		DepartmentDetails createdDepartment = response.getDepartmentDetails();
 		assertEquals(reqEvent.getDepartmentDetails().getName(), createdDepartment.getName());
 	}
+	
+	@Test 
+	public void testForSuccessfulDepartmentUpdateWithChangedName() {
+		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartment(1L));
+		UpdateDepartmentEvent reqEvent = DepartmentTestData.getUpdateDepartmentEventForChangedName();
+
+		DepartmentUpdatedEvent response = departmentService.updateDepartment(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		DepartmentDetails createdDepartment = response.getDepartmentDetails();
+		assertEquals(reqEvent.getDepartmentDetails().getName(), createdDepartment.getName());
+	}
 
 	@Test
 	public void testDepartmentUpdationWithEmptyDepartmentName() {
@@ -136,7 +150,9 @@ public class DepartmentTest {
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(DepartmentTestData.DEPARTMENT_NAME, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrivilegeErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 	}
+	
 	@Test
 	public void testForInvalidDepartmentUpdate() {
 		when(departmentDao.getDepartment(anyLong())).thenReturn(null);
@@ -153,6 +169,51 @@ public class DepartmentTest {
 
 		doThrow(new RuntimeException()).when(departmentDao).saveOrUpdate(any(Department.class));
 		DepartmentUpdatedEvent response = departmentService.updateDepartment(reqEvent);
+		assertNotNull("response cannot be null", response);
+	}
+	
+	@Test
+	public void testForInvalidDepartmentDisable() {
+		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
+		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEvent();
+		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testForInvalidDepartmentDisableWithName() {
+		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
+		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEventForName();
+		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testSuccessfulDepartmentDisable() {
+		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEvent();
+		Department departmentToDelete = DepartmentTestData.getDepartment(1L);
+		when(departmentDao.getDepartment(anyLong())).thenReturn(departmentToDelete);
+		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(DepartmentTestData.ACTIVITY_STATUS_DISABLED, departmentToDelete.getActivityStatus());
+	}
+	
+	@Test
+	public void testDepartmentDisableWithReference() {
+		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartmentForDisable(1l));
+		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEvent();
+		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+		assertEquals(UserErrorCode.REFERENCED_ATTRIBUTE.message(), response.getMessage());
+	}
+
+	@Test
+	public void testDepartmentDisableWithServerErr() {
+		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartment(1l));
+		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEvent();
+		doThrow(new RuntimeException()).when(departmentDao).saveOrUpdate(any(Department.class));
+		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}

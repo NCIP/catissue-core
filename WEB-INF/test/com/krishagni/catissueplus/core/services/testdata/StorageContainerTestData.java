@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.CreateStorageContai
 import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -184,6 +185,7 @@ public class StorageContainerTestData {
 		container.setBarcode("2-edpwesdadas-343");
 		container.setOneDimensionCapacity(10);
 		container.setTwoDimensionCapacity(10);
+		container.setId(l);
 		container.setName("Container1");
 		container.setComments("Blah blah blah");
 		container.setSite(getSite());
@@ -193,6 +195,7 @@ public class StorageContainerTestData {
 		container.setOneDimensionCapacity(20);
 		container.setTwoDimensionCapacity(20);
 		container.setCreatedBy(getUser(1l));
+		Long id = container.getId(); // for coverage
 		return container;
 	}
 
@@ -224,7 +227,7 @@ public class StorageContainerTestData {
 	public static PatchStorageContainerEvent getPatchData() {
 		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
 		event.setStorageContainerId(1l);
-		StorageContainerDetails details = new StorageContainerDetails();
+		StorageContainerPatchDetails details = new StorageContainerPatchDetails();
 		try {
 			BeanUtils.populate(details, getStorageContainerPatchAttributes());
 		}
@@ -239,7 +242,7 @@ public class StorageContainerTestData {
 	public static PatchStorageContainerEvent getPatchDataToSetParentContainer() {
 		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
 		event.setStorageContainerId(1l);
-		StorageContainerDetails details = new StorageContainerDetails();
+		StorageContainerPatchDetails details = new StorageContainerPatchDetails();
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("parentContainerName", "Freezer");
 		try {
@@ -256,7 +259,7 @@ public class StorageContainerTestData {
 	public static PatchStorageContainerEvent nonPatchData() {
 		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
 		event.setStorageContainerId(1l);
-		StorageContainerDetails details = new StorageContainerDetails();
+		StorageContainerPatchDetails details = new StorageContainerPatchDetails();
 		event.setStorageContainerDetails(details);
 		return event;
 	}
@@ -347,6 +350,24 @@ public class StorageContainerTestData {
 		CreateStorageContainerEvent event = new CreateStorageContainerEvent(getStorageContainerDetails());
 		event.getDetails().setBarcode(null);
 		event.getDetails().setName(null);
+		return event;
+	}
+
+	public static StorageContainer getStorageContainerForDisable(long l) {
+		StorageContainer storageContainer = getStorageContainer(l);
+		storageContainer.setChildContainers(getChildContainers());
+		return storageContainer;
+	}
+
+	private static Set<StorageContainer> getChildContainers() {
+		Set<StorageContainer> childs = new HashSet<StorageContainer>();
+		childs.add(new StorageContainer());
+		return childs;
+	}
+
+	public static DisableStorageContainerEvent getDisableStorageContainerEventForName() {
+		DisableStorageContainerEvent event = new DisableStorageContainerEvent();
+		event.setName("Abc");
 		return event;
 	}
 }

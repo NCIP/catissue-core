@@ -8,4 +8,7 @@ public interface DepartmentDao extends Dao<Department> {
 	Department getDepartment(Long departmentId);
 
 	Department getDepartmentByName(String anyString);
+
+	Boolean isUniqueDepartmentInInstitute(String name, String instName);
+	
 }

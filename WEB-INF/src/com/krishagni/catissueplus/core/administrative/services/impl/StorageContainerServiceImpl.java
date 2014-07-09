@@ -142,9 +142,18 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 	@PlusTransactional
 	public StorageContainerDisabledEvent disableStorageContainer(DisableStorageContainerEvent event) {
 		try {
-			StorageContainer oldStorageContainer = daoFactory.getStorageContainerDao().getStorageContainer(event.getId());
-			if (oldStorageContainer == null) {
-				return StorageContainerDisabledEvent.notFound(event.getId());
+			StorageContainer oldStorageContainer = null;
+			if (event.getName() != null) {
+				oldStorageContainer = daoFactory.getStorageContainerDao().getStorageContainerByName(event.getName());
+				if (oldStorageContainer == null) {
+					return StorageContainerDisabledEvent.notFound(event.getName());
+				}
+			}
+			else {
+				oldStorageContainer = daoFactory.getStorageContainerDao().getStorageContainer(event.getId());
+				if (oldStorageContainer == null) {
+					return StorageContainerDisabledEvent.notFound(event.getId());
+				}
 			}
 			oldStorageContainer.disable();
 			daoFactory.getStorageContainerDao().saveOrUpdate(oldStorageContainer);

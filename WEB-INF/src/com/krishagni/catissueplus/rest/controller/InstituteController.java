@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetails;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
@@ -63,6 +67,34 @@ public class InstituteController {
 		return null;
 	}
 
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public String disableInst(@PathVariable Long id) {
+		DisableInstituteEvent event = new DisableInstituteEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		InstituteDisabledEvent resp = instituteSvc.deleteInstitute(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	public String disableInstitute(@PathVariable String name) {
+		DisableInstituteEvent event = new DisableInstituteEvent();
+		event.setName(name);
+		event.setSessionDataBean(getSession());
+		InstituteDisabledEvent resp = instituteSvc.deleteInstitute(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

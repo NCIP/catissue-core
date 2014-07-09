@@ -29,9 +29,24 @@
             not-null="true"
             unique="true"/>
 
+		 <property
+            name="activityStatus"
+            type="string"
+            column="ACTIVITY_STATUS"
+            length="64"/>
+            
+         <set
+            name="departmentCollection"
+            table="OS_DEPARTMENT">
+
+        	<cache usage="read-write"/>
+            <key column="INSTITUTE_ID"/>
+            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Department" />
+
+        </set>
 
     <query name="getInstituteByName">
-    	FROM com.krishagni.catissueplus.core.administrative.domain.Institute institute WHERE institute.name = :name
+    	FROM com.krishagni.catissueplus.core.administrative.domain.Institute institute WHERE institute.name = :name 
     </query>
  
  </class>

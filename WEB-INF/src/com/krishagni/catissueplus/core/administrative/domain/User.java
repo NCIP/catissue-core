@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -19,6 +21,8 @@ import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
+
+import edu.wustl.common.util.XMLPropertyHandler;
 
 public class User {
 
@@ -267,14 +271,16 @@ public class User {
 
 	private void updatePassword(String newPassword) {
 		Password password = new Password();
-		if (isBlank(newPassword)) {
+		if (isBlank(newPassword)|| !isValidPasswordPattern(newPassword)) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
 		}
-		password.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt(4)));
 		password.setUpdateDate(new Date());
 		password.setUser(this);
-		this.passwordCollection.add(password);
 		this.setPasswordToken(null);
+		password.setPassword(BCrypt.hashpw(newPassword,
+				BCrypt.gensalt(Integer.parseInt(XMLPropertyHandler.getValue("bcrypt.salt.windings")))));
+		
+		this.passwordCollection.add(password);
 	}
 
 	public void setPasswordToken(User user, String domainName) {
@@ -283,6 +289,15 @@ public class User {
 		}
 	}
 
+	private final static String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})";
+
+	public static boolean isValidPasswordPattern(String password) {
+		boolean result = false;
+		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+		Matcher mat = pattern.matcher(password);
+		result = mat.matches();
+		return result;
+	}
 	private void validateOldPassword(String oldPassword) {
 		if (isBlank(oldPassword)) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);
@@ -307,6 +322,10 @@ public class User {
 		if (!this.getPasswordToken().equals(token)) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD_TOKEN);
 		}
+	}
+
+	public void delete() {
+		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 }

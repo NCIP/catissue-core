@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -76,7 +77,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 
 	@Override
-	public Participant patchParticipant(Participant participant, ParticipantDetail detail) {
+	public Participant patchParticipant(Participant participant, ParticipantPatchDetail detail) {
 		ObjectCreationException exception = new ObjectCreationException();
 		if (detail.isFirstNameModified()) {
 			setFirstName(participant, detail.getFirstName(), exception);

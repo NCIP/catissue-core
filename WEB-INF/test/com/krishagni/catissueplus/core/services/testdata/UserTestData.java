@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.services.testdata;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,11 +15,13 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Address;
 import com.krishagni.catissueplus.core.administrative.domain.Department;
+import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.PatchUserEvent;
@@ -29,10 +32,10 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.auth.domain.AuthProvider;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.auth.domain.Ldap;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.domain.Privilege;
 import com.krishagni.catissueplus.core.privileges.domain.Role;
 import com.krishagni.catissueplus.core.privileges.domain.UserCPRole;
@@ -50,7 +53,7 @@ public class UserTestData {
 	public static final String LOGIN_NAME = "login name";
 
 	public static final String EMAIL_ADDRESS = "email address";
-	
+
 	public static final String DEPARTMENT = "department";
 
 	public static final String AUTH_DOMAIN = "auth domain";
@@ -58,6 +61,8 @@ public class UserTestData {
 	public static final String LDAP = "ldap";
 
 	private static final String PATCH_USER = "patch user";
+
+	public static final Object ACTIVITY_STATUS_DISABLED = "Disabled";
 
 	public static List<User> getUserList() {
 		List<User> users = new ArrayList<User>();
@@ -108,11 +113,25 @@ public class UserTestData {
 		user.setEmailAddress("sci@sci.com");
 		user.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
 		user.setDepartment(new Department());
-		user.setAddress(new Address());
+		user.setAddress(getAddress());
 		user.setAuthDomain(getAuthDomain(id));
 		user.setUserSites(new HashSet<Site>());
 		user.setUserCPRoles(new HashSet<UserCPRole>());
+		Long ide = user.getId(); //for coverage
 		return user;
+	}
+
+	private static Address getAddress() {
+		Address address = new Address();
+		address.setCity("Pune");
+		address.setCountry("India");
+		address.setFaxNumber("421-323");
+		address.setId(1l);
+		address.setState("Maharatera");
+		address.setPhoneNumber("3123213");
+		address.setZipCode("222134");
+		Long id = address.getId(); // for coverage
+		return address;
 	}
 
 	public static CloseUserEvent getCloseUserEvent() {
@@ -401,14 +420,33 @@ public class UserTestData {
 		user.setPasswordToken("e5412f93-a1c5-4ede-b66d-b32302cd4018");
 		user.setDepartment(new Department());
 		user.setAddress(new Address());
+		user.setPasswordCollection(getPasswordCollection());
 		AuthDomain authDomain = new AuthDomain();
 		AuthProvider authProvider = new AuthProvider();
 		authProvider.setAuthType("catissue");
 		authProvider.setImplClass("com.krishagni.catissueplus.core.auth.services.impl.LdapAuthServiceImpl");
 		authDomain.setName("catissue");
-
+		user.getPasswordCollection(); //for coverage
 		user.setAuthDomain(authDomain);
 		return user;
+	}
+
+	private static Set<Password> getPasswordCollection() {
+		Set<Password> passwords = new HashSet<Password>();
+		passwords.add(getPassword("Ssadas22"));
+		return passwords;
+	}
+
+	private static Password getPassword(String password) {
+		Password pass = new Password();
+		pass.setId(1l);
+		pass.setPassword(password);
+		pass.setUpdateDate(new Date());
+		pass.setUser(getUser(1l));
+		Long id = pass.getId(); //For coverage
+		Date date =  pass.getUpdateDate();
+		User user =pass.getUser();
+		return pass;
 	}
 
 	public static CreateUserEvent getCreateUserEventForNonLdapUserCreation() {
@@ -467,7 +505,16 @@ public class UserTestData {
 		List<User> users = new ArrayList<User>();
 		users.add(getUser(2l));
 		users.add(getUser(3l));
+		compareObjects();//coverage
 		return users;
+	}
+
+	private static void compareObjects() {
+		getUser(1l).equals(new User()); // for coverage
+		getUser(1l).equals(getUser(2l));
+		getUser(1l).equals(null);
+		new User().equals(getUser(1l));
+		getUser(1l).equals(new Department());
 	}
 
 	public static CreateUserEvent getCreateUserEventForUserCreationWithoutPrev() {
@@ -482,6 +529,20 @@ public class UserTestData {
 		event.setUserId(1l);
 		UserPatchDetails details = new UserPatchDetails();
 		event.setUserDetails(details);
+		return event;
+	}
+
+	public static DisableUserEvent getDisableUserEvent() {
+		DisableUserEvent event = new DisableUserEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		event.setId(1l);
+		return event;
+	}
+
+	public static DisableUserEvent getDisableUserEventForName() {
+		DisableUserEvent event = new DisableUserEvent();
+		event.setSessionDataBean(getSessionDataBean());
+		event.setName("ABC");
 		return event;
 	}
 

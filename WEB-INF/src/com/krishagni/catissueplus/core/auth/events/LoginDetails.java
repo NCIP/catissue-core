@@ -1,13 +1,15 @@
 
 package com.krishagni.catissueplus.core.auth.events;
 
+import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
+
 public class LoginDetails {
 
 	private String loginId;
 
 	private String password;
 
-	private String domainName;
+	private String domainName = AuthenticationType.CATISSUE.value();
 
 	public String getLoginId() {
 		return loginId;

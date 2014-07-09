@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.administrative.domain.User"
-        table="CATISSUE_USER"
+        table="OS_USER"
         lazy="true">
 	
     	<cache usage="read-write" />
@@ -18,7 +18,7 @@
             length="30"
             unsaved-value="null">
             <generator class="native">
-                <param name="sequence">CATISSUE_USER_SEQ</param>
+                <param name="sequence">OS_USER_SEQ</param>
             </generator>
         </id>
 
@@ -148,19 +148,29 @@
 	</query>
 	
 	<query name="getUserByIdAndDomain">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.id = :userId AND user.authDomain.name = :domainName
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.id = :userId 
+		AND user.authDomain.name = :domainName 
+		AND user.activityStatus != 'Disabled' 
 	</query>
 	
-	<query name="getUserByLoginNameAndDomainName">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName AND user.authDomain.name = :domainName
+	<query name="getUser">
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName 
+		AND user.authDomain.name = :domainName  
+		AND user.activityStatus != 'Disabled' 
+	</query>
+	
+	<query name="getActiveUser">
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName 
+		AND user.authDomain.name = :domainName  
+		AND user.activityStatus = 'Active' 
 	</query>
 
 	<query name="getUsersById">
-		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds)
-        </query>
+		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds) AND activityStatus != 'Disabled'
+    </query>
 
-        <query name="getAllUsers">
-          from com.krishagni.catissueplus.core.administrative.domain.User
-        </query>
+    <query name="getAllUsers">
+        from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled'
+    </query>
    </class>
 </hibernate-mapping>

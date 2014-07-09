@@ -19,10 +19,13 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFa
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetails;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl;
@@ -38,6 +41,9 @@ public class InstituteTest {
 
 	@Mock
 	InstituteDao instituteDao;
+	
+	@Mock
+	DepartmentDao departmentDao;
 
 	private InstituteFactory instituteFactory;
 	private InstituteService instituteService;
@@ -46,6 +52,7 @@ public class InstituteTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
+		when(daoFactory.getDepartmentDao()).thenReturn(departmentDao);	
 		when(daoFactory.getInstituteDao()).thenReturn(instituteDao);
 		instituteService = new InstituteServiceImpl();
 		((InstituteServiceImpl) instituteService).setDaoFactory(daoFactory);
@@ -133,5 +140,51 @@ public class InstituteTest {
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(InstituteTestData.INSTITUTE_NAME, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrivilegeErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testForInvalidInstituteDisable() {
+		when(instituteDao.getInstituteByName(anyString())).thenReturn(null);
+		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEvent();
+		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testForInvalidInstituteDisableWithName() {
+		when(instituteDao.getInstituteByName(anyString())).thenReturn(null);
+		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEventForName();
+		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testSuccessfulInstituteDisable() {
+		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEvent();
+		Institute instituteToDelete = InstituteTestData.getInstitute(1L);
+		when(instituteDao.getInstitute(anyLong())).thenReturn(instituteToDelete);
+		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(InstituteTestData.ACTIVITY_STATUS_DISABLED, instituteToDelete.getActivityStatus());
+	}
+	
+	@Test
+	public void testInstituteDisableWithReference() {
+		when(instituteDao.getInstitute(anyLong())).thenReturn(InstituteTestData.getInstituteForDisable(1l));
+		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEvent();
+		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+		assertEquals(UserErrorCode.REFERENCED_ATTRIBUTE.message(), response.getMessage());
+	}
+
+	@Test
+	public void testInstituteDisableWithServerErr() {
+		when(instituteDao.getInstitute(anyLong())).thenReturn(InstituteTestData.getInstitute(1l));
+		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEvent();
+		doThrow(new RuntimeException()).when(instituteDao).saveOrUpdate(any(Institute.class));
+		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 }

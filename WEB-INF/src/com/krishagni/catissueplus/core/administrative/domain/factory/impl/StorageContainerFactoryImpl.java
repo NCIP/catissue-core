@@ -15,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.StorageCont
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -53,7 +54,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		StorageContainer storageContainer = new StorageContainer();
 		setComments(storageContainer, details.getComments());
 		setActivityStatus(storageContainer, details.getActivityStatus(), exceptionHandler);
-		setSiteOrParent(storageContainer, details, exceptionHandler);
+		setSiteOrParent(storageContainer, details.getSiteName(), details.getParentContainerName(), exceptionHandler);
 		setCollectionProtocols(storageContainer, details.getHoldsCPTitles(), exceptionHandler);
 		setCreatedByUser(storageContainer, details.getCreatedBy(), exceptionHandler);
 		setHoldsSpecimenTypes(storageContainer, details.getHoldsSpecimenTypes(), exceptionHandler);
@@ -67,7 +68,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 
 	@Override
-	public StorageContainer patchStorageContainer(StorageContainer storageContainer, StorageContainerDetails details) {
+	public StorageContainer patchStorageContainer(StorageContainer storageContainer, StorageContainerPatchDetails details) {
 		ObjectCreationException exception = new ObjectCreationException();
 
 		if (details.isCommentsModified()) {
@@ -75,7 +76,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		}
 
 		if (details.isSiteNameModified() || details.isParentContainerNameModified()) {
-			setSiteOrParent(storageContainer, details, exception);
+			setSiteOrParent(storageContainer, details.getSiteName(), details.getParentContainerName(), exception);
 		}
 
 		if (details.isHoldsSpecimenTypesModified()) {
@@ -213,11 +214,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		return true;
 	}
 
-	private void setSiteOrParent(StorageContainer storageContainer, StorageContainerDetails details,
+	private void setSiteOrParent(StorageContainer storageContainer, String siteName, String parentContainerName,
 			ObjectCreationException exceptionHandler) {
-
-		String siteName = details.getSiteName();
-		String parentContainerName = details.getParentContainerName();
 
 		if (parentContainerName == null && siteName == null) {
 			exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, SITE_CONTAINER);

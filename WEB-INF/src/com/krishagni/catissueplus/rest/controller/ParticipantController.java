@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEven
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
@@ -80,7 +81,7 @@ public class ParticipantController {
 	@ResponseBody
 	public ParticipantDetail patchParticipant(@PathVariable Long id,@RequestBody Map<String, Object> values) {
 		PatchParticipantEvent event = new PatchParticipantEvent();
-		ParticipantDetail detail = new ParticipantDetail();
+		ParticipantPatchDetail detail = new ParticipantPatchDetail();
 		try {
 			BeanUtils.populate(detail, values);
 		}

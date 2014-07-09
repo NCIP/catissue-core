@@ -5,15 +5,15 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class PatchParticipantEvent extends RequestEvent {
 
-	private ParticipantDetail participantDetail;
+	private ParticipantPatchDetail participantDetail;
 
 	private Long id;
 
-	public ParticipantDetail getParticipantDetail() {
+	public ParticipantPatchDetail getParticipantDetail() {
 		return participantDetail;
 	}
 
-	public void setParticipantDetail(ParticipantDetail participantDetail) {
+	public void setParticipantDetail(ParticipantPatchDetail participantDetail) {
 		this.participantDetail = participantDetail;
 	}
 

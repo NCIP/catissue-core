@@ -2375,29 +2375,6 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         <dropColumn columnName="KEY_SEQUENCE_ID" tableName="key_seq_generator"/>
         <renameColumn columnDataType="${int.type}" newColumnName="KEY_SEQUENCE_ID" oldColumnName="KEY_SEQUENCE_ID_TMP" tableName="key_seq_generator"/>
     </changeSet>
-    
-    <changeSet author="dpatil" id="table for catissue department institutes mapping" failOnError="true">
-       <createTable tableName="CATISSUE_DEPARTMENT_INSTITUTES">
-               <column name="DEPARTMENT_ID" type="${int.type}">
-               </column>
-
-               <column name="INSTITUTE_ID" type="${int.type}">
-               </column>
-       </createTable>
-   
-       <addForeignKeyConstraint
-               constraintName="FK_CAT_DEPTID_CAT_DEPAT_ID"
-               baseTableName="CATISSUE_DEPARTMENT_INSTITUTES"
-               baseColumnNames="DEPARTMENT_ID"
-               referencedTableName="CATISSUE_DEPARTMENT"
-               referencedColumnNames="IDENTIFIER" />
-       <addForeignKeyConstraint
-               constraintName="FK_CAT_INSTID_CAT_INST_ID"
-               baseTableName="CATISSUE_DEPARTMENT_INSTITUTES"
-               baseColumnNames="INSTITUTE_ID"
-               referencedTableName="CATISSUE_INSTITUTION"
-               referencedColumnNames="IDENTIFIER" />
-    </changeSet> 
 
     <changeSet author="vpawar" id="adding saved queries sequence" failOnError="true">
       <createSequence 
@@ -3284,5 +3261,118 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 		<sql>INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER,VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES((select max(IDENTIFIER)+1 from CATISSUE_PERMISSIBLE_VALUE),'In Progress',NULL,'shipping_activity_status')</sql>
 	</changeSet>
 
+     <changeSet author="dpatil" id="add activity status column to catissue_institution table" failOnError="true">
+        <addColumn tableName="catissue_institution">
+        <column name="ACTIVITY_STATUS" type="${text.type}(64)" defaultValue="Active"/>
+        </addColumn>
+    </changeSet>
+   
+    <changeSet author="dpatil" id="migrate user table for open specimen" failOnError="true">
+       <sql>
+            create table os_user as select * from catissue_user
+       </sql>
+    </changeSet>
+   
+    <changeSet author="dpatil" id="migrate database table for open specimen" failOnError="true">
+       <sql>
+            create table os_department as select * from catissue_department
+       </sql>
+    </changeSet>
 
+    <changeSet author="dpatil" id="add columns in os department tables" failOnError="true">   
+    <addColumn tableName="OS_DEPARTMENT">
+         <column name="INSTITUTE_ID" type="${int.type}"/>
+        </addColumn>
+   
+    <addColumn tableName="OS_DEPARTMENT">
+        <column name="ACTIVITY_STATUS" type="${text.type}(64)" defaultValue="Active"/>
+        </addColumn>
+     </changeSet>
+        
+    <changeSet author="dpatil" id="data migration os department table" failOnError="false" dbms="mysql" >
+    <sql>
+         UPDATE OS_DEPARTMENT dept JOIN os_user usr ON usr.department_id = dept.identifier SET  dept.institute_id = usr.institution_id WHERE usr.institution_id IS NOT NULL
+    </sql>
+    </changeSet>
+
+    <changeSet author="dpatil" id="data migration for inst in new department" failOnError="true" dbms="oracle" >
+      <sql splitStatements="false" endDelimiter="$">
+        create or replace  
+            PROCEDURE MIGRATE_INSTITUTE_PROC 
+            IS
+               deptId number;
+               instId number;
+           
+            BEGIN 
+            for d in (Select usr.institution_id AS instId, usr.department_id As deptId from os_user usr JOIN OS_DEPARTMENT dept ON usr.department_id = dept.identifier WHERE usr.institution_id IS NOT NULL)
+               loop
+                UPDATE catissue_department SET institute_id = d.instId WHERE identifier= d.deptId;
+               end loop;
+            commit; 
+            END MIGRATE_INSTITUTE_PROC;
+    </sql>
+    <sql>call MIGRATE_INSTITUTE_PROC();</sql>   
+    </changeSet>
+
+    <changeSet author="dpatil" id="add unique constraints columns in os_department table" failOnError="true">
+          <addUniqueConstraint constraintName="OS_DEPT_INSTID_UNIQUE_KEY"
+            tableName="OS_DEPARTMENT" columnNames="NAME, INSTITUTE_ID" />
+    </changeSet>   
+   
+   <changeSet author="dpatil" id="sequence generation for user and department" dbms="oracle" failOnError="true">
+        <sql endDelimiter="/">
+        BEGIN
+        DECLARE
+            userId NUMBER;
+            deptId NUMBER;
+        BEGIN
+              SELECT NVL(MAX(IDENTIFIER),0)+1
+              INTO userId
+              FROM OS_USER;
+             
+              SELECT NVL(MAX(IDENTIFIER),0)+1
+              INTO deptId
+              FROM OS_DEPARTMENT;
+             
+              execute immediate('CREATE SEQUENCE OS_USER_SEQ MINVALUE 0 START WITH '||userId||' INCREMENT BY 1 NOCACHE');
+              execute immediate('CREATE SEQUENCE OS_DEPARTMENT_SEQ MINVALUE 0 START WITH '||deptId||' INCREMENT BY 1 NOCACHE');
+        END;
+        END;
+        /
+        </sql>
+   </changeSet>
+
+   <changeSet author="dpatil" id="add primary keys" failOnError="true" dbms="mysql">
+    <sql> ALTER table os_department modify column IDENTIFIER BIGINT(20)primary key not null auto_increment</sql>
+    <sql> ALTER table os_user modify column IDENTIFIER BIGINT(20)primary key not null auto_increment</sql>
+   </changeSet>   
+ 
+   <changeSet author="dpatil" id="add primary keys" failOnError="true" dbms="oracle">
+    <sql>ALTER TABLE os_user ADD CONSTRAINT pk_user_id PRIMARY KEY (identifier)</sql>
+    <sql>ALTER TABLE os_department ADD CONSTRAINT pk_department_id PRIMARY KEY (identifier)</sql>
+   </changeSet>   
+
+   <changeSet author="dpatil" id="add constraints" failOnError="true">
+    <addForeignKeyConstraint
+            constraintName="FK_OS_USRDEPTID_DEPT_ID"
+            baseTableName="OS_USER"
+            baseColumnNames="DEPARTMENT_ID"
+            referencedTableName="OS_DEPARTMENT"
+            referencedColumnNames="IDENTIFIER" />
+
+    <addForeignKeyConstraint
+            constraintName="FK_OS_USRADDID_ADD_ID"
+            baseTableName="OS_USER"
+            baseColumnNames="ADDRESS_ID"
+            referencedTableName="CATISSUE_ADDRESS"
+            referencedColumnNames="IDENTIFIER" />
+
+    <addForeignKeyConstraint
+            constraintName="FK_OS_DEPTINSTID_INST_ID"
+            baseTableName="OS_DEPARTMENT"
+            baseColumnNames="INSTITUTE_ID"
+            referencedTableName="CATISSUE_INSTITUTION"
+            referencedColumnNames="IDENTIFIER" />
+   </changeSet>
+    
 </databaseChangeLog>

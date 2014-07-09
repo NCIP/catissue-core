@@ -10,6 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProt
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
@@ -127,7 +128,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public RegistrationUpdatedEvent patchRegistration(PatchRegistrationEvent event) {
 		try {
 			CollectionProtocolRegistration oldCpr = null;
-			CollectionProtocolRegistrationDetail detail = event.getCollectionProtocolRegistrationDetail();
+			CollectionProtocolRegistrationPatchDetail detail = event.getCollectionProtocolRegistrationDetail();
 			if (event.getId() != null) {
 				oldCpr = daoFactory.getCprDao().getCpr(event.getId());
 			}

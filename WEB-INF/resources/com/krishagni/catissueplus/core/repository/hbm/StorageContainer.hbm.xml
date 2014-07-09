@@ -81,6 +81,16 @@
             class="com.krishagni.catissueplus.core.administrative.domain.Site"
             column="SITE_ID"/>
             
+        <set
+            name="childContainers"
+            table="CATISSUE_STORAGE_CONTAINERS">
+
+        	<cache usage="read-write"/>
+            <key column="PARENT_CONTAINER_ID"/>
+            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
+
+        </set>
+            
         <many-to-one
             name="parentContainer"
             class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"

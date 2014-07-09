@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
+import com.krishagni.catissueplus.core.administrative.events.DepartmentDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.services.DepartmentService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
@@ -58,6 +62,34 @@ public class DepartmentController {
 		DepartmentUpdatedEvent resp = departmentSvc.updateDepartment(event);
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getDepartmentDetails();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public String disableDepartment(@PathVariable Long id) {
+		DisableDepartmentEvent event = new DisableDepartmentEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		DepartmentDisabledEvent resp = departmentSvc.deleteDepartment(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	public String disableDepartment(@PathVariable String name) {
+		DisableDepartmentEvent event = new DisableDepartmentEvent();
+		event.setName(name);
+		event.setSessionDataBean(getSession());
+		DepartmentDisabledEvent resp = departmentSvc.deleteDepartment(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
 		}
 		return null;
 	}

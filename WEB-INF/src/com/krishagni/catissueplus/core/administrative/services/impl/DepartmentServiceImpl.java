@@ -9,7 +9,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
+import com.krishagni.catissueplus.core.administrative.events.DepartmentDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.services.DepartmentService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -41,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			Department department = departmentFactory.createDepartment(event.getDepartmentDetails());
 
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
-			ensureUniqueDepartmentName(department.getName(), exceptionHandler);
+			ensureUniqueDepartmentNameInInstitute(department, exceptionHandler);
 			exceptionHandler.checkErrorAndThrow();
 
 			daoFactory.getDepartmentDao().saveOrUpdate(department);
@@ -55,10 +57,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	}
 
-	private void ensureUniqueDepartmentName(String name, ObjectCreationException exceptionHandler) {
-		Department department = daoFactory.getDepartmentDao().getDepartmentByName(name);
-
-		if (department != null) {
+	private void ensureUniqueDepartmentNameInInstitute(Department department, ObjectCreationException exceptionHandler) {
+		if (!daoFactory.getDepartmentDao().isUniqueDepartmentInInstitute(department.getName(),
+				department.getName())) {
 			exceptionHandler.addError(UserErrorCode.DUPLICATE_DEPARTMENT_NAME, DEPARTMENT_NAME);
 		}
 	}
@@ -73,6 +74,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 				return DepartmentUpdatedEvent.notFound(departmentId);
 			}
 			Department department = departmentFactory.createDepartment(event.getDepartmentDetails());
+
+			ObjectCreationException exceptionHandler = new ObjectCreationException();
+			checkChangeInDepartmentName(oldDepartment, department, exceptionHandler);
+			exceptionHandler.checkErrorAndThrow();
+
 			oldDepartment.update(department);
 			daoFactory.getDepartmentDao().saveOrUpdate(oldDepartment);
 			return DepartmentUpdatedEvent.ok(DepartmentDetails.fromDomain(oldDepartment));
@@ -85,4 +91,37 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	}
 
+	private void checkChangeInDepartmentName(Department oldDepartment, Department department,
+			ObjectCreationException exceptionHandler) {
+		if (!oldDepartment.getName().equals(department.getName())) {
+			ensureUniqueDepartmentNameInInstitute(department, exceptionHandler);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public DepartmentDisabledEvent deleteDepartment(DisableDepartmentEvent event) {
+		try {
+			Department department = null;
+			if (event.getName() != null) {
+				department = daoFactory.getDepartmentDao().getDepartmentByName(event.getName());
+				if (department == null) {
+					return DepartmentDisabledEvent.notFound(event.getId());
+				}
+			}
+			else {
+				department = daoFactory.getDepartmentDao().getDepartment(event.getId());
+				if (department == null) {
+					return DepartmentDisabledEvent.notFound(event.getId());
+				}
+			}
+			department.delete();
+			daoFactory.getDepartmentDao().saveOrUpdate(department);
+			return DepartmentDisabledEvent.ok();
+		}
+		catch (Exception e) {
+			return DepartmentDisabledEvent.serverError(e);
+		}
+	}
 }
+
