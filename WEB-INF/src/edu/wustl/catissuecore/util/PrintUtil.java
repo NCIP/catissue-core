@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.util;
 
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -33,8 +34,10 @@ public class PrintUtil
 					specimenId);
 
 			final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
-
-			printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, null, printerType,
+			gov.nih.nci.security.authorization.domainobjects.User user = new gov.nih.nci.security.authorization.domainobjects.User();
+			user.setUserId(dataBean.getUserId());
+			user.setLoginName(dataBean.getUserName());
+			printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, user, printerType,
 					printerLocation);
 
 		}

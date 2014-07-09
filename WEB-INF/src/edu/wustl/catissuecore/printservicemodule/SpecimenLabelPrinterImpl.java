@@ -46,7 +46,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 		final ArrayList listMap = new ArrayList();
 		//createObjectMap(abstractDomainObject,listMap);
 		this.createObjectMap(abstractDomainObject, listMap, printerType, printerLocation,
-						ipAddress);
+						ipAddress,userObj.getLoginName());
 		return callToPrinter(listMap);
 
 	}
@@ -68,7 +68,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 		//Iterate through all objects in List ,crate map of each object.
 		final ArrayList listMap = new ArrayList();
 		this.createObjectMap(abstractDomainObjectList, listMap, printerType, printerLocation,
-				ipAddress);
+				ipAddress,userObj.getLoginName());
 		return callToPrinter(listMap);
 	}
 
@@ -100,12 +100,12 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param ipAddress IP Address
 	 */
 	void createObjectMap(List<AbstractDomainObject> abstractDomainObjectList, List listMap,
-			String printerType, String printerLocation, String ipAddress)
+			String printerType, String printerLocation, String ipAddress,String loginName)
 	{
 		//Bug 11509
 		Collections.sort(abstractDomainObjectList, new IdComparator());
 		iterateSpecimenList(abstractDomainObjectList, ipAddress, printerType, printerLocation,
-				listMap);
+				listMap,loginName);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param ipAddress IP Address
 	 */
 	protected void addDataToPrint(Specimen specimen, List listMap, String printerType,
-			String printerLocation, String ipAddress)
+			String printerLocation, String ipAddress,String loginName)
 	{
 		final LinkedHashMap dataMap = new LinkedHashMap();
 		String label = specimen.getLabel();
@@ -151,7 +151,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param ipAddress IP Address
 	 */
 	void createObjectMap(AbstractDomainObject abstractDomainObject, List listMap,
-			String printerType, String printerLocation, String ipAddress)
+			String printerType, String printerLocation, String ipAddress,String loginName)
 	{
 
 		if (abstractDomainObject instanceof Specimen)
@@ -166,7 +166,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 			for (int cnt = 0; cnt < specimenList.size(); cnt++)
 			{
 				final Specimen obj = (Specimen) specimenList.get(cnt);
-				this.addDataToPrint(obj, listMap, printerType, printerLocation, ipAddress);
+				this.addDataToPrint(obj, listMap, printerType, printerLocation, ipAddress,loginName);
 			}
 		}
 
@@ -210,7 +210,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 		//Iterate through all objects in List ,crate map of each object.
 		final ArrayList listMap = new ArrayList();
 		iterateSpecimenList(abstractDomainObjectList, ipAddress, printerType, printerLocation,
-				listMap);
+				listMap,userObj.getLoginName());
 		return callToPrinter(listMap);
 	}
 	/**
@@ -222,14 +222,14 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param ipAddress ipAddress of system
 	 */
 	private void iterateSpecimenList(List<AbstractDomainObject> abstractDomainObjectList,
-			String ipAddress, String printerType, String printerLocation, final List listMap)
+			String ipAddress, String printerType, String printerLocation, final List listMap, String loginName)
 	{
 		for (final AbstractDomainObject abstractDomainObject : abstractDomainObjectList)
 		{
 			if (abstractDomainObject instanceof Specimen)
 			{
 				final Specimen obj = (Specimen) abstractDomainObject;
-				this.addDataToPrint(obj, listMap, printerType, printerLocation, ipAddress);
+				this.addDataToPrint(obj, listMap, printerType, printerLocation, ipAddress,loginName);
 			}
 		}
 	}

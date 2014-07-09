@@ -7,11 +7,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * This class is used to define method for Specimen label printing.
@@ -31,7 +33,7 @@ public class WashuSpecimenCollectionGroupLabelPrinterImpl
 	 */
 	@Override
 	List createObjectMap(AbstractDomainObject abstractDomainObject, String printerType,
-			String printerLocation, String ipAddress)
+			String printerLocation, String ipAddress,String loginName)
 	{
 		final List listMap = new ArrayList();
 		if (abstractDomainObject instanceof SpecimenCollectionGroup)
@@ -56,6 +58,21 @@ public class WashuSpecimenCollectionGroupLabelPrinterImpl
 					dataMap.put("class", obj.getClassName());
 					dataMap.put("id", obj.getId().toString());
 					dataMap.put(PrintWebServiceConstants.USER_IPADDRESS, ipAddress);
+					if(obj.getExternalIdentifierCollection() != null && !obj.getExternalIdentifierCollection().isEmpty()){
+						
+						StringBuilder exIds = new StringBuilder(100);
+						for (ExternalIdentifier exId : obj.getExternalIdentifierCollection()) {
+							exIds.append(exId.getName());
+							exIds.append(":");
+							exIds.append(exId.getValue());
+							exIds.append(",");
+						}
+						dataMap.put(PrintWebServiceConstants.EX_ID, exIds.toString());
+					}
+					if (!Validator.isEmpty(loginName))
+					{
+						dataMap.put(PrintWebServiceConstants.LOGIN_NAME, loginName);
+					}
 					if (obj.getClassName() != null)
 					{
 						dataMap.put(PrintWebServiceConstants.SPECIMEN_CLASS, obj.getClassName());
@@ -139,6 +156,28 @@ public class WashuSpecimenCollectionGroupLabelPrinterImpl
 						dataMap.put(PrintWebServiceConstants.PATHOLOGICAL_STATUS, CommonUtilities
 								.toString(obj.getPathologicalStatus()));
 					}
+					
+					 try
+		        {
+		            String participant = obj.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant().getId().toString();
+		            dataMap.put("participant", participant);
+		            String participantF = obj.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant().getFirstName().toString();
+		            String participantL = obj.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant().getLastName().toString();
+		            if(!Validator.isEmpty(participantF)){
+		            	dataMap.put("participantF", participantF);
+		            }
+		            if(!Validator.isEmpty(participantL)){
+		            	dataMap.put("participantL", participantL);
+		            }
+		            System.out.println((new StringBuilder("ParticipantT: ")).append(participant).append(" ").append(participantF).append(" ").append(participantL).toString());
+		        }
+		        catch(Exception e)
+		        {
+		            e.printStackTrace();
+//		            dataMap.put("participant", "null");
+//		            dataMap.put("participantF", "null");
+//		            dataMap.put("participantL", "null");
+		        }
 
 					final String cpTitle = CommonUtilities.toString(obj
 							.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
