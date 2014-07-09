@@ -3025,7 +3025,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
  		
     </changeSet> 
         
-    <!-- <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
+    <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
 	   <createTable tableName="OS_SPECIMEN_PRINT_RULE">
 		 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
 		   <constraints primaryKey="true" nullable="false"/>
