@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.administrative.domain.Department"
-        table="OS_DEPARTMENT"
+        table="CATISSUE_DEPARTMENT"
 	lazy="true">
     
     <cache usage="read-write" />
@@ -18,7 +18,7 @@
             length="30"
             unsaved-value="null">
             <generator class="native">
-                <param name="sequence">OS_DEPARTMENT_SEQ</param>
+                <param name="sequence">CATISSUE_DEPARTMENT_SEQ</param>
             </generator>
         </id>
 
@@ -28,17 +28,17 @@
             column="NAME"
             length="255"/>
             
-         <property
+         <!--property
             name="activityStatus"
             type="string"
             column="ACTIVITY_STATUS"
-            length="64"/>
+            length="64"/-->
             
-        <many-to-one
+        <!--many-to-one
             name="institute"
             class="com.krishagni.catissueplus.core.administrative.domain.Institute"
            	cascade="none"
-            column="INSTITUTE_ID"/>
+            column="INSTITUTE_ID"/-->
         
 		<set
             name="userCollection"
@@ -52,17 +52,14 @@
 
 	<query name="getDepartmentByName">
 		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name 
-		And department.activityStatus != 'Disabled'
 	</query>
 	
 	<query name="getDepartmentById">
 		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.id = :id 
-		And department.activityStatus != 'Disabled'
 	</query>
 	
 	<query name="getDepartmentByNameAndInst">
 		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name 
-		AND department.institute.name = :instName And department.activityStatus != 'Disabled'
 	</query>
     </class>
 </hibernate-mapping>
