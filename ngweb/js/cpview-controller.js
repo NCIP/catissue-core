@@ -2,7 +2,9 @@ angular.module('plus.cpview', [])
 
 .controller('CpViewController', ['$scope', '$window', '$timeout', 'repository',  function($scope, $window, $timeout, repository) {
 
-  $scope.initSel = function(elem, callback){ callback(elem); }
+  $scope.initSel = function(elem, callback){
+    callback(elem);
+  }
   $scope.selectedCp = selectionCp;
   $scope.selectedParticipant = selParticipant;
   $scope.initialTime = undefined;
@@ -23,9 +25,9 @@ angular.module('plus.cpview', [])
     $scope.selectedCp = {id: selected.id, shortTitle: selected.text};
 
     $scope.searchParticipant(selected.id, "", undefined);
-
+    $scope.participantList = [];
     $scope.selectedParticipant={};
-    
+
     $scope.tree=[];
   };
 
@@ -50,7 +52,7 @@ angular.module('plus.cpview', [])
         for (var i = 0; i < result.length; ++i) {
           var participant = {
             id: result[i].id + "," + result[i].cprId,
-            text: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'
+            text: result[i].firstName + "," + result[i].lastName + '(' + result[i].ppId + ')'
           }
           $scope.participantList.push(participant);
         }
