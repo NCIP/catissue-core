@@ -5171,4 +5171,7 @@
 			</classpath>
 		</java>
 	</target>
+	<target name="post_upgrade">
+		<antcall target="aq_form"/>
+	</target>
 </project>

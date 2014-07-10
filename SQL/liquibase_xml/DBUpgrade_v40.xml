@@ -3374,5 +3374,15 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             referencedTableName="CATISSUE_INSTITUTION"
             referencedColumnNames="IDENTIFIER" />
    </changeSet>
-    
+
+  <changeSet id="CREATE USER_VIEW" author="mibrahim" failOnError="true" runOnChange="true">
+    <sql>
+      CREATE OR REPLACE VIEW USER_VIEW AS (
+        SELECT U.IDENTIFIER AS IDENTIFIER, U.FIRST_NAME AS FIRST_NAME, 
+        U.LAST_NAME AS LAST_NAME, U.EMAIL_ADDRESS AS EMAIL_ADDRESS, D.NAME AS DEPARTMENT_NAME 
+      FROM 
+        CATISSUE_USER U JOIN CATISSUE_DEPARTMENT D ON U.DEPARTMENT_ID = D.IDENTIFIER
+      )
+    </sql>
+  </changeSet>    
 </databaseChangeLog>
