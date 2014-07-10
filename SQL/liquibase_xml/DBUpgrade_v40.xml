@@ -3295,7 +3295,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </sql>
     </changeSet>
 
-    <changeSet author="dpatil" id="data migration for inst in new department" failOnError="true" dbms="oracle" >
+    <!--<changeSet author="dpatil" id="data migration for inst in new department" failOnError="true" dbms="oracle" >
       <sql splitStatements="false" endDelimiter="$">
         create or replace  
             PROCEDURE MIGRATE_INSTITUTE_PROC 
@@ -3312,7 +3312,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             END MIGRATE_INSTITUTE_PROC;
     </sql>
     <sql>call MIGRATE_INSTITUTE_PROC();</sql>   
-    </changeSet>
+    </changeSet> -->
 
     <changeSet author="dpatil" id="add unique constraints columns in os_department table" failOnError="true">
           <addUniqueConstraint constraintName="OS_DEPT_INSTID_UNIQUE_KEY"
