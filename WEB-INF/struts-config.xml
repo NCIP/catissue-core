@@ -197,6 +197,15 @@ PUBLIC
 			validate="false" scope="request" parameter="type">
 		</action>
 
+        <action path="/TreeGridInItAction"
+            type="edu.wustl.common.tags.action.TreeGridInItAction" validate="false"
+            scope="session" /> 
+        <action path="/QueryGridInitAction"
+            type="edu.wustl.query.action.QueryGridInitAction" validate="false"
+            scope="session" />
+         <action path="/ShareTagAction"
+            type="edu.wustl.common.tags.action.ShareTagAction" validate="false"
+            scope="session" />
 		<action path="/TitliInitialiseSearch"
 			type="edu.wustl.catissuecore.action.TitliInitialiseSearchAction"
 			name="titliSearchForm" validate="false" scope="request">
@@ -6034,6 +6043,17 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 		<!--  bulk empi operations ends -->
+		<action path="/ShareQueryAjax"
+            type="edu.wustl.query.action.ShareQueryAjaxAction"
+            name="clinicalStudyForm"
+            validate="false"
+            scope="request">
+            <forward name="success" path="/ShareQueryAjax.do" />
+        </action>
+        
+        <action path="/TagGridInItAction" type="edu.wustl.query.action.TagGridInItAction"
+            validate="false" scope="session" />
+            
 		<action path="/GetTreeGridChildAction" type="edu.wustl.common.tags.action.GetTreeGridChildAction"
 			 scope="request" validate="false">
 		</action>
