@@ -62,7 +62,7 @@
 
 	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
-	<property name="cacaore.deployables" value="${cacore.deployable.location}" />
+	<!-- property name="cacaore.deployables" value="${cacore.deployable.location}" /-->
 	
 	<property name="dashboard.csv.dir" value="${base.dir}/insert_dashboard_queries" />
 	<if>
@@ -1409,42 +1409,6 @@
 		</if>
 	</target>
 
-
-	<!-- =================================
-          target: generate.cacore.for.xmi
-         ================================= -->
-	<target name="generate.cacore.for.xmi" depends="" description="description">
-
-		<if>
-			<equals arg1="true" arg2="${enable.de}" />
-			<then>
-				<delete dir="${tempcacore.dir}" />
-				<mkdir dir="${tempcacore.dir}" />
-
-				<delete dir="${export.dir}" />
-				<mkdir dir="${export.dir}" />
-
-				<!-- <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" /> -->
-				<!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
-
-				<!-- <mkdir dir="${cacaore.deployables}" />  -->
-
-				<ant antfile="DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
-					<property name="de.zip.location" value="${temp.dir}/dynamicextensions" /> 
-					<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
-					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
-					<property name="import.xmi" value="False" />
-				</ant>
-
-				<delete file="${base.dir}/log4j.properties" />
-				<delete dir="${tempcacore.dir}" />
-			</then>
-			<else>
-				<echo message="Skipping cacore generation as 'enable.de' property set to false"/>
-			</else>
-		</if>
-		
-	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -
           target: build.catissuecore.war
@@ -3313,7 +3277,7 @@
 
 				<ant antfile="DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
 					<property name="xmi.name" value="${filename}" />
-					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+					<!-- property name="cacore.deployable.dir" value="${cacaore.deployables}" /-->
 					<property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
 					<property name="import.xmi" value="True" />
 				</ant>
