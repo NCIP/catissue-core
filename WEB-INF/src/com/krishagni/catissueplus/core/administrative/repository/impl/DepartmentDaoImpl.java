@@ -17,6 +17,8 @@ public class DepartmentDaoImpl extends AbstractDao<Department> implements Depart
 	
 	private static final String GET_DEPARTMENT_BY_ID = FQN + ".getDepartmentById";
 
+	private static final String GET_DEPARTMENT_BY_NAME_AND_INST = FQN+ ".getDepartmentByNameAndInst";
+
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public Department getDepartment(Long id) {
@@ -33,6 +35,15 @@ public class DepartmentDaoImpl extends AbstractDao<Department> implements Depart
 		query.setString("name", name);
 		List<Department> results = query.list();
 		return results.isEmpty() ? null : results.get(0);
+	}
+
+	@Override
+	public Boolean isUniqueDepartmentInInstitute(String name, String instName) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_DEPARTMENT_BY_NAME_AND_INST);
+		query.setString("name", name);
+		query.setString("instName", instName);
+		List<Department> results = query.list();
+		return results.isEmpty() ? true : false;
 	}
 
 }

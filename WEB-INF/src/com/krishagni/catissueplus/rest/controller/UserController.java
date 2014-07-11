@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
@@ -40,6 +41,7 @@ import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
@@ -135,7 +137,7 @@ public class UserController {
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "close/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public String closeUser(@PathVariable Long id) {
@@ -149,6 +151,34 @@ public class UserController {
 		return null;
 	}
 	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public String disableUser(@PathVariable Long id) {
+		DisableUserEvent event = new DisableUserEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		UserDisabledEvent resp = userService.deleteUser(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	public String disableUser(@PathVariable String name) {
+		DisableUserEvent event = new DisableUserEvent();
+		event.setName(name);
+		event.setSessionDataBean(getSession());
+		UserDisabledEvent resp = userService.deleteUser(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/password")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

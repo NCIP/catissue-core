@@ -197,6 +197,15 @@ PUBLIC
 			validate="false" scope="request" parameter="type">
 		</action>
 
+        <action path="/TreeGridInItAction"
+            type="edu.wustl.common.tags.action.TreeGridInItAction" validate="false"
+            scope="session" /> 
+        <action path="/QueryGridInitAction"
+            type="edu.wustl.query.action.QueryGridInitAction" validate="false"
+            scope="session" />
+         <action path="/ShareTagAction"
+            type="edu.wustl.common.tags.action.ShareTagAction" validate="false"
+            scope="session" />
 		<action path="/TitliInitialiseSearch"
 			type="edu.wustl.catissuecore.action.TitliInitialiseSearchAction"
 			name="titliSearchForm" validate="false" scope="request">
@@ -827,12 +836,7 @@ PUBLIC
 			</action>
 		-->
 
-		<action path="/ViewCart" type="edu.wustl.catissuecore.action.ViewCartAction"
-			name="advanceSearchForm" validate="false" scope="request">
-			<forward name="view" path=".catissuecore.shoppingCartDef" />
-			<forward name="differentCartView" path=".catissuecore.queryResultsSpreadsheetViewDef" />
-			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
-		</action>
+		
 		<action path="/ViewSpecimenList" type="edu.wustl.catissuecore.action.ViewSpecimenList"
 			name="advanceSearchForm" validate="false" scope="request">
 			<forward name="view" path=".catissuecore.specimenShoppingCartDef" />
@@ -6039,6 +6043,17 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 		<!--  bulk empi operations ends -->
+		<action path="/ShareQueryAjax"
+            type="edu.wustl.query.action.ShareQueryAjaxAction"
+            name="clinicalStudyForm"
+            validate="false"
+            scope="request">
+            <forward name="success" path="/ShareQueryAjax.do" />
+        </action>
+        
+        <action path="/TagGridInItAction" type="edu.wustl.query.action.TagGridInItAction"
+            validate="false" scope="session" />
+            
 		<action path="/GetTreeGridChildAction" type="edu.wustl.common.tags.action.GetTreeGridChildAction"
 			 scope="request" validate="false">
 		</action>

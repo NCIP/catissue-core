@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProt
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.util.PpidGenerator;
@@ -290,7 +291,7 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 
 	@Override
 	public CollectionProtocolRegistration patchCpr(CollectionProtocolRegistration oldCpr,
-			CollectionProtocolRegistrationDetail detail) {
+			CollectionProtocolRegistrationPatchDetail detail) {
 		ObjectCreationException exception = new ObjectCreationException();
 	if(detail.isActivityStatusModified()){
 		setActivityStatus(oldCpr, detail.getActivityStatus(), exception);

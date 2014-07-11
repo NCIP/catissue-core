@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -208,71 +207,71 @@ public class SpecimenLabelPrinterFactoryImpl implements SpecimenLabelPrinterFact
 			}
 
 			else if (dataOnLabel.equalsIgnoreCase(PATHOLOGICAL_STATUS)) {
-				stringBuilder.append(DisplayPrintLabelType.PATHOLOGICAL_STATUS + " = \"" + specimen.getPathologicalStatus()
+				stringBuilder.append(DisplayPrintLabelType.PATHOLOGICAL_STATUS.value() + " = \"" + specimen.getPathologicalStatus()
 						+ "\"" + NEWLINE);
 			}
 			
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_IDENTIFIER)) {
-				stringBuilder.append(DisplayPrintLabelType.IDENTIFIER + " = \"" + specimen.getPathologicalStatus()
+				stringBuilder.append(DisplayPrintLabelType.IDENTIFIER.value() + " = \"" + specimen.getPathologicalStatus()
 						+ "\"" + NEWLINE);
 			}
 			
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_LINEAGE)) {
-				stringBuilder.append(DisplayPrintLabelType.LINEAGE + " = \"" + specimen.getLineage() + "\"" + NEWLINE);
+				stringBuilder.append(DisplayPrintLabelType.LINEAGE.value() + " = \"" + specimen.getLineage() + "\"" + NEWLINE);
 			}
 
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_COMMENT)) {
-				stringBuilder.append(DisplayPrintLabelType.COMMENT + " = \"" + specimen.getComment() + "\"" + NEWLINE);
+				stringBuilder.append(DisplayPrintLabelType.COMMENT.value() + " = \"" + specimen.getComment() + "\"" + NEWLINE);
 			}
 
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_COLLECTION_STATUS)) {
-				stringBuilder.append(DisplayPrintLabelType.COLLECTION_STATUS + " = \"" + specimen.getCollectionStatus() + "\""
+				stringBuilder.append(DisplayPrintLabelType.COLLECTION_STATUS.value() + " = \"" + specimen.getCollectionStatus() + "\""
 						+ NEWLINE);
 			}
 
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_CREATED_ON)) {
-				stringBuilder.append(DisplayPrintLabelType.CREATED_ON + " = \"" + specimen.getCreatedOn() + "\"" + NEWLINE);
+				stringBuilder.append(DisplayPrintLabelType.CREATED_ON.value() + " = \"" + specimen.getCreatedOn() + "\"" + NEWLINE);
 			}
 
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_TISSUE_SITE)) {
-				stringBuilder.append(DisplayPrintLabelType.TISSUE_SITE + " = \"" + specimen.getTissueSite() + "\"" + NEWLINE);
+				stringBuilder.append(DisplayPrintLabelType.TISSUE_SITE.value() + " = \"" + specimen.getTissueSite() + "\"" + NEWLINE);
 			}
 
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_STORAGE_CONTAINER_NAME)){ 
-				stringBuilder.append(DisplayPrintLabelType.STORAGE_CONTAINER_NAME + " = \"" + CommonUtilities
+				stringBuilder.append(DisplayPrintLabelType.STORAGE_CONTAINER_NAME.value() + " = \"" + CommonUtilities
 						.toString(specimen.getSpecimenPosition().getStorageContainer().getName()) + "\"" + NEWLINE);
 			}
 			
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_POSITION_DIMENSION_ONE)){ 
-				stringBuilder.append(DisplayPrintLabelType.POSITION_DIMENSION_ONE + " = \"" + CommonUtilities
+				stringBuilder.append(DisplayPrintLabelType.POSITION_DIMENSION_ONE.value() + " = \"" + CommonUtilities
 						.toString(specimen.getSpecimenPosition().getPositionDimensionOne()) + "\"" + NEWLINE);
 			}
 			
 			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_POSITION_DIMENSION_TWO)){ 
-				stringBuilder.append(DisplayPrintLabelType.POSITION_DIMENSION_TWO + " = \"" + CommonUtilities
+				stringBuilder.append(DisplayPrintLabelType.POSITION_DIMENSION_TWO.value() + " = \"" + CommonUtilities
 						.toString(specimen.getSpecimenPosition().getPositionDimensionTwo()) + "\"" + NEWLINE);
 			}
 			
 		}
 
 		if (printRule.getPrinterName() != null) {
-			stringBuilder.append(DisplayPrintLabelType.DISPLAY_PRINTER + " = \"" + printRule.getPrinterName() + "\""
+			stringBuilder.append(DisplayPrintLabelType.DISPLAY_PRINTER.value() + " = \"" + printRule.getPrinterName() + "\""
 					+ NEWLINE);
 		}
 		
 		String cpTitle = CommonUtilities.toString(specimen.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle());
 		
-		stringBuilder.append(DisplayPrintLabelType.CP_TITLE + " = \"" + cpTitle + "\"" + NEWLINE);
+		stringBuilder.append(DisplayPrintLabelType.CP_TITLE.value() + " = \"" + cpTitle + "\"" + NEWLINE);
 		
 		String ppi = CommonUtilities.toString(specimen.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
 		
 		if (ppi != null && !ppi.equals("")){
-			stringBuilder.append(DisplayPrintLabelType.PARTICIPANT_PROTOCOL_IDENTIFIER + " = \"" + ppi + "\"" + NEWLINE);
+			stringBuilder.append(DisplayPrintLabelType.PARTICIPANT_PROTOCOL_IDENTIFIER.value() + " = \"" + ppi + "\"" + NEWLINE);
 		}
 
-		stringBuilder.append(DisplayPrintLabelType.DISPLAY_LABELQUANTITY + " = \"1\"" + NEWLINE);
+		stringBuilder.append(DisplayPrintLabelType.DISPLAY_LABELQUANTITY.value() + " = \"1\"" + NEWLINE);
 		stringBuilder.append(END + NEWLINE);
 
 		return stringBuilder.toString();

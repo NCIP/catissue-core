@@ -501,6 +501,15 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
+	
+	@Test
+	public void testStorageContainerDisableWithReference() {
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(StorageContainerTestData.getStorageContainerForDisable(1l));
+		DisableStorageContainerEvent reqEvent = StorageContainerTestData.getDisableStorageContainerEventForName();
+		StorageContainerDisabledEvent response = storageContainerService.disableStorageContainer(reqEvent);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+		assertEquals(StorageContainerErrorCode.REFERENCED_ATTRIBUTE.message(), response.getMessage());
+	}
 
 	@Test
 	public void testForInvalidStorageContainerDisable() {

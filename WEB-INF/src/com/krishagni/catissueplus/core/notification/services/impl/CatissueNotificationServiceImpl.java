@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -105,11 +107,11 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 
 	private PatchRegistrationEvent createPatchRegistartionEvent(RegisterParticipantEvent registerPartEvent, Long cpId) {
 		PatchRegistrationEvent patchRegistrationEvent = new PatchRegistrationEvent();
-		CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
+		CollectionProtocolRegistrationPatchDetail cprDetail = new CollectionProtocolRegistrationPatchDetail();
 		cprDetail.setRegistrationDate(registerPartEvent.getRegistrationDetails().getEnrollmentDate());
 		cprDetail.setPpid(registerPartEvent.getRegistrationDetails().getPpId());
 		cprDetail.setCpId(cpId);
-		ParticipantDetail participantDetail = new ParticipantDetail();
+		ParticipantPatchDetail participantDetail = new ParticipantPatchDetail();
 		participantDetail.setBirthDate(registerPartEvent.getRegistrationDetails().getBirthDate());
 		participantDetail.setGender(registerPartEvent.getRegistrationDetails().getGender());
 		cprDetail.setParticipantDetail(participantDetail);

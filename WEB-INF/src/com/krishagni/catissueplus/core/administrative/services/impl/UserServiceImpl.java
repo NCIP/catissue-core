@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory
 import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
@@ -26,6 +27,7 @@ import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
@@ -147,6 +149,30 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PlusTransactional
+	public UserDisabledEvent deleteUser(DisableUserEvent event) {
+		try {
+			User user =  null;
+			if(event.getName() != null) {	
+				user =	daoFactory.getUserDao().getUserByLoginNameAndDomainName(event.getName(), CATISSUE);
+				if (user == null) {
+					return UserDisabledEvent.notFound(event.getId());
+				}
+			}else {
+				user =	daoFactory.getUserDao().getUser(event.getId());
+			if (user == null) {
+				return UserDisabledEvent.notFound(event.getId());
+			}}
+			user.delete();
+			daoFactory.getUserDao().saveOrUpdate(user);
+			return UserDisabledEvent.ok();
+		}
+		catch (Exception e) {
+			return UserDisabledEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public PasswordUpdatedEvent changePassword(UpdatePasswordEvent event) {
 		try {
 			Long userId = event.getPasswordDetails().getUserId();
@@ -209,8 +235,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PasswordValidatedEvent validatePassword(ValidatePasswordEvent event) {
-			Boolean isValid = Password.isValidPasswordPattern(event.getPassword());
-			return PasswordValidatedEvent.ok(isValid);
+		Boolean isValid = User.isValidPasswordPattern(event.getPassword());
+		return PasswordValidatedEvent.ok(isValid);
 	}
 
 	@Override

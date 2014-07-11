@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.printer.printRule.domain.SpecimenPrintRule"
-        table="CATISSUE_SPECIMEN_PRINT_RULE"
+        table="OS_SPECIMEN_PRINT_RULE"
         lazy="true">
 	
     	<cache usage="read-write" />
@@ -18,7 +18,7 @@
             length="30"
             unsaved-value="null">
             <generator class="native">
-                <param name="sequence">CATISSUE_PRINT_RULE_SEQ</param>
+                <param name="sequence">OS_PRINT_RULE_SEQ</param>
             </generator>
         </id>
 

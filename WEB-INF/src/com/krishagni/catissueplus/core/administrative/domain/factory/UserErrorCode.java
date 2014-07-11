@@ -17,6 +17,7 @@ public enum UserErrorCode implements CatissueErrorCode{
 	DUPLICATE_EMAIL(1214,"User with the same email address is already present in the system."), 
 	BAD_REQUEST(1215, "Bad Request"), 
 	DUPLICATE_DEPARTMENT_NAME(1216, "Department with the same name is already present in the system."),
+	REFERENCED_ATTRIBUTE(1220, "Attribute with reference cannot be disabled."),
 	DUPLICATE_INSTITUTE_NAME(1217, "Institute with the same name is already present in the system.");
 
 	private int code;

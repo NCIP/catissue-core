@@ -69,12 +69,6 @@ public class SpecimenDetail {
 
 	private List<BiohazardDetail> biohazardDetails = new ArrayList<BiohazardDetail>();
 
-	private List<String> modifiedAttributes = new ArrayList<String>();
-
-	public void setModifiedAttributes(List<String> modifiedAttributes) {
-		this.modifiedAttributes = modifiedAttributes;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -291,88 +285,12 @@ public class SpecimenDetail {
 		this.biohazardDetails = biohazardDetails;
 	}
 
-	public boolean isTissueSideModified() {
-		return modifiedAttributes.contains("tissueSide");
-	}
-
-	public boolean isTissueSiteModified() {
-		return modifiedAttributes.contains("tissueSite");
-	}
-
-	public boolean isPathologicalStatusModified() {
-		return modifiedAttributes.contains("pathologicalStatus");
-	}
-
-	public boolean isLineageModified() {
-		return modifiedAttributes.contains("lineage");
-	}
-
-	public boolean isInitialQuantityModified() {
-		return modifiedAttributes.contains("initialQuantity");
-	}
-
-	public boolean isSpecimenClassModified() {
-		return modifiedAttributes.contains("specimenClass");
-	}
-
-	public boolean isSpecimenTypeModified() {
-		return modifiedAttributes.contains("specimenType");
-	}
-
 	public Boolean isPrintLabelsEnabled() {
 		return enablePrintLabels;
 	}
 
 	public void setEnablePrintLabels(Boolean enablePrintLabels) {
 		this.enablePrintLabels = enablePrintLabels;
-	}
-
-	public boolean isLabelModified() {
-		return modifiedAttributes.contains("label");
-	}
-
-	public boolean isActivityStatusModified() {
-		return modifiedAttributes.contains("activityStatus");
-	}
-
-	public boolean isBarcodeModified() {
-		return modifiedAttributes.contains("barcode");
-	}
-
-	public boolean isCreatedOnModified() {
-		return modifiedAttributes.contains("createdOn");
-	}
-
-	public boolean isCommentModified() {
-		return modifiedAttributes.contains("comment");
-	}
-
-	public boolean isCollectionStatusModified() {
-		return modifiedAttributes.contains("collectionStatus");
-	}
-
-	public boolean isAvailableQuantityModified() {
-		return modifiedAttributes.contains("availableQuantity");
-	}
-
-	public boolean isContainerNameModified() {
-		return modifiedAttributes.contains("containerName");
-	}
-
-	public boolean isPos1Modified() {
-		return modifiedAttributes.contains("pos1");
-	}
-
-	public boolean isPos2Modified() {
-		return modifiedAttributes.contains("pos2");
-	}
-
-	public boolean isExternalIdentifierDetailsModified() {
-		return modifiedAttributes.contains("externalIdentifierDetails");
-	}
-
-	public boolean isBiohazardDetailsModified() {
-		return modifiedAttributes.contains("biohazardDetails");
 	}
 
 	public static SpecimenDetail fromDomain(Specimen specimen) {

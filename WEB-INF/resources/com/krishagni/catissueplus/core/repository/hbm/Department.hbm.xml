@@ -25,33 +25,41 @@
         <property
             name="name"
             type="string"
-            update="true"
-            insert="true"
             column="NAME"
-            length="255"
-            not-null="true"
-            unique="true"/>
+            length="255"/>
             
-        <set
-            name="institutes"
-            table="CATISSUE_DEPARTMENT_INSTITUTES"
-            inverse="false"
-            cascade="save-update">
+         <!--property
+            name="activityStatus"
+            type="string"
+            column="ACTIVITY_STATUS"
+            length="64"/-->
+            
+        <!--many-to-one
+            name="institute"
+            class="com.krishagni.catissueplus.core.administrative.domain.Institute"
+           	cascade="none"
+            column="INSTITUTE_ID"/-->
+        
+		<set
+            name="userCollection"
+            table="OS_USER">
 
+        	<cache usage="read-write"/>
             <key column="DEPARTMENT_ID"/>
-            <many-to-many
-                class="com.krishagni.catissueplus.core.administrative.domain.Institute"
-                column="INSTITUTE_ID"/>
-         </set>
-      
+            <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.User" />
+
+        </set>
 
 	<query name="getDepartmentByName">
-		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name
+		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name 
 	</query>
 	
 	<query name="getDepartmentById">
-		FROM com.krishagni.catissueplus.core.administrative.domain.Department department 
-		JOIN fetch department.institutes WHERE department.id = :id
+		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.id = :id 
+	</query>
+	
+	<query name="getDepartmentByNameAndInst">
+		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name 
 	</query>
     </class>
 </hibernate-mapping>

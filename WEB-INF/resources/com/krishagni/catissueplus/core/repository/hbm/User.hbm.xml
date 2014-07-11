@@ -111,7 +111,6 @@
                 class="com.krishagni.catissueplus.core.administrative.domain.Site"
                 column="SITE_ID"/>
          </set>
-        
 	
 		<set
             name="passwordCollection"
@@ -148,19 +147,29 @@
 	</query>
 	
 	<query name="getUserByIdAndDomain">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.id = :userId AND user.authDomain.name = :domainName
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.id = :userId 
+		AND user.authDomain.name = :domainName 
+		AND user.activityStatus != 'Disabled' 
 	</query>
 	
-	<query name="getUserByLoginNameAndDomainName">
-		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName AND user.authDomain.name = :domainName
+	<query name="getUser">
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName 
+		AND user.authDomain.name = :domainName  
+		AND user.activityStatus != 'Disabled' 
+	</query>
+	
+	<query name="getActiveUser">
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.loginName = :loginName 
+		AND user.authDomain.name = :domainName  
+		AND user.activityStatus = 'Active' 
 	</query>
 
 	<query name="getUsersById">
-		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds)
-        </query>
+		from com.krishagni.catissueplus.core.administrative.domain.User where id in (:userIds) AND activityStatus != 'Disabled'
+    </query>
 
-        <query name="getAllUsers">
-          from com.krishagni.catissueplus.core.administrative.domain.User
-        </query>
+    <query name="getAllUsers">
+        from com.krishagni.catissueplus.core.administrative.domain.User where activityStatus != 'Disabled'
+    </query>
    </class>
 </hibernate-mapping>

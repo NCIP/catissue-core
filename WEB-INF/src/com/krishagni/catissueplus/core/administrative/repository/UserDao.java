@@ -20,11 +20,11 @@ public interface UserDao extends Dao<User> {
 
 	List<String> getOldPasswords(Long id);
 
-	List<String> getOldPasswordsByLoginName(String loginName);
-	
 	Boolean isUniqueLoginNameInDomain(String loginName, String domainName);
 	
 	User getUserByLoginNameAndDomainName(String loginName, String domainName);
 
 	List<User> getUsersById(List<Long> userIds);
+	
+	User getActiveUser(String loginId, String domainName);
 }

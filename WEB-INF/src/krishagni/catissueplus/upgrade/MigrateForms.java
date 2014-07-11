@@ -48,6 +48,8 @@ public class MigrateForms {
 			"from catissue_user " +
 			"	where login_name = ? AND activity_status = 'Active'";
 	
+	private static final String FORMS_COUNT_SQL = 
+			"select count(identifier) from dyextn_containers";
 	
 	public static void main(String[] args) 
 	throws Exception {
@@ -58,6 +60,13 @@ public class MigrateForms {
 		}
 		
 		setupDataSource();
+		
+		if (!areLegacyFormsMigrated()) {
+			System.out.println("Forms have been migrated to V4 (OS v1.0), skipping form migration!");
+			logger.info("Forms have been already migrated to V4 (OS v1.0), skipping form migration!");
+			return;
+		}
+		System.out.println("Starting migration of forms.");
 		UserContext usrCtx = getUserContext(args[0]);
 		
 		Date startTime = Calendar.getInstance().getTime();
@@ -124,6 +133,26 @@ public class MigrateForms {
 		
 		String fileUploadDir = prop.getProperty("de.fileUploadDir");
 		DEApp.init(ds, fileUploadDir);
+	}
+	
+	private static boolean areLegacyFormsMigrated() { 
+		JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
+		
+		Integer formsCount = jdbcDao.getResultSet(FORMS_COUNT_SQL, new ArrayList<Object>(),new ResultExtractor<Integer>() {
+			@Override
+			public Integer extract(ResultSet rs) throws SQLException {
+				return rs.next() ? rs.getInt(1) : null;
+			}			
+		});
+		
+		System.out.println("Found " + formsCount + " existing forms in DYEXTN_CONTAINERS!");
+		logger.info("Found " + formsCount + " existing forms in DYEXTN_CONTAINERS!");
+		
+		if (formsCount > 0) { 
+			return false;
+		} else { 
+			return true;
+		}
 	}
 
 	private static UserContext getUserContext(final String username) {

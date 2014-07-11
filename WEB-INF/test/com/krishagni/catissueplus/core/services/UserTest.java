@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFa
 import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.ForgotPasswordEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.PasswordForgottenEvent;
@@ -33,6 +34,7 @@ import com.krishagni.catissueplus.core.administrative.events.UpdateUserEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserClosedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserDetails;
+import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
@@ -331,7 +333,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void testForInvalidUserDisable() {
+	public void testForInvalidUserClose() {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(null);
 		CloseUserEvent reqEvent = UserTestData.getCloseUserEvent();
 		reqEvent.setSessionDataBean(UserTestData.getSessionDataBean());
@@ -362,6 +364,43 @@ public class UserTest {
 	}
 
 	@Test
+	public void testForInvalidUserDisable() {
+		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(null);
+		DisableUserEvent reqEvent = UserTestData.getDisableUserEvent();
+		UserDisabledEvent response = userService.deleteUser(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testForInvalidUserDisableWithName() {
+		when(userDao.getUserByLoginNameAndDomainName(anyString(),anyString())).thenReturn(null);
+		DisableUserEvent reqEvent = UserTestData.getDisableUserEventForName();
+		UserDisabledEvent response = userService.deleteUser(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testSuccessfulUserDisable() {
+		DisableUserEvent reqEvent = UserTestData.getDisableUserEvent();
+		User userToDelete = UserTestData.getUser(1L);
+		when(userDao.getUser(anyLong())).thenReturn(userToDelete);
+		UserDisabledEvent response = userService.deleteUser(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(UserTestData.ACTIVITY_STATUS_DISABLED, userToDelete.getActivityStatus());
+	}
+
+	@Test
+	public void testUserDisableWithServerErr() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1l));
+		DisableUserEvent reqEvent = UserTestData.getDisableUserEvent();
+		doThrow(new RuntimeException()).when(userDao).saveOrUpdate(any(User.class));
+		UserDisabledEvent response = userService.deleteUser(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
 	public void testUserCreationWithInvalidDepartment() {
 		CreateUserEvent reqEvent = UserTestData.getCreateUserEventForUserCreation();
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
@@ -374,7 +413,7 @@ public class UserTest {
 
 	}
 
-	@Test
+	/*@Test
 	public void testSuccessfullPasswordSet() {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(UserTestData.getUserWithCatissueDomain(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEvent();
@@ -382,7 +421,7 @@ public class UserTest {
 		PasswordUpdatedEvent response = userService.setPassword(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-	}
+	}*/
 
 	@Test
 	public void testPasswordSetWithBlankNewPassword() {
@@ -464,7 +503,7 @@ public class UserTest {
 		assertEquals(UserErrorCode.INVALID_ATTR_VALUE.message(), response.getMessage());
 	}
 	
-	@Test
+	/*@Test
 	public void testSuccessfullPasswordReset() {
 		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(UserTestData.getUserWithCatissueDomain(1L));
 		UpdatePasswordEvent reqEvent = UserTestData.getUpdatePasswordEventForReSet();
@@ -473,7 +512,7 @@ public class UserTest {
 		PasswordUpdatedEvent response = userService.changePassword(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-	}
+	}*/
 
 	@Test
 	public void testSuccessfullPasswordSetWithDiffTokens() {

@@ -7,7 +7,7 @@ public class PatchStorageContainerEvent extends RequestEvent {
 
 	private Long storageContainerId;
 
-	private StorageContainerDetails storageContainerDetails;
+	private StorageContainerPatchDetails storageContainerDetails;
 
 	public Long getStorageContainerId() {
 		return storageContainerId;
@@ -17,11 +17,11 @@ public class PatchStorageContainerEvent extends RequestEvent {
 		this.storageContainerId = storageContainerId;
 	}
 
-	public StorageContainerDetails getStorageContainerDetails() {
+	public StorageContainerPatchDetails getStorageContainerDetails() {
 		return storageContainerDetails;
 	}
 
-	public void setStorageContainerDetails(StorageContainerDetails storageContainerDetails) {
+	public void setStorageContainerDetails(StorageContainerPatchDetails storageContainerDetails) {
 		this.storageContainerDetails = storageContainerDetails;
 	}
 

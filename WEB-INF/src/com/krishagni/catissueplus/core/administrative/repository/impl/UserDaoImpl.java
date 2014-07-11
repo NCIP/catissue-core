@@ -12,13 +12,13 @@ import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAllUsers() {
 		return sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_USERS).list();
 	}
 
-	
 	@Override
 	public User getUser(Long id) {
 		return (User) sessionFactory.getCurrentSession().get(User.class, id);
@@ -42,14 +42,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	public List<String> getOldPasswords(Long id) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_OLD_PASSWORD_BY_USER_ID);
 		query.setLong("userId", id);
-		return query.list();
-	}
-
-	@Override
-	@SuppressWarnings(value = {"unchecked"})
-	public List<String> getOldPasswordsByLoginName(String loginName) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_OLD_PASSWORD_BY_LOGIN_NAME);
-		query.setString("loginName", loginName);
 		return query.list();
 	}
 
@@ -93,6 +85,14 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return query.setParameterList("userIds", userIds).list();
 	}
 
+	@Override
+	public User getActiveUser(String loginId, String domainName) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ACTIVE_USER);
+		query.setString("loginName", loginId);
+		query.setString("domainName", domainName);
+		List<User> result = query.list();
+		return result.isEmpty() ? null : result.get(0);
+	}
 
 	private static final String FQN = User.class.getName();
 
@@ -100,13 +100,14 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	private static final String GET_USER_BY_EMAIL_ADDRESS = FQN + ".getUserByEmailAddress";
 	
-	private static final String GET_USER_BY_LOGIN_NAME_AND_DOMAIN = FQN + ".getUserByLoginNameAndDomainName";
+	private static final String GET_USER_BY_LOGIN_NAME_AND_DOMAIN = FQN + ".getUser";
 
 	private static final String GET_OLD_PASSWORD_BY_USER_ID = Password.class.getName() + ".getOldPasswordByUserId";
-
-	private static final String GET_OLD_PASSWORD_BY_LOGIN_NAME = Password.class.getName() + ".getOldPasswordByLoginName";
 
 	private static final String GET_USERS_BY_ID = FQN + ".getUsersById";
 	
 	private static final String GET_ALL_USERS = FQN + ".getAllUsers";
+	
+	private static final String GET_ACTIVE_USER = FQN+ ".getActiveUser";
+
 }

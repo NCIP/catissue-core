@@ -209,7 +209,9 @@ public class UserDetails {
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
 
-		userDto.setDeptName(user.getDepartment().getName());
+		if (user.getDepartment() != null) {
+			userDto.setDeptName(user.getDepartment().getName());
+		}
 		userDto.setActivityStatus(user.getActivityStatus());
 		userDto.setEmailAddress(user.getEmailAddress());
 		userDto.setId(user.getId());
@@ -221,7 +223,10 @@ public class UserDetails {
 		}
 		setUserCPRoles(userDto, user.getUserCPRoles());
 		setUserSiteNames(userDto, user.getUserSites());	
-		updateAddressDetails(userDto, user.getAddress());
+		
+		if(user.getAddress() != null){ 
+			updateAddressDetails(userDto, user.getAddress());
+		}
 		return userDto;
 	}
 

@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.BiohazardDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ExternalIdentifierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -86,7 +87,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	@Override
-	public Specimen patch(Specimen specimen, SpecimenDetail detail) {
+	public Specimen patch(Specimen specimen, SpecimenPatchDetail detail) {
 		ObjectCreationException exceptionHandler = new ObjectCreationException();
 		if (detail.isTissueSiteModified()) {
 			setTissueSite(detail.getTissueSite(), specimen, exceptionHandler);

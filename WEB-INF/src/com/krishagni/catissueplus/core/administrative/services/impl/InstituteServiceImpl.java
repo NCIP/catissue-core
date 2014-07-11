@@ -3,13 +3,14 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetails;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
@@ -82,6 +83,32 @@ public class InstituteServiceImpl implements InstituteService {
 		}
 		catch (Exception e) {
 			return InstituteUpdatedEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public InstituteDisabledEvent deleteInstitute(DisableInstituteEvent event) {
+		try {
+			Institute institute = null;
+			if (event.getName() != null) {
+				institute = daoFactory.getInstituteDao().getInstituteByName(event.getName());
+				if (institute == null) {
+					return InstituteDisabledEvent.notFound(event.getId());
+				}
+			}
+			else {
+				institute = daoFactory.getInstituteDao().getInstitute(event.getId());
+				if (institute == null) {
+					return InstituteDisabledEvent.notFound(event.getId());
+				}
+			}
+			institute.delete();
+			daoFactory.getInstituteDao().saveOrUpdate(institute);
+			return InstituteDisabledEvent.ok();
+		}
+		catch (Exception e) {
+			return InstituteDisabledEvent.serverError(e);
 		}
 	}
 

@@ -7,7 +7,7 @@ public class PatchSpecimenEvent extends RequestEvent {
 
 	private Long id;
 
-	private SpecimenDetail detail;
+	private SpecimenPatchDetail detail;
 
 	public Long getId() {
 		return id;
@@ -17,11 +17,11 @@ public class PatchSpecimenEvent extends RequestEvent {
 		this.id = id;
 	}
 
-	public SpecimenDetail getDetail() {
+	public SpecimenPatchDetail getDetail() {
 		return detail;
 	}
 
-	public void setDetail(SpecimenDetail detail) {
+	public void setDetail(SpecimenPatchDetail detail) {
 		this.detail = detail;
 	}
 

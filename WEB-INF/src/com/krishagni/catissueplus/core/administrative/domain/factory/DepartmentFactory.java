@@ -7,4 +7,5 @@ import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 public interface DepartmentFactory {
 
 	public Department createDepartment(DepartmentDetails details);
+
 }

@@ -1019,5 +1019,8 @@ Helpdesk Phone : @@contact.number@@</value>
         <name>label.print.file.dir</name>
         <value>/printer</value>
     </property>
-    
+    <property>
+        <name>"bcrypt.salt.windings"</name>
+        <value>4</value>
+    </property>
 </properties>

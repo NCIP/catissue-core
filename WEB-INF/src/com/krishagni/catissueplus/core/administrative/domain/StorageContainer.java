@@ -1,9 +1,13 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.SetUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -11,6 +15,8 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class StorageContainer {
 
 	private static final String NUMBERS = "Numbers";
+
+	private static final String STORAGE_CONTAINER = "storage container";
 
 	private Long id;
 
@@ -29,6 +35,8 @@ public class StorageContainer {
 	private User createdBy;
 
 	private Set<CollectionProtocol> holdsCPs = new HashSet<CollectionProtocol>();
+
+	private Set<StorageContainer> childContainers = new HashSet<StorageContainer>();
 
 	private Set<String> holdsSpecimenTypes = new HashSet<String>();
 
@@ -106,6 +114,14 @@ public class StorageContainer {
 		this.createdBy = createdBy;
 	}
 
+	public Set<StorageContainer> getChildContainers() {
+		return childContainers;
+	}
+
+	public void setChildContainers(Set<StorageContainer> childContainers) {
+		this.childContainers = childContainers;
+	}
+
 	public Set<CollectionProtocol> getHoldsCPs() {
 		return holdsCPs;
 	}
@@ -176,19 +192,15 @@ public class StorageContainer {
 		this.setSite(storageContainer.getSite());
 		this.setOneDimentionLabelingScheme(storageContainer.getOneDimentionLabelingScheme());
 		this.setTwoDimentionLabelingScheme(storageContainer.getTwoDimentionLabelingScheme());
-		
+
 		SetUpdater.<CollectionProtocol> newInstance().update(this.getHoldsCPs(), storageContainer.getHoldsCPs());
 		SetUpdater.<String> newInstance().update(this.getHoldsSpecimenTypes(), storageContainer.getHoldsSpecimenTypes());
 	}
 
 	public void disable() {
+		if (!this.getChildContainers().isEmpty()) {
+			reportError(StorageContainerErrorCode.REFERENCED_ATTRIBUTE, STORAGE_CONTAINER);
+		}
 		this.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
-
-	public void patch(StorageContainer storageContainer) {
-		if (!this.getActivityStatus().equals(storageContainer.getActivityStatus())) {
-			this.setActivityStatus(storageContainer.getActivityStatus());
-		}
-	}
-
 }

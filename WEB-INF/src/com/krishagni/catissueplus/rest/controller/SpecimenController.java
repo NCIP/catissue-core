@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEven
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -115,7 +116,7 @@ public class SpecimenController {
 	@ResponseBody
 	public SpecimenDetail patchSpecimen(@PathVariable Long id, @RequestBody Map<String, Object> specimenProps) {
 		PatchSpecimenEvent event = new PatchSpecimenEvent();
-		SpecimenDetail detail = new SpecimenDetail();
+		SpecimenPatchDetail detail = new SpecimenPatchDetail();
 		try {
 			BeanUtils.populate(detail, specimenProps);
 		}

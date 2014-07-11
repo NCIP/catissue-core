@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
@@ -124,7 +125,7 @@ public class CollectionProtocolRegistrationController {
 	public CollectionProtocolRegistrationDetail patchRegistration(@PathVariable Long id,
 			@RequestBody Map<String, Object> regProps) {
 		PatchRegistrationEvent event = new PatchRegistrationEvent();
-		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
+		CollectionProtocolRegistrationPatchDetail detail = new CollectionProtocolRegistrationPatchDetail();
 		try {
 			BeanUtils.populate(detail, regProps);
 		}

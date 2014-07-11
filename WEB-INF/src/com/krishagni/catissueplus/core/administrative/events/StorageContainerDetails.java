@@ -43,64 +43,6 @@ public class StorageContainerDetails {
 
 	private String twoDimentionLabelingScheme;
 
-	private List<String> modifiedAttributes = new ArrayList<String>();
-
-	public boolean isNameModified() {
-		return modifiedAttributes.contains("name");
-	}
-
-	public boolean isBarcodeModified() {
-		return modifiedAttributes.contains("barcode");
-	}
-
-	public boolean isActivityStatusModified() {
-		return modifiedAttributes.contains("activityStatus");
-	}
-
-	public boolean isTempratureModified() {
-		return modifiedAttributes.contains("tempratureInCentigrade");
-	}
-
-	public boolean isSiteNameModified() {
-		return modifiedAttributes.contains("siteName");
-	}
-
-	public boolean isParentContainerNameModified() {
-		return modifiedAttributes.contains("parentContainerName");
-	}
-
-	public boolean isCreatedByModified() {
-		return modifiedAttributes.contains("createdBy");
-	}
-
-	public boolean isHoldsCPTitlesModified() {
-		return modifiedAttributes.contains("holdsCPTitles");
-	}
-
-	public boolean isHoldsSpecimenTypesModified() {
-		return modifiedAttributes.contains("holdsSpecimenTypes");
-	}
-
-	public boolean isCommentsModified() {
-		return modifiedAttributes.contains("comments");
-	}
-
-	public boolean isOneDimensionCapacityModified() {
-		return modifiedAttributes.contains("oneDimensionCapacity");
-	}
-
-	public boolean isTwoDimensionCapacityModified() {
-		return modifiedAttributes.contains("twoDimensionCapacity");
-	}
-
-	public boolean isTwoDimentionLabelingSchemeModified() {
-		return modifiedAttributes.contains("twoDimentionLabelingScheme");
-	}
-
-	public boolean isOneDimentionLabelingSchemeModified() {
-		return modifiedAttributes.contains("oneDimentionLabelingScheme");
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -203,14 +145,6 @@ public class StorageContainerDetails {
 
 	public void setCreatedBy(UserInfo createdBy) {
 		this.createdBy = createdBy;
-	}
-
-	public List<String> getModifiedAttributes() {
-		return modifiedAttributes;
-	}
-
-	public void setModifiedAttributes(List<String> modifiedAttributes) {
-		this.modifiedAttributes = modifiedAttributes;
 	}
 
 	public String getOneDimentionLabelingScheme() {
