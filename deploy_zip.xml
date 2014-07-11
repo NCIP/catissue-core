@@ -85,7 +85,7 @@
 
     <property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
     <property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
-    <property name="cacaore.deployables" value="${cacore.deployable.location}" />
+    <!-- property name="cacaore.deployables" value="${cacore.deployable.location}" /-->
 
     <property name="csm.database.type" value="${database.type}"/>
     <property name="csm.database.host" value="${database.host}"/>
@@ -1342,40 +1342,7 @@
     </target>
 
 
-    <!-- =================================
-          target: generate.cacore.for.xmi
-         ================================= -->
-    <target name="generate.cacore.for.xmi" depends="" description="description">
-
-        <if>
-        <equals arg1="true" arg2="${enable.de}" />
-        <then>
-            <delete dir="${tempcacore.dir}" />
-            <mkdir dir="${tempcacore.dir}" />
     
-            <delete dir="${export.dir}" />
-            <mkdir dir="${export.dir}" />
-    
-            <!-- <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" /> -->
-            <!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
-    
-            <!-- <mkdir dir="${cacaore.deployables}" />  -->
-    
-            <ant antfile="${base.dir}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
-                <property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
-                <property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
-                <property name="cacore.deployable.dir" value="${cacaore.deployables}" />
-                <property name="import.xmi" value="False" />
-            </ant>
-            <delete file="${base.dir}/log4j.properties" />
-            <delete dir="${tempcacore.dir}" />
-        </then>
-        <else>
-            <echo message="Skipping cacore generation as 'enable.de' property set to false"/>
-        </else>
-    </if>
-    </target>
-
     <!-- - - - - - - - - - - - - - - - - -
           target: build.catissuecore.war
      - - - - - - - - - - - - - - - - - -->
@@ -3341,7 +3308,7 @@
 
                 <ant antfile="${base.dir}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
                     <property name="xmi.name" value="${filename}" />
-                    <property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+                    <!-- property name="cacore.deployable.dir" value="${cacaore.deployables}" /-->
                     <property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
                     <property name="import.xmi" value="True" />
                 </ant>
@@ -3703,22 +3670,7 @@
     </target>
 
 
-    <target name="show_hide_forms_based_on_CPs" description="set the show_hide_forms_based_on_CPs property">
-        <if>
-            <equals arg1="${show.hide.forms.based.on.CPs}" arg2="true" />
-            <then>
-                <echo message="Value of show_hide_forms_based_on_CPs is set to true" />
-                <antcall target="Associate_forms_to_CPs">
-                    <param name="cpsEntitiesXMLFile" value="${base.dir}/modules/dynamic_extensions/conf/Show_Hide_Forms.xml"/>
-                </antcall>
-                <echo message="Associated selected Forms with Cps..." />
-            </then>
-            <else>
-                <echo message="Value of show_hide_forms_based_on_CPs is set to false" />
-            </else>
-        </if>
-    </target>
-
+   
     <!-- Associating forms/entities with CPs  - start -->
     <target name="Associate_forms_to_CPs" description="Associating forms/entities with CPs">
         <delete quiet="true" includeemptydirs="true">
