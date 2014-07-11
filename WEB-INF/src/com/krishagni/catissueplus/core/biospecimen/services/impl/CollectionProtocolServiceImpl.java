@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
 import edu.wustl.security.global.Permissions;
@@ -41,7 +42,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req) {
 		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getAllCollectionProtocols();
 		List<CollectionProtocolSummary> listToReturn = new ArrayList<CollectionProtocolSummary>();
-		List<Long> cpList = privilegeSvc.getCpList(req.getSessionDataBean().getUserId(), Permissions.REGISTRATION);
+		List<Long> cpList = privilegeSvc.getCpList(req.getSessionDataBean().getUserId(), PrivilegeType.REGISTRATION.name(),req.isChkPrivileges());
 		for (CollectionProtocolSummary collectionProtocolSummary : list) {
 			if(cpList.contains(collectionProtocolSummary.getId())){
 				listToReturn.add(collectionProtocolSummary);

@@ -10,13 +10,13 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.events.UserPrivDetail;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.global.Permissions;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -32,26 +32,35 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 	@Override
 	@PlusTransactional
-	public List<Long> getCpList(Long userId, String privilegeConst) {
+	public List<Long> getCpList(Long userId, String privilegeConst,boolean isChkPrivilege) {
 		Set<Long> cpList = new HashSet<Long>();
+		Set<Long> readDeniedList = new HashSet<Long>();
 		UserPrivDetail privDetail = daoFactory.getCPUserRoleDao().getUserPrivDetail(userId);
 		String roleId = getRole(privDetail.getCsmUserId());
-		if (roleId.equalsIgnoreCase(Constants.ADMIN_USER))
+		if (Constants.ADMIN_USER.equalsIgnoreCase(roleId))
     {
 			cpList.addAll(daoFactory.getCPUserRoleDao().getAllCpIds());
 			return new ArrayList<Long>(cpList);
     }
-		List<Long> cp_Ids = daoFactory.getCPUserRoleDao().getCpIdsByUserId(userId);
-		for (Long long1 : cp_Ids) {
-			cpList.add(long1);
-		}
-		cpList.addAll(cp_Ids);
-		List<Long> siteIds = daoFactory.getCPUserRoleDao().getSiteIdsByUserId(userId);
+		if (!isChkPrivilege)
+    {
+			cpList.addAll(daoFactory.getCPUserRoleDao().getAllCpIds());
+    }
+		
 		PrivilegeManager privilegeManager;
 		try {
 			privilegeManager = PrivilegeManager.getInstance();
 		
 		final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(privDetail.getLoginName());
+		List<Long> cp_Ids = daoFactory.getCPUserRoleDao().getCpIdsByUserId(userId);
+		for (Long cpId : cp_Ids) {
+			if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cpId, PrivilegeType.READ_DENIED.name())){
+				readDeniedList.add(cpId);
+			}
+			cpList.add(cpId);
+		}
+//		cpList.addAll(cp_Ids);
+		List<Long> siteIds = daoFactory.getCPUserRoleDao().getSiteIdsByUserId(userId);
 			if (siteIds != null && !siteIds.isEmpty())
 			{
 				boolean hasViewPrivilege = false; // This checks if user has Registration and/or Specimen_Processing privilege
@@ -60,13 +69,18 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 				{
 					final String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
 					edu.wustl.common.util.global.Variables.privilegeDetailsMap.get(Constants.EDIT_PROFILE_PRIVILEGE);
-					if (privilegeCache.hasPrivilege(peName,privilegeConst))
-//							edu.wustl.common.util.global.Variables.privilegeDetailsMap
-//									.get(privilegeConst)))
+					
+					if(privilegeCache.hasPrivilege(peName,PrivilegeType.READ_DENIED.name()))
+					{
+						hasViewPrivilege = false;
+						List<Long> cpIds = daoFactory.getCPUserRoleDao().getCpIdBySiteId(siteId);
+						readDeniedList.addAll(cpIds);
+					}
+					else if(privilegeCache.hasPrivilege(peName,privilegeConst))
 					{
 						hasViewPrivilege = true;
 					}
-					else if(privilegeCache.hasPrivilege(peName,Permissions.SPECIMEN_PROCESSING))
+					else if(privilegeCache.hasPrivilege(peName,PrivilegeType.SPECIMEN_PROCESSING.name()))
 					{
 						hasViewPrivilege = true;
 					}
@@ -74,16 +88,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					{
 						List<Long> cpIds = daoFactory.getCPUserRoleDao().getCpIdBySiteId(siteId);
 						cpList.addAll(cpIds);
-				}
+					}
 			}
 	}
-//		for (Long siteId : siteIds) {
-//			if(privilegeCache.hasPrivilege("SITE_" + siteId + "_All_CP", privilegeConst)){
-//				
-//			}
-//		}
 		
-		
+			cpList.removeAll(readDeniedList);
 		}
 		catch (SMException e) {
 			// TODO Auto-generated catch block
@@ -92,6 +101,15 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 		return new ArrayList<Long>(cpList);
 	}
+	
+//	private void removeReadDenied(Set<Long> cpList,PrivilegeCache privilegeCache){
+//		for (Long long1 : cpList) {
+//			if(privilegeCache.hasPrivilege(peName,privilegeConst))
+//			{
+//				hasViewPrivilege = true;
+//			}
+//		}
+//	}
 	
 	private String getRole(Long csmUserId){
 		try
@@ -156,6 +174,12 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			e.printStackTrace();
 		}
 		return isPhiView;
+	}
+
+	@Override
+	public List<Long> getCpList(Long userId, String privilege) {
+
+		return getCpList(userId, privilege, false);
 	}
 
 }

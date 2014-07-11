@@ -3,7 +3,7 @@ angular.module('plus.cpviewService', [])
     return { 
      
      getAllCps: function() {
-        var url = 'rest/ng/collection-protocols';
+        var url = 'rest/ng/collection-protocols?chkPrivilege=true';
         return Utility.get($http, url);
       },
     
