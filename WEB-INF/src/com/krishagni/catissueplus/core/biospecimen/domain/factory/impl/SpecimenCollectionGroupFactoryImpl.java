@@ -16,6 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -51,6 +52,8 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	private static final String CPR_CPE = "registraion and event point refering to different protocols.";
 
 	private static final String RECEIVED_QUALITY = "received quality";
+
+	private static final String SCG_REPORTS = "scg reports";
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -264,8 +267,23 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		}
 	}
 
-	//	private void addError(CatissueErrorCode event, String field) {
-	//		objectCreationException.addError(event, field);
-	//	}
+	@Override
+	public SpecimenCollectionGroup updateReports(SpecimenCollectionGroup oldScg, ScgReportDetail detail) {
+
+		ObjectCreationException errorHandler = new ObjectCreationException();
+		if (detail.getDeIdentifiedReport() == null && detail.getIdentifiedReport() == null) {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SCG_REPORTS);
+		}
+
+		if (detail.getDeIdentifiedReport() != null) {
+			oldScg.setDeIdentifiedReport(detail.getDeIdentifiedReport());
+		}
+
+		if (detail.getIdentifiedReport() != null) {
+			oldScg.setIdentifiedReport(detail.getIdentifiedReport());
+		}
+		errorHandler.checkErrorAndThrow();
+		return oldScg;
+	}
 
 }

@@ -2,12 +2,15 @@ package com.krishagni.catissueplus.core.services.testdata;
 
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -15,6 +18,8 @@ import edu.wustl.common.beans.SessionDataBean;
 
 
 public class ScgTestData {
+
+	public static final Object SCG_REPORTS = "scg reports";
 
 	public static CreateScgEvent getCreateScgEventServerErr() {
 		return getCreateScgEvent();
@@ -24,6 +29,13 @@ public class ScgTestData {
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setBarcode("new barcode");
 		scg.setName("newName");
+		Site site = new Site();
+		site.setName("dsad");
+		scg.setCollectionSite(site);
+		scg.setCollector(new User());
+		scg.setReceiver(new User());
+		scg.setCollectionProtocolEvent(new CollectionProtocolEvent());
+		scg.setCollectionProtocolRegistration(new CollectionProtocolRegistration());
 		return scg;
 	}
 	public static UpdateScgEvent getupdateScgEventServerErr() {
@@ -100,4 +112,28 @@ public class ScgTestData {
 		sessionDataBean.setUserName("admin@admin.com");
 		return sessionDataBean;
 	}
+	
+	public static UpdateScgReportEvent getUpdateScgReportEvent() {
+		UpdateScgReportEvent event = new UpdateScgReportEvent();
+		event.setId(1l);
+		event.setSessionDataBean(getSessionDataBean());
+		event.setDetail(getScgReportDetail());
+		return event;
+	}
+
+	private static ScgReportDetail getScgReportDetail() {
+		ScgReportDetail details = new ScgReportDetail();
+		details.setDeIdentifiedReport("ABCDEFGHIJKLMNOPQRSTVWXYZ");
+		details.setIdentifiedReport("ABCDEFGHIJKLMNOPQRSTVWXYZ");
+		return details;
+	}
+
+	public static UpdateScgReportEvent getUpdateScgReportEventWithNullValues() {
+		UpdateScgReportEvent event = new UpdateScgReportEvent();
+		event.setId(1l);
+		event.setSessionDataBean(getSessionDataBean());
+		event.setDetail(new ScgReportDetail());
+		return event;
+	}
+
 }

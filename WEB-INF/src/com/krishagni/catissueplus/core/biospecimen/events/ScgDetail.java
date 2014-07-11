@@ -15,8 +15,8 @@ public class ScgDetail {
 
 	private String name;
 
+	
 	private String clinicalDiagnosis;
-
 	private String clinicalStatus;
 
 	private String activityStatus;

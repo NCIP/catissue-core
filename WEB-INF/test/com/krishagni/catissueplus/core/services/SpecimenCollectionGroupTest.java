@@ -22,9 +22,12 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenCollectionGroupFactoryImpl;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
@@ -33,6 +36,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGro
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.ParticipantTestData;
 import com.krishagni.catissueplus.core.services.testdata.ScgTestData;
+import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
 public class SpecimenCollectionGroupTest {
 
@@ -167,5 +171,65 @@ UpdateScgEvent event = ScgTestData.getUpdateScgEvent();
 //		assertEquals(1, response.getErroneousFields().length);
 //		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
 //		assertEquals(ScgErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	
+	@Test
+	public void testForSuccessfulSCGReportUpdate() {
+		UpdateScgReportEvent reqEvent = ScgTestData.getUpdateScgReportEvent();
+		ScgReportUpdatedEvent response = service.updateScgReport(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testForSuccessfulSCGGetwithReport() {
+		GetScgReportEvent reqEvent = new GetScgReportEvent();
+		reqEvent.setId(1l);
+		ScgReportUpdatedEvent response = service.getScgReport(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testForSuccessfulSCGGetwithReportWithInvalidScg() {
+		when(scgDao.getscg(anyLong())).thenReturn(null);
+		GetScgReportEvent reqEvent = new GetScgReportEvent();
+		reqEvent.setId(1l);
+		ScgReportUpdatedEvent response = service.getScgReport(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testForUserUpdateWithNullValues() {
+		UpdateScgReportEvent reqEvent = ScgTestData.getUpdateScgReportEventWithNullValues();
+
+		ScgReportUpdatedEvent response = service.updateScgReport(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(ScgTestData.SCG_REPORTS, response.getErroneousFields()[0].getFieldName());
+		assertEquals(ScgErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+	}
+	
+	@Test
+	public void testForInvalidScgUpdate() {
+		when(scgDao.getscg(anyLong())).thenReturn(null);
+		UpdateScgReportEvent reqEvent = ScgTestData.getUpdateScgReportEvent();
+
+		ScgReportUpdatedEvent response = service.updateScgReport(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
+	public void testUserUpdateWithServerErr() {
+		when(userDao.getUser(anyLong())).thenReturn(UserTestData.getUser(1L));
+		UpdateScgReportEvent reqEvent = ScgTestData.getUpdateScgReportEvent();
+
+		doThrow(new RuntimeException()).when(scgDao).saveOrUpdate(any(SpecimenCollectionGroup.class));
+		ScgReportUpdatedEvent response = service.updateScgReport(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
 }

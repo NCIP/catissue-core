@@ -13,14 +13,18 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent.ObjectType;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -286,7 +290,36 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_BARCODE, BARCODE);
 			return;
 		}
-
 	}
 
+	@Override
+	@PlusTransactional
+	public ScgReportUpdatedEvent updateScgReport(UpdateScgReportEvent event) {
+		try {
+			SpecimenCollectionGroup oldScg = daoFactory.getScgDao().getscg(event.getId());
+			if (oldScg == null) {
+				return ScgReportUpdatedEvent.notFound(event.getId());
+			}
+			SpecimenCollectionGroup scg = scgFactory.updateReports(oldScg, event.getDetail());
+			oldScg.updateReports(scg);
+			daoFactory.getScgDao().saveOrUpdate(oldScg);
+			return ScgReportUpdatedEvent.ok(ScgReportDetail.fromDomain(oldScg));
+		}
+		catch (ObjectCreationException oce) {
+			return ScgReportUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());
+		}
+		catch (Exception ex) {
+			return ScgReportUpdatedEvent.serverError(ex);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ScgReportUpdatedEvent getScgReport(GetScgReportEvent event) {
+		SpecimenCollectionGroup scg = daoFactory.getScgDao().getscg(event.getId());
+		if (scg == null) {
+			return ScgReportUpdatedEvent.notFound(event.getId());
+		}
+		return ScgReportUpdatedEvent.ok(ScgReportDetail.fromDomain(scg));
+	}
 }

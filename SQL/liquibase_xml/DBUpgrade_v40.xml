@@ -3385,4 +3385,14 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
       )
     </sql>
   </changeSet>    
+  
+  <changeSet id="adding identified deIdentified report column in scg" author="dpatil" runOnChange="true">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+       <column name="IDENTIFIED_REPORT" type="${clob.type}"/>
+    </addColumn>	
+        
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+       <column name="DEIDENTIFIED_REPORT" type="${clob.type}"/>
+    </addColumn>	   
+   </chnageSet>
 </databaseChangeLog>

@@ -1,13 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import java.util.Date;  
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -27,6 +28,10 @@ public class SpecimenCollectionGroup {
 	private String clinicalStatus;
 
 	private String activityStatus;
+
+	private String identifiedReport;
+
+	private String deIdentifiedReport;
 
 	private Site collectionSite;
 
@@ -99,8 +104,7 @@ public class SpecimenCollectionGroup {
 	}
 
 	public void setActivityStatus(String activityStatus) {
-		if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus))
-		{
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
 			delete(false);
 		}
 		this.activityStatus = activityStatus;
@@ -136,6 +140,22 @@ public class SpecimenCollectionGroup {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getIdentifiedReport() {
+		return identifiedReport;
+	}
+
+	public void setIdentifiedReport(String identifiedReport) {
+		this.identifiedReport = identifiedReport;
+	}
+
+	public String getDeIdentifiedReport() {
+		return deIdentifiedReport;
+	}
+
+	public void setDeIdentifiedReport(String deIdentifiedReport) {
+		this.deIdentifiedReport = deIdentifiedReport;
 	}
 
 	public String getSurgicalPathologyNumber() {
@@ -253,7 +273,7 @@ public class SpecimenCollectionGroup {
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.activityStatus);
 	}
-	
+
 	public boolean isCompleted() {
 		return Status.SCG_COLLECTION_STATUS_COMPLETED.getStatus().equals(this.collectionStatus);
 	}
@@ -294,6 +314,8 @@ public class SpecimenCollectionGroup {
 		setCollectionStatus(scg.getCollectionStatus());
 		setCollectionTimestamp(scg.getCollectionTimestamp());
 		setCollector(scg.getCollector());
+		setIdentifiedReport(scg.getIdentifiedReport());
+		setDeIdentifiedReport(scg.getDeIdentifiedReport());
 		setComment(scg.getComment());
 		setName(scg.getName());
 		setReceivedComments(scg.getReceivedComments());
@@ -301,6 +323,11 @@ public class SpecimenCollectionGroup {
 		setReceivedTimestamp(scg.getReceivedTimestamp());
 		setReceiver(scg.getReceiver());
 		setSurgicalPathologyNumber(scg.getSurgicalPathologyNumber());
+	}
+
+	public void updateReports(SpecimenCollectionGroup scg) {
+		this.setIdentifiedReport(scg.getIdentifiedReport());
+		this.setDeIdentifiedReport(scg.getDeIdentifiedReport());
 	}
 
 }

@@ -17,12 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -122,6 +126,37 @@ public class SpecimenCollectionGroupController {
 		event.setScgDetail(scgDetail);
 		event.setSessionDataBean(getSession());
 		ScgUpdatedEvent response = specimenCollGroupService.updateScg(event);
+		if (response.getStatus().equals(EventStatus.OK)) {
+			return response.getDetail();
+		}
+		return null;
+
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/reports")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ScgReportDetail updateSCGReports(@PathVariable Long id, @RequestBody ScgReportDetail reportDetail) {
+		UpdateScgReportEvent event = new UpdateScgReportEvent();
+		event.setId(id);
+		event.setDetail(reportDetail);
+		event.setSessionDataBean(getSession());
+		ScgReportUpdatedEvent response = specimenCollGroupService.updateScgReport(event);
+		if (response.getStatus().equals(EventStatus.OK)) {
+			return response.getDetail();
+		}
+		return null;
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/reports")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ScgReportDetail getSCGWithReports(@PathVariable Long id) {
+		GetScgReportEvent event = new GetScgReportEvent();
+		event.setId(id);
+		event.setSessionDataBean(getSession());
+		ScgReportUpdatedEvent response = specimenCollGroupService.getScgReport(event);
 		if (response.getStatus().equals(EventStatus.OK)) {
 			return response.getDetail();
 		}
