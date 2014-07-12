@@ -3394,5 +3394,5 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
        <column name="DEIDENTIFIED_REPORT" type="${clob.type}"/>
     </addColumn>	   
-   </chnageSet>
+   </changeSet>
 </databaseChangeLog>
