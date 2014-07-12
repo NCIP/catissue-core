@@ -3395,4 +3395,95 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
        <column name="DEIDENTIFIED_REPORT" type="${clob.type}"/>
     </addColumn>	   
    </changeSet>
+   
+     <changeSet id="add foreign key constraint in catissue_distri_event_param" author="nitesh">
+        <addForeignKeyConstraint
+            constraintName="FK_SP_DISTRI_SP_EVENT"
+            baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
+            baseColumnNames="SPECIMEN_ID"
+            referencedTableName="CATISSUE_SPECIMEN"
+            referencedColumnNames="IDENTIFIER" />
+        <addForeignKeyConstraint
+            constraintName="FK_DISTRI_DISTRI_SP_EVENT"
+            baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
+            baseColumnNames="DISTRIBUTION_ID"
+            referencedTableName="CATISSUE_DISTRIBUTION"
+            referencedColumnNames="IDENTIFIER" />
+  </changeSet>    
+  
+  <changeSet id="migrating distribution event data" author="nitesh" dbms="mysql">
+        <sql>DROP PROCEDURE IF EXISTS  migrateDistriData;</sql>
+        <sql splitStatements="false">
+            CREATE PROCEDURE migrateDistriData()
+            BEGIN
+            declare qty double;
+            declare dist_id bigint;
+            declare event_time dateTime default '20091902';
+            declare specimen_id bigint;
+            declare user_id bigint;
+            declare comments text;
+            declare nextId bigint;
+            declare record_not_found integer default 0;
+            
+            DECLARE distri cursor for select COIT.Requested_Quantity, CD.Identifier, CD.Event_TimeStamp, CESOI.SPECIMEN_ID, CD.User_Id, CD.Comments
+                from CATISSUE_ORDER_ITEM COIT join CATISSUE_EXISTING_SP_ORD_ITEM CESOI ON CESOI.IDENTIFIER =  COIT.IDENTIFIER
+                join catissue_distribution CD on CD.order_Id = COIT.order_Id 
+                left join catissue_distri_event_param cdep on CD.identifier = cdep.distribution_id
+                WHERE CESOI.SPECIMEN_ID IS NOT NULL AND (COIT.STATUS = 'Distributed' OR COIT.STATUS = 'Distributed And Close')
+                and cdep.distribution_id is null;
+                
+            declare CONTINUE HANDLER for NOT FOUND SET record_not_found = 1;
+
+            open distri;
+            read_loop: LOOP
+                fetch distri into qty, dist_id, event_time, specimen_id, user_id, comments;
+                if record_not_found then leave read_loop;
+                        end if;
+            SELECT max(IDENTIFIER)+1 INTO nextId from CATISSUE_SPECIMEN_EVENT_PARAM;
+            INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) values(specimen_id, event_time,user_id,comments);
+            INSERT INTO CATISSUE_DISTRI_EVENT_PARAM(identifier,DISTRIBUTED_QUANTITY,DISTRIBUTION_ID,EVENT_TIMESTAMP,SPECIMEN_ID,USER_ID,COMMENTS) 
+            values(nextId,qty,dist_id,event_time,specimen_id,user_id,comments);
+            end LOOP;
+            CLOSE distri;
+            END
+       </sql>
+       <sql>call migrateDistriData();</sql>
+       <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet id="migrating distribution event data" author="nitesh" runOnChange="true" dbms="oracle">
+            <sql splitStatements="false" endDelimiter="$">
+            create or replace  PROCEDURE migrateDistriData
+                         IS
+                         qty FLOAT;
+                        dist_id number;
+                        event_time date;
+                        specimen_id number;
+                        user_id number;
+                        comments varchar2(2000);
+                        nextId number;
+                        
+                        cursor distri IS select COIT.Requested_Quantity, CD.Identifier, CD.Event_TimeStamp, CESOI.SPECIMEN_ID, CD.User_Id, CD.Comments
+                          from CATISSUE_ORDER_ITEM COIT join CATISSUE_EXISTING_SP_ORD_ITEM CESOI ON CESOI.IDENTIFIER =  COIT.IDENTIFIER
+                          join catissue_distribution CD on CD.order_Id = COIT.order_Id 
+                          left join catissue_distri_event_param cdep on CD.identifier = cdep.distribution_id
+                          WHERE CESOI.SPECIMEN_ID IS NOT NULL AND (COIT.STATUS = 'Distributed' OR COIT.STATUS = 'Distributed And Close')
+                          and cdep.distribution_id is null;
+                         BEGIN
+                         open distri;
+                         LOOP
+                             fetch distri into qty, dist_id, event_time, specimen_id, user_id, comments;
+                          EXIT WHEN distri%notfound;
+                           select CATISSUE_SPEC_EVENT_PARAM_SEQ.NEXTVAL into nextId from dual;
+                          
+                          INSERT INTO  CATISSUE_SPECIMEN_EVENT_PARAM(IDENTIFIER,SPECIMEN_ID,EVENT_TIMESTAMP,USER_ID,COMMENTS) values(nextId,specimen_id, event_time,user_id,comments);
+                          INSERT INTO CATISSUE_DISTRI_EVENT_PARAM (identifier,DISTRIBUTED_QUANTITY,DISTRIBUTION_ID,EVENT_TIMESTAMP,SPECIMEN_ID,USER_ID,COMMENTS) values(nextId,qty,dist_id,event_time,specimen_id,user_id,comments);
+
+             END LOOP;
+             CLOSE distri;
+             END;
+           </sql>
+           <sql>call migrateDistriData();</sql>
+            <sql>commit;</sql>
+    </changeSet>
 </databaseChangeLog>
