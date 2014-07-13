@@ -3486,4 +3486,45 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
            <sql>call migrateDistriData();</sql>
             <sql>commit;</sql>
     </changeSet>
+
+  <changeSet id="CREATE CPR_EXTENSION_RECORDS_VIEW" author="mibrahim" failOnError="true" runOnChange="true">
+    <sql>
+      CREATE OR REPLACE VIEW cpr_extension_records_view AS (
+        SELECT 
+          re.OBJECT_ID AS cpr_id,re.RECORD_ID AS record_id 
+        FROM 
+          (catissue_form_record_entry re JOIN catissue_form_context fc ON((re.FORM_CTXT_ID = fc.IDENTIFIER))) 
+        WHERE 
+          ((fc.ENTITY_TYPE = 'Participant') AND (re.activity_status = 'ACTIVE'))
+      )
+    </sql>
+  </changeSet>    
+  
+
+  <changeSet id="CREATE SCG_EXTN_RECORDS_VIEW" author="mibrahim" failOnError="true" runOnChange="true">
+    <sql>
+      CREATE OR REPLACE VIEW scg_extn_records_view AS (
+        SELECT 
+          re.OBJECT_ID AS scg_id,re.RECORD_ID AS record_id 
+        FROM 
+          (catissue_form_record_entry re JOIN catissue_form_context fc ON((fc.IDENTIFIER = re.FORM_CTXT_ID))) 
+        WHERE 
+          ((fc.ENTITY_TYPE = 'SpecimenCollectionGroup') AND (re.activity_status = 'ACTIVE'))
+      )
+    </sql>
+  </changeSet>   
+
+  <changeSet id="CREATE SPECIMEN_EXTN_RECORDS_VIEW" author="mibrahim" failOnError="true" runOnChange="true">
+    <sql>
+      CREATE OR REPLACE VIEW specimen_extn_records_view AS (
+        SELECT 
+          re.OBJECT_ID AS specimen_id,re.RECORD_ID AS record_id 
+        FROM 
+          (catissue_form_record_entry re JOIN catissue_form_context fc ON((fc.IDENTIFIER = re.FORM_CTXT_ID))) 
+        WHERE 
+          ((fc.ENTITY_TYPE = 'Specimen') AND (re.activity_status = 'ACTIVE'))
+      )
+    </sql>
+  </changeSet> 
+
 </databaseChangeLog>
