@@ -119,7 +119,7 @@ angular.module('plus.cpview', [])
     $scope.onCpSelect({id: $scope.selectedCp.id, text: $scope.selectedCp.shortTitle});
     var scgTreeQ = $scope.onParticipantSelect(selParticipant, selectedScg);
     scgTreeQ.then(function() { $scope.handleDirectObjectLoad(); });
-  } 
+  }
 
   $scope.handleDirectObjectLoad = function(displayNode) {
     if (!selectedScg) {
@@ -266,8 +266,9 @@ angular.module('plus.cpview', [])
     $scope.selectedNode = data;
 
     if(data.type == 'scg') {
-    	var participantId = $scope.selectedParticipant.id.split(',')[0];
-        var ids = data.id.split(',');
+      var participantId = $scope.selectedParticipant.id.split(',')[0];
+      var ids = data.id.split(',');
+      $scope.treeReload = false;
   	  var url="QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=false&operation=edit&id="
           	 + data.scgId + "&cpSearchCpId=" + $scope.selectedCp.id + "&clickedNodeId="+ data.scgId;
   	  if(data.instance=='cpe')

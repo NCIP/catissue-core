@@ -370,7 +370,13 @@ function hideCursor(){
       selParticipant = participant != null ? participant : scope.selectedParticipant;
       selectedScg = scgId != null ? {id: scgId, type: 'scg'} : undefined;
       selectedSpecimen = specimenId != null ? {id: specimenId, type: 'specimen'} : undefined;
-      
+
+      var treeReload = scope.treeReload == false ? false : true;
+      if (!treeReload) {
+        scope.treeReload = true;
+        return;
+      }
+
       scope.onCpSelect({id: scope.selectedCp.id, text: scope.selectedCp.shortTitle}, false);
       var scgTreeQ = scope.onParticipantSelect(selParticipant, selectedScg == undefined ? true : selectedScg);
       scgTreeQ.then(function() { scope.handleDirectObjectLoad(false); });
