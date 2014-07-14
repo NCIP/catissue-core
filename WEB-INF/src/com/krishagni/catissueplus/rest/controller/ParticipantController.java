@@ -26,10 +26,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -47,6 +49,20 @@ public class ParticipantController {
 	@Autowired
 	private ParticipantService participantSvc;
 
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public ParticipantDetail getParticipantById(@PathVariable("id") Long participantId) {
+          ReqParticipantDetailEvent event = new ReqParticipantDetailEvent();
+          event.setParticipantId(participantId);
+
+          ParticipantDetailEvent resp = participantSvc.getParticipant(event);
+          if (resp.getStatus() == EventStatus.OK) {
+                  return resp.getParticipantDetail();
+          }
+          return null;
+  }
+	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
