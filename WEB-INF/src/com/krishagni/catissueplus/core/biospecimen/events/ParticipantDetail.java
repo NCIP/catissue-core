@@ -165,18 +165,19 @@ public class ParticipantDetail {
 		participantDetail.setEthnicity(participant.getEthnicity());
 		participantDetail.setGender(participant.getGender());
 		participantDetail.setId(participant.getId());
-		//TODO revisit
-		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
-		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
-		if (pmi != null) {
-			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
-				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
-				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
-				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
-				pmiColl.add(medicalRecordNumberDetail);
-			}
-		}
-		participantDetail.setPmiCollection(pmiColl);
+		//TODO revisit 
+		System.out.println();
+//		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
+//		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
+//		if (pmi != null) {
+//			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
+//				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
+//				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
+//				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
+//				pmiColl.add(medicalRecordNumberDetail);
+//			}
+//		}
+//		participantDetail.setPmiCollection(pmiColl);
 		participantDetail.setRace(participant.getRaceColl());
 		participantDetail.setSexGenotype(participant.getSexGenotype());
 		participantDetail.setSsn(participant.getSocialSecurityNumber());
