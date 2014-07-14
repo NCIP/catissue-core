@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -166,7 +167,6 @@ public class ParticipantDetail {
 		participantDetail.setGender(participant.getGender());
 		participantDetail.setId(participant.getId());
 		//TODO revisit 
-		System.out.println();
 //		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
 //		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
 //		if (pmi != null) {
@@ -178,7 +178,15 @@ public class ParticipantDetail {
 //			}
 //		}
 //		participantDetail.setPmiCollection(pmiColl);
-		participantDetail.setRace(participant.getRaceColl());
+		Set<String> raceSet = participant.getRaceColl();
+		Set<String> newRace = new HashSet<String>(); 
+		if(raceSet != null){
+			for (String race : raceSet) {
+				newRace.add(race);
+			}
+		}
+		
+		participantDetail.setRace(newRace);
 		participantDetail.setSexGenotype(participant.getSexGenotype());
 		participantDetail.setSsn(participant.getSocialSecurityNumber());
 		participantDetail.setVitalStatus(participant.getVitalStatus());
