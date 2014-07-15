@@ -26,7 +26,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 	            HttpServletRequest request, HttpServletResponse response) throws Exception
 	    {
-	        String objectToEdit= request.getParameter("pageOf");
+	        String objectToEdit= request.getParameter("pageOf"); 
 	        final SessionDataBean sessionData=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 	        final StringBuffer path= new StringBuffer();
 	        if(Constants.PAGE_OF_SPECIMEN_COLLECTION_GROUP.equalsIgnoreCase(objectToEdit))
@@ -83,9 +83,11 @@ public class EditInCPBasedViewAction extends BaseAction {
 	            if(!ids.isEmpty())
 	            {
 	                final Object[] id= (Object[]) ids.get(0);
-	                path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[2].toString());
-	                path.append("&URLCollectionEventId=").append(id[1].toString()).append("&URLId=").append(Constants.SPECIMEN_COLLECTION_GROUP).append("_").append(scgId).append('&');
-	                path.append(CDMSIntegrationConstants.OPERATION).append('=').append(scgOperation);
+	                path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[2].toString());
+                  path.append("&scgId=").append(scgId);
+//	                path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[2].toString());
+//	                path.append("&URLCollectionEventId=").append(id[1].toString()).append("&URLId=").append(Constants.SPECIMEN_COLLECTION_GROUP).append("_").append(scgId).append('&');
+//	                path.append(CDMSIntegrationConstants.OPERATION).append('=').append(scgOperation);
 	         //       path=path+"&URLCollectionProtocolId="+id[0].toString()+"&URLParticipantId="+id[2].toString()+"&URLCollectionEventId="+id[1].toString()+"&URLId="+scgId+"&"+ClinPortalIntegrationConstants.OPERATION+"="+scgOperation;
 	            }
 	        }
@@ -97,23 +99,29 @@ public class EditInCPBasedViewAction extends BaseAction {
 	    	 String specimenid = request.getParameter(Constants.SYSTEM_IDENTIFIER);
 	    	 NewSpecimenBizLogic specimenBizlogic = new NewSpecimenBizLogic();
 	         List<Object> list = specimenBizlogic.getcpIdandPartId(sessionData, specimenid);
-	     			if(!list.isEmpty())
+	     			if(!list.isEmpty()) 
 	                {
 	                    final Object[] id= (Object[]) list.get(0);
-	                    path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[1].toString());
-	                    path.append("&URLId=").append(Constants.SPECIMEN+"_"+specimenid);
+	                    path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString());
+	                    path.append("&scgId=").append(id[2].toString());
+	                    path.append("&specimenId=").append(specimenid);
+//	                    path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[1].toString());
+//	                    path.append("&URLId=").append(Constants.SPECIMEN+"_"+specimenid);
 	                }   
 	     }
 	     else if("pageOfCollectionProtocolRegistration".equalsIgnoreCase(objectToEdit))
-	     {
+	     { 
 	    	 String cprId = request
 	 				.getParameter(Constants.SYSTEM_IDENTIFIER);
 	 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 	 		List<Object> list = cprBizLogic.getCPIdandPartId(sessionData, cprId);
 	 		if (!list.isEmpty()) {
 	 			final Object[] id = (Object[]) list.get(0);
-	 			path.append("&URLCollectionProtocolId=").append(id[0].toString())
-	 					.append("&URLParticipantId=").append(id[1].toString());
+	 			
+	 		 path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString());
+	 		 
+//	 			path.append("&URLCollectionProtocolId=").append(id[0].toString())
+//	 					.append("&URLParticipantId=").append(id[1].toString());
 	 		}
 	    	 
 	     }

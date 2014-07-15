@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,9 +22,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -72,13 +75,28 @@ public class CollectionProtocolController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ParticipantInfo> getParticipants(@PathVariable("id") Long cpId,
-			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr) {
+			@RequestParam(value = "query", required = false, defaultValue = "") String searchStr,
+			@RequestParam(value = "pId", required = true, defaultValue = "0") String participantId) {
 		ReqParticipantsSummaryEvent event = new ReqParticipantsSummaryEvent();
 		event.setCpId(cpId);
 		event.setSearchString(searchStr);
+		event.setParticipantId(StringUtils.isBlank(participantId)?null:Long.valueOf(participantId));
 		event.setSessionDataBean(getSession());
 		ParticipantsSummaryEvent result = cpSvc.getParticipants(event);
 		return result.getParticipantsInfo();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participant")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ParticipantInfo getParticipant(@PathVariable("id") Long cpId,@RequestParam(value = "pId", required = true, defaultValue = "") String participantId)
+			{
+		ReqParticipantSummaryEvent event = new ReqParticipantSummaryEvent();
+		event.setCpId(cpId);
+		event.setParticipantId(StringUtils.isBlank(participantId)?null:Long.valueOf(participantId));
+		event.setSessionDataBean(getSession());
+		ParticipantSummaryEvent result = cpSvc.getParticipant(event);
+		return result.getParticipantInfo();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/registrations")

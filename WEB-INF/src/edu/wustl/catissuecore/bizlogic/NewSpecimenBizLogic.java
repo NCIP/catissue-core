@@ -5817,7 +5817,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 
 		final String hql1 = "select specimen.specimenCollectionGroup.collectionProtocolRegistration."
-				+ "collectionProtocol.id,specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id"
+				+ "collectionProtocol.id,specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id,specimen.specimenCollectionGroup.id"
 				+ " from edu.wustl.catissuecore.domain.Specimen as specimen where "
 				+ "specimen.id=" + specimenid;
 		List<Object> list = null;

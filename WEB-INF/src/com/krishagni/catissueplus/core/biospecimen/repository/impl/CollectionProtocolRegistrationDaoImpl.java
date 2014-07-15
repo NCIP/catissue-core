@@ -185,8 +185,48 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		boolean isUnique = query.list().isEmpty() ? true : false;
 		return isUnique;
 	}
+	
+	@Override
+	public ParticipantInfo getPhiParticipant(Long cpId, Long participantId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID);
+		query.setLong("cpId", cpId);
+		query.setLong("participantId", participantId);
+		
+		ParticipantInfo participant = new ParticipantInfo();
+		List<Object[]> rows = query.list();
+		for (Object[] row : rows) {
+			participant.setCprId((Long) row[0]);
+			participant.setId((Long) row[1]);
+			participant.setPpId((String) row[2]);
+			participant.setFirstName((String) row[3]);
+			participant.setLastName((String) row[4]);
+		}
+		return participant;
+	}
+
+	@Override
+	public ParticipantInfo getParticipant(Long cpId, Long participantId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_BY_CP_PARTICIPANT_ID);
+		query.setLong("cpId", cpId);
+		query.setLong("participantId", participantId);
+		
+		ParticipantInfo participant = new ParticipantInfo();
+		List<Object[]> rows = query.list();
+		for (Object[] row : rows) {
+			participant.setCprId((Long) row[0]);
+			participant.setId((Long) row[1]);
+			participant.setPpId((String) row[2]);
+			participant.setFirstName((String) row[3]);
+			participant.setLastName((String) row[4]);
+		}
+		return participant;
+	}
 
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
+	
+	private static final String GET_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getParticipantByCPAndParticipantId";
+	
+	private static final String GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getPhiParticipantByCPAndParticipantId";
 
 	private static final String GET_PARTICIPANTS_BY_CP_ID = FQN + ".getParticipantsByCpId";
 
@@ -204,10 +244,5 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 
 	private static final String GET_CPR_BY_PPID_AND_CPID = FQN + ".getCprByPpid";
 
-	//	private final String hql = "select scg.id,scg.name,scg.collectionStatus, scg.receivedTimestamp, "
-	//			+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"
-	//			+ "scg.collectionProtocolEvent.collectionPointLabel, scg.collectionProtocolRegistration.registrationDate from "
-	//			+ SpecimenCollectionGroup.class.getName() + " as scg where scg.collectionProtocolRegistration.id = :cprId"
-	//			+ " and scg.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
-	//			+ "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
+
 }

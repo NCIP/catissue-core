@@ -24,4 +24,8 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 	
 	public List<ParticipantInfo> getPhiParticipants(Long cpId, String searchString);
 
+	public ParticipantInfo getPhiParticipant(Long cpId, Long participantId);
+
+	public ParticipantInfo getParticipant(Long cpId, Long participantId);
+
 }
