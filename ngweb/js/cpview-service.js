@@ -20,7 +20,16 @@ angular.module('plus.cpviewService', [])
         }
         return Utility.get($http, url, undefined, params);
       },
-    
+
+       getParticipantById: function(cpId, participantId) {
+         var url = 'rest/ng/collection-protocols/'+cpId+'/participant';
+         var params = {
+           'pId' : participantId,
+           '_reqTime' : new Date().getTime()
+         }
+         return Utility.get($http, url, undefined, params);
+      },
+
       getSpecimens: function(scgId,objectType) {
         var url = 'rest/ng/specimen-collection-groups/'+scgId+'/specimens';
         var params = {

@@ -51,12 +51,12 @@ angular.module("plus.directives", [])
     return {
       restrict: "E",
       replace : "true",
-      template: "<input type='hidden'>",
+      template: "<input id='remote' type='hidden' value='val'>",
       scope   : {
         query         : "&onQuery",
         onSelect      : "&onSelect",
         initSelection : "&onInitselectionfn",
-	elem          : "=ngModel"
+	    elem          : "=ngModel"
       },
 
       link: function(scope, element, attrs) {
@@ -81,8 +81,8 @@ angular.module("plus.directives", [])
           .onChange(function(option) {
             scope.onSelect({selected: option});
           })
-	  .onInitSelection(function(elem, callback) {
-            scope.initSelection()(scope.elem, callback);
+	     .onInitSelection(function(elem, callback) {
+            scope.initSelection()(elem, callback);
           })
           .render();
       }

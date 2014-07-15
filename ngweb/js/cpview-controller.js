@@ -2,12 +2,29 @@ angular.module('plus.cpview', [])
 
 .controller('CpViewController', ['$scope', '$window', '$timeout', 'repository',  function($scope, $window, $timeout, repository) {
 
-  $scope.initSel = function(elem, callback){
-    callback(elem);
-  }
   $scope.selectedCp = selectionCp;
   $scope.selectedParticipant = selParticipant;
-  $scope.initialTime = undefined;
+
+  if (selParticipant.id == -1) { // How to do it angular way ??
+    var $remote = $('#remote');
+	$remote.removeAttr('value');
+  }
+
+  $scope.initSel = function(elem, callback){
+    if (selParticipant.id ==-1) {
+      return;
+    }
+    var participantId = selParticipant.id.split(',')[0];
+    var cpId = selectionCp.id;
+    repository.getParticipantById(cpId, participantId).success(function(result) {
+      var participant = {
+        id: result.id + "," + result.cprId,
+        text: result.firstName + "," + result.lastName + '(' + result.ppId + ')'
+      }
+      callback(participant);
+    });
+  }
+
   repository.getAllCps()           // TODO: Revisit
     .success(function(result) {
       $scope.cps = result;
