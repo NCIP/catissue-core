@@ -159,9 +159,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 
             InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
-			
+			String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
 			String deFileUploadDir = XMLPropertyHandler.getValue(DE_FILEUPLOAD_DIR);
-			DEApp.init(ds, deFileUploadDir);
+			DEApp.init(ds, deFileUploadDir, dateFomat);
 			initQueryPathsConfig();
             
 			logger.info("Initialization complete");

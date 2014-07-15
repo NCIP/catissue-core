@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import edu.wustl.common.util.global.*;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
@@ -132,7 +133,8 @@ public class MigrateForms {
 		ds.setUrl(jdbcUrl);
 		
 		String fileUploadDir = prop.getProperty("de.fileUploadDir");
-		DEApp.init(ds, fileUploadDir);
+		String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
+		DEApp.init(ds, fileUploadDir, dateFomat);
 	}
 	
 	private static boolean areLegacyFormsMigrated() { 
