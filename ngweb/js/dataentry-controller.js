@@ -138,6 +138,7 @@ angular.module('plus.dataentry', [])
           formDef      : data,
           recordId     : recordId,
           formDiv      : 'form-view',
+          dateFormat   : dateFormat,
           appData      : {formCtxtId: form.formCtxtId, objectId: entityObjId},
           formDataUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId?_reqTime='+_reqTime,
           formSaveUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId',

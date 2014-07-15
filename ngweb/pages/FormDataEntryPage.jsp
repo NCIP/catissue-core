@@ -171,6 +171,8 @@
       var cpEventLabel = "<%= request.getAttribute("cpEventLabel") %>"
       var specimenLabel = "<%= request.getAttribute("specimenLabel") %>"
       var userName =  "<%= request.getAttribute("userName") %>"
+      var dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
+
     </script>
     <script src="ngweb/js/utility.js" type="text/javascript"></script>
     <script src="ngweb/js/wrapper.js" type="text/javascript"></script>
