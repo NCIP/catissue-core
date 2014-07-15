@@ -3396,7 +3396,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </addColumn>	   
    </changeSet>
    
-     <changeSet id="add foreign key constraint in catissue_distri_event_param" author="nitesh">
+     <changeSet id="add foreign key constraint in catissue_distri_event_param" author="nitesh" failOnError="false">
         <addForeignKeyConstraint
             constraintName="FK_SP_DISTRI_SP_EVENT"
             baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
@@ -3418,7 +3418,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             BEGIN
             declare qty double;
             declare dist_id bigint;
-            declare event_time dateTime default '20091902';
+            declare event_time dateTime default '2013-05-03 06:40:37';
             declare specimen_id bigint;
             declare user_id bigint;
             declare comments text;
@@ -3525,6 +3525,18 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
           ((fc.ENTITY_TYPE = 'Specimen') AND (re.activity_status = 'ACTIVE'))
       )
     </sql>
-  </changeSet> 
+  </changeSet>
+  
+  <changeSet author="nitesh" id="add unique constraint for specimen Id in coll/rec event table">
+    <addUniqueConstraint 
+            columnNames="specimen_id"
+            constraintName="UN_SPEC_ID_REC_EVENT"
+            tableName="CATISSUE_RECEIVED_EVENT_PARAM"/>
+     
+    <addUniqueConstraint 
+            columnNames="specimen_id"
+            constraintName="UN_SPEC_ID_COLL_EVENT"
+            tableName="CATISSUE_COLL_EVENT_PARAM"/>
+  </changeSet>
 
 </databaseChangeLog>

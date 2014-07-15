@@ -47,7 +47,7 @@ public class CDMSCaTissueIntegrationUtil {
 		final StringBuilder hql = new StringBuilder();
 		hql
 				.append("Select scg.collectionProtocolEvent.collectionProtocol.id,scg.collectionProtocolEvent.id,");
-		hql.append(" scg.collectionProtocolRegistration.participant.id from ");
+		hql.append(" scg.collectionProtocolRegistration.participant.id, scg.collectionProtocolRegistration.id from ");
 		hql.append(SpecimenCollectionGroup.class.getName()).append(" as scg");
 		hql.append(" where scg.id=").append(scgId);
 		final SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
