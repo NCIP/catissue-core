@@ -2406,7 +2406,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 */
 	public List<Object> getCPIdandPartId(final SessionDataBean sessionData,
 			String cprid) throws ApplicationException, DAOException {
-		final String hql1 = "select cpr.collectionProtocol.id,cpr.participant.id"
+		final String hql1 = "select cpr.collectionProtocol.id,cpr.participant.id, cpr.id"
 				+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
 				+ "cpr.id=" + cprid;
 		List<Object> list = null;

@@ -83,7 +83,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	            if(!ids.isEmpty())
 	            {
 	                final Object[] id= (Object[]) ids.get(0);
-	                path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[2].toString());
+	                path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[2].toString()).append(",").append(id[3].toString());
                   path.append("&scgId=").append(scgId);
 //	                path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[2].toString());
 //	                path.append("&URLCollectionEventId=").append(id[1].toString()).append("&URLId=").append(Constants.SPECIMEN_COLLECTION_GROUP).append("_").append(scgId).append('&');
@@ -102,7 +102,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	     			if(!list.isEmpty()) 
 	                {
 	                    final Object[] id= (Object[]) list.get(0);
-	                    path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString());
+	                    path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString()).append(",").append(id[3].toString());
 	                    path.append("&scgId=").append(id[2].toString());
 	                    path.append("&specimenId=").append(specimenid);
 //	                    path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[1].toString());
@@ -118,7 +118,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	 		if (!list.isEmpty()) {
 	 			final Object[] id = (Object[]) list.get(0);
 	 			
-	 		 path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString());
+	 		 path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString()).append(",").append(id[2].toString());
 	 		 
 //	 			path.append("&URLCollectionProtocolId=").append(id[0].toString())
 //	 					.append("&URLParticipantId=").append(id[1].toString());
