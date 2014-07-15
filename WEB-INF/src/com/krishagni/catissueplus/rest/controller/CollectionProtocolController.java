@@ -80,7 +80,6 @@ public class CollectionProtocolController {
 		ReqParticipantsSummaryEvent event = new ReqParticipantsSummaryEvent();
 		event.setCpId(cpId);
 		event.setSearchString(searchStr);
-		event.setParticipantId(StringUtils.isBlank(participantId)?null:Long.valueOf(participantId));
 		event.setSessionDataBean(getSession());
 		ParticipantsSummaryEvent result = cpSvc.getParticipants(event);
 		return result.getParticipantsInfo();
