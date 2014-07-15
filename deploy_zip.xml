@@ -786,6 +786,7 @@
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
+			<replacefilter token="@@query.exportDataDir@@" value="${query.exportDataDir}" />
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
 			<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
@@ -833,6 +834,8 @@
 				<replacefilter token="@@nightly.cron.job.execution.time.min@@" value="${nightly.cron.job.execution.time.min}" />
 			<!-- Nightly Cron Job Config End -->
 			<replacefilter token="@@usermanual@@" value="${user.manual}" />
+                        <replacefilter token="@@de.fileUploadDir@@" value="${de.fileUploadDir}"/>
+
 					</replace>
 					<replace file="${temp.dir}/catissuecore-properties/help_links.xml" token="@@usermanual@@" value="${user.manual}" />
 		<!-- Add values to properties if EMPI feature is enabled-->
