@@ -402,7 +402,7 @@
       <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-2">
           <div class="btn-group" dropdown>
-            <button class="btn btn-primary">New Query</button>
+            <button class="btn btn-primary" ng-click="createQuery()">New Query</button>
             <button class="btn btn-primary dropdown-toggle" ng-disabled="queryData.cpList.length == 0">
               <span class="caret"></span>
               <span class="sr-only"></span>
