@@ -265,11 +265,6 @@ Ext.onReady(function(){
                 text: 'Reported Problems',
 				tooltip:'Shows Reported Problems',
                 href:'ReportedProblemShow.do?pageNum=1'
-            },
-			{
-                text: 'Conflicting SPRs',
-				tooltip:'Shows Conflicting Surgical Pathology Reports',
-                href:'ConflictView.do?pageNum=1'
             }
 		]
     });
@@ -451,23 +446,11 @@ Ext.onReady(function(){
 			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
             },
 			{
-				text: 'Help Home',
-				href:'/catissuecore/RedirectToHelp.do',
-				tooltip:'Help Home'
-			},
-			{
 				text: 'User Guide',
 				href: '#',
 				handler: getUserGuideLink,
 				tooltip: 'User Guide'
 			},
-			{
-				text: 'UML Model',
-				href:'#',
-				handler: getUmlModelLink,
-				tooltip:'UML Model'
-			},
-			
 			{
 				text: 'Report Problem',
 				href:'ReportProblem.do?operation=add', 
