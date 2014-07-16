@@ -1608,8 +1608,7 @@
 			<echo message="Create Form !! " />
 			<java classname="edu.common.dynamicextensions.nui.client.CreateAQFormClient" fork="true" maxmemory="1024M">
 				<arg value="${Application.url}" />
-				<arg value="${filename}" />
-				<arg value="${create_tables}" />
+				<arg value="aq-forms" />
 				<arg value="${username}" />
 				<classpath>
 					<fileset dir="${de.temp.dir}/binaries/DynamicExtensionsInterface">
