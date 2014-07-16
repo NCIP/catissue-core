@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 
 public class CollectionProtocolRegistrationDetail {
 
@@ -116,9 +117,15 @@ public class CollectionProtocolRegistrationDetail {
 	}
 
 	public static CollectionProtocolRegistrationDetail fromDomain(CollectionProtocolRegistration cpr) {
+		 
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
+		detail.setParticipantDetail(ParticipantDetail.fromDomain(cpr.getParticipant()));
 		detail.setId(cpr.getId());
 		detail.setCpId(cpr.getCollectionProtocol().getId());
+		detail.setActivityStatus(cpr.getActivityStatus());
+		detail.setBarcode(cpr.getBarcode());
+		detail.setPpid(cpr.getProtocolParticipantIdentifier());
+		detail.setRegistrationDate(cpr.getRegistrationDate());
 		return detail;
 	}
 

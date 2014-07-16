@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.LazyInitializationException;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
@@ -167,17 +169,23 @@ public class ParticipantDetail {
 		participantDetail.setGender(participant.getGender());
 		participantDetail.setId(participant.getId());
 		//TODO revisit 
-//		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
-//		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
-//		if (pmi != null) {
-//			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
-//				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
-//				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
-//				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
-//				pmiColl.add(medicalRecordNumberDetail);
-//			}
-//		}
-//		participantDetail.setPmiCollection(pmiColl);
+		List<ParticipantMedicalIdentifierNumberDetail> pmiColl = new ArrayList<ParticipantMedicalIdentifierNumberDetail>();
+		try{
+		Map<String, ParticipantMedicalIdentifier> pmi = participant.getPmiCollection();
+		
+		if (pmi != null) {
+			for (ParticipantMedicalIdentifier participantMedicalIdentifier : pmi.values()) {
+				ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail = new ParticipantMedicalIdentifierNumberDetail();
+				medicalRecordNumberDetail.setMrn(participantMedicalIdentifier.getMedicalRecordNumber());
+				medicalRecordNumberDetail.setSiteName(participantMedicalIdentifier.getSite().getName());
+				pmiColl.add(medicalRecordNumberDetail);
+			}
+		}
+		}catch(LazyInitializationException e)
+		{
+			
+		}
+		participantDetail.setPmiCollection(pmiColl);
 		Set<String> raceSet = participant.getRaceColl();
 		Set<String> newRace = new HashSet<String>(); 
 		if(raceSet != null){

@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
+import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -295,6 +297,64 @@ public class SpecimenDetail {
 
 	public static SpecimenDetail fromDomain(Specimen specimen) {
 		SpecimenDetail detail = new SpecimenDetail();
+		detail.setActivityStatus(specimen.getActivityStatus());
+		detail.setAvailableQuantity(specimen.getAvailableQuantity());
+		detail.setBarcode(specimen.getBarcode());
+		detail.setBiohazardDetails(getBiohazardDetail(specimen.getBiohazardCollection()));
+		detail.setCollectionStatus(specimen.getCollectionStatus());
+		detail.setComment(specimen.getComment());
+		detail.setLineage(specimen.getLineage());
+		detail.setConcentrationInMicrogramPerMicroliter(specimen.getConcentrationInMicrogramPerMicroliter());
+		detail.setCreatedOn(specimen.getCreatedOn());
+		detail.setExternalIdentifierDetails(getExternalIdentifierDetails(specimen.getExternalIdentifierCollection()));
+		detail.setId(specimen.getId());
+		detail.setInitialQuantity(specimen.getInitialQuantity());
+		detail.setIsAvailable(specimen.getIsAvailable());
+		detail.setLabel(specimen.getLabel());
+		detail.setLineage(specimen.getLineage());
+		if (specimen.getParentSpecimen() != null) {
+			detail.setParentSpecimenId(specimen.getParentSpecimen().getId());
+		}
+		detail.setPathologicalStatus(specimen.getPathologicalStatus());
+		/*    if (specimen.getSpecimenPosition() != null) {
+		        detail.setPos1(specimen.getSpecimenPosition().getPositionDimensionOne().toString());
+		        detail.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwo().toString());
+		    }*/
+		detail.setEventCollection(specimen.getEventCollection());
+		detail.setSpecimenClass(specimen.getSpecimenClass());
+		detail.setSpecimenType(specimen.getSpecimenType());
+		detail.setTissueSide(specimen.getTissueSide());
+		detail.setTissueSite(specimen.getTissueSite());
+		if (specimen.getSpecimenCollectionGroup() != null) {
+			detail.setScgId(specimen.getSpecimenCollectionGroup().getId());
+		}
 		return detail;
+	}
+
+	private static List<ExternalIdentifierDetail> getExternalIdentifierDetails(
+			Set<ExternalIdentifier> externalIdentifierCollection) {
+		List<ExternalIdentifierDetail> extIdentifiers = new ArrayList<ExternalIdentifierDetail>();
+		for (ExternalIdentifier extIdentifier : externalIdentifierCollection) {
+			ExternalIdentifierDetail detail = new ExternalIdentifierDetail();
+			detail.setId(extIdentifier.getId());
+			detail.setName(extIdentifier.getName());
+			detail.setValue(extIdentifier.getValue());
+			extIdentifiers.add(detail);
+		}
+		return extIdentifiers;
+	}
+
+	private static List<BiohazardDetail> getBiohazardDetail(Set<Biohazard> biohazardCollection) {
+		List<BiohazardDetail> biohazards = new ArrayList<BiohazardDetail>();
+
+		for (Biohazard biohazard : biohazardCollection) {
+			BiohazardDetail detail = new BiohazardDetail();
+			detail.setComment(biohazard.getComment());
+			detail.setId(biohazard.getId());
+			detail.setName(biohazard.getName());
+			detail.setType(biohazard.getType());
+			biohazards.add(detail);
+		}
+		return biohazards;
 	}
 }

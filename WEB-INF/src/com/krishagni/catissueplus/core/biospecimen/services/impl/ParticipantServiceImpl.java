@@ -4,9 +4,12 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.collections.map.HashedMap;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
@@ -107,9 +110,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
 			Participant participant = participantFactory.createParticipant(event.getParticipantDetail());
-			ObjectCreationException errorHandler = new ObjectCreationException();;
+			ObjectCreationException errorHandler = new ObjectCreationException();
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
-			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
+//			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
+			checkForUniquePMI(oldParticipant.getPmiCollection(), participant.getPmiCollection(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 
 			oldParticipant.update(participant);
@@ -133,11 +137,13 @@ public class ParticipantServiceImpl implements ParticipantService {
 			if (oldParticipant == null) {
 				return ParticipantUpdatedEvent.notFound(participantId);
 			}
+			Map<String, ParticipantMedicalIdentifier> oldPmiCollection = oldParticipant.getPmiCollection();
 			Participant participant = participantFactory.patchParticipant(oldParticipant, event.getParticipantDetail());
 			
 			ObjectCreationException errorHandler = new ObjectCreationException();;
 			validateSsn(oldParticipant.getSocialSecurityNumber(), participant.getSocialSecurityNumber(), errorHandler);
-			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
+			checkForUniquePMI(oldPmiCollection, participant.getPmiCollection(), errorHandler);
+//			ensureUniquePMI(participant.getPmiCollection(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			
 			oldParticipant.update(participant);
@@ -190,7 +196,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 		else if (!isBlank(oldSsn) && !isBlank(newSsn) && !oldSsn.equals(newSsn)) {
 			ensureUniqueSsn(newSsn, errorHandler);
 		}
-
 	}
 
 	private void ensureUniqueSsn(String ssn, ObjectCreationException errorHandler) {
@@ -205,11 +210,32 @@ public class ParticipantServiceImpl implements ParticipantService {
 		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
 			String siteName = entry.getKey();
 			String mrn = entry.getValue().getMedicalRecordNumber();
-			if (daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
+			if (!daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
 				errorHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
 			}
 
 		}
 	}
+	
+	private void checkForUniquePMI(Map<String, ParticipantMedicalIdentifier> oldPmiCollection,
+					Map<String, ParticipantMedicalIdentifier> newPmiCollection, ObjectCreationException errorHandler) {
+		Map<String,ParticipantMedicalIdentifier> map = new HashMap<String, ParticipantMedicalIdentifier>();
+					for (Entry<String, ParticipantMedicalIdentifier> entry : newPmiCollection.entrySet()) {
+						{
+							if(!oldPmiCollection.containsKey(entry.getKey())){
+										map.put(entry.getKey(), entry.getValue());
+							}
+							else{
+								ParticipantMedicalIdentifier pmi = oldPmiCollection.get(entry.getKey());
+								pmi.setMedicalRecordNumber(entry.getValue().getMedicalRecordNumber());
+								entry.setValue(pmi);
+//								entry.getValue().setId(oldPmiCollection.get(entry.getKey()).getId());
+							}
+						}
+					}
+					if (!map.isEmpty()) {
+						ensureUniquePMI(map, errorHandler);
+				}
+			}
 
 }

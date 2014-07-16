@@ -125,9 +125,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (detail.isRaceModified()) {
 			setRace(participant, detail.getRace(), exception);
 		}
-		if (detail.isPMIModified()) {
-			setPmi(participant, detail.getPmiCollection(), exception);
-		}
+		//TODO: Revisit
+//		if (detail.isPMIModified()) {
+//			setPmi(participant, detail.getPmiCollection(), exception);
+//		}
 
 		exception.checkErrorAndThrow();
 		return participant;

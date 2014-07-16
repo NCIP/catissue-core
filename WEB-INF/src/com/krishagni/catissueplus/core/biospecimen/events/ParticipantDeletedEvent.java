@@ -6,6 +6,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantDeletedEvent extends ResponseEvent {
 
+	private static final String SUCCESS = "success";
 	private Long id;
 
 	public Long getId() {
@@ -18,6 +19,7 @@ public class ParticipantDeletedEvent extends ResponseEvent {
 
 	public static ParticipantDeletedEvent ok() {
 		ParticipantDeletedEvent event = new ParticipantDeletedEvent();
+		event.setMessage(SUCCESS);
 		event.setStatus(EventStatus.OK);
 		return event;
 	}

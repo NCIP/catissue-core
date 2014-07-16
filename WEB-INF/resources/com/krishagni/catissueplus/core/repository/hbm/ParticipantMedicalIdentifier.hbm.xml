@@ -45,7 +45,7 @@
              
             update="true"
             insert="true"
-            column="SITE_ID" lazy="false" 
+            column="SITE_ID" 
         />
 
         <many-to-one

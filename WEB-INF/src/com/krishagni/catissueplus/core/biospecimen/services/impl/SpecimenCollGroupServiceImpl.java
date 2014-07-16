@@ -123,7 +123,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			errorHandler.checkErrorAndThrow();
 			oldScg.update(scg);
 			daoFactory.getScgDao().saveOrUpdate(oldScg);
-			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(scg));
+			return ScgUpdatedEvent.ok(ScgDetail.fromDomain(oldScg));
 		}
 		catch (ObjectCreationException oce) {
 			return ScgUpdatedEvent.invalidRequest(ScgErrorCode.ERRORS.message(), oce.getErroneousFields());

@@ -1,7 +1,8 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
-import java.lang.reflect.InvocationTargetException;
+import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
@@ -38,11 +40,12 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-
 @Controller
 @RequestMapping("/participants")
 public class ParticipantController {
 
+	private static final String PATCH_PARTICIPANT = "patch participant";
+	
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
@@ -101,14 +104,9 @@ public class ParticipantController {
 		try {
 			BeanUtils.populate(detail, values);
 		}
-		catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		catch (Exception e) {
+			reportError(ParticipantErrorCode.BAD_REQUEST, PATCH_PARTICIPANT);
+			 		}
 		detail.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setParticipantDetail(detail);
 		event.setId(id);
@@ -123,14 +121,14 @@ public class ParticipantController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Long delete(@PathVariable Long id,@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
+	public String delete(@PathVariable Long id,@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
 		DeleteParticipantEvent event = new DeleteParticipantEvent();
 		event.setSessionDataBean(getSession());
 		event.setIncludeChildren(Boolean.valueOf(includeChildren));
 		event.setId(id);
 		ParticipantDeletedEvent resp = participantSvc.delete(event);
 		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getId();
+			return resp.getMessage();
 		}
 		return null;
 	}
