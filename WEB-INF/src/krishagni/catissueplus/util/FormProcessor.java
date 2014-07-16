@@ -11,8 +11,8 @@ import com.krishagni.catissueplus.core.common.CaTissueAppContext;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteQueryFormContextEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFormContextDeletedEvent;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
+import com.krishagni.catissueplus.core.de.events.FormContextRemovedEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
@@ -76,10 +76,11 @@ public class FormProcessor implements FormPostProcessor {
 		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
 		FormService formSvc = (FormService) caTissueContext.getBean("formSvc");
 		
-		DeleteQueryFormContextEvent req = new DeleteQueryFormContextEvent();
+		RemoveFormContextEvent req = new RemoveFormContextEvent();
 		req.setFormId(formId);
+		req.setFormType(RemoveFormContextEvent.FormType.QUERY_FORMS);
 		
-		QueryFormContextDeletedEvent resp = formSvc.deleteQueryFormContext(req);
+		FormContextRemovedEvent resp = formSvc.removeFormContext(req);
 		
 		if (resp.getStatus() != EventStatus.OK) {
 			throw new RuntimeException("Could not delete the form: " + formId);

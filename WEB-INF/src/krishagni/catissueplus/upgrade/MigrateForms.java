@@ -70,6 +70,12 @@ public class MigrateForms {
 		System.out.println("Starting migration of forms.");
 		UserContext usrCtx = getUserContext(args[0]);
 		
+		if (usrCtx == null) {
+			logger.info("FATAL! There was no active user found! Aborting form migration! Please provide a active username in " + 
+					" parameter e.g. -Dusername=\"admin@admin.com\"");
+			return;
+		} 
+		
 		Date startTime = Calendar.getInstance().getTime();
 		logger.info("Migration start time: " + startTime);
 		Thread.sleep(5000);

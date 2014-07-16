@@ -5,13 +5,13 @@ import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
-import com.krishagni.catissueplus.core.de.events.DeleteQueryFormContextEvent;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FileDetailEvent;
 import com.krishagni.catissueplus.core.de.events.FileUploadedEvent;
-import com.krishagni.catissueplus.core.de.events.QueryFormContextDeletedEvent;
+import com.krishagni.catissueplus.core.de.events.FormContextRemovedEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.FormDataEvent;
@@ -41,7 +41,7 @@ public interface FormService {
 	
 	public FormContextsAddedEvent addFormContexts(AddFormContextsEvent req);
 	
-	public QueryFormContextDeletedEvent deleteQueryFormContext(DeleteQueryFormContextEvent req);
+	public FormContextRemovedEvent removeFormContext(RemoveFormContextEvent req);
 	
 	public EntityFormsEvent getEntityForms(ReqEntityFormsEvent req);
 	

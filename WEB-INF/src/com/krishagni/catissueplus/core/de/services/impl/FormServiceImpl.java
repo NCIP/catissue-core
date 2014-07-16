@@ -294,19 +294,28 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
 	@PlusTransactional
-	public QueryFormContextDeletedEvent deleteQueryFormContext(DeleteQueryFormContextEvent req) {
+	public FormContextRemovedEvent removeFormContext(RemoveFormContextEvent req) {
 		try {
-			Long formId = req.getFormId();
-			FormContextBean queryForm = formDao.getQueryFormContext(formId);
-			
-			if (queryForm == null) { 
-				return QueryFormContextDeletedEvent.notFound(formId);
+			switch (req.getFormType()) {
+			case DATA_ENTRY_FORMS: 
+				return FormContextRemovedEvent.badRequest("Deletion of data entry forms not supported!", null);
+				
+			case QUERY_FORMS:
+				Long formId = req.getFormId();
+				FormContextBean queryForm = formDao.getQueryFormContext(formId);
+				
+				if (queryForm == null) { 
+					return FormContextRemovedEvent.notFound(formId);
+				}
+				
+				formDao.delete(queryForm);
+				return FormContextRemovedEvent.ok(formId);
+				
+			default:
+				return FormContextRemovedEvent.badRequest("Invalid Entry Parameters!", null);
 			}
-			
-			formDao.delete(queryForm);
-			return QueryFormContextDeletedEvent.ok(formId);
 		} catch (Exception e) {
-			return QueryFormContextDeletedEvent.serverError(e.getMessage(), e);
+			return FormContextRemovedEvent.serverError(e.getMessage(), e);
 		}
 	}
 		
