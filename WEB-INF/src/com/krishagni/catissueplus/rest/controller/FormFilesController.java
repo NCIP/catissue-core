@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,18 +34,18 @@ public class FormFilesController {
 	@Autowired
 	private FormService formSvc;
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST,  produces="text/plain")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public FileDetail uploadFile(@PathVariable("file") MultipartFile file) {
+	public String uploadFile(@PathVariable("file") MultipartFile file) {
 		UploadFileEvent req = new UploadFileEvent();
 		req.setFile(file);
 		
 		FileUploadedEvent resp = formSvc.uploadFile(req);
 		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFile();
+			return new Gson().toJson(resp.getFile());
 		}
-		
+
 		return null;
 	}
 	
