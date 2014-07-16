@@ -291,6 +291,24 @@ public class FormServiceImpl implements FormService {
 		
 		return  RecordEntriesDeletedEvent.ok(deletedRecIds);
 	}
+	
+	@Override
+	@PlusTransactional
+	public QueryFormContextDeletedEvent deleteQueryFormContext(DeleteQueryFormContextEvent req) {
+		try {
+			Long formId = req.getFormId();
+			FormContextBean queryForm = formDao.getQueryFormContext(formId);
+			
+			if (queryForm == null) { 
+				return QueryFormContextDeletedEvent.notFound(formId);
+			}
+			
+			formDao.delete(queryForm);
+			return QueryFormContextDeletedEvent.ok(formId);
+		} catch (Exception e) {
+			return QueryFormContextDeletedEvent.serverError(e.getMessage(), e);
+		}
+	}
 		
 	@Override
 	@PlusTransactional

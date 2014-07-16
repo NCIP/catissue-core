@@ -177,6 +177,14 @@
             (f.cpId = :cpId or f.cpId = -1) and
             f.entityType = :entityType
         </query>
+        
+        <query name="getQueryFormCtxtByContainerId">
+            from
+            FormContextBean as f
+            where
+            f.containerId = :formId and
+            f.entityType = :entityType
+        </query>
 
         <sql-query name="getCprForms">
             <return-scalar column="formCtxtId" type="long"/>
