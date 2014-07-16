@@ -21,6 +21,12 @@
 	<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<!-- Mandar 21-Aug-06 : calendar changes end -->
+	
+	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 </head>
 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
@@ -90,19 +96,56 @@
 						<bean:message key="eventparameters.time"/>
 					</td>
 					<td align="left" colspan="2">
-						<span class="black_ar">
-							<autocomplete:AutoCompleteTag property="timeInHours"
-							optionsList = '${requestScope.hourList}'
-							initialValue='${checkInCheckOutEventParametersForm.timeInHours}'
-							styleClass="black_ar"
-							staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
-							<autocomplete:AutoCompleteTag property="timeInMinutes"
-							optionsList = '${requestScope.minutesList}'
-							initialValue='${checkInCheckOutEventParametersForm.timeInMinutes}'
-							styleClass="black_ar"
-							staticField="false" size="4" />
-							&nbsp;<bean:message key="eventparameters.timeinminutes"/>
-						</span>
+						
+						<div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="timeInHours1" styleClass="black_ar" styleId="timeInHours" size="1"> 
+						<logic:iterate id="hourListd" name="hourList">
+								
+									<option value="<bean:write name='hourListd'/>" selected><bean:write name='hourListd'/></option>
+								
+							</logic:iterate>
+						<select></div><div style="float:left;">&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+						</div><div style="float:left;">
+						<select id="timeInMinutes1" styleClass="black_ar" styleId="timeInMinutes" size="1"> 
+						<logic:iterate id="minutesId" name="minutesList">
+								
+									<option value="<bean:write name='minutesId'/>" selected><bean:write name='minutesId'/></option>
+								
+							</logic:iterate>
+						</select></div><div>&nbsp;&nbsp;<bean:message key="eventparameters.timeinminutes"/>
+						</div>
+<html:hidden property="timeInHours" value='${checkInCheckOutEventParametersForm.timeInHours}'/>
+<html:hidden property="timeInMinutes"  value='${checkInCheckOutEventParametersForm.timeInMinutes}'/>
+
+						</div>
+								<script>
+							 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var timeHr = new dhtmlXCombo("timeInHours1","timeInHours1","100px");
+							  timeHr.setSize(60);
+							  timeHr.enableFilteringMode(true);
+							  if('${checkInCheckOutEventParametersForm.timeInHours}'!=0){
+								timeHr.setComboValue('${checkInCheckOutEventParametersForm.timeInHours}');
+							  }
+							  timeHr.attachEvent("onChange", function(){
+								document.getElementsByName("timeInHours")[0].value= timeHr.getSelectedValue();
+							  });  
+
+							   var timeMinute = new dhtmlXCombo("timeInMinutes1","timeInMinutes1","100px");
+							  timeMinute.setSize(60);
+							  timeMinute.enableFilteringMode(true);
+							  if('${checkInCheckOutEventParametersForm.timeInMinutes}'!=0){
+								timeMinute.setComboValue('${checkInCheckOutEventParametersForm.timeInMinutes}');
+							  }
+							  timeMinute.attachEvent("onChange", function(){
+								document.getElementsByName("timeInMinutes")[0].value= timeMinute.getSelectedValue();
+							  });  
+
+						</script>	
+	  
+						
+						
+						
+						
 					</td>
 				</tr>
 				<tr>
@@ -115,13 +158,28 @@
 						</LABEL>
 					</td>
 					<td align="left" colspan="4">
-						<span class="black_ar">
-							<autocomplete:AutoCompleteTag property="storageStatus"
-							optionsList = '${requestScope.storageStatusList}'
-							initialValue='${checkInCheckOutEventParametersForm.storageStatus}'
-							styleClass="black_ar"
-							staticField="false" size="30" />
-						</span>
+											
+						<div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="storageStatus1" styleClass="black_ar" styleId="storageStatus1" size="1"> 
+						<logic:iterate id="storageStatus" name="storageStatusList">
+								
+									<option value="<bean:write name='storageStatus' />"><bean:write name="storageStatus"/></option>
+								
+							</logic:iterate>
+						</select></div>
+<html:hidden property="storageStatus" value="${checkInCheckOutEventParametersForm.storageStatus}"/>
+
+						</div>
+						<script>
+							  var storageStatus = new dhtmlXCombo("storageStatus1","storageStatus1","100px");
+							  storageStatus.setSize(225);
+							  storageStatus.enableFilteringMode(true);
+							  storageStatus.setComboValue("${checkInCheckOutEventParametersForm.storageStatus}");
+							  storageStatus.attachEvent("onChange", function(){
+								document.getElementsByName("storageStatus")[0].value= storageStatus.getSelectedValue();
+							  });
+						</script>
+						
 					</td>
 				</tr>
 				<tr>

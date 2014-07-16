@@ -24,6 +24,12 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
+	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+
 </head>
 
 <body>
@@ -93,20 +99,54 @@
                   <!-- Time -->
 				  <td align="left" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td class="black_ar" width="15%" ><bean:message key="eventparameters.time" /></td>
-                  <td align="left"><span class="black_ar"><autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = '${requestScope.hourList}'
-					   initialValue='${tissueSpecimenReviewEventParametersForm.timeInHours}'
-					  styleClass="black_ar"
-					  staticField="false"
-					  size="4"
-			    />	                   &nbsp;<bean:message key="eventparameters.timeinhours" />. &nbsp;&nbsp;
-                     <autocomplete:AutoCompleteTag property="timeInMinutes"
-						  optionsList = '${requestScope.minutesList}'
-						  initialValue='${tissueSpecimenReviewEventParametersForm.timeInMinutes}'
-						  styleClass="black_ar"
-						  staticField="false"
-						  size="4"
-				    />	                  &nbsp;<bean:message key="eventparameters.timeinminutes" />.</span></td>
+                  <td align="left">					
+						<div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="timeInHours1" styleClass="black_ar" styleId="timeInHours" size="1"> 
+						<logic:iterate id="hourListd" name="hourList">
+								
+									<option value="<bean:write name='hourListd'/>" selected><bean:write name='hourListd'/></option>
+								
+							</logic:iterate>
+						<select></div><div style="float:left;">&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+						</div><div style="float:left;">
+						<select id="timeInMinutes1" styleClass="black_ar" styleId="timeInMinutes" size="1"> 
+						<logic:iterate id="minutesId" name="minutesList">
+								
+									<option value="<bean:write name='minutesId'/>" selected><bean:write name='minutesId'/></option>
+								
+							</logic:iterate>
+						</select></div><div>&nbsp;&nbsp;<bean:message key="eventparameters.timeinminutes"/>
+						</div>
+<html:hidden property="timeInHours" value='${tissueSpecimenReviewEventParametersForm.timeInHours}'/>
+<html:hidden property="timeInMinutes"  value='${tissueSpecimenReviewEventParametersForm.timeInMinutes}'/>
+
+						</div>
+								<script>
+							 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var timeHr = new dhtmlXCombo("timeInHours1","timeInHours1","100px");
+							  timeHr.setSize(60);
+							  timeHr.enableFilteringMode(true);
+							  if('${tissueSpecimenReviewEventParametersForm.timeInHours}'!=0){
+								timeHr.setComboValue('${tissueSpecimenReviewEventParametersForm.timeInHours}');
+							  }
+							  timeHr.attachEvent("onChange", function(){
+								document.getElementsByName("timeInHours")[0].value= timeHr.getSelectedValue();
+							  });  
+
+							   var timeMinute = new dhtmlXCombo("timeInMinutes1","timeInMinutes1","100px");
+							  timeMinute.setSize(60);
+							  timeMinute.enableFilteringMode(true);
+							  if('${tissueSpecimenReviewEventParametersForm.timeInMinutes}'!=0){
+								timeMinute.setComboValue('${tissueSpecimenReviewEventParametersForm.timeInMinutes}');
+							  }
+							  timeMinute.attachEvent("onChange", function(){
+								document.getElementsByName("timeInMinutes")[0].value= timeMinute.getSelectedValue();
+							  });  
+
+						</script>	
+	  
+					
+					</td>
 
 
                 </tr>
@@ -133,12 +173,39 @@
 				<tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><LABEL for="type"><bean:message key="tissuespecimenrevieweventparameters.histologicalquality"/> </LABEL></td>
-                  <td align="left" class="black_ar"><autocomplete:AutoCompleteTag property="histologicalQuality"
-						  optionsList ='${requestScope.histologicalQualityList}'
-						  initialValue='${tissueSpecimenReviewEventParametersForm.histologicalQuality}'
-						  styleClass="black_ar"
-						  size="27"
-				    />	&nbsp;</td>
+                  <td align="left" class="black_ar">
+					
+					
+					
+					  <div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="histologicalQuality1" styleClass="black_ar" styleId="histologicalQuality1" size="1"> 
+						<logic:iterate id="histologicalQuality" name="histologicalQualityList">
+								
+									<option value="<bean:write name='histologicalQuality'  property="value"/>"><bean:write name="histologicalQuality"  property="name"/></option>
+								
+							</logic:iterate>
+						</select></div>
+						<html:hidden property="histologicalQuality" value="${tissueSpecimenReviewEventParametersForm.histologicalQuality}"/>
+
+						</div>
+								<script>
+							  var histologicalQuality = new dhtmlXCombo("histologicalQuality1","histologicalQuality1","100px");
+							  histologicalQuality.setSize(225);
+							  histologicalQuality.enableFilteringMode(true);
+							  histologicalQuality.setComboValue("${tissueSpecimenReviewEventParametersForm.histologicalQuality}");
+							  histologicalQuality.attachEvent("onChange", function(){
+								document.getElementsByName("histologicalQuality")[0].value= histologicalQuality.getSelectedValue();
+								
+							  });  
+
+
+						</script>	
+	  	  
+					
+					
+					
+					
+					</td>
 
 
                 </tr>

@@ -17,7 +17,8 @@
 <%
 String ua = request.getHeader("User-Agent");
 Object form = request.getAttribute("formName");
-if(!ua.contains("MSIE 9.0") || form instanceof CollectionProtocolForm){
+   String view=(String)request.getAttribute("view");
+if(!ua.contains("MSIE 9.0") || form instanceof CollectionProtocolForm || !"cpBasedView".equals(view)){
 
 %>
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
@@ -35,7 +36,6 @@ if(!ua.contains("MSIE 9.0") || form instanceof CollectionProtocolForm){
     <%
     String URLKey=(String)request.getAttribute("helpURLKey");
     String pageOf=(String)request.getAttribute("pageOf");
-    String view=(String)request.getAttribute("view");
     String helpURL=null;
     
     if(null==URLKey)

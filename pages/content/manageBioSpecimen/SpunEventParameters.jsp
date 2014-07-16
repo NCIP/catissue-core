@@ -21,6 +21,11 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
 </head>
@@ -78,18 +83,59 @@
 
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="15%"><bean:message key="eventparameters.time"/></td>
-                  <td align="left"><span class="black_ar"><autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = '${requestScope.hourList}'
-					  initialValue='${spunEventParametersForm.timeInHours}'
-					  styleClass="black_ar"
-					  staticField="false" size="4" />
-					  &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
-                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						 optionsList = '${requestScope.minutesList}'
-						 initialValue='${spunEventParametersForm.timeInMinutes}'
-						  styleClass="black_ar"
-						  staticField="false" size="4"/>
-						  &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+                  <td align="left">						  
+
+						<div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="timeInHours1" styleClass="black_ar" styleId="timeInHours" size="1"> 
+						<logic:iterate id="hourListd" name="hourList">
+								
+									<option value="<bean:write name='hourListd'/>" selected><bean:write name='hourListd'/></option>
+								
+							</logic:iterate>
+						<select></div><div style="float:left;">&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+						</div><div style="float:left;">
+						<select id="timeInMinutes1" styleClass="black_ar" styleId="timeInMinutes" size="1"> 
+						<logic:iterate id="minutesId" name="minutesList">
+								
+									<option value="<bean:write name='minutesId'/>" selected><bean:write name='minutesId'/></option>
+								
+							</logic:iterate>
+						</select></div><div>&nbsp;&nbsp;<bean:message key="eventparameters.timeinminutes"/>
+						</div>
+<html:hidden property="timeInHours" value='${spunEventParametersForm.timeInHours}'/>
+<html:hidden property="timeInMinutes"  value='${spunEventParametersForm.timeInMinutes}'/>
+
+						</div>
+						<script>
+							 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var timeHr = new dhtmlXCombo("timeInHours1","timeInHours1","100px");
+							  timeHr.setSize(60);
+							  if('${spunEventParametersForm.timeInHours}'!=0){
+								timeHr.setComboValue('${spunEventParametersForm.timeInHours}');
+							  }
+							  timeHr.attachEvent("onChange", function(){
+								document.getElementsByName("timeInHours")[0].value= timeHr.getSelectedValue();
+							  });  
+
+							   var timeMinute = new dhtmlXCombo("timeInMinutes1","timeInMinutes1","100px");
+							  timeMinute.setSize(60);
+							  if('${spunEventParametersForm.timeInMinutes}'!=0){
+								timeMinute.setComboValue('${spunEventParametersForm.timeInMinutes}');
+							  }
+							  timeMinute.attachEvent("onChange", function(){
+								document.getElementsByName("timeInMinutes")[0].value= timeMinute.getSelectedValue();
+							  });  
+
+						</script>	
+
+						  
+						  
+						  
+						  
+						  
+						  
+						  
+						  </td>
                 </tr>
 
                 <tr>

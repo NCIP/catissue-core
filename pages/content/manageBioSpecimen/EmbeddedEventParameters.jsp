@@ -19,6 +19,12 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+
 </head>
 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
@@ -72,25 +78,93 @@
 
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
-                  <td align="left"><span class="black_ar"><autocomplete:AutoCompleteTag property="timeInHours"
-					   optionsList = '${requestScope.hourList}'
-					   initialValue='${embeddedEventParametersForm.timeInHours}'
-					  styleClass="black_ar"
-					  staticField="false" size="4" />                    &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
-                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						   optionsList = '${requestScope.minutesList}'
-						  initialValue='${embeddedEventParametersForm.timeInMinutes}'
-						  styleClass="black_ar"
-						  staticField="false" size="4" />	                    &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+                  <td align="left">				  
+						  <div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="timeInHours1" styleClass="black_ar" styleId="timeInHours" size="1"> 
+						<logic:iterate id="hourListd" name="hourList">
+								
+									<option value="<bean:write name='hourListd'/>" selected><bean:write name='hourListd'/></option>
+								
+							</logic:iterate>
+						<select></div><div style="float:left;">&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+						</div><div style="float:left;">
+						<select id="timeInMinutes1" styleClass="black_ar" styleId="timeInMinutes" size="1"> 
+						<logic:iterate id="minutesId" name="minutesList">
+								
+									<option value="<bean:write name='minutesId'/>" selected><bean:write name='minutesId'/></option>
+								
+							</logic:iterate>
+						</select></div><div>&nbsp;&nbsp;<bean:message key="eventparameters.timeinminutes"/>
+						</div>
+<html:hidden property="timeInHours" value='${embeddedEventParametersForm.timeInHours}'/>
+<html:hidden property="timeInMinutes"  value='${embeddedEventParametersForm.timeInMinutes}'/>
+
+						</div>
+								<script>
+							 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var timeHr = new dhtmlXCombo("timeInHours1","timeInHours1","100px");
+							  timeHr.setSize(60);
+							  timeHr.enableFilteringMode(true);
+							  if('${embeddedEventParametersForm.timeInHours}'!=0){
+								timeHr.setComboValue('${embeddedEventParametersForm.timeInHours}');
+							  }
+							  timeHr.attachEvent("onChange", function(){
+								document.getElementsByName("timeInHours")[0].value= timeHr.getSelectedValue();
+							  });  
+
+							   var timeMinute = new dhtmlXCombo("timeInMinutes1","timeInMinutes1","100px");
+							  timeMinute.setSize(60);
+							  timeMinute.enableFilteringMode(true);
+							  if('${embeddedEventParametersForm.timeInMinutes}'!=0){
+								timeMinute.setComboValue('${embeddedEventParametersForm.timeInMinutes}');
+							  }
+							  timeMinute.attachEvent("onChange", function(){
+								document.getElementsByName("timeInMinutes")[0].value= timeMinute.getSelectedValue();
+							  });  
+
+						</script>	
+
+						  
+						  
+						  
+						  
+						  
+						  </td>
                 </tr>
                 <tr>
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar"><LABEL for="type"><bean:message key="embeddedeventparameters.embeddingMedium"/></LABEL>
                   <LABEL for="activityStatus"></LABEL>                    <LABEL for="type"></LABEL></td>
-                  <td align="left" colspan="4" class="black_ar"><autocomplete:AutoCompleteTag property="embeddingMedium"
-						  optionsList = '${requestScope.embeddingMediumList}'
-						  initialValue='${embeddedEventParametersForm.embeddingMedium}'
-						  styleClass="black_ar" size="30"/></td>
+                  <td align="left" colspan="4" class="black_ar">
+						  
+					  <div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="embeddingMedium1" styleClass="black_ar" styleId="embeddingMedium1" size="1"> 
+						<logic:iterate id="embeddingMediumList" name="embeddingMediumList">
+								
+									<option value="<bean:write name='embeddingMediumList' property='value'/>"><bean:write name="embeddingMediumList" property="name"/></option>
+								
+							</logic:iterate>
+						</select></div>
+<html:hidden property="embeddingMedium" value="${embeddedEventParametersForm.embeddingMedium}"/>
+
+						</div>
+								<script>
+							  var embeddingMedium = new dhtmlXCombo("embeddingMedium1","embeddingMedium1","100px");
+							  embeddingMedium.setSize(225);
+							  embeddingMedium.enableFilteringMode(true);
+							  if("${embeddedEventParametersForm.embeddingMedium}"!=0){
+								embeddingMedium.setComboValue("${embeddedEventParametersForm.embeddingMedium}");
+							  }
+							  embeddingMedium.attachEvent("onChange", function(){
+								document.getElementsByName("embeddingMedium")[0].value= embeddingMedium.getSelectedValue();
+							  });  
+
+
+						</script>	
+	  
+						  
+						  
+				  </td>
                 </tr>
 
 

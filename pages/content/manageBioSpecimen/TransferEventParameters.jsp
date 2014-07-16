@@ -11,7 +11,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.TransferEventParametersForm"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
-
+<head>
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
@@ -252,22 +252,58 @@ function updateStorageContainerValue()
 
                   <td align="center" class="black_ar" width="1%"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
-                  <td colspan="0" align="left"><span class="black_ar">
-					<autocomplete:AutoCompleteTag property="timeInHours"
-					   optionsList = '${requestScope.hourList}'
-					   initialValue='${transferEventParametersForm.timeInHours}'
-					  styleClass="black_ar"
-					  staticField="false"
-						size = "4" />
-					  &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
-                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						  optionsList = '${requestScope.minutesList}'
-						  initialValue='${transferEventParametersForm.timeInMinutes}'
-						  styleClass="black_ar"
-						  staticField="false"  size="4"/>
-				<label for="eventparameters.timeinminutes">
-					&nbsp;<bean:message key="eventparameters.timeinminutes"/>
-				</label></span></td>
+                  <td colspan="0" align="left">
+				
+				
+				
+				<div style="width:100%"  class="black_ar"><div style="float:left;">
+						<select id="timeInHours1" styleClass="black_ar" styleId="timeInHours" size="1"> 
+						<logic:iterate id="hourListd" name="hourList">
+								
+									<option value="<bean:write name='hourListd'/>" selected><bean:write name='hourListd'/></option>
+								
+							</logic:iterate>
+						<select></div><div style="float:left;">&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+						</div><div style="float:left;">
+						<select id="timeInMinutes1" styleClass="black_ar" styleId="timeInMinutes" size="1"> 
+						<logic:iterate id="minutesId" name="minutesList">
+								
+									<option value="<bean:write name='minutesId'/>" selected><bean:write name='minutesId'/></option>
+								
+							</logic:iterate>
+						</select></div><div>&nbsp;&nbsp;<bean:message key="eventparameters.timeinminutes"/>
+						</div>
+<html:hidden property="timeInHours" value='${transferEventParametersForm.timeInHours}'/>
+<html:hidden property="timeInMinutes"  value='${transferEventParametersForm.timeInMinutes}'/>
+
+						</div>
+								<script>
+							 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  var timeHr = new dhtmlXCombo("timeInHours1","timeInHours1","100px");
+							  timeHr.setSize(60);
+							  timeHr.enableFilteringMode(true);
+							  if('${transferEventParametersForm.timeInHours}'!=0){
+								timeHr.setComboValue('${transferEventParametersForm.timeInHours}');
+							  }
+							  timeHr.attachEvent("onChange", function(){
+								document.getElementsByName("timeInHours")[0].value= timeHr.getSelectedValue();
+							  });  
+
+							   var timeMinute = new dhtmlXCombo("timeInMinutes1","timeInMinutes1","100px");
+							  timeMinute.setSize(60);
+							  timeMinute.enableFilteringMode(true);
+							  if('${transferEventParametersForm.timeInMinutes}'!=0){
+								timeMinute.setComboValue('${transferEventParametersForm.timeInMinutes}');
+							  }
+							  timeMinute.attachEvent("onChange", function(){
+								document.getElementsByName("timeInMinutes")[0].value= timeMinute.getSelectedValue();
+							  });  
+
+						</script>	
+	  
+				
+				
+				</td>
                 </tr>
 
 

@@ -1,3 +1,4 @@
+
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
@@ -22,7 +23,7 @@
 
 <tr>
 	<td width="100%" valign="top">
-    	<!-- target of anchor to skip menus --><a name="content" />
+    	<!-- target of anchor to skip menus --><div name="content" />
         <tiles:insert attribute="content"></tiles:insert>
 	</td>
 </tr>
