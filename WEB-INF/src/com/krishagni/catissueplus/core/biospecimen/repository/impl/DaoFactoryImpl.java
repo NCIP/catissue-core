@@ -8,6 +8,8 @@ import com.krishagni.catissueplus.core.administrative.repository.CollectionProto
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
+import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
@@ -17,6 +19,8 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.Collection
 import com.krishagni.catissueplus.core.administrative.repository.impl.ContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DepartmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.EquipmentDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.ImageDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
@@ -238,6 +242,20 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public SpecimenListDao getSpecimenListDao() {
 		SpecimenListDaoImpl dao = new SpecimenListDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public EquipmentDao getEquipmentDao() {
+		EquipmentDaoImpl dao = new EquipmentDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public ImageDao getImageDao() {
+		ImageDaoImpl dao = new ImageDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

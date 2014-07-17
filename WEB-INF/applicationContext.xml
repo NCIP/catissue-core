@@ -342,4 +342,24 @@
 		<property name="specimenPrintRuleFactory" ref="specimenPrintRuleFact"/>
 	</bean>
 	
+	
+	<bean id="equipmentFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.EquipmentFactoryImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+	</bean>
+
+	<bean id="equipmentService" class="com.krishagni.catissueplus.core.administrative.services.impl.EquipmentServiceImpl">
+        <property name="daoFactory" ref="biospecimenDaoFactory"/>
+        <property name="equipmentFactory" ref="equipmentFactory" />
+	</bean>
+	
+	<bean id="imageFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ImageFactoryImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+	</bean>
+
+	<bean id="imageService" class="com.krishagni.catissueplus.core.administrative.services.impl.ImageServiceImpl">
+        <property name="daoFactory" ref="biospecimenDaoFactory"/>
+        <property name="imageFactory" ref="imageFactory" />
+	</bean>
+	
+	
  </beans>

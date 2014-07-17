@@ -6,6 +6,8 @@ import com.krishagni.catissueplus.core.administrative.repository.CollectionProto
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
+import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
@@ -69,9 +71,13 @@ public interface DaoFactory {
 	public StorageContainerDao getStorageContainerDao();
 
 	public DistributionProtocolDao getDistributionProtocolDao();
-	
+
 	public SpecimenPrintRuleDao getSpecimenPrintRuleDao();
-	
+
 	public SpecimenListDao getSpecimenListDao();
+
+	public EquipmentDao getEquipmentDao();
+
+	public ImageDao getImageDao();
 
 }
