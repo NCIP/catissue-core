@@ -25,7 +25,12 @@ function inputBlur(i){
 	}
 }
 </script>
+ <style type="text/css">
+    .imgAlign {
+        vertical-align: sub;
+    }
 
+    </style>
 
 
 
@@ -53,21 +58,21 @@ function inputBlur(i){
 						<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value"></a>
 				</logic:notEmpty>
 					<a href="OpenStorageContainer.do?operation=showMap" class="white"> 
-						<img src="images/uIEnhancementImages/container_icon.png"  title="Containers,Press Alt + Shift + C">
+						<img class="imgAlign"  src="images/uIEnhancementImages/container_icon.png"  title="Containers,Press Alt + Shift + C">
 						<span title="Containers, Press Alt + Shift + C" style="vertical-align:top"> 
 							<bean:message key="app.containers" />
 						</span> 
 					</a>
 					&nbsp;
 					<a href="RequestListView.do" class="white"> 
-						<img src="images/uIEnhancementImages/order_icon.png"  title="Orders,Press Alt + O">
+						<img class="imgAlign" src="images/uIEnhancementImages/order_icon.png"  title="Orders,Press Alt + O">
 						<span title="Orders, Press Alt + O" style="vertical-align:top"> 
 							<bean:message key="app.orders" /> 
 						</span> 
 					</a>
 					&nbsp;
 					<a href="ShowQueryDashboardAction.do" class="white">
-						<img src="images/uIEnhancementImages/search_icon.png" alt="Summary"
+						<img class="imgAlign" src="images/uIEnhancementImages/search_icon.png" alt="Summary"
 						 border="0" title="Queries,Press Alt + Q"/>
 						 <span style="vertical-align:top" title="Query,Press Alt + Q">
 							<bean:message key="app.queries" />
@@ -75,14 +80,14 @@ function inputBlur(i){
 					</a>
 					&nbsp;
 					<a	href="CpBasedSearch.do" class="white"> 
-						<img src="images/uIEnhancementImages/data_entry_icon.png" alt="CP Based View"
+						<img class="imgAlign" src="images/uIEnhancementImages/data_entry_icon.png" alt="CP Based View"
 						 border="0" title="CP Based View, Press Alt + C"/>
 						 <span title="CP Based View, Press Alt + C" style="vertical-align:top">
 							<bean:message key="app.cpBasedView" /> </span>
 					</a>&nbsp;
 					
 					<a	href="BulkOperation.do?pageOf=pageOfBulkOperation" class="white">
-							<img src="images/uIEnhancementImages/bo.png" alt="Summary"
+							<img class="imgAlign" src="images/uIEnhancementImages/bo.png" alt="Summary"
 								  border="0" title="Bulk Upload,,Press Alt + B" />
 								  <span title="Bulk Upload,Press Alt + B" style="vertical-align:top">
 									<bean:message key="app.bulkUplad" />  </span>
@@ -93,7 +98,7 @@ function inputBlur(i){
 				<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" valign="middle" align="right"><a
 						href="Home.do" class="white"> <bean:message
-						key="app.loginMessage" /> </a> <img
+						key="app.loginMessage" /> </a> <img class="imgAlign"
 						src="images/uIEnhancementImages/spacer.gif" width="10" height="10"
 						align="absmiddle" /></td>
 				</logic:empty>
