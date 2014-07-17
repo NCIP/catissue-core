@@ -3527,7 +3527,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </sql>
   </changeSet>
   
-  <changeSet author="nitesh" id="add unique constraint for specimen Id in coll/rec event table">
+  <changeSet author="nitesh" id="add unique constraint for specimen Id in coll/rec event table" failOnError="false">
     <addUniqueConstraint 
             columnNames="specimen_id"
             constraintName="UN_SPEC_ID_REC_EVENT"
