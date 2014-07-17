@@ -3538,5 +3538,152 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             constraintName="UN_SPEC_ID_COLL_EVENT"
             tableName="CATISSUE_COLL_EVENT_PARAM"/>
   </changeSet>
+  
+    <changeSet author="ajaysamgir" id="cat_equipment table"
+		failOnError="false">
+		<createTable tableName="CATISSUE_EQUIPMENT">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="DEVICE_NAME" type="${text.type}(255)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="DEVICE_SER_NUMBER" type="${text.type}(50)">
+			</column>
+
+			<column name="MANUFACTURER_NAME" type="${text.type}(255)">
+			</column>
+
+			<column name="SOFTWARE_VERSION" type="${text.type}(50)">
+			</column>
+
+			<column name="SITE_ID" type="${int.type}(20)">
+			</column>
+
+			<column name="EQUIPMENT_ID" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="DISPLAY_NAME" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="ACTIVITY_STATUS" type="${text.type}(20)">
+			</column>
+		</createTable>
+		
+		<createSequence 
+			sequenceName="CAT_EQP_SEQ" 
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
+			
+		<addForeignKeyConstraint 
+			constraintName="FK_EQUPT_SITE_ID"
+			baseTableName="CATISSUE_EQUIPMENT" 
+			baseColumnNames="SITE_ID"
+			referencedTableName="CATISSUE_SITE" 
+			referencedColumnNames="IDENTIFIER" />
+		<addUniqueConstraint 
+			constraintName="EQPT_ID_UNIQUE_KEY"
+			tableName="CATISSUE_EQUIPMENT" 
+			columnNames="EQUIPMENT_ID" />
+
+	</changeSet>
+	
+	<changeSet author="ajaysamgir" id="alter CATISSUE_EQUIPMENT table"	failOnError="false">
+		<addColumn tableName="CATISSUE_EQUIPMENT">
+			<column name="ACTIVITY_STATUS" type="${text.type}(20)" />
+		</addColumn>
+	</changeSet>
+	
+	<changeSet author="ajaysamgir" id="CATISSUE_IMAGE table"
+		failOnError="false">
+		<createTable tableName="CATISSUE_IMAGE">
+
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="DESCRIPTION" type="${text.type}(1000)">
+			</column>
+
+			<column name="EQP_IMAGE_ID" type="${text.type}(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="HEIGHT" type="${int.type}(1000)">
+			</column>
+
+			<column name="LAST_UPDATE_DATE" type="${date.type}">
+			</column>
+
+			<column name="QUALITY" type="${int.type}(50)">
+			</column>
+
+			<column name="RESOLUTION" type="${text.type}(50)">
+			</column>
+
+			<column name="SCAN_DATE" type="${date.type}">
+			</column>
+
+			<column name="STAIN_NAME" type="${text.type}(500)">
+			</column>
+
+			<column name="STATUS" type="${text.type}(55)">
+			</column>
+
+			<column name="THUMBNAIL" type="${blob.type}">
+			</column>
+
+			<column name="WIDTH" type="${int.type}(10)">
+			</column>
+
+			<column name="IMAGE_TYPE" type="${text.type}(100)">
+			</column>
+
+			<column name="EQUIPMENT_ID" type="${int.type}(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="SPECIMEN_ID" type="${int.type}(10)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="FULL_LOC_URL" type="${text.type}(200)">
+			</column>
+
+			<column name="ACTIVITY_STATUS" type="${text.type}(20)">
+			</column>
+
+		</createTable>
+		
+		<createSequence 
+			sequenceName="CAT_IMG_SEQ" 
+			startValue="1" 
+			incrementBy="1" 
+			ordered="true" />
+			
+		<addForeignKeyConstraint 
+			constraintName="FK_CAT_IMGE_SPECIMEN_ID"
+			baseTableName="CATISSUE_IMAGE" 
+			baseColumnNames="SPECIMEN_ID"
+			referencedTableName="CATISSUE_SPECIMEN" 
+			referencedColumnNames="IDENTIFIER" />
+
+		<addForeignKeyConstraint 
+			constraintName="FK_CAT_IMGE_EQUIPMENT_ID"
+			baseTableName="CATISSUE_IMAGE" 
+			baseColumnNames="EQUIPMENT_ID"
+			referencedTableName="CATISSUE_EQUIPMENT" 
+			referencedColumnNames="IDENTIFIER" />
+
+		<addUniqueConstraint 
+			constraintName="EQPT_IMGE_ID_UNIQUE_KEY"
+			tableName="CATISSUE_IMAGE" 
+			columnNames="EQUIPMENT_ID,EQP_IMAGE_ID" />
+	</changeSet>
 
 </databaseChangeLog>
