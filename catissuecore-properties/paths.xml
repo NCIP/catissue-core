@@ -28,14 +28,6 @@
 
 	<path>
 		<from>Participant</from>
-		<to>SpecimenEvent</to>
-		<start-field>scgs.specimens.events</start-field>
-		<links>	
-		</links>
-	</path>
-	
-	<path>
-		<from>Participant</from>
 		<to>Order</to>
 		<start-field>scgs.specimens.specimenOrders.order</start-field>
 		<links>
