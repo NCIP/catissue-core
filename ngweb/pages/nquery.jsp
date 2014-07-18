@@ -707,9 +707,17 @@
               <span>Export CSV</span> 
             </div>
           </div>
-          <div class="btn-group" ng-if="queryData.resultGridOpts.selectedItems.length > 0 && showAddToSpecimenList">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="searchSpecimenList = ''"
-              tooltip-placement="bottom" tooltip="Assign specimens to list" tooltip-append-to-body="true">
+          <div class="btn-group" ng-if="showAddToSpecimenList">
+            <div tooltip-placement="bottom" tooltip="Select rows in below table to assign specimens to list" tooltip-append-to-body="true">
+              <button type="button" class="btn btn-default disabled" style="border-radius: 4px;"
+                ng-if="queryData.resultGridOpts.selectedItems.length == 0">
+                <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
+                <span class="caret"></span>
+              </button>
+            </div>
+            <button type="button" class="btn btn-default dropdown-toggle" style="border-radius: 4px;" data-toggle="dropdown" ng-click="searchSpecimenList = ''"
+              tooltip-placement="bottom" tooltip="Assign specimens to list" tooltip-append-to-body="true"
+              ng-if="queryData.resultGridOpts.selectedItems.length > 0">
               <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
               <span class="caret"></span>
             </button>

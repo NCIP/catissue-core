@@ -98,8 +98,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	private static final String JNDI_NAME = "java:/catissuecore";
 	
-	private static final String DE_FILEUPLOAD_DIR = "de.fileUploadDir";
-
 	//class level instance to access methods for registering and unregistering queues
 	private final ParticipantManagerUtility participantManagerUtility = new ParticipantManagerUtility();
 
@@ -160,11 +158,21 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
 			String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
-			String deFileUploadDir = XMLPropertyHandler.getValue(DE_FILEUPLOAD_DIR);
-			DEApp.init(ds, deFileUploadDir, dateFomat);
-			initQueryPathsConfig();
-            
-			logger.info("Initialization complete");
+			
+			String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
+					.append("os-data").append(File.separator)
+					.append("de-file-data").append(File.separator)
+					.toString();
+			File dirFile = new File(dir);
+			if (!dirFile.exists()) {
+				if (!dirFile.mkdirs()) {
+					throw new RuntimeException("Error couldn't create directory for storing de file data");
+				}
+			}
+						
+			DEApp.init(ds, dir, dateFomat);
+			initQueryPathsConfig();            
+			logger.info("Initialization complete");									
 		}
 		catch (final Exception e)
 		{

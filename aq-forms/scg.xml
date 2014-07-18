@@ -41,7 +41,6 @@
 				<column>BARCODE</column>
 			</textField>
 		</row>
-
 		<row>
 			<subForm>
                                 <name>site</name>
@@ -50,7 +49,6 @@
                                 <table>CATISSUE_SITE</table>
                                 <foreignKey>IDENTIFIER</foreignKey>
                                 <parentKey>SITE_ID</parentKey>
-			
 				<row>
 					<dropDown>
 						<name>name</name>
@@ -64,7 +62,6 @@
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<dropDown>
 				<name>collectionStatus</name>
@@ -78,8 +75,6 @@
 				</options>
 			</dropDown>
 		</row>
-
-
 		<row>
 			<dropDown>
 				<name>clinicalDiagnosis</name>
@@ -92,7 +87,6 @@
 				</options>
 			</dropDown>
 		</row>
-
 		<row>
 			<dropDown>
 				<name>clinicalStatus</name>
@@ -104,7 +98,6 @@
 				</options>
 			</dropDown>
 		</row>
-				
 		<row>
 			<textField>
 				<name>surgicalPathologyNo</name>
@@ -114,8 +107,6 @@
 				<phi>true</phi>
 			</textField>
 		</row>
-
-        
 		<row>
 			<datePicker>
 				<name>collectionDate</name>
@@ -147,7 +138,6 @@
 			</dropDown>
 		</row>
 		<row>
-			
 			<subForm>
 		                <name>collectionProtocolEvent</name>
 		                <udn>collectionProtocolEvent</udn>
@@ -155,7 +145,6 @@
 		                <table>CATISSUE_COLL_PROT_EVENT</table>
 		                <foreignKey>IDENTIFIER</foreignKey>
 		                <parentKey>COLLECTION_PROTOCOL_EVENT_ID</parentKey>
-
 				<row>
 					<textField>
 						<name>collectionPointLabel</name>
@@ -195,20 +184,8 @@
                                 <foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
                                 <parentKey>IDENTIFIER</parentKey>
 				<pathLink>true</pathLink>
-
-                                <row>
-                                        <subForm>
-                                                <name>events</name>
-                                                <udn>events</udn>
-                                                <caption>Specimen Events</caption>
-                                                <table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
-                                                <foreignKey>SPECIMEN_ID</foreignKey>
-                                                <parentKey>IDENTIFIER</parentKey>
-                                        </subForm>
-                                </row>
                         </subForm>
                 </row>
-		
 		<row>
 			<textField>
 				<name>comments</name>
@@ -217,7 +194,6 @@
 				<column>COMMENTS</column>
 			</textField>
 		</row>
-
 		<row>
 			<subForm>
                                 <name>surgicalPathologyReport</name>
@@ -226,7 +202,6 @@
                                 <table>CATISSUE_IDENTIFIED_REPORT</table>
                                 <foreignKey>SCG_ID</foreignKey>
                                 <parentKey>IDENTIFIER</parentKey>
-			
 				<row>
 					<numberField>
 						<name>surgicalPathologyReportId</name>

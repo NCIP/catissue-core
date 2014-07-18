@@ -1,5 +1,6 @@
 package krishagni.catissueplus.upgrade;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import edu.wustl.common.util.global.*;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
@@ -138,9 +140,19 @@ public class MigrateForms {
 							+ ":" + prop.getProperty("database.port") + "/" + prop.getProperty("database.name");
 		ds.setUrl(jdbcUrl);
 		
-		String fileUploadDir = prop.getProperty("de.fileUploadDir");
-		String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
-		DEApp.init(ds, fileUploadDir, dateFomat);
+		String dir = new StringBuilder(prop.getProperty("jboss.home.dir")).append(File.separator)
+				.append("os-data").append(File.separator)
+				.append("de-file-data").append(File.separator)
+				.toString();
+		File dirFile = new File(dir);
+		
+		if (!dirFile.exists()) {
+			if (!dirFile.mkdirs()) {
+				throw new RuntimeException("Error couldn't create directory for storing de file data");
+			}
+		}
+					
+		DEApp.init(ds, dir, null);
 	}
 	
 	private static boolean areLegacyFormsMigrated() { 

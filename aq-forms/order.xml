@@ -3,7 +3,6 @@
 		<name>Order</name>
 		<caption>Order</caption>
 		<table>CATISSUE_ORDER</table>
-		
 		<row>
 			<numberField>
 				<name>id</name>
@@ -12,7 +11,6 @@
 				<column>IDENTIFIER</column>
 			</numberField>
 		</row>
-
 		<row>
 			<textField>
 				<name>orderName</name>
@@ -21,7 +19,6 @@
 				<column>NAME</column>
 			</textField>
 		</row>
-		
 		<row>
 			<subForm>
 				<name>distributionProtocol</name>
@@ -39,42 +36,62 @@
 						<column>TITLE</column>
 					</textField>
 				</row>
-			</subForm>
-		</row>
-		
-		<row>
-			<subForm>
-				<name>orderDistribution</name>
-				<udn>orderDistribution</udn>
-				<caption>Order Distribution</caption>
-				<table>CATISSUE_DISTRIBUTION</table>
-				<foreignKey>ORDER_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
 				<row>
 					<subForm>
-						<name>distributionSites</name>
-						<udn>distributionSites</udn>
-						<caption>Sites</caption>
-						<table>CATISSUE_SITE</table>
+						<name>principalInvestigator</name>
+						<udn>principalInvestigator</udn>
+						<caption>Principal Investigator</caption>
+						<table>USER_VIEW</table>
 						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>TO_SITE_ID</parentKey>
-						<row>
-							<dropDown>
-								<name>distributionSiteName</name>
-								<udn>distributionSiteName</udn>
-								<caption>Distribution Site Name</caption>
-								<column>NAME</column>
-								<options>
-									<sql>select distinct name from CATISSUE_SITE</sql>
-								</options>
-							</dropDown>							
+						<parentKey>PRINCIPAL_INVESTIGATOR_ID</parentKey>
+						<row>					
+							<textField>
+								<name>firstName</name>
+								<udn>firstName</udn>
+								<caption>Principal Investigator First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>lastName</name>
+								<udn>lastName</udn>
+								<caption>Principal Investigator Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+
+							<textField>
+								<name>email</name>
+								<udn>email</udn>
+								<caption>Principal Investigator Email Address</caption>
+								<column>EMAIL_ADDRESS</column>
+							</textField>
+
 						</row>
 					</subForm>
 				</row>
-
 			</subForm>
 		</row>
-
+		<row>
+			<subForm>
+				<name>distributionSite</name>
+				<udn>distributionSite</udn>
+				<caption>Distribution Site</caption>
+				<table>ORDER_SITE_VIEW</table>
+				<foreignKey>ORDER_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<dropDown>
+						<name>distributionSiteName</name>
+						<udn>distributionSiteName</udn>
+						<caption>Distribution Site Name</caption>
+						<column>SITE_NAME</column>
+						<options>
+							<sql>select distinct name from CATISSUE_SITE</sql>
+						</options>
+					</dropDown>							
+				</row>
+			</subForm>
+		</row>
 		<row>
 			<textField>
 				<name>comments</name>
@@ -83,34 +100,31 @@
 				<column>COMMENTS</column>
 			</textField>
 		</row>
-
 		<row>
 			<subForm>
 				<name>requester</name>
 				<udn>requester</udn>
-				<caption>Requestor</caption>
+				<caption>Requester</caption>
 				<table>USER_VIEW</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>REQUESTER_ID</parentKey>
-
 				<row>										
 					<textField>
 						<name>requesterFirstName</name>
 						<udn>requesterFirstName</udn>
-						<caption>Requestor First Name</caption>
+						<caption>Requester First Name</caption>
 						<column>FIRST_NAME</column>
 					</textField>
 					
 					<textField>
 						<name>requesterLastName</name>
 						<udn>requesterLastName</udn>
-						<caption> Requestor Last Name</caption>
+						<caption>Requester Last Name</caption>
 						<column>LAST_NAME</column>
 					</textField>
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<datePicker>
 				<name>requestedDate</name>
@@ -121,18 +135,14 @@
 			</datePicker>
 
 		</row>
-
 		<row>
 			<textField>
 				<name>requestersComment</name>
 				<udn>requestersComment</udn>
-				<caption>Requestors Comment</caption>
+				<caption>Requester Comment</caption>
 				<column>COMMENTS</column>
 			</textField>
 		</row>
-
-
-
 		<row>
 			<dropDown>
 				<name>orderStatus</name>

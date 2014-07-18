@@ -239,22 +239,10 @@ Ext.onReady(function(){
                     ]
                 }
             },
-			{
-                text: 'Local Extensions',
-				tooltip:'Shows Local Extensions',
-                href:'DefineAnnotationsInformationPage.do?operation=add',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                        {
-                            text: 'Add',
-                            href:'DefineAnnotationsInformationPage.do?operation=add'
-                        }, {
-                            text: 'Edit',
-                            href:'DefineAnnotationsInformationPage.do?operation=edit'
-                        }
-                    ]
-                }
+	    {
+                text: 'Manage Forms',
+		tooltip:'Forms dashboard and Create Form Wizard',
+                href:'ecrf.do'
             },
             {
                 text: 'Audit Report',
@@ -283,24 +271,6 @@ Ext.onReady(function(){
 			}			
 			
 			
-            // For Bio Specimen Data
-    var menu_ng = new Ext.menu.Menu({
-    	autoWidth: true,
-        id: 'menu_ng',
-        items: [
-          {
-            text: 'Manage Forms',
-            tooltip: 'Manage Forms',
-            href: 'ecrf.do'
-          },
-          {
-            text: 'Query',
-            tooltip: 'Query',
-            href: 'query.do'
-          }
-        ]
-    });
-
     var menu_bio = new Ext.menu.Menu({
     	autoWidth: true,
         id: 'menu_bio',
@@ -413,10 +383,10 @@ Ext.onReady(function(){
     	autoWidth: true,
         id: 'menu_search',
         items: [
-			{
-                text: 'Saved Queries',
-				tooltip:'Saved Queries',
-			    href : 'ShowQueryDashboardAction.do'
+	   {
+                text: 'Advanced Query',
+		tooltip:'Allows to create ad-hocs queries, export data, and many more',
+	        href : 'query.do'
             },
 			{
                 text: 'Simple',
@@ -506,11 +476,6 @@ Ext.onReady(function(){
     tb.render('toolbarLoggedIn');
 
 		tb.add(
-                {
-                   text: 'NextGen',
-                   menu: menu_ng
-                },
-
                 new Ext.Toolbar.MenuButton(
 		{
 			text:'Administration',

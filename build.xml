@@ -681,6 +681,7 @@
 
 		<copy todir="${zip.dir}" overwrite="true">
 			<fileset dir="${base.dir}" includes="aq-forms/**"/>
+			<fileset dir="${base.dir}" includes="aq-queries/**"/>
 		</copy>
 
 		<copy todir="${zip.dir}/modules/report_scripts" overwrite="true">

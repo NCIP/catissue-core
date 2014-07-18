@@ -830,9 +830,16 @@ public class QueryServiceImpl implements QueryService {
 	}
 	
 	private static String getExportDataDir() {
-		String dir = XMLPropertyHandler.getValue("query.exportDataDir");
-		if (dir == null || dir.isEmpty()) {
-			return ".";
+		String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
+			.append("os-data").append(File.separator)
+			.append("query-exported-data").append(File.separator)
+			.toString();
+		
+		File dirFile = new File(dir);
+		if (!dirFile.exists()) {
+			if (!dirFile.mkdirs()) {
+				throw new RuntimeException("Error couldn't create directory for exporting query data");
+			}
 		}
 		
 		return dir;

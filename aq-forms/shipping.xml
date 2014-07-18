@@ -2,8 +2,7 @@
 	<view>
 		<name>Shipping</name>
 		<caption>Shipping</caption>
-		<table>CATISSUE_BASE_SHIPMENT</table>
-		
+		<table>SHIPMENT_BASE_VIEW</table>
 		<row>
 			<numberField>
 				<name>id</name>
@@ -12,7 +11,6 @@
 				<column>IDENTIFIER</column>
 			</numberField>
 		</row>
-
 		<row>
 			<textField>
 				<name>label</name>
@@ -21,16 +19,14 @@
 				<column>LABEL</column>
 			</textField>
 		</row>
-		
 		<row>
 			<subForm>
-				<name>sites</name>
-				<udn>sites</udn>
-				<caption>Sites</caption>
+				<name>senderSite</name>
+				<udn>senderSite</udn>
+				<caption>Sender Site</caption>
 				<table>CATISSUE_SITE</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>SENDER_SITE_ID</parentKey>
-
 				<row>					
 					<dropDown>
 						<name>senderSiteName</name>
@@ -41,11 +37,22 @@
 							<sql>select distinct name from CATISSUE_SITE</sql>
 						</options>
 					</dropDown>
-	
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>receiverSite</name>
+				<udn>receiverSite</udn>
+				<caption>Receiver Site</caption>
+				<table>CATISSUE_SITE</table>
+				<foreignKey>IDENTIFIER</foreignKey>
+				<parentKey>RECEIVER_SITE_ID</parentKey>
+				<row>
 					<dropDown>
-						<name>recieverSiteName</name>
-						<udn>recieverSiteName</udn>
-						<caption>Reciever Site Name</caption>
+						<name>receiverSiteName</name>
+						<udn>receiverSiteName</udn>
+						<caption>Receiver Site Name</caption>
 						<column>NAME</column>
 						<options>
 							<sql>select distinct name from CATISSUE_SITE</sql>
@@ -54,7 +61,6 @@
 				</row>
 			</subForm>
 		</row>
-		
 		<row>
 			<subForm>
 				<name>sender</name>
@@ -63,26 +69,23 @@
 				<table>USER_VIEW</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>SENDER_USER_ID</parentKey>
-
 				<row>					
-		
 					<textField>
-						<name>firstName</name>
-						<udn>firstName</udn>
+						<name>senderFirstName</name>
+						<udn>senderFirstName</udn>
 						<caption>Sender First Name</caption>
 						<column>FIRST_NAME</column>
 					</textField>
 					
 					<textField>
-						<name>lastName</name>
-						<udn>lastName</udn>
+						<name>senderLastName</name>
+						<udn>senderLastName</udn>
 						<caption>Sender Last Name</caption>
 						<column>LAST_NAME</column>
 					</textField>
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<datePicker>
 				<name>sendDate</name>
@@ -91,28 +94,15 @@
 				<column>SEND_DATE</column>
 			</datePicker>
 		</row>
-
 		<row>
-			<subForm>
-				<name>shipment</name>
-				<udn>shipment</udn>
-				<caption>Shipment</caption>
-				<table>CATISSUE_SHIPMENT</table>
-				<foreignKey>IDENTIFIER</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-
-				<row>							
-					<textField>
-						<name>barcode</name>
-						<udn>barcode</udn>
-						<caption>Barcode</caption>
-						<column>BARCODE</column>
-						<maxLength>255</maxLength>
-					</textField>
-				</row>
-			</subForm>
+			<textField>
+				<name>barcode</name>
+				<udn>barcode</udn>
+				<caption>Barcode</caption>
+				<column>BARCODE</column>
+				<maxLength>255</maxLength>
+			</textField>
 		</row>
-		
 		<row>
 			<textField>
 				<name>senderComments</name>
@@ -121,16 +111,14 @@
 				<column>SENDER_COMMENTS</column>
 			</textField>
 		</row>
-
-				<row>
+		<row>
 			<textField>
-				<name>recieverComments</name>
-				<udn>recieverComments</udn>
-				<caption>Reciever Comments</caption>
+				<name>receiverComments</name>
+				<udn>receiverComments</udn>
+				<caption>Receiver Comments</caption>
 				<column>RECEIVER_COMMENTS</column>
 			</textField>
 		</row>
-
 		<row>
 			<dropDown>
 				<name>status</name>

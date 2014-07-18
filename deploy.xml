@@ -785,7 +785,7 @@
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
-			<replacefilter token="@@query.exportDataDir@@" value="${query.exportDataDir}" />
+			<replacefilter token="@@appserver.home.dir@@" value="${jboss.home.dir}" />
 
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
@@ -875,7 +875,6 @@
 			<!-- Nightly Cron Job Config End -->
 			
 				<replacefilter token="@@usermanual@@" value="${user.manual}" />
-                                <replacefilter token="@@de.fileUploadDir@@" value="${de.fileUploadDir}"/>
 
 					</replace>
 					<replace file="${temp.dir}/catissuecore-properties/help_links.xml" token="@@usermanual@@" value="${user.manual}" />
@@ -1008,7 +1007,8 @@
                <echo message="Upgrading DataBase with URL ${final.database.url}" />    
                <antcall target="upgrade_de_db"/>
                <updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v40.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
-		<antcall target="migrate_forms"/>
+               <antcall target="import_queries"/>
+	       <antcall target="migrate_forms"/>
        </target>
 
        <target name="upgrade_de_db">
@@ -5135,6 +5135,24 @@
 			</classpath>
 		</java>
 	</target>
+
+        <target name="import_queries">
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<antcall target="setupClassExecutionEnvironment"/>
+		<java classname="krishagni.catissueplus.upgrade.ImportQueries" fork="true" maxmemory="1024M">
+			<arg value="${username}"/>
+                        <arg value="aq-queries"/>
+			<classpath>
+				<pathelement location="${temp.dir.DE}" />
+				<pathelement location="${temp.dir.DE}/old" />
+				<fileset dir="WEB-INF/lib">
+					<include name="*" />
+				</fileset>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			</classpath>
+		</java>
+        </target>
+
 	<target name="post_upgrade">
 		<antcall target="aq_form"/>
 	</target>

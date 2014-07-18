@@ -12,7 +12,6 @@
 				<column>IDENTIFIER</column>
 			</numberField>
 		</row>
-		
 		<row>
 			<dropDown>
 				<name>shortTitle</name>
@@ -24,7 +23,6 @@
 				</options>
 			</dropDown>
 		</row>
-
 		<row>
 			<textField>
 				<name>title</name>
@@ -33,16 +31,14 @@
 				<column>TITLE</column>
 			</textField>
 		</row>
-		
 		<row>
 			<textField>
 				<name>irbIdentifier</name>
 				<udn>irbIdentifier</udn>
-				<caption>IRB Identifier</caption>
+				<caption>IRB ID</caption>
 				<column>IRB_IDENTIFIER</column>
 			</textField>
 		</row>
-		
 		<row>
 			<datePicker>
 				<name>startDate</name>
@@ -51,7 +47,6 @@
 				<column>START_DATE</column>
 			</datePicker>
 		</row>
-		
 		<row>
 			<datePicker>
 				<name>endDate</name>
@@ -60,7 +55,6 @@
 				<column>END_DATE</column>
 			</datePicker>
 		</row>
-		
 		<row>
                         <booleanCheckBox>
                                 <name>consentWaived</name>
@@ -69,7 +63,6 @@
                                 <column>CONSENTS_WAIVED</column>
                         </booleanCheckBox>
                 </row>
-				
 		<row>
 			<dropDown>
 				<name>activityStatus</name>
@@ -83,43 +76,40 @@
 				</options>
 			</dropDown>
 		</row>
-		
 		<row>
 			<subForm>
 				<name>principalInvestigator</name>
 				<udn>principalInvestigator</udn>
-				<caption>PI</caption>
+				<caption>Principal Investigator</caption>
 				<table>USER_VIEW</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>PRINCIPAL_INVESTIGATOR_ID</parentKey>
-
 				<row>					
 					<textField>
 						<name>email</name>
 						<udn>email</udn>
-						<caption>PI Email Address</caption>
+						<caption>Principal Investigator Email Address</caption>
 						<column>EMAIL_ADDRESS</column>
 					</textField>
 
-					
 					<textField>
 						<name>firstName</name>
 						<udn>firstName</udn>
-						<caption>PI First Name</caption>
+						<caption>Principal Investigator First Name</caption>
 						<column>FIRST_NAME</column>
 					</textField>
 					
 					<textField>
 						<name>lastName</name>
 						<udn>lastName</udn>
-						<caption>PI Last Name</caption>
+						<caption>Principal Investigator Last Name</caption>
 						<column>LAST_NAME</column>
 					</textField>
 										
 					<dropDown>
 						<name>department</name>
 						<udn>department</udn>
-						<caption>PI Department</caption>
+						<caption>Principal Investigator Department</caption>
 						<column>DEPARTMENT_NAME</column>
 						<options>
 							<sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
@@ -128,56 +118,45 @@
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<subForm>
 				<name>coordinator</name>
 				<udn>coordinator</udn>
 				<caption>Coordinator</caption>
-				<table>CATISSUE_COLL_COORDINATORS</table>
-				<foreignKey>COLLECTION_PROTOCOL_ID</foreignKey>
+				<table>CP_COORD_VIEW</table>
+				<foreignKey>CP_ID</foreignKey>
 				<parentKey>IDENTIFIER</parentKey>
 				<row>
-					<subForm>
-						<name>user</name>
-						<udn>user</udn>
-						<caption>User</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>
-							<textField>
-								<name>email</name>
-								<udn>email</udn>
-								<caption>Coordinator Email Address</caption>
-								<column>EMAIL_ADDRESS</column>
-							</textField>
+					<textField>
+						<name>email</name>
+						<udn>email</udn>
+						<caption>Coordinator Email Address</caption>
+						<column>EMAIL_ADDRESS</column>
+					</textField>
 
-							<textField>
-								<name>firstName</name>
-								<udn>firstName</udn>
-								<caption>Coordinator First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-							
-							<textField>
-								<name>lastName</name>
-								<udn>lastName</udn>
-								<caption>Coordinator Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-												
-							<dropDown>
-								<name>department</name>
-								<udn>department</udn>
-								<caption>Coordinator Department</caption>
-								<column>DEPARTMENT_NAME</column>
-								<options>
-									<sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
-								</options>
-							</dropDown>
-						</row>
-					</subForm>
+					<textField>
+						<name>firstName</name>
+						<udn>firstName</udn>
+						<caption>Coordinator First Name</caption>
+						<column>FIRST_NAME</column>
+					</textField>
+					
+					<textField>
+						<name>lastName</name>
+						<udn>lastName</udn>
+						<caption>Coordinator Last Name</caption>
+						<column>LAST_NAME</column>
+					</textField>
+										
+					<dropDown>
+						<name>department</name>
+						<udn>department</udn>
+						<caption>Coordinator Department</caption>
+						<column>DEPARTMENT_NAME</column>
+						<options>
+							<sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+						</options>
+					</dropDown>
 				</row>
 			</subForm>
 		</row>

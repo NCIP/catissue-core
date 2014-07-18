@@ -1886,7 +1886,12 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           } else if (fields[i].type == 'SUBFORM') {
             var field = {type: 'subform', val: fields[i].caption, name: prefix + fields[i].name};
             field.children = processFields(prefix + fields[i].name + ".", fields[i].subFields);
-            result.push(field);
+
+            if (field.children.length == 1) {
+              result.push(field.children[0]);
+            } else {
+              result.push(field);
+            }
           } else {
             result.push({type: 'field', val: fields[i].caption, name: prefix + fields[i].name, children: []});
           }
@@ -1995,7 +2000,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var name = fieldName.split(".", level + 1).join(".");
         var idx = -1;
         for (var i = 0; i < fields.length; ++i) {
-          if (name == fields[i].name) {
+          if (name == fields[i].name || fieldName == fields[i].name) {
             idx = i;
             break;
           }

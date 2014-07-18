@@ -3686,4 +3686,95 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 			columnNames="EQUIPMENT_ID,EQP_IMAGE_ID" />
 	</changeSet>
 
+
+   <changeSet author="vpawar" id="Table to track changes in default imported queries">
+     <createTable tableName="CATISSUE_IMPORT_QUERIES_LOG">
+       <column name="FILENAME" type="${text.type}(255)">
+         <constraints nullable="false"/>
+       </column>
+       <column name="MD5_DIGEST" type="${text.type}(64)">
+         <constraints nullable="false"/>
+       </column>
+       <column name="STATUS" type="${text.type}(16)">
+         <constraints nullable="false"/>
+       </column>
+       <column name="EXECUTED_ON" type="${timestamp.type}">
+         <constraints nullable="false"/>
+       </column>
+       <column name="QUERY_ID" type="${int.type}">
+         <constraints nullable="false"/>
+       </column>
+     </createTable>
+   </changeSet>
+
+   <changeSet author="mibrahim" id="CP Coordinators view" runOnChange="true">
+     <sql>
+       CREATE OR REPLACE VIEW CP_COORD_VIEW AS(
+         SELECT
+           U.IDENTIFIER AS IDENTIFIER, U.FIRST_NAME AS FIRST_NAME, U.LAST_NAME AS LAST_NAME,
+           U.EMAIL_ADDRESS AS EMAIL_ADDRESS, CPCRD.COLLECTION_PROTOCOL_ID AS CP_ID , D.NAME AS DEPARTMENT_NAME
+         FROM
+           CATISSUE_COLL_COORDINATORS CPCRD
+           INNER JOIN CATISSUE_USER U ON CPCRD.USER_ID = U.IDENTIFIER
+           INNER JOIN CATISSUE_DEPARTMENT D ON U.DEPARTMENT_ID = D.IDENTIFIER
+       );
+     </sql>
+   </changeSet>
+
+   <changeSet author="mibrahim" id="Specimen Hazard View" runOnChange="true">
+     <sql>
+       CREATE OR REPLACE VIEW SPECIMEN_BIOHAZARD_VIEW AS (
+         SELECT
+           BHZ.IDENTIFIER AS IDENTIFIER, BHZREL.SPECIMEN_ID AS SPECIMEN_ID,
+           BHZ.NAME AS BIOHAZARD_NAME, BHZ.TYPE AS BIOHAZARD_TYPE
+         FROM
+           CATISSUE_SPECIMEN_BIOHZ_REL BHZREL
+           INNER JOIN CATISSUE_BIOHAZARD BHZ ON BHZREL.BIOHAZARD_ID = BHZ.IDENTIFIER
+       );
+     </sql>
+   </changeSet>
+
+   <changeSet author="mibrahim" id="Order site view" runOnChange="true">
+     <sql>
+       CREATE OR REPLACE VIEW ORDER_SITE_VIEW AS (
+         SELECT
+           DISTB.IDENTIFIER AS IDENTIFIER, SITE.NAME AS SITE_NAME, DISTB.ORDER_ID
+         FROM
+           CATISSUE_DISTRIBUTION DISTB
+           LEFT JOIN CATISSUE_SITE SITE ON DISTB.TO_SITE_ID = SITE.IDENTIFIER
+         WHERE
+           DISTB.ORDER_ID IS NOT NULL
+       );
+     </sql>
+   </changeSet>
+
+   <changeSet author="mibrahim" id="Shipment view" runOnChange="true">
+     <sql>
+       CREATE OR REPLACE VIEW SHIPMENT_BASE_VIEW AS (
+         SELECT
+           BSHP.IDENTIFIER AS IDENTIFIER, BSHP.LABEL AS LABEL, BSHP.SENDER_SITE_ID AS SENDER_SITE_ID,
+           BSHP.SENDER_USER_ID AS SENDER_USER_ID, BSHP.SEND_DATE AS SEND_DATE, BSHP.SENDER_COMMENTS AS SENDER_COMMENTS,
+           BSHP.RECEIVER_COMMENTS AS RECEIVER_COMMENTS, BSHP.ACTIVITY_STATUS AS ACTIVITY_STATUS, SHP.BARCODE AS BARCODE,
+           BSHP.RECEIVER_SITE_ID AS RECEIVER_SITE_ID
+         FROM
+           CATISSUE_BASE_SHIPMENT BSHP
+           INNER JOIN CATISSUE_SHIPMENT SHP ON BSHP.IDENTIFIER = SHP.IDENTIFIER
+       );
+     </sql>
+   </changeSet>
+
+   <changeSet author="mibrahim" id="Specimen position view" runOnChange="true">
+     <sql>
+       CREATE OR REPLACE VIEW SPECIMEN_POS_VIEW AS (
+         SELECT
+           SPPOS.IDENTIFIER AS IDENTIFIER, SPPOS.SPECIMEN_ID AS SPECIMEN_ID,
+           CONTAINER.NAME AS CONTAINER_NAME, ABP.POSITION_DIMENSION_ONE_STRING AS POSITION_DIMENSION_ONE_STRING,
+           ABP.POSITION_DIMENSION_TWO_STRING AS POSITION_DIMENSION_TWO_STRING
+         FROM
+           CATISSUE_SPECIMEN_POSITION SPPOS
+           INNER JOIN CATISSUE_CONTAINER CONTAINER ON SPPOS.CONTAINER_ID = CONTAINER.IDENTIFIER
+           INNER JOIN CATISSUE_ABSTRACT_POSITION ABP ON SPPOS.IDENTIFIER = ABP.IDENTIFIER
+       );
+     </sql>
+   </changeSet>
 </databaseChangeLog>

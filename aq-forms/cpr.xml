@@ -14,7 +14,6 @@
 			</numberField>
 		</row>
 		<row>
-			
 			<textField>
 				<name>firstName</name>
 				<udn>firstName</udn>
@@ -41,7 +40,6 @@
 				<phi>true</phi>
 			</textField>
 		</row>
-
 		<row>
 			<datePicker>
 				<name>dateOfBirth</name>
@@ -52,7 +50,6 @@
 				<phi>true</phi>
 			</datePicker>
 		</row>
-		
 		<row>
 			<textField>
 				<name>ssn</name>
@@ -62,7 +59,6 @@
 				<phi>true</phi>
 			</textField>
 		</row>
-		
 		<row>
 			<textField>
 				<name>vitalStatus</name>
@@ -71,7 +67,6 @@
 				<column>VITAL_STATUS</column>
 			</textField>
 		</row>
-
 		<row>
 			<dropDown>
 				<name>activityStatus</name>
@@ -85,7 +80,6 @@
 				</options>
 			</dropDown>
 		</row>
-		
 		<row>
 			<radioButton>
 				<name>gender</name>
@@ -97,7 +91,6 @@
 				</options>
 			</radioButton>
 		</row>
-
 		<row>
 			<dropDown>
 				<name>genotype</name>
@@ -109,7 +102,6 @@
 				</options>
 			</dropDown>
 		</row>
-		
 		<row>
 			<checkBox>
 				<name>race</name>
@@ -125,7 +117,6 @@
 				</options>
 			</checkBox>
 		</row>
-
 		<row>
 			<textField>
 				<name>ethnicity</name>
@@ -134,7 +125,6 @@
 				<column>ETHNICITY</column>
 			</textField>
 		</row>
-
 		<row>
 			<textField>
 				<name>barcode</name>
@@ -143,7 +133,6 @@
 				<column>BARCODE</column>
 			</textField>
 		</row>
-
 		<row>
 			<datePicker>
 				<name>regDate</name>
@@ -155,7 +144,6 @@
 			</datePicker>
 
 		</row>
-
 		<row>
 			<datePicker>
 				<name>deathDate</name>
@@ -166,7 +154,6 @@
 				<phi>true</phi>
 			</datePicker>
 		</row>
-
 		<row>
 			<textField>
 				<name>ppid</name>
@@ -175,7 +162,6 @@
 				<column>PPID</column>
 			</textField>
 		</row>
-
 		<row>
 			<subForm>
 				<name>scgs</name>
@@ -185,7 +171,6 @@
 				<foreignKey>COLLECTION_PROTOCOL_REG_ID</foreignKey>
 				<parentKey>CPR_ID</parentKey>
 				<pathLink>true</pathLink>
-
 				<row>
 					<subForm>
 						<name>specimens</name>
@@ -195,18 +180,6 @@
 						<foreignKey>SPECIMEN_COLLECTION_GROUP_ID</foreignKey>
 						<parentKey>IDENTIFIER</parentKey>
 				  		<pathLink>true</pathLink>
-
-						<row>
-							<subForm>
-								<name>events</name>
-								<udn>events</udn>
-								<caption>Specimen Events</caption>
-								<table>CATISSUE_SPECIMEN_EVENT_PARAM</table>
-								<foreignKey>SPECIMEN_ID</foreignKey>
-								<parentKey>IDENTIFIER</parentKey>
-							</subForm>
-						</row>
-									
 						<row>
 							<subForm>
 								<name>specimenOrders</name>
@@ -215,7 +188,6 @@
 								<table>SPECIMEN_ORDER_VIEW</table>
 								<foreignKey>SPECIMEN_ID</foreignKey>
 								<parentKey>IDENTIFIER</parentKey>
-
 								<row>
 									<subForm>
 										<name>order</name>
@@ -228,7 +200,6 @@
 								</row>
 							</subForm>
 						</row>
-
 						<row>
 							<subForm>
 								<name>specimenShipment</name>
@@ -237,7 +208,6 @@
 								<table>SPECIMEN_SHIPMENT_VIEW</table>
 								<foreignKey>SPECIMEN_ID</foreignKey>
 								<parentKey>IDENTIFIER</parentKey>
-
 								<row>
 									<subForm>
 										<name>shipment</name>
@@ -254,17 +224,15 @@
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<subForm>
 				<name>medicalRecord</name>
 				<udn>medicalRecord</udn>
-				<caption>Medical Record</caption>
+				<caption>Medical Record Number</caption>
 				<table>PART_MED_REC_VIEW</table>
 				<foreignKey>PARTICIPANT_ID</foreignKey>
 				<parentKey>PARTICIPANT_ID</parentKey>
 				<row>
-		
 					<textField>
 						<name>medicalRecordNumber</name>
 						<udn>medicalRecordNumber</udn>
@@ -286,7 +254,6 @@
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<subForm>
 				<name>consentTier</name>
@@ -317,7 +284,6 @@
 				</row>
 			</subForm>
 		</row>
-		
 		<row>
 			<datePicker>
 				<name>consentSignDate</name>
@@ -327,7 +293,6 @@
 				<format>MM-dd-yyyy</format>
 			</datePicker>
 		</row>
-
 		<row>
 			<textField>
 				<name>consentDocUrl</name>
@@ -336,7 +301,6 @@
 				<column>CONSENT_DOC_URL</column>
 			</textField>
 		</row>
-
 		<row>
 			<subForm>
 				<name>consentWitness</name>
@@ -345,16 +309,7 @@
 				<table>USER_VIEW</table>
 				<foreignKey>IDENTIFIER</foreignKey>
 				<parentKey>CONSENT_WITNESS</parentKey>
-
-				<row>					
-					<textField>
-						<name>email</name>
-						<udn>email</udn>
-						<caption>Consent Witness Email Address</caption>
-						<column>EMAIL_ADDRESS</column>
-					</textField>
-
-					
+				<row>	
 					<textField>
 						<name>firstName</name>
 						<udn>firstName</udn>
@@ -371,7 +326,6 @@
 				</row>
 			</subForm>
 		</row>
-
 		<row>
 			<subForm>
 				<name>extensions</name>
