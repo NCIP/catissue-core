@@ -15,6 +15,8 @@ public class ExecuteQueryEvent extends RequestEvent {
 	private Long savedQueryId;
 	
 	private String runType;
+	
+	private String indexOf;
 
 	public Long getCpId() {
 		return cpId;
@@ -62,6 +64,14 @@ public class ExecuteQueryEvent extends RequestEvent {
 
 	public void setRunType(String runType) {
 		this.runType = runType;
+	}
+
+	public String getIndexOf() {
+		return indexOf;
+	}
+
+	public void setIndexOf(String indexOf) {
+		this.indexOf = indexOf;
 	}
 	
 }

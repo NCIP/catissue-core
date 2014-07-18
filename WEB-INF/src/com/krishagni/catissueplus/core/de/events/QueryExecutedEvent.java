@@ -9,6 +9,8 @@ public class QueryExecutedEvent extends ResponseEvent {
 	private String[] columnLabels;
 	
 	private List<String[]> rows;
+	
+	private Integer[] columnIndices;
 
 	public String[] getColumnLabels() {
 		return columnLabels;
@@ -26,10 +28,19 @@ public class QueryExecutedEvent extends ResponseEvent {
 		this.rows = rows;
 	}
 	
-	public static QueryExecutedEvent ok(String[] labels, List<String[]> rows) {
+	public Integer[] getColumnIndices() {
+		return columnIndices;
+	}
+
+	public void setColumnIndices(Integer[] columnIndices) {
+		this.columnIndices = columnIndices;
+	}
+
+	public static QueryExecutedEvent ok(String[] labels, List<String[]> rows, Integer[] indices) {
 		QueryExecutedEvent resp = new QueryExecutedEvent();
 		resp.setColumnLabels(labels);
-		resp.setRows(rows);
+		resp.setRows(rows); 
+		resp.setColumnIndices(indices);
 		resp.setStatus(EventStatus.OK);
 		return resp;
 	}

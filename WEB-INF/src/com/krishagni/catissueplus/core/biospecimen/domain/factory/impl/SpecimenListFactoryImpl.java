@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.util.CollectionUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
@@ -39,17 +41,21 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		setName(specimenList, details.getName(), oce);
 		
 		List<String> labels = new ArrayList<String>();
-		for (SpecimenSummary specimen : details.getSpecimens()) {
-			labels.add(specimen.getLabel());
+		if (!CollectionUtils.isEmpty(details.getSpecimens())) {
+			for (SpecimenSummary specimen : details.getSpecimens()) {
+				labels.add(specimen.getLabel());
+			}			
 		}
 		setSpecimens(specimenList, labels, oce);
 		
-		List<Long> sharedUsers = new ArrayList<Long>();
-		for (UserSummary user : details.getSharedWith()) {
-			if (user.getId().equals(userId)) {
-				continue;
-			}
-			sharedUsers.add(user.getId());
+		List<Long> sharedUsers = new ArrayList<Long>();		
+		if (!CollectionUtils.isEmpty(details.getSharedWith())) {
+			for (UserSummary user : details.getSharedWith()) {
+				if (user.getId().equals(userId)) {
+					continue;
+				}
+				sharedUsers.add(user.getId());
+			}			
 		}
 		setSharedUsers(specimenList, sharedUsers, oce);
 		

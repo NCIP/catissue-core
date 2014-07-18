@@ -259,7 +259,12 @@ public class QueryServiceImpl implements QueryService {
 			QueryResultData queryResult = resp.getResultData();
 			queryResult.setScreener(new QueryResultScreenerImpl(sdb, countQuery));
 			
-			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getStringifiedRows());
+			Integer[] indices = null;
+			if (req.getIndexOf() != null && !req.getIndexOf().isEmpty()) {
+				indices = queryResult.getColumnIndices(req.getIndexOf());
+			}
+			
+			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getStringifiedRows(), indices);
 		} catch (QueryParserException qpe) {
 			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
 		} catch (IllegalArgumentException iae) {
@@ -890,8 +895,9 @@ public class QueryServiceImpl implements QueryService {
 				return preScreenedResultCols;
 			}
 			
-			preScreenedResultCols.remove(0);
-			return preScreenedResultCols;
+			List<ResultColumn> result = new ArrayList<ResultColumn>(preScreenedResultCols);
+			result.remove(0);
+			return result;
 		}
 
 		@Override
@@ -915,7 +921,13 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			int i = 0; 
+			boolean first = true;
 			for (ResultColumn col : preScreenedResultCols) {
+				if (first) {
+					first = false;
+					continue;
+				}
+				
 				if (col.isPhi()) {
 					screenedData[i] = mask;
 				}

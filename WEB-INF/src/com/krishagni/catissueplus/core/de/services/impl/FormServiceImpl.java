@@ -90,8 +90,12 @@ public class FormServiceImpl implements FormService {
 		
 		List<FormFieldSummary> fields = getFormFields(form);
 		Long cpId = req.getCpId();
-		if (!req.isExtendedFields() || cpId == null || cpId < 0) {
+		if (!req.isExtendedFields()) {
 			return FormFieldsEvent.ok(formId, fields);
+		}
+		
+		if (cpId == null || cpId < 0) {
+			cpId = -1L;
 		}
 		
 		String formName = form.getName();

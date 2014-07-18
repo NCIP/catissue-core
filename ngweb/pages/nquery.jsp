@@ -159,7 +159,7 @@
           text-align: center;
        }
 
-       span.glyphicon-remove {
+       .paren-node span.glyphicon-remove, .op-node span.glyphicon-remove {
           font-size: 0.5em;
           color: #cccccc;
        }
@@ -708,23 +708,30 @@
             </div>
           </div>
           <div class="btn-group" ng-if="showAddToSpecimenList">
-            <div tooltip-placement="bottom" tooltip="Select rows in below table to assign specimens to list" tooltip-append-to-body="true">
-              <button type="button" class="btn btn-default disabled" style="border-radius: 4px;"
-                ng-if="queryData.resultGridOpts.selectedItems.length == 0">
-                <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
-                <span class="caret"></span>
-              </button>
-            </div>
-            <button type="button" class="btn btn-default dropdown-toggle" style="border-radius: 4px;" data-toggle="dropdown" ng-click="searchSpecimenList = ''"
+            <button type="button" class="btn btn-default" ng-if="!queryData.selectAll" ng-click="selectAllRows()"
+              tooltip-placement="bottom" tooltip="Select all rows in below table to assign specimens to list" tooltip-append-to-body="true">
+              <span class="glyphicon glyphicon-ok"></span>
+              <span>Select All</span>
+            </button>
+            <button type="button" class="btn btn-default" ng-if="queryData.selectAll" ng-click="unSelectAllRows()">
+              <span class="glyphicon glyphicon-remove"></span>
+              <span>Unselect All</span>
+            </button>
+            <button type="button" class="btn btn-default disabled" 
+              ng-if="queryData.resultGridOpts.selectedItems.length == 0">
+              <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
+              <span class="caret"></span>
+            </button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="searchSpecimenList = ''"
               tooltip-placement="bottom" tooltip="Assign specimens to list" tooltip-append-to-body="true"
               ng-if="queryData.resultGridOpts.selectedItems.length > 0">
               <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
               <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" style="width: 200px;">
+            <ul class="dropdown-menu" style="width: 300px;">
               <li>
                 <input ng-model="searchSpecimenList" 
-                  type="text" class="form-control" style="width: 160px; margin: 3px 20px" 
+                  type="text" class="form-control" style="width: 260px; margin: 3px 20px" 
                   ng-click="$event.stopPropagation()">
               </li>
               <li>
@@ -734,6 +741,8 @@
                   </li>
                 </ul>
               </li>
+              <li class="divider"></li>
+              <li><a ng-click="createNewSpecimenList()">Create New Specimen List</a></li>
             </ul>
           </div>
         </div>
@@ -1249,6 +1258,22 @@
         <button class="btn btn-default" ng-click="cancel()">No</button>
         <button class="btn btn-primary" ng-click="ok()">Yes</button>
       </div>
+    </script>
+
+    <script type="text/ng-template" id="create-specimen-list.html">
+      <div class="modal-header" style="height: 25%;">
+        <h4>New Specimen List</h3>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p>Please enter a new specimen list name:</p>
+          <input type="text" ng-model="specimenList.name" class="form-control" placeholder="Specimen List Name">
+        </div>
+      </div>
+      <div class="modal-footer" style="height: 25%;">
+         <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+         <button class="btn btn-primary" ng-disabled="!specimenList.name" ng-click="saveSpecimenList()">Create</button>
+      </div> 
     </script>
     
     <script>

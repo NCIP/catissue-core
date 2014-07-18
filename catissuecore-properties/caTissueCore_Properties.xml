@@ -691,11 +691,6 @@
         <value>30</value>
     </property>
 
-    <property>
-	<name>query.exportDataDir</name>
-        <value>@@query.exportDataDir@@</value>
-    </property>
-
 <!--  Added for EMPI integration -->
     <property>
         <name>empi.Enabled</name>
@@ -984,11 +979,6 @@ Helpdesk Phone : @@contact.number@@</value>
     	<value>1440</value>
     </property>
 
-    <property>
-        <name>de.fileUploadDir</name>
-        <value>@@de.fileUploadDir@@</value>
-    </property>
-
 	<property>
 		<name>NoOfAttemptsForFailNotifications</name>
 		<value>3</value>
@@ -1022,5 +1012,10 @@ Helpdesk Phone : @@contact.number@@</value>
     <property>
         <name>"bcrypt.salt.windings"</name>
         <value>4</value>
+    </property>
+
+    <property>
+      <name>appserver.home.dir</name>
+      <value>@@appserver.home.dir@@</value>
     </property>
 </properties>

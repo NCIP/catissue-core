@@ -10,7 +10,7 @@ angular.module('plus.services', [])
 
     return {
       executeQuery: function(id, cpId, drivingForm, aql, runType, wideRows) {
-        var req = {savedQueryId: id, cpId: cpId, drivingForm: drivingForm, aql: aql, runType: runType, wideRows: wideRows};
+        var req = {indexOf: 'Specimen.label', savedQueryId: id, cpId: cpId, drivingForm: drivingForm, aql: aql, runType: runType, wideRows: wideRows};
         return $http.post(baseUrl, req).then(successfn);
       },
 
@@ -152,6 +152,14 @@ angular.module('plus.services', [])
 
       addSpecimensToList: function(listId, specimens) {
         return $http.put(baseUrl + listId + '/specimens?operation=ADD', specimens).then(successfn);
+      },
+
+      saveOrUpdate: function(list) {
+        if (list.id) {
+          return $http.put(baseUrl + list.id, list).then(successfn);
+        } else {
+          return $http.post(baseUrl, list).then(successfn);
+        }
       }
     };
   });

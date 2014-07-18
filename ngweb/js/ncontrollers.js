@@ -296,6 +296,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
         $scope.queryData.resultData = result.rows;
         $scope.queryData.resultCols = colDefs;
+        $scope.queryData.labelIndices = result.columnIndices;
         $scope.queryData.resultDataSize = result.rows.length;
         $scope.queryData.pagingOptions.pageSize = 100;
         $scope.queryData.pagingOptions.currentPage = 1;
@@ -316,14 +317,75 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       }
     };
 
-    $scope.addSpecimensToList = function(list) {
-      var colDefs = $scope.queryData.resultCols;
-      var labelIndices = [], colLabel = "Specimen# Label";
-      for (var i = 0; i < colDefs.length; ++i) {
-        if (colDefs[i].displayName === colLabel) {
-          labelIndices.push(i);
-          colLabel = "Specimen# Label# " + labelIndices.length;
+    $scope.selectAllRows = function() {
+      $scope.queryData.resultGridOpts.selectAll(true);
+      $scope.queryData.selectAll = true;
+    };
+
+    $scope.unSelectAllRows = function() {
+      $scope.queryData.resultGridOpts.selectAll(false);
+      $scope.queryData.selectAll = false;
+    };
+
+    $scope.createNewSpecimenList = function() {
+      var specimenLabels = getSpecimenLabels();
+
+      var modalInstance = $modal.open({
+        templateUrl: 'create-specimen-list.html',
+        controller: CreateSpecimenListCtrl,
+        resolve: {
+          specimenLabels: function() {
+            return specimenLabels;
+          }
+        },
+        windowClass: 'ka-confirm-modal'
+      });
+
+      modalInstance.result.then(
+        function(list) {
+          if (list) {
+            Utility.notify($("#notifications"), "New specimen list created successfully", "success", true);
+            $scope.queryData.myLists.push(list);
+            list.specimens = undefined;
+            $scope.selectedRows.splice(0, $scope.selectedRows.length);
+            $scope.queryData.resultGridOpts.selectAll(false);
+            $scope.queryData.selectAll = false;
+          } else {
+            Utility.notify(
+              $("#notifications"), 
+              "Error creating specimen list. Please contact system administrator", "error", true);
+          }
         }
+      );
+    };
+
+    var CreateSpecimenListCtrl = function($scope, $modalInstance, specimenLabels) {
+      $scope.specimenList = {name: ""};
+      $scope.saveSpecimenList = function() {
+        var specimens = [];
+        if (specimenLabels) {
+          for (var i = 0; i < specimenLabels.length; ++i) {
+            specimens.push({label: specimenLabels[i]});
+          }
+        }
+
+        $scope.specimenList.specimens = specimens;
+        SpecimenListsService.saveOrUpdate($scope.specimenList).then(
+          function(specimenList) {
+            $modalInstance.close(specimenList);
+          }
+        );
+      };
+
+      $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+      }
+    };
+
+    var getSpecimenLabels = function() {
+      var labelIndices = $scope.queryData.labelIndices;
+      if (!labelIndices) {
+        return [];
       }
 
       var specimenLabels = [];
@@ -340,6 +402,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
       }
 
+      return specimenLabels;
+    };
+
+    $scope.addSpecimensToList = function(list) {
+      var specimenLabels = getSpecimenLabels();
       if (specimenLabels.length == 0) {
         return;
       }
@@ -358,6 +425,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
           $scope.selectedRows.splice(0, $scope.selectedRows.length);
           $scope.queryData.resultGridOpts.selectAll(false);
+          $scope.queryData.selectAll = false;
         }
       );
     };
@@ -406,6 +474,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.queryData.pagedData = [];
       $scope.queryData.resultData = [];
       $scope.queryData.resultCols = [];
+      $scope.queryData.labelIndices = [];
       $scope.queryData.resultDataSize = 0;
       $scope.queryData.view = 'query';
     }
@@ -538,7 +607,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         pageSize: 100,
         currentPage: 1
       },
-      myLists: undefined
+      myLists: undefined,
+      selectAll: false
     };
     $scope.selectedRows = [];
 
@@ -574,6 +644,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         resultData: [],
         pagedData: [],
         resultCols: [],
+        labelIndices: [],
+        selectAll: false,
         resultDataSize: 0
       };
     };
@@ -845,7 +917,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       });
     };
  
-    ViewQuerySqlCtrl = function($scope, $modalInstance, auditLogId) {
+    var ViewQuerySqlCtrl = function($scope, $modalInstance, auditLogId) {
       $scope.auditLog = null;
  
       QueryService.getAuditLog(auditLogId).then(
@@ -1736,7 +1808,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         {label:'current_date', value: 'current_date()'},
         {label:'months_between', value: 'months_between('},
         {label:'years_between', value: 'years_between('},
-        {label:'minutes_between', value: 'minutes_between('}
+        {label:'minutes_between', value: 'minutes_between('},
+        {label:'round', value: 'round('}
       ];
     };
 
