@@ -29,6 +29,14 @@
 			</dropDown>
 		</row>
 		<row>
+			<textField>
+				<name>label</name>
+				<udn>label</udn>
+				<caption>Specimen Label</caption>
+				<column>LABEL</column>
+			</textField>
+		</row>
+		<row>
 			<subForm>
                                 <name>parentSpecimen</name>
                                 <udn>parentSpecimen</udn>
@@ -46,14 +54,6 @@
                                 </row>
                         </subForm>
                 </row>
-		<row>
-			<textField>
-				<name>label</name>
-				<udn>label</udn>
-				<caption>Label</caption>
-				<column>LABEL</column>
-			</textField>
-		</row>
 		<row>
 			<textField>
 				<name>barcode</name>
@@ -112,6 +112,7 @@
                                           where pv.public_id = 'Tissue_Site_PID'
 
                                           order by value
+					</sql>
 				</options>
 			</dropDown>
 		</row>
@@ -344,6 +345,134 @@
 		</row>
 		<row>
 			<subForm>
+				<name>cellReviewEvent</name>
+				<udn>cellReviewEvent</udn>
+				<caption>Cell Review Event</caption>
+				<table>CATISSUE_CELL_SPE_REVIEW_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>revievedBy</name>
+						<udn>revievedBy</udn>
+						<caption>Cell Reviewed By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>cellRevieverFirstName</name>
+								<udn>cellRevieverFirstName</udn>
+								<caption>Cell Reviewer First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>cellRevieverLastName</name>
+								<udn>cellRevieverLastName</udn>
+								<caption>Cell Reviewer Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>cellRevieverComments</name>
+						<udn>cellRevieverComments</udn>
+						<caption>Cell Reviewer Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+		
+				        <datePicker>
+		                          <name>cellReviewTime</name>
+		                          <udn>cellReviewTime</udn>
+		                          <caption>Cell Review Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<numberField>
+						<name>neoPlasticCellularityPct</name>
+						<udn>neoPlasticCellularityPct</udn>
+						<caption>Cell Neo Plastic Cellularity Percentage</caption>
+						<column>NEOPLASTIC_CELLULARITY_PER</column>
+					</numberField>
+
+					<numberField>
+						<name>viableCellPct</name>
+						<udn>viableCellPct</udn>
+						<caption>Viable Cell Percentage</caption>
+						<column>VIABLE_CELL_PERCENTAGE</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>checkInCheckOutEvent</name>
+				<udn>checkInCheckOutEvent</udn>
+				<caption>Check In Check Out Event</caption>
+				<table>CATISSUE_IN_OUT_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>checkInCheckOutBy</name>
+						<udn>checkInCheckOutBy</udn>
+						<caption>Check In Check Out By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>checkInCheckOutFirstName</name>
+								<udn>checkInCheckOutFirstName</udn>
+								<caption>Check In Check Out by First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>checkInCheckOutLastName</name>
+								<udn>checkInCheckOutLastName</udn>
+								<caption>Check In Check Out by Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>checkInCheckOutComments</name>
+						<udn>checkInCheckOutComments</udn>
+						<caption>Check In Check Out Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+				                <name>checkInCheckOutTime</name>
+				                <udn>checkInCheckOutTime</udn>
+				                <caption>Check In Check Out Time</caption>
+				                <column>EVENT_TIMESTAMP</column>
+				                <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<dropDown>
+						<name>checkInCheckOutStorageStatus</name>
+						<udn>checkInCheckOutStorageStatus</udn>
+						<caption>Check In Check Out Storage Status</caption>
+						<column>STORAGE_STATUS</column>
+						<options>
+							<option><value>CHECK IN</value></option>
+							<option><value>CHECK OUT</value></option>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row> 
+		<row>
+			<subForm>
 				<name>collectionEvent</name>
 				<udn>collectionEvent</udn>
 				<caption>Collection Event</caption>
@@ -411,870 +540,6 @@
 							<sql>select value from catissue_permissible_value where public_id = '2003997' order by value</sql>
 						</options>
 					</dropDown>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>fixedEvent</name>
-				<udn>fixedEvent</udn>
-				<caption>Fixed Event</caption>
-				<table>CATISSUE_FIXED_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>fixedBy</name>
-						<udn>fixedBy</udn>
-						<caption>Fixed Event By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-
-						<row>					
-							<textField>
-								<name>fixedByFirstName</name>
-								<udn>fixedByFirstName</udn>
-								<caption>Fixed By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>fixedByLastName</name>
-								<udn>fixedByLastName</udn>
-								<caption>Fixed By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>fixationComments</name>
-						<udn>fixationComments</udn>
-						<caption>Fixation Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-
-				        <datePicker>
-				                <name>fixationTime</name>
-				                <udn>fixationTime</udn>
-				                <caption>Fixation Time</caption>
-				                <column>EVENT_TIMESTAMP</column>
-				                <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<dropDown>
-						<name>fixationType</name>
-						<udn>fixationType</udn>
-						<caption>Fixation Type</caption>
-						<column>FIXATION_TYPE</column>
-						<options>
-							<sql>select value from catissue_permissible_value where public_id = '2003995' order by value</sql>
-						</options>
-					</dropDown>
-					<numberField>
-						<name>durationInMins</name>
-						<udn>durationInMins</udn>
-						<caption>Fixation Duration</caption>
-						<column>DURATION_IN_MINUTES</column>
-					</numberField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>frozenEvent</name>
-				<udn>frozenEvent</udn>
-				<caption>Frozen Event</caption>
-				<table>CATISSUE_FROZEN_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>frozenBy</name>
-						<udn>frozenBy</udn>
-						<caption>Frozen By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-
-						<row>					
-							<textField>
-								<name>frozenByFirstName</name>
-								<udn>frozenByFirstName</udn>
-								<caption>Frozen By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>frozenByLastName</name>
-								<udn>frozenByLastName</udn>
-								<caption>Frozen By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>frozenComments</name>
-						<udn>frozenComments</udn>
-						<caption>Frozen Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-				                <name>frozenTime</name>
-				                <udn>frozenTime</udn>
-				                <caption>Frozen Time</caption>
-				                <column>EVENT_TIMESTAMP</column>
-				                <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<dropDown>
-						<name>frozenMethod</name>
-						<udn>frozenMethod</udn>
-						<caption>Frozen Method</caption>
-						<column>METHOD</column>
-						<options>
-							<sql>select value from catissue_permissible_value where public_id = '2003998' order by value</sql>
-						</options>
-					</dropDown>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>checkInCheckOutEvent</name>
-				<udn>checkInCheckOutEvent</udn>
-				<caption>Check In Check Out Event</caption>
-				<table>CATISSUE_IN_OUT_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>checkInCheckOutBy</name>
-						<udn>checkInCheckOutBy</udn>
-						<caption>Check In Check Out By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>checkInCheckOutFirstName</name>
-								<udn>checkInCheckOutFirstName</udn>
-								<caption>Check In Check Out by First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>checkInCheckOutLastName</name>
-								<udn>checkInCheckOutLastName</udn>
-								<caption>Check In Check Out by Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>checkInCheckOutComments</name>
-						<udn>checkInCheckOutComments</udn>
-						<caption>Check In Check Out Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-				                <name>checkInCheckOutTime</name>
-				                <udn>checkInCheckOutTime</udn>
-				                <caption>Check In Check Out Time</caption>
-				                <column>EVENT_TIMESTAMP</column>
-				                <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<dropDown>
-						<name>checkInCheckOutStorageStatus</name>
-						<udn>checkInCheckOutStorageStatus</udn>
-						<caption>Check In Check Out Storage Status</caption>
-						<column>STORAGE_STATUS</column>
-						<options>
-							<option><value>CHECK IN</value></option>
-							<option><value>CHECK OUT</value></option>
-						</options>
-					</dropDown>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>procedureEvent</name>
-				<udn>procedureEvent</udn>
-				<caption>Procedure Event</caption>
-				<table>CATISSUE_PROCEDURE_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>processedBy</name>
-						<udn>processedBy</udn>
-						<caption>Processed By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>processedByFirstName</name>
-								<udn>processedByFirstName</udn>
-								<caption>Processed By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>processedByLastName</name>
-								<udn>processedByLastName</udn>
-								<caption>Processed By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>procedureComments</name>
-						<udn>procedureComments</udn>
-						<caption>Procedure Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-
-				        <datePicker>
-		                          <name>procedureTime</name>
-		                          <udn>procedureTime</udn>
-		                          <caption>Procedure Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<textField>
-						<name>procedureUrl</name>
-						<udn>procedureUrl</udn>
-						<caption>Procedure URL</caption>
-						<column>URL</column>
-					</textField>
-
-					<textField>
-						<name>procedureName</name>
-						<udn>procedureName</udn>
-						<caption>Procedure Name</caption>
-						<column>NAME</column>
-					</textField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>spunEvent</name>
-				<udn>spunEvent</udn>
-				<caption>Spun Event</caption>
-				<table>CATISSUE_SPUN_EVENT_PARAMETERS</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>spunnedBy</name>
-						<udn>spunnedBy</udn>
-						<caption>Spunned By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>spunnedByFirstName</name>
-								<udn>spunnedByFirstName</udn>
-								<caption>Spunned By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>spunnedByLastName</name>
-								<udn>spunnedByLastName</udn>
-								<caption>Spunned By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>spunComments</name>
-						<udn>spunComments</udn>
-						<caption>Spun Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-		                          <name>spunTime</name>
-		                          <udn>spunTime</udn>
-		                          <caption>Spun Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<numberField>
-						<name>spunGforce</name>
-						<udn>spunGforce</udn>
-						<caption>Spun GForce</caption>
-						<column>GFORCE</column>
-					</numberField>
-
-					<numberField>
-						<name>spunDuration</name>
-						<udn>spunDuration</udn>
-						<caption>Spun Duration</caption>
-						<column>DURATION_IN_MINUTES</column>
-					</numberField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>transferEvent</name>
-				<udn>transferEvent</udn>
-				<caption>Transfer Event</caption>
-				<table>CATISSUE_TRANSFER_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>transferredBy</name>
-						<udn>transferredBy</udn>
-						<caption>Transferred By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>transferredByFirstName</name>
-								<udn>transferredByFirstName</udn>
-								<caption>Transferred By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>transferredByLastName</name>
-								<udn>transferredByLastName</udn>
-								<caption>Transferred By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<datePicker>
-						<name>transferTime</name>
-						<udn>transferTime</udn>
-						<caption>Transfer Time</caption>
-						<column>EVENT_TIMESTAMP</column>
-					</datePicker>
-				
-					<textField>
-						<name>transferComments</name>
-						<udn>transferComments</udn>
-						<caption>Transfer Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>recievedEvent</name>
-				<udn>recievedEvent</udn>
-				<caption>Received Event</caption>
-				<table>CATISSUE_RECEIVED_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>recievedBy</name>
-						<udn>recievedBy</udn>
-						<caption>Received By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-
-							<textField>
-								<name>recieverFirstName</name>
-								<udn>recieverFirstName</udn>
-								<caption>Receiver First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>recieverLastName</name>
-								<udn>recieverLastName</udn>
-								<caption>Receiver Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>recieverComments</name>
-						<udn>recieverComments</udn>
-						<caption>Receiver Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-		                          <name>recievedTime</name>
-		                          <udn>recievedTime</udn>
-		                          <caption>Received Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<dropDown>
-						<name>recievedQuality</name>
-						<udn>recievedQuality</udn>
-						<caption>Received Quality</caption>
-						<column>RECEIVED_QUALITY</column>
-						<options>
-							<sql>select value from catissue_permissible_value where public_id = '2003994' order by value</sql>
-						</options>
-					</dropDown>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>embeddedEvent</name>
-				<udn>embeddedEvent</udn>
-				<caption>Embedded Event</caption>
-				<table>CATISSUE_EMBEDDED_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>embeddedBy</name>
-						<udn>embeddedBy</udn>
-						<caption>Embedded By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>embeddedByFirstName</name>
-								<udn>embeddedByFirstName</udn>
-								<caption>Embedded By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>embeddedByLastName</name>
-								<udn>embeddedByLastName</udn>
-								<caption>Embedded By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>embeddedComments</name>
-						<udn>embeddedComments</udn>
-						<caption>Embedded Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-		                          <name>embeddedTime</name>
-		                          <udn>embeddedTime</udn>
-		                          <caption>Embedded Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<dropDown>
-						<name>embeddingMedium</name>
-						<udn>embeddingMedium</udn>
-						<caption>Embedding Medium</caption>
-						<column>EMBEDDING_MEDIUM</column>
-						<options>
-							<sql>select value from catissue_permissible_value where public_id = '2003999' order by value</sql>
-						</options>
-					</dropDown>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>thawEvent</name>
-				<udn>thawEvent</udn>
-				<caption>Thaw Event</caption>
-				<table>CATISSUE_THAW_EVENT_PARAMETERS</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>thawedBy</name>
-						<udn>thawedBy</udn>
-						<caption>Thawed By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>thawedByFirstName</name>
-								<udn>thawedByFirstName</udn>
-								<caption>Thawed By First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>thawedByLastName</name>
-								<udn>thawedByLastName</udn>
-								<caption>Thawed By Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<datePicker>
-						<name>thawedTime</name>
-						<udn>thawedTime</udn>
-						<caption>Thawed Time</caption>
-						<column>EVENT_TIMESTAMP</column>
-					</datePicker>
-				</row>
-				<row>
-					<textField>
-						<name>thawedComments</name>
-						<udn>thawedComments</udn>
-						<caption>Thawed Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>cellReviewEvent</name>
-				<udn>cellReviewEvent</udn>
-				<caption>Cell Review Event</caption>
-				<table>CATISSUE_CELL_SPE_REVIEW_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>revievedBy</name>
-						<udn>revievedBy</udn>
-						<caption>Cell Reviewed By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>cellRevieverFirstName</name>
-								<udn>cellRevieverFirstName</udn>
-								<caption>Cell Reviewer First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>cellRevieverLastName</name>
-								<udn>cellRevieverLastName</udn>
-								<caption>Cell Reviewer Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>cellRevieverComments</name>
-						<udn>cellRevieverComments</udn>
-						<caption>Cell Reviewer Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-		
-				        <datePicker>
-		                          <name>cellReviewTime</name>
-		                          <udn>cellReviewTime</udn>
-		                          <caption>Cell Review Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<numberField>
-						<name>neoPlasticCellularityPct</name>
-						<udn>neoPlasticCellularityPct</udn>
-						<caption>Cell Neo Plastic Cellularity Percentage</caption>
-						<column>NEOPLASTIC_CELLULARITY_PER</column>
-					</numberField>
-
-					<numberField>
-						<name>viableCellPct</name>
-						<udn>viableCellPct</udn>
-						<caption>Viable Cell Percentage</caption>
-						<column>VIABLE_CELL_PERCENTAGE</column>
-					</numberField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>tissueReviewEvent</name>
-				<udn>tissueReviewEvent</udn>
-				<caption>Tissue Review Event</caption>
-				<table>CATISSUE_TIS_SPE_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>tissueReviewedBy</name>
-						<udn>tissueReviewedBy</udn>
-						<caption>Tissue Reviewed By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-					
-							<textField>
-								<name>tissueReviewedFirstName</name>
-								<udn>tissueReviewedFirstName</udn>
-								<caption>Tissue Reviewer First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>tissueReviewedLastName</name>
-								<udn>tissueReviewedLastName</udn>
-								<caption>Tissue Reviewer Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>tissueReviewComments</name>
-						<udn>tissueReviewComments</udn>
-						<caption>Tissue Review Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-		                          <name>tissueReviewTime</name>
-		                          <udn>tissueReviewTime</udn>
-		                          <caption>Tissue Review Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<numberField>
-						<name>neoPlasticCellularityPct</name>
-						<udn>neoPlasticCellularityPct</udn>
-						<caption>Tissue Neo Plastic Cellularity Percentage</caption>
-						<column>NEOPLASTIC_CELLULARITY_PER</column>
-					</numberField>
-
-					<numberField>
-						<name>necrosisPct</name>
-						<udn>necrosisPct</udn>
-						<caption>Tissue Review Necrosis Percentage</caption>
-						<column>NECROSIS_PERCENTAGE</column>
-					</numberField>
-
-					<numberField>
-						<name>lymphocyticPct</name>
-						<udn>lymphocyticPct</udn>
-						<caption>Tissue Review Lymphocytic Percentage</caption>
-						<column>LYMPHOCYTIC_PERCENTAGE</column>
-					</numberField>
-
-					<numberField>
-						<name>totalCellularityPct</name>
-						<udn>totalCellularityPct</udn>
-						<caption>Tissue Total Cellularity Percentage</caption>
-						<column>TOTAL_CELLULARITY_PERCENTAGE</column>
-					</numberField>
-
-					<dropDown>
-						<name>histologicalQuality</name>
-						<udn>histologicalQuality</udn>
-						<caption>Tissue Review Histological Quality</caption>
-						<column>HISTOLOGICAL_QUALITY</column>
-						<options>
-							<sql>select value from catissue_permissible_value where public_id = 'Hist_Quality' order by value</sql>
-						</options>
-					</dropDown>
-				</row>
-			</subForm>
-		</row>		
-		<row>
-			<subForm>
-				<name>fluidReviewEvent</name>
-				<udn>fluidReviewEvent</udn>
-				<caption>Fluid Review Event</caption>
-				<table>CATISSUE_FLUID_SPE_EVENT_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>fluidReviewedBy</name>
-						<udn>fluidReviewedBy</udn>
-						<caption>Fluid Reviewed By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>fluidReviewerFirstName</name>
-								<udn>fluidReviewerFirstName</udn>
-								<caption> Fluid Reviewer First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>fluidReviewerLastName</name>
-								<udn>fluidReviewerLastName</udn>
-								<caption> Fluid Reviewer Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>fluidReviewComments</name>
-						<udn>fluidReviewComments</udn>
-						<caption>Fluid Review Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-		                          <name>fluidReviewTime</name>
-		                          <udn>fluidReviewTime</udn>
-		                          <caption>Fluid Review Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<numberField>
-						<name>cellCount</name>
-						<udn>cellCount</udn>
-						<caption>Fluid Review Cell Count</caption>
-						<column>CELL_COUNT</column>
-					</numberField>
-				</row>
-			</subForm>
-		</row>
-		<row>
-			<subForm>
-				<name>molecularReviewEvent</name>
-				<udn>molecularReviewEvent</udn>
-				<caption>Molecular Review Event</caption>
-				<table>CATISSUE_MOL_SPE_REVIEW_PARAM</table>
-				<foreignKey>SPECIMEN_ID</foreignKey>
-				<parentKey>IDENTIFIER</parentKey>
-				<row>
-					<subForm>
-						<name>molecularReviewedBy</name>
-						<udn>molecularReviewedBy</udn>
-						<caption>Molecular Reviewed By</caption>
-						<table>USER_VIEW</table>
-						<foreignKey>IDENTIFIER</foreignKey>
-						<parentKey>USER_ID</parentKey>
-						<row>					
-							<textField>
-								<name>moleculearRevieverFirstName</name>
-								<udn>moleculearRevieverFirstName</udn>
-								<caption>Molecular Reviewer First Name</caption>
-								<column>FIRST_NAME</column>
-							</textField>
-					
-							<textField>
-								<name>moleculearRevieverLastName</name>
-								<udn>moleculearRevieverLastName</udn>
-								<caption>Molecular Reviewer Last Name</caption>
-								<column>LAST_NAME</column>
-							</textField>
-						</row>
-					</subForm>
-				</row>
-				<row>
-					<textField>
-						<name>moleculeReviewComments</name>
-						<udn>moleculeReviewComments</udn>
-						<caption>Molecular Review Comments</caption>
-						<column>COMMENTS</column>
-					</textField>
-				
-				        <datePicker>
-		                          <name>molecularReviewTime</name>
-		                          <udn>molecularReviewTime</udn>
-		                          <caption>Molecular Review Time</caption>
-		                          <column>EVENT_TIMESTAMP</column>
-		                          <format>MM-dd-yyyy</format>
-		                        </datePicker>
-
-					<textField>
-						<name>gelImageUrl</name>
-						<udn>gelImageUrl</udn>
-						<caption>Molecular Gel Image URL</caption>
-						<column>GEL_IMAGE_URL</column>
-					</textField>
-
-					<textField>
-						<name>molecularQualityIndex</name>
-						<udn>molecularQualityIndex</udn>
-						<caption>Molecular Quality Index</caption>
-						<column>QUALITY_INDEX</column>
-					</textField>
-
-					<numberField>
-						<name>gelNumber</name>
-						<udn>gelNumber</udn>
-						<caption>Molecular Gel Number</caption>
-						<column>GEL_NUMBER</column>
-					</numberField>
-
-					<textField>
-						<name>laneNumber</name>
-						<udn>laneNumber</udn>
-						<caption>Molecular Lane Number</caption>
-						<column>LANE_NUMBER</column>
-					</textField>
-
-					<numberField>
-						<name>absorbanceAt260</name>
-						<udn>absorbanceAt260</udn>
-						<caption>Molecular Absorbance At 260</caption>
-						<column>ABSORBANCE_AT_260</column>
-					</numberField>
-
-					<numberField>
-						<name>absorbanceAt280</name>
-						<udn>absorbanceAt280</udn>
-						<caption>Molecular Absorbance At 280</caption>
-						<column>ABSORBANCE_AT_280</column>
-					</numberField>
-
-					<numberField>
-						<name>ratio28sTo18s</name>
-						<udn>ratio28sTo18s</udn>
-						<caption>Molecular Ratio 28S To 18S</caption>
-						<column>RATIO_28S_TO_18S</column>
-					</numberField>
 				</row>
 			</subForm>
 		</row>
@@ -1391,6 +656,742 @@
 					        <column>EVENT_TIMESTAMP</column>
 					        <format>MM-dd-yyyy</format>
 			                </datePicker>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>embeddedEvent</name>
+				<udn>embeddedEvent</udn>
+				<caption>Embedded Event</caption>
+				<table>CATISSUE_EMBEDDED_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>embeddedBy</name>
+						<udn>embeddedBy</udn>
+						<caption>Embedded By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>embeddedByFirstName</name>
+								<udn>embeddedByFirstName</udn>
+								<caption>Embedded By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>embeddedByLastName</name>
+								<udn>embeddedByLastName</udn>
+								<caption>Embedded By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>embeddedComments</name>
+						<udn>embeddedComments</udn>
+						<caption>Embedded Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+		                          <name>embeddedTime</name>
+		                          <udn>embeddedTime</udn>
+		                          <caption>Embedded Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<dropDown>
+						<name>embeddingMedium</name>
+						<udn>embeddingMedium</udn>
+						<caption>Embedding Medium</caption>
+						<column>EMBEDDING_MEDIUM</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003999' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>fixedEvent</name>
+				<udn>fixedEvent</udn>
+				<caption>Fixed Event</caption>
+				<table>CATISSUE_FIXED_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>fixedBy</name>
+						<udn>fixedBy</udn>
+						<caption>Fixed Event By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+
+						<row>					
+							<textField>
+								<name>fixedByFirstName</name>
+								<udn>fixedByFirstName</udn>
+								<caption>Fixed By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>fixedByLastName</name>
+								<udn>fixedByLastName</udn>
+								<caption>Fixed By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>fixationComments</name>
+						<udn>fixationComments</udn>
+						<caption>Fixation Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+
+				        <datePicker>
+				                <name>fixationTime</name>
+				                <udn>fixationTime</udn>
+				                <caption>Fixation Time</caption>
+				                <column>EVENT_TIMESTAMP</column>
+				                <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<dropDown>
+						<name>fixationType</name>
+						<udn>fixationType</udn>
+						<caption>Fixation Type</caption>
+						<column>FIXATION_TYPE</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003995' order by value</sql>
+						</options>
+					</dropDown>
+					<numberField>
+						<name>durationInMins</name>
+						<udn>durationInMins</udn>
+						<caption>Fixation Duration</caption>
+						<column>DURATION_IN_MINUTES</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>fluidReviewEvent</name>
+				<udn>fluidReviewEvent</udn>
+				<caption>Fluid Review Event</caption>
+				<table>CATISSUE_FLUID_SPE_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>fluidReviewedBy</name>
+						<udn>fluidReviewedBy</udn>
+						<caption>Fluid Reviewed By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>fluidReviewerFirstName</name>
+								<udn>fluidReviewerFirstName</udn>
+								<caption> Fluid Reviewer First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>fluidReviewerLastName</name>
+								<udn>fluidReviewerLastName</udn>
+								<caption> Fluid Reviewer Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>fluidReviewComments</name>
+						<udn>fluidReviewComments</udn>
+						<caption>Fluid Review Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+		                          <name>fluidReviewTime</name>
+		                          <udn>fluidReviewTime</udn>
+		                          <caption>Fluid Review Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<numberField>
+						<name>cellCount</name>
+						<udn>cellCount</udn>
+						<caption>Fluid Review Cell Count</caption>
+						<column>CELL_COUNT</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>frozenEvent</name>
+				<udn>frozenEvent</udn>
+				<caption>Frozen Event</caption>
+				<table>CATISSUE_FROZEN_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>frozenBy</name>
+						<udn>frozenBy</udn>
+						<caption>Frozen By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+
+						<row>					
+							<textField>
+								<name>frozenByFirstName</name>
+								<udn>frozenByFirstName</udn>
+								<caption>Frozen By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>frozenByLastName</name>
+								<udn>frozenByLastName</udn>
+								<caption>Frozen By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>frozenComments</name>
+						<udn>frozenComments</udn>
+						<caption>Frozen Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+				                <name>frozenTime</name>
+				                <udn>frozenTime</udn>
+				                <caption>Frozen Time</caption>
+				                <column>EVENT_TIMESTAMP</column>
+				                <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<dropDown>
+						<name>frozenMethod</name>
+						<udn>frozenMethod</udn>
+						<caption>Frozen Method</caption>
+						<column>METHOD</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003998' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>molecularReviewEvent</name>
+				<udn>molecularReviewEvent</udn>
+				<caption>Molecular Review Event</caption>
+				<table>CATISSUE_MOL_SPE_REVIEW_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>molecularReviewedBy</name>
+						<udn>molecularReviewedBy</udn>
+						<caption>Molecular Reviewed By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>moleculearRevieverFirstName</name>
+								<udn>moleculearRevieverFirstName</udn>
+								<caption>Molecular Reviewer First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>moleculearRevieverLastName</name>
+								<udn>moleculearRevieverLastName</udn>
+								<caption>Molecular Reviewer Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>moleculeReviewComments</name>
+						<udn>moleculeReviewComments</udn>
+						<caption>Molecular Review Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+		                          <name>molecularReviewTime</name>
+		                          <udn>molecularReviewTime</udn>
+		                          <caption>Molecular Review Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<textField>
+						<name>gelImageUrl</name>
+						<udn>gelImageUrl</udn>
+						<caption>Molecular Gel Image URL</caption>
+						<column>GEL_IMAGE_URL</column>
+					</textField>
+
+					<textField>
+						<name>molecularQualityIndex</name>
+						<udn>molecularQualityIndex</udn>
+						<caption>Molecular Quality Index</caption>
+						<column>QUALITY_INDEX</column>
+					</textField>
+
+					<numberField>
+						<name>gelNumber</name>
+						<udn>gelNumber</udn>
+						<caption>Molecular Gel Number</caption>
+						<column>GEL_NUMBER</column>
+					</numberField>
+
+					<textField>
+						<name>laneNumber</name>
+						<udn>laneNumber</udn>
+						<caption>Molecular Lane Number</caption>
+						<column>LANE_NUMBER</column>
+					</textField>
+
+					<numberField>
+						<name>absorbanceAt260</name>
+						<udn>absorbanceAt260</udn>
+						<caption>Molecular Absorbance At 260</caption>
+						<column>ABSORBANCE_AT_260</column>
+					</numberField>
+
+					<numberField>
+						<name>absorbanceAt280</name>
+						<udn>absorbanceAt280</udn>
+						<caption>Molecular Absorbance At 280</caption>
+						<column>ABSORBANCE_AT_280</column>
+					</numberField>
+
+					<numberField>
+						<name>ratio28sTo18s</name>
+						<udn>ratio28sTo18s</udn>
+						<caption>Molecular Ratio 28S To 18S</caption>
+						<column>RATIO_28S_TO_18S</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>procedureEvent</name>
+				<udn>procedureEvent</udn>
+				<caption>Procedure Event</caption>
+				<table>CATISSUE_PROCEDURE_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>processedBy</name>
+						<udn>processedBy</udn>
+						<caption>Processed By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>processedByFirstName</name>
+								<udn>processedByFirstName</udn>
+								<caption>Processed By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>processedByLastName</name>
+								<udn>processedByLastName</udn>
+								<caption>Processed By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>procedureComments</name>
+						<udn>procedureComments</udn>
+						<caption>Procedure Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+
+				        <datePicker>
+		                          <name>procedureTime</name>
+		                          <udn>procedureTime</udn>
+		                          <caption>Procedure Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<textField>
+						<name>procedureUrl</name>
+						<udn>procedureUrl</udn>
+						<caption>Procedure URL</caption>
+						<column>URL</column>
+					</textField>
+
+					<textField>
+						<name>procedureName</name>
+						<udn>procedureName</udn>
+						<caption>Procedure Name</caption>
+						<column>NAME</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>recievedEvent</name>
+				<udn>recievedEvent</udn>
+				<caption>Received Event</caption>
+				<table>CATISSUE_RECEIVED_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>recievedBy</name>
+						<udn>recievedBy</udn>
+						<caption>Received By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+
+							<textField>
+								<name>recieverFirstName</name>
+								<udn>recieverFirstName</udn>
+								<caption>Receiver First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>recieverLastName</name>
+								<udn>recieverLastName</udn>
+								<caption>Receiver Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>recieverComments</name>
+						<udn>recieverComments</udn>
+						<caption>Receiver Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+		                          <name>recievedTime</name>
+		                          <udn>recievedTime</udn>
+		                          <caption>Received Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<dropDown>
+						<name>recievedQuality</name>
+						<udn>recievedQuality</udn>
+						<caption>Received Quality</caption>
+						<column>RECEIVED_QUALITY</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = '2003994' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>spunEvent</name>
+				<udn>spunEvent</udn>
+				<caption>Spun Event</caption>
+				<table>CATISSUE_SPUN_EVENT_PARAMETERS</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>spunnedBy</name>
+						<udn>spunnedBy</udn>
+						<caption>Spunned By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>spunnedByFirstName</name>
+								<udn>spunnedByFirstName</udn>
+								<caption>Spunned By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>spunnedByLastName</name>
+								<udn>spunnedByLastName</udn>
+								<caption>Spunned By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>spunComments</name>
+						<udn>spunComments</udn>
+						<caption>Spun Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+		                          <name>spunTime</name>
+		                          <udn>spunTime</udn>
+		                          <caption>Spun Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<numberField>
+						<name>spunGforce</name>
+						<udn>spunGforce</udn>
+						<caption>Spun GForce</caption>
+						<column>GFORCE</column>
+					</numberField>
+
+					<numberField>
+						<name>spunDuration</name>
+						<udn>spunDuration</udn>
+						<caption>Spun Duration</caption>
+						<column>DURATION_IN_MINUTES</column>
+					</numberField>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>tissueReviewEvent</name>
+				<udn>tissueReviewEvent</udn>
+				<caption>Tissue Review Event</caption>
+				<table>CATISSUE_TIS_SPE_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>tissueReviewedBy</name>
+						<udn>tissueReviewedBy</udn>
+						<caption>Tissue Reviewed By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+					
+							<textField>
+								<name>tissueReviewedFirstName</name>
+								<udn>tissueReviewedFirstName</udn>
+								<caption>Tissue Reviewer First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>tissueReviewedLastName</name>
+								<udn>tissueReviewedLastName</udn>
+								<caption>Tissue Reviewer Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<textField>
+						<name>tissueReviewComments</name>
+						<udn>tissueReviewComments</udn>
+						<caption>Tissue Review Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				
+				        <datePicker>
+		                          <name>tissueReviewTime</name>
+		                          <udn>tissueReviewTime</udn>
+		                          <caption>Tissue Review Time</caption>
+		                          <column>EVENT_TIMESTAMP</column>
+		                          <format>MM-dd-yyyy</format>
+		                        </datePicker>
+
+					<numberField>
+						<name>neoPlasticCellularityPct</name>
+						<udn>neoPlasticCellularityPct</udn>
+						<caption>Tissue Neo Plastic Cellularity Percentage</caption>
+						<column>NEOPLASTIC_CELLULARITY_PER</column>
+					</numberField>
+
+					<numberField>
+						<name>necrosisPct</name>
+						<udn>necrosisPct</udn>
+						<caption>Tissue Review Necrosis Percentage</caption>
+						<column>NECROSIS_PERCENTAGE</column>
+					</numberField>
+
+					<numberField>
+						<name>lymphocyticPct</name>
+						<udn>lymphocyticPct</udn>
+						<caption>Tissue Review Lymphocytic Percentage</caption>
+						<column>LYMPHOCYTIC_PERCENTAGE</column>
+					</numberField>
+
+					<numberField>
+						<name>totalCellularityPct</name>
+						<udn>totalCellularityPct</udn>
+						<caption>Tissue Total Cellularity Percentage</caption>
+						<column>TOTAL_CELLULARITY_PERCENTAGE</column>
+					</numberField>
+
+					<dropDown>
+						<name>histologicalQuality</name>
+						<udn>histologicalQuality</udn>
+						<caption>Tissue Review Histological Quality</caption>
+						<column>HISTOLOGICAL_QUALITY</column>
+						<options>
+							<sql>select value from catissue_permissible_value where public_id = 'Hist_Quality' order by value</sql>
+						</options>
+					</dropDown>
+				</row>
+			</subForm>
+		</row>
+		<row>
+			<subForm>
+				<name>thawEvent</name>
+				<udn>thawEvent</udn>
+				<caption>Thaw Event</caption>
+				<table>CATISSUE_THAW_EVENT_PARAMETERS</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>thawedBy</name>
+						<udn>thawedBy</udn>
+						<caption>Thawed By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>thawedByFirstName</name>
+								<udn>thawedByFirstName</udn>
+								<caption>Thawed By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>thawedByLastName</name>
+								<udn>thawedByLastName</udn>
+								<caption>Thawed By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<datePicker>
+						<name>thawedTime</name>
+						<udn>thawedTime</udn>
+						<caption>Thawed Time</caption>
+						<column>EVENT_TIMESTAMP</column>
+					</datePicker>
+				</row>
+				<row>
+					<textField>
+						<name>thawedComments</name>
+						<udn>thawedComments</udn>
+						<caption>Thawed Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
+				</row>
+			</subForm>
+		</row>		
+		<row>
+			<subForm>
+				<name>transferEvent</name>
+				<udn>transferEvent</udn>
+				<caption>Transfer Event</caption>
+				<table>CATISSUE_TRANSFER_EVENT_PARAM</table>
+				<foreignKey>SPECIMEN_ID</foreignKey>
+				<parentKey>IDENTIFIER</parentKey>
+				<row>
+					<subForm>
+						<name>transferredBy</name>
+						<udn>transferredBy</udn>
+						<caption>Transferred By</caption>
+						<table>USER_VIEW</table>
+						<foreignKey>IDENTIFIER</foreignKey>
+						<parentKey>USER_ID</parentKey>
+						<row>					
+							<textField>
+								<name>transferredByFirstName</name>
+								<udn>transferredByFirstName</udn>
+								<caption>Transferred By First Name</caption>
+								<column>FIRST_NAME</column>
+							</textField>
+					
+							<textField>
+								<name>transferredByLastName</name>
+								<udn>transferredByLastName</udn>
+								<caption>Transferred By Last Name</caption>
+								<column>LAST_NAME</column>
+							</textField>
+						</row>
+					</subForm>
+				</row>
+				<row>
+					<datePicker>
+						<name>transferTime</name>
+						<udn>transferTime</udn>
+						<caption>Transfer Time</caption>
+						<column>EVENT_TIMESTAMP</column>
+					</datePicker>
+				
+					<textField>
+						<name>transferComments</name>
+						<udn>transferComments</udn>
+						<caption>Transfer Comments</caption>
+						<column>COMMENTS</column>
+					</textField>
 				</row>
 			</subForm>
 		</row>
