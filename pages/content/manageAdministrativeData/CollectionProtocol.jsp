@@ -142,11 +142,10 @@ function doOnLoad()
 	
 	//Drop Down components information
 	investigatorDropDownInfo = {propertyId:'principalInvestigatorId',gridObj:"principleInvestigatorGrid", gridDiv:"principleInvestigator", dropDownId:"principleInvestigatorDropDown", pagingArea:"principleInvestigatorPagingArea", infoArea:"principleInvestigatorInfoArea", onOptionSelect:investigatorOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=allUserList", callBackAction:onInvestigatorListReady, visibilityStatusVariable:piGridVisible};
-	parentProtocolDropDownInfo = {propertyId:'parentCollectionProtocolId',gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady, visibilityStatusVariable:ppGridVisible};
+	/*parentProtocolDropDownInfo = {propertyId:'parentCollectionProtocolId',gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady, visibilityStatusVariable:ppGridVisible};*/
 	// initialising grid
 	piGrid = initDropDownGrid(investigatorDropDownInfo,true); //initialize DropDown control for priciple Investigator
-	ppGrid = initDropDownGrid(parentProtocolDropDownInfo,true); //initialize DropDown control for priciple Investigator
-	enableDisableParentProtocol('${collectionProtocolForm.type}');
+	//ppGrid = initDropDownGrid(parentProtocolDropDownInfo,true); //initialize DropDown control for priciple Investigator
 	
 //initializing tab buttons
 	tabbar = new dhtmlXTabBar("tabbar_div", "top");
@@ -210,39 +209,6 @@ function updateCPTree()
   window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
 }
 
-function enableDisableParentProtocol(associationType)
-{
-	var imgObj = document.getElementById("ppDropDownId");
-	
-	if(associationType == 'Parent')
-	{
-		document.getElementsByName("parentCollectionProtocolId")[0].value = "";
-		document.getElementById("parentProtocolDropDown").value="";
-		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "&nbsp;";
-		document.getElementById("parentProtocolDropDown").setAttribute("disabled",true);
-		imgObj.onclick =function (e) {};
-		hideGrid(parentProtocolDropDownInfo['gridDiv']);
-		piGridVisible = false;
-		document.getElementById("studyCalendarEventPoint").setAttribute("readOnly",true);
-		document.getElementById("sequenceNumber").setAttribute("readOnly",true);
-		document.getElementById("studyCalendarEventPoint").value="";
-		document.getElementById("sequenceNumber").value="";
-		document.getElementById("parentProtocolRow").style.display = 'none';
-		document.getElementById("ScepAndSequenceNumberRow").style.display = 'none';
-	}	
-	else
-	{
-		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "<image src='images/uIEnhancementImages/star.gif' alt='Mandatory'>";
-		document.getElementById("parentProtocolDropDown").removeAttribute("disabled");
-		//imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
-		imgObj.onclick =function (e) {showHideGrid(e,parentProtocolDropDownInfo,ppGrid);};
-		
-		document.getElementById("studyCalendarEventPoint").removeAttribute("readOnly");
-		document.getElementById("sequenceNumber").removeAttribute("readOnly");
-		document.getElementById("parentProtocolRow").style.display = '';
-		document.getElementById("ScepAndSequenceNumberRow").style.display = '';
-	}
-}
 
 </script>
 
@@ -295,90 +261,6 @@ div#d999 {
 				
 				<!-- html:hidden property="type" /-->
 				
-				
-				<tr>
-					<td width="1%" align="center" class="black_ar"><img
-						src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-						width="6" height="6" hspace="0" vspace="0" /></td>
-					<td width="30%" align="left" class="black_ar" ><bean:message
-						key="collectionprotocol.typeofassiciation" /></td>
-					<td width="69%" align="left" class="black_ar">
-						<logic:iterate id="associationTypeValue" collection="<%=request.getAttribute(Constants.CP_ASSOCIATION_TYPE_LIST)%>">								
-							<c:if test="${collectionProtocolForm.type == associationTypeValue}">
-								<div style="float:left;"><input type="radio" value="${associationTypeValue}"  onclick="enableDisableParentProtocol(this.value);" name="type"  checked="true"><bean:write name="associationTypeValue"/>&nbsp;</input></div>
-							</c:if>
-							<c:if test="${collectionProtocolForm.type != associationTypeValue}">
-							 <div style="float:left;"><input type="radio" value="${associationTypeValue}"  onclick="enableDisableParentProtocol(this.value);" name="type" ><bean:write name="associationTypeValue"/>&nbsp;</input></div>
-							 </c:if>
-						</logic:iterate>
-					</td>
-				</tr>
-				
-
-				
-				<tr id="parentProtocolRow">
-					<td width="1%" align="center" class="black_ar"><span id="parentProtocolMendatorySymbol"></span></td>
-					<td width="30%" align="left" class="black_ar" ><bean:message
-						key="collectionprotocol.parentcollectionprotocol" /></td>
-					<td width="69%" align="left" class="black_ar">
-						<html:hidden property="parentCollectionProtocolId"  />
-						<div>
-							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
-								<tr>
-									<td align="left" width="88%" height="100%" >
-										<div id="ppDropDownIddiv" class="x-form-field-wrap " style="width:137px;">
-											<input id="parentProtocolDropDown"
-													onkeydown="keyNavigationCall(event,parentProtocolDropDownInfo,ppGrid);"
-													onKeyUp="autoCompleteControlGeneric(event,parentProtocolDropDownInfo,ppGrid);"
-													onClick="noEventPropogation(event)"
-													autocomplete="off"
-													size="18"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="ppDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
-												
-												src="images/uIEnhancementImages/s.gif"/>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-									<div id="parentProtocol" style="z-index: 100;"
-										onClick="noEventPropogation(event);">
-									<div id="parentProtocolGrid" style="height: 200px;"
-										onClick="noEventPropogation(event)"></div>
-									<div id="ppPagingArea" onClick="noEventPropogation(event)"></div>
-									<div id="ppInfoArea" onClick="noEventPropogation(event)"></div>
-									</div>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</td>
-				</tr>
-				
-				<tr id="ScepAndSequenceNumberRow">
-					<td width="1%" align="center" class="black_ar">&nbsp;</td>
-					<td width="30%" align="left" class="black_ar" ><bean:message
-						key="collectionprotocol.studyCalEventPoint" /></td>
-					<td width="69%" align="left" class="black_ar">
-						<table width="100%" cellpadding="0" cellspacing="0">
-							<tr>
-								<td width="31%" align="left" class="black_ar" >
-									<html:text styleClass="black_ar"
-									maxlength="50" size="18" styleId="studyCalendarEventPoint"
-									property="studyCalendarEventPoint" readonly='${requestScope.hasParent}' />
-								</td>
-								<td width="1%" align="left" class="black_ar">&nbsp;</td>
-								<td width="23%" align="left" class="black_ar" ><bean:message
-									key="collectionprotocol.sequence.number" /></td>
-								<td  width="45%" align="left" class="black_ar" >
-									<html:text styleClass="black_ar"
-									maxlength="50" size="20" styleId="sequenceNumber"
-									property="sequenceNumber" readonly='${requestScope.hasParent}' />
-								</td>
-							</tr>
-						</table>		
-					</td>
-				</tr>
 				
 				<tr>
 					<td width="1%" align="center" class="black_ar"><img
