@@ -22,7 +22,7 @@ Ext.onReady(function(){
 
     // Menus can be prebuilt and passed by reference
     var menuHome = new Ext.menu.Menu({
-    	autoWidth: true,
+    	width :200,
     	id: 'menuHome',
          items: [
 			{
@@ -39,7 +39,7 @@ Ext.onReady(function(){
     });
 
     var menu = new Ext.menu.Menu({
-    	autoWidth: true,
+    	width :200,
     	id: 'mainMenu',
         items: [
             {
@@ -47,6 +47,7 @@ Ext.onReady(function(){
 				href:'User.do?operation=add&pageOf=pageOfUserAdmin',
 				tooltip:'Add User',
                 menu: {        // <-- submenu by nested config object
+				width :200,
                     items: [
                         // stick any markup in a menu
                        {
@@ -70,6 +71,7 @@ Ext.onReady(function(){
 				tooltip:'Add Institution',
 				href:'Institution.do?operation=add&pageOf=pageOfInstitution',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -87,7 +89,9 @@ Ext.onReady(function(){
 				tooltip:'Add Department',
 				href:'Department.do?operation=add&pageOf=pageOfDepartment',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
+					
                         // stick any markup in a menu
                        {
                             text: 'Add',
@@ -104,6 +108,7 @@ Ext.onReady(function(){
 				tooltip:'Add Cancer Research Group',
 				href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -121,6 +126,7 @@ Ext.onReady(function(){
 				tooltip:'Add Site',
 				href:'Site.do?operation=add&pageOf=pageOfSite',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -138,6 +144,7 @@ Ext.onReady(function(){
 				tooltip:'Add Storage Type',
 				href:'StorageType.do?operation=add&pageOf=pageOfStorageType',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -155,6 +162,7 @@ Ext.onReady(function(){
 				tooltip:'Add Storage Container',
 				href:'OpenStorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
                 menu: {        // <-- submenu by nested config object
+				width :160,
                     items: [
                         // stick any markup in a menu
                        {
@@ -175,6 +183,7 @@ Ext.onReady(function(){
 				tooltip:'Add Specimen Array Type',
 				href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -192,6 +201,7 @@ Ext.onReady(function(){
 				tooltip:'Add Biohazard',
 				href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -210,7 +220,9 @@ Ext.onReady(function(){
 //				href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
 					                href:'OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
+					
                         // stick any markup in a menu
                        {
                             text: 'Add',
@@ -227,6 +239,7 @@ Ext.onReady(function(){
 				tooltip:'Add Distribution Protocol',
 				href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol',
                 menu: {        // <-- submenu by nested config object
+				width :150,
                     items: [
                         // stick any markup in a menu
                        {
@@ -272,7 +285,7 @@ Ext.onReady(function(){
 			
 			
     var menu_bio = new Ext.menu.Menu({
-    	autoWidth: true,
+    	width :230,
         id: 'menu_bio',
         items: [
             {
@@ -333,6 +346,7 @@ Ext.onReady(function(){
 				tooltip:'Specimen Report',
 				href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution',
                 menu: {        // <-- submenu by nested config object
+					width:170,
                     items: [
                         // stick any markup in a menu
 						{
@@ -380,7 +394,7 @@ Ext.onReady(function(){
             // For Search link
 
     var menu_search = new Ext.menu.Menu({
-    	autoWidth: true,
+    	width :200,
         id: 'menu_search',
         items: [
 	   {
@@ -402,7 +416,7 @@ Ext.onReady(function(){
     });
 
 	    var logout_menu = new Ext.menu.Menu({
-    	autoWidth: true,
+    	width :160,
         id: 'logout_menu',
 		items: [
 			{
@@ -449,7 +463,7 @@ Ext.onReady(function(){
 	//For Help Tab
 
 	var helpMenu = new Ext.menu.Menu({
-		autoWidth: true,
+		width :200,
         id: 'helpMenu',
          items: [
 			{
@@ -476,11 +490,11 @@ Ext.onReady(function(){
     tb.render('toolbarLoggedIn');
 
 		tb.add(
-                new Ext.Toolbar.MenuButton(
+              
 		{
 			text:'Administration',
             menu: menu 
-		}),
+		},
 
         {
             text:'Biobanking',
