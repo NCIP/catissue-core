@@ -3,23 +3,11 @@
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
 		     
 		 >
-		<!--<referenceAssociation
-			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-			      roleName="specimenCollectionGroup" >
-				<attribute name="name" csvColumnName="SCG name"   />
-		</referenceAssociation>-->
 		<referenceAssociation
 					className="edu.wustl.catissuecore.domain.Specimen" 
 					roleName="parentSpecimen"  parentRoleName="specimen" >
 					<attribute name="label" csvColumnName="Parent Specimen Label"   />
 		</referenceAssociation>
-		
-		<containmentAssociation
-			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-			      roleName="specimenCharacteristics">
-				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-		</containmentAssociation>
 		
 			<containmentAssociation
 			className="edu.wustl.catissuecore.domain.ExternalIdentifier" cardinality="*"
@@ -43,7 +31,7 @@
 					<attribute name="name" csvColumnName="Container Name"   />
 				</referenceAssociation>			
 		</containmentAssociation>
-		<!--<containmentAssociation
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
 			   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
 				<referenceAssociation
@@ -54,7 +42,7 @@
 				<attribute name="comment" csvColumnName="Collected Comments"    />								
 				<attribute name="collectionProcedure" csvColumnName="Procedure"   />
 				<attribute name="container" csvColumnName="Container"   />
-				<attribute name="timestamp" csvColumnName="Collected Date (MM/DD/YYYY)"   />
+				<attribute name="timestamp" csvColumnName="Collected Date"   />
 		</containmentAssociation>
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
@@ -66,8 +54,11 @@
 				</referenceAssociation>
 				<attribute name="comment" csvColumnName="Received Comments"   />								
 				<attribute name="receivedQuality" csvColumnName="Quality"   />				
-				<attribute name="timestamp" csvColumnName="Received Date (MM/DD/YYYY)"   />
-		</containmentAssociation>-->
+				<attribute name="timestamp" csvColumnName="Received Date"   />
+		</containmentAssociation>
+		
+		<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+		<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 		<attribute name="label" csvColumnName="Label"   />
 		<attribute name="barcode" csvColumnName="Barcode"   />
 		<attribute name="createdOn" csvColumnName="Created On"   />

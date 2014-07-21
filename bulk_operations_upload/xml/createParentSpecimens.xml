@@ -8,12 +8,7 @@
 			      roleName="specimenCollectionGroup" >
 				<attribute name="name" csvColumnName="SCG name"   />
 		</referenceAssociation>		
-		<containmentAssociation
-			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-			      roleName="specimenCharacteristics">
-				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-		</containmentAssociation>
+		
 		
 			<containmentAssociation
 			className="edu.wustl.catissuecore.domain.ExternalIdentifier" cardinality="*"
@@ -62,6 +57,8 @@
 				<attribute name="receivedQuality" csvColumnName="Quality"   />				
 				<attribute name="timestamp" csvColumnName="Received Date (MM/DD/YYYY)"   />
 		</containmentAssociation>-->
+		<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+		<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 		<attribute name="label" csvColumnName="Label"   />
 		<attribute name="barcode" csvColumnName="Barcode"   />
 		<attribute name="createdOn" csvColumnName="Created On"   />

@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BulkOperationMetadata templateName="EditSpecimen" batchSize="5">
-	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
-		     
-		 >
-			
-		 <containmentAssociation
-			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-			      roleName="specimenCharacteristics">
-				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-		</containmentAssociation>
-		
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen">
+
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"
 			  
@@ -56,13 +47,14 @@
 		<attribute name="isAvailable" csvColumnName="Is Available"   />
 		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
 		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
-
+		<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+		<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 			<!-- <discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
 			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
 			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
 			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/> -->
 
-		</attribute>
+		
               <attribute name="specimenClass" csvColumnName="Type"   />
 		<attribute name="specimenType" csvColumnName="Type"   />
 		<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />

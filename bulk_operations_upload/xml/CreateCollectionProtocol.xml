@@ -57,14 +57,8 @@
 				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
 				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 				<attribute name="lineage" csvColumnName="Lineage"   />
-
-
-				<referenceAssociation
-					className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-					      roleName="specimenCharacteristics">
-						<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-						<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-				</referenceAssociation>
+				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 
 				<containmentAssociation
 					className="edu.wustl.catissuecore.domain.CollectionEventParameters"
@@ -105,14 +99,8 @@
 				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
 				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 				<attribute name="lineage" csvColumnName="Lineage"   />
-
-
-				<referenceAssociation
-					className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-					      roleName="specimenCharacteristics">
-						<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-						<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-				</referenceAssociation>
+				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 
 				<containmentAssociation
 					className="edu.wustl.catissuecore.domain.CollectionEventParameters"
@@ -150,13 +138,8 @@
 				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
 				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 				<attribute name="lineage" csvColumnName="Lineage"   />
-
-				<referenceAssociation
-					className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-					      roleName="specimenCharacteristics">
-						<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-						<attribute name="tissueSide" csvColumnName="Tissue Side"   />
-				</referenceAssociation>
+				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 
 				<containmentAssociation
 					className="edu.wustl.catissuecore.domain.CollectionEventParameters"

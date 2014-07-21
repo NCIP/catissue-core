@@ -8,23 +8,33 @@
 			      roleName="specimenCollectionGroup" >
 				<attribute name="name" csvColumnName="SCG name"   />
 		</referenceAssociation>		
+		
+		<referenceAssociation
+					className="edu.wustl.catissuecore.domain.Specimen" 
+					roleName="parentSpecimen"  parentRoleName="specimen" >
+					<attribute name="label" csvColumnName="Parent Specimen Label"   />
+		</referenceAssociation>
+		
 		<containmentAssociation
-			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-			      roleName="specimenCharacteristics">
-				<attribute name="tissueSite" csvColumnName="Tissue Site"   />
-				<attribute name="tissueSide" csvColumnName="Tissue Side"   />
+			className="edu.wustl.catissuecore.domain.ExternalIdentifier" cardinality="*"
+			      roleName="externalIdentifierCollection" parentRoleName="specimen">
+				<attribute name="name" csvColumnName="External ID Name"   />
+				<attribute name="value" csvColumnName="External ID Value"   />
 		</containmentAssociation>
+
+		
+		
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"
 			  
 			 roleName="specimenPosition"   >
-				<attribute name="positionDimensionOneString" csvColumnName="Position one"   />
-				<attribute name="positionDimensionTwoString" csvColumnName="Position two"   />
+				<attribute name="positionDimensionOne" csvColumnName="Position One"   />
+				<attribute name="positionDimensionTwo" csvColumnName="Position Two"   />
 				<referenceAssociation
 				className="edu.wustl.catissuecore.domain.StorageContainer"
 				  
 				 roleName="storageContainer"    >
-					<attribute name="name" csvColumnName="Container name"   />
+					<attribute name="name" csvColumnName="Container Name"   />
 				</referenceAssociation>			
 		</containmentAssociation>
 		<containmentAssociation
@@ -52,6 +62,9 @@
 				<attribute name="receivedQuality" csvColumnName="Quality"   />				
 				<attribute name="timestamp" csvColumnName="Received Date"   />
 		</containmentAssociation>
+		
+		<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+		<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 		<attribute name="label" csvColumnName="Label"   />
 		<attribute name="barcode" csvColumnName="Barcode"   />
 		<attribute name="createdOn" csvColumnName="Created On"   />
@@ -59,14 +72,7 @@
 		<attribute name="comment" csvColumnName="Comment"   />
 		<attribute name="isAvailable" csvColumnName="Is Available"   />
 		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
-		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
-
-			<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
-			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
-			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
-			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/>
-
-		</attribute>
+		<attribute name="specimenClass" csvColumnName="Specimen Class"   />
 		<attribute name="specimenType" csvColumnName="Type"   />
 		<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />
