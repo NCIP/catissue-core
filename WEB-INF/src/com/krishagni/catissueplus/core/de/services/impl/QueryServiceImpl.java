@@ -28,6 +28,7 @@ import org.hibernate.Transaction;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.email.EmailHandler;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -71,7 +72,7 @@ public class QueryServiceImpl implements QueryService {
 	private static final String EXPORT_DATA_DIR = getExportDataDir();
 	
 	private static ExecutorService exportThreadPool = Executors.newFixedThreadPool(EXPORT_THREAD_POOL_SIZE);
-	
+		
 	private DaoFactory daoFactory;
 
 	private UserDao userDao;
@@ -79,6 +80,10 @@ public class QueryServiceImpl implements QueryService {
 	private QueryFolderFactory queryFolderFactory;
 	
 	private PrivilegeService privilegeSvc;
+	
+	static {
+		initExportFileCleaner();
+	}
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -765,6 +770,7 @@ public class QueryServiceImpl implements QueryService {
 						path, query, new QueryResultScreenerImpl(req.getSessionDataBean(), false));
 				try {
 					insertAuditLog(req, resp);
+					sendEmail();
 					txn.commit();
 				} catch (Exception e) {
 					if (txn != null) {
@@ -773,6 +779,21 @@ public class QueryServiceImpl implements QueryService {
 				}
                 
 				return true;
+			}
+			
+			private void sendEmail() {
+				try {
+					User user = userDao.getUser(req.getSessionDataBean().getUserId());
+					
+					SavedQuery savedQuery = null;
+					Long queryId = req.getSavedQueryId();
+					if (queryId != null) {
+						savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
+					}					
+					EmailHandler.sendQueryDataExportedEmail(user, savedQuery, filename);					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}				
 			}
 		});
 		
@@ -937,5 +958,40 @@ public class QueryServiceImpl implements QueryService {
 			
 			return screenedData;
 		}		
+	}
+	
+	private static void initExportFileCleaner() {
+		long currentTime = Calendar.getInstance().getTime().getTime();
+		
+		Calendar nextDayStart = Calendar.getInstance();
+		nextDayStart.set(Calendar.HOUR, 0);
+		nextDayStart.set(Calendar.MINUTE, 0);
+		nextDayStart.set(Calendar.SECOND, 0);
+		nextDayStart.set(Calendar.MILLISECOND, 0);
+		nextDayStart.add(Calendar.DATE, 1);
+				
+		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
+				new Runnable() {					
+					@Override
+					public void run() {
+						try {
+							Calendar cal = Calendar.getInstance();
+							cal.add(Calendar.DAY_OF_MONTH, -30);
+							long deleteBeforeTime = cal.getTimeInMillis();
+							
+							File dir = new File(EXPORT_DATA_DIR);							
+							for (File file : dir.listFiles()) {								
+								if (file.lastModified() <= deleteBeforeTime) {
+									file.delete();
+								}
+							}
+						} catch (Exception e) {
+							
+						}						
+					}
+				},
+				nextDayStart.getTimeInMillis() - currentTime, 
+				24 * 60 * 60 * 1000, 
+				TimeUnit.MILLISECONDS);						
 	}
 }

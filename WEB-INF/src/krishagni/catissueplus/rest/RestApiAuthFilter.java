@@ -56,10 +56,11 @@ public class RestApiAuthFilter implements Filter
 		HttpServletRequest httpReq = (HttpServletRequest) req;
 		HttpServletResponse httpResp = (HttpServletResponse) resp;
 
-		if (httpReq.getSession().getAttribute(Constants.SESSION_DATA) == null)
+		if (httpReq.getSession(false) == null ||
+				httpReq.getSession(false).getAttribute(Constants.SESSION_DATA) == null)
 		{
 			String authInfo = httpReq.getHeader(HttpHeaders.AUTHORIZATION);
-			if (authInfo == null && httpReq.getSession(false) == null)
+			if (authInfo == null)
 			{
 				sendRequireAuthResp(httpResp);
 				return;
@@ -85,7 +86,7 @@ public class RestApiAuthFilter implements Filter
 			String user = creds[0], password = creds[1];
 			try
 			{
-				User authenticatedUser = authenticate(user, password);
+				User authenticatedUser = authenticate(httpReq, user, password);
 				if (authenticatedUser == null)
 				{
 					logger.debug(user + ": You're not authorized");
@@ -183,7 +184,7 @@ public class RestApiAuthFilter implements Filter
 			throws IOException
 	{
 		httpResp.setHeader(HttpHeaders.WWW_AUTHENTICATE,
-				"Basic realm=\"caTissue\"");
+				"Basic realm=\"OpenSpecimen\"");
 		httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 				"You must supply valid credentials to access the caTissue Plus REST API");
 	}
@@ -194,7 +195,7 @@ public class RestApiAuthFilter implements Filter
 		httpResp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
 
-	private User authenticate(String user, String password)
+	private User authenticate(HttpServletRequest request, String user, String password)
 			throws AuthenticationException, ApplicationException,
 			CatissueException
 	{
@@ -202,9 +203,8 @@ public class RestApiAuthFilter implements Filter
 
 		loginCredentials.setLoginName(user);
 		loginCredentials.setPassword(password);
-
-		LoginResult loginResult = LoginProcessor
-				.processUserLogin(loginCredentials);
+		
+		LoginResult loginResult = CatissueLoginProcessor.processUserLogin(request, loginCredentials);
 		if (loginResult.isAuthenticationSuccess())
 		{
 			User validUser = CatissueLoginProcessor.getUser(loginResult

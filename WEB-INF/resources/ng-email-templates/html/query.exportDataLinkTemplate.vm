@@ -1,0 +1,20 @@
+Hello $user.lastName, $user.firstName<br>
+<br>
+<br>
+Please click on below link to download exported data of 
+
+#if($query)
+  query <i>$query.title</i>
+#else
+  unsaved query
+#end
+
+<br>
+<a href=$appUrl/rest/ng/query/export?fileId=$filename>$appUrl/rest/ng/query/export?fileId=$filename</a> 
+<br>
+<br>
+The link will be valid for 30 days
+<br>
+<br>
+$footer	
+	 

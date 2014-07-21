@@ -1132,7 +1132,6 @@
       </div>
     </script>
       
-    </script>
     <script type="text/ng-template" id="save-query.html">
       <div class="modal-header" style="height: 10%">
         <h4>Save Query</h4>

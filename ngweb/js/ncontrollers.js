@@ -1050,6 +1050,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
                   continue;
                 }
                 filters[i].field = $scope.getFormField(filters[i].form, filters[i].fieldName) 
+                if (!filters[i].field) {
+                  Utility.notify($("#notifications"), "Failed to load query. Contact system administrator", "error", true);
+                  return false;
+                }
               }
 
               $scope.disableCpSelection();
@@ -1715,7 +1719,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             });
           },
           done: function(e, data) { 
-            $modalInstance.close(data.result.id);
+            if (data.result) {
+              $modalInstance.close(data.result.id);
+            } else {
+              $modalInstance.close(-1);
+            }
           },
           fail: function(e, data) { 
             $modalInstance.close(-1);
