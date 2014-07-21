@@ -1,0 +1,7 @@
+Hello $sharedWith.lastName, $sharedWith.firstName<br>
+<br>
+	Query folder by title <i>$folder.name</i> has been shared to you by $user.lastName, $user.firstName. You can now access the folder after you login to OpenSpecimen.
+<br>
+<br>
+$footer	
+	 
