@@ -44,6 +44,10 @@ public class QueryFolderDetails extends QueryFolderSummary {
 	private static List<SavedQuerySummary> fromSavedQueries(Set<SavedQuery> savedQueries) {
 		List<SavedQuerySummary> result = new ArrayList<SavedQuerySummary>();
 		for (SavedQuery query : savedQueries) {
+			if (query.getDeletedOn() != null) {
+				continue;
+			}
+			
 			result.add(SavedQuerySummary.fromSavedQuery(query));
 		}
 
