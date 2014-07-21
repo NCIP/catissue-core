@@ -3121,48 +3121,6 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         </sql>
     </changeSet>
     
-    <changeSet author="ajaysamgir" id="table for os_biozd" failOnError="true">
-       <createTable tableName="OS_BIOHAZARD">
-    	 
-    	 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
-          	<constraints primaryKey="true" nullable="false"/>
-        </column>
-         
-         <column name="NAME" type="${text.type}(64)">
-         </column>
-         
-         <column name="TYPE" type="${text.type}(50)">
-         </column>
-         
-          <column name="COMMENTS" type="${text.type}(500)">
-         </column>
-         
-         <column name="ACTIVITY_STATUS" type="${text.type}(30)">
-         </column>
-         
-        </createTable>
-
-       <createSequence 
-			sequenceName="OS_BIOHAZARD_SEQ" 
-			startValue="1" 
-			incrementBy="1" 
-			ordered="true" />
-    
-    </changeSet>
-    
-    <changeSet author="ajaysamgir" id="Migrate CATISSU_BIOZ table data to OS_B table for mysql" failOnError="true" dbms="mysql">
-         <sql> insert into OS_BIOHAZARD(NAME,TYPE,COMMENTS) 
-         select NAME,TYPE,COMMENTS from CATISSUE_BIOHAZARD 
- 		</sql>
-    </changeSet> 
-    
-     <changeSet author="ajaysamgir" id="Migrate CATISSU_BIO table data to OS_B table for oracle" failOnError="true" dbms="oracle">
-         <sql> insert into OS_BIOHAZARD(IDENTIFIER,NAME,TYPE,COMMENTS) 
-         select OS_BIOHAZARD_SEQ.nextVal,NAME,TYPE,COMMENTS from CATISSUE_BIOHAZARD
- 		</sql>
- 		
-    </changeSet> 
-
     <changeSet author="vpawar" id="Add column to soft delete a query" dbms="mysql">
       <sql>alter table CATISSUE_SAVED_QUERIES add column DELETED_ON TIMESTAMP NULL DEFAULT NULL</sql>
     </changeSet>
@@ -3776,5 +3734,13 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
            INNER JOIN CATISSUE_ABSTRACT_POSITION ABP ON SPPOS.IDENTIFIER = ABP.IDENTIFIER
        );
      </sql>
+     
    </changeSet>
+   
+    <changeSet author="ajaysamgir" id="alter table catissue_biohazard" failOnError="true">
+ 		<addColumn tableName="CATISSUE_BIOHAZARD">
+			<column name="ACTIVITY_STATUS" type="${text.type}(20)" />
+		</addColumn>
+   </changeSet> 
+   
 </databaseChangeLog>

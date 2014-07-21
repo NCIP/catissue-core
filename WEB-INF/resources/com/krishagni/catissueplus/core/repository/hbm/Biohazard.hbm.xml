@@ -6,7 +6,7 @@
 <hibernate-mapping auto-import="false">
     <class
         name="com.krishagni.catissueplus.core.administrative.domain.Biohazard"
-        table="OS_BIOHAZARD"
+        table="CATISSUE_BIOHAZARD"
 		lazy="true" >
     
     <cache usage="read-write" />
@@ -19,7 +19,7 @@
             unsaved-value="null">
             
             <generator class="native">
-                <param name="sequence">OS_BIOHAZARD_SEQ</param>
+                <param name="sequence">CATISSUE_BIOHAZARD_SEQ</param>
             </generator>
         </id>
 
@@ -61,12 +61,11 @@
                 class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
                 column="SPECIMEN_ID"
                 />
-                
-
          </set>
 
 	 <query name="getBiohazardByName">
-    	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard WHERE biohazard.name = :biohazardName
+    	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard 
+    	WHERE biohazard.name = :biohazardName
      </query>
     </class>
 
