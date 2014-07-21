@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.de.domain;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -87,22 +88,25 @@ public class QueryFolder {
 		}		
 	}
 
-	public void addSharedUsers(List<User> users) {
-		sharedWith.addAll(users);
+	public Collection<User> addSharedUsers(Collection<User> users) {
+		Set<User> addedUsers = new HashSet<User>(users);
+		addedUsers.removeAll(sharedWith);
+		
+		sharedWith.addAll(addedUsers);
+		return addedUsers;
 	}
 	
-	public void removeSharedUsers(List<User> users) {
+	public void removeSharedUsers(Collection<User> users) {
 		sharedWith.removeAll(users);
 	}
 	
-	public void updateSharedUsers(List<User> users) {
+	public Collection<User> updateSharedUsers(Collection<User> users) {
+		Set<User> newUsers = new HashSet<User>(users);
+		newUsers.removeAll(sharedWith);
+		
 		sharedWith.retainAll(users);
-
-		for (User user : users) {
-			if (!sharedWith.contains(user)) {
-				sharedWith.add(user);
-			}
-		}
+		sharedWith.addAll(newUsers);
+		return newUsers;
 	}
 	
 	public boolean canUserAccess(Long userId) {

@@ -11,6 +11,8 @@ public class QueryExecutedEvent extends ResponseEvent {
 	private List<String[]> rows;
 	
 	private Integer[] columnIndices;
+	
+	private int dbRowsCount;
 
 	public String[] getColumnLabels() {
 		return columnLabels;
@@ -36,12 +38,21 @@ public class QueryExecutedEvent extends ResponseEvent {
 		this.columnIndices = columnIndices;
 	}
 
-	public static QueryExecutedEvent ok(String[] labels, List<String[]> rows, Integer[] indices) {
+	public int getDbRowsCount() {
+		return dbRowsCount;
+	}
+
+	public void setDbRowsCount(int dbRowsCount) {
+		this.dbRowsCount = dbRowsCount;
+	}
+
+	public static QueryExecutedEvent ok(String[] labels, List<String[]> rows, int dbRowsCount, Integer[] indices) {
 		QueryExecutedEvent resp = new QueryExecutedEvent();
 		resp.setColumnLabels(labels);
-		resp.setRows(rows); 
+		resp.setRows(rows);
+		resp.setDbRowsCount(dbRowsCount);
 		resp.setColumnIndices(indices);
-		resp.setStatus(EventStatus.OK);
+		resp.setStatus(EventStatus.OK);		
 		return resp;
 	}
 	

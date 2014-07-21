@@ -755,6 +755,12 @@
         <span ng-if="queryData.notifs.error == 'INTERNAL_SERVER_ERROR'">Internal Server Error. Please retry after some time or contact system admin</span>
       </div>
       <div ng-show="!queryData.notifs.waitRecs && !queryData.notifs.error" class="row" style="height: 90%; padding-left: 15px;">
+        <div ng-if="queryData.moreData" style="color:#b94a48">
+          Export to view all records. 
+          <a style="color:#b94a48" href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank">
+            <u>Click here</u>
+          </a> to know why exported data file have more records.
+        </div>
         <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
       </div>
     </div>

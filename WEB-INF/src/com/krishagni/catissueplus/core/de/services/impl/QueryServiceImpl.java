@@ -3,10 +3,13 @@ package com.krishagni.catissueplus.core.de.services.impl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -269,7 +272,9 @@ public class QueryServiceImpl implements QueryService {
 				indices = queryResult.getColumnIndices(req.getIndexOf());
 			}
 			
-			return QueryExecutedEvent.ok(queryResult.getColumnLabels(), queryResult.getStringifiedRows(), indices);
+			return QueryExecutedEvent.ok(
+					queryResult.getColumnLabels(), queryResult.getStringifiedRows(), 
+					queryResult.getDbRowsCount(), indices);
 		} catch (QueryParserException qpe) {
 			return QueryExecutedEvent.badRequest(qpe.getMessage(), qpe);
 		} catch (IllegalArgumentException iae) {
@@ -430,8 +435,15 @@ public class QueryServiceImpl implements QueryService {
 			folderDetails.setOwner(owner);
 			
 			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);
+			Set<User> newUsers = new HashSet<User>(queryFolder.getSharedWith());
+			newUsers.removeAll(existing.getSharedWith());
 			existing.update(queryFolder);
 			
+			if (!newUsers.isEmpty()) {
+				User user = userDao.getUser(userId);
+				sendFolderSharedEmail(user, queryFolder, newUsers);
+			}
+						
 			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
 			return QueryFolderUpdatedEvent.ok(QueryFolderDetails.fromQueryFolder(existing));			
 		} catch (ObjectCreationException oce) {
@@ -580,6 +592,7 @@ public class QueryServiceImpl implements QueryService {
 				return QueryFolderSharedEvent.notAuthorized(folderId);
 			}
 			
+			
 			List<User> users = null;
 			List<Long> userIds = req.getUserIds();
 			if (userIds == null || userIds.isEmpty()) {
@@ -588,24 +601,30 @@ public class QueryServiceImpl implements QueryService {
 				users = userDao.getUsersById(userIds);
 			}
 			
+			Collection<User> newUsers = null; 
 			switch (req.getOp()) {
 				case ADD:
-					queryFolder.addSharedUsers(users);
+					newUsers = queryFolder.addSharedUsers(users);
 					break;
 					
 				case UPDATE:
-					queryFolder.updateSharedUsers(users);
+					newUsers = queryFolder.updateSharedUsers(users);
 					break;
 					
 				case REMOVE:
 					queryFolder.removeSharedUsers(users);
 					break;					
 			}
-						
+											
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);			
 			List<UserSummary> result = new ArrayList<UserSummary>();
 			for (User user : queryFolder.getSharedWith()) {
 				result.add(UserSummary.fromUser(user));
+			}
+			
+			if (newUsers != null && !newUsers.isEmpty()) {
+				User user = userDao.getUser(userId);
+				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
 			
 			return QueryFolderSharedEvent.ok(folderId, result);
@@ -993,5 +1012,11 @@ public class QueryServiceImpl implements QueryService {
 				nextDayStart.getTimeInMillis() - currentTime, 
 				24 * 60 * 60 * 1000, 
 				TimeUnit.MILLISECONDS);						
+	}
+	
+	private void sendFolderSharedEmail(User user, QueryFolder folder, Collection<User> sharedUsers) {
+		for (User sharedWith : sharedUsers) {
+			EmailHandler.sendQueryFolderSharedEmail(user, folder, sharedWith);
+		}		
 	}
 }

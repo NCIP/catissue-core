@@ -298,6 +298,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         $scope.queryData.resultCols = colDefs;
         $scope.queryData.labelIndices = result.columnIndices;
         $scope.queryData.resultDataSize = result.rows.length;
+        $scope.queryData.moreData = (result.dbRowsCount >= 10000);
         $scope.queryData.pagingOptions.pageSize = 100;
         $scope.queryData.pagingOptions.currentPage = 1;
 
@@ -476,6 +477,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.queryData.resultCols = [];
       $scope.queryData.labelIndices = [];
       $scope.queryData.resultDataSize = 0;
+      $scope.queryData.moreData = false;
       $scope.queryData.view = 'query';
     }
 
@@ -646,7 +648,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         resultCols: [],
         labelIndices: [],
         selectAll: false,
-        resultDataSize: 0
+        resultDataSize: 0,
+        moreData: false
       };
     };
 

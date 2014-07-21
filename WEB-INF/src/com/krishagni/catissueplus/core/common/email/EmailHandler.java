@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -17,6 +18,8 @@ public class EmailHandler {
 	private static String FORGOT_PASSWORD_EMAIL_TMPL = "user.forgotPasswordTemplate";
 	
 	private static String QUERY_DATA_EXPORTED_EMAIL_TMPL = "query.exportData";
+	
+	private static String SHARE_QUERY_FOLDER_EMAIL_TMPL = "query.shareQueryFolder";
 
 	private static final String KEY_EMAIL_ADMIN_EMAIL_ADDRESS = "email.administrative.emailAddress";
 
@@ -52,5 +55,21 @@ public class EmailHandler {
 				null, 
 				vars, 
 				query != null ? query.getTitle() : "Unsaved query");		
+	}
+	
+	public static void sendQueryFolderSharedEmail(User user, QueryFolder folder, User sharedWith) {
+		Map<String, Object> vars = new HashMap<String, Object>();
+		vars.put("user", user);
+		vars.put("folder", folder);
+		vars.put("sharedWith", sharedWith);
+		vars.put("appUrl", CommonServiceLocator.getInstance().getAppURL());
+		
+		EmailClient.getInstance().sendEmail(
+				SHARE_QUERY_FOLDER_EMAIL_TMPL, 
+				new String[] {sharedWith.getEmailAddress()}, 
+				new String[] {adminEmailAddress}, 
+				null, 
+				vars, 
+				folder.getName());		
 	}
 }
