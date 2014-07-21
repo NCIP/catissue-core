@@ -732,7 +732,7 @@
 					<subForm>
 						<name>fixedBy</name>
 						<udn>fixedBy</udn>
-						<caption>Fixed Event By</caption>
+						<caption>Fixed By</caption>
 						<table>USER_VIEW</table>
 						<foreignKey>IDENTIFIER</foreignKey>
 						<parentKey>USER_ID</parentKey>
