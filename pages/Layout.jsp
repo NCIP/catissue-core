@@ -62,6 +62,11 @@ if(!ua.contains("MSIE 9.0") || form instanceof CollectionProtocolForm || !"cpBas
         z-index: 150;
         width:100%;
       }
+	    table.borderClass {
+                margin: 0px;
+                border-collapse: separate;
+                padding: 0px;
+            }
     </style>
 
 <!--Jitendra -->
@@ -253,18 +258,16 @@ if(!ua.contains("MSIE 9.0") || form instanceof CollectionProtocolForm || !"cpBas
         </logic:empty>
             <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
                 <table width="100%" border="0" cellpadding="0" cellspacing="0"
-                    bgcolor="#FFFFFF">
+                    bgcolor="#FFFFFF"  class="borderClass">
                     <tr>
                         <td width="30%" rowspan="2" style="border-top:4px solid #558dc0;"><tiles:insert
                             attribute="applicationheader">
                         </tiles:insert></td>
-                        <td valign="top"><tiles:insert attribute="header"></tiles:insert></td>
+                        <td valign="top"  width="70%" align="right"><tiles:insert attribute="header"></tiles:insert>
+						<tiles:insert attribute="mainmenu"></tiles:insert>
+						</td>
                     </tr>
-                    <tr>
-                        <td width="70%" align="right" valign="top"><tiles:insert
-                            attribute="mainmenu">
-                        </tiles:insert></td>
-                    </tr>
+                    
                 </table>
             </logic:notEmpty>
         

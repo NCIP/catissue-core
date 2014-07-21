@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -27,7 +27,7 @@ function inputBlur(i){
 </script>
  <style type="text/css">
     .imgAlign {
-        vertical-align: sub;
+		vertical-align:text-bottom;
     }
 
     </style>
@@ -36,7 +36,7 @@ function inputBlur(i){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-		<td width="5%" valign="top"><img
+		<td width="5%" valign="top"  style="line-height:0px;" ><img
 			src="images/uIEnhancementImages/top_bg1.jpg" width="53" height="20" /></td>
 		<td width="95%" valign="top" align="right"
 			background="images/uIEnhancementImages/top_bg.jpg"
@@ -71,7 +71,7 @@ function inputBlur(i){
 						</span> 
 					</a>
 					&nbsp;
-					<a href="ShowQueryDashboardAction.do" class="white">
+					<a href="query.do" class="white">
 						<img class="imgAlign" src="images/uIEnhancementImages/search_icon.png" alt="Summary"
 						 border="0" title="Queries,Press Alt + Q"/>
 						 <span style="vertical-align:top" title="Query,Press Alt + Q">
