@@ -57,6 +57,8 @@
 		function getHelpURL()
 		{
 			var URL;
+			
+			
 			<%
 			if(null!=helpURL) 
 			{
@@ -69,7 +71,28 @@
 					URL="<%=helpURL%>";
 				<%}
 			}%>
-			if(URL!="")
+			var windLoc = document.URL;
+			if(windLoc != "" && windLoc.indexOf("/query.do") != -1){
+				URL = "<%=HelpXMLPropertyHandler.getValue("Query")%>";
+				window.open(URL,'_blank');
+			}
+			else if(windLoc != "" && windLoc.indexOf("/ecrf.do") != -1){
+				URL = "<%=HelpXMLPropertyHandler.getValue("FormCreation")%>";
+				window.open(URL,'_blank');
+			}
+			else if(windLoc != "" && windLoc.indexOf("/loadcsd.do") != -1){
+				URL = "<%=HelpXMLPropertyHandler.getValue("FormCreation")%>";
+				window.open(URL,'_blank');
+			}
+			else if(windLoc != "" && windLoc.indexOf("/ViewSpecimenList.do") != -1){
+				URL = "<%=HelpXMLPropertyHandler.getValue("SpecimenList")%>";
+				window.open(URL,'_blank');
+			}
+			else if(windLoc != "" && windLoc.indexOf("/AuditReport.do") != -1){
+				URL = "<%=HelpXMLPropertyHandler.getValue("AuditReport")%>";
+				window.open(URL,'_blank');
+			}
+			else if(URL!="")
 			{
 				window.open(URL,'_blank');
 			}			

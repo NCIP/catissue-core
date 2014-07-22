@@ -424,11 +424,13 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 function updateHelpURL()
 {
 	var URL="";
+	
+	var activeTab = participantTabbar.getActiveTab();
 	if("pageOfParticipantCPQuery"=="<%=pageOf%>")
 	{
-		if("viewAnnotations"=="<%=pageView%>")
+		if("annotationTab"==activeTab)
 		{
-			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm")%>";
+			URL="<%=HelpXMLPropertyHandler.getValue("FormDataEntry")%>";
 		}
 		else
 		{

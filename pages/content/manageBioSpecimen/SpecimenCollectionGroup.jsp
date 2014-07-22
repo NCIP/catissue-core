@@ -42,12 +42,18 @@
 	Long reportIdVal=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);
 %>
 <script>
+var scgTabbar;
 function updateHelpURL()
 	{
 		var URL="";
+		var activeTab = scgTabbar.getActiveTab();
 		if("pageOfSpecimenCollectionGroupCPQuery"=="<%=pageOf%>")
 		{
 			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm")%>";
+		}
+		if("annotationTab"==activeTab)
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("FormDataEntry")%>";
 		}
 		return URL;
 	}

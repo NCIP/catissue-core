@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="edu.wustl.catissuecore.dto.SpecimenDTO"%>
@@ -797,6 +797,26 @@ var className=classNameCombo.getSelectedText();
     var frameUrl="ShowFramedPage.do?pageOf=pageOfEditSpecimen&selectedContainerName=containerName&pos1=pos1&pos2=pos2&containerId=containerId"
                         + "&holdSpecimenClass="+className+ "&holdSpecimenType="+sptype  + "&holdCollectionProtocol=${requestScope.cpId}&collStatus=<bean:write name='specimenDTO' property='collectionStatus' scope='request'/>";
         mapButtonClickedOnSpecimen(frameUrl,'SpecimenPage',"containerName");
+}
+
+function updateHelpURL()
+{
+	var URL="";
+	var activeTab = specimenTabbar.getActiveTab();
+	if("annotationTab"==activeTab)
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("FormDataEntry")%>";
+		}
+		else if("eventsTab"==activeTab)
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm")%>";
+		}
+		else if("specimenDetailsTab"==activeTab)
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.NewSpecimenForm")%>";
+		}
+		
+	return URL;
 }
 </script>
 </body>

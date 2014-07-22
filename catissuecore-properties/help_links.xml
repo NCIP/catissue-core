@@ -46,7 +46,7 @@
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.AnnotationForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Creating+Dynamic+Extensions#CreatingDynamicExtensions-CreatingaForm</value>
+        <value>https://catissueplus.atlassian.net/wiki/x/MoB2AQ</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.ConsentResponse</name>
@@ -105,10 +105,6 @@
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-HowDoesCPBasedDataEntryWork?</value>
     </property>
     <property>
-        <name>edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Clinical+Annotations+Introduction#ClinicalAnnotationsIntroduction-AddingClinicalandPathologicalDatatoanAnnotation</value>
-    </property>
-    <property>
         <name>edu.wustl.query.actionForm.SaveQueryForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-SavingtheQuery</value>
     </property>
@@ -130,7 +126,7 @@
     </property>
     <property>
         <name>edu.wustl.query.actionForm.CategorySearchForm</name>
-        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Performing+Searches#PerformingSearches-UsingtheAdvancedQueryWizard</value>
+        <value>https://catissueplus.atlassian.net/wiki/x/O4BLAQ</value>
     </property>
     <property>
         <name>edu.wustl.catissuecore.actionForm.CPSearchForm</name>
@@ -179,5 +175,25 @@
     <property>
         <name>edu.wustl.catissuecore.actionForm.MultipleSpecimenForm</name>
         <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-AddingMultipleSpecimens</value>
+    </property>
+    <property>
+        <name>Query</name>
+        <value>https://catissueplus.atlassian.net/wiki/x/O4BLAQ</value>
+    </property>
+    <property>
+        <name>FormCreation</name>
+        <value>https://catissueplus.atlassian.net/wiki/x/MoB2AQ</value>
+    </property>
+    <property>
+        <name>SpecimenList</name>
+        <value>https://catissueplus.atlassian.net/wiki/display/CAT/Handling+Biospecimens#HandlingBiospecimens-SpecimenOperations</value>
+    </property>
+    <property>
+        <name>AuditReport</name>
+        <value>https://catissueplus.atlassian.net/wiki/x/QICxAQ</value>
+    </property>
+    <property>
+        <name>FormDataEntry</name>
+        <value>https://catissueplus.atlassian.net/wiki/x/MoB2AQ</value>
     </property>
 </properties>

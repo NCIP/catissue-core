@@ -1017,12 +1017,6 @@ function showErrorMessage(msg)
 	document.getElementById('error').style.display='block';
 }
 
-function updateHelpURL()
-{
-	var URL="";
-	return URL;
-}
-
 
 // Declaring valid date character, minimum year and maximum year
 var dtCh= "-";

@@ -483,7 +483,7 @@ function showAnnotations(scgEntityIdValue,idValue,staticEntityNameValue,pageOfVa
 
 function loadSCGTabbar()
 {
-	var scgTabbar = new dhtmlXTabBar("SCG_tabbar", "top",25);
+	scgTabbar = new dhtmlXTabBar("SCG_tabbar", "top",25);
 	scgTabbar.setSkin('default');
 	scgTabbar.setImagePath("dhtmlx_suite/imgs/");
 	scgTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
