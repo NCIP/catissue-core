@@ -46,7 +46,7 @@
 		<attribute name="comment" csvColumnName="Comment"   />
 		<attribute name="isAvailable" csvColumnName="Is Available"   />
 		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
-		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
+		<attribute name="specimenClass" csvColumnName="Specimen Class"   />
 		<attribute name="tissueSite" csvColumnName="Tissue Site"   />
 		<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 			<!-- <discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
