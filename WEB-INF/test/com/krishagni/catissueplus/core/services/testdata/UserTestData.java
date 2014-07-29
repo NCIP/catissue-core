@@ -155,6 +155,7 @@ public class UserTestData {
 		details.setFirstName("firstName");
 		details.setLastName("lastName");
 		details.setDeptName("Chemical");
+		details.setCountry("India");
 		details.setEmailAddress("sci@sci.com");
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("MyLdap");
@@ -196,7 +197,7 @@ public class UserTestData {
 
 	public static UpdateUserEvent getUpadteUserEventWithLNUpdate() {
 		UpdateUserEvent reqEvent = getUpdateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setLoginName("admin");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -219,6 +220,7 @@ public class UserTestData {
 		details.setEmailAddress("sci@sci.com");
 		details.setLoginName("admin@admin.com");
 		details.setDomainName("myLdap");
+		details.setCountry("India");
 		details.setUserSiteNames(getSites());
 		details.setUserCPRoles(getUserCpRolesDetails());
 		return details;
@@ -226,7 +228,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithInvalidEmail() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setEmailAddress("admin");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -234,7 +236,7 @@ public class UserTestData {
 
 	public static UpdateUserEvent getCreateUserEventWithNonDupEmail() {
 		UpdateUserEvent reqEvent = getUpdateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setEmailAddress("admin@admin");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -242,14 +244,14 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventForUserCreation() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		reqEvent.setUserDetails(details);
 		return reqEvent;
 	}
 
 	public static CreateUserEvent getCreateUserEventWithNullSite() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setUserSiteNames(null);
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -257,7 +259,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithNullCP() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setUserCPRoles(null);
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -265,7 +267,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithEmptyLoginName() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setLoginName("");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -273,7 +275,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithEmptyDomainName() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setDomainName("");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -281,7 +283,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithEmptyEmail() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setEmailAddress("");
 
 		reqEvent.setUserDetails(details);
@@ -290,7 +292,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithEmptyFirstName() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setFirstName("");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -298,7 +300,7 @@ public class UserTestData {
 
 	public static CreateUserEvent getCreateUserEventWithEmptyLastName() {
 		CreateUserEvent reqEvent = getCreateUserEvent();
-		UserDetails details = reqEvent.getUserDetails();
+		UserDetails details = getUserDetails();
 		details.setLastName("");
 		reqEvent.setUserDetails(details);
 		return reqEvent;
@@ -489,8 +491,7 @@ public class UserTestData {
 		attributes.put("loginName", "dpatil");
 		attributes.put("emailAddress", "daresh@smaol.com");
 		attributes.put("deptName", "chemical");
-
-		attributes.put("country", "us");
+		attributes.put("country", "India");
 		attributes.put("state", "alaska");
 		attributes.put("city", "newuor");
 		attributes.put("faxNumber", "43249-434");

@@ -7,8 +7,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/WEB-INF/multiSelectUsingCombo.tld" prefix="mCombo" %>
 <head>
-	<script>var imgsrc="catissuecore/images/de/";</script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ajax.js"></script>
+	<script>var imgsrc="openspecimen/images/de/";</script>
+	<script language="JavaScript" type="text/javascript" src="/openspecimen/javascripts/de/ajax.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/multiselectUsingCombo.js"></script>
 

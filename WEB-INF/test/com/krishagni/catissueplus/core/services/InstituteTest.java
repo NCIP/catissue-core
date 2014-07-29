@@ -27,12 +27,19 @@ import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEve
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeErrorCode;
 import com.krishagni.catissueplus.core.services.testdata.InstituteTestData;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 
 public class InstituteTest {
 
@@ -44,6 +51,16 @@ public class InstituteTest {
 	
 	@Mock
 	DepartmentDao departmentDao;
+	
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+	
+	PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
 
 	private InstituteFactory instituteFactory;
 	private InstituteService instituteService;
@@ -51,6 +68,15 @@ public class InstituteTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+	
 
 		when(daoFactory.getDepartmentDao()).thenReturn(departmentDao);	
 		when(daoFactory.getInstituteDao()).thenReturn(instituteDao);

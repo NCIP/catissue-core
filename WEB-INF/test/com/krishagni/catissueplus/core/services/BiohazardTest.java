@@ -27,11 +27,18 @@ import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEven
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.services.BiohazardService;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.BiohazardServiceImpl;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.BiohazardTestData;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 
 public class BiohazardTest {
 
@@ -41,6 +48,16 @@ public class BiohazardTest {
 	@Mock
 	BiohazardDao biohazardDao;
 
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+
+	PermissibleValuesManager pvManager;
+
+	private PermissibleValueService pvService;
+
 	private BiohazardFactory biohazardFactory;
 
 	private BiohazardService biohazardService;
@@ -48,6 +65,16 @@ public class BiohazardTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+
 		when(daoFactory.getBiohazardDao()).thenReturn(biohazardDao);
 		when(daoFactory.getBiohazardDao().getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
 		when(daoFactory.getBiohazardDao().getBiohazard(anyString())).thenReturn(BiohazardTestData.getBiohazard());

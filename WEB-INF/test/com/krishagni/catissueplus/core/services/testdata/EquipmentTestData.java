@@ -121,6 +121,7 @@ public class EquipmentTestData {
 		details.setSoftwareVersion("2.0");
 		details.setSiteName("Site1234");
 		details.setManufacturerName("Scanscope");
+		details.setActivityStatus("Active");
 		return details;
 	}
 

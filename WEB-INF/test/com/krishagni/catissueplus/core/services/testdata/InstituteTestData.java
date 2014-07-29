@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.services.testdata;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
@@ -76,6 +78,13 @@ public class InstituteTestData {
 		Set<Department> departments = new HashSet<Department>();
 		departments.add(new Department());
 		return departments;
+	}
+
+	public static List<String> getPvValues() {
+		List<String> values = new ArrayList<String>();
+		values.add(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+		values.add(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		return values;
 	}
 
 }

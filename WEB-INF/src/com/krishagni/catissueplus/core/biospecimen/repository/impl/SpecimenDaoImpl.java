@@ -80,13 +80,24 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Specimen> getSpecimensByLabel(List<String> labels) {
-		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_SPECIMENS_BY_LABEL)
-				.setParameterList("labels", labels)
-				.list();
+		List<Specimen> specimens = new ArrayList<Specimen>();
+		
+		int i = 0;
+		int numLabels = labels.size();
+		while (i < numLabels) {
+			List<String> params = labels.subList(i, i + 500 > numLabels ? numLabels : i + 500);
+			i += 500;
+			
+			specimens.addAll(
+				sessionFactory.getCurrentSession()
+					.getNamedQuery(GET_SPECIMENS_BY_LABEL)
+					.setParameterList("labels", params)
+					.list());					
+		}
+		
+		return specimens;
 	}
 	
-
 	private static final String FQN = Specimen.class.getName();
 
 	private static final String GET_SCG_ID_BY_SPECIMEN_ID = FQN + ".getScgIdBySpecimenId";

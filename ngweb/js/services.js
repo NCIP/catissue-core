@@ -1,10 +1,10 @@
 
 angular.module('plus.services', [])
   .factory('QueryService', function($http, $document) {
-    var baseUrl         = '/catissuecore/rest/ng/query/';
-    var savedQueriesUrl = '/catissuecore/rest/ng/saved-queries/';
-    var foldersUrl      = '/catissuecore/rest/ng/query-folders/';
-    var auditLogsUrl    = '/catissuecore/rest/ng/query-audit-logs/';
+    var baseUrl         = '/openspecimen/rest/ng/query/';
+    var savedQueriesUrl = '/openspecimen/rest/ng/saved-queries/';
+    var foldersUrl      = '/openspecimen/rest/ng/query-folders/';
+    var auditLogsUrl    = '/openspecimen/rest/ng/query-audit-logs/';
 
     var successfn = function(result) { return result.data; };
 
@@ -22,7 +22,7 @@ angular.module('plus.services', [])
       downloadQueryData: function(fileId) {
         var link = angular.element('<a/>')
           .attr({
-            href: '/catissuecore/rest/ng/query/export?fileId=' + fileId, 
+            href: '/openspecimen/rest/ng/query/export?fileId=' + fileId, 
             target: '_blank'});
 
         angular.element($document[0].body).append(link);
@@ -131,7 +131,7 @@ angular.module('plus.services', [])
     };
   })
   .factory('UsersService', function($http) {
-    var baseUrl         = '/catissuecore/rest/ng/users/';
+    var baseUrl         = '/openspecimen/rest/ng/users/';
     var successfn = function(result) { return result.data; };
 
     return {
@@ -142,7 +142,7 @@ angular.module('plus.services', [])
   })
 
   .factory('SpecimenListsService', function($http) {
-    var baseUrl = '/catissuecore/rest/ng/specimen-lists/';
+    var baseUrl = '/openspecimen/rest/ng/specimen-lists/';
     var successfn = function(result) { return result.data; };
 
     return {

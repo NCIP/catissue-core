@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionPro
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -22,6 +23,7 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.Distributi
 import com.krishagni.catissueplus.core.administrative.repository.impl.EquipmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ImageDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
@@ -242,6 +244,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public SpecimenListDao getSpecimenListDao() {
 		SpecimenListDaoImpl dao = new SpecimenListDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+	
+	@Override
+	public PermissibleValueDao getPermissibleValueDao() {
+		PermissibleValueDaoImpl dao = new PermissibleValueDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

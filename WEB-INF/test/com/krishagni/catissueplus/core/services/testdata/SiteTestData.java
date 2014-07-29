@@ -102,6 +102,7 @@ public class SiteTestData {
 		CreateSiteEvent reqEvent = new CreateSiteEvent();
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		SiteDetails siteDetails = getDetails();
+		siteDetails.setCountry("India");
 		reqEvent.setSiteDetails(siteDetails);
 		return reqEvent;
 	}
@@ -158,7 +159,7 @@ public class SiteTestData {
 
 	public static UpdateSiteEvent getUpdateSiteEvent() {
 		SiteDetails details = getDetails();
-
+		details.setCountry("India");
 		UpdateSiteEvent reqEvent = new UpdateSiteEvent(details, details.getId());
 		reqEvent.setSessionDataBean(getSessionDataBean());
 		reqEvent.setSiteDetails(details);
@@ -167,6 +168,7 @@ public class SiteTestData {
 
 	public static UpdateSiteEvent getUpdateSiteEventWithSiteName() {
 		SiteDetails details = getDetails();
+		details.setCountry("India");
 		details.setId(null);
 		UpdateSiteEvent reqEvent = new UpdateSiteEvent(details, details.getName());
 		reqEvent.setSessionDataBean(getSessionDataBean());
@@ -262,7 +264,7 @@ public class SiteTestData {
 		attributes.put("coordinatorCollection", getCoordinatorCollectionList());
 		attributes.put("emailAddress", "admin@admin.com");
 		attributes.put("activityStatus", Status.ACTIVITY_STATUS_DISABLED.getStatus());
-		attributes.put("country", "india");
+		attributes.put("country", "India");
 		attributes.put("state", "maharashtra");
 		attributes.put("city", "mumbai");
 		attributes.put("faxNumber", "43249-434");
@@ -371,13 +373,13 @@ public class SiteTestData {
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCountry() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getDetails().setCountry("india");
+		event.getDetails().setCountry("India");
 		return event;
 	}
 
 	public static PatchSiteEvent getPatchSiteEventWithModifiedCity() {
 		PatchSiteEvent event = getEmptyPatchData();
-		event.getDetails().setCity("india");
+		event.getDetails().setCity("India");
 		return event;
 	}
 

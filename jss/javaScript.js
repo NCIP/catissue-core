@@ -498,7 +498,7 @@ function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterT
 function showCommentsDialog(operation,key) {
  		 var url ='NewMultipleSpecimenAction.do?method=showCommentsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
 		 var properties = "height = 120; width:100px; Top:300; Left:350; center: Yes; resizable: no;status:no;help:no;toolbar :no";
-   		 window.open(url,"caTissuecore", properties);
+   		 window.open(url,"openSpecimen", properties);
 }
 
 function showExtenalIdentifierDialog(operation,key) {
@@ -1200,7 +1200,7 @@ function onButtonClick(itemId,itemValue)
 		{
 			selectedStaticEntityId.value = itemId;
 		}
-		form.action="/catissuecore/BuildDynamicEntity.do";
+		form.action="/openspecimen/BuildDynamicEntity.do";
 		form.submit();
 	}
 }
@@ -1222,7 +1222,7 @@ function loadDynamicExtDataEntryPage()
 	    var selectBox = document.getElementById('selectedAnnotation');
 		if(selectBox.selectedIndex != "-1")
 		{
-			document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
+			document.forms[0].action  = "/openspecimen/LoadDynamicExtentionsDataEntryPage.do";
 			document.forms[0].submit();
 		}
 }
@@ -1237,7 +1237,7 @@ function loadDynExtDataEntryPage(event)
 		document.forms[0].selectedAnnotation.value=event.target.name;
 	}
 
-	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
+	document.forms[0].action  = "/openspecimen/LoadDynamicExtentionsDataEntryPage.do";
 	document.forms[0].submit();
 }
 
@@ -1258,7 +1258,7 @@ function editAnnotation(rowID){
 		staticEntityRecordId=string[2];
 		recordId=string[3];
 	}
-	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="+entityId+"&selectedStaticEntityId="+staticEntityId+"&selectedStaticEntityRecordId="+staticEntityRecordId+"&recordId="+recordId+"&operation=editSelectedAnnotation";
+	document.forms[0].action  = "/openspecimen/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="+entityId+"&selectedStaticEntityId="+staticEntityId+"&selectedStaticEntityRecordId="+staticEntityRecordId+"&recordId="+recordId+"&operation=editSelectedAnnotation";
 	document.forms[0].submit();
 }
 
@@ -1311,7 +1311,7 @@ function submitForm()
 		var form =  document.getElementById('annotationForm');
 	    var selectBox = document.getElementById('optionSelect');
 	    var destination = selectBox.options[selectBox.selectedIndex].value;
-		form.action="/catissuecore/BuildDynamicEntity.do";
+		form.action="/openspecimen/BuildDynamicEntity.do";
 		form.submit();
 
 }

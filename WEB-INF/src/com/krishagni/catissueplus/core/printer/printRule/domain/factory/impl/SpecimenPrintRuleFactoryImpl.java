@@ -21,7 +21,7 @@ public class SpecimenPrintRuleFactoryImpl implements SpecimenPrintRuleFactory {
 
 	private static final String DATA_ON_LABEL = "data on label";
 
-	private static final String SPECIMEN_CLASS = "spceimen class";
+	private static final String SPECIMEN_CLASS = "specimen class";
 
 	private static final String SPECIMEN_TYPE = "specimen type";
 

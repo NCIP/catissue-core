@@ -1023,7 +1023,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         </addColumn>
     </changeSet>
     
-    <changeSet id="32" author="nitesh">
+    <changeSet id="32" author="nitesh" failOnError="false">
         <dropForeignKeyConstraint baseTableName="CATISSUE_COLL_PROT_EVENT" constraintName="FK_PARENT_COLL_PROT_EVENT"/>
         <dropForeignKeyConstraint baseTableName="CATISSUE_SPECIMEN_COLL_GROUP" constraintName="FK_PARENT_SPEC_COLL_GROUP"/>
     </changeSet>
@@ -1476,7 +1476,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <column name="ACTIVITY_STATUS" type="${text.type}(50)" />
         </addColumn>
     </changeSet>
-    <changeSet id="updating constraints for distribution protocol" author="nitesh">
+    <changeSet id="updating constraints for distribution protocol" author="nitesh" failOnError="false">
         <dropForeignKeyConstraint baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL" constraintName="FKC8999977BC7298A9"/>
     </changeSet>
     <changeSet id="add unique constraint" author="nitesh" dbms="mysql">
@@ -1577,7 +1577,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         </addColumn>
     </changeSet>
     
-    <changeSet id="updating constraints for CATISSUE_COLLECTION_PROTOCOL" author="nitesh">
+    <changeSet id="updating constraints for CATISSUE_COLLECTION_PROTOCOL" author="nitesh" failOnError="false">
         <dropForeignKeyConstraint baseTableName="CATISSUE_COLLECTION_PROTOCOL" constraintName="FK32DC439DBC7298A9"/>
     </changeSet>
     
@@ -2636,7 +2636,14 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <column name="AVAILABLE_QUANTITY" type="varchar(50)"/>
         </createIndex>
     </changeSet>
-    
+    <changeSet id="adding index for parent_specimen_id" author="nitesh" failOnError="false">
+		<createIndex 
+                indexName="INDX_CAT_PARENT_SPECIMEN"
+                tableName="CATISSUE_SPECIMEN"
+                unique="false">
+            <column name="PARENT_SPECIMEN_ID" type="${int.type}"/>
+        </createIndex>
+	</changeSet>
     <changeSet id="creating constraints for SCG table" author="nitesh">
     
     <addForeignKeyConstraint baseColumnNames="COLLECTION_PROTOCOL_REG_ID"

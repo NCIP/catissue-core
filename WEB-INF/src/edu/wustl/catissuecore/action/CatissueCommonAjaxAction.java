@@ -832,6 +832,7 @@ public ActionForward swapContainerUsingDrag(ActionMapping mapping, ActionForm fo
 			returnedJObject.put("contactNumber", XMLPropertyHandler.getValue("contact.number"));
 			returnedJObject.put("whatsNew", XMLPropertyHandler.getValue("whats.new"));
 			returnedJObject.put("dataAtGlanceDiv", XMLPropertyHandler.getValue("data.at.glance.visible"));
+			returnedJObject.put("contactus",XMLPropertyHandler.getValue("email.administrative.emailAddress"));
 			
 			response.setContentType("application/json");
 			response.getWriter().write(returnedJObject.toString());

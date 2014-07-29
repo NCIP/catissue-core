@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.core.services.testdata;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
@@ -11,6 +13,7 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEve
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DepartmentTestData {
 
@@ -19,6 +22,8 @@ public class DepartmentTestData {
 	public static final String INSTITUTE = "institute";
 
 	public static final Object ACTIVITY_STATUS_DISABLED = "Disabled";
+
+	public static final Object PERMISSIBLE_VALUE = "permissible value";
 
 	public static CreateDepartmentEvent getCreateDepartmentEvent() {
 		CreateDepartmentEvent event = new CreateDepartmentEvent();

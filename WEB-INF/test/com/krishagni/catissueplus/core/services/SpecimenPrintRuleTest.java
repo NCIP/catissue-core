@@ -14,7 +14,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.printer.printRule.domain.SpecimenPrintRule;
 import com.krishagni.catissueplus.core.printer.printRule.domain.factory.PrintRuleErrorCode;
@@ -30,6 +37,7 @@ import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleE
 import com.krishagni.catissueplus.core.printer.printRule.repository.SpecimenPrintRuleDao;
 import com.krishagni.catissueplus.core.printer.printRule.services.PrintRuleService;
 import com.krishagni.catissueplus.core.printer.printRule.services.impl.SpecimenPrintRuleServiceImpl;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.SpecimenPrintRuleTestData;
 
 public class SpecimenPrintRuleTest {
@@ -40,6 +48,16 @@ public class SpecimenPrintRuleTest {
 	@Mock
 	SpecimenPrintRuleDao printRuleDao;
 
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+
+	PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
+
 	private SpecimenPrintRuleFactoryImpl specimenPrintRuleFactory;
 
 	private PrintRuleService printRuleService;
@@ -47,6 +65,15 @@ public class SpecimenPrintRuleTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+
 		when(daoFactory.getSpecimenPrintRuleDao()).thenReturn(printRuleDao);
 		printRuleService = new SpecimenPrintRuleServiceImpl();
 		((SpecimenPrintRuleServiceImpl) printRuleService).setDaoFactory(daoFactory);
@@ -64,7 +91,8 @@ public class SpecimenPrintRuleTest {
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName()); 
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
 
 	@Test
@@ -86,7 +114,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(SpecimenPrintRuleTestData.PRINT_RULE_NAME, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrintRuleErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithEmptyPrinterName() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithEmptyPrinterName();
@@ -96,39 +124,43 @@ public class SpecimenPrintRuleTest {
 		assertEquals(SpecimenPrintRuleTestData.PRINTER_NAME, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrintRuleErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithNullSpecimenClass() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithEmptySpecimenClass();
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithAnySpecimenClass() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithAnySpecimenClass();
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithNullWorkstationIP() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithEmptyWorkstationIP();
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithAnyWorkstationIP() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithAnyWorkstationIP();
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithInvalidWorkstationIP() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithInvalidWorkstationIP();
@@ -138,23 +170,25 @@ public class SpecimenPrintRuleTest {
 		assertEquals(SpecimenPrintRuleTestData.WORKSTATION_IP, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrintRuleErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithNullSpecimenType() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithEmptySpecimenType();
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithAnySpecimenType() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithAnySpecimenType();
 		PrintRuleCreatedEvent response = printRuleService.createPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getDetails()).getName(), ((SpecimenPrintRuleDetails)response.getPrintRuleDetails()).getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getDetails()).getName(),
+				((SpecimenPrintRuleDetails) response.getPrintRuleDetails()).getName());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithEmptyLabelType() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithEmptyLabelType();
@@ -164,7 +198,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(SpecimenPrintRuleTestData.LABEL_TYPE, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrintRuleErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithInvalidLabelType() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithInvalidLabelType();
@@ -174,7 +208,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(SpecimenPrintRuleTestData.LABEL_TYPE, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrintRuleErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testPrintRuleCreationWithEmptyDataOnLabel() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEventWithEmptyDataOnLabel();
@@ -184,7 +218,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(SpecimenPrintRuleTestData.DATA_ON_LABEL, response.getErroneousFields()[0].getFieldName());
 		assertEquals(PrintRuleErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testPrintRuleDuplicatePrintRule() {
 		CreatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getCreatePrintRuleEvent();
@@ -212,9 +246,9 @@ public class SpecimenPrintRuleTest {
 		PrintRuleUpdatedEvent response = printRuleService.updatePrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 		SpecimenPrintRuleDetails createdPrintRule = (SpecimenPrintRuleDetails) response.getPrintRuleDetails();
-		assertEquals(((SpecimenPrintRuleDetails)reqEvent.getPrintRuleDetails()).getName(), createdPrintRule.getName());
+		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getPrintRuleDetails()).getName(), createdPrintRule.getName());
 	}
-	
+
 	@Test
 	public void testForPrintRuleUpdateWithChangeInSpecimenClass() {
 		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.FALSE);
@@ -225,7 +259,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(PrintRuleErrorCode.DUPLICATE_PRINT_RULE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testForPrintRuleUpdateWithChangeInSpecimenType() {
 		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.FALSE);
@@ -236,7 +270,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(PrintRuleErrorCode.DUPLICATE_PRINT_RULE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
-	
+
 	@Test
 	public void testForPrintRuleUpdateWithChangeInWorkstationIP() {
 		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.FALSE);
@@ -266,7 +300,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSuccessfulPrintRuleDelete() {
 		DeletePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getDeletePrintRuleEvent();
@@ -276,7 +310,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSuccessfulPrintRuleDeleteByName() {
 		DeletePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getDeletePrintRuleEventByName();
@@ -286,7 +320,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPrintRuleDeleteWithServerErr() {
 		doThrow(new RuntimeException()).when(printRuleDao).delete(any(SpecimenPrintRule.class));
@@ -297,7 +331,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testForInvalidPrintRuleDelete() {
 		when(printRuleDao.getPrintRuleByName(anyString())).thenReturn(null);
@@ -305,7 +339,7 @@ public class SpecimenPrintRuleTest {
 		PrintRuleDeletedEvent response = printRuleService.deletePrintRule(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testForSuccessfulPrintUpdateWithName() {
 		UpdatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getUpdatePrintRuleEvent();
@@ -314,7 +348,7 @@ public class SpecimenPrintRuleTest {
 		SpecimenPrintRuleDetails createdRule = (SpecimenPrintRuleDetails) response.getPrintRuleDetails();
 		assertEquals(((SpecimenPrintRuleDetails) reqEvent.getPrintRuleDetails()).getName(), createdRule.getName());
 	}
-	
+
 	@Test
 	public void testForSuccessfulPrintUpdateWithId() {
 		UpdatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getUpdatePrintRuleEventById();
@@ -331,7 +365,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testSuccessfullPatchPritnRuleByName() {
 		PatchPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPatchDataWithName();
@@ -339,7 +373,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPatchPrintRuleWithInvalidAttribute() {
 		when(daoFactory.getSpecimenPrintRuleDao().isUniquePrintRuleName(anyString())).thenReturn(false);
@@ -348,7 +382,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals("Please resolve the highlighted errors.", response.getMessage());
 	}
-	
+
 	@Test
 	public void testPatchPrintRuleInvalidRule() {
 		when(daoFactory.getSpecimenPrintRuleDao().getPrintRule(anyLong())).thenReturn(null);
@@ -357,7 +391,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPatchPrintRule() {
 		PatchPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.nonPatchData();
@@ -365,7 +399,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testPrintRulePatchWithServerErr() {
 		doThrow(new RuntimeException()).when(printRuleDao).saveOrUpdate(any(SpecimenPrintRule.class));

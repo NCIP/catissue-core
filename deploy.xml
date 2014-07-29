@@ -585,6 +585,7 @@
 
 	<target name="clean_server" description="deletes the WAR file and cache from server, clean-up the server ">
 		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
+		<delete file="${jboss.server.url}/deploy/openspecimen.war" />
 		<delete file="${jboss.server.url}/deploy/cas.war" quiet="true"/>
 		<delete file="${jboss.server.url}/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.server.url}/deploy/caTissuePrintWebService.war" />
@@ -913,11 +914,15 @@
 		</copy>
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
-				<include name="catissuecore.war" />
 				<include name="catissuecore-ds.xml" />
 				<include name="catissuecorecsm.war" />
 				<include name="caTissuePrintWebService.war" />
 			</fileset>
+		</copy>
+		
+		<copy todir="${jboss.server.url}/deploy" overwrite="true">
+			<fileset dir="${temp.dir}"/>
+				<globmapper from="catissuecore.war" to="openspecimen.war"/>
 		</copy>
 
 		<copy file="performance.properties" todir="${rel.jboss.home}/server/default/conf" overwrite="true"/>

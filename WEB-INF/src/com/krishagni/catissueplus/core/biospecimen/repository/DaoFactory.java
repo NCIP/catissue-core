@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionPro
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -79,5 +80,7 @@ public interface DaoFactory {
 	public EquipmentDao getEquipmentDao();
 
 	public ImageDao getImageDao();
+	
+	public PermissibleValueDao getPermissibleValueDao();
 
 }

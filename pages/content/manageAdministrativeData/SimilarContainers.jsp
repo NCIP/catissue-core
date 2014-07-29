@@ -53,14 +53,14 @@
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script>var imgsrc="catissuecore/images/de/";</script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/prototype.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/scr.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combobox.js"></script>
+	<script>var imgsrc="openspecimen/images/de/";</script>
+	<script language="JavaScript" type="text/javascript" src="/openspecimen/javascripts/de/prototype.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/openspecimen/javascripts/de/scr.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/openspecimen/javascripts/de/combobox.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/ext-base.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/ext-all.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combos.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ajax.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/openspecimen/javascripts/de/combos.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/openspecimen/javascripts/de/ajax.js"></script>
 
 	<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />

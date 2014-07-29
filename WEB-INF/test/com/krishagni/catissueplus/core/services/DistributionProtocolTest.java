@@ -28,12 +28,19 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolServiceImpl;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.DistributionProtocolTestData;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 
 public class DistributionProtocolTest {
 
@@ -49,6 +56,17 @@ public class DistributionProtocolTest {
 
 	@Mock
 	private UserDao userDao;
+	
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+
+	PermissibleValuesManager pvManager;
+
+	private PermissibleValueService pvService;
+
 
 	private DistributionProtocolFactory distributionProtocolFactory;
 
@@ -57,6 +75,16 @@ public class DistributionProtocolTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+		
 
 		when(daoFactory.getDistributionProtocolDao()).thenReturn(distributionProtocolDao);
 		when(daoFactory.getUserDao()).thenReturn(userDao);

@@ -39,15 +39,22 @@ import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.administrative.services.impl.UserServiceImpl;
 import com.krishagni.catissueplus.core.auth.repository.DomainDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.privileges.repository.RoleDao;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
 public class UserTest {
@@ -76,6 +83,16 @@ public class UserTest {
 	@Mock
 	EmailSender emailSender;
 	
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+	
+	PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
+	
 	private UserFactory userFactory;
 
 	private UserService userService;
@@ -83,6 +100,19 @@ public class UserTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		
+		when(daoFactory.getSiteDao()).thenReturn(siteDao);
+		when(daoFactory.getUserDao()).thenReturn(userDao);
+		
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+
 		
 		when(daoFactory.getUserDao()).thenReturn(userDao);
 		when(daoFactory.getDomainDao()).thenReturn(domainDao);

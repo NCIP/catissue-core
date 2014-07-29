@@ -249,6 +249,8 @@ public class QueryServiceImpl implements QueryService {
 	@Override
 	@PlusTransactional
 	public QueryExecutedEvent executeQuery(ExecuteQueryEvent req) {
+		QueryResultData queryResult = null;
+		
 		try {
 			SessionDataBean sdb = req.getSessionDataBean();
 			boolean countQuery = req.getRunType().equals("Count");
@@ -264,7 +266,7 @@ public class QueryServiceImpl implements QueryService {
 			QueryResponse resp = query.getData();
 			insertAuditLog(req, resp);
 			
-			QueryResultData queryResult = resp.getResultData();
+			queryResult = resp.getResultData();
 			queryResult.setScreener(new QueryResultScreenerImpl(sdb, countQuery));
 			
 			Integer[] indices = null;
@@ -287,6 +289,14 @@ public class QueryServiceImpl implements QueryService {
 				message = "Internal Server Error";
 			}
 			return QueryExecutedEvent.serverError(message, e);
+		} finally {
+			if (queryResult != null) {
+				try {
+					queryResult.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}				
+			}
 		}
 	}
 

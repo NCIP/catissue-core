@@ -395,7 +395,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var selectedRow = selectedRows[i];
         for (var j = 0; j < labelIndices.length; ++j) {
           var label = selectedRow["col" + labelIndices[j]];
-          if (label == '' || specimenLabels.indexOf(label) != -1) {
+          if (!label || specimenLabels.indexOf(label) != -1) {
             continue;
           }
 

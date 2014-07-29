@@ -56,7 +56,7 @@ public class ImageTestData {
 		image.setResolution("");
 		image.setScanDate(new Date());
 		image.setSpecimen(getSpecimen());
-		image.setStainName("");
+		image.setStainName("Blue");
 		image.setHeight(120L);
 		return image;
 	}
@@ -82,7 +82,7 @@ public class ImageTestData {
 		details.setResolution("");
 		details.setScanDate(null);
 		details.setSpecimenId(1L);
-		details.setStainName("");
+		details.setStainName("Blue");
 		details.setHeight(100L);
 		return details;
 	}
@@ -201,7 +201,7 @@ public class ImageTestData {
 		details.setResolution("");
 		details.setScanDate(new Date());
 		details.setSpecimenId(1L);
-		details.setStainName("");
+		details.setStainName("Blue");
 		details.setHeight(100L);
 		return details;
 	}
@@ -219,7 +219,7 @@ public class ImageTestData {
 		details.setResolution("");
 		details.setScanDate(new Date());
 		details.setSpecimenId(1L);
-		details.setStainName("");
+		details.setStainName("Blue");
 		details.setHeight(100L);
 		return details;
 	}
@@ -256,7 +256,7 @@ public class ImageTestData {
 		attributes.put("quality", "admin@admin.com");
 		attributes.put("resolution", "resolution");
 		attributes.put("scanDate", new Date());
-		attributes.put("stainName", "stainName");
+		attributes.put("stainName", "Blue");
 		attributes.put("status", "status");
 		attributes.put("width", "400");
 		attributes.put("height", "400");

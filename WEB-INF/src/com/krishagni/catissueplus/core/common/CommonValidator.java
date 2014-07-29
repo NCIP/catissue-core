@@ -10,6 +10,12 @@ import org.apache.commons.lang.StringUtils;
 
 public class CommonValidator {
 
+	static PermissibleValuesManager pvManager;
+
+	public static void setPvManager(PermissibleValuesManager pvManager) {
+		CommonValidator.pvManager = pvManager;
+	}
+
 	public static final String IP_PATTERN = 
 			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." 
@@ -17,12 +23,10 @@ public class CommonValidator {
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
 	public static boolean isValidPv(String value, String type) {
-		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
 		if (pvManager.validate(type, value)) {
 			return true;
 		}
 		return false;
-		//		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
 	}
 
 	public static boolean isBlank(String value) {
@@ -30,22 +34,17 @@ public class CommonValidator {
 	}
 
 	public static boolean isValidPv(String[] value, String type) {
-		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
 		if (pvManager.validate(type, value)) {
 			return true;
 		}
 		return false;
-		//		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
 	}
 
 	public static boolean isValidPv(String parentValue, String value, String type) {
-		PermissibleValuesManager pvManager = new PermissibleValuesManagerImpl();
 		if (pvManager.validate(type, parentValue, value)) {
 			return true;
 		}
 		return false;
-		//		reportError(ParticipantErrorCode.INVALID_ATTR_VALUE, type);
-
 	}
 
 	public static boolean isEmailValid(String emailAddress) {

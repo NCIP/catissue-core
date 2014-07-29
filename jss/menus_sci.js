@@ -69,7 +69,7 @@ Ext.onReady(function(){
          items: [
 			{
 				text: 'Help Home',
-				href:'/catissuecore/RedirectToHelp.do',
+				href:'/openspecimen/RedirectToHelp.do',
 				tooltip:'Help Home'
 			},
 			{

@@ -16,7 +16,10 @@ import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -32,7 +35,11 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollection
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.SpecimenTestData;
 
 public class SpecimenTest {
@@ -60,10 +67,21 @@ public class SpecimenTest {
 
 	@Mock
 	private SpecimenFactory factory;
+	
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+	
+	PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+
 		when(daoFactory.getScgDao()).thenReturn(scgDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);
 		when(daoFactory.getUserDao()).thenReturn(userDao);
@@ -77,6 +95,14 @@ public class SpecimenTest {
 		when(collectionProtocolDao.getSpecimenRequirement(anyLong())).thenReturn(SpecimenTestData.getRequirement());
 		when(userDao.getUser(anyString())).thenReturn(SpecimenTestData.getUser());
 		when(scgDao.getscg(anyLong())).thenReturn(SpecimenTestData.getScgToReturn());
+		
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
 		when(containerDao.getContainer(anyString())).thenReturn(SpecimenTestData.getContainerToReturn());
 
 		when(specimenDao.isBarcodeUnique(anyString())).thenReturn(true);

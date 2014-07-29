@@ -1,7 +1,7 @@
 
 angular.module('plus.formsServices', [])
   .factory('FormsService', function($http) {
-    var apiUrl = '/catissuecore/rest/ng/';
+    var apiUrl = '/openspecimen/rest/ng/';
 
     var baseUrl = apiUrl + 'forms/';
 
@@ -117,7 +117,7 @@ angular.module('plus.formsServices', [])
   
   /** Need to merge this with rest of services **/
   .factory('CollectionProtocolService', function($http) {
-    var baseUrl = '/catissuecore/rest/ng/collection-protocols/';
+    var baseUrl = '/openspecimen/rest/ng/collection-protocols/';
     var successfn = function(result) { return result.data; };
 
     return {

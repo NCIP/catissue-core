@@ -140,11 +140,11 @@ angular.module('plus.dataentry', [])
           formDiv      : 'form-view',
           dateFormat   : dateFormat,
           appData      : {formCtxtId: form.formCtxtId, objectId: entityObjId},
-          formDataUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId?_reqTime='+_reqTime,
-          formSaveUrl  : '/catissuecore/rest/ng/forms/:formId/data/:recordId',
-          fileUploadUrl : '/catissuecore/rest/ng/form-files?_reqTime='+_reqTime,
+          formDataUrl  : '/openspecimen/rest/ng/forms/:formId/data/:recordId?_reqTime='+_reqTime,
+          formSaveUrl  : '/openspecimen/rest/ng/forms/:formId/data/:recordId',
+          fileUploadUrl : '/openspecimen/rest/ng/form-files?_reqTime='+_reqTime,
           fileDownloadUrl: function(formId, recordId, ctrlName) {
-            return '/catissuecore/rest/ng/form-files?formId=' + formId + '&recordId=' + recordId + '&ctrlName=' + ctrlName + '&_reqTime='+_reqTime;
+            return '/openspecimen/rest/ng/form-files?formId=' + formId + '&recordId=' + recordId + '&ctrlName=' + ctrlName + '&_reqTime='+_reqTime;
           },
 
           onSaveSuccess: function() {

@@ -449,7 +449,7 @@ Ext.onReady(function(){
 			
 			{
 				text: 'Logout',
-				href:'/catissuecore/Logout.do', 
+				href:'/openspecimen/Logout.do', 
 				tooltip:'Log Out'
 			}
 		]
@@ -468,7 +468,7 @@ Ext.onReady(function(){
          items: [
 			{
 				text: 'Help Home',
-				href:'/catissuecore/RedirectToHelp.do',
+				href:'/openspecimen/RedirectToHelp.do',
 				tooltip:'Help Home'
 			},
 			{

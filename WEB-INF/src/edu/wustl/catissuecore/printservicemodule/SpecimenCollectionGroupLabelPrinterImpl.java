@@ -44,7 +44,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter
 			final String printerLocation)
 	{
 		final List listMap = this.createObjectMap(abstractDomainObject, printerType,
-				printerLocation, ipAddress);
+				printerLocation, ipAddress,userObj.getLoginName());
 
 		try
 		{
@@ -103,7 +103,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter
 	 * @return List List of all Specimen including child Specimen
 	 */
 	List createObjectMap(AbstractDomainObject abstractDomainObject, String printerType,
-			String printerLocation, String ipAddress)
+			String printerLocation, String ipAddress,String loginName)
 	{
 		final List listMap = new ArrayList();
 		if (abstractDomainObject instanceof SpecimenCollectionGroup)

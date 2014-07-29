@@ -28,17 +28,24 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDis
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl;
 import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
 import com.krishagni.catissueplus.core.barcodegenerator.impl.StorageContainerBarcodeGenerator;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 import com.krishagni.catissueplus.core.labelgenerator.impl.StorageContainerLabelGenerator;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.StorageContainerTestData;
 import com.krishagni.catissueplus.core.tokens.factory.TokenFactory;
 
@@ -59,6 +66,16 @@ public class StorageContainerTest {
 	@Mock
 	SiteDao siteDao;
 
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+
+	PermissibleValuesManager pvManager;
+
+	private PermissibleValueService pvService;
+
 	private StorageContainerFactory storageContainerFactory;
 
 	private StorageContainerService storageContainerService;
@@ -78,6 +95,16 @@ public class StorageContainerTest {
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		when(daoFactory.getCollectionProtocolDao()).thenReturn(collectionProtocolDao);
 		when(daoFactory.getStorageContainerDao()).thenReturn(storageContainerDao);
+		
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+
 		storageContainerService = new StorageContainerServiceImpl();
 		((StorageContainerServiceImpl) storageContainerService).setDaoFactory(daoFactory);
 		storageContainerFactory = new StorageContainerFactoryImpl();
@@ -501,10 +528,11 @@ public class StorageContainerTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testStorageContainerDisableWithReference() {
-		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(StorageContainerTestData.getStorageContainerForDisable(1l));
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(
+				StorageContainerTestData.getStorageContainerForDisable(1l));
 		DisableStorageContainerEvent reqEvent = StorageContainerTestData.getDisableStorageContainerEventForName();
 		StorageContainerDisabledEvent response = storageContainerService.disableStorageContainer(reqEvent);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());

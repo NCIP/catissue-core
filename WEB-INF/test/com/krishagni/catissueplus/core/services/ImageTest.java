@@ -26,12 +26,19 @@ import com.krishagni.catissueplus.core.administrative.events.PatchImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateImageEvent;
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.ImageDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.services.ImageService;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.ImageServiceImpl;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.ImageTestData;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 
 public class ImageTest {
 
@@ -46,6 +53,16 @@ public class ImageTest {
 
 	@Mock
 	ImageDao imageDao;
+	
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+
+	PermissibleValuesManager pvManager;
+
+	private PermissibleValueService pvService;
 
 	ImageFactory imageFactory;
 
@@ -54,7 +71,16 @@ public class ImageTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+		
+		
 		when(daoFactory.getSpecimenDao()).thenReturn(specimenDao);
 		when(daoFactory.getEquipmentDao()).thenReturn(equipmentDao);
 		when(daoFactory.getImageDao()).thenReturn(imageDao);

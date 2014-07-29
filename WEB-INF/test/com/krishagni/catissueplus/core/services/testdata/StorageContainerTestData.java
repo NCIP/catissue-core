@@ -53,7 +53,7 @@ public class StorageContainerTestData {
 
 	public static final String TWO_DIMENSION_CAPACITY = "two dimension capacity";
 
-	public static final Object SITE_CONTAINER = "site container";
+	public static final String SITE_CONTAINER = "site container";
 
 	public static List<User> getUserList() {
 		List<User> users = new ArrayList<User>();
@@ -286,7 +286,7 @@ public class StorageContainerTestData {
 	private static Set<String> getSpecimenTypes() {
 		Set<String> spectTypes = new HashSet<String>();
 		spectTypes.add("Tissue");
-		spectTypes.add("Blood");
+		spectTypes.add("Cell");
 		return spectTypes;
 	}
 

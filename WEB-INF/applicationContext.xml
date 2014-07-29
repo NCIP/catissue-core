@@ -361,5 +361,22 @@
         <property name="imageFactory" ref="imageFactory" />
 	</bean>
 	
+	<bean id="permissibleValueFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.PermissibleValueFactoryImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+	</bean>
+	
+	<bean id="permissibleValueSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl">
+		<property name="daoFactory" ref="biospecimenDaoFactory"/>
+		<property name="pvFactory" ref="permissibleValueFact"/>
+	</bean>
+	
+	<bean id="pvMangeerSvc" class="com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl">
+    	<property name="permissibleValueSvc" ref="permissibleValueSvc"/>
+  	</bean>
+  	
+	<bean id="commonValidatorSvc" class="com.krishagni.catissueplus.core.common.CommonValidator">
+    	<property name="pvManager" ref="pvMangeerSvc"/>
+  	</bean>
+	
 	
  </beans>

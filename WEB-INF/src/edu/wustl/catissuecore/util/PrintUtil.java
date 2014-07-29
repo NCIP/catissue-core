@@ -33,8 +33,11 @@ public class PrintUtil
 					specimenId);
 			
 			final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
-			printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, null, printerType,
-					printerLocation);
+			gov.nih.nci.security.authorization.domainobjects.User user = new gov.nih.nci.security.authorization.domainobjects.User();
+			 user.setUserId(dataBean.getUserId());
+			 user.setLoginName(dataBean.getUserName());
+			 printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, user, printerType,
+			printerLocation);
 
 		}
 		catch (final DAOException exception)

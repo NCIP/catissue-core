@@ -27,43 +27,70 @@ import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEv
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.services.DepartmentService;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.DepartmentServiceImpl;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.privileges.domain.factory.PrivilegeErrorCode;
 import com.krishagni.catissueplus.core.services.testdata.DepartmentTestData;
 import com.krishagni.catissueplus.core.services.testdata.InstituteTestData;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 
-public class DepartmentTest {
-
+public class DepartmentTest { 
+	
 	@Mock
 	private DaoFactory daoFactory;
 
 	@Mock
 	DepartmentDao departmentDao;
-
+	
 	@Mock
 	InstituteDao instituteDao;
+
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+	
+	PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
 
 	private DepartmentFactory departmentFactory;
 
 	private DepartmentService departmentService;
 
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-
+	
 		when(daoFactory.getDepartmentDao()).thenReturn(departmentDao);
 		when(daoFactory.getInstituteDao()).thenReturn(instituteDao);
-
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+		
 		departmentService = new DepartmentServiceImpl();
 		((DepartmentServiceImpl) departmentService).setDaoFactory(daoFactory);
 		departmentFactory = new DepartmentFactoryImpl();
 		((DepartmentFactoryImpl) departmentFactory).setDaoFactory(daoFactory);
 		((DepartmentServiceImpl) departmentService).setDepartmentFactory(departmentFactory);
-		
+
 		when(instituteDao.getInstituteByName(anyString())).thenReturn(InstituteTestData.getInstitute(1l));
+		
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
 		when(departmentDao.isUniqueDepartmentInInstitute(anyString(), anyString())).thenReturn(Boolean.TRUE);
 	}
@@ -129,8 +156,8 @@ public class DepartmentTest {
 		DepartmentDetails createdDepartment = response.getDepartmentDetails();
 		assertEquals(reqEvent.getDepartmentDetails().getName(), createdDepartment.getName());
 	}
-	
-	@Test 
+
+	@Test
 	public void testForSuccessfulDepartmentUpdateWithChangedName() {
 		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartment(1L));
 		UpdateDepartmentEvent reqEvent = DepartmentTestData.getUpdateDepartmentEventForChangedName();
@@ -152,7 +179,7 @@ public class DepartmentTest {
 		assertEquals(PrivilegeErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 	}
-	
+
 	@Test
 	public void testForInvalidDepartmentUpdate() {
 		when(departmentDao.getDepartment(anyLong())).thenReturn(null);
@@ -171,7 +198,7 @@ public class DepartmentTest {
 		DepartmentUpdatedEvent response = departmentService.updateDepartment(reqEvent);
 		assertNotNull("response cannot be null", response);
 	}
-	
+
 	@Test
 	public void testForInvalidDepartmentDisable() {
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
@@ -179,7 +206,7 @@ public class DepartmentTest {
 		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
-	
+
 	@Test
 	public void testForInvalidDepartmentDisableWithName() {
 		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
@@ -198,7 +225,7 @@ public class DepartmentTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertEquals(DepartmentTestData.ACTIVITY_STATUS_DISABLED, departmentToDelete.getActivityStatus());
 	}
-	
+
 	@Test
 	public void testDepartmentDisableWithReference() {
 		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartmentForDisable(1l));

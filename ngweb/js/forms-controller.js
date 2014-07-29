@@ -40,11 +40,11 @@ angular.module('plus.forms', [])
     };
 
     $scope.addForm = function() {
-        window.top.location.href = "/catissuecore/loadcsd.do"; 
+        window.top.location.href = "/openspecimen/loadcsd.do"; 
     };
 
     $scope.editForm = function(form) {
-      window.top.location.href = "/catissuecore/loadcsd.do#loadCachedForm/" + form.formId + "/true ?_reqTime=" +  new Date().getTime();
+      window.top.location.href = "/openspecimen/loadcsd.do#loadCachedForm/" + form.formId + "/true ?_reqTime=" +  new Date().getTime();
     };
 
     $scope.showFormContexts = function(form) {

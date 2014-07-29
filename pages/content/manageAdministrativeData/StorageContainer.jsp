@@ -84,15 +84,15 @@
 %>
 
 <head>
-<script> var imgsrc="catissuecore/images/de/";</script>
+<script> var imgsrc="openspecimen/images/de/";</script>
 <script language="JavaScript" type="text/javascript"
-	src="/catissuecore/javascripts/de/prototype.js"></script>
+	src="/openspecimen/javascripts/de/prototype.js"></script>
 <script language="JavaScript" type="text/javascript"
-	src="/catissuecore/javascripts/de/scr.js"></script>
+	src="/openspecimen/javascripts/de/scr.js"></script>
 <script language="JavaScript" type="text/javascript"
-	src="/catissuecore/javascripts/de/combobox.js"></script>
+	src="/openspecimen/javascripts/de/combobox.js"></script>
 <script language="JavaScript" type="text/javascript"
-	src="/catissuecore/javascripts/de/ajax.js"></script>
+	src="/openspecimen/javascripts/de/ajax.js"></script>
 <script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>

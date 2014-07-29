@@ -62,7 +62,7 @@ var  downloadUrl= "";
                             
                         <div class="container-text  container-text-top-margin" >
                                 <img  height="14px" src="images/uIEnhancementImages/ic_mail.gif">
-                                &nbsp <a href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&amp;FILE_NAME_KEY=app.contactUs.file"><bean:message key="login.contact.us" /></a>
+                                &nbsp <a id="contactus" href="mailto:"><bean:message key="login.contact.us" /></a>
                         </div>
                             
         <div class="container-text  container-text-top-margin">
@@ -355,7 +355,7 @@ function loadInstituteLogo(){
                 document.getElementById("userManual").href =  myJsonResponse.userManual;
                 document.getElementById("contactNumber").innerHTML = myJsonResponse.contactNumber;
                 document.getElementById("whatsNew").href =  myJsonResponse.whatsNew;
-				
+				document.getElementById("contactus").href="mailto:"+myJsonResponse.contactus;
 				if(myJsonResponse.dataAtGlanceDiv != undefined && myJsonResponse.dataAtGlanceDiv == "true"){
 					document.getElementById("dataAtGlanceDiv").style.display="";
 					loadSummaryCount();

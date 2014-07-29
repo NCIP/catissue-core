@@ -26,12 +26,19 @@ import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.SiteTestData;
 
 public class SiteTest {
@@ -44,6 +51,16 @@ public class SiteTest {
 
 	@Mock
 	UserDao userDao;
+	
+	@Mock
+	PermissibleValueDao pvDao;
+
+	@Mock
+	CommonValidator commonValidator;
+	
+	PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
 
 	SiteFactory siteFactory;
 
@@ -55,6 +72,16 @@ public class SiteTest {
 
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		when(daoFactory.getUserDao()).thenReturn(userDao);
+		
+		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
+	
 
 		siteService = new SiteServiceImpl();
 		siteFactory = new SiteFactoryImpl();

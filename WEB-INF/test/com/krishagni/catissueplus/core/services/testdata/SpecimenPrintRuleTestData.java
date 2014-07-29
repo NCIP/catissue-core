@@ -221,8 +221,8 @@ public class SpecimenPrintRuleTestData {
 
 	private static Map<String, Object> getPrintRulePatchAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
-		attributes.put("specimenClass", "Fluid");
-		attributes.put("specimenType", "any");
+		attributes.put("specimenClass", "Tissue");
+		attributes.put("specimenType", "Any");
 		attributes.put("labelType", getLabelTypes());
 		attributes.put("dataOnLabel", getDataLabels());
 		attributes.put("printerName", "t1");
@@ -276,7 +276,7 @@ public class SpecimenPrintRuleTestData {
 		UpdatePrintRuleEvent event = getUpdatePrintRuleEvent();
 		SpecimenPrintRuleDetails details = ((SpecimenPrintRuleDetails) event.getPrintRuleDetails());
 		details.setName("New_print_rule");
-		details.setSpecimenType("MyType");
+		details.setSpecimenType("Any");
 		event.setPrintRuleDetails(details);
 		return event;
 	}

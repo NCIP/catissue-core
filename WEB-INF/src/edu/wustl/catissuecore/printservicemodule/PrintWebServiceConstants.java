@@ -80,6 +80,8 @@ public final class PrintWebServiceConstants
 	 * Specify SPECIMEN_LABEL.
 	 */
 	public static final String SPECIMEN_LABEL = "Specimen Label";
+	public static final String EX_ID = "External Identifier";
+	public static final String LOGIN_NAME = "Login Name";
 	/**
 	 * Specify SPECIMEN_CLASS.
 	 */
