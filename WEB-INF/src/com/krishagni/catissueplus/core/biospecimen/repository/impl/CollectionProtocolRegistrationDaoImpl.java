@@ -44,7 +44,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		query.setLong("cpId", cpId);
 
 		if (isSearchTermSpecified) {
-			query.setString("searchTerm", searchString.toLowerCase() + "%");
+			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
 		}
 		query.setMaxResults(Utility.getMaxParticipantCnt());
 		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
@@ -77,7 +77,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
 		query.setLong("cpId", cpId);
 		if (isSearchTermSpecified) {
-			query.setString("searchTerm", searchString.toLowerCase() + "%");
+			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
 		}
 		query.setMaxResults(Utility.getMaxParticipantCnt());
 		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
