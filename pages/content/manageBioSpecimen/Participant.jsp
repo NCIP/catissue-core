@@ -15,7 +15,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
-
+<%@ page language="java" isELIgnored="false"%>
 
 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>

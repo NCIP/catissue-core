@@ -11,7 +11,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
-
+<%@ page language="java" isELIgnored="false"%>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
@@ -260,7 +260,7 @@ function giveCall(url,msg,msg1,id)
 				<bean:message key="specimen.createdDate"/>
 			</label></strong></td>
 			<td class="noneditable">- 
-				<%=form.getCreatedDate()%>&nbsp;<span class="grey_ar_s"><bean:message key="date.pattern"/></span>
+				<%=form.getCreatedDate()%>&nbsp;<span class="grey_ar_s">${datePattern}</span>
 			<html:hidden styleId="createdDate" property="createdDate" />	
 			<html:hidden styleId="spCollectionGroupId" property="spCollectionGroupId" />
 			<html:hidden styleId="scgName" property="scgName" />

@@ -626,7 +626,7 @@ function giveCall(url,msg,msg1,id)
                 <div  class="aliquot_details aliquot_details_spacing">
                     <div>
                     <input type="text" size="10" id="creationDate" name = "creationDate" class="black_ar"  onblur="validateAliqDate(this)" value='<fmt:formatDate value="${creationDate}" pattern="${datePattern}" />' onclick="doInitCalendar('creationDate',false,'${uiDatePattern}');" />
-                    <span id="dateId" class="capitalized  grey_ar_s" > [<bean:message key="date.pattern" />]</span>&nbsp;
+                    <span id="dateId" class="capitalized  grey_ar_s" > [${datePattern}]</span>&nbsp;
                     </div>
                 </div>
                 <div  class="aliquot_details aliquot_details_spacing">

@@ -6,6 +6,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.common.labelSQLApp.form.CPDashboardForm"%>
 <%@ taglib uri="/WEB-INF/scheduler.tld" prefix="scheduler"%>
 
@@ -233,14 +234,14 @@ boolean isWhite = false;
 					<td class="black_new">Duration:</td>
 					<td>
 						<html:text property="fromDate" styleId="fromDate1" styleClass="black_new" style="width: 100px"/>
-						<span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>
+						<span class="grey_ar_s capitalized"> [${datePattern}]</span>
 					</td>
 					<td align="center"  class="black_new" width="10%">
 							To:
 					</td>
 					<td width="65%">
 						<html:text property="toDate" styleId="toDate1" styleClass="black_new" style="width: 100px"/>
-						<span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>
+						<span class="grey_ar_s capitalized"> [${datePattern}]</span>
 					</td>
 				</tr>
 				<tr><td></td></tr>				

@@ -344,7 +344,7 @@ function switchToOlderView()
                 <td class="black_ar"> 
 				<input type="text" name="requestedDate" class="black_ar"
                                    id="requestedDate" size="10" onblur="processData(this)" value='<fmt:formatDate value="${DisplayOrderDTO.requestedDate}" pattern="${datePattern}" />' onclick="doInitCalendar('requestedDate',false,'${uiDatePattern}');"/>
-                                <span id="dateId" class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
+                                <span id="dateId" class="grey_ar_s capitalized">[${datePattern}]</span>&nbsp;
 						</td>			
               </tr>
 			    <tr>

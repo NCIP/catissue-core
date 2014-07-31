@@ -87,7 +87,7 @@
 							pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 							styleClass="black_ar"	/>
 						</logic:empty>
-						 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+						 <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;
 					</td>
 					<td align="center" class="black_ar">
 						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />

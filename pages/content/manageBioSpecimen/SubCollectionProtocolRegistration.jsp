@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.*"%>	  
+<%@ page language="java" isELIgnored="false"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
@@ -287,7 +288,7 @@
 					<%
 						}
 					%>
-					<span class="capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
+					<span class="capitalized">[${datePattern}]</span>&nbsp;
 
 				 	</td>
 				</tr>

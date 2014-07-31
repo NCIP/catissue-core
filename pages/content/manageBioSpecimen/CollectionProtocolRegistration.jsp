@@ -9,6 +9,7 @@
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.*"%>	  
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
+<%@ page language="java" isELIgnored="false"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
@@ -279,7 +280,7 @@
 					<td class="formField">
 <!-- 				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				           <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="registrationDate" property="registrationDate" />
-				           &nbsp;<bean:message key="date.pattern" />&nbsp;
+				           &nbsp;&nbsp;
 					       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
 						         <img src="images\calendar.gif" width=24 height=22 border=0></a>
 -->
@@ -314,7 +315,7 @@
 <%
 	}
 %>
- <span class="capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;&nbsp;
+ <span class="capitalized"> [${datePattern}]</span>&nbsp;&nbsp;
 
 				 	</td>
 				</tr>

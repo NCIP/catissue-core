@@ -10,6 +10,7 @@
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page language="java" isELIgnored="false"%>
 <script src="jss/ajax.js"></script>	   
 <script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
@@ -573,7 +574,7 @@
 						styleClass="formDateSized10" />
 					<%
 						}
-					%> <span class="capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;</td>
+					%> <span class="capitalized">[${datePattern}]</span>&nbsp;</td>
 				</tr>
 				
 				<!-- hours & minutes -->	

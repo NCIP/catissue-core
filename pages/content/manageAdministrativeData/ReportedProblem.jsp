@@ -61,7 +61,7 @@
 										key="reportedProblem.from" /></strong></td>
 									<td width="27%" class="tableheading"><strong><bean:message
 										key="reportedProblem.reportedDate" /></strong> 
-										 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+										 <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;
 									</td>
 								</tr>
 								</logic:notEmpty>

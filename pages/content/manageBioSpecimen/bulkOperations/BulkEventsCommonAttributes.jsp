@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
+<%@ page language="java" isELIgnored="false"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
@@ -63,7 +64,7 @@
     		  			      pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
     		  			      value="<%= eventDate %>"
 							  styleClass="black_ar"
-							/> <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
+							/> <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;</td>
 				</tr>
             <tr>
               <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>

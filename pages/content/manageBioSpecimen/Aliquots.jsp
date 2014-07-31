@@ -509,7 +509,7 @@ function setContainerValues()
 		  			value='${requestScope.createdDate}'
 		  			pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 		  			styleClass="black_ar"/>
-					 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+					 <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;
 			</td>
 		</tr>
 	</table>

@@ -387,7 +387,7 @@
 							styleId="birthDate" size="10"  
 							value="<%=currentBirthDate%>" />
 			
-			           <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
+			           <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;</td>
 					</tr>
 					</c:if>
 					</c:forEach>
@@ -441,7 +441,7 @@
 					    <html:text property="deathDate" styleClass="black_ar"
 							   styleId="deathDate" size="10" value="<%=currentDeathDate%>" 
                                disabled="<%=deathDisable%>" />								
-					    <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
+					    <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;</td>
 					</tr>
 					</c:if>
 					</c:forEach>
@@ -690,7 +690,7 @@
 						<td valign="middle" class="black_ar"> 
 							<html:text property="registrationDate" styleClass="black_ar"
 							   styleId="registrationDate" size="10"/>	
-							   <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+							   <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;
 						</td>
 						
 						<td valign="middle" class="black_ar align_right_style_new"> 

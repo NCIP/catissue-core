@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-
+<%@ page language="java" isELIgnored="false"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionProtocolForm"%>
 <%@ page import="java.util.*"%>
@@ -338,7 +338,7 @@ function insRow(subdivtag)
 					  <%
 					  	}
 					  %>
-					 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+					 <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;
 					  
 					</td>
                 </tr>
@@ -364,7 +364,7 @@ function insRow(subdivtag)
 								pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 	value="<%=distributionProtocolEndDate%>"
 								styleClass="black_ar"/>
-								 <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;
+								 <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;
 						
 								</td>
 				  			  </tr>

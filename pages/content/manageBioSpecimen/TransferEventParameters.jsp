@@ -248,7 +248,7 @@ function updateStorageContainerValue()
 						  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 						  styleClass="black_ar" size="5" />
 				</logic:empty>
-                    <span class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;</td>
+                    <span class="grey_ar_s capitalized">[${datePattern}]</span>&nbsp;</td>
 
                   <td align="center" class="black_ar" width="1%"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>

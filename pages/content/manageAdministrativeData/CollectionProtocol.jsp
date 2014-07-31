@@ -383,7 +383,7 @@ div#d999 {
 						day='${requestScope.collectionProtocolDay}'
 						pattern="<%=CommonServiceLocator.getInstance().getDatePattern() %>"
 						value='${requestScope.currentCollectionProtocolDate}'
-						styleClass="black_ar" /> <span class="grey_ar_s capitalized"> [<bean:message key="date.pattern" />]</span>&nbsp;</td>
+						styleClass="black_ar" /> <span class="grey_ar_s capitalized"> [${datePattern}]</span>&nbsp;</td>
 				</tr>
 				<tr>
 					<td align="center" class="black_ar">&nbsp;</td>
