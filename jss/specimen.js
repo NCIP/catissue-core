@@ -710,6 +710,7 @@ function validateAndProcessComboData(obj)
 	if(obj.getSelectedValue()=='-1' || obj.getSelectedText()=='-- Select --' || obj.getSelectedText().trim()=="")
 	{
 		obj.DOMelem.className += " errorStyleOn";
+		obj.DOMelem.style.cssText = " width: 203px; border: 1px solid #FF0000;";
 		submitCombo=false;
 	}
 	else
@@ -720,7 +721,10 @@ function validateAndProcessComboData(obj)
 		{
 			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
 			typeCombo.DOMelem.className = typeCombo.DOMelem.className.replace(/errorStyleOn/g,"");
+			obj.DOMelem.style.cssText = " width: 203px;";
+			typeCombo.DOMelem.style.cssText = " width: 203px;";
 			typeCombo.DOMelem.className += " errorStyleOn";
+			typeCombo.DOMelem.style.cssText = "width: 203px; border: 1px solid #FF0000;";
 			submitCombo=false;
 			return;
 		}
@@ -728,6 +732,7 @@ function validateAndProcessComboData(obj)
 		if(index != -1)
 		{
 			obj.DOMelem.className = obj.DOMelem.className.replace(/errorStyleOn/g,"");
+			obj.DOMelem.style.cssText = " width: 203px;";
 		}
 		
 		if(obj.name=="collectionStatus" && obj.getSelectedText()!="Collected" && !labelSubmit)

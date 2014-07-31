@@ -299,7 +299,7 @@
                                 <td width="30%" class="black_ar" >
                                 <input type="text" name="createdDate" class="black_ar"
                                    id="createdDate" size="10" onblur="processData(this)" value='<fmt:formatDate value="${specimenDTO.createdDate}" pattern="${datePattern}" />'/>
-                                <span id="dateId" class="grey_ar_s capitalized">[<bean:message key="date.pattern" />]</span>&nbsp;
+                                <span id="dateId" class="grey_ar_s capitalized">[${datePattern}]</span>&nbsp;
                                 </td>
                             </tr>
                             
