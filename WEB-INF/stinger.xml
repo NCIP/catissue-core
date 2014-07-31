@@ -44,38 +44,38 @@ the Stinger project lead at eric.sheridan@owasp.org
 	<exclude-set>
 		<exclude>.*.html</exclude>
 		<exclude>.*.gif</exclude>
-		<exclude>/catissuecore/LoadDynamicExtentionsDataEntryPage.do</exclude>
-		<exclude>/catissuecore/LoadAnnotationDataEntryPage.do</exclude>
-		<exclude>/catissuecore/BulkOperation.do</exclude>
-		<exclude>/catissuecore/BulkHandler.do</exclude>
-		<exclude>/catissuecore/FileUpload.do</exclude>
+		<exclude>/openspecimen/LoadDynamicExtentionsDataEntryPage.do</exclude>
+		<exclude>/openspecimen/LoadAnnotationDataEntryPage.do</exclude>
+		<exclude>/openspecimen/BulkOperation.do</exclude>
+		<exclude>/openspecimen/BulkHandler.do</exclude>
+		<exclude>/openspecimen/FileUpload.do</exclude>
 		<!-- The action used to upload the permissible values while creating Local extentions -->
-		<exclude>/catissuecore/UploadFileAction.do*</exclude>
+		<exclude>/openspecimen/UploadFileAction.do*</exclude>
 		<!-- Uploads the file in the file control on DE form using ajax -->
-		<exclude>/catissuecore/ViewAllConsents.do</exclude>
-		<exclude>/catissuecore/UploadFile.do*</exclude>
-		<exclude>/catissuecore/SpecimenArray.do*</exclude>
-		<exclude>/catissuecore/SpecimenArrayAppletAction.do*</exclude>
-		<exclude>/catissuecore/SpecimenArrayAdd.do*</exclude>
-		<exclude>/catissuecore/SpecimenArrayEdit.do*</exclude>
-		<exclude>/catissuecore/BaseAppletAction*</exclude>
-		<exclude>/catissuecore/SpecimenArray.do/..//SpecimenArrayAppletAction.do</exclude>
-		<exclude>/catissuecore/SpecimenArray.do/..//SpecimenArrayAppletAction.do*</exclude>
-		<exclude>/catissuecore/SpecimenArrayAdd.do/..//SpecimenArrayAppletAction.do</exclude>
-		<exclude>/catissuecore/SpecimenArrayEdit.do/..//SpecimenArrayAppletAction.do</exclude>
-		<exclude>/catissuecore/InitCreateDefineArray.do/..//SpecimenArrayAppletAction.do</exclude>
-		<exclude>/catissuecore/SearchObject.do/..//SpecimenArrayAppletAction.do</exclude>
-		<exclude>/catissuecore/SimpleSearch.do/..//SpecimenArrayAppletAction.do</exclude>
-		<exclude>/catissuecore/CreateCategoryAction.do*</exclude>
-		<exclude>/catissuecore/ImportPVAction.do*</exclude>
-		<exclude>/catissuecore/ConsentVerification.do</exclude>
-		<exclude>/catissuecore/BulkMatchingFileUpload.do*</exclude>
-		<exclude>/catissuecore/UploadSprReport.do*</exclude>
-			<exclude>/catissuecore/UploadConsentDocumentAction.do*</exclude>
-		<exclude>/catissuecore/SubmitOrder.do*</exclude>
-		<exclude>/catissuecore/CreateAliquotsFromSpecimen.do*</exclude>
-		<exclude>/catissuecore/GetAliquotInfoAjax.do*</exclude>
-		<exclude>/catissuecore/CPQueryParticipantEdit.do*</exclude>
+		<exclude>/openspecimen/ViewAllConsents.do</exclude>
+		<exclude>/openspecimen/UploadFile.do*</exclude>
+		<exclude>/openspecimen/SpecimenArray.do*</exclude>
+		<exclude>/openspecimen/SpecimenArrayAppletAction.do*</exclude>
+		<exclude>/openspecimen/SpecimenArrayAdd.do*</exclude>
+		<exclude>/openspecimen/SpecimenArrayEdit.do*</exclude>
+		<exclude>/openspecimen/BaseAppletAction*</exclude>
+		<exclude>/openspecimen/SpecimenArray.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/openspecimen/SpecimenArray.do/..//SpecimenArrayAppletAction.do*</exclude>
+		<exclude>/openspecimen/SpecimenArrayAdd.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/openspecimen/SpecimenArrayEdit.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/openspecimen/InitCreateDefineArray.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/openspecimen/SearchObject.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/openspecimen/SimpleSearch.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/openspecimen/CreateCategoryAction.do*</exclude>
+		<exclude>/openspecimen/ImportPVAction.do*</exclude>
+		<exclude>/openspecimen/ConsentVerification.do</exclude>
+		<exclude>/openspecimen/BulkMatchingFileUpload.do*</exclude>
+		<exclude>/openspecimen/UploadSprReport.do*</exclude>
+		<exclude>/openspecimen/UploadConsentDocumentAction.do*</exclude>
+		<exclude>/openspecimen/SubmitOrder.do*</exclude>
+		<exclude>/openspecimen/CreateAliquotsFromSpecimen.do*</exclude>
+		<exclude>/openspecimen/GetAliquotInfoAjax.do*</exclude>
+		<exclude>/openspecimen/CPQueryParticipantEdit.do*</exclude>
 		<exclude>.*.jss</exclude>
 		<exclude>.*.css</exclude>
 	</exclude-set>
