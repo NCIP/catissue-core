@@ -1,6 +1,6 @@
 Dear $user.lastName, $user.firstName<br>
 <br>
-Congratulations! You are now a member of caTissue. Your registration details are as follows:<br> 
+Congratulations! You are now a member of OpenSpecimen. Your registration details are as follows:<br> 
 <table> 
 	<tr>
 		<td> Login Name  </td> <td>: $user.loginName </td>
@@ -47,7 +47,7 @@ Congratulations! You are now a member of caTissue. Your registration details are
 </table>
 <br>
 #if($user.targetIdpLoginName != "null") 
-Congratulations, you have successfully been migrated to your institution's user account. Please use the same to log into caTissue from now on.<br>
+Congratulations, you have successfully been migrated to your institution's user account. Please use the same to log into OpenSpecimen from now on.<br>
 #end
 <br>
 Please click the below link to set your password:

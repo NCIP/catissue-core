@@ -1,6 +1,6 @@
 Dear $user.lastName, $user.firstName<br>
 <br>
-Congratulations! You are now a member of caTissue. Your registration details are as follows:<br> 
+Congratulations! You are now a member of OpenSpecimen. Your registration details are as follows:<br> 
 <table> 
 
 	<tr>
@@ -45,7 +45,7 @@ Congratulations! You are now a member of caTissue. Your registration details are
 			$appUrl/rest/ng/users/$user.id/password?token=$user.passwordToken<br>
 		<br>
 	#else
-		To login into caTissue use your LDAP credentials   
+		To login into OpenSpecimen use your LDAP credentials   
 	#end
 	
 <br>	
