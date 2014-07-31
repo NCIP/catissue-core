@@ -9,6 +9,7 @@
     #myoutercontainer { text-align: center;display:block;float: left; }
     #myinnercontainer { display: table-cell; vertical-align: middle;}
     .countTxt {text-align: right;border:0px;}
+	
 </style>
 <%
     /**
@@ -382,7 +383,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
                 
                     <td width="20%" align="right" class="black_ar_t"><b><bean:message key="app.comments"/></b></td>
                     <td width="30%" colspan="4" align="left"  class="align_left_style1">
-                        <html:textarea styleClass="black_ar" style="width: 64%; height:40px;" property="comment"/>
+                        <html:textarea styleClass="black_ar" rows="2" cols="90" property="comment"/>
                         
                             <%
                                 String changeAction = "setFormAction('"+formName+"')";

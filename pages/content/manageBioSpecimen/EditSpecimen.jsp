@@ -610,7 +610,7 @@
                              <div style="display:none" id="derivedDiv">
                              
                              <bean:message key="derive.noOfSpecimens"/>&nbsp;
-                            <html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" style="text-align:right"/>
+                            <html:text styleClass="black_ar" styleId="numberOfSpecimens" size="10" property="numberOfSpecimens" value="1" style="text-align:right"/>
                         </div>
                         <div style="display:none" id="aliquotDiv">
                             
@@ -693,7 +693,13 @@ var staticEntityName='${entityName}';
 var hasConsents = ${hasConsents};
 </logic:equal>
 <logic:equal name="hideButton" value="true">
-document.getElementById('submitButton').disabled=true;
+document.getElementById('specimenSubmitButton').disabled=true;
+</logic:equal>
+<logic:equal name="showScgErr" value="true">
+	
+	document.getElementById('success').style.display='none';
+	document.getElementById('errorMsg').innerHTML = '<bean:message key="errors.parent.scg.collect"/>';
+	document.getElementById('error').style.display='block';
 </logic:equal>
 var isImageEnabled = ${isImageEnabled};
 

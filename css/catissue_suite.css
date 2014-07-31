@@ -1154,4 +1154,11 @@ font: bold 11px sans-serif;
 	height:35px;
 	overflow-x:hidden;
 	overflow-y:auto;
+
+}
+
+@-moz-document url-prefix() {
+    textarea {
+        height: 2.75em;
+    }
 }

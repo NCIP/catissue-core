@@ -12,8 +12,6 @@ import krishagni.catissueplus.dto.SpecimenDTO;
 import krishagni.catissueplus.util.SpecimenUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -49,28 +47,6 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			hibernateDao = (HibernateDAO) AppUtility.openDAOSession(null);
 			SpecimenRequirement requirement = (SpecimenRequirement) hibernateDao.retrieveById(
 					SpecimenRequirement.class.getName(), requirementId);
-			//			if(StringUtils.isBlank(request.getParameter("parentId")) && "null".equals(request.getParameter("parentId")) && StringUtils.isBlank(request.getParameter("scgId")) && "null".equals(request.getParameter("scgId")))
-			//			{
-			//				ActionErrors errors = new ActionErrors();
-			////				You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
-			//				//Error
-			//				ActionError error = new ActionError("errors.parent.scg.collect");
-			//				errors.add("errors.parent.scg.collect", error);
-			//				saveErrors(request, errors);
-			//				request.setAttribute("hideButton", true);
-			//			}
-			//			else if(request.getParameter("parentId") == null && Constants.NEW_SPECIMEN.equals(requirement.getLineage()))
-			//			{
-			//				ActionErrors errors = new ActionErrors();
-			//				
-			////				You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
-			//				//Error
-			//				ActionError error = new ActionError("errors.parent.collect");
-			//				errors.add("errors.parent.collect", error);
-			//				saveErrors(request, errors);
-			//				request.setAttribute("hideButton", true);
-			//			}
-//boolean flag = true;
 			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			if (!StringUtils.isBlank(request.getParameter("scgId")) && !"null".equals(request.getParameter("scgId"))) {
 				Long scgId = Long.valueOf(request.getParameter("scgId"));
@@ -78,14 +54,8 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			}
 			else {
 				specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
-//				flag = false;
-				ActionErrors errors = new ActionErrors();
-				//			You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
-				//Error
-				ActionError error = new ActionError("errors.parent.scg.collect");
-				errors.add("errors.parent.scg.collect", error);
-				saveErrors(request, errors);
-				request.setAttribute("hideButton", true);
+				request.setAttribute("hideButton", true); 
+				request.setAttribute("showScgErr", true);
 			}
 			if (!StringUtils.isBlank(request.getParameter("parentId")) && !"null".equals(request.getParameter("parentId"))) {
 				Long parentId = Long.valueOf(request.getParameter("parentId"));
@@ -95,16 +65,6 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 				specimenDTO.setParentSpecimenBarcode(parentSpecimen.getBarcode());
 				specimenDTO.setParentSpecimenName(parentSpecimen.getLabel());
 			}
-//			else if (Constants.NEW_SPECIMEN.equals(requirement.getLineage()) && flag) {
-//				ActionErrors errors = new ActionErrors();
-//
-//				//			You have to enter Specimen Collection Group of Parent Specimen on Parent Specimen page before creating derived Specimens
-//				//Error
-//				ActionError error = new ActionError("errors.parent.collect");
-//				errors.add("errors.parent.collect", error);
-//				saveErrors(request, errors);
-//				request.setAttribute("hideButton", true);
-//			}
 
 			if (scg != null) {
 				specimenDTO.setSpecimenCollectionGroupId(scg.getId());
@@ -115,7 +75,6 @@ public class AddSpecimenFromRequirementAction extends CatissueBaseAction {
 			}
 			specimenDTO.setRequirementId(requirementId);
 			specimenDTO.setLineage(requirement.getLineage());
-//			specimenDTO.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
 			specimenDTO.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			specimenDTO.setAvailable(Boolean.FALSE);
 			specimenDTO.setIsVirtual(Boolean.TRUE);
