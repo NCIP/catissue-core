@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -94,6 +95,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/** The collection eventdate of event. */
 	private String collectionEventdateOfEvent;
+	
+	private Date registrationDate;
 
 	/** The collection event time in hours. */
 	private String collectionEventTimeInHours;
@@ -218,6 +221,14 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public void setIsPhiView(String isPhiView) {
 		this.isPhiView = isPhiView;
+	}
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
 	/**

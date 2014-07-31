@@ -255,6 +255,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 							.get(0);
 				}
 			}
+			specimenCollectionGroupForm.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
 			User witness = null;
 			if (collectionProtocolRegistration.getId() != null)
 			{
@@ -1272,7 +1273,20 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			HttpServletRequest request)
 	{
 		// set the current Date and Time for the event.
-		final Calendar cal = Calendar.getInstance();
+		final Calendar cal = Calendar.getInstance(); 
+		Calendar regCal = Calendar.getInstance();
+		regCal.setTime(specimenForm.getRegistrationDate());
+		String cpeId = String.valueOf(specimenForm.getCollectionProtocolEventId());
+		String studyPoint = "0";
+		List<NameValueBean> cpeList = (List)request.getAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST);
+		for (NameValueBean nvb : cpeList) {
+			if(cpeId.equals(nvb.getValue())) 
+			{
+				studyPoint = nvb.getName().split(",")[0];
+				break;
+			}
+		} 
+		regCal.add(Calendar.DATE, Double.valueOf(studyPoint).intValue());
 		// Collection Event fields
 		if (specimenForm.getCollectionEventdateOfEvent() == null)
 		{
@@ -1282,7 +1296,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			}
 			else
 			{
-				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(),
+				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(regCal.getTime(),
 						CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}
@@ -1308,7 +1322,7 @@ public class SpecimenCollectionGroupAction extends CatissueBaseAction
 			}
 			else
 			{
-				specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(),
+				specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(regCal.getTime(),
 						CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}

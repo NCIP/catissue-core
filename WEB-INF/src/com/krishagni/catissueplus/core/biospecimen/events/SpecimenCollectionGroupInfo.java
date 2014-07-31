@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
@@ -10,7 +11,6 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.common.util.global.ApplicationProperties;
-
 import krishagni.catissueplus.dto.BiohazardDTO;
 
 public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectionGroupInfo> {
@@ -193,7 +193,10 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 		//		scgInfo.setId(collectionProtocolEvent.getId());
 		scgInfo.setCollectionStatus(Status.SCG_COLLECTION_STATUS_PENDING.getStatus());
 		scgInfo.setHasChilds(false);
-		scgInfo.setRegistrationDate(registrationDate);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(registrationDate);
+		cal.add(Calendar.DATE, collectionProtocolEvent.getStudyCalendarEventPoint().intValue());
+		scgInfo.setRegistrationDate(cal.getTime());
 		scgInfo.setCollectionPointLabel(collectionProtocolEvent.getCollectionPointLabel());
 		scgInfo.setEventPoint(collectionProtocolEvent.getStudyCalendarEventPoint());
 		scgInfo.setEventId(collectionProtocolEvent.getId());
