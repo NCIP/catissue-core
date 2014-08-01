@@ -93,3 +93,15 @@ ul.tree ul li:last-child:before {
 .tree  li .active{
     background-color:#ccc;
 }
+
+.tree-data {
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  overflow: hidden;
+}
+    
+.tooptip-data {
+  float: left;
+  display: inline-flex;
+}
+

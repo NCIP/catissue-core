@@ -19,19 +19,3 @@
 <ul  ng-model="data.nodes" ng-show="data.state == 'opened'" role="group">
   <li ng-repeat="data in data.nodes" ng-include="'ngweb/pages/templates/tree_item.html'"></li>
 </ul>
-
-<style type="text/css">
-  .tree-data {
-    text-overflow: ellipsis; 
-    white-space: nowrap;
-    width: 15em; 
-    overflow: hidden;
-  }
-    
-  .tooptip-data {
-    float: left;
-    display: inline-flex;
-  }
- </style>
- 
- 
