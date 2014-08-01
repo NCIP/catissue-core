@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface UserDao extends Dao<User> {
 	
-	List<User> getAllUsers();
+	List<User> getAllUsers(int i);
 
 	User getUser(String witnessName);
 

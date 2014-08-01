@@ -1,9 +1,7 @@
 
 package com.krishagni.catissueplus.core.services.testdata;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
@@ -12,8 +10,8 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DepartmentTestData {
 
@@ -103,6 +101,18 @@ public class DepartmentTestData {
 		Set<User> users = new HashSet<User>();
 		users.add(new User());
 		return users;
+	}
+	
+	public static GetDepartmentEvent getDepartmentEvent() {
+		GetDepartmentEvent event = new GetDepartmentEvent();
+		event.setId(1l);
+		return event;
+	}
+
+	public static GetDepartmentEvent getDepartmentEventForName() {
+		GetDepartmentEvent event = new GetDepartmentEvent();
+		event.setName("Abc");
+		return event;
 	}
 
 }

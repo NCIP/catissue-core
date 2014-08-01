@@ -48,7 +48,10 @@
     <query name="getInstituteByName">
     	FROM com.krishagni.catissueplus.core.administrative.domain.Institute institute WHERE institute.name = :name 
     </query>
- 
+    
+    <query name="getInstitutes">
+    	FROM com.krishagni.catissueplus.core.administrative.domain.Institute 
+    </query>
  </class>
 
 </hibernate-mapping>

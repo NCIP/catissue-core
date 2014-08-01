@@ -20,7 +20,10 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetAllStorageContainersEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllStorageContainersEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
@@ -367,6 +370,31 @@ public class StorageContainerTestData {
 
 	public static DisableStorageContainerEvent getDisableStorageContainerEventForName() {
 		DisableStorageContainerEvent event = new DisableStorageContainerEvent();
+		event.setName("Abc");
+		return event;
+	}
+	
+	public static ReqAllStorageContainersEvent getAllStorageContainerEvent() {
+		ReqAllStorageContainersEvent event = new ReqAllStorageContainersEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static List<StorageContainer> getStorageContainers() {
+		List<StorageContainer> StorageContainers = new ArrayList<StorageContainer>();
+		StorageContainers.add(getStorageContainer(1l));
+		StorageContainers.add(getStorageContainer(2l));
+		return StorageContainers;
+	}
+
+	public static GetStorageContainerEvent getStorageContainerEvent() {
+		GetStorageContainerEvent event = new GetStorageContainerEvent();
+		event.setId(1l);
+		return event;
+	}
+
+	public static GetStorageContainerEvent getStorageContainerEventForName() {
+		GetStorageContainerEvent event = new GetStorageContainerEvent();
 		event.setName("Abc");
 		return event;
 	}

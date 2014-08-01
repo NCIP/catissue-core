@@ -9,7 +9,10 @@ import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetAllInstitutesEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetails;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllInstitutesEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -54,6 +57,12 @@ public class InstituteTestData {
 		event.getInstituteDetails().setName(null);
 		return event;
 	}
+	
+	public static UpdateInstituteEvent getUpdateInstituteEventForName() {
+		UpdateInstituteEvent event = getUpdateInstituteEvent();
+		event.setName("Ads");
+		return event;
+	}
 
 	public static DisableInstituteEvent getDisableInstituteEventForName() {
 		DisableInstituteEvent  event = new DisableInstituteEvent();
@@ -85,6 +94,31 @@ public class InstituteTestData {
 		values.add(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		values.add(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		return values;
+	}
+
+	public static ReqAllInstitutesEvent getAllInstitutesEvent() {
+		ReqAllInstitutesEvent event = new ReqAllInstitutesEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static List<Institute> getInstitutes() {
+		List<Institute> institutes = new ArrayList<Institute>();
+		institutes.add(getInstitute(1l));
+		institutes.add(getInstitute(2l));
+		return institutes;
+	}
+
+	public static GetInstituteEvent getInstituteEvent() {
+		GetInstituteEvent event = new GetInstituteEvent();
+		event.setInstId(1l);
+		return event;
+	}
+
+	public static GetInstituteEvent getInstituteEventForName() {
+		GetInstituteEvent event = new GetInstituteEvent();
+		event.setName("Abc");
+		return event;
 	}
 
 }

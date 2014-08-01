@@ -17,11 +17,11 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEve
 import com.krishagni.catissueplus.core.administrative.events.DepartmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDisabledEvent;
+import com.krishagni.catissueplus.core.administrative.events.DepartmentGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
-import com.krishagni.catissueplus.core.administrative.events.DisableUserEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
-import com.krishagni.catissueplus.core.administrative.events.UserDisabledEvent;
 import com.krishagni.catissueplus.core.administrative.services.DepartmentService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
@@ -35,7 +35,6 @@ public class DepartmentController {
 	@Autowired
 	private DepartmentService departmentSvc;
 
-	@Autowired
 	private HttpServletRequest httpServletRequest;
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -88,6 +87,32 @@ public class DepartmentController {
 		event.setName(name);
 		event.setSessionDataBean(getSession());
 		DepartmentDisabledEvent resp = departmentSvc.deleteDepartment(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public String getDepartment(@PathVariable Long id) {
+		GetDepartmentEvent event = new GetDepartmentEvent();
+		event.setId(id);
+		DepartmentGotEvent resp = departmentSvc.getDepartment(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	public String getDepartment(@PathVariable String name) {
+		GetDepartmentEvent event = new GetDepartmentEvent();
+		event.setName(name);
+		DepartmentGotEvent resp = departmentSvc.getDepartment(event);
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getMessage();
 		}

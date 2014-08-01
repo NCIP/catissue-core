@@ -89,7 +89,7 @@ public class SpecimenLabelPrinterFactoryImpl implements SpecimenLabelPrinterFact
 	}
 
 	private void populatePrintRules() {
-		List<SpecimenPrintRule> rules = daoFactory.getSpecimenPrintRuleDao().getRules();
+		List<SpecimenPrintRule> rules = daoFactory.getSpecimenPrintRuleDao().getRules(0);
 		printLabelRules = new HashMap<String, SpecimenPrintRule>();
 		for (SpecimenPrintRule rule : rules) {
 			String key = rule.getSpecimenClass() + "_" + rule.getSpecimenType() + "_" + rule.getWorkstationIP();

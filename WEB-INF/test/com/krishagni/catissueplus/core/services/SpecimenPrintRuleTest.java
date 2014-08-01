@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +15,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
@@ -28,10 +28,14 @@ import com.krishagni.catissueplus.core.printer.printRule.domain.factory.PrintRul
 import com.krishagni.catissueplus.core.printer.printRule.domain.factory.impl.SpecimenPrintRuleFactoryImpl;
 import com.krishagni.catissueplus.core.printer.printRule.events.CreatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.DeletePrintRuleEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.GetAllPrintRulesEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.GetPrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PatchPrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleCreatedEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleDeletedEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleGotEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleUpdatedEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.ReqAllPrintRulesEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRuleDetails;
 import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.repository.SpecimenPrintRuleDao;
@@ -407,5 +411,47 @@ public class SpecimenPrintRuleTest {
 		PrintRuleUpdatedEvent response = printRuleService.patchPrintRule(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+	
+	@Test
+	public void testGetAllPrintRules() {
+		when(printRuleDao.getRules(eq(1000))).thenReturn(SpecimenPrintRuleTestData.getPrintRules());
+		ReqAllPrintRulesEvent reqEvent = SpecimenPrintRuleTestData.getAllPrintRulesEvent();
+		GetAllPrintRulesEvent response = printRuleService.getPrintAllRules(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetPrintRuleById() {
+		when(printRuleDao.getPrintRule(anyLong())).thenReturn(SpecimenPrintRuleTestData.getPrintRule(1l));
+		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEvent();
+		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetPrintRuleWithWrongInstWithId() {
+		when(printRuleDao.getPrintRule(anyLong())).thenReturn(null);
+		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEvent();
+		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	
+	@Test
+	public void testGetPrintRuleByName() {
+		when(printRuleDao.getPrintRuleByName(anyString())).thenReturn(SpecimenPrintRuleTestData.getPrintRule(1l));
+		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEventForName();
+		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+	
+	@Test
+	public void testGetPrintRuleWithWrongInst() {
+		when(printRuleDao.getPrintRuleByName(anyString())).thenReturn(null);
+		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEventForName();
+		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 }

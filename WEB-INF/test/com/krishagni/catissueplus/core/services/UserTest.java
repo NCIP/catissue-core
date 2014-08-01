@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.services;
 import static org.junit.Assert.assertEquals; 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -679,7 +680,7 @@ public class UserTest {
 	
 	@Test
 	public void testGetAllUsers() {
-		when(userDao.getAllUsers()).thenReturn(UserTestData.getUsers());
+		when(userDao.getAllUsers(eq(1000))).thenReturn(UserTestData.getUsers());
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
 		AllUsersEvent resp = userService.getAllUsers(req);
 		assertNotNull("response cannot be null", resp.getUsers());

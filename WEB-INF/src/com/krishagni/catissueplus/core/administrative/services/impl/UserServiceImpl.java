@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
@@ -40,10 +37,8 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class UserServiceImpl implements UserService {
 
-	@Autowired
 	private DaoFactory daoFactory;
 
-	@Autowired
 	private UserFactory userFactory;
 
 	private final String LOGIN_NAME = "login name";
@@ -52,7 +47,6 @@ public class UserServiceImpl implements UserService {
 
 	private final String CATISSUE = "catissue";
 
-	@Autowired
 	private EmailSender emailSender;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -70,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
-		List<User> users = daoFactory.getUserDao().getAllUsers();
+		List<User> users = daoFactory.getUserDao().getAllUsers(req.getMaxResults());
 		List<UserSummary> result = new ArrayList<UserSummary>();
 
 		for (User user : users) {
@@ -232,6 +226,14 @@ public class UserServiceImpl implements UserService {
 			return PasswordForgottenEvent.serverError(e);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public GetUserEvent getUser(Long userId) {
+		User user = daoFactory.getUserDao().getUser(userId);
+		UserDetails userDetails = UserDetails.fromDomain(user);
+		return GetUserEvent.ok(userDetails);
+	}
 
 	@Override
 	public PasswordValidatedEvent validatePassword(ValidatePasswordEvent event) {
@@ -284,14 +286,6 @@ public class UserServiceImpl implements UserService {
 		if (!oldUser.getEmailAddress().equals(newUser.getEmailAddress())) {
 			ensureUniqueEmailAddress(newUser.getEmailAddress(), exceptionHandler);
 		}
-	}
-
-	@Override
-	@PlusTransactional
-	public GetUserEvent getUser(Long userId) {
-		User user = daoFactory.getUserDao().getUser(userId);
-		UserDetails userDetails = UserDetails.fromDomain(user);
-		return GetUserEvent.ok(userDetails);
 	}
 
 }

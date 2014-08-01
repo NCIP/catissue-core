@@ -6,6 +6,7 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +16,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.printer.printRule.domain.SpecimenPrintRule;
 import com.krishagni.catissueplus.core.printer.printRule.events.CreatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.DeletePrintRuleEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.GetPrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PatchPrintRuleEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.ReqAllPrintRulesEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRuleDetails;
 import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleEvent;
 import com.krishagni.catissueplus.core.privileges.PrivilegeType;
@@ -287,6 +290,31 @@ public class SpecimenPrintRuleTestData {
 		details.setName("New_print_rule");
 		details.setWorkstationIP("192.168.2.2");
 		event.setPrintRuleDetails(details);
+		return event;
+	}
+	
+	public static ReqAllPrintRulesEvent getAllPrintRulesEvent() {
+		ReqAllPrintRulesEvent event = new ReqAllPrintRulesEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static List<SpecimenPrintRule> getPrintRules() {
+		List<SpecimenPrintRule> PrintRules = new ArrayList<SpecimenPrintRule>();
+		PrintRules.add(getPrintRule(1l));
+		PrintRules.add(getPrintRule(2l));
+		return PrintRules;
+	}
+
+	public static GetPrintRuleEvent getPrintRuleEvent() {
+		GetPrintRuleEvent event = new GetPrintRuleEvent();
+		event.setId(1l);
+		return event;
+	}
+
+	public static GetPrintRuleEvent getPrintRuleEventForName() {
+		GetPrintRuleEvent event = new GetPrintRuleEvent();
+		event.setName("Abc");
 		return event;
 	}
 }

@@ -1,10 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;

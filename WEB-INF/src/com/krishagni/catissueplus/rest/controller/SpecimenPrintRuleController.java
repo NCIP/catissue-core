@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -23,10 +25,14 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.printer.printRule.domain.factory.PrintRuleErrorCode;
 import com.krishagni.catissueplus.core.printer.printRule.events.CreatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.DeletePrintRuleEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.GetAllPrintRulesEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.GetPrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PatchPrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleCreatedEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleDeletedEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleGotEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleUpdatedEvent;
+import com.krishagni.catissueplus.core.printer.printRule.events.ReqAllPrintRulesEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRuleDetails;
 import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.services.PrintRuleService;
@@ -164,6 +170,48 @@ public class SpecimenPrintRuleController {
 		return null;
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<SpecimenPrintRuleDetails> getSpecimenPrintRule(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
+		ReqAllPrintRulesEvent event  = new ReqAllPrintRulesEvent();
+		event.setMaxResults(Integer.parseInt(maxResults));
+		GetAllPrintRulesEvent resp = specimenPrintRuleSvc.getPrintAllRules(event);
+
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value ="/{id}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SpecimenPrintRuleDetails getPrintRule(@PathVariable Long id) {
+		GetPrintRuleEvent event = new GetPrintRuleEvent();
+		event.setId(id);
+		PrintRuleGotEvent resp = specimenPrintRuleSvc.getPrintRule(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SpecimenPrintRuleDetails getInstitute(@PathVariable String name) {
+		GetPrintRuleEvent event = new GetPrintRuleEvent();
+		event.setName(name);
+		PrintRuleGotEvent resp = specimenPrintRuleSvc.getPrintRule(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

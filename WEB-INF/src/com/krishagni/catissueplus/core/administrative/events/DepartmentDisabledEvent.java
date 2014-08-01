@@ -30,7 +30,7 @@ public class DepartmentDisabledEvent extends ResponseEvent{
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
 		resp.setErroneousFields(erroneousField);
-		return resp;
+		return resp; 
 	}
 
 	public static DepartmentDisabledEvent serverError(Throwable... t) {
@@ -42,9 +42,9 @@ public class DepartmentDisabledEvent extends ResponseEvent{
 		return resp;
 	}
 
-	public static DepartmentDisabledEvent notFound(Long userId) {
+	public static DepartmentDisabledEvent notFound(Long deptId) {
 		DepartmentDisabledEvent resp = new DepartmentDisabledEvent();
-		resp.setId(userId);
+		resp.setId(deptId);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

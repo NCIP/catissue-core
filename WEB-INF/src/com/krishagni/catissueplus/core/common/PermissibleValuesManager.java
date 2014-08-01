@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.common;
 
 import java.util.List;
 
-import com.krishagni.catissueplus.core.administrative.domain.PvInfo;
+import com.krishagni.catissueplus.core.administrative.events.PvInfo;
 
 
 public interface PermissibleValuesManager {

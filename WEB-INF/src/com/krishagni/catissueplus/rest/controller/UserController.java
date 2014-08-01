@@ -69,8 +69,9 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
-	public List<UserSummary> getAllUsers() {
+	public List<UserSummary> getAllUsers(@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
+		req.setMaxResults(Integer.parseInt(maxResults));
 		AllUsersEvent resp = userService.getAllUsers(req);
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getUsers();

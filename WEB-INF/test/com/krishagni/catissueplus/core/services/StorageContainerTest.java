@@ -7,6 +7,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -21,10 +22,14 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.StorageCont
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.CreateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetAllStorageContainersEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchStorageContainerEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllStorageContainersEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetails;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDisabledEvent;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
@@ -407,7 +412,6 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(StorageContainerErrorCode.AUTO_GENERATED_LABEL.message(),
 				response.getErroneousFields()[0].getErrorMessage());
-
 	}
 
 	@Test
@@ -417,7 +421,6 @@ public class StorageContainerTest {
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(StorageContainerErrorCode.MISSING_ATTR_VALUE.message(),
 				response.getErroneousFields()[0].getErrorMessage());
-
 	}
 
 	@Test
@@ -466,7 +469,6 @@ public class StorageContainerTest {
 		StorageContainerCreatedEvent response = storageContainerService.createStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
-
 	}
 
 	@Test
@@ -560,6 +562,47 @@ public class StorageContainerTest {
 		assertEquals(StorageContainerTestData.ACTIVITY_STATUS_CLOSED, scToDelete.getActivityStatus());
 	}
 
+	@Test
+	public void testGetAllStorageContainers() {
+		when(storageContainerDao.getAllStorageContainers(eq(1000))).thenReturn(StorageContainerTestData.getStorageContainers());
+		ReqAllStorageContainersEvent reqEvent = StorageContainerTestData.getAllStorageContainerEvent();
+		GetAllStorageContainersEvent response = storageContainerService.getStorageContainers(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetStorageContainerById() {
+		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
+		GetStorageContainerEvent reqEvent = StorageContainerTestData.getStorageContainerEvent();
+		StorageContainerGotEvent response = storageContainerService.getStorageContainer(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetStorageContainerWithWrongInstWithId() {
+		when(storageContainerDao.getStorageContainer(anyLong())).thenReturn(null);
+		GetStorageContainerEvent reqEvent = StorageContainerTestData.getStorageContainerEvent();
+		StorageContainerGotEvent response = storageContainerService.getStorageContainer(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testGetStorageContainerByName() {
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(StorageContainerTestData.getStorageContainer(1l));
+		GetStorageContainerEvent reqEvent = StorageContainerTestData.getStorageContainerEventForName();
+		StorageContainerGotEvent response = storageContainerService.getStorageContainer(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getStorageContainerDetails());
+	}
+	
+	@Test
+	public void testGetStorageContainerWithWrongInst() {
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(null);
+		GetStorageContainerEvent reqEvent = StorageContainerTestData.getStorageContainerEventForName();
+		StorageContainerGotEvent response = storageContainerService.getStorageContainer(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
 	@Test
 	public void testStorageContainerDisableWithServerErr() {
 		DisableStorageContainerEvent reqEvent = StorageContainerTestData.getDisableStorageContainerEvent();

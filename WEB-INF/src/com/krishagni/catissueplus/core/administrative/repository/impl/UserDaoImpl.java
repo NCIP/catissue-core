@@ -15,8 +15,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<User> getAllUsers() {
-		return sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_USERS).list();
+	public List<User> getAllUsers(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_USERS);
+		query.setMaxResults(maxResults);
+		return query.list();
 	}
 
 	@Override

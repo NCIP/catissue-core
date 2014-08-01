@@ -1,8 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-public class ReqAllUsersEvent extends RequestEvent {
+public class ReqAllInstitutesEvent extends ResponseEvent {
 
 	private int maxResults;
 
@@ -13,5 +13,4 @@ public class ReqAllUsersEvent extends RequestEvent {
 	public void setMaxResults(int maxResults) {
 		this.maxResults = maxResults;
 	}
-
 }

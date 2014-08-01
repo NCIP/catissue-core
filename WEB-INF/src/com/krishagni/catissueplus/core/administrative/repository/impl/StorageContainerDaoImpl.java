@@ -14,6 +14,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	private static final String FQN = StorageContainer.class.getName();
 
 	private static final String GET_CONTAINER_BY_BARCODE = FQN+".getContainerByBarcode";
+	
+	private static final String GET_CONTAINERS = FQN+".getContainers";
 
 	private static final String GET_CONTAINER_BY_NAME = FQN+".getContainerByName";
 
@@ -46,6 +48,14 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CONTAINER_BY_BARCODE);
 		query.setString("barcode", barcode);
 		return query.list().isEmpty() ? true : false;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<StorageContainer> getAllStorageContainers(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CONTAINERS);
+		query.setMaxResults(maxResults);
+		return query.list();
 	}
 
 }

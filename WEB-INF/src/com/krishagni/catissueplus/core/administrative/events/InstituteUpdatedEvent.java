@@ -1,4 +1,3 @@
-
 package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
@@ -6,9 +5,12 @@ import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class InstituteUpdatedEvent extends ResponseEvent {
+
 	private InstituteDetails instituteDetails;
 
 	private Long instituteId;
+
+	private String name;
 
 	public InstituteDetails getInstituteDetails() {
 		return instituteDetails;
@@ -26,6 +28,14 @@ public class InstituteUpdatedEvent extends ResponseEvent {
 		this.instituteId = instituteId;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public static InstituteUpdatedEvent ok(InstituteDetails details) {
 		InstituteUpdatedEvent event = new InstituteUpdatedEvent();
 		event.setInstituteDetails(details);
@@ -33,7 +43,8 @@ public class InstituteUpdatedEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static InstituteUpdatedEvent invalidRequest(String message, ErroneousField... erroneousField) {
+	public static InstituteUpdatedEvent invalidRequest(String message,
+			ErroneousField... erroneousField) {
 		InstituteUpdatedEvent resp = new InstituteUpdatedEvent();
 		resp.setStatus(EventStatus.BAD_REQUEST);
 		resp.setMessage(message);
@@ -57,5 +68,10 @@ public class InstituteUpdatedEvent extends ResponseEvent {
 		return resp;
 	}
 
-
+	public static InstituteUpdatedEvent notFound(String name) {
+		InstituteUpdatedEvent resp = new InstituteUpdatedEvent();
+		resp.setName(name);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
 }

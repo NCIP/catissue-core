@@ -22,8 +22,10 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEve
 import com.krishagni.catissueplus.core.administrative.events.DepartmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDisabledEvent;
+import com.krishagni.catissueplus.core.administrative.events.DepartmentGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
@@ -243,6 +245,40 @@ public class DepartmentTest {
 		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+	
+	@Test
+	public void testGetDepartmentById() {
+		when(departmentDao.getDepartment(anyLong())).thenReturn(DepartmentTestData.getDepartment(1l));
+		GetDepartmentEvent reqEvent = DepartmentTestData.getDepartmentEvent();
+		DepartmentGotEvent response = departmentService.getDepartment(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetDepartmentWithWrongInstWithId() {
+		when(departmentDao.getDepartment(anyLong())).thenReturn(null);
+		GetDepartmentEvent reqEvent = DepartmentTestData.getDepartmentEvent();
+		DepartmentGotEvent response = departmentService.getDepartment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	
+	@Test
+	public void testGetDepartmentByName() {
+		when(departmentDao.getDepartmentByName(anyString())).thenReturn(DepartmentTestData.getDepartment(1l));
+		GetDepartmentEvent reqEvent = DepartmentTestData.getDepartmentEventForName();
+		DepartmentGotEvent response = departmentService.getDepartment(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+	
+	@Test
+	public void testGetDepartmentWithWrongInst() {
+		when(departmentDao.getDepartmentByName(anyString())).thenReturn(null);
+		GetDepartmentEvent reqEvent = DepartmentTestData.getDepartmentEventForName();
+		DepartmentGotEvent response = departmentService.getDepartment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 
 }

@@ -50,8 +50,11 @@ public class SpecimenPrintRuleDaoImpl extends AbstractDao<SpecimenPrintRule> imp
 	
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
-	public List<SpecimenPrintRule> getRules() {
+	public List<SpecimenPrintRule> getRules(int maxResults) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PRINT_RULES);
+		if(maxResults !=0) {
+			query.setMaxResults(maxResults);
+		}
 		return query.list();
 	}
 
@@ -59,5 +62,4 @@ public class SpecimenPrintRuleDaoImpl extends AbstractDao<SpecimenPrintRule> imp
 	public SpecimenPrintRule getPrintRule(Long id) {
 		return (SpecimenPrintRule) sessionFactory.getCurrentSession().get(SpecimenPrintRule.class, id);
 	}
-
 }

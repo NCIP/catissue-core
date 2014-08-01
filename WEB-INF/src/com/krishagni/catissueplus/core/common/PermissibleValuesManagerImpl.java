@@ -4,9 +4,9 @@ package com.krishagni.catissueplus.core.common;
 import java.util.Arrays;
 import java.util.List;
 
-import com.krishagni.catissueplus.core.administrative.domain.PvInfo;
 import com.krishagni.catissueplus.core.administrative.events.AllPvsEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetAllPVsEvent;
+import com.krishagni.catissueplus.core.administrative.events.PvInfo;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePvEvent;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;

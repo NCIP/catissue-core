@@ -1,4 +1,3 @@
-
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
@@ -25,8 +24,18 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		return (Institute) sessionFactory.getCurrentSession().get(Institute.class, id);
 	}
 	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Institute> getAllInstitutes(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_INSTITUTES);
+		query.setMaxResults(maxResults);
+		return query.list();
+	}
+	
 	private static final String FQN = Institute.class.getName();
 
 	private static final String GET_INSTITUTE_BY_NAME = FQN + ".getInstituteByName";
+	
+	private static final String GET_INSTITUTES = FQN + ".getInstitutes";
 
 }

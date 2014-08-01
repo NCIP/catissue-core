@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.domain.PvInfo;
 import com.krishagni.catissueplus.core.administrative.events.AddPvEvent;
 import com.krishagni.catissueplus.core.administrative.events.AllPvsEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeletePvEvent;
@@ -26,6 +25,7 @@ import com.krishagni.catissueplus.core.administrative.events.PermissibleValueDet
 import com.krishagni.catissueplus.core.administrative.events.PvAddedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PvDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PvEditedEvent;
+import com.krishagni.catissueplus.core.administrative.events.PvInfo;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
@@ -102,36 +102,6 @@ public class PermissibleValueController {
 		}
 		return null;
 	}
-
-	/*	@RequestMapping(method = RequestMethod.POST, value = "/csvInsert")
-		@ResponseStatus(HttpStatus.OK)
-		@ResponseBody	
-		public List<PvInfo> uploadFileForInsert(@PathVariable("file") MultipartFile file) {
-			UploadFileEvent req = new UploadFileEvent();
-			req.setFile(file);
-			
-			AllPvsEvent resp = pvSvc.insertPvs(req);
-			if (resp.getStatus() == EventStatus.OK) {
-				return resp.getPvs();
-			}
-			
-			return null;
-		}
-		
-		@RequestMapping(method = RequestMethod.POST, value = "/csvUpdate")
-		@ResponseStatus(HttpStatus.OK)
-		@ResponseBody	
-		public List<PvInfo> uploadFileForUpdate(@PathVariable("file") MultipartFile file) {
-			UploadFileEvent req = new UploadFileEvent();
-			req.setFile(file);
-			
-			AllPvsEvent resp = pvSvc.updatePvs(req);
-			if (resp.getStatus() == EventStatus.OK) {
-				return resp.getPvs();
-			}
-			
-			return null;
-		}*/
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

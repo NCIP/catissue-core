@@ -16,6 +16,6 @@ public interface SpecimenPrintRuleDao extends Dao<SpecimenPrintRule> {
 
 	public SpecimenPrintRule getPrintRule(Long id);
 
-	public List<SpecimenPrintRule> getRules();
+	public List<SpecimenPrintRule> getRules(int maxResults);
 
 }

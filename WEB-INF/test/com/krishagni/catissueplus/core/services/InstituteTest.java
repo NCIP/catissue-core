@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -20,10 +21,14 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.CreateInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableInstituteEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetAllInstitutesEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetails;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDisabledEvent;
+import com.krishagni.catissueplus.core.administrative.events.InstituteGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllInstitutesEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DepartmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
@@ -136,11 +141,31 @@ public class InstituteTest {
 		InstituteDetails createdInstitute = response.getInstituteDetails();
 		assertEquals(reqEvent.getInstituteDetails().getName(), createdInstitute.getName());
 	}
+	
+	@Test
+	public void testForSuccessfulInstituteUpdateForName() {
+		when(instituteDao.getInstituteByName(anyString())).thenReturn(InstituteTestData.getInstitute(1L));
+		UpdateInstituteEvent reqEvent = InstituteTestData.getUpdateInstituteEventForName();
+
+		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		InstituteDetails createdInstitute = response.getInstituteDetails();
+		assertEquals(reqEvent.getInstituteDetails().getName(), createdInstitute.getName());
+	}
 
 	@Test
 	public void testForInvalidInstituteUpdate() {
 		when(instituteDao.getInstitute(anyLong())).thenReturn(null);
 		UpdateInstituteEvent reqEvent = InstituteTestData.getUpdateInstituteEvent();
+
+		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testForInvalidInstituteUpdateInForInvalidName() {
+		when(instituteDao.getInstituteByName(anyString())).thenReturn(null);
+		UpdateInstituteEvent reqEvent = InstituteTestData.getUpdateInstituteEventForName();
 
 		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
@@ -159,6 +184,59 @@ public class InstituteTest {
 	
 	@Test
 	public void testInstituteUpdationWithEmptyInstituteName() {
+		when(instituteDao.getInstitute(anyLong())).thenReturn(InstituteTestData.getInstitute(1L));
+		UpdateInstituteEvent reqEvent = InstituteTestData.getUpdateInstituteEventForEmptyName();
+		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals(InstituteTestData.INSTITUTE_NAME, response.getErroneousFields()[0].getFieldName());
+		assertEquals(PrivilegeErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+	}
+	
+	@Test
+	public void testGetAllInstitutes() {
+		when(instituteDao.getAllInstitutes(eq(1000))).thenReturn(InstituteTestData.getInstitutes());
+		ReqAllInstitutesEvent reqEvent = InstituteTestData.getAllInstitutesEvent();
+		GetAllInstitutesEvent response = instituteService.getInstitutes(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetInstituteById() {
+		when(instituteDao.getInstitute(anyLong())).thenReturn(InstituteTestData.getInstitute(1l));
+		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEvent();
+		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+	
+	@Test
+	public void testGetInstituteWithWrongInstWithId() {
+		when(instituteDao.getInstitute(anyLong())).thenReturn(null);
+		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEvent();
+		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	
+	@Test
+	public void testGetInstituteByName() {
+		when(instituteDao.getInstituteByName(anyString())).thenReturn(InstituteTestData.getInstitute(1l));
+		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEventForName();
+		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+	
+	@Test
+	public void testGetInstituteWithWrongInst() {
+		when(instituteDao.getInstituteByName(anyString())).thenReturn(null);
+		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEventForName();
+		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+	
+	@Test
+	public void testInstituteGetWithEmptyInstituteName() {
 		when(instituteDao.getInstitute(anyLong())).thenReturn(InstituteTestData.getInstitute(1L));
 		UpdateInstituteEvent reqEvent = InstituteTestData.getUpdateInstituteEventForEmptyName();
 		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);

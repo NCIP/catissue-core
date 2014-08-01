@@ -1,8 +1,9 @@
-package com.krishagni.catissueplus.core.administrative.events;
+
+package com.krishagni.catissueplus.core.printer.printRule.events;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-public class ReqAllUsersEvent extends RequestEvent {
+public class ReqAllPrintRulesEvent extends RequestEvent {
 
 	private int maxResults;
 
