@@ -219,16 +219,24 @@ public class ImportQueries {
 			"      filename = ? )";
 	
 	private static final String INSERT_QUERY_ORA_SQL = 
-			"insert into catissue_saved_queries values(catissue_saved_queries_seq.nextval, ?, ?, ?, null, null, ?, ?, null)";
+			"insert into catissue_saved_queries " +
+			"  (identifier, title, created_by, last_updated_by, last_run_on, last_run_count, query_def, last_updated_on, deleted_on) " +
+			"values " +
+			"  (catissue_saved_queries_seq.nextval, ?, ?, ?, null, null, ?, ?, null)";
 
 	private static final String INSERT_QUERY_MY_SQL = 
-			"insert into catissue_saved_queries values(default, ?, ?, ?, null, null, ?, ?, null)";
-	
+			"insert into catissue_saved_queries " +
+			"  (identifier, title, created_by, last_updated_by, last_run_on, last_run_count, query_def, last_updated_on, deleted_on) " +
+			"values " +
+			"  (default, ?, ?, ?, null, null, ?, ?, null)";
+		
 	private static final String UPDATE_QUERY_SQL =
 			"update catissue_saved_queries " +
 		    "set title = ?, last_updated_by = ?, query_def = ?, last_updated_on = ? where identifier = ?";
 	
 	private static final String INSERT_CHANGE_LOG_SQL = 
-			"insert into catissue_import_queries_log values(?, ?, ?, ?, ?)"; // {filename, md5, status, datetime, id}
-	
+			"insert into catissue_import_queries_log " +
+			"  (filename, md5_digest, status, executed_on, query_id) " +
+			"values " +
+			"  (?, ?, ?, ?, ?)";	
 }
