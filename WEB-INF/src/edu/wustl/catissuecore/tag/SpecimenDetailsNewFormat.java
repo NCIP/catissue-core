@@ -1188,7 +1188,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			String collectionStatus=specimen.getCollectionStatus();			
 			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
 			{
+					if(isNumeric(specimen.getPositionDimensionOne())){
 				str[3] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),1,Integer.valueOf(specimen.getPositionDimensionOne())));
+					}
+					else{
+						str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
+					}
 			}
 			else
 			{
@@ -1197,7 +1202,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			str[4] = elementNamePrefix + "positionDimensionTwo";
 			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
 			{
+				
+				if(isNumeric(specimen.getPositionDimensionOne())){
 				str[5] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),2,Integer.valueOf(specimen.getPositionDimensionTwo())));
+				}else{
+					str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
+				}
 			}
 			else
 			{
@@ -1234,6 +1244,19 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		//bug 11169 end
 		return str;
 	}
+
+	private boolean isNumeric(String positionDimensionOne) {
+		boolean isNumeric = true;
+		try{
+			Integer.valueOf(positionDimensionOne);
+		}catch(NumberFormatException e)
+	{
+			isNumeric = false;
+	}
+		return isNumeric;
+	}
+
+
 
 	/**
 	 * Gets the 2 ele det at.
