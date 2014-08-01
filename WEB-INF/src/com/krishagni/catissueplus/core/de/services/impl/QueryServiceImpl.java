@@ -955,8 +955,8 @@ public class QueryServiceImpl implements QueryService {
 			if (sdb.isAdmin() || this.countQuery || rowData.length == 0) {
 				return rowData;
 			}
-			
-			Long cpId = (Long)rowData[0];
+						
+			Long cpId = ((Number)rowData[0]).longValue();
 			Object[] screenedData = ArrayUtils.remove(rowData, 0);
 			
 			Boolean phiAccess = phiAccessMap.get(cpId);
