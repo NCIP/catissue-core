@@ -62,11 +62,8 @@ function callUpdateSpecimen()
 	document.forms[0].submit();
 
 }
-if(navigator.userAgent.indexOf('Mac')>=0)
-{
-	window.onload = function() {document.getElementById("td1").height=700;document.getElementById("multiplespeId").height=700; }
-	window.onresize = function() {document.getElementById("td1").height=700;document.getElementById("multiplespeId").height=700; }
-}
+
+
 </script>
 </head>
 <body>
@@ -76,20 +73,20 @@ if(navigator.userAgent.indexOf('Mac')>=0)
 			<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		</td>
 	</tr>
-		<tr>
+		<tr height="700">
 <%
       Object os = request.getHeader("user-agent");
       if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
       {
 %>
-			<td id="td1" height=700>
-				<div id="multiplespeId" style="overflow:auto;height:700;width:100%">
+			<td id="td1" height="700">
+				
 
 <%
       }else{
 %>
-			<td id="td1" height=100%>
-				<div id="multiplespeId" style="overflow:auto;height:700;width:100%">
+			<td id="td1" height="700">
+				
 <%
 }
 %>
