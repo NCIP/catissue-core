@@ -129,7 +129,7 @@
 							</label>
 		</td>
 		<td class="black_ar align_left_style1"  align="left" width="60%">
-			<html:textarea styleClass="black_ar" style="width: 68%; height:40px;" styleId="collectionEventComments" property="collectionEventComments" />
+			<html:textarea styleClass="black_ar" style="width: 68%" rows="2" styleId="collectionEventComments" property="collectionEventComments" />
 		</td>		
     </table></td>
     <td width="50%">
@@ -220,7 +220,7 @@
 			</label>
 		</td>						
 		<td width="60%" class="black_ar align_left_style1">
-			<html:textarea styleClass="black_ar" style="width: 68%; height:40px;"  styleId="receivedEventComments" property="receivedEventComments" />
+			<html:textarea styleClass="black_ar" style="width: 68%;" rows="2"  styleId="receivedEventComments" property="receivedEventComments" />
 		</td>	
       </tr>
 	   <tr>

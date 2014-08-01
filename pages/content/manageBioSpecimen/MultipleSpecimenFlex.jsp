@@ -109,7 +109,6 @@ function callUpdateSpecimen()
 								pluginspage="http://www.adobe.com/go/getflashplayer">
 							</embed>
 						</object>
-					</div>
 			</td>
 		</tr>
 		<tr>
