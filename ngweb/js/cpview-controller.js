@@ -15,7 +15,7 @@ angular.module('plus.cpview', [])
       return;
     }
     var participantId = selParticipant.id.split(',')[0];
-    var cpId = selectionCp.id;
+    var cpId = $scope.selectedCp.id;
     repository.getParticipantById(cpId, participantId).success(function(result) {
       var participant = {
         id: result.id + "," + result.cprId,
@@ -69,7 +69,7 @@ angular.module('plus.cpview', [])
         for (var i = 0; i < result.length; ++i) {
           var participant = {
             id: result[i].id + "," + result[i].cprId,
-            text: result[i].firstName + "," + result[i].lastName + '(' + result[i].ppId + ')'
+            text: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'
           }
           $scope.participantList.push(participant);
         }

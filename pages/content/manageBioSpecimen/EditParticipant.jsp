@@ -28,12 +28,12 @@
 		if (operation == "edit" ) {
 		  var id = "<%=form.getId()%>";
 		  var participant = {
-            id: id + "," + cprId,
-            name: lastName + "," + firstName + '(' + ppId + ')'           
-          }
+                    id: id + "," + cprId,
+                    text: lastName + "," + firstName + '(' + ppId + ')'           
+                  };
 		  var newParticipant = ppId + "," + cprId;
 		  parent.handleCpView(participant, null, null);
-        }
+                }
 
 		function setSubmittedForParticipanteMPIGenerate(submittedFor,forwardTo){
 			var noOfreg = '<%=noOrRowsCollectionProtocolRegistration%>';

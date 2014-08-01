@@ -72,8 +72,8 @@
         <query name="getPhiParticipantsByCpId">
             select cpr.id, participant.id,  
             case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , 
-            case when participant.lastName is null then ' ' else participant.lastName end , 
-            case when participant.firstName is null then ' ' else participant.firstName end 
+            case when participant.firstName is null then ' ' else participant.firstName end,
+            case when participant.lastName is null then ' ' else participant.lastName end
             from CollectionProtocolRegistration cpr inner join 
             cpr.participant participant 
             inner join cpr.collectionProtocol cp 
@@ -105,8 +105,8 @@
             select
             cpr.id, participant.id,
             case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,
-            case when participant.lastName is null then ' ' else participant.lastName end , 
-            case when participant.firstName is null then ' ' else participant.firstName end
+            case when participant.firstName is null then ' ' else participant.firstName end,
+            case when participant.lastName is null then ' ' else participant.lastName end
             from
             CollectionProtocolRegistration cpr
             inner join

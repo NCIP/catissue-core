@@ -89,6 +89,8 @@ angular.module("plus.directives", [])
         scope.$watch('elem', function(selected) {
           if (!selected || !selected.id) {
             control.setValue('');
+          } else {
+            control.setValue(selected.id);
           }
         });
       }
