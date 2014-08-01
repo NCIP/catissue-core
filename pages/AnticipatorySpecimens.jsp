@@ -808,7 +808,10 @@ var isSCGPresent = false;
 </script>
 <logic:notEmpty name="scgSummaryDTO">
 <script>
-isSCGPresent = true;
+  isSCGPresent = true;
+
+  var scgId =  ${scgSummaryDTO.scgId}
+  parent.handleCpView(null, scgId , null);
 </script>
 <%@ include file="/pages/content/manageBioSpecimen/SpecimenCollectionGroupSummary.jsp"%>
 </logic:notEmpty>
