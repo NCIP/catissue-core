@@ -56,7 +56,7 @@ angular.module("plus.directives", [])
         query         : "&onQuery",
         onSelect      : "&onSelect",
         initSelection : "&onInitselectionfn",
-	    elem          : "=ngModel"
+        elem          : "=ngModel"
       },
 
       link: function(scope, element, attrs) {
@@ -81,10 +81,16 @@ angular.module("plus.directives", [])
           .onChange(function(option) {
             scope.onSelect({selected: option});
           })
-	     .onInitSelection(function(elem, callback) {
+	  .onInitSelection(function(elem, callback) {
             scope.initSelection()(elem, callback);
           })
           .render();
+
+        scope.$watch('elem', function(selected) {
+          if (!selected || !selected.id) {
+            control.setValue('');
+          }
+        });
       }
     }
 })
