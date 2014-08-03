@@ -1,7 +1,10 @@
 angular.module('plus.cpview', [])
 
-.controller('CpViewController', ['$scope', '$window', '$timeout', 'repository',  function($scope, $window, $timeout, repository) {
+.controller('CpViewController', 
+  ['$scope', '$window', '$timeout', 'repository', '$filter',  
+  function($scope, $window, $timeout, repository, $filter) {
 
+  $scope.datePattern = datePattern;
   $scope.selectedCp = selectionCp;
   $scope.selectedParticipant = selParticipant;
 
@@ -106,15 +109,15 @@ angular.module('plus.cpview', [])
         var scg = scgs[i];
         tree.push(
           {    		 
-        	  id: scg.instanceType + scg.id + scg.eventId, 
+              id: scg.instanceType + scg.id + scg.eventId, 
               level: 1, 
-  			  scgId: scg.id,
+              scgId: scg.id,
               type: 'scg',
               name: $scope.getScgLabel(scg),
               collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
               tooltip: $scope.getScgTooltip(scg),
               eventId: scg.eventId,
-  			  instance: scg.instanceType,
+              instance: scg.instanceType,
               nodes: [],
               state: 'closed'
           });
@@ -321,18 +324,18 @@ angular.module('plus.cpview', [])
   };
 
   $scope.getScgLabel = function(scg) {
-    var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-	var date = new Date(date1);
-    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + date.format("m-d-Y");
+    var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
+    var dateStr = $filter('date')(date, $scope.datePattern);
+    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + dateStr;
   }
 
   $scope.getScgTooltip = function(scg) {
-    var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-    var date = new Date(date1);
+    var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
+    var dateStr = $filter('date')(date, $scope.datePattern);
     var htmlToolTip = 
     	"<table style=\"font-size: 12px\"><tbody>" +
     	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td class=\"pull-left\">"+ scg.eventPoint + " (" + scg.collectionPointLabel  + ") "+ "</td><tr/>" +
-    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ date.format("d-m-Y") + "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ dateStr + "</td><tr/>" +
     	"</tbody></table>";
 
     return htmlToolTip;

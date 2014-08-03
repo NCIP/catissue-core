@@ -336,6 +336,7 @@ function hideCursor(){
 </TABLE>
     
 <script>
+    var datePattern = "<%= edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern() %>";
     SearchResult=document.getElementById('SearchLeftPart');
     SearchResult.style.height = (document.body.clientHeight - 60) + 'px';
     SearchResult2=document.getElementById('SearchLeftPart2');
