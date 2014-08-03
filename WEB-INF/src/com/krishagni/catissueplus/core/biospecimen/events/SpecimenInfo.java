@@ -210,10 +210,14 @@ public class SpecimenInfo  implements Comparable<SpecimenInfo>{
 	
 	@Override
 	public int compareTo(SpecimenInfo specimenInfo) {
-		if(requirementId != null && specimenInfo.getRequirementId() != null)
-		{
+		if (requirementId != null && specimenInfo.getRequirementId() == null) {
+			return -1;
+		} else if (requirementId == null && specimenInfo.getRequirementId() != null) {
+			return 1;
+		} else if (requirementId != null && specimenInfo.getRequirementId() != null) {
 			return requirementId.compareTo(specimenInfo.getRequirementId());
-		}
-		return 1;
+		} else {
+			return id.compareTo(specimenInfo.getId());
+		}		
 	}
 }
