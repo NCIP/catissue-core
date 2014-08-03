@@ -805,13 +805,20 @@ String lbl = "Apply first to all";
 </script>
 <script>
 var isSCGPresent = false;
+var scgId = "<%=request.getAttribute("scgId")%>";
+if (scgId && scgId != 'null') {
+  parent.handleCpView(null, scgId , null);
+} 
+
 </script>
 <logic:notEmpty name="scgSummaryDTO">
 <script>
   isSCGPresent = true;
 
-  var scgId =  ${scgSummaryDTO.scgId}
-  parent.handleCpView(null, scgId , null);
+  if (!scgId || scgId == 'null') {
+    scgId =  ${scgSummaryDTO.scgId}
+    parent.handleCpView(null, scgId , null);
+  }
 </script>
 <%@ include file="/pages/content/manageBioSpecimen/SpecimenCollectionGroupSummary.jsp"%>
 </logic:notEmpty>

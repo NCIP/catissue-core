@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -102,6 +103,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			while(specCollItr.hasNext())
 			{
 				Specimen specimen = (Specimen)specCollItr.next();
+				SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();				
+				request.setAttribute("scgId", scg.getId());
 				if(Constants.DERIVED_SPECIMEN.equals(specimen.getLineage())&& specimen.getParentSpecimen() == null)
 				{
 					final ActionErrors actionErrors = new ActionErrors();

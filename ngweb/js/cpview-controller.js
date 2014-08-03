@@ -11,10 +11,10 @@ angular.module('plus.cpview', [])
   }
 
   $scope.initSel = function(elem, callback){
-    if (selParticipant.id ==-1) {
+    if ($scope.selectedParticipant.id ==-1) {
       return;
     }
-    var participantId = selParticipant.id.split(',')[0];
+    var participantId = $scope.selectedParticipant.id.split(',')[0];
     var cpId = $scope.selectedCp.id;
     repository.getParticipantById(cpId, participantId).success(function(result) {
       var participant = {
