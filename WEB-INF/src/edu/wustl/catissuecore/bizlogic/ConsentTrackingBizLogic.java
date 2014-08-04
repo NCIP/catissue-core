@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -124,7 +126,7 @@ public class ConsentTrackingBizLogic
 	private List<ConsentTierDTO> getCprConsentTierList(List consentDetailList,List<ConsentTier> cpConsentTierList)
 			throws ApplicationException
 	{
-		List<ConsentTierDTO> consentTierList = new ArrayList<ConsentTierDTO>();
+		Set<ConsentTierDTO> consentTierList = new HashSet<ConsentTierDTO>();
 		Iterator ite = consentDetailList.iterator();
 		ConsentTierDTO dto;
 		while (ite.hasNext())
@@ -137,22 +139,14 @@ public class ConsentTrackingBizLogic
 			consentTierList.add(dto);
 		}
 		for(int i = 0;i<cpConsentTierList.size();i++){
-		    boolean consentTierExists = false;
-		    for(int j = 0;j<consentTierList.size();j++){
-		        if(consentTierList.get(j).getId().compareTo(cpConsentTierList.get(i).getId())==0){
-		            consentTierExists = true;
-		            break;
-		        }
-		    }
-		    if(!consentTierExists){
+		    
 		        dto = new ConsentTierDTO();
 	            dto.setConsentStatment(cpConsentTierList.get(i).getStatement());
 	            dto.setParticipantResponses(Constants.NOT_SPECIFIED);
 	            dto.setId(cpConsentTierList.get(i).getId());
 	            consentTierList.add(dto);
-		    }
 		}
-		return consentTierList;
+		return new ArrayList<ConsentTierDTO>(consentTierList);
 
 	}
 

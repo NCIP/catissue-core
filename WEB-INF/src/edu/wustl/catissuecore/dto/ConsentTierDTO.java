@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.dto;
 
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+
 
 public class ConsentTierDTO
 {
@@ -32,6 +34,32 @@ public class ConsentTierDTO
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+
+		if (obj instanceof ConsentTierDTO) {
+			ConsentTierDTO dto = (ConsentTierDTO) obj;
+			if (this.getConsentStatment() != null) {
+				return this.getConsentStatment().equals(dto.getConsentStatment());
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((consentStatment == null) ? 0 : consentStatment.hashCode());
+		return result;
 	}
     
 }
