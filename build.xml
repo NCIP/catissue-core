@@ -1450,6 +1450,11 @@
 	            
 	            <fileset dir="./WEB-INF/classes">
 	                <include name="com/krishagni/**/*.class" />
+	            	<exclude name="com/krishagni/**/repository/*.class" />
+	            	<exclude name="com/krishagni/**/repository/impl/*.class" />
+	            	<exclude name="com/krishagni/**/controller/*.class" />
+	            	<exclude name="com/krishagni/**/*Controller.class" />
+	            	<exclude name="com/krishagni/**/*DAO*.class" />
 	            	<exclude name="**/*Test.class"/>
 	            </fileset>
 
