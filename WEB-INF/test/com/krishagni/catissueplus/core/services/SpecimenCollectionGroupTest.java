@@ -15,8 +15,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
+import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
@@ -33,8 +36,12 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenCollectionGroupDao;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
 import com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenCollGroupServiceImpl;
+import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManager;
+import com.krishagni.catissueplus.core.common.PermissibleValuesManagerImpl;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.services.testdata.ParticipantTestData;
+import com.krishagni.catissueplus.core.services.testdata.PermissibleValueTestData;
 import com.krishagni.catissueplus.core.services.testdata.ScgTestData;
 import com.krishagni.catissueplus.core.services.testdata.UserTestData;
 
@@ -56,12 +63,22 @@ public class SpecimenCollectionGroupTest {
 	private SiteDao siteDao;
 	@Mock
 	private UserDao userDao;
+	
+	@Mock
+	private PermissibleValueDao pvDao;
 
 	@Mock
 	private SpecimenCollGroupService service;
 
 	@Mock
 	private SpecimenCollectionGroupFactory factory;
+	
+	@Mock
+	private CommonValidator commonValidator;
+	
+	private PermissibleValuesManager pvManager;
+	
+	private PermissibleValueService pvService;
 
 	@Before
 	public void setup() {
@@ -76,10 +93,18 @@ public class SpecimenCollectionGroupTest {
 		factory = new SpecimenCollectionGroupFactoryImpl();
 		((SpecimenCollectionGroupFactoryImpl)factory).setDaoFactory(daoFactory);
 		((SpecimenCollGroupServiceImpl) service).setScgFactory(factory);
+		pvService = new PermissibleValueServiceImpl();
+		
+		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
+		pvManager = new PermissibleValuesManagerImpl();
+		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
+		CommonValidator.setPvManager(pvManager);
+		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
 		when(siteDao.getSite(anyString())).thenReturn(ParticipantTestData.getSite("siteName"));
 		when(cprDao.getCpr(anyLong())).thenReturn(ScgTestData.getCpr(1l));
 		when(collectionProtocolDao.getCpe(anyLong())).thenReturn(ScgTestData.getCpe());
 		when(userDao.getUser(anyString())).thenReturn(ScgTestData.getUser());
+		when(userDao.getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(ScgTestData.getUser());
 		when(scgDao.isBarcodeUnique(anyString())).thenReturn(true);
 		when(scgDao.isNameUnique(anyString())).thenReturn(true);
 		when(scgDao.getscg(anyLong())).thenReturn(ScgTestData.getScgToReturn());
@@ -90,7 +115,7 @@ public class SpecimenCollectionGroupTest {
 		CreateScgEvent event = ScgTestData.getCreateScgEvent();
 		ScgCreatedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
-//		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 	
 	@Test
@@ -110,10 +135,10 @@ public class SpecimenCollectionGroupTest {
 		
 		ScgCreatedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("name", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(ScgErrorCode.DUPLICATE_NAME.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("name", response.getErroneousFields()[0].getFieldName());
+		assertEquals(ScgErrorCode.DUPLICATE_NAME.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
@@ -123,10 +148,10 @@ public class SpecimenCollectionGroupTest {
 		
 		ScgCreatedEvent response = service.createScg(event);
 		assertNotNull("Response cannot be null",response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(ScgErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
+		assertEquals(ScgErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
@@ -134,7 +159,7 @@ public class SpecimenCollectionGroupTest {
 		UpdateScgEvent event = ScgTestData.getUpdateScgEvent();
 		ScgUpdatedEvent response = service.updateScg(event);
 		assertNotNull("Response cannot be null",response);
-//		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 	
 	@Test
@@ -154,23 +179,23 @@ public class SpecimenCollectionGroupTest {
 		
 		ScgUpdatedEvent response = service.updateScg(event);
 		assertNotNull("Response cannot be null",response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("name", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(ScgErrorCode.DUPLICATE_NAME.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("name", response.getErroneousFields()[0].getFieldName());
+		assertEquals(ScgErrorCode.DUPLICATE_NAME.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	@Test
 	public void testScgUpdateDuplicateBarcode() {
 		when(scgDao.isBarcodeUnique(anyString())).thenReturn(false);
-UpdateScgEvent event = ScgTestData.getUpdateScgEvent();
+		UpdateScgEvent event = ScgTestData.getUpdateScgEvent();
 		
 		ScgUpdatedEvent response = service.updateScg(event);
 		assertNotNull("Response cannot be null",response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(ScgErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
+		assertEquals(ScgErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 	
 	

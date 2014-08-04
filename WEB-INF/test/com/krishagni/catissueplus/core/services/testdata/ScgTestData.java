@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -56,14 +57,22 @@ public class ScgTestData {
 	}
 	public static CollectionProtocolEvent getCpe() {
 		CollectionProtocolEvent cpe = new CollectionProtocolEvent();
+		cpe.setCollectionProtocol(getCp(1l));
 		return cpe;
 	}
 	
+	private static CollectionProtocol getCp(Long id) {
+		CollectionProtocol cp = new CollectionProtocol();
+		cp.setId(id);
+		return cp;
+	}
+
 	public static CollectionProtocolRegistration getCpr(Long cpId) {
 		CollectionProtocolRegistration registrationDetails = new CollectionProtocolRegistration();
 		registrationDetails.setRegistrationDate(new Date());
 		registrationDetails.setBarcode("barcode1");
 		registrationDetails.setId(cpId);
+		registrationDetails.setCollectionProtocol(getCp(cpId));
 		return registrationDetails;
 	}
 

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
@@ -19,6 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.StorageLocation;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.common.beans.SessionDataBean;
@@ -38,7 +40,6 @@ public class SpecimenTestData {
 	public static CreateSpecimenEvent getCreateChildEventInvalidParentData() {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
-		detail.setScgId(null);
 		detail.setParentSpecimenId(null);
 		event.setSessionDataBean(getSessionDataBean());
 		event.setSpecimenDetail(detail);
@@ -48,7 +49,6 @@ public class SpecimenTestData {
 	public static CreateSpecimenEvent getCreateChildEventInvalidParent() {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
-		detail.setScgId(null);
 		detail.setParentSpecimenId(1l);
 		event.setSessionDataBean(getSessionDataBean());
 		event.setSpecimenDetail(detail);
@@ -87,7 +87,19 @@ public class SpecimenTestData {
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setBarcode("new barcode");
 		scg.setName("newName");
+		scg.setCollectionProtocolRegistration(getCpr());
 		return scg;
+	}
+
+	private static CollectionProtocolRegistration getCpr() {
+		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+		cpr.setCollectionProtocol(getCp());
+		return cpr;
+	}
+
+	private static CollectionProtocol getCp() {
+		CollectionProtocol cp =new CollectionProtocol();
+		return cp;
 	}
 
 	public static UpdateSpecimenEvent getUpdateSpecimenEvent() {
@@ -155,7 +167,7 @@ public class SpecimenTestData {
 	public static CreateSpecimenEvent getCreateChildSpecimenEvent() {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
-		detail.setScgId(null);
+//		detail.setScgId(null);
 		detail.setParentSpecimenId(1l);
 		event.setSessionDataBean(getSessionDataBean());
 		event.setSpecimenDetail(detail);

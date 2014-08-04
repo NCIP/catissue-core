@@ -115,7 +115,7 @@ public class SpecimenTest {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class SpecimenTest {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateChildSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class SpecimenTest {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
@@ -154,10 +154,10 @@ public class SpecimenTest {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEventEmptyLabel();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("label", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(SpecimenErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("label", response.getErroneousFields()[0].getFieldName());
+		assertEquals(SpecimenErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -166,21 +166,22 @@ public class SpecimenTest {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateChildEventInvalidParent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("parent specimen", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("parent specimen", response.getErroneousFields()[0].getFieldName());
+		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
 	public void tesChildCreationInvalidParentData() {
+		when(specimenDao.getSpecimen(anyLong())).thenReturn(null);
 		CreateSpecimenEvent event = SpecimenTestData.getCreateChildEventInvalidParentData();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(1, response.getErroneousFields().length);
-//		assertEquals("parent", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(SpecimenErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(1, response.getErroneousFields().length);
+		assertEquals("parent specimen", response.getErroneousFields()[0].getFieldName());
+		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -223,14 +224,14 @@ public class SpecimenTest {
 		CreateSpecimenEvent event = SpecimenTestData.getCreateSpecimenEvent();
 		SpecimenCreatedEvent response = service.createSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(2, response.getErroneousFields().length);
-//
-//		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(SpecimenErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
-//
-//		assertEquals("label", response.getErroneousFields()[1].getFieldName());
-//		assertEquals(SpecimenErrorCode.DUPLICATE_LABEL.message(), response.getErroneousFields()[1].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(2, response.getErroneousFields().length);
+
+		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
+		assertEquals(SpecimenErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
+
+		assertEquals("label", response.getErroneousFields()[1].getFieldName());
+		assertEquals(SpecimenErrorCode.DUPLICATE_LABEL.message(), response.getErroneousFields()[1].getErrorMessage());
 	}
 
 	@Test
@@ -238,7 +239,7 @@ public class SpecimenTest {
 		UpdateSpecimenEvent event = SpecimenTestData.getUpdateSpecimenEvent();
 		SpecimenUpdatedEvent response = service.updateSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
@@ -248,14 +249,14 @@ public class SpecimenTest {
 		UpdateSpecimenEvent event = SpecimenTestData.getUpdateSpecimenEvent();
 		SpecimenUpdatedEvent response = service.updateSpecimen(event);
 		assertNotNull("Response cannot be null", response);
-//		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-//		assertEquals(2, response.getErroneousFields().length);
-//
-//		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
-//		assertEquals(SpecimenErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
-//
-//		assertEquals("label", response.getErroneousFields()[1].getFieldName());
-//		assertEquals(SpecimenErrorCode.DUPLICATE_LABEL.message(), response.getErroneousFields()[1].getErrorMessage());
+		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		assertEquals(2, response.getErroneousFields().length);
+
+		assertEquals("barcode", response.getErroneousFields()[0].getFieldName());
+		assertEquals(SpecimenErrorCode.DUPLICATE_BARCODE.message(), response.getErroneousFields()[0].getErrorMessage());
+
+		assertEquals("label", response.getErroneousFields()[1].getFieldName());
+		assertEquals(SpecimenErrorCode.DUPLICATE_LABEL.message(), response.getErroneousFields()[1].getErrorMessage());
 	}
 
 	@Test
@@ -299,6 +300,7 @@ public class SpecimenTest {
 		CreateAliquotEvent event = SpecimenTestData.getCreateAliquotWithFullContainer();
 		AliquotCreatedEvent response = service.createAliquot(event);
 		assertNotNull("Response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
 //		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 //		assertEquals(SpecimenErrorCode.CONTAINER_FULL.message(), response.getErroneousFields()[0].getErrorMessage());
 
