@@ -50,6 +50,7 @@ public class ConsentTierDTO
 			if (this.getConsentStatment() != null) {
 				return this.getConsentStatment().equals(dto.getConsentStatment());
 			}
+			return false;
 		}
 		return true;
 	}
