@@ -43,7 +43,7 @@
 <body>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" >
   <tr valign="center" class="bgImage">
-    <td width="100%"> &nbsp; <img src="images/advQuery/ic_saved_queries.gif" id="QueryAuditMenu"
+    <td width="100%"> &nbsp; <img src="images/ic_saved_queries.gif" id="QueryAuditMenu"
                     alt="Query Audit Page" width="38" height="48" hspace="5"
                     align="absmiddle" /> <span class="savedQueryHeading">
         Login Audit Log</span>
