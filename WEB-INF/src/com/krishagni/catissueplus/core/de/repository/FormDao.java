@@ -12,6 +12,8 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface FormDao extends Dao<FormContextBean>{	
 	public List<FormSummary> getAllFormsSummary();
 	
+	public List<FormSummary> getSpecimenEventFormsSummary();
+	
 	public List<FormSummary> getQueryForms();
 	
 	public List<FormContextDetail> getFormContexts(Long formId);
@@ -19,6 +21,8 @@ public interface FormDao extends Dao<FormContextBean>{
 	public List<FormCtxtSummary> getCprForms(Long cprId);
 		
 	public List<FormCtxtSummary> getSpecimenForms(Long specimenId);
+	
+	public List<FormCtxtSummary> getSpecimenEventForms(Long specimenId);
 	
 	public List<FormCtxtSummary> getScgForms(Long scgId);
 	

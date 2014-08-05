@@ -198,12 +198,17 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenListFactory" ref="specimenListFactory"/>
   </bean>
-
+  
   <bean id="formDao" class="com.krishagni.catissueplus.core.de.repository.impl.FormDaoImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/> 
   </bean>
   
   <bean id="formSvc" class="com.krishagni.catissueplus.core.de.services.impl.FormServiceImpl">
+    <property name="formDao" ref="formDao"/>
+  </bean>
+  
+  <bean id="specimenEventsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenEventsServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="formDao" ref="formDao"/>
   </bean>
 

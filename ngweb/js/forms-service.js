@@ -87,6 +87,10 @@ angular.module('plus.formsServices', [])
       getSpecimenForms: function(specimenId) {
         return Utility.get($http, getFormsUrl('specimens', specimenId), successfn);
       },
+      
+      getSpecimenEventForms: function(specimenId){
+          return Utility.get($http, getFormsUrl('specimen-events', specimenId), successfn);
+      },
 
       getScgForms: function(scgId) {
         return Utility.get($http, getFormsUrl('specimen-collection-groups', scgId), successfn);

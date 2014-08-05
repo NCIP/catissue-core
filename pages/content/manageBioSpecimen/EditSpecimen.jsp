@@ -711,6 +711,8 @@ var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=page
 
 var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
 
+var showSpecimenEventTab="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName=SpecimenEvent&id="+specimenId;
+
 var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
 
 var showImagesTab="EditSpecimenImage.do?id="+specimenId;

@@ -18,6 +18,8 @@ angular.module('plus.dataentry', [])
         formsq = FormsService.getSpecimenForms(entityObjId);
       } else if (entity == 'SpecimenCollectionGroup') {
         formsq = FormsService.getScgForms(entityObjId);
+      } else if (entity == 'SpecimenEvent'){
+        formsq = FormsService.getSpecimenEventForms(entityObjId);
       }
  
       formsq.then(function(formsList) {
@@ -46,7 +48,7 @@ angular.module('plus.dataentry', [])
 
       if (entity == 'Participant') {
         recordsq = FormsService.getCprFormRecords(entityObjId, form.formCtxtId);
-      } else if (entity == 'Specimen') {
+      } else if ( (entity == 'Specimen') || (entity == 'SpecimenEvent') ) {
         recordsq = FormsService.getSpecimenFormRecords(entityObjId, form.formCtxtId);
       } else if (entity == 'SpecimenCollectionGroup') {
         recordsq = FormsService.getScgFormRecords(entityObjId, form.formCtxtId);
@@ -141,7 +143,7 @@ angular.module('plus.dataentry', [])
           dateFormat   : dateFormat,
           appData      : {formCtxtId: form.formCtxtId, objectId: entityObjId},
           formDataUrl  : '/openspecimen/rest/ng/forms/:formId/data/:recordId?_reqTime='+_reqTime,
-          formSaveUrl  : '/openspecimen/rest/ng/forms/:formId/data/:recordId',
+          formSaveUrl  : '/openspecimen/rest/ng/forms/:formId/data',
           fileUploadUrl : '/openspecimen/rest/ng/form-files?_reqTime='+_reqTime,
           fileDownloadUrl: function(formId, recordId, ctrlName) {
             return '/openspecimen/rest/ng/form-files?formId=' + formId + '&recordId=' + recordId + '&ctrlName=' + ctrlName + '&_reqTime='+_reqTime;

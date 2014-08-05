@@ -6173,6 +6173,10 @@ PUBLIC
   		<action path="/query" type="edu.wustl.catissuecore.action.ForwardAction">
   		    <forward name="success" path=".catissuecore.query" />	
   		</action>
+  		
+  		<action path="/specimenEventsBulkDataEntry" type="edu.wustl.catissuecore.action.ForwardAction">
+			<forward name="success" path=".nextgen.seBulkDataEntry" />
+		</action>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
@@ -6182,7 +6186,7 @@ PUBLIC
 		key="msg.shippingtracking" null="false" />
 
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
-		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 		<set-property property="definitions-parser-validate"
 			value="true" />

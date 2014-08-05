@@ -21,7 +21,6 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
 import edu.wustl.catissuecore.dto.SpecimenDTO;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -154,6 +153,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 			request.setAttribute(Constants.BIOHAZARD_TYPE_NAME_LIST_JSON, biohazardTypeNameListJSON);
 
 			request.setAttribute("entityName", "Specimen");
+			request.setAttribute("eventEntityName", "SpecimenEvent");
 			request.setAttribute(Constants.OPERATION, Constants.EDIT);			
 		}
 		finally

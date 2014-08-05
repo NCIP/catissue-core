@@ -133,7 +133,7 @@
         <div style="height: 45%; overflow: auto;">
           <div>Use form in following collection protocols</div>
           <div class="checkbox">
-            <label><input type="checkbox" ng-checked="allProtocols" ng-model="allProtocols"> All Present and Future Collection Protocols </label>
+            <label><input type="checkbox" ng-checked="allProtocols" ng-model="allProtocols" ng-disabled="isSpecimenEvent"> All Present and Future Collection Protocols </label>
           </div>
           <div ng-show="allProtocols != true" style="margin-top:10px;margin-bottom:10px;">
             <ka-select style="width: 100%" multiple data-placeholder="Select One or More Collection Protocols"
@@ -141,9 +141,9 @@
           </div>
           <div style="margin-top:10px;margin-bottom:10px;">
             <ka-select style="width: 100%" data-placeholder="Select Level"
-                       options="extnEntities" option-id="entity" option-value="name" selected="selectedEntity"></ka-select>
+                       options="extnEntities" option-id="entity" option-value="name" selected="selectedEntity" on-select="onEntitySelect"></ka-select>
           </div>
-          <div class="checkbox">
+          <div class="checkbox" ng-show="isSpecimenEvent != true">
             <label><input type="checkbox" ng-checked="isMultiRecord" ng-model="isMultiRecord"> Multiple records allowed </label>
           </div>
         </div>

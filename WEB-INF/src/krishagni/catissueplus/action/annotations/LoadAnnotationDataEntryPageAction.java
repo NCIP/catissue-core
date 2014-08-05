@@ -57,7 +57,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction {
 				request.setAttribute("cpTitle", (String) result[1]);				
 				request.setAttribute("scgLabel", (String) result[2]);
 				request.setAttribute("cpEventLabel", (String) result[3]);
-			} else if (entityType.equals("Specimen")) {
+			} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
 				result = getSpecimenInfo(session, entityRecId);
 				request.setAttribute("ppId", (String) result[0]);
 				request.setAttribute("cpTitle", (String) result[1]);				

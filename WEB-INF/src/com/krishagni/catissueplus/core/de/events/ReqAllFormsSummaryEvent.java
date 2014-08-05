@@ -5,7 +5,8 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 public class ReqAllFormsSummaryEvent extends RequestEvent {
 	public static enum FormType {
 		DATA_ENTRY_FORMS,
-		QUERY_FORMS
+		QUERY_FORMS,
+		SPECIMEN_EVENT_FORMS
 	}
 
 	private FormType formType;
