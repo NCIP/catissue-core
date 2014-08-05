@@ -68,7 +68,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		ObjectCreationException errorHandler = new ObjectCreationException();
 		Specimen specimen = new Specimen();
 		setScg(specimenDetail, specimen, errorHandler);
-		//		setParentSpecimen(specimenDetail, specimen, errorHandler); //check for parent in this method
+		setParentSpecimen(specimenDetail, specimen, errorHandler); //check for parent in this method
 		setActivityStatus(specimenDetail.getActivityStatus(), specimen, errorHandler);
 		setSpecimenRequirement(specimenDetail, specimen, errorHandler);
 		setCollectionStatus(specimenDetail.getCollectionStatus(), specimen, errorHandler);

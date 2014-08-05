@@ -63,10 +63,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setFirstName(participant, details.getFirstName(), exception);
 		setLastName(participant, details.getLastName(), exception);
 		setMiddleName(participant, details.getMiddleName(), exception);
+		setVitalStatus(participant, details.getVitalStatus(), exception);
 		setBirthDate(participant, details.getBirthDate(), exception);
 		setDeathDate(participant, details.getDeathDate(), exception);
 		setActivityStatus(participant, details.getActivityStatus(), exception);
-		setVitalStatus(participant, details.getVitalStatus(), exception);
 		setSexGenotype(participant, details.getSexGenotype(), exception);
 		setGender(participant, details.getGender(), exception);
 		setRace(participant, details.getRace(), exception);
