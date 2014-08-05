@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -153,7 +154,7 @@ public class ImportQueries {
 					 userId,
 					 userId,
 					 query.getQueryDefJson(),
-					 Calendar.getInstance().getTime());
+					 new Timestamp(Calendar.getInstance().getTimeInMillis()));
 			 
 			 String sql = DbUtil.isOracle() ? INSERT_QUERY_ORA_SQL : (DbUtil.isMySQL() ? INSERT_QUERY_MY_SQL : null);
 			 Number id = jdbcDao.executeUpdateAndGetKey(sql, params, "IDENTIFIER");
@@ -180,7 +181,7 @@ public class ImportQueries {
 					 query.getTitle(),
 					 userId,
 					 query.getQueryDefJson(),
-					 Calendar.getInstance().getTime(),
+					 new Timestamp(Calendar.getInstance().getTimeInMillis()),
 					 queryId);
 			 
 			 jdbcDao.executeUpdate(UPDATE_QUERY_SQL, params);
