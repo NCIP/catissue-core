@@ -20,15 +20,18 @@ public class DbUtil {
 		
 		String driverClass = null;
 		String databaseType = null;
+		String separator = null;
 		dbType = databaseType = prop.getProperty("database.type");
 		
 		if (databaseType.equals("mysql")) {
 			driverClass = "com.mysql.jdbc.Driver";
 			databaseType = databaseType + "://";
+			separator = "/";
 
 		} else if (databaseType.equals("oracle")) {
 			driverClass = "oracle.jdbc.driver.OracleDriver";
 			databaseType = databaseType + ":thin:@";
+			separator = ":";
 		}
 		
 		
@@ -37,7 +40,7 @@ public class DbUtil {
 		ds.setPassword(prop.getProperty("database.password"));
 		
 		String jdbcUrl = "jdbc:" + databaseType +  prop.getProperty("database.host") 
-							+ ":" + prop.getProperty("database.port") + "/" + prop.getProperty("database.name");
+							+ ":" + prop.getProperty("database.port") + separator + prop.getProperty("database.name");
 		ds.setUrl(jdbcUrl);
 		return ds;
 	}

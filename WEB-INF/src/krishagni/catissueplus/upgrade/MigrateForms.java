@@ -121,14 +121,16 @@ public class MigrateForms {
 		
 		String driverClass = null;
 		String databaseType = prop.getProperty("database.type");
+		String separator = null;
 		
 		if (databaseType.equals("mysql")) {
 			driverClass = "com.mysql.jdbc.Driver";
 			databaseType = databaseType + "://";
-
+			separator = "/";
 		} else if (databaseType.equals("oracle")) {
 			driverClass = "oracle.jdbc.driver.OracleDriver";
 			databaseType = databaseType + ":thin:@";
+			separator = ":";
 		}
 		
 		
@@ -137,7 +139,7 @@ public class MigrateForms {
 		ds.setPassword(prop.getProperty("database.password"));
 		
 		String jdbcUrl = "jdbc:" + databaseType +  prop.getProperty("database.host") 
-							+ ":" + prop.getProperty("database.port") + "/" + prop.getProperty("database.name");
+							+ ":" + prop.getProperty("database.port") + separator + prop.getProperty("database.name");
 		ds.setUrl(jdbcUrl);
 		
 		String dir = new StringBuilder(prop.getProperty("jboss.home.dir")).append(File.separator)
