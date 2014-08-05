@@ -549,6 +549,9 @@ function doInitCal(objName, defaultDate,format) {
 	{
 		cal.setDate (new Date());
 	}
+	cal.attachEvent("onClick",function(){
+	 document.getElementById(objName).focus();
+	});
 	return cal;
 }
 
