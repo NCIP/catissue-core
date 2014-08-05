@@ -3019,13 +3019,13 @@
 		<if>
 						<equals arg1="" arg2="${email.sendEmailFrom.emailPassword}" />
 						<then>
-							<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus ${build.version} Successfully Deployed" encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
+							<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="OpenSpecimen ${build.version} Successfully Deployed" encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
 										<from address="${email.sendEmailFrom.emailAddress}" />
 										<to address="${email.administrative.emailAddress}" />
 											</mail>
 						</then>
 					<else>
-						<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="caTissue Plus ${build.version} Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" password="${email.sendEmailFrom.emailPassword}"  encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
+						<mail mailhost="${email.mailServer}" messagefile="${mail.file.dir}/mail.txt" subject="OpenSpecimen ${build.version} Successfully Deployed" user="${email.sendEmailFrom.emailAddress}" password="${email.sendEmailFrom.emailPassword}"  encoding="mime" ssl="${email.smtp.starttls.enabled}" mailPort="${email.mailServer.port}" failonerror="false">
 														<from address="${email.sendEmailFrom.emailAddress}" />
 														<to address="${email.administrative.emailAddress}" />
 															</mail>

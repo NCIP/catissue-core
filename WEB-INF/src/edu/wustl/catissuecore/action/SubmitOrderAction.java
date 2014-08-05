@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.OrderStatusDTO;
 import edu.wustl.catissuecore.dto.OrderSubmissionDTO;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
@@ -90,14 +91,14 @@ public class SubmitOrderAction extends BaseAction
 						orderStatusDTO.getOrderId(), getExportedName(sessionDataBean), dao);
 				UserBizLogic userBizLogic=new UserBizLogic();
 				dao.commit();
+				User user = userBizLogic.getUserNameById(orderSubmissionDTO.getRequestorId(), dao);
 				orderBizLogic
-						.sendOrderUpdateEmail(
-								userBizLogic.getUserNameById(orderSubmissionDTO.getRequestorId(), dao),
+						.sendOrderUpdateEmail(user.getFirstName(), user.getLastName(),
 								orderSubmissionDTO.getRequestorEmail(),
 								sessionDataBean.getUserName(),
 								orderSubmissionDTO.getOrderName(),
-								sessionDataBean.getLastName() + ","
-										+ sessionDataBean.getFirstName(),
+								sessionDataBean.getLastName(),
+										 sessionDataBean.getFirstName(),
 								orderStatusDTO.getStatus(), orderStatusDTO.getOrderId(), csvFileData);
 				response.getWriter().write("Success");
 

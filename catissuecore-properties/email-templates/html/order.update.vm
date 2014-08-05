@@ -1,7 +1,7 @@
-Hello $requestor
+Hello $requestorLastName, $requestorFirstName
 <br>
 <br>
-Your order "$order" has been updated by $updater on $date. The new status of your order is $status .
+Your order "$order" has been updated by $updaterLastName, $updaterFirstName on $date. The new status of your order is $status .
 <br>
 Please click on the below link to view the latest details of the above order: $url/Order.do?id=$orderId
 <br>

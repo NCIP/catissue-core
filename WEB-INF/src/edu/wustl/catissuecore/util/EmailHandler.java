@@ -242,14 +242,16 @@ public class EmailHandler
 		}
 	}   
 
-	public boolean sendOrderUpdateEmail(String requestorName,
+	public boolean sendOrderUpdateEmail(String requestorFirstName, String requestorLastName,
 			String toEmailAddress, String ccEmailAddress,String bccEmailAddress,
-			String orderName, String updaterName,String orderStatus, Long orderId,List<File> attachmentOrderCsv)
+			String orderName, String updaterFirstName, String updaterLastName, String orderStatus, Long orderId,List<File> attachmentOrderCsv)
     {
     	Map<String, Object> contextMap = new HashMap<String, Object>();
-    	contextMap.put("requestor", requestorName);
+    	contextMap.put("requestorFirstName", requestorFirstName);
+    	contextMap.put("requestorLastName", requestorLastName);
     	contextMap.put("order", orderName);
-    	contextMap.put("updater", updaterName);
+    	contextMap.put("updaterFirstName", updaterFirstName);
+    	contextMap.put("updaterLastName", updaterLastName);
     	contextMap.put("date", new Date().toString());
     	contextMap.put("status", orderStatus);
     	contextMap.put("url", CommonServiceLocator.getInstance().getAppURL());
