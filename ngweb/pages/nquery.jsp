@@ -585,7 +585,7 @@
                     </button>
                     <a type="button" class="btn btn-default" 
                       tooltip-placement="bottom" tooltip="Download Query Definition" tooltip-append-to-body="true"
-                      href="/catissuecore/rest/ng/saved-queries/{{query.id}}/definition-file" target="_blank">
+                      href="/openspecimen/rest/ng/saved-queries/{{query.id}}/definition-file" target="_blank">
                       <span class="glyphicon glyphicon-download-alt"></span>
                     </a>
                     <button type="button" class="btn btn-default" ng-click="viewAuditLog(query)" 
@@ -1122,7 +1122,7 @@
         <h4>Import Query</h4>
       </div>
       <div class="modal-body" style="height: 50%">
-        <form action="/catissuecore/rest/ng/saved-queries/definition-file">
+        <form action="/openspecimen/rest/ng/saved-queries/definition-file">
           <div class="form-group">
             <label>Select Query Definition File</label>
             <div style="position:relative;">
