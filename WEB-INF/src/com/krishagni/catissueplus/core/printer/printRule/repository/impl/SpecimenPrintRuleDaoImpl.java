@@ -19,7 +19,7 @@ public class SpecimenPrintRuleDaoImpl extends AbstractDao<SpecimenPrintRule> imp
 			+ ".getPrintRuleBySpecimenClassAndSpecimenTypeAndIP";
 
 	private static final String GET_PRINT_RULES = FQN + ".getPrintRules";
-	
+
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public SpecimenPrintRule getPrintRuleByName(String name) {
@@ -39,20 +39,22 @@ public class SpecimenPrintRuleDaoImpl extends AbstractDao<SpecimenPrintRule> imp
 		return query.list().isEmpty() ? true : false;
 	}
 
-	@Override
-	public boolean isUniqueRule(String specClass, String specType, String workstationIP) {
+	public boolean isUniqueRule(String specClass, String specType, String workstationIP, String cpShortTitle,
+			String loginName) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PRINT_RULE_BY_SPECCLASS_SPECTYPE_IP);
 		query.setString("specimenClass", specClass);
 		query.setString("specimenType", specType);
 		query.setString("workstationIP", workstationIP);
+		query.setString("cpShortTitle", cpShortTitle);
+		query.setString("loginName", loginName);
 		return query.list().isEmpty() ? true : false;
 	}
-	
+
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public List<SpecimenPrintRule> getRules(int maxResults) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PRINT_RULES);
-		if(maxResults !=0) {
+		if (maxResults != 0) {
 			query.setMaxResults(maxResults);
 		}
 		return query.list();

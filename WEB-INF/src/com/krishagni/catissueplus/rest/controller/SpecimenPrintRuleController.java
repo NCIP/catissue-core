@@ -34,6 +34,7 @@ import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleGotEven
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleUpdatedEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.ReqAllPrintRulesEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRuleDetails;
+import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRulePatchDetails;
 import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.services.PrintRuleService;
 
@@ -69,21 +70,21 @@ public class SpecimenPrintRuleController {
 	@ResponseStatus(HttpStatus.OK)
 	public SpecimenPrintRuleDetails updateSpecimenPrintRuleByName(@PathVariable String ruleName,
 			@RequestBody SpecimenPrintRuleDetails specimenPrintRuleDetails) {
-		PrintRuleUpdatedEvent resp = specimenPrintRuleSvc
-				.updatePrintRule(new UpdatePrintRuleEvent(specimenPrintRuleDetails, ruleName));
+		PrintRuleUpdatedEvent resp = specimenPrintRuleSvc.updatePrintRule(new UpdatePrintRuleEvent(
+				specimenPrintRuleDetails, ruleName));
 		if (resp.getStatus() == EventStatus.OK) {
 			return (SpecimenPrintRuleDetails) resp.getPrintRuleDetails();
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT, value = "/{ruleId}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public SpecimenPrintRuleDetails updateSpecimenPrintRule(@PathVariable Long ruleId,
 			@RequestBody SpecimenPrintRuleDetails specimenPrintRuleDetails) {
-		PrintRuleUpdatedEvent resp = specimenPrintRuleSvc
-				.updatePrintRule(new UpdatePrintRuleEvent(specimenPrintRuleDetails, ruleId));
+		PrintRuleUpdatedEvent resp = specimenPrintRuleSvc.updatePrintRule(new UpdatePrintRuleEvent(
+				specimenPrintRuleDetails, ruleId));
 		if (resp.getStatus() == EventStatus.OK) {
 			return (SpecimenPrintRuleDetails) resp.getPrintRuleDetails();
 		}
@@ -99,7 +100,7 @@ public class SpecimenPrintRuleController {
 		event.setPrintRuleName(ruleName);
 		event.setSessionDataBean(getSession());
 
-		SpecimenPrintRuleDetails details = new SpecimenPrintRuleDetails();
+		SpecimenPrintRulePatchDetails details = new SpecimenPrintRulePatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -115,7 +116,7 @@ public class SpecimenPrintRuleController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{ruleId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -125,7 +126,7 @@ public class SpecimenPrintRuleController {
 		event.setPrintRuleId(ruleId);
 		event.setSessionDataBean(getSession());
 
-		SpecimenPrintRuleDetails details = new SpecimenPrintRuleDetails();
+		SpecimenPrintRulePatchDetails details = new SpecimenPrintRulePatchDetails();
 		try {
 			BeanUtils.populate(details, values);
 		}
@@ -155,7 +156,7 @@ public class SpecimenPrintRuleController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{ruleId}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
@@ -175,7 +176,7 @@ public class SpecimenPrintRuleController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<SpecimenPrintRuleDetails> getSpecimenPrintRule(
 			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
-		ReqAllPrintRulesEvent event  = new ReqAllPrintRulesEvent();
+		ReqAllPrintRulesEvent event = new ReqAllPrintRulesEvent();
 		event.setMaxResults(Integer.parseInt(maxResults));
 		GetAllPrintRulesEvent resp = specimenPrintRuleSvc.getPrintAllRules(event);
 
@@ -185,7 +186,7 @@ public class SpecimenPrintRuleController {
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value ="/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public SpecimenPrintRuleDetails getPrintRule(@PathVariable Long id) {
@@ -211,7 +212,6 @@ public class SpecimenPrintRuleController {
 		return null;
 	}
 
-	
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}

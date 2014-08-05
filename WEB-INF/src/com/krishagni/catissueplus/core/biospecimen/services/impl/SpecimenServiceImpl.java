@@ -68,7 +68,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public void setSpecLabelPrinterFact(SpecimenLabelPrinterFactory specLabelPrinterFact) {
 		this.specLabelPrinterFact = specLabelPrinterFact;
 	}
-	
+
 	public void setSpecimenLabelGenerator(LabelGenerator<Specimen> specimenLabelGenerator) {
 		this.specimenLabelGenerator = specimenLabelGenerator;
 	}
@@ -100,8 +100,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 			ensureUniqueLabel(specimen.getLabel(), errorHandler);
 			errorHandler.checkErrorAndThrow();
 			daoFactory.getSpecimenDao().saveOrUpdate(specimen);
-			if(event.getSpecimenDetail().isPrintLabelsEnabled()){
-				specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress());
+			if (event.getSpecimenDetail().isPrintLabelsEnabled()) {
+				specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress(), event.getSessionDataBean()
+						.getUserName(), specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+						.getCollectionProtocol().getShortTitle());
 			}
 			return SpecimenCreatedEvent.ok(SpecimenDetail.fromDomain(specimen));
 		}

@@ -10,6 +10,8 @@ public class SiteDeletedEvent extends ResponseEvent {
 
 	private Long id;
 
+	private String name;
+
 	public Long getId() {
 		return id;
 	}
@@ -18,9 +20,24 @@ public class SiteDeletedEvent extends ResponseEvent {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public static SiteDeletedEvent notFound(Long siteId) {
 		SiteDeletedEvent response = new SiteDeletedEvent();
 		response.setId(siteId);
+		response.setStatus(EventStatus.NOT_FOUND);
+		return response;
+	}
+
+	public static SiteDeletedEvent notFound(String name) {
+		SiteDeletedEvent response = new SiteDeletedEvent();
+		response.setName(name);
 		response.setStatus(EventStatus.NOT_FOUND);
 		return response;
 	}

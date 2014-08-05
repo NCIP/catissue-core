@@ -6,9 +6,14 @@ import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class ContainerLabel implements LabelToken<StorageContainer> {
 
+	private static String EMPTY_CONTAINER_LABEL = "";
+
 	@Override
 	public String getTokenValue(StorageContainer storageContainer) {
-		return storageContainer.getName();
+		if (storageContainer.getName() == null) {
+			return storageContainer.getName();
+		}
+		return EMPTY_CONTAINER_LABEL;
 	}
 
 }

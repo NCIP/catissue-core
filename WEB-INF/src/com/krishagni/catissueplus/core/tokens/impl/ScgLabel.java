@@ -6,9 +6,13 @@ import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class ScgLabel implements LabelToken<SpecimenCollectionGroup> {
 
+	private static final String EMPTY_SCG_LABEL = "";
+
 	@Override
 	public String getTokenValue(SpecimenCollectionGroup scg) {
-		return scg.getName();
+		if (scg.getName() != null) {
+			return scg.getName();
+		}
+		return EMPTY_SCG_LABEL;
 	}
-
 }

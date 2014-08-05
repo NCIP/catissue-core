@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.AllDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
@@ -25,7 +27,10 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -56,7 +61,7 @@ public class DistributionProtocolTest {
 
 	@Mock
 	private UserDao userDao;
-	
+
 	@Mock
 	PermissibleValueDao pvDao;
 
@@ -67,7 +72,6 @@ public class DistributionProtocolTest {
 
 	private PermissibleValueService pvService;
 
-
 	private DistributionProtocolFactory distributionProtocolFactory;
 
 	private DistributionProtocolService distributionProtocolSvc;
@@ -75,16 +79,15 @@ public class DistributionProtocolTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		
+
 		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
 		pvService = new PermissibleValueServiceImpl();
-		
+
 		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
 		pvManager = new PermissibleValuesManagerImpl();
 		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
 		CommonValidator.setPvManager(pvManager);
 		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
-		
 
 		when(daoFactory.getDistributionProtocolDao()).thenReturn(distributionProtocolDao);
 		when(daoFactory.getUserDao()).thenReturn(userDao);
@@ -703,7 +706,7 @@ public class DistributionProtocolTest {
 	}
 
 	@Test
-	public void testDistributionProtocolDeleteNullOldDistributionProtocolUsingTitle() {
+	public void testDeleteNullOldDistributionProtocolUsingTitle() {
 
 		when(daoFactory.getDistributionProtocolDao().getDistributionProtocol(anyLong())).thenReturn(null);
 		DeleteDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDeleteDistributionProtocolEvent();
@@ -712,6 +715,26 @@ public class DistributionProtocolTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testForSuccessfulDPDeleteWithName() {
+		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		DeleteDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+				.getDeleteDistributionProtocolEventForTitle();
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testForInvalidDPDeleteWithName() {
+		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(null);
+		DeleteDistributionProtocolEvent reqEvent = DistributionProtocolTestData
+				.getDeleteDistributionProtocolEventForTitle();
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getTitle());
 	}
 
 	@Test
@@ -753,5 +776,52 @@ public class DistributionProtocolTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
+	public void testGetAllDPs() {
+		when(distributionProtocolDao.getAllDistributionProtocol(eq(1000)))
+				.thenReturn(DistributionProtocolTestData.getDPs());
+		ReqAllDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getAllDistributionProtocolEvent();
+		AllDistributionProtocolsEvent response = distributionProtocolSvc.getAllDistributionProtocols(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getProtocols().size());
+	}
+
+	@Test
+	public void testGetSiteById() {
+		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEvent();
+		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testGetDPWithWrongId() {
+		when(distributionProtocolDao.getDistributionProtocol(anyLong())).thenReturn(null);
+		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEvent();
+		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testGetDPByTitle() {
+		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(
+				DistributionProtocolTestData.getDistributionProtocolToReturn());
+		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
+		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+
+	@Test
+	public void testGetDPWithWrongTitle() {
+		when(distributionProtocolDao.getDistributionProtocol(anyString())).thenReturn(null);
+		GetDistributionProtocolEvent reqEvent = DistributionProtocolTestData.getDistributionProtocolEventForName();
+		GotDistributionProtocolEvent response = distributionProtocolSvc.getDistributionProtocol(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getTitle());
 	}
 }

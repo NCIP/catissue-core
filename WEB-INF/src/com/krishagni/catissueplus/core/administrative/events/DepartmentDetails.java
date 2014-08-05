@@ -50,8 +50,8 @@ public class DepartmentDetails {
 		DepartmentDetails details = new DepartmentDetails();
 		details.setId(department.getId());
 		details.setName(department.getName());
-		details.setInstituteName(department.getInstitute().getName());
-		details.setActivityStatus(department.getActivityStatus());
+		//details.setInstituteName(department.getInstitute().getName());
+		//details.setActivityStatus(department.getActivityStatus());
 		return details;
 	}
 

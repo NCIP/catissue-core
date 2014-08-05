@@ -110,8 +110,8 @@ public class PermissibleValueServiceImpl implements PermissibleValueService {
 	@Override
 	@PlusTransactional
 	public AllPvsEvent getPermissibleValues(GetAllPVsEvent event) {
-		List<PermissibleValue> permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByAttribute(event.getAttribute(),
-				event.getSearchString(), event.getMaxResult());
+		List<PermissibleValue> permissibleValues = daoFactory.getPermissibleValueDao().getAllPVsByAttribute(
+				event.getAttribute(), event.getSearchString(), event.getMaxResult());
 		List<PvInfo> pvDetails = new ArrayList<PvInfo>();
 		for (PermissibleValue pv : permissibleValues) {
 			pvDetails.add(PvInfo.fromDomain(pv));
@@ -136,10 +136,10 @@ public class PermissibleValueServiceImpl implements PermissibleValueService {
 				}
 			}
 		}*/
-		
+
 		return true;
 	}
-	
+
 	private void ensureUniqueConcepetCode(String conceptCode, ObjectCreationException exceptionHandler) {
 		if (conceptCode != null && !daoFactory.getPermissibleValueDao().isUniqueConceptCode(conceptCode)) {
 			exceptionHandler.addError(PVErrorCode.DUPLICATE_CONCEPT_CODE, CONCEPT_CODE);
@@ -152,7 +152,7 @@ public class PermissibleValueServiceImpl implements PermissibleValueService {
 			exceptionHandler.addError(PVErrorCode.DUPLICATE_PV_VALUE, PV_VALUE);
 		}
 	}
-	
+
 	private void checkChangeInConceptCode(PermissibleValue oldPv, PermissibleValue permissibleValue,
 			ObjectCreationException exceptionHandler) {
 		if (oldPv.getConceptCode() != null && !oldPv.getConceptCode().equals(permissibleValue.getConceptCode())) {

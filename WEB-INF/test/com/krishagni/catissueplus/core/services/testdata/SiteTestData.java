@@ -20,7 +20,9 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
 import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
@@ -472,4 +474,36 @@ public class SiteTestData {
 		reqEvent.getSiteDetails().setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		return reqEvent;
 	}
+
+	public static List<Site> getSites() {
+		List<Site> sites = new ArrayList<Site>();
+		sites.add(getSite());
+		sites.add(getSite());
+		return sites;
+	}
+
+	public static ReqAllSiteEvent getAllSitesEvent() {
+		ReqAllSiteEvent event = new ReqAllSiteEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static GetSiteEvent getSiteEvent() {
+		GetSiteEvent event = new GetSiteEvent();
+		event.setId(1L);
+		return event;
+	}
+
+	public static GetSiteEvent getSiteEventForName() {
+		GetSiteEvent event = new GetSiteEvent();
+		event.setName("In Transit");
+		return event;
+	}
+
+	public static DeleteSiteEvent getDeleteSiteEventForName() {
+		DeleteSiteEvent event = new DeleteSiteEvent();
+		event.setName("In Transit");
+		return event;
+	}
+
 }

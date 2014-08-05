@@ -6,6 +6,7 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +18,9 @@ import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
@@ -260,4 +263,34 @@ public class BiohazardTestData {
 		return event;
 	}
 
+	public static List<Biohazard> getBiohazards() {
+		List<Biohazard> biohazards = new ArrayList<Biohazard>();
+		biohazards.add(getBiohazard());
+		biohazards.add(getBiohazard());
+		return biohazards;
+	}
+
+	public static ReqAllBiohazardEvent getAllBiohazardsEvent() {
+		ReqAllBiohazardEvent event = new ReqAllBiohazardEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static GetBiohazardEvent getBiohazardEvent() {
+		GetBiohazardEvent event = new GetBiohazardEvent();
+		event.setId(1L);
+		return event;
+	}
+
+	public static GetBiohazardEvent getBiohazardEventForName() {
+		GetBiohazardEvent event = new GetBiohazardEvent();
+		event.setName("Cr-3321");
+		return event;
+	}
+
+	public static DeleteBiohazardEvent getDeleteBiohazardEventForName() {
+		DeleteBiohazardEvent event = new DeleteBiohazardEvent();
+		event.setName("Bio-huzard");
+		return event;
+	}
 }

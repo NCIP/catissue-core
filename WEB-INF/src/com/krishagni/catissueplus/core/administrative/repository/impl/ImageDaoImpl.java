@@ -28,4 +28,13 @@ public class ImageDaoImpl extends AbstractDao<Image> implements ImageDao {
 		return imgList.isEmpty() ? true : false;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Image getImage(String eqpImageId) {
+		Query query = getSessionFactory().getCurrentSession().getNamedQuery(GET_EQUIPMENT_IMAGE_ID);
+		query.setString("eqpImageId", eqpImageId);
+		List<Image> imgList = query.list();
+		return imgList.isEmpty() ? null : imgList.get(0);
+	}
+
 }

@@ -1,16 +1,23 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardFactory;
+import com.krishagni.catissueplus.core.administrative.events.AllBiohazardsEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.services.BiohazardService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -31,6 +38,39 @@ public class BiohazardServiceImpl implements BiohazardService {
 
 	public void setBiohazardFactory(BiohazardFactory biohazardFactory) {
 		this.biohazardFactory = biohazardFactory;
+	}
+
+	@Override
+	@PlusTransactional
+	public AllBiohazardsEvent getAllBiohazards(ReqAllBiohazardEvent req) {
+		List<Biohazard> biohazards = daoFactory.getBiohazardDao().getAllBiohazards(req.getMaxResults());
+		List<BiohazardDetails> result = new ArrayList<BiohazardDetails>();
+
+		for (Biohazard biohazard : biohazards) {
+			result.add(BiohazardDetails.fromDomain(biohazard));
+		}
+
+		return AllBiohazardsEvent.ok(result);
+	}
+
+	@Override
+	@PlusTransactional
+	public GotBiohazardEvent getBiohazard(GetBiohazardEvent event) {
+		Biohazard biohazard;
+		if (event.getId() != null) {
+			biohazard = daoFactory.getBiohazardDao().getBiohazard(event.getId());
+			if (biohazard == null) {
+				return GotBiohazardEvent.notFound(event.getId());
+			}
+		}
+		else {
+			biohazard = daoFactory.getBiohazardDao().getBiohazard(event.getName());
+			if (biohazard == null) {
+				return GotBiohazardEvent.notFound(event.getName());
+			}
+		}
+		BiohazardDetails biohazardDetails = BiohazardDetails.fromDomain(biohazard);
+		return GotBiohazardEvent.ok(biohazardDetails);
 	}
 
 	@Override
@@ -141,12 +181,17 @@ public class BiohazardServiceImpl implements BiohazardService {
 	public BiohazardDeletedEvent deteteBiohazard(DeleteBiohazardEvent reqEvent) {
 		try {
 			Biohazard biohazard;
-
-			Long biohazardId = reqEvent.getId();
-
-			biohazard = daoFactory.getBiohazardDao().getBiohazard(biohazardId);
-			if (biohazard == null) {
-				return BiohazardDeletedEvent.notFound(biohazardId);
+			if (reqEvent.getId() != null) {
+				biohazard = daoFactory.getBiohazardDao().getBiohazard(reqEvent.getId());
+				if (biohazard == null) {
+					return BiohazardDeletedEvent.notFound(reqEvent.getId());
+				}
+			}
+			else {
+				biohazard = daoFactory.getBiohazardDao().getBiohazard(reqEvent.getName());
+				if (biohazard == null) {
+					return BiohazardDeletedEvent.notFound(reqEvent.getName());
+				}
 			}
 
 			biohazard.delete();

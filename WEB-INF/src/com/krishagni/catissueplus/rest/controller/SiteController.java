@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,16 +17,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.AllSitesEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
+import com.krishagni.catissueplus.core.administrative.events.SiteGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
@@ -46,6 +52,48 @@ public class SiteController {
 	private HttpServletRequest httpServletRequest;
 
 	private static String PATCH_SITE = "patch site";
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SiteDetails getSite(@PathVariable Long id) {
+		GetSiteEvent reqEvent = new GetSiteEvent();
+		reqEvent.setId(id);
+		SiteGotEvent resp = siteService.getSite(reqEvent);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SiteDetails getSite(@PathVariable String name) {
+		GetSiteEvent reqEvent = new GetSiteEvent();
+		reqEvent.setName(name);
+		SiteGotEvent resp = siteService.getSite(reqEvent);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	//@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
+	@ResponseBody
+	public List<SiteDetails> getAllSites(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
+		ReqAllSiteEvent req = new ReqAllSiteEvent();
+		req.setMaxResults(Integer.parseInt(maxResults));
+		AllSitesEvent resp = siteService.getAllSites(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getSites();
+		}
+
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -143,6 +191,20 @@ public class SiteController {
 	public String deleteSite(@PathVariable Long id) {
 		DeleteSiteEvent reqEvent = new DeleteSiteEvent();
 		reqEvent.setId(id);
+		reqEvent.setSessionDataBean(getSession());
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getMessage();
+		}
+		return null;
+	}
+
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteSite(@PathVariable String name) {
+		DeleteSiteEvent reqEvent = new DeleteSiteEvent();
+		reqEvent.setName(name);
 		reqEvent.setSessionDataBean(getSession());
 		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
 		if (response.getStatus() == EventStatus.OK) {

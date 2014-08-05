@@ -5,7 +5,7 @@ import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-public class PrintRuleCreatedEvent extends ResponseEvent{
+public class PrintRuleCreatedEvent extends ResponseEvent {
 
 	private Object details;
 

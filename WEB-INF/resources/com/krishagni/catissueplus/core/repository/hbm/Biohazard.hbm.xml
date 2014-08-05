@@ -67,6 +67,10 @@
     	SELECT biohazard FROM com.krishagni.catissueplus.core.administrative.domain.Biohazard biohazard 
     	WHERE biohazard.name = :biohazardName
      </query>
+     
+      <query name="getAllBiohazards">
+        from com.krishagni.catissueplus.core.administrative.domain.Biohazard where activityStatus != 'Disabled'
+    </query>
     </class>
 
 </hibernate-mapping>

@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.AllDepartmentsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
@@ -21,6 +25,7 @@ import com.krishagni.catissueplus.core.administrative.events.DepartmentGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetDepartmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.services.DepartmentService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -36,6 +41,20 @@ public class DepartmentController {
 	private DepartmentService departmentSvc;
 
 	private HttpServletRequest httpServletRequest;
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DepartmentDetails> getAllDepatments(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
+		ReqAllDepartmentEvent req = new ReqAllDepartmentEvent();
+		req.setMaxResults(Integer.parseInt(maxResults));
+		AllDepartmentsEvent resp = departmentSvc.getAllDepartments(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDepartments();
+		}
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -54,7 +73,8 @@ public class DepartmentController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{departmentId}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public DepartmentDetails updateDepartment(@PathVariable Long departmentId, @RequestBody DepartmentDetails departmentDetails) {
+	public DepartmentDetails updateDepartment(@PathVariable Long departmentId,
+			@RequestBody DepartmentDetails departmentDetails) {
 		UpdateDepartmentEvent event = new UpdateDepartmentEvent();
 		event.setDepartmentDetails(departmentDetails);
 		departmentDetails.setId(departmentId);
@@ -64,7 +84,7 @@ public class DepartmentController {
 		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
@@ -78,7 +98,7 @@ public class DepartmentController {
 		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
 	@ResponseStatus(HttpStatus.OK)
@@ -92,7 +112,7 @@ public class DepartmentController {
 		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
@@ -105,7 +125,7 @@ public class DepartmentController {
 		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
 	@ResponseStatus(HttpStatus.OK)
@@ -123,4 +143,3 @@ public class DepartmentController {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 }
-	

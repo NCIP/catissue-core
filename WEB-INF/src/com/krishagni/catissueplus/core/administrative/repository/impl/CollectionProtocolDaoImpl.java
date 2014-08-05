@@ -17,6 +17,12 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
 
+	private static final String GET_CP_BY_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
+			.getName() + ".getCpByTitle";
+
+	private static final String GET_CP_BY_SHORT_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
+			.getName() + ".getCpByShortTitle";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CollectionProtocolSummary> getAllCollectionProtocols() {
@@ -30,7 +36,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			cp.setId((Long) row[0]);
 			cp.setShortTitle((String) row[1]);
 			cp.setTitle((String) row[2]);
-			cp.setPpidFormat((String)row[3]);
+			cp.setPpidFormat((String) row[3]);
 
 			cps.add(cp);
 		}
@@ -65,8 +71,14 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		List<com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol> cpList = query.list();
 		return cpList.isEmpty() ? null : cpList.get(0);
 	}
-	
-	private static final String GET_CP_BY_NAME = 
-			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class.getName() + ".getCpByTitle";
+
+	@Override
+	@SuppressWarnings(value = {"unchecked"})
+	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByShortTitle(String cpShortTitle) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CP_BY_SHORT_NAME);
+		query.setString("cpShortTitle", cpShortTitle);
+		List<com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol> cpList = query.list();
+		return cpList.isEmpty() ? null : cpList.get(0);
+	}
 
 }

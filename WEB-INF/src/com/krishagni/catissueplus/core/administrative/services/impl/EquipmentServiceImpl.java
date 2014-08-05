@@ -1,16 +1,23 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.krishagni.catissueplus.core.administrative.domain.Equipment;
 import com.krishagni.catissueplus.core.administrative.domain.factory.EquipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.EquipmentFactory;
+import com.krishagni.catissueplus.core.administrative.events.AllEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetEquipmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchEquipmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.services.EquipmentService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -35,6 +42,41 @@ public class EquipmentServiceImpl implements EquipmentService {
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	@Override
+	@PlusTransactional
+	public GotEquipmentEvent getEquipment(GetEquipmentEvent event) {
+		Equipment equipment;
+		if (event.getId() != null) {
+			equipment = daoFactory.getEquipmentDao().getEquipment(event.getId());
+			if (equipment == null) {
+				return GotEquipmentEvent.notFound(event.getId());
+			}
+
+		}
+		else {
+			equipment = daoFactory.getEquipmentDao().getEquipment(event.getDisplayName());
+			if (equipment == null) {
+				return GotEquipmentEvent.notFound(event.getDisplayName());
+			}
+		}
+		EquipmentDetails details = EquipmentDetails.fromDomain(equipment);
+
+		return GotEquipmentEvent.ok(details);
+	}
+
+	@Override
+	@PlusTransactional
+	public AllEquipmentEvent getAllEquipments(ReqAllEquipmentEvent event) {
+		List<Equipment> equipments = daoFactory.getEquipmentDao().getAllEquipments(event.getMaxResults());
+		List<EquipmentDetails> result = new ArrayList<EquipmentDetails>();
+
+		for (Equipment equipment : equipments) {
+			result.add(EquipmentDetails.fromDomain(equipment));
+		}
+
+		return AllEquipmentEvent.ok(result);
 	}
 
 	@Override
@@ -129,12 +171,19 @@ public class EquipmentServiceImpl implements EquipmentService {
 	@PlusTransactional
 	public EquipmentDeletedEvent deleteEquipment(DeleteEquipmentEvent reqEvent) {
 		try {
-			Long id = reqEvent.getId();
-			Equipment equipment = daoFactory.getEquipmentDao().getEquipment(id);
-			if (equipment == null) {
-				return EquipmentDeletedEvent.notFound(id);
+			Equipment equipment;
+			if (reqEvent.getId() != null) {
+				equipment = daoFactory.getEquipmentDao().getEquipment(reqEvent.getId());
+				if (equipment == null) {
+					return EquipmentDeletedEvent.notFound(reqEvent.getId());
+				}
 			}
-
+			else {
+				equipment = daoFactory.getEquipmentDao().getEquipment(reqEvent.getDisplayName());
+				if (equipment == null) {
+					return EquipmentDeletedEvent.notFound(reqEvent.getDisplayName());
+				}
+			}
 			equipment.delete();
 			daoFactory.getEquipmentDao().saveOrUpdate(equipment);
 			return EquipmentDeletedEvent.ok();
@@ -180,4 +229,5 @@ public class EquipmentServiceImpl implements EquipmentService {
 			ensureUniqueEquipmentId(equipmentId, exceptionHandler);
 		}
 	}
+
 }

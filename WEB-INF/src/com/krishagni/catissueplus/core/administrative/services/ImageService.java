@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.administrative.services;
 
 import com.krishagni.catissueplus.core.administrative.events.CreateImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageUpdatedEvent;
@@ -18,5 +20,7 @@ public interface ImageService {
 	public ImageUpdatedEvent patchImage(PatchImageEvent event);
 
 	public ImageDeletedEvent deleteImage(DeleteImageEvent reqEvent);
+
+	public GotImageEvent getImage(GetImageEvent event);
 
 }

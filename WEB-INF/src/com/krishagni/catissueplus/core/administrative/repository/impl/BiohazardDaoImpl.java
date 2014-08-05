@@ -15,6 +15,8 @@ public class BiohazardDaoImpl extends AbstractDao<Biohazard> implements Biohazar
 
 	private static final String GET_BIOHAZARD_BY_NAME = FQN + ".getBiohazardByName";
 
+	private static final String GET_ALL_BIOHAZARDS = FQN + ".getAllBiohazards";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Biohazard getBiohazard(String name) {
@@ -37,5 +39,13 @@ public class BiohazardDaoImpl extends AbstractDao<Biohazard> implements Biohazar
 	@Override
 	public Biohazard getBiohazard(long id) {
 		return (Biohazard) sessionFactory.getCurrentSession().get(Biohazard.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Biohazard> getAllBiohazards(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_BIOHAZARDS);
+		query.setMaxResults(maxResults);
+		return query.list();
 	}
 }

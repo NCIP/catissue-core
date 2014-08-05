@@ -2,10 +2,10 @@
 package com.krishagni.catissueplus.core.printer.printRule.events;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.printer.printRule.domain.SpecimenPrintRule;
 
 public class SpecimenPrintRuleDetails {
@@ -18,43 +18,17 @@ public class SpecimenPrintRuleDetails {
 
 	private String specimenType = "";
 
-	private Set<String> labelType;
+	private String labelType;
 
 	private String workstationIP;
 
-	private Set<String> dataOnLabel = new HashSet<String>();
+	private List<String> dataOnLabel = new ArrayList<String>();
 
 	private String printerName;
 
-	private List<String> modifiedAttributes = new ArrayList<String>();
+	private String cpShortTitle;
 
-	public boolean isNameModified() {
-		return modifiedAttributes.contains("name");
-	}
-
-	public boolean isSpecimenClassModified() {
-		return modifiedAttributes.contains("specimenClass");
-	}
-
-	public boolean isSpecimenTypeModified() {
-		return modifiedAttributes.contains("specimenType");
-	}
-
-	public boolean isLabelTypeModified() {
-		return modifiedAttributes.contains("labelType");
-	}
-
-	public boolean isWorkstationIPModified() {
-		return modifiedAttributes.contains("workstationIP");
-	}
-
-	public boolean isDataOnLabelModified() {
-		return modifiedAttributes.contains("dataOnLabel");
-	}
-
-	public boolean isPrinterNameModified() {
-		return modifiedAttributes.contains("printerName");
-	}
+	private UserInfo loginName;
 
 	public Long getId() {
 		return id;
@@ -88,11 +62,11 @@ public class SpecimenPrintRuleDetails {
 		this.specimenType = specimenType;
 	}
 
-	public Set<String> getLabelType() {
+	public String getLabelType() {
 		return labelType;
 	}
 
-	public void setLabelType(Set<String> labelType) {
+	public void setLabelType(String labelType) {
 		this.labelType = labelType;
 	}
 
@@ -104,11 +78,11 @@ public class SpecimenPrintRuleDetails {
 		this.workstationIP = workstationIP;
 	}
 
-	public Set<String> getDataOnLabel() {
+	public List<String> getDataOnLabel() {
 		return dataOnLabel;
 	}
 
-	public void setDataOnLabel(Set<String> dataOnLabel) {
+	public void setDataOnLabel(List<String> dataOnLabel) {
 		this.dataOnLabel = dataOnLabel;
 	}
 
@@ -120,43 +94,47 @@ public class SpecimenPrintRuleDetails {
 		this.printerName = printerName;
 	}
 
-	public List<String> getModifiedAttributes() {
-		return modifiedAttributes;
+	public String getCpShortTitle() {
+		return cpShortTitle;
 	}
 
-	public void setModifiedAttributes(List<String> modifiedAttributes) {
-		this.modifiedAttributes = modifiedAttributes;
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+
+	public UserInfo getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(UserInfo loginName) {
+		this.loginName = loginName;
 	}
 
 	public static SpecimenPrintRuleDetails fromDomain(SpecimenPrintRule specimenPrintRule) {
 		SpecimenPrintRuleDetails details = new SpecimenPrintRuleDetails();
 		details.setId(specimenPrintRule.getId());
-		details.setLabelType(populateLabelType(specimenPrintRule.getLabelType()));
+		details.setLabelType(specimenPrintRule.getLabelType());
 		details.setName(specimenPrintRule.getName());
-		details.setDataOnLabel(populateDataOnLabels(specimenPrintRule.getDataOnLabel()));
+		details.setDataOnLabel(populatenewDataOnLabel(specimenPrintRule.getDataOnLabel()));
 		details.setSpecimenClass(specimenPrintRule.getSpecimenClass());
 		details.setSpecimenType(specimenPrintRule.getSpecimenType());
 		details.setWorkstationIP(specimenPrintRule.getWorkstationIP());
 		details.setPrinterName(specimenPrintRule.getPrinterName());
+		details.setCpShortTitle(specimenPrintRule.getCpShortTitle());
+		details.setLoginName(getLoginNameDetails(specimenPrintRule));
 		return details;
 	}
 
-	private static Set<String> populateLabelType(String labelType) {
-		String[] labelTypes = labelType.split("\\,");
-		Set<String> labelTypeSet = new HashSet<String>();
-		for (String label : labelTypes) {
-			labelTypeSet.add(label);
-		}
-		return labelTypeSet;
+	private static UserInfo getLoginNameDetails(SpecimenPrintRule specimenPrintRule) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setLoginName(specimenPrintRule.getLoginName());
+
+		return userInfo;
 	}
 
-	private static Set<String> populateDataOnLabels(String dataOnLabel) {
-		String[] dataOnLabels = dataOnLabel.split("\\,");
-		Set<String> dataOnLabelsSet = new HashSet<String>();
-		for (String label : dataOnLabels) {
-			dataOnLabelsSet.add(label);
-		}
-		return dataOnLabelsSet;
+	private static List<String> populatenewDataOnLabel(Set<String> dataOnLabel) {
+		List<String> data = new ArrayList<String>();
+		data.addAll(dataOnLabel);
+		return data;
 	}
-
 }

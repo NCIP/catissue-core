@@ -15,7 +15,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
+import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.services.PermissibleValueService;
 import com.krishagni.catissueplus.core.administrative.services.impl.PermissibleValueServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -56,10 +58,16 @@ public class SpecimenPrintRuleTest {
 	PermissibleValueDao pvDao;
 
 	@Mock
+	UserDao userDao;
+
+	@Mock
+	CollectionProtocolDao cpDao;
+
+	@Mock
 	CommonValidator commonValidator;
 
 	PermissibleValuesManager pvManager;
-	
+
 	private PermissibleValueService pvService;
 
 	private SpecimenPrintRuleFactoryImpl specimenPrintRuleFactory;
@@ -70,8 +78,11 @@ public class SpecimenPrintRuleTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
+		when(daoFactory.getUserDao()).thenReturn(userDao);
+		when(daoFactory.getCollectionProtocolDao()).thenReturn(cpDao);
+
 		pvService = new PermissibleValueServiceImpl();
-		
+
 		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
 		pvManager = new PermissibleValuesManagerImpl();
 		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
@@ -80,13 +91,21 @@ public class SpecimenPrintRuleTest {
 
 		when(daoFactory.getSpecimenPrintRuleDao()).thenReturn(printRuleDao);
 		printRuleService = new SpecimenPrintRuleServiceImpl();
-		((SpecimenPrintRuleServiceImpl) printRuleService).setDaoFactory(daoFactory);
 		specimenPrintRuleFactory = new SpecimenPrintRuleFactoryImpl();
+
+		((SpecimenPrintRuleServiceImpl) printRuleService).setDaoFactory(daoFactory);
 		((SpecimenPrintRuleServiceImpl) printRuleService).setSpecimenPrintRuleFactory(specimenPrintRuleFactory);
+		((SpecimenPrintRuleFactoryImpl) specimenPrintRuleFactory).setDaoFactory(daoFactory);
+
 		when(printRuleDao.getPrintRuleByName(anyString())).thenReturn(SpecimenPrintRuleTestData.getPrintRule(1l));
 		when(printRuleDao.getPrintRule(anyLong())).thenReturn(SpecimenPrintRuleTestData.getPrintRule(1l));
 		when(printRuleDao.isUniquePrintRuleName(anyString())).thenReturn(Boolean.TRUE);
-		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.TRUE);
+		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(
+				Boolean.TRUE);
+		when(daoFactory.getUserDao().getUserByLoginNameAndDomainName(anyString(), anyString())).thenReturn(
+				SpecimenPrintRuleTestData.getUser());
+		when(daoFactory.getCollectionProtocolDao().getCPByShortTitle(anyString())).thenReturn(
+				SpecimenPrintRuleTestData.getCP());
 	}
 
 	@Test
@@ -255,7 +274,8 @@ public class SpecimenPrintRuleTest {
 
 	@Test
 	public void testForPrintRuleUpdateWithChangeInSpecimenClass() {
-		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.FALSE);
+		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(
+				Boolean.FALSE);
 		UpdatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getUpdatePrintRuleEventForChangeSpecimenClassAndName();
 
 		PrintRuleUpdatedEvent response = printRuleService.updatePrintRule(reqEvent);
@@ -266,7 +286,8 @@ public class SpecimenPrintRuleTest {
 
 	@Test
 	public void testForPrintRuleUpdateWithChangeInSpecimenType() {
-		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.FALSE);
+		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(
+				Boolean.FALSE);
 		UpdatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getUpdatePrintRuleEventForChangeSpecimenTypeAndName();
 
 		PrintRuleUpdatedEvent response = printRuleService.updatePrintRule(reqEvent);
@@ -277,7 +298,8 @@ public class SpecimenPrintRuleTest {
 
 	@Test
 	public void testForPrintRuleUpdateWithChangeInWorkstationIP() {
-		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString())).thenReturn(Boolean.FALSE);
+		when(printRuleDao.isUniqueRule(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(
+				Boolean.FALSE);
 		UpdatePrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getUpdatePrintRuleEventForChangeWorkstationIPAndName();
 
 		PrintRuleUpdatedEvent response = printRuleService.updatePrintRule(reqEvent);
@@ -412,7 +434,7 @@ public class SpecimenPrintRuleTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
-	
+
 	@Test
 	public void testGetAllPrintRules() {
 		when(printRuleDao.getRules(eq(1000))).thenReturn(SpecimenPrintRuleTestData.getPrintRules());
@@ -421,7 +443,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertEquals(2, response.getDetails().size());
 	}
-	
+
 	@Test
 	public void testGetPrintRuleById() {
 		when(printRuleDao.getPrintRule(anyLong())).thenReturn(SpecimenPrintRuleTestData.getPrintRule(1l));
@@ -429,7 +451,7 @@ public class SpecimenPrintRuleTest {
 		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
 	}
-	
+
 	@Test
 	public void testGetPrintRuleWithWrongInstWithId() {
 		when(printRuleDao.getPrintRule(anyLong())).thenReturn(null);
@@ -438,8 +460,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 		assertNotNull(response.getId());
 	}
-	
-	
+
 	@Test
 	public void testGetPrintRuleByName() {
 		when(printRuleDao.getPrintRuleByName(anyString())).thenReturn(SpecimenPrintRuleTestData.getPrintRule(1l));
@@ -448,7 +469,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(EventStatus.OK, response.getStatus());
 		assertNotNull(response.getDetails());
 	}
-	
+
 	@Test
 	public void testGetPrintRuleWithWrongInst() {
 		when(printRuleDao.getPrintRuleByName(anyString())).thenReturn(null);
@@ -457,7 +478,7 @@ public class SpecimenPrintRuleTest {
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 		assertNotNull(response.getName());
 	}
-	
+
 	@Test
 	public void testGetDepartmentByIdWithServerError() {
 		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEvent();
@@ -465,5 +486,5 @@ public class SpecimenPrintRuleTest {
 		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
-	}	
+	}
 }

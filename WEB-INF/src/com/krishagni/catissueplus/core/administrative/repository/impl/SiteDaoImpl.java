@@ -15,6 +15,8 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 
 	private static final String GET_SITE_BY_NAME = FQN + ".getSiteByName";
 
+	private static final String GET_ALL_SITES = FQN + ".getAllSites";
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Site getSite(String siteName) {
@@ -36,5 +38,14 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		query.setString("siteName", siteName);
 		List<Site> siteList = query.list();
 		return siteList.isEmpty() ? true : false;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Site> getAllSites(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_SITES);
+		query.setMaxResults(maxResults);
+		return query.list();
+
 	}
 }

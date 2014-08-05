@@ -3052,9 +3052,9 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
          select OS_DISTRIBUTION_PROTOCOL_SEQ.nextVal,PRINCIPAL_INVESTIGATOR_ID, TITLE, SHORT_TITLE, IRB_IDENTIFIER, START_DATE, DESCRIPTION_URL, ACTIVITY_STATUS from CATISSUE_DISTRIBUTION_PROTOCOL 
  		</sql>
  		
-    </changeSet> 
-        
-    <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
+    </changeSet>
+     
+     <changeSet author="dpatil" id="new specimen print rule table" failOnError="true">
 	   <createTable tableName="OS_SPECIMEN_PRINT_RULE">
 		 <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
 		   <constraints primaryKey="true" nullable="false"/>
@@ -3074,10 +3074,6 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 		 	<constraints nullable="false"/>
 		 </column>
 		 
-		 <column name="DATA_ON_LABEL" type="${text.type}(1000)">
-		 	<constraints nullable="false"/>
-		 </column>
-		 
 		 <column name="PRINTER_NAME" type="${text.type}(255)">
 		 	<constraints nullable="false"/>
 		 </column>
@@ -3085,10 +3081,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 		 <column name="WORKSTATION_IP" type="${text.type}(64)" defaultValue="Any">
 		 </column>
 		 
+		 <column name="LOGIN_NAME" type="${text.type}(255)" defaultValue="Any">
+		 </column>
+		 
+		 <column name="CP_SHORT_TITLE" type="${text.type}(255)" defaultValue="Any">
+		 </column>
+		 
 	   </createTable>
 	   
 	   <addUniqueConstraint constraintName="SPEC_CLASS_TYPE_ID_UNIQUE_KEY"
-			tableName="OS_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP" />
+			tableName="OS_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP,LOGIN_NAME,CP_SHORT_TITLE" />
 	   
 	   <createSequence
             sequenceName="OS_PRINT_RULE_SEQ"
@@ -3096,6 +3098,25 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             incrementBy="1"
             ordered="true" />
 	</changeSet>
+
+	 <changeSet author="ajaysamgir" id="Create table CATISSUE_SPECIMEN_PRINT_DATA " failOnError="true">
+      <createTable tableName="CATISSUE_SPECIMEN_PRINT_DATA">
+        <column name="PRINT_RULE_ID" type="${int.type}">
+        </column>
+        
+        <column name="DATA_ON_LABEL" type="${text.type}(255)">
+        </column>
+        
+      </createTable>
+      
+      <addForeignKeyConstraint
+              constraintName="FK_SPEC_PRINT_ID_BY_PRINT_RULE"
+              baseTableName="CATISSUE_SPECIMEN_PRINT_DATA"
+              baseColumnNames="PRINT_RULE_ID"
+              referencedTableName="OS_SPECIMEN_PRINT_RULE"
+              referencedColumnNames="IDENTIFIER" />
+               
+    </changeSet>
 
     <changeSet id="Create SPECIMEN_ORDER_VIEW" author="mibrahim" runOnChange="true" dbms="mysql">
        <sql>CREATE OR REPLACE VIEW SPECIMEN_ORDER_VIEW AS 

@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.printer.printRule.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class SpecimenPrintRule {
 
 	private Long id;
@@ -15,9 +18,13 @@ public class SpecimenPrintRule {
 
 	private String workstationIP = "Any";
 
-	private String dataOnLabel;
+	private Set<String> dataOnLabel = new HashSet<String>();
 
 	private String printerName;
+
+	private String cpShortTitle;
+
+	private String loginName;
 
 	public Long getId() {
 		return id;
@@ -67,11 +74,11 @@ public class SpecimenPrintRule {
 		this.workstationIP = workstationIP;
 	}
 
-	public String getDataOnLabel() {
+	public Set<String> getDataOnLabel() {
 		return dataOnLabel;
 	}
 
-	public void setDataOnLabel(String dataOnLabel) {
+	public void setDataOnLabel(Set<String> dataOnLabel) {
 		this.dataOnLabel = dataOnLabel;
 	}
 
@@ -83,6 +90,22 @@ public class SpecimenPrintRule {
 		this.printerName = printerName;
 	}
 
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+
+	public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
 	public void update(SpecimenPrintRule specimenPrintRule) {
 		this.setDataOnLabel(specimenPrintRule.getDataOnLabel());
 		this.setLabelType(specimenPrintRule.getLabelType());
@@ -91,6 +114,10 @@ public class SpecimenPrintRule {
 		this.setSpecimenType(specimenPrintRule.getSpecimenType());
 		this.setWorkstationIP(specimenPrintRule.getWorkstationIP());
 		this.setPrinterName(specimenPrintRule.getPrinterName());
+		this.setCpShortTitle(specimenPrintRule.getCpShortTitle());
+		this.setLoginName(specimenPrintRule.getLoginName());
+		this.setCpShortTitle(specimenPrintRule.getCpShortTitle());
+		this.setLoginName(specimenPrintRule.getLoginName());
 	}
 
 }

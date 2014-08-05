@@ -1,17 +1,24 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
+import com.krishagni.catissueplus.core.administrative.events.AllSitesEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
+import com.krishagni.catissueplus.core.administrative.events.SiteGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
@@ -34,6 +41,39 @@ public class SiteServiceImpl implements SiteService {
 
 	public void setSiteFactory(SiteFactory siteFactory) {
 		this.siteFactory = siteFactory;
+	}
+
+	@Override
+	@PlusTransactional
+	public SiteGotEvent getSite(GetSiteEvent event) {
+		Site site;
+
+		if (event.getId() != null) {
+			site = daoFactory.getSiteDao().getSite(event.getId());
+			if (site == null) {
+				return SiteGotEvent.notFound(event.getId());
+			}
+		}
+		else {
+			site = daoFactory.getSiteDao().getSite(event.getName());
+			if (site == null) {
+				return SiteGotEvent.notFound(event.getName());
+			}
+		}
+		SiteDetails siteDetails = SiteDetails.fromDomain(site);
+		return SiteGotEvent.ok(siteDetails);
+	}
+
+	@Override
+	@PlusTransactional
+	public AllSitesEvent getAllSites(ReqAllSiteEvent req) {
+		List<Site> sites = daoFactory.getSiteDao().getAllSites(req.getMaxResults());
+		List<SiteDetails> result = new ArrayList<SiteDetails>();
+
+		for (Site site : sites) {
+			result.add(SiteDetails.fromDomain(site));
+		}
+		return AllSitesEvent.ok(result);
 	}
 
 	@Override
@@ -140,13 +180,18 @@ public class SiteServiceImpl implements SiteService {
 	public SiteDeletedEvent deleteSite(DeleteSiteEvent event) {
 		try {
 			Site site;
-
-			Long siteId = event.getId();
-			site = daoFactory.getSiteDao().getSite(siteId);
-			if (site == null) {
-				return SiteDeletedEvent.notFound(siteId);
+			if (event.getId() != null) {
+				site = daoFactory.getSiteDao().getSite(event.getId());
+				if (site == null) {
+					return SiteDeletedEvent.notFound(event.getId());
+				}
 			}
-
+			else {
+				site = daoFactory.getSiteDao().getSite(event.getName());
+				if (site == null) {
+					return SiteDeletedEvent.notFound(event.getName());
+				}
+			}
 			site.delete();
 			daoFactory.getSiteDao().saveOrUpdate(site);
 			return SiteDeletedEvent.ok();

@@ -1,11 +1,15 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import krishagni.catissueplus.util.CommonUtil;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
+import com.krishagni.catissueplus.core.administrative.events.AllDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
@@ -13,7 +17,10 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -37,6 +44,40 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	public void setDistributionProtocolFactory(DistributionProtocolFactory distributionProtocolFactory) {
 		this.distributionProtocolFactory = distributionProtocolFactory;
+	}
+
+	@Override
+	@PlusTransactional
+	public AllDistributionProtocolsEvent getAllDistributionProtocols(ReqAllDistributionProtocolEvent event) {
+		List<DistributionProtocol> distributionProtocols = daoFactory.getDistributionProtocolDao()
+				.getAllDistributionProtocol(event.getMaxResults());
+		List<DistributionProtocolDetails> result = new ArrayList<DistributionProtocolDetails>();
+
+		for (DistributionProtocol distributionProtocol : distributionProtocols) {
+			result.add(DistributionProtocolDetails.fromDomain(distributionProtocol));
+		}
+
+		return AllDistributionProtocolsEvent.ok(result);
+	}
+
+	@Override
+	@PlusTransactional
+	public GotDistributionProtocolEvent getDistributionProtocol(GetDistributionProtocolEvent event) {
+		DistributionProtocol distributionProtocol;
+		if (event.getId() != null) {
+			distributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(event.getId());
+			if (distributionProtocol == null) {
+				return GotDistributionProtocolEvent.notFound(event.getId());
+			}
+		}
+		else {
+			distributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(event.getTitle());
+			if (distributionProtocol == null) {
+				return GotDistributionProtocolEvent.notFound(event.getTitle());
+			}
+		}
+		DistributionProtocolDetails details = DistributionProtocolDetails.fromDomain(distributionProtocol);
+		return GotDistributionProtocolEvent.ok(details);
 	}
 
 	@Override
@@ -154,11 +195,21 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public DistributionProtocolDeletedEvent deleteDistributionProtocol(DeleteDistributionProtocolEvent event) {
 		try {
-			DistributionProtocol oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(
-					event.getId());
-			if (oldDistributionProtocol == null) {
-				return DistributionProtocolDeletedEvent.notFound(event.getId());
+			DistributionProtocol oldDistributionProtocol;
+
+			if (event.getId() != null) {
+				oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(event.getId());
+				if (oldDistributionProtocol == null) {
+					return DistributionProtocolDeletedEvent.notFound(event.getId());
+				}
 			}
+			else {
+				oldDistributionProtocol = daoFactory.getDistributionProtocolDao().getDistributionProtocol(event.getTitle());
+				if (oldDistributionProtocol == null) {
+					return DistributionProtocolDeletedEvent.notFound(event.getTitle());
+				}
+			}
+
 			oldDistributionProtocol.delete();
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(oldDistributionProtocol);
 			return DistributionProtocolDeletedEvent.ok();

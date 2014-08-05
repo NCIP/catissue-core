@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleGotEven
 import com.krishagni.catissueplus.core.printer.printRule.events.PrintRuleUpdatedEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.ReqAllPrintRulesEvent;
 import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRuleDetails;
+import com.krishagni.catissueplus.core.printer.printRule.events.SpecimenPrintRulePatchDetails;
 import com.krishagni.catissueplus.core.printer.printRule.events.UpdatePrintRuleEvent;
 import com.krishagni.catissueplus.core.printer.printRule.services.PrintRuleService;
 
@@ -44,7 +45,8 @@ public class SpecimenPrintRuleServiceImpl implements PrintRuleService {
 	@PlusTransactional
 	public PrintRuleCreatedEvent createPrintRule(CreatePrintRuleEvent event) {
 		try {
-			SpecimenPrintRule specimenPrintRule = specimenPrintRuleFactory.createSpecimenPrintRule((SpecimenPrintRuleDetails)event.getDetails());
+			SpecimenPrintRule specimenPrintRule = specimenPrintRuleFactory
+					.createSpecimenPrintRule((SpecimenPrintRuleDetails) event.getDetails());
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			ensureUniqueName(specimenPrintRule.getName(), exceptionHandler);
 			ensureUniqueRule(specimenPrintRule, exceptionHandler);
@@ -76,8 +78,8 @@ public class SpecimenPrintRuleServiceImpl implements PrintRuleService {
 			if (oldSpecimenPrintRule == null) {
 				return PrintRuleUpdatedEvent.notFound();
 			}
-			SpecimenPrintRule specimenPrintRule = specimenPrintRuleFactory.createSpecimenPrintRule((SpecimenPrintRuleDetails) event
-					.getPrintRuleDetails());
+			SpecimenPrintRule specimenPrintRule = specimenPrintRuleFactory
+					.createSpecimenPrintRule((SpecimenPrintRuleDetails) event.getPrintRuleDetails());
 
 			ObjectCreationException exceptionHandler = new ObjectCreationException();
 			checkChangeInPrintName(oldSpecimenPrintRule.getName(), specimenPrintRule.getName(), exceptionHandler);
@@ -136,9 +138,9 @@ public class SpecimenPrintRuleServiceImpl implements PrintRuleService {
 				return PrintRuleUpdatedEvent.notFound();
 			}
 			SpecimenPrintRule specimenPrintRule = specimenPrintRuleFactory.patchSpecimenPrintRule(oldSpecimenPrintRule,
-					(SpecimenPrintRuleDetails) event.getPrintRuleDetails());
+					(SpecimenPrintRulePatchDetails) event.getPrintRuleDetails());
 
-			if (((SpecimenPrintRuleDetails) event.getPrintRuleDetails()).isNameModified()) {
+			if (((SpecimenPrintRulePatchDetails) event.getPrintRuleDetails()).isNameModified()) {
 				ObjectCreationException exceptionHandler = new ObjectCreationException();
 				ensureUniqueName(specimenPrintRule.getName(), exceptionHandler);
 				exceptionHandler.checkErrorAndThrow();
@@ -154,12 +156,11 @@ public class SpecimenPrintRuleServiceImpl implements PrintRuleService {
 			return PrintRuleUpdatedEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public GetAllPrintRulesEvent getPrintAllRules(ReqAllPrintRulesEvent event) {
-		List<SpecimenPrintRule> ruleList = daoFactory.getSpecimenPrintRuleDao()
-				.getRules(event.getMaxResults());
+		List<SpecimenPrintRule> ruleList = daoFactory.getSpecimenPrintRuleDao().getRules(event.getMaxResults());
 		List<SpecimenPrintRuleDetails> details = new ArrayList<SpecimenPrintRuleDetails>();
 		for (SpecimenPrintRule rule : ruleList) {
 			details.add(SpecimenPrintRuleDetails.fromDomain(rule));
@@ -177,21 +178,24 @@ public class SpecimenPrintRuleServiceImpl implements PrintRuleService {
 				if (printRule == null) {
 					return PrintRuleGotEvent.notFound(event.getName());
 				}
-			} else {
+			}
+			else {
 				printRule = daoFactory.getSpecimenPrintRuleDao().getPrintRule(event.getId());
 				if (printRule == null) {
 					return PrintRuleGotEvent.notFound(event.getId());
 				}
 			}
 			return PrintRuleGotEvent.ok(SpecimenPrintRuleDetails.fromDomain(printRule));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			return PrintRuleGotEvent.serverError(e);
 		}
 	}
-	
+
 	private void ensureUniqueRule(SpecimenPrintRule specimenPrintRule, ObjectCreationException exceptionHandler) {
 		if (!daoFactory.getSpecimenPrintRuleDao().isUniqueRule(specimenPrintRule.getSpecimenClass(),
-				specimenPrintRule.getSpecimenType(), specimenPrintRule.getWorkstationIP())) {
+				specimenPrintRule.getSpecimenType(), specimenPrintRule.getWorkstationIP(), specimenPrintRule.getLoginName(),
+				specimenPrintRule.getCpShortTitle())) {
 			exceptionHandler.addError(PrintRuleErrorCode.DUPLICATE_PRINT_RULE, PRINT_RULE_NAME);
 		}
 	}
@@ -201,14 +205,17 @@ public class SpecimenPrintRuleServiceImpl implements PrintRuleService {
 			exceptionHandler.addError(PrintRuleErrorCode.DUPLICATE_PRINT_RULE, PRINT_RULE_NAME);
 		}
 	}
-	
+
 	private void checkChangeInRule(SpecimenPrintRule oldSpecimenPrintRule, SpecimenPrintRule specimenPrintRule,
 			ObjectCreationException exceptionHandler) {
 		if (!oldSpecimenPrintRule.getSpecimenClass().equals(specimenPrintRule.getSpecimenClass())
 				|| !oldSpecimenPrintRule.getSpecimenType().equals(specimenPrintRule.getSpecimenType())
-				|| !oldSpecimenPrintRule.getWorkstationIP().equals(specimenPrintRule.getWorkstationIP())) {
+				|| !oldSpecimenPrintRule.getWorkstationIP().equals(specimenPrintRule.getWorkstationIP())
+				|| !oldSpecimenPrintRule.getCpShortTitle().equals(specimenPrintRule.getCpShortTitle())
+				|| !oldSpecimenPrintRule.getLoginName().equals(specimenPrintRule.getLoginName())) {
 			ensureUniqueRule(specimenPrintRule, exceptionHandler);
 		}
+
 	}
 
 	private void checkChangeInPrintName(String oldPrintRuleName, String newPrintRuleName,

@@ -42,5 +42,9 @@
 	<query name="getDomainByName">
 		SELECT domain FROM com.krishagni.catissueplus.core.auth.domain.AuthDomain domain WHERE domain.name = :domainName
 	</query>
+	
+	<query name="getAllDomains">
+        FROM com.krishagni.catissueplus.core.auth.domain.AuthDomain
+    </query>
    </class>
 </hibernate-mapping>

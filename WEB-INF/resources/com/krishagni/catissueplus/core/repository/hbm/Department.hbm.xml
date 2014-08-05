@@ -61,5 +61,9 @@
 	<query name="getDepartmentByNameAndInst">
 		FROM com.krishagni.catissueplus.core.administrative.domain.Department department WHERE department.name = :name 
 	</query>
+	
+	<query name="getAllDepartments">
+		FROM com.krishagni.catissueplus.core.administrative.domain.Department department 
+	</query>
     </class>
 </hibernate-mapping>

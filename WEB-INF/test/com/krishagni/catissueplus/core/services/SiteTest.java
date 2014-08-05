@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -18,12 +19,16 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.AllSitesEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchSiteEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllSiteEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetails;
+import com.krishagni.catissueplus.core.administrative.events.SiteGotEvent;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -51,15 +56,15 @@ public class SiteTest {
 
 	@Mock
 	UserDao userDao;
-	
+
 	@Mock
 	PermissibleValueDao pvDao;
 
 	@Mock
 	CommonValidator commonValidator;
-	
+
 	PermissibleValuesManager pvManager;
-	
+
 	private PermissibleValueService pvService;
 
 	SiteFactory siteFactory;
@@ -72,16 +77,15 @@ public class SiteTest {
 
 		when(daoFactory.getSiteDao()).thenReturn(siteDao);
 		when(daoFactory.getUserDao()).thenReturn(userDao);
-		
+
 		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
 		pvService = new PermissibleValueServiceImpl();
-		
+
 		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
 		pvManager = new PermissibleValuesManagerImpl();
 		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
 		CommonValidator.setPvManager(pvManager);
 		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
-	
 
 		siteService = new SiteServiceImpl();
 		siteFactory = new SiteFactoryImpl();
@@ -667,7 +671,7 @@ public class SiteTest {
 	}
 
 	@Test
-	public void testForSuccessfulBiohazardDeletion() {
+	public void testForSuccessfulSiteDeletion() {
 
 		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEvent();
 		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
@@ -718,5 +722,66 @@ public class SiteTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testForSuccessfulSiteDeleteWithName() {
+		when(siteDao.getSite(anyString())).thenReturn(SiteTestData.getSite());
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEventForName();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testForInvalidSiteDeleteWithName() {
+		when(siteDao.getSite(anyString())).thenReturn(null);
+		DeleteSiteEvent reqEvent = SiteTestData.getDeleteSiteEventForName();
+		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
+	}
+
+	@Test
+	public void testGetAllSites() {
+		when(siteDao.getAllSites(eq(1000))).thenReturn(SiteTestData.getSites());
+		ReqAllSiteEvent reqEvent = SiteTestData.getAllSitesEvent();
+		AllSitesEvent response = siteService.getAllSites(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getSites().size());
+	}
+
+	@Test
+	public void testGetSiteById() {
+		when(siteDao.getSite(anyLong())).thenReturn(SiteTestData.getSite());
+		GetSiteEvent reqEvent = SiteTestData.getSiteEvent();
+		SiteGotEvent response = siteService.getSite(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testGetSiteWithWrongId() {
+		when(siteDao.getSite(anyLong())).thenReturn(null);
+		GetSiteEvent reqEvent = SiteTestData.getSiteEvent();
+		SiteGotEvent response = siteService.getSite(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testGetSiteByName() {
+		when(siteDao.getSite(anyString())).thenReturn(SiteTestData.getSite());
+		GetSiteEvent reqEvent = SiteTestData.getSiteEventForName();
+		SiteGotEvent response = siteService.getSite(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+
+	@Test
+	public void testGetSiteWithWrongName() {
+		when(siteDao.getSite(anyString())).thenReturn(null);
+		GetSiteEvent reqEvent = SiteTestData.getSiteEventForName();
+		SiteGotEvent response = siteService.getSite(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 }

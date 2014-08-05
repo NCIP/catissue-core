@@ -47,8 +47,6 @@ import com.krishagni.catissueplus.core.printer.printService.services.PrintServic
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
-//import com.krishagni.catissueplus.service.SpecimenService;
-
 @Controller
 @RequestMapping("/specimens")
 public class SpecimenController {
@@ -58,7 +56,7 @@ public class SpecimenController {
 
 	@Autowired
 	private FormService formSvc;
-	
+
 	@Autowired
 	private PrintService specimenLabelPrintSvc;
 
@@ -185,7 +183,7 @@ public class SpecimenController {
 
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

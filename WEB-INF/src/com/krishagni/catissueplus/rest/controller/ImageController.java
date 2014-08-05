@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDetails;
@@ -46,6 +48,32 @@ public class ImageController {
 
 	@Autowired
 	private ImageService imagesvc;
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ImageDetails getBiohazard(@PathVariable Long id) {
+		GetImageEvent event = new GetImageEvent();
+		event.setId(id);
+		GotImageEvent resp = imagesvc.getImage(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/eqpImageId={eqpImageId}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ImageDetails getBiohazard(@PathVariable String eqpImageId) {
+		GetImageEvent event = new GetImageEvent();
+		event.setEqpImageId(eqpImageId);
+		GotImageEvent resp = imagesvc.getImage(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -107,6 +135,20 @@ public class ImageController {
 	public String deleteImage(@PathVariable Long id) {
 		DeleteImageEvent reqEvent = new DeleteImageEvent();
 		reqEvent.setId(id);
+		reqEvent.setSessionDataBean(getSession());
+		ImageDeletedEvent response = imagesvc.deleteImage(reqEvent);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getMessage();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/eqpImageId={eqpImageId}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteImage(@PathVariable String eqpImageId) {
+		DeleteImageEvent reqEvent = new DeleteImageEvent();
+		reqEvent.setEqpImageId(eqpImageId);
 		reqEvent.setSessionDataBean(getSession());
 		ImageDeletedEvent response = imagesvc.deleteImage(reqEvent);
 		if (response.getStatus() == EventStatus.OK) {

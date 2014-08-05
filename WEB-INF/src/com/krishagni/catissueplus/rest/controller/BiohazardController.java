@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.AllBiohazardsEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
@@ -27,7 +30,10 @@ import com.krishagni.catissueplus.core.administrative.events.BiohazardPatchDetai
 import com.krishagni.catissueplus.core.administrative.events.BiohazardUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.services.BiohazardService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -46,6 +52,47 @@ public class BiohazardController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<BiohazardDetails> getAllBiohazards(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
+		ReqAllBiohazardEvent req = new ReqAllBiohazardEvent();
+		req.setMaxResults(Integer.parseInt(maxResults));
+		AllBiohazardsEvent resp = biohazardSvc.getAllBiohazards(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getBiohazards();
+		}
+
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public BiohazardDetails getBiohazard(@PathVariable Long id) {
+		GetBiohazardEvent event = new GetBiohazardEvent();
+		event.setId(id);
+		GotBiohazardEvent resp = biohazardSvc.getBiohazard(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public BiohazardDetails getBiohazard(@PathVariable String name) {
+		GetBiohazardEvent event = new GetBiohazardEvent();
+		event.setName(name);
+		GotBiohazardEvent resp = biohazardSvc.getBiohazard(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -150,6 +197,20 @@ public class BiohazardController {
 		BiohazardDeletedEvent response = biohazardSvc.deteteBiohazard(reqEvent);
 		if (response.getStatus() == EventStatus.OK) {
 			return response.getMessage();
+		}
+		return null;
+	}
+
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteBiohazard(@PathVariable String name) {
+		DeleteBiohazardEvent reqEvent = new DeleteBiohazardEvent();
+		reqEvent.setName(name);
+		reqEvent.setSessionDataBean(getSession());
+		BiohazardDeletedEvent resp = biohazardSvc.deteteBiohazard(reqEvent);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getMessage();
 		}
 		return null;
 	}

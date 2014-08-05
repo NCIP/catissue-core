@@ -33,7 +33,9 @@ public class DomainDaoImpl extends AbstractDao<AuthDomain> implements DomainDao 
 	private static final String FQN = AuthDomain.class.getName();
 
 	private static final String GET_DOMAIN_BY_NAME = FQN + ".getDomainByName";
-	
+
+	private static final String GET_ALL_DOMAINS = FQN + ".getAllDomains";
+
 	private static final String GET_PROVIDER_BY_TYPE = AuthProvider.class.getName() + ".getProviderByType";
 
 	@Override
@@ -43,6 +45,14 @@ public class DomainDaoImpl extends AbstractDao<AuthDomain> implements DomainDao 
 		query.setString("authType", authType);
 		List<AuthProvider> result = query.list();
 		return result.isEmpty() ? null : result.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AuthDomain> getAllAuthDomains(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_DOMAINS);
+		query.setMaxResults(maxResults);
+		return query.list();
 	}
 
 }

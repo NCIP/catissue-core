@@ -19,6 +19,8 @@ public class EquipmentDaoImpl extends AbstractDao<Equipment> implements Equipmen
 
 	private static final String GET_EQUIPMENT_BY_EQUIPMENT_ID = FQN + ".getEquipmentByEquipmentId";
 
+	private static final String GET_ALL_EQUIPMENTS = FQN + ".getAllEquipments";
+
 	@Override
 	public Equipment getEquipment(long id) {
 		return (Equipment) sessionFactory.getCurrentSession().get(Equipment.class, id);
@@ -31,6 +33,14 @@ public class EquipmentDaoImpl extends AbstractDao<Equipment> implements Equipmen
 		query.setString("displayName", displayName);
 		List<Equipment> eqList = query.list();
 		return eqList.isEmpty() ? null : eqList.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Equipment> getAllEquipments(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_EQUIPMENTS);
+		return query.setMaxResults(maxResults).list();
+
 	}
 
 	@SuppressWarnings("unchecked")

@@ -26,22 +26,25 @@ public class SpecimenLabelPrinterService implements PrintService {
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public LabelPrintCreatedEvent print(CreateLabelPrintEvent event) {
 		try {
 			Specimen specimen = null;
-			if(event.getName() != null) {
+			if (event.getName() != null) {
 				specimen = daoFactory.getSpecimenDao().getSpecimenByLabel(event.getName());
-			} else {
+			}
+			else {
 				specimen = daoFactory.getSpecimenDao().getSpecimen(event.getId());
 			}
-			
-			if(specimen == null) {
+
+			if (specimen == null) {
 				LabelPrintCreatedEvent.notFound();
 			}
-			specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress());
+			specLabelPrinterFact.printLabel(specimen, event.getSessionDataBean().getIpAddress(), event.getSessionDataBean()
+					.getUserName(), specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					.getCollectionProtocol().getShortTitle());
 			return LabelPrintCreatedEvent.ok();
 		}
 		catch (Exception e) {

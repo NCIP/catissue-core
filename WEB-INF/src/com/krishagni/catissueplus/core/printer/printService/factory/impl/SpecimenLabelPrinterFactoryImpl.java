@@ -9,7 +9,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,8 +19,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.printer.printRule.domain.SpecimenPrintRule;
 import com.krishagni.catissueplus.core.printer.printRule.domain.factory.PrintRuleErrorCode;
-import com.krishagni.catissueplus.core.printer.printService.factory.DisplayPrintLabelType;
 import com.krishagni.catissueplus.core.printer.printService.factory.SpecimenLabelPrinterFactory;
+import com.krishagni.catissueplus.core.tokens.factory.TokenFactory;
 
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -31,59 +33,43 @@ public class SpecimenLabelPrinterFactoryImpl implements SpecimenLabelPrinterFact
 	@Autowired
 	private DaoFactory daoFactory;
 
+	@Autowired
+	private TokenFactory tokenFactory;
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
+	public void setTokenFactory(TokenFactory tokenFactory) {
+		this.tokenFactory = tokenFactory;
+	}
+
 	public static final String ANY = "Any";
-
-	private static final String SPECIMEN_LABEL = "Specimen Label";
-
-	private static final String SPECIMEN_CLASS = "Specimen Class";
-
-	private static final String SPECIMEN_BARCODE = "Specimen Barcode";
-
-	private static final String SPECIMEN_TYPE = "Specimen Type";
-
-	private static final String CONCENTRATION = "Concentration";
-
-	private static final String QUANTITY = "Quantity";
-
-	private static final String SPECIMEN_TISSUE_SITE = "Tissue site";
 
 	private static final String NEWLINE = "\r\n";
 
-	private static final String PATHOLOGICAL_STATUS = "Pathological status";
-
-	private static final String SPECIMEN_IDENTIFIER = "Specimen Identifier";
-
-	private static final String SPECIMEN_COLLECTION_STATUS = "Collection Status";
-
-	private static final String SPECIMEN_CREATED_ON = "Created On";
-
-	private static final String SPECIMEN_LINEAGE = "Lineage";
-
-	private static final String SPECIMEN_COMMENT = "Comment";
-
 	private static final String END = "END";
 
-	private static final String SPECIMEN_STORAGE_CONTAINER_NAME = "Storage Container";
+	private static final String PRINT_RULE = "print rule";
 
-	private static final String SPECIMEN_POSITION_DIMENSION_ONE = "Position Dimension One";
+	private static final String LABEL_NAME = "LABEL";
 
-	private static final String SPECIMEN_POSITION_DIMENSION_TWO = "Position Dimension Two";
+	private static final String CP_TITLE = "CP Short Title";
 
-	private static final String PRINT_RIULE = "print rule";
+	private static final String DISPLAY_LABELQUANTITY = "LabelQuantity";
+
+	private static final String PARTICIPANT_PROTOCOL_IDENTIFIER = "PPI";
 
 	@Override
-	public void printLabel(Specimen specimen, String ipAddress) throws IOException {
+	public void printLabel(Specimen specimen, String ipAddress, String loginName, String cpShortTitle) throws IOException {
 		if (ipAddress == null) {
 			ipAddress = ANY;
 		}
 		populatePrintRules();
-		SpecimenPrintRule printRule = getRule(specimen.getSpecimenClass(), specimen.getSpecimenType(), ipAddress);
+		SpecimenPrintRule printRule = getRule(specimen.getSpecimenClass(), specimen.getSpecimenType(), ipAddress,
+				loginName, cpShortTitle);
 		if (printRule == null) {
-			reportError(PrintRuleErrorCode.NOT_FOUND, PRINT_RIULE);
+			reportError(PrintRuleErrorCode.NOT_FOUND, PRINT_RULE);
 		}
 		createFile(specimen, printRule);
 	}
@@ -98,7 +84,8 @@ public class SpecimenLabelPrinterFactoryImpl implements SpecimenLabelPrinterFact
 	}
 
 	public void createFile(Specimen specimen, SpecimenPrintRule printRule) throws IOException {
-		String printDirectory = CommonServiceLocator.getInstance().getPropDirPath() + XMLPropertyHandler.getValue("label.print.file.dir");
+		String printDirectory = CommonServiceLocator.getInstance().getPropDirPath()
+				+ XMLPropertyHandler.getValue("label.print.file.dir");
 		checkDirectory(printDirectory);
 		BufferedWriter fileWriter = null;
 
@@ -121,157 +108,88 @@ public class SpecimenLabelPrinterFactoryImpl implements SpecimenLabelPrinterFact
 	}
 
 	private String getFileName(String label) {
-		String fileName = label + "_" + new Timestamp(System.currentTimeMillis()); ;
+		String fileName = label + "_" + new Timestamp(System.currentTimeMillis());;
 		return fileName;
 	}
 
-	public static SpecimenPrintRule getRule(String specimenClass, String specimenType, String workStationIP)
-			throws IOException {
+	public static SpecimenPrintRule getRule(String specimenClass, String specimenType, String workStationIP,
+			String loginName, String cpShortTitle) throws IOException {
+		String matchedKey = null;
 
-		String key = specimenClass + "_" + specimenType + "_" + workStationIP;
-		String keyAnyType = specimenClass + "_" + ANY + "_" + workStationIP;
-		String keyAnyClass = ANY + "_" + specimenType + "_" + workStationIP;
-		String keyAnyIP = specimenClass + "_" + specimenType + "_" + ANY;
-		String keyAnyTypeAnyIP = specimenClass + "_" + ANY + "_" + ANY;
-		String keyAnyClassAnyType = ANY + "_" + ANY + "_" + workStationIP;
-		String keyAnyClassAnyIP = ANY + "_" + specimenType + "_" + ANY;
-		String keyAny = ANY + "_" + ANY + "_" + ANY;
+		Set<String> keySet = new HashSet<String>();
+		keySet.add(getKey(specimenClass, specimenType, cpShortTitle, loginName, workStationIP));
+		keySet.add(getKey(specimenClass, specimenType, cpShortTitle, loginName, ANY));
+		keySet.add(getKey(specimenClass, specimenType, cpShortTitle, ANY, workStationIP));
+		keySet.add(getKey(specimenClass, specimenType, cpShortTitle, ANY, ANY));
+		keySet.add(getKey(specimenClass, specimenType, ANY, loginName, workStationIP));
+		keySet.add(getKey(specimenClass, specimenType, ANY, loginName, ANY));
+		keySet.add(getKey(specimenClass, specimenType, ANY, ANY, workStationIP));
+		keySet.add(getKey(specimenClass, specimenType, ANY, ANY, ANY));
 
-		if (printLabelRules.containsKey(key)) {
-			return printLabelRules.get(key);
+		keySet.add(getKey(specimenClass, ANY, cpShortTitle, loginName, workStationIP));
+		keySet.add(getKey(specimenClass, ANY, cpShortTitle, loginName, ANY));
+		keySet.add(getKey(specimenClass, ANY, cpShortTitle, ANY, workStationIP));
+		keySet.add(getKey(specimenClass, ANY, cpShortTitle, ANY, ANY));
+		keySet.add(getKey(specimenClass, ANY, ANY, loginName, workStationIP));
+		keySet.add(getKey(specimenClass, ANY, ANY, loginName, ANY));
+		keySet.add(getKey(specimenClass, ANY, ANY, ANY, workStationIP));
+		keySet.add(getKey(specimenClass, ANY, ANY, ANY, ANY));
+
+		keySet.add(getKey(ANY, ANY, cpShortTitle, loginName, workStationIP));
+		keySet.add(getKey(ANY, ANY, cpShortTitle, loginName, ANY));
+		keySet.add(getKey(ANY, ANY, cpShortTitle, ANY, workStationIP));
+		keySet.add(getKey(ANY, ANY, cpShortTitle, ANY, ANY));
+		keySet.add(getKey(ANY, ANY, ANY, loginName, workStationIP));
+		keySet.add(getKey(ANY, ANY, ANY, loginName, ANY));
+		keySet.add(getKey(ANY, ANY, ANY, ANY, workStationIP));
+		keySet.add(getKey(ANY, ANY, ANY, ANY, ANY));
+
+		for (String key : keySet) {
+			if (printLabelRules.containsKey(key)) {
+				matchedKey = key;
+				break;
+			}
 		}
-		else if (printLabelRules.containsKey(keyAnyType)) {
-			return printLabelRules.get(keyAnyType);
-		}
-		else if (printLabelRules.containsKey(keyAnyClass)) {
-			return printLabelRules.get(keyAnyClass);
-		}
-		else if (printLabelRules.containsKey(keyAnyIP)) {
-			return printLabelRules.get(keyAnyIP);
-		}
-		else if (printLabelRules.containsKey(keyAnyTypeAnyIP)) {
-			return printLabelRules.get(keyAnyTypeAnyIP);
-		}
-		else if (printLabelRules.containsKey(keyAnyClassAnyType)) {
-			return printLabelRules.get(keyAnyClassAnyType);
-		}
-		else if (printLabelRules.containsKey(keyAnyClassAnyIP)) {
-			return printLabelRules.get(keyAnyClassAnyIP);
-		}
-		else if (printLabelRules.containsKey(keyAny)) {
-			return printLabelRules.get(keyAny);
-		}
-		return null;
+
+		return printLabelRules.get(matchedKey);
+	}
+
+	private static String getKey(String specimenClass, String specimenType, String cpTitle, String loginName,
+			String workStationIP) {
+		StringBuilder builder = new StringBuilder(100);
+		builder.append(specimenClass).append("_").append(specimenType).append("_").append(cpTitle).append("_")
+				.append(loginName).append("_").append(workStationIP);
+
+		return builder.toString();
 	}
 
 	public String getDataToPrint(Specimen specimen, SpecimenPrintRule printRule) {
-		String[] dataOnLabels = printRule.getDataOnLabel().split(",");
 
+		Set<String> dataOnLabels = printRule.getDataOnLabel();
 		StringBuilder stringBuilder = new StringBuilder();
-
-		stringBuilder
-				.append(DisplayPrintLabelType.LABEL_NAME.value() + " = \"" + printRule.getLabelType() + "\"" + NEWLINE);
+		stringBuilder.append(LABEL_NAME + " = \"" + printRule.getLabelType() + "\"" + NEWLINE);
 
 		for (String dataOnLabel : dataOnLabels) {
-			if (dataOnLabel.equalsIgnoreCase(SPECIMEN_LABEL)) {
-				stringBuilder.append(DisplayPrintLabelType.LABEL.value() + " = \"" + specimen.getLabel() + "\"" + NEWLINE);
-			}
-			
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_IDENTIFIER)) {
-				stringBuilder.append(DisplayPrintLabelType.IDENTIFIER + " = \"" + specimen.getPathologicalStatus()
-						+ "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_BARCODE)) {
-				stringBuilder.append(DisplayPrintLabelType.BARCODE.value() + " = \"" + specimen.getBarcode() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_TYPE)) {
-				stringBuilder
-						.append(DisplayPrintLabelType.TYPE.value() + " = \"" + specimen.getSpecimenType() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_CLASS)) {
-				stringBuilder.append(DisplayPrintLabelType.CLASS.value() + " = \"" + specimen.getSpecimenClass() + "\""
-						+ NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(CONCENTRATION)) {
-				stringBuilder.append(DisplayPrintLabelType.CONCENTRATION.value() + " = \""
-						+ specimen.getConcentrationInMicrogramPerMicroliter() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(QUANTITY)) {
-				stringBuilder.append(DisplayPrintLabelType.QUANTITY.value() + " = \"" + specimen.getAvailableQuantity() + "\""
-						+ NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(PATHOLOGICAL_STATUS)) {
-				stringBuilder.append(DisplayPrintLabelType.PATHOLOGICAL_STATUS.value() + " = \"" + specimen.getPathologicalStatus()
-						+ "\"" + NEWLINE);
-			}
-			
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_IDENTIFIER)) {
-				stringBuilder.append(DisplayPrintLabelType.IDENTIFIER.value() + " = \"" + specimen.getPathologicalStatus()
-						+ "\"" + NEWLINE);
-			}
-			
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_LINEAGE)) {
-				stringBuilder.append(DisplayPrintLabelType.LINEAGE.value() + " = \"" + specimen.getLineage() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_COMMENT)) {
-				stringBuilder.append(DisplayPrintLabelType.COMMENT.value() + " = \"" + specimen.getComment() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_COLLECTION_STATUS)) {
-				stringBuilder.append(DisplayPrintLabelType.COLLECTION_STATUS.value() + " = \"" + specimen.getCollectionStatus() + "\""
-						+ NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_CREATED_ON)) {
-				stringBuilder.append(DisplayPrintLabelType.CREATED_ON.value() + " = \"" + specimen.getCreatedOn() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_TISSUE_SITE)) {
-				stringBuilder.append(DisplayPrintLabelType.TISSUE_SITE.value() + " = \"" + specimen.getTissueSite() + "\"" + NEWLINE);
-			}
-
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_STORAGE_CONTAINER_NAME)){ 
-				stringBuilder.append(DisplayPrintLabelType.STORAGE_CONTAINER_NAME.value() + " = \"" + CommonUtilities
-						.toString(specimen.getSpecimenPosition().getStorageContainer().getName()) + "\"" + NEWLINE);
-			}
-			
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_POSITION_DIMENSION_ONE)){ 
-				stringBuilder.append(DisplayPrintLabelType.POSITION_DIMENSION_ONE.value() + " = \"" + CommonUtilities
-						.toString(specimen.getSpecimenPosition().getPositionDimensionOne()) + "\"" + NEWLINE);
-			}
-			
-			else if (dataOnLabel.equalsIgnoreCase(SPECIMEN_POSITION_DIMENSION_TWO)){ 
-				stringBuilder.append(DisplayPrintLabelType.POSITION_DIMENSION_TWO.value() + " = \"" + CommonUtilities
-						.toString(specimen.getSpecimenPosition().getPositionDimensionTwo()) + "\"" + NEWLINE);
-			}
-			
+			String tokenValue = tokenFactory.getTokenValue(dataOnLabel, specimen);
+			stringBuilder.append(dataOnLabel + " = \"" + tokenValue + "\"" + NEWLINE);
 		}
 
 		if (printRule.getPrinterName() != null) {
-			stringBuilder.append(DisplayPrintLabelType.DISPLAY_PRINTER.value() + " = \"" + printRule.getPrinterName() + "\""
-					+ NEWLINE);
-		}
-		
-		String cpTitle = CommonUtilities.toString(specimen.getSpecimenCollectionGroup()
-				.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle());
-		
-		stringBuilder.append(DisplayPrintLabelType.CP_TITLE.value() + " = \"" + cpTitle + "\"" + NEWLINE);
-		
-		String ppi = CommonUtilities.toString(specimen.getSpecimenCollectionGroup()
-				.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
-		
-		if (ppi != null && !ppi.equals("")){
-			stringBuilder.append(DisplayPrintLabelType.PARTICIPANT_PROTOCOL_IDENTIFIER.value() + " = \"" + ppi + "\"" + NEWLINE);
+			stringBuilder.append(printRule.getPrinterName() + " = \"" + printRule.getPrinterName() + "\"" + NEWLINE);
 		}
 
-		stringBuilder.append(DisplayPrintLabelType.DISPLAY_LABELQUANTITY.value() + " = \"1\"" + NEWLINE);
+		String cpTitle = CommonUtilities.toString(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getCollectionProtocol().getShortTitle());
+
+		stringBuilder.append(CP_TITLE + " = \"" + cpTitle + "\"" + NEWLINE);
+
+		String ppi = CommonUtilities.toString(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getProtocolParticipantIdentifier());
+
+		if (ppi != null && !ppi.equals("")) {
+			stringBuilder.append(PARTICIPANT_PROTOCOL_IDENTIFIER + " = \"" + ppi + "\"" + NEWLINE);
+		}
+		stringBuilder.append(DISPLAY_LABELQUANTITY + " = \"1\"" + NEWLINE);
 		stringBuilder.append(END + NEWLINE);
 
 		return stringBuilder.toString();

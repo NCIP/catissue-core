@@ -6,6 +6,7 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -19,7 +20,9 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDistributionP
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
+import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
@@ -387,6 +390,37 @@ public class DistributionProtocolTestData {
 	public static PatchDistributionProtocolEvent getPatchDistributionProtocolEventWithoutDisableActivityStatus() {
 		PatchDistributionProtocolEvent event = getPatchDistributionProtocolEvent();
 		event.getDetails().setActivityStatus("Active");
+		return event;
+	}
+
+	public static List<DistributionProtocol> getDPs() {
+		List<DistributionProtocol> distributionProtocols = new ArrayList<DistributionProtocol>();
+		distributionProtocols.add(getDistributionProtocolToReturn());
+		distributionProtocols.add(getDistributionProtocolToReturn());
+		return distributionProtocols;
+	}
+
+	public static ReqAllDistributionProtocolEvent getAllDistributionProtocolEvent() {
+		ReqAllDistributionProtocolEvent event = new ReqAllDistributionProtocolEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static GetDistributionProtocolEvent getDistributionProtocolEvent() {
+		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+		event.setId(1L);
+		return event;
+	}
+
+	public static GetDistributionProtocolEvent getDistributionProtocolEventForName() {
+		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+		event.setTitle("CP Title");
+		return event;
+	}
+
+	public static DeleteDistributionProtocolEvent getDeleteDistributionProtocolEventForTitle() {
+		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
+		event.setTitle("title");
 		return event;
 	}
 }

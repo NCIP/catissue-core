@@ -17,9 +17,18 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 
 	private static final String GET_DISTRIBUTION_PROTOCOL_SHORT_TITLE = FQN + ".getDistributionProtocolByShortTitle";
 
+	private static final String GET_ALL_DPS = FQN + ".getAllDistributionProtocols";
+
 	@Override
 	public DistributionProtocol getDistributionProtocol(Long id) {
 		return (DistributionProtocol) sessionFactory.getCurrentSession().get(DistributionProtocol.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DistributionProtocol> getAllDistributionProtocol(int maxResults) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_DPS);
+		return query.setMaxResults(maxResults).list();
 	}
 
 	@SuppressWarnings("unchecked")

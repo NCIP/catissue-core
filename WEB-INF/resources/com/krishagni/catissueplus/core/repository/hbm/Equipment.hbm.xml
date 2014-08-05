@@ -92,18 +92,23 @@
             not-null="true" />
             
       <query name="getEquipmentByDisplayName">
-    	SELECT equipment.displayName FROM com.krishagni.catissueplus.core.administrative.domain.Equipment equipment 
+    	SELECT equipment FROM com.krishagni.catissueplus.core.administrative.domain.Equipment equipment 
     	WHERE equipment.displayName = :displayName
     </query>
     
     <query name="getEquipmentByDeviceName">
-    	SELECT equipment.deviceName FROM com.krishagni.catissueplus.core.administrative.domain.Equipment equipment WHERE 
+    	SELECT equipment FROM com.krishagni.catissueplus.core.administrative.domain.Equipment equipment WHERE 
     	equipment.deviceName = :deviceName
     </query>
     
     <query name="getEquipmentByEquipmentId">
-    	SELECT equipment.equipmentId FROM com.krishagni.catissueplus.core.administrative.domain.Equipment equipment WHERE 
+    	SELECT equipment FROM com.krishagni.catissueplus.core.administrative.domain.Equipment equipment WHERE 
     	equipment.equipmentId = :equipmentId
+    </query>
+    
+    
+    <query name="getAllEquipments">
+        from com.krishagni.catissueplus.core.administrative.domain.Equipment where activityStatus != 'Disabled'
     </query>
     
     </class>

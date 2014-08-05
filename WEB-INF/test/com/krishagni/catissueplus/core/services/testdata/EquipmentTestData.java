@@ -6,6 +6,7 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +23,9 @@ import com.krishagni.catissueplus.core.administrative.events.CreateEquipmentEven
 import com.krishagni.catissueplus.core.administrative.events.DeleteEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentPatchDetails;
+import com.krishagni.catissueplus.core.administrative.events.GetEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchEquipmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateEquipmentEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 
@@ -328,6 +331,37 @@ public class EquipmentTestData {
 	public static CreateEquipmentEvent getCreateEventWithInvalidActivityStatus() {
 		CreateEquipmentEvent event = getCreateEquipmentEvent();
 		event.getDetails().setActivityStatus("ANY");
+		return event;
+	}
+
+	public static List<Equipment> getEquipments() {
+		List<Equipment> equipments = new ArrayList<Equipment>();
+		equipments.add(getEquipment());
+		equipments.add(getEquipment());
+		return equipments;
+	}
+
+	public static ReqAllEquipmentEvent getAllEquipmentsEvent() {
+		ReqAllEquipmentEvent event = new ReqAllEquipmentEvent();
+		event.setMaxResults(1000);
+		return event;
+	}
+
+	public static GetEquipmentEvent getEquipmentEvent() {
+		GetEquipmentEvent event = new GetEquipmentEvent();
+		event.setId(1L);
+		return event;
+	}
+
+	public static GetEquipmentEvent getEquipmentEventForName() {
+		GetEquipmentEvent event = new GetEquipmentEvent();
+		event.setDisplayName("disp");
+		return event;
+	}
+
+	public static DeleteEquipmentEvent getDeleteEquipmentEventForName() {
+		DeleteEquipmentEvent event = new DeleteEquipmentEvent();
+		event.setDisplayName("displayName");
 		return event;
 	}
 

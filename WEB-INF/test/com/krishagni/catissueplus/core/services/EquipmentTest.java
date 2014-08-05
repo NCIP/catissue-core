@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -18,12 +19,16 @@ import com.krishagni.catissueplus.core.administrative.domain.Equipment;
 import com.krishagni.catissueplus.core.administrative.domain.factory.EquipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.EquipmentFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.EquipmentFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.AllEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.EquipmentUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetEquipmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchEquipmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.repository.EquipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -50,7 +55,7 @@ public class EquipmentTest {
 
 	@Mock
 	SiteDao siteDao;
-	
+
 	@Mock
 	PermissibleValueDao pvDao;
 
@@ -68,10 +73,10 @@ public class EquipmentTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		
+
 		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
 		pvService = new PermissibleValueServiceImpl();
-		
+
 		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
 		pvManager = new PermissibleValuesManagerImpl();
 		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
@@ -205,7 +210,7 @@ public class EquipmentTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 		assertNotNull(response.getId());
-		
+
 	}
 
 	@Test
@@ -471,6 +476,23 @@ public class EquipmentTest {
 	}
 
 	@Test
+	public void testForSuccessfulEquipmentDeleteWithName() {
+		when(equipmentDao.getEquipment(anyString())).thenReturn(EquipmentTestData.getEquipment());
+		DeleteEquipmentEvent reqEvent = EquipmentTestData.getDeleteEquipmentEventForName();
+		EquipmentDeletedEvent response = equipmentService.deleteEquipment(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testForInvalidEquipmentDeleteWithName() {
+		when(equipmentDao.getEquipment(anyString())).thenReturn(null);
+		DeleteEquipmentEvent reqEvent = EquipmentTestData.getDeleteEquipmentEventForName();
+		EquipmentDeletedEvent response = equipmentService.deleteEquipment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getDisplayName());
+	}
+
+	@Test
 	public void testForEquipmentDeletionWithActiveChildren() {
 		when(daoFactory.getEquipmentDao().getEquipment(anyLong())).thenReturn(
 				EquipmentTestData.getEquipmentWithImageCollection());
@@ -480,6 +502,50 @@ public class EquipmentTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 
+	}
+
+	@Test
+	public void testGetAllEquipments() {
+		when(equipmentDao.getAllEquipments(eq(1000))).thenReturn(EquipmentTestData.getEquipments());
+		ReqAllEquipmentEvent reqEvent = EquipmentTestData.getAllEquipmentsEvent();
+		AllEquipmentEvent response = equipmentService.getAllEquipments(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getEquipments().size());
+	}
+
+	@Test
+	public void testGetEquipmentById() {
+		when(equipmentDao.getEquipment(anyLong())).thenReturn(EquipmentTestData.getEquipment());
+		GetEquipmentEvent reqEvent = EquipmentTestData.getEquipmentEvent();
+		GotEquipmentEvent response = equipmentService.getEquipment(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testGetEquipmentWithWrongId() {
+		when(equipmentDao.getEquipment(anyLong())).thenReturn(null);
+		GetEquipmentEvent reqEvent = EquipmentTestData.getEquipmentEvent();
+		GotEquipmentEvent response = equipmentService.getEquipment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testGetEquipmentByName() {
+		when(equipmentDao.getEquipment(anyString())).thenReturn(EquipmentTestData.getEquipment());
+		GetEquipmentEvent reqEvent = EquipmentTestData.getEquipmentEventForName();
+		GotEquipmentEvent response = equipmentService.getEquipment(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+
+	@Test
+	public void testGetEquipmentWithWrongName() {
+		when(equipmentDao.getEquipment(anyString())).thenReturn(null);
+		GetEquipmentEvent reqEvent = EquipmentTestData.getEquipmentEventForName();
+		GotEquipmentEvent response = equipmentService.getEquipment(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getDisplayName());
 	}
 
 	//	@Test

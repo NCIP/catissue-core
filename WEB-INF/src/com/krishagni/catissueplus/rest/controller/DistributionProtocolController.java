@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.AllDistributionProtocolsEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolCreatedEvent;
@@ -28,7 +31,10 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolPatchedEvent;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolUpdatedEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchDistributionProtocolEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -47,6 +53,46 @@ public class DistributionProtocolController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DistributionProtocolDetails> getAllDistributionProtocols(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
+		ReqAllDistributionProtocolEvent req = new ReqAllDistributionProtocolEvent();
+		req.setMaxResults(Integer.parseInt(maxResults));
+		AllDistributionProtocolsEvent resp = distributionProtocolSvc.getAllDistributionProtocols(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getProtocols();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public DistributionProtocolDetails getBiohazard(@PathVariable Long id) {
+		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+		event.setId(id);
+		GotDistributionProtocolEvent resp = distributionProtocolSvc.getDistributionProtocol(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/title={title}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public DistributionProtocolDetails getBiohazard(@PathVariable String title) {
+		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
+		event.setTitle(title);
+		GotDistributionProtocolEvent resp = distributionProtocolSvc.getDistributionProtocol(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getDetails();
+		}
+		return null;
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -153,6 +199,20 @@ public class DistributionProtocolController {
 	public String deleteDistributionProtocol(@PathVariable Long id) {
 		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
 		event.setId(id);
+		event.setSessionDataBean(getSession());
+		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(event);
+		if (response.getStatus() == EventStatus.OK) {
+			return response.getMessage();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/title={title}")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteDistributionProtocol(@PathVariable String title) {
+		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
+		event.setTitle(title);
 		event.setSessionDataBean(getSession());
 		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(event);
 		if (response.getStatus() == EventStatus.OK) {

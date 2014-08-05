@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.core.services.testdata;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
@@ -11,6 +13,7 @@ import com.krishagni.catissueplus.core.administrative.events.CreateDepartmentEve
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetails;
 import com.krishagni.catissueplus.core.administrative.events.DisableDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.GetDepartmentEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 
 public class DepartmentTestData {
@@ -79,15 +82,14 @@ public class DepartmentTestData {
 		return event;
 	}
 
-
 	public static DisableDepartmentEvent getDisableDepartmentEventForName() {
-		DisableDepartmentEvent  event = new DisableDepartmentEvent();
+		DisableDepartmentEvent event = new DisableDepartmentEvent();
 		event.setName("Abc");
 		return event;
 	}
 
 	public static DisableDepartmentEvent getDisableDepartmentEvent() {
-		DisableDepartmentEvent  event = new DisableDepartmentEvent();
+		DisableDepartmentEvent event = new DisableDepartmentEvent();
 		event.setId(1l);
 		return event;
 	}
@@ -103,7 +105,7 @@ public class DepartmentTestData {
 		users.add(new User());
 		return users;
 	}
-	
+
 	public static GetDepartmentEvent getDepartmentEvent() {
 		GetDepartmentEvent event = new GetDepartmentEvent();
 		event.setId(1l);
@@ -113,6 +115,19 @@ public class DepartmentTestData {
 	public static GetDepartmentEvent getDepartmentEventForName() {
 		GetDepartmentEvent event = new GetDepartmentEvent();
 		event.setName("Abc");
+		return event;
+	}
+
+	public static List<Department> getDepartments() {
+		List<Department> departments = new ArrayList<Department>();
+		departments.add(getDepartment(1L));
+		departments.add(getDepartment(2L));
+		return departments;
+	}
+
+	public static ReqAllDepartmentEvent getAllDepartmentEvent() {
+		ReqAllDepartmentEvent event = new ReqAllDepartmentEvent();
+		event.setMaxResults(1000);
 		return event;
 	}
 

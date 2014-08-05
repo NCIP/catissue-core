@@ -8,6 +8,8 @@ public interface ImageDao extends Dao<Image> {
 
 	public Image getImage(Long id);
 
+	public Image getImage(String eqpImageId);
+
 	public boolean isUniqueEquipmentImageId(String eqpImageId);
 
 }

@@ -71,6 +71,11 @@
         <query name="getCpByTitle">
     		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.title = :cpTitle
     	</query>
+    	
+    	 <query name="getCpByShortTitle">
+    		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.shortTitle = :cpShortTitle
+    	</query>
+    	
 	 </class>
 
 </hibernate-mapping>

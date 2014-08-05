@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.java.common.CacheControl;
-import com.java.common.CachePolicy;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.AllUsersEvent;
 import com.krishagni.catissueplus.core.administrative.events.CloseUserEvent;
@@ -67,9 +65,10 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
+	//@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
-	public List<UserSummary> getAllUsers(@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
+	public List<UserSummary> getAllUsers(
+			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
 		req.setMaxResults(Integer.parseInt(maxResults));
 		AllUsersEvent resp = userService.getAllUsers(req);
@@ -79,11 +78,11 @@ public class UserController {
 
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public UserDetails getUser(@PathVariable Long id) {	
+	public UserDetails getUser(@PathVariable Long id) {
 		GetUserEvent resp = userService.getUser(id);
 		if (resp.getStatus() == EventStatus.OK) {
 			return resp.getUserDetails();
@@ -151,7 +150,7 @@ public class UserController {
 		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
@@ -165,7 +164,7 @@ public class UserController {
 		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
 	@ResponseStatus(HttpStatus.OK)

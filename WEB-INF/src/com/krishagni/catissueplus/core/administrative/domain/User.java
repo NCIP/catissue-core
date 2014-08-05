@@ -202,7 +202,7 @@ public class User {
 		this.setEmailAddress(user.getEmailAddress());
 		this.setComments(user.getComments());
 		SetUpdater.<Site> newInstance().update(this.getUserSites(), user.getUserSites());
-		
+
 		for (UserCPRole userCP : user.getUserCPRoles()) {
 			userCP.setUser(this);
 		}
@@ -271,7 +271,7 @@ public class User {
 
 	private void updatePassword(String newPassword) {
 		Password password = new Password();
-		if (isBlank(newPassword)|| !isValidPasswordPattern(newPassword)) {
+		if (isBlank(newPassword) || !isValidPasswordPattern(newPassword)) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, PASSWORD);
 		}
 		password.setUpdateDate(new Date());
@@ -279,7 +279,7 @@ public class User {
 		this.setPasswordToken(null);
 		password.setPassword(BCrypt.hashpw(newPassword,
 				BCrypt.gensalt(Integer.parseInt(XMLPropertyHandler.getValue("bcrypt.salt.windings")))));
-		
+
 		this.passwordCollection.add(password);
 	}
 
@@ -298,6 +298,7 @@ public class User {
 		result = mat.matches();
 		return result;
 	}
+
 	private void validateOldPassword(String oldPassword) {
 		if (isBlank(oldPassword)) {
 			reportError(UserErrorCode.INVALID_ATTR_VALUE, OLD_PASSWORD);

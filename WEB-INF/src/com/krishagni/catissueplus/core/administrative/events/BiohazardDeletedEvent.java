@@ -10,6 +10,8 @@ public class BiohazardDeletedEvent extends ResponseEvent {
 
 	private Long id;
 
+	private String name;
+
 	public Long getId() {
 		return id;
 	}
@@ -18,9 +20,24 @@ public class BiohazardDeletedEvent extends ResponseEvent {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public static BiohazardDeletedEvent notFound(Long id) {
 		BiohazardDeletedEvent event = new BiohazardDeletedEvent();
 		event.setId(id);
+		event.setStatus(EventStatus.NOT_FOUND);
+		return event;
+	}
+
+	public static BiohazardDeletedEvent notFound(String name) {
+		BiohazardDeletedEvent event = new BiohazardDeletedEvent();
+		event.setName(name);
 		event.setStatus(EventStatus.NOT_FOUND);
 		return event;
 	}

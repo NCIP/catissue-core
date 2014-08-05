@@ -19,6 +19,8 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.ImageFactor
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.ImageFactoryImpl;
 import com.krishagni.catissueplus.core.administrative.events.CreateImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageUpdatedEvent;
@@ -53,7 +55,7 @@ public class ImageTest {
 
 	@Mock
 	ImageDao imageDao;
-	
+
 	@Mock
 	PermissibleValueDao pvDao;
 
@@ -73,14 +75,13 @@ public class ImageTest {
 		MockitoAnnotations.initMocks(this);
 		when(daoFactory.getPermissibleValueDao()).thenReturn(pvDao);
 		pvService = new PermissibleValueServiceImpl();
-		
+
 		((PermissibleValueServiceImpl) pvService).setDaoFactory(daoFactory);
 		pvManager = new PermissibleValuesManagerImpl();
 		((PermissibleValuesManagerImpl) pvManager).setPermissibleValueSvc(pvService);
 		CommonValidator.setPvManager(pvManager);
 		when(pvDao.getAllValuesByAttribute(anyString())).thenReturn(PermissibleValueTestData.getPvValues());
-		
-		
+
 		when(daoFactory.getSpecimenDao()).thenReturn(specimenDao);
 		when(daoFactory.getEquipmentDao()).thenReturn(equipmentDao);
 		when(daoFactory.getImageDao()).thenReturn(imageDao);
@@ -339,11 +340,62 @@ public class ImageTest {
 	}
 
 	@Test
+	public void testForSuccessfulImageDeleteWithDisplayName() {
+		when(imageDao.getImage(anyString())).thenReturn(ImageTestData.getImage());
+		DeleteImageEvent reqEvent = ImageTestData.getDeleteImageEventForName();
+		ImageDeletedEvent response = imageService.deleteImage(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testForInvalidImageDeleteWithDisplayName() {
+		when(imageDao.getImage(anyString())).thenReturn(null);
+		DeleteImageEvent reqEvent = ImageTestData.getDeleteImageEventForName();
+		ImageDeletedEvent response = imageService.deleteImage(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+	}
+
+	@Test
 	public void testForServerErrorWhileImageDelete() {
 		doThrow(new RuntimeException()).when(imageDao).saveOrUpdate(any(Image.class));
 		DeleteImageEvent reqEvent = ImageTestData.getDeleteImageEvent();
 		ImageDeletedEvent response = imageService.deleteImage(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}
+
+	@Test
+	public void testGetImageById() {
+		when(imageDao.getImage(anyLong())).thenReturn(ImageTestData.getImage());
+		GetImageEvent reqEvent = ImageTestData.getImageEvent();
+		GotImageEvent response = imageService.getImage(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testGetImageWithWrongId() {
+		when(imageDao.getImage(anyLong())).thenReturn(null);
+		GetImageEvent reqEvent = ImageTestData.getImageEvent();
+		GotImageEvent response = imageService.getImage(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testGetImageByName() {
+		when(imageDao.getImage(anyString())).thenReturn(ImageTestData.getImage());
+		GetImageEvent reqEvent = ImageTestData.getImageEventForName();
+		GotImageEvent response = imageService.getImage(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+
+	@Test
+	public void testGetImageWithWrongName() {
+		when(imageDao.getImage(anyString())).thenReturn(null);
+		GetImageEvent reqEvent = ImageTestData.getImageEventForName();
+		GotImageEvent response = imageService.getImage(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getEqpImageId());
 	}
 }

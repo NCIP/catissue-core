@@ -14,10 +14,12 @@ public class DepartmentDaoImpl extends AbstractDao<Department> implements Depart
 	private static final String FQN = Department.class.getName();
 
 	private static final String GET_DEPARTMENT_BY_NAME = FQN + ".getDepartmentByName";
-	
+
 	private static final String GET_DEPARTMENT_BY_ID = FQN + ".getDepartmentById";
 
-	private static final String GET_DEPARTMENT_BY_NAME_AND_INST = FQN+ ".getDepartmentByNameAndInst";
+	private static final String GET_DEPARTMENT_BY_NAME_AND_INST = FQN + ".getDepartmentByNameAndInst";
+
+	private static final String GET_ALL_DEPARTMENTS = FQN + ".getAllDepartments";
 
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
@@ -44,6 +46,12 @@ public class DepartmentDaoImpl extends AbstractDao<Department> implements Depart
 		query.setString("instName", instName);
 		List<Department> results = query.list();
 		return results.isEmpty() ? true : false;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Department> getAllDepartments(int maxResults) {
+		return sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_DEPARTMENTS).list();
 	}
 
 }

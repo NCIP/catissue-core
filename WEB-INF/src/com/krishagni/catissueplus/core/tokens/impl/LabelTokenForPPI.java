@@ -6,7 +6,13 @@ import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class LabelTokenForPPI implements LabelToken<Specimen> {
 
+	private static final String EMPTY_PPI = "";
+
 	public String getTokenValue(Specimen specimen) {
-		return specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+		if (specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getProtocolParticipantIdentifier() != null) {
+			return specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					.getProtocolParticipantIdentifier();
+		}
+		return EMPTY_PPI;
 	}
 }

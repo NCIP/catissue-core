@@ -10,6 +10,8 @@ public class EquipmentDeletedEvent extends ResponseEvent {
 
 	private Long id;
 
+	private String displayName;
+
 	public Long getId() {
 		return id;
 	}
@@ -18,9 +20,24 @@ public class EquipmentDeletedEvent extends ResponseEvent {
 		this.id = id;
 	}
 
-	public static EquipmentDeletedEvent notFound(Long siteId) {
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public static EquipmentDeletedEvent notFound(Long id) {
 		EquipmentDeletedEvent response = new EquipmentDeletedEvent();
-		response.setId(siteId);
+		response.setId(id);
+		response.setStatus(EventStatus.NOT_FOUND);
+		return response;
+	}
+
+	public static EquipmentDeletedEvent notFound(String displayName) {
+		EquipmentDeletedEvent response = new EquipmentDeletedEvent();
+		response.setDisplayName(displayName);
 		response.setStatus(EventStatus.NOT_FOUND);
 		return response;
 	}

@@ -1,19 +1,23 @@
 
 package com.krishagni.catissueplus.core.administrative.repository;
 
+import java.util.List;
+
 import com.krishagni.catissueplus.core.administrative.domain.Equipment;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface EquipmentDao extends Dao<Equipment> {
 
-	Equipment getEquipment(long anyLong);
+	public Equipment getEquipment(long anyLong);
 
-	Equipment getEquipment(String anyString);
+	public Equipment getEquipment(String displayName);
 
-	boolean isUniqueDisplayName(String displayName);
+	public boolean isUniqueDisplayName(String displayName);
 
-	boolean isUniqueDeviceName(String deviceName);
+	public boolean isUniqueDeviceName(String deviceName);
 
-	boolean isUniqueEquipmentId(String equipmentId);
+	public boolean isUniqueEquipmentId(String equipmentId);
+
+	public List<Equipment> getAllEquipments(int maxResults);
 
 }

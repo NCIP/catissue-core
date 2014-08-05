@@ -17,6 +17,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDetails;
 import com.krishagni.catissueplus.core.administrative.events.ImagePatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.PatchImageEvent;
@@ -279,6 +280,24 @@ public class ImageTestData {
 		PatchImageEvent event = new PatchImageEvent();
 		ImagePatchDetails details = new ImagePatchDetails();
 		event.setDetails(details);
+		return event;
+	}
+
+	public static GetImageEvent getImageEvent() {
+		GetImageEvent event = new GetImageEvent();
+		event.setId(1L);
+		return event;
+	}
+
+	public static GetImageEvent getImageEventForName() {
+		GetImageEvent event = new GetImageEvent();
+		event.setEqpImageId("eqpImageId");
+		return event;
+	}
+
+	public static DeleteImageEvent getDeleteImageEventForName() {
+		DeleteImageEvent event = new DeleteImageEvent();
+		event.setEqpImageId("In Transit");
 		return event;
 	}
 

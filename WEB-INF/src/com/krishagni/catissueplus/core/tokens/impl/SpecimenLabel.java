@@ -6,9 +6,14 @@ import com.krishagni.catissueplus.core.tokens.LabelToken;
 
 public class SpecimenLabel implements LabelToken<Specimen> {
 
+	private static final String EMPTY_LABEL = "";
+
 	@Override
 	public String getTokenValue(Specimen specimen) {
-		return specimen.getLabel();
+		if (specimen.getLabel() != null) {
+			return specimen.getLabel();
+		}
+		return EMPTY_LABEL;
 	}
 
 }

@@ -7,6 +7,8 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.ImageFactor
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.CreateImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetImageEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ImageDetails;
@@ -32,6 +34,27 @@ public class ImageServiceImpl implements ImageService {
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	@Override
+	@PlusTransactional
+	public GotImageEvent getImage(GetImageEvent event) {
+		Image image;
+		if (event.getId() != null) {
+			image = daoFactory.getImageDao().getImage(event.getId());
+			if (image == null) {
+				return GotImageEvent.notFound(event.getId());
+			}
+		}
+		else {
+			image = daoFactory.getImageDao().getImage(event.getEqpImageId());
+			if (image == null) {
+				return GotImageEvent.notFound(event.getEqpImageId());
+			}
+		}
+
+		ImageDetails details = ImageDetails.fromDomain(image);
+		return GotImageEvent.ok(details);
 	}
 
 	@Override
@@ -127,10 +150,18 @@ public class ImageServiceImpl implements ImageService {
 	@PlusTransactional
 	public ImageDeletedEvent deleteImage(DeleteImageEvent reqEvent) {
 		try {
-			Long id = reqEvent.getId();
-			Image image = daoFactory.getImageDao().getImage(id);
-			if (image == null) {
-				return ImageDeletedEvent.notFound(id);
+			Image image;
+			if (reqEvent.getId() != null) {
+				image = daoFactory.getImageDao().getImage(reqEvent.getId());
+				if (image == null) {
+					return ImageDeletedEvent.notFound(reqEvent.getId());
+				}
+			}
+			else {
+				image = daoFactory.getImageDao().getImage(reqEvent.getEqpImageId());
+				if (image == null) {
+					return ImageDeletedEvent.notFound(reqEvent.getId());
+				}
 			}
 
 			image.delete();
@@ -141,4 +172,5 @@ public class ImageServiceImpl implements ImageService {
 			return ImageDeletedEvent.serverError(e);
 		}
 	}
+
 }

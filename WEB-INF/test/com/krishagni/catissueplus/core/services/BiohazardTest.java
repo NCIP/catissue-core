@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -18,13 +19,17 @@ import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.BiohazardFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.impl.BiohazardFactoryImpl;
+import com.krishagni.catissueplus.core.administrative.events.AllBiohazardsEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardCreatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDeletedEvent;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardDetails;
 import com.krishagni.catissueplus.core.administrative.events.BiohazardUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.CreateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.DeleteBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GetBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.GotBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqAllBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.repository.BiohazardDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
@@ -464,6 +469,67 @@ public class BiohazardTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testGetAllBiohazards() {
+		when(biohazardDao.getAllBiohazards(eq(1000))).thenReturn(BiohazardTestData.getBiohazards());
+		ReqAllBiohazardEvent reqEvent = BiohazardTestData.getAllBiohazardsEvent();
+		AllBiohazardsEvent response = biohazardService.getAllBiohazards(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getBiohazards().size());
+	}
+
+	@Test
+	public void testGetBiohazardById() {
+		when(biohazardDao.getBiohazard(anyLong())).thenReturn(BiohazardTestData.getBiohazard());
+		GetBiohazardEvent reqEvent = BiohazardTestData.getBiohazardEvent();
+		GotBiohazardEvent response = biohazardService.getBiohazard(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testGetBiohazardWithWrongId() {
+		when(biohazardDao.getBiohazard(anyLong())).thenReturn(null);
+		GetBiohazardEvent reqEvent = BiohazardTestData.getBiohazardEvent();
+		GotBiohazardEvent response = biohazardService.getBiohazard(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testGetBiohazardByName() {
+		when(biohazardDao.getBiohazard(anyString())).thenReturn(BiohazardTestData.getBiohazard());
+		GetBiohazardEvent reqEvent = BiohazardTestData.getBiohazardEventForName();
+		GotBiohazardEvent response = biohazardService.getBiohazard(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
+	}
+
+	@Test
+	public void testGetBiohazardWithWrongName() {
+		when(biohazardDao.getBiohazard(anyString())).thenReturn(null);
+		GetBiohazardEvent reqEvent = BiohazardTestData.getBiohazardEventForName();
+		GotBiohazardEvent response = biohazardService.getBiohazard(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
+	}
+
+	@Test
+	public void testForSuccessfulSiteDeleteWithName() {
+		when(biohazardDao.getBiohazard(anyString())).thenReturn(BiohazardTestData.getBiohazard());
+		DeleteBiohazardEvent reqEvent = BiohazardTestData.getDeleteBiohazardEventForName();
+		BiohazardDeletedEvent response = biohazardService.deteteBiohazard(reqEvent);
+		assertEquals(EventStatus.OK, response.getStatus());
+	}
+
+	@Test
+	public void testForInvalidSiteDeleteWithName() {
+		when(biohazardDao.getBiohazard(anyString())).thenReturn(null);
+		DeleteBiohazardEvent reqEvent = BiohazardTestData.getDeleteBiohazardEventForName();
+		BiohazardDeletedEvent response = biohazardService.deteteBiohazard(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 }
