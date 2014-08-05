@@ -234,8 +234,13 @@ div#d999 {
 		<tr height="100%">
 			<td height="100%">
                              
-                         <%@ include file="/pages/content/common/ActionErrors.jsp"%>
+                         
 			<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+				<tr>
+					<td>
+						<%@ include file="/pages/content/common/ActionErrors.jsp"%>
+					</td>
+				</tr>
 				<tr height="100%">
 					<td width="100%" height="100%" >
 						<div id="tabbar_div" style="width:auto;height:100%;">
