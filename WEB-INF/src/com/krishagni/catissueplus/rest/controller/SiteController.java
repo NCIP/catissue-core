@@ -51,7 +51,8 @@ public class SiteController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SiteDetails createSite(@RequestBody SiteDetails siteDetails) {
-		CreateSiteEvent event = new CreateSiteEvent(siteDetails);
+		CreateSiteEvent event = new CreateSiteEvent();
+		event.setSiteDetails(siteDetails);
 		event.setSessionDataBean(getSession());
 		SiteCreatedEvent resp = siteService.createSite(event);
 		if (resp.getStatus() == EventStatus.OK) {

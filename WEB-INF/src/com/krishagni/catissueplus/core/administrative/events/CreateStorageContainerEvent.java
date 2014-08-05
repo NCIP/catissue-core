@@ -8,7 +8,7 @@ public class CreateStorageContainerEvent extends RequestEvent {
 	private StorageContainerDetails details;
 	
 	public CreateStorageContainerEvent(StorageContainerDetails details) {
-		this.details = details;
+		setDetails(details);
 	}
 
 	public StorageContainerDetails getDetails() {

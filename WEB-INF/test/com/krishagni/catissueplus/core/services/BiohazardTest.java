@@ -295,6 +295,7 @@ public class BiohazardTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -306,6 +307,7 @@ public class BiohazardTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 	@Test
@@ -420,6 +422,7 @@ public class BiohazardTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	// @Test

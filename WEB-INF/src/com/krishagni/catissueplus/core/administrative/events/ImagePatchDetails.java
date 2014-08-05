@@ -7,8 +7,6 @@ import java.util.List;
 
 public class ImagePatchDetails {
 
-	private Long id;
-
 	private String description;
 
 	private String eqpImageId;
@@ -42,14 +40,6 @@ public class ImagePatchDetails {
 	private String activityStatus;
 
 	private List<String> modifiedAttributes = new ArrayList<String>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getDescription() {
 		return description;

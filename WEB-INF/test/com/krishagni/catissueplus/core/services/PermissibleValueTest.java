@@ -184,6 +184,7 @@ public class PermissibleValueTest {
 
 		PvEditedEvent response = pvService.updatePermissibleValue(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -203,6 +204,7 @@ public class PermissibleValueTest {
 		DeletePvEvent reqEvent = PermissibleValueTestData.getDeletePvEvent();
 		PvDeletedEvent response = pvService.deletePermissibleValue(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -241,6 +243,9 @@ public class PermissibleValueTest {
 		GetAllPVsEvent event = PermissibleValueTestData.getGetAllPVsEvent();
 		AllPvsEvent response = pvService.getPermissibleValues(event);
 		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(4, response.getPvs().size());
+		assertEquals(event.getAttribute(), response.getPvs().get(0).getAttribute());
+		assertEquals("Tissue", response.getPvs().get(0).getValue());
 	}
 
 	/*@Test

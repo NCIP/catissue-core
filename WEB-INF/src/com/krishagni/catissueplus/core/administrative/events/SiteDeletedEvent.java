@@ -8,17 +8,7 @@ public class SiteDeletedEvent extends ResponseEvent {
 
 	private static final String SUCCESS = "success";
 
-	private SiteDetails details;
-
 	private Long id;
-
-	public SiteDetails getDetails() {
-		return details;
-	}
-
-	public void setDetails(SiteDetails details) {
-		this.details = details;
-	}
 
 	public Long getId() {
 		return id;

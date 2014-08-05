@@ -5,19 +5,9 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class DeleteDistributionProtocolEvent extends RequestEvent {
 
-	private DistributionProtocolDetails details;
-
 	private Long id;
 
 	private String title;
-
-	public DistributionProtocolDetails getDetails() {
-		return details;
-	}
-
-	public void setDetails(DistributionProtocolDetails details) {
-		this.details = details;
-	}
 
 	public Long getId() {
 		return id;

@@ -40,6 +40,7 @@ public class InstituteTestData {
 
 	public static UpdateInstituteEvent getUpdateInstituteEvent() {
 		UpdateInstituteEvent event = new UpdateInstituteEvent();
+		event.setId(1l);
 		InstituteDetails details = new InstituteDetails();
 		details.setName("My Inst");
 		event.setInstituteDetails(details);

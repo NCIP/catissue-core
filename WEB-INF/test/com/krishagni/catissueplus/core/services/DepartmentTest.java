@@ -189,6 +189,7 @@ public class DepartmentTest {
 
 		DepartmentUpdatedEvent response = departmentService.updateDepartment(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getDepartmentId());
 	}
 
 	@Test
@@ -207,6 +208,7 @@ public class DepartmentTest {
 		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEvent();
 		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -215,6 +217,7 @@ public class DepartmentTest {
 		DisableDepartmentEvent reqEvent = DepartmentTestData.getDisableDepartmentEventForName();
 		DepartmentDisabledEvent response = departmentService.deleteDepartment(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 	@Test
@@ -261,6 +264,7 @@ public class DepartmentTest {
 		GetDepartmentEvent reqEvent = DepartmentTestData.getDepartmentEvent();
 		DepartmentGotEvent response = departmentService.getDepartment(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 	
 	
@@ -281,4 +285,12 @@ public class DepartmentTest {
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
 	}
 
+	@Test
+	public void testGetDepartmentByIdWithServerError() {
+		GetDepartmentEvent reqEvent = DepartmentTestData.getDepartmentEvent();
+		doThrow(new RuntimeException()).when(departmentDao).getDepartment(anyLong());
+		DepartmentGotEvent response = departmentService.getDepartment(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}	
 }

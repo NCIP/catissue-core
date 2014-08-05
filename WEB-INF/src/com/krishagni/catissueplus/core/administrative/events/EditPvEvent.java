@@ -8,7 +8,7 @@ public class EditPvEvent extends RequestEvent {
 	private PermissibleValueDetails details;
 
 	public EditPvEvent(PermissibleValueDetails details, Long pvId) {
-		this.details = details;
+		setDetails(details);
 		this.details.setId(pvId);
 	}
 

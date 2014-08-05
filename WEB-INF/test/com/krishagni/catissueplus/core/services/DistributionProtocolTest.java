@@ -448,6 +448,7 @@ public class DistributionProtocolTest {
 		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -458,6 +459,7 @@ public class DistributionProtocolTest {
 		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getTitle());
 	}
 
 	@Test
@@ -648,6 +650,7 @@ public class DistributionProtocolTest {
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -657,6 +660,7 @@ public class DistributionProtocolTest {
 		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getTitle());
 	}
 
 	@Test
@@ -707,6 +711,7 @@ public class DistributionProtocolTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test

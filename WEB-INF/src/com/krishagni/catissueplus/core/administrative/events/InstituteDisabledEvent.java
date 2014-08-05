@@ -36,14 +36,6 @@ public class InstituteDisabledEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static InstituteDisabledEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		InstituteDisabledEvent resp = new InstituteDisabledEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
-	}
-
 	public static InstituteDisabledEvent serverError(Throwable... t) {
 		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
 		InstituteDisabledEvent resp = new InstituteDisabledEvent();

@@ -9,8 +9,6 @@ public class DeletePrintRuleEvent extends RequestEvent {
 
 	private Long printRuleId;
 
-	private Object printRuleDetails;
-
 	public String getPrintRuleName() {
 		return printRuleName;
 	}
@@ -25,14 +23,6 @@ public class DeletePrintRuleEvent extends RequestEvent {
 
 	public void setPrintRuleId(Long printRuleId) {
 		this.printRuleId = printRuleId;
-	}
-
-	public Object getPrintRuleDetails() {
-		return printRuleDetails;
-	}
-
-	public void setPrintRuleDetails(Object printRuleDetails) {
-		this.printRuleDetails = printRuleDetails;
 	}
 
 }

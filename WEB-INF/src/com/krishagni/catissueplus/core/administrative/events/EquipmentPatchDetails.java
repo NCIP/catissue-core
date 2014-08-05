@@ -14,8 +14,6 @@ public class EquipmentPatchDetails {
 
 	private String siteName;
 
-	private Long id;
-
 	private String displayName;
 
 	private String softwareVersion;
@@ -56,14 +54,6 @@ public class EquipmentPatchDetails {
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getDisplayName() {

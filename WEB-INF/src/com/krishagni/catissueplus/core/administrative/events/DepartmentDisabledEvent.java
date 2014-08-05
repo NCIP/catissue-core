@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -9,6 +8,8 @@ public class DepartmentDisabledEvent extends ResponseEvent{
 	private static final String SUCCESS = "success";
 	
 	private Long id;
+	
+	private String name;
 
 	public Long getId() {
 		return id;
@@ -17,20 +18,22 @@ public class DepartmentDisabledEvent extends ResponseEvent{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public static DepartmentDisabledEvent ok() {
 		DepartmentDisabledEvent event = new DepartmentDisabledEvent();
 		event.setStatus(EventStatus.OK);
 		event.setMessage(SUCCESS);
 		return event;
-	}
-
-	public static DepartmentDisabledEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		DepartmentDisabledEvent resp = new DepartmentDisabledEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp; 
 	}
 
 	public static DepartmentDisabledEvent serverError(Throwable... t) {
@@ -45,6 +48,13 @@ public class DepartmentDisabledEvent extends ResponseEvent{
 	public static DepartmentDisabledEvent notFound(Long deptId) {
 		DepartmentDisabledEvent resp = new DepartmentDisabledEvent();
 		resp.setId(deptId);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
+	
+	public static DepartmentDisabledEvent notFound(String name) {
+		DepartmentDisabledEvent resp = new DepartmentDisabledEvent();
+		resp.setName(name);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

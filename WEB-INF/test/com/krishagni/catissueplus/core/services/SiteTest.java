@@ -325,6 +325,7 @@ public class SiteTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -336,6 +337,7 @@ public class SiteTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getSiteName());
 	}
 
 	@Test

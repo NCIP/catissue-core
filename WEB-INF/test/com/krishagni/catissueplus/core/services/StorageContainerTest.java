@@ -430,6 +430,7 @@ public class StorageContainerTest {
 		StorageContainerUpdatedEvent response = storageContainerService.updateStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getStorageContainerId());
 	}
 
 	@Test
@@ -511,6 +512,7 @@ public class StorageContainerTest {
 		StorageContainerUpdatedEvent response = storageContainerService.patchStorageContainer(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getStorageContainerId());
 	}
 
 	@Test
@@ -549,6 +551,29 @@ public class StorageContainerTest {
 
 		StorageContainerDisabledEvent response = storageContainerService.disableStorageContainer(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+	}
+
+	@Test
+	public void testSuccessfulStorageContainerDisableByName() {
+		DisableStorageContainerEvent reqEvent = StorageContainerTestData.getDisableStorageContainerEventForName();
+		StorageContainer scToDelete = StorageContainerTestData.getStorageContainer(1L);
+		when(storageContainerDao.getStorageContainerByName(anyString())).thenReturn(scToDelete);
+		StorageContainerDisabledEvent response = storageContainerService.disableStorageContainer(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(StorageContainerTestData.ACTIVITY_STATUS_CLOSED, scToDelete.getActivityStatus());
+	}
+	
+	@Test
+	public void testForInvalidStorageContainerDisableByName() {
+		when(daoFactory.getStorageContainerDao().getStorageContainerByName(anyString())).thenReturn(null);
+		DisableStorageContainerEvent reqEvent = StorageContainerTestData.getDisableStorageContainerEventForName();
+		reqEvent.setSessionDataBean(StorageContainerTestData.getSessionDataBean());
+
+		StorageContainerDisabledEvent response = storageContainerService.disableStorageContainer(reqEvent);
+		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 	@Test
@@ -568,6 +593,7 @@ public class StorageContainerTest {
 		ReqAllStorageContainersEvent reqEvent = StorageContainerTestData.getAllStorageContainerEvent();
 		GetAllStorageContainersEvent response = storageContainerService.getStorageContainers(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getSummary().size());
 	}
 	
 	@Test
@@ -584,6 +610,7 @@ public class StorageContainerTest {
 		GetStorageContainerEvent reqEvent = StorageContainerTestData.getStorageContainerEvent();
 		StorageContainerGotEvent response = storageContainerService.getStorageContainer(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 	
 	@Test
@@ -601,6 +628,7 @@ public class StorageContainerTest {
 		GetStorageContainerEvent reqEvent = StorageContainerTestData.getStorageContainerEventForName();
 		StorageContainerGotEvent response = storageContainerService.getStorageContainer(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 	
 	@Test

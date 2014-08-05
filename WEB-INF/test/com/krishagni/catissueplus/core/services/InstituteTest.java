@@ -160,6 +160,7 @@ public class InstituteTest {
 
 		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getInstituteId());
 	}
 	
 	@Test
@@ -169,6 +170,7 @@ public class InstituteTest {
 
 		InstituteUpdatedEvent response = instituteService.updateInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 	@Test
@@ -199,6 +201,7 @@ public class InstituteTest {
 		ReqAllInstitutesEvent reqEvent = InstituteTestData.getAllInstitutesEvent();
 		GetAllInstitutesEvent response = instituteService.getInstitutes(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getDetails().size());
 	}
 	
 	@Test
@@ -215,8 +218,8 @@ public class InstituteTest {
 		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEvent();
 		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
-	
 	
 	@Test
 	public void testGetInstituteByName() {
@@ -233,6 +236,7 @@ public class InstituteTest {
 		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEventForName();
 		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 	
 	@Test
@@ -248,10 +252,11 @@ public class InstituteTest {
 	
 	@Test
 	public void testForInvalidInstituteDisable() {
-		when(instituteDao.getInstituteByName(anyString())).thenReturn(null);
+		when(instituteDao.getInstitute(anyLong())).thenReturn(null);
 		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEvent();
 		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 	
 	@Test
@@ -260,6 +265,7 @@ public class InstituteTest {
 		DisableInstituteEvent reqEvent = InstituteTestData.getDisableInstituteEventForName();
 		InstituteDisabledEvent response = instituteService.deleteInstitute(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 	@Test
@@ -291,4 +297,13 @@ public class InstituteTest {
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
 	}
+	
+	@Test
+	public void testGetInstituteByIdWithServerError() {
+		GetInstituteEvent reqEvent = InstituteTestData.getInstituteEvent();
+		doThrow(new RuntimeException()).when(instituteDao).getInstitute(anyLong());
+		InstituteGotEvent response = instituteService.getInstitute(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}	
 }

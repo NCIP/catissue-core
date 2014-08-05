@@ -7,7 +7,7 @@ public class AddPvEvent extends RequestEvent {
 private PermissibleValueDetails pvDetails;
 	
 	public AddPvEvent(PermissibleValueDetails pvDetails) {
-		this.pvDetails = pvDetails;
+		setDetails(pvDetails);
 	}
 
 	public PermissibleValueDetails getDetails() {

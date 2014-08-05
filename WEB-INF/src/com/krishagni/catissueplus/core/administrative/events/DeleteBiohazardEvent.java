@@ -7,8 +7,6 @@ public class DeleteBiohazardEvent extends RequestEvent {
 
 	private Long id;
 
-	private BiohazardDetails biohazardDetails;
-
 	public Long getId() {
 		return id;
 	}
@@ -17,11 +15,4 @@ public class DeleteBiohazardEvent extends RequestEvent {
 		this.id = id;
 	}
 
-	public BiohazardDetails getBiohazardDetails() {
-		return biohazardDetails;
-	}
-
-	public void setBiohazardDetails(BiohazardDetails biohazardDetails) {
-		this.biohazardDetails = biohazardDetails;
-	}
 }

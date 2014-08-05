@@ -8,7 +8,7 @@ public class UpdateStorageContainerEvent extends RequestEvent {
 	private StorageContainerDetails details;
 
 	public UpdateStorageContainerEvent(StorageContainerDetails details, Long containerId) {
-		this.details = details;
+		setDetails(details);
 		this.details.setId(containerId);
 	}
 

@@ -90,7 +90,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			if (event.getName() != null) {
 				department = daoFactory.getDepartmentDao().getDepartmentByName(event.getName());
 				if (department == null) {
-					return DepartmentDisabledEvent.notFound(event.getId());
+					return DepartmentDisabledEvent.notFound(event.getName());
 				}
 			}
 			else {
@@ -116,7 +116,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			if (event.getName() != null) {
 				department = daoFactory.getDepartmentDao().getDepartmentByName(event.getName());
 				if (department == null) {
-					return DepartmentGotEvent.notFound(event.getId());
+					return DepartmentGotEvent.notFound(event.getName());
 				}
 			}
 			else {

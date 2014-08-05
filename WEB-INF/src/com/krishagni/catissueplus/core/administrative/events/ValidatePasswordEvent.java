@@ -8,7 +8,7 @@ public class ValidatePasswordEvent extends RequestEvent {
 	private String password;
 	
 	public ValidatePasswordEvent(String password){
-		this.password = password;
+		setPassword(password);
 	}
 
 	public String getPassword() {

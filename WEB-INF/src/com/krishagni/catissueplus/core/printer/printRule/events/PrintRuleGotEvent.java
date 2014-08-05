@@ -45,6 +45,7 @@ public class PrintRuleGotEvent extends ResponseEvent {
 	public static PrintRuleGotEvent notFound(Long id) {
 		PrintRuleGotEvent resp = new PrintRuleGotEvent();
 		resp.setStatus(EventStatus.NOT_FOUND);
+		resp.setId(id);
 		return resp;
 	}
 

@@ -46,7 +46,7 @@ public class PermissibleValueTestData {
 	public static PermissibleValue getPermissibleValue(long id) {
 		PermissibleValue pv = new PermissibleValue();
 		pv.setConceptCode("32344");
-		pv.setAttribute("dsad");
+		pv.setAttribute("abc");
 		pv.setValue("Tissue");
 		return pv;
 	}
@@ -100,6 +100,8 @@ public class PermissibleValueTestData {
 	public static GetAllPVsEvent getGetAllPVsEvent() {
 		GetAllPVsEvent event = new GetAllPVsEvent();
 		event.setAttribute("abc");
+		event.setMaxResult(1000);
+		event.setSearchString("f");
 		return event;
 	}
 

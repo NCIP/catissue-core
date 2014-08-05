@@ -193,6 +193,7 @@ public class EquipmentTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.OK, response.getStatus());
+		assertNotNull(response.getDetails());
 	}
 
 	@Test
@@ -203,6 +204,8 @@ public class EquipmentTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
+		
 	}
 
 	@Test
@@ -331,6 +334,7 @@ public class EquipmentTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -463,6 +467,7 @@ public class EquipmentTest {
 
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test

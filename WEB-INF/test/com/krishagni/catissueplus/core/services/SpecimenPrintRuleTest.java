@@ -419,6 +419,7 @@ public class SpecimenPrintRuleTest {
 		ReqAllPrintRulesEvent reqEvent = SpecimenPrintRuleTestData.getAllPrintRulesEvent();
 		GetAllPrintRulesEvent response = printRuleService.getPrintAllRules(reqEvent);
 		assertEquals(EventStatus.OK, response.getStatus());
+		assertEquals(2, response.getDetails().size());
 	}
 	
 	@Test
@@ -435,6 +436,7 @@ public class SpecimenPrintRuleTest {
 		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEvent();
 		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 	
 	
@@ -453,5 +455,15 @@ public class SpecimenPrintRuleTest {
 		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEventForName();
 		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
+	
+	@Test
+	public void testGetDepartmentByIdWithServerError() {
+		GetPrintRuleEvent reqEvent = SpecimenPrintRuleTestData.getPrintRuleEvent();
+		doThrow(new RuntimeException()).when(printRuleDao).getPrintRule(anyLong());
+		PrintRuleGotEvent response = printRuleService.getPrintRule(reqEvent);
+		assertNotNull("response cannot be null", response);
+		assertEquals(EventStatus.INTERNAL_SERVER_ERROR, response.getStatus());
+	}	
 }

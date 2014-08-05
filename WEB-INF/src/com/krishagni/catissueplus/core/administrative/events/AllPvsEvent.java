@@ -25,12 +25,4 @@ public class AllPvsEvent extends ResponseEvent {
 		return resp;
 	}
 
-	public static AllPvsEvent serverError(Throwable... t) {
-		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
-		AllPvsEvent resp = new AllPvsEvent();
-		resp.setStatus(EventStatus.INTERNAL_SERVER_ERROR);
-		resp.setException(t1);
-		resp.setMessage(t1 != null ? t1.getMessage() : null);
-		return resp;
-	}
 }

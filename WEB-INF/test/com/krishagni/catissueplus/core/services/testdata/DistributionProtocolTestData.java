@@ -89,8 +89,8 @@ public class DistributionProtocolTestData {
 		UpdateDistributionProtocolEvent event = new UpdateDistributionProtocolEvent();
 		event.setSessionDataBean(getSessionDataBean());
 		DistributionProtocolDetails details = getDistributionProtocolDetails();
-		details.setId(null);
 		event.setDetails(details);
+		event.setTitle("asds");
 		return event;
 	}
 

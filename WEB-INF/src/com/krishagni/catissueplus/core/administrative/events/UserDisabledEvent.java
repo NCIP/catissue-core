@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -34,14 +33,6 @@ public class UserDisabledEvent extends ResponseEvent {
 		event.setStatus(EventStatus.OK);
 		event.setMessage(SUCCESS);
 		return event;
-	}
-
-	public static UserDisabledEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		UserDisabledEvent resp = new UserDisabledEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
 	}
 
 	public static UserDisabledEvent serverError(Throwable... t) {

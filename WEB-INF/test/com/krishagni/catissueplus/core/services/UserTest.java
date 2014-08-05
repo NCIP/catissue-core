@@ -345,11 +345,12 @@ public class UserTest {
 
 	@Test
 	public void testForInvalidUserUpdate() {
-		when(userDao.getUserByIdAndDomainName(anyLong(),anyString())).thenReturn(null);
+		when(userDao.getUserByIdAndDomainName(anyLong(), anyString())).thenReturn(null);
 		UpdateUserEvent reqEvent = UserTestData.getUpdateUserEvent();
 
 		UserUpdatedEvent response = userService.updateUser(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getUserId());
 	}
 
 	@Test
@@ -371,6 +372,7 @@ public class UserTest {
 
 		UserClosedEvent response = userService.closeUser(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 
 	@Test
@@ -400,6 +402,7 @@ public class UserTest {
 		DisableUserEvent reqEvent = UserTestData.getDisableUserEvent();
 		UserDisabledEvent response = userService.deleteUser(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getId());
 	}
 	
 	@Test
@@ -408,6 +411,7 @@ public class UserTest {
 		DisableUserEvent reqEvent = UserTestData.getDisableUserEventForName();
 		UserDisabledEvent response = userService.deleteUser(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getName());
 	}
 
 	@Test
@@ -676,12 +680,14 @@ public class UserTest {
 		UserUpdatedEvent response = userService.patchUser(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertNotNull(response.getUserId());
 	}
 	
 	@Test
 	public void testGetAllUsers() {
 		when(userDao.getAllUsers(eq(1000))).thenReturn(UserTestData.getUsers());
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
+		req.setMaxResults(1000);
 		AllUsersEvent resp = userService.getAllUsers(req);
 		assertNotNull("response cannot be null", resp.getUsers());
 	}

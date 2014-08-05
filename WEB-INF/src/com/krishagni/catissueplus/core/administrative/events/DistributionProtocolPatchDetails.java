@@ -7,8 +7,6 @@ import java.util.List;
 
 public class DistributionProtocolPatchDetails {
 
-	private Long id;
-
 	private UserInfo principalInvestigator;
 
 	private String title;
@@ -26,14 +24,6 @@ public class DistributionProtocolPatchDetails {
 	private String activityStatus;
 
 	private List<String> modifiedAttributes = new ArrayList<String>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public UserInfo getPrincipalInvestigator() {
 		return principalInvestigator;

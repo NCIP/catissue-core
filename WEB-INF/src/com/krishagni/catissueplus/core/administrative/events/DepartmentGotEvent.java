@@ -6,6 +6,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public class DepartmentGotEvent extends ResponseEvent {
 
 	private Long id;
+	
+	private String name;
 
 	private DepartmentDetails details;
 
@@ -23,6 +25,16 @@ public class DepartmentGotEvent extends ResponseEvent {
 
 	public void setDetails(DepartmentDetails details) {
 		this.details = details;
+	}
+	
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public static DepartmentGotEvent ok(DepartmentDetails details) {
@@ -44,6 +56,13 @@ public class DepartmentGotEvent extends ResponseEvent {
 	public static DepartmentGotEvent notFound(Long deptId) {
 		DepartmentGotEvent resp = new DepartmentGotEvent();
 		resp.setId(deptId);
+		resp.setStatus(EventStatus.NOT_FOUND);
+		return resp;
+	}
+
+	public static DepartmentGotEvent notFound(String name) {
+		DepartmentGotEvent resp = new DepartmentGotEvent();
+		resp.setName(name);
 		resp.setStatus(EventStatus.NOT_FOUND);
 		return resp;
 	}

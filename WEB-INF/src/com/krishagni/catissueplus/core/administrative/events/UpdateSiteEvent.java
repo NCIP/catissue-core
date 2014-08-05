@@ -24,7 +24,7 @@ public class UpdateSiteEvent extends RequestEvent {
 
 	public UpdateSiteEvent(SiteDetails details, String name) {
 		this.siteDetails = details;
-		this.siteName = name;
+		setSiteName(name);
 	}
 
 	public SiteDetails getSiteDetails() {

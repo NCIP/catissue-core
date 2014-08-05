@@ -7,21 +7,11 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolDeletedEvent extends ResponseEvent {
 
-	private DistributionProtocolDetails details = new DistributionProtocolDetails();
-
 	private long id;
 
 	private String title;
 
 	private static final String SUCCESS = "success";
-
-	public DistributionProtocolDetails getDetails() {
-		return details;
-	}
-
-	public void setDetails(DistributionProtocolDetails details) {
-		this.details = details;
-	}
 
 	public long getId() {
 		return id;
@@ -67,14 +57,6 @@ public class DistributionProtocolDeletedEvent extends ResponseEvent {
 		event.setStatus(EventStatus.OK);
 		event.setMessage(SUCCESS);
 		return event;
-	}
-
-	public static DistributionProtocolDeletedEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		DistributionProtocolDeletedEvent resp = new DistributionProtocolDeletedEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
 	}
 
 }

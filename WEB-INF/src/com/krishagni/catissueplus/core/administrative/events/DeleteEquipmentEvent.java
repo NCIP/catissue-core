@@ -7,8 +7,6 @@ public class DeleteEquipmentEvent extends RequestEvent {
 
 	private Long id;
 
-	private EquipmentDetails details;
-
 	public Long getId() {
 		return id;
 	}
@@ -16,13 +14,4 @@ public class DeleteEquipmentEvent extends RequestEvent {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public EquipmentDetails getDetails() {
-		return details;
-	}
-
-	public void setDetails(EquipmentDetails details) {
-		this.details = details;
-	}
-
 }

@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -10,7 +9,9 @@ public class InstituteGotEvent extends ResponseEvent {
 	
 	private String name;
 
-	private InstituteDetails details;public Long getId() {
+	private InstituteDetails details;
+	
+	public Long getId() {
 		return id;
 	}
 
@@ -39,15 +40,6 @@ public class InstituteGotEvent extends ResponseEvent {
 		event.setStatus(EventStatus.OK);
 		event.setDetails(details);
 		return event;
-	}
-
-	public static InstituteGotEvent invalidRequest(String message,
-			ErroneousField... erroneousField) {
-		InstituteGotEvent resp = new InstituteGotEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
 	}
 
 	public static InstituteGotEvent serverError(Throwable... t) {

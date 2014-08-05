@@ -7,17 +7,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class GetAllInstitutesEvent extends ResponseEvent {
 
-	private int maxResults;
-
 	private List<InstituteDetails> details;
-
-	public int getMaxResults() {
-		return maxResults;
-	}
-	
-	public void setMaxResults(int maxResults) {
-		this.maxResults = maxResults;
-	}
 
 	public List<InstituteDetails> getDetails() {
 		return details;

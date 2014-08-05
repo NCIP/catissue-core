@@ -36,14 +36,6 @@ public class StorageContainerDisabledEvent extends ResponseEvent {
 		return event;
 	}
 
-	public static StorageContainerDisabledEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		StorageContainerDisabledEvent resp = new StorageContainerDisabledEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
-	}
-
 	public static StorageContainerDisabledEvent serverError(Throwable... t) {
 		Throwable t1 = t != null && t.length > 0 ? t[0] : null;
 		StorageContainerDisabledEvent resp = new StorageContainerDisabledEvent();

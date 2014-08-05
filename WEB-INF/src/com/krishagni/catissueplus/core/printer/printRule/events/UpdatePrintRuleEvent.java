@@ -13,12 +13,12 @@ public class UpdatePrintRuleEvent extends RequestEvent {
 
 	public UpdatePrintRuleEvent(Object printRuleDetails, String printRuleName) {
 		this.printRuleDetails = printRuleDetails;
-		this.printRuleName = printRuleName;
+		setPrintRuleName(printRuleName);
 	}
 
 	public UpdatePrintRuleEvent(Object printRuleDetails, Long ruleId) {
 		this.printRuleDetails = printRuleDetails;
-		this.printRuleId = ruleId;
+		setPrintRuleId(ruleId);
 	}
 
 	public Object getPrintRuleDetails() {

@@ -35,6 +35,7 @@ public class DepartmentTestData {
 	public static UpdateDepartmentEvent getUpdateDepartmentEvent() {
 		UpdateDepartmentEvent event = new UpdateDepartmentEvent();
 		DepartmentDetails details = new DepartmentDetails();
+		details.setId(1l);
 		details.setName("My department");
 		details.setInstituteName("My Inst");
 		event.setDepartmentDetails(details);

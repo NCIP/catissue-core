@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.printer.printRule.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -14,14 +13,6 @@ public class PrintRuleDeletedEvent extends ResponseEvent {
 		event.setMessage(SUCCESS);
 		event.setStatus(EventStatus.OK);
 		return event;
-	}
-
-	public static PrintRuleDeletedEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		PrintRuleDeletedEvent resp = new PrintRuleDeletedEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
 	}
 
 	public static PrintRuleDeletedEvent serverError(Throwable... t) {

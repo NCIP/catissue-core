@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -23,14 +22,6 @@ public class UserClosedEvent extends ResponseEvent{
 		event.setStatus(EventStatus.OK);
 		event.setMessage(SUCCESS);
 		return event;
-	}
-
-	public static UserClosedEvent invalidRequest(String message, ErroneousField... erroneousField) {
-		UserClosedEvent resp = new UserClosedEvent();
-		resp.setStatus(EventStatus.BAD_REQUEST);
-		resp.setMessage(message);
-		resp.setErroneousFields(erroneousField);
-		return resp;
 	}
 
 	public static UserClosedEvent serverError(Throwable... t) {

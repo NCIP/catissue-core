@@ -10,7 +10,7 @@ public class UpdatePasswordEvent extends RequestEvent {
 	private String passwordToken;
 
 	public UpdatePasswordEvent(PasswordDetails passwordDetails, String token, Long userId) {
-		this.passwordDetails = passwordDetails;
+		setPasswordDetails(passwordDetails);
 		this.passwordDetails.setUserId(userId);
 		this.passwordToken = token;
 	}

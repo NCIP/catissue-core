@@ -35,12 +35,12 @@ public class UserCPRoleDetails {
 		this.cpTitle = cpTitle;
 	}
 
-	public static UserCPRoleDetails fromDomain(UserCPRole userCpRole) {
+	/*public static UserCPRoleDetails fromDomain(UserCPRole userCpRole) {
 		UserCPRoleDetails userCpRoleDetails = new UserCPRoleDetails();
 		userCpRoleDetails.setCpTitle(userCpRole.getCollectionProtocol().getTitle());
 		userCpRoleDetails.setId(userCpRole.getId());
 		userCpRoleDetails.setRoleName(userCpRole.getRole().getName());
 		return userCpRoleDetails;
-	}
+	}*/
 
 }

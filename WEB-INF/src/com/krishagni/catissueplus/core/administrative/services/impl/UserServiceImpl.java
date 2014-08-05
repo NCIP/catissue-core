@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
 			if(event.getName() != null) {	
 				user =	daoFactory.getUserDao().getUserByLoginNameAndDomainName(event.getName(), CATISSUE);
 				if (user == null) {
-					return UserDisabledEvent.notFound(event.getId());
+					return UserDisabledEvent.notFound(event.getName());
 				}
 			}else {
 				user =	daoFactory.getUserDao().getUser(event.getId());

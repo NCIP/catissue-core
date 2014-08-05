@@ -146,7 +146,7 @@ public class SpecimenPrintRuleTestData {
 	}
 	
 	public static DeletePrintRuleEvent getDeletePrintRuleEventByName() {
-		DeletePrintRuleEvent event = new DeletePrintRuleEvent();
+		DeletePrintRuleEvent event = getDeletePrintRuleEvent();
 		event.setPrintRuleName("My Rule");
 		return event;
 	}
