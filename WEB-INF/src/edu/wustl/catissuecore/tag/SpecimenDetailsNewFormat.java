@@ -1203,7 +1203,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
 			{
 				
-				if(isNumeric(specimen.getPositionDimensionOne())){
+				if(isNumeric(specimen.getPositionDimensionTwo())){
 				str[5] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),2,Integer.valueOf(specimen.getPositionDimensionTwo())));
 				}else{
 					str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
