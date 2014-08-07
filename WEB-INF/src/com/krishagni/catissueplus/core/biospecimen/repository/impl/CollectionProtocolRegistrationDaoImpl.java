@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.common.util.XMLPropertyHandler;
 import gov.nih.nci.logging.api.util.StringUtils;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -47,22 +45,15 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
 		}
 		query.setMaxResults(Utility.getMaxParticipantCnt());
-		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
 		List<Object[]> rows = query.list();
+		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
 		for (Object[] row : rows) {
-			ParticipantInfo participant = new ParticipantInfo();
-			participant.setCprId((Long) row[0]);
-			participant.setId((Long) row[1]);
-			participant.setPpId((String) row[2]);
-			participant.setFirstName((String) row[3]);
-			participant.setLastName((String) row[4]);
-
-			result.add(participant);
+			result.add(prepareParticipantInfo(row));
 		}
 
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ParticipantInfo> getPhiParticipants(Long cpId, String searchString) {
@@ -73,7 +64,6 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 			queryName = GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
 		}
 		
-
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
 		query.setLong("cpId", cpId);
 		if (isSearchTermSpecified) {
@@ -83,14 +73,7 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
 		List<Object[]> rows = query.list();
 		for (Object[] row : rows) {
-			ParticipantInfo participant = new ParticipantInfo();
-			participant.setCprId((Long) row[0]);
-			participant.setId((Long) row[1]);
-			participant.setPpId((String) row[2]);
-			participant.setFirstName((String) row[3]);
-			participant.setLastName((String) row[4]);
-
-			result.add(participant);
+			result.add(preparePhiParticipantInfo(row));
 		}
 
 		return result;
@@ -192,16 +175,8 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		query.setLong("cpId", cpId);
 		query.setLong("participantId", participantId);
 		
-		ParticipantInfo participant = new ParticipantInfo();
 		List<Object[]> rows = query.list();
-		for (Object[] row : rows) {
-			participant.setCprId((Long) row[0]);
-			participant.setId((Long) row[1]);
-			participant.setPpId((String) row[2]);
-			participant.setFirstName((String) row[3]);
-			participant.setLastName((String) row[4]);
-		}
-		return participant;
+		return preparePhiParticipantInfo(rows.get(0));
 	}
 
 	@Override
@@ -210,14 +185,27 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		query.setLong("cpId", cpId);
 		query.setLong("participantId", participantId);
 		
-		ParticipantInfo participant = new ParticipantInfo();
 		List<Object[]> rows = query.list();
-		for (Object[] row : rows) {
-			participant.setCprId((Long) row[0]);
-			participant.setId((Long) row[1]);
-			participant.setPpId((String) row[2]);
+		return prepareParticipantInfo(rows.get(0));
+	}
+	
+	private ParticipantInfo preparePhiParticipantInfo(Object[] row) {
+		ParticipantInfo participant = prepareParticipantInfo(row);
+		if(row[3] != null){
 			participant.setFirstName((String) row[3]);
+		}
+		if(row[4] != null){
 			participant.setLastName((String) row[4]);
+		}
+		return participant;
+	}
+	
+	private ParticipantInfo prepareParticipantInfo(Object[] row) {
+		ParticipantInfo participant = new ParticipantInfo();
+		participant.setCprId((Long) row[0]);
+		participant.setId((Long) row[1]);
+		if(row[2] != null){
+		participant.setPpId((String) row[2]);
 		}
 		return participant;
 	}

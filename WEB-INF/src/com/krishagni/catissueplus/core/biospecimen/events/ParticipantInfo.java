@@ -15,13 +15,13 @@ public class ParticipantInfo {
 		this.cprId = cprId;
 	}
 
-	private String firstName;
+	private String firstName = "";
 
-	private String lastName;
+	private String lastName = "";
 
 	private Long id;
 
-	private String ppId;
+	private String ppId = "";
 
 	private Long cprId;
 

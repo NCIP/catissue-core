@@ -111,23 +111,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 //		}
 //	}
 	
-	private String getRole(Long csmUserId){
-		try
-		{
-				final Role role = SecurityManagerFactory.getSecurityManager()
-						.getUserRole(csmUserId);
-				if (role != null && role.getId() != null)
-				{
-					return role.getId().toString();
-				}
-		}
-		catch (final SMException e)
-		{
-		}
-		return "";
-	}
-	
-
 	@Override
 	public Map<Long, Boolean> getCPPrivileges(Long userId, List<Long> cpIds, String privilegeConst) {
 		Map<Long, Boolean> cpPrivilegeMap = new HashMap<Long, Boolean>();
@@ -155,7 +138,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		try {
 			privilegeManager = PrivilegeManager.getInstance();
 		final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(privDetail.getLoginName());
-		if(privilegeCache.hasPrivilege(CollectionProtocol.class.getName()+"_"+cpId, privilegeConstant)){
+		if(hasPrivilege(privilegeCache, CollectionProtocol.class.getName()+"_"+cpId, privilegeConstant)){
 			isPhiView = true;
 		}
 		else{
@@ -180,6 +163,32 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	public List<Long> getCpList(Long userId, String privilege) {
 
 		return getCpList(userId, privilege, false);
+	}
+	
+	private boolean hasPrivilege(PrivilegeCache privilegeCache, String key, String privilegeConstant) throws SMException {
+		if(privilegeCache.hasPrivilege(key, privilegeConstant)){
+			return true;
+		}else if(PrivilegeType.PHI_ACCESS.value().equals(privilegeConstant)){
+			return privilegeCache.hasPrivilege(key, PrivilegeType.REGISTRATION.value());
+		}
+		
+		return false;
+	}
+	
+	private String getRole(Long csmUserId){
+		try
+		{
+				final Role role = SecurityManagerFactory.getSecurityManager()
+						.getUserRole(csmUserId);
+				if (role != null && role.getId() != null)
+				{
+					return role.getId().toString();
+				}
+		}
+		catch (final SMException e)
+		{
+		}
+		return "";
 	}
 
 }
