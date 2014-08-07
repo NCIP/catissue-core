@@ -16,7 +16,9 @@
     http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-  
+  <!-- Beans for caCORE starts -->
+  <bean id="remoteService" class="gov.nih.nci.system.comm.server.ApplicationServiceServerImpl" />
+  <!-- Bean added for caCORE ends -->
   
   <bean id="daoConfigFactory" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
    <property name="targetClass"><value>edu.wustl.dao.daofactory.DAOConfigFactory</value></property>
