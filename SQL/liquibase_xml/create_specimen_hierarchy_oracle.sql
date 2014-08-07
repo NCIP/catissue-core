@@ -6,7 +6,7 @@ IS currentId NUMBER(20);
    sqlValues CLOB;
    sqlStatement CLOB;
    ancestors CLOB;
-   finalStatement CLOB;
+   finalStatement varchar(10000);
    currentTime CLOB;
 BEGIN
 
@@ -110,7 +110,7 @@ IS startPos NUMBER(20);
    currentNodeId NUMBER(20);
    currentChildren CLOB;
    extendedAncestors CLOB;
-   finalStatement CLOB;
+   finalStatement varchar(10000);
 BEGIN
  nodeIterator := 1;
  numNodes := getCountOfIds(currentNodes);
@@ -149,7 +149,7 @@ BEGIN
    
    sqlStatement := sqlStatement || sqlValues; 
    
-   IF (DBMS_LOB.GETLENGTH(sqlStatement)>10000) THEN
+   IF (DBMS_LOB.GETLENGTH(sqlStatement) > 4800) THEN
     finalStatement := 'INSERT ALL ' || sqlStatement ;
     finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
     EXECUTE IMMEDIATE finalStatement;
