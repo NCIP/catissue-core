@@ -8,7 +8,7 @@
 
     <property>
         <name>app.name</name>
-        <value>catissuecore</value>
+        <value>openspecimen</value>
     </property>
 
     <property>
@@ -851,7 +851,7 @@
     </property>
     <property>
         <name>logout.mapping</name>
-        <value>/catissuecore/Logout.do</value>
+        <value>/openspecimen/Logout.do</value>
     </property>
     
     <property><!-- The class which retrieves host data  -->
@@ -860,7 +860,7 @@
     </property>
     <property>
         <name>scheduler.mail.subject</name>
-        <value>Catissue Report Scheduler:</value>
+        <value>OpenSpecimen Report Scheduler:</value>
     </property>
     <property>
         <name>scheduler.mail.header</name>
@@ -872,7 +872,7 @@
 Please note that the report(s) will be available for download until ? after which it/they will be deleted from the server.
 
 Thank You,
-caTissue Administration Team, 
+OpenSpecimen Team, 
 Helpdesk Phone : @@contact.number@@</value>
     </property>
     <property>
