@@ -34,6 +34,9 @@ import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
+import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
+import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 public class UserServiceImpl implements UserService {
 
@@ -64,14 +67,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
-		List<User> users = daoFactory.getUserDao().getAllUsers(req.getMaxResults());
-		List<UserSummary> result = new ArrayList<UserSummary>();
 
-		for (User user : users) {
-			result.add(UserSummary.fromUser(user));
+		
+		if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
+			String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
+			return AllUsersEvent.badRequest(msg, null);
 		}
 
-		return AllUsersEvent.ok(result);
+		Long userId = req.getSessionDataBean().getUserId();
+		List<UserSummary> users = daoFactory.getUserDao().getAllUsers(
+						req.getStartAt(), req.getMaxRecords(), 
+						req.getSearchString());
+		
+		Long count = null;
+		if (req.isCountReq()) {
+			count = daoFactory.getUserDao().getUsersCount(userId, req.getSearchString());
+		}
+
+		return AllUsersEvent.ok(users,count);
 	}
 
 	@Override

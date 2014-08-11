@@ -4,14 +4,44 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqAllUsersEvent extends RequestEvent {
 
-	private int maxResults;
+	private String searchString;
 
-	public int getMaxResults() {
-		return maxResults;
+	private int startAt;
+
+	private int maxRecords;
+
+	private boolean countReq;
+
+	public String getSearchString() {
+		return searchString;
 	}
 
-	public void setMaxResults(int maxResults) {
-		this.maxResults = maxResults;
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+
+	public int getStartAt() {
+		return startAt;
+	}
+
+	public void setStartAt(int startAt) {
+		this.startAt = startAt;
+	}
+
+	public int getMaxRecords() {
+		return maxRecords;
+	}
+
+	public void setMaxRecords(int maxRecords) {
+		this.maxRecords = maxRecords;
+	}
+
+	public boolean isCountReq() {
+		return countReq;
+	}
+
+	public void setCountReq(boolean countReq) {
+		this.countReq = countReq;
 	}
 
 }

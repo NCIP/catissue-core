@@ -4,12 +4,11 @@ package com.krishagni.catissueplus.core.administrative.repository;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface UserDao extends Dao<User> {
 	
-	List<User> getAllUsers(int i);
-
 	User getUser(String witnessName);
 
 	User getUser(Long userId);
@@ -27,4 +26,9 @@ public interface UserDao extends Dao<User> {
 	List<User> getUsersById(List<Long> userIds);
 	
 	User getActiveUser(String loginId, String domainName);
+
+	List<UserSummary> getAllUsers(int startAt, int maxRecords,
+			String ... searchString);
+
+	Long getUsersCount(Long userId, String ... searchString);
 }
