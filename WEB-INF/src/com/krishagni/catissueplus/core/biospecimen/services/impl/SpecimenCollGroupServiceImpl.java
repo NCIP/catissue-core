@@ -3,9 +3,19 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 import com.krishagni.catissueplus.core.barcodegenerator.BarcodeGenerator;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
@@ -23,6 +33,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -30,7 +41,10 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupSer
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
+
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 
 @Service(value = "specimenCollGroupService")
 public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
@@ -68,15 +82,19 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	@PlusTransactional
 	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
-		System.out.println();
 		try {
+			List<Specimen> specimenList = new ArrayList<Specimen>();
+			List<SpecimenRequirement> requirementList = new ArrayList<SpecimenRequirement>();
 			if (ObjectType.CPE.getName().equals(req.getObjectType())) {
-				return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensListFromCpe(req.getId()));
+				requirementList = daoFactory.getCollectionProtocolDao().getSpecimenRequirments(req.getId());
 
 			}
 			else {
-				return AllSpecimensSummaryEvent.ok(daoFactory.getScgDao().getSpecimensList(req.getId()));
+				requirementList = daoFactory.getCollectionProtocolDao().getSpecimenRequirments(req.getId());
+				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
+
 			}
+			return AllSpecimensSummaryEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
 
 		}
 		catch (CatissueException e) {
@@ -211,7 +229,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	}
 
 	private void setName(String name, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		//TODO: get SCG Label Format 
+		// TODO: get SCG Label Format
 		String scgLabelFormat = null;
 		if (isBlank(scgLabelFormat)) {
 			if (!scg.isCompleted() && isBlank(name)) {
@@ -229,14 +247,15 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	}
 
 	/**
-	 * If Barcode Format is null then set user provided barcode & if user does not provided barcode then 
-	 * set Specimen Label as barcode.
+	 * If Barcode Format is null then set user provided barcode & if user does
+	 * not provided barcode then set Specimen Label as barcode.
+	 * 
 	 * @param barcode
 	 * @param scg
 	 * @param errorHandler
 	 */
 	private void setBarcode(String barcode, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		//TODO:get Barcode Format from CP.
+		// TODO:get Barcode Format from CP.
 		String barcodeFormat = null;
 		if (isBlank(barcodeFormat)) {
 			if (isBlank(barcode)) {
@@ -258,7 +277,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 	private void updateName(String name, SpecimenCollectionGroup scg, SpecimenCollectionGroup oldScg,
 			ObjectCreationException errorHandler) {
-		//TODO: get SCG Label Format
+		// TODO: get SCG Label Format
 		String scgLabelFormat = null;
 		if (isBlank(scgLabelFormat)) {
 			if (isBlank(name)) {
@@ -277,7 +296,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 	private void updateBarcode(String barcode, SpecimenCollectionGroup scg, SpecimenCollectionGroup oldScg,
 			ObjectCreationException errorHandler) {
-		//TODO:get Barcode Format
+		// TODO:get Barcode Format
 		String barcodeFormat = null;
 		if (isBlank(barcodeFormat)) {
 			if (isBlank(barcode)) {
@@ -321,5 +340,90 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			return ScgReportUpdatedEvent.notFound(event.getId());
 		}
 		return ScgReportUpdatedEvent.ok(ScgReportDetail.fromDomain(scg));
+	}
+
+	private List<SpecimenInfo> getSpecimensList(Collection<Specimen> specimens,
+			Collection<SpecimenRequirement> requirementColl, Long scgId) {
+		Map<String, Set<SpecimenInfo>> specimensMap = new HashMap<String, Set<SpecimenInfo>>();
+		Map<Long, Long> specimenReqMapping = new HashMap<Long, Long>();
+
+		for (Specimen specimen : specimens) {
+			if (!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimen.getActivityStatus())) {
+				SpecimenRequirement sr = specimen.getSpecimenRequirement();
+				if (sr != null) {
+					specimenReqMapping.put(sr.getId(), specimen.getId());
+				}
+				Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+				String parentKey = "-1";
+				if (parentSpecimen != null) {
+					SpecimenRequirement psr = parentSpecimen.getSpecimenRequirement();
+					if (psr == null) {
+						parentKey = parentSpecimen.getId() + "_null";
+					}
+					else {
+						parentKey = parentSpecimen.getId() + "_" + psr.getId();
+					}
+				}
+				Set<SpecimenInfo> specimenInfoList = specimensMap.get(parentKey);
+				if (specimenInfoList == null) {
+					specimenInfoList = new HashSet<SpecimenInfo>();
+					specimensMap.put(parentKey, specimenInfoList);
+				}
+
+				specimenInfoList.add(SpecimenInfo.fromSpecimen(specimen));
+			}
+		}
+
+		for (SpecimenRequirement requirement : requirementColl) {
+			if (!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(requirement.getActivityStatus())) {
+				SpecimenRequirement parentSpecimenReq = (SpecimenRequirement) requirement.getParentSpecimen();
+
+				String parentKey = "-1";
+				if (parentSpecimenReq != null) {
+					parentKey = specimenReqMapping.get(parentSpecimenReq.getId()) + "_" + parentSpecimenReq.getId();
+				}
+				if (specimenReqMapping.get(requirement.getId()) == null) {
+					Set<SpecimenInfo> specimenInfoList = specimensMap.get(parentKey);
+					if (specimenInfoList == null) {
+						specimenInfoList = new HashSet<SpecimenInfo>();
+						specimensMap.put(parentKey, specimenInfoList);
+					}
+					SpecimenInfo sr = SpecimenInfo.fromRequirement(requirement);
+					sr.setScgId(scgId);
+					specimenInfoList.add(sr);
+				}
+			}
+		}
+
+		Set<SpecimenInfo> specimensList = specimensMap.get("-1");
+		linkParentChildSpecimens(specimensMap, specimensList);
+		List<SpecimenInfo> result = specimensList == null
+				? Collections.<SpecimenInfo> emptyList()
+				: new ArrayList<SpecimenInfo>(specimensList);
+		if (specimensList != null) {
+			Collections.sort(result);
+		}
+		return result;
+	}
+
+	private void linkParentChildSpecimens(Map<String, Set<SpecimenInfo>> specimensMap, Set<SpecimenInfo> specimens) {
+		if (specimens == null || specimens.isEmpty()) {
+			return;
+		}
+
+		for (SpecimenInfo specimen : specimens) {
+			Set<SpecimenInfo> childSpecimens = specimensMap.get(specimen.getId() + "_" + specimen.getRequirementId());
+			List<SpecimenInfo> childList = Collections.emptyList();
+			if (childSpecimens != null) {
+				childList = new ArrayList<SpecimenInfo>(childSpecimens);
+				Collections.sort(childList);
+			}
+
+			for (SpecimenInfo specimenInfo : childList) {
+				specimenInfo.setParentId(specimen.getId());
+			}
+			specimen.setChildren(childList);
+			linkParentChildSpecimens(specimensMap, childSpecimens);
+		}
 	}
 }

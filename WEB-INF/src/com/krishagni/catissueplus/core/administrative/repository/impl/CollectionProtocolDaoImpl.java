@@ -2,12 +2,16 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Query;
 
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -79,6 +83,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		query.setString("cpShortTitle", cpShortTitle);
 		List<com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol> cpList = query.list();
 		return cpList.isEmpty() ? null : cpList.get(0);
+	}
+
+	@Override
+	public List<SpecimenRequirement> getSpecimenRequirments(Long cpeId) {
+			Object object = sessionFactory.getCurrentSession().get(CollectionProtocolEvent.class.getName(), cpeId);
+			if (object == null) {
+				return Collections.emptyList();
+			}
+			CollectionProtocolEvent cpe = (CollectionProtocolEvent) object;
+			return new ArrayList<SpecimenRequirement>(cpe.getSpecimenRequirementCollection());
 	}
 
 }

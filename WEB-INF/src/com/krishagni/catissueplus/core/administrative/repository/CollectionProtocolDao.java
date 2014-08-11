@@ -23,4 +23,6 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByTitle(String title);
 
 	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByShortTitle(String shortTitle);
+	
+	public List<SpecimenRequirement> getSpecimenRequirments(Long cpeId);
 }
