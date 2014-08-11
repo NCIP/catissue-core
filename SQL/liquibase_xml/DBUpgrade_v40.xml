@@ -3089,8 +3089,8 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 		 
 	   </createTable>
 	   
-	   <addUniqueConstraint constraintName="SPEC_CLASS_TYPE_ID_UNIQUE_KEY"
-			tableName="OS_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP,LOGIN_NAME,CP_SHORT_TITLE" />
+	   <!--  <addUniqueConstraint constraintName="SPEC_CLASS_TYPE_ID_UNIQUE_KEY"
+			tableName="OS_SPECIMEN_PRINT_RULE" columnNames="SPECIMEN_CLASS,SPECIMEN_TYPE,WORKSTATION_IP,LOGIN_NAME,CP_SHORT_TITLE" />-->
 	   
 	   <createSequence
             sequenceName="OS_PRINT_RULE_SEQ"
