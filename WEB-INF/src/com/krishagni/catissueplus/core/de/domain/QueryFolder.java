@@ -15,6 +15,8 @@ public class QueryFolder {
 	private String name;
 
 	private User owner;
+	
+	private Boolean sharedWithAll;
 
 	private Set<User> sharedWith = new HashSet<User>();
 
@@ -28,6 +30,14 @@ public class QueryFolder {
 		this.name = name;
 	}
 
+	public Boolean isSharedWithAll() {
+		return sharedWithAll != null && sharedWithAll.equals(true);
+	}
+
+	public void setSharedWithAll(Boolean sharedWithAll) {
+		this.sharedWithAll = sharedWithAll;
+	}
+	
 	public Set<User> getSharedWith() {
 		return sharedWith;
 	}
@@ -114,6 +124,10 @@ public class QueryFolder {
 			return true;
 		}
 		
+		if (sharedWithAll != null && sharedWithAll.equals(true)) {
+			return true;
+		}
+		
 		boolean shared = false;
 		for (User user : sharedWith) {
 			if (user.getId().equals(userId)) {
@@ -128,6 +142,11 @@ public class QueryFolder {
 	public void update(QueryFolder folder) {
 		this.setName(folder.getName());
 		this.setSavedQueries(folder.getSavedQueries());
-		this.setSharedWith(folder.getSharedWith());
+		this.setSharedWithAll(folder.isSharedWithAll());
+		if (folder.isSharedWithAll()) {
+			this.sharedWith.clear();
+		} else {
+			this.setSharedWith(folder.getSharedWith());
+		}		
 	}
 }

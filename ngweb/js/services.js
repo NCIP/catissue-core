@@ -136,7 +136,13 @@ angular.module('plus.services', [])
 
     return {
       getAllUsers: function() {
-        return Utility.get($http, baseUrl, successfn);
+        return Utility.get($http, baseUrl, function(result) {
+          if (result.data) {
+            return result.data.users;
+          }
+
+          return [];
+        });
       }
     };
   })

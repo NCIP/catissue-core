@@ -10,6 +10,8 @@ public class QueryFolderSummary {
 	private String name;
 	
 	private UserSummary owner;
+	
+	private boolean sharedWithAll;
 
 	public Long getId() {
 		return id;
@@ -35,11 +37,20 @@ public class QueryFolderSummary {
 		this.owner = owner;
 	}
 
+	public boolean isSharedWithAll() {
+		return sharedWithAll;
+	}
+
+	public void setSharedWithAll(boolean sharedWithAll) {
+		this.sharedWithAll = sharedWithAll;
+	}
+
 	public static QueryFolderSummary fromQueryFolder(QueryFolder queryFolder){
 		QueryFolderSummary folderSummary = new QueryFolderSummary();
 		folderSummary.setId(queryFolder.getId());
 		folderSummary.setName(queryFolder.getName());
 		folderSummary.setOwner(UserSummary.fromUser(queryFolder.getOwner()));
+		folderSummary.setSharedWithAll(queryFolder.isSharedWithAll());
 		return folderSummary;
 	}
 }

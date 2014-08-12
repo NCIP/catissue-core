@@ -408,6 +408,10 @@ public class QueryServiceImpl implements QueryService {
 			QueryFolder queryFolder = queryFolderFactory.createQueryFolder(folderDetails);	
 			
 			daoFactory.getQueryFolderDao().saveOrUpdate(queryFolder);
+			
+			if (!queryFolder.getSharedWith().isEmpty()) {
+				sendFolderSharedEmail(queryFolder.getOwner(), queryFolder, queryFolder.getSharedWith());
+			}			
 			return QueryFolderCreatedEvent.ok(QueryFolderDetails.fromQueryFolder(queryFolder));
 		} catch (ObjectCreationException oce) {
 			return QueryFolderCreatedEvent.badRequest(oce);
@@ -449,12 +453,12 @@ public class QueryServiceImpl implements QueryService {
 			newUsers.removeAll(existing.getSharedWith());
 			existing.update(queryFolder);
 			
+			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
+			
 			if (!newUsers.isEmpty()) {
 				User user = userDao.getUser(userId);
 				sendFolderSharedEmail(user, queryFolder, newUsers);
 			}
-						
-			daoFactory.getQueryFolderDao().saveOrUpdate(existing);
 			return QueryFolderUpdatedEvent.ok(QueryFolderDetails.fromQueryFolder(existing));			
 		} catch (ObjectCreationException oce) {
 			return QueryFolderUpdatedEvent.badRequest(oce);

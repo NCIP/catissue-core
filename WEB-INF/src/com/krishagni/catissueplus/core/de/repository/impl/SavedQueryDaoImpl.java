@@ -36,9 +36,10 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 				.createAlias("folders", "f", Criteria.LEFT_JOIN)
 				.createAlias("f.sharedWith", "su", Criteria.LEFT_JOIN)
 				.add(Restrictions.isNull("s.deletedOn"))
-				.add(Restrictions.or(
-						Restrictions.eq("c.id", userId),
-						Restrictions.eq("su.id", userId)))
+				.add(Restrictions.disjunction()
+						.add(Restrictions.eq("f.sharedWithAll", true))
+						.add(Restrictions.eq("c.id", userId))
+						.add(Restrictions.eq("su.id", userId)))
 				.setProjection(Projections.countDistinct("s.id"));
 		
 		addSearchConditions(criteria, searchString);
@@ -54,9 +55,10 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 				.createAlias("folders", "f", Criteria.LEFT_JOIN)
 				.createAlias("f.sharedWith", "su", Criteria.LEFT_JOIN)
 				.add(Restrictions.isNull("s.deletedOn"))
-				.add(Restrictions.or(
-						Restrictions.eq("c.id", userId),
-						Restrictions.eq("su.id", userId)));
+				.add(Restrictions.disjunction()
+						.add(Restrictions.eq("f.sharedWithAll", true))
+						.add(Restrictions.eq("c.id", userId))
+						.add(Restrictions.eq("su.id", userId)));
 		
 		addSearchConditions(criteria, searchString);
 		addProjectionFields(criteria);
@@ -122,7 +124,9 @@ public class SavedQueryDaoImpl extends AbstractDao<SavedQuery> implements SavedQ
 				.createAlias("f.sharedWith", "su", Criteria.INNER_JOIN)
 				.add(Restrictions.eq("s.id", queryId))
 				.add(Restrictions.isNull("s.deletedOn"))
-				.add(Restrictions.eq("su.id", userId))
+				.add(Restrictions.or(
+						Restrictions.eq("su.id", userId), 
+						Restrictions.eq("f.sharedWithAll", true)))
 				.setProjection(Projections.count("s.id"));
 
 		List<Number> count = criteria.list();

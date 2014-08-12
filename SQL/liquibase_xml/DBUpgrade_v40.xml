@@ -3815,5 +3815,12 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 			<column name="ACTIVITY_STATUS" type="${text.type}(20)" />
 		</addColumn>
    </changeSet> 
+
+  <changeSet author="vpawar" id="Column to specify a folder is shared with all users">
+    <addColumn tableName="CATISSUE_QUERY_FOLDERS">
+      <column name="SHARED_WITH_ALL" type="${boolean.type}"> </column>
+    </addColumn>
+  </changeSet>
+
    
 </databaseChangeLog>

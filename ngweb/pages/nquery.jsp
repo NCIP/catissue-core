@@ -517,7 +517,10 @@
               <tbody>
                 <tr ng-repeat="folder in queryData.sharedFolders" ng-class="{'selected-folder': queryData.selectedFolderId == folder.id}">
                   <td class="item clearfix">
-                    <span ng-click="selectFolder(folder.id)">{{folder.name}}</span>
+                    <div class="pull-left" ng-click="selectFolder(folder.id)" 
+                      tooltip-placement="bottom" tooltip="{{folder.name}}" tooltip-append-to-body="true">
+                        {{folder.name}}
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -1186,7 +1189,13 @@
             No queries selected. Please select at least one query.
           </span>
         </div>
-        <div style="height: 30%;">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-checked="modalData.sharedWithAll" ng-model="modalData.sharedWithAll"> 
+            Share folder with all present and future users   
+          </label>
+        </div>
+        <div style="height: 30%;" ng-if="modalData.sharedWithAll != 1 && modalData.sharedWithAll != true">
           <label>Share folder with following users</label>
           <div style="height: 80%; overflow: auto;">
             <ka-select multiple

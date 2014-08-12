@@ -1179,17 +1179,20 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       if (folderId) {
         QueryService.getFolder(folderId).then(
           function(folderDetail) {
-            $scope.modalData.folderName = folderDetail.name,
-            $scope.modalData.sharedWith = folderDetail.sharedWith,
-            $scope.modalData.queries = folderDetail.queries
+            $scope.modalData.folderName = folderDetail.name;
+            $scope.modalData.sharedWith = folderDetail.sharedWith;
+            $scope.modalData.sharedWithAll = folderDetail.sharedWithAll;
+            $scope.modalData.queries = folderDetail.queries;
           }
         );
       }
 
       $scope.saveOrUpdateFolder = function () {
         var sharedWith = [];
-        for (var i = 0; i < $scope.modalData.sharedWith.length; ++i) {
-          sharedWith.push({id: $scope.modalData.sharedWith[i].id});
+        if (!$scope.modalData.sharedWithAll) {
+          for (var i = 0; i < $scope.modalData.sharedWith.length; ++i) {
+            sharedWith.push({id: $scope.modalData.sharedWith[i].id});
+          }
         }
 
         var queries = [];
@@ -1200,6 +1203,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var folderDetail = {
           id: folderId,
           name: $scope.modalData.folderName,
+          sharedWithAll: $scope.modalData.sharedWithAll,
           sharedWith: sharedWith,
           queries: queries
         };

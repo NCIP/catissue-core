@@ -38,6 +38,7 @@ public class QueryFolderDetails extends QueryFolderSummary {
 		fd.setOwner(UserSummary.fromUser(folder.getOwner()));
 		fd.setQueries(fromSavedQueries(folder.getSavedQueries()));
 		fd.setSharedWith(fromUsers(folder.getSharedWith()));
+		fd.setSharedWithAll(folder.isSharedWithAll());
 		return fd;
 	}
 

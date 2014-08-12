@@ -54,12 +54,15 @@ public class QueryFolderFactoryImpl implements QueryFolderFactory {
 		}
 		setQueries(queryFolder, queryIds, oce);
 		
-		List<Long> sharedUsers = new ArrayList<Long>();
-		for (UserSummary user : details.getSharedWith()) {
-			if (user.getId().equals(userId)) {
-				continue;
-			}
-			sharedUsers.add(user.getId());
+		queryFolder.setSharedWithAll(details.isSharedWithAll());		
+		List<Long> sharedUsers = new ArrayList<Long>();		
+		if (!details.isSharedWithAll()) {
+			for (UserSummary user : details.getSharedWith()) {
+				if (user.getId().equals(userId)) {
+					continue;
+				}
+				sharedUsers.add(user.getId());
+			}			
 		}
 		setSharedUsers(queryFolder, sharedUsers, oce);
 		
