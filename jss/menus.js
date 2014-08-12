@@ -399,7 +399,7 @@ Ext.onReady(function(){
         items: [
 	   {
                 text: 'Advanced Query',
-		tooltip:'Allows to create ad-hocs queries, export data, and many more',
+		tooltip:'Create and Save Queries',
 	        href : 'query.do'
             },
 			{
