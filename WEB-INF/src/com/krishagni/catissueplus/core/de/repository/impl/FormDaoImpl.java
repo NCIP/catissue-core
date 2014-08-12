@@ -6,8 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.de.events.*;
-
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
@@ -16,9 +14,16 @@ import org.hibernate.Query;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.de.events.CPFormSummary;
+import com.krishagni.catissueplus.core.de.events.FormContextDetail;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormSummary;
+import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 
 public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao {
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormSummary> getAllFormsSummary() {
@@ -52,27 +57,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				
 		return forms;
 	}
-	
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<FormSummary> getSpecimenEventFormsSummary() {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_EVENT_FORMS_SUMMARY);
-        List<Object[]> rows = query.list();
+	public List<CPFormSummary> getAllCPFormsSummary(String entityType) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_CP_FORMS_SUMMARY);
+        List<Object[]> rows = query.setString("entityType", entityType).list();
 
-        List<FormSummary> forms = new ArrayList<FormSummary>();
+        List<CPFormSummary> forms = new ArrayList<CPFormSummary>();
         for (Object[] row : rows) {
-            FormSummary form = new FormSummary();
+            CPFormSummary form = new CPFormSummary();
             form.setFormId((Long) row[0]);
             form.setName((String) row[1]);
             form.setCaption((String) row[2]);
-            form.setCreationTime((Date) row[3]);
-            form.setModificationTime((Date) row[4]);
-            form.setCpCount(-1);
-            UserSummary user = new UserSummary();
-            user.setId((Long) row[5]);
-            user.setFirstName((String) row[6]);
-            user.setLastName((String) row[7]);
-            form.setCreatedBy(user);
-
+            form.setFormCtxtId((Long) row[3]);
             forms.add(form);
         }
 
@@ -317,6 +314,23 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return formIds;
 	}
 	
+	@Override
+	public boolean canAddRecord(Long formCtxtId, Long objectId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_CNT);
+		query.setLong("formCtxtId", formCtxtId).setLong("objectId", objectId);
+		List<Object[]> result = query.list();
+		Object[] obj = result.iterator().next();
+		
+		Long noOfRecords = (Long) obj[0];
+		boolean isMultiRecord = (Boolean)obj[1];
+		
+		if(!isMultiRecord && (noOfRecords >= 1L)) {
+			return false;
+		} 
+		
+		return true;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
         ObjectCpDetail objCp = new ObjectCpDetail();
@@ -383,13 +397,12 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 
         return objCp;
 	}
-
 	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
 	
-	private static final String GET_SPECIMEN_EVENT_FORMS_SUMMARY = FQN + ".getSpecimenEventFormsSummary";
+	private static final String GET_ALL_CP_FORMS_SUMMARY = FQN + ".getAllCPFormsSummary";
 	
 	private static final String GET_QUERY_FORMS = FQN + ".getQueryForms";
 	
@@ -424,6 +437,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_FORM_IDS = FQN + ".getFormIds";
 	
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
-
+	
+	private static final String GET_RECORD_CNT = FQN + ".getRecordCount";
 	
 }

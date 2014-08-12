@@ -2,6 +2,8 @@ package com.krishagni.catissueplus.core.de.services;
 
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
+import com.krishagni.catissueplus.core.de.events.CPFormSummary;
+import com.krishagni.catissueplus.core.de.events.AllCPFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
@@ -20,6 +22,7 @@ import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
+import com.krishagni.catissueplus.core.de.events.ReqAllCpFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -34,6 +37,8 @@ import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
 
 public interface FormService {
 	public AllFormsSummaryEvent getForms(ReqAllFormsSummaryEvent req);
+	
+	public AllCPFormsSummaryEvent getCPForms(ReqAllCpFormsEvent req);
 	
 	public FormDefinitionEvent getFormDefinition(ReqFormDefinitionEvent req);
 	

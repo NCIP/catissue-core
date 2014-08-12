@@ -2,53 +2,81 @@ specimenEvent = angular.module('specimenEvent-app',['plus.formsServices', 'plus.
 
 specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventService','FormsService', function($scope, SpecimenEventService, FormsService){
   $scope.selectedEvent = undefined;
-
   $scope.specimenLabels = undefined;
+  var dataTable = undefined;
 
-  SpecimenEventService.getAllEvents().then( function(events) {
-    console.log(events);
+  FormsService.getAllCPForms('specimenEvent').then( function(events) {
     $scope.specimenEvents = events;
   });
 
-  var getSpecimenEventDataUrl = function(formId, specimenLabels) {
-    return '/openspecimen/rest/ng/specimen-events/' + formId + '/data/' + specimenLabels;
-  }
-
   $scope.onEventSelect = function(selectedEvent) {
+    $('#data-table').empty();
+    $scope.dataEntryMode = false;
     var specimenLabels = $scope.specimenLabels.split(',');
     FormsService.getFormDef(selectedEvent.formId).then(function (data){
-    var that = this;
-    var _reqTime = new Date().getTime();
-    var tableDataUrl = getSpecimenEventDataUrl(selectedEvent.formId, specimenLabels);
-    dataTable = new edu.common.de.DataTable({
-      formId           : selectedEvent.formId,
-      formContextId    : data.formContextId,
-      formDef          : data,
-      formDiv          : 'bulk-data-entry',
-      tableDataUrl     : tableDataUrl,
-      dataTableSaveUrl : '/openspecimen/rest/ng/forms/:formId/data',
-      onLoadError      : function() {
-        Utility.notify($("#notifications"), "Form Data Loading Failed", "error", true);
-      },
-
-      onValidationError: function() {
-        Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
-      },
-
-      onSaveSuccess: function() {
-        Utility.notify($("#notifications"), "Form Data Saved", "success", true);
-      },
-
-      onSaveError: function() {
-        Utility.notify($("#notifications"), "Form Data Save Failed", "error", true);
-      },
-
-    });
-
-      dataTable.render();
+      var formDef = data;
+      var appData =
+      dataTable = new edu.common.de.DataTable({
+        formId           : selectedEvent.formId,
+        appData          : {formCtxtId : $scope.selectedEvent.formCtxtId},
+        idColumnLabel    : 'Specimen Label',
+        formDef          : formDef,
+        formDiv          : 'data-table',
+        onValidationError: function() {
+          Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
+        }
+      });
     });
   }
+
+  $scope.addRecord = function() {
+    var specimenLabels = $scope.specimenLabels.split(',');
+    var tableData =[];
+    SpecimenEventService.getSpecimensSummary(specimenLabels).then( function(data) {
+      for(var i =0 ;i < data.length; i++) {
+        var tableRowJson = {label:data[i].label, objectId: data[i].id, formRecords:[] };
+        tableData.push(tableRowJson);
+      }
+        $scope.dataEntryMode = true;
+        renderDataTable('add', tableData);
+    });
+  };
+
+  $scope.saveDataTable = function() {
+    var formData = JSON.stringify(dataTable.getData());
+    FormsService.saveFormData($scope.selectedEvent.formId,null,JSON.stringify(formData)).then(function(data){
+      Utility.notify($("#notifications"), "Form Data Saved", "success", true);
+      showAllRecords('view');
+    },
+    function(data) {
+     Utility.notify($("#notifications"), "Form Data Save Failed.Please Check whether form is multi record or not.", "error", true);
+    }
+    );
+  }
+
+  $scope.editDataTable = function() {
+    showAllRecords('edit');
+  }
+
+  $scope.cancelDataTable = function() {
+    showAllRecords('view');
+  }
+
+  var showAllRecords = function(mode) {
+    $scope.dataEntryMode = (mode == 'view') ? false : true;
+    var specimenLabels = $scope.specimenLabels.split(',');
+    SpecimenEventService.getEventData($scope.selectedEvent.formId, specimenLabels).then( function(data) {
+      renderDataTable(mode, data.specimenEventFormDataList);
+    });
+  }
+
+  var renderDataTable = function(mode, tableData) {
+    dataTable.setMode(mode);
+    dataTable.setData(tableData);
+  }
+
 }]);
+
 
 specimenEvent.factory('SpecimenEventService',function($http){
 
@@ -59,25 +87,20 @@ specimenEvent.factory('SpecimenEventService',function($http){
       return baseUrl + formId + '/data/' + specimenLabels;
     }
 
-    var getFormsUrl = function() {
-      return apiUrl + '/forms';
-    }
-
     var successfn = function(result){
-      console.log(result);
-      console.log(result.data);
       return result.data;
     }
 
     return{
-      getAllEvents : function(){
-        var params = { formType : 'specimenEvent'};
-        return Utility.get($http, getFormsUrl(), successfn, params);
-      },
-
       getEventData :  function(formId, specimenLabels) {
         var url = getSpecimenEventDataUrl(formId, specimenLabels);
         return Utility.get($http, url,successfn);
+      },
+
+      getSpecimensSummary: function(specimenLabelsArray) {
+        var params = { specimenLabels : specimenLabelsArray};
+        var url = apiUrl + 'specimens'
+        return Utility.get($http, url,successfn,params);
       }
     }
 });

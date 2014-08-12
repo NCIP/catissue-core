@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
+import com.krishagni.catissueplus.core.de.events.AllCPFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
@@ -42,6 +43,7 @@ import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
+import com.krishagni.catissueplus.core.de.events.ReqAllCpFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -98,14 +100,17 @@ public class FormServiceImpl implements FormService {
 		switch (req.getFormType()) {
 		    case DATA_ENTRY_FORMS:
 			    return AllFormsSummaryEvent.ok(formDao.getAllFormsSummary());
-			
-		    case SPECIMEN_EVENT_FORMS :
-		    	return AllFormsSummaryEvent.ok(formDao.getSpecimenEventFormsSummary());    
-			    
+					    
 		    case QUERY_FORMS:
 		    default:
 		    	return AllFormsSummaryEvent.ok(formDao.getQueryForms());		
 		}		
+	}
+    
+	@Override
+	@PlusTransactional
+	public AllCPFormsSummaryEvent getCPForms(ReqAllCpFormsEvent req) {
+		return AllCPFormsSummaryEvent.ok(formDao.getAllCPFormsSummary(req.getEntityType())); 
 	}
 
     @Override
@@ -287,6 +292,13 @@ public class FormServiceImpl implements FormService {
 
 		formData.setRecordId(recordId);
 		boolean isInsert = (recordId == null);
+		
+		if(isInsert) {
+			boolean isAddRecord = canAddRecord(formCtxtId, objectId );
+			if(!isAddRecord) {
+				throw new RuntimeException("Form is single record ");
+			}
+		}
 
 		FormDataManager formDataMgr = new FormDataManagerImpl(false);
 		recordId = formDataMgr.saveOrUpdateFormData(null, formData);
@@ -315,6 +327,10 @@ public class FormServiceImpl implements FormService {
 		return formData;
 	}
 	
+	private boolean canAddRecord(Long formCtxtId, Long objectId) {
+		return formDao.canAddRecord(formCtxtId, objectId);
+	}
+
 	@Override
 	@PlusTransactional
 	public FileDetailEvent getFileDetail(ReqFileDetailEvent req) {

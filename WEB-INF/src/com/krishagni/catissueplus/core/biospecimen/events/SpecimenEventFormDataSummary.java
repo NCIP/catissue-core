@@ -1,12 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import edu.common.dynamicextensions.napi.FormData;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpecimenEventFormDataSummary {
 	private String label;
 
-	private String formData;
+	private List<String> formRecords = new ArrayList<String>();
 
     private Long objectId;
 
@@ -18,20 +19,24 @@ public class SpecimenEventFormDataSummary {
 		this.label = label;
 	}
 
-	public String getFormData() {
-		return formData;
+	public List<String> getFormRecords() {
+		return formRecords;
 	}
 
-	public void setFormData(FormData formData) { 
-		this.formData = formData != null ?formData.toJson():null; 
+	public void setFormRecords(List<String> formRecords) {
+		this.formRecords = formRecords;
 	}
 
-    public Long getObjectId() {
+	public Long getObjectId() {
         return objectId;
     }
 
     public void setObjectId(Long objectId) {
         this.objectId = objectId;
     }
+    
+    /*select count(*),fc.is_multirecord as isMultirecord from catissue_form_record_entry r 
+    left join  catissue_form_context fc on  r.form_ctxt_id = fc.identifier and r.object_id = 65 and r.activity_status = 'ACTIVE'
+    where fc.entity_type = 'SpecimenEvent' and fc.identifier = 32*/
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -24,11 +25,14 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -44,6 +48,7 @@ import com.krishagni.catissueplus.core.printer.printService.events.CreateLabelPr
 import com.krishagni.catissueplus.core.printer.printService.events.LabelPrintCreatedEvent;
 import com.krishagni.catissueplus.core.printer.printService.services.PrintService;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -74,6 +79,23 @@ public class SpecimenController {
 		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
 		return specimenSvc.getSpecimensList(event).getSpecimensInfo();
 	}
+	
+	@RequestMapping(method=RequestMethod.GET)	
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenSummary> getSpecimens(
+			@RequestParam(value="specimenLabels", required=false) String[] specimenLabels) {
+		ReqSpecimensSummaryEvent event = new ReqSpecimensSummaryEvent();
+		event.setSpecimenLabels(Arrays.asList(specimenLabels));
+		
+		SpecimensSummaryEvent resp = specimenSvc.getSpecimensByLabels(event);
+		if(resp.getStatus() == EventStatus.OK ) {
+			return resp.getSpecimens();
+		}
+		
+		return null;
+	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)

@@ -703,10 +703,6 @@ document.getElementById('specimenSubmitButton').disabled=true;
 </logic:equal>
 var isImageEnabled = ${isImageEnabled};
 
-
-var showEventsTab = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
-
-
 var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfNewSpecimenCPQuery&reportId="+reportId+"&id="+specimenId;
 
 var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;

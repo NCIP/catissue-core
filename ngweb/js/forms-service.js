@@ -19,6 +19,15 @@ angular.module('plus.formsServices', [])
       getAllForms: function() {
         return Utility.get($http, baseUrl, successfn);
       },
+      
+      getAllCPForms: function(entityType) {
+        var params = {
+    	  entityType: entityType,
+    	  '_reqTime' : new Date().getTime()
+        }
+        var url = baseUrl + "/allcp";
+	return Utility.get($http,url,successfn, params);
+      },
 
       getQueryForms: function() {
     	var params = {

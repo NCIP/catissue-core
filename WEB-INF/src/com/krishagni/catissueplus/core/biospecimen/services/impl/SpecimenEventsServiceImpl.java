@@ -25,7 +25,7 @@ public class SpecimenEventsServiceImpl implements SpecimenEventService {
 	private DaoFactory daoFactory;
 	
 	private FormDao formDao;
-	
+
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -57,13 +57,14 @@ public class SpecimenEventsServiceImpl implements SpecimenEventService {
 			specimenEventFormDataSummary.setObjectId(specimen.getId());
 
 			List<FormRecordSummary> formRecords = formDao.getFormRecords(formContext.getIdentifier(), specimen.getId());
-
-			if (formRecords != null && !formRecords.isEmpty()) {
-				FormRecordSummary formRecord = formRecords.get(0);
+			List<String> formRecordList = new ArrayList<String>();
+					
+			for (FormRecordSummary formRecordSummary : formRecords) {
 				FormDataManager formDataManager = new FormDataManagerImpl(false);
-				FormData formData = formDataManager.getFormData(formId, formRecord.getRecordId());
-				specimenEventFormDataSummary.setFormData(formData);
+				FormData formData = formDataManager.getFormData(formId, formRecordSummary.getRecordId());
+				formRecordList.add(formData.toJson());
 			}
+			specimenEventFormDataSummary.setFormRecords(formRecordList);
 			specimenEventFormDataSummaries.add(specimenEventFormDataSummary);
 		}
 
@@ -73,5 +74,5 @@ public class SpecimenEventsServiceImpl implements SpecimenEventService {
 
 		return SpecimenEventFormDataEvent.ok(specimenEventFormData);
 	}
-
+	
 }

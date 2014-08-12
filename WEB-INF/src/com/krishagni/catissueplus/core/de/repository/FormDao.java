@@ -3,16 +3,21 @@ package com.krishagni.catissueplus.core.de.repository;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.de.events.*;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
 import com.krishagni.catissueplus.core.common.repository.Dao;
+import com.krishagni.catissueplus.core.de.events.CPFormSummary;
+import com.krishagni.catissueplus.core.de.events.FormContextDetail;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormSummary;
+import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 
 public interface FormDao extends Dao<FormContextBean>{	
 	public List<FormSummary> getAllFormsSummary();
 	
-	public List<FormSummary> getSpecimenEventFormsSummary();
+	public List<CPFormSummary> getAllCPFormsSummary(String entityType);
 	
 	public List<FormSummary> getQueryForms();
 	
@@ -43,4 +48,7 @@ public interface FormDao extends Dao<FormContextBean>{
 	public Long getFormCtxtId(Long containerId, String entityType, Long cpId);
 	
 	public List<Long> getFormIds(Long cpId, String entityType);
+
+	public boolean canAddRecord(Long formCtxtId, Long objectId);
+	
 }

@@ -21,10 +21,13 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -87,7 +90,23 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return AllSpecimensSummaryEvent.serverError(e);
 		}
 	}
+	
 
+	@Override
+	@PlusTransactional
+	public SpecimensSummaryEvent getSpecimensByLabels(ReqSpecimensSummaryEvent event) {
+		try {
+			 List<String> labels = event.getSpecimenLabels();		
+			 List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
+			 if (specimens.size() != labels.size()) {
+				 return SpecimensSummaryEvent.badRequest(SpecimenErrorCode.INVALID_LABELS.message());
+			 }
+			 return SpecimensSummaryEvent.ok(SpecimenSummary.from(specimens));
+		} catch(Exception ex){
+			return SpecimensSummaryEvent.serverError(ex);
+		}
+	}
+	
 	@Override
 	@PlusTransactional
 	public SpecimenCreatedEvent createSpecimen(CreateSpecimenEvent event) {
@@ -341,4 +360,5 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return;
 		}
 	}
+
 }

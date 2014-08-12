@@ -25,11 +25,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
+import com.krishagni.catissueplus.core.de.events.AllCPFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.BulkFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.BulkSaveFormDataEvent;
+import com.krishagni.catissueplus.core.de.events.CPFormSummary;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
@@ -40,6 +42,7 @@ import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
+import com.krishagni.catissueplus.core.de.events.ReqAllCpFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent.FormType;
 import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
@@ -72,9 +75,7 @@ public class FormsController {
 	public List<FormSummary> getAllFormsSummary(
 			@RequestParam(value="formType", required=false, defaultValue="dataEntry") String formType) {
 		ReqAllFormsSummaryEvent req = new ReqAllFormsSummaryEvent();
-		req.setFormType(formType.equals("query") ? FormType.QUERY_FORMS : formType.equals("specimenEvent")
-				? FormType.SPECIMEN_EVENT_FORMS
-				: FormType.DATA_ENTRY_FORMS);
+		req.setFormType(formType.equals("query") ? FormType.QUERY_FORMS : FormType.DATA_ENTRY_FORMS);
 		
 		AllFormsSummaryEvent resp = formSvc.getForms(req);		
 		if (resp.getStatus() == EventStatus.OK) {
@@ -82,6 +83,21 @@ public class FormsController {
 		}
 		
 		// TODO: Return appropriate error codes
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/allcp" )
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<CPFormSummary> getAllCPFormsSummary(
+			@RequestParam(value="entityType") String entityType) {
+		ReqAllCpFormsEvent req = new ReqAllCpFormsEvent();
+		req.setEntityType(entityType);
+		req.setSessionDataBean(getSession());
+		AllCPFormsSummaryEvent resp = formSvc.getCPForms(req);		
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getAllCPForms();
+		}
 		return null;
 	}
 	
