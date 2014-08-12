@@ -30,5 +30,5 @@ public interface UserDao extends Dao<User> {
 	List<UserSummary> getAllUsers(int startAt, int maxRecords,
 			String ... searchString);
 
-	Long getUsersCount(Long userId, String ... searchString);
+	Long getUsersCount(String ... searchString);
 }

@@ -51,7 +51,7 @@ public class CollectionProtocolController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<CollectionProtocolSummary> getCollectionProtocolList(@RequestParam(value = "chkPrivilege", required = false, defaultValue = "") String chkPrivlege) {
+	public List<CollectionProtocolSummary> getCollectionProtocolList(@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true") String chkPrivlege) {
 		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
 		req.setSessionDataBean(getSession()); 
 		req.setChkPrivileges("true".equalsIgnoreCase(chkPrivlege));

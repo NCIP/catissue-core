@@ -1,7 +1,6 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,8 +33,6 @@ import com.krishagni.catissueplus.core.common.email.EmailSender;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.de.events.SavedQueriesSummaryEvent;
-import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 public class UserServiceImpl implements UserService {
@@ -74,14 +71,13 @@ public class UserServiceImpl implements UserService {
 			return AllUsersEvent.badRequest(msg, null);
 		}
 
-		Long userId = req.getSessionDataBean().getUserId();
 		List<UserSummary> users = daoFactory.getUserDao().getAllUsers(
 						req.getStartAt(), req.getMaxRecords(), 
 						req.getSearchString());
 		
 		Long count = null;
 		if (req.isCountReq()) {
-			count = daoFactory.getUserDao().getUsersCount(userId, req.getSearchString());
+			count = daoFactory.getUserDao().getUsersCount(req.getSearchString());
 		}
 
 		return AllUsersEvent.ok(users,count);

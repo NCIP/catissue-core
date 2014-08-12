@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,13 +15,10 @@ import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.events.UserInfo;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.de.domain.SavedQuery;
-import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
@@ -136,13 +132,9 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public Long getUsersCount(Long userId, String ... searchString) {
+	public Long getUsersCount(String ... searchString) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
-				.createAlias("id", "id")
-				.createAlias("firstName", "fn")
-				.createAlias("lastName", "ln")
-				.createAlias("loginName", "l")
 				
 				.add(Restrictions.or(
 						Restrictions.eq("u.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()),
