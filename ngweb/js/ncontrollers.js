@@ -1408,6 +1408,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       for (var i = 0; i < extnSubForm.subFields.length; ++i) {
         var subForm = extnSubForm.subFields[i];
         var extnFields = flattenFields(fqn + "extensions." + subForm.name + ".", subForm.subFields);
+        for (var j = 0; j < extnFields.length; ++j) {
+          extnFields[j].extensionForm = subForm.caption;
+        }
         extnForms.push({name: subForm.name, caption: subForm.caption, fields: extnFields});
       }
 
