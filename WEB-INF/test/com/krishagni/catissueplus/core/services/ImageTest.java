@@ -348,11 +348,12 @@ public class ImageTest {
 	}
 
 	@Test
-	public void testForInvalidImageDeleteWithDisplayName() {
+	public void testForInvalidImageDeleteWithImgEqpId() {
 		when(imageDao.getImage(anyString())).thenReturn(null);
 		DeleteImageEvent reqEvent = ImageTestData.getDeleteImageEventForName();
 		ImageDeletedEvent response = imageService.deleteImage(reqEvent);
 		assertEquals(EventStatus.NOT_FOUND, response.getStatus());
+		assertEquals(response.getEqpImageId(), reqEvent.getEqpImageId());
 	}
 
 	@Test

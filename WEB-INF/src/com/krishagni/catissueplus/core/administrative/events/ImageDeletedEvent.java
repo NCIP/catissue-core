@@ -35,6 +35,13 @@ public class ImageDeletedEvent extends ResponseEvent {
 		return response;
 	}
 
+	public static ImageDeletedEvent notFound(String eqpImageId) {
+		ImageDeletedEvent response = new ImageDeletedEvent();
+		response.setEqpImageId(eqpImageId);
+		response.setStatus(EventStatus.NOT_FOUND);
+		return response;
+	}
+
 	public static ImageDeletedEvent ok() {
 		ImageDeletedEvent response = new ImageDeletedEvent();
 		response.setStatus(EventStatus.OK);

@@ -160,7 +160,7 @@ public class ImageServiceImpl implements ImageService {
 			else {
 				image = daoFactory.getImageDao().getImage(reqEvent.getEqpImageId());
 				if (image == null) {
-					return ImageDeletedEvent.notFound(reqEvent.getId());
+					return ImageDeletedEvent.notFound(reqEvent.getEqpImageId());
 				}
 			}
 
