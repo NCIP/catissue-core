@@ -131,8 +131,9 @@
           </table>
         </div>
         <div style="height: 45%; overflow: auto;">
-          <div>Use form in following collection protocols</div>
-          <div class="checkbox">
+          <div ng-show="isSpecimenEvent != true">Use form in following collection protocols</div>
+          <div ng-show="isSpecimenEvent">Specimen Event forms always attached to all collection protocols. </div>
+          <div class="checkbox" ng-show="isSpecimenEvent != true">
             <label><input type="checkbox" ng-checked="allProtocols" ng-model="allProtocols" ng-disabled="isSpecimenEvent"> All Present and Future Collection Protocols </label>
           </div>
           <div ng-show="allProtocols != true" style="margin-top:10px;margin-bottom:10px;">

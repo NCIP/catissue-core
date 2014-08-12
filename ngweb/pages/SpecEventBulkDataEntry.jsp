@@ -28,7 +28,7 @@
 <body ng-controller="SpecimenEventController">
 <div class="container">
     <div class="row">
-        <div class="col-xs-7"><h3>Specimen Event Bulk Data Entry</h3></div>
+        <div class="col-xs-7"><h3>Specimen Event Bulk Data Entry </h3></div>
     </div>
     <div id="notifications" class="cp-notifs hidden"></div>
     <form class="form-horizontal">
@@ -46,10 +46,13 @@
         </div>
       </div>
     </form>
-    <div>
-      <div id="bulk-data-entry"></div>
+    <div id="bulk-data-entry">
+      <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true">Add Record</button>
+      <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="dataEntryMode != true">Edit Existing Records</button>
+      <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">Save</button>
+      <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">Cancel</button>
+      <div id="data-table"></div>
     </div>
-
     <script>
        var dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
     </script>
