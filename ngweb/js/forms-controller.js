@@ -109,9 +109,10 @@ angular.module('plus.forms', [])
       $scope.isMultiRecord = false;
       $scope.selectedCps = undefined;
       $scope.selectedEntity = undefined;
+      $scope.isSpecimenEvent = false;
 
       $scope.onEntitySelect = function(selected) {
-    	  $scope.allProtocols = selected.entity == 'SpecimenEvent';
+    	  $scope.allProtocols = $scope.isSpecimenEvent = selected.entity == 'SpecimenEvent';
       }
 
       $scope.enableAttach = function(allProtocols, selectedCps, selectedEntity) {
