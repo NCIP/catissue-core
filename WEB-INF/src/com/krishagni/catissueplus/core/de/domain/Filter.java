@@ -11,12 +11,12 @@ public class Filter {
 		LE ("<="),
 		LT ("<"),
 		CONTAINS ("contains"),
-		STARTS_WITH ("starts_with"),
-		ENDS_WITH ("ends_with"),
+		STARTS_WITH ("starts with"),
+		ENDS_WITH ("ends with"),
 		IN ("in"),
-		NOT_IN ("not_in"),
+		NOT_IN ("not in"),
 		EXISTS ("exists"),
-		NOT_EXISTS ("not_exists"),
+		NOT_EXISTS ("not exists"),
 		BETWEEN("between");
 		
 		private String symbol;
