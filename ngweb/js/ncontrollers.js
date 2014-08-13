@@ -664,7 +664,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             var searchQuery = "";
             angular.forEach(gridFilterPlugin.scope.columns, function(col) {
               if (col.visible && col.filterText) {
-                var filterText = (col.filterText.indexOf('*') == 0 ? col.filterText.replace('*', '') : "^" + col.filterText) + ";";
+                var filterText = (col.filterText.indexOf('*') == 0 ? col.filterText.replace('*', '') : col.filterText) + ";";
                 searchQuery += col.displayName + ": " + filterText;
               }
             });
