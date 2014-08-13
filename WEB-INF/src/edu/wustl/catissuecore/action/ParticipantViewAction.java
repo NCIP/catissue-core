@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.dao.SCGDAO;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.dto.ParticipantDTO;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -24,6 +25,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.security.global.Permissions;
 
 public class ParticipantViewAction  extends CatissueBaseAction
 {
@@ -70,6 +72,12 @@ public class ParticipantViewAction  extends CatissueBaseAction
 		       	ParticipantBizLogic bizLogic=new ParticipantBizLogic();
 				ParticipantDTO participantDTO=bizLogic.getParticipantDTO(hibernateDao,new Long(participantId), 
 						new Long(cpId));
+				if(! AppUtility.hasPrivilegeToView(CollectionProtocol.class.getName(), new Long(cpId), sessionData, Permissions.REGISTRATION)){
+				    participantDTO.setFirstName("");
+				    participantDTO.setLastName("");
+				    participantDTO.setDob(null);
+				    participantDTO.getMrns().clear();
+				}
 				request.setAttribute("participantDto", participantDTO);
 				request.setAttribute("datePattern", CommonServiceLocator.getInstance().getDatePattern());
 			}
