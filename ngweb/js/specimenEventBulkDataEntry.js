@@ -1,6 +1,6 @@
-specimenEvent = angular.module('specimenEvent-app',['plus.formsServices', 'plus.directives','ui.bootstrap']);
+specimenEvent = angular.module('specimen-event-app',['plus.formsServices', 'plus.directives','ui.bootstrap']);
 
-specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventService','FormsService', function($scope, SpecimenEventService, FormsService){
+specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventService','FormsService', function($scope, SpecimensEventService, FormsService){
   $scope.selectedEvent = undefined;
   $scope.specimenLabels = undefined;
   $scope.isApplyFirstToAll = false;
@@ -18,7 +18,6 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
     var specimenLabels = $scope.specimenLabels.split(',');
     FormsService.getFormDef(selectedEvent.formId).then(function (data){
       var formDef = data;
-      var appData =
       dataTable = new edu.common.de.DataTable({
         formId           : selectedEvent.formId,
         appData          : {formCtxtId : $scope.selectedEvent.formCtxtId},
@@ -33,9 +32,9 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
   }
 
   $scope.addRecord = function() {
-    var specimenLabels = $scope.specimenLabels.split(',');
+    var specimenLabels = $scope.specimenLabels.trim().split("\\s*,\\s*");
     var tableData =[];
-    SpecimenEventService.getSpecimensSummary(specimenLabels).then( function(data) {
+    SpecimensEventService.getSpecimensSummary(specimenLabels).then( function(data) {
       for(var i =0 ;i < data.length; i++) {
         var tableRowJson = {label:data[i].label, objectId: data[i].id, formRecords:[] };
         tableData.push(tableRowJson);
@@ -74,7 +73,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
     $scope.dataEntryMode = (mode == 'view') ? false : true;
     $scope.isApplyFirstToAll = false;
     var specimenLabels = $scope.specimenLabels.split(',');
-    SpecimenEventService.getEventData($scope.selectedEvent.formId, specimenLabels).then( function(data) {
+    SpecimensEventService.getEventData($scope.selectedEvent.formId, specimenLabels).then( function(data) {
       renderDataTable(mode, data.specimenEventFormDataList);
     });
   }
@@ -87,7 +86,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
 }]);
 
 
-specimenEvent.factory('SpecimenEventService',function($http){
+specimenEvent.factory('SpecimensEventService',function($http){
 
     var apiUrl = '/openspecimen/rest/ng/';
     var baseUrl = apiUrl + 'specimen-events/';

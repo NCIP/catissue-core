@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="specimenEvent-app">
+<html ng-app="specimen-event-app">
 <head lang="en">
   <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css">
