@@ -2754,8 +2754,9 @@ public class AppUtility
 
 		if (cpIdsList.isEmpty())
 		{
-			return new CSMValidator()
-					.hasPrivilegeToViewGlobalParticipant(sessionDataBean);
+			cpIdsList.add(identifier);
+//			return new CSMValidator()
+//					.hasPrivilegeToViewGlobalParticipant(sessionDataBean);
 		}
 
 		if (cpIdsList.size() > 1 && objName.equals(Participant.class.getName()))

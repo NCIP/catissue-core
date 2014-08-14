@@ -12,15 +12,22 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
+
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.CDMSCaTissueIntegrationUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.Utility;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 public class EditInCPBasedViewAction extends BaseAction {
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -28,7 +35,8 @@ public class EditInCPBasedViewAction extends BaseAction {
 	    {
 	        String objectToEdit= request.getParameter("pageOf"); 
 	        final SessionDataBean sessionData=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-	        final StringBuffer path= new StringBuffer();
+	        StringBuffer path= new StringBuffer();
+	        String cpId = "";
 	        if(Constants.PAGE_OF_SPECIMEN_COLLECTION_GROUP.equalsIgnoreCase(objectToEdit))
 	    {
 	       	String scgId = request.getParameter(CDMSIntegrationConstants.SCGID);
@@ -43,7 +51,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	        }
 	        if(scgOperation!=null && scgOperation.equals(CDMSIntegrationConstants.ADD))
 	        {/*Get ALREADY CREATED ANTICIAPTORY SCGS - THE RECENT ONE*/
-	            final String cpId=request.getParameter(CDMSIntegrationConstants.COLLECTION_PROTOCOL_ID);
+	            cpId=request.getParameter(CDMSIntegrationConstants.COLLECTION_PROTOCOL_ID);
 	            final String visitNum=request.getParameter(CDMSIntegrationConstants.VISIT_NUMBER);
 	            final String participantId=request.getParameter(CDMSIntegrationConstants.PARTICIPANT_ID);
 	            final String collectionEventId=request.getParameter(CDMSIntegrationConstants.COLL_PROTOCOL_EVENT_ID);
@@ -83,6 +91,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	            if(!ids.isEmpty())
 	            {
 	                final Object[] id= (Object[]) ids.get(0);
+	                cpId = id[0].toString();
 	                path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[2].toString()).append(",").append(id[3].toString());
                   path.append("&scgId=").append(scgId);
 //	                path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[2].toString());
@@ -102,6 +111,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	     			if(!list.isEmpty()) 
 	                {
 	                    final Object[] id= (Object[]) list.get(0);
+	                    cpId = id[0].toString();
 	                    path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString()).append(",").append(id[3].toString());
 	                    path.append("&scgId=").append(id[2].toString());
 	                    path.append("&specimenId=").append(specimenid);
@@ -117,7 +127,7 @@ public class EditInCPBasedViewAction extends BaseAction {
 	 		List<Object> list = cprBizLogic.getCPIdandPartId(sessionData, cprId);
 	 		if (!list.isEmpty()) {
 	 			final Object[] id = (Object[]) list.get(0);
-	 			
+	 			cpId = id[0].toString();
 	 		 path.append("&cpId=").append(id[0].toString()).append("&participantId=").append(id[1].toString()).append(",").append(id[2].toString());
 	 		 
 //	 			path.append("&URLCollectionProtocolId=").append(id[0].toString())
@@ -125,18 +135,42 @@ public class EditInCPBasedViewAction extends BaseAction {
 	 		}
 	    	 
 	     }
-	     
+	        
 	     ActionForward actionForward=mapping.findForward(CDMSIntegrationConstants.CP_BASED_VIEW);
 	     String path1 = actionForward.getPath();
 	     final ActionForward newActionForward = new ActionForward();
 	     newActionForward.setName(actionForward.getName());
 	     newActionForward.setRedirect(false);
 	     newActionForward.setContextRelative(false);
+	     if(hasSpecimenProcessingPriv(sessionData, cpId)){
 	     newActionForward.setPath(path1+path.toString());
+	     }
+	     else{
+	    	 newActionForward.setPath(path1);
+	     }
 	     
 	    actionForward = newActionForward;
 	        return actionForward;
 	    }
+
+	private boolean hasSpecimenProcessingPriv(final SessionDataBean sessionData, String cpId) throws SMException {
+		boolean isAuthorize = sessionData.isAdmin();
+		if (!isAuthorize)
+		{ 
+
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(sessionData.getUserName());
+			String cpProtectionEleName = CollectionProtocol.class.getName() + "_" + cpId;
+			// Checking whether the logged in user has the required
+			// privilege on the given protection element
+			isAuthorize = privilegeCache.hasPrivilege(cpProtectionEleName, PrivilegeType.SPECIMEN_PROCESSING.toString());
+			
+			if(!isAuthorize)
+			{   
+				isAuthorize = AppUtility.checkForAllCurrentAndFutureCPs(PrivilegeType.SPECIMEN_PROCESSING.toString(), sessionData, cpId);
+			}
+		}
+		return isAuthorize;
+	}
 
 	    /**
 	     *
