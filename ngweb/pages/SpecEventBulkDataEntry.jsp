@@ -19,8 +19,18 @@
   <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
   <style type="text/css">
     th {
-      background: #3276b1;
-      color:  #FFFFFF;
+      background: rgba(170, 170, 170, 0.24);
+      color:  #333;
+    }
+
+    .right {
+      float: right;
+    }
+
+    .data-table {
+      margin-top:10px;
+      height:350px;
+      overflow:auto;
     }
   </style>
 
@@ -47,12 +57,15 @@
       </div>
     </form>
     <div id="bulk-data-entry">
-      <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true">Add Record</button>
-      <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="dataEntryMode != true">Edit Existing Records</button>
-      <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">Save</button>
-      <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">Cancel</button>
-      <div id="data-table"></div>
-    </div>
+      <div>
+        <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true">Add Record</button>
+        <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="dataEntryMode != true">Edit Existing Records</button>
+        <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">Save</button>
+        <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">Cancel</button>
+        <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()">Apply First To All</button>
+      <div>
+        <div id="data-table" class="data-table"></div>
+      </div>
     <script>
        var dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
     </script>

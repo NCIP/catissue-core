@@ -3,6 +3,8 @@ specimenEvent = angular.module('specimenEvent-app',['plus.formsServices', 'plus.
 specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventService','FormsService', function($scope, SpecimenEventService, FormsService){
   $scope.selectedEvent = undefined;
   $scope.specimenLabels = undefined;
+  $scope.isApplyFirstToAll = false;
+
   var dataTable = undefined;
 
   FormsService.getAllCPForms('specimenEvent').then( function(events) {
@@ -12,6 +14,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
   $scope.onEventSelect = function(selectedEvent) {
     $('#data-table').empty();
     $scope.dataEntryMode = false;
+    $scope.isApplyFirstToAll = false;
     var specimenLabels = $scope.specimenLabels.split(',');
     FormsService.getFormDef(selectedEvent.formId).then(function (data){
       var formDef = data;
@@ -38,6 +41,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
         tableData.push(tableRowJson);
       }
         $scope.dataEntryMode = true;
+        $scope.isApplyFirstToAll = false;
         renderDataTable('add', tableData);
     });
   };
@@ -62,8 +66,13 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimenEventSer
     showAllRecords('view');
   }
 
+  $scope.applyFirstToAll = function() {
+       dataTable.copyFirstToAll();
+  }
+
   var showAllRecords = function(mode) {
     $scope.dataEntryMode = (mode == 'view') ? false : true;
+    $scope.isApplyFirstToAll = false;
     var specimenLabels = $scope.specimenLabels.split(',');
     SpecimenEventService.getEventData($scope.selectedEvent.formId, specimenLabels).then( function(data) {
       renderDataTable(mode, data.specimenEventFormDataList);
