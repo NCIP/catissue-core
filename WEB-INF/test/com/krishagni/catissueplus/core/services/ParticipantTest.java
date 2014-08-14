@@ -102,6 +102,8 @@ public class ParticipantTest {
 	@Test
 	public void testForSuccessfulParticipantCreation() {
 
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		CreateParticipantEvent reqEvent = ParticipantTestData
 				.getParticipantCreateEvent();
 
@@ -109,12 +111,12 @@ public class ParticipantTest {
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
-		// assertEquals(EventStatus.OK, response.getStatus());
-		// ParticipantDetail createdParticipant =
-		// response.getParticipantDetail();
-		// assertNotNull(createdParticipant);
-		// assertEquals(reqEvent.getParticipantDetail().getFirstName(),
-		// createdParticipant.getFirstName());
+		 assertEquals(EventStatus.OK, response.getStatus());
+		 ParticipantDetail createdParticipant =
+		 response.getParticipantDetail();
+		 assertNotNull(createdParticipant);
+		 assertEquals(reqEvent.getParticipantDetail().getFirstName(),
+		 createdParticipant.getFirstName());
 
 	}
 
@@ -128,11 +130,11 @@ public class ParticipantTest {
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals(1, response.getErroneousFields().length);
-		// assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
-		// assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(),
-		// response.getErroneousFields()[0].getErrorMessage());
+		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		 assertEquals(1, response.getErroneousFields().length);
+		 assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
+		 assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(),
+		 response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -145,15 +147,11 @@ public class ParticipantTest {
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		assertEquals(2, response.getErroneousFields().length);
+		assertEquals(1, response.getErroneousFields().length);
 		assertEquals(BIRTH_DATE,
 				response.getErroneousFields()[0].getFieldName());
 		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(),
 				response.getErroneousFields()[0].getErrorMessage());
-		assertEquals(DEATH_DATE,
-				response.getErroneousFields()[1].getFieldName());
-		assertEquals(ParticipantErrorCode.CONSTRAINT_VIOLATION.message(),
-				response.getErroneousFields()[1].getErrorMessage());
 	}
 
 	@Test
@@ -197,16 +195,17 @@ public class ParticipantTest {
 		CreateParticipantEvent reqEvent = ParticipantTestData
 				.getParticipantCreateEventInvalidSite();
 		when(siteDao.getSite(anyString())).thenReturn(null);
-
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		ParticipantCreatedEvent response = participantService
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals(1, response.getErroneousFields().length);
-		// assertEquals(SITE, response.getErroneousFields()[0].getFieldName());
-		// assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(),
-		// response.getErroneousFields()[0].getErrorMessage());
+		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		 assertEquals(1, response.getErroneousFields().length);
+		 assertEquals(SITE, response.getErroneousFields()[0].getFieldName());
+		 assertEquals(ParticipantErrorCode.INVALID_ATTR_VALUE.message(),
+		 response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
@@ -219,42 +218,48 @@ public class ParticipantTest {
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
 		System.out.println(response.getMessage());
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals(ParticipantErrorCode.MISSING_ATTR_VALUE.message(),
-		// response.getErroneousFields()[0].getErrorMessage());
+		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		 assertEquals(ParticipantErrorCode.MISSING_ATTR_VALUE.message(),
+		 response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test
 	public void testParticipantCreationInvalidGender() {
 
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		CreateParticipantEvent reqEvent = ParticipantTestData
 				.getParticipantCreateInvalidGender();
 
 		ParticipantCreatedEvent response = participantService
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		System.out.println(response.getMessage());
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals("Attribute value is invalid : gender",
-		// response.getMessage());
+//		System.out.println(response.getMessage());
+//		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+//		 assertEquals("Attribute value is invalid : gender",
+//		 response.getMessage());
 	}
 
 	@Test
 	public void testParticipantCreationInvalidRace() {
 
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		CreateParticipantEvent reqEvent = ParticipantTestData
 				.getParticipantCreateInvalidRace();
 
 		ParticipantCreatedEvent response = participantService
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals("Attribute value is invalid : race",
-		// response.getMessage());
+//		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+//		 assertEquals("Attribute value is invalid : race",
+//		 response.getMessage());
 	}
 
 	@Test
 	public void testParticipantCreationDuplicateSsn() {
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		CreateParticipantEvent reqEvent = ParticipantTestData
 				.getParticipantCreateDuplicateSsn();
 
@@ -263,15 +268,17 @@ public class ParticipantTest {
 		ParticipantCreatedEvent response = participantService
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals(ParticipantErrorCode.DUPLICATE_SSN.message(),
-		// response.getErroneousFields()[0].getErrorMessage());
-		// assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
+		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		 assertEquals(ParticipantErrorCode.DUPLICATE_SSN.message(),
+		 response.getErroneousFields()[0].getErrorMessage());
+		 assertEquals(SSN, response.getErroneousFields()[0].getFieldName());
 	}
 
 	@Test
 	public void testParticipantCreationWithServerErr() {
 
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		CreateParticipantEvent reqEvent = ParticipantTestData
 				.getParticipantCreateEvent();
 
@@ -280,15 +287,15 @@ public class ParticipantTest {
 		ParticipantCreatedEvent response = participantService
 				.createParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.INTERNAL_SERVER_ERROR,
-		// response.getStatus());
+		 assertEquals(EventStatus.INTERNAL_SERVER_ERROR,response.getStatus());
 	}
 
 	@Test
 	public void testForSuccessfulParticipantUpdate() {
 
 		when(participantDao.isSsnUnique(anyString())).thenReturn(true);
-
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		when(participantDao.getParticipant(anyLong())).thenReturn(
 				ParticipantTestData.getUpdateParticipant());
 		UpdateParticipantEvent reqEvent = ParticipantTestData
@@ -297,12 +304,12 @@ public class ParticipantTest {
 		ParticipantUpdatedEvent response = participantService
 				.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.OK, response.getStatus());
-		// ParticipantDetail createdParticipant =
-		// response.getParticipantDetail();
-		// assertNotNull(createdParticipant);
-		// assertEquals(reqEvent.getParticipantDetail().getFirstName(),
-		// createdParticipant.getFirstName());
+		 assertEquals(EventStatus.OK, response.getStatus());
+		 ParticipantDetail createdParticipant =
+		 response.getParticipantDetail();
+		 assertNotNull(createdParticipant);
+		 assertEquals(reqEvent.getParticipantDetail().getFirstName(),
+		 createdParticipant.getFirstName());
 	}
 
 	@Test
@@ -325,7 +332,8 @@ public class ParticipantTest {
 
 	@Test
 	public void testParticipantUpdateNewSsn() {
-
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		when(participantDao.getParticipant(anyLong())).thenReturn(
 				ParticipantTestData.getUpdatedParticipantWithNewSsn());
 
@@ -335,7 +343,7 @@ public class ParticipantTest {
 		ParticipantUpdatedEvent response = participantService
 				.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.OK, response.getStatus());
+		 assertEquals(EventStatus.OK, response.getStatus());
 	}
 
 	@Test
@@ -354,6 +362,8 @@ public class ParticipantTest {
 	@Test
 	public void testParticipantUpdateWithServerErr() {
 
+		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
+				true);
 		when(participantDao.getParticipant(anyLong())).thenReturn(
 				ParticipantTestData.getUpdateParticipant());
 		UpdateParticipantEvent reqEvent = ParticipantTestData
@@ -364,8 +374,7 @@ public class ParticipantTest {
 		ParticipantUpdatedEvent response = participantService
 				.updateParticipant(reqEvent);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.INTERNAL_SERVER_ERROR,
-		// response.getStatus());
+		 assertEquals(EventStatus.INTERNAL_SERVER_ERROR,response.getStatus());
 	}
 
 	@Test
@@ -442,7 +451,7 @@ public class ParticipantTest {
 				.getParticipantCreateEventDuplicateMrn();
 
 		when(participantDao.isPmiUnique(anyString(), anyString())).thenReturn(
-				true);
+				false);
 		when(siteDao.getSite("siteName")).thenReturn(
 				ParticipantTestData.getSite("siteName"));
 		when(siteDao.getSite("newSiteName")).thenReturn(
@@ -451,11 +460,11 @@ public class ParticipantTest {
 		ParticipantCreatedEvent response = participantService
 				.createParticipant(event);
 		assertNotNull("response cannot be null", response);
-		// assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
-		// assertEquals(1, response.getErroneousFields().length);
-		// assertEquals(ParticipantErrorCode.DUPLICATE_PMI.message(),
-		// response.getErroneousFields()[0].getErrorMessage());
-		// assertEquals(PMI, response.getErroneousFields()[0].getFieldName());
+		 assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
+		 assertEquals(1, response.getErroneousFields().length);
+		 assertEquals(ParticipantErrorCode.DUPLICATE_PMI.message(),
+		 response.getErroneousFields()[0].getErrorMessage());
+		 assertEquals(PMI, response.getErroneousFields()[0].getFieldName());
 	}
 
 }

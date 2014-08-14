@@ -238,7 +238,12 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		if (mrns != null && mrns.size() > 0) {
 			for (ParticipantMedicalIdentifierNumberDetail medicalRecordNumberDetail : mrns) {
 				ParticipantMedicalIdentifier medicalIdentifier = getMedicalIdentifier(medicalRecordNumberDetail, exception);
-				map.put(medicalIdentifier.getSite().getName(), medicalIdentifier);
+				if(medicalIdentifier.getSite() != null){
+					map.put(medicalIdentifier.getSite().getName(), medicalIdentifier);
+				}
+				else{
+					return;
+				}
 			}
 			participant.setPmiCollection(map);
 		}
