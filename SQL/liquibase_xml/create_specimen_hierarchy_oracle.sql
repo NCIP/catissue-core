@@ -3,10 +3,9 @@ IS currentId NUMBER(20);
    pageSize NUMBER(20);
    pageIterator NUMBER(20);
    pageContent CLOB;
-   sqlValues CLOB;
    sqlStatement CLOB;
    ancestors CLOB;
-   finalStatement varchar(10000);
+   finalStatement CLOB;
    currentTime CLOB;
 BEGIN
 
@@ -15,7 +14,6 @@ BEGIN
   
  pageSize := 100;
  pageContent := '';
- sqlValues := '';
  pageIterator := 1;
  ancestors := '';
  finalStatement := '';
@@ -33,12 +31,12 @@ BEGIN
   
   IF (pageIterator > pageSize) THEN 
    pageIterator := 1;
-   createHierarchy(ancestors, pageContent, sqlValues , sqlStatement);   
+   createHierarchy(ancestors, pageContent, sqlStatement);   
   
    IF (DBMS_LOB.GETLENGTH(sqlStatement) IS NOT NULL ) THEN
     finalStatement := 'INSERT ALL ' || sqlStatement ;
     finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
-    EXECUTE IMMEDIATE finalStatement;
+    EXECUTE IMMEDIATE TO_CHAR(finalStatement);
     COMMIT;
     sqlStatement := '';
    END IF;
@@ -50,11 +48,11 @@ BEGIN
  END LOOP;
 
  IF (DBMS_LOB.GETLENGTH(pageContent) IS NOT NULL ) THEN
-  createHierarchy(ancestors, pageContent, sqlValues , sqlStatement);
+  createHierarchy(ancestors, pageContent, sqlStatement);
   IF (DBMS_LOB.GETLENGTH(sqlStatement) IS NOT NULL ) THEN
    finalStatement := 'INSERT ALL ' || sqlStatement ;
    finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
-   EXECUTE IMMEDIATE finalStatement;
+   EXECUTE IMMEDIATE TO_CHAR(finalStatement);
    COMMIT;
    sqlStatement := '';
   END IF;
@@ -100,7 +98,7 @@ END;
 /
 
 
-CREATE OR REPLACE PROCEDURE createHierarchy(ancestors IN CLOB, currentNodes IN CLOB, sqlValues IN OUT CLOB, sqlStatement IN OUT CLOB)
+CREATE OR REPLACE PROCEDURE createHierarchy(ancestors IN CLOB, currentNodes IN CLOB, sqlStatement IN OUT CLOB)
 IS startPos NUMBER(20);
    nodeIterator NUMBER(20);
    ancestorIterator NUMBER(20);
@@ -110,7 +108,7 @@ IS startPos NUMBER(20);
    currentNodeId NUMBER(20);
    currentChildren CLOB;
    extendedAncestors CLOB;
-   finalStatement varchar(10000);
+   finalStatement CLOB;
 BEGIN
  nodeIterator := 1;
  numNodes := getCountOfIds(currentNodes);
@@ -119,7 +117,7 @@ BEGIN
  LOOP
   
   currentNodeId := getIdByIndex(currentNodes, nodeIterator );
-  sqlValues := buildSql(sqlValues, currentNodeId, currentNodeId );
+  sqlStatement := buildSql(sqlStatement, currentNodeId, currentNodeId );
 
   numAncestors := getCountOfIds(ancestors);
   ancestorIterator := 1;
@@ -127,9 +125,17 @@ BEGIN
   WHILE ancestorIterator <= numAncestors
   LOOP
    currentAncestorId := getIdByIndex(ancestors,ancestorIterator);
-   sqlValues := buildSql(sqlValues, currentAncestorId, currentNodeId);
+   sqlStatement := buildSql(sqlStatement, currentAncestorId, currentNodeId);
    ancestorIterator := ancestorIterator + 1;
   END LOOP;
+
+  IF ((DBMS_LOB.GETLENGTH(sqlStatement) IS NOT NULL) AND (DBMS_LOB.GETLENGTH(sqlStatement) > 10000)) THEN
+   finalStatement := 'INSERT ALL ' || sqlStatement ;
+   finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
+   EXECUTE IMMEDIATE TO_CHAR(finalStatement);
+   COMMIT;
+   sqlStatement := '';
+  END IF;
 
   currentChildren := '';
   extendedAncestors := '';
@@ -143,21 +149,14 @@ BEGIN
    extendedAncestors := extendedAncestors || TO_CHAR(currentNodeId);
   END IF;
 
-  createHierarchy(extendedAncestors,currentChildren,sqlValues,sqlStatement);
+  createHierarchy(extendedAncestors,currentChildren,sqlStatement);
 
-  IF (DBMS_LOB.GETLENGTH(ancestors) IS NULL) THEN
-   
-   sqlStatement := sqlStatement || sqlValues; 
-   
-   IF (DBMS_LOB.GETLENGTH(sqlStatement) > 4800) THEN
-    finalStatement := 'INSERT ALL ' || sqlStatement ;
-    finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
-    EXECUTE IMMEDIATE finalStatement;
-    COMMIT;
-    sqlStatement := '';
-   END IF;
-
-   sqlValues := '';
+  IF ((DBMS_LOB.GETLENGTH(sqlStatement) IS NOT NULL) AND (DBMS_LOB.GETLENGTH(sqlStatement) > 10000)) THEN
+   finalStatement := 'INSERT ALL ' || sqlStatement ;
+   finalStatement := finalStatement || ' SELECT 1 FROM DUAL';
+   EXECUTE IMMEDIATE TO_CHAR(finalStatement);
+   COMMIT;
+   sqlStatement := '';
   END IF;
 
   nodeIterator := nodeIterator  + 1;
