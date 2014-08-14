@@ -1251,6 +1251,25 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			if (orderItemColItr.hasNext())
 			{
 				final OrderItem orderItem = (OrderItem) orderItemColItr.next();
+				if(orderItem instanceof ExistingSpecimenOrderItem){
+					ExistingSpecimenOrderItem item = (ExistingSpecimenOrderItem)orderItem;
+					if (item != null
+							&& (item.getStatus().equals(
+									Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || item
+									.getStatus().equals(
+											Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))){
+						Specimen specimen = item.getSpecimen();
+						SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+						final Long cpId = specimenCollectionGroup
+								.getCollectionProtocolRegistration().getCollectionProtocol()
+								.getId();
+						objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
+						hasDistributionPrivilege = hasDistributionPrivileges(privilegeCache, sessionDataBean,
+								 objectId, cpId);
+					}
+					
+					
+				}
 				if (orderItem instanceof PathologicalCaseOrderItem)
 				{
 					final PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
@@ -1267,19 +1286,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 								.getCollectionProtocolRegistration().getCollectionProtocol()
 								.getId();
 						objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
-						boolean isAuthorized = privilegeCache.hasPrivilege(objectId,
-								Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
-						if (!isAuthorized)
-						{
-							isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(
-									Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
-						}
-
-						if (isAuthorized)
-						{
-							hasDistributionPrivilege = true;
-							// break;
-						}
+						hasDistributionPrivilege = hasDistributionPrivileges(privilegeCache, sessionDataBean,
+								 objectId, cpId);
 					}
 				}
 			}
@@ -1291,6 +1299,19 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 
 		return hasDistributionPrivilege;
+	}
+
+	private boolean hasDistributionPrivileges(PrivilegeCache privilegeCache, SessionDataBean sessionDataBean,
+			String objectId, final Long cpId) throws SMException {
+		boolean isAuthorized = privilegeCache.hasPrivilege(objectId,
+				Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
+		if (!isAuthorized)
+		{
+			isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(
+					Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
+		}
+
+		return isAuthorized;
 	}
 
 	/**
