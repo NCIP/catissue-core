@@ -357,12 +357,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 				String parentKey = "-1";
 				if (parentSpecimen != null) {
 					SpecimenRequirement psr = parentSpecimen.getSpecimenRequirement();
-					if (psr == null) {
-						parentKey = parentSpecimen.getId() + "_null";
-					}
-					else {
-						parentKey = parentSpecimen.getId() + "_" + psr.getId();
-					}
+						parentKey = parentSpecimen.getId() + "_" + (psr==null ? psr : psr.getId());
 				}
 				Set<SpecimenInfo> specimenInfoList = specimensMap.get(parentKey);
 				if (specimenInfoList == null) {
