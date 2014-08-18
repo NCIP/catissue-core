@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
@@ -19,7 +20,6 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.security.global.Permissions;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
