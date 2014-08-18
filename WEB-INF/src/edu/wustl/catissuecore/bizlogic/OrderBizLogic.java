@@ -1253,11 +1253,11 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				final OrderItem orderItem = (OrderItem) orderItemColItr.next();
 				if(orderItem instanceof ExistingSpecimenOrderItem){
 					ExistingSpecimenOrderItem item = (ExistingSpecimenOrderItem)orderItem;
-					if (item != null
-							&& (item.getStatus().equals(
-									Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || item
-									.getStatus().equals(
-											Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))){
+					if (item != null){
+//							&& (item.getStatus().equals(
+//									Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || item
+//									.getStatus().equals(
+//											Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE))){
 						Specimen specimen = item.getSpecimen();
 						SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
 						final Long cpId = specimenCollectionGroup

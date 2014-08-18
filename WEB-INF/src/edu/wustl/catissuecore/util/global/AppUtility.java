@@ -2752,7 +2752,7 @@ public class AppUtility
 			return false;
 		}
 
-		if (cpIdsList.isEmpty())
+		if (cpIdsList.isEmpty() && "edu.wustl.catissuecore.domain.CollectionProtocol".equals(objName))
 		{
 			cpIdsList.add(identifier);
 //			return new CSMValidator()

@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.security.global.Permissions;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
@@ -50,6 +51,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				listToReturn.add(collectionProtocolSummary);
 			}
 		}
+		Collections.sort(listToReturn);
 		return AllCollectionProtocolsEvent.ok(listToReturn);
 	}
 

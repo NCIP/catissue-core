@@ -1223,8 +1223,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					stringBuffer.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
 					for (final CollectionProtocolRegistration cpr : cprCollection)
 					{
-						if (cpr.getId() == null)
-						{
+//						if (cpr.getId() == null)
 							if (cpr.getCollectionProtocol() == null)
 							{
 								return objectId;
@@ -1232,7 +1231,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 							checkForCollectionProtocolIdentifier(dao, cpr);
 							stringBuffer.append("_").append(cpr.getCollectionProtocol().getId());
 							isNewCPRPresent = true;
-						}
 					}
 				}
 				if (isNewCPRPresent)
@@ -1279,7 +1277,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final String protEltName = this.getObjectId(dao, domainObject);
 			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
-
 			if (protEltName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
 			{
 				User user = null;

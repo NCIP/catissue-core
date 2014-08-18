@@ -13,7 +13,7 @@
            });
 			
 		 shortcut.add("alt+q", function() {
-				var strLinkForQueries=strLinkWithoutSlash.concat("/ShowQueryDashboardAction.do");
+				var strLinkForQueries=strLinkWithoutSlash.concat("/query.do");
 					window.top.location.href =strLinkForQueries;
 				});
 				
@@ -26,4 +26,3 @@
 			var strLinkForBulkUpload=strLinkWithoutSlash.concat("/BulkOperation.do?pageOf=pageOfBulkOperation");
 				window.top.location.href =strLinkForBulkUpload; 
            });
-	

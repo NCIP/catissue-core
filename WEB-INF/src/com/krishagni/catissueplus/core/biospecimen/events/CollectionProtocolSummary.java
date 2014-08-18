@@ -1,7 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class CollectionProtocolSummary {
+public class CollectionProtocolSummary implements Comparable<CollectionProtocolSummary>{
 
 	private Long id;
 
@@ -41,6 +41,11 @@ public class CollectionProtocolSummary {
 
 	public void setPpidFormat(String ppidFormat) {
 		this.ppidFormat = ppidFormat;
+	}
+
+	@Override
+	public int compareTo(CollectionProtocolSummary cpSummary) {
+		return this.shortTitle.toUpperCase().compareTo(cpSummary.getShortTitle().toUpperCase());
 	}
 
 }

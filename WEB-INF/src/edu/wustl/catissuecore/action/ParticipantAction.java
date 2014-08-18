@@ -27,11 +27,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+
+import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
@@ -59,6 +63,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
@@ -153,7 +158,15 @@ public class ParticipantAction extends CatissueBaseAction
 		{
 			participantForm.setCpId(Long.valueOf(cpid));
 		}
-
+		SessionDataBean sessionBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+			if(cpid != null && !AppUtility.hasPrivilegeToView(CollectionProtocol.class.getName(), Long.valueOf(cpid), sessionBean, PrivilegeType.REGISTRATION.toString()))
+		{
+				ActionErrors errors = new ActionErrors();
+				ActionError error = new ActionError("access.view.action.denied", "");
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, errors);
+				return mapping.findForward(Constants.ACCESS_DENIED);
+		}
 		if (participantForm.getOperation().equals(Constants.EDIT))
 		{
 			request.setAttribute("participantId",
