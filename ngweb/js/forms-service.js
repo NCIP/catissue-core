@@ -117,12 +117,12 @@ angular.module('plus.formsServices', [])
   
   /** Need to merge this with rest of services **/
   .factory('CollectionProtocolService', function($http) {
-    var baseUrl = '/openspecimen/rest/ng/collection-protocols?chkPrivilege=false';
+    var baseUrl = '/openspecimen/rest/ng/collection-protocols';
     var successfn = function(result) { return result.data; };
 
     return {
       getCpList: function() {
-        return Utility.get($http, baseUrl, successfn);
+        return Utility.get($http, baseUrl+"?chkPrivilege=false", successfn);
       }
     }
   });
