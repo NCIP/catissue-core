@@ -59,10 +59,9 @@
     <div id="bulk-data-entry">
       <div>
         <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true">Add Record</button>
-        <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="dataEntryMode != true">Edit Existing Records</button>
         <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">Save</button>
         <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">Cancel</button>
-        <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()">Apply First To All</button>
+        <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">Apply First To All</button>
       <div>
         <div id="data-table" class="data-table"></div>
       </div>

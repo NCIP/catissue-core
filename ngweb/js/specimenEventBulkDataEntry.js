@@ -49,7 +49,9 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
     var formData = JSON.stringify(dataTable.getData());
     FormsService.saveFormData($scope.selectedEvent.formId,null,JSON.stringify(formData)).then(function(data){
       Utility.notify($("#notifications"), "Form Data Saved", "success", true);
-      showAllRecords('view');
+      //showAllRecords('view');
+      $('#data-table').empty();
+      $scope.dataEntryMode = false;
     },
     function(data) {
      Utility.notify($("#notifications"), "Form Data Save Failed.Please Check whether form is multi record or not.", "error", true);
@@ -62,7 +64,9 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   }
 
   $scope.cancelDataTable = function() {
-    showAllRecords('view');
+    //showAllRecords('view');
+    $('#data-table').empty();
+    $scope.dataEntryMode = false;
   }
 
   $scope.applyFirstToAll = function() {
