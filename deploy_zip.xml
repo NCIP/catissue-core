@@ -5590,6 +5590,7 @@
                 <java classname="krishagni.catissueplus.upgrade.ImportQueries" fork="true" maxmemory="1024M">
                         <arg value="${username}"/>
                         <arg value="aq-queries"/>
+                        <arg value="Default Queries"/>
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
 				<pathelement location="${temp.dir.DE}/old" />
