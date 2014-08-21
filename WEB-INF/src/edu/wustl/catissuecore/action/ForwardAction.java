@@ -52,8 +52,6 @@ public class ForwardAction extends BaseAction
 		}
 		if(request.getAttribute("org.apache.struts.action.ERROR")!=null){
 			ActionErrors actionErrors = (ActionErrors)request.getAttribute("org.apache.struts.action.ERROR");
-//			ActionErrors actionErrors = new ActionErrors();
-//			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
 			saveErrors(request, actionErrors);
 		}
 		return (mapping.findForward(Constants.SUCCESS));

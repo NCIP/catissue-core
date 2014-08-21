@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="createParticipantWithConsents" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
+		 	    >
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			 cardinality="*" roleName="collectionProtocolRegistrationCollection" maxNoOfRecords="2"
+			  parentRoleName="participant" >
+			<containmentAssociation className="edu.wustl.catissuecore.domain.ConsentTierResponse"
+			 cardinality="*" roleName="consentTierResponseCollection"
+			 maxNoOfRecords="5" parentRoleName="participant" >
+				<referenceAssociation className="edu.wustl.catissuecore.domain.ConsentTier"
+					   roleName="consentTier"   >
+					<attribute name="statement" csvColumnName="Consent Statement"   />
+				</referenceAssociation>
+			<attribute name="response" csvColumnName="Consent Response"   />
+			</containmentAssociation>
+			<referenceAssociation
+				className="edu.wustl.catissuecore.domain.CollectionProtocol"
+				   roleName="collectionProtocol"   >
+				<attribute name="title" csvColumnName="CP Title"   />
+			</referenceAssociation>
+			<referenceAssociation
+				className="edu.wustl.catissuecore.domain.User"
+				   roleName="consentWitness"   >
+				<attribute name="loginName" csvColumnName="Witness Name"   />
+			</referenceAssociation>
+			<attribute name="consentSignatureDate" csvColumnName="Consent Sign Date"   />
+
+			<attribute name="protocolParticipantIdentifier" csvColumnName="PPI"   />
+				<attribute name="registrationDate" csvColumnName="Registration Date"   />
+				<attribute name="isToInsertAnticipatorySCGs" csvColumnName="isToInsertAnticipatorySCGs"   />
+		</containmentAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.Race"
+			 cardinality="*" roleName="raceCollection"
+			 maxNoOfRecords="2" parentRoleName="participant" >
+			<attribute name="raceName" csvColumnName="Race"   />
+		</containmentAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+			 cardinality="*" roleName="participantMedicalIdentifierCollection"
+			 maxNoOfRecords="3" parentRoleName="participant" >
+		<referenceAssociation	className="edu.wustl.catissuecore.domain.Site" 	  roleName="site"  parentRoleName="participant" >
+					<attribute name="name" csvColumnName="Site Name"   />
+				</referenceAssociation>
+			<attribute name="medicalRecordNumber" csvColumnName="Medical Record Number"   />
+		</containmentAssociation>
+		<attribute name="socialSecurityNumber" csvColumnName="Social Security Number"   />
+		<attribute name="birthDate" csvColumnName="Birth Date"   />
+		<attribute name="gender" csvColumnName="Gender"   />
+		<attribute name="firstName" csvColumnName="First Name"   />
+		<attribute name="lastName" csvColumnName="Last Name"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="ethnicity" csvColumnName="Ethinicity"   />
+		<attribute name="deathDate" csvColumnName="Death Date"   />
+		<attribute name="vitalStatus" csvColumnName="Vital Status"   />
+		<attribute name="sexGenotype" csvColumnName="Sex genotype"   />
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -14,7 +14,6 @@ import java.util.Map;
 import krishagni.catissueplus.bizlogic.StorageContainerBizlogic;
 import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
 import krishagni.catissueplus.mobile.dto.SpecimenDTO;
-import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -141,7 +140,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(null, "errors.availablequantity",
 					quantityString);
 		}
-		Object pSpec =  dao.retrieveById(AbstractSpecimen.class.getName(),
+		Object pSpec =  dao.retrieveById(Specimen.class.getName(),
 				parentSpecimen.getId());
 		((Specimen)pSpec).setAvailableQuantity(totalAliquotQty);
 		dao.update(pSpec);

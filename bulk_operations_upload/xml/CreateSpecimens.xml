@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="CreateSpecimen" batchSize="5">
+<BulkOperationMetadata templateName="createSpecimens" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
 		     
 		 >

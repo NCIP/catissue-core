@@ -16,7 +16,7 @@
 	</referenceAssociation>
 	
 	<referenceAssociation  className="edu.wustl.catissuecore.domain.User"        roleName="coordinator">
-		<attribute name="id" csvColumnName="User ID"   />
+		<attribute name="loginName" csvColumnName="User login name"   />
 	</referenceAssociation>
 		
 		<attribute name="emailAddress" csvColumnName="Email Address"   />

@@ -28,7 +28,8 @@
 		<attribute name="full" csvColumnName="Full"   />
 		<attribute name="comment" csvColumnName="Comments"   />
 		<attribute name="name" csvColumnName="container name"   />
-		<!--<attribute name="noOfContainers" csvColumnName="No Of Containers"   />-->
+		<attribute name="noOfContainers" csvColumnName="No Of Containers"   />
+		<attribute name="barcode" csvColumnName="Barcode"   />
 
 		<containmentAssociation className="java.lang.String"	  maxNoOfRecords="2"   cardinality="*" roleName="holdsSpecimenClassCollection">
 			<attribute name="holdsSpecimenClassCollection" csvColumnName="holdsSpecimenClass"    />

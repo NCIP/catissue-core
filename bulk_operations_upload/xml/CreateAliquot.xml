@@ -3,16 +3,14 @@
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Aliquot"
 		     
 		 >
-
+		<referenceAssociation
+					className="edu.wustl.catissuecore.domain.Specimen" 
+					roleName="specimen"  parentRoleName="specimen" >
+					<attribute name="label" csvColumnName="Parent Specimen Label"   />
+		</referenceAssociation>
+		 
 		<attribute name="count" csvColumnName="count"   />
 		<attribute name="quantityPerAliquot" csvColumnName="quantityPerAliquot"   />
-
-		<referenceAssociation
-			className="edu.wustl.catissuecore.domain.Specimen"
-			      roleName="specimen">
-			<attribute name="label" csvColumnName="label"   />
-
-		</referenceAssociation>
 
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"

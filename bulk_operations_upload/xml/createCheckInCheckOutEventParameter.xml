@@ -7,8 +7,8 @@
 			className="edu.wustl.catissuecore.domain.User"
 			 
 			  roleName="user"    >
-				<!-- <attribute name="loginName" csvColumnName="User Login Name"   /> -->
-				<attribute name="id" csvColumnName="User Id"   />
+		<attribute name="loginName" csvColumnName="User Login Name"   /> 
+				
 		</referenceAssociation>
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.Specimen"
