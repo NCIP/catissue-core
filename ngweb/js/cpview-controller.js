@@ -164,7 +164,7 @@ angular.module('plus.cpview', [])
     var scgId = selectedScg.id;
 	
     repository.getSpecimens(scgId).success(function(result) {
-      scgNode.nodes = $scope.getSpecimenTree(result);
+      scgNode.nodes = $scope.getSpecimenTree(result,'scg');
       scgNode.childrenProbed = true;
       if (scgNode.nodes.length == 0) {
         scgNode.state = 'disabled';
@@ -209,7 +209,7 @@ angular.module('plus.cpview', [])
     return false;
   };
 
-  $scope.getSpecimenTree = function(specimens) {
+  $scope.getSpecimenTree = function(specimens,parentType) {
     var specimenNodes = [];
 
     if (specimens == null || specimens == undefined) {
@@ -219,6 +219,7 @@ angular.module('plus.cpview', [])
     for (var i = 0; i < specimens.length; ++i) {
       var specimen = specimens[i];
       var name = $scope.getSpecimenName(specimen);
+	  var scgId = parentType == 'cpe' ? '' : specimen.scgId;
       var specimenNode = {
     		  id: specimen.instanceType + specimen.id + specimen.requirementId,
     	        name: name,
@@ -227,10 +228,10 @@ angular.module('plus.cpview', [])
     	        type: 'specimen',
     	        instance: specimen.instanceType,
     			specimenId: specimen.id,
-    			scgId: specimen.scgId,
+    			scgId: scgId,
     			parentId: specimen.parentId,
     			requirementId: specimen.requirementId,
-    	        nodes: $scope.getSpecimenTree(specimen.children),
+    	        nodes: $scope.getSpecimenTree(specimen.children,parentType),
     	        specimenType: specimen.specimenType,
     	        state: 'closed'
       }
@@ -269,7 +270,7 @@ angular.module('plus.cpview', [])
   		scgId = data.eventId;
   	}
           repository.getSpecimens(scgId,objectType).success(function(result) {
-            data.nodes = $scope.getSpecimenTree(result);
+            data.nodes = $scope.getSpecimenTree(result,objectType);
             data.childrenProbed = true;
             if (data.nodes.length == 0) {
               data.state = 'disabled';
