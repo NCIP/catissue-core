@@ -418,7 +418,7 @@ PUBLIC
 			<forward name="specimenArray" path="/SpecArrayDistribute.do?typeOf=specimenArray" />
 			<forward name="pathologyCase"
 				path="/PathologyCaseDistribute.do?typeOf=pathologyCase" redirect="true" />
-			<forward name="failure" path="/ShoppingCart.do" />
+			<forward name="failure" path="/ViewSpecimenList.do" />
 		</action>
 
 		<!-- Direct Distribute specimen orders -->
@@ -426,7 +426,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.DirectDistributeInitAction" name="OrderSpecimenForm"
 			validate="false" scope="request">
 			<forward name="success" path="/specToDistribute.do" />
-			<forward name="failure" path="/ShoppingCart.do" />
+			<forward name="failure" path="/ViewSpecimenList.do" />
 			<forward name="redirectToSpecimenList" path="/ViewSpecimenList.do?operation=view" />
 		</action>
 
