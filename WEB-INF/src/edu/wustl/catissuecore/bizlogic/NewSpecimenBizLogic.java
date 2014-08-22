@@ -1405,18 +1405,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		final Specimen oldSpecimen = (Specimen) oldObj;
 		final String type = currentSpecimen.getSpecimenType();
 		final String pathologicalStatus = currentSpecimen.getPathologicalStatus();
+		final String tissueSide = currentSpecimen.getTissueSide();
+		final String tissueSite = currentSpecimen.getTissueSite();
+		
 		final String identifier = currentSpecimen.getId().toString();
 		if (!currentSpecimen.getPathologicalStatus().equals(oldSpecimen.getPathologicalStatus())
-				|| !currentSpecimen.getSpecimenType().equals(oldSpecimen.getSpecimenType()))
+				|| !currentSpecimen.getSpecimenType().equals(oldSpecimen.getSpecimenType())
+				||	!currentSpecimen.getTissueSide().equals(oldSpecimen.getTissueSide())
+				||	!currentSpecimen.getTissueSite().equals(oldSpecimen.getTissueSite()))
 		{
 			try
 			{
 				jdbcDao = this.openJDBCSession();
-				final String queryStr = "UPDATE CATISSUE_SPECIMEN SET TYPE = '" + type
-						+ "',PATHOLOGICAL_STATUS = '" + pathologicalStatus
+				final String queryStr = "UPDATE CATISSUE_SPECIMEN SET SPECIMEN_TYPE = '" + type
+						+ "',PATHOLOGICAL_STATUS = '" + pathologicalStatus 
+						+"' , TISSUE_SIDE = '"+ tissueSide
+						+"' , TISSUE_SITE = '"+ tissueSite
 						+ "' WHERE LINEAGE = 'ALIQUOT' AND PARENT_SPECIMEN_ID ='" + identifier
 						+ "';";
 				jdbcDao.executeUpdate(queryStr);
+				jdbcDao.commit();
 			}
 			catch (final Exception e)
 			{
@@ -1909,6 +1917,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		persistentSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		persistentSpecimen.setSpecimenType(specimen.getSpecimenType());
 		persistentSpecimen.setCollectionStatus(specimen.getCollectionStatus());
+		persistentSpecimen.setTissueSide(specimen.getTissueSide());
+		persistentSpecimen.setTissueSite(specimen.getTissueSite());
 		Double conc = 0D;
 		if (Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
