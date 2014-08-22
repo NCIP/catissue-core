@@ -2,8 +2,11 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
@@ -50,6 +53,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				listToReturn.add(collectionProtocolSummary);
 			}
 		}
+		Collections.sort(listToReturn);
 		return AllCollectionProtocolsEvent.ok(listToReturn);
 	}
 
@@ -93,6 +97,14 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		catch (CatissueException e) {
 			return ParticipantSummaryEvent.serverError(e);
 		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req) {
+		Long cpId = req.getCpId();
+		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getChildProtocols(cpId);
+		return ChildCollectionProtocolsEvent.ok(list);
 	}
 
 }

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -51,13 +53,25 @@ public class CollectionProtocolController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<CollectionProtocolSummary> getCollectionProtocolList(@RequestParam(value = "chkPrivilege", required = false, defaultValue = "") String chkPrivlege) {
+	public List<CollectionProtocolSummary> getCollectionProtocolList(@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true") String chkPrivlege) {
 		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
 		req.setSessionDataBean(getSession()); 
 		req.setChkPrivileges("true".equalsIgnoreCase(chkPrivlege));
 
 		AllCollectionProtocolsEvent result = cpSvc.getAllProtocols(req);
 		return result.getCpList();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/childProtocols")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<CollectionProtocolSummary> getChildProtocolsList(@PathVariable("id") Long id) {
+		ReqChildProtocolEvent req = new ReqChildProtocolEvent();
+		req.setSessionDataBean(getSession()); 
+		req.setCpId(id);
+
+		ChildCollectionProtocolsEvent result = cpSvc.getChildProtocols(req);
+		return result.getChildProtocols();
 	}
 
 	/*	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

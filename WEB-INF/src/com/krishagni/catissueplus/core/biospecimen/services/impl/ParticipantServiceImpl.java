@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections.map.HashedMap;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -25,7 +26,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SubRegistrationDetailsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSubRegistrationDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogic;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -187,6 +191,18 @@ public class ParticipantServiceImpl implements ParticipantService {
 			details.add(ParticipantDetail.fromDomain(participant));
 		}
 		return ParticipantMatchedEvent.ok(details);
+	}
+	
+	@Override
+	public SubRegistrationDetailsEvent getSubRegistrationDetails(ReqSubRegistrationDetailEvent event) {
+		List<RegistrationInfo> registrationsInfo = new ArrayList<RegistrationInfo>();
+		
+		List<CollectionProtocolRegistration> registrations = new ArrayList<CollectionProtocolRegistration>();
+		registrations = daoFactory.getCprDao().getSubRegDetailForParticipantAndCp(event.getParticipantId(),event.getCpId());
+		for (CollectionProtocolRegistration cpr : registrations) {
+			registrationsInfo.add(RegistrationInfo.fromDomain(cpr));
+		}
+		return SubRegistrationDetailsEvent.ok(registrationsInfo);
 	}
 	
 	private void validateSsn(String oldSsn, String newSsn, ObjectCreationException errorHandler) {

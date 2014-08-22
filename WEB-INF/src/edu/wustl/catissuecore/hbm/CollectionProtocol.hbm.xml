@@ -443,7 +443,24 @@
             catissue_collection_protocol 
           where 
             activity_status = :activityStatus
+            and PARENT_CP_ID IS NULL
         </sql-query>
+        
+        <sql-query name="getChildProtocols">
+          <return-scalar column="identifier" type="long"/>
+          <return-scalar column="short_title" type="string"/>
+          <return-scalar column="title" type="string"/>
+          <return-scalar column="PPID_FORMAT" type="string"/>
+          select 
+            identifier, short_title, title, PPID_FORMAT
+          from 
+            catissue_collection_protocol 
+          where 
+            activity_status = :activityStatus
+          and 
+          	PARENT_CP_ID = :parentId
+        </sql-query>
+        
     </class>
     <query name="getconsentTierCollection">Select cp.consentTierCollection from edu.wustl.catissuecore.domain.CollectionProtocol cp WHERE cp.id = ?
     </query>
