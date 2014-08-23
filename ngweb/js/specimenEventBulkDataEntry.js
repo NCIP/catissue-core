@@ -2,20 +2,18 @@ specimenEvent = angular.module('specimen-event-app',['plus.formsServices', 'plus
 
 specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventService', 'SpecimensService', 'FormsService', function($scope, SpecimensEventService, SpecimensService, FormsService){
 
-  var getUrlParams = function() {
-    var vars = [], hash;
-    var hashes = parent.window.location.href.slice(parent.window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-      hash = hashes[i].split('=');
-      vars.push(hash[0]);
-      vars[hash[0]] = hash[1];
-    }
-    return vars;
+  function getSpecimenLabels() {
+    var query = parent.location.search.substr(1);
+    var params = {};
+    query.split("&").forEach(function(part) {
+      var item = part.split("=");
+      params[item[0]] = decodeURIComponent(item[1]);
+    });
+    return params.specimenLabels;
   }
 
   $scope.selectedEvent = undefined;
-  $scope.specimenLabels = getUrlParams()['specimenLabels'];
+  $scope.specimenLabels = getSpecimenLabels();
 
   var dataTable = undefined;
   FormsService.getAllSpecimenEventForms().then( function(events) {
