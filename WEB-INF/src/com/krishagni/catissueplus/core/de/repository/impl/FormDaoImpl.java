@@ -14,7 +14,6 @@ import org.hibernate.Query;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.de.events.CPFormSummary;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
@@ -57,25 +56,33 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				
 		return forms;
 	}
+	
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<CPFormSummary> getAllCPFormsSummary(String entityType) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_CP_FORMS_SUMMARY);
-        List<Object[]> rows = query.setString("entityType", entityType).list();
-
-        List<CPFormSummary> forms = new ArrayList<CPFormSummary>();
-        for (Object[] row : rows) {
-            CPFormSummary form = new CPFormSummary();
-            form.setFormId((Long) row[0]);
-            form.setName((String) row[1]);
-            form.setCaption((String) row[2]);
-            form.setFormCtxtId((Long) row[3]);
-            forms.add(form);
-        }
-
-        return forms;
-    }
-
+ 	@Override
+  	public List<FormSummary> getSpecimenEventFormsSummary() {
+       Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_EVENT_FORMS_SUMMARY);
+       List<Object[]> rows = query.list();
+  
+       List<FormSummary> forms = new ArrayList<FormSummary>();
+       for (Object[] row : rows) {
+           FormSummary form = new FormSummary();
+           form.setFormId((Long) row[0]);
+           form.setName((String) row[1]);
+           form.setCaption((String) row[2]);
+           form.setCreationTime((Date) row[3]);
+           form.setModificationTime((Date) row[4]);
+           form.setCpCount(-1);
+           UserSummary user = new UserSummary();
+           user.setId((Long) row[5]);
+           user.setFirstName((String) row[6]);
+           user.setLastName((String) row[7]);
+           form.setCreatedBy(user);
+  
+           forms.add(form);
+       }
+  
+       return forms;
+   }
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -314,6 +321,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return formIds;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean canAddRecord(Long formCtxtId, Long objectId) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_CNT);
@@ -402,7 +410,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
 	
-	private static final String GET_ALL_CP_FORMS_SUMMARY = FQN + ".getAllCPFormsSummary";
+	private static final String GET_SPECIMEN_EVENT_FORMS_SUMMARY = FQN + ".getSpecimenEventFormsSummary";
 	
 	private static final String GET_QUERY_FORMS = FQN + ".getQueryForms";
 	

@@ -1,11 +1,13 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenEventFormData;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenEventFormDataEvent;
-
+import com.krishagni.catissueplus.core.biospecimen.events.SaveSpecimenEventsDataEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenEventsSavedEvent;
 
 public interface SpecimenEventService {
 	
-	public SpecimenEventFormDataEvent getSpecimenEventFormData(ReqSpecimenEventFormData req);
+	public SpecimenEventsSavedEvent saveSpecimenEvents(SaveSpecimenEventsDataEvent event);
+	
+//	public SpecimenEventFormDataEvent getSpecimenEventFormData(ReqSpecimenEventFormData req);
+	
 
 }

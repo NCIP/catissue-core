@@ -20,13 +20,12 @@ angular.module('plus.formsServices', [])
         return Utility.get($http, baseUrl, successfn);
       },
       
-      getAllCPForms: function(entityType) {
-        var params = {
-    	  entityType: entityType,
+      getAllSpecimenEventForms: function() {
+    	var params = {
+          formType : 'specimenEvent',
     	  '_reqTime' : new Date().getTime()
-        }
-        var url = baseUrl + "/allcp";
-	return Utility.get($http,url,successfn, params);
+    	}
+        return Utility.get($http, baseUrl, successfn, params);
       },
 
       getQueryForms: function() {

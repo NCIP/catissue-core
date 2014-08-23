@@ -17,12 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
-import com.krishagni.catissueplus.core.de.events.AllCPFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
-import com.krishagni.catissueplus.core.de.events.BulkFormDataEvent;
-import com.krishagni.catissueplus.core.de.events.BulkSaveFormDataEvent;
+import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -43,7 +41,6 @@ import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
-import com.krishagni.catissueplus.core.de.events.ReqAllCpFormsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -52,6 +49,7 @@ import com.krishagni.catissueplus.core.de.events.ReqFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.ReqFormFieldsEvent;
+import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.SaveFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.UploadFileEvent;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
@@ -76,6 +74,7 @@ import edu.wustl.catissuecore.action.bulkOperations.BOTemplateGeneratorUtil;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class FormServiceImpl implements FormService {
+	private static final String SPECIMEN_EVENT = "SpecimenEvent";
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
 	static {
@@ -100,17 +99,14 @@ public class FormServiceImpl implements FormService {
 		switch (req.getFormType()) {
 		    case DATA_ENTRY_FORMS:
 			    return AllFormsSummaryEvent.ok(formDao.getAllFormsSummary());
+			    
+		    case SPECIMEN_EVENT_FORMS: 
+		    	return AllFormsSummaryEvent.ok(formDao.getSpecimenEventFormsSummary());
 					    
 		    case QUERY_FORMS:
 		    default:
 		    	return AllFormsSummaryEvent.ok(formDao.getQueryForms());		
 		}		
-	}
-    
-	@Override
-	@PlusTransactional
-	public AllCPFormsSummaryEvent getCPForms(ReqAllCpFormsEvent req) {
-		return AllCPFormsSummaryEvent.ok(formDao.getAllCPFormsSummary(req.getEntityType())); 
 	}
 
     @Override
@@ -178,24 +174,21 @@ public class FormServiceImpl implements FormService {
 		return FormContextsEvent.ok(formDao.getFormContexts(req.getFormId()));		
 	}
 	
-	
 	@Override
 	@PlusTransactional
 	public FormContextsAddedEvent addFormContexts(AddFormContextsEvent req) {
 		List<FormContextDetail> formCtxts = req.getFormContexts();
 		for (FormContextDetail formCtxtDetail : formCtxts) {
-			Long cpId = -1L;
-			boolean isMultiRecord = false;
 			Long formId = formCtxtDetail.getFormId();
-			cpId = formCtxtDetail.getCollectionProtocol().getId();
+			Long cpId = formCtxtDetail.getCollectionProtocol().getId();
 			String entity = formCtxtDetail.getLevel();
 			Integer sortOrder = formCtxtDetail.getSortOrder();
-			isMultiRecord = formCtxtDetail.isMultiRecord();
+			boolean isMultiRecord = formCtxtDetail.isMultiRecord();
 			FormContextBean formCtxt = formDao.getFormContext(formId, cpId, entity);
 			if (formCtxt == null) {
 				formCtxt = new FormContextBean();
 				formCtxt.setContainerId(formId);
-				formCtxt.setCpId(cpId);
+				formCtxt.setCpId(entity == SPECIMEN_EVENT ? -1 : cpId);
 				formCtxt.setEntityType(entity);
 				formCtxt.setMultiRecord(isMultiRecord);
 			}
@@ -258,7 +251,7 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public FormDataEvent saveFormData(SaveFormDataEvent req) {
 		try {
-			FormData formData = saveOrUpdateFormData(req.getFormData(), req.getRecordId(),req.getSessionDataBean());
+			FormData formData = saveOrUpdateFormData(req.getSessionDataBean(), req.getRecordId(), req.getFormData());
 			return FormDataEvent.ok(formData.getContainer().getId(), formData.getRecordId(), formData);
 		} catch(IllegalArgumentException ex) {
 			return FormDataEvent.badRequest();
@@ -267,24 +260,24 @@ public class FormServiceImpl implements FormService {
 
 	@Override
 	@PlusTransactional
-	public BulkFormDataEvent bulkSaveFormData(BulkSaveFormDataEvent req) {
+	public BulkFormDataSavedEvent saveBulkFormData(SaveBulkFormDataEvent req) {
 		try{ 
 			List<FormData> formDataList = req.getFormDataList();
 			List<FormData> savedFormDataList = new ArrayList<FormData>();
 			for (FormData formData : formDataList) {
-				FormData savedFormData = saveOrUpdateFormData(formData,formData.getRecordId(),req.getSessionDataBean());
+				FormData savedFormData = saveOrUpdateFormData(req.getSessionDataBean(), formData.getRecordId(), formData);
 				savedFormDataList.add(savedFormData);
 			}
-			return BulkFormDataEvent.ok(req.getFormId(), formDataList);
+			return BulkFormDataSavedEvent.ok(req.getFormId(), savedFormDataList);
 		} catch(IllegalArgumentException ex) {
-			return BulkFormDataEvent.badRequest(ex);
+			return BulkFormDataSavedEvent.badRequest(ex);
 		}	
 	}
 
-	private FormData saveOrUpdateFormData(FormData formData, Long recordId, SessionDataBean session) {
+	private FormData saveOrUpdateFormData(SessionDataBean session, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();
 		if (appData.get("formCtxtId") == null || appData.get("objectId") == null) {
-			throw new IllegalArgumentException("Null FormContextId or ObjectId ");
+			throw new IllegalArgumentException("Invalid form context id or object id ");
 		}
 
 		Long formCtxtId = ((Double) appData.get("formCtxtId")).longValue();
@@ -313,7 +306,7 @@ public class FormServiceImpl implements FormService {
 		}
 
 		if (recordEntry.getActivityStatus() == Status.CLOSED) {
-			throw new RuntimeException();
+			throw new IllegalArgumentException("Provied record id does not exist");
 		}
 
 		recordEntry.setFormCtxtId(formCtxtId);

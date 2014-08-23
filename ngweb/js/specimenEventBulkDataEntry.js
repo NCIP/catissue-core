@@ -1,26 +1,34 @@
 specimenEvent = angular.module('specimen-event-app',['plus.formsServices', 'plus.directives','ui.bootstrap']);
 
-specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventService','FormsService', function($scope, SpecimensEventService, FormsService){
+specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventService', 'SpecimensService', 'FormsService', function($scope, SpecimensEventService, SpecimensService, FormsService){
+
+  var getUrlParams = function() {
+    var vars = [], hash;
+    var hashes = parent.window.location.href.slice(parent.window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  }
+
   $scope.selectedEvent = undefined;
-  $scope.specimenLabels = undefined;
-  $scope.isApplyFirstToAll = false;
+  $scope.specimenLabels = getUrlParams()['specimenLabels'];
 
   var dataTable = undefined;
-
-  FormsService.getAllCPForms('specimenEvent').then( function(events) {
+  FormsService.getAllSpecimenEventForms().then( function(events) {
     $scope.specimenEvents = events;
   });
 
   $scope.onEventSelect = function(selectedEvent) {
-    $('#data-table').empty();
     $scope.dataEntryMode = false;
-    $scope.isApplyFirstToAll = false;
-    var specimenLabels = $scope.specimenLabels.split(',');
+    $scope.editRecords = false;
     FormsService.getFormDef(selectedEvent.formId).then(function (data){
       var formDef = data;
       dataTable = new edu.common.de.DataTable({
         formId           : selectedEvent.formId,
-        appData          : {formCtxtId : $scope.selectedEvent.formCtxtId},
         idColumnLabel    : 'Specimen Label',
         formDef          : formDef,
         formDiv          : 'data-table',
@@ -28,65 +36,119 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
           Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
         }
       });
+      dataTable.clear();
     });
   }
 
   $scope.addRecord = function() {
-    var specimenLabels = $scope.specimenLabels.trim().split("\\s*,\\s*");
+    $("#notifications").hide();
+    var re = /\s*,\s*/;
+    var specimenLabels = $scope.specimenLabels.trim().split(re);
     var tableData =[];
-    SpecimensEventService.getSpecimensSummary(specimenLabels).then( function(data) {
-      for(var i =0 ;i < data.length; i++) {
-        var tableRowJson = {label:data[i].label, objectId: data[i].id, formRecords:[] };
-        tableData.push(tableRowJson);
-      }
+
+    SpecimensService.validateSpecimensLabel(specimenLabels).then( function(data) {
+      if(isValidSpecimenLabels(data)) {
+        for(var i =0; i < specimenLabels.length; i++) {
+          var tableRec = {key : {id : specimenLabels[i] , label : specimenLabels[i]}, records : []};
+          tableData.push(tableRec);
+        }
+
         $scope.dataEntryMode = true;
-        $scope.isApplyFirstToAll = false;
-        renderDataTable('add', tableData);
+        $scope.editRecords = false;
+        dataTable.setMode($scope.dataEntryMode == true ? 'edit' : 'view');
+        renderDataTable(tableData);
+      }
     });
   };
 
+  var isValidSpecimenLabels = function(data) {
+    var invalidSpecimens = [];
+    $.each(data, function(key,val){
+      if(val == false) {
+        invalidSpecimens.push(key);
+      }
+    });
+
+    if(invalidSpecimens.length > 0) {
+      var errorMsg = "Specimen labels " + invalidSpecimens  + " does not exist or don't have access.";
+      Utility.notify($("#notifications"), errorMsg, "error", false);
+      return false;
+    }
+    return true;
+  }
+
   $scope.saveDataTable = function() {
     var formData = JSON.stringify(dataTable.getData());
-    FormsService.saveFormData($scope.selectedEvent.formId,null,JSON.stringify(formData)).then(function(data){
+    SpecimensEventService.saveFormData($scope.selectedEvent.formId, JSON.stringify(formData)).then(function(data){
       Utility.notify($("#notifications"), "Form Data Saved", "success", true);
-      //showAllRecords('view');
-      $('#data-table').empty();
+
+      var obj = jQuery.parseJSON(data);
+      var savedFormData = eval(obj);
+      var tableData = populateTableDataFromSavedFormData(savedFormData);
+
       $scope.dataEntryMode = false;
+      $scope.editRecords = true;
+      dataTable.setMode('view');
+      renderDataTable(tableData);
     },
     function(data) {
-     Utility.notify($("#notifications"), "Form Data Save Failed.Please Check whether form is multi record or not.", "error", true);
+      Utility.notify($("#notifications"), "Form Data Save Failed.", "error", true);
     }
     );
   }
 
   $scope.editDataTable = function() {
-    showAllRecords('edit');
+    var tableData = dataTable.getData();
+    var formData = populateFormDataFromTableData(tableData);
+    $scope.dataEntryMode = true;
+    $scope.editRecords = false;
+    dataTable.setMode('edit');
+    renderDataTable(formData);
   }
 
   $scope.cancelDataTable = function() {
-    //showAllRecords('view');
-    $('#data-table').empty();
+    dataTable.clear();
     $scope.dataEntryMode = false;
   }
 
   $scope.applyFirstToAll = function() {
-       dataTable.copyFirstToAll();
+    dataTable.copyFirstToAll();
   }
 
-  var showAllRecords = function(mode) {
-    $scope.dataEntryMode = (mode == 'view') ? false : true;
-    $scope.isApplyFirstToAll = false;
-    var specimenLabels = $scope.specimenLabels.split(',');
-    SpecimensEventService.getEventData($scope.selectedEvent.formId, specimenLabels).then( function(data) {
-      renderDataTable(mode, data.specimenEventFormDataList);
-    });
+  var populateTableDataFromSavedFormData = function(savedFormData){
+     console.log("Saved Form Data");
+     console.log(savedFormData);
+
+     var tableData =[];
+     var re = /\s*,\s*/;
+     var specimenLabels = $scope.specimenLabels.trim().split(re);
+     for(var i = 0; i < savedFormData.length; i++) {
+       var records =[];
+       records.push(savedFormData[i]);
+       var tableRec = { key : {id : specimenLabels[i] , label : specimenLabels[i]}, records : records };
+       tableData.push(tableRec);
+     }
+     return tableData;
   }
 
-  var renderDataTable = function(mode, tableData) {
-    dataTable.setMode(mode);
+  var populateFormDataFromTableData = function(tableData) {
+     var tblData = [];
+     for(var i = 0; i< tableData.length; i++) {
+        var specimenLabel = tableData[i].appData.id;
+        delete tableData[i].appData;
+        var records = [];
+        records.push(tableData[i]);
+        var tableRec = {key : {id : specimenLabel , label : specimenLabel}, records : records };
+        tblData.push(tableRec);
+     }
+     console.log("Edit data");
+     console.log(tblData);
+     return tblData;
+  }
+
+  var renderDataTable = function(tableData) {
     dataTable.setData(tableData);
   }
-
 }]);
 
 
@@ -95,24 +157,33 @@ specimenEvent.factory('SpecimensEventService',function($http){
     var apiUrl = '/openspecimen/rest/ng/';
     var baseUrl = apiUrl + 'specimen-events/';
 
-    var getSpecimenEventDataUrl = function(formId, specimenLabels) {
-      return baseUrl + formId + '/data/' + specimenLabels;
-    }
-
     var successfn = function(result){
       return result.data;
     }
 
     return{
-      getEventData :  function(formId, specimenLabels) {
-        var url = getSpecimenEventDataUrl(formId, specimenLabels);
-        return Utility.get($http, url,successfn);
-      },
-
-      getSpecimensSummary: function(specimenLabelsArray) {
-        var params = { specimenLabels : specimenLabelsArray};
-        var url = apiUrl + 'specimens'
-        return Utility.get($http, url,successfn,params);
+      saveFormData : function(formId, formDataJson) {
+        var url = baseUrl + "/" + formId + "/data/";
+        ret = $http.post(url, formDataJson).then(successfn);
+        return ret;
       }
     }
+});
+
+specimenEvent.factory('SpecimensService', function($http) {
+
+  var apiUrl = '/openspecimen/rest/ng/';
+  var baseUrl = apiUrl + 'specimens/';
+
+  var successfn = function(result){
+    return result.data;
+  }
+
+  return {
+    validateSpecimensLabel : function(labels) {
+      var params = { specimenLabels : labels};
+      var url = baseUrl + '/validate-labels';
+      return Utility.get($http, url, successfn, params);
+    }
+  }
 });

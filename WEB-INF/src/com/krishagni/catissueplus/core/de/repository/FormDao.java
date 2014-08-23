@@ -7,7 +7,6 @@ import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
 import com.krishagni.catissueplus.core.common.repository.Dao;
-import com.krishagni.catissueplus.core.de.events.CPFormSummary;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
@@ -17,9 +16,9 @@ import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 public interface FormDao extends Dao<FormContextBean>{	
 	public List<FormSummary> getAllFormsSummary();
 	
-	public List<CPFormSummary> getAllCPFormsSummary(String entityType);
-	
 	public List<FormSummary> getQueryForms();
+	
+	public List<FormSummary> getSpecimenEventFormsSummary();
 	
 	public List<FormContextDetail> getFormContexts(Long formId);
 	

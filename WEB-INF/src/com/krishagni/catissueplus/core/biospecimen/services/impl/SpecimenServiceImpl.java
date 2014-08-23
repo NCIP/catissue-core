@@ -4,7 +4,9 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +23,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ValidateSpecimensLabelEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensLabelValidatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -36,6 +37,9 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 import com.krishagni.catissueplus.core.printer.printService.factory.SpecimenLabelPrinterFactory;
+import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
+
+import edu.wustl.security.global.Permissions;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -56,6 +60,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private LabelGenerator<Specimen> specimenLabelGenerator;
 
 	private BarcodeGenerator<Specimen> specimenBarcodeGenerator;
+	
+	private PrivilegeService privilegeSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -79,6 +85,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public void setSpecimenBarcodeGenerator(BarcodeGenerator<Specimen> specimenBarcodeGenerator) {
 		this.specimenBarcodeGenerator = specimenBarcodeGenerator;
 	}
+	
+	public void setPrivilegeSvc(PrivilegeService privilegeSvc) {
+		this.privilegeSvc = privilegeSvc;
+	}
 
 	@Override
 	@PlusTransactional
@@ -94,16 +104,30 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	@Override
 	@PlusTransactional
-	public SpecimensSummaryEvent getSpecimensByLabels(ReqSpecimensSummaryEvent event) {
+	public SpecimensLabelValidatedEvent validateSpecimensLabel(ValidateSpecimensLabelEvent event) {
 		try {
-			 List<String> labels = event.getSpecimenLabels();		
-			 List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
-			 if (specimens.size() != labels.size()) {
-				 return SpecimensSummaryEvent.badRequest(SpecimenErrorCode.INVALID_LABELS.message());
-			 }
-			 return SpecimensSummaryEvent.ok(SpecimenSummary.from(specimens));
+			Map<String,Boolean> labelValidationMap = new HashMap<String,Boolean>();
+			List<String> existLabels = new ArrayList<String>();
+
+			List<String> labels = event.getLabels();
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
+			for (Specimen specimen : specimens) {
+				existLabels.add(specimen.getLabel());
+				Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+				boolean hasPrivilege = privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING);
+				labelValidationMap.put(specimen.getLabel(),hasPrivilege);
+			}
+			 
+			if(labels.size() != existLabels.size()) {
+				labels.removeAll(existLabels);
+				for (String label : labels) {
+					labelValidationMap.put(label, false);
+				}
+			}
+
+			return SpecimensLabelValidatedEvent.ok(labelValidationMap);
 		} catch(Exception ex){
-			return SpecimensSummaryEvent.serverError(ex);
+			return SpecimensLabelValidatedEvent.serverError(ex);
 		}
 	}
 	
