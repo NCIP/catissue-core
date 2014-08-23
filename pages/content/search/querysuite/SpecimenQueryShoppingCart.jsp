@@ -200,6 +200,7 @@ function gotoAdvanceQuery()
 
 function onSubmit(orderedString)
 {
+
     if(document.forms[0].chkName[2].checked == true)
     {
         if(document.getElementById('specimenEventParameter').value == "Transfer")
@@ -208,8 +209,12 @@ function onSubmit(orderedString)
         }
         else
         {
-            dobulkSpecimenEventsPage();
+            dobulkSpecimenEventsPage('StaticForms');
         }
+    }
+    else if(document.forms[0].chkName[3].checked == true)
+    {
+          dobulkSpecimenEventsPage('DynamicForms');
     }
     else if(document.forms[0].chkName[1].checked == true)
     {
@@ -219,22 +224,22 @@ function onSubmit(orderedString)
     {
         addToOrderList(orderedString);
     }
-    else if(document.forms[0].chkName[3].checked == true)
+    else if(document.forms[0].chkName[4].checked == true)
     {
         //create Shipment Request
         createShipmentRequest();
     }
-    else if(document.forms[0].chkName[4].checked == true)
+    else if(document.forms[0].chkName[5].checked == true)
     {
         //create Shipment
         createShipment();
     }
-    else if(document.forms[0].chkName[5].checked == true)
+    else if(document.forms[0].chkName[6].checked == true)
     {
         //distribute Order
         distributeOrder();
     }
-    else if(document.forms[0].chkName[6].checked == true)
+    else if(document.forms[0].chkName[7].checked == true)
     {
         printSpecimensLabels(orderedString);
     }
@@ -330,7 +335,7 @@ function dobulkTransferOperations(orderedString)
             }
         }
         
-function dobulkSpecimenEventsPage()
+function dobulkSpecimenEventsPage(formType)
         {
             var isChecked = updateHiddenFields();
             
@@ -355,7 +360,11 @@ function dobulkSpecimenEventsPage()
                     }   
                     
                 }
-                var action = "QuickEvents.do?specimenLabel="+specLabels+"&specimenEventParameter="+selectedEvent+"&fromPage=SpecimenList";
+                if(formType == 'StaticForms') {
+                  var action = "QuickEvents.do?specimenLabel="+specLabels+"&specimenEventParameter="+selectedEvent+"&fromPage=SpecimenList";
+                } else if(formType == 'DynamicForms') {
+                  var action = "specimenEventsBulkDataEntry.do?specimenLabels="+specLabels;
+                }
                 document.forms[0].action = action;
                 document.forms[0].submit();
             }
@@ -703,20 +712,31 @@ function loadSpecimenGrid()
           </tr>
         
           <tr>
+
+            <td class="black_ar">
+              <input type="radio" name="chkName" value="sleBulkDataEntry" id="sle" onclick="showHideComponents()">
+            </td>
+            <td class="black_ar">
+              Specimen Event (Dynamic)
+            </td>
+
             <td class="black_ar"><input type="radio" name="chkName" onclick="showHideComponents()" value="requestShipment" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.request"/></td>           
             <td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showHideComponents()" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
-            
-            
-                    <td class="black_ar"><input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> ></td>
-            <td class="black_ar" >Distribute</td>
-            
-            <td class="black_ar"><input type="radio" name="chkName"
-                                value="printLabels" id="printCheckbox"
-                                onclick="showHideComponents()"><bean:message
-                                key="mylist.label.printLabels" /></td>
-                            <td>
+
+            <td class="black_ar">
+              <input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> >
+              <label class="black_ar"> Distribute </label
+            </td>
+          </tr>
+          <tr>
+            <td class="black_ar">
+              <input type="radio" name="chkName" value="printLabels" id="printCheckbox" onclick="showHideComponents()">
+            </td>
+            <td class="black_ar">
+              <bean:message key="mylist.label.printLabels" />
+            </td>
           </tr>
         </table>          
       </tr>
