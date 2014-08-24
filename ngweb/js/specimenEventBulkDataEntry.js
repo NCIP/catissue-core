@@ -29,13 +29,14 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
         formId           : selectedEvent.formId,
         idColumnLabel    : 'Specimen Label',
         formDef          : formDef,
-        formDiv          : 'data-table',
-        onValidationError: function() {
-          Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
-        }
+        formDiv          : 'data-table'
       });
       dataTable.clear();
     });
+  }
+
+  var onValidationError =  function() {
+    Utility.notify($("#notifications"), "There are some errors on forms. Please rectify them before saving", "error", true);
   }
 
   $scope.addRecord = function() {
@@ -76,7 +77,11 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   }
 
   $scope.saveDataTable = function() {
-    var formData = JSON.stringify(dataTable.getData());
+    var formData = (dataTable.getData().status == 'success') ? JSON.stringify(dataTable.getData().data) : null;
+    if(formData == null) {
+       onValidationError();
+       return;
+    }
     SpecimensEventService.saveFormData($scope.selectedEvent.formId, JSON.stringify(formData)).then(function(data){
       Utility.notify($("#notifications"), "Form Data Saved", "success", true);
 
@@ -96,7 +101,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   }
 
   $scope.editDataTable = function() {
-    var tableData = dataTable.getData();
+    var tableData = dataTable.getData().data;
     var formData = populateFormDataFromTableData(tableData);
     $scope.dataEntryMode = true;
     $scope.editRecords = false;
