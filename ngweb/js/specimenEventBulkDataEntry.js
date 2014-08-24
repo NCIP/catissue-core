@@ -41,11 +41,14 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
 
   $scope.addRecord = function() {
     $("#notifications").hide();
+    $scope.loading = true;
+
     var re = /\s*,\s*/;
     var specimenLabels = $scope.specimenLabels.trim().split(re);
     var tableData =[];
 
     SpecimensService.validateSpecimensLabel(specimenLabels).then( function(data) {
+      $scope.loading = false;
       if(isValidSpecimenLabels(data)) {
         for(var i =0; i < specimenLabels.length; i++) {
           var tableRec = {key : {id : specimenLabels[i] , label : specimenLabels[i]}, records : []};
@@ -77,12 +80,15 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   }
 
   $scope.saveDataTable = function() {
+    $scope.loading = true;
     var formData = (dataTable.getData().status == 'success') ? JSON.stringify(dataTable.getData().data) : null;
     if(formData == null) {
+       $scope.loading = false;
        onValidationError();
        return;
     }
     SpecimensEventService.saveFormData($scope.selectedEvent.formId, JSON.stringify(formData)).then(function(data){
+      $scope.loading = false;
       Utility.notify($("#notifications"), "Form Data Saved", "success", true);
 
       var obj = jQuery.parseJSON(data);

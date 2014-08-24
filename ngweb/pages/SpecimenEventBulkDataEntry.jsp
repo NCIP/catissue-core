@@ -40,6 +40,43 @@
       height:350px;
       overflow:auto;
     }
+
+    .spin {
+      -webkit-animation: spin 2s infinite linear;
+      -moz-animation: spin 2s infinite linear;
+      -o-animation: spin 2s infinite linear;
+      animation: spin 2s infinite linear;
+         -webkit-transform-origin: 50% 58%;
+             transform-origin:50% 58%;
+             -ms-transform-origin:50% 58%; /* IE 9 */
+    }
+
+    @-moz-keyframes spin {
+      from {
+        -moz-transform: rotate(0deg);
+      }
+      to {
+        -moz-transform: rotate(360deg);
+      }
+    }
+
+    @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 
     </head>
@@ -68,9 +105,15 @@
     </div>
     <div id="bulk-data-entry">
       <div>
-        <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true"> Add Record </button>
+        <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true">
+          <span ng-show="loading" class="glyphicon glyphicon-refresh spin"></span>
+          <span>Add Record</span>
+        </button>
         <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="editRecords == true"> Edit </button>
-        <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode"> Save </button>
+        <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">
+           <span ng-show="loading" class="glyphicon glyphicon-refresh spin"></span>
+           <span> Save </span>
+        </button>
         <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode"> Cancel </button>
         <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">Apply First To All</button>
       <div>
@@ -85,7 +128,5 @@
     <script src="../js/specimenEventBulkDataEntry.js" type="text/javascript"></script>
     <script src="../js/forms-service.js" type="text/javascript"></script>
     <script src="../external/de/js/de-form.js" type="text/javascript"></script>
-
-
 </body>
 </html>
