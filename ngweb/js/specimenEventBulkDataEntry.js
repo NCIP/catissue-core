@@ -101,6 +101,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
       renderDataTable(tableData);
     },
     function(data) {
+      $scope.loading = false;
       Utility.notify($("#notifications"), "Form Data Save Failed.", "error", true);
     }
     );
@@ -125,9 +126,6 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   }
 
   var populateTableDataFromSavedFormData = function(savedFormData){
-     console.log("Saved Form Data");
-     console.log(savedFormData);
-
      var tableData =[];
      var re = /\s*,\s*/;
      var specimenLabels = $scope.specimenLabels.trim().split(re);
@@ -150,8 +148,6 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
         var tableRec = {key : {id : specimenLabel , label : specimenLabel}, records : records };
         tblData.push(tableRec);
      }
-     console.log("Edit data");
-     console.log(tblData);
      return tblData;
   }
 
