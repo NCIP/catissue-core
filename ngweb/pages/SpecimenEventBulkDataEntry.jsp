@@ -109,13 +109,20 @@
           <span ng-show="loading" class="glyphicon glyphicon-refresh spin"></span>
           <span>Add Record</span>
         </button>
-        <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="editRecords == true"> Edit </button>
-        <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">
-           <span ng-show="loading" class="glyphicon glyphicon-refresh spin"></span>
-           <span> Save </span>
+        <button class="btn btn-primary" id="edit" ng-click="editDataTable()" ng-show="editRecords == true">
+          <span ng-show="loading" class="glyphicon glyphicon-refresh spin"></span>
+          <span>Edit</span>
         </button>
-        <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode"> Cancel </button>
-        <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">Apply First To All</button>
+        <button class="btn btn-primary" id="save" ng-click="saveDataTable()" ng-show="dataEntryMode">
+          <span ng-show="loading" class="glyphicon glyphicon-refresh spin"></span>
+          <span> Save </span>
+        </button>
+        <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">
+           Cancel
+        </button>
+        <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">
+          Apply First To All
+        </button>
       <div>
         <div id="data-table" class="data-table"></div>
       </div>

@@ -108,12 +108,14 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   }
 
   $scope.editDataTable = function() {
+    $scope.loading = true;
     var tableData = dataTable.getData().data;
     var formData = populateFormDataFromTableData(tableData);
     $scope.dataEntryMode = true;
     $scope.editRecords = false;
     dataTable.setMode('edit');
     renderDataTable(formData);
+    $scope.loading = false;
   }
 
   $scope.cancelDataTable = function() {
