@@ -68,7 +68,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	/**
 	 * Date on which the Participant is registered to the Collection Protocol.
 	 */
-	protected String registrationDate;
+	protected String registrationsDate;
 
 	/**
 	 * Date on which the Participant is registered to the Collection Protocol.
@@ -200,7 +200,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		}
 		this.participantProtocolID = CommonUtilities.toString(registration
 				.getProtocolParticipantIdentifier());
-		this.registrationDate = CommonUtilities.parseDateToString(registration
+		this.registrationsDate = CommonUtilities.parseDateToString(registration
 				.getRegistrationDate(), dtePattern);
 		/**
 		 * For Consent tracking setting UI attributes
@@ -236,9 +236,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 * registered to the Collection Protocol.
 	 * @see #setRegistrationDate(String)
 	 */
-	public String getRegistrationDate()
+	public String getRegistrationsDate()
 	{
-		return this.registrationDate;
+		return this.registrationsDate;
 	}
 
 	/**
@@ -248,9 +248,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 * registered to the Collection Protocol.
 	 * @see #getRegistrationDate()
 	 */
-	public void setRegistrationDate(final String registrationDate)
+	public void setRegistrationsDate(final String registrationDate)
 	{
-		this.registrationDate = registrationDate;
+		this.registrationsDate = registrationDate;
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			}
 
 			//  date validation according to bug id 707, 722 and 730
-			final String errorKey = validator.validateDate(this.registrationDate, true);
+			final String errorKey = validator.validateDate(this.registrationsDate, true);
 			if (errorKey.trim().length() > 0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,

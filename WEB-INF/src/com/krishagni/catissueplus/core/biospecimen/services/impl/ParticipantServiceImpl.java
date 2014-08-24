@@ -183,6 +183,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	@Override
+	@PlusTransactional
 	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent event) {
 		List<Participant> list = participantLookupLogic.getMatchingParticipants(event.getParticipantDetail()); 
 //				daoFactory.getParticipantDao().getMatchingParticipants(event.getParticipantDetail());
@@ -194,6 +195,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 	
 	@Override
+	@PlusTransactional
 	public SubRegistrationDetailsEvent getSubRegistrationDetails(ReqSubRegistrationDetailEvent event) {
 		List<RegistrationInfo> registrationsInfo = new ArrayList<RegistrationInfo>();
 		

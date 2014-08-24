@@ -486,8 +486,8 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 
 		try
 		{
-			this.registrationDate = CommonUtilities.parseDate(form.getRegistrationDate(),
-					CommonUtilities.datePattern(form.getRegistrationDate()));
+			this.registrationDate = CommonUtilities.parseDate(form.getRegistrationsDate(),
+					CommonUtilities.datePattern(form.getRegistrationsDate()));
 		}
 		catch (final ParseException e)
 		{

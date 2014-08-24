@@ -172,9 +172,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		{
 			final CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm) form;
 			cpform.setId(0);
-			if (cpform.getRegistrationDate() == null)
+			if (cpform.getRegistrationsDate() == null)
 			{
-				cpform.setRegistrationDate(CommonUtilities.parseDateToString(Calendar.getInstance()
+				cpform.setRegistrationsDate(CommonUtilities.parseDateToString(Calendar.getInstance()
 						.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}

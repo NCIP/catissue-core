@@ -6,6 +6,11 @@ angular.module('plus.cpviewService', [])
         var url = 'rest/ng/collection-protocols?chkPrivilege=true';
         return Utility.get($http, url);
       },
+	 
+	 getChildCpRegistrations: function(participantId,cpId) {
+        var url = 'rest/ng/participants/'+participantId+'/SubCpRegistrations?cpId='+cpId;
+        return Utility.get($http, url);
+      },
 	  
 	  getChildCps: function(cpId) {
         var url = 'rest/ng/collection-protocols/'+cpId+'/childProtocols';

@@ -28,7 +28,7 @@
 	if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 	{
 		form = (CollectionProtocolRegistrationForm)obj;
-		currentRegistrationDate = form.getRegistrationDate();  
+		currentRegistrationDate = form.getRegistrationsDate();  
 	
 		if(currentRegistrationDate == null)
 		{
@@ -121,7 +121,7 @@
 		 {
 		  var originalDateOfRegistration= <%=registrationMonth.intValue()%> +"/"+<%=registrationDay.intValue()%> +"/"+<%=registrationYear.intValue()%>;
 		var newRegistrationDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalDateOfRegistration);
-		document.getElementById("registrationDate").value=newRegistrationDate;
+		document.getElementById("registrationsDate").value=newRegistrationDate;
 		 }
 		</script>
 	<%}%>
@@ -264,8 +264,8 @@
 						 {
 							
 					%>
-					<ncombo:DateTimeComponent name="registrationDate"
-									  id="registrationDate"
+					<ncombo:DateTimeComponent name="registrationsDate"
+									  id="registrationsDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  month= "<%=registrationMonth %>"
 									  year= "<%=registrationYear %>"
@@ -279,8 +279,8 @@
 						else
 						{  
 					 %>
-					<ncombo:DateTimeComponent name="registrationDate"
-									  id="registrationDate"
+					<ncombo:DateTimeComponent name="registrationsDate"
+									  id="registrationsDate"
  									  formName="collectionProtocolRegistrationForm"	
  									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 									  styleClass="formDateSized10" 

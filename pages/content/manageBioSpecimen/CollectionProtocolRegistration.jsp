@@ -28,7 +28,7 @@
 	if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 	{
 		form = (CollectionProtocolRegistrationForm)obj;
-		currentRegistrationDate = form.getRegistrationDate();  
+		currentRegistrationDate = form.getRegistrationsDate();  
 		signedConsentDate=form.getConsentDate();
 		
 		if(currentRegistrationDate == null)
@@ -278,11 +278,7 @@
 						</label>
 					</td>
 					<td class="formField">
-<!-- 				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				           <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="registrationDate" property="registrationDate" />
-				           &nbsp;&nbsp;
-					       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
-						         <img src="images\calendar.gif" width=24 height=22 border=0></a>
+<!-- 				           
 -->
 <%
 	if(currentRegistrationDate.trim().length() > 0)
@@ -291,8 +287,8 @@
 	Integer registrationMonth = new Integer(AppUtility.getMonth(currentRegistrationDate ));
 	Integer registrationDay = new Integer(AppUtility.getDay(currentRegistrationDate ));
 %>
-			<ncombo:DateTimeComponent name="registrationDate"
-									  id="registrationDate"
+			<ncombo:DateTimeComponent name="registrationsDate"
+									  id="registrationsDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  month= "<%=registrationMonth %>"
 									  year= "<%=registrationYear %>"
@@ -306,8 +302,8 @@
 	else
 	{  
  %>
-			<ncombo:DateTimeComponent name="registrationDate"
-									  id="registrationDate"
+			<ncombo:DateTimeComponent name="registrationsDate"
+									  id="registrationsDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  styleClass="formDateSized10" 
 									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
