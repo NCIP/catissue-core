@@ -164,6 +164,14 @@ var isParticipantUpdated = true;
     .distributed {
       color: blue;
     }
+    
+    .registered {
+      color: red;
+    }
+	
+	.not-registered {
+      color: black;
+    }
    
     hr {
       margin-top: 10px;
@@ -336,7 +344,8 @@ function hideCursor(){
 </TABLE>
     
 <script>
-    SearchResult=document.getElementById('SearchLeftPart');
+    var datePattern = "<%= edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern() %>";
+	SearchResult=document.getElementById('SearchLeftPart');
     SearchResult.style.height = (document.body.clientHeight - 60) + 'px';
     SearchResult2=document.getElementById('SearchLeftPart2');
     SearchResult2.style.height = (document.body.clientHeight - 60) + 'px';

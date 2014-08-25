@@ -60,8 +60,7 @@
 
 		        <query name="getParticipantsByCpId">
             select cpr.id, participant.id,  
-            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , 
-            ' ', ' ' 
+            cpr.protocolParticipantIdentifier 
             from CollectionProtocolRegistration cpr inner join 
             cpr.participant participant 
             inner join cpr.collectionProtocol cp 
@@ -70,10 +69,7 @@
         </query>
         
         <query name="getPhiParticipantsByCpId">
-            select cpr.id, participant.id,  
-            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end , 
-            case when participant.lastName is null then ' ' else participant.lastName end , 
-            case when participant.firstName is null then ' ' else participant.firstName end 
+            select cpr.id, participant.id, cpr.protocolParticipantIdentifier, participant.firstName, participant.lastName 
             from CollectionProtocolRegistration cpr inner join 
             cpr.participant participant 
             inner join cpr.collectionProtocol cp 
@@ -83,9 +79,7 @@
 
         <query name="getParticipantsByCpIdAndSearchTerm">
             select
-            cpr.id, participant.id,
-            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,
-            ' ', ' ' 
+            cpr.id, participant.id, cpr.protocolParticipantIdentifier 
             from
             CollectionProtocolRegistration cpr
             inner join
@@ -103,10 +97,7 @@
         
         <query name="getPhiParticipantsByCpIdAndSearchTerm">
             select
-            cpr.id, participant.id,
-            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,
-            case when participant.lastName is null then ' ' else participant.lastName end , 
-            case when participant.firstName is null then ' ' else participant.firstName end
+            cpr.id, participant.id, cpr.protocolParticipantIdentifier, participant.firstName, participant.lastName 
             from
             CollectionProtocolRegistration cpr
             inner join
@@ -126,9 +117,7 @@
         
         <query name="getParticipantByCPAndParticipantId">
             select
-            cpr.id, participant.id,
-            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,
-            ' ', ' ' 
+            cpr.id, participant.id, cpr.protocolParticipantIdentifier 
             from
             CollectionProtocolRegistration cpr
             inner join
@@ -144,10 +133,7 @@
         </query>
         <query name="getPhiParticipantByCPAndParticipantId">
             select
-            cpr.id, participant.id,
-            case when cpr.protocolParticipantIdentifier is null then ' ' else cpr.protocolParticipantIdentifier end ,
-            case when participant.lastName is null then ' ' else participant.lastName end , 
-            case when participant.firstName is null then ' ' else participant.firstName end
+            cpr.id, participant.id, cpr.protocolParticipantIdentifier, participant.lastName, participant.firstName 
             from
             CollectionProtocolRegistration cpr
             inner join
@@ -191,6 +177,20 @@
 			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
 			cpr where cpr.collectionProtocol.id=:cpId and
 			cpr.protocolParticipantIdentifier=:ppid
+		</query>
+		
+		<query name="getRegistrationByParticipantId">
+			from
+			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
+			cpr where cpr.participant.id=:participantId and
+			cpr.activityStatus='Active'
+		</query>
+		
+		<query name="getSubRegistrationByParticipantAndCPId">
+			from
+			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
+			cpr where cpr.participant.id=:participantId and cpr.collectionProtocol.parentCollectionProtocol.id=:cpId and
+			cpr.activityStatus='Active'
 		</query>
 
 	</class>

@@ -1,8 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,8 +8,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.common.util.Status;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.common.util.global.ApplicationProperties;
-import krishagni.catissueplus.dto.BiohazardDTO;
 
 public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectionGroupInfo> {
 

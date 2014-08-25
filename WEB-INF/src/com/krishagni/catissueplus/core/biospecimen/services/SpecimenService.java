@@ -8,11 +8,11 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ValidateSpecimensLabelEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensLabelValidatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 
 public interface SpecimenService {
@@ -29,5 +29,5 @@ public interface SpecimenService {
 
 	public AliquotCreatedEvent createAliquot(CreateAliquotEvent event);
 
-	public SpecimensSummaryEvent getSpecimensByLabels(ReqSpecimensSummaryEvent event);
+	public SpecimensLabelValidatedEvent validateSpecimensLabel(ValidateSpecimensLabelEvent event);
 }

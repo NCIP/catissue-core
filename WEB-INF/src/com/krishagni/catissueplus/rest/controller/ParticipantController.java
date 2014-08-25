@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,19 +34,23 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEven
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SubRegistrationDetailsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSubRegistrationDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+
 @Controller
 @RequestMapping("/participants")
 public class ParticipantController {
 
 	private static final String PATCH_PARTICIPANT = "patch participant";
-	
+
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
@@ -53,19 +58,51 @@ public class ParticipantController {
 	private ParticipantService participantSvc;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public ParticipantDetail getParticipantById(@PathVariable("id") Long participantId) {
-          ReqParticipantDetailEvent event = new ReqParticipantDetailEvent();
-          event.setParticipantId(participantId);
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ParticipantDetail getParticipantById(@PathVariable("id") Long participantId) {
+		ReqParticipantDetailEvent event = new ReqParticipantDetailEvent();
+		event.setParticipantId(participantId);
 
-          ParticipantDetailEvent resp = participantSvc.getParticipant(event);
-          if (resp.getStatus() == EventStatus.OK) {
-                  return resp.getParticipantDetail();
-          }
-          return null;
-  }
+		ParticipantDetailEvent resp = participantSvc.getParticipant(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getParticipantDetail();
+		}
+		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/registrations")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<RegistrationInfo> getRegistrationsforParticipant(@PathVariable("id") Long participantId,
+			@RequestParam(value = "cpId", required = false, defaultValue = "") String cpId) {
+		ReqSubRegistrationDetailEvent event = new ReqSubRegistrationDetailEvent();
+		event.setParticipantId(participantId);
+		event.setCpId(StringUtils.isBlank(cpId)?null:Long.valueOf(cpId));
+
+		SubRegistrationDetailsEvent resp = participantSvc.getSubRegistrationDetails(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getRegistrationInfo();
+		}
+		return null;
+	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/SubCpRegistrations")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<RegistrationInfo> getSubCPRegistrationsforParticipant(@PathVariable("id") Long participantId,
+			@RequestParam(value = "cpId", required = true, defaultValue = "") String cpId) {
+		ReqSubRegistrationDetailEvent event = new ReqSubRegistrationDetailEvent();
+		event.setParticipantId(participantId);
+		event.setCpId(StringUtils.isBlank(cpId)?null:Long.valueOf(cpId));
+
+		SubRegistrationDetailsEvent resp = participantSvc.getSubRegistrationDetails(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getRegistrationInfo();
+		}
+		return null;
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -80,10 +117,10 @@ public class ParticipantController {
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantDetail updateParticipant(@PathVariable Long id,@RequestBody ParticipantDetail participantDetail) {
+	public ParticipantDetail updateParticipant(@PathVariable Long id, @RequestBody ParticipantDetail participantDetail) {
 		UpdateParticipantEvent event = new UpdateParticipantEvent();
 		event.setParticipantId(id);
 		event.setSessionDataBean(getSession());
@@ -94,11 +131,11 @@ public class ParticipantController {
 		}
 		return null;
 	}
-	
-	@RequestMapping(method = RequestMethod.PATCH, value="/{id}")
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantDetail patchParticipant(@PathVariable Long id,@RequestBody Map<String, Object> values) {
+	public ParticipantDetail patchParticipant(@PathVariable Long id, @RequestBody Map<String, Object> values) {
 		PatchParticipantEvent event = new PatchParticipantEvent();
 		ParticipantPatchDetail detail = new ParticipantPatchDetail();
 		try {
@@ -106,7 +143,7 @@ public class ParticipantController {
 		}
 		catch (Exception e) {
 			reportError(ParticipantErrorCode.BAD_REQUEST, PATCH_PARTICIPANT);
-			 		}
+		}
 		detail.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setParticipantDetail(detail);
 		event.setId(id);
@@ -118,10 +155,11 @@ public class ParticipantController {
 		return null;
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String delete(@PathVariable Long id,@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
+	public String delete(@PathVariable Long id,
+			@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
 		DeleteParticipantEvent event = new DeleteParticipantEvent();
 		event.setSessionDataBean(getSession());
 		event.setIncludeChildren(Boolean.valueOf(includeChildren));
@@ -132,8 +170,8 @@ public class ParticipantController {
 		}
 		return null;
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value="/matchParticipants")
+
+	@RequestMapping(method = RequestMethod.POST, value = "/matchParticipants")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ParticipantDetail> getMatchedParticipants(@RequestBody ParticipantDetail participantDetail) {

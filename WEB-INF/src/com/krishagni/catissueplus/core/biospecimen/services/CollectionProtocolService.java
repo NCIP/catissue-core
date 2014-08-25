@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
+import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProtocolsEvent;
+import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
@@ -15,5 +17,7 @@ public interface CollectionProtocolService {
 	public ParticipantsSummaryEvent getParticipants(ReqParticipantsSummaryEvent req);
 
 	public ParticipantSummaryEvent getParticipant(ReqParticipantSummaryEvent event);
+
+	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req);
 
 }

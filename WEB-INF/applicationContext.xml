@@ -188,6 +188,7 @@
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="specimenBarcodeGenerator" ref="specimenBarcodeGenerator"/>
   	<property name="specLabelPrinterFact" ref="specimenLabelPrinterFact"/>
+  	<property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
   <bean id="specimenListFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.SpecimenListFactoryImpl">
@@ -210,6 +211,8 @@
   <bean id="specimenEventsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenEventsServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="formDao" ref="formDao"/>
+    <property name="formSvc" ref="formSvc"/>
+    <property name="privilegeSvc" ref="privSvc"/>
   </bean>
 
   <bean id="userDao" class="com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl">

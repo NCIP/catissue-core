@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +26,13 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ValidateSpecimensLabelEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensLabelValidatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -80,19 +80,19 @@ public class SpecimenController {
 		return specimenSvc.getSpecimensList(event).getSpecimensInfo();
 	}
 	
-	@RequestMapping(method=RequestMethod.GET)	
+	@RequestMapping(method=RequestMethod.GET, value = "validate-labels")	
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenSummary> getSpecimens(
-			@RequestParam(value="specimenLabels", required=false) String[] specimenLabels) {
-		ReqSpecimensSummaryEvent event = new ReqSpecimensSummaryEvent();
-		event.setSpecimenLabels(Arrays.asList(specimenLabels));
+	public Map<String,Boolean> validateSpecimenLabels(
+			@RequestParam(value="specimenLabels", required=true) String[] specimenLabels) {
+		ValidateSpecimensLabelEvent event = new ValidateSpecimensLabelEvent();
+		event.setLabels(new ArrayList(Arrays.asList(specimenLabels)));
+		event.setSessionDataBean(getSession());
 		
-		SpecimensSummaryEvent resp = specimenSvc.getSpecimensByLabels(event);
+		SpecimensLabelValidatedEvent resp = specimenSvc.validateSpecimensLabel(event);
 		if(resp.getStatus() == EventStatus.OK ) {
-			return resp.getSpecimens();
+			return resp.getLabelValidationMap();
 		}
-		
 		return null;
 	}
 	

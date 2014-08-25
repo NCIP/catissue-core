@@ -1393,7 +1393,7 @@
 	</definition>
 	
 	<definition name=".nextgen.seBulkDataEntry" extends=".catissuecore.homePageDef5">
-		<put name="pageContentUrl" value="ngweb/pages/SpecEventBulkDataEntry.jsp" type="string"/>
+		<put name="pageContentUrl" value="ngweb/pages/SpecimenEventBulkDataEntry.jsp" type="string"/>
 	</definition>
 
 </tiles-definitions>

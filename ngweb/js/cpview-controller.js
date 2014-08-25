@@ -1,7 +1,10 @@
 angular.module('plus.cpview', [])
 
-.controller('CpViewController', ['$scope', '$window', '$timeout', 'repository',  function($scope, $window, $timeout, repository) {
+.controller('CpViewController', 
+  ['$scope', '$window', '$timeout', 'repository', '$filter',  
+  function($scope, $window, $timeout, repository, $filter) {
 
+  $scope.datePattern = datePattern;
   $scope.selectedCp = selectionCp;
   $scope.selectedParticipant = selParticipant;
 
@@ -11,11 +14,11 @@ angular.module('plus.cpview', [])
   }
 
   $scope.initSel = function(elem, callback){
-    if (selParticipant.id ==-1) {
+    if ($scope.selectedParticipant.id ==-1) {
       return;
     }
-    var participantId = selParticipant.id.split(',')[0];
-    var cpId = selectionCp.id;
+    var participantId = $scope.selectedParticipant.id.split(',')[0];
+    var cpId = $scope.selectedCp.id;
     repository.getParticipantById(cpId, participantId).success(function(result) {
       var participant = {
         id: result.id + "," + result.cprId,
@@ -69,7 +72,7 @@ angular.module('plus.cpview', [])
         for (var i = 0; i < result.length; ++i) {
           var participant = {
             id: result[i].id + "," + result[i].cprId,
-            text: result[i].firstName + "," + result[i].lastName + '(' + result[i].ppId + ')'
+            text: result[i].lastName + "," + result[i].firstName + '(' + result[i].ppId + ')'
           }
           $scope.participantList.push(participant);
         }
@@ -88,7 +91,7 @@ angular.module('plus.cpview', [])
     var participantId = ids[0], cprId = ids[1];
     $scope.selectedCprId = cprId;
     $scope.tree=[];
-
+	
     if (!selectedScg) {
       var url = "QueryParticipantSearchForView.do?pageOf=newParticipantViewPage&operation=edit&cpSearchCpId=" + 
                  $scope.selectedCp.id + "&id=" + participantId;
@@ -96,32 +99,11 @@ angular.module('plus.cpview', [])
     }
       
     $scope.selectedParticipant = selected;
-    return repository.getCollectionGroups($scope.selectedCprId).then(function(result) {
-      var image;
-      var collectionStatus;
-
-      var tree = [];
-      var scgs = result.data;
-      for (var i = 0; i < scgs.length; ++i) {
-        var scg = scgs[i];
-        tree.push(
-          {    		 
-        	  id: scg.instanceType + scg.id + scg.eventId, 
-              level: 1, 
-  			  scgId: scg.id,
-              type: 'scg',
-              name: $scope.getScgLabel(scg),
-              collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
-              tooltip: $scope.getScgTooltip(scg),
-              eventId: scg.eventId,
-  			  instance: scg.instanceType,
-              nodes: [],
-              state: 'closed'
-          });
-      }
-      $scope.tree = tree;
-      return tree;
-    });
+	var participantId = selected.id.split(',')[0];
+	var cpTree = [];
+	$scope.populateCPTree($scope.selectedCp.id,participantId,$scope.selectedCprId,cpTree);
+	$scope.tree = cpTree;
+	
   }
 
   $scope.viewParticipant = function(){
@@ -161,7 +143,7 @@ angular.module('plus.cpview', [])
     var scgId = selectedScg.id;
 	
     repository.getSpecimens(scgId).success(function(result) {
-      scgNode.nodes = $scope.getSpecimenTree(result);
+      scgNode.nodes = $scope.getSpecimenTree(result,'scg');
       scgNode.childrenProbed = true;
       if (scgNode.nodes.length == 0) {
         scgNode.state = 'disabled';
@@ -206,7 +188,7 @@ angular.module('plus.cpview', [])
     return false;
   };
 
-  $scope.getSpecimenTree = function(specimens) {
+  $scope.getSpecimenTree = function(specimens,parentType) {
     var specimenNodes = [];
 
     if (specimens == null || specimens == undefined) {
@@ -216,6 +198,7 @@ angular.module('plus.cpview', [])
     for (var i = 0; i < specimens.length; ++i) {
       var specimen = specimens[i];
       var name = $scope.getSpecimenName(specimen);
+	  var scgId = parentType == 'cpe' ? '' : specimen.scgId;
       var specimenNode = {
     		  id: specimen.instanceType + specimen.id + specimen.requirementId,
     	        name: name,
@@ -224,10 +207,10 @@ angular.module('plus.cpview', [])
     	        type: 'specimen',
     	        instance: specimen.instanceType,
     			specimenId: specimen.id,
-    			scgId: specimen.scgId,
+    			scgId: scgId,
     			parentId: specimen.parentId,
     			requirementId: specimen.requirementId,
-    	        nodes: $scope.getSpecimenTree(specimen.children),
+    	        nodes: $scope.getSpecimenTree(specimen.children,parentType),
     	        specimenType: specimen.specimenType,
     	        state: 'closed'
       }
@@ -240,6 +223,68 @@ angular.module('plus.cpview', [])
     }
 
     return specimenNodes;
+  };
+  
+  $scope.getCpDependents = function(childCPList,dataNode) {
+    var childCPNodes = [];
+
+    if (childCPList == null || childCPList == undefined) {
+      return childCPNodes;
+    }
+
+    for (var i = 0; i < childCPList.length; ++i) {
+      var childCP = childCPList[i];
+      var name = $scope.getChildCPLabel(childCP);
+      var childCPNode = {
+    		  id: 'childCP' + childCP.id + childCP.title, 
+              scgId: childCP.id,
+              type: 'childCP',
+              name: $scope.getChildCPLabel(childCP),
+              collectionStatus: $scope.getStatusIcon(childCP.collectionStatus),
+              tooltip: $scope.getChildCPTooltip(childCP),
+              eventId: childCP.title,
+              instance: 'childCP',
+              nodes: [],
+              state: 'closed'
+      }
+
+      
+      childCPNodes.push(childCPNode);
+	  dataNode.nodes.push(childCPNode);
+    }
+
+    return childCPNodes;
+  };
+  
+  $scope.getScgDependents = function(scgs,dataNode) {
+    var scgNodes = [];
+
+    if (scgs == null || scgs == undefined) {
+      return scgNodes;
+    }
+
+    for (var i = 0; i < scgs.length; ++i) {
+      var scg = scgs[i];
+      var name = $scope.getScgLabel(scg);
+      var scgNode = {
+    		  id: scg.instanceType + scg.id + scg.eventId, 
+              
+              scgId: scg.id,
+              type: 'scg',
+              name: $scope.getScgLabel(scg),
+              collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
+              tooltip: $scope.getScgTooltip(scg),
+              eventId: scg.eventId,
+              instance: scg.instanceType,
+              nodes: [],
+              state: 'closed'
+      }
+
+      scgNodes.push(scgNode);
+	  dataNode.nodes.push(scgNode);
+    }
+
+    return scgNodes;
   };
   
   $scope.getSpecimenName = function(specimen) {
@@ -266,12 +311,24 @@ angular.module('plus.cpview', [])
   		scgId = data.eventId;
   	}
           repository.getSpecimens(scgId,objectType).success(function(result) {
-            data.nodes = $scope.getSpecimenTree(result);
+            data.nodes = $scope.getSpecimenTree(result,objectType);
             data.childrenProbed = true;
             if (data.nodes.length == 0) {
               data.state = 'disabled';
             }
           });
+        }
+		if (data.type == 'childCP') {
+  		  var objectType="";
+  		  
+  		scgId = data.eventId;
+		var cpNodes=[];
+		var scgNodes=[];
+		var nodes=[];
+		if(data.regDate != '' && data.regDate){
+		  var participantId = $scope.selectedParticipant.id.split(',')[0];
+		  $scope.populateCPTree(data.scgId,participantId,data.regId,data.nodes);
+		  }
         }
       }
     } else if (data.state == 'opened') {
@@ -281,7 +338,8 @@ angular.module('plus.cpview', [])
 
   $scope.displayNode = function(data) {
     $scope.selectedNode = data;
-
+	
+	
     if(data.type == 'scg') {
       var participantId = $scope.selectedParticipant.id.split(',')[0];
       var ids = data.id.split(',');
@@ -303,6 +361,16 @@ angular.module('plus.cpview', [])
 		}		
       $('#cpFrameNew').attr('src',url);
     } 
+	else {
+      //var ids = data.id.split(',');
+	  
+	  var participantId = $scope.selectedParticipant.id.split(',')[0];
+	  
+      var url = "CPQuerySubCollectionProtocolRegistration.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery&refresh=false&operation=add&cpSearchParticipantId="+participantId+"&cpSearchCpId="+data.scgId+"&participantId="+participantId+"&clickedNodeId="+data.id+"&regDate=&parentCPId="+$scope.selectedCp.id;
+	  
+		
+      $('#cpFrameNew').attr('src',url);
+    }
   }
 
 
@@ -314,6 +382,10 @@ angular.module('plus.cpview', [])
       statusIcon = 'fa fa-circle not-collected';
     } else if (collectionStatus == 'Distributed') {
       statusIcon = 'fa fa-circle distributed';
+    } else if (collectionStatus == 'Registered') {
+      statusIcon = 'fa fa-circle registered';
+	}else if (collectionStatus == 'NotRegistered') {
+      statusIcon = 'fa fa-circle not-registered';
     } else {
       statusIcon = 'fa fa-circle pending';
     } 
@@ -321,20 +393,129 @@ angular.module('plus.cpview', [])
   };
 
   $scope.getScgLabel = function(scg) {
-    var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-	var date = new Date(date1);
-    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + date.format("m-d-Y");
+    var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
+    var dateStr = $filter('date')(date, $scope.datePattern);
+    return "T" + scg.eventPoint + ": " + scg.collectionPointLabel + ": " + dateStr;
   }
+  
+  $scope.getChildCPLabel = function(scg) {
+    var title = scg.shortTitle;
+    
+    return title;
+  }
+  
+  
 
-  $scope.getScgTooltip = function(scg) {
-    var date1 = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
-    var date = new Date(date1);
+  $scope.getChildCPTooltip = function(scg) {
+    var date = scg.regDate ? scg.regDate : '';
+    var dateStr = $filter('date')(date, $scope.datePattern);
     var htmlToolTip = 
     	"<table style=\"font-size: 12px\"><tbody>" +
-    	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td class=\"pull-left\">"+ scg.eventPoint + " (" + scg.collectionPointLabel  + ") "+ "</td><tr/>" +
-    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ date.format("d-m-Y") + "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-left\">Title : </i></b></td><td class=\"pull-left\">"+ scg.title + "</td></tr>" +
+    	  "<tr><td><b><i class=\"pull-left\">Rgistration Date: </i></b></td><td class=\"pull-left\">"+dateStr+"</td></tr>" +
     	"</tbody></table>";
 
     return htmlToolTip;
+  }
+  
+  $scope.getScgTooltip = function(scg) {
+    var date = scg.receivedDate ? scg.receivedDate : scg.registrationDate;
+    var dateStr = $filter('date')(date, $scope.datePattern);
+    var htmlToolTip = 
+    	"<table style=\"font-size: 12px\"><tbody>" +
+    	  "<tr><td><b><i class=\"pull-right\">Event Point : </i></b></td><td class=\"pull-left\">"+ scg.eventPoint + " (" + scg.collectionPointLabel  + ") "+ "</td><tr/>" +
+    	  "<tr><td><b><i class=\"pull-right\">Received date: </i></b></td><td class=\"pull-left\">"+ dateStr + "</td><tr/>" +
+    	"</tbody></table>";
+
+    return htmlToolTip;
+  }
+  
+  
+  $scope.populateCPTree = function(cpId,participantId,cprId,cpTree){
+	repository.getChildCps(cpId).then(function(result) {
+      var image;
+      var collectionStatus;
+
+      var tree = [];
+      var childCP = result.data;
+	  var childCPList=[];
+	  
+	  if(childCP.length >= 1){
+		repository.getChildCpRegistrations(participantId,cpId).then(function(result) {
+			var childCPReg = result.data;
+			
+			
+			for (var i = 0; i < childCP.length; ++i) {
+			var regDate = '';
+			var regId = '';
+			var subCP = childCP[i];
+			for (var j = 0; j < childCPReg.length; ++j) {
+				var subReg = childCPReg[j];
+				if(subCP.id == subReg.cpId){
+				regDate = subReg.registrationDate;
+				regId = subReg.id;
+				}
+			}
+			childCPList[i]= {
+			  id: subCP.id, 
+              shortTitle: subCP.shortTitle,
+              regDate: regDate,
+              collectionStatus: regDate == '' ? 'NotRegistered' : 'Registered',
+              title: subCP.title,
+			  regId: regId
+			};
+			
+		}
+		for (var i = 0; i < childCPList.length; ++i) {
+        var scg = childCPList[i];
+        cpTree.push(
+          {    		 
+              id: 'childCP' + scg.id + scg.title, 
+              scgId: scg.id,
+              type: 'childCP',
+              name: $scope.getChildCPLabel(scg),
+              collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
+              tooltip: $scope.getChildCPTooltip(scg),
+              eventId: scg.title,
+			  regId: scg.regId,
+			  regDate: scg.regDate,
+              instance: 'childCP',
+              nodes: [],
+              state: 'closed'
+          });
+      }
+	  $scope.populateScgTree(cprId,cpTree);
+	  })
+	  }
+	  else{
+		$scope.populateScgTree(cprId,cpTree);
+	  }
+    });
+  }
+  
+  $scope.populateScgTree = function(cprId,cpTree){
+	repository.getCollectionGroups(cprId).then(function(result) {
+      var image;
+      var collectionStatus;
+
+      var tree = [];
+      var scgs = result.data;
+      for (var i = 0; i < scgs.length; ++i) {
+        var scg = scgs[i];
+        cpTree.push(
+          {    		 
+              id: scg.instanceType + scg.id + scg.eventId, 
+              scgId: scg.id,
+              type: 'scg',
+              name: $scope.getScgLabel(scg),
+              collectionStatus: $scope.getStatusIcon(scg.collectionStatus),
+              tooltip: $scope.getScgTooltip(scg),
+              eventId: scg.eventId,
+              instance: scg.instanceType,
+              nodes: [],
+              state: 'closed'
+          });
+      }
+    });
   }
 }]);
