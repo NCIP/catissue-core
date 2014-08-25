@@ -56,7 +56,7 @@ angular.module("plus.directives", [])
         query         : "&onQuery",
         onSelect      : "&onSelect",
         initSelection : "&onInitselectionfn",
-	    elem          : "=ngModel"
+        elem          : "=ngModel"
       },
 
       link: function(scope, element, attrs) {
@@ -81,7 +81,7 @@ angular.module("plus.directives", [])
           .onChange(function(option) {
             scope.onSelect({selected: option});
           })
-	     .onInitSelection(function(elem, callback) {
+	  .onInitSelection(function(elem, callback) {
             scope.initSelection()(elem, callback);
           })
           .render();
@@ -289,7 +289,9 @@ angular.module("plus.directives", [])
       replace: true,
       template:
         '<div class="ka-tree">' +
-        '  <ul ui-sortable ng-model="opts.treeData"> <ka-tree-node ng-repeat="node in opts.treeData" node="node"></ka-tree-item></ul> ' +
+        '  <ul ui-sortable ng-model="opts.treeData"> ' +
+        '    <ka-tree-node ng-repeat="node in opts.treeData" node="node" node-tmpl="opts.nodeTmpl"></ka-tree-node> ' + 
+        '  </ul> ' +
         '</div>',
 
       link: function(scope, element, attrs) {
@@ -340,12 +342,13 @@ angular.module("plus.directives", [])
       require: '^kaTree',
       replace: 'true',
       scope: {
-        node: '='
+        node: '=',
+        nodeTmpl: '='
       },
       link: function(scope, element, attrs, ctrl) {
         element.append($compile(
           '<ul ui-sortable ng-model="node.children" ng-if="node.expanded"> ' +
-          '  <ka-tree-node ng-repeat="child in node.children" node="child"></ka-tree-node> ' +
+          '  <ka-tree-node node-tmpl="nodeTmpl" ng-repeat="child in node.children" node="child"></ka-tree-node> ' +
           '</ul>')(scope));
 
         scope.nodeChecked = ctrl.nodeChecked;
@@ -355,7 +358,8 @@ angular.module("plus.directives", [])
 
       template:
         '<li>' +
-        '  <div class="clearfix ka-tree-node" ng-class="{\'ka-tree-node-offset\': node.children && node.children.length <= 0}"> ' +
+        '  <div class="clearfix ka-tree-node" ng-class="{\'ka-tree-node-offset\': node.children && node.children.length <= 0}" ' +
+        '    ng-mouseenter="hover=true" ng-mouseleave="hover=false"> ' +
         '    <div ng-if="!node.children || node.children.length > 0" ' +
         '         class="ka-tree-node-toggle-marker fa" ' +
         '         ng-class="{true: \'fa-plus-square-o\', false: \'fa-minus-square-o\'}[!node.expanded]" ' +
@@ -365,7 +369,8 @@ angular.module("plus.directives", [])
         '      <input type="checkbox" ng-model="node.checked" ng-checked="isNodeChecked(node)" ng-change="nodeChecked(node)"> ' +
         '    </div> ' +
         '    <div class="ka-tree-node-label"> ' +
-        '      {{node.val}}' +
+        '      <div ng-if="nodeTmpl" ng-include src="nodeTmpl"></div> ' +
+        '      <div ng-if="!nodeTmpl">{{node.val}}</div> ' +
         '    </div> ' +
         '  </div> ' +
         '</li>'

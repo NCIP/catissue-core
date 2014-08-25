@@ -30,6 +30,14 @@
   top: 0;
 }
 
+.define-view-notifs {
+  text-align: center;
+  z-index: 100;
+  position: fixed;
+  left: 10px;
+  right: 10px;
+}
+
 .cp-de-form {
   font-size: 14px;
 }

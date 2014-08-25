@@ -517,7 +517,10 @@
               <tbody>
                 <tr ng-repeat="folder in queryData.sharedFolders" ng-class="{'selected-folder': queryData.selectedFolderId == folder.id}">
                   <td class="item clearfix">
-                    <span ng-click="selectFolder(folder.id)">{{folder.name}}</span>
+                    <div class="pull-left" ng-click="selectFolder(folder.id)" 
+                      tooltip-placement="bottom" tooltip="{{folder.name}}" tooltip-append-to-body="true">
+                        {{folder.name}}
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -585,7 +588,7 @@
                     </button>
                     <a type="button" class="btn btn-default" 
                       tooltip-placement="bottom" tooltip="Download Query Definition" tooltip-append-to-body="true"
-                      href="/catissuecore/rest/ng/saved-queries/{{query.id}}/definition-file" target="_blank">
+                      href="/openspecimen/rest/ng/saved-queries/{{query.id}}/definition-file" target="_blank">
                       <span class="glyphicon glyphicon-download-alt"></span>
                     </a>
                     <button type="button" class="btn btn-default" ng-click="viewAuditLog(query)" 
@@ -924,8 +927,9 @@
                   </div>
                 </div>
                 <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="!filter.expr"> 
-                  <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i> 
+                  <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i>
                   <b> {{filter.op.desc}} </b> 
+
                   <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
                   <i ng-if="filter.op.name != 'between'">{{filter.value}}</i>
                 </div>
@@ -1103,15 +1107,78 @@
     </script>
           
     <script type="text/ng-template" id="define-view.html">
-      <div class="modal-header" style="height: 10%">
-        <h4>Define Results View</h4>
+      <div class="modal-body" style="height: 465px;">
+        <div id="define-view-notif" class="define-view-notifs hidden"></div>
+        <tabset>
+          <tab heading="Define View"> 
+            <div style="margin-top: 10px; height: 405px; overflow: auto">
+              <span class="plus-heading">Please select the fields that you wish to view in results table</span>
+              <span class="plus-note plus-margin-bottom">Drag and drop fields to reorder the view</span>
+              <ka-tree opts='treeOpts'></ka-tree>
+            </div>
+          </tab>
+          <tab heading="Reporting" select="prepareReportingOpts()">
+            <div style="margin-top: 10px; height: 405px; overflow: auto">
+              <div class="form-group">
+                <label for="reporting-type">Reporting Type</label>
+                <ka-select id="reporting-type" style="width: 100%;"
+                  data-placeholder="Select Report Type"
+                  options="reportingOpts" option-id="type" option-value="label"
+                  on-select="onReportSelect"
+                  selected="reporting.type">
+                </ka-select>
+              </div>
+
+              <div ng-if="reporting.type == 'crosstab'">
+                <div class="form-group">
+                  <label for="group-rows-by">Group Rows By</label>
+                  <ka-select id="group-rows-by" style="width: 100%;"
+                    data-placeholder="Select fields to use for grouping rows"
+                    options="groupRowsBy" option-id="name" option-value="value"
+                    on-select="onGroupRowsByChange"
+                    multiple selected="reporting.params.groupRowsBy">
+                  </ka-select>
+                </div>
+
+                <div class="form-group">
+                  <label for="group-col-by">Group Columns By</label>
+                  <ka-select id="group-col-by" style="width: 100%;"
+                    data-placeholder="Select field to use for grouping columns"
+                    options="groupColBy" option-id="name" option-value="value"
+                    on-select="onGroupColByChange"
+                    selected="reporting.params.groupColBy">
+                  </ka-select>
+                </div>
+
+                <div class="form-group">
+                  <label for="summary-value">Summary Value</label>
+                  <ka-select id="summary-value" style="width: 100%;"
+                    data-placeholder="Select summary field"
+                    options="summaryFields" option-id="name" option-value="value"
+                    on-select="onSummaryFieldChange"
+                    selected="reporting.params.summaryField">
+                  </ka-select>
+                </div>
+
+                <div class="form-group">
+                  <label for="rollup">Rollup Type</label>
+                  <div id="rollup">
+                    <label class="radio-inline">
+                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="none"> None
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="rollup"> Normal
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="powerset"> Powerset
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tab>
       </div>
-      <div class="modal-body" style="height: 75%;overflow:auto">
-        <span class="plus-heading">Please select the fields that you wish to view in results table</span>
-        <span class="plus-note plus-margin-bottom">Drag and drop fields to reorder the view</span>
-        <ka-tree opts='treeOpts'></ka-tree>
-      </div>
-      <div class="modal-footer" style="height: 12%">
+      <div class="modal-footer" style="height: 65px;">
         <button class="btn btn-default" ng-click="cancel()">Cancel</button>
         <button class="btn btn-primary" ng-click="ok()">Ok</button>
       </div>
@@ -1122,7 +1189,7 @@
         <h4>Import Query</h4>
       </div>
       <div class="modal-body" style="height: 50%">
-        <form action="/catissuecore/rest/ng/saved-queries/definition-file">
+        <form action="/openspecimen/rest/ng/saved-queries/definition-file">
           <div class="form-group">
             <label>Select Query Definition File</label>
             <div style="position:relative;">
@@ -1279,6 +1346,35 @@
          <button class="btn btn-default" ng-click="cancel()">Cancel</button>
          <button class="btn btn-primary" ng-disabled="!specimenList.name" ng-click="saveSpecimenList()">Create</button>
       </div> 
+    </script>
+
+    <script type="text/ng-template" id="aggregate-tmpl.html">
+      <div>
+        {{node.val}}
+        <span ng-if="node.aggFn">({{node.desc ? node.desc : node.aggFn}})</span>
+        <div ng-if="node.type == 'field' && hover"> 
+          <label class="radio-inline">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="count" ng-change="node.checked=true"> Count
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="sum" ng-change="node.checked=true"> Sum
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="avg" ng-change="node.checked=true"> Average
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT' || node.dataType == 'DATE'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="min" ng-change="node.checked=true"> Min
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT' || node.dataType == 'DATE'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="max" ng-change="node.checked=true"> Max
+          </label>
+          <label class="radio-inline" ng-if="node.aggFn">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value=""> Reset
+          </label> 
+          
+          <input class="form-control" ng-if="node.aggFn" ng-model="node.desc">
+        </div>
+      </div>
     </script>
     
     <script>

@@ -1,8 +1,12 @@
 package com.krishagni.catissueplus.core.de.events;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.domain.Filter;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode;
+import com.krishagni.catissueplus.core.de.domain.ReportSpec;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 
 public class SavedQueryDetail extends SavedQuerySummary {
@@ -14,7 +18,9 @@ public class SavedQueryDetail extends SavedQuerySummary {
 
 	private QueryExpressionNode[] queryExpression;
 
-	private String[] selectList;
+	private Object[] selectList;
+	
+	private ReportSpec reporting;
 
 	public Long getCpId() {
 		return cpId;
@@ -48,14 +54,22 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		this.queryExpression = queryExpression;
 	}
 
-	public String[] getSelectList() {
+	public Object[] getSelectList() {
 		return selectList;
 	}
 
-	public void setSelectList(String[] selectList) {
+	public void setSelectList(Object[] selectList) {
 		this.selectList = selectList;
 	}
 	
+	public ReportSpec getReporting() {
+		return reporting;
+	}
+
+	public void setReporting(ReportSpec reporting) {
+		this.reporting = reporting;
+	}
+
 	public static SavedQueryDetail fromSavedQuery(SavedQuery savedQuery){
 		SavedQueryDetail detail = new SavedQueryDetail();
 		
@@ -70,7 +84,7 @@ public class SavedQueryDetail extends SavedQuerySummary {
 		detail.setFilters(savedQuery.getFilters());
 		detail.setQueryExpression(savedQuery.getQueryExpression());
 		detail.setSelectList(savedQuery.getSelectList());
-		
+		detail.setReporting(savedQuery.getReporting());
 		return detail;
-	}
+	}	
 }
