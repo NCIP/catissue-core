@@ -193,7 +193,7 @@ function showHideComponents()
 }
 function gotoAdvanceQuery()
 {
-    var action = "QueryWizard.do?";
+    var action = "query.do?";
     document.forms[0].action = action;
     document.forms[0].submit();
 }
