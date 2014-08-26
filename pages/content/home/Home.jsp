@@ -311,7 +311,7 @@ login.forgot.password=Forgot password?
 </table>
 <br/>
 <div class="footer-class black_ar">
-        <div style="padding-top:18px;"><span>OpenSpecimen is an open source biobanking software built on top of NCI caTissue. For more details visit <a href="http://www.catissueplus.org">www.openspecimen.org</a> or mail us at <a href="mailto:support@krishagni.com">support@krishagni.com</a></span></div>
+        <div style="padding-top:18px;"><span>OpenSpecimen is an open source biobanking software built on top of NCI caTissue. For more details visit <a href="http://www.openspecimen.org" target="_blank">www.openspecimen.org</a> or mail us at <a href="mailto:support@krishagni.com">support@krishagni.com</a></span></div>
 </div>
 <script>
 
