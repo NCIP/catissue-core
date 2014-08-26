@@ -6145,9 +6145,9 @@ PUBLIC
 			 	<forward name="failure" path="/QueryParticipantSearchForView.do?pageOf=newParticipantViewPage"/>
 		</action>
 		
-		<action path="/AuditReport" type="edu.wustl.catissuecore.action.AuditReportAction"
+		<action path="/AuditReport" type="edu.wustl.catissuecore.action.ForwardAdminAction"
 			validate="false" scope="request">
-			<forward name="pageOfAuditReport" path=".catissuecore.AuditReportDef" />
+			<forward name="success" path=".catissuecore.AuditReportDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do?isDashboardVisible=false" />
 		</action>
 		
@@ -6162,11 +6162,13 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SaveSCGAjaxAction" validate="false" scope="request">
 		</action>
 
- 		<action path="/loadcsd" type="edu.wustl.catissuecore.action.ForwardAction">
+ 		<action path="/loadcsd" type="edu.wustl.catissuecore.action.ForwardAdminAction">
+ 			<forward name="access_denied" path="/ManageAdministrativeData.do?isDashboardVisible=false" />
  			<forward name="success" path=".catissuecore.csd" />
                 </action>
  
- 		<action path="/ecrf" type="edu.wustl.catissuecore.action.ForwardAction">
+ 		<action path="/ecrf" type="edu.wustl.catissuecore.action.ForwardAdminAction">
+ 			<forward name="access_denied" path="/ManageAdministrativeData.do?isDashboardVisible=false" />
   			<forward name="success" path=".catissuecore.ecrf"/>
   		</action>
 

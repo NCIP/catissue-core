@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
-public class AuditReportAction extends CatissueBaseAction {
+public class ForwardAdminAction extends CatissueBaseAction {
 
 	@Override
 	protected ActionForward executeCatissueAction(ActionMapping mapping,
@@ -19,7 +19,7 @@ public class AuditReportAction extends CatissueBaseAction {
 		SessionDataBean bean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		if(bean.isAdmin())
 		{
-			return mapping.findForward("pageOfAuditReport");
+			return mapping.findForward("success");
 		}
 		else
 		{
