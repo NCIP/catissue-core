@@ -2495,7 +2495,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         END ENABLECONSTRAINT;
     </sql>
     </changeSet>
-    <changeSet id="for deleting the anticipated SCG's having anticipated specimens" author="nitesh">
+    <!-- <changeSet id="for deleting the anticipated SCG's having anticipated specimens" author="nitesh">
 
        <sql>
             create table catissue_tmp_scg as select * from (
@@ -2510,15 +2510,6 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
        </sql>
         <addPrimaryKey tableName="catissue_tmp_scg" columnNames="IDENTIFIER"/>
      
-      <!--  <sql>create table catissue_tmp_scg as select * from catissue_specimen_coll_group where identifier in(
-            select identifier from catissue_specimen_coll_group
-            
-            MINUS
-
-            select distinct scg.identifier from catissue_specimen_coll_group scg join catissue_specimen sp on sp.SPECIMEN_COLLECTION_GROUP_ID = scg.identifier
-            where scg.COLLECTION_STATUS = 'Pending' and sp.COLLECTION_STATUS ='Pending'
-            and scg.identifier not in (select SPECIMEN_COLLECTION_GROUP_ID from catissue_specimen where COLLECTION_STATUS = 'Collected'))
-       </sql> -->
        <sql>
             create table catissue_tmp_specimen  as select * from catissue_specimen  where SPECIMEN_COLLECTION_GROUP_ID in(
             select identifier from catissue_tmp_scg)
@@ -2635,7 +2626,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                 unique="false">
             <column name="AVAILABLE_QUANTITY" type="varchar(50)"/>
         </createIndex>
-    </changeSet>
+    </changeSet> -->
     <changeSet id="adding index for parent_specimen_id" author="nitesh" failOnError="false">
 		<createIndex 
                 indexName="INDX_CAT_PARENT_SPECIMEN"
@@ -2644,7 +2635,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             <column name="PARENT_SPECIMEN_ID" type="${int.type}"/>
         </createIndex>
 	</changeSet>
-    <changeSet id="creating constraints for SCG table" author="nitesh">
+    <!-- <changeSet id="creating constraints for SCG table" author="nitesh">
     
     <addForeignKeyConstraint baseColumnNames="COLLECTION_PROTOCOL_REG_ID"
                    baseTableName="CATISSUE_SPECIMEN_COLL_GROUP"
@@ -2727,7 +2718,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
         <addAutoIncrement columnDataType="${int.type}"
             columnName="IDENTIFIER"
             tableName="CATISSUE_SPECIMEN"/>
-    </changeSet>    
+    </changeSet>     -->
 
     <changeSet id="delete orphan references from specimen list table" author="nitesh">
         <sql>
