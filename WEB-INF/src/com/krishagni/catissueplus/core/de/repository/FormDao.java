@@ -42,12 +42,14 @@ public interface FormDao extends Dao<FormContextBean>{
 
 	public FormRecordEntryBean getRecordEntry(Long recordId);
 
+	public Long getRecordsCount(Long formCtxtId, Long objectId);
+
 	public ObjectCpDetail getObjectCpDetail(Map<String, Object> map);
 
 	public Long getFormCtxtId(Long containerId, String entityType, Long cpId);
 	
 	public List<Long> getFormIds(Long cpId, String entityType);
-
-	public boolean canAddRecord(Long formCtxtId, Long objectId);
+	
+	public List<FormContextBean> getFormContextsById(List<Long> formContextIds);
 	
 }

@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,10 +59,9 @@ public class SpecimenEventsServiceImpl implements SpecimenEventService {
 				return SpecimenEventsSavedEvent.notAuthorized(new IllegalAccessException("Does not have access for data entry on specimen" + specimenLabel));
 			}
 			
-			Map<String, Object> appData = new HashMap<String, Object>();
+			Map<String, Object> appData = formData.getAppData();
 			appData.put("formCtxtId", formCtxtId.doubleValue());
 			appData.put("objectId", specimen.getId().doubleValue());
-			formData.setAppData(appData);
 		}
 
 		SaveBulkFormDataEvent event = new SaveBulkFormDataEvent();

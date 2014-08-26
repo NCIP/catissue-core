@@ -202,6 +202,13 @@
               (f.cpId = :cpId or f.cpId = -1) and
               f.entityType = :entityType
         </query>
+                
+        <query name="getFormContextsById">
+            from
+              FormContextBean as f 
+            where
+              f.identifier in (:ids)
+        </query>
         
         <query name="getQueryFormCtxtByContainerId">
             from
@@ -406,15 +413,14 @@
         
         <sql-query name="getRecordCount">
         	<return-scalar column="recordCnt" type="long"/>
-        	<return-scalar column="isMultirecord" type="boolean"/> 
         	
         	select 
-        	  count(*) as recordCnt,fc.is_multirecord as isMultirecord 
-        	from catissue_form_record_entry r 
-              left join  catissue_form_context fc on  r.form_ctxt_id = fc.identifier 
-              
+        	  count(*) as recordCnt 
+        	from 
+        	  catissue_form_record_entry r  
             where 
-              fc.identifier = :formCtxtId and r.object_id = :objectId and r.activity_status = 'ACTIVE' 
+              r.form_ctxt_id = :formCtxtId and r.object_id = :objectId and r.activity_status = 'ACTIVE' 
         </sql-query>
+
     </class>
 </hibernate-mapping>

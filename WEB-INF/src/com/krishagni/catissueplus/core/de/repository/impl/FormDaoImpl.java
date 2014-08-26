@@ -217,7 +217,28 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		List<FormContextBean> objs = query.list();
 		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FormContextBean> getFormContextsById(List<Long> formContextIds) {
+		List<FormContextBean> formContexts = new ArrayList<FormContextBean>();
 		
+		int i = 0;
+		int numIds = formContextIds.size();
+		while (i < numIds) {
+			List<Long> params = formContextIds.subList(i, i + 500 > numIds ? numIds : i + 500);
+			i += 500;
+			
+			formContexts.addAll(
+				sessionFactory.getCurrentSession()
+					.getNamedQuery(GET_FORM_CTXTS_BY_ID)
+					.setParameterList("ids", params)
+					.list());					
+		}
+		
+		return formContexts;
+	}
+	
 	@Override
 	public void saveOrUpdateRecordEntry(FormRecordEntryBean recordEntry) {
 		sessionFactory.getCurrentSession().saveOrUpdate(recordEntry);
@@ -323,20 +344,11 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean canAddRecord(Long formCtxtId, Long objectId) {
+	public Long getRecordsCount(Long formCtxtId, Long objectId) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_CNT);
 		query.setLong("formCtxtId", formCtxtId).setLong("objectId", objectId);
-		List<Object[]> result = query.list();
-		Object[] obj = result.iterator().next();
-		
-		Long noOfRecords = (Long) obj[0];
-		boolean isMultiRecord = (Boolean)obj[1];
-		
-		if(!isMultiRecord && (noOfRecords >= 1L)) {
-			return false;
-		} 
-		
-		return true;
+		List<Long> result = query.list();
+		return result.iterator().next();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -418,6 +430,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_FORM_CTXT = FQN + ".getFormContext";
 	
+	private static final String GET_FORM_CTXTS_BY_ID = FQN + ".getFormContextsById";
+	
 	private static final String GET_CPR_FORMS = FQN + ".getCprForms";
 	
 	private static final String GET_SPECIMEN_FORMS = FQN + ".getSpecimenForms";
@@ -447,5 +461,5 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
 	
 	private static final String GET_RECORD_CNT = FQN + ".getRecordCount";
-	
+
 }

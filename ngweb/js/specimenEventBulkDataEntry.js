@@ -21,22 +21,20 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   });
 
   $scope.onEventSelect = function(selectedEvent) {
-    $scope.dataEntryMode = false;
-    $scope.editRecords = false;
+    $scope.dataEntryMode = $scope.editRecords  = false;
     FormsService.getFormDef(selectedEvent.formId).then(function (data){
       var formDef = data;
       dataTable = new edu.common.de.DataTable({
         formId           : selectedEvent.formId,
         idColumnLabel    : 'Specimen Label',
         formDef          : formDef,
-        formDiv          : 'data-table'
+        formDiv          : 'data-table',
+        onValidationError: function() {
+          Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
+        }
       });
       dataTable.clear();
     });
-  }
-
-  var onValidationError =  function() {
-    Utility.notify($("#notifications"), "There are some errors on forms. Please rectify them before saving", "error", true);
   }
 
   $scope.addRecord = function() {
@@ -81,10 +79,9 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
 
   $scope.saveDataTable = function() {
     $scope.loading = true;
-    var formData = (dataTable.getData().status == 'success') ? JSON.stringify(dataTable.getData().data) : null;
-    if(formData == null) {
+    var formData = JSON.stringify(dataTable.getData());
+    if(formData == undefined || formData == null) {
        $scope.loading = false;
-       onValidationError();
        return;
     }
     SpecimensEventService.saveFormData($scope.selectedEvent.formId, JSON.stringify(formData)).then(function(data){
@@ -93,7 +90,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
 
       var obj = jQuery.parseJSON(data);
       var savedFormData = eval(obj);
-      var tableData = populateTableDataFromSavedFormData(savedFormData);
+      var tableData = populateTableData(savedFormData);
 
       $scope.dataEntryMode = false;
       $scope.editRecords = true;
@@ -109,12 +106,11 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
 
   $scope.editDataTable = function() {
     $scope.loading = true;
-    var tableData = dataTable.getData().data;
-    var formData = populateFormDataFromTableData(tableData);
+    var tableData = populateTableData(dataTable.getData());
     $scope.dataEntryMode = true;
     $scope.editRecords = false;
     dataTable.setMode('edit');
-    renderDataTable(formData);
+    renderDataTable(tableData);
     $scope.loading = false;
   }
 
@@ -127,30 +123,16 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
     dataTable.copyFirstToAll();
   }
 
-  var populateTableDataFromSavedFormData = function(savedFormData){
-     var tableData =[];
-     var re = /\s*,\s*/;
-     var specimenLabels = $scope.specimenLabels.trim().split(re);
-     for(var i = 0; i < savedFormData.length; i++) {
-       var records =[];
-       records.push(savedFormData[i]);
-       var tableRec = { key : {id : specimenLabels[i] , label : specimenLabels[i]}, records : records };
-       tableData.push(tableRec);
-     }
-     return tableData;
-  }
-
-  var populateFormDataFromTableData = function(tableData) {
-     var tblData = [];
-     for(var i = 0; i< tableData.length; i++) {
-        var specimenLabel = tableData[i].appData.id;
-        delete tableData[i].appData;
-        var records = [];
-        records.push(tableData[i]);
-        var tableRec = {key : {id : specimenLabel , label : specimenLabel}, records : records };
-        tblData.push(tableRec);
-     }
-     return tblData;
+  var populateTableData = function(tableData) {
+    var tblData = [];
+    for(var i = 0; i< tableData.length; i++) {
+      var specimenLabel = tableData[i].appData.id;
+      var records = [];
+      records.push(tableData[i]);
+      var tableRec = {key : {id : specimenLabel , label : specimenLabel}, records : records };
+      tblData.push(tableRec);
+    }
+    return tblData;
   }
 
   var renderDataTable = function(tableData) {

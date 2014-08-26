@@ -280,16 +280,25 @@ public class FormServiceImpl implements FormService {
 			throw new IllegalArgumentException("Invalid form context id or object id ");
 		}
 
-		Long formCtxtId = ((Double) appData.get("formCtxtId")).longValue();
 		Long objectId = ((Double) appData.get("objectId")).longValue();
+		List<Long> formCtxtId = new ArrayList<Long>();
+		formCtxtId.add(((Double) appData.get("formCtxtId")).longValue());
+		List<FormContextBean> formContexts = formDao.getFormContextsById(formCtxtId);
+		if(formContexts == null) {
+			throw new IllegalArgumentException("Invalid form context id");
+		}
+		FormContextBean formContext = formContexts.get(0);
+		
 
 		formData.setRecordId(recordId);
 		boolean isInsert = (recordId == null);
 		
 		if(isInsert) {
-			boolean isAddRecord = canAddRecord(formCtxtId, objectId );
-			if(!isAddRecord) {
-				throw new RuntimeException("Form is single record ");
+			if(!formContext.isMultiRecord()) {
+				Long noOfRecords = formDao.getRecordsCount(formContext.getIdentifier(), objectId);
+				if(noOfRecords >= 1L) {
+					throw new RuntimeException("Form is single record ");
+				}
 			}
 		}
 
@@ -302,14 +311,14 @@ public class FormServiceImpl implements FormService {
 			recordEntry.setActivityStatus(Status.ACTIVE);
 		}
 		else {
-			recordEntry = formDao.getRecordEntry(formCtxtId, objectId, recordId);
+			recordEntry = formDao.getRecordEntry(formContext.getIdentifier(), objectId, recordId);
 		}
 
 		if (recordEntry.getActivityStatus() == Status.CLOSED) {
 			throw new IllegalArgumentException("Provied record id does not exist");
 		}
 
-		recordEntry.setFormCtxtId(formCtxtId);
+		recordEntry.setFormCtxtId(formContext.getIdentifier());
 		recordEntry.setObjectId(objectId);
 		recordEntry.setRecordId(recordId);
 		recordEntry.setUpdatedBy(session.getUserId());
@@ -320,10 +329,6 @@ public class FormServiceImpl implements FormService {
 		return formData;
 	}
 	
-	private boolean canAddRecord(Long formCtxtId, Long objectId) {
-		return formDao.canAddRecord(formCtxtId, objectId);
-	}
-
 	@Override
 	@PlusTransactional
 	public FileDetailEvent getFileDetail(ReqFileDetailEvent req) {
