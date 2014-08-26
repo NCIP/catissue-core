@@ -1015,8 +1015,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
+				System.out.println();
 				hql = "select orderDetails from " + OrderDetails.class.getName()
-						+ " orderDetails left outer join orderDetails.distributionProtocol where orderDetails.status = 'Completed' and orderDetails.distributionProtocol.title='"+dpName
+						+ " orderDetails left outer join orderDetails.distributionProtocol where orderDetails.status = 'Completed' and orderDetails.distributionProtocol.shortTitle='"+dpName
 						+ "' order by orderDetails.requestedDate desc";
 			}
 			orderListFromDB = dao.executeQuery(hql, null);
