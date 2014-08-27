@@ -116,7 +116,7 @@
             <column name="SPECIMEN_TYPE" type="${text.type}(50)" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
-            <column name="CONCENTRATION" type="${int.type}" />
+            <column name="CONCENTRATION" type="${double.type}" />
         </addColumn>
         <addColumn tableName="CATISSUE_SPECIMEN">
             <column name="PARENT_SPECIMEN_ID" type="${int.type}" />
