@@ -11,7 +11,7 @@
     <property name="int.type" value="bigint(20)" dbms="mysql" />
     <property name="int.type" value="number(19,0)" dbms="oracle" />
     
-    <property name="double.type" value="bigint(20)" dbms="mysql" />
+    <property name="double.type" value="double" dbms="mysql" />
     <property name="double.type" value="double" dbms="oracle" />
 
     <property name="smallint.type" value="smallint" dbms="mysql" />
