@@ -1117,21 +1117,19 @@
               <ka-tree opts='treeOpts'></ka-tree>
             </div>
           </tab>
-          <tab heading="Reporting" select="prepareReportingOpts()">
+          <tab heading="Pivot Table" select="preparePivotTableOpts()">
             <div style="margin-top: 10px; height: 405px; overflow: auto">
               <div class="form-group">
-                <label for="reporting-type">Reporting Type</label>
-                <ka-select id="reporting-type" style="width: 100%;"
-                  data-placeholder="Select Report Type"
-                  options="reportingOpts" option-id="type" option-value="label"
-                  on-select="onReportSelect"
-                  selected="reporting.type">
-                </ka-select>
+                <label class="checkbox-inline">
+                  <input type="checkbox" ng-model="pivotTable" 
+                    ng-checked="reporting.type == 'crosstab'" ng-change="createPivotTable(pivotTable)"> 
+                  Create Pivot Table
+                </label>
               </div>
 
               <div ng-if="reporting.type == 'crosstab'">
                 <div class="form-group">
-                  <label for="group-rows-by">Group Rows By</label>
+                  <label for="group-rows-by">Row Fields</label>
                   <ka-select id="group-rows-by" style="width: 100%;"
                     data-placeholder="Select fields to use for grouping rows"
                     options="groupRowsBy" option-id="name" option-value="value"
@@ -1141,7 +1139,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="group-col-by">Group Columns By</label>
+                  <label for="group-col-by">Column Field</label>
                   <ka-select id="group-col-by" style="width: 100%;"
                     data-placeholder="Select field to use for grouping columns"
                     options="groupColBy" option-id="name" option-value="value"
@@ -1151,7 +1149,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="summary-value">Summary Value</label>
+                  <label for="summary-value">Value Field</label>
                   <ka-select id="summary-value" style="width: 100%;"
                     data-placeholder="Select summary field"
                     options="summaryFields" option-id="name" option-value="value"

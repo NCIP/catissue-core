@@ -1995,9 +1995,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         {type: 'crosstab', label: 'Crosstab'}
       ];
 
-      $scope.onReportSelect = function(reportType) {
-        $scope.reporting.type = reportType.type;
-        $scope.prepareReportingOpts();
+      $scope.createPivotTable = function(pivotTable) {
+        if (!pivotTable) {
+          $scope.reporting = {type: '', params: {}};
+        } else {
+          $scope.reporting.type = 'crosstab';
+          $scope.preparePivotTableOpts();
+        }
       };
 
       var forms = [];
@@ -2031,7 +2035,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
 
           if (!node.checked) {
-            $scope.prepareReportingOpts();
+            $scope.preparePivotTableOpts();
           }
         }
       };
@@ -2041,26 +2045,17 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var rptParams = $scope.reporting.params;
         if ($scope.reporting.type == 'crosstab') {
           if (!rptParams.groupRowsBy || rptParams.groupRowsBy.length == 0) {
-            Utility.notify($("#define-view-notif"), "Group Rows By is not specified", "error", true);
+            Utility.notify($("#define-view-notif"), "Rows field is not specified", "error", true);
             return;
           }
 
           if (!rptParams.groupColBy) {
-            Utility.notify($("#define-view-notif"), "Group Columns By is not specified", "error", true);
+            Utility.notify($("#define-view-notif"), "Column field is not specified", "error", true);
             return;
           }
 
           if (!rptParams.summaryField) {
             Utility.notify($("#define-view-notif"), "Summary field is not specified", "error", true);
-            return;
-          }
-
-          if (rptParams.groupRowsBy.length != (selectedFields.length - 2)) {
-            Utility.notify(
-              $("#define-view-notif"), 
-              "Missing fields in Group Rows By ", 
-              "error", 
-              true);
             return;
           }
         }
@@ -2134,7 +2129,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return getGroupFields(reportFields, excludeFields);
       };
 
-      var prepareCrosstabFields = function(reportFields) {
+      var preparePivotTabFields = function(reportFields) {
         $scope.groupRowsBy = getGroupRowsBy(reportFields);       
         $scope.groupColBy = getGroupColBy(reportFields);       
         $scope.summaryFields = getSummaryFields(reportFields);       
@@ -2158,7 +2153,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return dstArr;
       }
 
-      $scope.prepareReportingOpts = function() {
+      $scope.preparePivotTableOpts = function() {
         if ($scope.reporting.type != 'crosstab') {
           return;
         }
@@ -2189,22 +2184,22 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
         }
 
-        prepareCrosstabFields($scope.reportFields);
+        preparePivotTabFields($scope.reportFields);
       };
 
       $scope.onGroupRowsByChange = function(newVal) {
         $scope.reporting.params.groupRowsBy = newVal;
-        prepareCrosstabFields($scope.reportFields);
+        preparePivotTabFields($scope.reportFields);
       };
 
       $scope.onGroupColByChange = function(newVal) {
         $scope.reporting.params.groupColBy = newVal;
-        prepareCrosstabFields($scope.reportFields);
+        preparePivotTabFields($scope.reportFields);
       };
 
       $scope.onSummaryFieldChange = function(newVal) {
         $scope.reporting.params.summaryField = newVal;
-        prepareCrosstabFields($scope.reportFields);
+        preparePivotTabFields($scope.reportFields);
       };
 
       var processFields = function(prefix, fields) {
