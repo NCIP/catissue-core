@@ -95,6 +95,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			cp.setShortTitle((String) row[1]);
 			cp.setTitle((String) row[2]);
 			cp.setPpidFormat((String) row[3]);
+			cp.setCpType((String)row[4]);
 			cps.add(cp);
 		}
 

@@ -165,8 +165,12 @@ var isParticipantUpdated = true;
       color: blue;
     }
     
-    .registered {
-      color: red;
+    .registered_Phase {
+      color: 0066FF;
+    }
+    
+    .registered_Arm {
+      color: #FF00FF;
     }
 	
 	.not-registered {
@@ -375,19 +379,22 @@ function hideCursor(){
     
     function handleCpView(participant, scgId, specimenId) {
       var scope = angular.element($("#CpViewController")).scope();
-
+	
       selParticipant = participant != null ? participant : scope.selectedParticipant;
       selectedScg = scgId != null ? {id: scgId, type: 'scg'} : undefined;
       selectedSpecimen = specimenId != null ? {id: specimenId, type: 'specimen'} : undefined;
 
       var treeReload = scope.treeReload == false ? false : true;
-      if (!treeReload) {
+	  
+      if (!treeReload && !scope.selectedSubCpId) {
         scope.treeReload = true;
         return;
-      }
+      }else if(scope.selectedSubCpId){
+	  return;
+	  }
 
       scope.onCpSelect({id: scope.selectedCp.id, text: scope.selectedCp.shortTitle}, false);
-      var scgTreeQ = scope.onParticipantSelect(selParticipant, selectedScg == undefined ? true : selectedScg);
+      var scgTreeQ = scope.onParticipantSelect(selParticipant, selectedScg == undefined ? true : selectedScg,true);
       scgTreeQ.then(function() { scope.handleDirectObjectLoad(false); });
     }
 </script>
