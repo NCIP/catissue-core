@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections.map.HashedMap;
-
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -30,8 +28,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent
 import com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogic;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
-import com.krishagni.catissueplus.core.common.Audit;
-import com.krishagni.catissueplus.core.common.Audit.Operation;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
@@ -179,6 +175,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	@Override
+	@PlusTransactional
 	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent event) {
 		List<Participant> list = participantLookupLogic.getMatchingParticipants(event.getParticipantDetail()); 
 //				daoFactory.getParticipantDao().getMatchingParticipants(event.getParticipantDetail());
