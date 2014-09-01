@@ -16,7 +16,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
@@ -44,7 +43,7 @@ public class AddCollectionProtocol
 		try
 		{
 			//ApplicationServiceProvider applicationServiceProvider = new ApplicationServiceProvider();
-			Utility.init();
+			//Utility.init();
 			CaCoreAPIService.initialize();
 
 			Site site = (Site) CaCoreAPIService.getObject(Site.class, "name", CaTIESProperties

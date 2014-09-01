@@ -1,17 +1,6 @@
 
 package edu.wustl.catissuecore.deidentifier.deid;
 
-import java.text.DateFormat;
-import java.util.Collection;
-
-import org.jdom.CDATA;
-import org.jdom.Element;
-
-import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class provides various utility methods which helps for the.
@@ -23,10 +12,10 @@ public class DeidUtils
 
 	/**
 	 * logger.
-	 */
+	 *//*
 	private static final Logger logger = Logger.getCommonLogger(DeidUtils.class);
 
-	/**
+	*//**
 	 * This method takes the identified report, its participant and converts all.
 	 * the information into an appropriate xml document
 	 * @param participant
@@ -37,7 +26,7 @@ public class DeidUtils
 	 *            Synthesized text
 	 * @return Element which contains other all the report element as
 	 *         child nodes
-	 */
+	 *//*
 	protected static Element buildReportElement(final Participant participant,
 			final IdentifiedSurgicalPathologyReport ispr, String sprText)
 	{
@@ -91,7 +80,7 @@ public class DeidUtils
 		return reportElement;
 	}
 
-	/**
+	*//**
 	 * This method converts the raw input information about participant into XML.
 	 * format
 	 * @param variable
@@ -103,7 +92,7 @@ public class DeidUtils
 	 * @return Elelment which contains input information
 	 * @throws Exception
 	 *             a generic exception occured while creating person element
-	 */
+	 *//*
 
 	protected static Element buildHeaderPersonElement(final String variable, final String value,
 			final String role) throws Exception
@@ -128,7 +117,7 @@ public class DeidUtils
 		return headerPersonElement;
 	}
 
-	/**
+	*//**
 	 * This method converts the raw header values into appropriate XML element.
 	 * @param variable
 	 *            Report Header
@@ -137,7 +126,7 @@ public class DeidUtils
 	 * @return Elelemnt that contains header data element
 	 * @throws Exception
 	 *             a generic exception occured while creating data element
-	 */
+	 *//*
 
 	protected static Element buildHeaderDataElement(final String variable, final String value)
 			throws Exception
@@ -160,12 +149,12 @@ public class DeidUtils
 		return headerDataElement;
 	}
 
-	/**
+	*//**
 	 * This method removes all the illegal XML characters from the input text.
 	 * @param sprText
 	 *            synthesized text
 	 * @return text without ellegal XML characters
-	 */
+	 *//*
 	public static String removeIllegalXmlCharacters(String sprText)
 	{
 		// illegal XML character
@@ -192,5 +181,5 @@ public class DeidUtils
 			ex.printStackTrace();
 		}
 		return result;
-	}
+	}*/
 }

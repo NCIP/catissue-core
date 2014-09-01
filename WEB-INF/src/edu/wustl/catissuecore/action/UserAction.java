@@ -13,7 +13,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.auth.exception.AuthFileParseException;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;

@@ -1,69 +1,5 @@
 package edu.wustl.catissuecore.interceptor;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.jms.JMSException;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-
-import edu.wustl.bulkoperator.util.BulkOperationException;
-import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
-import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCiderMessage;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenPosition;
-import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.cider.jaxb.domain.CollectionEventType;
-import edu.wustl.cider.jaxb.domain.CollectionProtocolRegistrationType;
-import edu.wustl.cider.jaxb.domain.CollectionProtocolType;
-import edu.wustl.cider.jaxb.domain.ObjectFactory;
-import edu.wustl.cider.jaxb.domain.ParticipantType;
-import edu.wustl.cider.jaxb.domain.SCGCollectionType;
-import edu.wustl.cider.jaxb.domain.SiteType;
-import edu.wustl.cider.jaxb.domain.SpecimenCharacteristicsType;
-import edu.wustl.cider.jaxb.domain.SpecimenCollectionGroupType;
-import edu.wustl.cider.jaxb.domain.SpecimenCollectionType;
-import edu.wustl.cider.jaxb.domain.SpecimenEventsType;
-import edu.wustl.cider.jaxb.domain.SpecimenMessage;
-import edu.wustl.cider.jaxb.domain.SpecimenPositionType;
-import edu.wustl.cider.jaxb.domain.SpecimenType;
-import edu.wustl.cider.jaxb.domain.StorageContainerType;
-import edu.wustl.cider.jaxb.domain.UserType;
-import edu.wustl.cider.jaxb.domain.impl.CollectionEventTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.CollectionProtocolRegistrationTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.CollectionProtocolTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SCGCollectionTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SiteTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SpecimenCharacteristicsTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SpecimenCollectionGroupTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SpecimenCollectionTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SpecimenEventsTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SpecimenPositionTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.SpecimenTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.StorageContainerTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.UserTypeImpl;
-import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.InterceptProcessorException;
 import edu.wustl.dao.interceptor.InterceptProcessor;
 import edu.wustl.dao.interceptor.SaveUpdateInterceptThread.eventType;
@@ -77,33 +13,45 @@ import edu.wustl.dao.interceptor.SaveUpdateInterceptThread.eventType;
 public class SpecimenInterceptor implements InterceptProcessor
 {
 
+	@Override
+	public void onError(String arg0, eventType arg1, Long arg2) throws InterceptProcessorException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void process(Object arg0, eventType arg1) throws InterceptProcessorException {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * Logger
-	 */
+	 *//*
 	private static Logger LOGGER = Logger.getCommonLogger(SpecimenInterceptor.class);
 
-	/**
+	*//**
 	 * User temp dir location.
-	 */
+	 *//*
 	private static final String TEMP_DIR_LOCATION=System.getProperty("java.io.tmpdir");
 
-	/**
+	*//**
 	 * temporary file name prefix.
-	 */
+	 *//*
 	private static final String FILE_NAME_PREFIX="specimen_";
 
 
-	/**
+	*//**
 	 * Package name for generated JAXB domain Objects.
-	 */
+	 *//*
 	private static final String JAXB_PACKAGE_NAME="edu.wustl.cider.jaxb.domain";
 
-	/**
+	*//**
 	 * This method does the processing for given obj which is inserted or updates using hibernate session.
 	 * @param obj object to be processed.
 	 * @param type event type occured.
 	 * @throws InterceptProcessorException exception.
-	 */
+	 *//*
 	public void process(Object obj, eventType type) throws InterceptProcessorException
 	{
 		// TODO Auto-generated method stub
@@ -194,11 +142,11 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 	}
 
-	/**
+	*//**
 	 * This method will write down the contents of the given fileName
 	 * @param fileName name of the file whose contents should be sent on queue.
 	 * @throws JMSException exception in queue handling.
-	 */
+	 *//*
 	private boolean writeMessage(String fileName) throws JMSException
 	{
 		return SpecimenWmqProcessor.getInstance().writeMessageToQueue(fileName);
@@ -206,13 +154,13 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 	}
 
-	/**
+	*//**
 	 * This method will set the properties for given jaxb domain object from the actual specimen object.
 	 * @param specimen specimen from which toread the properties
 	 * @param xmlParticiapant object which should be updated
 	 * @throws DatatypeConfigurationException exception
 	 * @throws ApplicationException
-	 */
+	 *//*
 	private void updateJaxbDomainObject(Specimen specimen,ParticipantType xmlParticiapant)
 			throws  ApplicationException
 	{
@@ -423,18 +371,20 @@ public class SpecimenInterceptor implements InterceptProcessor
 	}
 
 
-	/**
+	*//**
 	 * This method will handle the errors occured previously during the processing of some specimens.
 	 * It will again try to process those specimen.
 	 * @param objectType type or class of object
 	 * @param type type of event.
 	 * @param objectId object identifier.
 	 * @throws InterceptProcessorException exception.
-	 */
+	 *//*
 	public void onError(String objectType,eventType type,Long objectId) throws InterceptProcessorException
 	{
 		Specimen specimen = AppUtility.getSpecimen(objectId.toString());
 		process(specimen, type) ;
 
-	}
+	}*/
 }
+
+

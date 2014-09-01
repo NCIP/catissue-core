@@ -1,9 +1,7 @@
 package edu.wustl.catissuecore.interceptor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TimerTask;
-
+/*
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -17,11 +15,17 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.interceptor.SaveUpdateInterceptThread.eventType;
 import edu.wustl.dao.query.generator.ColumnValueBean;
-
+*/
 
 public class SpecimenDataBackloader extends TimerTask
 {
-	static
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	/*static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
@@ -34,11 +38,11 @@ public class SpecimenDataBackloader extends TimerTask
 			+"join catissue_collection_protocol cp on cp.identifier = cpr.collection_protocol_id and cp.is_empi_enable = 1 "
 			+"join catissue_participant participant on participant.identifier = cpr.participant_id and participant.empi_id is not null"
 			+ " where specimen.identifier not in (select specimen_id from catissue_specimen_message_log )";
-	/**
+	*//**
 	 * This method called to get JDBCDAO instance.
 	 * @return JDBCDAO instance.
 	 * @throws BizLogicException BizLogicException
-	 */
+	 *//*
 	protected JDBCDAO openJDBCSession() throws DAOException
 	{
 		JDBCDAO jdbcDAO = null;
@@ -50,11 +54,11 @@ public class SpecimenDataBackloader extends TimerTask
 			return jdbcDAO;
 	}
 
-	/**
+	*//**
 	 * This method called to close JDBC session.
 	 * @param jdbcDAO jdbcDAO
 	 * @throws BizLogicException BizLogicException
-	 */
+	 *//*
 	protected void closeJDBCSession(JDBCDAO jdbcDAO) throws DAOException
 	{
 
@@ -128,4 +132,4 @@ public class SpecimenDataBackloader extends TimerTask
 	}
 
 
-}
+*/}

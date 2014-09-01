@@ -7,16 +7,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.jdom.Element;
-import org.jdom.output.Format;
-
 import com.deid.JniDeID;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.deidentifier.AbstractDeidentifier;
-import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
@@ -130,7 +125,8 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	public DeidentifiedSurgicalPathologyReport getDeidentifiedReport(
 			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
-		this.logger.info("De-identification process started for "
+		return null;
+		/*this.logger.info("De-identification process started for "
 				+ identifiedReport.getId().toString());
 		// instantiate document
 		final org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element(
@@ -176,7 +172,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 				+ identifiedReport.getId().toString());
 
 		return deidentifiedReport;
-	}
+*/	}
 
 	/**
 	 * Method to create and initialize object of.

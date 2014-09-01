@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
-import javax.jms.JMSException;
 import javax.mail.MessagingException;
 import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
@@ -22,8 +20,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
-import edu.common.dynamicextensions.nutility.BOUtil;
-import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
 import krishagni.catissueplus.csd.CatissueUserContextProviderImpl;
 import krishagni.catissueplus.util.FormProcessor;
 import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
@@ -32,11 +28,13 @@ import org.apache.commons.io.FilenameUtils;
 
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
+import edu.common.dynamicextensions.nutility.BOUtil;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
+import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -49,8 +47,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
-import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
@@ -76,19 +72,18 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.util.DAOUtility;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 /**
  *
- * @author aarti_sharma
+ * @author aarti_sharma 
  *
  * */
 public class CatissueCoreServletContextListener implements ServletContextListener
 {
 
-	/**
+	/**	
 	 * CatissueCoreServletContextListener Logger.
 	 */
 	private static final Logger logger = Logger
@@ -126,7 +121,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			initCiderIntegration();
 			//QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
 			if (XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
 			{
@@ -187,18 +181,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
  		PathConfig.intialize(path);
 	}
 
-	
-	private void initCiderIntegration()
-	{
-		if (XMLPropertyHandler.getValue("CiderWmqEnabled").equalsIgnoreCase("true"))
-		{
-			SpecimenWmqProcessor.getInstance();
-			Timer dataBackloader = new Timer(true);
-			dataBackloader.scheduleAtFixedRate(new SpecimenDataBackloader(),
-					DAOUtility.getStartTimeForTodaysDate("23:30"), (24 * 60 * 60 * 1000));
-		}
-	}
-
 	/**
 	 * Inite mpi.
 	 */
@@ -209,7 +191,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			checkEMPIAdminUser();
 			RaceGenderCodesProperyHandler.init("HL7MesRaceGenderCodes.xml");
 			participantManagerUtility.registerWMQListener();
-
 			try
 			{
 				ParticipantManagerUtility.initialiseParticiapntMatchScheduler();
@@ -220,11 +201,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				logger.error(excep.getMessage(), excep);
 			}
 
-		}
-		catch (JMSException excep)
-		{
-			logger.error(" EMPI : ERROR WHILE REGISTERING WMQ LISTENER");
-			logger.error(excep.getMessage(), excep);
 		}
 		catch (Exception excep)
 		{
@@ -467,7 +443,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		try
 		{
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			SpecimenWmqProcessor.cleanup();
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			executerImpl.shutdown();
 

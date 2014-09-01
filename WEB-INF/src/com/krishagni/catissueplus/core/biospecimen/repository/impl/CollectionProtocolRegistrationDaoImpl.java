@@ -1,9 +1,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import gov.nih.nci.logging.api.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +20,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
+
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 @Repository("collectionProtocolRegistrationDao")
 public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<CollectionProtocolRegistration>

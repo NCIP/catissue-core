@@ -16,7 +16,6 @@ import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.StopServer;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -97,7 +96,7 @@ public class DeIDPipelineManager
 	 */
 	private void initDeid() throws Exception
 	{
-		Utility.init();
+	//	Utility.init();
 		// Configuring CSV logger
 		CSVLogger.configure(CaTIESConstants.LOGGER_DEID_SERVER);
 		// Initializing caCoreAPI instance
