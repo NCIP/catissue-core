@@ -1,8 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td style="padding-left:6px;padding-top:6px"><img src="images/uIEnhancementImages/caTissue_logo.png"
-            alt="caTissue Suite"/>
+        <td style="padding-left:6px;padding-top:6px"><a href="http://www.openspecimen.org" target="_blank"><img src="images/uIEnhancementImages/caTissue_logo.png"alt="caTissue Suite"/></a>
             <!--span class="black_ar"><bean:message key="application.environment" /></span-->
         </td>
         <td >
