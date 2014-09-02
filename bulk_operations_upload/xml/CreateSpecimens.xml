@@ -28,8 +28,8 @@
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"
 			  
 			 roleName="specimenPosition"   >
-				<attribute name="positionDimensionOne" csvColumnName="Position One"   />
-				<attribute name="positionDimensionTwo" csvColumnName="Position Two"   />
+				<attribute name="positionDimensionOneString" csvColumnName="Position One"   />
+				<attribute name="positionDimensionTwoString" csvColumnName="Position Two"   />
 				<referenceAssociation
 				className="edu.wustl.catissuecore.domain.StorageContainer"
 				  
@@ -78,5 +78,6 @@
 		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />
 		<attribute name="lineage" csvColumnName="Lineage"   />
 		<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
+		<attribute name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration" />
 	</BulkOperationClass>
 </BulkOperationMetadata>
