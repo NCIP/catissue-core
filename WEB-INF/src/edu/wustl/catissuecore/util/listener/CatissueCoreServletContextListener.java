@@ -26,8 +26,11 @@ import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
+
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
+import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.BOUtil;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
@@ -166,6 +169,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 						
 			DEApp.init(ds, dir, dateFomat);
 			initQueryPathsConfig();            
+			ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
 			logger.info("Initialization complete");									
 		}
 		catch (final Exception e)
