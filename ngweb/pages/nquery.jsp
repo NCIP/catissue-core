@@ -1198,11 +1198,10 @@
         <div style="height: 30%;" ng-if="modalData.sharedWithAll != 1 && modalData.sharedWithAll != true">
           <label>Share folder with following users</label>
           <div style="height: 80%; overflow: auto;">
-            <ka-select multiple
-              data-placeholder="Users" style="width: 100%;"
-              options="modalData.users" option-id="id" option-value="userName"
-              selected="modalData.sharedWith">
-            </ka-select>
+            <ka-search ng-model="modalData.sharedWith" data-placeholder="Users"
+              on-initselectionfn="initSelectedUsers" on-query="searchUser" multiple
+              on-select="onUserSelect(selected)" style="width:100%;">
+            </ka-search>
           </div>
         </div>
       </div>

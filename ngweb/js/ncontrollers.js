@@ -1117,7 +1117,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           queries: function() {
             return $scope.queryData.selectedQueries;
           },
-          folderId: undefined
+          folder: undefined
         }   
       });
       
@@ -1139,8 +1139,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           queries: function() {
             return [];
           },
-          folderId: function() {
-            return folder.id;
+          folder: function() {
+            return QueryService.getFolder(folder.id);
           }
         }
       });
@@ -1168,25 +1168,62 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         });
     };
 
-    var AddEditQueryFolderCtrl = function($scope, $modalInstance, users, queries, folderId) {
+    var AddEditQueryFolderCtrl = function($scope, $modalInstance, users, queries, folder) {
       $scope.modalData = {
-        users: users,
         queries: queries,
         sharedWith: [],
-        folderId: folderId
+        folderId: folder.id
       };
 
-      if (folderId) {
-        QueryService.getFolder(folderId).then(
-          function(folderDetail) {
-            $scope.modalData.folderName = folderDetail.name;
-            $scope.modalData.sharedWith = folderDetail.sharedWith;
-            $scope.modalData.sharedWithAll = folderDetail.sharedWithAll;
-            $scope.modalData.queries = folderDetail.queries;
-          }
-        );
+      if (folder) {
+        $scope.modalData.folderName = folder.name;
+        $scope.modalData.sharedWith = folder.sharedWith;
+        $scope.modalData.sharedWithAll = folder.sharedWithAll;
+        $scope.modalData.queries = folder.queries;
       }
 
+      var userList = [];
+      for (var i = 0; i < users.length; ++i) {
+        userList.push({id: users[i].id, text: users[i].userName}); 
+      }
+
+      $scope.initSelectedUsers = function(elem, callback) {
+        var sharedWith = $scope.modalData.sharedWith;
+        if (!sharedWith || sharedWith.length == 0) {
+          return;
+        }
+
+        var result = [];
+        for (var i = 0; i < sharedWith.length; ++i) {
+          if (sharedWith[i].firstName || sharedWith[i].lastName) {
+            result.push({id: sharedWith[i].id, text: sharedWith[i].firstName + ' ' + sharedWith[i].lastName});
+          } else if (sharedWith[i].text) {
+            result.push(sharedWith[i]);
+          }
+        }
+        
+        callback(result);
+      };
+
+      $scope.searchUser = function(unwanted, term, callback) {
+        if (!term) {
+          callback(userList);
+          return;
+        }
+
+        UsersService.getAllUsers({searchString: term}).then(
+          function(users) {
+            for (var i = 0; i < users.length; ++i) {
+              users[i].text = users[i].firstName + " " + users[i].lastName;
+            }
+            callback(users);
+          }
+        );
+      };
+
+      $scope.onUserSelect = function(selected) {
+      };
+ 
       $scope.saveOrUpdateFolder = function () {
         var sharedWith = [];
         if (!$scope.modalData.sharedWithAll) {
@@ -1201,7 +1238,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
 
         var folderDetail = {
-          id: folderId,
+          id: $scope.modalData.folderId,
           name: $scope.modalData.folderName,
           sharedWithAll: $scope.modalData.sharedWithAll,
           sharedWith: sharedWith,

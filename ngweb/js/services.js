@@ -135,14 +135,14 @@ angular.module('plus.services', [])
     var successfn = function(result) { return result.data; };
 
     return {
-      getAllUsers: function() {
+      getAllUsers: function(params) {
         return Utility.get($http, baseUrl, function(result) {
           if (result.data) {
             return result.data.users;
           }
 
           return [];
-        });
+        }, params);
       }
     };
   })

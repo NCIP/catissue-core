@@ -61,7 +61,8 @@ angular.module("plus.directives", [])
 
       link: function(scope, element, attrs) {
         var timeout = undefined;
-        control = new Select2Search(element);
+        var opts = {multiple: attrs.multiple != undefined};
+        control = new Select2Search(element, opts);
 
         scope.select = control;//new Select2Search(element);
         control
@@ -79,7 +80,12 @@ angular.module("plus.directives", [])
             }, timeInterval);
           })
           .onChange(function(option) {
+            scope.elem  = option;
             scope.onSelect({selected: option});
+
+            if (!scope.$$phase) {
+              scope.$apply();
+            }
           })
 	  .onInitSelection(function(elem, callback) {
             scope.initSelection()(elem, callback);
@@ -87,7 +93,9 @@ angular.module("plus.directives", [])
           .render();
 
         scope.$watch('elem', function(selected) {
-          if (!selected || !selected.id) {
+          if (selected instanceof Array) {
+            control.setValue(selected);
+          } else if (!selected || !selected.id) {
             control.setValue('');
           } else {
             control.setValue(selected.id);

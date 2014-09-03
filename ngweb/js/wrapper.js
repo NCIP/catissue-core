@@ -124,7 +124,7 @@ var Select2 = function(element, config) {
   };
 };
 
-var Select2Search = function(element) {
+var Select2Search = function(element, opts) {
   this.element = element;
   this.queryFn = null;
   this.onChangeFn = null;
@@ -135,9 +135,8 @@ var Select2Search = function(element) {
   this.element.bind("change", function(e) {
     e.stopImmediatePropagation();
     var option = that.element.select2('data');
-    var selected = {id: option.id, text: option.text};
     if (that.onChangeFn) {
-      that.onChangeFn(selected);
+      that.onChangeFn(option);
     }
   });
 
@@ -145,6 +144,7 @@ var Select2Search = function(element) {
     var that = this;
     this.element.select2({
       minimumInputLength: 0,
+      multiple: opts.multiple == true,
       query: function(query) {
         that.queryFn(query.term, function(result){
         query.callback({results: result});
