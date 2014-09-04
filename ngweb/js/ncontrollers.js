@@ -1172,7 +1172,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.modalData = {
         queries: queries,
         sharedWith: [],
-        folderId: folder.id
+        folderId: folder ? folder.id : undefined
       };
 
       if (folder) {
