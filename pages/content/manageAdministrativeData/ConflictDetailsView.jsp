@@ -29,9 +29,9 @@
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
-	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
-	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
-	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
+	<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxcommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 

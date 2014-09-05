@@ -12,28 +12,28 @@
 <%@ page import="javax.servlet.*"%>
 <%@ page import="edu.wustl.bulkoperator.jobmanager.Constants"%>
 <LINK href="css/styleSheet.css" type="text/css" rel="stylesheet">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css"/>
 
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css"/>
-  <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css"/>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css"/>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css"/>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_skins.css"/>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_blue.css"/>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_black.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
+  <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid_skins.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_blue.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_black.css"/>
 
 
 
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxgrid_srnd.js"></script>
-<script  src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
-<script  src="dhtmlx_suite/js/connector.js"></script>
-<script  src="dhtmlx_suite/ext/dhtmlxgrid_splt.js"></script>
-<script  src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script  src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_srnd.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_splt.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
 
 
 

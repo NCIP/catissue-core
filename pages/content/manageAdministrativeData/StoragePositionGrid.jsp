@@ -4,13 +4,13 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <head>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css"/>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css"/>
-<link rel="stylesheet" type="text/css"  href="dhtmlx_suite/css/dhtmlxcombo.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css"/>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css"/>
+<link rel="stylesheet" type="text/css"  href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css"/>
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxdataview.css">  
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxDataView/codebase/dhtmlxdataview.css">  
 <style>
 body { overflow:auto; }
 td {
@@ -19,14 +19,14 @@ td {
 }
 </style>
 
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/ajax.js" type="text/javascript"></script>
-<script src="dhtmlx_suite/js/dhtmlxdataview.js" type="text/javascript"></script>
+<script src="dhtmlxSuite_v35/dhtmlxDataView/codebase/dhtmlxdataview.js" type="text/javascript"></script>
 </head>
 
 <%

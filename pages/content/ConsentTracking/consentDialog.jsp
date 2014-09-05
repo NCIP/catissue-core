@@ -142,11 +142,11 @@ var useFunction = "derivedSpecimenGrid";
 		
 	</head>
 		<body >
-		<script  src="../../../dhtml_comp/js/dhtmlXCommon.js"></script>
-		<script  src="../../../dhtml_comp/js/dhtmlXGrid.js"></script>		
-		<script  src="../../../dhtml_comp/js/dhtmlXGridCell.js"></script>	
-		<script  src="../../../dhtml_comp/js/dhtmlXGrid_mcol.js"></script>	
-		<link rel="STYLESHEET" type="text/css" href="../../../dhtml_comp/css/dhtmlXGrid.css"/> 
+		<script  src="../../../dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcommon.js"></script>
+		<script  src="../../../dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>		
+		<script  src="../../../dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>	
+		<script  src="../../../dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js"></script>	
+		<link rel="STYLESHEET" type="text/css" href="../../../dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/> 
 		<link href="../../../css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
 		

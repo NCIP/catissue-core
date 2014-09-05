@@ -6,28 +6,28 @@
 <%@ page language="java" isELIgnored="false"%>
 <script src="jss/ajax.js"></script>	   
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxToolbar/codebase/skins/dhtmlxtoolbar_dhx_blue.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css">
 <link rel="STYLESHEET" type="text/css" href="css/alretmessages.css">
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtabbar_start.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_mcol.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxToolbar/codebase/dhtmlxtoolbar.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar_start.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
 <script src="jss/json2.js" type="text/javascript"></script>
 <c:set var="tr_white_color" value="tr_alternate_color_white" />
 <c:set var="tr_grey_color" value="tr_alternate_color_lightGrey" />
@@ -292,7 +292,7 @@ function switchToOlderView()
 					       </div>
 						</td>
 						<script>
-								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+								  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 								  user_combo = new dhtmlXComboFromSelect("requestorName");
 								  user_combo.setSize(330);
 								  user_combo.enableFilteringMode(true);
@@ -324,7 +324,7 @@ function switchToOlderView()
 					</td>
 
 					<script>
-								  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+								  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 								  site_combo = new dhtmlXComboFromSelect("siteName");
 								  site_combo.setSize(330);
 								  site_combo.enableFilteringMode(true);
@@ -439,7 +439,7 @@ function loadTab()
 	tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	tabbar.setHrefMode("iframes-on-demand");	
 	tabbar.setSkin('dhx_skyblue');
-	tabbar.setImagePath("dhtmlx_suite/imgs/");
+	tabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 	tabbar.addTab("SimpleViewDiv", "Specimens", "100px");	
 	tabbar.addTab("ConsentViewDiv", "Consents", "100px");
 	tabbar.enableAutoSize(false,true);
@@ -492,7 +492,7 @@ function init_grid()
 	var funcName = "rowClick";
 
 	mygrid = new dhtmlXGridObject('gridbox');
-	mygrid.setImagePath("dhtmlx_suite/imgs/");
+	mygrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 	mygrid.setHeader("Specimen Label,Specimen Class,Specimen Type,Specimen Position,Available Qty,Requested Qty,Distributed Qty,Status,Comments,,,Error");
    	mygrid.setColumnHidden(9,true);
    	mygrid.setColumnHidden(10,true);

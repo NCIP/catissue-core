@@ -3,15 +3,15 @@
 
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<script	src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script	src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_extra.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
+<script	src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script	src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script	src="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_extra.js"></script>
+<script	src="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_whp.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css" />
 
-<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+<script src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
 
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <LINK type=text/css rel=stylesheet href="css/participantEffects.css" />

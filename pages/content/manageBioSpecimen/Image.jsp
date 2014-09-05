@@ -9,23 +9,23 @@
 var imageDataJson = {};
 var equipDataJson = {};
 
-window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 
 </script>
 <script>
 
-window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 
 </script>
 <script src="jss/json2.js" type="text/javascript"></script>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxcombo_whp.js">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_whp.js">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
 
-<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script  src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
 
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 
@@ -37,11 +37,11 @@ window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
 
 <!------------------------------------------------------------------------------->
 
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
 
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"    src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"    src="jss/caTissueSuite.js"></script>

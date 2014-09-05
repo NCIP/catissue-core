@@ -2,9 +2,9 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.tree.SpecimenTreeNode"%>
 
-<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
-<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
-<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxcommon.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/OrderingSystem.js"></script>
 
@@ -95,7 +95,7 @@
 		document.getElementById("treebox").innerHTML ="";
 
 		tree=new dhtmlXTreeObject("treebox","100%","100%",0);
-		tree.setImagePath("dhtml_comp/imgs/");		
+		tree.setImagePath("dhtmlxSuite_v35/dhtmlxTree/codebase/imgs/");		
 		//Call function obtainUserData() when any node is double clicked.
 		tree.setOnDblClickHandler(obtainUserData);	
 		<% 

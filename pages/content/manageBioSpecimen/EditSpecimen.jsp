@@ -9,7 +9,7 @@
 
 <script>
     var imgsrc="images/";
-    window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+    window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 </script>
 <style>
 .errorStyleOn{
@@ -82,7 +82,7 @@
 </style>
 <script>
     var imgsrc="images/";
-    window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+    window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 </script>
 <!----------------------------------------------------------------------->
 <body onload="LoadSCGTabBar('${requestScope.operation}');"> 

@@ -20,11 +20,11 @@
   text-align:left;
 }
 	</style>
-	<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtml_comp/css/dhtmlXGrid.css"> 
+	<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"> 
 	
-	<script src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXCommon.js"></script>
-	<script src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid.js"></script> 
-	<script src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGridCell.js"></script> 
+	<script src="<%=request.getContextPath()%>/dhtmlxSuite_v35/custom/dhtmlXCommon.js"></script>
+	<script src="<%=request.getContextPath()%>/dhtmlxSuite_v35/custom/dhtmlXGrid.js"></script> 
+	<script src="<%=request.getContextPath()%>/dhtmlxSuite_v35/custom/dhtmlXGridCell.js"></script> 
 	
 	<% TitliTableMapper mapper = TitliTableMapper.getInstance(); %>
 	
@@ -44,7 +44,7 @@
 			//mygrid = new dhtmlXGridObject();
 			//mygrid.attachToObject(document.body);
 			 
-			this.grid.setImagePath("dhtml_comp/imgs/"); 
+			this.grid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/"); 
 			this.grid.setHeader("Entity,Matches"); 
 			this.grid.setInitWidths("300,100"); 
 			this.grid.setColAlign("left,left"); 

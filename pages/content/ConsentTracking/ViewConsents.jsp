@@ -18,21 +18,21 @@
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
-<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
 <script src="jss/fileUploader.js" type="text/javascript"></script>
 
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
 
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <script src="jss/script.js" type="text/javascript"></script>
 
-<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+<script src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
 
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script src="jss/json2.js" type="text/javascript"></script>
@@ -124,7 +124,7 @@ function checkDisable(){
 												</logic:iterate>
 											</select>
 											<script>
-												 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+												 window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 												  var witness = new dhtmlXCombo("witnessIdCombo","witnessIdCombo","100px");
 												  //response_combo.enableFilteringMode(true);
 												  witness.setSize(200);
@@ -219,7 +219,7 @@ function checkDisable(){
 										</c:forEach>	
 										</select>
 										<script>
-										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+										  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 										  var response_combo = new dhtmlXCombo("${consentTierDTO.id}","${consentTierDTO.id}","100px");
 										  //response_combo.enableFilteringMode(true);
 										  response_combo.setSize(200);
@@ -247,7 +247,7 @@ function checkDisable(){
 										</c:forEach>	
 									</select>
 									<script>
-										  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+										  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 										  var response_combo1 = new dhtmlXCombo("${consentTierDTO.id}","${consentTierDTO.id}","100px");
 										  //response_combo.enableFilteringMode(true);
 										  response_combo1.setSize(200);

@@ -13,11 +13,11 @@
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-<script language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxcommon.js"></script>
-	<script  language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxgrid.js"></script> 
-	<script language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script> 
-	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
-	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script  language="JavaScript" type="text/javascript"src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script> 
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script> 
+	<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
+	<script language="JavaScript" type="text/javascript" src='dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_export.js'></script>
 </head>
 
 <%
@@ -618,7 +618,7 @@ for(var cnt= 0 ;cnt< headerStringArray.length;cnt++){
 	}
 }
 
-//grid.setImagePath("dhtml_comp/imgs/"); 
+//grid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/"); 
 grid.setHeader(headerString); 
 if(headerStringArray.length>10){
 grid.setInitWidths(widthString);

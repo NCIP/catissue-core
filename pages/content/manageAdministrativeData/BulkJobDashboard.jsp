@@ -8,17 +8,17 @@
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <head>
 <link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/css/dhtmlxgrid.css" />
+	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css" />
 <link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css" />
+	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css" />
 <script language="JavaScript" type="text/javascript"
 	src="jss/bulkOperatorScripts.js"></script>
 <script type="text/javascript" src="jss/bulkOperatorAjax.js"></script>
 <link href="css/bulkOperator.css" rel="stylesheet" type="text/css" />
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxgrid_mcol.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js"></script>
 <script>
 	var xmlString='${requestScope.msgBoardXml}';
 	var latestRowId='';
@@ -167,7 +167,7 @@
 						<div id="gridbox" width="100%" height="340px"></div>
 						<script>
 			mygrid = new dhtmlXGridObject('gridbox');
-				mygrid.setImagePath("dhtmlx_suite/imgs/");
+				mygrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 				mygrid.setSkin("dhx_skyblue");
 				mygrid.init();
 				mygrid.setEditable("FALSE");

@@ -29,11 +29,11 @@
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <link rel="stylesheet" type="text/css" href="css/login.css" />
 <link rel="stylesheet" type="text/css" href="css/login-theam.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
 
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
 
 </head>
 
@@ -139,7 +139,7 @@ function disableIdpDetails(disableStatus)
 								<script>
 									  //common init code
 									 // dhtmlx.skin ='dhx_skyblue';
-									  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+									  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 									  target_combo = new dhtmlXCombo("target_combo","target_combo","100px");
 									  target_combo.enableFilteringMode(true);
 									  target_combo.setSize(200);
@@ -233,7 +233,7 @@ function disableIdpDetails(disableStatus)
 						<script>
 							  //common init code
 							  //dhtmlx.skin ='dhx_skyblue';
-							  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 							  var state_combo = new dhtmlXCombo("state_combo","state_combo","100px");
 							  state_combo.enableFilteringMode(true);
 							  state_combo.setSize(200);
@@ -258,7 +258,7 @@ function disableIdpDetails(disableStatus)
 							  <script>
 							  //common init code
 							  //dhtmlx.skin ='dhx_skyblue';
-							  window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							  window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 							  var country_combo = new dhtmlXCombo("country_combo","country_combo","100px");
 							  country_combo.enableFilteringMode(true);
 							  country_combo.setSize(200);

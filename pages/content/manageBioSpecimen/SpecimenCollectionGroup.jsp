@@ -23,7 +23,7 @@
 <script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
 
 <script>
-      window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+      window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 </script>
 
 <script src="jss/script.js" type="text/javascript"></script>

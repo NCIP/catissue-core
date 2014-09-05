@@ -13,22 +13,22 @@
 <%@ include file="/pages/content/common/AdminCommonCode.jsp"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<script language="JavaScript"  type="text/javascript" src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script  language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxdataprocessor.js"></script>
-<script  src="dhtmlx_suite/ext/dhtmlxgrid_export.js"></script>
-<script  language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
-<script   language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script  language="JavaScript" type="text/javascript"  src="dhtmlx_suite/ext/dhtmlxgrid_srnd.js"></script>
-<script  src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css">
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script  language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script  language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/dhtmlxdataprocessor.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_export.js"></script>
+<script  language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
+<script   language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script  language="JavaScript" type="text/javascript"  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_srnd.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
 <%
 String header;
 	String alias = (String) request.getParameter("aliasName");
@@ -142,7 +142,7 @@ var ColCount = ${requestScope.ColCount};
 	<script>
 
 	 mygrid = new dhtmlXGridObject("gridbox1");
-	 mygrid.setImagePath("dhtmlx_suite/imgs/");
+	 mygrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 	 mygrid.setHeader(columns);
 	 //mygrid.setInitWidths("200,200");
 	 mygrid.setInitWidthsP(colWidth);
