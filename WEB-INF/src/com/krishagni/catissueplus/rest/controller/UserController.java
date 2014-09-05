@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,16 +68,31 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
-	public List<UserSummary> getAllUsers() {
+	public Map<String, Object> getAllUsers(
+			@RequestParam(value = "start", required = false, defaultValue = "0") int startAt,
+			@RequestParam(value = "max", required = false, defaultValue = "100") int maxRecords,
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
+            @RequestParam(value = "searchString", required = false, defaultValue = "") String searchString) {
+		
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
+		req.setStartAt(startAt);
+		req.setMaxRecords(maxRecords);
+		req.setCountReq(countReq);
+		req.setSearchString(searchString);
+		
 		AllUsersEvent resp = userService.getAllUsers(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUsers();
+		if (resp.getStatus() != EventStatus.OK) {
+			return null;
 		}
-
-		return null;
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (resp.getCount() != null) {
+			result.put("count", resp.getCount());
+		}
+		
+		result.put("users", resp.getUsers());
+		return result;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

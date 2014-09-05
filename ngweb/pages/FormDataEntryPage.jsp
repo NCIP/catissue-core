@@ -180,6 +180,9 @@
     <script src="ngweb/js/forms-service.js" type="text/javascript"></script>
     <script src="ngweb/js/dataentry-controller.js" type="text/javascript"></script>
     <script src="ngweb/js/dataentry-app.js" type="text/javascript"></script>
+    <script src="ngweb/external/de/js/de-field-manager.js" type="text/javascript"></script>
     <script src="ngweb/external/de/js/de-form.js" type="text/javascript"></script>
+
+    <script src="ngweb/js/de-users.js" type="text/javascript"></script>
   </body>
 </html>

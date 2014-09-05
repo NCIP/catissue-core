@@ -130,13 +130,20 @@ angular.module('plus.services', [])
       }
     };
   })
+
   .factory('UsersService', function($http) {
     var baseUrl         = '/openspecimen/rest/ng/users/';
     var successfn = function(result) { return result.data; };
 
     return {
       getAllUsers: function() {
-        return Utility.get($http, baseUrl, successfn);
+        return Utility.get($http, baseUrl, function(result) { 
+          if (result.status == 200) {
+            return result.data.users;
+          }
+
+          return [];
+        });
       }
     };
   })

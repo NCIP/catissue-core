@@ -70,14 +70,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public AllUsersEvent getAllUsers(ReqAllUsersEvent req) {
-		List<User> users = daoFactory.getUserDao().getAllUsers();
-		List<UserSummary> result = new ArrayList<UserSummary>();
-
-		for (User user : users) {
-			result.add(UserSummary.fromUser(user));
+		int startAt = req.getStartAt() < 0 ? 0 : req.getStartAt();
+		int maxRecords = req.getMaxRecords() <= 0 ? 100 : req.getMaxRecords();
+		
+		List<UserSummary> result = daoFactory.getUserDao().getAllUsers(startAt, maxRecords, req.getSearchString());
+		Long count = null;
+		
+		if (req.isCountReq()) {
+			count = daoFactory.getUserDao().getUsersCount(req.getSearchString());
 		}
-
-		return AllUsersEvent.ok(result);
+		
+		return AllUsersEvent.ok(result, count);
 	}
 
 	@Override

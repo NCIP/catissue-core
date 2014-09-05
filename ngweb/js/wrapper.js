@@ -128,14 +128,12 @@ var Select2Search = function(element) {
   this.element = element;
   this.queryFn = null;
   this.onChangeFn = null;
-  this.setValue = null;
   this.initSelectionFn = null;
 
   var that = this;
   this.element.bind("change", function(e) {
     e.stopImmediatePropagation();
-    var option = that.element.select2('data');
-    var selected = {id: option.id, text: option.text};
+    var selected = that.element.select2('data');
     if (that.onChangeFn) {
       that.onChangeFn(selected);
     }
@@ -146,10 +144,10 @@ var Select2Search = function(element) {
     this.element.select2({
       minimumInputLength: 0,
       query: function(query) {
-        that.queryFn(query.term, function(result){
-        query.callback({results: result});
-	})},
-	
+        that.queryFn(query.term, function(result) {
+          query.callback({results: result});
+	})
+      },
       initSelection: function(element, callback) {
         that.initSelectionFn(element,callback);
       }
@@ -173,9 +171,18 @@ var Select2Search = function(element) {
     return this;
   },
 
-  this.setValue = function(value){
+  this.setValue = function(value) {
     $(this.element).select2("val", value);
     return this;
+  },
+
+  this.getValue = function() {
+    var data = $(this.element).select2('data');
+    if (!data) {
+      return {id: '', text: ''};
+    }
+
+    return {id: data.id, text: data.text};
   }
 };
 

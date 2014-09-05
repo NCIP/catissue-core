@@ -1,24 +1,55 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.util.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
-
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<User> getAllUsers() {
-		return sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_USERS).list();
+	public List<UserSummary> getAllUsers(int startAt, int maxRecords, String ... searchString) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(User.class, "u")
+				.add(Restrictions.or(
+						Restrictions.eq("u.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()),
+						Restrictions.eq("u.activityStatus", Status.ACTIVITY_STATUS_CLOSED.getStatus())));
+		
+		addSearchConditions(criteria, searchString);
+		addProjectionFields(criteria);
+		criteria.addOrder(Order.desc("u.id"));
+		addLimits(criteria, startAt, maxRecords);
+		return getUsers(criteria);
 	}
 
+	@Override
+	public Long getUsersCount(String ... searchString) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+				.createCriteria(User.class, "u")
+				.add(Restrictions.or(
+						Restrictions.eq("u.activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()),
+						Restrictions.eq("u.activityStatus", Status.ACTIVITY_STATUS_CLOSED.getStatus())))
+				.setProjection(Projections.countDistinct("u.id"));
+		
+		addSearchConditions(criteria, searchString);
+		return ((Number)criteria.uniqueResult()).longValue();
+	}
+	
 	@Override
 	public User getUser(Long id) {
 		return (User) sessionFactory.getCurrentSession().get(User.class, id);
@@ -94,6 +125,58 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
+	private void addSearchConditions(Criteria criteria, String[] searchString) {
+		if (searchString == null || searchString.length == 0 || StringUtils.isEmpty(searchString[0])) {
+			return;
+		}
+		
+		Disjunction srchCond = Restrictions.disjunction();
+		srchCond.add(Restrictions.or(
+				Restrictions.or(
+				Restrictions.ilike("u.firstName", searchString[0], MatchMode.ANYWHERE),
+				Restrictions.ilike("u.lastName", searchString[0], MatchMode.ANYWHERE)),
+				Restrictions.ilike("u.loginName", searchString[0], MatchMode.ANYWHERE)
+				));
+		criteria.add(srchCond);
+	}
+	
+	private void addProjectionFields(Criteria criteria) {
+		criteria.setProjection(Projections.distinct(
+				Projections.projectionList()
+					.add(Projections.property("u.id"), "id")
+					.add(Projections.property("u.firstName"), "firstName")
+					.add(Projections.property("u.lastName"), "lastName")
+					.add(Projections.property("u.loginName"), "loginName")
+		));		
+	}
+	
+	private void addLimits(Criteria criteria, int start, int maxRecords) {
+		criteria.setFirstResult(start <= 0 ? 0 : start);
+		if (maxRecords > 0) {
+			criteria.setMaxResults(maxRecords);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<UserSummary> getUsers(Criteria criteria) {
+		List<UserSummary> result = new ArrayList<UserSummary>();
+		List<Object[]> rows = criteria.list();				
+		for (Object[] row : rows) {			
+			result.add(getUserSummary(row));			
+		}
+		
+		return result;		
+	}
+
+	private UserSummary getUserSummary(Object[] row) {
+		UserSummary userSummary = new UserSummary();
+		userSummary.setId((Long)row[0]);
+		userSummary.setFirstName((String)row[1]);
+		userSummary.setLastName((String)row[2]);
+		userSummary.setLoginName((String)row[3]);
+		return userSummary;		
+	}
+	
 	private static final String FQN = User.class.getName();
 
 	private static final String GET_USER_BY_ID_AND_DOMAIN = FQN + ".getUserByIdAndDomain";
