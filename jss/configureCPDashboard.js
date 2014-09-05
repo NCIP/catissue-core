@@ -2,7 +2,7 @@ var dashboardItemGrid, dashboardItemGridCombo, dashboardItemRowCounter = 1;
 var associationIds = "";
 function doCPDashboardInitGrid() {
 dashboardItemGrid = new dhtmlXGridObject('cpDashboard_container');
-	dashboardItemGrid.setImagePath("dhtmlx_suite/imgs/");
+	dashboardItemGrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 	dashboardItemGrid.setSkin("dhx_skyblue");
 	dashboardItemGrid
 			.setHeader(",Sequence Order,Dashboard Item,Display Label,Delete");

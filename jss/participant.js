@@ -223,7 +223,7 @@
 			    {	
 				participantTabbar = new dhtmlXTabBar("participant_tabbar", "top",25);
 				participantTabbar.setSkin('default');
-				participantTabbar.setImagePath("dhtmlx_suite/imgs/");
+				participantTabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 				participantTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 
 				participantTabbar.addTab("editParticipantTab",'<span style="font-size:13px"> Edit Participant </span>', "150px");

@@ -485,7 +485,7 @@ function loadSCGTabbar()
 {
 	scgTabbar = new dhtmlXTabBar("SCG_tabbar", "top",25);
 	scgTabbar.setSkin('default');
-	scgTabbar.setImagePath("dhtmlx_suite/imgs/");
+	scgTabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 	scgTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 	if("edit" == operation)
 	{

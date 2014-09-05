@@ -242,7 +242,7 @@ function loadContainerValues(isVirtuallyLocatedValue)
 function doInitGrid()
 {
 	grid = new dhtmlXGridObject('mygrid_container');
-	grid.setImagePath("dhtmlx_suite/dhtml_pop/imgs/");
+	grid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
  	grid.setHeader("My Specimen Lists");
  	grid.setInitWidths("175");
  	grid.setColAlign("left");
@@ -284,7 +284,7 @@ function loadSpecimenTabbarForEdit()
 	
 	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
 	specimenTabbar.setSkin('default');
-	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
+	specimenTabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 	
 	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
@@ -328,7 +328,7 @@ function loadSpecimenTabbarForAdd()
 {
 	specimenTabbar = new dhtmlXTabBar("specimen_tabbar", "top",25);
 	specimenTabbar.setSkin('default');
-	specimenTabbar.setImagePath("dhtmlx_suite/imgs/");
+	specimenTabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> New Specimen </span>', "150px");
 	specimenTabbar.setHrefMode("iframes-on-demand");
