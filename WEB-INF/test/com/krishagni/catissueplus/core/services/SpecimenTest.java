@@ -180,8 +180,8 @@ public class SpecimenTest {
 		assertNotNull("Response cannot be null", response);
 		assertEquals(EventStatus.BAD_REQUEST, response.getStatus());
 		assertEquals(1, response.getErroneousFields().length);
-		assertEquals("parent specimen", response.getErroneousFields()[0].getFieldName());
-		assertEquals(SpecimenErrorCode.INVALID_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
+		assertEquals("parent", response.getErroneousFields()[0].getFieldName());
+		assertEquals(SpecimenErrorCode.MISSING_ATTR_VALUE.message(), response.getErroneousFields()[0].getErrorMessage());
 	}
 
 	@Test

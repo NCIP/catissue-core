@@ -41,6 +41,7 @@ public class SpecimenTestData {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
 		detail.setParentSpecimenId(null);
+		detail.setLineage("Derived");
 		event.setSessionDataBean(getSessionDataBean());
 		event.setSpecimenDetail(detail);
 		return event;
@@ -50,6 +51,7 @@ public class SpecimenTestData {
 		CreateSpecimenEvent event = new CreateSpecimenEvent();
 		SpecimenDetail detail = getSpecimenDetail();
 		detail.setParentSpecimenId(1l);
+		detail.setLineage("Derived");
 		event.setSessionDataBean(getSessionDataBean());
 		event.setSpecimenDetail(detail);
 		return event;

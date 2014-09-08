@@ -132,7 +132,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	private void setParentSpecimen(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
 		if(!"New".equals(specimenDetail.getLineage())){ 
 		if (specimenDetail.getParentSpecimenId() == null) {
-			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, PARENT);
+			errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, PARENT);
 			return;
 		}
 		Specimen parentSpecimen = daoFactory.getSpecimenDao().getSpecimen(specimenDetail.getParentSpecimenId());
