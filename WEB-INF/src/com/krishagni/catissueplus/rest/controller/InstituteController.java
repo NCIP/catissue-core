@@ -27,7 +27,6 @@ import com.krishagni.catissueplus.core.administrative.events.InstituteUpdatedEve
 import com.krishagni.catissueplus.core.administrative.events.ReqAllInstitutesEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateInstituteEvent;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -51,11 +50,10 @@ public class InstituteController {
 		event.setSessionDataBean(getSession());
 		event.setInstituteDetails(instituteDetails);
 		InstituteCreatedEvent resp = instituteSvc.createInstitute(event);
-		if (resp.getStatus() == EventStatus.OK) {
-
-			return resp.getInstituteDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getInstituteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{instituteId}")
@@ -67,10 +65,10 @@ public class InstituteController {
 		event.setInstituteDetails(instituteDetails);
 		event.setId(instituteId);
 		InstituteUpdatedEvent resp = instituteSvc.updateInstitute(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getInstituteDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getInstituteDetails();
 	}
 
 	@ResponseBody
@@ -81,10 +79,10 @@ public class InstituteController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		InstituteDisabledEvent resp = instituteSvc.deleteInstitute(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -95,10 +93,10 @@ public class InstituteController {
 		event.setName(name);
 		event.setSessionDataBean(getSession());
 		InstituteDisabledEvent resp = instituteSvc.deleteInstitute(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -109,11 +107,10 @@ public class InstituteController {
 		ReqAllInstitutesEvent event  = new ReqAllInstitutesEvent();
 		event.setMaxResults(Integer.parseInt(maxResults));
 		GetAllInstitutesEvent resp = instituteSvc.getInstitutes(event);
-
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
@@ -123,11 +120,10 @@ public class InstituteController {
 		GetInstituteEvent event = new GetInstituteEvent();
 		event.setInstId(id);
 		InstituteGotEvent resp = instituteSvc.getInstitute(event);
-
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
@@ -137,11 +133,10 @@ public class InstituteController {
 		GetInstituteEvent event = new GetInstituteEvent();
 		event.setName(name);
 		InstituteGotEvent resp = instituteSvc.getInstitute(event);
-
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	private SessionDataBean getSession() {

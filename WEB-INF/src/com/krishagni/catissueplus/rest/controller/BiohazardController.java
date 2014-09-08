@@ -36,7 +36,6 @@ import com.krishagni.catissueplus.core.administrative.events.PatchBiohazardEvent
 import com.krishagni.catissueplus.core.administrative.events.ReqAllBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateBiohazardEvent;
 import com.krishagni.catissueplus.core.administrative.services.BiohazardService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -61,11 +60,10 @@ public class BiohazardController {
 		ReqAllBiohazardEvent req = new ReqAllBiohazardEvent();
 		req.setMaxResults(Integer.parseInt(maxResults));
 		AllBiohazardsEvent resp = biohazardSvc.getAllBiohazards(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getBiohazards();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getBiohazards();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -75,10 +73,10 @@ public class BiohazardController {
 		GetBiohazardEvent event = new GetBiohazardEvent();
 		event.setId(id);
 		GotBiohazardEvent resp = biohazardSvc.getBiohazard(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
@@ -88,10 +86,10 @@ public class BiohazardController {
 		GetBiohazardEvent event = new GetBiohazardEvent();
 		event.setName(name);
 		GotBiohazardEvent resp = biohazardSvc.getBiohazard(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -101,12 +99,12 @@ public class BiohazardController {
 		CreateBiohazardEvent biohazardEvent = new CreateBiohazardEvent();
 		biohazardEvent.setBiohazardDetails(biohazardDetails);
 		biohazardEvent.setSessionDataBean(getSession());
-		BiohazardCreatedEvent response = biohazardSvc.createBiohazard(biohazardEvent);
+		BiohazardCreatedEvent resp = biohazardSvc.createBiohazard(biohazardEvent);
 
-		if (response.getStatus().equals(EventStatus.OK)) {
-			return response.getBiohazardDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getBiohazardDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -117,11 +115,11 @@ public class BiohazardController {
 		event.setBiohazardDetails(details);
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		BiohazardUpdatedEvent response = biohazardSvc.updateBiohazard(event);
-		if (response != null) {
-			return response.getBiohazardDetails();
+		BiohazardUpdatedEvent resp = biohazardSvc.updateBiohazard(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getBiohazardDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/name={name}")
@@ -132,11 +130,11 @@ public class BiohazardController {
 		event.setBiohazardDetails(details);
 		event.setName(name);
 		event.setSessionDataBean(getSession());
-		BiohazardUpdatedEvent response = biohazardSvc.updateBiohazard(event);
-		if (response != null) {
-			return response.getBiohazardDetails();
+		BiohazardUpdatedEvent resp = biohazardSvc.updateBiohazard(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getBiohazardDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -156,11 +154,11 @@ public class BiohazardController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		BiohazardUpdatedEvent response = biohazardSvc.patchBiohazard(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getBiohazardDetails();
+		BiohazardUpdatedEvent resp = biohazardSvc.patchBiohazard(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getBiohazardDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/name={name}")
@@ -180,11 +178,11 @@ public class BiohazardController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		BiohazardUpdatedEvent response = biohazardSvc.patchBiohazard(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getBiohazardDetails();
+		BiohazardUpdatedEvent resp = biohazardSvc.patchBiohazard(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getBiohazardDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -194,11 +192,11 @@ public class BiohazardController {
 		DeleteBiohazardEvent reqEvent = new DeleteBiohazardEvent();
 		reqEvent.setId(id);
 		reqEvent.setSessionDataBean(getSession());
-		BiohazardDeletedEvent response = biohazardSvc.deteteBiohazard(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		BiohazardDeletedEvent resp = biohazardSvc.deteteBiohazard(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -209,10 +207,10 @@ public class BiohazardController {
 		reqEvent.setName(name);
 		reqEvent.setSessionDataBean(getSession());
 		BiohazardDeletedEvent resp = biohazardSvc.deteteBiohazard(reqEvent);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {

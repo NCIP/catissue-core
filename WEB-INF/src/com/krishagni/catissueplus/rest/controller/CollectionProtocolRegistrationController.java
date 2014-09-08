@@ -19,16 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenCollGroupSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -64,7 +65,11 @@ public class CollectionProtocolRegistrationController {
 		ReqSpecimenCollGroupSummaryEvent req = new ReqSpecimenCollGroupSummaryEvent();
 		req.setCprId(cprId);
 		req.setSessionDataBean(getSession());
-		return cprSvc.getSpecimenCollGroupsList(req).getScgList();
+		AllSpecimenCollGroupsSummaryEvent resp = cprSvc.getSpecimenCollGroupsList(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getScgList();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
@@ -77,11 +82,10 @@ public class CollectionProtocolRegistrationController {
 		req.setSessionDataBean(getSession());
 
 		EntityFormsEvent resp = formSvc.getEntityForms(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getForms();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getForms();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
@@ -96,11 +100,10 @@ public class CollectionProtocolRegistrationController {
 		req.setSessionDataBean(getSession());
 
 		EntityFormRecordsEvent resp = formSvc.getEntityFormRecords(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormRecords();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getFormRecords();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -113,10 +116,10 @@ public class CollectionProtocolRegistrationController {
 		event.setId(id);
 		event.setIncludeChildren(Boolean.valueOf(includeChildren));
 		RegistrationDeletedEvent resp = cprSvc.delete(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getId();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getId();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -140,11 +143,11 @@ public class CollectionProtocolRegistrationController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		event.setCollectionProtocolRegistrationDetail(detail);
-		RegistrationUpdatedEvent response = cprSvc.patchRegistration(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getCprDetail();
+		RegistrationUpdatedEvent resp = cprSvc.patchRegistration(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getCprDetail();
 	}
 
 	private SessionDataBean getSession() {

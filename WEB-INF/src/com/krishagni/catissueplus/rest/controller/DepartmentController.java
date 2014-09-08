@@ -28,7 +28,6 @@ import com.krishagni.catissueplus.core.administrative.events.GetDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.ReqAllDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDepartmentEvent;
 import com.krishagni.catissueplus.core.administrative.services.DepartmentService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -50,10 +49,10 @@ public class DepartmentController {
 		ReqAllDepartmentEvent req = new ReqAllDepartmentEvent();
 		req.setMaxResults(Integer.parseInt(maxResults));
 		AllDepartmentsEvent resp = departmentSvc.getAllDepartments(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDepartments();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDepartments();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -64,10 +63,10 @@ public class DepartmentController {
 		event.setSessionDataBean(getSession());
 		event.setDepartmentDetails(departmentDetails);
 		DepartmentCreatedEvent resp = departmentSvc.createDepartment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDepartmentDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDepartmentDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{departmentId}")
@@ -79,10 +78,10 @@ public class DepartmentController {
 		event.setDepartmentDetails(departmentDetails);
 		departmentDetails.setId(departmentId);
 		DepartmentUpdatedEvent resp = departmentSvc.updateDepartment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDepartmentDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDepartmentDetails();
 	}
 
 	@ResponseBody
@@ -93,10 +92,10 @@ public class DepartmentController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		DepartmentDisabledEvent resp = departmentSvc.deleteDepartment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -107,10 +106,10 @@ public class DepartmentController {
 		event.setName(name);
 		event.setSessionDataBean(getSession());
 		DepartmentDisabledEvent resp = departmentSvc.deleteDepartment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -120,10 +119,10 @@ public class DepartmentController {
 		GetDepartmentEvent event = new GetDepartmentEvent();
 		event.setId(id);
 		DepartmentGotEvent resp = departmentSvc.getDepartment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -133,10 +132,10 @@ public class DepartmentController {
 		GetDepartmentEvent event = new GetDepartmentEvent();
 		event.setName(name);
 		DepartmentGotEvent resp = departmentSvc.getDepartment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {

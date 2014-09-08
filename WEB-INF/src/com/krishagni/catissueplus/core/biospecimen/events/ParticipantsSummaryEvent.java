@@ -21,6 +21,7 @@ public class ParticipantsSummaryEvent extends ResponseEvent {
 	public static ParticipantsSummaryEvent ok(List<ParticipantInfo> participantsInfo) {
 		ParticipantsSummaryEvent participantsSummaryEvent = new ParticipantsSummaryEvent();
 		participantsSummaryEvent.setParticipantsInfo(participantsInfo);
+		participantsSummaryEvent.setStatus(EventStatus.OK);
 		return participantsSummaryEvent;
 	}
 

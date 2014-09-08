@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -19,7 +20,6 @@ import com.krishagni.catissueplus.core.notification.domain.factory.CPStudyMappin
 import com.krishagni.catissueplus.core.notification.events.RegisterParticipantEvent;
 import com.krishagni.catissueplus.core.notification.repository.CPStudyMappingDao;
 import com.krishagni.catissueplus.core.notification.services.CatissueNotificationService;
-import com.krishagni.catissueplus.rest.controller.PatchRegistrationEvent;
 
 public class CatissueNotificationServiceImpl implements CatissueNotificationService {
 

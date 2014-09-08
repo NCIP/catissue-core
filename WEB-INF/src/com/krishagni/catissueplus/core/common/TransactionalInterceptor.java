@@ -12,6 +12,8 @@ import org.hibernate.context.ManagedSessionContext;
 
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ErrorCodeEnum;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -47,7 +49,8 @@ public class TransactionalInterceptor {
 		Object object = null;
 		try {
 			object = pjp.proceed();
-			if (isTransactionStarted && tx != null) {
+			ResponseEvent resp = (ResponseEvent)object;
+			if (resp.getStatus() == EventStatus.OK && isTransactionStarted && tx != null) {
 				tx.commit();
 				LOGGER.info("Transaction commited.");
 			}

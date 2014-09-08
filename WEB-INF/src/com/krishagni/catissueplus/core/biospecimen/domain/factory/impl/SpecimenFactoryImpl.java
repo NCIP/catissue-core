@@ -130,7 +130,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setParentSpecimen(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if (specimenDetail.getParentSpecimenId() == null && !"New".equals(specimenDetail.getLineage())) {
+		if(!"New".equals(specimenDetail.getLineage())){ 
+		if (specimenDetail.getParentSpecimenId() == null) {
 			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, PARENT);
 			return;
 		}
@@ -140,6 +141,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		specimen.setParentSpecimen(parentSpecimen);
+		}
 	}
 
 	private void setSpecimenRequirement(SpecimenDetail specimenDetail, Specimen specimen,

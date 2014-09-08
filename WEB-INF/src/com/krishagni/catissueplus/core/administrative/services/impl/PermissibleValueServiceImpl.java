@@ -120,7 +120,6 @@ public class PermissibleValueServiceImpl implements PermissibleValueService {
 	}
 
 	@Override
-	@PlusTransactional
 	public Boolean validate(ValidatePvEvent event) {
 		//Commenting code as database doesn't containing all attribute and PV values.
 		//TODO: Include all attributes and their respective PV values through script.  

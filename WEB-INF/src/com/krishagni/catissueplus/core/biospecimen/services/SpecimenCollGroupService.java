@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services;
 
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDeletedEvent;
@@ -16,7 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 
 public interface SpecimenCollGroupService {
 
-	AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
+	AllSpecimensEvent getSpecimensList(ReqSpecimenSummaryEvent event);
 
 	ScgDeletedEvent delete(DeleteSpecimenGroupsEvent event);
 
@@ -29,4 +31,6 @@ public interface SpecimenCollGroupService {
 	ScgReportUpdatedEvent updateScgReport(UpdateScgReportEvent event);
 
 	ScgReportUpdatedEvent getScgReport(GetScgReportEvent event);
+
+	AllCollectionGroupsDetailEvent getAllCollectionGroups(ReqAllScgEvent req);
 }

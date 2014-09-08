@@ -17,4 +17,8 @@ public interface SpecimenCollectionGroupDao extends Dao<SpecimenCollectionGroup>
 
 	public SpecimenCollectionGroup getscg(Long scgId);
 
+	public List<SpecimenCollectionGroup> getAllScgs(int startAt, int maxRecords, String... searchString);
+
+	public Long getScgsCount(String... searchString);
+
 }

@@ -30,7 +30,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryE
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -51,13 +50,17 @@ public class CollectionProtocolController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<CollectionProtocolSummary> getCollectionProtocolList(@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true") String chkPrivlege) {
+	public List<CollectionProtocolSummary> getCollectionProtocolList(
+			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true") String chkPrivlege) {
 		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
-		req.setSessionDataBean(getSession()); 
+		req.setSessionDataBean(getSession());
 		req.setChkPrivileges("true".equalsIgnoreCase(chkPrivlege));
 
-		AllCollectionProtocolsEvent result = cpSvc.getAllProtocols(req);
-		return result.getCpList();
+		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getCpList();
 	}
 
 	/*	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -81,21 +84,27 @@ public class CollectionProtocolController {
 		event.setCpId(cpId);
 		event.setSearchString(searchStr);
 		event.setSessionDataBean(getSession());
-		ParticipantsSummaryEvent result = cpSvc.getParticipants(event);
-		return result.getParticipantsInfo();
+		ParticipantsSummaryEvent resp = cpSvc.getParticipants(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getParticipantsInfo();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/participant")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantInfo getParticipant(@PathVariable("id") Long cpId,@RequestParam(value = "pId", required = true, defaultValue = "") String participantId)
-			{
+	public ParticipantInfo getParticipant(@PathVariable("id") Long cpId,
+			@RequestParam(value = "pId", required = true, defaultValue = "") String participantId) {
 		ReqParticipantSummaryEvent event = new ReqParticipantSummaryEvent();
 		event.setCpId(cpId);
-		event.setParticipantId(StringUtils.isBlank(participantId)?null:Long.valueOf(participantId));
+		event.setParticipantId(StringUtils.isBlank(participantId) ? null : Long.valueOf(participantId));
 		event.setSessionDataBean(getSession());
-		ParticipantSummaryEvent result = cpSvc.getParticipant(event);
-		return result.getParticipantInfo();
+		ParticipantSummaryEvent resp = cpSvc.getParticipant(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getParticipantInfo();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/registrations")
@@ -104,17 +113,16 @@ public class CollectionProtocolController {
 	public CollectionProtocolRegistrationDetail register(@PathVariable("id") Long cpId,
 			@RequestBody CollectionProtocolRegistrationDetail cprDetails) {
 		CreateRegistrationEvent event = new CreateRegistrationEvent();
-		event.setCpId(cpId); 
+		event.setCpId(cpId);
 		cprDetails.setCpId(cpId);
 		event.setCprDetail(cprDetails);
 		event.setSessionDataBean(getSession());
-		RegistrationCreatedEvent result = cprSvc.createRegistration(event);
-		if (result.getStatus() == EventStatus.OK) {
-			return result.getCprDetail();
+		RegistrationCreatedEvent resp = cprSvc.createRegistration(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getCprDetail();
 	}
-	
 
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);

@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
@@ -28,7 +33,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -54,6 +58,31 @@ public class SpecimenCollectionGroupController {
 	@Autowired
 	private FormService formSvc;
 
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getAllCollGroups(
+			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
+		ReqAllScgEvent req = new ReqAllScgEvent();
+		req.setStartAt(start);
+		req.setMaxRecords(max);
+		req.setCountReq(countReq);
+		req.setSearchString(searchString);
+		req.setSessionDataBean(getSession());
+		AllCollectionGroupsDetailEvent resp = specimenCollGroupService.getAllCollectionGroups(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (resp.getCount() != null) {
+			result.put("count", resp.getCount());
+		}
+		result.put("collectionGroups", resp.getCollectionGroupsDetail());
+		return result;	
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -63,7 +92,11 @@ public class SpecimenCollectionGroupController {
 		req.setSessionDataBean(getSession());
 		req.setId(id);
 		req.setObjectType(objectType);
-		return specimenCollGroupService.getSpecimensList(req).getSpecimensInfo();
+		AllSpecimensEvent resp = specimenCollGroupService.getSpecimensList(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getInfo(); 
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
@@ -76,11 +109,10 @@ public class SpecimenCollectionGroupController {
 		req.setSessionDataBean(getSession());
 
 		EntityFormsEvent resp = formSvc.getEntityForms(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getForms();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getForms();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
@@ -95,11 +127,10 @@ public class SpecimenCollectionGroupController {
 		req.setSessionDataBean(getSession());
 
 		EntityFormRecordsEvent resp = formSvc.getEntityFormRecords(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormRecords();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getFormRecords();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -109,12 +140,11 @@ public class SpecimenCollectionGroupController {
 		CreateScgEvent createScgEvent = new CreateScgEvent();
 		createScgEvent.setScgDetail(scgDetail);
 		createScgEvent.setSessionDataBean(getSession());
-		ScgCreatedEvent scgCreated = specimenCollGroupService.createScg(createScgEvent);
-		if (scgCreated.getStatus().equals(EventStatus.OK)) {
-			return scgCreated.getDetail();
+		ScgCreatedEvent resp = specimenCollGroupService.createScg(createScgEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
-
+			return resp.getDetail();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -125,12 +155,11 @@ public class SpecimenCollectionGroupController {
 		event.setId(id);
 		event.setScgDetail(scgDetail);
 		event.setSessionDataBean(getSession());
-		ScgUpdatedEvent response = specimenCollGroupService.updateScg(event);
-		if (response.getStatus().equals(EventStatus.OK)) {
-			return response.getDetail();
+		ScgUpdatedEvent resp = specimenCollGroupService.updateScg(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
-
+			return resp.getDetail();
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/reports")
@@ -141,12 +170,11 @@ public class SpecimenCollectionGroupController {
 		event.setId(id);
 		event.setDetail(reportDetail);
 		event.setSessionDataBean(getSession());
-		ScgReportUpdatedEvent response = specimenCollGroupService.updateScgReport(event);
-		if (response.getStatus().equals(EventStatus.OK)) {
-			return response.getDetail();
+		ScgReportUpdatedEvent resp = specimenCollGroupService.updateScgReport(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
-
+			return resp.getDetail();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/reports")
@@ -156,12 +184,11 @@ public class SpecimenCollectionGroupController {
 		GetScgReportEvent event = new GetScgReportEvent();
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		ScgReportUpdatedEvent response = specimenCollGroupService.getScgReport(event);
-		if (response.getStatus().equals(EventStatus.OK)) {
-			return response.getDetail();
+		ScgReportUpdatedEvent resp = specimenCollGroupService.getScgReport(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
-
+			return resp.getDetail();
 	}
 
 	private SessionDataBean getSession() {

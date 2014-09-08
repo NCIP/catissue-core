@@ -36,7 +36,6 @@ import com.krishagni.catissueplus.core.administrative.events.SitePatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.SiteUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateSiteEvent;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -60,10 +59,10 @@ public class SiteController {
 		GetSiteEvent reqEvent = new GetSiteEvent();
 		reqEvent.setId(id);
 		SiteGotEvent resp = siteService.getSite(reqEvent);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
@@ -73,10 +72,10 @@ public class SiteController {
 		GetSiteEvent reqEvent = new GetSiteEvent();
 		reqEvent.setName(name);
 		SiteGotEvent resp = siteService.getSite(reqEvent);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -88,11 +87,10 @@ public class SiteController {
 		ReqAllSiteEvent req = new ReqAllSiteEvent();
 		req.setMaxResults(Integer.parseInt(maxResults));
 		AllSitesEvent resp = siteService.getAllSites(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSites();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getSites();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -103,10 +101,10 @@ public class SiteController {
 		event.setSiteDetails(siteDetails);
 		event.setSessionDataBean(getSession());
 		SiteCreatedEvent resp = siteService.createSite(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSiteDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getSiteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -116,10 +114,10 @@ public class SiteController {
 		UpdateSiteEvent event = new UpdateSiteEvent(siteDetails, id);
 		event.setSessionDataBean(getSession());
 		SiteUpdatedEvent resp = siteService.updateSite(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSiteDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getSiteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/name={name}")
@@ -129,10 +127,10 @@ public class SiteController {
 		UpdateSiteEvent event = new UpdateSiteEvent(siteDetails, name);
 		event.setSessionDataBean(getSession());
 		SiteUpdatedEvent resp = siteService.updateSite(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSiteDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getSiteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -153,11 +151,11 @@ public class SiteController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		SiteUpdatedEvent response = siteService.patchSite(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getSiteDetails();
+		SiteUpdatedEvent resp = siteService.patchSite(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getSiteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/name={name}")
@@ -178,11 +176,11 @@ public class SiteController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		SiteUpdatedEvent response = siteService.patchSite(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getSiteDetails();
+		SiteUpdatedEvent resp = siteService.patchSite(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getSiteDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -192,11 +190,11 @@ public class SiteController {
 		DeleteSiteEvent reqEvent = new DeleteSiteEvent();
 		reqEvent.setId(id);
 		reqEvent.setSessionDataBean(getSession());
-		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		SiteDeletedEvent resp = siteService.deleteSite(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -206,11 +204,11 @@ public class SiteController {
 		DeleteSiteEvent reqEvent = new DeleteSiteEvent();
 		reqEvent.setName(name);
 		reqEvent.setSessionDataBean(getSession());
-		SiteDeletedEvent response = siteService.deleteSite(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		SiteDeletedEvent resp = siteService.deleteSite(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {

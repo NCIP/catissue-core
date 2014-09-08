@@ -5,7 +5,6 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,8 +45,6 @@ import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.ValidatePasswordEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.auth.domain.factory.PasswordActionType;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
-import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -65,14 +62,13 @@ public class UserController {
 	private HttpServletRequest httpServletRequest;
 
 	@RequestMapping(method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
 	//@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
 	@ResponseBody
 	public Map<String, Object> getAllUsers(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
 			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString) {
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
@@ -80,11 +76,9 @@ public class UserController {
 		req.setSearchString(searchString);
 		req.setSessionDataBean(getSession());
 		AllUsersEvent resp = userService.getAllUsers(req);
-
-		if (resp.getStatus() != EventStatus.OK) {
-			return null;
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (resp.getCount() != null) {
 			result.put("count", resp.getCount());
@@ -98,10 +92,10 @@ public class UserController {
 	@ResponseBody
 	public UserDetails getUser(@PathVariable Long id) {
 		GetUserEvent resp = userService.getUser(id);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUserDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getUserDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -109,10 +103,10 @@ public class UserController {
 	@ResponseBody
 	public UserDetails createUser(@RequestBody UserDetails userDetails) {
 		UserCreatedEvent resp = userService.createUser(new CreateUserEvent(userDetails));
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUserDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getUserDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -120,10 +114,10 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public UserDetails updateUser(@PathVariable Long id, @RequestBody UserDetails userDetails) {
 		UserUpdatedEvent resp = userService.updateUser(new UpdateUserEvent(userDetails, id));
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getUserDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getUserDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -144,11 +138,11 @@ public class UserController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setUserDetails(details);
 
-		UserUpdatedEvent response = userService.patchUser(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getUserDetails();
+		UserUpdatedEvent resp = userService.patchUser(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getUserDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "close/{id}")
@@ -159,10 +153,10 @@ public class UserController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		UserClosedEvent resp = userService.closeUser(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -173,10 +167,10 @@ public class UserController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		UserDisabledEvent resp = userService.deleteUser(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@ResponseBody
@@ -187,10 +181,10 @@ public class UserController {
 		event.setName(name);
 		event.setSessionDataBean(getSession());
 		UserDisabledEvent resp = userService.deleteUser(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/password")
@@ -209,10 +203,10 @@ public class UserController {
 			resp = userService.setPassword(event);
 		}
 
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{loginName}/forgotPassword")
@@ -222,10 +216,10 @@ public class UserController {
 		ForgotPasswordEvent event = new ForgotPasswordEvent();
 		event.setName(loginName);
 		PasswordForgottenEvent resp = userService.forgotPassword(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/validatePassword/{password}")
@@ -234,10 +228,10 @@ public class UserController {
 	public Boolean validatePassword(@PathVariable String password) {
 		ValidatePasswordEvent event = new ValidatePasswordEvent(password);
 		PasswordValidatedEvent resp = userService.validatePassword(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.isValid();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return false;
+			return resp.isValid();
 	}
 
 	private SessionDataBean getSession() {

@@ -3,15 +3,12 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Biohazard;
 import com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 
 public class SpecimenDetail {
 
@@ -64,8 +61,6 @@ public class SpecimenDetail {
 	private String pos2;
 
 	private Boolean enablePrintLabels = false;
-
-	private Set<SpecimenEventParameters> eventCollection = new HashSet<SpecimenEventParameters>();
 
 	private List<ExternalIdentifierDetail> externalIdentifierDetails = new ArrayList<ExternalIdentifierDetail>();
 
@@ -263,14 +258,6 @@ public class SpecimenDetail {
 		this.pos2 = pos2;
 	}
 
-	public Set<SpecimenEventParameters> getEventCollection() {
-		return eventCollection;
-	}
-
-	public void setEventCollection(Set<SpecimenEventParameters> eventCollection) {
-		this.eventCollection = eventCollection;
-	}
-
 	public List<ExternalIdentifierDetail> getExternalIdentifierDetails() {
 		return externalIdentifierDetails;
 	}
@@ -320,7 +307,6 @@ public class SpecimenDetail {
 		        detail.setPos1(specimen.getSpecimenPosition().getPositionDimensionOne().toString());
 		        detail.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwo().toString());
 		    }*/
-		detail.setEventCollection(specimen.getEventCollection());
 		detail.setSpecimenClass(specimen.getSpecimenClass());
 		detail.setSpecimenType(specimen.getSpecimenType());
 		detail.setTissueSide(specimen.getTissueSide());

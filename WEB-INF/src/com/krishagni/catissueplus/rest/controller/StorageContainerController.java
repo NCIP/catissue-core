@@ -1,3 +1,4 @@
+
 package com.krishagni.catissueplus.rest.controller;
 
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
@@ -36,7 +37,6 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerSum
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateStorageContainerEvent;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -56,42 +56,35 @@ public class StorageContainerController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public StorageContainerDetails createStorageContainer(
-			@RequestBody StorageContainerDetails details) {
-		CreateStorageContainerEvent event = new CreateStorageContainerEvent(
-				details);
+	public StorageContainerDetails createStorageContainer(@RequestBody StorageContainerDetails details) {
+		CreateStorageContainerEvent event = new CreateStorageContainerEvent(details);
 		event.setSessionDataBean(getSession());
-		StorageContainerCreatedEvent resp = storageContainerSvc
-				.createStorageContainer(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getStorageContainerDetails();
+		StorageContainerCreatedEvent resp = storageContainerSvc.createStorageContainer(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getStorageContainerDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public StorageContainerDetails updateStorageContainer(
-			@PathVariable Long id, @RequestBody StorageContainerDetails details) {
-		UpdateStorageContainerEvent event = new UpdateStorageContainerEvent(
-				details, id);
+	public StorageContainerDetails updateStorageContainer(@PathVariable Long id,
+			@RequestBody StorageContainerDetails details) {
+		UpdateStorageContainerEvent event = new UpdateStorageContainerEvent(details, id);
 		event.setSessionDataBean(getSession());
 
-		StorageContainerUpdatedEvent resp = storageContainerSvc
-				.updateStorageContainer(event);
-
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getStorageContainerDetails();
+		StorageContainerUpdatedEvent resp = storageContainerSvc.updateStorageContainer(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getStorageContainerDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public StorageContainerDetails patchStorageContainer(@PathVariable Long id,
-			@RequestBody Map<String, Object> values) {
+	public StorageContainerDetails patchStorageContainer(@PathVariable Long id, @RequestBody Map<String, Object> values) {
 		PatchStorageContainerEvent event = new PatchStorageContainerEvent();
 		event.setStorageContainerId(id);
 		event.setSessionDataBean(getSession());
@@ -99,18 +92,18 @@ public class StorageContainerController {
 		StorageContainerPatchDetails details = new StorageContainerPatchDetails();
 		try {
 			BeanUtils.populate(details, values);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			reportError(StorageContainerErrorCode.BAD_REQUEST, PATCH_CONTAINER);
 		}
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setStorageContainerDetails(details);
 
-		StorageContainerUpdatedEvent response = storageContainerSvc
-				.patchStorageContainer(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getStorageContainerDetails();
+		StorageContainerUpdatedEvent resp = storageContainerSvc.patchStorageContainer(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getStorageContainerDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -120,12 +113,11 @@ public class StorageContainerController {
 		DisableStorageContainerEvent event = new DisableStorageContainerEvent();
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		StorageContainerDisabledEvent resp = storageContainerSvc
-				.disableStorageContainer(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		StorageContainerDisabledEvent resp = storageContainerSvc.disableStorageContainer(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/name={name}")
@@ -135,26 +127,25 @@ public class StorageContainerController {
 		DisableStorageContainerEvent event = new DisableStorageContainerEvent();
 		event.setName(name);
 		event.setSessionDataBean(getSession());
-		StorageContainerDisabledEvent resp = storageContainerSvc
-				.disableStorageContainer(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		StorageContainerDisabledEvent resp = storageContainerSvc.disableStorageContainer(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody 
+	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<StorageContainerSummary> getStorageContainers(
 			@RequestParam(value = "maxResults", required = false, defaultValue = "1000") String maxResults) {
 		ReqAllStorageContainersEvent event = new ReqAllStorageContainersEvent();
 		event.setMaxResults(Integer.parseInt(maxResults));
 		GetAllStorageContainersEvent resp = storageContainerSvc.getStorageContainers(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getSummary();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getSummary();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -163,29 +154,27 @@ public class StorageContainerController {
 	public StorageContainerDetails getStorageContainerById(@PathVariable Long id) {
 		GetStorageContainerEvent event = new GetStorageContainerEvent();
 		event.setId(id);
-		StorageContainerGotEvent resp = storageContainerSvc
-				.getStorageContainer(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getStorageContainerDetails();
+		StorageContainerGotEvent resp = storageContainerSvc.getStorageContainer(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getStorageContainerDetails();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/name={name}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public StorageContainerDetails getStorageContainerById(@PathVariable String  name) {
+	public StorageContainerDetails getStorageContainerById(@PathVariable String name) {
 		GetStorageContainerEvent event = new GetStorageContainerEvent();
 		event.setName(name);
 		StorageContainerGotEvent resp = storageContainerSvc.getStorageContainer(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getStorageContainerDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+		return resp.getStorageContainerDetails();
 	}
 
 	private SessionDataBean getSession() {
-		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}
 }

@@ -15,12 +15,12 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -31,20 +31,11 @@ import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 import com.krishagni.catissueplus.core.printer.printService.factory.SpecimenLabelPrinterFactory;
 
 public class SpecimenServiceImpl implements SpecimenService {
-
-	private static final String LABEL = "label";
-
-	private static final String BARCODE = "barcode";
-
-	private static final String ALIQUOT_COUNT = "Aliquot Count";
-
-	private static final String SPECIMEN_AVAILABLE_QUANTITY = "Specimen available quantity ";
-
-	private static final String DEFAULT_BARCODE_TOKEN = "SPECIMEN_LABEL";
 
 	private DaoFactory daoFactory;
 
@@ -79,13 +70,26 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	@Override
 	@PlusTransactional
-	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event) {
-		try {
-			return AllSpecimensSummaryEvent.ok(daoFactory.getSpecimenDao().getSpecimensList(event.getId()));
+	public AllSpecimensEvent getAllSpecimens(ReqAllSpecimensEvent req) {
+		if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
+			String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
+			return AllSpecimensEvent.badRequest(msg, null);
 		}
-		catch (CatissueException e) {
-			return AllSpecimensSummaryEvent.serverError(e);
+
+		List<Specimen> specimens = daoFactory.getSpecimenDao().getAllSpecimens(
+						req.getStartAt(), req.getMaxRecords(), 
+						req.getSearchString());
+		List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+		for (Specimen specimen : specimens) {
+			result.add(SpecimenDetail.fromDomain(specimen));
 		}
+		
+		Long count = null;
+		if (req.isCountReq()) {
+			count = daoFactory.getSpecimenDao().getSpecimensCount(req.getSearchString());
+		}
+
+			return AllSpecimensEvent.ok(result,count);
 	}
 
 	@Override
@@ -343,4 +347,15 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return;
 		}
 	}
+	
+
+	private static final String LABEL = "label";
+
+	private static final String BARCODE = "barcode";
+
+	private static final String ALIQUOT_COUNT = "Aliquot Count";
+
+	private static final String SPECIMEN_AVAILABLE_QUANTITY = "Specimen available quantity ";
+
+	private static final String DEFAULT_BARCODE_TOKEN = "SPECIMEN_LABEL";
 }

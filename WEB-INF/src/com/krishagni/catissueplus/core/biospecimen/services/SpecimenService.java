@@ -2,20 +2,20 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 
 public interface SpecimenService {
 
-	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent event);
+	public AllSpecimensEvent getAllSpecimens(ReqAllSpecimensEvent event);
 
 	public SpecimenDeletedEvent delete(DeleteSpecimenEvent event);
 

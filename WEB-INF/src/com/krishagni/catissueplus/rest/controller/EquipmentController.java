@@ -36,7 +36,6 @@ import com.krishagni.catissueplus.core.administrative.events.PatchEquipmentEvent
 import com.krishagni.catissueplus.core.administrative.events.ReqAllEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateEquipmentEvent;
 import com.krishagni.catissueplus.core.administrative.services.EquipmentService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -62,11 +61,10 @@ public class EquipmentController {
 		ReqAllEquipmentEvent req = new ReqAllEquipmentEvent();
 		req.setMaxResults(Integer.parseInt(maxResults));
 		AllEquipmentEvent resp = equipmentSvc.getAllEquipments(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getEquipments();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+			return resp.getEquipments();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -76,10 +74,10 @@ public class EquipmentController {
 		GetEquipmentEvent event = new GetEquipmentEvent();
 		event.setId(id);
 		GotEquipmentEvent resp = equipmentSvc.getEquipment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/displayName={displayName}")
@@ -89,10 +87,10 @@ public class EquipmentController {
 		GetEquipmentEvent event = new GetEquipmentEvent();
 		event.setDisplayName(displayName);
 		GotEquipmentEvent resp = equipmentSvc.getEquipment(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -102,11 +100,11 @@ public class EquipmentController {
 		CreateEquipmentEvent reqEvent = new CreateEquipmentEvent();
 		reqEvent.setDetails(details);
 		reqEvent.setSessionDataBean(getSession());
-		EquipmentCreatedEvent response = equipmentSvc.createEquipment(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		EquipmentCreatedEvent resp = equipmentSvc.createEquipment(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -117,11 +115,11 @@ public class EquipmentController {
 		reqEvent.setDetails(details);
 		reqEvent.setId(id);
 		reqEvent.setSessionDataBean(getSession());
-		EquipmentUpdatedEvent response = equipmentSvc.updateEquipment(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		EquipmentUpdatedEvent resp = equipmentSvc.updateEquipment(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -141,11 +139,11 @@ public class EquipmentController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		reqEvent.setDetails(details);
 
-		EquipmentUpdatedEvent response = equipmentSvc.patchEquipment(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		EquipmentUpdatedEvent resp = equipmentSvc.patchEquipment(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -155,11 +153,11 @@ public class EquipmentController {
 		DeleteEquipmentEvent reqEvent = new DeleteEquipmentEvent();
 		reqEvent.setId(id);
 		reqEvent.setSessionDataBean(getSession());
-		EquipmentDeletedEvent response = equipmentSvc.deleteEquipment(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		EquipmentDeletedEvent resp = equipmentSvc.deleteEquipment(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/displayName={displayName}")
@@ -169,11 +167,11 @@ public class EquipmentController {
 		DeleteEquipmentEvent reqEvent = new DeleteEquipmentEvent();
 		reqEvent.setDisplayName(displayName);
 		reqEvent.setSessionDataBean(getSession());
-		EquipmentDeletedEvent response = equipmentSvc.deleteEquipment(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		EquipmentDeletedEvent resp = equipmentSvc.deleteEquipment(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {

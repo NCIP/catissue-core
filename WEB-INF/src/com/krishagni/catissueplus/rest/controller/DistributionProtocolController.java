@@ -37,7 +37,6 @@ import com.krishagni.catissueplus.core.administrative.events.PatchDistributionPr
 import com.krishagni.catissueplus.core.administrative.events.ReqAllDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateDistributionProtocolEvent;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -62,10 +61,10 @@ public class DistributionProtocolController {
 		ReqAllDistributionProtocolEvent req = new ReqAllDistributionProtocolEvent();
 		req.setMaxResults(Integer.parseInt(maxResults));
 		AllDistributionProtocolsEvent resp = distributionProtocolSvc.getAllDistributionProtocols(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getProtocols();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getProtocols();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -75,10 +74,10 @@ public class DistributionProtocolController {
 		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
 		event.setId(id);
 		GotDistributionProtocolEvent resp = distributionProtocolSvc.getDistributionProtocol(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/title={title}")
@@ -88,10 +87,10 @@ public class DistributionProtocolController {
 		GetDistributionProtocolEvent event = new GetDistributionProtocolEvent();
 		event.setTitle(title);
 		GotDistributionProtocolEvent resp = distributionProtocolSvc.getDistributionProtocol(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -102,11 +101,11 @@ public class DistributionProtocolController {
 		CreateDistributionProtocolEvent event = new CreateDistributionProtocolEvent();
 		event.setDistributionProtocolDetails(distributionProtocolDetails);
 		event.setSessionDataBean(getSession());
-		DistributionProtocolCreatedEvent response = distributionProtocolSvc.createDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		DistributionProtocolCreatedEvent resp = distributionProtocolSvc.createDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -118,11 +117,11 @@ public class DistributionProtocolController {
 		event.setId(id);
 		event.setDetails(details);
 		event.setSessionDataBean(getSession());
-		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		DistributionProtocolUpdatedEvent resp = distributionProtocolSvc.updateDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/title={title}")
@@ -134,11 +133,11 @@ public class DistributionProtocolController {
 		event.setTitle(title);
 		event.setDetails(details);
 		event.setSessionDataBean(getSession());
-		DistributionProtocolUpdatedEvent response = distributionProtocolSvc.updateDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		DistributionProtocolUpdatedEvent resp = distributionProtocolSvc.updateDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -160,11 +159,11 @@ public class DistributionProtocolController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		DistributionProtocolPatchedEvent resp = distributionProtocolSvc.patchDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/title={title}")
@@ -186,11 +185,11 @@ public class DistributionProtocolController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		DistributionProtocolPatchedEvent response = distributionProtocolSvc.patchDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		DistributionProtocolPatchedEvent resp = distributionProtocolSvc.patchDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -200,11 +199,11 @@ public class DistributionProtocolController {
 		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		DistributionProtocolDeletedEvent resp = distributionProtocolSvc.deleteDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/title={title}")
@@ -214,11 +213,11 @@ public class DistributionProtocolController {
 		DeleteDistributionProtocolEvent event = new DeleteDistributionProtocolEvent();
 		event.setTitle(title);
 		event.setSessionDataBean(getSession());
-		DistributionProtocolDeletedEvent response = distributionProtocolSvc.deleteDistributionProtocol(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		DistributionProtocolDeletedEvent resp = distributionProtocolSvc.deleteDistributionProtocol(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {

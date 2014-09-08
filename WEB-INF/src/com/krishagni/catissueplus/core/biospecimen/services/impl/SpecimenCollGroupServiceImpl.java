@@ -20,11 +20,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGrou
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchScgEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent.ObjectType;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgCreatedEvent;
@@ -33,6 +35,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
@@ -42,6 +45,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 import com.krishagni.catissueplus.core.labelgenerator.LabelGenerator;
 
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -81,7 +85,31 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 	@Override
 	@PlusTransactional
-	public AllSpecimensSummaryEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
+	public AllCollectionGroupsDetailEvent getAllCollectionGroups(ReqAllScgEvent req) {
+		if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
+			String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
+			return AllCollectionGroupsDetailEvent.badRequest(msg, null);
+		}
+
+		List<SpecimenCollectionGroup> scgs = daoFactory.getScgDao().getAllScgs(
+						req.getStartAt(), req.getMaxRecords(), 
+						req.getSearchString());
+		List<ScgDetail> result = new ArrayList<ScgDetail>();
+		for (SpecimenCollectionGroup scg : scgs) {
+			result.add(ScgDetail.fromDomain(scg));
+		}
+		
+		Long count = null;
+		if (req.isCountReq()) {
+			count = daoFactory.getScgDao().getScgsCount(req.getSearchString());
+		}
+
+			return AllCollectionGroupsDetailEvent.ok(result,count);
+	}
+	
+	@Override
+	@PlusTransactional
+	public AllSpecimensEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
 		try {
 			List<Specimen> specimenList = new ArrayList<Specimen>();
 			List<SpecimenRequirement> requirementList = new ArrayList<SpecimenRequirement>();
@@ -94,11 +122,11 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
 
 			}
-			return AllSpecimensSummaryEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
+			return AllSpecimensEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
 
 		}
 		catch (CatissueException e) {
-			return AllSpecimensSummaryEvent.serverError(e);
+			return AllSpecimensEvent.serverError(e);
 		}
 	}
 
@@ -421,4 +449,5 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 			linkParentChildSpecimens(specimensMap, childSpecimens);
 		}
 	}
+
 }

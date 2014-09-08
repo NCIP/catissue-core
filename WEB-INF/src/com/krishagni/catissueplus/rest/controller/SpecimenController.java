@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,23 +16,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimenSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -62,15 +63,30 @@ public class SpecimenController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/child-specimens")
-	@ResponseStatus(HttpStatus.OK)
+	
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<SpecimenInfo> getChildSpecimenList(@PathVariable("id") Long parentId) {
-		ReqSpecimenSummaryEvent event = new ReqSpecimenSummaryEvent();
-		event.setId(parentId);
-		event.setSessionDataBean((SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA));
-		return specimenSvc.getSpecimensList(event).getSpecimensInfo();
+	public Map<String, Object> getAllSpecimens(
+			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
+			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
+		ReqAllSpecimensEvent req = new ReqAllSpecimensEvent();
+		req.setStartAt(start);
+		req.setMaxRecords(max);
+		req.setCountReq(countReq);
+		req.setSearchString(searchString);
+		req.setSessionDataBean(getSession());
+		AllSpecimensEvent resp = specimenSvc.getAllSpecimens(req);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (resp.getCount() != null) {
+			result.put("count", resp.getCount());
+		}
+		result.put("specimens", resp.getSpecimensInfo());
+		return result;	
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
@@ -83,11 +99,10 @@ public class SpecimenController {
 		req.setSessionDataBean(getSession());
 
 		EntityFormsEvent resp = formSvc.getEntityForms(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getForms();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+		return resp.getForms();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms/{formCtxtId}/records")
@@ -102,11 +117,10 @@ public class SpecimenController {
 		req.setSessionDataBean(getSession());
 
 		EntityFormRecordsEvent resp = formSvc.getEntityFormRecords(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormRecords();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-
-		return null;
+		return resp.getFormRecords();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -130,10 +144,10 @@ public class SpecimenController {
 		event.setSessionDataBean(getSession());
 		event.setDetail(detail);
 		SpecimenUpdatedEvent response = specimenSvc.patchSpecimen(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getSpecimenDetail();
+		if (!response.isSuccess()) {
+			response.raiseException();
 		}
-		return null;
+		return response.getSpecimenDetail();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/aliquots")
@@ -145,14 +159,13 @@ public class SpecimenController {
 		createAliquotEvent.setSpecimenId(id);
 
 		AliquotCreatedEvent response = specimenSvc.createAliquot(createAliquotEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getAliquots();
+		if (!response.isSuccess()) {
+			response.raiseException();
 		}
-		return null;
+		return response.getAliquots();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenDetail createSpecimen(@RequestBody SpecimenDetail specimenDetail) {
 		CreateSpecimenEvent createSpecimenEvent = new CreateSpecimenEvent();
@@ -161,11 +174,10 @@ public class SpecimenController {
 		createSpecimenEvent.setScgId(specimenDetail.getScgId());
 
 		SpecimenCreatedEvent response = specimenSvc.createSpecimen(createSpecimenEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getSpecimenDetail();
+		if (!response.isSuccess()) {
+			response.raiseException();
 		}
-
-		return null;
+		return response.getSpecimenDetail();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -177,11 +189,10 @@ public class SpecimenController {
 		event.setSpecimenDetail(specimenDetail);
 		event.setSessionDataBean(getSession());
 		SpecimenUpdatedEvent response = specimenSvc.updateSpecimen(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getSpecimenDetail();
+		if (!response.isSuccess()) {
+			response.raiseException();
 		}
-
-		return null;
+			return response.getSpecimenDetail();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/{id}")
@@ -192,10 +203,10 @@ public class SpecimenController {
 		event.setId(id);
 		event.setSessionDataBean(getSession());
 		LabelPrintCreatedEvent resp = specimenLabelPrintSvc.print(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/labelPrint/name={name}")
@@ -206,10 +217,10 @@ public class SpecimenController {
 		event.setName(name);
 		event.setSessionDataBean(getSession());
 		LabelPrintCreatedEvent resp = specimenLabelPrintSvc.print(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.events.UserPrivDetail;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
@@ -31,7 +30,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	@Override
-	@PlusTransactional
 	public List<Long> getCpList(Long userId, String privilegeConst,boolean isChkPrivilege) {
 		Set<Long> cpList = new HashSet<Long>();
 		Set<Long> readDeniedList = new HashSet<Long>();

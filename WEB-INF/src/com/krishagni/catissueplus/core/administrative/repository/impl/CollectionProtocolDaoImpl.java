@@ -8,10 +8,7 @@ import java.util.List;
 import org.hibernate.Query;
 
 import com.krishagni.catissueplus.core.administrative.repository.CollectionProtocolDao;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -20,12 +17,6 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> implements CollectionProtocolDao {
-
-	private static final String GET_CP_BY_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
-			.getName() + ".getCpByTitle";
-
-	private static final String GET_CP_BY_SHORT_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
-			.getName() + ".getCpByShortTitle";
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -57,10 +48,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	public CollectionProtocolEvent getCpe(Long cpeId) {
 		return (CollectionProtocolEvent) sessionFactory.getCurrentSession().get(CollectionProtocolEvent.class, cpeId);
 	}
-
-	private static final String FQN = CollectionProtocol.class.getName();
-
-	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
 
 	@Override
 	public SpecimenRequirement getSpecimenRequirement(Long requirementId) {
@@ -94,5 +81,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent) object;
 			return new ArrayList<SpecimenRequirement>(cpe.getSpecimenRequirementCollection());
 	}
+
+	
+	private static final String FQN = CollectionProtocol.class.getName();
+
+	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
+	
+	private static final String GET_CP_BY_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
+			.getName() + ".getCpByTitle";
+
+	private static final String GET_CP_BY_SHORT_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
+			.getName() + ".getCpByShortTitle";
 
 }

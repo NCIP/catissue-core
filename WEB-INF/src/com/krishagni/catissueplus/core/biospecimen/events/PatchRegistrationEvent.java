@@ -1,5 +1,5 @@
 
-package com.krishagni.catissueplus.rest.controller;
+package com.krishagni.catissueplus.core.biospecimen.events;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;

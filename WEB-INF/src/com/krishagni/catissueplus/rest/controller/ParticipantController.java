@@ -36,16 +36,16 @@ import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+
 @Controller
 @RequestMapping("/participants")
 public class ParticipantController {
 
 	private static final String PATCH_PARTICIPANT = "patch participant";
-	
+
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
@@ -53,18 +53,18 @@ public class ParticipantController {
 	private ParticipantService participantSvc;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public ParticipantDetail getParticipantById(@PathVariable("id") Long participantId) {
-          ReqParticipantDetailEvent event = new ReqParticipantDetailEvent();
-          event.setParticipantId(participantId);
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ParticipantDetail getParticipantById(@PathVariable("id") Long participantId) {
+		ReqParticipantDetailEvent event = new ReqParticipantDetailEvent();
+		event.setParticipantId(participantId);
 
-          ParticipantDetailEvent resp = participantSvc.getParticipant(event);
-          if (resp.getStatus() == EventStatus.OK) {
-                  return resp.getParticipantDetail();
-          }
-          return null;
-  }
+		ParticipantDetailEvent resp = participantSvc.getParticipant(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+			return resp.getParticipantDetail();
+	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -73,32 +73,32 @@ public class ParticipantController {
 		CreateParticipantEvent event = new CreateParticipantEvent();
 		event.setSessionDataBean(getSession());
 		event.setParticipantDetail(participantDetail);
-		ParticipantCreatedEvent response = participantSvc.createParticipant(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getParticipantDetail();
+		ParticipantCreatedEvent resp = participantSvc.createParticipant(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getParticipantDetail();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantDetail updateParticipant(@PathVariable Long id,@RequestBody ParticipantDetail participantDetail) {
+	public ParticipantDetail updateParticipant(@PathVariable Long id, @RequestBody ParticipantDetail participantDetail) {
 		UpdateParticipantEvent event = new UpdateParticipantEvent();
 		event.setParticipantId(id);
 		event.setSessionDataBean(getSession());
 		event.setParticipantDetail(participantDetail);
-		ParticipantUpdatedEvent response = participantSvc.updateParticipant(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getParticipantDetail();
+		ParticipantUpdatedEvent resp = participantSvc.updateParticipant(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getParticipantDetail();
 	}
-	
-	@RequestMapping(method = RequestMethod.PATCH, value="/{id}")
+
+	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ParticipantDetail patchParticipant(@PathVariable Long id,@RequestBody Map<String, Object> values) {
+	public ParticipantDetail patchParticipant(@PathVariable Long id, @RequestBody Map<String, Object> values) {
 		PatchParticipantEvent event = new PatchParticipantEvent();
 		ParticipantPatchDetail detail = new ParticipantPatchDetail();
 		try {
@@ -106,34 +106,35 @@ public class ParticipantController {
 		}
 		catch (Exception e) {
 			reportError(ParticipantErrorCode.BAD_REQUEST, PATCH_PARTICIPANT);
-			 		}
+		}
 		detail.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setParticipantDetail(detail);
 		event.setId(id);
 		event.setSessionDataBean(getSession());
-		ParticipantUpdatedEvent response = participantSvc.patchParticipant(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getParticipantDetail();
+		ParticipantUpdatedEvent resp = participantSvc.patchParticipant(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getParticipantDetail();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String delete(@PathVariable Long id,@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
+	public String delete(@PathVariable Long id,
+			@RequestParam(value = "includeChildren", required = false, defaultValue = "false") String includeChildren) {
 		DeleteParticipantEvent event = new DeleteParticipantEvent();
 		event.setSessionDataBean(getSession());
 		event.setIncludeChildren(Boolean.valueOf(includeChildren));
 		event.setId(id);
 		ParticipantDeletedEvent resp = participantSvc.delete(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMessage();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value="/matchParticipants")
+
+	@RequestMapping(method = RequestMethod.POST, value = "/matchParticipants")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ParticipantDetail> getMatchedParticipants(@RequestBody ParticipantDetail participantDetail) {
@@ -141,10 +142,10 @@ public class ParticipantController {
 		event.setSessionDataBean(getSession());
 		event.setParticipantDetail(participantDetail);
 		ParticipantMatchedEvent resp = participantSvc.getMatchingParticipants(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getMatchingParticipants();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMatchingParticipants();
 	}
 
 	private SessionDataBean getSession() {

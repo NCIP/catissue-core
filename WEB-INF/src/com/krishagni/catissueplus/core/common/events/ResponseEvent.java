@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.common.events;
 
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ResponseEvent {
 
@@ -43,6 +44,14 @@ public class ResponseEvent {
 
 	public void setException(Throwable exception) {
 		this.exception = exception;
+	}
+	
+	public boolean isSuccess(){
+		return status == EventStatus.OK; 
+	}
+	
+	public void raiseException(){
+		throw new OpenSpecimenException(this);
 	}
 
 }

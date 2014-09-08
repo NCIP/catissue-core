@@ -367,7 +367,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/restApiContext.xml</param-value>
+      <param-value>/WEB-INF/applicationContext.xml</param-value>
     </init-param>
     
     <load-on-startup>1</load-on-startup>

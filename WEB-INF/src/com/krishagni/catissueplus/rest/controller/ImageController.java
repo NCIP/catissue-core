@@ -32,7 +32,6 @@ import com.krishagni.catissueplus.core.administrative.events.ImageUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.events.PatchImageEvent;
 import com.krishagni.catissueplus.core.administrative.events.UpdateImageEvent;
 import com.krishagni.catissueplus.core.administrative.services.ImageService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -56,10 +55,10 @@ public class ImageController {
 		GetImageEvent event = new GetImageEvent();
 		event.setId(id);
 		GotImageEvent resp = imagesvc.getImage(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/eqpImageId={eqpImageId}")
@@ -69,10 +68,10 @@ public class ImageController {
 		GetImageEvent event = new GetImageEvent();
 		event.setEqpImageId(eqpImageId);
 		GotImageEvent resp = imagesvc.getImage(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -82,11 +81,11 @@ public class ImageController {
 		CreateImageEvent reqEvent = new CreateImageEvent();
 		reqEvent.setDetails(details);
 		reqEvent.setSessionDataBean(getSession());
-		ImageCreatedEvent response = imagesvc.createImage(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		ImageCreatedEvent resp = imagesvc.createImage(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -98,10 +97,10 @@ public class ImageController {
 		event.setDetails(details);
 		event.setSessionDataBean(getSession());
 		ImageUpdatedEvent resp = imagesvc.updateImage(event);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getDetails();
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
@@ -122,11 +121,11 @@ public class ImageController {
 		details.setModifiedAttributes(new ArrayList<String>(values.keySet()));
 		event.setDetails(details);
 
-		ImageUpdatedEvent response = imagesvc.patchImage(event);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getDetails();
+		ImageUpdatedEvent resp = imagesvc.patchImage(event);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getDetails();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -136,11 +135,11 @@ public class ImageController {
 		DeleteImageEvent reqEvent = new DeleteImageEvent();
 		reqEvent.setId(id);
 		reqEvent.setSessionDataBean(getSession());
-		ImageDeletedEvent response = imagesvc.deleteImage(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		ImageDeletedEvent resp = imagesvc.deleteImage(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/eqpImageId={eqpImageId}")
@@ -150,11 +149,11 @@ public class ImageController {
 		DeleteImageEvent reqEvent = new DeleteImageEvent();
 		reqEvent.setEqpImageId(eqpImageId);
 		reqEvent.setSessionDataBean(getSession());
-		ImageDeletedEvent response = imagesvc.deleteImage(reqEvent);
-		if (response.getStatus() == EventStatus.OK) {
-			return response.getMessage();
+		ImageDeletedEvent resp = imagesvc.deleteImage(reqEvent);
+		if (!resp.isSuccess()) {
+			resp.raiseException();
 		}
-		return null;
+			return resp.getMessage();
 	}
 
 	private SessionDataBean getSession() {
