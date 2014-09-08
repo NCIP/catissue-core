@@ -166,6 +166,17 @@ openspecimen.ui.fancy.UserField = function(params) {
     return {name: field.name, value: val ? val : ''};
   };
 
+  this.getDisplayValue = function() {
+    if(!this.control) {
+      this.postRender();
+    }
+    var val = this.control.getValue();
+    if (val) {
+      var displayValue = val.text;
+    }
+    return {name: field.name, value: displayValue ? displayValue : '' };
+  }
+
   this.setValue = function(recId, value) {
     this.recId = recId;
     this.value = value ? value : '';
@@ -182,6 +193,6 @@ openspecimen.ui.fancy.UserField = function(params) {
 edu.common.de.FieldManager.getInstance()
   .register({
     name: "userField", 
-    displayName: "Users", 
+    displayName: "User Dropdown",
     fieldCtor: openspecimen.ui.fancy.UserField
   }); 

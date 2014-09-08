@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="specimen-event-app">
 <head lang="en">
-<%@ taglib uri="../../WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="../../WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="../../WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="../../WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ page language="java" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="java.util.Enumeration"%>
-
   <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css">
   <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css">
@@ -134,6 +126,8 @@
     <script src="../js/wrapper.js" type="text/javascript"></script>
     <script src="../js/specimenEventBulkDataEntry.js" type="text/javascript"></script>
     <script src="../js/forms-service.js" type="text/javascript"></script>
+    <script src="../external/de/js/de-field-manager.js" type="text/javascript"></script>
     <script src="../external/de/js/de-form.js" type="text/javascript"></script>
+    <script src="../js/de-users.js" type="text/javascript"></script>
 </body>
 </html>

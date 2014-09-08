@@ -37,5 +37,6 @@ public class UserControl extends Control {
 	public void getProps(Map<String, Object> props) {
 		props.put("type", "userField");
 		props.put("apiUrl", "rest/ng/users");
+		props.put("dataType", getDataType());
 	}		
 }

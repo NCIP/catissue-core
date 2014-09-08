@@ -26,10 +26,12 @@ import krishagni.catissueplus.util.QuartzSchedulerJobUtil;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
-
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
+
+import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
+import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
+
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.BOUtil;
 import edu.common.dynamicextensions.nutility.DEApp;
@@ -75,6 +77,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
@@ -170,6 +173,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			DEApp.init(ds, dir, dateFomat);
 			initQueryPathsConfig();            
 			ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
+			ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());
+			
 			logger.info("Initialization complete");									
 		}
 		catch (final Exception e)
