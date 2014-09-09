@@ -22,7 +22,6 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import edu.common.dynamicextensions.domain.Association;
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
 import edu.common.dynamicextensions.domain.CategoryAttribute;
@@ -61,6 +60,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeMetadataInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.BaseAbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.BooleanTypeInformationInterface;
+import edu.common.dynamicextensions.domaininterface.CategoryAssociationInterface;
 import edu.common.dynamicextensions.domaininterface.CategoryAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.DateTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.DoubleTypeInformationInterface;
@@ -89,8 +89,8 @@ import edu.common.dynamicextensions.domaininterface.userinterface.TextAreaInterf
 import edu.common.dynamicextensions.domaininterface.userinterface.TextFieldInterface;
 import edu.common.dynamicextensions.domaininterface.validationrules.RuleInterface;
 import edu.common.dynamicextensions.domaininterface.validationrules.RuleParameterInterface;
+import edu.common.dynamicextensions.entitymanager.CategoryManager;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
-import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FileControlValue;
@@ -137,10 +137,10 @@ public class MigrateForm {
 	
 	private static Map<String, Long> staticEntityMap = null;
 
-	FormMigrationCtxt formMigrationCtxt = null;
+	private FormMigrationCtxt formMigrationCtxt = null;
 	
-	ContainerInterface oldForm = null;
-
+	private ContainerInterface oldForm = null;
+	
 	static {
 		
 		entityCache = EntityCache.getInstance();
@@ -294,7 +294,7 @@ public class MigrateForm {
 				sfCtxt.sfCtrl = newCtrl;
 				
 				mapCtxt = sfCtxt;
-			} else { 
+			} else {
 				newCtrl = getNewControl(oldCtrl);
 				mapCtxt = newCtrl;
 			}
@@ -647,10 +647,33 @@ public class MigrateForm {
 		
 		if (ctrl instanceof LabelInterface) {
 			name = new StringBuilder("label").append(ctrl.getId()).toString();
+		} else if (ctrl instanceof AbstractContainmentControlInterface) {
+			name = getAssociationName(ctrl.getBaseAbstractAttribute());
 		} else {
-			name = ctrl.getBaseAbstractAttribute().getName();			
+			name = ctrl.getBaseAbstractAttribute().getName();
+			int idx = name.lastIndexOf(" Category Attribute");
+			if (idx != -1) {
+				name = name.substring(0, idx);
+			}			
 		} 
+		
 		return StringUtils.deleteWhitespace(name).replaceAll(specialChars, "_");
+	}
+	
+	private String getAssociationName(BaseAbstractAttributeInterface attr) {
+		String name = attr.getName();
+		if (attr instanceof CategoryAssociationInterface) {
+			name = getLastPart(attr.getName(), 3);
+		}
+		
+		return name;
+	}	
+	
+	private String getLastPart(String name, int startIdx) {
+		String[] nameParts = name.split("[\\[\\]]");
+		int numParts = nameParts.length;			
+		return new StringBuilder(nameParts[numParts - startIdx])
+			.append(nameParts[numParts - (startIdx - 1)]).toString();		
 	}
 	
 	private String getCustomLabel(ControlInterface ctrl) {
@@ -979,10 +1002,11 @@ public class MigrateForm {
 		logger.info("Number of records to migrate for container : " + oldForm.getId() + 
 				" with form context id : " + info.getOldFormCtxId() + " is : " + recAndObjectIds.size());
 	
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		EntityInterface entity = null; 
+		EntityInterface entity = null;
+		CategoryEntity catEntity = null;
+		
 		if (oldForm.getAbstractEntity() instanceof CategoryEntity) {
-			CategoryEntity catEntity = (CategoryEntity)oldForm.getAbstractEntity();
+			catEntity = (CategoryEntity)oldForm.getAbstractEntity();
 			entity = catEntity.getEntity();
 		} else {
 			entity = (EntityInterface)oldForm.getAbstractEntity();
@@ -1003,12 +1027,17 @@ public class MigrateForm {
 				if (oldRecId == null) {
 					continue;
 				}
-				Map<AbstractAttributeInterface, Object> entityRec = entityManager.getRecordById(entity, oldRecId);
-				Map<BaseAbstractAttributeInterface, Object> record = new HashMap<BaseAbstractAttributeInterface, Object>(entityRec);
-
-				DataValueMapUtility.updateDataValueMapDataLoading(record, oldForm);
-				migrateFormData(recObj, record, info);		
 				
+				Map<BaseAbstractAttributeInterface, Object> record = null;
+				if (catEntity != null) {
+					record = CategoryManager.getInstance().getRecordById(catEntity, oldRecId);
+				} else {
+					Map<AbstractAttributeInterface, Object> entityRec = EntityManager.getInstance().getRecordById(entity, oldRecId);
+					record = new HashMap<BaseAbstractAttributeInterface, Object>(entityRec);
+				}
+				
+				DataValueMapUtility.updateDataValueMapDataLoading(record, oldForm);
+				migrateFormData(recObj, record, info);						
 			} catch (DynamicExtensionsSystemException e) {
 				if (!e.getMessage().startsWith("Exception in execution query :: Unhooked data present in database for recordEntryId")) {
 					throw e;
@@ -1133,20 +1162,7 @@ public class MigrateForm {
 			BaseAbstractAttributeInterface oldAttr = oldCtrl.getBaseAbstractAttribute();
 
 			Object newValue = null;
-			if (oldAttr instanceof CategoryAttributeInterface) {
-				AbstractAttributeInterface abstAttr = ((CategoryAttributeInterface) oldAttr).getAbstractAttribute();
-				Control newControl = (Control)fieldMap.get(oldAttr);
-				Object oldValue = oldFormData.get(abstAttr);
-				if (oldValue instanceof List) {
-					newValue = getMultiSelectValues((List<Map<BaseAbstractAttributeInterface, Object>>)oldValue); 
-				} else if (oldCtrl instanceof FileUploadInterface){
-					newValue = getNewFileControlValue(jdbcDao, oldFormData, (AttributeInterface)abstAttr);
-				} else {
-					newValue = oldValue;
-				}
-				ControlValue cv = new ControlValue(newControl, newValue);
-				formData.addFieldValue(cv);				
-			} else if (oldAttr instanceof AttributeInterface) {
+			if (oldAttr instanceof CategoryAttributeInterface || oldAttr instanceof AttributeInterface) {
 				Control newControl = (Control)fieldMap.get(oldAttr);
 				Object oldValue = oldFormData.get(oldAttr);
 				if (oldValue instanceof List) {
@@ -1158,7 +1174,8 @@ public class MigrateForm {
 				}
 				ControlValue cv = new ControlValue(newControl, newValue);
 				formData.addFieldValue(cv);				
-			} else if (oldAttr instanceof AssociationInterface && oldCtrl instanceof AbstractContainmentControlInterface) {
+			} else if ((oldAttr instanceof CategoryAssociationInterface || oldAttr instanceof AssociationInterface) 
+					&& oldCtrl instanceof AbstractContainmentControlInterface) {				
 				FormMigrationCtxt sfMigrationCtxt = (FormMigrationCtxt)fieldMap.get(oldAttr);				
 				Control newSfCtrl = sfMigrationCtxt.sfCtrl;
 				
@@ -1172,7 +1189,20 @@ public class MigrateForm {
 				
 				ControlValue cv = new ControlValue(newSfCtrl, newSfData);
 				formData.addFieldValue(cv);
-			} 
+			} else if (oldAttr instanceof AssociationInterface) { // multiselect 
+				Control newControl = (Control)fieldMap.get(oldAttr);
+				Object oldValue = oldFormData.get(oldAttr);
+				if (oldValue instanceof List) {
+					newValue = getMultiSelectValues((List<Map<BaseAbstractAttributeInterface, Object>>)oldValue); 
+				} else {
+					newValue = oldValue;
+				}
+				
+				ControlValue cv = new ControlValue(newControl, newValue);
+				formData.addFieldValue(cv);								
+			} else {
+				System.err.println("[ERROR]: Unknown attribute type: " + oldAttr.getName() + ": " + oldAttr.getClass());
+			}
 		}
 		
 		return formData;
