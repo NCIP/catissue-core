@@ -1154,7 +1154,7 @@
                     data-placeholder="Select summary field"
                     options="summaryFields" option-id="name" option-value="value"
                     on-select="onSummaryFieldChange"
-                    selected="reporting.params.summaryField">
+                    multiple selected="reporting.params.summaryFields">
                   </ka-select>
                 </div>
 
