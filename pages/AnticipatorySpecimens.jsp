@@ -57,7 +57,6 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
 <link rel="stylesheet" type="text/css"	href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxToolbar/codebase/skins/dhtmlxtoolbar_dhx_blue.css">
@@ -1125,5 +1124,33 @@ if (scgId && scgId != 'null') {
 identifyDisabledCheckBox();
 displayPrinterTypeLocation();
 </script>
+<link rel="STYLESHEET" type="text/css" href="css/dhtmldropdown.css">
+<style>
+div.gridbox table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
+    background-color: rgb(223, 232, 246);
+    color: black;
+    border-color: skyblue;
+}
+
+div.gridbox table.obj td {
+    border: 1px solid rgb(97, 161, 227);
+    padding :2px;
+}
+
+div.dhx_page_active {
+    background-color: rgb(191, 220, 243);
+}
+
+.dhx_pbox {
+    margin-top: 3px;
+    border-width: 1px 1px 1px;
+    border-style: solid;
+    border-color: rgb(97, 161, 227);
+}
+
+div.gridbox_drop{
+    border:1px solid rgb(97, 161, 227);
+}
+</style>
 </html>
 	  <%@ include file="/pages/content/manageBioSpecimen/SpecimenTagPopup.jsp" %>
