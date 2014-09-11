@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ValidateSpecimensLabelEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensLabelValidatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
@@ -45,6 +48,7 @@ import com.krishagni.catissueplus.core.printer.printService.events.CreateLabelPr
 import com.krishagni.catissueplus.core.printer.printService.events.LabelPrintCreatedEvent;
 import com.krishagni.catissueplus.core.printer.printService.services.PrintService;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -88,6 +92,23 @@ public class SpecimenController {
 		result.put("specimens", resp.getSpecimensInfo());
 		return result;	
 	}
+	
+	@RequestMapping(method=RequestMethod.GET, value = "validate-labels")	
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String,Boolean> validateSpecimenLabels(
+			@RequestParam(value="specimenLabels", required=true) String[] specimenLabels) {
+		ValidateSpecimensLabelEvent event = new ValidateSpecimensLabelEvent();
+		event.setLabels(new ArrayList(Arrays.asList(specimenLabels)));
+		event.setSessionDataBean(getSession());
+		
+		SpecimensLabelValidatedEvent resp = specimenSvc.validateSpecimensLabel(event);
+		if(resp.getStatus() == EventStatus.OK ) {
+			return resp.getLabelValidationMap();
+		}
+		return null;
+	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)

@@ -10,7 +10,9 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetailEvent
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SubRegistrationDetailsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSubRegistrationDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 
 public interface ParticipantService {
@@ -32,4 +34,6 @@ public interface ParticipantService {
 	public ParticipantUpdatedEvent patchParticipant(PatchParticipantEvent event);
 
 	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent event);
+
+	public SubRegistrationDetailsEvent getSubRegistrationDetails(ReqSubRegistrationDetailEvent event);
 }

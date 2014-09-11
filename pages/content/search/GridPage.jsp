@@ -1,10 +1,10 @@
 <!-- dataList and columnList are to be set in the main JSP file -->
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript"  type="text/javascript" src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script   language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script  language="JavaScript" type="text/javascript"  src="dhtmlx_suite/ext/dhtmlxgrid_srnd.js"></script>
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script  language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script   language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script  language="JavaScript" type="text/javascript"  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_srnd.js"></script>
 <script>
 	var myData =${requestScope.myData};
 	var columns =${requestScope.columns};
@@ -92,7 +92,7 @@ function init_grid()
 	
 
 	mygrid = new dhtmlXGridObject('gridbox');
-	mygrid.setImagePath("newDhtmlx/imgs/");
+	mygrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 	mygrid.setHeader(columns);
 	mygrid.setEditable("FALSE");
 	mygrid.enableAutoHeigth(false);

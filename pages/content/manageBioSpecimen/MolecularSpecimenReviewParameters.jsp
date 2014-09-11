@@ -18,11 +18,11 @@
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+	<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
 
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
 <SCRIPT>var imgsrc="images/";
 
 function calculateAbsorbanceRatio()
@@ -142,7 +142,7 @@ function roundOff(valueToBeRoundOff, precision)
 
 						</div>
 								<script>
-							 window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+							 window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 							  var timeHr = new dhtmlXCombo("timeInHours1","timeInHours1","100px");
 							  timeHr.setSize(60);
 							  timeHr.enableFilteringMode(true);

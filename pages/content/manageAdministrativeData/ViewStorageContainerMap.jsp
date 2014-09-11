@@ -11,18 +11,18 @@
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-<script language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxcommon.js"></script>
-	<script  language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxgrid.js"></script> 
-	<script language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script>
-	<script language="JavaScript" type="text/javascript" src="newDhtmlx/ext/dhtmlxgrid_drag_custom.js"></script> 
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script  language="JavaScript" type="text/javascript"src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script> 
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/custom/dhtmlxgrid_drag_custom.js"></script> 
 	<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script> 
-	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
-	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
+	<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
+	<script language="JavaScript" type="text/javascript" src='dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_export.js'></script>
 	
-	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+	<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
 	
 </head>
 <%
@@ -522,7 +522,7 @@ for(var cnt= 0 ;cnt< headerStringArray.length;cnt++){
 }
  //["text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;","text-align:center;"];
  
-//grid.setImagePath("dhtml_comp/imgs/"); 
+//grid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/"); 
 grid.setHeader(headerString,null,styleArray); 
 /*if(headerStringArray.length>10){
 grid.setInitWidths(widthString);

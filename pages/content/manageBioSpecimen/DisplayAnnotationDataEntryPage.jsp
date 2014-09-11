@@ -24,7 +24,7 @@ window.onresize = function() {  mdFrmResizer("dynamicExtensionsFrame",pcnt); }
 <html>
 	<head>
 			<title></title>
-			<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
+			<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
 			<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 			<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
 			<script src="<%=request.getContextPath()%>/jss/script.js" type="text/javascript"></script>

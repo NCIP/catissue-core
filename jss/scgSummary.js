@@ -2,7 +2,7 @@ var hourTimeCombo,minutesTimeCombo,rhourTimeCombo,rminutesTimeCombo,siteCombo,co
 
 function convertSelectToCombo()
 {
- window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+ window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 
 siteCombo = dhtmlXComboFromSelect("site");
 siteCombo.setSize("240");

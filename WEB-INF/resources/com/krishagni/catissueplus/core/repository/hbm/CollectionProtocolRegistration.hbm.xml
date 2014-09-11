@@ -178,6 +178,20 @@
 			cpr where cpr.collectionProtocol.id=:cpId and
 			cpr.protocolParticipantIdentifier=:ppid
 		</query>
+		
+		<query name="getRegistrationByParticipantId">
+			from
+			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
+			cpr where cpr.participant.id=:participantId and
+			cpr.activityStatus='Active'
+		</query>
+		
+		<query name="getSubRegistrationByParticipantAndCPId">
+			from
+			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
+			cpr where cpr.participant.id=:participantId and cpr.collectionProtocol.parentCollectionProtocol.id=:cpId and
+			cpr.activityStatus='Active'
+		</query>
 
 	</class>
 </hibernate-mapping>

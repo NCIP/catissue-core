@@ -33,28 +33,28 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 
 
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css"	href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
 <link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxToolbar/codebase/skins/dhtmlxtoolbar_dhx_blue.css">
 
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxTree/codebase/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
 
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxToolbar/codebase/dhtmlxtoolbar.js"></script>
 
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
@@ -71,7 +71,7 @@
 
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
 
 <script language="JavaScript" type="text/javascript" src="jss/aliquots.js"></script>
 <script language="JavaScript">

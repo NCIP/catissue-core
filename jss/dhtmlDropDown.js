@@ -1,4 +1,4 @@
-window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 
 var gridOn = 0, gridInit=0;
 var timerForInvestigatorFilter, piText;
@@ -8,7 +8,7 @@ function initDropDownGrid(gridDropDownInfo, loadDataVariable)
 {
 	
 		var gridObj = new dhtmlXGridObject(gridDropDownInfo['gridObj']);
-		gridObj.setImagePath("dhtmlx_suite/imgs/");
+		gridObj.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 		gridObj.setHeader(" ");
 		gridObj.setInitWidths("*");
 		gridObj.setColAlign("left");
@@ -50,7 +50,7 @@ function initDropDownGridForSummary(gridDropDownInfo, loadDataVariable)
 {
 	
 		var gridObj = new dhtmlXGridObject(gridDropDownInfo['gridObj']);
-		gridObj.setImagePath("dhtmlx_suite/imgs/");
+		gridObj.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 		gridObj.setHeader(" ");
 		gridObj.setInitWidths("*");
 		gridObj.setColAlign("left");
@@ -297,7 +297,7 @@ function initWindow()
 {
     dhxWins = new dhtmlXWindows();
     dhxWins.enableAutoViewport(true);
-    //dhxWins.setImagePath("dhtmlx_suite/imgs/");
+    //dhxWins.setImagePath("dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/");
     dhxWins.setSkin("dhx_skyblue");
 }
 

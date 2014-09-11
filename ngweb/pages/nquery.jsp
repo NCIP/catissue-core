@@ -927,10 +927,7 @@
                   </div>
                 </div>
                 <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="!filter.expr"> 
-                  <i>{{filter.form.caption}} &gt;&gt; </i> 
-                  <i ng-if="filter.field.extensionForm"> {{filter.field.extensionForm}} &gt; &gt; </i>
-                  <i>{{filter.field.caption}} </i> 
-
+                  <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i>
                   <b> {{filter.op.desc}} </b> 
 
                   <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
@@ -1110,15 +1107,76 @@
     </script>
           
     <script type="text/ng-template" id="define-view.html">
-      <div class="modal-header" style="height: 10%">
-        <h4>Define Results View</h4>
+      <div class="modal-body" style="height: 465px;">
+        <div id="define-view-notif" class="define-view-notifs hidden"></div>
+        <tabset>
+          <tab heading="Define View"> 
+            <div style="margin-top: 10px; height: 405px; overflow: auto">
+              <span class="plus-heading">Please select the fields that you wish to view in results table</span>
+              <span class="plus-note plus-margin-bottom">Drag and drop fields to reorder the view</span>
+              <ka-tree opts='treeOpts'></ka-tree>
+            </div>
+          </tab>
+          <tab heading="Pivot Table" select="preparePivotTableOpts()">
+            <div style="margin-top: 10px; height: 405px; overflow: auto">
+              <div class="form-group">
+                <label class="checkbox-inline">
+                  <input type="checkbox" ng-model="pivotTable" 
+                    ng-checked="reporting.type == 'crosstab'" ng-change="createPivotTable(pivotTable)"> 
+                  Create Pivot Table
+                </label>
+              </div>
+
+              <div ng-if="reporting.type == 'crosstab'">
+                <div class="form-group">
+                  <label for="group-rows-by">Row Fields</label>
+                  <ka-select id="group-rows-by" style="width: 100%;"
+                    data-placeholder="Select fields to use for grouping rows"
+                    options="groupRowsBy" option-id="name" option-value="value"
+                    on-select="onGroupRowsByChange"
+                    multiple selected="reporting.params.groupRowsBy">
+                  </ka-select>
+                </div>
+
+                <div class="form-group">
+                  <label for="group-col-by">Column Field</label>
+                  <ka-select id="group-col-by" style="width: 100%;"
+                    data-placeholder="Select field to use for grouping columns"
+                    options="groupColBy" option-id="name" option-value="value"
+                    on-select="onGroupColByChange"
+                    selected="reporting.params.groupColBy">
+                  </ka-select>
+                </div>
+
+                <div class="form-group">
+                  <label for="summary-value">Value Field</label>
+                  <ka-select id="summary-value" style="width: 100%;"
+                    data-placeholder="Select summary field"
+                    options="summaryFields" option-id="name" option-value="value"
+                    on-select="onSummaryFieldChange"
+                    multiple selected="reporting.params.summaryFields">
+                  </ka-select>
+                </div>
+
+                <div class="form-group">
+                  <label for="rollup">Rollup Type</label>
+                  <div id="rollup">
+                    <label class="radio-inline">
+                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="none"> None
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="rollup"> Normal
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="powerset"> Powerset
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tab>
       </div>
-      <div class="modal-body" style="height: 75%;overflow:auto">
-        <span class="plus-heading">Please select the fields that you wish to view in results table</span>
-        <span class="plus-note plus-margin-bottom">Drag and drop fields to reorder the view</span>
-        <ka-tree opts='treeOpts'></ka-tree>
-      </div>
-      <div class="modal-footer" style="height: 12%">
+      <div class="modal-footer" style="height: 65px;">
         <button class="btn btn-default" ng-click="cancel()">Cancel</button>
         <button class="btn btn-primary" ng-click="ok()">Ok</button>
       </div>
@@ -1291,6 +1349,35 @@
          <button class="btn btn-default" ng-click="cancel()">Cancel</button>
          <button class="btn btn-primary" ng-disabled="!specimenList.name" ng-click="saveSpecimenList()">Create</button>
       </div> 
+    </script>
+
+    <script type="text/ng-template" id="aggregate-tmpl.html">
+      <div>
+        {{node.val}}
+        <span ng-if="node.aggFn">({{node.desc ? node.desc : node.aggFn}})</span>
+        <div ng-if="node.type == 'field' && hover"> 
+          <label class="radio-inline">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="count" ng-change="node.checked=true"> Count
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="sum" ng-change="node.checked=true"> Sum
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="avg" ng-change="node.checked=true"> Average
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT' || node.dataType == 'DATE'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="min" ng-change="node.checked=true"> Min
+          </label>
+          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT' || node.dataType == 'DATE'">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="max" ng-change="node.checked=true"> Max
+          </label>
+          <label class="radio-inline" ng-if="node.aggFn">
+            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value=""> Reset
+          </label> 
+          
+          <input class="form-control" ng-if="node.aggFn" ng-model="node.desc">
+        </div>
+      </div>
     </script>
     
     <script>

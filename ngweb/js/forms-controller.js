@@ -19,7 +19,9 @@ angular.module('plus.forms', [])
     $scope.extnEntities = [ 
       {entity: 'Participant', name: 'Participant'},
       {entity: 'Specimen', name: 'Specimen'},
-      {entity: 'SpecimenCollectionGroup', name: 'Specimen Collection Group'}
+      {entity: 'SpecimenCollectionGroup', name: 'Specimen Collection Group'},
+      {entity: 'SpecimenEvent', name:'Specimen Event'}
+      
     ];
 
     $scope.formatDate = function(timeInMs) {
@@ -107,6 +109,11 @@ angular.module('plus.forms', [])
       $scope.isMultiRecord = false;
       $scope.selectedCps = undefined;
       $scope.selectedEntity = undefined;
+      $scope.isSpecimenEvent = false;
+
+      $scope.onEntitySelect = function(selected) {
+    	  $scope.allProtocols = $scope.isSpecimenEvent = selected.entity == 'SpecimenEvent';
+      }
 
       $scope.enableAttach = function(allProtocols, selectedCps, selectedEntity) {
          return ((allProtocols || (selectedCps && selectedCps.length > 0)) && selectedEntity) ? true : false;

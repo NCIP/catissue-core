@@ -6,6 +6,7 @@ public class ReqEntityFormsEvent extends RequestEvent {
 	public static enum EntityType {
 		COLLECTION_PROTOCOL_REGISTRATION,
 		SPECIMEN,
+		SPECIMEN_EVENT,
 		SPECIMEN_COLLECTION_GROUP
 	};
 

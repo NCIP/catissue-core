@@ -9,7 +9,7 @@
 
 <script>
     var imgsrc="images/";
-    window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+    window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 </script>
 <style>
 .errorStyleOn{
@@ -82,7 +82,7 @@
 </style>
 <script>
     var imgsrc="images/";
-    window.dhx_globalImgPath = "dhtmlx_suite/imgs/";
+    window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 </script>
 <!----------------------------------------------------------------------->
 <body onload="LoadSCGTabBar('${requestScope.operation}');"> 
@@ -703,13 +703,11 @@ document.getElementById('specimenSubmitButton').disabled=true;
 </logic:equal>
 var isImageEnabled = ${isImageEnabled};
 
-
-var showEventsTab = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
-
-
 var showViewSPRTab="ViewSurgicalPathologyReport.do?operation=viewSPR&pageOf=pageOfNewSpecimenCPQuery&reportId="+reportId+"&id="+specimenId;
 
 var showAnnotationTab="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
+
+var showSpecimenEventTab="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName=SpecimenEvent&id="+specimenId;
 
 var showConsentsTab="FetchConsents.do?consentLevelId="+specimenId+"&consentLevel=specimen&reportId="+reportId+"&pageof=pageOfNewSpecimenCPQuery&entityId="+entityId+"&staticEntityName="+staticEntityName;
 

@@ -9,6 +9,8 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 public class AllUsersEvent extends ResponseEvent {
 
 	private List<UserSummary> users;
+	
+	private Long count;
 
 	private Long count;
 

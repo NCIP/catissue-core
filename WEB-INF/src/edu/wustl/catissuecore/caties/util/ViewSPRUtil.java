@@ -136,7 +136,7 @@ public class ViewSPRUtil
 
 		//initialize section header map
 		Map abbrToHeader = new HashMap();
-		abbrToHeader = Utility.initializeReportSectionHeaderMap(configFileName);
+		//abbrToHeader = Utility.initializeReportSectionHeaderMap(configFileName);
 
 		//retieved the report Map
 		Map reportMap = new HashMap();

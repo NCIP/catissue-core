@@ -1,8 +1,8 @@
 <!-- dataList and columnList are to be set in the main JSP file -->
 <link rel="STYLESHEET" type="text/css"
-	href="dhtml_comp/css/dhtmlXGrid.css" />
+	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css" />
 
-<script src="dhtml_comp/js/dhtmlXCommon.js"></script> <script src="dhtml_comp/js/dhtmlXGrid.js"></script> <script src="dhtml_comp/js/dhtmlXGridCell.js"></script> <script src="dhtml_comp/js/dhtmlXGrid_mcol.js"></script> <script> var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%> <% List row = (List)dataList.get(i); int j; %> <%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormat(row.get(j))%>,<%}%><%=AppUtility.toNewGridFormat(row.get(j))%><%="\""%>,<%}%> <% List row = (List)dataList.get(i); int j; %> <%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormat(row.get(j))%>,<%}%><%=AppUtility.toNewGridFormat(row.get(j))%><%="\""%> ];
+<script src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcommon.js"></script> <script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script> <script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script> <script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js"></script> <script> var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%> <% List row = (List)dataList.get(i); int j; %> <%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormat(row.get(j))%>,<%}%><%=AppUtility.toNewGridFormat(row.get(j))%><%="\""%>,<%}%> <% List row = (List)dataList.get(i); int j; %> <%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=AppUtility.toNewGridFormat(row.get(j))%>,<%}%><%=AppUtility.toNewGridFormat(row.get(j))%><%="\""%> ];
 
 
 
@@ -138,7 +138,7 @@
 		}
 
 		mygrid = new dhtmlXGridObject('gridbox');
-		mygrid.setImagePath("dhtml_comp/imgs/");
+		mygrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 
 		mygrid.entBox.style.width="603px";
 		colDataTypes=colDataTypes.replace(/ch/,"ra");

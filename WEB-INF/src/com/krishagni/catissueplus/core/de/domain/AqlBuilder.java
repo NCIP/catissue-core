@@ -24,7 +24,7 @@ public class AqlBuilder {
 		return new AqlBuilder();
 	}
 	
-	public String getQuery(String[] selectList, Filter[] filters, QueryExpressionNode[] queryExprNodes) {
+	public String getQuery(Object[] selectList, Filter[] filters, QueryExpressionNode[] queryExprNodes) {
 		Map<Integer, Filter> filterMap = new HashMap<Integer, Filter>();
 		for (Filter filter : filters) {
 			filterMap.put(filter.getId(), filter);
@@ -35,16 +35,35 @@ public class AqlBuilder {
 		return "select " + selectClause + " where " + whereClause;		
 	}
 	
-	private String buildSelectClause(Map<Integer, Filter> filterMap, String[] selectList) {
+	private String buildSelectClause(Map<Integer, Filter> filterMap, Object[] selectList) {
 		StringBuilder select = new StringBuilder();
-		for (String field : selectList) {
-			if (field.startsWith("$temporal.")) {				
-				Integer filterId = Integer.parseInt(field.substring("$temporal.".length()));
-				Filter filter = filterMap.get(filterId);
-				field = getLhs(filter.getExpr()) + " as \"" + filter.getDesc() + " \""; 
-			}
-			
-			select.append(field).append(", ");
+		for (Object field : selectList) {
+			String elem = "";
+			if (field instanceof String) {
+				elem = (String)field;
+				if (elem.startsWith("$temporal.")) {				
+					Integer filterId = Integer.parseInt(elem.substring("$temporal.".length()));
+					Filter filter = filterMap.get(filterId);
+					elem = getLhs(filter.getExpr()) + " as \"" + filter.getDesc() + " \""; 
+				}
+				
+				select.append(elem).append(", ");
+			} else if (field instanceof AggregateField) {
+				AggregateField aggField = (AggregateField)field;
+				String fieldName = aggField.getName();
+				
+				if (aggField.getAggFn() == null) {
+					select.append(fieldName).append(", ");
+				} else {
+					String fnExpr = aggField.getAggFn() + "(";
+					if (aggField.getAggFn().equals("count")) {
+						fnExpr += "distinct ";
+					}
+					
+					fnExpr += fieldName + ") as \"" + aggField.getLabel() + " \"";
+					select.append(fnExpr).append(", ");
+				}				
+			}							
 		}
 		
 		int endIdx = select.length() - 2;		

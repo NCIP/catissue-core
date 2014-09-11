@@ -12,28 +12,28 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
-<script language="JavaScript"  type="text/javascript" src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/connector.js"></script>
+<script language="JavaScript"  type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script  language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
 
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_validation.js">
-<script src="dhtmlx_suite/ext/dhtmlxgrid_validation.js" type="text/javascript" charset="utf-8"></script>
-<script   language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script  language="JavaScript" type="text/javascript"  src="dhtmlx_suite/ext/dhtmlxgrid_srnd.js"></script>
-    <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-    <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
-    <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-    <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-    <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css">
-<script type="text/javascript" src="dhtmlx_suite/gridexcells/dhtmlxgrid_excell_combo.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_validation.js">
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_validation.js" type="text/javascript" charset="utf-8"></script>
+<script   language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script  language="JavaScript" type="text/javascript"  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_srnd.js"></script>
+    <script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+    <script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css">
+    <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+    <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css">
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/excells/dhtmlxgrid_excell_combo.js"></script>
 <script src="jss/script.js"></script>
 <script type="text/javascript" src="jss/tag-popup.js"></script>
 <link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>  
+<script src="dhtmlxSuite_v35/dhtmlxTreeGrid/codebase/dhtmlxtreegrid.js"></script>  
 
 <style>
 .active-column-0 {width:30px}
@@ -200,6 +200,7 @@ function gotoAdvanceQuery()
 
 function onSubmit(orderedString)
 {
+
     if(document.forms[0].chkName[2].checked == true)
     {
         if(document.getElementById('specimenEventParameter').value == "Transfer")
@@ -208,8 +209,12 @@ function onSubmit(orderedString)
         }
         else
         {
-            dobulkSpecimenEventsPage();
+            dobulkSpecimenEventsPage('StaticForms');
         }
+    }
+    else if(document.forms[0].chkName[3].checked == true)
+    {
+          dobulkSpecimenEventsPage('DynamicForms');
     }
     else if(document.forms[0].chkName[1].checked == true)
     {
@@ -219,22 +224,22 @@ function onSubmit(orderedString)
     {
         addToOrderList(orderedString);
     }
-    else if(document.forms[0].chkName[3].checked == true)
+    else if(document.forms[0].chkName[4].checked == true)
     {
         //create Shipment Request
         createShipmentRequest();
     }
-    else if(document.forms[0].chkName[4].checked == true)
+    else if(document.forms[0].chkName[5].checked == true)
     {
         //create Shipment
         createShipment();
     }
-    else if(document.forms[0].chkName[5].checked == true)
+    else if(document.forms[0].chkName[6].checked == true)
     {
         //distribute Order
         distributeOrder();
     }
-    else if(document.forms[0].chkName[6].checked == true)
+    else if(document.forms[0].chkName[7].checked == true)
     {
         printSpecimensLabels(orderedString);
     }
@@ -330,7 +335,7 @@ function dobulkTransferOperations(orderedString)
             }
         }
         
-function dobulkSpecimenEventsPage()
+function dobulkSpecimenEventsPage(formType)
         {
             var isChecked = updateHiddenFields();
             
@@ -355,7 +360,11 @@ function dobulkSpecimenEventsPage()
                     }   
                     
                 }
-                var action = "QuickEvents.do?specimenLabel="+specLabels+"&specimenEventParameter="+selectedEvent+"&fromPage=SpecimenList";
+                if(formType == 'StaticForms') {
+                  var action = "QuickEvents.do?specimenLabel="+specLabels+"&specimenEventParameter="+selectedEvent+"&fromPage=SpecimenList";
+                } else if(formType == 'DynamicForms') {
+                  var action = "specimenEventsBulkDataEntry.do?specimenLabels="+specLabels;
+                }
                 document.forms[0].action = action;
                 document.forms[0].submit();
             }
@@ -497,7 +506,7 @@ function loadSpecimenGrid()
 {
 
     mygrid = new dhtmlXGridObject("specimenGrid");
-    mygrid.setImagePath("dhtmlx_suite/imgs/");
+    mygrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
     //CHKBOX,SCG_NAME,Label,Barcode,Parent_Specimen_Id,Class,Type,Avl_Quantity,Lineage,Identifier
     mygrid.setInitWidthsP("3,22,15,,15,15,,15,15,,");
     mygrid.setEditable(true);
@@ -703,20 +712,31 @@ function loadSpecimenGrid()
           </tr>
         
           <tr>
+
+            <td class="black_ar">
+              <input type="radio" name="chkName" value="sleBulkDataEntry" id="sle" onclick="showHideComponents()">
+            </td>
+            <td class="black_ar">
+              Specimen Event (Dynamic)
+            </td>
+
             <td class="black_ar"><input type="radio" name="chkName" onclick="showHideComponents()" value="requestShipment" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.request"/></td>           
             <td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showHideComponents()" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
-            
-            
-                    <td class="black_ar"><input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> ></td>
-            <td class="black_ar" >Distribute</td>
-            
-            <td class="black_ar"><input type="radio" name="chkName"
-                                value="printLabels" id="printCheckbox"
-                                onclick="showHideComponents()"><bean:message
-                                key="mylist.label.printLabels" /></td>
-                            <td>
+
+            <td class="black_ar">
+              <input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> >
+              <label class="black_ar"> Distribute </label
+            </td>
+          </tr>
+          <tr>
+            <td class="black_ar">
+              <input type="radio" name="chkName" value="printLabels" id="printCheckbox" onclick="showHideComponents()">
+            </td>
+            <td class="black_ar">
+              <bean:message key="mylist.label.printLabels" />
+            </td>
           </tr>
         </table>          
       </tr>

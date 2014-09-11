@@ -2,8 +2,6 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import gov.nih.nci.logging.api.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +21,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
+
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 @Repository("collectionProtocolRegistrationDao")
 public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<CollectionProtocolRegistration>
@@ -189,6 +190,22 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		return prepareParticipantInfo(rows.get(0));
 	}
 	
+	@Override
+	public List<CollectionProtocolRegistration> getRegDetailsForParticipant(Long participantId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_REGISTRATION_BY_PARTICIPANT_ID);
+		query.setLong("participantId", participantId);
+		List<CollectionProtocolRegistration> registrations = query.list();
+		return registrations;
+	}
+	
+	@Override
+	public List<CollectionProtocolRegistration> getSubRegDetailForParticipantAndCp(Long participantId, Long cpId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SUB_REGISTRATIONS_BY_PARTICIPANT_AND_CP_ID);
+		query.setLong("participantId", participantId);
+		query.setLong("cpId", cpId);
+		return query.list();
+	}
+	
 	private ParticipantInfo preparePhiParticipantInfo(Object[] row) {
 		ParticipantInfo participant = prepareParticipantInfo(row);
 		if(row[3] != null){
@@ -212,6 +229,10 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
 	
+	private static final String GET_REGISTRATION_BY_PARTICIPANT_ID = FQN + ".getRegistrationByParticipantId";
+	
+	private static final String GET_SUB_REGISTRATIONS_BY_PARTICIPANT_AND_CP_ID = FQN + ".getSubRegistrationByParticipantAndCPId";
+	
 	private static final String GET_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getParticipantByCPAndParticipantId";
 	
 	private static final String GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID = FQN + ".getPhiParticipantByCPAndParticipantId";
@@ -231,6 +252,5 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	private static final String GET_CPID_BY_PPID_AND_CPID = FQN + ".getCprIdByPpid";
 
 	private static final String GET_CPR_BY_PPID_AND_CPID = FQN + ".getCprByPpid";
-
 
 }

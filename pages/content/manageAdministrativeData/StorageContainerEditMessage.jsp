@@ -3,10 +3,10 @@
 <script src="jss/highCharts/highstock.js"></script>
 <script src="jss/highCharts/highcharts.js"></script>
 <script src="jss/highCharts/exporting.js"></script>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
-	<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-	<script  src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
-	<script src="dhtmlx_suite/js/dhtmlxcontainer.js" type="text/javascript"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css">
+	<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script  src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+	<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js" type="text/javascript"></script>
 <body onload="onGraphPageLoad()">	
 <div id="containerGraphtabbar" style = "width:100%;height:100%;">
 <div id="specimenCountTab" name="Specimen Count">
@@ -275,7 +275,7 @@
     var tabbar=new dhtmlXTabBar("containerGraphtabbar","top");
 	function onGraphPageLoad(){
 		tabbar.setSkin("modern");
-		tabbar.setImagePath("dhtmlx_suite/imgs/");
+		tabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 		tabbar.addTab("specimenCountTab","By Count","120px");
 		tabbar.addTab("percentTab","By Utilization","150px");
 		tabbar.setContentHTML("specimenCountTab",'<div style="overflow-y: scroll;width: 100%; height: 100%;"><div id="containerSpecimenGraphDiv" style="width: 100%;"></div></div>');

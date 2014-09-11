@@ -60,13 +60,13 @@ heightForGrid=false;
 	<head>
 		<%-- Stylesheet --%>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
-		<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtml_comp/css/dhtmlXGrid.css"/>
+		<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css"/>
 		<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/jss/ajax.js" type="text/javascript"></script>
-		<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXCommon.js"></script>
-		<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid.js"></script>
-		<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGridCell.js"></script>
-	<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid_excell_link.js"></script>
+		<script  src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcommon.js"></script>
+		<script  src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+		<script  src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+	<script  src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/excells/dhtmlxgrid_excell_link.js"></script>
 
 	<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtml_comp/css/dhtmlXMenu.css">
 		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXProtobar.js"></script>
@@ -139,7 +139,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
         {	
 
 			gridForGroups= new dhtmlXGridObject('divForGroups');
-			gridForGroups.setImagePath("dhtml_comp/imgs/");
+			gridForGroups.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 			//		gridForGroups.enableAutoHeigth(false);  //on safari
 			gridForGroups.enableAutoHeigth(true);  //for mozilla, IE
 			gridForGroups.setHeader("Group");

@@ -3,13 +3,12 @@ package com.krishagni.catissueplus.core.administrative.events;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqAllUsersEvent extends RequestEvent {
-
 	private String searchString;
-
+	
 	private int startAt;
-
+	
 	private int maxRecords;
-
+	
 	private boolean countReq;
 
 	public String getSearchString() {
@@ -43,5 +42,4 @@ public class ReqAllUsersEvent extends RequestEvent {
 	public void setCountReq(boolean countReq) {
 		this.countReq = countReq;
 	}
-
 }

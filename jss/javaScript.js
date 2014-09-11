@@ -1131,7 +1131,7 @@ function isNumeric(strString)
 function initializeGridForSelectedEntities(groupsXML)
 {
 	gridForEntities= new dhtmlXGridObject('gridForEnities');
-	gridForEntities.setImagePath("dhtml_comp/imgs/");
+	gridForEntities.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 	gridForEntities.enableAutoHeigth(false);
 	gridForEntities.setHeader("#,Form Title,Entity,Date,Created By,Conditions");
 	gridForEntities.setInitWidthsP("5,23,17,12,15,15,13");
@@ -1153,7 +1153,7 @@ function initializeGridForSelectedEntities(groupsXML)
 function initializeGridForEntities()
 {
 	gridForEntities= new dhtmlXGridObject('gridForEnities');
-	gridForEntities.setImagePath("dhtml_comp/imgs/");
+	gridForEntities.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 	gridForEntities.enableAutoHeigth(false);
 	gridForEntities.setHeader("Form Title,Entity,Date,Created By,Conditions");
 	gridForEntities.setInitWidthsP("27,18,15,18,22");

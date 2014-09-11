@@ -5,11 +5,11 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Iterator"%>
-<script	src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script	src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_extra.js"></script>
-<script	src="dhtmlx_suite/ext/dhtmlxcombo_whp.js"></script>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css" />
+<script	src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script	src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script	src="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_extra.js"></script>
+<script	src="dhtmlxSuite_v35/dhtmlxCombo/codebase/ext/dhtmlxcombo_whp.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css" />
 <head>
 </head>
 
@@ -56,7 +56,7 @@
 				 					
 			</td>		
             		<script>
-						window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+						window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 						var distributionProtocolNameCombo = dhtmlXComboFromSelect("distributionProtocolName");
 						distributionProtocolNameCombo.setSize(301);
 						distributionProtocolNameCombo.enableFilteringMode(true);

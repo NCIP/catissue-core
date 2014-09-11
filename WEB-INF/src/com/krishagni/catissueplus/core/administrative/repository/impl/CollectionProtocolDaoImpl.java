@@ -82,10 +82,31 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 			return new ArrayList<SpecimenRequirement>(cpe.getSpecimenRequirementCollection());
 	}
 
+	@Override
+	public List<CollectionProtocolSummary> getChildProtocols(Long cpId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_CHILD_CPS);
+		query.setLong("parentId", cpId);
+		query.setString("activityStatus", Constants.ACTIVITY_STATUS_ACTIVE); 
+		List<Object[]> rows = query.list();
+		List<CollectionProtocolSummary> cps = new ArrayList<CollectionProtocolSummary>();
+		for (Object[] row : rows) {
+			CollectionProtocolSummary cp = new CollectionProtocolSummary();
+			cp.setId((Long) row[0]);
+			cp.setShortTitle((String) row[1]);
+			cp.setTitle((String) row[2]);
+			cp.setPpidFormat((String) row[3]);
+			cp.setCpType((String)row[4]);
+			cps.add(cp);
+		}
+
+		return cps;
+	}
 	
 	private static final String FQN = CollectionProtocol.class.getName();
 
 	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
+	
+	private static final String GET_CHILD_CPS = FQN + ".getChildProtocols";
 	
 	private static final String GET_CP_BY_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
 			.getName() + ".getCpByTitle";

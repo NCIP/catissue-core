@@ -1391,5 +1391,9 @@
 	<definition name=".catissuecore.AuditReportDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/audit/Audit.jsp" />
 	</definition>
+	
+	<definition name=".nextgen.seBulkDataEntry" extends=".catissuecore.homePageDef5">
+		<put name="pageContentUrl" value="ngweb/pages/SpecimenEventBulkDataEntry.jsp" type="string"/>
+	</definition>
 
 </tiles-definitions>

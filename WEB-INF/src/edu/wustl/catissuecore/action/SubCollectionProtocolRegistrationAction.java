@@ -101,7 +101,7 @@ public class SubCollectionProtocolRegistrationAction extends CatissueBaseAction
 				this.setParticipantMedicalIdentifierInForm(parentCPId, participantId, cpform);
 				System.out.println("ParentCPId:" + parentCPId);
 			}
-			if (cpform.getRegistrationDate() == null)
+			if (cpform.getRegistrationsDate() == null)
 			{
 
 				if (request.getParameter("regDate") != null)
@@ -118,11 +118,11 @@ public class SubCollectionProtocolRegistrationAction extends CatissueBaseAction
 					// Now the Date received is of format mm--dd-yyyy.So no need
 					// to parse it.
 
-					cpform.setRegistrationDate(request.getParameter(Constants.REG_DATE));
+					cpform.setRegistrationsDate(request.getParameter(Constants.REG_DATE));
 				}
-				if (cpform.getRegistrationDate() == null || cpform.getRegistrationDate().equals(""))
+				if (cpform.getRegistrationsDate() == null || cpform.getRegistrationsDate().equals(""))
 				{
-					cpform.setRegistrationDate(CommonUtilities.parseDateToString(Calendar
+					cpform.setRegistrationsDate(CommonUtilities.parseDateToString(Calendar
 							.getInstance().getTime(), CommonServiceLocator.getInstance()
 							.getDatePattern()));
 
@@ -291,8 +291,8 @@ public class SubCollectionProtocolRegistrationAction extends CatissueBaseAction
 				form.setParticipantProtocolID(protocolParticipantIdentifier);
 			}
 			form.setId(id);
-			form.setRegistrationDate(regDate.toString());
-			form.setRegistrationDate(CommonUtilities.parseDateToString(regDate,
+			form.setRegistrationsDate(regDate.toString());
+			form.setRegistrationsDate(CommonUtilities.parseDateToString(regDate,
 					CommonServiceLocator.getInstance().getDatePattern()));
 
 			return true;

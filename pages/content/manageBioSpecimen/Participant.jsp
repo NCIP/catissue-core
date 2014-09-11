@@ -21,7 +21,7 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 <script>
-      window.dhx_globalImgPath="dhtmlx_suite/imgs/";
+      window.dhx_globalImgPath="dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
 </script>
 <script src="jss/ajax.js"></script> 
 <script src="jss/script.js"></script>

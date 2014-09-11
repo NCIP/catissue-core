@@ -124,6 +124,31 @@
             order by
               modificationTime desc
         </sql-query>
+        
+        <sql-query name="getSpecimenEventFormsSummary">
+            <return-scalar column="formId" type="long"/>
+            <return-scalar column="formName" type="string"/>
+            <return-scalar column="formCaption" type="string"/>
+            <return-scalar column="creationTime" type="timestamp"/>
+            <return-scalar column="modificationTime" type="timestamp"/>
+            <return-scalar column="userId" type="long"/>
+            <return-scalar column="userFirstName" type="string"/>
+            <return-scalar column="userLastName" type="string"/>
+  
+            select
+              c.identifier as formId, c.name as formName, c.caption as formCaption,
+              c.create_time as creationTime,
+              case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+            from
+              catissue_form_context ctxt
+              inner join dyextn_containers c on ctxt.container_id = c.identifier
+              inner join catissue_user u on u.identifier = c.created_by
+            where
+              ctxt.entity_type='SpecimenEvent'
+            order by
+              c.caption
+        </sql-query>        
 
         <sql-query name="getQueryForms">
             <return-scalar column="formId" type="long"/>
@@ -176,6 +201,13 @@
               f.containerId = :formId and
               (f.cpId = :cpId or f.cpId = -1) and
               f.entityType = :entityType
+        </query>
+                
+        <query name="getFormContextsById">
+            from
+              FormContextBean as f 
+            where
+              f.identifier in (:ids)
         </query>
         
         <query name="getQueryFormCtxtByContainerId">
@@ -234,6 +266,36 @@
             group by
               fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
         </sql-query>
+        
+        <sql-query name="getSpecimenEventForms">
+            <return-scalar column="formCtxtId" type="long"/>
+            <return-scalar column="formId" type="long"/>
+            <return-scalar column="formCaption" type="string"/>
+            <return-scalar column="cpId" type="long"/>
+            <return-scalar column="recordCnt" type="integer"/>
+            <return-scalar column="isMultirecord" type="boolean"/>
+
+            select
+              fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+              count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
+            from
+              catissue_form_context fc
+              left join (
+                catissue_coll_prot_reg reg
+                inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier
+                inner join catissue_specimen specimen on specimen.specimen_collection_group_id = scg.identifier)
+                on reg.collection_protocol_id = fc.cp_id
+              inner join dyextn_containers c on c.identifier = fc.container_id
+              left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
+            where
+              fc.entity_type = 'SpecimenEvent' and (specimen.identifier = :specimenId or fc.cp_id = -1)
+            group by
+              fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
+            order by 
+               c.caption  
+
+        </sql-query>
+        
 
         <sql-query name="getScgForms">
             <return-scalar column="formCtxtId" type="long"/>
@@ -348,5 +410,17 @@
             where
               (cp_id = :cpId or cp_id = -1) and entity_type = :entityType
         </sql-query>
+        
+        <sql-query name="getRecordCount">
+        	<return-scalar column="recordCnt" type="long"/>
+        	
+        	select 
+        	  count(*) as recordCnt 
+        	from 
+        	  catissue_form_record_entry r  
+            where 
+              r.form_ctxt_id = :formCtxtId and r.object_id = :objectId and r.activity_status = 'ACTIVE' 
+        </sql-query>
+
     </class>
 </hibernate-mapping>

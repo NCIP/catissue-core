@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,10 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEven
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SubRegistrationDetailsEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegistrationInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSubRegistrationDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 
@@ -65,7 +69,38 @@ public class ParticipantController {
 		}
 			return resp.getParticipantDetail();
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/registrations")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<RegistrationInfo> getRegistrationsforParticipant(@PathVariable("id") Long participantId,
+			@RequestParam(value = "cpId", required = false, defaultValue = "") String cpId) {
+		ReqSubRegistrationDetailEvent event = new ReqSubRegistrationDetailEvent();
+		event.setParticipantId(participantId);
+		event.setCpId(StringUtils.isBlank(cpId)?null:Long.valueOf(cpId));
+
+		SubRegistrationDetailsEvent resp = participantSvc.getSubRegistrationDetails(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getRegistrationInfo();
+		}
+		return null;
+	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/SubCpRegistrations")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<RegistrationInfo> getSubCPRegistrationsforParticipant(@PathVariable("id") Long participantId,
+			@RequestParam(value = "cpId", required = true, defaultValue = "") String cpId) {
+		ReqSubRegistrationDetailEvent event = new ReqSubRegistrationDetailEvent();
+		event.setParticipantId(participantId);
+		event.setCpId(StringUtils.isBlank(cpId)?null:Long.valueOf(cpId));
+
+		SubRegistrationDetailsEvent resp = participantSvc.getSubRegistrationDetails(event);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getRegistrationInfo();
+		}
+		return null;
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

@@ -313,7 +313,7 @@ Ext.onReady(function(){
                             href:'GetAliquotDetails.do?pageOf=fromMenu&parentSpecimentLabel=&aliquotCount=&quantityPerAliquot=&searchBasedOn=label'
                         }, {
                             text: 'Events',
-                            href:'QuickEvents.do?operation=add'
+                            href:'specimenEventsBulkDataEntry.do'
                         }, {
                             text: 'Multiple',
                              href:'MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu'

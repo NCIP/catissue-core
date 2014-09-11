@@ -10,25 +10,25 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/alretmessages.css"/>
    
-<link rel="STYLESHEET" type="text/css"  href="newDhtmlx/version3/dhtmlxGrid/dhtmlxgrid.css">
-<link rel="STYLESHEET" type="text/css" href="newDhtmlx/version3/dhtmlxGrid/skins/dhtmlxgrid_dhx_skyblue.css">
-<link rel="STYLESHEET" type="text/css"  href="newDhtmlx/version3/dhtmlxCombo/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css"/>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css"/>
+<link rel="STYLESHEET" type="text/css"  href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css">
+<link rel="STYLESHEET" type="text/css"  href="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css"/>
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css"/>
 
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxcalendar_dhx_skyblue.css" />
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcalendar.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.css" />
 
 <link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
 
-<script src="newDhtmlx/version3/dhtmlxGrid/dhtmlxcommon.js"></script>
-<script type="text/javascript" src="newDhtmlx/version3/dhtmlxGrid/dhtmlxgrid.js"></script>
-<script type="text/javascript" src="newDhtmlx/version3/dhtmlxGrid/dhtmlxgridcell.js"></script>
-<script type="text/javascript" src="newDhtmlx/version3/dhtmlxCombo/dhtmlxcombo.js"></script>
-<script type="text/javascript" src="newDhtmlx/version3/dhtmlxGrid/excells/dhtmlxgrid_excell_combo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcalendar.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/excells/dhtmlxgrid_excell_combo.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
 
 <script src="jss/json2.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
@@ -42,13 +42,12 @@
 <script type="text/javascript" src="jss/specimen.js"></script>
 
 
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
+<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
 
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
 <STYLE type="text/css">
 <!--
 .aliquot_details{padding-top: 3px; padding-bottom: 3px;}
@@ -136,7 +135,7 @@ ul li ul li a span {
         }
         function init_grid(){       
             aliquotGrid = new dhtmlXGridObject('gridbox');
-            aliquotGrid.setImagePath("dhtmlx_suite/imgs/");
+            aliquotGrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
             aliquotGrid.setHeader("Label,Barcode,Quantity,Storage Container <a style='margin-left:62px;' href='#' onclick='applyFirstToALL()'>Apply first to all</a>,Position 1,Position 2,Container Map,");
             aliquotGrid.setEditable("true");
             aliquotGrid.enableAutoHeigth(false);

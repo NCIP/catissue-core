@@ -7,10 +7,10 @@
 			margin: 1 2 1 0;		
 		}
 	</style>
-	<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
-	<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-	<script  src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
-	<script src="dhtmlx_suite/js/dhtmlxcontainer.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css">
+	<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script  src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+	<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js" type="text/javascript"></script>
 </head>
 	
 <body>
@@ -24,7 +24,7 @@
 var tabbar = new dhtmlXTabBar("a_tabbar", "top");
 tabbar.setHrefMode("iframes-on-demand");
 tabbar.setSkin("dhx_skyblue");
-tabbar.setImagePath("dhtmlx_suite/imgs/");
+tabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 tabbar.addTab("a1", "Map", "100px");
 tabbar.addTab("a2", "Edit", "100px");
 

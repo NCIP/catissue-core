@@ -5,7 +5,8 @@ import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
-import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
+import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
+import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -19,6 +20,7 @@ import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntriesDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
+import com.krishagni.catissueplus.core.de.events.RemoveFormContextEvent;
 import com.krishagni.catissueplus.core.de.events.ReqAllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.ReqEntityFormsEvent;
@@ -50,6 +52,8 @@ public interface FormService {
 	public FormDataEvent getFormData(ReqFormDataEvent req);
 	
 	public FormDataEvent saveFormData(SaveFormDataEvent req);
+	
+	public BulkFormDataSavedEvent saveBulkFormData(SaveBulkFormDataEvent req);
 
 	public FileDetailEvent getFileDetail(ReqFileDetailEvent req);
 
@@ -59,6 +63,7 @@ public interface FormService {
 
 	public RecordEntryEventAdded addRecordEntry(AddRecordEntryEvent req);
 
-	public BOTemplateGeneratedEvent genereateBoTemplate(BOTemplateGenerationEvent boReq); 
+	public BOTemplateGeneratedEvent genereateBoTemplate(BOTemplateGenerationEvent boReq);
+
 	
 }

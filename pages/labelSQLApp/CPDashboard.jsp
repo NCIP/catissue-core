@@ -18,9 +18,17 @@
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <link rel="STYLESHEET" type="text/css" href="css/alretmessages.css">
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<script src="jss/caTissueSuite.js"></script>
-<script src="jss/common.js"></script>
+
 <SCRIPT>var imgsrc="images/";</SCRIPT>
+
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css">
+<script  src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script  src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
+<script src="jss/caTissueSuite.js"></script>
+<script src="jss/common.js"></script>	
 <script src="jss/calendarComponent.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="css/advQuery/styleSheet.css" />
@@ -28,13 +36,6 @@
 	href="css/advQuery/catissue_suite.css" />
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
-<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script  src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
-
-<script language="JavaScript" type="text/javascript" src="jss/keyBoardShortCutPlugin.js"></script>
-<script language="JavaScript" type="text/javascript" src="jss/KeyBoardMenuCode.js"></script>
-	
 <style>
 html, body {
   height: 100%
@@ -303,7 +304,7 @@ function loadUI()
 {
 	tabbar = new dhtmlXTabBar("a_tabbar", "top",25);
 	tabbar.setSkin('default');
-	tabbar.setImagePath("dhtmlx_suite/imgs/");
+	tabbar.setImagePath("dhtmlxSuite_v35/dhtmlxTabbar/codebase/imgs/");
 	tabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 	
 	tabbar.addTab("a1",'<span style="position:relative;right:60px; font-size:14px"> Dashboard </span>', "200px");

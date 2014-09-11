@@ -11,6 +11,8 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 
 	private String ppidFormat;
 
+	private String cpType;
+
 	public Long getId() {
 		return id;
 	}
@@ -41,6 +43,14 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 
 	public void setPpidFormat(String ppidFormat) {
 		this.ppidFormat = ppidFormat;
+	}
+
+	public String getCpType() {
+		return cpType;
+	}
+
+	public void setCpType(String cpType) {
+		this.cpType = cpType;
 	}
 
 	@Override

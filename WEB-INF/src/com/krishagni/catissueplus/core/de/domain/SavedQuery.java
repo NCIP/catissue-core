@@ -31,7 +31,9 @@ public class SavedQuery {
 
 	private QueryExpressionNode[] queryExpression;
 
-	private String[] selectList;
+	private Object[] selectList;
+	
+	private ReportSpec reporting;
 	
 	private Set<QueryFolder> folders = new HashSet<QueryFolder>();
 
@@ -125,14 +127,22 @@ public class SavedQuery {
 		this.queryExpression = queryExpression;
 	}
 
-	public String[] getSelectList() {
+	public Object[] getSelectList() {
 		return selectList;
 	}
 
-	public void setSelectList(String[] selectList) {
+	public void setSelectList(Object[] selectList) {
 		this.selectList = selectList;
 	}
 	
+	public ReportSpec getReporting() {
+		return reporting;
+	}
+
+	public void setReporting(ReportSpec reporting) {
+		this.reporting = reporting;
+	}
+
 	public Set<QueryFolder> getFolders() {
 		return folders;
 	}
@@ -166,6 +176,7 @@ public class SavedQuery {
 		query.queryExpression = queryExpression;
 		query.drivingForm = drivingForm;
 		query.folders = null;
+		query.reporting = reporting;
 		
 		try {
 			return getObjectMapper().writeValueAsString(query);
@@ -187,6 +198,7 @@ public class SavedQuery {
 		this.filters = query.filters;		
 		this.queryExpression = query.queryExpression;
 		this.drivingForm = query.drivingForm;
+		this.reporting = query.reporting;
 	}
 	
 	public String getAql() {
@@ -200,8 +212,9 @@ public class SavedQuery {
 		setLastUpdatedBy(query.getLastUpdatedBy());
 		setLastUpdated(query.getLastUpdated());
 		setSelectList(query.getSelectList());
-		setFilters(query.getFilters());
+		setFilters(query.getFilters());		
 		setQueryExpression(query.getQueryExpression());
+		setReporting(query.getReporting());
 	}
 	
 	@Override
@@ -233,8 +246,7 @@ public class SavedQuery {
 		}
 		return true;
 	}
-	
-	
+		
 	private ObjectMapper getObjectMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibilityChecker(
@@ -244,6 +256,5 @@ public class SavedQuery {
 				.withSetterVisibility(Visibility.NONE)
 				.withCreatorVisibility(Visibility.NONE));
 		return mapper;		
-	}
-	
+	}	
 }

@@ -1,10 +1,11 @@
 package com.krishagni.catissueplus.core.de.domain.factory.impl;
 
-import gov.nih.nci.logging.api.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;

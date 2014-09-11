@@ -8,29 +8,29 @@
 <!-- dhtmlx Grid/tree Grid -->
 <link rel="stylesheet" type="text/css"
     href="css/advQuery/styleSheet.css" />
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css">
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<!--link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css" /-->
-<script src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css" />
+<!--link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css" /-->
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn.js"></script>
 <link rel="STYLESHEET" type="text/css"
-    href=" dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css"/>
-<script src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+    href=" dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css"/>
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="jss/advQuery/json2.js"></script>
 <link rel="stylesheet" type="text/css" href="css/advQuery/tag-popup.css" />
 <style>
     .dhx_toolbar_base_dhx_skyblue { 
-        background-image: url("dhtmlx_suite/imgs/dhxtoolbar_dhx_skyblue/sky_blue_grid1.gif");
+        background-image: url("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/sky_blue_grid1.gif");
         background-repeat: repeat-x;
         border-radius: 0.3em 0.3em 0.3em 0.3em; 
     }
     
     div.gridbox_dhx_skyblue table.obj.row20px tr.rowselected td {
-        background-image: url("dhtmlx_suite/imgs/sky_blue_sel_1.png");
+        background-image: url("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/sky_blue_sel_1.png");
     }
     div.dhx_toolbar_poly_dhx_skyblue div.btn_item span {
         margin-left: 5px;
@@ -75,7 +75,7 @@ var filterVal = null;
 var startIndex = 0;
 window.onload = function() {   
     auditGridBox = new dhtmlXGridObject('auditGridbox');
-    auditGridBox.setImagePath("dhtmlx_suite/imgs/");
+    auditGridBox.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
     auditGridBox.setHeader("<b>User Name,<b>IP Address,<b>TimeStamp,<b>Login Attempt");
     
     auditGridBox.attachHeader("#text_filter,#text_filter,#rspan,#select_filter"); 

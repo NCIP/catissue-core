@@ -1,9 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
-import gov.nih.nci.logging.api.util.StringUtils;
-
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;

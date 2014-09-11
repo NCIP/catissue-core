@@ -5,6 +5,7 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,7 +63,7 @@ public class UserController {
 	private HttpServletRequest httpServletRequest;
 
 	@RequestMapping(method = RequestMethod.GET)
-	//@CacheControl(policy = {CachePolicy.NO_STORE, CachePolicy.NO_CACHE})
+	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Map<String, Object> getAllUsers(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,

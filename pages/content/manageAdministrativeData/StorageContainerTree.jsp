@@ -39,13 +39,13 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
-	<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
+	<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
 
 	
-	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmxtreeCommon.js"></script>
-	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-	<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/ext/dhtmlxtree_dragin.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxcommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/ext/dhtmlxtree_dragin.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 	<style>
@@ -188,7 +188,7 @@
 			<%--Creating nodes for the DHTML tree --%>
 			<%-- parent node id for root node is "0" --%>
 			tree=new dhtmlXTreeObject("treeboxbox_tree","100%","100%",0);
-			tree.setImagePath("dhtml_comp/imgs/");
+			tree.setImagePath("dhtmlxSuite_v35/dhtmlxTree/codebase/imgs/");
 			tree.setSkin('dhx_skyblue');
 			tree.enableDragAndDrop(true);
 			tree.setOnClickHandler(tonclick);

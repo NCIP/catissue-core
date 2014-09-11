@@ -1,11 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import gov.nih.nci.logging.api.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;

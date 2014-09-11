@@ -2,26 +2,13 @@
 package edu.wustl.catissuecore.caties.util;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
@@ -116,7 +103,7 @@ public class Utility
 	 * @throws Exception exception occured while converting XML content into equivalent plain text format
 	 */
 
-	public static String convertDocumentToString(final org.jdom.Document doc, final Format format)
+	/*public static String convertDocumentToString(final org.jdom.Document doc, final Format format)
 			throws Exception
 	{
 		String result = "";
@@ -136,7 +123,7 @@ public class Utility
 
 		return result;
 	}
-
+*/
 	/**
 	 * This method is responsible to extract only report content that contains report section text.
 	 * @param deIDResponse deidentified text from native call
@@ -146,7 +133,7 @@ public class Utility
 	 * @param xPath : xPath
 	 * @throws Exception throws exception occured while etracting report content
 	 */
-	public static String extractReport(String deIDResponse, final String dtdFilename,
+/*	public static String extractReport(String deIDResponse, final String dtdFilename,
 			final String xPath, final String reportTextTagName) throws Exception
 	{
 		String deidSprText = "";
@@ -197,7 +184,7 @@ public class Utility
 		}
 		return deidSprText;
 	}
-
+*/
 	/**
 	 * To retrive the reportLoaderQueueObject.
 	 * @param reportQueueId : reportQueueId

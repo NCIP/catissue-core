@@ -19,6 +19,14 @@ angular.module('plus.formsServices', [])
       getAllForms: function() {
         return Utility.get($http, baseUrl, successfn);
       },
+      
+      getAllSpecimenEventForms: function() {
+    	var params = {
+          formType : 'specimenEvent',
+    	  '_reqTime' : new Date().getTime()
+    	}
+        return Utility.get($http, baseUrl, successfn, params);
+      },
 
       getQueryForms: function() {
     	var params = {
@@ -86,6 +94,10 @@ angular.module('plus.formsServices', [])
 
       getSpecimenForms: function(specimenId) {
         return Utility.get($http, getFormsUrl('specimens', specimenId), successfn);
+      },
+      
+      getSpecimenEventForms: function(specimenId){
+          return Utility.get($http, getFormsUrl('specimen-events', specimenId), successfn);
       },
 
       getScgForms: function(scgId) {

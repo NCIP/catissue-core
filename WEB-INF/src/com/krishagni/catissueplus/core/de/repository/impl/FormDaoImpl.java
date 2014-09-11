@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.krishagni.catissueplus.core.de.events.*;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
@@ -15,9 +14,15 @@ import org.hibernate.Query;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.de.events.FormContextDetail;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
+import com.krishagni.catissueplus.core.de.events.FormSummary;
+import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 
 public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao {
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormSummary> getAllFormsSummary() {
@@ -51,6 +56,33 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 				
 		return forms;
 	}
+	
+	@SuppressWarnings("unchecked")
+ 	@Override
+  	public List<FormSummary> getSpecimenEventFormsSummary() {
+       Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_EVENT_FORMS_SUMMARY);
+       List<Object[]> rows = query.list();
+  
+       List<FormSummary> forms = new ArrayList<FormSummary>();
+       for (Object[] row : rows) {
+           FormSummary form = new FormSummary();
+           form.setFormId((Long) row[0]);
+           form.setName((String) row[1]);
+           form.setCaption((String) row[2]);
+           form.setCreationTime((Date) row[3]);
+           form.setModificationTime((Date) row[4]);
+           form.setCpCount(-1);
+           UserSummary user = new UserSummary();
+           user.setId((Long) row[5]);
+           user.setFirstName((String) row[6]);
+           user.setLastName((String) row[7]);
+           form.setCreatedBy(user);
+  
+           forms.add(form);
+       }
+  
+       return forms;
+   }
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -131,6 +163,14 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return getEntityForms(query.list());
 	}
 	
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<FormCtxtSummary> getSpecimenEventForms(Long specimenId) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_EVENT_FORMS);
+        query.setLong("specimenId", specimenId);
+        return getEntityForms(query.list());
+    }
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormCtxtSummary> getScgForms(Long scgId) {
@@ -177,7 +217,28 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		List<FormContextBean> objs = query.list();
 		return objs != null && !objs.isEmpty() ? objs.iterator().next() : null;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FormContextBean> getFormContextsById(List<Long> formContextIds) {
+		List<FormContextBean> formContexts = new ArrayList<FormContextBean>();
 		
+		int i = 0;
+		int numIds = formContextIds.size();
+		while (i < numIds) {
+			List<Long> params = formContextIds.subList(i, i + 500 > numIds ? numIds : i + 500);
+			i += 500;
+			
+			formContexts.addAll(
+				sessionFactory.getCurrentSession()
+					.getNamedQuery(GET_FORM_CTXTS_BY_ID)
+					.setParameterList("ids", params)
+					.list());					
+		}
+		
+		return formContexts;
+	}
+	
 	@Override
 	public void saveOrUpdateRecordEntry(FormRecordEntryBean recordEntry) {
 		sessionFactory.getCurrentSession().saveOrUpdate(recordEntry);
@@ -282,6 +343,15 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Override
+	public Long getRecordsCount(Long formCtxtId, Long objectId) {
+		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_RECORD_CNT);
+		query.setLong("formCtxtId", formCtxtId).setLong("objectId", objectId);
+		List<Long> result = query.list();
+		return result.iterator().next();
+	}
+	
+	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
         ObjectCpDetail objCp = new ObjectCpDetail();
         String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
@@ -347,11 +417,12 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 
         return objCp;
 	}
-
 	
 	private static final String FQN = FormContextBean.class.getName();
 	
 	private static final String GET_ALL_FORMS = FQN + ".getAllFormsSummary";
+	
+	private static final String GET_SPECIMEN_EVENT_FORMS_SUMMARY = FQN + ".getSpecimenEventFormsSummary";
 	
 	private static final String GET_QUERY_FORMS = FQN + ".getQueryForms";
 	
@@ -359,9 +430,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_FORM_CTXT = FQN + ".getFormContext";
 	
+	private static final String GET_FORM_CTXTS_BY_ID = FQN + ".getFormContextsById";
+	
 	private static final String GET_CPR_FORMS = FQN + ".getCprForms";
 	
 	private static final String GET_SPECIMEN_FORMS = FQN + ".getSpecimenForms";
+	
+	private static final String GET_SPECIMEN_EVENT_FORMS = FQN + ".getSpecimenEventForms";
 	
 	private static final String GET_SCG_FORMS = FQN + ".getScgForms";
 	
@@ -384,6 +459,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_FORM_IDS = FQN + ".getFormIds";
 	
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
-
 	
+	private static final String GET_RECORD_CNT = FQN + ".getRecordCount";
+
 }

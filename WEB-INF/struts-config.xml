@@ -6175,6 +6175,10 @@ PUBLIC
   		<action path="/query" type="edu.wustl.catissuecore.action.ForwardAction">
   		    <forward name="success" path=".catissuecore.query" />	
   		</action>
+  		
+  		<action path="/specimenEventsBulkDataEntry" type="edu.wustl.catissuecore.action.ForwardAction">
+			<forward name="success" path=".nextgen.seBulkDataEntry" />
+		</action>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

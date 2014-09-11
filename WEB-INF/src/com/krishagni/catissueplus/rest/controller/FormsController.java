@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.AddFormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
+import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
+import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormContextsAddedEvent;
@@ -65,7 +72,8 @@ public class FormsController {
 	public List<FormSummary> getAllFormsSummary(
 			@RequestParam(value="formType", required=false, defaultValue="dataEntry") String formType) {
 		ReqAllFormsSummaryEvent req = new ReqAllFormsSummaryEvent();
-		req.setFormType(formType.equals("query") ? FormType.QUERY_FORMS : FormType.DATA_ENTRY_FORMS);
+		req.setFormType(formType.equals("query") ? FormType.QUERY_FORMS : formType.equals("specimenEvent") ? FormType.SPECIMEN_EVENT_FORMS :
+				FormType.DATA_ENTRY_FORMS);
 		
 		AllFormsSummaryEvent resp = formSvc.getForms(req);		
 		if (resp.getStatus() == EventStatus.OK) {
@@ -75,7 +83,7 @@ public class FormsController {
 		// TODO: Return appropriate error codes
 		return null;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value="{id}/definition")
 	@ResponseStatus(HttpStatus.OK)
 	public void getFormDefinition(@PathVariable("id") Long formId, Writer writer) 
@@ -133,17 +141,16 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String saveFormData(@PathVariable("id") Long formId, @RequestBody String formDataJson) {
-		return saveFormData(formId, null, formDataJson);
+		return saveOrUpdateFormData(formId, formDataJson);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value="{id}/data/{recordId}")
+	@RequestMapping(method = RequestMethod.PUT, value="{id}/data")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String updateFormData(
-			@PathVariable("id") Long formId, 
-			@PathVariable("recordId") Long recordId, 
+			@PathVariable("id") Long formId,
 			@RequestBody String formDataJson) {		
-		return saveFormData(formId, recordId, formDataJson);
+		return saveOrUpdateFormData(formId, formDataJson);
 	}
 		
 	@RequestMapping(method = RequestMethod.GET, value="{id}/contexts")	
@@ -208,7 +215,7 @@ public class FormsController {
 		return null;
 	}
 
-	private String saveFormData(Long formId, Long recordId, String formDataJson) {
+	private String saveOrUpdateFormData(Long formId, String formDataJson) {
 		try {
 			formDataJson = URLDecoder.decode(formDataJson,"UTF-8");
 			if (formDataJson.endsWith("=")) {
@@ -218,20 +225,53 @@ public class FormsController {
 			throw new RuntimeException("Error parsing input JSON", e);
 		}
 		
-		FormData formData = FormData.fromJson(formDataJson, formId);
-	
-		SaveFormDataEvent req = new SaveFormDataEvent();
-		req.setFormData(formData);
-		req.setFormId(formId);
-		req.setSessionDataBean(getSession());
-		req.setRecordId(recordId);
-		
-		FormDataEvent resp = formSvc.saveFormData(req);
-		if (resp.getStatus() == EventStatus.OK) {
-			return resp.getFormData().toJson();
+		JsonElement formDataJsonEle = new JsonParser().parse(formDataJson);
+		if(formDataJsonEle.isJsonArray()) {
+			return bulkSaveFormData(formId, formDataJson);
+		} else {
+			FormData formData = FormData.fromJson(formDataJson, formId);
+
+			SaveFormDataEvent req = new SaveFormDataEvent();
+			req.setFormData(formData);
+			req.setFormId(formId);
+			req.setSessionDataBean(getSession());
+			req.setRecordId(formData.getRecordId());
+
+			FormDataEvent resp = formSvc.saveFormData(req);
+			if (resp.getStatus() == EventStatus.OK) {
+				return resp.getFormData().toJson();
+			}
 		}
-		
+
 		return null;		
+	}
+	
+	private String bulkSaveFormData(Long formId, String formDataJsonArray) {
+		JsonParser parser = new JsonParser();
+  		JsonArray records = parser.parse(formDataJsonArray).getAsJsonArray();
+  
+  		List<FormData> formDataList = new ArrayList<FormData>();
+  		for (int i = 0; i < records.size(); i++) {
+  			String formDataJson = records.get(i).toString();
+  			FormData formData = FormData.fromJson(formDataJson, formId);
+  			formDataList.add(formData);
+  		}
+				
+  		SaveBulkFormDataEvent event = new SaveBulkFormDataEvent();
+  		event.setFormId(formId);
+  		event.setFormDataList(formDataList);
+  		event.setSessionDataBean(getSession());
+  
+  		BulkFormDataSavedEvent bulkFormData = formSvc.saveBulkFormData(event);
+  		if (bulkFormData.getStatus() == EventStatus.OK) {
+  			List<String> savedFormData = new ArrayList<String>();
+  			for (FormData formData : bulkFormData.getFormDataList()) {
+  				savedFormData.add(formData.toJson());
+  			}
+  			return new Gson().toJson(savedFormData);
+  		}
+  
+  		return null;
 	}
 		
 	private SessionDataBean getSession() {

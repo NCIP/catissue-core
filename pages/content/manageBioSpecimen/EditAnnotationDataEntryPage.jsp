@@ -14,16 +14,16 @@
 <head>
 <title></title>
 <link rel="STYLESHEET" type="text/css"
-	href="dhtml_comp/css/dhtmlXGrid.css" />
+	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css" />
 <link href="css/catissue_suite.css" type=text/css rel=stylesheet>
 
 <script
-	src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXCommon.js"></script>
-<script src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid.js"></script>
+	src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxCalendar/codebase/dhtmlxcommon.js"></script>
+<script src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
 <script
-	src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGridCell.js"></script>
+	src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
 <script
-	src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid_excell_link.js"></script>
+	src="<%=request.getContextPath()%>/dhtmlxSuite_v35/dhtmlxGrid/codebase/excells/dhtmlxgrid_excell_link.js"></script>
 <script src="<%=request.getContextPath()%>/jss/ajax.js" type="text/javascript"></script>
 
 <script src="<%=request.getContextPath()%>/jss/javaScript.js"
@@ -76,7 +76,7 @@ var recordIds = [ <%int i;%><%for (i=0;i<(indexIds.size());i++){%>
 		var div=document.getElementById('editAnnotations');
 		div.innerHTML="<br><table class=\"whitetable_bg\" style=\"font-family:verdana;font-size:0.71em;font-weight:normal;\"><th allign=\"center\"> Update Records for "+entityName+" </th></table>";
 		dannotationsGrid = new dhtmlXGridObject('displayAnnotationsGrid');
-		dannotationsGrid.setImagePath("dhtml_comp/imgs/");
+		dannotationsGrid.setImagePath("dhtmlxSuite_v35/dhtmlxGrid/codebase/imgs/");
 		dannotationsGrid.enableAutoHeigth(true,"450");
 		dannotationsGrid.setHeader("Record Id,Created Date,Updated By,Action");
 		dannotationsGrid.setInitWidthsP("25,25,25,23");

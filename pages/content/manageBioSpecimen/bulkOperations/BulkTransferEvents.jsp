@@ -12,11 +12,11 @@
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
     <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-	<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-	<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-	<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+	<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css">
+	<link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css">
+	<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxcontainer.js"></script>
+	<script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 </head>
 
