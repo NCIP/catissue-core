@@ -390,5 +390,15 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return;
 		}
 	}
+	
+	private static final String LABEL = "label";
+
+	private static final String BARCODE = "barcode";
+
+	private static final String ALIQUOT_COUNT = "Aliquot Count";
+
+	private static final String SPECIMEN_AVAILABLE_QUANTITY = "Specimen available quantity ";
+
+	private static final String DEFAULT_BARCODE_TOKEN = "SPECIMEN_LABEL";
 
 }

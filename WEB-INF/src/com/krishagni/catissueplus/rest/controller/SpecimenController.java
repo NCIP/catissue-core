@@ -36,6 +36,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;

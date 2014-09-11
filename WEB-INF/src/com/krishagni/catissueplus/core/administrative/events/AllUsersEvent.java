@@ -12,8 +12,6 @@ public class AllUsersEvent extends ResponseEvent {
 	
 	private Long count;
 
-	private Long count;
-
 	public List<UserSummary> getUsers() {
 		return users;
 	}

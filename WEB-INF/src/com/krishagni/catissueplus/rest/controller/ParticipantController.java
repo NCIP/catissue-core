@@ -40,6 +40,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantDetailEv
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSubRegistrationDetailEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
