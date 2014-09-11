@@ -143,7 +143,6 @@ var Select2Search = function(element, opts) {
     var that = this;
     this.element.select2({
       minimumInputLength: 0,
-      multiple: opts.multiple == true,
       query: function(query) {
         that.queryFn(query.term, function(result) {
           query.callback({results: result});
