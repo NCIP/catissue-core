@@ -9,12 +9,13 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.ibm.icu.util.Calendar;
 import com.krishagni.catissueplus.core.audit.domain.Audit;
 import com.krishagni.catissueplus.core.audit.domain.factory.AuditFactory;
 import com.krishagni.catissueplus.core.audit.domain.factory.impl.AuditFactoryImpl;
