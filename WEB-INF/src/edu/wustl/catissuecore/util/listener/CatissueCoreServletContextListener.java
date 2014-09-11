@@ -173,7 +173,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			DEApp.init(ds, dir, dateFomat);
 			initQueryPathsConfig();            
 			ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
-			ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());
+			//ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());
 			
 			logger.info("Initialization complete");									
 		}
