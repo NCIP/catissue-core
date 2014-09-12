@@ -4,9 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +19,15 @@ import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.GetSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ValidateSpecimensLabelEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensLabelValidatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -108,30 +107,21 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	@Override
 	@PlusTransactional
-	public SpecimensLabelValidatedEvent validateSpecimensLabel(ValidateSpecimensLabelEvent event) {
+	public SpecimensSummaryEvent getSpecimens(GetSpecimensEvent event) {
 		try {
-			Map<String,Boolean> labelValidationMap = new HashMap<String,Boolean>();
-			List<String> existLabels = new ArrayList<String>();
-
+			List<SpecimenSummary> specimenSummaryList = new ArrayList<SpecimenSummary>();
 			List<String> labels = event.getLabels();
-			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
-			for (Specimen specimen : specimens) {
-				existLabels.add(specimen.getLabel());
+			List<Specimen> specimensList = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
+			for (Specimen specimen : specimensList) {
 				Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
-				boolean hasPrivilege = privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING);
-				labelValidationMap.put(specimen.getLabel(),hasPrivilege);
-			}
-			 
-			if(labels.size() != existLabels.size()) {
-				labels.removeAll(existLabels);
-				for (String label : labels) {
-					labelValidationMap.put(label, false);
+				if(privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING)) {
+					specimenSummaryList.add(SpecimenSummary.from(specimen));
 				}
 			}
-
-			return SpecimensLabelValidatedEvent.ok(labelValidationMap);
+			 
+			return SpecimensSummaryEvent.ok(specimenSummaryList);
 		} catch(Exception ex){
-			return SpecimensLabelValidatedEvent.serverError(ex);
+			return SpecimensSummaryEvent.serverError(ex);
 		}
 	}
 	

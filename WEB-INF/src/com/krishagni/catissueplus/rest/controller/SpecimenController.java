@@ -2,8 +2,9 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,14 +27,15 @@ import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.GetSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ValidateSpecimensLabelEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimensLabelValidatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
@@ -49,7 +51,6 @@ import com.krishagni.catissueplus.core.printer.printService.events.CreateLabelPr
 import com.krishagni.catissueplus.core.printer.printService.events.LabelPrintCreatedEvent;
 import com.krishagni.catissueplus.core.printer.printService.services.PrintService;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
@@ -94,18 +95,17 @@ public class SpecimenController {
 		return result;	
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value = "validate-labels")	
+	@RequestMapping(method=RequestMethod.GET, value="/label")	
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Map<String,Boolean> validateSpecimenLabels(
-			@RequestParam(value="specimenLabels", required=true) String[] specimenLabels) {
-		ValidateSpecimensLabelEvent event = new ValidateSpecimensLabelEvent();
+	public List<SpecimenSummary> getSpecimens(@RequestParam(value="specimenLabels", required=true) String[] specimenLabels) {
+		GetSpecimensEvent event = new GetSpecimensEvent();
 		event.setLabels(new ArrayList(Arrays.asList(specimenLabels)));
 		event.setSessionDataBean(getSession());
 		
-		SpecimensLabelValidatedEvent resp = specimenSvc.validateSpecimensLabel(event);
+		SpecimensSummaryEvent resp = specimenSvc.getSpecimens(event);
 		if(resp.getStatus() == EventStatus.OK ) {
-			return resp.getLabelValidationMap();
+			return resp.getSpecimens();
 		}
 		return null;
 	}

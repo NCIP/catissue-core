@@ -22,6 +22,8 @@ public class SpecimenSummary {
 	private String tissueSite;
 
 	private String tissueSide;
+	
+	private String cpShortTitle;
 
 	public Long getId() {
 		return id;
@@ -78,10 +80,20 @@ public class SpecimenSummary {
 	public void setTissueSide(String tissueSide) {
 		this.tissueSide = tissueSide;
 	}
-	
+
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+
 	public static SpecimenSummary from(Specimen specimen) {
 		SpecimenSummary summary = new SpecimenSummary();
 		BeanUtils.copyProperties(specimen, summary);
+		summary.setCpShortTitle(specimen.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle());
 		return summary;
 	}
 	

@@ -5,6 +5,7 @@
   <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css">
   <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css">
   <link href="../external/de/css/de.css" rel="stylesheet" type="text/css">
+  <link href="../css/app.css" rel="stylesheet" type="text/css">
   <link href="../external/jquery/css/chosen.min.css" rel="stylesheet" type="text/css">
   <link href="../external/jquery/css/chosen-sprite.png" rel="stylesheet" type="text/css">
 
@@ -73,11 +74,11 @@
 
     </head>
 <body ng-controller="SpecimenEventController">
+<div id="notifications" class="cp-notifs hidden"></div>
 <div class="container">
     <div class="row">
         <div class="col-xs-7"><h3>Specimen Event Bulk Data Entry </h3></div>
     </div>
-    <div id="notifications" class="cp-notifs hidden"></div>
     <form class="form-horizontal">
       <div class="form-group">
         <label for="specimenLabels" class="control-label col-xs-2">Specimen Label(s)</label>
@@ -111,6 +112,9 @@
         </button>
         <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">
            Cancel
+        </button>
+        <button class="btn btn-default" id="delete" ng-click="deleteRow()" ng-show="deleteRecords">
+          Delete
         </button>
         <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">
           Apply First To All
