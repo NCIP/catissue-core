@@ -32,7 +32,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml</param-value>
+		<param-value>/WEB-INF/applicationContext.xml,/WEB-INF/restApiContext.xml</param-value>
 	</context-param>
 
 	<!-- FLEX Configuration START-->
