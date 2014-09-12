@@ -8,7 +8,7 @@ import java.util.Map;
 import edu.common.dynamicextensions.domain.nui.*;
 import org.springframework.context.ApplicationContext;
 
-import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryEvent;
 import com.krishagni.catissueplus.core.de.events.RecordEntryEventAdded;
 import com.krishagni.catissueplus.core.de.services.FormService;
@@ -175,7 +175,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService {
 
 	protected List<Object> hookStaticDynExtObj(HookingInformation recEntryInfo, Long containerId, Long recordId)
 	throws Exception {
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		FormService formSvc = (FormService) caTissueContext.getBean("formSvc");
 		Map<String,Object> recIntegrationInfo = recEntryInfo.getDataHookingInformation();
 

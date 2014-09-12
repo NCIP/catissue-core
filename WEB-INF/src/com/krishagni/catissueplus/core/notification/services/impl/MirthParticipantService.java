@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.notification.events.NotificationResponse;
 import com.krishagni.catissueplus.core.notification.events.NotificationResponse.Status;
 import com.krishagni.catissueplus.core.notification.events.SubjectDto;
@@ -72,7 +72,7 @@ public class MirthParticipantService implements CrudService {
 			subject.setEnrollmentDate(regDate);
 			subject.setLabel(cpr.getProtocolParticipantIdentifier().toString());
 			Long cpId = cpr.getCollectionProtocol().getId();
-			ApplicationContext appCtx = CaTissueAppContext.getInstance();
+			ApplicationContext appCtx = OpenSpecimenAppCtxProvider.getAppCtx();
 			MirthApplicationService mirthAppSvc = (MirthApplicationService) appCtx.getBean("mirthAppService");
 
 			String studyId = mirthAppSvc.getMappedStudyId(cpId, "Mirth");

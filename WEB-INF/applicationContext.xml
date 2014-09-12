@@ -28,6 +28,7 @@
   <context:component-scan base-package="edu.wustl.dynamicextensions.formdesigner"/>
 
   <bean class="com.krishagni.catissueplus.core.common.RestErrorController" /> 
+
   <!-- Beans for caCORE starts -->
   <bean id="remoteService" class="gov.nih.nci.system.comm.server.ApplicationServiceServerImpl" />
   <!-- Bean added for caCORE ends -->
@@ -404,6 +405,9 @@
        
        <bean id="commonValidatorSvc" class="com.krishagni.catissueplus.core.common.CommonValidator">
        <property name="pvManager" ref="pvMangeerSvc"/>
+  </bean>
+
+  <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider">
   </bean>
 
  </beans>

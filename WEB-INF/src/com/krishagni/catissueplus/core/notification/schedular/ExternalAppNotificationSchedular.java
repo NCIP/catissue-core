@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.ApplicationContext;
 
-import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppNotificationService;
 
@@ -34,7 +34,7 @@ public class ExternalAppNotificationSchedular implements Runnable {
 	@Override
 	public void run() {
 		try {
-			ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+			ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 			ExternalAppNotificationService extApp = (ExternalAppNotificationService) caTissueContext
 					.getBean("extAppNotificationService");
 			extApp.notifyExternalApps();

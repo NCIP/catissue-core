@@ -4,7 +4,7 @@ package com.krishagni.catissueplus.core.tokens.impl;
 import org.springframework.context.ApplicationContext;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.util.KeyGenFactory;
 import com.krishagni.catissueplus.core.tokens.LabelToken;
 
@@ -14,8 +14,8 @@ public class LabelTokenForSpecimenUniqueId implements LabelToken<Specimen> {
 
 	@Override
 	public String getTokenValue(Specimen specimen) {
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
-		KeyGenFactory keyFactory = (KeyGenFactory) caTissueContext.getBean("keyFactory");
+		ApplicationContext appCtx = OpenSpecimenAppCtxProvider.getAppCtx();
+		KeyGenFactory keyFactory = (KeyGenFactory) appCtx.getBean("keyFactory");
 		Long value = keyFactory.getValueByKey(SPECIMEN_UNIQUE_ID, SPECIMEN_UNIQUE_ID);
 		return value.toString();
 	}

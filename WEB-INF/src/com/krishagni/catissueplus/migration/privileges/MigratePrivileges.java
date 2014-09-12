@@ -22,7 +22,7 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserPatchDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserUpdatedEvent;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
-import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.privileges.events.CreateRoleEvent;
@@ -190,7 +190,7 @@ public class MigratePrivileges {
 	}
 
 	private List<UserSummary> getAllUsers() {
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		ReqAllUsersEvent reqAllUsersEvent = new ReqAllUsersEvent();
 		reqAllUsersEvent.setSessionDataBean(getSessionDataBean());
 		UserService userSvc = (UserService) caTissueContext.getBean("userSvc");
@@ -200,7 +200,7 @@ public class MigratePrivileges {
 
 	private void initializeRolesMap() {
 		privilegeRoles = new HashMap<PrivilegeDto, RoleDetails>();
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		RoleService roleSvc = (RoleService) caTissueContext.getBean("roleSvc");
 		List<RoleDetails> roles = roleSvc.getAllRoles();
 		for (RoleDetails role : roles) {
@@ -224,7 +224,7 @@ public class MigratePrivileges {
 	private boolean updateUser(UserSummary userSummary, List<CPRoleDetails> cpUserRoles) throws Exception {
 		try {
 			List<UserCPRoleDetails> userCPRoleDetailsList = populateUserCPRoles(cpUserRoles);
-			ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+			ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 			UserService userSvc = (UserService) caTissueContext.getBean("userSvc");
 			GetUserEvent getUserEvent = userSvc.getUser(userSummary.getId());
 			UserDetails oldUserDetails = getUserEvent.getUserDetails();
@@ -278,7 +278,7 @@ public class MigratePrivileges {
 	}
 
 	private RoleDetails createRole(RoleDetails roleDetails) throws Exception {
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		RoleService roleSvc = (RoleService) caTissueContext.getBean("roleSvc");
 
 		RoleDetails details = new RoleDetails();

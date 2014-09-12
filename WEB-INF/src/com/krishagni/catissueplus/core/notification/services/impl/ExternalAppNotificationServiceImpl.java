@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.krishagni.catissueplus.core.audit.domain.Audit;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
-import com.krishagni.catissueplus.core.common.CaTissueAppContext;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.util.ObjectType;
 import com.krishagni.catissueplus.core.common.util.Operation;
@@ -49,7 +49,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 	 */
 	@Override
 	public void notifyExternalApps() {
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		ExternalAppNotificationService extAppNotifSvc = (ExternalAppNotificationService) caTissueContext
 				.getBean("extAppNotificationService");
 		List<NotificationDetails> notificationObjects = extAppNotifSvc.getNotificationObjects();
@@ -60,7 +60,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 
 	@Override
 	public void notifyFailedNotifications() {
-		ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		ExternalAppNotificationService extAppNotifSvc = (ExternalAppNotificationService) caTissueContext
 				.getBean("extAppNotificationService");
 		List<ExtAppNotificationStatus> failNotificationObjects = extAppNotifSvc.getFailedNotificationObjects();
@@ -96,7 +96,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 	@PlusTransactional
 	public void notifyExternalApps(NotificationDetails notifDetail) {
 		try {
-			ApplicationContext caTissueContext = CaTissueAppContext.getInstance();
+			ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 			ExternalApplications extAppsBean = (ExternalApplications) caTissueContext.getBean("externalApplications");
 			List<ExternalApplication> extApps = extAppsBean.getAllExternalApplications();
 
