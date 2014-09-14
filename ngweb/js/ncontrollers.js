@@ -27,16 +27,24 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       between: {name: 'between', desc: 'Between', code: '&#xf1e0;', symbol: 'between', model: 'BETWEEN'}
     };
 
-    var getOpByModel = function(model) {
+    var getOp = function(fn) {
       var result = undefined;
       for (var k in ops) {
-        if (ops[k].model == model) {
+        if (fn(ops[k])) {
           result = ops[k];
           break;
         }
       }
 
       return result;
+    };
+
+    var getOpBySymbol = function(symbol) {
+      return getOp(function(op) { return op.symbol == symbol });
+    };
+      
+    var getOpByModel = function(model) {
+      return getOp(function(op) { return op.model == model });
     };
 
     var hidePopovers = function() {
@@ -222,14 +230,18 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       }
     }, true);
 
-    var getLhs = function(temporalExpr) {
-      var re = /[<=>!]/g;
+    var getTemporalExprObj = function(temporalExpr) {
+      var re = /<=|>=|<|>|=|!=/g
       var matches = undefined;
       if ((matches = re.exec(temporalExpr))) {
-        return temporalExpr.substring(0, matches.index);
-      } 
+        return {
+          lhs: temporalExpr.substring(0, matches.index),
+          op : matches[0],
+          rhs: temporalExpr.substring(matches.index + matches[0].length)
+        }
+      }
 
-      return undefined;
+      return {};
     };
 
     var getSelectList = function(filterMap, selectedFields) {
@@ -242,7 +254,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         if (typeof field == "string" && field.indexOf(temporalMarker) == 0) { // TODO: Handle temporal expr and aggregates
           var filterId = field.substring(temporalMarker.length);
           var filter = filterMap[filterId];
-          field = getLhs(filter.expr);
+          field += getTemporalExprObj(filter.expr).lhs;
           field += " as \"" + filter.desc + "\"";
         } else if (typeof field != "string") {
           var fnExpr = field.name;
@@ -676,6 +688,24 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
     $scope.selectedRows = [];
 
+    var startLoading = function() {
+      $scope.queryData.notifs.loading = true;
+    };
+
+    var stopLoading = function() {
+      $scope.queryData.notifs.loading = false;
+    };
+
+    var isParameterized = function(filters) {
+      for (var i = 0; i < filters.length; ++i) {
+        if (filters[i].parameterized) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
     $scope.getQueryDataDefaults = function() {
       return {
         isValid: true,
@@ -853,6 +883,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
       q.then(
         function(result) {
+          $scope.queryData.selectedQueries = [];
+
           if (countReq) {
             $scope.queryData.totalQueries = result.count;
           }
@@ -1046,7 +1078,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         op: getOpByModel(filterDef.op),
         value: value,
         form: $scope.getForm(formName),
-        fieldName: fieldName.substr(dotIdx + 1)
+        fieldName: fieldName.substr(dotIdx + 1),
+        parameterized: filterDef.parameterized
       };
     };
 
@@ -1054,6 +1087,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.loadQuery(query).then(function(result) { 
         if (!result) { return; }
 
+        stopLoading();
         $scope.queryData.view = 'query'; 
       });
     };
@@ -1062,12 +1096,102 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.loadQuery(query).then( function(result) { 
         if (!result) { return; }
 
-        $scope.getRecords(); 
+        stopLoading();
+        $scope.showRecords();
       });
+    };
+
+    $scope.showRecords = function() {
+      if (isParameterized($scope.queryData.filters)) {
+        runParameterizedFilters();
+      } else {
+        $scope.getRecords(); 
+      }
+    };
+
+    var runParameterizedFilters = function() {
+      var modal = $modal.open({
+        templateUrl: 'parameterized-filters-modal.html',
+        controller: ParameterizedFilterCtrl,
+        resolve: {
+          queryData: function() {
+            return $scope.queryData;
+          }
+        },
+ 
+        windowClass: 'parameterized-filters-dialog'
+      });
+
+      modal.result.then(
+        function(queryData) {
+          $scope.queryData = queryData;
+          $scope.getRecords();
+        });
+    };
+
+    var ParameterizedFilterCtrl = function($scope, $modalInstance, queryData) {
+      $scope.queryData = queryData;
+
+      
+      var filters = queryData.filters;
+      for (var i = 0; i < filters.length; ++i) {
+        if (!filters[i].parameterized) {
+          continue;
+        }
+
+        if (filters[i].expr) {
+          var tObj = filters[i].tObj = getTemporalExprObj(filters[i].expr);
+          tObj.ops = getNumericOps();
+          filters[i].value = tObj.rhs;
+          filters[i].op = getOpBySymbol(tObj.op);
+        } else {
+          filters[i].field.ops = getValidOps(filters[i].field);
+        }
+      }
+
+      $scope.onOpSelect = function(filter) {
+        return function(op) {
+          onOpSelect(op, filter);
+        }
+      };
+
+      $scope.isUnaryOpSelected = function(filter) {
+        return isUnaryOpSelected(filter);
+      };
+
+      $scope.getValueType = function(filter) {
+        return getValueType(filter);
+      };
+  
+      $scope.ok = function() {
+        var filters = queryData.filters;
+        for (var i = 0; i < filters.length; ++i) {
+          if (!filters[i].parameterized || !filters[i].expr) {
+            continue;
+          }
+
+          var tObj = filters[i].tObj;
+          filters[i].expr = tObj.lhs + ' ' + filters[i].op.symbol + ' ';
+          if (filters[i].value instanceof Array) {
+            filters[i].expr += filters[i].value[0] + ' and ' + filters[i].value[1];
+          } else {
+            filters[i].expr += filters[i].value;
+          }
+        }
+            
+        $modalInstance.close($scope.queryData);
+      };
+
+      $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+      };
+  
     };
 
     $scope.loadQuery = function(query) {
       angular.extend($scope.queryData, $scope.getQueryDataDefaults());
+
+      startLoading();
       return QueryService.getQuery(query.id).then(
         function(queryDef) {
           queryDef.cpId = queryDef.cpId || -1;
@@ -1082,6 +1206,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
 
           if (!selectedCp) {
+            stopLoading();
             Utility.notify($("#notifications"), "Permission Denied", "error", true);
             return false;
           }
@@ -1119,6 +1244,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
                 }
                 filters[i].field = $scope.getFormField(filters[i].form, filters[i].fieldName) 
                 if (!filters[i].field) {
+                  stopLoading();
                   Utility.notify($("#notifications"), "Failed to load query. Contact system administrator", "error", true);
                   return false;
                 }
@@ -1152,6 +1278,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
       );
     };
+
 
     $scope.getUsers = function() {
       var deferred = $q.defer();
@@ -1599,23 +1726,43 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.queryData.currFilter.ops = getValidOps(field);
     };
 
-    $scope.onOpSelect = function(op) {
-      $scope.queryData.currFilter.op = op;
+    var onOpSelect = function(op, filter) {
+      if (!filter) {
+        filter = $scope.queryData.currFilter;
+      }
+
+      filter.op = op;
       if (op.name == "between") {
-        $scope.queryData.currFilter.value = [null, null];
+        filter.value = [null, null];
       } else {
-        $scope.queryData.currFilter.value = null;
+        filter.value = null;
       }
     };
 
-    $scope.isUnaryOpSelected = function() {
-      var currFilter = $scope.queryData.currFilter;
-      return currFilter.op && (currFilter.op.name == 'exists' || currFilter.op.name == 'not_exists');
+    $scope.onOpSelect = function(op) {
+      onOpSelect(op);
     };
+
+    
+    var isUnaryOpSelected = function(filter) {
+      if (!filter) {
+        filter = $scope.queryData.currFilter;
+      }
+
+      return filter.op && (filter.op.name == 'exists' || filter.op.name == 'not_exists');
+    };
+
+    $scope.isUnaryOpSelected = function() {
+      return isUnaryOpSelected();
+    }
         
-    $scope.getValueType = function() {
-      var field = $scope.queryData.currFilter.field;
-      var op = $scope.queryData.currFilter.op;
+    var getValueType = function(filter) {
+      if (!filter) {
+        filter = $scope.queryData.currFilter;
+      }
+     
+      var field = filter.field;
+      var op = filter.op;
 
       if (!field || !op) {
         return "text";
@@ -1630,6 +1777,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       } else {
         return "text";
       }
+    };
+
+    $scope.getValueType = function() {
+      return getValueType();
     };
 
     $scope.getOpCode = function(opName) {
@@ -1671,22 +1822,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       hidePopovers();
 
       $scope.queryData.filterId++;
-      var filter = undefined;
-      if ($scope.queryData.currFilter.expr) {
-        filter = {
-          id: $scope.queryData.filterId,
-          expr: $scope.queryData.currFilter.expr,
-          desc: $scope.queryData.currFilter.desc
-        };
-      } else {
-        filter = {
-          id: $scope.queryData.filterId,
-          form: $scope.queryData.openForm,
-          field: $scope.queryData.currFilter.field,
-          op: $scope.queryData.currFilter.op,
-          value: $scope.queryData.currFilter.value
-        };
-      }
+      var filter = {form: $scope.queryData.openForm};
+      filter = angular.extend(filter, $scope.queryData.currFilter);
+      filter.id = $scope.queryData.filterId;
 
       if ($scope.queryData.filters.length > 0) {
         $scope.queryData.exprNodes.push({type: 'op', value: ops.and.name});
@@ -1702,21 +1840,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     $scope.editFilter = function() {
       hidePopovers();
 
-      if ($scope.queryData.currFilter.expr) {
-        filter = {
-          id: $scope.queryData.currFilter.id,
-          expr: $scope.queryData.currFilter.expr,
-          desc: $scope.queryData.currFilter.desc
-        };
-      } else {
-        filter = {
-          id: $scope.queryData.currFilter.id,
-          form: $scope.queryData.currFilter.form,
-          field: $scope.queryData.currFilter.field,
-          op: $scope.queryData.currFilter.op,
-          value: $scope.queryData.currFilter.value
-        };
-      }
+      var filter = {}
+      filter = angular.extend(filter, $scope.queryData.currFilter);
+      filter.id = $scope.queryData.filterId;
 
       for (var i = 0; i < $scope.queryData.filters.length; ++i) {
         if (filter.id == $scope.queryData.filters[i].id) {
@@ -1851,10 +1977,19 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         for (var i = 0; i < queryData.filters.length; ++i) {
           var filter = queryData.filters[i];
           if (filter.expr) {
-            filters.push({id: filter.id, expr: filter.expr, desc: filter.desc});
+            filters.push({
+              id: filter.id, 
+              expr: filter.expr, 
+              desc: filter.desc, 
+              parameterized: filter.parameterized});
           } else {
             var values = (filter.value instanceof Array) ? filter.value : [filter.value]
-            filters.push({id: filter.id, field: filter.form.name + "." + filter.field.name, op: filter.op.model, values: values}); 
+            filters.push({
+              id: filter.id, 
+              field: filter.form.name + "." + filter.field.name, 
+              op: filter.op.model, 
+              values: values, 
+              parameterized: filter.parameterized}); 
           }
         }
 

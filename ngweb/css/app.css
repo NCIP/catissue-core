@@ -27,7 +27,7 @@
   z-index: 100;
   position: fixed;
   width:100%;
-  top: 0;
+  top: 1px;
 }
 
 .define-view-notifs {

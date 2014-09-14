@@ -41,6 +41,8 @@ public class Filter {
 	private String expr;
 	
 	private String desc;
+	
+	private boolean parameterized;
 
 	public int getId() {
 		return id;
@@ -88,5 +90,13 @@ public class Filter {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public boolean isParameterized() {
+		return parameterized;
+	}
+
+	public void setParameterized(boolean parameterized) {
+		this.parameterized = parameterized;
 	}
 }

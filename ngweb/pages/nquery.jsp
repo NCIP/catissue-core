@@ -165,15 +165,27 @@
        }
 
        .data-grid {
-          border: 1px solid #428BCA;
+          border: 1px solid #ddd;
           width: 100%;
-          border-radius: 4px;
        }
 
-       .tooltip-inner {
+       .data-grid-header {
+          width: 100%;
+          margin: 0;
+          padding: 3px 0;
+          text-align:center;
+          background: #428bca;
+          color:white;
+       }
+
+       .tooltip-inner, .loading-notif {
           background-color: #ffffcc;
           border: 1px solid #f0c36d;
           color: #000000;
+       }
+
+       .loading-notif { 
+          padding: 2px 5px;
        }
 
        .tooltip-arrow:after {
@@ -218,13 +230,13 @@
        }
 
        .ngTopPanel {
-          background-color: #428BCA; 
-          color: #ffffff;
+          background-color: #f1f2f3; 
+          color: #000000;
        }
 
        .ngFooterPanel {
-          background-color: #428BCA; 
-          color: #ffffff;
+          background-color: #f1f2f3; 
+          color: #000000;
        }
 
        .ngSortButtonDown, .ngSortButtonUp {
@@ -272,7 +284,7 @@
        .folders .item div:first-child {
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 90px;
+          width: 85px;
           white-space: nowrap;
        }
 
@@ -385,11 +397,25 @@
        .plus-margin-bottom {
          margin-bottom: 5px;
        }
+
+       .parameterized-filters-dialog > div.modal-dialog {
+         width: 1000px;
+       }
+
+       .ellipsis {
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+       }
     </style>
   </head>
 
   <body ng-controller="QueryController">
     <div id="notifications" class="cp-notifs hidden"></div>
+    <div class="cp-notifs" ng-if="queryData.notifs.loading">
+      <span class="loading-notif"> Loading ...  </span>
+    </div>
+
     <div class="container" ng-if="queryData.view == 'dashboard'">
       <div class="row">
         <div class="col-xs-7">
@@ -413,7 +439,7 @@
             </ul>
           </div>
         </div>
-        <div class="col-xs-2" style="padding-top: 8px; font-size: 14px;">
+        <div class="col-xs-3" style="padding-top: 8px; font-size: 14px;">
           <div ng-if="queryData.queries.length > 0">
             Queries ({{queryData.startAt + 1}} - {{queryData.startAt + queryData.queries.length}} of {{queryData.totalQueries}})
           </div>
@@ -450,7 +476,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-offset-1 col-xs-3">
+        <div class="col-xs-3">
           <div class="plus-addon plus-addon-input-right">
             <span class="glyphicon glyphicon-search"></span>
             <input type="text" class="form-control" placeholder="Search Query" 
@@ -701,6 +727,10 @@
               <span class="glyphicon glyphicon-wrench"></span> 
               <span>Edit Query </span>
             </div> 
+            <div class="btn btn-default" ng-click="showRecords()">
+              <span class="glyphicon glyphicon-repeat"></span> 
+              <span>Rerun Query</span>
+            </div>
             <div class="btn btn-default" ng-click="defineView()"> 
               <span class="glyphicon glyphicon-eye-open"></span> 
               <span>Define View </span>
@@ -751,7 +781,7 @@
         </div>
       </div>
       <div ng-if="queryData.notifs.waitRecs" class="alert alert-info">
-        <span>Loading, please wait for a moment ...</span>
+        <span>Loading records, please wait for a moment ...</span>
       </div>
       <div ng-if="!queryData.notifs.waitRecs && queryData.notifs.error" class="alert alert-danger">
         <span ng-if="queryData.notifs.error == 'BAD_REQUEST'">Malformed Query. Please go back and edit query. <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial</span>
@@ -764,11 +794,25 @@
             <u>Click here</u>
           </a> to know why exported data file have more records.
         </div>
-        <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
+
+        <p class="data-grid-header">
+          <strong ng-if="queryData.id">{{queryData.title}}</strong>
+          <strong ng-if="!queryData.id">Unsaved Query</strong>
+        </p>
+        <div class="data-grid" style="height: 95%;" ng-grid="queryData.resultGridOpts"></div>
       </div>
     </div>
     <div class="container" ng-if="queryData.view == 'query'">
-      <div class="row" style="height: 100%;">
+      <div class="row" style="height: 5%;">
+        <div class="col-xs-offset-3 col-xs-9"
+          tooltip="{{queryData.title}}" tooltip-placement="bottom" tooltip-append-to-body="true">
+          <h4 ng-if="queryData.id" class="ellipsis">
+            {{queryData.title}}
+          </h4>
+          <h4 ng-if="!queryData.id">Unsaved Query</h4>
+        </div>
+      </div>
+      <div class="row" style="height: 95%">
         <div class="col-xs-3 content-left">
           <accordion ka-fix-height="100%" close-others="true"> 
             <div class="panel panel-primary">
@@ -1016,6 +1060,99 @@
       </div>
     </div>
 
+    <script type="text/ng-template" id="parameterized-filters-modal.html">
+      <div class="modal-header" style="height: 10%">
+        <h4>Parameterized Filters</h4>
+      </div>
+      <div class="modal-body" style="height: 75%;overflow:auto;">
+        <table class="table">
+          <thead>
+            <th class="col-xs-5">Field</th>
+            <th class="col-xs-3">Operator</th>
+            <th class="col-xs-4">Condition Value</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="filter in queryData.filters | filter: {'parameterized': true}">
+              <td>
+                <i ng-if="!filter.expr">{{filter.form.caption}} &gt;&gt; {{filter.field.caption}}</i>
+                <i ng-if="filter.expr">{{filter.desc}}</i>
+              </td>
+              <td ng-if="!filter.expr">
+                <ka-select id="operator" style="width: 100%;"
+                  data-placeholder="Select Operator"
+                  options="filter.field.ops" option-id="name" option-value="desc"
+                  on-select="onOpSelect(filter)"
+                  selected="filter.op">
+                </ka-select>
+              </td>
+              <td ng-if="filter.expr">
+                <ka-select id="operator" style="width: 100%;"
+                  data-placeholder="Select Operator"
+                  options="filter.tObj.ops" option-id="name" option-value="desc"
+                  on-select="onOpSelect(filter)"
+                  selected="filter.op">
+                </ka-select>
+              </td>
+              <td>
+                <div ng-if="!isUnaryOpSelected(filter)">
+                  <div id="value" ng-switch="getValueType(filter)">
+                    <div ng-switch-when="select">
+                      <ka-select data-placeholder="Select Condition Value"
+                        options="filter.field.pvs"
+                        selected="filter.value" style="width: 100%">
+                      </ka-select>
+                    </div>
+                    <div ng-switch-when="multiSelect">
+                      <ka-select multiple
+                        data-placeholder="Select Condition Values"
+                        options="filter.field.pvs"
+                        selected="filter.value" style="width: 100%">
+                      </ka-select>
+                    </div>
+                    <div ng-switch-when="tagsSelect">
+                      <ka-tags tags="filter.value" 
+                        placeholder="Specify Condition Value & then hit enter key"/>
+                    </div>
+                    <div ng-switch-when="betweenDate" class="clearfix">
+                      <input class="pull-left form-control" placeholder="Range Min" type="text" 
+                        ka-date-picker="{{queryData.datePickerOpts}}"
+                        ng-model="filter.value[0]"
+                        style="width:42%;">
+                      <span class="pull-left" style="width:15%;text-align:center;padding: 4px;">and</span>
+                      <input class="pull-left form-control" placeholder="Range Max" type="text" 
+                        ka-date-picker="{{queryData.datePickerOpts}}"
+                        ng-model="filter.value[1]"
+                        style="width:42%;">
+                    </div>
+                    <div ng-switch-when="betweenNumeric" class="clearfix">
+                      <input class="pull-left form-control" placeholder="Range Min" type="text" 
+                        ng-model="filter.value[0]"
+                        style="width:42%;">
+                      <span class="pull-left" style="width:15%;text-align:center;padding: 4px;">and</span>
+                      <input class="pull-left form-control" placeholder="Range Max" type="text" 
+                        ng-model="filter.value[1]"
+                        style="width:42%;">
+                    </div>
+                    <input ng-switch-when="datePicker" class="form-control"
+                      data-placeholder="Select Date"
+                      type="text" ka-date-picker="{{queryData.datePickerOpts}}"
+                      ng-model="filter.value"></input>
+                    <input ng-switch-default class="form-control"
+                      placeholder="Specify Condition Value"
+                      type="text" ng-model="filter.value"></input>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="height: 12%">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="ok()">Run</button>
+      </div>
+    </script>
+        
     <script type="text/ng-template" id="filter-popover-tmpl.html">
       <div style="width: 300px;">
         <div class="form-group">
@@ -1027,20 +1164,22 @@
             selected="queryData.currFilter.op">
           </ka-select>
         </div>
+
         <div class="form-group" ng-hide="isUnaryOpSelected()">
           <label for="value">Condition Value</label>
           <div id="value" ng-switch="getValueType()">
             <div ng-switch-when="select">
               <ka-select data-placeholder="Select Condition Value"
-                         options="queryData.currFilter.field.pvs"
-                         selected="queryData.currFilter.value" style="width: 100%">
+                options="queryData.currFilter.field.pvs"
+                selected="queryData.currFilter.value" style="width: 100%">
               </ka-select>
             </div>
             <div ng-switch-when="multiSelect">
               <ka-select multiple
-                         data-placeholder="Select Condition Values"
-                         options="queryData.currFilter.field.pvs"
-                         selected="queryData.currFilter.value" style="width: 100%"></ka-select>
+                data-placeholder="Select Condition Values"
+                options="queryData.currFilter.field.pvs"
+                selected="queryData.currFilter.value" style="width: 100%">
+              </ka-select>
             </div>
             <div ng-switch-when="tagsSelect">
               <ka-tags tags="queryData.currFilter.value" 
@@ -1048,33 +1187,42 @@
             </div>
             <div ng-switch-when="betweenDate" class="clearfix">
               <input class="pull-left form-control" placeholder="Range Min" type="text" 
-                     ka-date-picker="{{queryData.datePickerOpts}}"
-                     ng-model="queryData.currFilter.value[0]"
-                     style="width:42%;">
+                ka-date-picker="{{queryData.datePickerOpts}}"
+                ng-model="queryData.currFilter.value[0]"
+                style="width:42%;">
               <span class="pull-left" style="width:15%;text-align:center;padding: 4px;">and</span>
               <input class="pull-left form-control" placeholder="Range Max" type="text" 
-                     ka-date-picker="{{queryData.datePickerOpts}}"
-                     ng-model="queryData.currFilter.value[1]"
-                     style="width:42%;">
+                ka-date-picker="{{queryData.datePickerOpts}}"
+                ng-model="queryData.currFilter.value[1]"
+                style="width:42%;">
             </div>
             <div ng-switch-when="betweenNumeric" class="clearfix">
               <input class="pull-left form-control" placeholder="Range Min" type="text" 
-                     ng-model="queryData.currFilter.value[0]"
-                     style="width:42%;">
+                ng-model="queryData.currFilter.value[0]"
+                style="width:42%;">
               <span class="pull-left" style="width:15%;text-align:center;padding: 4px;">and</span>
               <input class="pull-left form-control" placeholder="Range Max" type="text" 
-                     ng-model="queryData.currFilter.value[1]"
-                     style="width:42%;">
+                ng-model="queryData.currFilter.value[1]"
+                style="width:42%;">
             </div>
             <input ng-switch-when="datePicker" class="form-control"
-                   data-placeholder="Select Date"
-                   type="text" ka-date-picker="{{queryData.datePickerOpts}}"
-                   ng-model="queryData.currFilter.value"></input>
+              data-placeholder="Select Date"
+              type="text" ka-date-picker="{{queryData.datePickerOpts}}"
+              ng-model="queryData.currFilter.value"></input>
             <input ng-switch-default class="form-control"
-                   placeholder="Specify Condition Value"
-                   type="text" ng-model="queryData.currFilter.value"></input>
+              placeholder="Specify Condition Value"
+              type="text" ng-model="queryData.currFilter.value"></input>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="queryData.currFilter.parameterized" 
+              ng-checked="queryData.currFilter.parameterized">
+            Parameterized Filter
+          </label>
+        </div>
+
         <div class="form-group"> 
           <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
           <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
@@ -1099,9 +1247,26 @@
           <input type="text" ng-model="queryData.currFilter.desc" class="form-control">
         </div>
         <div class="form-group"> 
-          <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
-          <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
-          <button class="btn btn-default" ng-click="cancelFilter()">Cancel</button>
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="queryData.currFilter.parameterized" 
+              ng-checked="queryData.currFilter.parameterized">
+            Parameterized Filter
+          </label>
+        </div>
+        <div class="form-group"> 
+          <button class="btn btn-success" 
+            ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" 
+            ng-show="!queryData.currFilter.id">
+            Add
+          </button>
+          <button class="btn btn-success" 
+            ng-disabled="disableAddFilterBtn()" ng-click="editFilter()" 
+            ng-show="queryData.currFilter.id">
+            Edit
+          </button>
+          <button class="btn btn-default" ng-click="cancelFilter()">
+            Cancel
+          </button>
         </div>
       </div>
     </script>
