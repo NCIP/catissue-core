@@ -742,7 +742,7 @@
               <span>Dashboard</span> 
             </div> 
             <div class="btn btn-default" ng-click="redefineQuery()"> 
-              <span class="glyphicon glyphicon-wrench"></span> 
+              <span class="glyphicon glyphicon-pencil"></span> 
               <span>Edit Query </span>
             </div> 
             <div class="btn btn-default" ng-click="showRecords()">
