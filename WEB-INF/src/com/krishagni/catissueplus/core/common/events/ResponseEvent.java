@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.core.common.events;
 
+import com.krishagni.catissueplus.core.common.errors.CatissueErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
+import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ResponseEvent {
@@ -53,5 +55,25 @@ public class ResponseEvent {
 	public void raiseException(){
 		throw new OpenSpecimenException(this);
 	}
+	
+    public void setupResponseEvent(EventStatus status, CatissueErrorCode errorCode, Throwable t) {
+        setStatus(status);
+
+        String message = null;
+        if (errorCode != null) {
+                message = errorCode.message();
+        }
+
+        if (message == null && t != null) {
+                message = t.getMessage();
+        }
+        setMessage(message);
+        setException(t);
+
+        if (t instanceof ObjectCreationException) {
+                ObjectCreationException oce = (ObjectCreationException)t;
+                setErroneousFields(oce.getErroneousFields());
+        }
+    }
 
 }
