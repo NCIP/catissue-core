@@ -189,6 +189,18 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Equipment.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Image.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/PermissibleValue.hbm.xml"/>
+		
+		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/Operation.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/Permission.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/Role.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/Resource.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/ResourceInstanceOp.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/RoleAccessControl.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/Subject.hbm.xml"/>
+		<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/>
+		
     </session-factory>
 
 </hibernate-configuration>

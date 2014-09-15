@@ -41,6 +41,10 @@
   <bean id="deDaoFactory" class="com.krishagni.catissueplus.core.de.repository.impl.DaoFactoryImpl">
     <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
   </bean>
+
+  <bean id="rbacDaoFactory" class="com.krishagni.rbac.repository.impl.DaoFactoryImpl">
+    <property name="sessionFactory" value="#{sessionFactoryBuilder.getSessionFactory()}"/>
+  </bean>
     
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <!-- one of the properties available; the maximum file size in bytes, 100mb -->
@@ -238,6 +242,10 @@
     <property name="userDao" ref="userDao"/>
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
     <property name="privilegeSvc" ref="privSvc"/>
+  </bean>
+
+  <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
+    <property name="daoFactory" ref="rbacDaoFactory"/>
   </bean>
 
   <bean id="auditFactory" class="com.krishagni.catissueplus.core.audit.domain.factory.impl.AuditFactoryImpl">
