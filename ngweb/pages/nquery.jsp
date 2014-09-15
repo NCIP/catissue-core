@@ -407,6 +407,24 @@
          text-overflow: ellipsis;
          white-space: nowrap;
        }
+
+       .query-title {
+         padding: 5px; 
+         border-bottom: 1px solid #ddd; 
+         border-radius: 4px
+       }
+
+       .pq {
+         position: absolute;
+         right: 0px;
+         top: 0px;
+         border-radius: 50%;
+         background: #428bca;
+         height: 12px;
+         width: 12px;
+         font-size: 10px;
+         color: white;
+       } 
     </style>
   </head>
 
@@ -598,8 +616,8 @@
                     <input type="checkbox" checklist-model="queryData.selectedQueries" checklist-value="query">
                   </div>
                   <div class="pull-left" style="width: 90%;">
-                    <a style="cursor:pointer;" ng-click="editQuery(query)" 
-                      tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to edit query">
+                    <a style="cursor:pointer;" ng-click="runQuery(query)" 
+                      tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to view records">
                       #{{query.id}} {{query.title}}
                     </a>
                   </div>
@@ -608,9 +626,9 @@
                 <td>
                   {{query.lastModifiedOn | formatDate}}
                   <div class="pull-right btn-group btn-group-xs" ng-if="query.highlight">
-                    <button type="button" class="btn btn-default" ng-click="runQuery(query)"
-                      tooltip-placement="bottom" tooltip="View Records" tooltip-append-to-body="true">
-                      <span class="glyphicon glyphicon-play"></span>
+                    <button type="button" class="btn btn-default" ng-click="editQuery(query)"
+                      tooltip-placement="bottom" tooltip="Edit Query" tooltip-append-to-body="true">
+                      <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                     <a type="button" class="btn btn-default" 
                       tooltip-placement="bottom" tooltip="Download Query Definition" tooltip-append-to-body="true"
@@ -803,16 +821,18 @@
       </div>
     </div>
     <div class="container" ng-if="queryData.view == 'query'">
-      <div class="row" style="height: 5%;">
-        <div class="col-xs-offset-3 col-xs-9"
-          tooltip="{{queryData.title}}" tooltip-placement="bottom" tooltip-append-to-body="true">
-          <h4 ng-if="queryData.id" class="ellipsis">
+      <div class="row" style="height: 7%;">
+        <div class="col-xs-offset-3 col-xs-9">
+          <h4 ng-if="queryData.id" class="ellipsis query-title"
+            tooltip="{{queryData.title}}" tooltip-placement="bottom" tooltip-append-to-body="true">
             {{queryData.title}}
           </h4>
-          <h4 ng-if="!queryData.id">Unsaved Query</h4>
+          <h4 ng-if="!queryData.id" class="query-title">
+            Unsaved Query
+          </h4>
         </div>
       </div>
-      <div class="row" style="height: 95%">
+      <div class="row" style="height: 93%">
         <div class="col-xs-3 content-left">
           <accordion ka-fix-height="100%" close-others="true"> 
             <div class="panel panel-primary">
@@ -942,18 +962,25 @@
               <div id="expr" class="filter-item clearfix" ng-class="{'filter-item-error': !queryData.isValid}" 
                    style="margin-top: 1%; min-height: 4em; width: 100%;" ng-model="queryData.exprNodes" ui-sortable="exprSortOpts">
                 <div ng-switch="node.type" ng-repeat="node in queryData.exprNodes" class="pull-left">
-                  <div ng-switch-when="filter" class="filter-item-valign filter-node" tooltip-html-unsafe="{{getFilterDesc(node.value)}}" tooltip-placement="bottom">
+                  <div ng-switch-when="filter" class="filter-item-valign filter-node" style="position: relative;"
+                    tooltip-html-unsafe="{{getFilterDesc(node.value)}}" tooltip-placement="bottom">
                     <b>{{node.value}}</b>
+                    <div class="pq" ng-if="isFilterParamterized(node.value)"
+                      tooltip="Parameterized Filter" tooltip-placement="bottom" tooltip-append-to-body="true">
+                      P
+                    </div>
                   </div>
                   <div ng-switch-when="op" ng-click="toggleOp($index)" 
-                       class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;"
-                       tooltip="{{node.value != 'not' && node.value != 'nthchild' ? 'Click to toggle operator' : ''}}" tooltip-placement="bottom">
+                    class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;"
+                    tooltip="{{node.value != 'not' && node.value != 'nthchild' ? 'Click to toggle operator' : ''}}" tooltip-placement="bottom">
                     <span class="fa" ng-bind-html="getOpCode(node.value)"></span>
-                    <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                    <span style="position: absolute; top: 0; right: 0; cursor: pointer;" 
+                      class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
                   </div>
                   <div ng-switch-when="paren" class="filter-item-valign paren-node" style="position: relative;">
                     {{node.value}}
-                    <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                    <span style="position: absolute; top: 0; right: 0; cursor: pointer;" 
+                      class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
                   </div>
                 </div>
               </div>
@@ -966,8 +993,12 @@
             <div class="panel-body" style="height: 87%; overflow: auto;">
               <div class="filter-item" style="display: table; width: 100%;" ng-repeat="filter in queryData.filters">
                 <div style="display: table-cell; vertical-align: middle;">
-                  <div class="filter-item-valign pull-left" style="background-color: #cccccc; width:2.5em; border-radius: 50%; border: 1px solid #cccccc;text-align: center;margin-right: 1%;">
+                  <div class="filter-item-valign pull-left" style="background-color: #cccccc; position: relative; width:2.5em; border-radius: 50%; border: 1px solid #cccccc;text-align: center;margin-right: 1%;">
                     <div><b>{{filter.id}}</b></div>
+                    <div class="pq" ng-if="filter.parameterized"
+                      tooltip="Parameterized Filter" tooltip-placement="bottom" tooltip-append-to-body="true">
+                      P 
+                    </div>
                   </div>
                 </div>
                 <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="!filter.expr"> 
@@ -1023,38 +1054,7 @@
               </div>
               <a href=#" tooltip="Cancel and go back to dashboard" tooltip-placement="top" ng-click="showQueries()" style="margin-left: 10px;">Cancel</a>
             </div>
-            <div class="pull-right" style="width: 45%; margin-left: 1%;" ng-if="queryData.notifs.showCount">
-              <div ng-if="queryData.notifs.waitCount" class="alert alert-info" style="padding: 5px 12px;">
-                <span>Counting ...</span>
-              </div>
-
-              <div ng-if="!queryData.notifs.waitCount">
-                <div ng-if="!queryData.notifs.error">
-                  <div ng-if="queryData.cprCnt != 0 || queryData.specimenCnt != 0" 
-                       class="alert alert-info" style="padding: 5px 12px;">
-                    <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
-                    <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
-                    <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
-                  </div>
-                  <div ng-if="queryData.cprCnt == 0 && queryData.specimenCnt == 0" 
-                       class="alert alert-warning" style="padding: 5px 12px;">
-                    <span>Zaarooo records found! <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial</span>
-                    <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
-                  </div>
-                </div>
-                <div ng-if="queryData.notifs.error">
-                  <div class="alert alert-danger" style="padding: 5px 12px;" ng-switch on="queryData.notifs.error">
-                    <span ng-switch-when="BAD_REQUEST">
-                      Query is malformed! <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial
-                    </span>
-                    <span ng-switch-when="INTERNAL_SERVER_ERROR">
-                      Internal Server Error. Contact system admin.
-                    </span>
-                    <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div ng-include="'count-tmpl.html'" class="pull-right" style="width: 45%; margin-left: 1%;"/>
           </div>
         </div>
       </div>
@@ -1062,7 +1062,7 @@
 
     <script type="text/ng-template" id="parameterized-filters-modal.html">
       <div class="modal-header" style="height: 10%">
-        <h4>Parameterized Filters</h4>
+        <h4>{{queryData.title}}</h4>
       </div>
       <div class="modal-body" style="height: 75%;overflow:auto;">
         <table class="table">
@@ -1148,8 +1148,19 @@
         </table>
       </div>
       <div class="modal-footer" style="height: 12%">
+        <div ng-include="'count-tmpl.html'" class="pull-left" style="text-align: left; width: 45%; margin-left: 1%;"/>
+
         <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-        <button class="btn btn-primary" ng-click="ok()">Run</button>
+        <button class="btn btn-primary" ng-click="getCount()"
+          tooltip="Get Count" tooltip-placement="top" tooltip-append-to-body="true">
+          <span class="glyphicon glyphicon-dashboard"></span>
+          <span>Get Count</span>
+        </button>
+        <button class="btn btn-primary" ng-click="ok()"
+          tooltip="Run Query" tooltip-placement="top" tooltip-append-to-body="true">
+          <span class="glyphicon glyphicon-play"></span>
+          <span>View Records</span>
+        </button>
       </div>
     </script>
         
@@ -1544,7 +1555,53 @@
         </div>
       </div>
     </script>
-    
+
+    <script type="text/ng-template" id="count-tmpl.html">
+      <div ng-if="queryData.notifs.showCount">
+        <div ng-if="queryData.notifs.waitCount" class="alert alert-info" style="padding: 5px 12px;">
+          <span>Counting ...</span>
+        </div>
+
+        <div ng-if="!queryData.notifs.waitCount">
+          <div ng-if="!queryData.notifs.error">
+            <div ng-if="queryData.cprCnt != 0 || queryData.specimenCnt != 0" 
+              class="alert alert-info" style="padding: 5px 12px;">
+              <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
+              <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
+              <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+            </div>
+            <div ng-if="queryData.cprCnt == 0 && queryData.specimenCnt == 0" 
+              class="alert alert-warning" style="padding: 5px 12px;">
+              <span>
+                Zaarooo records found! 
+                <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank">
+                  <b>Click here</b>
+                </a> to watch tutorial
+              </span>
+              <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+            </div>
+          </div>
+          <div ng-if="queryData.notifs.error">
+            <div class="alert alert-danger" style="padding: 5px 12px;" ng-switch on="queryData.notifs.error">
+              <span ng-switch-when="BAD_REQUEST">
+                Query is malformed! 
+                <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank">
+                  <b>Click here</b>
+                </a> to watch tutorial
+              </span>
+              <span ng-switch-when="INTERNAL_SERVER_ERROR">
+                Internal Server Error. Contact system admin.
+              </span>
+              <span style="font-size: 1.2em; cursor: pointer;" 
+                class="pull-right" ng-click="closeNotif('showCount')">
+                &times;
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
     <script>
       var query = query || {};
       query.global = query.global || {};

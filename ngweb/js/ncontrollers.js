@@ -181,28 +181,32 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       return $scope.queryData.selectedCp.id == -1 || form.name != 'CollectionProtocol';
     };
 
-    $scope.getCount= function() {
-      var query = getWhereExpr(getFilterMap($scope.queryData.filters), $scope.queryData.exprNodes);
+    var getCount= function(queryData) {
+      var query = getWhereExpr(queryData.filtersMap, queryData.exprNodes);
       var aql = "select count(distinct Participant.id) as \"cprCnt\", count(distinct Specimen.id) as \"specimenCnt\" where " + query;
-      $scope.queryData.notifs.showCount = true;
-      $scope.queryData.notifs.waitCount = true;
+      queryData.notifs.showCount = true;
+      queryData.notifs.waitCount = true;
 
-      var cpId = $scope.queryData.selectedCp.id;
-      var queryId = $scope.queryData.id;
+      var cpId = queryData.selectedCp.id;
+      var queryId = queryData.id;
       QueryService.executeQuery(queryId, cpId, 'Participant', aql, 'Count').then(
         function(result) {
           if (result.status != 'OK') {
-            $scope.queryData.notifs.error = result.status;
+            queryData.notifs.error = result.status;
           } else {
-            $scope.queryData.cprCnt  = result.rows[0][0];
-            $scope.queryData.specimenCnt = 0;
+            queryData.cprCnt  = result.rows[0][0];
+            queryData.specimenCnt = 0;
             for (var i = 1; i < result.rows[0].length; ++i) {
-              $scope.queryData.specimenCnt += parseInt(result.rows[0][i]);
+              queryData.specimenCnt += parseInt(result.rows[0][i]);
             }
-            $scope.queryData.notifs.error = "";
+            queryData.notifs.error = "";
           }
-          $scope.queryData.notifs.waitCount = false;
+          queryData.notifs.waitCount = false;
         });
+    };
+
+    $scope.getCount= function() {
+      getCount($scope.queryData);
     };
 
 
@@ -346,7 +350,6 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var aql = "select " + selectList + " where " + query + " limit 0, 10000 " + rptExpr;
 
       $scope.showAddToSpecimenList = showAddToSpecimenList(selectList);
-      var startTime = new Date();
       $scope.queryData.notifs.waitRecs = true;
       var cpId = $scope.queryData.selectedCp.id;
       var queryId = $scope.queryData.id;
@@ -590,16 +593,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       } 
     };
 
-    $scope.getFilterDesc = function(filterId) {
-      var filter = null;
-      var filters = $scope.queryData.filters;
-      for (var i = 0; i < filters.length; ++i) {
-        if (filters[i].id == filterId) {
-          filter = filters[i];
-          break;
-        }
-      }
+    $scope.isFilterParamterized = function(filterId) {
+      var filter = $scope.queryData.filtersMap[filterId];
+      return filter && filter.parameterized;
+    };
 
+    $scope.getFilterDesc = function(filterId) {
+      var filter = $scope.queryData.filtersMap[filterId];
       var desc = "Unknown";
       if (filter && filter.expr && filter.desc) {
         desc = filter.desc;
@@ -717,6 +717,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         selectedForm: null,
         selectedFields: getDefaultSelectedFields(),
         filters: [],
+        filtersMap: {},
         joinType: 'all',
         exprNodes: [],              //{type: filter/op/paran, val: filter id/and-or-intersect-not}
         filterId: 0,
@@ -1182,6 +1183,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         $modalInstance.close($scope.queryData);
       };
 
+      $scope.getCount = function() {
+        getCount($scope.queryData);
+      }
+
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
@@ -1213,10 +1218,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
           $scope.onCpSelect(selectedCp);
 
-          var filters = [];
+          var filters = [], filtersMap = {};
           var maxFilterId = 0;
           for (var i = 0; i < queryDef.filters.length; ++i) {
-            filters.push(getFilter(queryDef.filters[i]));
+            var filter = getFilter(queryDef.filters[i]);
+            filters.push(filter);
+            filtersMap[filter.id] = filter;
+
             if (maxFilterId < queryDef.filters[i].id) {
               maxFilterId = queryDef.filters[i].id;
             }
@@ -1268,8 +1276,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
 
           var queryProps = {
-            selectedFields: queryDef.selectList, filters: filters, exprNodes: exprNodes, 
-            id: query.id, title: query.title, filterId: maxFilterId, selectedCp: selectedCp,
+            selectedFields: queryDef.selectList, filters: filters, filtersMap: filtersMap,
+            exprNodes: exprNodes, id: query.id, title: query.title, 
+            filterId: maxFilterId, selectedCp: selectedCp,
             reporting: queryDef.reporting || {type: 'none', params: {}}
           };
 
@@ -1829,7 +1838,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       if ($scope.queryData.filters.length > 0) {
         $scope.queryData.exprNodes.push({type: 'op', value: ops.and.name});
       }
+
       $scope.queryData.filters.push(filter);
+      $scope.queryData.filtersMap[filter.id] = filter;      
       $scope.queryData.exprNodes.push({type: 'filter', value: filter.id});
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
       $scope.queryData.currFilter = {};
@@ -1842,11 +1853,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
       var filter = {}
       filter = angular.extend(filter, $scope.queryData.currFilter);
-      filter.id = $scope.queryData.filterId;
 
       for (var i = 0; i < $scope.queryData.filters.length; ++i) {
         if (filter.id == $scope.queryData.filters[i].id) {
           $scope.queryData.filters[i] = filter;
+          $scope.queryData.filtersMap[filter.id] = filter;
           break;
         }
       }
@@ -1866,6 +1877,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     $scope.deleteFilter = function(filter) {
       hidePopovers();
 
+      delete $scope.queryData.filtersMap[filter.id];
       for (var i = 0; i < $scope.queryData.filters.length; ++i) {
         if (filter.id == $scope.queryData.filters[i].id) {
           $scope.queryData.filters.splice(i, 1);
