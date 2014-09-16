@@ -21,7 +21,6 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenCollectionGroupFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenGroupsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
@@ -35,8 +34,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.ScgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensInfoEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -109,7 +108,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	
 	@Override
 	@PlusTransactional
-	public AllSpecimensEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
+	public SpecimensInfoEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
 		try {
 			List<Specimen> specimenList = new ArrayList<Specimen>();
 			List<SpecimenRequirement> requirementList = new ArrayList<SpecimenRequirement>();
@@ -122,11 +121,11 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
 
 			}
-			return AllSpecimensEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
+			return SpecimensInfoEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
 
 		}
 		catch (CatissueException e) {
-			return AllSpecimensEvent.serverError(e);
+			return SpecimensInfoEvent.serverError(e);
 		}
 	}
 

@@ -113,7 +113,7 @@
         <button class="btn btn-default" id="cancel" ng-click="cancelDataTable()" ng-show="dataEntryMode">
            Cancel
         </button>
-        <button class="btn btn-default" id="delete" ng-click="deleteRow()" ng-show="deleteRecords">
+        <button class="btn btn-default" id="delete" ng-click="deleteSelectedRows()" ng-show="deleteRows">
           Delete
         </button>
         <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">

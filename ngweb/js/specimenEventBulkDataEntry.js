@@ -15,7 +15,6 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   $scope.selectedEvent = undefined;
   $scope.specimenLabels = getSpecimenLabels();
   $scope.specimensSummary = {};
-  $scope.deleteRecords = false;
 
   var dataTable = undefined;
 
@@ -24,31 +23,30 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
   });
 
   $scope.onEventSelect = function(selectedEvent) {
-    $scope.dataEntryMode = $scope.editRecords  = $scope.deleteRecords = false;
+    $scope.dataEntryMode = $scope.editRecords  = $scope.deleteRows = false;
     FormsService.getFormDef(selectedEvent.formId).then(function (data){
       var formDef = data;
       var that = this;
       dataTable = new edu.common.de.DataTable({
         formId           : selectedEvent.formId,
         idColumnLabel    : 'Specimen Label',
-        extraCols        : ['Collection Protocol', 'Specimen Type'],
+        appColumns       : [{id: 'cpName',label: 'Collection Protocol'}, {id: 'specimenType', label:'Specimen Type'}],
         formDef          : formDef,
         formDiv          : 'data-table',
         onValidationError: function() {
           Utility.notify($("#notifications"), "There are some errors on form. Please rectify them before saving", "error", true);
         },
 
-        onRowSelect: function() {
-           var isRowSelected = dataTable.isRowSelected();
-           $scope.deleteRecords = isRowSelected;
-           console.log($scope.deleteRecords);
+        onRowSelect: function(isRowSelected) {
+          $scope.deleteRows = isRowSelected;
+          $scope.$apply();
         }
       });
       dataTable.clear();
     });
   }
 
-  var getSpecimenSummary = function(specimenLabel) {
+  $scope.getSpecimenSummary = function(specimenLabel) {
     for(var i = 0; i< $scope.specimensSummary.length; i++ ) {
       if($scope.specimensSummary[i].label == specimenLabel) {
         return $scope.specimensSummary[i];
@@ -65,15 +63,19 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
 
     SpecimensService.getSpecimens(specimenLabels).then( function(data) {
       $scope.loading = false;
-      $scope.specimensSummary = data;
-      if(validate(specimenLabels, data)) {
+      $scope.specimensSummary = data.specimens;
+      if(validate(specimenLabels, data.specimens)) {
         for(var i=0; i < specimenLabels.length; i++) {
-          var specimenSummary = getSpecimenSummary(specimenLabels[i]);
-          var tableRec = {static: {key :{id : specimenSummary.label , label : specimenSummary.label}, cpname: specimenSummary.cpShortTitle, speicmenType:specimenSummary.specimenType}, records : []};
+          var specimenSummary = $scope.getSpecimenSummary(specimenLabels[i]);
+          var tableRec = {
+            key            : {id : specimenSummary.label , label : specimenSummary.label},
+            appColumnsData : { cpName: specimenSummary.cpShortTitle, specimenType: specimenSummary.specimenType },
+            records        : []
+          };
           tableData.push(tableRec);
         }
 
-        $scope.dataEntryMode = $scope.deleteRecords = true;
+        $scope.dataEntryMode = true;
         $scope.editRecords = false;
         dataTable.setMode($scope.dataEntryMode == true ? 'add' : 'view');
         renderDataTable(tableData);
@@ -81,13 +83,13 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
     });
   };
 
-  $scope.deleteRow = function() {
+  $scope.deleteSelectedRows = function() {
      dataTable.deleteRows();
+     $scope.deleteRows = false;
   };
 
   var validate = function(specimenLabels, data) {
     var validSpecimens = [];
-    console.log(data);
     for(var i = 0; i< data.length; i++ ) {
       if($.inArray(data[i].label, specimenLabels) != -1) {
         validSpecimens.push(data[i].label);
@@ -118,7 +120,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
       var savedFormData = eval(obj);
       var tableData = populateTableData(savedFormData);
 
-      $scope.dataEntryMode = $scope.deleteRecords = false;
+      $scope.dataEntryMode = false;
       $scope.editRecords = true;
       dataTable.setMode('view');
       renderDataTable(tableData);
@@ -134,7 +136,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
     $scope.loading = true;
     var tableData = populateTableData(dataTable.getData());
     $scope.dataEntryMode = true;
-    $scope.editRecords = $scope.deleteRecords = false;
+    $scope.editRecords = false;
     dataTable.setMode('edit');
     renderDataTable(tableData);
     $scope.loading = false;
@@ -142,7 +144,7 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
 
   $scope.cancelDataTable = function() {
     dataTable.clear();
-    $scope.dataEntryMode = $scope.deleteRecords = false;
+    $scope.dataEntryMode = false;
   }
 
   $scope.applyFirstToAll = function() {
@@ -153,11 +155,14 @@ specimenEvent.controller('SpecimenEventController', ['$scope', 'SpecimensEventSe
     var tblData = [];
     for(var i = 0; i< tableData.length; i++) {
       var specimenLabel = tableData[i].appData.id;
-      var specimenSummary = getSpecimenSummary(specimenLabel);
+      var specimenSummary = $scope.getSpecimenSummary(specimenLabel);
       var records = [];
       records.push(tableData[i]);
-      var tableRec = {static: {key :{id : specimenLabel , label : specimenLabel},
-        cpname:specimenSummary.cpShortTitle , speicmenType:specimenSummary.specimenType}, records : records };
+      var tableRec = {
+        key            : {id : specimenLabel , label : specimenLabel},
+        appColumnsData : { cpName: specimenSummary.cpShortTitle, specimenType: specimenSummary.specimenType },
+        records        : records
+      };
       tblData.push(tableRec);
     }
     return tblData;
@@ -198,12 +203,11 @@ specimenEvent.factory('SpecimensService', function($http) {
 
   return {
     getSpecimens : function(labels) {
-      var url = baseUrl + "/label"; 	
-      var params = { 
-        specimenLabels : labels,
+      var params = {
+        label : labels,
     	'_reqTime' : new Date().getTime()
       };
-      return Utility.get($http, url, successfn, params);
+      return Utility.get($http, baseUrl, successfn, params);
     }
   }
 });

@@ -24,21 +24,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.GetSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPatchDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
-import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
@@ -72,44 +68,34 @@ public class SpecimenController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> getAllSpecimens(
+	public Map<String, Object> getSpecimens(
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
 			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
-		ReqAllSpecimensEvent req = new ReqAllSpecimensEvent();
-		req.setStartAt(start);
-		req.setMaxRecords(max);
-		req.setCountReq(countReq);
-		req.setSearchString(searchString);
-		req.setSessionDataBean(getSession());
-		AllSpecimensEvent resp = specimenSvc.getAllSpecimens(req);
-		if (!resp.isSuccess()) {
-			resp.raiseException();
-		}
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (resp.getCount() != null) {
-			result.put("count", resp.getCount());
-		}
-		result.put("specimens", resp.getSpecimensInfo());
-		return result;	
-	}
-	
-	@RequestMapping(method=RequestMethod.GET, value="/label")	
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<SpecimenSummary> getSpecimens(@RequestParam(value="specimenLabels", required=true) String[] specimenLabels) {
-		GetSpecimensEvent event = new GetSpecimensEvent();
-		event.setLabels(new ArrayList(Arrays.asList(specimenLabels)));
-		event.setSessionDataBean(getSession());
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString,
+			@RequestParam(value="label", required=false) String[] labels){
 		
-		SpecimensSummaryEvent resp = specimenSvc.getSpecimens(event);
-		if(resp.getStatus() == EventStatus.OK ) {
-			return resp.getSpecimens();
-		}
-		return null;
+			ReqSpecimensEvent req = new ReqSpecimensEvent();
+			req.setStartAt(start);
+			req.setMaxRecords(max);
+			req.setCountReq(countReq);
+			req.setSearchString(searchString);
+			req.setSessionDataBean(getSession());
+			
+			List<String> specimenLabels = (labels != null) ? new ArrayList(Arrays.asList(labels)) : null; 
+			req.setSpecimenLabels(specimenLabels);
+			SpecimensSummaryEvent resp = specimenSvc.getSpecimens(req);
+			if (!resp.isSuccess()) {
+				resp.raiseException();
+			}
+			Map<String, Object> result = new HashMap<String, Object>();
+			if (resp.getCount() != null) {
+				result.put("count", resp.getCount());
+			}
+			result.put("specimens", resp.getSpecimensSummary());
+			
+			return result;
 	}
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/forms")
 	@ResponseStatus(HttpStatus.OK)

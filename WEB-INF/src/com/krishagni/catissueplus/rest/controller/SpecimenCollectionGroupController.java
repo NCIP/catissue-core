@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionGroupsDetailEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.GetScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllScgEvent;
@@ -30,6 +30,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ScgReportDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgReportUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ScgUpdatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensInfoEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateScgReportEvent;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenCollGroupService;
@@ -92,7 +93,7 @@ public class SpecimenCollectionGroupController {
 		req.setSessionDataBean(getSession());
 		req.setId(id);
 		req.setObjectType(objectType);
-		AllSpecimensEvent resp = specimenCollGroupService.getSpecimensList(req);
+		SpecimensInfoEvent resp = specimenCollGroupService.getSpecimensList(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}

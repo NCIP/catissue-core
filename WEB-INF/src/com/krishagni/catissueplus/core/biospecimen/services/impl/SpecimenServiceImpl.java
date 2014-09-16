@@ -15,13 +15,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.AliquotCreatedEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.GetSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqAllSpecimensEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -82,49 +80,42 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	@Override
 	@PlusTransactional
-	public AllSpecimensEvent getAllSpecimens(ReqAllSpecimensEvent req) {
-		if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
-			String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
-			return AllSpecimensEvent.badRequest(msg, null);
+	public SpecimensSummaryEvent getSpecimens(ReqSpecimensEvent req) {
+		List<Specimen> specimens = null; 
+		Long count = null;
+		
+		if(req.getSpecimenLabels() != null) {
+			specimens = daoFactory.getSpecimenDao().getSpecimensByLabel(req.getSpecimenLabels());
+			if(req.isCountReq()) {
+				count = (long) specimens.size();
+			}
 		}
-
-		List<Specimen> specimens = daoFactory.getSpecimenDao().getAllSpecimens(
-						req.getStartAt(), req.getMaxRecords(), 
-						req.getSearchString());
-		List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
-		for (Specimen specimen : specimens) {
-			result.add(SpecimenDetail.fromDomain(specimen));
+		else{
+			if (req.getStartAt() < 0 || req.getMaxRecords() <= 0) {
+				String msg = SavedQueryErrorCode.INVALID_PAGINATION_FILTER.message();
+				return SpecimensSummaryEvent.badRequest(msg, null);
+			}
+			specimens = daoFactory.getSpecimenDao().getAllSpecimens(
+					req.getStartAt(), req.getMaxRecords(), 
+					req.getSearchString());
 		}
 		
-		Long count = null;
-		if (req.isCountReq()) {
+		List<SpecimenSummary> result = new ArrayList<SpecimenSummary>();
+		for (Specimen specimen : specimens) {
+			Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
+			if(privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING)) {
+				result.add(SpecimenSummary.from(specimen));
+			}
+		}
+		
+		if (req.isCountReq() && count == null) {
 			count = daoFactory.getSpecimenDao().getSpecimensCount(req.getSearchString());
 		}
 
-			return AllSpecimensEvent.ok(result,count);
+		return SpecimensSummaryEvent.ok(result,count);
 	}
 	
 
-	@Override
-	@PlusTransactional
-	public SpecimensSummaryEvent getSpecimens(GetSpecimensEvent event) {
-		try {
-			List<SpecimenSummary> specimenSummaryList = new ArrayList<SpecimenSummary>();
-			List<String> labels = event.getLabels();
-			List<Specimen> specimensList = daoFactory.getSpecimenDao().getSpecimensByLabel(labels);
-			for (Specimen specimen : specimensList) {
-				Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
-				if(privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId, Permissions.SPECIMEN_PROCESSING)) {
-					specimenSummaryList.add(SpecimenSummary.from(specimen));
-				}
-			}
-			 
-			return SpecimensSummaryEvent.ok(specimenSummaryList);
-		} catch(Exception ex){
-			return SpecimensSummaryEvent.serverError(ex);
-		}
-	}
-	
 	@Override
 	@PlusTransactional
 	public SpecimenCreatedEvent createSpecimen(CreateSpecimenEvent event) {
