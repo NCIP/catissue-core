@@ -23,7 +23,7 @@ public class OperationDetails {
 	}
 
 	public void setName(String name) {
-		this.name = name == null ? null : name.toUpperCase();
+		this.name = name;
 	}
 	
 	public OperationDetails() {

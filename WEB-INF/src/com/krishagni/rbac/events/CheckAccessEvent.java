@@ -44,7 +44,7 @@ public class CheckAccessEvent extends RequestEvent {
 	}
 
 	public void setResourceName(String resourceName) {
-		this.resourceName = resourceName == null ? null : resourceName.toUpperCase();
+		this.resourceName = resourceName;
 	}
 
 	public String getOperationName() {
@@ -52,7 +52,7 @@ public class CheckAccessEvent extends RequestEvent {
 	}
 
 	public void setOperationName(String operationName) {
-		this.operationName = operationName == null ? null : operationName.toUpperCase();
+		this.operationName = operationName;
 	}
 
 	public Long getResourceInstanceId() {

@@ -25,7 +25,7 @@ public class PermissionDetails {
 	}
 
 	public void setResourceName(String resourceName) {
-		this.resourceName = resourceName == null ? null : resourceName.toUpperCase();
+		this.resourceName = resourceName;
 	}
 
 	public String getOperationName() {
@@ -33,7 +33,7 @@ public class PermissionDetails {
 	}
 
 	public void setOperationName(String operationName) {
-		this.operationName = operationName == null ? null : operationName.toUpperCase();
+		this.operationName = operationName;
 	}
 
 	public static PermissionDetails fromPermission(Permission permission) {

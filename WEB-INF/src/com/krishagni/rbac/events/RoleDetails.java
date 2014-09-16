@@ -28,7 +28,7 @@ public class RoleDetails {
 	}
 
 	public void setName(String name) {
-		this.name = name == null ? null : name.toUpperCase();
+		this.name = name;
 	}
 
 	public String getDescription() {

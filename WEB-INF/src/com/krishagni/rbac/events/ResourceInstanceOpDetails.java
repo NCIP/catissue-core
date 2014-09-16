@@ -20,7 +20,7 @@ public class ResourceInstanceOpDetails {
 	}
 
 	public void setOperationName(String operationName) {
-		this.operationName = operationName == null ? null : operationName.toUpperCase();
+		this.operationName = operationName;
 	}
 	
 	public static ResourceInstanceOpDetails fromResourceInstanceOp(ResourceInstanceOp op) {
