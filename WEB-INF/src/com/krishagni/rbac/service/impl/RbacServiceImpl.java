@@ -529,7 +529,7 @@ public class RbacServiceImpl implements RbacService {
 				
 				ResourceInstanceOp op = new ResourceInstanceOp();
 				op.setRoleAccessControl(rac);
-				op.setResourceInstanceId(riod.getResourceInstanceId());
+				op.setResourceInstanceId(riod.getResourceInstanceId() == null ? -1L : riod.getResourceInstanceId());
 				op.setOperation(permission.getOperation());
 								
 				rac.getOperations().add(op);
