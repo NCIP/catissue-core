@@ -1127,14 +1127,17 @@ displayPrinterTypeLocation();
 <link rel="STYLESHEET" type="text/css" href="css/dhtmldropdown.css">
 <style>
 div.gridbox table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
-    background-color: rgb(223, 232, 246);
+    background-color: rgb(216, 216, 216);
     color: black;
-    border-color: skyblue;
+    border-color: lightgrey;
 }
 
 div.gridbox table.obj td {
-    border: 1px solid rgb(97, 161, 227);
-    padding :2px;
+    border: 0px solid rgb(97, 161, 227);
+    padding: 2px;
+    font-size: 12px;
+    font-family: verdana;
+    color: black;
 }
 
 div.dhx_page_active {
@@ -1149,7 +1152,7 @@ div.dhx_page_active {
 }
 
 div.gridbox_drop{
-    border:1px solid rgb(97, 161, 227);
+    border:1px solid lightgrey;
 }
 </style>
 </html>
