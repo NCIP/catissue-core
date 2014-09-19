@@ -101,7 +101,7 @@ var PivotTable = (function($) {
 
         var columnIdx = type.colIdx;
         var tr = $("<tr/>");
-        if (columnIdx != lastColIdx) {
+        if (columnIdx != lastColIdx && numGrpCols != 1) {
           tr.prop("class", "row-separator");
         }
 
@@ -154,7 +154,7 @@ var PivotTable = (function($) {
           }
 
           var tr = $("<tr/>");
-          if (tds.length == numCols) {
+          if (tds.length == numCols && numGrpCols != 1) {
             tr.prop("class", "row-separator");
           }
 
@@ -207,7 +207,7 @@ var PivotTable = (function($) {
 
       if (count == 0) {
         return {type: 'data'};
-      } else if (count == 1) {
+      } else if (count == 1 && numGrpCols != 1) {
         return {type: 'subTotal', colIdx: idx, value: val};
       } else if (count == numGrpCols) {
         return {type: 'grandTotal'};
