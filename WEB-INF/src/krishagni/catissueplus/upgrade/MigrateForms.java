@@ -154,7 +154,7 @@ public class MigrateForms {
 			}
 		}
 					
-		DEApp.init(ds, dir, null);
+		DEApp.init(ds, dir, null, null);
 	}
 	
 	private static boolean areLegacyFormsMigrated() { 

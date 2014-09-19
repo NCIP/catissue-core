@@ -158,6 +158,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
 			String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
+			String timeFormat = CommonServiceLocator.getInstance().getTimePattern(); 
 			
 			String dir = new StringBuilder(XMLPropertyHandler.getValue("appserver.home.dir")).append(File.separator)
 					.append("os-data").append(File.separator)
@@ -170,7 +171,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				}
 			}
 						
-			DEApp.init(ds, dir, dateFomat);
+			DEApp.init(ds, dir, dateFomat,timeFormat);
 			initQueryPathsConfig();            
 			ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
 			ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());

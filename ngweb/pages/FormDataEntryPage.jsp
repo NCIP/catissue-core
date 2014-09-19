@@ -12,8 +12,9 @@
     <link href="ngweb/external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
     <link href="ngweb/external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
     <link href="ngweb/external/de/css/de.css" rel="stylesheet" type="text/css"></link>
-    <link rel="stylesheet" href="ngweb/external/jquery/css/chosen.min.css">
-    <link rel="stylesheet" href="ngweb/external/jquery/css/chosen-sprite.png">
+    <link href="ngweb/external/jquery/css/chosen.min.css" rel="stylesheet" type="text/css">
+    <link href="ngweb/external/jquery/css/chosen-sprite.png" rel="stylesheet" type="text/css">
+    <link href="ngweb/external/bootstrap3-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css">
 
     <script src="ngweb/external/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="ngweb/external/jquery/chosen.jquery.min.js" type="text/javascript"></script>
@@ -27,6 +28,7 @@
     <script src="ngweb/external/angularjs/ui-bootstrap-tpls-0.11.0.min.js" type="text/javascript"></script>
     <script src="ngweb/external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="ngweb/external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="ngweb/external/bootstrap3-timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
 
   </head>
   <body ng-controller="FormsDataController" style="height: 100%;" class="clearfix">

@@ -4,6 +4,8 @@
   <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css">
   <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css">
+  <link href="../external/bootstrap3-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css">
   <link href="../external/de/css/de.css" rel="stylesheet" type="text/css">
   <link href="../css/app.css" rel="stylesheet" type="text/css">
   <link href="../external/jquery/css/chosen.min.css" rel="stylesheet" type="text/css">
@@ -18,17 +20,13 @@
   <script src="../external/angularjs/ui-bootstrap-tpls-0.11.0.min.js" type="text/javascript"></script>
   <script src="../external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
+  <script src="../external/bootstrap3-timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
   <style type="text/css">
-    th {
-      background: rgba(170, 170, 170, 0.24);
-      color:  #333;
-    }
-
     .right {
       float: right;
     }
 
-    .data-table {
+    .data-table-container {
       margin-top:10px;
       height:350px;
       overflow:auto;
@@ -39,9 +37,9 @@
       -moz-animation: spin 2s infinite linear;
       -o-animation: spin 2s infinite linear;
       animation: spin 2s infinite linear;
-         -webkit-transform-origin: 50% 58%;
-             transform-origin:50% 58%;
-             -ms-transform-origin:50% 58%; /* IE 9 */
+      -webkit-transform-origin: 50% 58%;
+      transform-origin:50% 58%;
+      -ms-transform-origin:50% 58%; /* IE 9 */
     }
 
     @-moz-keyframes spin {
@@ -71,14 +69,13 @@
       }
     }
   </style>
-
-    </head>
+</head>
 <body ng-controller="SpecimenEventController">
-<div id="notifications" class="cp-notifs hidden"></div>
-<div class="container">
+  <div id="notifications" class="cp-notifs hidden"></div>
+  <div class="container">
     <div class="row">
-        <div class="col-xs-7"><h3>Specimen Event Bulk Data Entry </h3></div>
-    </div>
+    <div class="col-xs-7"><h3>Specimen Event Bulk Data Entry </h3></div>
+  </div>
     <form class="form-horizontal">
       <div class="form-group">
         <label for="specimenLabels" class="control-label col-xs-2">Specimen Label(s)</label>
@@ -94,8 +91,6 @@
         </div>
       </div>
     </form>
-    <div>
-    </div>
     <div id="bulk-data-entry">
       <div>
         <button class="btn btn-primary" id="add" ng-click="addRecord()" ng-show="dataEntryMode != true">
@@ -119,19 +114,20 @@
         <button class="btn btn-primary right" id="Apply First To All" ng-click="applyFirstToAll()" ng-show="dataEntryMode">
           Apply First To All
         </button>
-      <div>
-        <div id="data-table" class="data-table"></div>
       </div>
-    <script>
-       var dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
-    </script>
-    <script src="../js/utility.js" type="text/javascript"></script>
-    <script src="../js/directives.js" type="text/javascript"></script>
-    <script src="../js/wrapper.js" type="text/javascript"></script>
-    <script src="../js/specimenEventBulkDataEntry.js" type="text/javascript"></script>
-    <script src="../js/forms-service.js" type="text/javascript"></script>
-    <script src="../external/de/js/de-field-manager.js" type="text/javascript"></script>
-    <script src="../external/de/js/de-form.js" type="text/javascript"></script>
-    <script src="../js/de-users.js" type="text/javascript"></script>
+      <div id="data-table" class="data-table-container"></div>
+    </div>
+
+  <script>
+    var dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
+  </script>
+  <script src="../js/utility.js" type="text/javascript"></script>
+  <script src="../js/directives.js" type="text/javascript"></script>
+  <script src="../js/wrapper.js" type="text/javascript"></script>
+  <script src="../js/specimenEventBulkDataEntry.js" type="text/javascript"></script>
+  <script src="../js/forms-service.js" type="text/javascript"></script>
+  <script src="../external/de/js/de-field-manager.js" type="text/javascript"></script>
+  <script src="../external/de/js/de-form.js" type="text/javascript"></script>
+  <script src="../js/de-users.js" type="text/javascript"></script>
 </body>
 </html>
