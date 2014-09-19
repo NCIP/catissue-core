@@ -1,8 +1,5 @@
 package com.krishagni.catissueplus.core.de.events;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.domain.Filter;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode;

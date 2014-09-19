@@ -258,7 +258,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         if (typeof field == "string" && field.indexOf(temporalMarker) == 0) { // TODO: Handle temporal expr and aggregates
           var filterId = field.substring(temporalMarker.length);
           var filter = filterMap[filterId];
-          field += getTemporalExprObj(filter.expr).lhs;
+          field = getTemporalExprObj(filter.expr).lhs;
           field += " as \"" + filter.desc + "\"";
         } else if (typeof field != "string") {
           var fnExpr = field.name;
@@ -285,6 +285,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     var showAddToSpecimenList = function(selectList) {
+      if ($scope.queryData.reporting.type == 'crosstab') {
+        return false;
+      }
+
       for (var i = 0; i < $scope.queryData.selectedFields.length; ++i) {
         if ($scope.queryData.selectedFields[i] === 'Specimen.label') {
           return true;
@@ -332,12 +336,12 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       colIdx = colIdx.length > 0 ? colIdx[0] : undefined;
       var summaryIdx = getFieldIndices(selectedFields, reporting.params.summaryFields);
 
-      var rollupType = "";
-      if (reporting.params.rollupType && reporting.params.rollupType != 'none') {
-        rollupType = ", " + reporting.params.rollupType;
+      var includeSubTotals = "";
+      if (reporting.params.includeSubTotals) {
+        includeSubTotals = ", true";
       } 
 
-      return 'crosstab((' + rowIdx.join(',') + '), ' + colIdx + ', (' + summaryIdx.join(',') + ') ' + rollupType + ')';
+      return 'crosstab((' + rowIdx.join(',') + '), ' + colIdx + ', (' + summaryIdx.join(',') + ') ' + includeSubTotals + ')';
     };
 
     $scope.getRecords = function() {
@@ -360,28 +364,17 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           return;
         }
 
-        var colDefs = [];
-        for (var i = 0; i < result.columnLabels.length; ++i) {
-          colDefs.push({
-            field: "col" + i, 
-            displayName: result.columnLabels[i],
-            width: 100, 
-            headerCellTemplate: 'templates/grid-column-filter.html'
-          });
+        if ($scope.queryData.reporting.type == 'crosstab') {
+          showPivotTable(result);
+        } else {
+          showDataGrid(result);
         }
-        $scope.queryData.resultData = result.rows;
-        $scope.queryData.resultCols = colDefs;
-        $scope.queryData.labelIndices = result.columnIndices;
-        $scope.queryData.resultDataSize = result.rows.length;
-        $scope.queryData.moreData = (result.dbRowsCount >= 10000);
-        $scope.queryData.pagingOptions.pageSize = 100;
-        $scope.queryData.pagingOptions.currentPage = 1;
 
-        
-        $scope.setPagedData(1, 100);
         $scope.queryData.notifs.waitRecs = false;
         $scope.queryData.notifs.error = '';
-        $scope.selectedRows.splice(0, $scope.selectedRows.length);
+        $scope.queryData.moreData = (result.dbRowsCount >= 10000);
+        $scope.selectedRows.length = 0;
+
       });
 
       if ($scope.showAddToSpecimenList && $scope.queryData.myLists === undefined) {
@@ -391,6 +384,41 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
         );
       }
+    };
+
+    var showPivotTable = function(result) {
+      $scope.queryData.resultData = result.rows;
+      $scope.queryData.resultCols = result.columnLabels;
+
+      $scope.queryData.pivotTableOpts = {
+        height: '500px',
+        width: '1200px',
+        title: $scope.queryData.title || "Unsaved Query",
+        colHeaders: $scope.queryData.resultCols,
+        numGrpCols: $scope.queryData.reporting.params.groupRowsBy.length,
+        data: $scope.queryData.resultData
+      };
+    };
+
+    var showDataGrid = function(result) {
+      var colDefs = [];
+      for (var i = 0; i < result.columnLabels.length; ++i) {
+        colDefs.push({
+          field: "col" + i, 
+          displayName: result.columnLabels[i],
+          width: 100, 
+          headerCellTemplate: 'templates/grid-column-filter.html'
+        });
+      }
+      $scope.queryData.resultData = result.rows;
+      $scope.queryData.resultCols = colDefs;
+      $scope.queryData.labelIndices = result.columnIndices;
+      $scope.queryData.resultDataSize = result.rows.length;
+      $scope.queryData.pagingOptions.pageSize = 100;
+      $scope.queryData.pagingOptions.currentPage = 1;
+
+        
+      $scope.setPagedData(1, 100);
     };
 
     $scope.selectAllRows = function() {
@@ -548,14 +576,18 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.redefineQuery = function() {
-      $scope.queryData.pagedData = [];
-      $scope.queryData.resultData = [];
-      $scope.queryData.resultCols = [];
-      $scope.queryData.labelIndices = [];
+      clearResultData();
+      $scope.queryData.view = 'query';
+    };
+
+    var clearResultData = function() {
+      $scope.queryData.pagedData.length = 0;
+      $scope.queryData.resultData.length = 0;
+      $scope.queryData.resultCols.length = 0;
+      $scope.queryData.labelIndices.length = 0;
       $scope.queryData.resultDataSize = 0;
       $scope.queryData.moreData = false;
-      $scope.queryData.view = 'query';
-    }
+    };
 
     $scope.addParen = function() {
       var node1 = {type: 'paren', value: '('};
@@ -806,6 +838,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     $scope.showQueries = function() {
+      clearResultData();
       $scope.queryData = angular.extend(
         $scope.queryData, 
         {queries: [], selectedQueries: [], selectedFolderId: -1,

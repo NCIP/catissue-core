@@ -28,6 +28,7 @@
     <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
 
     <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
+    <link href="../css/pivottable.css" rel="stylesheet" type="text/css"></link>
 
     <style type="text/css">
        .plus-panel {
@@ -805,6 +806,7 @@
         <span ng-if="queryData.notifs.error == 'BAD_REQUEST'">Malformed Query. Please go back and edit query. <a href="https://catissueplus.atlassian.net/wiki/x/O4BLAQ" target="_blank"><b>Click here</b></a> to watch tutorial</span>
         <span ng-if="queryData.notifs.error == 'INTERNAL_SERVER_ERROR'">Internal Server Error. Please retry after some time or contact system admin</span>
       </div>
+
       <div ng-show="!queryData.notifs.waitRecs && !queryData.notifs.error" class="row" style="height: 90%; padding-left: 15px;">
         <div ng-if="queryData.moreData" style="color:#b94a48">
           Export to view all records. 
@@ -813,13 +815,22 @@
           </a> to know why exported data file have more records.
         </div>
 
-        <p class="data-grid-header">
-          <strong ng-if="queryData.id">{{queryData.title}}</strong>
-          <strong ng-if="!queryData.id">Unsaved Query</strong>
-        </p>
-        <div class="data-grid" style="height: 95%;" ng-grid="queryData.resultGridOpts"></div>
+        <div ng-if="queryData.reporting.type == 'crosstab'" style="height: 100%;">
+          <div style="height: 95%;" ka-pivot-table="queryData.pivotTableOpts">
+          </div>
+        </div>
+
+        <div ng-if="queryData.reporting.type != 'crosstab'" style="height: 100%;">
+          <p class="data-grid-header">
+            <strong ng-if="queryData.id">{{queryData.title}}</strong>
+            <strong ng-if="!queryData.id">Unsaved Query</strong>
+          </p>
+          <div class="data-grid" style="height: 95%;" ng-grid="queryData.resultGridOpts">
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="container" ng-if="queryData.view == 'query'">
       <div class="row" style="height: 7%;">
         <div class="col-xs-offset-3 col-xs-9">
@@ -1335,18 +1346,11 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="rollup">Rollup Type</label>
-                  <div id="rollup">
-                    <label class="radio-inline">
-                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="none"> None
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="rollup"> Normal
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="rollupType" ng-model="reporting.params.rollupType" value="powerset"> Powerset
-                    </label>
-                  </div>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" ng-model="reporting.params.includeSubTotals" 
+                      ng-checked="reporting.params.includeSubTotals">
+                    Include sub-totals
+                  </label>
                 </div>
               </div>
             </div>
@@ -1612,6 +1616,7 @@
 
     <script src="../js/utility.js" type="text/javascript"></script>
     <script src="../js/wrapper.js" type="text/javascript"></script>
+    <script src="../js/pivottable.js" type="text/javascript"></script>
     <script src="../js/filters.js" type="text/javascript"></script>
     <script src="../js/services.js" type="text/javascript"></script>
     <script src="../js/forms-service.js" type="text/javascript"></script>

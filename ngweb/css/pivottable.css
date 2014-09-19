@@ -1,0 +1,48 @@
+.ka-pivot-table table {
+  border: 1px solid #ddd;
+  width: 0!important;
+  min-width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.ka-pivot-table th {
+  background: #e6eeee;
+  padding: 10px;
+}
+
+.ka-pivot-table td {
+  padding: 5px;
+}
+
+.ka-pivot-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.ka-pivot-table th, .ka-pivot-table td {
+  border-right: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+}
+
+.ka-pivot-table .title {
+  background: #428bca!important;
+  color: #ffffff;
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ka-pivot-table .ellipsis, .ka-pivot-table th, .ka-pivot-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ka-pivot-table .col-key {
+  font-style: italic;
+}
+
+.ka-pivot-table tr.row-separator {
+  border-top: 3px solid #ddd;
+}
