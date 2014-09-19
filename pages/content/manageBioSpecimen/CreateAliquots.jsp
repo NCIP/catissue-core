@@ -47,7 +47,7 @@
 <link rel="stylesheet" type="text/css" href="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.css">
 
 <script src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
-<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+<script src="dhtmlxSuite_v35/custom/dhtmlXTreeGrid.js"></script>
 <STYLE type="text/css">
 <!--
 .aliquot_details{padding-top: 3px; padding-bottom: 3px;}
