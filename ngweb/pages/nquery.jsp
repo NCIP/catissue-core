@@ -1065,7 +1065,8 @@
               </div>
               <a href=#" tooltip="Cancel and go back to dashboard" tooltip-placement="top" ng-click="showQueries()" style="margin-left: 10px;">Cancel</a>
             </div>
-            <div ng-include="'count-tmpl.html'" class="pull-right" style="width: 45%; margin-left: 1%;"/>
+            <div ng-include="'count-tmpl.html'" class="pull-right" style="width: 45%; margin-left: 1%;">
+            </div>
           </div>
         </div>
       </div>
@@ -1159,7 +1160,8 @@
         </table>
       </div>
       <div class="modal-footer" style="height: 12%">
-        <div ng-include="'count-tmpl.html'" class="pull-left" style="text-align: left; width: 45%; margin-left: 1%;"/>
+        <div ng-include="'count-tmpl.html'" class="pull-left" style="text-align: left; width: 45%; margin-left: 1%;">
+        </div>
 
         <button class="btn btn-default" ng-click="cancel()">Cancel</button>
         <button class="btn btn-primary" ng-click="getCount()"
