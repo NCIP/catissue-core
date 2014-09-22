@@ -1,0 +1,20 @@
+<div class="ka-wizard clearfix">
+  <div class='ka-wizard-steps'>
+    <div class='ka-wizard-step-titles'> 
+      <div class='ka-wizard-step-title' ng-class='{"ka-wizard-step-selected": step.selected, "ka-wizard-step-finished": step.finished}'
+        ng-repeat='step in steps'>
+        {{step.title}}
+      </div>
+    </div>
+    <div class='ka-wizard-step-progs'>
+       <div class='ka-wizard-step-prog' 
+         ng-class='{"ka-wizard-first-step": $index == 0, "ka-wizard-last-step": $index == steps.length - 1, 
+         "ka-wizard-step-finished": step.finished, "ka-wizard-step-selected": step.selected}'
+         ng-repeat='step in steps'> 
+         <div ng-click='gotoStep($index)'></div> 
+       </div>
+    </div> 
+  </div>
+
+  <div ng-transclude/>
+</div>

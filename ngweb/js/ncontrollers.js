@@ -441,8 +441,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           specimenLabels: function() {
             return specimenLabels;
           }
-        },
-        windowClass: 'ka-confirm-modal'
+        }
       });
 
       modalInstance.result.then(
@@ -944,8 +943,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           query: function() {
             return query;
           }
-        },
-        windowClass: 'ka-confirm-modal'
+        }
       });
 
       modalInstance.result.then(
@@ -1042,7 +1040,6 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var modalInstance = $modal.open({
         templateUrl: 'view-query-sql.html',
         controller: ViewQuerySqlCtrl,
-        windowClass: 'view-query-sql',
         resolve: {
           auditLogId: function () {
             return auditLog.id;
@@ -1072,7 +1069,6 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     $scope.importQuery = function() {
       var modalInstance = $modal.open({
         templateUrl: 'import-query.html',
-        windowClass: 'import-query',
         controller: ImportQueryCtrl
       });
 
@@ -1152,7 +1148,6 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             return $scope.queryData;
           }
         },
- 
         windowClass: 'parameterized-filters-dialog'
       });
 
@@ -2197,7 +2192,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           queryData: function() {
             return $scope.queryData;
           }
-        }
+        },
+        windowClass: 'define-view-dialog'
       });
 
       defineViewModal.result.then(
@@ -2266,6 +2262,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
       $scope.ok = function() {
         var selectedFields = getSelectedFields(forms);
+        if (!selectedFields || selectedFields.length == 0) {
+          Utility.notify($("#define-view-notif"), "No fields selected", "error", true);
+          return;
+        }
+
         var rptParams = $scope.reporting.params;
         if ($scope.reporting.type == 'crosstab') {
           if (!rptParams.groupRowsBy || rptParams.groupRowsBy.length == 0) {
@@ -2378,11 +2379,16 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       }
 
       $scope.preparePivotTableOpts = function() {
-        if ($scope.reporting.type != 'crosstab') {
-          return;
+        var selectedFields = getSelectedFields(forms, true);
+        if (!selectedFields || selectedFields.length == 0) {
+          Utility.notify($("#define-view-notif"), "No fields selected", "error", true);
+          return false;
         }
 
-        var selectedFields = getSelectedFields(forms, true);
+        if ($scope.reporting.type != 'crosstab') {
+          return true;
+        }
+
         $scope.reportFields = [];
         for (var i = 0; i < selectedFields.length; ++i) {
           var field = selectedFields[i];
@@ -2406,6 +2412,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
 
         preparePivotTabFields($scope.reportFields);
+        return true;
       };
 
       $scope.onGroupRowsByChange = function(newVal) {
