@@ -120,6 +120,18 @@
 
   <script>
     var dateFormat = <%= "'" + edu.wustl.common.util.global.CommonServiceLocator.getInstance().getDatePattern().toLowerCase()  + "'"%>
+    
+    function getSpecimenLabels() {
+      var query = parent.location.search.substr(1);
+      var params = {};
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        params[item[0]] = decodeURIComponent(item[1]);
+      });
+      return params.specimenLabels;
+    }
+    
+    var globalSpecimenLabels = getSpecimenLabels();
   </script>
   <script src="../js/utility.js" type="text/javascript"></script>
   <script src="../js/directives.js" type="text/javascript"></script>
