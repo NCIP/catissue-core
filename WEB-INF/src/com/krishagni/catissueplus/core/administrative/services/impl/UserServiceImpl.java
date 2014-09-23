@@ -72,8 +72,8 @@ public class UserServiceImpl implements UserService {
 		}
 
 		List<UserSummary> users = daoFactory.getUserDao().getAllUsers(
-						req.getStartAt(), req.getMaxRecords(), 
-						req.getSearchString());
+						req.getStartAt(), req.getMaxRecords(), req.getSortBy(),
+						req.getSort().name(), req.getSearchString());
 		
 		Long count = null;
 		if (req.isCountReq()) {

@@ -18,11 +18,11 @@ openspecimen.ui.fancy.Users = function() {
 
     var xhr;
     if (queryTerm) {
-      xhr = $.ajax({type: 'GET', url: baseUrl, data: {searchString: queryTerm}});
+      xhr = $.ajax({type: 'GET', url: baseUrl, data: {searchString: queryTerm, sortBy:'lastName'}});
     } else if (this.getAllUsersXhr) {
       xhr = this.getAllUsersXhr;
     } else {
-      xhr = this.getAllUsersXhr = $.ajax({type: 'GET', url: baseUrl});
+      xhr = this.getAllUsersXhr = $.ajax({type: 'GET', url: baseUrl, data: {sortBy:'lastName'}});
     }
    
     xhr.done(
@@ -30,7 +30,7 @@ openspecimen.ui.fancy.Users = function() {
         var result = [];
         var users = data.users;
         for (var i = 0; i < users.length; ++i) {
-          result.push({id: users[i].id, text: users[i].firstName + ' ' + users[i].lastName});
+          result.push({id: users[i].id, text: users[i].lastName + ' ' + users[i].firstName});
         }
 
         if (!queryTerm) {

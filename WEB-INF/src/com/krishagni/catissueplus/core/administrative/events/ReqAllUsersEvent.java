@@ -3,6 +3,11 @@ package com.krishagni.catissueplus.core.administrative.events;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqAllUsersEvent extends RequestEvent {
+	public static enum SortType {
+		ASC,
+		DESC
+	}
+	
 	private String searchString;
 	
 	private int startAt;
@@ -10,6 +15,10 @@ public class ReqAllUsersEvent extends RequestEvent {
 	private int maxRecords;
 	
 	private boolean countReq;
+	
+	private String sortBy;
+	
+	private SortType sort;
 
 	public String getSearchString() {
 		return searchString;
@@ -42,4 +51,21 @@ public class ReqAllUsersEvent extends RequestEvent {
 	public void setCountReq(boolean countReq) {
 		this.countReq = countReq;
 	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+
+	public SortType getSort() {
+		return sort;
+	}
+
+	public void setSort(SortType sort) {
+		this.sort = sort;
+	}
+	
 }

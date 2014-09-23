@@ -5,7 +5,6 @@ import static com.krishagni.catissueplus.core.common.errors.CatissueException.re
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,13 +68,18 @@ public class UserController {
 			@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
 			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
-			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
+			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString,
+			@RequestParam(value = "sortBy", required= false, defaultValue= "id") String sortBy,
+			@RequestParam(value = "sort", required= false, defaultValue= "asc") String sort){
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
 		req.setCountReq(countReq);
 		req.setSearchString(searchString);
 		req.setSessionDataBean(getSession());
+		req.setSortBy(sortBy);
+		req.setSort(sort.equals("desc") ? ReqAllUsersEvent.SortType.DESC : ReqAllUsersEvent.SortType.ASC);
+		
 		AllUsersEvent resp = userService.getAllUsers(req);
 		if (!resp.isSuccess()) {
 			resp.raiseException();
