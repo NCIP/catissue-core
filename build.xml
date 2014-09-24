@@ -456,7 +456,6 @@
 				<exclude name="**/WEB-INF/lib/mockito-all-1.9.5.jar" />	
 				<exclude name="**/WEB-INF/lib/cobertura.jar"/>
 				<!--exclude name="**/WEB-INF/lib/asm-3.0.jar"/-->
-				<exclude name="**/WEB-INF/lib/commons-logging.jar"/>
 				<!-- exclude name="**/WEB-INF/lib/ant*.jar" / -->
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
 				<!--<exclude name="**/WEB-INF/lib/dom4*.jar" />-->
