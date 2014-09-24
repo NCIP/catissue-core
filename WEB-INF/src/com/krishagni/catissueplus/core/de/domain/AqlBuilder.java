@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.de.domain.Filter.Op;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.LogicalOp;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.Parenthesis;
+import com.krishagni.catissueplus.core.de.domain.SelectField.Function;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
@@ -48,20 +49,29 @@ public class AqlBuilder {
 				}
 				
 				select.append(elem).append(", ");
-			} else if (field instanceof AggregateField) {
-				AggregateField aggField = (AggregateField)field;
+			} else if (field instanceof SelectField) {
+				SelectField aggField = (SelectField)field;
 				String fieldName = aggField.getName();
 				
-				if (aggField.getAggFn() == null) {
+				if (aggField.getAggFns() == null || aggField.getAggFns().isEmpty()) {
 					select.append(fieldName).append(", ");
 				} else {
-					String fnExpr = aggField.getAggFn() + "(";
-					if (aggField.getAggFn().equals("count")) {
-						fnExpr += "distinct ";
+					StringBuilder fnExpr = new StringBuilder("");
+					for (Function fn : aggField.getAggFns()) {
+						if (fnExpr.length() > 0) {
+							fnExpr.append(", ");
+						}
+						
+						if (fn.getName().equals("count")) {
+							fnExpr.append("count(distinct ");
+						} else {
+							fnExpr.append(fn.getName()).append("(");
+						}
+						
+						fnExpr.append(fieldName).append(") as \"").append(fn.getDesc()).append(" \"");
 					}
 					
-					fnExpr += fieldName + ") as \"" + aggField.getLabel() + " \"";
-					select.append(fnExpr).append(", ");
+					select.append(fnExpr.toString()).append(", ");
 				}				
 			}							
 		}

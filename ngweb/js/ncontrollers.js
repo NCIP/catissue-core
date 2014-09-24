@@ -261,17 +261,27 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           field = getTemporalExprObj(filter.expr).lhs;
           field += " as \"" + filter.desc + "\"";
         } else if (typeof field != "string") {
-          var fnExpr = field.name;
-          if (field.aggFn) {
-            fnExpr = field.aggFn + "(";
-            if (field.aggFn == 'count') {
-              fnExpr += "distinct ";
+          if (field.aggFns && field.aggFns.length > 0) {
+            var fnExprs = "";
+            for (var j = 0; j < field.aggFns.length; ++j) {
+              if (fnExprs.length > 0) {
+                fnExprs += ", ";
+              }
+
+              var aggFn = field.aggFns[j];
+              if (aggFn.name == 'count') {
+                fnExprs += 'count(distinct ';
+              } else {
+                fnExprs += aggFn.name + '(';
+              }
+
+              fnExprs += field.name + ") as \"" + aggFn.desc + " \"";
             }
 
-            fnExpr += field.name + ") as \"" + field.label + " \"";
+            field = fnExprs;
+          } else {
+            field = field.name;
           }
-
-          field = fnExpr;
         }
 
         result += field + ", ";
@@ -297,7 +307,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       return false;
     };
 
-    var getFieldIndices = function(selectedFields, reportFields) {
+    var getFieldIndices = function(fields, reportFields) {
       var idx = [];
 
       if (!reportFields) {
@@ -306,11 +316,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
       for (var i = 0; i < reportFields.length; ++i) {
         var rptField = reportFields[i];
-        for (var j = 0; j < selectedFields.length; ++j) {
-          var selField = selectedFields[j];
-          selField = (typeof selField == "string") ? selField : selField.name;
+        for (var j = 0; j < fields.length; ++j) {
+          var selField = fields[j];
+          selField = (typeof selField == "string") ? selField : selField.id;
 
-          if (selField == rptField.name) {
+          if (selField == rptField.id) {
             idx.push(j + 1);
             break;
           }
@@ -318,6 +328,35 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       }
 
       return idx;
+    };
+
+    var getPivotTabFields = function(selectedFields, fresh) {
+      var reportFields = [];
+
+      for (var i = 0; i < selectedFields.length; ++i) {
+        var field = selectedFields[i];
+        var isAgg = false;
+        var len = field.aggFns ? field.aggFns.length : 0;
+ 
+        for (var j = 0; j < len; ++j) {
+          var aggFn = field.aggFns[j];
+          if (fresh || aggFn.opted) {
+            reportFields.push({
+              id: field.name + '$' + aggFn.name,
+              name: field.name,
+              value: aggFn.desc,
+              aggFn: aggFn.name
+            });
+            isAgg = true;
+          }
+        }
+
+        if (!isAgg) {
+          reportFields.push({id: field.name, name:  field.name, value: field.label});
+        }
+      }
+
+      return reportFields;
     };
 
     var getRptExpr = function() {
@@ -330,11 +369,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return reporting.type;
       }
 
-      var selectedFields = $scope.queryData.selectedFields;
-      var rowIdx = getFieldIndices(selectedFields, reporting.params.groupRowsBy);
-      var colIdx = getFieldIndices(selectedFields, [reporting.params.groupColBy]);
+      var pivotTabFields = getPivotTabFields($scope.queryData.selectedFields, true);
+      var rowIdx = getFieldIndices(pivotTabFields, reporting.params.groupRowsBy);
+      var colIdx = getFieldIndices(pivotTabFields, [reporting.params.groupColBy]);
       colIdx = colIdx.length > 0 ? colIdx[0] : undefined;
-      var summaryIdx = getFieldIndices(selectedFields, reporting.params.summaryFields);
+      var summaryIdx = getFieldIndices(pivotTabFields, reporting.params.summaryFields);
 
       var includeSubTotals = "";
       if (reporting.params.includeSubTotals) {
@@ -396,6 +435,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         title: $scope.queryData.title || "Unsaved Query",
         colHeaders: $scope.queryData.resultCols,
         numGrpCols: $scope.queryData.reporting.params.groupRowsBy.length,
+        multipleVal: $scope.queryData.reporting.params.summaryFields.length > 1,
         data: $scope.queryData.resultData
       };
     };
@@ -2207,6 +2247,14 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     }
 
     var DefineViewCtrl = function($scope, $modalInstance, queryData) {
+      var aggFns = [
+        {name: 'count', label: 'Count'},
+        {name: 'sum',   label: 'Sum'},
+        {name: 'min',   label: 'Min'},
+        {name: 'max',   label: 'Max'},
+        {name: 'avg',   label: 'Avg'}
+      ];
+
       $scope.queryData = queryData;
       $scope.reporting = angular.copy(queryData.reporting);
 
@@ -2239,7 +2287,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
       $scope.treeOpts = {
         treeData: forms,
-        nodeTmpl: 'aggregate-tmpl.html',
+        nodeTmpl: 'field-tmpl.html',
 
         toggleNode: function(node) {
           if (node.expanded) {
@@ -2260,9 +2308,34 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
       };
 
+      var sanitizeSelectedFields = function(selectedFields) {
+        for (var i = 0; i < selectedFields.length; ++i) {
+          var selectedField = selectedFields[i];
+          delete selectedField.label;
+
+          var aggFns = selectedField.aggFns;
+          if (!aggFns) {
+            continue;
+          }
+
+          for (var j = aggFns.length - 1; j >= 0; j--) {
+            if (!aggFns[j].opted) {
+              aggFns.splice(j, 1);
+            }
+          }
+
+          if (aggFns.length == 0) {
+            delete selectedField.aggFns;
+          }
+        }
+      };
+
       $scope.ok = function() {
-        var selectedFields = getSelectedFields(forms);
-        if (!selectedFields || selectedFields.length == 0) {
+        if (!$scope.selectedFields) {
+          $scope.selectedFields = getSelectedFields(forms);
+        }
+
+        if (!$scope.selectedFields || $scope.selectedFields.length == 0) {
           Utility.notify($("#define-view-notif"), "No fields selected", "error", true);
           return;
         }
@@ -2285,9 +2358,11 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           }
         }
 
+        sanitizeSelectedFields($scope.selectedFields);
+
         $modalInstance.close({
-            selectedFields: selectedFields, 
-            reporting: $scope.reporting
+          selectedFields: $scope.selectedFields, 
+          reporting: $scope.reporting
         });
       };
 
@@ -2299,7 +2374,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         var result = angular.copy(reportFields);
         for (var i = 0; i < exclude.length; ++i) {
           for (var j = 0; j < result.length; ++j) {
-            if (result[j].name == exclude[i].name) {
+            if (result[j].name == exclude[i].name &&
+                (!exclude[i].aggFn || result[j].aggFn == exclude[i].aggFn)) {
               result.splice(j, 1);
               break;
             }
@@ -2364,7 +2440,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         for (var i = dstArr.length - 1; i >= 0; --i) {
           var found = false;
           for (var j = 0; j < srcArr.length; ++j) {
-            if (dstArr[i].name == srcArr[j].name) {
+            if (dstArr[i].name == srcArr[j].name &&
+                (!dstArr[i].aggFn || dstArr[i].aggFn == srcArr[j].aggFn)) {
               found = true;
               break;
             }
@@ -2378,22 +2455,69 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return dstArr;
       }
 
-      $scope.preparePivotTableOpts = function() {
-        var selectedFields = getSelectedFields(forms, true);
-        if (!selectedFields || selectedFields.length == 0) {
+      var prepareAggFns = function(fields, fns, fresh) {
+        for (var i = 0; i < fields.length; ++i) {
+          if (!fields[i].aggFns) {
+            fields[i].aggFns = angular.copy(fns);
+            continue;
+          }
+
+          if (!fresh) {
+            continue;
+          }
+
+          for (var j = 0; j < fns.length; ++j) {
+            var found = false;
+ 
+            for (var k = 0; k < fields[i].aggFns.length; ++k) {
+              if (fns[j].name == fields[i].aggFns[k].name) {
+                fields[i].aggFns[k].label = fns[j].label;
+                fields[i].aggFns[k].opted = true;
+                found = true;
+                break;
+              }
+            }
+
+            if (!found) {
+              fields[i].aggFns.splice(j, 0, angular.copy(fns[j]));
+            }
+          }
+        }
+      };
+
+      $scope.showCurrField = function(field) {
+        $scope.currField = field;
+      };
+
+      $scope.toggleAggFn = function(field, fn) {
+        if (fn.opted && !fn.desc) {
+          fn.desc = field.label + " " + fn.label;
+        } else if (!fn.opted) {
+          fn.desc = undefined;
+        }
+      };
+
+      $scope.prepareAggregateOpts = function() {
+        var init = !$scope.selectedFields || $scope.selectedFields.length == 0;
+
+        $scope.selectedFields = getSelectedFields(forms, true);
+        $scope.currField = undefined;
+
+        if (!$scope.selectedFields || $scope.selectedFields.length == 0) {
           Utility.notify($("#define-view-notif"), "No fields selected", "error", true);
           return false;
         }
 
+        prepareAggFns($scope.selectedFields, aggFns, init);
+        return true;
+      };   
+
+      $scope.preparePivotTableOpts = function() {
         if ($scope.reporting.type != 'crosstab') {
           return true;
         }
 
-        $scope.reportFields = [];
-        for (var i = 0; i < selectedFields.length; ++i) {
-          var field = selectedFields[i];
-          $scope.reportFields.push({name:  field.name, value: field.label});
-        }
+        $scope.reportFields = getPivotTabFields($scope.selectedFields, false);
 
         var rptParams = $scope.reporting.params;
         if (rptParams.groupRowsBy) {
@@ -2566,8 +2690,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           } else {
             fieldNode.checked = true;
             if (typeof selectedFields[i] != "string") {
-              fieldNode.aggFn = selectedFields[i].aggFn;
-              fieldNode.desc = selectedFields[i].label;
+              fieldNode.aggFns = selectedFields[i].aggFns;
             }
             ++i;
           }
@@ -2605,8 +2728,8 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
               if (field.type == 'subform') {
                 selected = selected.concat(getSelectedFields([field], incCaption));
               } else if (field.checked) {
-                if (field.aggFn) {
-                  selected.push({name: field.name, aggFn: field.aggFn, label: field.desc ? field.desc : field.aggFn});
+                if (field.aggFns) {
+                  selected.push({name: field.name, label: field.val, aggFns: field.aggFns});
                 } else {
                   if (!incCaption) {
                     selected.push(field.name);
@@ -2634,7 +2757,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           if (field.type == 'subform') {
             result = result.concat(getAllFormFields(field, incCaption));
           } else {
-            result.push(incCaption ? {name: field.name, label: field.caption} : field.name);
+            result.push(incCaption ? {name: field.name, label: field.val} : field.name);
           }
         }
 

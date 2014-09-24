@@ -1290,13 +1290,18 @@
 
       <div class="ka-modal-body">
         <div ka-wizard="defineViewWizard">
-          <ka-wizard-step on-finish="preparePivotTableOpts" title="Select Fields">
+          <ka-wizard-step on-finish="prepareAggregateOpts" title="Select Fields">
             <div style="margin-top: 10px; margin-right: -20px; height: 380px; overflow: auto">
               <span class="plus-heading">Please select the fields that you wish to view in results table</span>
               <span class="plus-note plus-margin-bottom">Drag and drop fields to reorder the view</span>
               <ka-tree opts='treeOpts'></ka-tree>
             </div>
           </ka-wizard-step>
+
+          <ka-wizard-step on-finish="preparePivotTableOpts" title="Aggregates">
+            <div ng-include="'aggregate-functions.html'"></div>
+          </ka-wizard-step>
+
           <ka-wizard-step title="Pivot Table">
             <div ng-include="'pivot-table.html'"></div>
           </ka-wizard-step>
@@ -1505,33 +1510,8 @@
       </div>
     </script>
 
-    <script type="text/ng-template" id="aggregate-tmpl.html">
-      <div>
-        {{node.val}}
-        <span ng-if="node.aggFn">({{node.desc ? node.desc : node.aggFn}})</span>
-        <div ng-if="node.type == 'field' && hover"> 
-          <label class="radio-inline">
-            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="count" ng-change="node.checked=true"> Count
-          </label>
-          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT'">
-            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="sum" ng-change="node.checked=true"> Sum
-          </label>
-          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT'">
-            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="avg" ng-change="node.checked=true"> Average
-          </label>
-          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT' || node.dataType == 'DATE'">
-            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="min" ng-change="node.checked=true"> Min
-          </label>
-          <label class="radio-inline" ng-if="node.dataType == 'INTEGER' || node.dataType == 'FLOAT' || node.dataType == 'DATE'">
-            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value="max" ng-change="node.checked=true"> Max
-          </label>
-          <label class="radio-inline" ng-if="node.aggFn">
-            <input type="radio" name="aggregateFn" ng-model="node.aggFn" value=""> Reset
-          </label> 
-          
-          <input class="form-control" ng-if="node.aggFn" ng-model="node.desc">
-        </div>
-      </div>
+    <script type="text/ng-template" id="field-tmpl.html">
+      <div> {{node.val}} </div>
     </script>
 
     <script type="text/ng-template" id="count-tmpl.html">
@@ -1595,7 +1575,7 @@
             <label for="group-rows-by">Row Fields</label>
             <ka-select id="group-rows-by" style="width: 100%;"
               data-placeholder="Select fields to use for grouping rows"
-              options="groupRowsBy" option-id="name" option-value="value"
+              options="groupRowsBy"
               on-select="onGroupRowsByChange"
               multiple selected="reporting.params.groupRowsBy">
             </ka-select>
@@ -1605,7 +1585,7 @@
             <label for="group-col-by">Column Field</label>
             <ka-select id="group-col-by" style="width: 100%;"
               data-placeholder="Select field to use for grouping columns"
-              options="groupColBy" option-id="name" option-value="value"
+              options="groupColBy"
               on-select="onGroupColByChange"
               selected="reporting.params.groupColBy">
             </ka-select>
@@ -1615,7 +1595,7 @@
             <label for="summary-value">Value Field</label>
             <ka-select id="summary-value" style="width: 100%;"
               data-placeholder="Select summary field"
-              options="summaryFields" option-id="name" option-value="value"
+              options="summaryFields"
               on-select="onSummaryFieldChange"
               multiple selected="reporting.params.summaryFields">
             </ka-select>
@@ -1627,6 +1607,57 @@
                 ng-checked="reporting.params.includeSubTotals">
               Include sub-totals
             </label>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="aggregate-functions.html">
+      <div style="margin-top: 20px;">
+        <div class="row">
+          <div class="col-xs-6">
+            <label>Selected Fields</label>
+          </div>
+
+          <div class="col-xs-6">
+            <label>Functions</label>
+          </div> 
+        </div>
+               
+        <div class="row">
+          <div class="col-xs-6" style="height: 340px;">
+            <div class="list-group ka-list-box">
+              <a class="list-group-item ellipsis" 
+                ng-class="{'active': currField.name == selectedField.name}"
+                ng-repeat="selectedField in selectedFields"
+                ng-click="showCurrField(selectedField)">
+                <span class="badge">
+                  {{(selectedField.aggFns | filter:{opted: true}).length}}
+                </span>
+                {{selectedField.label}}
+              </a>
+            </div>
+          </div>
+
+          <div class="col-xs-6" ng-if="!currField.name">
+            Select field in list on the left side panel
+          </div>
+
+          <div class="col-xs-6" ng-if="currField.name">
+            <div class="row form-group" ng-repeat="fn in currField.aggFns">
+              <div class="col-xs-3">
+                <label class="checkbox-inline" style="margin-top: 7px">
+                  <input type="checkbox" 
+                    ng-model="fn.opted" 
+                    ng-checked="fn.opted"
+                    ng-change="toggleAggFn(currField, fn)"> 
+                  {{fn.label}}
+                </label>
+              </div>
+              <div class="col-xs-9" ng-if="fn.opted">
+                <input type="text" class="form-control" ng-model="fn.desc">
+              </div>
+            </div>
           </div>
         </div>
       </div>

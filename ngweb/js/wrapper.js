@@ -62,7 +62,8 @@ var Select2 = function(element, config) {
     for (var i = 0; i < this.config.options.length; ++i) {
       var option = this.config.options[i];
       if (typeof option == "object") {
-        this.element.append($('<option/>').prop('value', option[id]).append(option[value]));
+        var idVal = (id in option) ? option[id] : i;
+        this.element.append($('<option/>').prop('value', idVal).append(option[value]));
       } else {
         this.element.append($('<option/>').prop('value', option).append(option));
       }

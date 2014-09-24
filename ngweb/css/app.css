@@ -330,7 +330,7 @@
 .ka-btn-secondary {
   color: #ffffff;
   background: #888;
-  border-color: #444;
+  border-color: #666;
 }
 
 .ka-btn-secondary:hover, .ka-btn-secondary:focus, .ka-btn-secondary:active {
@@ -344,3 +344,14 @@
   color: #428bca;
 }
   
+.list-group.ka-list-box {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.ka-list-box .list-group-item {
+  border: none;
+  padding: 5px 10px;
+}

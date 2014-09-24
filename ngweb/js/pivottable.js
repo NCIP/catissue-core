@@ -60,19 +60,24 @@ var PivotTable = (function($) {
 
     var getTableBody = function() {
       var tbody = $("<tbody/>");
+
+      var numGrpCols = opts.numGrpCols;
+      if (opts.multipleVal) {
+        numGrpCols++;
+      }
           
-      var result = preProcessRecords(opts.numGrpCols, opts.data);
+      var result = preProcessRecords(numGrpCols, opts.data);
 
       if (result.grandTotal) {
-        tbody.append(getGrandTotalTr(opts.numGrpCols, result.grandTotal));
+        tbody.append(getGrandTotalTr(numGrpCols, result.grandTotal));
       }
 
       if (result.subTotals && result.subTotals.length > 0) {
-        var trs = getSubTotalTrs(opts.colHeaders, opts.numGrpCols, result.subTotals);
+        var trs = getSubTotalTrs(opts.colHeaders, numGrpCols, result.subTotals);
         appendEls(tbody, trs);
       }
 
-      var dataTrs = getDataTrs(opts.numGrpCols, result.data);
+      var dataTrs = getDataTrs(numGrpCols, result.data);
       appendEls(tbody, dataTrs);
       return tbody;
     };

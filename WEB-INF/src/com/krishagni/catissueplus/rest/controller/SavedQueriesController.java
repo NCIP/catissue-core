@@ -10,7 +10,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.krishagni.catissueplus.core.de.domain.SelectField;
 import com.krishagni.catissueplus.core.de.events.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.de.services.QueryService;
@@ -124,6 +127,8 @@ public class SavedQueriesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SavedQueryDetail saveQuery(@RequestBody SavedQueryDetail detail) {
+		curateSavedQueryDetail(detail);
+		
 		SaveQueryEvent req = new SaveQueryEvent();
 		req.setSavedQueryDetail(detail);
 		req.setSessionDataBean(getSession());
@@ -140,6 +145,8 @@ public class SavedQueriesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SavedQueryDetail updateQuery(@RequestBody SavedQueryDetail detail) {
+		curateSavedQueryDetail(detail);
+		
 		UpdateQueryEvent req = new UpdateQueryEvent();
 		req.setSavedQueryDetail(detail);
 		req.setSessionDataBean(getSession());
@@ -192,5 +199,35 @@ public class SavedQueriesController {
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(
 				Constants.SESSION_DATA);
+	}
+	
+	
+	private void curateSavedQueryDetail(SavedQueryDetail detail) {
+		Object[] selectList = detail.getSelectList();
+		if (selectList == null) {
+			return;
+		}
+		
+		for (int i = 0; i < selectList.length; ++i) {
+			if (!(selectList[i] instanceof Map)) {
+				continue;
+			}
+			
+			try {
+				selectList[i] = getSelectField(getJson((Map<String, Object>)selectList[i]));
+			} catch (Exception e) {
+				throw new RuntimeException("Bad select field", e);
+			}
+		}
+	}
+	
+	private String getJson(Map<String, Object> props) 
+	throws Exception {
+		return new ObjectMapper().writeValueAsString(props);
+	}
+	
+	private SelectField getSelectField(String json) 
+	throws Exception {
+		return new ObjectMapper().readValue(json, SelectField.class);
 	}
 }
