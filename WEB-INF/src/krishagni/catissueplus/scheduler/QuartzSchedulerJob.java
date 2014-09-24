@@ -27,8 +27,8 @@ public class QuartzSchedulerJob implements Job
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException
     {
         logger.info("Starting execution of ContainerSpecimenCountJob");
-        Class containerSpecimenCountJob;
-        try
+        /*Class containerSpecimenCountJob;
+       try
         {
             containerSpecimenCountJob = Class.forName("krishagni.catissueplus.scheduler.ContainerSpecimenCountJob");
             containerSpecimenCountJob.getMethod("executeContainerSpecimenCountJob").invoke(null);
@@ -39,7 +39,7 @@ public class QuartzSchedulerJob implements Job
         catch (Exception e)
         {
            
-        }
+        }*/
         logger.info("Starting execution of TitliIndexerJob");
         TitliIndexer.main(null);//run titli indexer
         logger.info("End of execution of TitliIndexerJob");
