@@ -218,6 +218,7 @@ public class FormServiceImpl implements FormService {
 		    case SPECIMEN_COLLECTION_GROUP:
 		    	forms = formDao.getScgForms(req.getEntityId());
 		    	break;
+		    	
 		    case SPECIMEN_EVENT :
 		    	forms = formDao.getSpecimenEventForms(req.getEntityId());
 		    	break;	

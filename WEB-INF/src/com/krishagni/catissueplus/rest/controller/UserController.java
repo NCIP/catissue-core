@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.rest.controller;
 import static com.krishagni.catissueplus.core.common.errors.CatissueException.reportError;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,16 +70,14 @@ public class UserController {
 			@RequestParam(value = "max", required = false, defaultValue = "100") int max,
 			@RequestParam(value = "countReq", required = false, defaultValue = "false") boolean countReq,
 			@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString,
-			@RequestParam(value = "sortBy", required= false, defaultValue= "id") String sortBy,
-			@RequestParam(value = "sort", required= false, defaultValue= "asc") String sort){
+			@RequestParam(value = "sortBy", required= false, defaultValue= "id") String[] sortBy){
 		ReqAllUsersEvent req = new ReqAllUsersEvent();
 		req.setStartAt(start);
 		req.setMaxRecords(max);
 		req.setCountReq(countReq);
 		req.setSearchString(searchString);
 		req.setSessionDataBean(getSession());
-		req.setSortBy(sortBy);
-		req.setSort(sort.equals("desc") ? ReqAllUsersEvent.SortType.DESC : ReqAllUsersEvent.SortType.ASC);
+		req.setSortBy(Arrays.asList(sortBy));
 		
 		AllUsersEvent resp = userService.getAllUsers(req);
 		if (!resp.isSuccess()) {
@@ -100,9 +99,20 @@ public class UserController {
 		if (!resp.isSuccess()) {
 			resp.raiseException();
 		}
-			return resp.getUserDetails();
+		return resp.getUserDetails();
 	}
-
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/signed-in-user")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public UserDetails getSignedInUser() {
+		GetUserEvent resp = userService.getUser(getSession().getUserId());
+		if (!resp.isSuccess()) {
+			resp.raiseException();
+		}
+		return resp.getUserDetails();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

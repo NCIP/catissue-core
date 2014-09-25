@@ -34,11 +34,12 @@ Features
  
  Upcoming features
  ------------------
- * Highly configurable user interface
- * Mobile and tablet apps
+ * Patient family relationships (family pedigree)
  * Invoicing
  * Tissue Microarray
-
+ * Highly configurable user interface
+ * Mobile and tablet apps
+ 
 
 Online Resources
 ----------------
