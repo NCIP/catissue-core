@@ -6,18 +6,18 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
-<script language="JavaScript" type="text/javascript"
-	src="jss/caTissueSuite.js"></script>
-	<script language="JavaScript" type="text/javascript"
-	src="jss/ajax.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css">
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
+	
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
-	<script  language="JavaScript" type="text/javascript"src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script> 
-	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script> 
-	<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
-	<script language="JavaScript" type="text/javascript" src='dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_export.js'></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+<script  language="JavaScript" type="text/javascript"src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script> 
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script> 
+<script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js"></script>
+<script language="JavaScript" type="text/javascript" src='dhtmlxSuite_v35/dhtmlxGrid/codebase/ext/dhtmlxgrid_export.js'></script>
 </head>
 
 <%
@@ -411,7 +411,7 @@ function containerInfoTab()
 							<td width="150">
 								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
 									<tr>
-											<td width="150" class="tabletd1">Specimen Class</td>
+											<td width="150" class="tabletd1">Specimen Class:</td>
 									</tr>
 								</table>
 							</td>
@@ -574,7 +574,7 @@ function containerInfoTab()
 	<tr>
 		<td   width="5" class="black_ar_t" align="center"><b><%=verTempOne%><b></td>
 		<td width="100%" height="100%" >
-				<div id="containerGrid"></div>
+				<div id="containerGrid" width="100%"></div>
 			</td>
 				</tr>
 		<tr>
@@ -651,7 +651,7 @@ grid.parse(myObject,"json");
 }
 document.body.onload = function(){
 loadGrid();
-      //alert("LOADED!");
+      
   }
 
 //document.getElementByTag("Body");
