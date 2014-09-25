@@ -1,5 +1,6 @@
-OpenSpecimen - Open Source Biobanking Informatics Platform - Developed by Krishagni Solutions (India)
------------------------------------------------------------------------------------------------------
+OpenSpecimen - Open Source Biobanking Informatics Platform 
+Developed by Krishagni Solutions (India)
+-----------------------------------------------------------
 
 Introduction
 ------------
