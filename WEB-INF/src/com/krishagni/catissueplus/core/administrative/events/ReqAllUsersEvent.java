@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.List;
+
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
 public class ReqAllUsersEvent extends RequestEvent {
@@ -16,9 +18,8 @@ public class ReqAllUsersEvent extends RequestEvent {
 	
 	private boolean countReq;
 	
-	private String sortBy;
+	private List<String> sortBy;
 	
-	private SortType sort;
 
 	public String getSearchString() {
 		return searchString;
@@ -51,21 +52,14 @@ public class ReqAllUsersEvent extends RequestEvent {
 	public void setCountReq(boolean countReq) {
 		this.countReq = countReq;
 	}
-
-	public String getSortBy() {
+	
+	public List<String> getSortBy() {
 		return sortBy;
 	}
 
-	public void setSortBy(String sortBy) {
+	public void setSortBy(List<String> sortBy) {
 		this.sortBy = sortBy;
 	}
 
-	public SortType getSort() {
-		return sort;
-	}
 
-	public void setSort(SortType sort) {
-		this.sort = sort;
-	}
-	
 }

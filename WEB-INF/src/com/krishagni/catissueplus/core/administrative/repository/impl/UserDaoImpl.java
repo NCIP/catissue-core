@@ -114,8 +114,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_ACTIVE_USER = FQN+ ".getActiveUser";
 
 	@Override
-	public List<UserSummary> getAllUsers(int startAt, int maxRecords, String sortBy,
-			String sort, String ... searchString) {
+	public List<UserSummary> getAllUsers(int startAt, int maxRecords, List<String> sortBy,
+			String ... searchString) {
 		Criteria criteria = sessionFactory.getCurrentSession()
 				.createCriteria(User.class, "u")
 				.add(Restrictions.or(
@@ -125,12 +125,15 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addSearchConditions(criteria, searchString);
 		addProjectionFields(criteria);
-		if(sort.equals("ASC")){
-			criteria.addOrder(Property.forName(sortBy).asc());
-		} else {
-			criteria.addOrder(Property.forName(sortBy).desc());
-		}
 		
+		for(String sort : sortBy ){
+			if(sort.startsWith("-")){
+				criteria.addOrder(Property.forName(sort.substring(1)).desc());
+			} else {
+				criteria.addOrder(Property.forName(sort).asc());
+			}
+		}
+
 		addLimits(criteria, startAt, maxRecords);
 		return getUsers(criteria);
 	}
