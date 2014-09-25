@@ -2309,6 +2309,10 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       };
 
       var sanitizeSelectedFields = function(selectedFields) {
+        if (!selectedFields) {
+          return;
+        }
+
         for (var i = 0; i < selectedFields.length; ++i) {
           var selectedField = selectedFields[i];
           delete selectedField.label;
