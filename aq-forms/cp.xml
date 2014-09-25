@@ -3,7 +3,7 @@
 		<name>CollectionProtocol</name>
 		<caption>Collection Protocol</caption>
 		<table>CATISSUE_COLLECTION_PROTOCOL</table>
-		<activeCondition>ACTIVITY_STATUS = 'Active'</activeCondition>
+		<activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
 		<row>
 			<numberField>
 				<name>id</name>

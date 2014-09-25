@@ -4,7 +4,7 @@
 		<caption>Participant</caption>
 		<table>CPR_VIEW</table>
 		<primaryKey>CPR_ID</primaryKey>
-		<activeCondition>ACTIVITY_STATUS = 'Active'</activeCondition>  
+		<activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>  
 		<row>
 			<numberField>
 				<name>id</name>

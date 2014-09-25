@@ -3,7 +3,7 @@
 		<name>SpecimenCollectionGroup</name>
 		<caption>Specimen Collection Group</caption>
 		<table>CATISSUE_SPECIMEN_COLL_GROUP</table>
-		<activeCondition>ACTIVITY_STATUS = 'Active'</activeCondition>
+		<activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
 		<row>
 			<numberField>
 				<name>id</name>
