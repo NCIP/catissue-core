@@ -117,7 +117,7 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 
 			}
 			else {
-				requirementList = daoFactory.getCollectionProtocolDao().getSpecimenRequirments(req.getId());
+				requirementList = daoFactory.getScgDao().getSpecimenRequirments(req.getId());
 				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
 
 			}
