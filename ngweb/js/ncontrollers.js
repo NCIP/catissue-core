@@ -2247,13 +2247,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     }
 
     var DefineViewCtrl = function($scope, $modalInstance, queryData) {
-      var aggFns = [
-        {name: 'count', label: 'Count'},
-        {name: 'sum',   label: 'Sum'},
-        {name: 'min',   label: 'Min'},
-        {name: 'max',   label: 'Max'},
-        {name: 'avg',   label: 'Avg'}
-      ];
+      var aggFns = {
+        count: {name: 'count', label: 'Count'},
+        sum:   {name: 'sum',   label: 'Sum'},
+        min:   {name: 'min',   label: 'Min'},
+        max:   {name: 'max',   label: 'Max'},
+        avg:   {name: 'avg',   label: 'Avg'}
+      };
 
       $scope.queryData = queryData;
       $scope.reporting = angular.copy(queryData.reporting);
@@ -2312,6 +2312,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         for (var i = 0; i < selectedFields.length; ++i) {
           var selectedField = selectedFields[i];
           delete selectedField.label;
+          delete selectedField.type;
 
           var aggFns = selectedField.aggFns;
           if (!aggFns) {
@@ -2367,6 +2368,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       };
 
       $scope.cancel = function() {
+        sanitizeSelectedFields($scope.selectedFields);
         $modalInstance.dismiss('cancel');
       };
 
@@ -2455,10 +2457,29 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return dstArr;
       }
 
+      var getTypeAggFns = function(type, fns) {
+        var result = undefined;
+        if (type == 'INTEGER' || type == 'FLOAT') {
+          result = [fns.count, fns.sum, fns.min, fns.max, fns.avg];
+        } else if (type == 'STRING') {
+          result = [fns.count];
+        } else if (type == 'BOOLEAN') {
+          result = [fns.count, fns.sum];
+        } else if (type == 'DATE') {
+          result = [fns.count, fns.min, fns.max];
+        } else {
+          result = [];
+        }
+
+        return result;
+      };
+
       var prepareAggFns = function(fields, fns, fresh) {
         for (var i = 0; i < fields.length; ++i) {
+          var typeFns = getTypeAggFns(fields[i].type, fns);
+
           if (!fields[i].aggFns) {
-            fields[i].aggFns = angular.copy(fns);
+            fields[i].aggFns = angular.copy(typeFns);
             continue;
           }
 
@@ -2466,12 +2487,12 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             continue;
           }
 
-          for (var j = 0; j < fns.length; ++j) {
+          for (var j = 0; j < typeFns.length; ++j) {
             var found = false;
  
             for (var k = 0; k < fields[i].aggFns.length; ++k) {
-              if (fns[j].name == fields[i].aggFns[k].name) {
-                fields[i].aggFns[k].label = fns[j].label;
+              if (typeFns[j].name == fields[i].aggFns[k].name) {
+                fields[i].aggFns[k].label = typeFns[j].label;
                 fields[i].aggFns[k].opted = true;
                 found = true;
                 break;
@@ -2479,7 +2500,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
             }
 
             if (!found) {
-              fields[i].aggFns.splice(j, 0, angular.copy(fns[j]));
+              fields[i].aggFns.splice(j, 0, angular.copy(typeFns[j]));
             }
           }
         }
@@ -2729,12 +2750,12 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
                 selected = selected.concat(getSelectedFields([field], incCaption));
               } else if (field.checked) {
                 if (field.aggFns) {
-                  selected.push({name: field.name, label: field.val, aggFns: field.aggFns});
+                  selected.push({name: field.name, label: field.val, type: field.dataType, aggFns: field.aggFns});
                 } else {
                   if (!incCaption) {
                     selected.push(field.name);
                   } else {
-                    selected.push({name: field.name, label: field.val});
+                    selected.push({name: field.name, label: field.val, type: field.dataType});
                   }
                 }
               }
@@ -2757,7 +2778,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           if (field.type == 'subform') {
             result = result.concat(getAllFormFields(field, incCaption));
           } else {
-            result.push(incCaption ? {name: field.name, label: field.val} : field.name);
+            result.push(incCaption ? {name: field.name, label: field.val, type: field.dataType} : field.name);
           }
         }
 
