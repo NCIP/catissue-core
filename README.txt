@@ -20,11 +20,25 @@ Features
  * Clinical and pathology annotations
  * Specimen request and distribution 
  * Shipping and tracking
+ * Track specimen lifecycle events
  * Reports: Data query, Pivot table, Export as CSV, Scheduled reports
  * Custom fields and forms
  * Complete audit trial
- * REST APIs
  * Bulk Operation to upload CSV data
+ * Token based specimen label generation
+ * Barcode printing
+ * REST APIs
+ * Integration with clinical databases
+ * Integration with instruments
+ * Real time notifications
+ 
+ Upcoming features
+ ------------------
+ * Highly configurable user interface
+ * Mobile and tablet apps
+ * Invoicing
+ * Tissue Microarray
+
 
 Online Resources
 ----------------
