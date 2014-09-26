@@ -50,11 +50,15 @@ specimenEvent.controller('SpecimenEventController',
 
     $scope.addRecord = function() {
       $("#notifications").hide();
-
       $scope.loading = true;
-      var re = /\s*[\s,]\s*/;
-      var specimenLabels = $scope.specimenLabels.trim().split(re);
-      var tableData =[];
+
+      var specimenLabels = [];
+      var re = /\n*\t*\v*[\n\t\v,]\n*\t*\v*/;
+      $.each($scope.specimenLabels.trim().split(re), function(){
+        if(this != "") {
+           specimenLabels.push($.trim(this));
+        }
+      });
 
       SpecimensService.getSpecimens(specimenLabels).then( function(data) {
         $scope.loading = false;
@@ -69,6 +73,7 @@ specimenEvent.controller('SpecimenEventController',
           $scope.specimenMap[specimen.label] = specimen;
         }
 
+        var tableData =[];
         for (var i = 0; i < specimenLabels.length; i++) {
           var specimen = $scope.specimenMap[specimenLabels[i]];
           var tableRec = {
