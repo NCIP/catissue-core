@@ -1016,6 +1016,17 @@
 	       <antcall target="migrate_forms"/>
        </target>
 
+    <target name="upgrade_db_os_v1.1">
+      <updateDatabase 
+        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-changelog-1.1.xml" 
+        driver="${final.database.driver}" 
+        url="${final.database.url}" 
+        username="${database.username}" 
+        password="${database.password}" 
+        dropFirst="false" 
+        classpathref="liquibaseClasspath" />
+    </target>
+
        <target name="upgrade_de_db">
            <delete dir="${temp.dir}/dynamicextensions" failonerror="no"/>
            <mkdir dir="${temp.dir}/dynamicextensions"/>
@@ -1700,6 +1711,7 @@
 		<antcall target="upgrade_db_plusv3.2" />
 		<antcall target="upgrade_db_plusv3.3" />
 		<antcall target="upgrade_db_plusv4.0" />
+                <antcall target="upgrade_db_os_v1.1"/>
 
 	</target>
 

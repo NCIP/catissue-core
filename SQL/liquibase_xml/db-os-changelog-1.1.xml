@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="specimen extension records - de + events" author="vpawar" failOnError="true" runOnChange="true">
+    <sql>
+      create or replace view SPECIMEN_EXTN_RECORDS_VIEW as (
+        select
+          re.OBJECT_ID as SPECIMEN_ID, re.RECORD_ID as RECORD_ID
+        from
+          CATISSUE_FORM_RECORD_ENTRY re 
+          inner join CATISSUE_FORM_CONTEXT fc on fc.IDENTIFIER = re.FORM_CTXT_ID
+        where
+          (fc.ENTITY_TYPE = 'Specimen' or fc.ENTITY_TYPE = 'SpecimenEvent') and 
+          re.ACTIVITY_STATUS = 'ACTIVE'
+      )
+    </sql>
+  </changeSet>
+</databaseChangeLog>
