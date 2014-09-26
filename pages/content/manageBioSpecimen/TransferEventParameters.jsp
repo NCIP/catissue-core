@@ -319,11 +319,11 @@ function updateStorageContainerValue()
 				<html:hidden property="containerId" styleId="containerId"/>
 				<!-- Checking the fromPositionData is null -->
 				<logic:empty name="transferEventParametersForm" property="fromPositionData" >
-				<html:text styleClass="black_ar" size="30" styleId="fromPosition" property="fromPosition" readonly="true" />
+				<html:text styleClass="black_ar" size="30" styleId="fromPosition" property="fromPosition" readonly="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 				</logic:empty>
 
 				<logic:notEmpty name="transferEventParametersForm" property="fromPositionData" >
-				<html:text styleClass="black_ar" size="30" styleId="fromPositionData" property="fromPositionData" readonly="true" />
+				<html:text styleClass="black_ar" size="30" styleId="fromPositionData" property="fromPositionData" readonly="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 				</logic:notEmpty>
                   </span></td>
                 </tr>
@@ -376,10 +376,10 @@ function updateStorageContainerValue()
 							</td>
 							<td>&nbsp;&nbsp;</td>
 							<td class="groupelements"  width="10%">
-								<html:text styleClass="black_ar"  size="1" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
+								<html:text styleClass="black_ar"  size="3" styleId="pos1" property="pos1"  disabled= "false" style="display:block" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 							</td>
 							<td class="groupelements" width="10%">
-								<html:text styleClass="black_ar"  size="1" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
+								<html:text styleClass="black_ar"  size="3" styleId="pos2" property="pos2" disabled= "false" style="display:block" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 							</td>
 							<td class="groupelements">
 								<html:button styleClass="black_ar" property="containerMap" styleId="mapButton" onclick="showPopUp()">
