@@ -10,6 +10,8 @@ openspecimen.ui.fancy.Users = function() {
  
   var defaultList = [];
 
+  var signedInUser;
+
   this.getUsers = function(queryTerm, callback) {
     if (!queryTerm && defaultList.length > 0) {
       callback(defaultList);
@@ -72,8 +74,8 @@ openspecimen.ui.fancy.Users = function() {
   };
 
   this.getSignedInUser = function(callback) {
-    if (this.signedInUser) {
-      callback(this.signedInUser);
+    if (signedInUser) {
+      callback(signedInUser);
       return;
     }
 
@@ -82,8 +84,11 @@ openspecimen.ui.fancy.Users = function() {
       .done(function(data) {
         var result = {id: data.id, text: data.lastName + ', ' + data.firstName};
         userCacheMap[data.id] = result;
-        that.signedInUser = data;
-        callback(data);
+        signedInUser = result;
+        callback(result);
+      })
+      .fail(function(data) {
+        alert("Failed to retrieve user");
       });
   };
 };
@@ -131,13 +136,16 @@ openspecimen.ui.fancy.UserField = function(params) {
 
   var initSelectedUser = function(userId, elem, callback) {
     if (!userId) {
-      qFunc('', callback);
+      usersSvc.getSignedInUser(function(user) {
+        that.value = user.id;
+        that.control.setValue(user.id);
+        callback(user);
+      });
       return;
     }
 
     usersSvc.getUser(userId, callback);
-  }; 
-
+  };
 
   this.render = function() {
     this.inputEl = $("<input/>")
@@ -153,13 +161,6 @@ openspecimen.ui.fancy.UserField = function(params) {
     this.control = new Select2Search(this.inputEl);
     this.control.onQuery(qFunc).onChange(onChange);
     this.control.setValue(this.value);
-
-    if (!this.value) {
-      usersSvc.getSignedInUser(function(user) {
-        that.value = user.id;
-        that.control.setValue(user.id);
-      });
-    }
 
     this.control.onInitSelection(
       function(elem, callback) {
