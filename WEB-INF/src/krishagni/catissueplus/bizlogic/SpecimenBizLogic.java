@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.axis.utils.StringUtils;
+
 import krishagni.catissueplus.Exception.CatissueException;
 import krishagni.catissueplus.Exception.SpecimenErrorCodeEnum;
 import krishagni.catissueplus.dao.SCGDAO;
@@ -1078,13 +1080,31 @@ public class SpecimenBizLogic
 	public void disposeSpecimen(HibernateDAO hibernateDao, SessionDataBean sessionDataBean, Specimen specimen,
 			String specimenDisposalReason) throws DAOException, BizLogicException
 	{
-		final DisposalEventParameters disposalEvent = this.createDisposeEvent(sessionDataBean, specimen,
+		if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimen.getActivityStatus())){
+			chkActiveChilds(hibernateDao,specimen.getId());
+		}
+		else{
+			specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
+		}
+		DisposalEventParameters disposalEvent = this.createDisposeEvent(sessionDataBean, specimen,
 				specimenDisposalReason);
+		
 		SpecimenDAO specimenDAO = new SpecimenDAO();
 		specimenDAO.populateEventWithUserId(disposalEvent, hibernateDao);
 		disposeEvent((DisposalEventParameters) disposalEvent, specimen, hibernateDao);
 		specimen.getSpecimenEventCollection().add(disposalEvent);
 		hibernateDao.insert(disposalEvent);
+	}
+
+	private void chkActiveChilds(HibernateDAO hibernateDao, Long id) throws DAOException, BizLogicException {
+		String hql = "select sp.id from "+Specimen.class.getName()+" sp where sp.parentSpecimen.id = "+id+" and sp.activityStatus != 'Disabled'"
+				+ " and sp.collectionStatus='Collected'";
+		List result = hibernateDao.executeQuery(hql, null);
+		if(result != null && result.size() >=1 ){
+			final ErrorKey errorKey = ErrorKey.getErrorKey("errors.specimen.contains.subspecimen");
+			throw new BizLogicException(errorKey, null, "");
+		}
+	
 	}
 
 	private void disposeEvent(DisposalEventParameters disposalEventParameters, Specimen specimen,
@@ -1099,7 +1119,7 @@ public class SpecimenBizLogic
 		final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 		specimen.setSpecimenPosition(null);
 		specimen.setIsAvailable(Boolean.FALSE);
-		specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
+//		specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
 		hibernateDao.update(specimen);
 		if(prevPosition != null)
 		{
@@ -1117,7 +1137,7 @@ public class SpecimenBizLogic
 		final User user = new User();
 		user.setId(sessionDataBean.getUserId());
 		disposalEvent.setUser(user);
-		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
+		disposalEvent.setActivityStatus(specimen.getActivityStatus());
 		return disposalEvent;
 	}
 	

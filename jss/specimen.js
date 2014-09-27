@@ -73,7 +73,7 @@ function initSpecimenCombo()
 
 		if(document.getElementById('activityStatus')!=null)
 		{
-			var activityStatusCombo = dhtmlXComboFromSelect("activityStatus");
+			activityStatusCombo = dhtmlXComboFromSelect("activityStatus");
 			activityStatusCombo.setOptionWidth(203);
 			activityStatusCombo.setSize(203);
 			activityStatusCombo.attachEvent("onBlur", function(){processComboData(this.name,this.getSelectedText());});

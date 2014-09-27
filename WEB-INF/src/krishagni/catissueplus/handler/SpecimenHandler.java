@@ -14,9 +14,8 @@ import krishagni.catissueplus.util.DAOUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.common.dynamicextensions.xmi.AnnotationUtil;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.PrintUtil;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
@@ -236,6 +235,44 @@ public class SpecimenHandler
         return returnJsonObject.toString();
 
     }
+
+
+
+	public SpecimenDTO updateSpecimenStatus(SpecimenDTO specimenDTO, SessionDataBean sessionDataBean) throws BizLogicException {
+		NewSpecimenBizLogic sbizlogic = new NewSpecimenBizLogic();
+		HibernateDAO hibernateDao = null;
+		try
+    {
+			String reason = specimenDTO.getComments();
+			
+        hibernateDao = DAOUtil.openDAOSession(sessionDataBean);
+        Specimen  specimen = sbizlogic.getSpecimenObj(specimenDTO.getId(), hibernateDao);
+        specimen.setActivityStatus(specimenDTO.getActivityStatus());
+        SpecimenBizLogic specimenBizLogic = new SpecimenBizLogic();
+        specimenBizLogic.disposeSpecimen(hibernateDao, sessionDataBean, specimen, reason);
+//        sbizlogic.disposeSpecimen(sessionDataBean, specimen, hibernateDao, reason);
+        specimenDTO.setPos1("");
+        specimenDTO.setPos2("");
+        specimenDTO.setContainerId(null);
+        specimenDTO.setContainerName("");
+        specimenDTO.setAvailable(false);
+        hibernateDao.commit();
+    }catch (ApplicationException exception)
+    {
+      String errMssg = CommonUtil.getErrorMessage(exception,new Specimen(),"Inserting");
+      LOGGER.error(errMssg, exception);
+      throw new BizLogicException(exception.getErrorKey(),
+              exception,exception.getMsgValues(),errMssg);
+      
+  }
+
+
+  finally
+  {
+      DAOUtil.closeDAOSession(hibernateDao);
+  }
+		return specimenDTO;
+	}
 
 
 }

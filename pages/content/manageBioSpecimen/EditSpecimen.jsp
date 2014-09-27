@@ -15,6 +15,7 @@
 .errorStyleOn{
     border: 1px solid #FF0000;
 }
+.textarea { height: auto; }
 </style>
 <style type="text/css">
     #myoutercontainer { text-align: center;display:block;float: left; }
@@ -83,6 +84,150 @@
 <script>
     var imgsrc="images/";
     window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
+		var activityStatusCombo={};
+        var aliquotDateErr = false;
+        var aliquotGrid;
+        var aliquotPopUpParam = {};
+        var aliquotNameSpace = {};
+		
+        function showDisableSpecimenWindow(){
+            if(aliquotNameSpace.dhxWins == undefined){
+                aliquotNameSpace.dhxWins = new dhtmlXWindows();
+                aliquotNameSpace.dhxWins.setSkin("dhx_skyblue");
+                aliquotNameSpace.dhxWins.enableAutoViewport(true);
+            }
+            aliquotNameSpace.dhxWins.setImagePath("");
+            if(aliquotNameSpace.dhxWins.window("containerPositionPopUp")==null){
+                var w =400;
+                var h =240;
+                var x = (screen.width / 3) - (w / 2);
+                var y = 150;
+                aliquotNameSpace.dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+                //aliquotNameSpace.dhxWins.setPosition(x, y);
+                //aliquotNameSpace.dhxWins.window("containerPositionPopUp").center();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").allowResize();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").setModal(true);
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").setText("Dispose Specimen");
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("park").hide();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("close").hide();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").setIcon("images/terms-conditions.png", "images/terms-conditions.png");
+                 //dhxWins.window("containerPositionPopUp").setModal(false);
+                var div = document.createElement("div");
+            
+                div.id="aliquotPopupDiv";
+                div.innerHTML = "<table width='100%' border='0' cellpadding='5' cellspacing='3'>"
+				+"<tr><td colspan='2' class='black_ar'></br><td></tr>"
+				+"<tr><td class='black_ar_b' width='120px'>Activity Status</td><td class='black_ar aliquot_details aliquot_form_label'><input type='radio' name='aliquotRadio' value='Disabled' style='vertical-align: middle;' checked><span class='black_ar' style='vertical-align: middle;'>Disabled</span> &nbsp;"
+                +"<input type='radio' name='aliquotRadio' value='Closed' style='vertical-align: middle;'><span class='black_ar' style='vertical-align: middle;'>Closed</span></td></tr>"
+				
+				+"<tr><td class='black_ar_b'>Reason</td><td class='black_ar'><textarea style='height:50px;' class='black_ar' cols='30' rows='10' id='reason' name='reason' ></textarea></td></tr>"
+				+"<tr><td></td><td class='black_ar'><input type='button' name='Ok' onClick='submitEvent()' value='Ok' ><input type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'></td></tr>"
+				+"</table>";
+				
+                document.body.appendChild(div);
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").attachObject("aliquotPopupDiv");
+            }
+        }
+		
+		function submitEvent(){
+            var specimenStatus = getCheckedRadioId("aliquotRadio");
+			var reason = document.getElementById('reason').value;
+			var spId = document.getElementById("id").value;
+			tabDataJSON["comments"]= reason;
+			tabDataJSON["activityStatus"]= specimenStatus;
+			tabDataJSON["id"] = spId;
+            createRestCall(tabDataJSON,spId);
+            
+            closeTermWindow();
+        }
+		function createRestCall(specimenData ,spId){
+			var req = createRequest(); // defined above
+// Create the callback:
+document.getElementById("specimenSubmitButton").disabled = true;
+req.onreadystatechange = function() {
+  if (req.readyState != 4) return; // Not there yet
+  if (req.status != 201) {
+    // Handle request failure here...
+	var errorMsg=req.getResponseHeader("errorMsg");
+	showErrorMessage(errorMsg);
+	document.getElementById("specimenSubmitButton").disabled = false;
+    return;
+  }
+  document.getElementById("specimenSubmitButton").disabled = false;
+  // Request successful, read the response
+  var resp = req.responseText;
+  var updatedSpecimenDTO = eval('('+resp+')')
+	if(updatedSpecimenDTO.activityStatus == 'Disabled'){
+	
+	  parent.handleCpView(null, updatedSpecimenDTO.specimenCollectionGroupId, null);
+	  
+	  document.getElementById('error').style.display='none';
+	  document.getElementById('success').style.display='block';
+	  var divStyle = document.getElementById('specListDiv').style.display;
+	  divStyle='block';
+	  document.getElementById('specListDiv').style.display='none';
+	  document.getElementById('deleteButtonDiv').style.display='none';
+	  document.getElementById('specimenSubmitButton').style.display='none';
+	  document.getElementById('available').disabled = false;
+	  document.getElementById('available').checked = updatedSpecimenDTO.available;
+	  var activeSpan = document.getElementById('activitySpan');
+	  if(activeSpan){
+		document.getElementById('activitySpan').innerHTML = updatedSpecimenDTO.activityStatus;
+		}else{
+	  
+	  
+	  activityStatusCombo.setComboValue("Disabled");
+			activityStatusCombo.setComboText("Disabled");
+			}
+			tabDataJSON={};
+		
+			scrollToTop();
+	  return;
+	  
+	}
+	
+		parent.handleCpView(null, updatedSpecimenDTO.specimenCollectionGroupId, updatedSpecimenDTO.id);
+	
+				document.getElementById('available').disabled = false;
+				document.getElementById('available').checked = updatedSpecimenDTO.available;
+				document.getElementById('activitySpan').innerHTML = updatedSpecimenDTO.activityStatus;
+				document.getElementById('error').style.display='none';
+				document.getElementById('success').style.display='block';
+				forwardToChildSpecimen(operation);
+			
+			var divStyle = document.getElementById('specListDiv').style.display;
+			
+			if(divStyle == 'none')
+			{
+				divStyle='block';
+				document.getElementById('specListDiv').style.display='block';
+			}
+			tabDataJSON={};
+		/*	if(operation == 'add')
+			{
+				LoadSCGTabBar('edit');
+			}*/
+			scrollToTop();
+		}
+		
+		
+		
+			req.open("PUT", "rest/specimens/"+spId+"/updateStatus", false);
+		
+		req.setRequestHeader("Content-Type",
+							 "application/json");
+		req.send(JSON.stringify(specimenData));
+
+		}
+        function getCheckedRadioId(name) {
+            var elements = document.getElementsByName(name);
+            for (var i=0, len=elements.length; i<len; ++i)
+                if (elements[i].checked) return elements[i].value;
+        }
+        function closeTermWindow(){
+            aliquotNameSpace.dhxWins.window("containerPositionPopUp").close();
+        }
 </script>
 <!----------------------------------------------------------------------->
 <body onload="LoadSCGTabBar('${requestScope.operation}');"> 
@@ -404,8 +549,9 @@
                                 <td width="30%" align="left" class="black_ar">
                                     <c:choose>
                                         <c:when test="${specimenDTO.activityStatus == 'Active'}">
-                                            <label for="activityStatus">
+                                            <label for="activityStatus"><span id="activitySpan">
                                                 <bean:write name="specimenDTO" property="activityStatus" scope="request"/>
+												</span>
                                             </label>
                                         </c:when>
                                         <c:otherwise>
@@ -658,9 +804,15 @@
                                     <div id="specListDiv" style="display:none">
                                     | <input type="button" value="Add To Specimen List"
                                             onclick="organizeTarget()" class="blue_ar_b" />
+    
+                                    </div>
+                                    </td><td>
+										<div id="deleteButtonDiv" style="display:none">
+          									| <input type="button" value="Delete"
+                                            onclick="showDisableSpecimenWindow()" class="blue_ar_b" />
                                     
                                     </div>
-                                    </td></tr></table>
+									</td></tr></table>
                                     <input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="${specimenDTO.id}" checked/>
                                 </td>
                             </tr>
@@ -789,6 +941,12 @@ prepareSpecimenTypeOptions('${cellTypeListJSON}','${molecularTypeListJSON}','${t
     document.getElementById('specListDiv').style.display='block';
 }
 </c:if>
+<c:if test="${operation=='edit'}">
+{
+    document.getElementById('deleteButtonDiv').style.display='block';
+}
+</c:if>
+
 function chkeEmptyNumber(obj)
 {
     if(obj.value.trim()=="" || obj.value == null)

@@ -3,6 +3,7 @@ package krishagni.catissueplus.rest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -197,6 +198,37 @@ public class SpecimenResource
             SpecimenDTO specimenDTO = gson.fromJson(specimenDetails, SpecimenDTO.class);
             SpecimenHandler specimenHandler = new SpecimenHandler();
             specimenDTO = specimenHandler.updateSpecimen(specimenDTO, getSessionDataBean());
+
+            response = Response.status(Status.CREATED.getStatusCode()).entity(specimenDTO)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+        catch (CatissueException e)
+        {
+            LOGGER.error(e);
+            response = getResponse(e);
+        }
+        catch (Exception e)
+        {
+            LOGGER.error(e);
+            response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage())
+                    .header("errorMsg", e.getMessage()).type(MediaType.APPLICATION_JSON).build();
+        }
+        return response;
+    }
+    
+    @Path("{id}/updateStatus")
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response updateSpecimenStatus(@PathParam("id") String id, String specimenDetails)
+    {
+        Gson gson = AppUtility.initGSONBuilder().create();
+        Response response = null;
+        try
+        {
+            SpecimenDTO specimenDTO = gson.fromJson(specimenDetails, SpecimenDTO.class);
+            SpecimenHandler specimenHandler = new SpecimenHandler();
+            specimenDTO = specimenHandler.updateSpecimenStatus(specimenDTO, getSessionDataBean());
 
             response = Response.status(Status.CREATED.getStatusCode()).entity(specimenDTO)
                     .type(MediaType.APPLICATION_JSON).build();
