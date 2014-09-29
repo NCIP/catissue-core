@@ -1,0 +1,86 @@
+<form>
+  <view>
+    <name>SpecimenTissueReviewEvent</name>
+    <caption>Tissue Review Event</caption>
+    <table>CATISSUE_TIS_SPE_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <numberField>
+        <name>neoPlasticCellularityPct</name>
+        <udn>neoPlasticCellularityPct</udn>
+        <caption>Neo Plastic Cellularity Percentage</caption>
+        <column>NEOPLASTIC_CELLULARITY_PER</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>necrosisPct</name>
+        <udn>necrosisPct</udn>
+        <caption>Necrosis Percentage</caption>
+        <column>NECROSIS_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>lymphocyticPct</name>
+        <udn>lymphocyticPct</udn>
+        <caption>Lymphocytic Percentage</caption>
+        <column>LYMPHOCYTIC_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>totalCellularityPct</name>
+        <udn>totalCellularityPct</udn>
+        <caption>Total Cellularity Percentage</caption>
+        <column>TOTAL_CELLULARITY_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <dropDown>
+        <name>histologicalQuality</name>
+        <udn>histologicalQuality</udn>
+        <caption>Histological Quality</caption>
+        <column>HISTOLOGICAL_QUALITY</column>
+        <options>
+          <sql>select value from catissue_permissible_value where public_id = 'Hist_Quality' order by value</sql>
+        </options>
+      </dropDown>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+      </textArea>
+    </row>
+  </view>
+</form>
+

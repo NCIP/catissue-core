@@ -1,0 +1,100 @@
+<form>
+  <view>
+    <name>SpecimenMolecularReviewEvent</name>
+    <caption>Molecular Review Event</caption>
+    <table>CATISSUE_MOL_SPE_REVIEW_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>gelImageUrl</name>
+        <udn>gelImageUrl</udn>
+        <caption>Gel Image URL</caption>
+        <column>GEL_IMAGE_URL</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>qualityIdx</name>
+        <udn>qualityIdx</udn>
+        <caption>Quality Index</caption>
+        <column>QUALITY_INDEX</column>
+      </textField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>gelNumber</name>
+        <udn>gelNumber</udn>
+        <caption>Gel Number</caption>
+        <column>GEL_NUMBER</column>
+      </numberField>
+    </row>
+
+    <row>
+      <textField>
+        <name>laneNumber</name>
+        <udn>laneNumber</udn>
+        <caption>Lane Number</caption>
+        <column>LANE_NUMBER</column>
+      </textField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>absorbanceAt260</name>
+        <udn>absorbanceAt260</udn>
+        <caption>Absorbance At 260</caption>
+        <column>ABSORBANCE_AT_260</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>absorbanceAt280</name>
+        <udn>absorbanceAt280</udn>
+        <caption>Absorbance At 280</caption>
+        <column>ABSORBANCE_AT_280</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>ratio28sTo18s</name>
+        <udn>ratio28sTo18s</udn>
+        <caption>Ratio 28S To 18S</caption>
+        <column>RATIO_28S_TO_18S</column>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+      </textArea>
+    </row>
+  </view>
+</form>
+

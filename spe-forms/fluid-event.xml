@@ -1,0 +1,47 @@
+<form>
+  <view>
+    <name>SpecimenFluidEvent</name>
+    <caption>Fluid Event</caption>
+    <table>CATISSUE_FLUID_SPE_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <numberField>
+        <name>cellCount</name>
+        <udn>cellCount</udn>
+        <caption>Cell Count</caption>
+        <column>CELL_COUNT</column>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+      </textArea>
+    </row>
+  </view>
+</form>
+

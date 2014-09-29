@@ -2,12 +2,10 @@ package krishagni.catissueplus.upgrade;
 
 import java.io.FileInputStream;
 import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-
-import edu.common.dynamicextensions.nutility.DEApp;
-import edu.wustl.common.util.global.CommonServiceLocator;
 
 public class DbUtil {
 	public static String dbType = null;

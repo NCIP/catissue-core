@@ -1,0 +1,55 @@
+<form>
+  <view>
+    <name>SpecimenProcedureEvent</name>
+    <caption>Procedure Event</caption>
+    <table>CATISSUE_PROCEDURE_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>url</name>
+        <udn>url</udn>
+        <caption>URL</caption>
+        <column>URL</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>name</name>
+        <udn>name</udn>
+        <caption>Name</caption>
+        <column>NAME</column>
+      </textField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+      </textArea>
+    </row>
+  </view>
+</form>
+

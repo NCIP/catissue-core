@@ -1,0 +1,55 @@
+<form>
+  <view>
+    <name>SpecimenCellReviewEvent</name>
+    <caption>Cell Review Event</caption>
+    <table>CATISSUE_CELL_SPE_REVIEW_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <numberField>
+        <name>neoPlasticCellularityPct</name>
+        <udn>neoPlasticCellularityPct</udn>
+        <caption>Neo Plastic Cellularity Percentage</caption>
+        <column>NEOPLASTIC_CELLULARITY_PER</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>viableCellPct</name>
+        <udn>viableCellPct</udn>
+        <caption>Viable Cell Percentage</caption>
+	<column>VIABLE_CELL_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+      </textArea>
+    </row>
+  </view>
+</form>
