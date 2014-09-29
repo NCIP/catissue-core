@@ -5530,6 +5530,20 @@
 				<antcall target="migrate_forms"/>
 	    </target>
 
+    <target name="upgrade_db_os_v1.1">
+      <updateDatabase 
+        changeLogFile="${base.dir}/SQL/liquibase_xml/db-os-changelog-1.1.xml" 
+        driver="${final.database.driver}" 
+        url="${final.database.url}" 
+        username="${database.username}" 
+        password="${database.password}" 
+        dropFirst="false" 
+        classpathref="liquibaseClasspath" />
+
+      <ant target="migrate_specimen_events"/>
+    </target>
+
+
 		<target name="upgrade_de_db">
         	<delete dir="${de.temp.dir}" failonerror="no" />
         	<mkdir dir="${de.temp.dir}" />
@@ -5605,7 +5619,25 @@
                 </java>
         </target>
 
+        <target name="migrate_specimen_events">
+          <unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+          <antcall target="setupClassExecutionEnvironment"/>
+
+          <java classname="krishagni.catissueplus.upgrade.MigrateSpecimenEvents" fork="true" maxmemory="1024M">
+            <arg value="${username}"/>
+            <arg value="spe-forms/events-cfg.json"/>
+            <classpath>
+              <pathelement location="${temp.dir.DE}" />
+              <pathelement location="${temp.dir.DE}/old" />
+              <fileset dir="${temp.dir}/catissuecore/WEB-INF/lib/">
+                <include name="*" />
+              </fileset>
+              <pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+            </classpath>
+          </java>
+        </target>
+
 	<target name="post_upgrade">
-		<antcall target="aq_form"/>
+          <antcall target="aq_form"/>
 	</target>
 </project>
