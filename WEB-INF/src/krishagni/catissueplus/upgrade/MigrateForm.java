@@ -21,8 +21,6 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
@@ -680,7 +678,6 @@ public class MigrateForm {
 	
 	private String getCustomLabel(ControlInterface ctrl) {
 		BaseAbstractAttribute attr = (BaseAbstractAttribute) ctrl.getBaseAbstractAttribute();
-		Collection<TaggedValueInterface> tagCollection = attr.getTaggedValueCollection();
 		return getTaggedValue(attr.getTaggedValueCollection(), "displayLabel");
 	}
 	
