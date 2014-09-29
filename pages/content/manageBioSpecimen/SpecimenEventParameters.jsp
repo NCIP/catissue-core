@@ -245,14 +245,14 @@ window.onresize = function() { mdResDetector(); }
 						</td>
 					</tr>
 						<% } %>
-					<tr>
+					<!-- tr>
 						<td align="left" width="33%" class="black_ar">
 							&nbsp;&nbsp;<bean:message key="specimenEventParameters.caption"/>
 							&nbsp;&nbsp;&nbsp;&nbsp;<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false" onchange="onParameterChange(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
 							</html:select>
 						</td>
-					</tr>
+					</tr -->
 					<tr>
 						<td class="whitetable_bg" colspan="3" height="70%">
 							<%
