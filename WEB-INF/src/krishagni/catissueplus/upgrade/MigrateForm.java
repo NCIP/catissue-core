@@ -21,6 +21,8 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
@@ -1001,6 +1003,10 @@ public class MigrateForm {
 		List<RecordObject> recAndObjectIds = getRecordAndObjectIds(info.getOldFormCtxId());
 		logger.info("Number of records to migrate for container : " + oldForm.getId() + 
 				" with form context id : " + info.getOldFormCtxId() + " is : " + recAndObjectIds.size());
+		if (recAndObjectIds.size() == 0) {
+			return;
+		}
+		
 	
 		EntityInterface entity = null;
 		CategoryEntity catEntity = null;
@@ -1012,18 +1018,22 @@ public class MigrateForm {
 			entity = (EntityInterface)oldForm.getAbstractEntity();
 		}
 		
-		String tableName = entity.getTableProperties().getName();
-	
-		if (recAndObjectIds.size() == 0) {
-			return;
+		String tableName = entity.getTableProperties().getName();			
+		String recordIdCol = getRecordIdCol(info, entity.getId(), tableName);
+		
+		if (recordIdCol == null) {
+			throw new RuntimeException("Could not determine record id column for " + tableName + 
+					", old container : " + oldForm.getId());
 		}
 		
-		String recordIdCol = "DYEXTN_AS_" + getHookEntityId(info, oldForm.getId()) + "_" + entity.getId();
+		logger.info("Using record ID column: " + recordIdCol + 
+				" for table: " + tableName +
+				" while migrating: " + oldForm.getId());
 		
 		for (RecordObject recObj : recAndObjectIds) {
 			
 			try {
-				Long oldRecId = getRecordId(tableName, recordIdCol,recObj.recordId ); 
+				Long oldRecId = getRecordId(tableName, recordIdCol, recObj.recordId ); 
 				if (oldRecId == null) {
 					continue;
 				}
@@ -1049,6 +1059,42 @@ public class MigrateForm {
 		logger.info("Migrated records for container: " + oldForm.getId() + 
 				", number of records = " + recAndObjectIds.size() + 
 				", time = " + (System.currentTimeMillis() - t1) / 1000 + " seconds"); 
+	}
+	
+	private String getRecordIdCol(FormInfo info, Long entityId, String tableName) {
+		String recordIdCol = "DYEXTN_AS_" + getHookEntityId(info, oldForm.getId()) + "_" + entityId;
+		if (doesColumnExists(tableName, recordIdCol)) {
+			return recordIdCol;
+		}
+		
+		if (info.isDefaultForm()) {
+			return null;
+		}
+		
+		info.setDefaultForm(true);
+		recordIdCol = "DYEXTN_AS_" + getHookEntityId(info, oldForm.getId()) + "_" + entityId;
+		if (doesColumnExists(tableName, recordIdCol)) {
+			info.setDefaultForm(false);
+			return recordIdCol;
+		}
+		
+		return null;				
+	}
+	
+	private boolean doesColumnExists(String table, String column) {
+		try {
+			String sql = String.format(CHECK_REC_ID_EXISTS_SQL, column, table, column);
+			JdbcDaoFactory.getJdbcDao().getResultSet(sql, null, new ResultExtractor<Boolean>() {
+				@Override
+				public Boolean extract(ResultSet rs) throws SQLException {
+					return true;
+				}
+			});
+			
+			return true;
+		} catch (Exception e) {
+			return false;
+		}		
 	}
 	
 	private Long getRecordId(String tableName, String recordIdCol, Long oldRecId) {
@@ -1346,5 +1392,8 @@ public class MigrateForm {
 	
 	private static final String INSERT_RECORD_ENTRY_SQL_ORACLE = 
 			"insert into catissue_form_record_entry values(CATISSUE_FORM_REC_ENTRY_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+	
+	private static final String CHECK_REC_ID_EXISTS_SQL = 
+			"select %s from %s where %s < 0";
 	
 }
