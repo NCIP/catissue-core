@@ -20,7 +20,7 @@
     </sql>
   </changeSet>
 
-  <changeSet id="unwanted events param table" author="vpawar" failOnError="true" runOnChange="true">
+  <changeSet id="unwanted events param table" author="vpawar" failOnError="true">
     <dropTable cascadeConstraints="true" tableName="catissue_event_param"/>
   </changeSet>
 </databaseChangeLog>
