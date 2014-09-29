@@ -1078,7 +1078,7 @@ public class SpecimenBizLogic
 	}
 
 	public void disposeSpecimen(HibernateDAO hibernateDao, SessionDataBean sessionDataBean, Specimen specimen,
-			String specimenDisposalReason) throws DAOException, BizLogicException
+			DisposalEventParameters disposalEvent) throws DAOException, BizLogicException
 	{
 		if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimen.getActivityStatus())){
 			chkActiveChilds(hibernateDao,specimen.getId());
@@ -1086,8 +1086,6 @@ public class SpecimenBizLogic
 		else{
 			specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 		}
-		DisposalEventParameters disposalEvent = this.createDisposeEvent(sessionDataBean, specimen,
-				specimenDisposalReason);
 		
 		SpecimenDAO specimenDAO = new SpecimenDAO();
 		specimenDAO.populateEventWithUserId(disposalEvent, hibernateDao);

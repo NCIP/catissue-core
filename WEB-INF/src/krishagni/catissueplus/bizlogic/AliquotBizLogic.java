@@ -18,6 +18,8 @@ import krishagni.catissueplus.dto.ContainerInputDetailsDTO;
 import krishagni.catissueplus.dto.ExternalIdentifierDTO;
 import krishagni.catissueplus.dto.SingleAliquotDetailsDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import krishagni.catissueplus.util.SpecimenUtil;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -159,8 +161,8 @@ public class AliquotBizLogic
         if (aliquotDetailsDTO.isDisposeParentSpecimen())
         {
 
-            specimenBizLogic.disposeSpecimen(hibernateDao, sessionDataBean, parentSpecimen,
-                    Constants.SPECIMEN_DISPOSAL_REASON);
+        	DisposalEventParameters eventParameters = SpecimenUtil.createDisposeEvent(sessionDataBean, parentSpecimen, Constants.SPECIMEN_DISPOSAL_REASON);
+            specimenBizLogic.disposeSpecimen(hibernateDao, sessionDataBean, parentSpecimen, eventParameters);
         }
         specimenDAO.reduceQuantity(totalDistributedQuantity, parentSpecimen.getId(), hibernateDao);
         aliquotDetailsDTO.setCurrentAvailableQuantity(parentSpecimen.getAvailableQuantity());

@@ -226,7 +226,7 @@ public class SpecimenResource
         Response response = null;
         try
         {
-            SpecimenDTO specimenDTO = gson.fromJson(specimenDetails, SpecimenDTO.class);
+            edu.wustl.catissuecore.dto.SpecimenDTO specimenDTO = gson.fromJson(specimenDetails, edu.wustl.catissuecore.dto.SpecimenDTO.class);
             SpecimenHandler specimenHandler = new SpecimenHandler();
             specimenDTO = specimenHandler.updateSpecimenStatus(specimenDTO, getSessionDataBean());
 

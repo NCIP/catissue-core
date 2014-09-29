@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenBizlogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.dto.BiohazardDTO;
@@ -41,6 +43,7 @@ public class SpecimenEditAction extends CatissueBaseAction
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String obj = null;
 		HibernateDAO hibernateDao = null;
+		SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 
 		if (request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
 		{
@@ -59,10 +62,16 @@ public class SpecimenEditAction extends CatissueBaseAction
 				Specimen specimen = (Specimen) hibernateDao.retrieveById(Specimen.class.getName(),
 						identifier);
 				specimenDTO = new SpecimenBizlogic().getDTO(specimen);
+				specimenDTO.setUserId(sessionDataBean.getUserId());
+				Calendar cal = Calendar.getInstance();
+				specimenDTO.setDisposalDate(cal.getTime());
+				specimenDTO.setDisposalHours(Integer.toString(cal
+						.get(Calendar.HOUR_OF_DAY)));
+				specimenDTO.setDisposalMins(Integer.toString(cal
+						.get(Calendar.MINUTE)));
+				
 				request.setAttribute("specimenDTO", specimenDTO);
 
-				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
-						.getAttribute(Constants.SESSION_DATA);
 				NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 				List<Object> list = bizLogic.getcpIdandPartId(sessionDataBean, obj);
 				Object[] objArr = (Object[]) list.get(0);
@@ -155,6 +164,17 @@ public class SpecimenEditAction extends CatissueBaseAction
 			request.setAttribute("entityName", "Specimen");
 			request.setAttribute("eventEntityName", "SpecimenEvent");
 			request.setAttribute(Constants.OPERATION, Constants.EDIT);			
+			UserBizLogic userBizLogic=new UserBizLogic();
+			final List<NameValueBean> users=userBizLogic.getUsersNameValueList(null);
+			users.add(new NameValueBean(Constants.SELECT_OPTION, String.valueOf(Constants.SELECT_OPTION_VALUE)));
+			request.setAttribute(Constants.USERLIST, users);
+			
+		// Sets the hourList attribute to be used in the Add/Edit
+			// FrozenEventParameters Page.
+			request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+			// Sets the minutesList attribute to be used in the Add/Edit
+			// FrozenEventParameters Page.
+			request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 		}
 		finally
 		{

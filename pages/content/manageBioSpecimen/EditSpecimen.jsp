@@ -96,10 +96,10 @@
                 aliquotNameSpace.dhxWins.setSkin("dhx_skyblue");
                 aliquotNameSpace.dhxWins.enableAutoViewport(true);
             }
-            aliquotNameSpace.dhxWins.setImagePath("");
+        //    aliquotNameSpace.dhxWins.setImagePath("");
             if(aliquotNameSpace.dhxWins.window("containerPositionPopUp")==null){
-                var w =400;
-                var h =240;
+                var w =500;
+                var h =360;
                 var x = (screen.width / 3) - (w / 2);
                 var y = 150;
                 aliquotNameSpace.dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
@@ -112,34 +112,40 @@
                 aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("park").hide();
                 aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("close").hide();
                 aliquotNameSpace.dhxWins.window("containerPositionPopUp").setIcon("images/terms-conditions.png", "images/terms-conditions.png");
-                 //dhxWins.window("containerPositionPopUp").setModal(false);
-                var div = document.createElement("div");
+             
+			 if(document.getElementById("disposalPop")==null){
+				  var div = document.createElement("div");
             
-                div.id="aliquotPopupDiv";
-                div.innerHTML = "<table width='100%' border='0' cellpadding='5' cellspacing='3'>"
-				+"<tr><td colspan='2' class='black_ar'></br><td></tr>"
-				+"<tr><td class='black_ar_b' width='120px'>Activity Status</td><td class='black_ar aliquot_details aliquot_form_label'><input type='radio' name='aliquotRadio' value='Disabled' style='vertical-align: middle;' checked><span class='black_ar' style='vertical-align: middle;'>Disabled</span> &nbsp;"
-                +"<input type='radio' name='aliquotRadio' value='Closed' style='vertical-align: middle;'><span class='black_ar' style='vertical-align: middle;'>Closed</span></td></tr>"
-				
-				+"<tr><td class='black_ar_b'>Reason</td><td class='black_ar'><textarea style='height:50px;' class='black_ar' cols='30' rows='10' id='reason' name='reason' ></textarea></td></tr>"
-				+"<tr><td></td><td class='black_ar'><input type='button' name='Ok' onClick='submitEvent()' value='Ok' ><input type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'></td></tr>"
-				+"</table>";
-				
-                document.body.appendChild(div);
-                aliquotNameSpace.dhxWins.window("containerPositionPopUp").attachObject("aliquotPopupDiv");
+                div.id="disposalPop";
+				div.innerHTML = windowDivStr;
+				  document.body.appendChild(div);
+              
+			 }else{
+				windowDivStr = document.getElementById("disposalPop").innerHTML;
+			 }
+			 doInitCal('disposalDate',false,'${uiDatePattern}');
+				aliquotNameSpace.dhxWins.window("containerPositionPopUp").attachObject("disposalPop");
             }
+			  
         }
-		
+		var windowDivStr;
 		function submitEvent(){
             var specimenStatus = getCheckedRadioId("aliquotRadio");
 			var reason = document.getElementById('reason').value;
 			var spId = document.getElementById("id").value;
+			var userId = document.getElementById("userId").value;
+			var disposalDate = document.getElementById("disposalDate").value;
+			var disposalHours = document.getElementById("disposalHours").value;
+			var disposalMins = document.getElementById("disposalMins").value;
+			
 			tabDataJSON["comments"]= reason;
 			tabDataJSON["activityStatus"]= specimenStatus;
 			tabDataJSON["id"] = spId;
+			tabDataJSON["userId"]= userId;
+			tabDataJSON["disposalDate"]= disposalDate;
+			tabDataJSON["disposalHours"]= disposalHours;
+			tabDataJSON["disposalMins"]= disposalMins;
             createRestCall(tabDataJSON,spId);
-            
-            closeTermWindow();
         }
 		function createRestCall(specimenData ,spId){
 			var req = createRequest(); // defined above
@@ -150,7 +156,10 @@ req.onreadystatechange = function() {
   if (req.status != 201) {
     // Handle request failure here...
 	var errorMsg=req.getResponseHeader("errorMsg");
-	showErrorMessage(errorMsg);
+	
+	document.getElementById('pop-error').innerHTML = errorMsg;
+	document.getElementById('pop-error').style.display='block';
+	//showErrorMessage(errorMsg);
 	document.getElementById("specimenSubmitButton").disabled = false;
     return;
   }
@@ -158,8 +167,16 @@ req.onreadystatechange = function() {
   // Request successful, read the response
   var resp = req.responseText;
   var updatedSpecimenDTO = eval('('+resp+')')
+  var contSpan = document.getElementById('containerSpan');
+	  var contPopSpan = document.getElementById('containerPopSpan');
+	  if(contPopSpan){
+	    document.getElementById('containerPopSpan').innerHTML = ''; 
+	  }
+	  if(contSpan){
+	    document.getElementById('containerSpan').innerHTML = 'Virtually Located'; 
+	  }
 	if(updatedSpecimenDTO.activityStatus == 'Disabled'){
-	
+	closeTermWindow();
 	  parent.handleCpView(null, updatedSpecimenDTO.specimenCollectionGroupId, null);
 	  
 	  document.getElementById('error').style.display='none';
@@ -171,6 +188,7 @@ req.onreadystatechange = function() {
 	  document.getElementById('specimenSubmitButton').style.display='none';
 	  document.getElementById('available').disabled = false;
 	  document.getElementById('available').checked = updatedSpecimenDTO.available;
+	  
 	  var activeSpan = document.getElementById('activitySpan');
 	  if(activeSpan){
 		document.getElementById('activitySpan').innerHTML = updatedSpecimenDTO.activityStatus;
@@ -191,10 +209,13 @@ req.onreadystatechange = function() {
 	
 				document.getElementById('available').disabled = false;
 				document.getElementById('available').checked = updatedSpecimenDTO.available;
+				var actSpan = document.getElementById('activitySpan');
+				if(actSpan){
 				document.getElementById('activitySpan').innerHTML = updatedSpecimenDTO.activityStatus;
+				}
 				document.getElementById('error').style.display='none';
 				document.getElementById('success').style.display='block';
-				forwardToChildSpecimen(operation);
+				//forwardToChildSpecimen(operation);
 			
 			var divStyle = document.getElementById('specListDiv').style.display;
 			
@@ -209,6 +230,7 @@ req.onreadystatechange = function() {
 				LoadSCGTabBar('edit');
 			}*/
 			scrollToTop();
+			closeTermWindow();
 		}
 		
 		
@@ -582,9 +604,11 @@ req.onreadystatechange = function() {
                                     <input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='Virtually Located' readonly style="border:0px;" id="storageContainerPosition" title="Virtually Located"/>
                                 </logic:equal>
                                 <logic:equal name="specimenDTO" property="isVirtual" value="false">
+								<span id="containerSpan">
                                 <input type="text" size="30" maxlength="255"  class="black_ar tr_alternate_color_lightGrey"  value='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)' readonly style="border:0px" id="storageContainerPosition" title='<bean:write name="specimenDTO" property="containerName" scope="request"/>:(<bean:write name="specimenDTO" property="pos1" scope="request"/>,<bean:write name="specimenDTO" property="pos2" scope="request"/>)'/>
-                                    
+                                </span>
                                 </logic:equal>
+								<span id="containerPopSpan">
                                 <a href="#" onclick="javascript:loadDHTMLXWindowForTransferEvent();return false">
                             <img src="images/uIEnhancementImages/grid_icon.png" alt="Displays the positions for the selected container"  width="16" height="16" border="0" style="vertical-align: middle" title="Displays the positions for the selected container"></a>
                                     
@@ -594,6 +618,7 @@ req.onreadystatechange = function() {
             <img src="images/uIEnhancementImages/Tree.gif" border="0" width="16" height="16" style="vertical-align: bottom" title="select positions from hierarchical view"/>
         </a>
                                 </span>
+								</span>
                                 <html:hidden name="specimenDTO" property="isVirtual" styleId="isVirtual"/>
                                 <html:hidden name="specimenDTO" property="containerName" styleId="containerName"/>
                                 <html:hidden name="specimenDTO" property="pos1" styleId="pos1"/>
@@ -808,7 +833,7 @@ req.onreadystatechange = function() {
                                     </div>
                                     </td><td>
 										<div id="deleteButtonDiv" style="display:none">
-          									| <input type="button" value="Delete"
+          									| <input type="button" value="Dispose"
                                             onclick="showDisableSpecimenWindow()" class="blue_ar_b" />
                                     
                                     </div>
@@ -834,6 +859,47 @@ req.onreadystatechange = function() {
      </td>
    </tr>
 </table>
+<div id="disposalPop" style="display:none">
+	<table width='100%' border='0' cellpadding='5' cellspacing='3'>
+		<tr><td colspan="2">
+			<div id="pop-error" class="alert alert-error" style="display:none">
+                            <strong>Error!</strong> <span id="errorMsg">Change a few things up and try submitting again.</span>
+                        </div>
+		</td></tr>
+		
+		<tr><td class='black_ar_b' width='120px'>User</td><td class='black_ar'><html:select property='userId' name='specimenDTO' styleClass='black_ar' styleId='userId' size='1'><html:options collection='userList' labelProperty='name' property='value' /></html:select></td></tr>
+				
+		<tr><td class='black_ar_b'>Disposal Date</td><td class='black_ar'>   
+			<table style='border-collapse:collapse;'><tr><td><input type="text" name="disposalDate" class="black_ar"
+                              id="disposalDate" size="10" value='<fmt:formatDate value="${specimenDTO.disposalDate}" pattern="${datePattern}" />'/>
+				</td><td  style='padding-left:4px'><html:select property='disposalHours' name='specimenDTO' styleClass='black_ar' styleId='disposalHours' size='1'>
+				<logic:iterate name='hourList' id='listhoursId'>
+				<html:option  value='${listhoursId}'> ${listhoursId} </html:option>
+				</logic:iterate>
+				</html:select> 
+				</td>
+				<td  style='padding-left:4px'>
+				<html:select property='disposalMins' name='specimenDTO' styleClass='black_ar' styleId='disposalMins' size='1'>
+				<logic:iterate name='minutesList' id='listminutesId'>
+				<html:option  value="${listminutesId}"> ${listminutesId} </html:option>
+				</logic:iterate>
+				</html:select> 
+				</td>
+				</tr>
+				</table>
+		</td></tr>
+				
+		<tr><td class='black_ar_b' width='120px'>Activity Status</td><td class='black_ar aliquot_details aliquot_form_label'><input type='radio' name='aliquotRadio' value='Disabled' style='vertical-align: middle;' checked onclick="activityStatusChange(this)"><span class='black_ar' style='vertical-align: middle;margin-left:2px;'>Disabled</span> &nbsp;
+         <input type='radio' name='aliquotRadio' value='Closed' style='vertical-align: middle;' onclick="activityStatusChange(this)"><span class='black_ar' style='vertical-align: middle;margin-left:2px;'>Closed</span></td></tr>
+		 
+		 <tr><td></td><td class="black_ar" style="color:#FF0000"><div id="disbDiv" style="display:block">Disabling a specimen will delete the specimen forever. Are you sure?</div>
+		 
+		 </td></tr>
+				
+				<tr><td class='black_ar_b'>Reason</td><td class='black_ar'><textarea style='height:50px;' class='black_ar' cols='30' rows='10' id='reason' name='reason' ></textarea></td></tr>
+				<tr><td></td><td class='black_ar'><input type='button' name='Ok' onClick='submitEvent()' value='Ok' ><input type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'></td></tr>
+	</table>
+</div>
 </html:form>
 
 <script>
@@ -981,6 +1047,15 @@ function updateHelpURL()
 		}
 		
 	return URL;
+}
+
+function activityStatusChange(radio){
+if(radio.value == 'Closed'){
+document.getElementById('disbDiv').style.display ="none";
+}else{
+document.getElementById('disbDiv').style.display ="block";
+}
+
 }
 </script>
 </body>

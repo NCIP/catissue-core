@@ -2,6 +2,8 @@ package krishagni.catissueplus.bizlogic;
 
 import krishagni.catissueplus.dto.DerivedDTO;
 import krishagni.catissueplus.dto.SpecimenDTO;
+import krishagni.catissueplus.util.SpecimenUtil;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -55,8 +57,8 @@ public class DeriveBizLogic
 		parentSpecimen.setId(specimenDTO.getParentSpecimenId());
 		if(deriveDTO.isDisposeParentSpecimen())
 		{
-			specimenBizlogic.disposeSpecimen(hibernateDao, sessionDataBean, parentSpecimen,
-		                    Constants.DERIVED_SPECIMEN_DISPOSAL_REASON);
+			DisposalEventParameters eventParameters = SpecimenUtil.createDisposeEvent(sessionDataBean, parentSpecimen, Constants.SPECIMEN_DISPOSAL_REASON);
+			specimenBizlogic.disposeSpecimen(hibernateDao, sessionDataBean, parentSpecimen, eventParameters);
 		}
 		return specimenDTO;
 	}

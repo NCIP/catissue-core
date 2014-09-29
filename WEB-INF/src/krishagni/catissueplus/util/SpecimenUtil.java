@@ -1,10 +1,16 @@
 package krishagni.catissueplus.util;
 
+import java.util.Date;
+
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
@@ -110,6 +116,20 @@ public class SpecimenUtil
 			isGenerateLabel = SpecimenUtil.isLblGenOnForCP(pLabelFormat, derLabelFormat, aliqLabelFormat, lineage);
 		}
 		return isGenerateLabel;
+	}
+	
+	public static DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
+			String disposalReason)
+	{
+		final DisposalEventParameters disposalEvent = new DisposalEventParameters();
+		disposalEvent.setSpecimen(specimen);
+		disposalEvent.setReason(disposalReason);
+		disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
+		final User user = new User();
+		user.setId(sessionDataBean.getUserId());
+		disposalEvent.setUser(user);
+		disposalEvent.setActivityStatus(specimen.getActivityStatus());
+		return disposalEvent;
 	}
 	
 }
