@@ -98,7 +98,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
         finally
         {
-            manageLoginHistory(loginResult, loginCredentials.getLoginName(), request);
+            manageLoginHistory(loginResult, request);
         }
         return loginResult;
     }
@@ -142,7 +142,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
      * @throws CatissueException
      *             the catissue exception
      */
-    public static void manageLoginHistory(LoginResult loginResult, final String loginName,
+    public static void manageLoginHistory(LoginResult loginResult,
             final HttpServletRequest request) throws CatissueException
     {
         HibernateDAO hibernateDAO = null;
@@ -151,7 +151,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
             hibernateDAO =(HibernateDAO) AppUtility.openDAOSession(null);
 
             UserDAO userDAO = new UserDAO();
-            LoginDetails loginDetails = userDAO.getLoginDetails(hibernateDAO, loginName, request.getRemoteAddr());
+            LoginDetails loginDetails = userDAO.getLoginDetails(hibernateDAO, loginResult.getAppLoginName(), request.getRemoteAddr());
                 
             boolean isLoginSuccessful;
             isLoginSuccessful = loginResult.isAuthenticationSuccess();
@@ -162,7 +162,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
             (hibernateDAO).auditLoginEvents(isLoginSuccessful, loginDetails);
             if(!isLoginSuccessful)
             {
-            	lockUserAccount(loginName,hibernateDAO,loginResult);
+            	lockUserAccount(loginResult.getAppLoginName(),hibernateDAO,loginResult);
             }
             
             hibernateDAO.commit();

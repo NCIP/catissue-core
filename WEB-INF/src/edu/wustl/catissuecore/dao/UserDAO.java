@@ -24,6 +24,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
@@ -39,18 +40,50 @@ public class UserDAO
 	private static final Logger LOGGER = Logger.getCommonLogger(UserDAO.class);
 	public Long getUserIDFromLoginName(HibernateDAO hibernateDao,String loginName,String activityStatus) throws DAOException, BizLogicException 
 	{
-
+		Long userId = null;
 		Map<String, NamedQueryParam> params = new HashMap<String, NamedQueryParam>();
 		params.put("0", new NamedQueryParam(DBTypes.STRING, loginName));
 		params.put("1", new NamedQueryParam(DBTypes.STRING, activityStatus));
 		List<Long> userIds = hibernateDao.executeNamedQuery("getUserIdFromLoginName", params);
 		if(userIds == null || userIds.isEmpty())
 		{
-			LOGGER.error("Invalid user details.");
+			//Will modify this after FC
+			String sql = "select identifier from catissue_user u join csm_migrate_user mu "
+					+ " on u.login_Name = mu.login_Name where mu.WUSTLKEY = '"+loginName+"' and u.activity_status='"+Constants.ACTIVITY_STATUS_LOCKED+"'";
+			JDBCDAO dao = null;
+			try {
+				//revisit
+			dao = AppUtility.openJDBCSession();
+			List ids = new ArrayList();
+			ids = dao.executeQuery(sql);
+			if(ids != null && !ids.isEmpty()){
+				List res = (List)ids.get(0);
+				userId = Long.valueOf(res.get(0).toString());
+			}
+			
+			}
+			catch (ApplicationException e) {
+				LOGGER.error("Invalid user details.");
 			ErrorKey errorKey = ErrorKey.getErrorKey("errors.invalid");
 			throw new BizLogicException(errorKey,null, "User");
+			}finally{
+				try {
+					AppUtility.closeJDBCSession(dao);
+				}
+				catch (ApplicationException e) {
+					LOGGER.error("Invalid user details.");
+					ErrorKey errorKey = ErrorKey.getErrorKey("errors.invalid");
+					throw new BizLogicException(errorKey,null, "User");
+				}
+			}
+//			LOGGER.error("Invalid user details.");
+//			ErrorKey errorKey = ErrorKey.getErrorKey("errors.invalid");
+//			throw new BizLogicException(errorKey,null, "User");
 		}
-		return userIds.get(0);
+		else{
+			userId = userIds.get(0);
+		}
+		return userId;
 	}
 	
 	public List<Long> getAssociatedSiteIds(HibernateDAO hibernateDAO, Long userId) throws DAOException
