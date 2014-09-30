@@ -463,10 +463,10 @@ public class SpecimenBizLogic
 						.getSpecimenEventCollection(), sessionDataBean.getUserId(), specimen);
 			}
 		}
-		else
-		{
-			specimen.setSpecimenEventCollection(this.populateDeriveSpecimenEventCollection(parentSpecimen, specimen));
-		}
+//		else
+//		{
+//			specimen.setSpecimenEventCollection(this.populateDeriveSpecimenEventCollection(parentSpecimen, specimen));
+//		}
 	}
 
 	/**
@@ -475,33 +475,33 @@ public class SpecimenBizLogic
 	 * @param deriveSpecimen Derived Specimen
 	 * @return Set<SpecimenEventParameters>
 	 */
-	private Set<SpecimenEventParameters> populateDeriveSpecimenEventCollection(Specimen parentSpecimen,
-			Specimen deriveSpecimen)
-	{
-		final Set<SpecimenEventParameters> deriveEventCollection = new HashSet<SpecimenEventParameters>();
-		final Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
-				.getSpecimenEventCollection();
-		SpecimenEventParameters deriveSpecimenEventParameters = null;
-		if (parentSpecimeneventCollection != null)
-		{
-			for (final SpecimenEventParameters specimenEventParameters : parentSpecimeneventCollection)
-			{
-				try
-				{
-					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters.clone();
-				}
-				catch (CloneNotSupportedException e)
-				{
-					LOGGER.error(e);
-					throw new CatissueException(SpecimenErrorCodeEnum.INTERNAL_SERVER_ERROR.getCode());
-				}
-				deriveSpecimenEventParameters.setId(null);
-				deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
-				deriveEventCollection.add(deriveSpecimenEventParameters);
-			}
-		}
-		return deriveEventCollection;
-	}
+//	private Set<SpecimenEventParameters> populateDeriveSpecimenEventCollection(Specimen parentSpecimen,
+//			Specimen deriveSpecimen)
+//	{
+//		final Set<SpecimenEventParameters> deriveEventCollection = new HashSet<SpecimenEventParameters>();
+//		final Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
+//				.getSpecimenEventCollection();
+//		SpecimenEventParameters deriveSpecimenEventParameters = null;
+//		if (parentSpecimeneventCollection != null)
+//		{
+//			for (final SpecimenEventParameters specimenEventParameters : parentSpecimeneventCollection)
+//			{
+//				try
+//				{
+//					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters.clone();
+//				}
+//				catch (CloneNotSupportedException e)
+//				{
+//					LOGGER.error(e);
+//					throw new CatissueException(SpecimenErrorCodeEnum.INTERNAL_SERVER_ERROR.getCode());
+//				}
+//				deriveSpecimenEventParameters.setId(null);
+//				deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
+//				deriveEventCollection.add(deriveSpecimenEventParameters);
+//			}
+//		}
+//		return deriveEventCollection;
+//	}
 
 	/**
 	 * Validates the specimen DTO from UI.
