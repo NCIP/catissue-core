@@ -213,6 +213,10 @@ openspecimen.ui.fancy.UserField = function(params) {
   this.validate = function() {
     return this.validator.validate();
   };
+
+  this.getPrintEl = function() {
+    return edu.common.de.Utility.getPrintEl(this);
+  };
 };
 
 edu.common.de.FieldManager.getInstance()
