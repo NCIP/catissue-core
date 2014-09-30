@@ -2108,7 +2108,7 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
             baseTableName="catissue_spec_tag_items" baseColumnNames="OBJ_ID" referencedTableName="catissue_specimen"
             referencedColumnNames="IDENTIFIER" />
     </changeSet>
-	<changeSet  author="Mosin" id="Updating SQ metadata" failOnError="true">
+	<changeSet  author="Mosin" id="Updating SQ metadata" failOnError="false">
 		<sql>delete from CATISSUE_QUERY_TABLE_DATA where table_id = 9</sql>
 		<sql>update CATISSUE_INTERFACE_COLUMN_DATA set table_id =10 where table_id = 9</sql>
 		<sql>delete from CATISSUE_TABLE_RELATION where parent_table_id = 10 and child_table_id = 9</sql>

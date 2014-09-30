@@ -20,7 +20,7 @@
 			<column name="CONSENT_DOCUMENT_NAME" type="${text.type}(255)" />
 		</addColumn>
 	</changeSet>
-	<changeSet id="2" author="catissue" runOnChange="true">
+	<changeSet id="2" author="catissue" failOnError="false">
 		<createTable tableName="CATISSUE_STOR_CONT_UTILIZATION">
 			<column name="STORAGE_CONTAINER_ID" type="${int.type}">
 				<constraints nullable="false" />
