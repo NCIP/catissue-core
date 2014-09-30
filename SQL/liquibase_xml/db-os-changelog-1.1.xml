@@ -23,4 +23,10 @@
   <changeSet id="unwanted events param table" author="vpawar" failOnError="true">
     <dropTable cascadeConstraints="true" tableName="catissue_event_param"/>
   </changeSet>
+  
+  <changeSet id="updating simple query metada for SCG" author="nmarwaha" failOnError="true">
+    <sql>
+      insert into catissue_related_tables_map values (3,35,'IDENTIFIER','SITE_ID')
+    </sql>
+  </changeSet>
 </databaseChangeLog>
