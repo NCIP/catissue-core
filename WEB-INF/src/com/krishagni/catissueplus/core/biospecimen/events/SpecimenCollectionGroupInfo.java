@@ -209,8 +209,8 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 		if (receivedDate != null && scgInfo.getReceivedDate() != null) {
 			return receivedDate.compareTo(scgInfo.getReceivedDate());
 		}
-		else {
-			return registrationDate.compareTo(scgInfo.getRegistrationDate());
+		else { 
+			return eventId.compareTo(scgInfo.getEventId());
 		}
 	}
 }
