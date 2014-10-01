@@ -181,10 +181,10 @@ public class MigrateSpecimenEvents {
 		addEventIdColumn(table);
 
 		boolean endOfRecords = false;
-		int startRow = 0;
+		int startRow = 1;
 		while (!endOfRecords) {
 			logger.info("Migrating records chunk (" + 
-					startRow + ", " + (startRow + INSERT_BATCH_SIZE) + 
+					startRow + ", " + (startRow + INSERT_BATCH_SIZE - 1) + 
 					") from " + table);
 
 			Transaction txn = TransactionManager.getInstance().newTxn();
@@ -201,13 +201,13 @@ public class MigrateSpecimenEvents {
 			TransactionManager.getInstance().commit(txn);
 		}
 
-		logger.info("Migrated " + startRow + " records");
+		logger.info("Migrated " + (startRow - 1) + " records");
 	}
 
 	private String getIdSpecimenIdSql(String table, int startRow, int numRows) {
 		String sql = "";
 		if (DbUtil.isOracle()) {
-			sql = String.format(GET_ID_AND_SPECIMEN_ID_ORA_SQL, table, startRow	+ numRows, startRow);
+			sql = String.format(GET_ID_AND_SPECIMEN_ID_ORA_SQL, table, startRow + numRows - 1, startRow);
 		} else {
 			sql = String.format(GET_ID_AND_SPECIMEN_ID_MY_SQL, table, startRow,	numRows);
 		}
@@ -295,9 +295,13 @@ public class MigrateSpecimenEvents {
 			+ "  catissue_form_context_seq.nextval, ?, ?, ?, ?, ?)";
 
 	private static final String GET_ID_AND_SPECIMEN_ID_ORA_SQL = 
-			"select * from (select tab.*, rownum rnum from (%s) tab where rownum < %d) where rnum >= %d";
+			"select * from " +
+			"  (select tab.*, rownum rnum from " +
+			"    (select identifier, specimen_id from %s order by identifier) tab " +
+			"   where rownum <= %d) where rnum >= %d";
 
-	private static final String GET_ID_AND_SPECIMEN_ID_MY_SQL = "select identifier, specimen_id from %s limit %d, %d";
+	private static final String GET_ID_AND_SPECIMEN_ID_MY_SQL = 
+			"select identifier, specimen_id from %s order by identifier limit %d, %d";
 
 	private static final String INSERT_FORM_RECORD_MY_SQL = "insert into catissue_form_record_entry( "
 			+ " identifier, form_ctxt_id, object_id, record_id, updated_by, update_time, activity_status) "
@@ -318,10 +322,10 @@ public class MigrateSpecimenEvents {
 
 	private static final String RENAME_EVENT_ID_TO_ID_MY_SQL = "alter table %s change event_id identifier BIGINT";
 
-	private static final String ADD_PK_SQL = "alter table %s add constraint %s_pk primary key(identifier)";
+	private static final String ADD_PK_SQL = "alter table %s add primary key(identifier)";
 
 	private static final String GET_FORM_ID_BY_NAME_SQL = "select identifier from dyextn_containers where name = ?";
 
 	private static final String DELETE_EVENT_ENTRIES_SQL = 
-			"delete s from catissue_specimen_event_param s inner join %s ce on ce.identifier = s.identifier";
+			"delete from catissue_specimen_event_param where identifier in (select identifier from %s)";
 }
