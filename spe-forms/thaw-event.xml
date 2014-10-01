@@ -31,6 +31,7 @@
         <udn>comments</udn>
         <caption>Comments</caption>
         <column>COMMENTS</column>
+        <height>2</height>
       </textArea>
     </row>
   </view>
