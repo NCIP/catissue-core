@@ -23,6 +23,8 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 
 	private Date receivedDate;
 
+	private Date collectionDate;
+
 	private Date registrationDate;
 
 	private int parentOffset;
@@ -95,6 +97,14 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 
 	public void setReceivedDate(Date receivedDate) {
 		this.receivedDate = receivedDate;
+	}
+
+	public Date getCollectionDate() {
+		return collectionDate;
+	}
+
+	public void setCollectionDate(Date collectionDate) {
+		this.collectionDate = collectionDate;
 	}
 
 	public Date getRegistrationDate() {
@@ -174,6 +184,7 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 		scgInfo.setId(specimenCollectionGroup.getId());
 		scgInfo.setName(specimenCollectionGroup.getName());
 		scgInfo.setReceivedDate(specimenCollectionGroup.getReceivedTimestamp());
+		scgInfo.setCollectionDate(specimenCollectionGroup.getCollectionTimestamp());
 		scgInfo.setRegistrationDate(registrationDate);
 		scgInfo.setCollectionPointLabel(event.getCollectionPointLabel());
 		scgInfo.setEventPoint(event.getStudyCalendarEventPoint());
@@ -209,7 +220,7 @@ public class SpecimenCollectionGroupInfo implements Comparable<SpecimenCollectio
 		if (receivedDate != null && scgInfo.getReceivedDate() != null) {
 			return receivedDate.compareTo(scgInfo.getReceivedDate());
 		}
-		else { 
+		else {
 			return eventId.compareTo(scgInfo.getEventId());
 		}
 	}
