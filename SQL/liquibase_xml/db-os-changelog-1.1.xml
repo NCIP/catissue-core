@@ -29,4 +29,11 @@
       insert into catissue_related_tables_map values (3,35,'IDENTIFIER','SITE_ID')
     </sql>
   </changeSet>
+  
+  <changeSet author="Mosin" id="set default value to " failOnError="false">
+	<addDefaultValue columnName="ACTIVITY_STATUS" defaultValue="Active" tableName="CATISSUE_BIOHAZARD"/>
+ 	<sql>
+		update CATISSUE_BIOHAZARD set ACTIVITY_STATUS = 'Active';
+    </sql>
+  </changeSet> 
 </databaseChangeLog>
