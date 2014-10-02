@@ -993,7 +993,9 @@
                   </div>
                 </div>
                 <div style="display: table-cell; vertical-align: middle; width: 83.33%; padding-left: 15px; padding-right: 15px;" ng-if="!filter.expr"> 
-                  <i>{{filter.form.caption}} &gt;&gt; {{filter.field.caption}} </i>
+                  <i>{{filter.form.caption}} &gt;&gt; </i>
+                  <i ng-if="filter.field.extensionForm">{{filter.field.extensionForm}} &gt;&gt; </i>
+                  <i>{{filter.field.caption}} </i>
                   <b> {{filter.op.desc}} </b> 
 
                   <i ng-if="filter.op.name == 'between'">{{filter.value[0]}} and {{filter.value[1]}}</i>
@@ -1070,7 +1072,11 @@
             <tbody>
               <tr ng-repeat="filter in queryData.filters | filter: {'parameterized': true}">
                 <td class="col-xs-5">
-                  <i ng-if="!filter.expr">{{filter.form.caption}} &gt;&gt; {{filter.field.caption}}</i>
+                  <span ng-if="!filter.expr">
+                    <i>{{filter.form.caption}} &gt;&gt; </i>
+                    <i ng-if="filter.field.extensionForm">{{filter.field.extensionForm}} &gt;&gt; </i> 
+                    <i>{{filter.field.caption}}</i>
+                  </span>
                   <i ng-if="filter.expr">{{filter.desc}}</i>
                 </td>
                 <td class="col-xs-3" ng-if="!filter.expr">
