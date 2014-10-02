@@ -30,7 +30,7 @@
     </sql>
   </changeSet>
   
-  <changeSet  author="Mosin" failOnError="false">
+  <changeSet  author="Mosin"  id="set default value to Active" failOnError="false">
     <addDefaultValue columnName="ACTIVITY_STATUS" defaultValue="Active" tableName="CATISSUE_BIOHAZARD"/>
     <sql>
       update CATISSUE_BIOHAZARD set ACTIVITY_STATUS = 'Active';
