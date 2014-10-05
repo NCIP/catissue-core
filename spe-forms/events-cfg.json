@@ -1,5 +1,40 @@
 [
   {
+    "name"   : "SpecimenCollectionEvent",
+    "form"   : "spe-forms/collection-event.xml",
+    "dbTable": "CATISSUE_COLL_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenDisposalEvent",
+    "form"   : "spe-forms/disposal-event.xml",
+    "dbTable": "CATISSUE_DISPOSAL_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenDistributedEvent",
+    "form"   : "spe-forms/distributed-event.xml",
+    "dbTable": "CATISSUE_DISTRI_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenReceivedEvent",
+    "form"   : "spe-forms/received-event.xml",
+    "dbTable": "CATISSUE_RECEIVED_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenTransferEvent",
+    "form"   : "spe-forms/transfer-event.xml",
+    "dbTable": "CATISSUE_TRANSFER_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
     "name"   : "SpecimenCellReviewEvent",
     "form"   : "spe-forms/cell-review-event.xml",
     "dbTable": "CATISSUE_CELL_SPE_REVIEW_PARAM"

@@ -30,10 +30,30 @@
     </sql>
   </changeSet>
   
-  <changeSet  author="Mosin"  id="set default value to Active" failOnError="false">
+  <changeSet id="set default value to Active" author="Mosin" failOnError="false">
     <addDefaultValue columnName="ACTIVITY_STATUS" defaultValue="Active" tableName="CATISSUE_BIOHAZARD"/>
     <sql>
       update CATISSUE_BIOHAZARD set ACTIVITY_STATUS = 'Active';
     </sql>
   </changeSet> 
+
+  <changeSet id="create triggers for static specimen de events" author="vpawar" runOnChange="true" failOnError="true" dbms="mysql">
+    <sqlFile 
+      encoding="utf8"
+      path="static_specimen_events_de_records_mysql.sql"
+      relativeToChangelogFile="true"
+      endDelimiter="//"
+      splitStatements="true"
+      stripComments="true"/>
+  </changeSet>
+
+  <changeSet id="create triggers for static specimen de events" author="vpawar" runOnChange="true" failOnError="true" dbms="oracle">
+    <sqlFile 
+      encoding="utf8"
+      path="static_specimen_events_de_records_oracle.sql"
+      relativeToChangelogFile="true"
+      endDelimiter="//"
+      splitStatements="true"
+      stripComments="true"/>
+  </changeSet>
 </databaseChangeLog>

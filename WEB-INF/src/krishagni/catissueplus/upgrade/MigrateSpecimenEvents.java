@@ -34,7 +34,16 @@ import edu.common.dynamicextensions.ndao.TransactionManager.Transaction;
 public class MigrateSpecimenEvents {
 	private static final Logger logger = Logger.getLogger(MigrateSpecimenEvents.class);
 
-	private static final int INSERT_BATCH_SIZE = 500;
+	private static final int INSERT_BATCH_SIZE = 5000;
+	
+	private String eventName;
+	
+	private String eventFormDef;
+	
+	private String eventTable;
+	
+	private boolean systemEvent;
+	
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) 
@@ -61,18 +70,10 @@ public class MigrateSpecimenEvents {
 				new ObjectMapper().readValue(new File(args[1]), List.class);
 		
 		for (Map<String, String> eventInfo : eventsInfo) {
-			String eventName = eventInfo.get("name");
-			String formDef = eventInfo.get("form");
-			String eventTable = eventInfo.get("dbTable");
-
 			try {
-				long time = System.currentTimeMillis();
-				logger.info("Migrating : " + eventName);
-				MigrateSpecimenEvents migrator = new MigrateSpecimenEvents();
-				migrator.migrate(ctx, eventName, formDef, eventTable);
-				logger.info("Migrated : " + eventName + " in " + (System.currentTimeMillis() - time) + " ms");
+				MigrateSpecimenEvents migrator = new MigrateSpecimenEvents(eventInfo);
+				migrator.migrate(ctx);				
 			} catch (Exception e) {
-				logger.error("Migration of " + eventName + " failed.", e);
 			}
 		}
 	}
@@ -103,34 +104,63 @@ public class MigrateSpecimenEvents {
 		};
 	}
 
-	public void migrate(UserContext ctx, String formName, String formFile, String dbTable) 
+	public MigrateSpecimenEvents(Map<String, String> eventInfo) {
+		eventName = eventInfo.get("name");
+		eventFormDef = eventInfo.get("form");
+		eventTable = eventInfo.get("dbTable");
+		
+		String systemEventStr = eventInfo.get("systemEvent");
+		if (systemEventStr != null && systemEventStr.trim().equalsIgnoreCase("true")) {
+			systemEvent = true;
+		}
+	}
+	
+	public void migrate(UserContext ctx) 
 	throws Exception {
 		try {
-			if (doesFormExists(formName)) {
-				logger.info("Specimen event " + formName + " already exists. "
+			long t1 = System.currentTimeMillis();
+			logger.info("Migrating : " + eventName);
+
+			if (doesFormExists(eventName)) {
+				logger.info("Specimen event " + eventName + " already exists. "
 						+ "Stopping migration for this event");
 				return;
 			}
 
-			logger.info("Deleting old event entries from parent table");
-			deleteParentEventEntries(dbTable);
-
-			logger.info("Creating form for event: " + formName);
-			Long formId = createForm(ctx, formFile);
-			if (formId == null) {
-				logger.error("Error creating form for event: " + formName);
-				throw new RuntimeException("Error creating form for event: " + formName);
+			if (!systemEvent) {
+				logger.info("Deleting old event entries from parent table");
+				deleteParentEventEntries(eventTable);				
 			}
 
-			logger.info("Migrating records for event: " + formName);
-			migrateRecords(ctx, formId, dbTable);
+			logger.info("Creating form for event: " + eventName);
+			Long formId = createForm(ctx, eventFormDef);
+			if (formId == null) {
+				logger.error("Error creating form for event: " + eventName);
+				throw new RuntimeException("Error creating form for event: " + eventName);
+			}
 
-			logger.info("Adjusting identifier column for event: " + formName);
-			adjustEventIdColumn(dbTable);
+			logger.info("Migrating records for event: " + eventName);
+			migrateRecords(ctx, formId, eventTable);
+
+			logger.info("Adjusting identifier column for event: " + eventName);
+			
+			long t2 = System.currentTimeMillis();
+			if (!systemEvent) {
+				adjustEventIdColumn(eventTable);
+			} else {
+				adjustSystemEventIdColumn(eventTable);
+			}
+			logger.info("Adjusting identifier column for event: " + eventName + " took " + timeDiff(t2));
+			
+			logger.info("Migrated : " + eventName + " in " + timeDiff(t1) + " ms");
 		} catch (Exception e) {
-			logger.error("Error migrating data for event: " + formName);
+			logger.error("Error migrating data for event: " + eventName, e);
 			throw e;
 		}
+	}
+	
+	private long timeDiff(long time) {
+		return System.currentTimeMillis() - time;
 	}
 
 	private boolean doesFormExists(String formName) {
@@ -181,17 +211,17 @@ public class MigrateSpecimenEvents {
 		addEventIdColumn(table);
 
 		boolean endOfRecords = false;
-		int startRow = 1;
+		int startRow = 0;
 		while (!endOfRecords) {
 			logger.info("Migrating records chunk (" + 
-					startRow + ", " + (startRow + INSERT_BATCH_SIZE - 1) + 
+					startRow + ", " + (startRow + INSERT_BATCH_SIZE) + 
 					") from " + table);
 
 			Transaction txn = TransactionManager.getInstance().newTxn();
 			JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
 
 			Map<Long, Long> recordsMap = getIdSpecimenIdRecs(table, startRow, INSERT_BATCH_SIZE, jdbcDao); // id -> specimen id
-			if (recordsMap.isEmpty() || recordsMap.size() < INSERT_BATCH_SIZE) {
+			if (recordsMap.isEmpty()) {
 				endOfRecords = true;
 			}
 
@@ -201,13 +231,13 @@ public class MigrateSpecimenEvents {
 			TransactionManager.getInstance().commit(txn);
 		}
 
-		logger.info("Migrated " + (startRow - 1) + " records");
+		logger.info("Migrated " + (startRow) + " records");
 	}
 
 	private String getIdSpecimenIdSql(String table, int startRow, int numRows) {
 		String sql = "";
 		if (DbUtil.isOracle()) {
-			sql = String.format(GET_ID_AND_SPECIMEN_ID_ORA_SQL, table, startRow + numRows - 1, startRow);
+			sql = String.format(GET_ID_AND_SPECIMEN_ID_ORA_SQL, table, startRow + numRows, startRow);
 		} else {
 			sql = String.format(GET_ID_AND_SPECIMEN_ID_MY_SQL, table, startRow,	numRows);
 		}
@@ -261,14 +291,30 @@ public class MigrateSpecimenEvents {
 	}
 
 	private void addEventIdColumn(String table) {
-		String sql = String.format(ADD_EVENT_ID_SQL, table,	ColumnTypeHelper.getIntegerColType());
+		String sql = String.format(ADD_COL_SQL, table,	"EVENT_ID", ColumnTypeHelper.getIntegerColType());
 		JdbcDaoFactory.getJdbcDao().executeDDL(sql);
 	}
 
 	private void adjustEventIdColumn(String table) {
 		dropIdentifierColumn(table);
 		renameEventIdColumn(table);
-		addPkColumn(table);
+		addPkColumn(table, "identifier");
+	}
+	
+	private void adjustSystemEventIdColumn(String table) {
+		String addSpeColumnSql = String.format(ADD_COL_SQL, table, "SPE_ID", ColumnTypeHelper.getIntegerColType());
+		JdbcDaoFactory.getJdbcDao().executeDDL(addSpeColumnSql);
+		
+		String updateSpeIdSql = String.format(UPDATE_SPE_ID_SQL, table);
+		JdbcDaoFactory.getJdbcDao().executeUpdate(updateSpeIdSql, null);
+		
+		dropIdentifierColumn(table);
+		renameEventIdColumn(table);
+		addPkColumn(table, "SPE_ID");
+		
+		String indexName = table.substring(0, 22).toLowerCase() + "_id_idx";
+		String createIdxSql = String.format(CREATE_IDX_SQL, indexName, table, "IDENTIFIER");
+		JdbcDaoFactory.getJdbcDao().executeDDL(createIdxSql);								
 	}
 
 	private void dropIdentifierColumn(String table) {
@@ -280,8 +326,8 @@ public class MigrateSpecimenEvents {
 		JdbcDaoFactory.getJdbcDao().executeDDL(String.format(sql, table));
 	}
 
-	private void addPkColumn(String table) {
-		String sql = String.format(ADD_PK_SQL, table, table);
+	private void addPkColumn(String table, String column) {
+		String sql = String.format(ADD_PK_SQL, table, column);
 		JdbcDaoFactory.getJdbcDao().executeDDL(sql);
 	}
 
@@ -298,7 +344,7 @@ public class MigrateSpecimenEvents {
 			"select * from " +
 			"  (select tab.*, rownum rnum from " +
 			"    (select identifier, specimen_id from %s order by identifier) tab " +
-			"   where rownum <= %d) where rnum >= %d";
+			"   where rownum <= %d) where rnum > %d";
 
 	private static final String GET_ID_AND_SPECIMEN_ID_MY_SQL = 
 			"select identifier, specimen_id from %s order by identifier limit %d, %d";
@@ -312,20 +358,26 @@ public class MigrateSpecimenEvents {
 			+ "values ("
 			+ " catissue_form_rec_entry_seq.nextval, ?, ?, ?, ?, ?, ?)";
 
-	private static final String ADD_EVENT_ID_SQL = "alter table %s add event_id %s";
+	private static final String ADD_COL_SQL = "alter table %s add %s %s";
 
 	private static final String UPDATE_EVENT_ID_SQL = "update %s set event_id = ? where identifier = ?";
 
 	private static final String DROP_ID_COL_SQL = "alter table %s drop column identifier";
 
-	private static final String RENAME_EVENT_ID_TO_ID_ORA_SQL = "alter table %s rename column event_id to identifier";
+	private static final String RENAME_EVENT_ID_TO_ID_ORA_SQL = "alter table %s rename column EVENT_ID to IDENTIFIER";
 
-	private static final String RENAME_EVENT_ID_TO_ID_MY_SQL = "alter table %s change event_id identifier BIGINT";
+	private static final String RENAME_EVENT_ID_TO_ID_MY_SQL = "alter table %s change EVENT_ID IDENTIFIER BIGINT";
 
-	private static final String ADD_PK_SQL = "alter table %s add primary key(identifier)";
+	private static final String ADD_PK_SQL = "alter table %s add primary key(%s)";
 
 	private static final String GET_FORM_ID_BY_NAME_SQL = "select identifier from dyextn_containers where name = ?";
 
 	private static final String DELETE_EVENT_ENTRIES_SQL = 
 			"delete from catissue_specimen_event_param where identifier in (select identifier from %s)";
+	
+	private static final String UPDATE_SPE_ID_SQL = 
+			"update %s set spe_id = identifier";
+	
+	private static final String CREATE_IDX_SQL =
+			"create index %s on %s(%s)";
 }

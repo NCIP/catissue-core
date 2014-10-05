@@ -1,0 +1,48 @@
+<form>
+  <view>
+    <name>SpecimenDistributedEvent</name>
+    <caption>Distributed Event</caption>
+    <table>CATISSUE_DISTRI_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <numberField>
+        <name>quantity</name>
+        <udn>quantity</udn>
+        <caption>Quantity</caption>
+        <column>DISTRIBUTED_QUANTITY</column>
+        <mandatory>true</mandatory>
+        <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

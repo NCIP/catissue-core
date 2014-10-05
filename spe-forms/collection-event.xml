@@ -1,0 +1,72 @@
+<form>
+  <view>
+    <name>SpecimenCollectionEvent</name>
+    <caption>Collection Event</caption>
+    <table>CATISSUE_COLL_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <dropDown>
+        <name>procedure</name>
+        <udn>procedure</udn>
+        <caption>Collection Procedure</caption>
+        <column>COLLECTION_PROCEDURE</column>
+        <options>
+          <sql>
+            select 'Use CP Defaults' as value from dual
+            union
+            select value from catissue_permissible_value where public_id = '2003996' order by value
+          </sql>
+        </options>
+        <mandatory>true</mandatory>
+      </dropDown>
+    </row>
+
+    <row>
+      <dropDown>
+        <name>container</name>
+        <udn>container</udn>
+        <caption>Collection Container</caption>
+        <column>CONTAINER</column>
+        <options>
+          <sql>
+            select 'Use CP Defaults' as value from dual
+            union
+            select value from catissue_permissible_value where public_id = '2003997' order by value
+          </sql>
+        </options>
+        <mandatory>true</mandatory>
+      </dropDown>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>User</caption>
+        <column>USER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>Date and Time</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+      </datePicker>
+    </row>
+
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>Comments</caption>
+        <column>COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>
