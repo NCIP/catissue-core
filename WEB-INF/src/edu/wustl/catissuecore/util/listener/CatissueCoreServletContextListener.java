@@ -31,6 +31,8 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
 import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
+import com.krishagni.catissueplus.core.notification.schedular.ExternalAppFailNotificationSchedular;
+import com.krishagni.catissueplus.core.notification.schedular.ExternalAppNotificationSchedular;
 
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.nutility.BOUtil;
@@ -148,6 +150,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			
             QuartzSchedulerJobUtil.scheduleQuartzSchedulerJob();
             //QueryDataExportService.initialize();
+            
+            ExternalAppNotificationSchedular.scheduleExtAppNotifSchedulerJob();
+            ExternalAppFailNotificationSchedular.scheduleExtAppFailNotifSchedulerJob();
 
 			CSDProperties.getInstance().setUserContextProvider(new CatissueUserContextProviderImpl());
 			

@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.VelocityClassLoaderManager;
 import com.krishagni.catissueplus.core.common.email.EmailClient;
 import com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus;
+import com.krishagni.catissueplus.core.notification.events.FailedNotificationReportEvent;
 import com.krishagni.catissueplus.core.notification.schedular.ExternalAppNotificationSchedular;
 import com.krishagni.catissueplus.core.notification.services.EmailNotificationService;
 
@@ -50,7 +51,7 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
 
 	@Override
 	@PlusTransactional
-	public void sendFailedNotificationReport() {
+	public FailedNotificationReportEvent sendFailedNotificationReport() {
 		try {
 			List<ExtAppNotificationStatus> expiredNotifications = daoFactory.getExternalAppNotificationDao()
 					.getExpiredNotificationObjects();
@@ -63,10 +64,12 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
 						new String[]{adminEmailAddress}, null, null, attachements, contextMap, null);
 				reportFile.delete();
 			}
+			return FailedNotificationReportEvent.ok();
 
 		}
 		catch (Exception ex) {
 			LOGGER.error(ERROR_WHILE_SENDING_MAIL, ex);
+			return FailedNotificationReportEvent.serverError(ex.getMessage(), ex);
 		}
 	}
 

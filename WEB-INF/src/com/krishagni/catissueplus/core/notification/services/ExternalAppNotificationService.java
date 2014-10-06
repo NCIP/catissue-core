@@ -1,10 +1,11 @@
 
 package com.krishagni.catissueplus.core.notification.services;
 
-import java.util.List;
-
 import com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus;
+import com.krishagni.catissueplus.core.notification.events.FailedNotificationObjectsEvent;
 import com.krishagni.catissueplus.core.notification.events.NotificationDetails;
+import com.krishagni.catissueplus.core.notification.events.NotificationObjectsEvent;
+import com.krishagni.catissueplus.core.notification.events.NotifiedExternalAppEvent;
 
 public interface ExternalAppNotificationService {
 
@@ -14,12 +15,12 @@ public interface ExternalAppNotificationService {
 
 	//TODO: below methods should be private and wont be exposed in interface 
 
-	public void notifyExternalApps(NotificationDetails notifEvent);
+	public NotifiedExternalAppEvent notifyExternalApps(NotificationDetails notifEvent);
 
-	public List<NotificationDetails> getNotificationObjects();
+	public NotificationObjectsEvent getNotificationObjects();
 
-	public List<ExtAppNotificationStatus> getFailedNotificationObjects();
+	public FailedNotificationObjectsEvent getFailedNotificationObjects();
 
-	public void notifyFailedNotifications(ExtAppNotificationStatus extAppNotificationStatus);
+	public NotifiedExternalAppEvent notifyFailedNotifications(ExtAppNotificationStatus extAppNotificationStatus);
 
 }
