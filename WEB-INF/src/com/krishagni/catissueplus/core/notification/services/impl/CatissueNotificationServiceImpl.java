@@ -66,6 +66,7 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 			cprDetail.setRegistrationDate(event.getRegistrationDetails().getEnrollmentDate());
 			cprDetail.setCpId(cpId);
 			createRegEvent.setCprDetail(cprDetail);
+			createRegEvent.setSessionDataBean(event.getSessionDataBean());
 
 			return cprSvc.createRegistration(createRegEvent);
 		}

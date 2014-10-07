@@ -16,8 +16,11 @@ import com.krishagni.catissueplus.core.common.util.ObjectType;
 import com.krishagni.catissueplus.core.common.util.Operation;
 import com.krishagni.catissueplus.core.notification.domain.ExtAppNotificationStatus;
 import com.krishagni.catissueplus.core.notification.domain.ExternalApplication;
+import com.krishagni.catissueplus.core.notification.events.FailedNotificationObjectsEvent;
 import com.krishagni.catissueplus.core.notification.events.NotificationDetails;
+import com.krishagni.catissueplus.core.notification.events.NotificationObjectsEvent;
 import com.krishagni.catissueplus.core.notification.events.NotificationResponse;
+import com.krishagni.catissueplus.core.notification.events.NotifiedExternalAppEvent;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppNotificationService;
 import com.krishagni.catissueplus.core.notification.services.ExternalAppService;
 import com.krishagni.catissueplus.core.notification.util.ExternalApplications;
@@ -52,7 +55,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		ExternalAppNotificationService extAppNotifSvc = (ExternalAppNotificationService) caTissueContext
 				.getBean("extAppNotificationService");
-		List<NotificationDetails> notificationObjects = extAppNotifSvc.getNotificationObjects();
+		List<NotificationDetails> notificationObjects = extAppNotifSvc.getNotificationObjects().getNotificationObjects();
 		for (NotificationDetails notifEvent : notificationObjects) {
 			extAppNotifSvc.notifyExternalApps(notifEvent);
 		}
@@ -63,7 +66,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 		ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 		ExternalAppNotificationService extAppNotifSvc = (ExternalAppNotificationService) caTissueContext
 				.getBean("extAppNotificationService");
-		List<ExtAppNotificationStatus> failNotificationObjects = extAppNotifSvc.getFailedNotificationObjects();
+		List<ExtAppNotificationStatus> failNotificationObjects = extAppNotifSvc.getFailedNotificationObjects().getFailedNotificationObjects();
 		for (ExtAppNotificationStatus failNotification : failNotificationObjects) {
 			extAppNotifSvc.notifyFailedNotifications(failNotification);
 		}
@@ -71,7 +74,7 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 
 	@Override
 	@PlusTransactional
-	public void notifyFailedNotifications(ExtAppNotificationStatus failNotification) {
+	public NotifiedExternalAppEvent notifyFailedNotifications(ExtAppNotificationStatus failNotification) {
 		try {
 			NotificationDetails notifDetail = new NotificationDetails();
 			notifDetail.setAuditId(failNotification.getAudit().getId());
@@ -85,16 +88,18 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 			failNotification.setComments(notificationResponse.getMessage());
 			failNotification.setUpdatedDate(new Date());
 			daoFactory.getExternalAppNotificationDao().saveOrUpdate(failNotification);
+
+			return NotifiedExternalAppEvent.ok();
 		}
 		catch (Exception ex) {
-
 			LOGGER.error(NOTIFICATION_EXCEPTION + failNotification.getAudit().getObjectType() + ex.getMessage());
+			return NotifiedExternalAppEvent.serverError(ex.getMessage(), ex);
 		}
 	}
 
 	@Override
 	@PlusTransactional
-	public void notifyExternalApps(NotificationDetails notifDetail) {
+	public NotifiedExternalAppEvent notifyExternalApps(NotificationDetails notifDetail) {
 		try {
 			ApplicationContext caTissueContext = OpenSpecimenAppCtxProvider.getAppCtx();
 			ExternalApplications extAppsBean = (ExternalApplications) caTissueContext.getBean("externalApplications");
@@ -112,12 +117,12 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 				status.setUpdatedDate(new Date());
 				daoFactory.getExternalAppNotificationDao().saveOrUpdate(status);
 			}
-
+			return NotifiedExternalAppEvent.ok();
 		}
 		catch (Exception ex) {
 			LOGGER.error(NOTIFICATION_EXCEPTION + notifDetail.getObjectType() + ex.getMessage());
+			return NotifiedExternalAppEvent.serverError(ex.getMessage(), ex);
 		}
-
 	}
 
 	private NotificationResponse notify(NotificationDetails notifDetail, ExternalApplication externalApplication)
@@ -145,14 +150,16 @@ public class ExternalAppNotificationServiceImpl implements ExternalAppNotificati
 
 	@Override
 	@PlusTransactional
-	public List<NotificationDetails> getNotificationObjects() {
-		return daoFactory.getExternalAppNotificationDao().getNotificationObjects();
+	public NotificationObjectsEvent getNotificationObjects() {
+		List<NotificationDetails> notificationObjects = daoFactory.getExternalAppNotificationDao().getNotificationObjects();
+		return NotificationObjectsEvent.ok(notificationObjects);
 	}
 
 	@Override
 	@PlusTransactional
-	public List<ExtAppNotificationStatus> getFailedNotificationObjects() {
-		return daoFactory.getExternalAppNotificationDao().getFailedNotificationObjects();
+	public FailedNotificationObjectsEvent getFailedNotificationObjects() {
+		List<ExtAppNotificationStatus> failedNotificationObjects = daoFactory.getExternalAppNotificationDao().getFailedNotificationObjects();
+		return FailedNotificationObjectsEvent.ok(failedNotificationObjects);
 	}
 
 	private Object getDomainObject(ObjectType objectType, Long objectId) {
