@@ -5671,6 +5671,18 @@
           </java>
         </target>
 
+        <target name="prepare_nciv20_for_os_upgrade">
+          <echo message="Preparing caTissue NCI v2.0 database for OS upgrade."/>
+          <updateDatabase 
+            changeLogFile="${base.dir}/SQL/liquibase_xml/db-nciv2-changelog.xml" 
+            driver="${final.database.driver}" 
+            url="${final.database.url}" 
+            username="${database.username}" 
+            password="${database.password}" 
+            dropFirst="false" 
+            classpathref="liquibaseClasspath" />
+	</target>
+
 	<target name="post_upgrade">
           <antcall target="aq_form"/>
 	</target>

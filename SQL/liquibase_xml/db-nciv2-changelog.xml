@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext 
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <property name="int.type" value="bigint(20)" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <changeSet id="add primary key to users table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_USER" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to abstract specimen table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_ABSTRACT_SPECIMEN" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to collection protocol table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_COLLECTION_PROTOCOL" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to CSM users table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CSM_USER" columnNames="USER_ID"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimens table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_SPECIMEN" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimens char table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_SPECIMEN_CHAR" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimens req table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_CP_REQ_SPECIMEN" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimens event table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_SPECIMEN_EVENT_PARAM" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimens collection event table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_COLL_EVENT_PARAM" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimens received event table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_RECEIVED_EVENT_PARAM" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to SCG table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_SPECIMEN_COLL_GROUP" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to abstract SCG table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_ABS_SPECI_COLL_GROUP" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to CPE table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_COLL_PROT_EVENT" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to distribution protocol table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_DISTRIBUTION_PROTOCOL" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to specimen protocol table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_SPECIMEN_PROTOCOL" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to site table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_SITE" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to address table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_ADDRESS" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add primary key to institute table" author="vpawar" failOnError="false">
+    <addPrimaryKey tableName="CATISSUE_INSTITUTE" columnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet id="add SCG_ID column to deidentified reports table" author="vpawar" failOnError="false">
+    <addColumn tableName="CATISSUE_DEIDENTIFIED_REPORT">
+      <column name="SCG_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="add SCG_ID column to identified reports table" author="vpawar" failOnError="false">
+    <addColumn tableName="CATISSUE_IDENTIFIED_REPORT">
+      <column name="SCG_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>
