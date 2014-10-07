@@ -5153,39 +5153,56 @@
 			<echo message="Inserting dashboard queries finished..." />
 			<echo message="---------------------------------------" />
 		</target>
+
 	<target name="migrate_forms">
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<antcall target="setupClassExecutionEnvironment"/>
-		<java classname="krishagni.catissueplus.upgrade.MigrateForms" fork="true" maxmemory="1536M">
-			<arg value="${username}"/>
-			<classpath>
-				<pathelement location="${temp.dir.DE}" />
-				<pathelement location="${temp.dir.DE}/old" />
-				<fileset dir="WEB-INF/lib">
-					<include name="*" />
-				</fileset>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-			</classpath>
-		</java>
-	</target>
+          <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+          <antcall target="setupClassExecutionEnvironment"/>
+          <java classname="krishagni.catissueplus.upgrade.MigrateForms" fork="true" maxmemory="1536M">
+            <arg value="${username}"/>
+            <classpath>
+              <pathelement location="${temp.dir.DE}" />
+              <pathelement location="${temp.dir.DE}/old" />
+              <fileset dir="WEB-INF/lib">
+                <include name="*" />
+              </fileset>
+              <pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+            </classpath>
+          </java>
+        </target>
 
         <target name="import_queries">
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<antcall target="setupClassExecutionEnvironment"/>
-		<java classname="krishagni.catissueplus.upgrade.ImportQueries" fork="true" maxmemory="1024M">
-			<arg value="${username}"/>
-			<arg value="aq-queries"/>
-			<arg value="Default Queries"/>
-			<classpath>
-				<pathelement location="${temp.dir.DE}" />
-				<pathelement location="${temp.dir.DE}/old" />
-				<fileset dir="WEB-INF/lib">
-					<include name="*" />
-				</fileset>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-			</classpath>
-		</java>
+          <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+          <antcall target="setupClassExecutionEnvironment"/>
+          <java classname="krishagni.catissueplus.upgrade.ImportQueries" fork="true" maxmemory="1024M">
+            <arg value="${username}"/>
+            <arg value="aq-queries"/>
+            <arg value="Default Queries"/>
+            <classpath>
+              <pathelement location="${temp.dir.DE}" />
+              <pathelement location="${temp.dir.DE}/old" />
+              <fileset dir="WEB-INF/lib">
+                <include name="*" />
+              </fileset>
+              <pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+            </classpath>
+          </java>
         </target>
+
+	<target name="migrate_spp">
+          <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+          <antcall target="setupClassExecutionEnvironment"/>
+          <java classname="krishagni.catissueplus.upgrade.MigrateSppForms" fork="true" maxmemory="1536M">
+            <arg value="${username}"/>
+            <classpath>
+              <pathelement location="${temp.dir.DE}" />
+              <pathelement location="${temp.dir.DE}/old" />
+              <fileset dir="WEB-INF/lib">
+                <include name="*" />
+              </fileset>
+              <pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+            </classpath>
+          </java>
+	</target>
 
         <target name="migrate_specimen_events">
           <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
