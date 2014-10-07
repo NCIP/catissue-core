@@ -106,6 +106,7 @@ import edu.common.dynamicextensions.nutility.IoUtil;
 import edu.common.dynamicextensions.processor.ProcessorConstants;
 import edu.common.dynamicextensions.util.DataValueMapUtility;
 import edu.common.dynamicextensions.util.DynamicExtensionsUtility;
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.dao.HibernateDAO;
 
@@ -163,11 +164,10 @@ public class MigrateForm {
 			@Override
 			public Map<String, Long>  extract(ResultSet rs) throws SQLException {
 				Map<String, Long> staticEntityMap = new HashMap<String, Long>();
-				while(rs.next()) {
-					
-					staticEntityMap.put(getEntityType(rs.getString("name")), rs.getLong("identifier"));
-					
+				while(rs.next()) {					
+					staticEntityMap.put(getEntityType(rs.getString("name")), rs.getLong("identifier"));					
 				}
+				
 				return staticEntityMap;
 			}
 		});
@@ -187,6 +187,8 @@ public class MigrateForm {
 			entityType = "Specimen";
 		} else if (entityType.equals("edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry")) {
 			entityType = "SpecimenCollectionGroup";
+		} else if (entityType.equals("edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry")) {
+			entityType = "SpecimenEvent";
 		}
 		
 		return entityType;
@@ -963,23 +965,24 @@ public class MigrateForm {
 	}
 
 	private void attachForm(JdbcDao jdbcDao, List<FormInfo> formInfos) throws Exception {
-
-		String entityType = null;
-	
+		attachForm(jdbcDao, formMigrationCtxt.newForm.getId(), formInfos);
+	}
+		
+	protected void attachForm(JdbcDao jdbcDao, Long newFormId, List<FormInfo> formInfos)
+	throws Exception {
 		for (FormInfo info : formInfos) {
-			entityType = info.getEntityType();
+			String entityType = info.getEntityType();
 			Long cpId = info.getCpId();
 			
 			FormDetailsDTO dto = new FormDetailsDTO();
-			dto.setContainerId(formMigrationCtxt.newForm.getId());
+			dto.setContainerId(newFormId);
 			dto.setEntityType(entityType);
 			dto.setCpId(cpId);
 
 			insertForm(dto);
 			
 			info.setNewFormCtxId(dto.getId());
-			migrateFormData(info);
-			
+			migrateFormData(info);			
 		}
 	}	
 	
@@ -989,11 +992,11 @@ public class MigrateForm {
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////
 	public class RecordObject {
-		private Long recordId;
-		private Long objectId;
+		Long recordId;
+		Long objectId;
 	}
 	
-	private void migrateFormData(FormInfo info) 
+	protected void migrateFormData(FormInfo info) 
 	throws Exception{
 		long t1 = System.currentTimeMillis();
 			
@@ -1122,35 +1125,43 @@ public class MigrateForm {
 		return key;
 	}
 
-	private List<RecordObject> getRecordAndObjectIds(Long oldCtxId) {										
-		JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
-		
-		List<Object> params = new ArrayList<Object>();
-		params.add(oldCtxId);
-		List<RecordObject> recAndObjectIds = jdbcDao.getResultSet(GET_RECORD_AND_OBJECT_IDS_SQL, params, new ResultExtractor<List<RecordObject>>() {
-			@Override
-			public List<RecordObject>  extract(ResultSet rs) throws SQLException {
-				List<RecordObject> recAndObjectIds = new ArrayList<RecordObject>();
-				
-				while (rs.next()) {
-					RecordObject recObj = new RecordObject();
-					recObj.recordId = rs.getLong(1);
-					Long scgId = rs.getLong(2), pId = rs.getLong(3), spId = rs.getLong(4);
-					
-					recObj.objectId = scgId != null && scgId > 0 ? scgId	// Scg id
-										: pId != null && pId > 0 ? pId 		// Participant id
-										: spId != null && spId > 0 ? spId	// Specimen id 
-										: -1;								// No object id is associated
-						
-					if (recObj.objectId == -1) {
-						continue;
+	protected List<RecordObject> getRecordAndObjectIds(Long oldCtxId) {										
+		return JdbcDaoFactory.getJdbcDao().getResultSet(
+				GET_RECORD_AND_OBJECT_IDS_SQL, 
+				Collections.singletonList(oldCtxId), 
+				new ResultExtractor<List<RecordObject>>() {
+					@Override
+					public List<RecordObject> extract(ResultSet rs)
+					throws SQLException {
+						List<RecordObject> recAndObjectIds = new ArrayList<RecordObject>();
+
+						while (rs.next()) {
+							RecordObject recObj = new RecordObject();
+							recObj.recordId = rs.getLong(1);
+							Long scgId = rs.getLong(2), 
+								pId    = rs.getLong(3), 
+								spId   = rs.getLong(4);
+
+							if (scgId != null && scgId > 0) { // SCG
+								recObj.objectId = scgId;
+							} else if (pId != null && pId > 0) { // Participant
+								recObj.objectId = pId;
+							} else if (spId != null && spId > 0) { // Specimen
+								recObj.objectId = spId;
+							} else {
+								recObj.objectId = -1L;
+							}
+
+							if (recObj.objectId == -1) {
+								continue;
+							}
+
+							recAndObjectIds.add(recObj);
+						}
+
+						return recAndObjectIds;
 					}
-					recAndObjectIds.add(recObj);
-				}
-				return recAndObjectIds;
-			}			
 		});
-		return recAndObjectIds;
 	}
 	
 	public void insertForm(FormDetailsDTO form) {
@@ -1341,32 +1352,33 @@ public class MigrateForm {
 	
 	private static final String GET_STATIC_ENTITY_ID_NAME_SQL = 
 		"select " +
-				"	dam.identifier, dam.name " +
-				"from " +
-				"	dyextn_abstract_metadata dam " + 
-				"	inner join dyextn_entity de on de.identifier = dam.identifier "+ 
-				"where dam.name in " +
-				" ( " +
-				"	'edu.wustl.catissuecore.domain.Participant', " +
-				"	'edu.wustl.catissuecore.domain.Specimen', " +
-				"	'edu.wustl.catissuecore.domain.SpecimenCollectionGroup', " +
-				"	'edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry', " +
-				"	'edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry', " +
-				"	'edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry'" +
-				" ) ";
+		"	dam.identifier, dam.name " +
+		"from " +
+		"	dyextn_abstract_metadata dam " + 
+		"	inner join dyextn_entity de on de.identifier = dam.identifier "+ 
+		"where dam.name in " +
+		" ( " +
+		"	'edu.wustl.catissuecore.domain.Participant', " +
+		"	'edu.wustl.catissuecore.domain.Specimen', " +
+		"	'edu.wustl.catissuecore.domain.SpecimenCollectionGroup', " +
+		"	'edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry', " +
+		"	'edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry', " +
+		"	'edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry', " +
+		"	'edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry'" +
+		" ) ";
 	
 	private static final String GET_RECORD_AND_OBJECT_IDS_SQL =
 		"select " +
-				"	re.identifier, specimen_collection_group_id, cpr.identifier, specimen_id " +
-				"from dyextn_abstract_form_context afc " +
-				"	inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = afc.identifier " +
-				"	left join ( " +
-				"	catissue_participant_rec_ntry p_re " + 
-				"	inner join catissue_coll_prot_reg cpr on cpr.participant_id = p_re.participant_id " +
-				"	) on p_re.identifier = re.identifier " +
-				"	left join catissue_scg_rec_ntry scg_re on scg_re.identifier = re.identifier " + 
-				"	left join catissue_specimen_rec_ntry sp_re on sp_re.identifier = re.identifier " +
-				"where afc.identifier = ?";
+		"	re.identifier, specimen_collection_group_id, cpr.identifier, specimen_id " +
+		"from dyextn_abstract_form_context afc " +
+		"	inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = afc.identifier " +
+		"	left join ( " +
+		"	  catissue_participant_rec_ntry p_re " + 
+		"	  inner join catissue_coll_prot_reg cpr on cpr.participant_id = p_re.participant_id " +
+		"	) on p_re.identifier = re.identifier " +
+		"	left join catissue_scg_rec_ntry scg_re on scg_re.identifier = re.identifier " + 
+		"	left join catissue_specimen_rec_ntry sp_re on sp_re.identifier = re.identifier " +
+		"where afc.identifier = ?";
 
 	
 	private static final String GET_FILE_CONTENT = 

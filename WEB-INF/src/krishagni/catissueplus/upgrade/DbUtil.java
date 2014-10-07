@@ -1,6 +1,5 @@
 package krishagni.catissueplus.upgrade;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -10,11 +9,15 @@ import org.apache.commons.dbcp.BasicDataSource;
 public class DbUtil {
 	public static String dbType = null;
 	
-	public static synchronized DataSource getDataSource() throws Exception{
+	public static synchronized DataSource getDataSource() 
+	throws Exception {
+		Properties prop = UpgradeUtil.loadInstallProps();
+		return getDataSource(prop);
+	}
+	
+	public static synchronized DataSource getDataSource(Properties prop) 
+	throws Exception{
 		BasicDataSource ds = new BasicDataSource();
-		
-		Properties prop = new Properties();
-		prop.load(new FileInputStream("caTissueInstall.properties"));
 		
 		String driverClass = null;
 		String databaseType = null;

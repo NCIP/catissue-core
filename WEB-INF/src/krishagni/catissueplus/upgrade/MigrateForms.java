@@ -1,7 +1,5 @@
 package krishagni.catissueplus.upgrade;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,46 +11,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import edu.wustl.common.util.global.*;
+import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
-import edu.common.dynamicextensions.ndao.TransactionManager;
-import edu.common.dynamicextensions.nutility.DEApp;
 
 
 public class MigrateForms {
 	
 	private static final Logger logger = Logger.getLogger(MigrateForms.class);
-
-	private static final String GET_CONTAINER_IDS_SQL = 
-		"select " +
-		"	c.identifier, cfc.collection_protocol_id, map.static_entity_id , fc.identifier, count(pre.identifier), " +
-		"	count(scg_re.identifier), count(sp_re.identifier) " +
-		"from dyextn_container c " + 
-		"	inner join dyextn_abstract_form_context fc on fc.container_id = c.identifier " +
-		"	inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = fc.identifier " + 
-		"	left join catissue_participant_rec_ntry pre on pre.identifier = re.identifier " +
-		"	left join catissue_scg_rec_ntry scg_re on scg_re.identifier = re.identifier " + 
-		"	left join catissue_specimen_rec_ntry sp_re on sp_re.identifier = re.identifier " +
-		"	left join catissue_cp_studyformcontext cfc on cfc.study_form_context_id = fc.identifier " + 
-		"	left join dyextn_entity_map map on map.container_id = c.identifier " +
-		"group by c.identifier, cfc.collection_protocol_id, fc.identifier, map.static_entity_id" ;
-	
-	
-	private static final String GET_USER_ID = 
-			"select" +
-			"	identifier " +
-			"from catissue_user " +
-			"	where login_name = ? AND activity_status = 'Active'";
-	
-	private static final String FORMS_COUNT_SQL = 
-			"select count(identifier) from dyextn_containers";
 	
 	public static void main(String[] args) 
 	throws Exception {
@@ -62,18 +33,18 @@ public class MigrateForms {
 			return;
 		}
 		
-		setupDataSource();
+		Properties prop = UpgradeUtil.loadInstallProps();
+		DataSource ds = DbUtil.getDataSource(prop);
+		UpgradeUtil.initializeDE(prop, ds);
 		
-		if (!areLegacyFormsMigrated()) {
-			System.out.println("Forms have been migrated to V4 (OS v1.0), skipping form migration!");
+		if (areLegacyFormsMigrated()) {
 			logger.info("Forms have been already migrated to V4 (OS v1.0), skipping form migration!");
 			return;
 		}
-		System.out.println("Starting migration of forms.");
-		UserContext usrCtx = getUserContext(args[0]);
 		
+		UserContext usrCtx = UpgradeUtil.getUserCtx(args[0]); 
 		if (usrCtx == null) {
-			logger.info("FATAL! There was no active user found! Aborting form migration! Please provide a active username in " + 
+			logger.error("No active user found! Aborting form migration! Please provide an active username in " + 
 					" parameter e.g. -Dusername=\"admin@admin.com\"");
 			return;
 		} 
@@ -83,15 +54,12 @@ public class MigrateForms {
 		Thread.sleep(5000);
 		Map<Long, List<FormInfo>> containerInfo  = getAllFormsInfo();	
 				
-		logger.info("Old container ids : " + containerInfo);
-		
 		migrateContainers(containerInfo, usrCtx);
 
 		Date endTime = Calendar.getInstance().getTime();
 		logger.info("Migration end time: " + endTime);
 		logger.info("Total time for migration: " + 
-				(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");
-		
+				(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");		
 	}
 
 	private static void migrateContainers(Map<Long, List<FormInfo>> containerInfo, UserContext usrCtx) {
@@ -112,105 +80,20 @@ public class MigrateForms {
 		}
 		logger.info("finished migrating " + count + " forms");
 	}
-
-	private static void setupDataSource() throws Exception{
-		BasicDataSource ds = new BasicDataSource();
-		
-		Properties prop = new Properties();
-		prop.load(new FileInputStream("caTissueInstall.properties"));
-		
-		String driverClass = null;
-		String databaseType = prop.getProperty("database.type");
-		String separator = null;
-		
-		if (databaseType.equals("mysql")) {
-			driverClass = "com.mysql.jdbc.Driver";
-			databaseType = databaseType + "://";
-			separator = "/";
-		} else if (databaseType.equals("oracle")) {
-			driverClass = "oracle.jdbc.driver.OracleDriver";
-			databaseType = databaseType + ":thin:@";
-			separator = ":";
-		}
-		
-		
-		ds.setDriverClassName(driverClass);
-		ds.setUsername(prop.getProperty("database.username"));
-		ds.setPassword(prop.getProperty("database.password"));
-		
-		String jdbcUrl = "jdbc:" + databaseType +  prop.getProperty("database.host") 
-							+ ":" + prop.getProperty("database.port") + separator + prop.getProperty("database.name");
-		ds.setUrl(jdbcUrl);
-		
-		String dir = new StringBuilder(prop.getProperty("jboss.home.dir")).append(File.separator)
-				.append("os-data").append(File.separator)
-				.append("de-file-data").append(File.separator)
-				.toString();
-		File dirFile = new File(dir);
-		
-		if (!dirFile.exists()) {
-			if (!dirFile.mkdirs()) {
-				throw new RuntimeException("Error couldn't create directory for storing de file data");
-			}
-		}
-					
-		DEApp.init(ds, dir, null, null);
-	}
 	
 	private static boolean areLegacyFormsMigrated() { 
 		JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
 		
-		Integer formsCount = jdbcDao.getResultSet(FORMS_COUNT_SQL, new ArrayList<Object>(),new ResultExtractor<Integer>() {
-			@Override
-			public Integer extract(ResultSet rs) throws SQLException {
-				return rs.next() ? rs.getInt(1) : null;
-			}			
-		});
+		Integer formsCount = jdbcDao.getResultSet(FORMS_COUNT_SQL, null,
+				new ResultExtractor<Integer>() {
+					@Override
+					public Integer extract(ResultSet rs) throws SQLException {
+						return rs.next() ? rs.getInt(1) : null;
+					}
+				});
 		
-		System.out.println("Found " + formsCount + " existing forms in DYEXTN_CONTAINERS!");
 		logger.info("Found " + formsCount + " existing forms in DYEXTN_CONTAINERS!");
-		
-		if (formsCount > 0) { 
-			return false;
-		} else { 
-			return true;
-		}
-	}
-
-	private static UserContext getUserContext(final String username) {
-		JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
-		List<Object> params = new ArrayList<Object>();
-		params.add(username);
-		
-		Long userId = jdbcDao.getResultSet(GET_USER_ID, params, new ResultExtractor<Long>() {
-			@Override
-			public Long extract(ResultSet rs) throws SQLException {
-				return rs.next() ? rs.getLong(1) : null;
-			}			
-		});
-		
-		if (userId == null) {
-			logger.error("No active user with login name: " + username);
-			return null;
-		}
-			
-		final Long finalUserId = userId;
-		return new UserContext() {				
-			@Override
-			public String getUserName() {
-				return username;
-			}
-			
-			@Override
-			public Long getUserId() {
-				return finalUserId;
-			}
-			
-			@Override
-			public String getIpAddress() {
-				return null;
-			}
-		};
+		return formsCount > 0;
 	}
 	
 	private static Map<Long, List<FormInfo>> getAllFormsInfo() {
@@ -235,14 +118,7 @@ public class MigrateForms {
 			// rs(2)               : Collection protocol id
 			// rs(3)               : Static entity id (Exists only for default forms)
 			// rs(4)               : Old form fontext id
-			// rs(5), rs(6), rs(7) : Determines to which entity type formContext belongs
-			
-			List<FormInfo> formInfos = containerInfo.get(rs.getLong(1));
-			if (formInfos == null) {
-				formInfos = new ArrayList<FormInfo>();
-				containerInfo.put(rs.getLong(1), formInfos);
-			} 
-			
+			// rs(5), rs(6), rs(7) : Determines to which entity type formContext belongs						
 			FormInfo info = new FormInfo();
 			info.setCpId((Long)rs.getLong(2) > 0 ? rs.getLong(2) : -1);
 			info.setDefaultForm((Long)rs.getLong(3) > 0 ? true : false);
@@ -250,9 +126,36 @@ public class MigrateForms {
 			info.setParticipant((Long)rs.getLong(5) > 0 ? true : false);
 			info.setScg((Long)rs.getLong(6) > 0 ? true : false);
 			info.setSpecimen((Long)rs.getLong(7) > 0 ? true : false);
-
+			
+			if (info.getEntityType() == null) {
+				continue;
+			}
+			
+			List<FormInfo> formInfos = containerInfo.get(rs.getLong(1));
+			if (formInfos == null) {
+				formInfos = new ArrayList<FormInfo>();
+				containerInfo.put(rs.getLong(1), formInfos);
+			} 
+			
 			formInfos.add(info);
 		}
 		return containerInfo;
 	}
+	
+	private static final String GET_CONTAINER_IDS_SQL = 
+			"select " +
+			"	c.identifier, cfc.collection_protocol_id, map.static_entity_id , fc.identifier, count(pre.identifier), " +
+			"	count(scg_re.identifier), count(sp_re.identifier) " +
+			"from dyextn_container c " + 
+			"	inner join dyextn_abstract_form_context fc on fc.container_id = c.identifier " +
+			"	inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = fc.identifier " + 
+			"	left join catissue_participant_rec_ntry pre on pre.identifier = re.identifier " +
+			"	left join catissue_scg_rec_ntry scg_re on scg_re.identifier = re.identifier " + 
+			"	left join catissue_specimen_rec_ntry sp_re on sp_re.identifier = re.identifier " +
+			"	left join catissue_cp_studyformcontext cfc on cfc.study_form_context_id = fc.identifier " + 
+			"	left join dyextn_entity_map map on map.container_id = c.identifier " +
+			"group by c.identifier, cfc.collection_protocol_id, fc.identifier, map.static_entity_id" ;
+	
+	private static final String FORMS_COUNT_SQL = 
+				"select count(identifier) from dyextn_containers";	
 }

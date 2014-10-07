@@ -8,6 +8,8 @@ public class FormInfo {
 	
 	private boolean specimen;
 	
+	private boolean specimenEvent;
+	
 	private Long cpId;
 	
 	private Long newFormCtxId;
@@ -48,6 +50,14 @@ public class FormInfo {
 		this.specimen = specimen;
 	}
 
+	public boolean isSpecimenEvent() {
+		return specimenEvent;
+	}
+
+	public void setSpecimenEvent(boolean specimenEvent) {
+		this.specimenEvent = specimenEvent;
+	}
+
 	public Long getCpId() {
 		return cpId != null ? cpId : -1;
 	}
@@ -73,6 +83,8 @@ public class FormInfo {
 			entityType = "Specimen";
 		} else if (scg) {
 			entityType = "SpecimenCollectionGroup";
+		} else if (specimenEvent) {
+			entityType = "SpecimenEvent";
 		}
 		
 		return entityType;
