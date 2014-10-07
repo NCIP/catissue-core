@@ -288,8 +288,7 @@ function loadSpecimenTabbarForEdit()
 	specimenTabbar.setSkinColors("#FFFFFF", "#FFFFFF");
 	
 	specimenTabbar.addTab("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
-	specimenTabbar.addTab("specimenEventsTab",'<span style="font-size:13px"> Standard Events </span>',"150px");
-        specimenTabbar.addTab("deSpecimenEventsTab",'<span style="font-size:13px"> DE Events </span>',"150px");
+        specimenTabbar.addTab("deSpecimenEventsTab",'<span style="font-size:13px"> Specimen Events </span>',"150px");
 
 	if(reportId != null && reportId != -1  && reportId != -2)
 	{
@@ -313,7 +312,6 @@ function loadSpecimenTabbarForEdit()
 	}
 
 	specimenTabbar.setContentHref("annotationTab", showAnnotationTab);
-	specimenTabbar.setContentHref("specimenEventsTab", showSpecimenEventsTab);
 	specimenTabbar.setContentHref("deSpecimenEventsTab", showDESpecimenEventsTab);
 
 /*if(hasConsents){	
