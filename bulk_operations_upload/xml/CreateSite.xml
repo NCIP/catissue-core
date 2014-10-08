@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata templateName="createSite" batchSize="5">
+
+<BulkOperationClass className="edu.wustl.catissuecore.domain.Site" >		
+
+	<referenceAssociation  className="edu.wustl.catissuecore.domain.Address"        roleName="address">
+
+		<attribute name="city" csvColumnName="City"   />
+		<attribute name="country" csvColumnName="Country"   />
+		<attribute name="faxNumber" csvColumnName="Fax Number"   />
+		<attribute name="phoneNumber" csvColumnName="Phone Number"   />
+		<attribute name="state" csvColumnName="State"   />
+		<attribute name="street" csvColumnName="Street"   />
+		<attribute name="zipCode" csvColumnName="Zip Code"   />
+	</referenceAssociation>
+	
+	<referenceAssociation  className="edu.wustl.catissuecore.domain.User"        roleName="coordinator">
+		<attribute name="loginName" csvColumnName="User login name"   />
+	</referenceAssociation>
+		
+		<attribute name="emailAddress" csvColumnName="Email Address"   />
+		<attribute name="name" csvColumnName="Name"   />
+		<attribute name="type" csvColumnName="Type"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+</BulkOperationClass>
+</BulkOperationMetadata>
+
+
+

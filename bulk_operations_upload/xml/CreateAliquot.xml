@@ -1,0 +1,33 @@
+<BulkOperationMetadata templateName="CreateAliquots" batchSize="5">
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Aliquot"
+		     
+		 >
+		<referenceAssociation
+					className="edu.wustl.catissuecore.domain.Specimen" 
+					roleName="specimen"  parentRoleName="specimen" >
+					<attribute name="label" csvColumnName="Parent Specimen Label"   />
+		</referenceAssociation>
+		 
+		<attribute name="count" csvColumnName="count"   />
+		<attribute name="quantityPerAliquot" csvColumnName="quantityPerAliquot"   />
+
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			    
+			cardinality="*" roleName="specimenPositionCollection" >
+				<attribute name="positionDimensionOne" csvColumnName="Position one"   />
+				<attribute name="positionDimensionTwo" csvColumnName="Position two"   />
+				<referenceAssociation
+					className="edu.wustl.catissuecore.domain.StorageContainer"
+					    
+					 roleName="storageContainer" >
+						<attribute name="name" csvColumnName="Container name"   />
+				</referenceAssociation>			
+		</containmentAssociation>
+
+		<attribute name="aliquotsInSameContainer" csvColumnName="aliquotsInSameContainer"   />
+
+	</BulkOperationClass>
+
+</BulkOperationMetadata>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="createSpunEventParameters" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpunEventParameters"
+		 
+		      >
+		<referenceAssociation
+			className="edu.wustl.catissuecore.domain.User"
+			 
+			  roleName="user"    >
+				<attribute name="loginName" csvColumnName="User Login Name"   />
+			<!-- <attribute name="id" csvColumnName="User Id"   />  -->
+		</referenceAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.Specimen"
+			 
+			  roleName="specimen"   parentRoleName="FluidSpecimenReviewEventParameters" >
+			<attribute name="label" csvColumnName="Specimen label"   />	
+		</containmentAssociation>
+		<attribute name="timestamp" csvColumnName="Date"   />
+		<attribute name="comment" csvColumnName="Comments"   />
+<attribute name="durationInMinutes" csvColumnName="Duration Min"   />
+<attribute name="gravityForce" csvColumnName="Gravity"   />				
+	</BulkOperationClass>
+</BulkOperationMetadata>

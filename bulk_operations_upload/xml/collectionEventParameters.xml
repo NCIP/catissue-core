@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="createCollectionEventParameters" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CollectionEventParameters">
+		<referenceAssociation
+			className="edu.wustl.catissuecore.domain.User"
+			 
+			  roleName="user"    >
+			
+			<attribute name="loginName" csvColumnName="UserLoginName"   />
+		</referenceAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.Specimen"
+			 
+			  roleName="specimen"   parentRoleName="FluidSpecimenReviewEventParameters" >
+			<attribute name="label" csvColumnName="Specimen label"   />	
+		</containmentAssociation>
+		<attribute name="comment" csvColumnName="Collected Comments"    />								
+		<attribute name="collectionProcedure" csvColumnName="Procedure"   />
+		<attribute name="container" csvColumnName="Container"   />
+		<attribute name="timestamp" csvColumnName="Collected Date"   />
+	</BulkOperationClass>
+</BulkOperationMetadata>

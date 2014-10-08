@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="CreateChildContainer" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageContainer"       >
+
+		<referenceAssociation className="edu.wustl.catissuecore.domain.StorageType"       roleName="storageType">
+			<attribute name="name" csvColumnName="Storage Type name"   />
+		</referenceAssociation>
+		
+		<referenceAssociation className="edu.wustl.catissuecore.domain.CollectionProtocol"   maxNoOfRecords="2"   cardinality="*" roleName="collectionProtocolCollection">
+			<attribute name="id" csvColumnName="CP id"   />
+		</referenceAssociation>
+        
+    	<containmentAssociation className="edu.wustl.catissuecore.domain.Capacity"       roleName="capacity">
+			<attribute name="oneDimensionCapacity" csvColumnName="Dimension one"   />
+			<attribute name="twoDimensionCapacity" csvColumnName="Dimension Two"   />
+		</containmentAssociation>
+
+		<referenceAssociation className="edu.wustl.catissuecore.domain.ContainerPosition"       roleName="locatedAtPosition">
+			<attribute name="positionDimensionOneString" csvColumnName="Location one"   />
+			<attribute name="positionDimensionTwoString" csvColumnName="Location two"   />
+
+			<referenceAssociation className="edu.wustl.catissuecore.domain.Container"       roleName="parentContainer">
+				<attribute name="name" csvColumnName="Parent Container Name"   />
+			</referenceAssociation>
+		</referenceAssociation>
+
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="full" csvColumnName="Full"   />
+		<attribute name="comment" csvColumnName="Comments"   />
+		<attribute name="name" csvColumnName="container name"   />
+		<attribute name="noOfContainers" csvColumnName="No Of Containers"   />
+		<attribute name="barcode" csvColumnName="Barcode"   />
+
+		<containmentAssociation className="java.lang.String"	  maxNoOfRecords="2"   cardinality="*" roleName="holdsSpecimenClassCollection">
+			<attribute name="holdsSpecimenClassCollection" csvColumnName="holdsSpecimenClass"    />
+		</containmentAssociation>
+
+		<containmentAssociation className="edu.wustl.catissuecore.domain.StorageType"   maxNoOfRecords="2"   cardinality="*" roleName="holdsStorageTypeCollection">
+			<attribute name="id" csvColumnName="holdsStorageType"   />
+		</containmentAssociation>
+
+	</BulkOperationClass>
+</BulkOperationMetadata>

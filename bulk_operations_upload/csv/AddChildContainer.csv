@@ -1,0 +1,2 @@
+Storage Type name,Barcode,container name,Activity Status,Full,Comments,Dimension one,Dimension Two,Parent Container Name,Location one,Location two,No Of Containers,holdsSpecimenClass#1,holdsSpecimenClass#2,holdsStorageType#1,holdsStorageType#2,CP id#1,CP id#2
+Box,boxbar1234,box1container,Active,FALSE,comments,10,5,Site A_Rack10x5_3,2,A,1,Fluid,Cell,,,1,

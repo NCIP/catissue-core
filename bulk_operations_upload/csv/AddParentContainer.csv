@@ -1,0 +1,2 @@
+Storage Type name,Site name,Barcode,container name,One Dimension,Two Dimension,Activity Status,Full,Comments,CP ID#1,CP ID#2,holdsSpecimenClass#1,holdsSpecimenClass#2,holdsStorageType#1,holdsStorageType#2
+box1,ATCC,box1BARCODE123,box1NAME,10,5,Active,FALSE,cOMMENTS,32,,Tissue,Fluid,7,9

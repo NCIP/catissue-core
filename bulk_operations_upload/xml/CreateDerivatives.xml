@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata templateName="createDerivatives" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
+		     
+		 >
+		<referenceAssociation
+					className="edu.wustl.catissuecore.domain.Specimen" 
+					roleName="parentSpecimen"  parentRoleName="specimen" >
+					<attribute name="label" csvColumnName="Parent Specimen Label"   />
+		</referenceAssociation>
+		
+			<containmentAssociation
+			className="edu.wustl.catissuecore.domain.ExternalIdentifier" cardinality="*"
+			      roleName="externalIdentifierCollection" parentRoleName="specimen">
+				<attribute name="name" csvColumnName="External ID Name"   />
+				<attribute name="value" csvColumnName="External ID Value"   />
+		</containmentAssociation>
+
+		
+		
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			  
+			 roleName="specimenPosition"   >
+				<attribute name="positionDimensionOne" csvColumnName="Position One"   />
+				<attribute name="positionDimensionTwo" csvColumnName="Position Two"   />
+				<referenceAssociation
+				className="edu.wustl.catissuecore.domain.StorageContainer"
+				  
+				 roleName="storageContainer"    >
+					<attribute name="name" csvColumnName="Container Name"   />
+				</referenceAssociation>			
+		</containmentAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
+			   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
+				<referenceAssociation
+				className="edu.wustl.catissuecore.domain.User"
+				      roleName="user">
+					<attribute name="loginName" csvColumnName="Collected User Login Name"   />
+				</referenceAssociation>
+				<attribute name="comment" csvColumnName="Collected Comments"    />								
+				<attribute name="collectionProcedure" csvColumnName="Procedure"   />
+				<attribute name="container" csvColumnName="Container"   />
+				<attribute name="timestamp" csvColumnName="Collected Date"   />
+		</containmentAssociation>
+		<containmentAssociation
+			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
+			   parentRoleName="specimen"  cardinality="*" roleName="specimenEventCollection">
+				<referenceAssociation
+				className="edu.wustl.catissuecore.domain.User"
+				      roleName="user">
+					<attribute name="loginName" csvColumnName="Received User Login Name"   />
+				</referenceAssociation>
+				<attribute name="comment" csvColumnName="Received Comments"   />								
+				<attribute name="receivedQuality" csvColumnName="Quality"   />				
+				<attribute name="timestamp" csvColumnName="Received Date"   />
+		</containmentAssociation>
+		
+		<attribute name="tissueSite" csvColumnName="Tissue Site"   />
+		<attribute name="tissueSide" csvColumnName="Tissue Side"   />
+		<attribute name="label" csvColumnName="Label"   />
+		<attribute name="barcode" csvColumnName="Barcode"   />
+		<attribute name="createdOn" csvColumnName="Created On"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="comment" csvColumnName="Comment"   />
+		<attribute name="isAvailable" csvColumnName="Is Available"   />
+		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
+		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
+
+		</attribute>
+		<attribute name="specimenType" csvColumnName="Type"   />
+		<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
+		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />
+		<attribute name="lineage" csvColumnName="Lineage"   />
+		<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
+		<attribute name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration"   />
+
+	</BulkOperationClass>
+</BulkOperationMetadata>
