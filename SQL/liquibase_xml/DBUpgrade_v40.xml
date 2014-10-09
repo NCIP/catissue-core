@@ -3813,5 +3813,5 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </addColumn>
   </changeSet>
 
-   
+     
 </databaseChangeLog>
