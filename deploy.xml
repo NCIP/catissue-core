@@ -1026,7 +1026,7 @@
         dropFirst="false" 
         classpathref="liquibaseClasspath" />
 
-      <ant target="migrate_specimen_events"/>
+      <antcall target="migrate_specimen_events"/>
     </target>
 
        <target name="upgrade_de_db">
