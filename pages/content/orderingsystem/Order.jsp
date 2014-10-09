@@ -258,7 +258,7 @@ function switchToOlderView()
 					</td>
 					<td width="10%" class="black_ar align_right_style"></td>
 					<td width="17%" class="black_ar align_right_style"></td>
-				<td width="29%" class="black_ar align_right_style"><html:link href="#" styleId="olderViewLink" styleClass="view"   onclick="switchToOlderView()">Switch To Older View</html:link>
+				<td width="29%" class="black_ar align_right_style">
 				</td>
 				</tr>
 
