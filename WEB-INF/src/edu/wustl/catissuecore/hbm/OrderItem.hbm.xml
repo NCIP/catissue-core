@@ -321,7 +321,10 @@
         -->
 
     </class>
-	<query name="getOrderItems">select specimen.label,specimen.specimenType,specimen.specimenClass,specimen.availableQuantity,specimenOrderItem.requestedQuantity,specimenOrderItem.status,specimenOrderItem.description,specimenOrderItem.id,specimen.id,specimenOrderItem.distribtedQuantity,storageContainer.name,specimenPosition.positionDimensionOneString,specimenPosition.positionDimensionTwoString from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem specimenOrderItem join specimenOrderItem.specimen specimen left join specimen.specimenPosition specimenPosition left join specimenPosition.storageContainer storageContainer where specimenOrderItem.orderDetails.id = ?
+	<!--  <query name="getOrderItems">select specimen.label,specimen.specimenType,specimen.specimenClass,specimen.availableQuantity,specimenOrderItem.requestedQuantity,specimenOrderItem.status,specimenOrderItem.description,specimenOrderItem.id,specimen.id,specimenOrderItem.distribtedQuantity,storageContainer.name,specimenPosition.positionDimensionOneString,specimenPosition.positionDimensionTwoString from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem specimenOrderItem join specimenOrderItem.specimen specimen left join specimen.specimenPosition specimenPosition left join specimenPosition.storageContainer storageContainer where specimenOrderItem.orderDetails.id = ?
+	</query>-->
+	
+	<query name="getOrderItems">from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem specimenOrderItem where specimenOrderItem.orderDetails.id = ?
 	</query>
 	<query name="updateOrderItemSQL">UPDATE edu.wustl.catissuecore.domain.OrderItem SET distribtedQuantity = ?,status = ?,description =? WHERE id = ?
 	</query>

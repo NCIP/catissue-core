@@ -5,6 +5,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" isELIgnored="false"%>
 <script src="jss/ajax.js"></script>	   
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.css"/>
+<link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxWindows/codebase/skins/dhtmlxwindows_dhx_skyblue.css"/>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.css">
@@ -13,10 +15,17 @@
 <link rel="STYLESHEET" type="text/css"	href="dhtmlxSuite_v35/dhtmlxToolbar/codebase/skins/dhtmlxtoolbar_dhx_blue.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlxSuite_v35/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css">
 <link rel="STYLESHEET" type="text/css" href="css/alretmessages.css">
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxcommon.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/dhtmlxtree.js"></script>
+	<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTree/codebase/ext/dhtmlxtree_dragin.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 <script src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
 <script src="dhtmlxSuite_v35/dhtmlxCombo/codebase/dhtmlxcombo.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxAccordion/codebase/dhtmlxcontainer.js"></script>
 <script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxTabbar/codebase/dhtmlxtabbar.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlxSuite_v35/dhtmlxWindows/codebase/dhtmlxcontainer.js"></script>
 <script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
 <script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="dhtmlxSuite_v35/dhtmlxDataView/codebase/connector/connector.js"></script>
@@ -406,7 +415,7 @@ function switchToOlderView()
  <tr>
           <td class="buttonbg" colspan="2">
 					<input type="button" class="blue_ar_b" value="Next >>" onclick="goToConsentTabFromNext()" accesskey="Enter">
-					<input type="button" class="blue_ar_b" value="Export Order" onclick="exportOrder('${requestScope.id}')" accesskey="Enter">
+					<input type="button" class="blue_ar_b" value="Export Order" onclick="defineView('${requestScope.id}')" accesskey="Enter">
 				
 					
 			</td>
@@ -427,6 +436,15 @@ function switchToOlderView()
     </td>
   </tr>
 </table>
+<div id="defineViewPop" style="display:none">
+	<div style="height:50px" class="black_ar_b">Please select the fields that you wish to export</div>
+	<!--div style="width:100%;height:200px;overflow:scroll;overflow-x:hidden;"-->
+				  <div id="treeBox"  style="width:100%;height:200px;"></div>
+	<!--/div-->
+	<div>
+		<input type='button' name='Export' onClick='exportReport()' value='Export' class="blue_ar_b"><input class="blue_ar_b" type='button'  value='Cancel' name='Cancel' onClick='closeTermWindow()'style='margin-left:6px'>
+	</div>
+</div>
    <!-- main table ends here -->
 </html:form>
 
@@ -434,6 +452,45 @@ function switchToOlderView()
 </body>
 
 <script>
+//alert("${requestScope.distriTree}");
+var tree;
+function initTree(){
+tree=new dhtmlXTreeObject("treeBox","100%","100%",0);
+			tree.setImagePath("dhtmlxSuite_v35/dhtmlxTree/codebase/imgs/");
+			tree.setSkin('dhx_skyblue');
+			tree.enableTreeImages(false);
+			tree.enableTreeLines(false);
+			tree.enableSmartXMLParsing(true);
+			
+			tree.attachEvent("onOpenEnd",tonclick);
+			tree.enableCheckBoxes(1);
+			tree.enableThreeStateCheckboxes(true); 
+			tree.loadXMLString("${requestScope.distriTree}");
+			document.getElementById('treeBox').style.overflowY ="scroll";
+			//<?xml version="1.0"?> 
+
+			//tree.setOnClickHandler(tonclick);
+			//tree.setOnOpenHandler(expand);
+}
+function tonclick(id)
+{
+	document.getElementById('treeBox').style.overflowY ="scroll";
+ };
+function expand(id,mode)
+	{
+			document.getElementById('treeBox').style.overflowY =
+   (document.getElementById('treeBox').offsetHeight > 399) ? 'auto' : 'hidden';
+		if(mode ==1 || mode==0)
+		{
+			return true;
+		}
+		
+		
+		return true;
+	}
+function closeTermWindow(){
+            aliquotNameSpace.dhxWins.window("containerPositionPopUp").close();
+        }
 function loadTab()
 {
 	tabbar = new dhtmlXTabBar("tabbar_div", "top");
@@ -549,9 +606,71 @@ function qtyChange(stage,rId,cInd,nValue,oValue)
 	else
 	return true;
 }
-function exportOrder(orderId){
-	var dwdIframe = document.getElementById("orderExportFrame");
-	dwdIframe.src = "ExportAction.do?type=exportOrder&orderId="+orderId;
+function exportReport(){
+var orderId = '${requestScope.id}';
+var chkdNodes = tree.getAllChecked();
+if(chkdNodes.length == 0){
+alert("Please select atleast one node to export");
+return;
 }
+var dwdIframe = document.getElementById("orderExportFrame");
+var itemsList = tree.getAllChecked();
+itemsList = itemsList.replace("scg,","");
+itemsList = itemsList.replace("specimen,","");
+itemsList = itemsList.replace("participant,","");
+itemsList = itemsList.replace("cpr,","");
+itemsList = itemsList.replace("protocol,","");
+dwdIframe.src = "ExportAction.do?type=exportOrder&orderId="+orderId+"&items="+itemsList;
+closeTermWindow();
+}
+</script>
+<script>
+var imgsrc="images/";
+    window.dhx_globalImgPath = "dhtmlxSuite_v35/dhtmlxWindows/codebase/imgs/";
+		var activityStatusCombo={};
+        var aliquotDateErr = false;
+        var aliquotGrid;
+        var aliquotPopUpParam = {};
+        var aliquotNameSpace = {};
+function defineView(orderId){
+            if(aliquotNameSpace.dhxWins == undefined){
+                aliquotNameSpace.dhxWins = new dhtmlXWindows();
+                aliquotNameSpace.dhxWins.setSkin("dhx_skyblue");
+                aliquotNameSpace.dhxWins.enableAutoViewport(true);
+            }
+        //    aliquotNameSpace.dhxWins.setImagePath("");
+            if(aliquotNameSpace.dhxWins.window("containerPositionPopUp")==null){
+                var w =500;
+                var h =360;
+                var x = (screen.width / 3) - (w / 2);
+                var y = 150;
+                aliquotNameSpace.dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+                //aliquotNameSpace.dhxWins.setPosition(x, y);
+                //aliquotNameSpace.dhxWins.window("containerPositionPopUp").center();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").allowResize();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").setModal(true);
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").setText("Define View");
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("park").hide();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").button("close").hide();
+                aliquotNameSpace.dhxWins.window("containerPositionPopUp").setIcon("images/terms-conditions.png", "images/terms-conditions.png");
+             
+			 if(document.getElementById("defineViewPop")==null){
+				  var div = document.createElement("div");
+            
+                div.id="defineViewPop";
+				div.innerHTML = windowDivStr;
+				  document.body.appendChild(div);
+              
+			 }else{
+				windowDivStr = document.getElementById("defineViewPop").innerHTML;
+			 }
+			 initTree();
+			 aliquotNameSpace.dhxWins.window("containerPositionPopUp").attachObject("defineViewPop");
+			 
+            }
+			  
+        }
+		var windowDivStr;
 </script>
 <!----------------------------------------------->	

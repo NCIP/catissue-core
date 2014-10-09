@@ -32,7 +32,12 @@
 "Exported On:","$exportedOn"
 "Exported By:","$exportedBy"
 "Order Items Detail:"
-"Specimen Label","Specimen Type","Specimen Class","Specimen Position","Available Quantity","Requested Quantity","Distributed Quantity","Status","Description"
+#set ($headerRow="")
+#foreach( $itemLabel in $exportedItems )
+    #set ($headerRow= "$headerRow , $itemLabel")
+#end
+$headerRow,"Requested Quantity","Distributed Quantity","Status","Description"
+#set ($resultRow="")
 #foreach( $gridData in $orderItemsDetail )
  #set ($description='')
  #if($gridData.description)
@@ -58,5 +63,102 @@
  #if($gridData.specimenContainerName && $positionDimensionTwo && $gridData.positionDimensionOne)
   #set ($specimenPosition = $specimenContainerName + "(" + $positionDimensionOne + "," + $positionDimensionTwo + ")")
  #end
-"${gridData.specLabel}","${gridData.specimenType}","${gridData.specimenClass}","${specimenPosition}","${gridData.availableQuantity}","${gridData.requestedQuantity}","${distributedQuantity}","${gridData.status}","${description}"
+ #set ($resultRow="")
+ #if($exportedItems.contains('Title'))
+   #set ($resultRow= "$resultRow , $gridData.title")
+ #end
+ #if($exportedItems.contains('Short Title'))
+   #set ($resultRow= "$resultRow , $gridData.shortTitle")
+ #end
+ #if($exportedItems.contains('First Name'))
+   #set ($resultRow= "$resultRow , $gridData.firstName")
+ #end
+ #if($exportedItems.contains('Middle Name'))
+   #set ($resultRow= "$resultRow , $gridData.middleName")
+ #end
+ #if($exportedItems.contains('Last Name'))
+   #set ($resultRow= "$resultRow , $gridData.lastName")
+ #end
+ #if($exportedItems.contains('SSN'))
+   #set ($resultRow= "$resultRow , $gridData.ssn")
+ #end
+ #if($exportedItems.contains('Gender'))
+   #set ($resultRow= "$resultRow , $gridData.gender")
+ #end
+ #if($exportedItems.contains('Race'))
+   #set ($resultRow= "$resultRow , $gridData.race")
+ #end
+ #if($exportedItems.contains('Ethnicity'))
+   #set ($resultRow= "$resultRow , $gridData.ethnicity")
+ #end
+ #if($exportedItems.contains('Birth Date'))
+   #set ($resultRow= "$resultRow , $gridData.birthDate")
+ #end
+ #if($exportedItems.contains('Vital Status'))
+   #set ($resultRow= "$resultRow , $gridData.vitalStatus")
+ #end
+ #if($exportedItems.contains('Death Date'))
+   #set ($resultRow= "$resultRow , $gridData.deathDate")
+ #end
+ #if($exportedItems.contains('Medical Record Number'))
+   #set ($resultRow= "$resultRow , $gridData.mrn")
+   #set ($resultRow= "$resultRow , $gridData.siteName")
+ #end
+ #if($exportedItems.contains('Registration Date'))
+   #set ($resultRow= "$resultRow , $gridData.registrationDate")
+ #end
+ #if($exportedItems.contains('PPI'))
+   #set ($resultRow= "$resultRow , $gridData.ppid")
+ #end
+ #if($exportedItems.contains('SCG Name'))
+   #set ($resultRow= "$resultRow , $gridData.scgName")
+ #end
+ #if($exportedItems.contains('Clinical Diagnosis'))
+   #set ($resultRow= "$resultRow , $gridData.clinicalDiagnosis")
+ #end
+ #if($exportedItems.contains('Clinical Status'))
+   #set ($resultRow= "$resultRow , $gridData.clinicalStatus")
+ #end
+ #if($exportedItems.contains('Collection Site'))
+   #set ($resultRow= "$resultRow , $gridData.collectionSite")
+ #end
+ #if($exportedItems.contains('Collection Event label'))
+   #set ($resultRow= "$resultRow , $gridData.cpeLabel")
+ #end
+ #if($exportedItems.contains('Study Calendar Event Point'))
+   #set ($resultRow= "$resultRow , $gridData.studyEventPoint")
+ #end
+ #if($exportedItems.contains('Surgical Pathology Number'))
+   #set ($resultRow= "$resultRow , $gridData.sprNumber")
+ #end
+ #if($exportedItems.contains('Label'))
+   #set ($resultRow= "$resultRow , $gridData.specLabel")
+ #end
+ #if($exportedItems.contains('Class'))
+   #set ($resultRow= "$resultRow , $gridData.specimenClass")
+ #end
+ #if($exportedItems.contains('Type'))
+   #set ($resultRow= "$resultRow , $gridData.specimenType")
+ #end
+ #if($exportedItems.contains('Tissue Site'))
+   #set ($resultRow= "$resultRow , $gridData.tissueSite")
+ #end
+ #if($exportedItems.contains('Tissue Side'))
+   #set ($resultRow= "$resultRow , $gridData.tissueSide")
+ #end
+ #if($exportedItems.contains('Available Quantity'))
+   #set ($resultRow= "$resultRow , $gridData.availableQuantity")
+ #end
+ #if($exportedItems.contains('Container'))
+   #set ($resultRow= "$resultRow , $specimenPosition")
+ #end
+ #if($exportedItems.contains('External ID'))
+   #set ($resultRow= "$resultRow , $gridData.externalId")
+   #set ($resultRow= "$resultRow , $gridData.externalValue")
+ #end
+ #set ($resultRow= "$resultRow , $gridData.requestedQuantity")
+ #set ($resultRow= "$resultRow , $distributedQuantity")
+ #set ($resultRow= "$resultRow , $gridData.status")
+ #set ($resultRow= "$resultRow , $gridData.description")
+ $resultRow
 #end

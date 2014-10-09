@@ -1,0 +1,44 @@
+<tree id='0'>
+ <item id='protocol' text='Collection Protocol' checked='-1'>
+  <item id='Title' text='Title'></item>
+  <item id='Short Title' text='Short Title' checked='0'></item>
+ </item>
+ 
+ <item id='participant' text='Participant' checked='-1'>
+  <item id='First Name' text='First Name'></item>
+  <item id='Middle Name' text='Middle Name'></item>
+  <item id='Last Name' text='Last Name'></item>
+  <item id='SSN' text='SSN'></item>
+  <item id='Gender' text='Gender'></item>
+  <item id='Race' text='Race'></item>
+  <item id='Ethnicity' text='Ethnicity'></item>
+  <item id='Birth Date' text='Birth Date'></item>
+  <item id='Vital Status' text='Vital Status'></item>
+  <item id='Death Date' text='Death Date'></item>
+  <item id='Medical Record Number, Site Name' text='Medical Record Number'></item>
+  <item id='Registration Date' text='Registration Date'></item>
+  <item id='PPI' text='PPI' checked='0'></item>
+ </item>
+ 
+ <item id='scg' text='Specimen Collection Group' checked='-1'>
+  <item id='SCG Name' text='Name' checked='0'></item>
+  <item id='Clinical Diagnosis' text='Clinical Diagnosis'></item>
+  <item id='Clinical Status' text='Clinical Status'></item>
+  <item id='Collection Site' text='Collection Site'></item>
+  <item id='Collection Event label' text='Collection Event label'></item>
+  <item id='Study Calendar Event Point' text='Study Calendar Event Point'></item>
+  <item id='Surgical Pathology Number' text='Surgical Pathology Number'></item>
+ </item>
+ 
+ <item id='specimen' text='Specimen' checked='0'>
+  <item id='Label' text='Label' ></item>
+  <item id='Class' text='Class'></item>
+  <item id='Type' text='Type'></item>
+  <item id='Tissue Site' text='Tissue Site'></item>
+  <item id='Tissue Side' text='Tissue Side'></item>
+  <item id='Available Quantity' text='Available Quantity'></item>
+  <item id='Container' text='Storage Container'></item>
+  <item id='External ID,External Value' text='External Identifier'></item>
+  
+ </item> 
+</tree>

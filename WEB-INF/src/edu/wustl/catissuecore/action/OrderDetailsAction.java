@@ -70,7 +70,7 @@ public class OrderDetailsAction extends BaseAction
 			try
 			{
 				dao=(HibernateDAO)AppUtility.openDAOSession((SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA));
-				String xmlString = VelocityManager.getInstance().evaluate(orderBizLogic.getOrderItemsDetail(Long.parseLong(request.getParameter("id")),dao),"orderGridTemplate.vm");
+				String xmlString = VelocityManager.getInstance().evaluate(orderBizLogic.getOrderItemsDetailForGrid(Long.parseLong(request.getParameter("id")),dao),"orderGridTemplate.vm");
 				response.setContentType("text/xml");
 		        response.getWriter().write(xmlString);
 			}

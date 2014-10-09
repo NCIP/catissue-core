@@ -1,9 +1,5 @@
 package edu.wustl.catissuecore.action;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +10,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
-import com.itextpdf.text.Chunk;
-
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.HibernateDAO;
 
 public class ExportAction  extends DispatchAction {
@@ -37,7 +30,15 @@ public class ExportAction  extends DispatchAction {
 			String exportedBy = getExportedName(sessionDataBean);
 			OrderBizLogic orderBizLogic = new OrderBizLogic();
 			Long orderId = Long.parseLong(request.getParameter("orderId"));
-			Map<String,Object> returnMap  = orderBizLogic.getOrderCsv(orderId,exportedBy, dao);
+			String exportedItems = request.getParameter("items");
+//			List list = Arrays.asList(exportedItems.split(","));
+//			
+//			list.remove("specimen");
+//			list.remove("scg");
+//			list.remove("participant");
+//			list.remove("cpr");
+//			exportedItems = list.toString();  
+			Map<String,Object> returnMap  = orderBizLogic.getOrderCsv(orderId,exportedBy, dao, exportedItems);
 			byteArr = (byte[]) returnMap.get("fileData");
 			response.setHeader(Constants.CONTENT_DISPOSITION, "attachment;"
 						+ "filename=\""+returnMap.get("fileName")+"\"");

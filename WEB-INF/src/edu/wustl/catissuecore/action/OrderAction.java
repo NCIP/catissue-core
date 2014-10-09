@@ -13,6 +13,10 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
@@ -116,6 +121,7 @@ public class OrderAction extends BaseAction
 			final List<NameValueBean> users=userBizLogic.getUsersNameValueList(null);
 			users.add(new NameValueBean(Constants.SELECT_OPTION, String.valueOf(Constants.SELECT_OPTION_VALUE)));
 			request.setAttribute(Constants.USERLIST, users);
+			request.setAttribute("distriTree", readFile());
 			
 		}
 		finally
@@ -124,4 +130,28 @@ public class OrderAction extends BaseAction
 		}
 		return mapping.findForward("success");
 	}
+	
+	private String readFile() throws IOException {
+		BufferedReader reader = null;
+		String treeXml ="";
+		try{
+			String server_file_path =  CommonServiceLocator.getInstance().getPropDirPath()
+					+ File.separator+"distriExport.xml";
+    reader = new BufferedReader( new FileReader(server_file_path));
+    String         line = null;
+    StringBuilder  stringBuilder = new StringBuilder();
+    String         ls = System.getProperty("line.separator");
+    while( ( line = reader.readLine() ) != null ) {
+        stringBuilder.append( line );
+        stringBuilder.append( ls );
+    }
+    treeXml = stringBuilder.toString();
+    treeXml = treeXml.replace("\n", "").replace("\r", "");
+		}finally{
+			if(reader!=null){
+				reader.close();
+			}
+		}
+    return treeXml;
+}
 }
