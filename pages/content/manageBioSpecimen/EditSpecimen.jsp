@@ -89,7 +89,7 @@
         var aliquotGrid;
         var aliquotPopUpParam = {};
         var aliquotNameSpace = {};
-		
+		var userListCombo;
         function showDisableSpecimenWindow(){
             if(aliquotNameSpace.dhxWins == undefined){
                 aliquotNameSpace.dhxWins = new dhtmlXWindows();
@@ -124,6 +124,11 @@
 				windowDivStr = document.getElementById("disposalPop").innerHTML;
 			 }
 			 doInitCal('disposalDate',false,'${uiDatePattern}');
+			 userListCombo = dhtmlXComboFromSelect("userId");
+		//classNameCombo.setOptionWidth(203);
+	    userListCombo.setSize(203);
+	    userListCombo.attachEvent("onOpen",onComboClick);
+	    userListCombo.attachEvent("onKeyPressed",onComboKeyPress);
 				aliquotNameSpace.dhxWins.window("containerPositionPopUp").attachObject("disposalPop");
             }
 			  
@@ -133,7 +138,7 @@
             var specimenStatus = getCheckedRadioId("aliquotRadio");
 			var reason = document.getElementById('reason').value;
 			var spId = document.getElementById("id").value;
-			var userId = document.getElementById("userId").value;
+			var userId = userListCombo.getSelectedValue();
 			var disposalDate = document.getElementById("disposalDate").value;
 			var disposalHours = document.getElementById("disposalHours").value;
 			var disposalMins = document.getElementById("disposalMins").value;
