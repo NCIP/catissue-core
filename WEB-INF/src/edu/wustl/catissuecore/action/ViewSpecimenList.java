@@ -60,7 +60,7 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 		target = new String(Constants.VIEW);
 		session.removeAttribute(AQConstants.HYPERLINK_COLUMN_MAP);
 		getLabels(request);
-		request.setAttribute("eventArray", Constants.EVENT_PARAMETERS);
+		request.setAttribute("eventArray", Constants.NEW_EVENT_PARAMETERS);
 		request.setAttribute("advanceSearchForm", searchForm);
 		
 		String tagId = request.getParameter("tagId");

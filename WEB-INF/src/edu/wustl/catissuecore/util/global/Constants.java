@@ -2417,6 +2417,10 @@ public class Constants
 			"Cell Specimen Review", "Check In Check Out", "Collection", "Disposal", "Embedded",
 			"Fixed", "Fluid Specimen Review", "Frozen", "Molecular Specimen Review", "Procedure",
 			"Received", "Spun", "Thaw", "Tissue Specimen Review", "Transfer"};
+	
+	public static final String NEW_EVENT_PARAMETERS[] = {Constants.SELECT_OPTION,
+		"Disposal", "Transfer"};
+	
 	public static final String QUICK_EVENT_PARAMETERS[] = {Constants.SELECT_OPTION,
 		"Cell Specimen Review", "Check In Check Out", "Collection", "Disposal", "Embedded",
 		"Fixed", "Fluid Specimen Review", "Frozen", "Molecular Specimen Review", "Procedure",

@@ -54,14 +54,14 @@ public class QuickEventsAction extends BaseAction
 		 *  Constants.SYSTEM_IDENTIFIER, true);
 		 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList); */
 
-		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.QUICK_EVENT_PARAMETERS);
-		String pageOf = request.getParameter("pageOf");
+		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.NEW_EVENT_PARAMETERS);
+		String pageOf = request.getParameter("pageOf");  
 		if(Validator.isEmpty(pageOf))
 		{
 			pageOf = request.getParameter(Constants.CP_QUERY);
 		}
 		request.setAttribute(Constants.CP_QUERY, pageOf);
-		//add messages from session to request
+		//add messages from session to request 
 		final HttpSession session = request.getSession(true);
 		if (session != null)
 		{

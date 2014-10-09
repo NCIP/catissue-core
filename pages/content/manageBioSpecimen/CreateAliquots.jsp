@@ -560,7 +560,7 @@ function getCommaseparatedIdList(){
 }
 function openEventPage()
 {
-    var action = 'QuickEvents.do?specimenLabel='+getCommaseparatedList()+'&pageOf=CPQuery';
+    var action = 'specimenEventsBulkDataEntry.do?specimenLabels='+getCommaseparatedList()+'&pageOf=CPQuery';
     document.location=action;
     
 }
@@ -755,12 +755,7 @@ function giveCall(url,msg,msg1,id)
             value="Add To Specimen List"
             onclick="ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')">&nbsp;|&nbsp;
             </html:button>
-            <html:button
-            styleClass="blue_ar_b" property="Add Events"
-            title="Add Events"
-            value="Add Events"
-            onclick="openEventPage()">
-            </html:button>
+            
 
         </div>
     </div>

@@ -386,12 +386,7 @@ function initPrepareSpecimenType()
                             </html:button>&nbsp;
                             </div>
                         <div id="eventdiv" style="display:none">
-                        <html:button styleId="eventButton"
-                            styleClass="blue_ar_b" property="Add Events"
-                            title="Add Events"
-                            value="Add Events" onclick="openEventPage()">
-                            Add events
-                        </html:button>&nbsp;|&nbsp;
+                        &nbsp;
                         <html:button
                             styleClass="blue_ar_b" property="Add To Specimen List"
                             title="Add To Specimen List"
