@@ -56,4 +56,14 @@
       splitStatements="true"
       stripComments="true"/>
   </changeSet>
+  
+  <changeSet author="asamgir" id="Permissible_values csv file upload">
+    <loadUpdateData encoding="UTF-8"
+      file="./SQL/Permissible_values/CATISSUE_PERMISSIBLE_VALUE.csv"
+      primaryKey="IDENTIFIER"
+      tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="CONCEPT_CODE" type="String"/>            
+    </loadUpdateData>
+  </changeSet>
+  
 </databaseChangeLog>
