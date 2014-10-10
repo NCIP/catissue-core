@@ -1,5 +1,9 @@
 package com.krishagni.catissueplus.core.de.ui;
 
+import static edu.common.dynamicextensions.nutility.XmlUtil.writeElementEnd;
+import static edu.common.dynamicextensions.nutility.XmlUtil.writeElementStart;
+
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +53,12 @@ public class UserControl extends Control implements LookupControl {
 		props.put("apiUrl", "rest/ng/users");
 		props.put("dataType", getDataType());
 	}
+	
+	public void serializeToXml(Writer writer, Properties props) {
+		writeElementStart(writer, "userField");
+		super.serializeToXml(writer, props);
+		writeElementEnd(writer, "userField");						
+	}
 
 	@Override
 	public String getTableName() {		
@@ -79,7 +89,7 @@ public class UserControl extends Control implements LookupControl {
 	public Properties getPvSourceProps() {
 		return LU_PV_SOURCE_PROPS;
 	}
-	
+		
 	private static Properties initPvSourceProps() {
 		Properties props = new Properties();
 		props.put("apiUrl", "rest/ng/users");
