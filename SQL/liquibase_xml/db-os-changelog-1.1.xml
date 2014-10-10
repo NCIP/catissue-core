@@ -57,7 +57,7 @@
       stripComments="true"/>
   </changeSet>
   
-  <changeSet author="asamgir" id="Permissible_values csv file upload">
+  <changeSet id="Permissible_values csv file upload" author="asamgir">
     <loadUpdateData encoding="UTF-8"
       file="./SQL/Permissible_values/CATISSUE_PERMISSIBLE_VALUE.csv"
       primaryKey="IDENTIFIER"
@@ -65,5 +65,32 @@
       <column name="CONCEPT_CODE" type="String"/>            
     </loadUpdateData>
   </changeSet>
-  
+
+  <changeSet id="User view for use in AQ" author="vpawar" runOnChange="true" dbms="mysql">
+    <sql>
+      create or replace view USER_VIEW as (
+        select 
+          u.IDENTIFIER as IDENTIFIER, u.FIRST_NAME as FIRST_NAME, u.LAST_NAME AS LAST_NAME, 
+          u.EMAIL_ADDRESS AS EMAIL_ADDRESS, concat(u.LAST_NAME, ', ', u.FIRST_NAME) as NAME,
+          d.NAME AS DEPARTMENT_NAME
+        from
+          CATISSUE_USER u 
+          inner join CATISSUE_DEPARTMENT d ON u.DEPARTMENT_ID = d.IDENTIFIER
+      )
+    </sql>
+  </changeSet>
+
+  <changeSet id="User view for use in AQ" author="vpawar" runOnChange="true" dbms="oracle">
+    <sql>
+      create or replace view USER_VIEW as (
+        select 
+          u.IDENTIFIER as IDENTIFIER, u.FIRST_NAME as FIRST_NAME, u.LAST_NAME AS LAST_NAME, 
+          u.EMAIL_ADDRESS AS EMAIL_ADDRESS, u.LAST_NAME || ', ' || u.FIRST_NAME as NAME,
+          d.NAME AS DEPARTMENT_NAME
+        from
+          CATISSUE_USER u 
+          inner join CATISSUE_DEPARTMENT d ON u.DEPARTMENT_ID = d.IDENTIFIER
+      )
+    </sql>
+  </changeSet>
 </databaseChangeLog>
