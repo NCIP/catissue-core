@@ -974,8 +974,7 @@ function getTabDetails(specimenId){
 		var showImagesTab="EditSpecimenImage.do?id="+specimenId;
 
 		specimenTabbar.setLabel("specimenDetailsTab",'<span style="font-size:13px"> Specimen Details </span>', "150px");
-		specimenTabbar.addTab("specimenEventsTab",'<span style="font-size:13px"> Standard Events </span>',"150px");
-		specimenTabbar.addTab("deSpecimenEventsTab",'<span style="font-size:13px"> DE Events </span>',"150px");
+		specimenTabbar.addTab("deSpecimenEventsTab",'<span style="font-size:13px"> Specimen Events </span>',"150px");
 	if(reportId != null && reportId != -1  && reportId != -2)
 	{
 		specimenTabbar.addTab("reportsTab",'<span style="font-size:13px"> View Report(s)</span>',"150px");
@@ -992,12 +991,11 @@ function getTabDetails(specimenId){
 	specimenTabbar.setHrefMode("iframes-on-demand");
 	specimenTabbar.setContent("specimenDetailsTab", "specimenDetailsDiv");
 	
-	var showAnnotationTab1="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName="+staticEntityName+"&id="+specimenId;
+	var showAnnotationTab1="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName=Specimen&id="+specimenId;
 
 	var showSpecimenEventsTab1 = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&specimenId="+specimenId+"&menuSelected=15";
 	
 	var showDESpecimenEventsTab1="LoadAnnotationDataEntryPage.do?entityId="+entityId+"&entityRecordId="+specimenId+"&pageOf=pageOfNewSpecimenCPQuery&operation=viewAnnotations&staticEntityName=SpecimenEvent&id="+specimenId;
-	specimenTabbar.setContentHref("specimenEventsTab", showSpecimenEventsTab1);
 	specimenTabbar.setContentHref("deSpecimenEventsTab", showDESpecimenEventsTab1);
 	if(reportId != null && reportId != -1  && reportId != -2)
 	{
