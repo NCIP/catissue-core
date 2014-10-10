@@ -1645,7 +1645,15 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         return false;
       } else if (qd.currFilter.field && qd.currFilter.op) {
         var op = qd.currFilter.op.name;
-        return op == 'exists' || op == 'not_exists' || qd.currFilter.value ? false : true;
+        if (op == 'exists' || op == 'not_exists') {
+          return false;
+        } else if (op == 'qin' || op == 'not_in') { 
+          return !qd.currFilter.value || qd.currFilter.value.length == 0;
+        } else if (qd.currFilter.value) {
+          return false;
+        } else {
+          return true;
+        }
       } else {
         return true;
       }
@@ -1844,7 +1852,13 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       if (!field || !op) {
         return "text";
       } else if (op && (op.name == "qin" || op.name == "not_in")) {
-        return field.pvs ? "multiSelect" : "tagsSelect";
+        if (field.lookupProps) {
+          return "lookupMultiple";
+        } else {
+          return field.pvs ? "multiSelect" : "tagsSelect";
+        }
+      } else if (field.lookupProps) {
+        return "lookupSingle";
       } else if (op && op.name == "between") {
         return field.type == "DATE" ? "betweenDate" : "betweenNumeric"; 
       } else if (field.pvs && !(op.name == 'contains' || op.name == 'starts_with' || op.name == 'ends_with')) {
@@ -1911,7 +1925,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       $scope.queryData.filtersMap[filter.id] = filter;      
       $scope.queryData.exprNodes.push({type: 'filter', value: filter.id});
       $scope.queryData.isValid = isValidQueryExpr($scope.queryData.exprNodes);
-      $scope.queryData.currFilter = {};
+      $scope.queryData.currFilter = {value: ""};
 
       $scope.disableCpSelection();
     };

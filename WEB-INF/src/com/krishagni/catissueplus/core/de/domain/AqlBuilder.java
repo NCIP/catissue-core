@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.de.domain.SelectField.Function;
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.DataType;
+import edu.common.dynamicextensions.domain.nui.LookupControl;
 
 public class AqlBuilder {
 	
@@ -159,12 +160,14 @@ public class AqlBuilder {
 		}
 		
 		ctrl = form.getControlByUdn(ctrlName, "\\.");				
-		String[] values = (String[])Arrays.copyOf(filter.getValues(), filter.getValues().length);
-		if (ctrl.getDataType() == DataType.STRING || ctrl.getDataType() == DataType.DATE) {
-			for (int i = 0; i < values.length; ++i) {
-				values[i] = "\"" + values[i] + "\"";   
-			}
-		} 
+
+		DataType type = ctrl.getDataType();
+		if (ctrl instanceof LookupControl) {
+			type = ((LookupControl)ctrl).getValueType();
+		}
+		
+		String[] values = (String[])Arrays.copyOf(filter.getValues(), filter.getValues().length);		
+		quoteStrings(type, values);
 		
 		String value = values[0];
 		if (filter.getOp() == Op.IN || filter.getOp() == Op.NOT_IN) {
@@ -174,6 +177,16 @@ public class AqlBuilder {
 		}
 		
 		return filterExpr.append(value).toString();
+	}
+	
+	private void quoteStrings(DataType type, String[] values) {
+		if (type != DataType.STRING && type != DataType.DATE) {
+			return;
+		}
+		
+		for (int i = 0; i < values.length; ++i) {
+			values[i] = "\"" + values[i] + "\"";   
+		}		
 	}
 	
 	private String join(String[] values) {

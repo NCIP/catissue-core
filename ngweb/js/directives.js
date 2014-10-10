@@ -46,6 +46,119 @@ angular.module("plus.directives", [])
     };
   })
 
+  .directive('kaLookup', function($timeout) { 
+    var formatNames = function(format, objs) {
+      var result = [];
+      for (var i = 0; i < objs.length; ++i) {
+        result.push(formatName(format, objs[i]));
+      }
+
+      return result;
+    };
+
+    var formatName = function(format, obj) {
+      if (!obj) {
+        return "";
+      }
+
+      if (obj.$kaLookupVal) {
+        return obj.$kaLookupVal;
+      }
+
+      return format.replace(
+        /{{(\w+)}}/g, 
+        function(all, s) {
+          if (obj) {
+            return obj[s];
+          } 
+
+          return "undefined";
+        }
+      );
+    };
+
+    var render = function(scope, element, multiple) {
+      var opts = scope.opts;
+
+      element.select2('destroy');
+
+      element.select2({
+        placeholder: scope.placeholder,
+
+        minimumInputLength: 3,
+
+        multiple: multiple ? true : false,
+
+        ajax: {
+          url: '/openspecimen/' + opts.apiUrl,
+
+          dataType: 'json',
+
+          data: function(term, page) {
+            var obj = {};
+            obj[opts.searchTermName] = term;
+            return obj;                
+          },
+
+          results: function(data, page) {
+            var results = data;
+            if (opts.respField) {
+              results = data[opts.respField];
+            }
+
+            return {results: results};
+          }
+        },
+
+        initSelection: function(el, callback) {
+        },
+
+        formatResult: function(obj) {
+          return formatName(opts.resultFormat, obj);
+        },
+
+        formatSelection: function(obj) {
+          return formatName(opts.resultFormat, obj);
+        }                         
+      }).change(function(evt) {
+        $timeout(function() { 
+          var val = element.select2('data');
+          if (val instanceof Array) {
+            scope.selectedOpt = formatNames(opts.resultFormat, val);
+          } else {
+            scope.selectedOpt = formatName(opts.resultFormat, val); 
+          }
+        });
+      });
+
+      if (scope.selectedOpt instanceof Array) {
+        var items = [];
+        for (var i = 0; i < scope.selectedOpt.length; ++i) {
+          items.push({id: i, $kaLookupVal: scope.selectedOpt[i]});
+        }
+
+        element.select2('data', items);
+      } else if (scope.selectedOpt) {
+        element.select2('data', {$kaLookupVal: scope.selectedOpt});
+      }
+    };
+
+    return {
+      restrict: "A",
+
+      scope: {
+        opts : "=",
+        selectedOpt: "=",
+        placeholder: '@'
+      },
+
+      link: function(scope, element, attrs) {
+        scope.$watch('opts', function(opts) {
+          render(scope, element, attrs.multiple);
+        });
+      }
+    };
+  })
 
   .directive('kaSearch', function($timeout) { // TODO: Deprecated
     return {

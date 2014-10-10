@@ -1135,6 +1135,18 @@
                           ng-model="filter.value[1]"
                           style="width:42%;">
                       </div>
+                      <div ng-switch-when="lookupSingle">
+                        <input type="hidden" style="width: 100%;"
+                          ka-lookup opts="filter.field.lookupProps" 
+                          placeholder="Select Condition Value"
+                          selected-opt="filter.value"></input>
+                      </div>
+                      <div ng-switch-when="lookupMultiple">
+                        <input type="hidden" style="width: 100%;"
+                          ka-lookup opts="filter.field.lookupProps" multiple
+                          placeholder="Select Condition Values"
+                          selected-opt="filter.value"></input>
+                      </div>
                       <input ng-switch-when="datePicker" class="form-control"
                         data-placeholder="Select Date"
                         type="text" ka-date-picker="{{queryData.datePickerOpts}}"
@@ -1219,6 +1231,18 @@
               <input class="pull-left form-control" placeholder="Range Max" type="text" 
                 ng-model="queryData.currFilter.value[1]"
                 style="width:42%;">
+            </div>
+            <div ng-switch-when="lookupSingle">
+              <input type="hidden" style="width: 100%;"
+                ka-lookup opts="queryData.currFilter.field.lookupProps" 
+                placeholder="Select Condition Value"
+                selected-opt="queryData.currFilter.value"></input>
+            </div>
+            <div ng-switch-when="lookupMultiple">
+              <input type="hidden" style="width: 100%;"
+                ka-lookup opts="queryData.currFilter.field.lookupProps" multiple
+                placeholder="Select Condition Values"
+                selected-opt="queryData.currFilter.value"></input>
             </div>
             <input ng-switch-when="datePicker" class="form-control"
               data-placeholder="Select Date"

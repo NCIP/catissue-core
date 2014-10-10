@@ -60,6 +60,7 @@ import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.DataType;
 import edu.common.dynamicextensions.domain.nui.FileUploadControl;
 import edu.common.dynamicextensions.domain.nui.Label;
+import edu.common.dynamicextensions.domain.nui.LookupControl;
 import edu.common.dynamicextensions.domain.nui.PageBreak;
 import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.domain.nui.SelectControl;
@@ -466,10 +467,9 @@ public class FormServiceImpl implements FormService {
                 	fields.add(field);            		
             	}
             } else if (!(control instanceof Label || control instanceof PageBreak)) {
-            	DataType dataType = (control instanceof FileUploadControl) ? DataType.STRING : control.getDataType();
+            	DataType dataType = getType(control);
             	field.setType(dataType.name());
-            	
-                
+            	                
             	if (control instanceof SelectControl) {
             		SelectControl selectCtrl = (SelectControl)control;
             		List<String> pvs = new ArrayList<String>();
@@ -478,6 +478,9 @@ public class FormServiceImpl implements FormService {
             		}
             		
             		field.setPvs(pvs);
+            	} else if (control instanceof LookupControl) {
+            		LookupControl luCtrl = (LookupControl)control;
+            		field.setLookupProps(luCtrl.getPvSourceProps());
             	}
             	
             	fields.add(field);
@@ -485,5 +488,15 @@ public class FormServiceImpl implements FormService {
         }
 
         return fields;		
+	}
+	
+	private DataType getType(Control ctrl) {
+		if (ctrl instanceof FileUploadControl) {
+			return DataType.STRING;
+		} else if (ctrl instanceof LookupControl) {
+			return ((LookupControl)ctrl).getValueType();
+		} else {
+			return ctrl.getDataType();
+		}
 	}
 }
