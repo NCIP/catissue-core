@@ -352,7 +352,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         }
 
         if (!isAgg) {
-          reportFields.push({id: field.name, name:  field.name, value: field.label});
+          reportFields.push({id: field.name, name:  field.name, value: field.form + ": " + field.label});
         }
       }
 
@@ -2593,15 +2593,20 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
         preparePivotTabFields($scope.reportFields);
       };
 
-      var processFields = function(prefix, fields) {
+      var processFields = function(formCaption, prefix, fields, extnForm) {
         var result = [];
         for (var i = 0; i < fields.length; ++i) {
           if (fields[i].type == 'SUBFORM' && fields[i].name == 'extensions') {
-            var extnForms = processFields(prefix + fields[i].name + ".", fields[i].subFields);
+            var extnForms = processFields(formCaption, prefix + fields[i].name + ".", fields[i].subFields, true);
             result = result.concat(extnForms);
           } else if (fields[i].type == 'SUBFORM') {
             var field = {type: 'subform', val: fields[i].caption, name: prefix + fields[i].name};
-            field.children = processFields(prefix + fields[i].name + ".", fields[i].subFields);
+            var caption = formCaption;
+            if (extnForm) {
+              caption += ": " + fields[i].caption;
+            }
+
+            field.children = processFields(caption, prefix + fields[i].name + ".", fields[i].subFields);
 
             if (field.children.length == 1) {
               result.push(field.children[0]);
@@ -2609,8 +2614,9 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
               result.push(field);
             }
           } else {
-            result.push({
+            result.push({             
               type: 'field', 
+              form: formCaption,
               val: fields[i].caption, 
               name: prefix + fields[i].name, 
               dataType: fields[i].type,
@@ -2631,7 +2637,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
 
         getFormFields($scope.queryData.selectedCp.id, node.form).then(
           function(fields) {
-            node.children = processFields(node.form.name + ".", fields);
+            node.children = processFields(node.form.caption, node.form.name + ".", fields);
             deferred.resolve(node.children);
           }
         );
@@ -2768,12 +2774,12 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
                 selected = selected.concat(getSelectedFields([field], incCaption));
               } else if (field.checked) {
                 if (field.aggFns) {
-                  selected.push({name: field.name, label: field.val, type: field.dataType, aggFns: field.aggFns});
+                  selected.push({form: field.form, name: field.name, label: field.val, type: field.dataType, aggFns: field.aggFns});
                 } else {
                   if (!incCaption) {
                     selected.push(field.name);
                   } else {
-                    selected.push({name: field.name, label: field.val, type: field.dataType});
+                    selected.push({form: field.form, name: field.name, label: field.val, type: field.dataType});
                   }
                 }
               }
@@ -2787,7 +2793,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       var getAllFormFields = function(form, incCaption) {
         if (form.type == 'temporal') {
           var name = '$temporal.' + form.form.id;
-          return incCaption ? [{name: name, label: form.val}] : [name];
+          return incCaption ? [{name: name, label: form.val, form: form.val}] : [name];
         }
 
         var result = [];
@@ -2796,7 +2802,7 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
           if (field.type == 'subform') {
             result = result.concat(getAllFormFields(field, incCaption));
           } else {
-            result.push(incCaption ? {name: field.name, label: field.val, type: field.dataType} : field.name);
+            result.push(incCaption ? {form: field.form, name: field.name, label: field.val, type: field.dataType} : field.name);
           }
         }
 

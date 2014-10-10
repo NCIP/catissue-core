@@ -1660,11 +1660,13 @@
               <a class="list-group-item ellipsis" 
                 ng-class="{'active': currField.name == selectedField.name}"
                 ng-repeat="selectedField in selectedFields"
-                ng-click="showCurrField(selectedField)">
+                ng-click="showCurrField(selectedField)"
+                tooltip="{{selectedField.form}}: {{selectedField.label}}" 
+                tooltip-placement="bottom" tooltip-append-to-body="true">
                 <span class="badge">
                   {{(selectedField.aggFns | filter:{opted: true}).length}}
                 </span>
-                {{selectedField.label}}
+                {{selectedField.form}}: {{selectedField.label}}
               </a>
             </div>
           </div>
