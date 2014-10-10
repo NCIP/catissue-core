@@ -80,7 +80,7 @@
   </changeSet>
 
   <changeSet id="add primary key to institute table" author="vpawar" failOnError="false">
-    <addPrimaryKey tableName="CATISSUE_INSTITUTE" columnNames="IDENTIFIER"/>
+    <addPrimaryKey tableName="CATISSUE_INSTITUTION" columnNames="IDENTIFIER"/>
   </changeSet>
 
   <changeSet id="add SCG_ID column to deidentified reports table" author="vpawar" failOnError="false">
