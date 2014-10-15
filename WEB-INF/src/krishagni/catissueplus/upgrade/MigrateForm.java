@@ -19,6 +19,7 @@ import java.util.Set;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 import krishagni.catissueplus.dto.FormDetailsDTO;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -263,7 +264,9 @@ public class MigrateForm {
 		String entityName = entity.getName();
 		
 		Container newForm = new Container();
-		newForm.setCaption(oldForm.getCaption() != null ? oldForm.getCaption() : entityName);
+		
+		String oldFormCaption = oldForm.getCaption() != null ? oldForm.getCaption() : entityName;
+		newForm.setCaption(getCaption(oldFormCaption));
 		newForm.setName(getUniqueFormName(entityName));
 		
 		int seqOffset = 0;
@@ -615,7 +618,7 @@ public class MigrateForm {
 		String ctrlName = getCtrlName(oldCtrl);
 		newCtrl.setName(ctrlName.concat(oldCtrl.getId().toString()));
 		newCtrl.setUserDefinedName(ctrlName);
-		newCtrl.setCaption(oldCtrl.getCaption());
+		newCtrl.setCaption(getCaption(oldCtrl.getCaption()));
 		newCtrl.setCustomLabel(getCustomLabel(oldCtrl));
 		newCtrl.setLabelPosition(verticalCtrlAlignment ? LabelPosition.TOP : LabelPosition.LEFT_SIDE);
 		newCtrl.setToolTip(oldCtrl.getTooltip());
@@ -1349,6 +1352,69 @@ public class MigrateForm {
 		
 		return values.toArray(new String[0]);
 	}
+	
+	//
+	// Converts camel case caption to regular caption
+	// thicknessInMicrons => Thickness In Microns
+	//
+	private String getCaption(String input) {
+		String[] tokens = splitByCamelCase(input);
+		if (tokens.length > 0) {
+			tokens[0] = StringUtils.capitalize(tokens[0]);
+		}
+		
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < tokens.length; ++i) {
+			if (tokens[i] == null || tokens[i].trim().isEmpty()) {
+				continue;
+			}
+						
+			if (result.length() > 0) {
+				result.append(" ");
+			}			
+			result.append(tokens[i].trim());
+		}
+		
+		return result.toString();		
+	}
+
+	private String[] splitByCamelCase(String str) {
+		if (str == null) {
+			return null;
+		}
+
+		if (str.length() == 0) {
+			return ArrayUtils.EMPTY_STRING_ARRAY;
+		}
+
+		char[] c = str.trim().toCharArray();
+		List<String> list = new ArrayList<String>();
+		int tokenStart = 0;
+		int currentType = Character.getType(c[tokenStart]);
+		for (int pos = tokenStart + 1; pos < c.length; pos++) {
+			int type = Character.getType(c[pos]);
+			if (type == currentType) {
+				continue;
+			}
+			
+			if (type == Character.LOWERCASE_LETTER && currentType == Character.UPPERCASE_LETTER) {
+				int newTokenStart = pos - 1;
+				if (newTokenStart != tokenStart) {
+					list.add(new String(c, tokenStart, newTokenStart - tokenStart));
+					tokenStart = newTokenStart;
+				}
+			} else {
+				list.add(new String(c, tokenStart, pos - tokenStart));
+				tokenStart = pos;
+			}
+			
+			currentType = type;
+		}
+
+		list.add(new String(c, tokenStart, c.length - tokenStart));
+		return list.toArray(new String[list.size()]);
+	}
+	
 	
 	private static final String GET_STATIC_ENTITY_ID_NAME_SQL = 
 		"select " +
