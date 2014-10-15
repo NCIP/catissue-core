@@ -64,11 +64,14 @@ public class MigrateSpecimenEvents {
 		TransactionManager.getInstance(ds);
 
 		UserContext ctx = getUserCtxt(args[0]);
-		ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
-
-		List<Map<String, String>> eventsInfo = 
-				new ObjectMapper().readValue(new File(args[1]), List.class);
+		if (ctx == null) {
+			return;
+		}
 		
+		ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());
+		
+		List<Map<String, String>> eventsInfo = 
+				new ObjectMapper().readValue(new File(args[1]), List.class);		
 		for (Map<String, String> eventInfo : eventsInfo) {
 			try {
 				MigrateSpecimenEvents migrator = new MigrateSpecimenEvents(eventInfo);
