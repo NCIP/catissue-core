@@ -112,13 +112,17 @@ import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.dao.HibernateDAO;
 
 public class MigrateForm {
-	private class FormMigrationCtxt {
-		private Container newForm;
+	protected class FormMigrationCtxt {
+		protected Container newForm;
 		
-		private Control sfCtrl;
+		protected Control sfCtrl;
 		
-		private Map<BaseAbstractAttributeInterface, Object> fieldMap = 
+		protected Map<BaseAbstractAttributeInterface, Object> fieldMap = 
 				new HashMap<BaseAbstractAttributeInterface, Object>();
+		
+		public FormMigrationCtxt() {
+			
+		}
 	}
 	
 	private static Logger logger = Logger.getLogger(MigrateForm.class);
@@ -249,7 +253,7 @@ public class MigrateForm {
 	}
 
 
-	private FormMigrationCtxt getNewFormDefinition(ContainerInterface oldForm) 
+	protected FormMigrationCtxt getNewFormDefinition(ContainerInterface oldForm) 
 	throws Exception {
 
 		FormMigrationCtxt formMigrationCtxt = new FormMigrationCtxt();
@@ -1036,7 +1040,7 @@ public class MigrateForm {
 		for (RecordObject recObj : recAndObjectIds) {
 			
 			try {
-				Long oldRecId = getRecordId(tableName, recordIdCol, recObj.recordId ); 
+				Long oldRecId = getRecordId(tableName, recordIdCol, recObj.recordId); 
 				if (oldRecId == null) {
 					continue;
 				}
@@ -1190,7 +1194,7 @@ public class MigrateForm {
 	throws Exception {
 
 		JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
-		FormData newRecord = getFormData(jdbcDao, formMigrationCtxt, oldForm, oldRecord);
+		FormData newRecord = getFormData(jdbcDao, recObj, formMigrationCtxt, oldForm, oldRecord);
 		FormDataManager formDataMgr = new FormDataManagerImpl(false);
 		Long newRecordId = formDataMgr.saveOrUpdateFormData(null, newRecord, jdbcDao);
 		
@@ -1208,7 +1212,9 @@ public class MigrateForm {
 	}
 	
 	
-	private FormData getFormData(JdbcDao jdbcDao, FormMigrationCtxt formMigrationCtxt, ContainerInterface oldForm,
+	protected FormData getFormData(
+			JdbcDao jdbcDao, RecordObject recObj, 
+			FormMigrationCtxt formMigrationCtxt, ContainerInterface oldForm,
 			Map<BaseAbstractAttributeInterface, Object> oldFormData) {
 				
 		Container newForm = formMigrationCtxt.newForm;
@@ -1241,7 +1247,7 @@ public class MigrateForm {
 				
 				AbstractContainmentControlInterface oldSfCtrl = (AbstractContainmentControlInterface)oldCtrl;
 				for (Map<BaseAbstractAttributeInterface, Object> oldSfRec : oldSfRecs) {
-					newSfData.add(getFormData(jdbcDao, sfMigrationCtxt, oldSfCtrl.getContainer(), oldSfRec));
+					newSfData.add(getFormData(jdbcDao, recObj, sfMigrationCtxt, oldSfCtrl.getContainer(), oldSfRec));
 				}
 				
 				ControlValue cv = new ControlValue(newSfCtrl, newSfData);

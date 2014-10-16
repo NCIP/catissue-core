@@ -3,10 +3,23 @@ package krishagni.catissueplus.upgrade;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import krishagni.catissueplus.dto.FormDetailsDTO;
+
+import com.krishagni.catissueplus.core.de.ui.UserControl;
+
+import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.Control;
+import edu.common.dynamicextensions.domain.nui.DatePicker;
+import edu.common.dynamicextensions.domain.nui.TextArea;
 import edu.common.dynamicextensions.domain.nui.UserContext;
+import edu.common.dynamicextensions.domaininterface.BaseAbstractAttributeInterface;
+import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
+import edu.common.dynamicextensions.napi.ControlValue;
+import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
@@ -15,6 +28,50 @@ import edu.emory.mathcs.backport.java.util.Collections;
 public class MigrateSppForm extends MigrateForm {
 	public MigrateSppForm(UserContext usrCtx) {
 		super(usrCtx);
+	}
+	
+	@Override
+	protected FormMigrationCtxt getNewFormDefinition(ContainerInterface oldForm) 
+	throws Exception {
+		FormMigrationCtxt formMigrationCtxt = super.getNewFormDefinition(oldForm);
+		
+		Container newForm = formMigrationCtxt.newForm;
+		addCommonSppFields(newForm);
+		newForm.setCaption(newForm.getCaption() + " - SPP");
+		return formMigrationCtxt;
+	}
+	
+	@Override
+	protected FormData getFormData(
+			JdbcDao jdbcDao, RecordObject recObj, 
+			FormMigrationCtxt formMigrationCtxt, ContainerInterface oldForm,
+			Map<BaseAbstractAttributeInterface, Object> oldFormData) {
+		FormData formData = super.getFormData(jdbcDao, recObj, formMigrationCtxt, oldForm, oldFormData);
+		
+		Map<String, Object> fieldValues = jdbcDao.getResultSet(
+				GET_SPP_COMMON_FIELDS_SQL, 
+				Collections.singletonList(recObj.recordId), 
+				new ResultExtractor<Map<String, Object>>() {
+
+					@Override
+					public Map<String, Object> extract(ResultSet rs) throws SQLException {
+						Map<String, Object> fields = new HashMap<String, Object>();
+						
+						if (!rs.next()) {
+							return fields;
+						}
+												
+						fields.put(DEVIATION, rs.getString(1));
+						fields.put(DATETIME, rs.getTimestamp(2));
+						fields.put(USER, rs.getLong(3));
+						fields.put(COMMENTS, rs.getString(4));
+						return fields;
+					}
+				}
+		);
+		
+		addCommonSppFieldValues(formData, fieldValues);
+		return formData;
 	}
 
 	@Override
@@ -68,7 +125,68 @@ public class MigrateSppForm extends MigrateForm {
 		}
 	}	
 	
-			
+	private void addCommonSppFields(Container newForm) {		
+		for (Control ctrl : newForm.getControls()) {
+			ctrl.setSequenceNumber(ctrl.getSequenceNumber() + 5);
+		}
+		
+		for (Control ctrl : getCommonSppFields()) {
+			newForm.addControl(ctrl);
+		}		
+	}
+	
+	private List<Control> getCommonSppFields() {
+		List<Control> result = new ArrayList<Control>();
+		
+		Control user = new UserControl();
+		user.setName(USER);
+		user.setUserDefinedName(USER);
+		user.setCaption("User");
+		user.setSequenceNumber(1);
+		user.setxPos(0);
+		result.add(user);
+		
+		DatePicker dateTime = new DatePicker();
+		dateTime.setName(DATETIME);
+		dateTime.setUserDefinedName(DATETIME);
+		dateTime.setCaption("Date and Time");
+		dateTime.setSequenceNumber(2);
+		dateTime.setxPos(0);
+		dateTime.setFormat("MM-dd-yyyy HH:mm");
+		result.add(dateTime);
+		
+		TextArea deviation = new TextArea();
+		deviation.setName(DEVIATION);
+		deviation.setUserDefinedName(DEVIATION);
+		deviation.setCaption("Reason for Deviation");
+		deviation.setSequenceNumber(3);
+		deviation.setxPos(0);
+		deviation.setNoOfRows(2);
+		result.add(deviation);
+		
+		TextArea comments = new TextArea();
+		comments.setName(COMMENTS);
+		comments.setUserDefinedName(COMMENTS);
+		comments.setCaption("Comments");
+		comments.setSequenceNumber(4);
+		comments.setxPos(0);
+		comments.setNoOfRows(2);
+		result.add(comments);
+		
+		return result;		
+	}
+	
+	private void addCommonSppFieldValues(FormData formData, Map<String, Object> fieldValues) {
+		for (Map.Entry<String, Object> fieldValue : fieldValues.entrySet()) {
+			addCommonSppFieldValue(formData, fieldValue.getKey(), fieldValue.getValue());
+		}
+	}
+	
+	private void addCommonSppFieldValue(FormData formData, String fieldName, Object value) {
+		Control ctrl = formData.getContainer().getControl(fieldName);
+		formData.addFieldValue(new ControlValue(ctrl, ctrl.toString(value)));
+	}
+	
 	private static final String GET_RECORD_AND_SPECIMEN_IDS_SQL =
 			"select " +
 			"	re.identifier, spe_re.specimen_id " +
@@ -79,4 +197,19 @@ public class MigrateSppForm extends MigrateForm {
 			"where " + 
 			"   afc.identifier = ?";
 	
+	private static final String GET_SPP_COMMON_FIELDS_SQL =
+			"select " +
+			"  reason_deviation, timestamp, user_details, comments " +
+			"from " +
+			"  catissue_abstract_application " +
+			"where " +
+			"  identifier = ?";
+	
+	private static final String DEVIATION = "deviationReason";
+	
+	private static final String USER = "user";
+	
+	private static final String DATETIME = "dateTime";
+	
+	private static final String COMMENTS = "comments";
 }
