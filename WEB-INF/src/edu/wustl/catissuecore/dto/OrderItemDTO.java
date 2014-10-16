@@ -4,21 +4,17 @@
 package edu.wustl.catissuecore.dto;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
-import flex.messaging.io.ArrayList;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 
 public class OrderItemDTO {
 
@@ -487,10 +483,16 @@ public class OrderItemDTO {
 	}
 
 	public void populateCpr(CollectionProtocolRegistration cpr) {
-		this.setRegistrationDate(cpr.getRegistrationDate()!=null?cpr.getRegistrationDate().toString():"");
+		if(cpr.getRegistrationDate() == null){
+			this.setRegistrationDate(cpr.getRegistrationDate()!=null?cpr.getRegistrationDate().toString():EMPTY_STRING);
+		}else{
+			String regDate = CommonUtilities.parseDateToString(cpr.getRegistrationDate(), CommonServiceLocator.getInstance()
+					.getDatePattern());
+			this.setRegistrationDate(regDate);
+		}
 		this.setPpid(cpr.getProtocolParticipantIdentifier()==null?EMPTY_STRING:cpr.getProtocolParticipantIdentifier());
-		this.setShortTitle(cpr.getCollectionProtocol().getShortTitle());
-		this.setTitle(cpr.getCollectionProtocol().getTitle());
+		this.setShortTitle(cpr.getCollectionProtocol().getShortTitle());//.replace(",", "\\,"));
+		this.setTitle(cpr.getCollectionProtocol().getTitle());//.replace(",", "\\,"));  
 	}
 
 	public void populateParticipant(Participant participant) {
@@ -500,8 +502,20 @@ public class OrderItemDTO {
 		this.setMiddleName(participant.getMiddleName()==null?EMPTY_STRING:participant.getMiddleName());
 		this.setGender(participant.getGender()==null?EMPTY_STRING:participant.getGender());
 		this.setEthnicity(participant.getEthnicity()==null?EMPTY_STRING:participant.getEthnicity());
-		this.setBirthDate(participant.getBirthDate()!=null?participant.getBirthDate().toString():EMPTY_STRING);
-		this.setDeathDate(participant.getDeathDate()!=null?participant.getDeathDate().toString():EMPTY_STRING);
+		if(participant.getBirthDate() == null){
+			this.setBirthDate(participant.getBirthDate()!=null?participant.getBirthDate().toString():EMPTY_STRING);
+		}else{
+			String birthDate = CommonUtilities.parseDateToString(participant.getBirthDate(), CommonServiceLocator.getInstance()
+					.getDatePattern());
+			this.setBirthDate(birthDate);
+		}
+		if(participant.getBirthDate() == null){
+			this.setDeathDate(participant.getDeathDate()!=null?participant.getDeathDate().toString():EMPTY_STRING);
+		}else{
+			String deathDate = CommonUtilities.parseDateToString(participant.getDeathDate(), CommonServiceLocator.getInstance()
+					.getDatePattern());
+			this.setDeathDate(deathDate);
+		}
 		this.setVitalStatus(participant.getVitalStatus()==null?EMPTY_STRING:participant.getVitalStatus());
 		Collection<Race> raceColl = participant.getRaceCollection();
 		List<String> raceList = new java.util.ArrayList<String>();

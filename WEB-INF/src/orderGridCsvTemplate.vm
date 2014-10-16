@@ -1,3 +1,4 @@
+
 #set ($orderName='')
 #if($orderDetailMap.orderName)
       #set ($orderName=$orderDetailMap.orderName)
@@ -63,102 +64,109 @@ $headerRow,"Requested Quantity","Distributed Quantity","Status","Description"
  #if($gridData.specimenContainerName && $positionDimensionTwo && $gridData.positionDimensionOne)
   #set ($specimenPosition = $specimenContainerName + "(" + $positionDimensionOne + "," + $positionDimensionTwo + ")")
  #end
- #set ($resultRow="")
- #if($exportedItems.contains('Title'))
-   #set ($resultRow= "$resultRow , $gridData.title")
- #end
- #if($exportedItems.contains('Short Title'))
-   #set ($resultRow= "$resultRow , $gridData.shortTitle")
- #end
- #if($exportedItems.contains('First Name'))
-   #set ($resultRow= "$resultRow , $gridData.firstName")
- #end
- #if($exportedItems.contains('Middle Name'))
-   #set ($resultRow= "$resultRow , $gridData.middleName")
- #end
- #if($exportedItems.contains('Last Name'))
-   #set ($resultRow= "$resultRow , $gridData.lastName")
- #end
- #if($exportedItems.contains('SSN'))
-   #set ($resultRow= "$resultRow , $gridData.ssn")
- #end
- #if($exportedItems.contains('Gender'))
-   #set ($resultRow= "$resultRow , $gridData.gender")
- #end
- #if($exportedItems.contains('Race'))
-   #set ($resultRow= "$resultRow , $gridData.race")
- #end
- #if($exportedItems.contains('Ethnicity'))
-   #set ($resultRow= "$resultRow , $gridData.ethnicity")
- #end
- #if($exportedItems.contains('Birth Date'))
-   #set ($resultRow= "$resultRow , $gridData.birthDate")
- #end
- #if($exportedItems.contains('Vital Status'))
-   #set ($resultRow= "$resultRow , $gridData.vitalStatus")
- #end
- #if($exportedItems.contains('Death Date'))
-   #set ($resultRow= "$resultRow , $gridData.deathDate")
- #end
- #if($exportedItems.contains('Medical Record Number'))
-   #set ($resultRow= "$resultRow , $gridData.mrn")
-   #set ($resultRow= "$resultRow , $gridData.siteName")
- #end
- #if($exportedItems.contains('Registration Date'))
-   #set ($resultRow= "$resultRow , $gridData.registrationDate")
- #end
- #if($exportedItems.contains('PPI'))
-   #set ($resultRow= "$resultRow , $gridData.ppid")
- #end
- #if($exportedItems.contains('SCG Name'))
-   #set ($resultRow= "$resultRow , $gridData.scgName")
- #end
- #if($exportedItems.contains('Clinical Diagnosis'))
-   #set ($resultRow= "$resultRow , $gridData.clinicalDiagnosis")
- #end
- #if($exportedItems.contains('Clinical Status'))
-   #set ($resultRow= "$resultRow , $gridData.clinicalStatus")
- #end
- #if($exportedItems.contains('Collection Site'))
-   #set ($resultRow= "$resultRow , $gridData.collectionSite")
- #end
- #if($exportedItems.contains('Collection Event label'))
-   #set ($resultRow= "$resultRow , $gridData.cpeLabel")
- #end
- #if($exportedItems.contains('Study Calendar Event Point'))
-   #set ($resultRow= "$resultRow , $gridData.studyEventPoint")
- #end
- #if($exportedItems.contains('Surgical Pathology Number'))
-   #set ($resultRow= "$resultRow , $gridData.sprNumber")
- #end
- #if($exportedItems.contains('Label'))
-   #set ($resultRow= "$resultRow , $gridData.specLabel")
- #end
- #if($exportedItems.contains('Class'))
-   #set ($resultRow= "$resultRow , $gridData.specimenClass")
- #end
- #if($exportedItems.contains('Type'))
-   #set ($resultRow= "$resultRow , $gridData.specimenType")
- #end
- #if($exportedItems.contains('Tissue Site'))
-   #set ($resultRow= "$resultRow , $gridData.tissueSite")
- #end
- #if($exportedItems.contains('Tissue Side'))
-   #set ($resultRow= "$resultRow , $gridData.tissueSide")
- #end
- #if($exportedItems.contains('Available Quantity'))
-   #set ($resultRow= "$resultRow , $gridData.availableQuantity")
- #end
- #if($exportedItems.contains('Container'))
-   #set ($resultRow= "$resultRow , $specimenPosition")
- #end
- #if($exportedItems.contains('External ID'))
-   #set ($resultRow= "$resultRow , $gridData.externalId")
-   #set ($resultRow= "$resultRow , $gridData.externalValue")
- #end
- #set ($resultRow= "$resultRow , $gridData.requestedQuantity")
- #set ($resultRow= "$resultRow , $distributedQuantity")
- #set ($resultRow= "$resultRow , $gridData.status")
- #set ($resultRow= "$resultRow , $gridData.description")
- $resultRow
+		#set ($title='')
+		#if($gridData.title)
+		#set ($title=$gridData.title)
+		#end
+		#set ($shortTitle='')
+		#if($gridData.shortTitle)
+		#set ($shortTitle=$gridData.shortTitle)
+		#end
+		#set ($firstName='')
+		#if($gridData.firstName)
+			#set ($firstName=$gridData.firstName)
+		#end
+		#set ($middleName='')
+		#if($gridData.middleName)
+			#set ($middleName=$gridData.middleName)
+		#end
+		#set ($lastName='')
+		#if($gridData.lastName)
+			#set ($lastName=$gridData.lastName)
+		#end
+		#set ($ssn='')
+		#if($gridData.ssn)
+			#set ($ssn=$gridData.ssn)
+		#end
+		#set ($gender='')
+		#if($gridData.gender)
+			#set ($gender=$gridData.gender)
+		#end
+		#set ($race='')
+		#if($gridData.race)
+			#set ($race=$gridData.race)
+		#end
+		#set ($ethnicity='')
+		#if($gridData.ethnicity)
+			#set ($ethnicity=$gridData.ethnicity)
+		#end
+		#set ($birthDate='')
+		#if($gridData.birthDate)
+			#set ($birthDate=$gridData.birthDate)
+		#end
+		#set ($vitalStatus='')
+		#if($gridData.vitalStatus)
+			#set ($vitalStatus=$gridData.vitalStatus)
+		#end
+		#set ($deathDate='')
+		#if($gridData.deathDate)
+			#set ($deathDate=$gridData.deathDate)
+		#end
+		#set ($registrationDate='')
+		#if($gridData.registrationDate)
+			#set ($registrationDate=$gridData.registrationDate)
+		#end
+		#set ($ppid='')
+		#if($gridData.ppid)
+			#set ($ppid=$gridData.ppid)
+		#end
+		#set ($scgName='')
+		#if($gridData.scgName)
+			#set ($scgName=$gridData.scgName)
+		#end
+		#set ($clinicalDiagnosis='')
+		#if($gridData.clinicalDiagnosis)
+			#set ($clinicalDiagnosis=$gridData.clinicalDiagnosis)
+		#end
+		#set ($clinicalStatus='')
+		#if($gridData.clinicalStatus)
+			#set ($clinicalStatus=$gridData.clinicalStatus)
+		#end
+		#set ($collectionSite='')
+		#if($gridData.collectionSite)
+			#set ($collectionSite=$gridData.collectionSite)
+		#end
+		#set ($cpeLabel='')
+		#if($gridData.cpeLabel)
+			#set ($cpeLabel=$gridData.cpeLabel)
+		#end
+		#set ($studyEventPoint='')
+		#if($gridData.studyEventPoint)
+			#set ($studyEventPoint=$gridData.studyEventPoint)
+		#end
+		#set ($sprNumber='')
+		#if($gridData.sprNumber)
+			#set ($sprNumber=$gridData.sprNumber)
+		#end
+		#set ($specLabel='')
+		#if($gridData.specLabel)
+			#set ($specLabel=$gridData.specLabel)
+		#end
+		#set ($specimenClass='')
+		#if($gridData.specimenClass)
+			#set ($specimenClass=$gridData.specimenClass)
+		#end
+		#set ($specimenType='')
+		#if($gridData.specimenType)
+			#set ($specimenType=$gridData.specimenType)
+		#end
+		#set ($tissueSite='')
+		#if($gridData.tissueSite)
+			#set ($tissueSite=$gridData.tissueSite)
+		#end
+		#set ($tissueSide='')
+		#if($gridData.tissueSide)
+			#set ($tissueSide=$gridData.tissueSide)
+		#end
+ ,#if($exportedItems.contains('Title'))"${title}",#end#if($exportedItems.contains('Short Title'))"${shortTitle}",#end#if($exportedItems.contains('First Name'))"${firstName}",#end#if($exportedItems.contains('Middle Name'))"${middleName}",#end#if($exportedItems.contains('Last Name'))"${lastName}",#end#if($exportedItems.contains('SSN'))"$gridData.ssn",#end#if($exportedItems.contains('Gender'))"${gender}",#end#if($exportedItems.contains('Race'))"${race}",#end#if($exportedItems.contains('Ethnicity'))"${ethnicity}",#end#if($exportedItems.contains('Birth Date'))"${birthDate}",#end#if($exportedItems.contains('Vital Status'))"${vitalStatus}",#end#if($exportedItems.contains('Death Date'))"${deathDate}",#end#if($exportedItems.contains('Medical Record Number'))"$gridData.mrn","$gridData.siteName",#end#if($exportedItems.contains('Registration Date'))"${registrationDate}",#end#if($exportedItems.contains('PPI'))"${ppid}",#end#if($exportedItems.contains('SCG Name'))"${scgName}",#end#if($exportedItems.contains('Clinical Diagnosis'))"${clinicalDiagnosis}",#end#if($exportedItems.contains('Clinical Status'))"${clinicalStatus}",#end#if($exportedItems.contains('Collection Site'))"${collectionSite}",#end#if($exportedItems.contains('Collection Event label'))"${cpeLabel}",#end#if($exportedItems.contains('Study Calendar Event Point'))"${studyEventPoint}",#end#if($exportedItems.contains('Surgical Pathology Number'))"${sprNumber}",#end#if($exportedItems.contains('Label'))"${specLabel}",#end#if($exportedItems.contains('Class'))"${specimenClass}",#end#if($exportedItems.contains('Type'))"${specimenType}",#end#if($exportedItems.contains('Tissue Site'))"${tissueSite}",#end#if($exportedItems.contains('Tissue Side'))"${tissueSide}",#end#if($exportedItems.contains('Available Quantity'))"$gridData.availableQuantity",#end#if($exportedItems.contains('Container'))"${specimenPosition}",#end#if($exportedItems.contains('External ID'))"$gridData.externalId","$gridData.externalValue",#end"$gridData.requestedQuantity","${distributedQuantity}","$gridData.status","${description}" 
 #end

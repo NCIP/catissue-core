@@ -1158,6 +1158,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_COLL_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_COLL_EVENT_PARAM"
+	               constraintName="FK_SPEC_COLL_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_FIXED_EVENT_PARAM" failOnError="false">
@@ -1171,6 +1176,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_FIXED_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_FIXED_EVENT_PARAM"
+	               constraintName="FK_SPEC_FIXED_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_FROZEN_EVENT_PARAM" failOnError="false">
@@ -1184,6 +1194,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_FROZEN_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	    <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_FROZEN_EVENT_PARAM"
+	               constraintName="FK_SPEC_FROZEN_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_IN_OUT_EVENT_PARAM" failOnError="false">
@@ -1197,6 +1212,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_INOUT_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_IN_OUT_EVENT_PARAM"
+	               constraintName="FK_SPEC_IN_OUT_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_PROCEDURE_EVENT_PARAM" failOnError="false">
@@ -1210,6 +1230,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_PROC_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_PROCEDURE_EVENT_PARAM"
+	               constraintName="FK_SPEC_PROCEDURE_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_SPUN_EVENT_PARAMETERS" failOnError="false">
@@ -1223,6 +1248,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_SPUN_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_SPUN_EVENT_PARAMETERS"
+	               constraintName="FK_SPEC_SPUN_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_TRANSFER_EVENT_PARAM" failOnError="false">
@@ -1236,6 +1266,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_TRANSFER_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_TRANSFER_EVENT_PARAM"
+	               constraintName="FK_SPEC_TRANSFER_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_RECEIVED_EVENT_PARAM" failOnError="false">
@@ -1249,6 +1284,11 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
 	               constraintName="FK_USER_REC_EVENT"
 	               referencedColumnNames="IDENTIFIER"
 	               referencedTableName="CATISSUE_USER"/>
+	     <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_RECEIVED_EVENT_PARAM"
+	               constraintName="FK_SPEC_REC_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_EMBEDDED_EVENT_PARAM" failOnError="false">
@@ -1257,11 +1297,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_EMB_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+        <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM"
                constraintName="FK_USER_EMB_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_EMBEDDED_EVENT_PARAM"
+	               constraintName="FK_SPEC_EMBEDDED_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_THAW_EVENT_PARAMETERS" failOnError="false">
@@ -1270,11 +1315,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_THAW_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+        <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_THAW_EVENT_PARAMETERS"
                constraintName="FK_USER_THAW_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_THAW_EVENT_PARAMETERS"
+	               constraintName="FK_SPEC_THAW_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_CELL_SPE_REVIEW_PARAM" failOnError="false">
@@ -1283,12 +1333,17 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_CELL_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <dropForeignKeyConstraint baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM" constraintName="FK52F40EDEBC7298A9"/>
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+     	<dropForeignKeyConstraint baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM" constraintName="FK52F40EDEBC7298A9"/>
+     	<addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
                constraintName="FK_USER_CELL_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_CELL_SPE_REVIEW_PARAM"
+	               constraintName="FK_SPEC_CELL_REV_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/> 
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_TIS_SPE_EVENT_PARAM" failOnError="false">
@@ -1297,11 +1352,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_TISSUE_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+     	<addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM"
                constraintName="FK_USER_TISSUE_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_TIS_SPE_EVENT_PARAM"
+	               constraintName="FK_SPEC_TISSUE_REV_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_FLUID_SPE_EVENT_PARAM" failOnError="false">
@@ -1310,11 +1370,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_FLUID_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+        <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM"
                constraintName="FK_USER_FLUID_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_FLUID_SPE_EVENT_PARAM"
+	               constraintName="FK_SPEC_FLUID_REV_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_MOL_SPE_REVIEW_PARAM" failOnError="false">
@@ -1323,11 +1388,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_MOL_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+         <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM"
                constraintName="FK_USER_MOL_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_MOL_SPE_REVIEW_PARAM"
+	               constraintName="FK_SPEC_MOL_REV_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_DISPOSAL_EVENT_PARAM" failOnError="false">
@@ -1336,11 +1406,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_DISP_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+        <addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM"
                constraintName="FK_USER_DISP_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_DISPOSAL_EVENT_PARAM"
+	               constraintName="FK_SPEC_DISPOSAL_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
     
     <changeSet author="nitesh" id="adding FK for CATISSUE_DISTRI_EVENT_PARAM" failOnError="false">
@@ -1349,11 +1424,16 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
                constraintName="FK_DISTRI_EVENT_TO_EV_MAPPING"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_SPEC_EVENT_MAPPING"/> -->
-     <addForeignKeyConstraint baseColumnNames="USER_ID"
+     	<addForeignKeyConstraint baseColumnNames="USER_ID"
                baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
                constraintName="FK_USER_DISTRI_EVENT"
                referencedColumnNames="IDENTIFIER"
                referencedTableName="CATISSUE_USER"/>
+        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID"
+	               baseTableName="CATISSUE_DISTRI_EVENT_PARAM"
+	               constraintName="FK_SPEC_DISTRI_EVENT"
+	               referencedColumnNames="IDENTIFIER"
+	               referencedTableName="CATISSUE_SPECIMEN"/>
     </changeSet>
 
     <changeSet author="vpawar" id="adding new form context table" failOnError="true">
@@ -3813,5 +3893,5 @@ PROCEDURE DEL_DUP_SCG_REC_EVENTS
     </addColumn>
   </changeSet>
 
-     
+   
 </databaseChangeLog>

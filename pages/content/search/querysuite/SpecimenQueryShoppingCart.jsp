@@ -124,10 +124,11 @@ function reloadGrid(obj)
 }
 function updateHiddenFields()
     {
-        var isCreateRequestShipment = document.forms[0].chkName[3].checked || document.forms[0].chkName[4].checked;
+        var isCreateRequestShipment = document.forms[0].chkName[4].checked || document.forms[0].chkName[5].checked || document.forms[0].chkName[3].checked;
                var isChecked = "false";
         var checkedRows = mygrid.getCheckedRows(0);
 //alert(checkedRows);
+
         if(checkedRows.length > 0)
         {
             isChecked = "true";

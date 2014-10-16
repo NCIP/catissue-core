@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.DateFormat;
@@ -1910,7 +1911,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic {
 		return consentkey.toString();
 	}
 
-	public List getOrderItemsDetail(Long orderId, HibernateDAO dao) throws Exception {
+	public List getOrderItemsDetail(Long orderId, HibernateDAO dao, ExportedItemDto dto) throws Exception {
 		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 		substParams.put("0", new NamedQueryParam(DBTypes.LONG, orderId));
 		List<ExistingSpecimenOrderItem> orderItemsDetails = dao.executeNamedQuery("getOrderItems", substParams);
@@ -1922,9 +1923,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic {
 			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
 			Participant participant = cpr.getParticipant();
-
 			orderItemDTO.populateSpecimen(specimen);
-			orderItemDTO.populateScg(scg);
+			orderItemDTO.populateScg(scg); 
 			orderItemDTO.populateParticipant(participant);
 			orderItemDTO.populateCpr(cpr);
 
@@ -1942,13 +1942,31 @@ public class OrderBizLogic extends CatissueDefaultBizLogic {
 			Collection<ParticipantMedicalIdentifier> pmiColl = participant.getParticipantMedicalIdentifierCollection();
 			int extIdSize = exts == null ? 0 : exts.size();
 			int mrnSize = pmiColl == null ? 0 : exts.size();
-			if (mrnSize == 0 && extIdSize == 0) {
+			if (mrnSize == 0 && extIdSize == 0 || (!dto.isExternalId() && !dto.isMrn())) {
 				orderItemsDTOs.add(orderItemDTO);
 			}
-			else {
+			else if(dto.isExternalId() && dto.isMrn()){
 				if (extIdSize >= mrnSize) {
 					Iterator<ParticipantMedicalIdentifier> itr = pmiColl.iterator();
+					int cnt = 0;
 					for (ExternalIdentifier exId : exts) {
+						if(cnt >= 1){
+							OrderItemDTO dtoBean = (OrderItemDTO)BeanUtils.cloneBean(orderItemDTO);
+							if (!StringUtils.isBlank(exId.getName())) {
+								dtoBean.setExternalId(exId.getName()==null?"":exId.getName());
+								dtoBean.setExternalValue(exId.getValue()==null?"":exId.getValue());
+							}
+
+							if (itr.hasNext()) {
+								ParticipantMedicalIdentifier pmi = itr.next();
+								if (!StringUtils.isBlank(pmi.getMedicalRecordNumber())) {
+									dtoBean.setMrn(pmi.getMedicalRecordNumber());
+									dtoBean.setSiteName(pmi.getSite().getName());
+								}
+							}
+							orderItemsDTOs.add(dtoBean);
+						}
+						else{
 						if (!StringUtils.isBlank(exId.getName())) {
 							orderItemDTO.setExternalId(exId.getName()==null?"":exId.getName());
 							orderItemDTO.setExternalValue(exId.getValue()==null?"":exId.getValue());
@@ -1962,12 +1980,32 @@ public class OrderBizLogic extends CatissueDefaultBizLogic {
 							}
 						}
 						orderItemsDTOs.add(orderItemDTO);
-
+						}
+						
+						cnt++;
 					}
 				}
 				else if (mrnSize >= extIdSize) {
 					Iterator<ExternalIdentifier> itr = exts.iterator();
+					int cnt = 0;
 					for (ParticipantMedicalIdentifier pmi : pmiColl) {
+						if(cnt >= 1){
+							OrderItemDTO dtoBean = (OrderItemDTO)BeanUtils.cloneBean(orderItemDTO);
+							if (!StringUtils.isBlank(pmi.getMedicalRecordNumber())) {
+								dtoBean.setMrn(pmi.getMedicalRecordNumber());
+								dtoBean.setSiteName(pmi.getSite().getName());
+							}
+
+							if (itr.hasNext()) {
+								ExternalIdentifier exId = itr.next();
+								if (!StringUtils.isBlank(exId.getName())) {
+									dtoBean.setExternalId(exId.getName());
+									dtoBean.setExternalValue(exId.getValue());
+								}
+							}
+							orderItemsDTOs.add(dtoBean);
+						}
+						else{
 						if (!StringUtils.isBlank(pmi.getMedicalRecordNumber())) {
 							orderItemDTO.setMrn(pmi.getMedicalRecordNumber());
 							orderItemDTO.setSiteName(pmi.getSite().getName());
@@ -1980,9 +2018,51 @@ public class OrderBizLogic extends CatissueDefaultBizLogic {
 								orderItemDTO.setExternalValue(exId.getValue());
 							}
 						}
+						orderItemsDTOs.add(orderItemDTO);
+						}
+						cnt++;
+					}
+				}
+			}
+			else if(dto.isExternalId()  && extIdSize > 0){
+				int cnt = 0;
+				for (ExternalIdentifier exId : exts) {
+					if (!StringUtils.isBlank(exId.getName())) {
+						if(cnt >= 1){
+							OrderItemDTO dtoBean = (OrderItemDTO)BeanUtils.cloneBean(orderItemDTO);
+							dtoBean.setExternalId(exId.getName()==null?"":exId.getName());
+							dtoBean.setExternalValue(exId.getValue()==null?"":exId.getValue());
+							orderItemsDTOs.add(dtoBean);
+						}else{
+						orderItemDTO.setExternalId(exId.getName()==null?"":exId.getName());
+						orderItemDTO.setExternalValue(exId.getValue()==null?"":exId.getValue());
+						orderItemsDTOs.add(orderItemDTO);
+						}
+					}else{
+					orderItemsDTOs.add(orderItemDTO);
+					}
+					cnt++;
+				}
 
+			}
+			else if(dto.isMrn() && mrnSize > 0 ){
+				int cnt = 0;
+				for (ParticipantMedicalIdentifier pmi : pmiColl) {
+					if (!StringUtils.isBlank(pmi.getMedicalRecordNumber())) {
+						if(cnt >= 1){
+							OrderItemDTO dtoBean = (OrderItemDTO)BeanUtils.cloneBean(orderItemDTO);
+							dtoBean.setMrn(pmi.getMedicalRecordNumber());
+							dtoBean.setSiteName(pmi.getSite().getName());
+							orderItemsDTOs.add(dtoBean);
+						}else{
+							orderItemDTO.setMrn(pmi.getMedicalRecordNumber());
+							orderItemDTO.setSiteName(pmi.getSite().getName());
+							orderItemsDTOs.add(orderItemDTO);
+						}
+					}else{
 						orderItemsDTOs.add(orderItemDTO);
 					}
+					cnt++;
 				}
 			}
 		}
@@ -2262,8 +2342,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic {
 			orderDetailMap.put("requestedDate", requestedDateStr);
 			orderDetailMap.put("exportedOn", currentDate);
 			orderDetailMap.put("exportedBy", exportedBy);
-			orderDetailMap.put("orderItemsDetail", getOrderItemsDetail(orderId, dao));
 			ExportedItemDto dto = populateITemList(exportedItems);
+			orderDetailMap.put("orderItemsDetail", getOrderItemsDetail(orderId, dao,dto));
+			
 			orderDetailMap.put("exportedItems", dto.getExportedItems());
 			orderDetailMap.put("exportDto", dto);
 
