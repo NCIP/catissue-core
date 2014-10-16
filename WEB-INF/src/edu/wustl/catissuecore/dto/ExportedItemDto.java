@@ -59,7 +59,7 @@ public class ExportedItemDto {
 	}
 
 	public boolean isMrn() {
-		return exportedItems.contains("Medical Revord Number");
+		return exportedItems.contains("Medical Record Number");
 	}
 
 	public boolean isSite() {
@@ -135,7 +135,7 @@ public class ExportedItemDto {
 	}
 
 	public boolean isExternalId() {
-		return exportedItems.contains("External Id");
+		return exportedItems.contains("External ID");
 	}
 
 	public boolean isExternalValue() {

@@ -30,14 +30,14 @@
   <item id='Surgical Pathology Number' text='Surgical Pathology Number'></item>
  </item>
  
- <item id='specimen' text='Specimen' checked='0'>
-  <item id='Label' text='Label' ></item>
-  <item id='Class' text='Class'></item>
-  <item id='Type' text='Type'></item>
-  <item id='Tissue Site' text='Tissue Site'></item>
-  <item id='Tissue Side' text='Tissue Side'></item>
-  <item id='Available Quantity' text='Available Quantity'></item>
-  <item id='Container' text='Storage Container'></item>
+ <item id='specimen' text='Specimen' checked='-1'>
+  <item id='Label' text='Label' checked='0'></item>
+  <item id='Class' text='Class' checked='0'></item>
+  <item id='Type' text='Type' checked='0'></item>
+  <item id='Tissue Site' text='Tissue Site' checked='0'></item>
+  <item id='Tissue Side' text='Tissue Side' checked='0'></item>
+  <item id='Available Quantity' text='Available Quantity' checked='0'></item>
+  <item id='Container' text='Storage Container' checked='0'></item>
   <item id='External ID,External Value' text='External Identifier'></item>
   
  </item> 
