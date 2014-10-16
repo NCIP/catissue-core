@@ -9,8 +9,13 @@ import java.util.Map;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -290,13 +295,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		
 	@Override
 	public ObjectCpDetail getObjectCpDetail(Map<String, Object> dataHookingInformation) {
-
 		ObjectCpDetail objCp = null;
-		if (dataHookingInformation.get("entityType").equals("Participant") ) {
+		String entityType = (String)dataHookingInformation.get("entityType"); 
+		if (entityType.equals("Participant") ) {
 			objCp = getObjectIdForParticipant(dataHookingInformation);
-		} else if (dataHookingInformation.get("entityType").equals("Specimen") ) {
-			objCp = getObjectIdForSpecimen(dataHookingInformation);
-		} else {
+		} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
+			objCp = getObjectIdForSpecimen(entityType, dataHookingInformation);
+		} else if (entityType.equals("SpecimenCollectionGroup")) {
 			objCp = getObjectIdForSCG(dataHookingInformation);
 		}
 		
@@ -353,69 +358,112 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
-        ObjectCpDetail objCp = new ObjectCpDetail();
-        String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
+		ObjectCpDetail objCp = new ObjectCpDetail();
+		String cpTitle = (String) dataHookingInformation.get("collectionProtocol");
 		String ppId = (String) dataHookingInformation.get("ppi");
-		
+
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_OBJ_ID);
 		query.setString("ppId", ppId);
 		query.setString("cpTitle", cpTitle);
-        List<Object[]> objs = query.list();
 
-        if (objs == null || objs.isEmpty()) {
-            return null;
-        }
+		List<Object[]> objs = query.list();
+		if (objs == null || objs.isEmpty()) {
+			return null;
+		}
 
-        objCp.setObjectId((Long)objs.get(0)[0]);
-        objCp.setCpId((Long) objs.get(0)[1]);
-
-        return objCp;
+		Object[] row = objs.get(0);
+		objCp.setObjectId((Long) row[0]);
+		objCp.setCpId((Long) row[1]);
+		return objCp;
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	private ObjectCpDetail getObjectIdForSpecimen(Map<String, Object> dataHookingInformation) {
-        ObjectCpDetail objCp = new ObjectCpDetail();
-        String specimenId = (String) dataHookingInformation.get("specimenId");
-		String specimenLabel = (String) dataHookingInformation.get("specimenLabel");
-		String specimenBarcode = (String) dataHookingInformation.get("specimenBarcode");
-		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMEN_OBJ_ID);
-		query.setString("specimenId", specimenId);
-		query.setString("specimenLabel", specimenLabel);
-		query.setString("specimenBarcode", specimenBarcode);
-        List<Object[]> objs = query.list();
+	private ObjectCpDetail getObjectIdForSpecimen(String entityType, Map<String, Object> dataHookingInformation) {
+		ObjectCpDetail objCp = new ObjectCpDetail();
+		String id = null, label = null, barcode = null;
 
-        if (objs == null || objs.isEmpty()) {
-            return null;
-        }
+		if (entityType.equals("Specimen")) {
+			id = (String) dataHookingInformation.get("specimenId");
+			label = (String) dataHookingInformation.get("specimenLabel");
+			barcode = (String) dataHookingInformation.get("specimenBarcode");
+		} else if (entityType.equals("SpecimenEvent")) {
+			id = (String) dataHookingInformation.get("specimenIdForEvent");
+			label = (String) dataHookingInformation.get("specimenLabelForEvent");
+			barcode = (String) dataHookingInformation.get("specimenBarcodeForEvent");
+		} else {
+			throw new RuntimeException("Unknown entity type: " + entityType);
+		}
 
-        objCp.setObjectId((Long)objs.get(0)[0]);
-        objCp.setCpId((Long)objs.get(0)[1]);
+		Criteria query = sessionFactory
+				.getCurrentSession()
+				.createCriteria(Specimen.class)
+				.createAlias("specimenCollectionGroup", "scg")
+				.createAlias("scg.collectionProtocolRegistration", "cpr")
+				.createAlias("cpr.collectionProtocol", "cp")
+				.setProjection(
+						Projections.projectionList()
+								.add(Projections.property("id"))
+								.add(Projections.property("cp.id")));
 
-        return objCp;
+		if (id != null) {
+			Long specimenId = Long.parseLong(id);
+			query.add(Restrictions.eq("id", specimenId));
+		} else if (label != null) {
+			query.add(Restrictions.eq("label", label));
+		} else if (barcode != null) {
+			query.add(Restrictions.eq("barcode", barcode));
+		} else {
+			throw new RuntimeException("Require either Specimen ID, Specimen Label or Specimen Barcode");
+		}
+
+		List<Object[]> objs = query.list();
+		if (objs == null || objs.isEmpty()) {
+			return null;
+		}
+
+		Object[] row = objs.get(0);
+		objCp.setObjectId((Long) row[0]);
+		objCp.setCpId((Long) row[1]);
+		return objCp;
 	}
 
 	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForSCG(Map<String, Object> dataHookingInformation) {
-        ObjectCpDetail objCp = new ObjectCpDetail();
-        String scgId = (String) dataHookingInformation.get("scgId");
-		String scgName = (String) dataHookingInformation.get("scgName");
-		String scgBarcode = (String) dataHookingInformation.get("scgBarcode");
-		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_SCG_OBJ_ID);
-		query.setString("scgId", scgId);
-		query.setString("scgName", scgName);
-		query.setString("scgBarcode", scgBarcode);
-        List<Object[]> objs = query.list();
+		ObjectCpDetail objCp = new ObjectCpDetail();
+		String id = (String) dataHookingInformation.get("scgId");
+		String name = (String) dataHookingInformation.get("scgName");
+		String barcode = (String) dataHookingInformation.get("scgBarcode");
 
-        if (objs == null || objs.isEmpty()) {
-            return null;
-        }
+		Criteria query = sessionFactory
+				.getCurrentSession()
+				.createCriteria(SpecimenCollectionGroup.class)
+				.createAlias("collectionProtocolRegistration", "cpr")
+				.createAlias("cpr.collectionProtocol", "cp")
+				.setProjection(
+						Projections.projectionList()
+								.add(Projections.property("id"))
+								.add(Projections.property("cp.id")));
 
-        objCp.setObjectId((Long)objs.get(0)[0]);
-        objCp.setCpId((Long)objs.get(0)[1]);
+		if (id != null) {
+			Long scgId = Long.parseLong(id);
+			query.add(Restrictions.eq("id", scgId));
+		} else if (name != null) {
+			query.add(Restrictions.eq("name", name));
+		} else if (barcode != null) {
+			query.add(Restrictions.eq("barcode", barcode));
+		} else {
+			throw new RuntimeException("Require either SCG ID, SCG Name or SCG Barcode");
+		}
 
-        return objCp;
+		List<Object[]> objs = query.list();
+		if (objs == null || objs.isEmpty()) {
+			return null;
+		}
+
+		Object[] row = objs.get(0);
+		objCp.setObjectId((Long) row[0]);
+		objCp.setCpId((Long) row[1]);
+		return objCp;
 	}
 	
 	private static final String FQN = FormContextBean.class.getName();
@@ -444,10 +492,6 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_PARTICIPANT_OBJ_ID = FQN + ".getParticipantObjId";
 
-	private static final String GET_SPECIMEN_OBJ_ID =  FQN + ".getSpecimenObjId";
-
-	private static final String GET_SCG_OBJ_ID =  FQN + ".getScgObjId";
-	
 	private static final String GET_FORM_CTX_ID = FQN + ".getFormContextId";
 
 	private static final String RE_FQN = FormRecordEntryBean.class.getName();

@@ -354,34 +354,6 @@
               reg.protocol_participant_id = :ppId and cp.title = :cpTitle
         </sql-query>
 
-
-        <sql-query name="getSpecimenObjId">
-            <return-scalar column="id" type="long"/>
-            <return-scalar column="cpId" type="long"/>
-
-            select
-              sp.identifier as id, reg.collection_protocol_id as cpId
-            from
-              catissue_coll_prot_reg reg
-              inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier
-              inner join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier
-            where
-              sp.identifier = :specimenId or sp.label = :specimenLabel or sp.barcode = :specimenBarcode
-        </sql-query>
-
-        <sql-query name="getScgObjId">
-            <return-scalar column="id" type="long"/>
-            <return-scalar column="cpId" type="long"/>
-
-            select
-              scg.identifier as id, reg.collection_protocol_id as cpId
-            from
-              catissue_coll_prot_reg reg
-              inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier
-            where
-              scg.identifier = :scgId or scg.name = :scgName or scg.barcode = :scgBarcode
-        </sql-query>
-
         <query name = "getContainerId">
             select
               containerId

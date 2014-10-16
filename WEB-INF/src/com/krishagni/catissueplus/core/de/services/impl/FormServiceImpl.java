@@ -442,6 +442,7 @@ public class FormServiceImpl implements FormService {
 	public BOTemplateGeneratedEvent genereateBoTemplate(BOTemplateGenerationEvent req) {
 		Long formId = req.getFormId();
 		BOTemplateGeneratorUtil generator = new BOTemplateGeneratorUtil();
+		
 		try {
 			for (String level : req.getEntityLevels()) {
 				generator.generateAndUploadTemplate(formId, level);
@@ -449,8 +450,10 @@ public class FormServiceImpl implements FormService {
 		} catch (Exception e) {
 			BOTemplateGeneratedEvent.not_ok();
 		}
+		
 		return BOTemplateGeneratedEvent.ok(null);
 	}
+	
 	private List<FormFieldSummary> getFormFields(Container container) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();
 

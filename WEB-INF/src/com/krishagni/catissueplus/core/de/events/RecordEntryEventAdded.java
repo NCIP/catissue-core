@@ -17,6 +17,7 @@ public class RecordEntryEventAdded extends ResponseEvent {
 
 	public static RecordEntryEventAdded ok(Long recordEntryId) {
 		RecordEntryEventAdded resp = new RecordEntryEventAdded();
+		resp.setStatus(EventStatus.OK);
 		resp.setRecordEntryId(recordEntryId);
 		return resp;		
 	}

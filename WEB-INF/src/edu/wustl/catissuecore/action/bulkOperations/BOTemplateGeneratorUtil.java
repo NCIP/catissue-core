@@ -12,24 +12,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BOTemplateGeneratorUtil {
-	 private static Map<String, String> participantIntegratorFields = new HashMap<String, String>();
+	 private static Map<String, String> PARTICIPANT_INTEGRATOR_FIELDS = new HashMap<String, String>();
 
-	 private static Map<String, String> specimenIntegratorFields = new HashMap<String, String>();
+	 private static Map<String, String> SPECIMEN_INTEGRATOR_FIELDS = new HashMap<String, String>();
 	 
-	 private static Map<String, String> scgIntegratorFields = new HashMap<String, String>();
+	 private static Map<String, String> SPE_INTEGRATOR_FIELDS = new HashMap<String, String>();
+	 
+	 private static Map<String, String> SCG_INTEGRATOR_FIELDS = new HashMap<String, String>();
 
-	    static {
-            participantIntegratorFields.put("Collection Protocol Title", "collectionProtocol");
-            participantIntegratorFields.put("Participant Protcol ID", "ppi");
+	static {
+		PARTICIPANT_INTEGRATOR_FIELDS.put("Collection Protocol Title",
+				"collectionProtocol");
+		PARTICIPANT_INTEGRATOR_FIELDS.put("Participant Protcol ID", "ppi");
 
-            specimenIntegratorFields.put("Specimen Name", "specimenLabel");
-            specimenIntegratorFields.put("Specimen ID", "specimenId");
-            specimenIntegratorFields.put("Specimen Barcode", "specimenBarcode");
+		SPECIMEN_INTEGRATOR_FIELDS.put("Specimen Name", "specimenLabel");
+		SPECIMEN_INTEGRATOR_FIELDS.put("Specimen ID", "specimenId");
+		SPECIMEN_INTEGRATOR_FIELDS.put("Specimen Barcode", "specimenBarcode");
 
-            scgIntegratorFields.put("SCG Name", "scgName");
-	    	scgIntegratorFields.put("SCG ID", "scgId");
-	    	scgIntegratorFields.put("SCG Barcode", "scgBarcode");
-	    }
+		SPE_INTEGRATOR_FIELDS.put("Specimen Name", "specimenLabelForEvent");
+		SPE_INTEGRATOR_FIELDS.put("Specimen ID", "specimenIdForEvent");
+		SPE_INTEGRATOR_FIELDS
+				.put("Specimen Barcode", "specimenBarcodeForEvent");
+
+		SCG_INTEGRATOR_FIELDS.put("SCG Name", "scgName");
+		SCG_INTEGRATOR_FIELDS.put("SCG ID", "scgId");
+		SCG_INTEGRATOR_FIELDS.put("SCG Barcode", "scgBarcode");
+	}
 	    
 		public String generateAndUploadTemplate(Long formId, String level) throws Exception {
 			Map<String, String> integratorCtxtFields = getIntegratorCtrxt(level);
@@ -67,15 +75,15 @@ public class BOTemplateGeneratorUtil {
 		private Map<String, String> getIntegratorCtrxt(String level) {
 			Map<String, String> integratorCtxtFields = new HashMap<String, String>();
 			if (level.equalsIgnoreCase("Participant")) {
-				integratorCtxtFields = participantIntegratorFields;
+				integratorCtxtFields = PARTICIPANT_INTEGRATOR_FIELDS;
 			} else if (level.equalsIgnoreCase("SpecimenCollectionGroup")) {
-				integratorCtxtFields = scgIntegratorFields;
+				integratorCtxtFields = SCG_INTEGRATOR_FIELDS;
 			} else if (level.equalsIgnoreCase("Specimen")) {
-				integratorCtxtFields = specimenIntegratorFields;
+				integratorCtxtFields = SPECIMEN_INTEGRATOR_FIELDS;
+			} else if (level.equalsIgnoreCase("SpecimenEvent")) {
+				integratorCtxtFields = SPE_INTEGRATOR_FIELDS;
 			}
 			
 			return integratorCtxtFields;
-		}
-	
-	
+		}	
 }
