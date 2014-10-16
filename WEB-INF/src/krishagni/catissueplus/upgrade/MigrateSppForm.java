@@ -135,47 +135,60 @@ public class MigrateSppForm extends MigrateForm {
 		}		
 	}
 	
-	private List<Control> getCommonSppFields() {
-		List<Control> result = new ArrayList<Control>();
-		
+	private Control[] getCommonSppFields() {
+		return new Control[] {
+				getUserField(1),
+				getDateTimeField(2),
+				getReasonForDeviationField(3),
+				getCommentsField(4)
+		};
+	}
+	
+	private Control getUserField(int rowNo) {
 		Control user = new UserControl();
 		user.setName(USER);
 		user.setUserDefinedName(USER);
 		user.setCaption("User");
-		user.setSequenceNumber(1);
+		user.setSequenceNumber(rowNo);
 		user.setxPos(0);
-		result.add(user);
-		
+		user.setMandatory(true);
+		return user;		
+	}
+	
+	private Control getDateTimeField(int rowNo) {
 		DatePicker dateTime = new DatePicker();
 		dateTime.setName(DATETIME);
 		dateTime.setUserDefinedName(DATETIME);
 		dateTime.setCaption("Date and Time");
-		dateTime.setSequenceNumber(2);
+		dateTime.setSequenceNumber(rowNo);
 		dateTime.setxPos(0);
 		dateTime.setFormat("MM-dd-yyyy HH:mm");
-		result.add(dateTime);
-		
+		dateTime.setMandatory(true);
+		return dateTime;		
+	}
+	
+	private Control getReasonForDeviationField(int rowNo) {
 		TextArea deviation = new TextArea();
 		deviation.setName(DEVIATION);
 		deviation.setUserDefinedName(DEVIATION);
 		deviation.setCaption("Reason for Deviation");
-		deviation.setSequenceNumber(3);
+		deviation.setSequenceNumber(rowNo);
 		deviation.setxPos(0);
 		deviation.setNoOfRows(2);
-		result.add(deviation);
-		
+		return deviation;		
+	}
+	
+	private Control getCommentsField(int rowNo) {
 		TextArea comments = new TextArea();
 		comments.setName(COMMENTS);
 		comments.setUserDefinedName(COMMENTS);
 		comments.setCaption("Comments");
-		comments.setSequenceNumber(4);
+		comments.setSequenceNumber(rowNo);
 		comments.setxPos(0);
 		comments.setNoOfRows(2);
-		result.add(comments);
-		
-		return result;		
+		return comments;
 	}
-	
+		
 	private void addCommonSppFieldValues(FormData formData, Map<String, Object> fieldValues) {
 		for (Map.Entry<String, Object> fieldValue : fieldValues.entrySet()) {
 			addCommonSppFieldValue(formData, fieldValue.getKey(), fieldValue.getValue());
