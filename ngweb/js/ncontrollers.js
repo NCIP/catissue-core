@@ -249,19 +249,16 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
     };
 
     var getSelectList = function(filterMap, selectedFields) {
-      var temporalMarker = '$temporal.';
       var result = "";
 
       for (var i = 0; i < selectedFields.length; ++i) {
         var field = selectedFields[i];
 
-        if (typeof field == "string" && field.indexOf(temporalMarker) == 0) { // TODO: Handle temporal expr and aggregates
-          var filterId = field.substring(temporalMarker.length);
-          var filter = filterMap[filterId];
-          field = getTemporalExprObj(filter.expr).lhs;
-          field += " as \"" + filter.desc + "\"";
+        if (typeof field == "string") {
+          field = getFieldExpr(filterMap, field, true);
         } else if (typeof field != "string") {
           if (field.aggFns && field.aggFns.length > 0) {
+            var fieldExpr = getFieldExpr(filterMap, field.name);
             var fnExprs = "";
             for (var j = 0; j < field.aggFns.length; ++j) {
               if (fnExprs.length > 0) {
@@ -275,12 +272,12 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
                 fnExprs += aggFn.name + '(';
               }
 
-              fnExprs += field.name + ") as \"" + aggFn.desc + " \"";
+              fnExprs += fieldExpr + ") as \"" + aggFn.desc + " \"";
             }
 
             field = fnExprs;
           } else {
-            field = field.name;
+            field = getFieldExpr(filterMap, field.name, true);
           }
         }
 
@@ -292,6 +289,22 @@ angular.module('plus.controllers', ['checklist-model', 'ui.app'])
       }
 
       return result;
+    };
+
+    var getFieldExpr = function(filterMap, fieldName, includeDesc) {
+      var temporalMarker = '$temporal.';
+      if (fieldName.indexOf(temporalMarker) != 0) {
+        return fieldName;
+      }
+
+      var filterId = fieldName.substring(temporalMarker.length);
+      var filter = filterMap[filterId];
+      var expr = getTemporalExprObj(filter.expr).lhs;
+      if (includeDesc) {
+        expr += " as \"" + filter.desc + "\"";
+      }
+
+      return expr;
     };
 
     var showAddToSpecimenList = function(selectList) {

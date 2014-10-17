@@ -40,23 +40,17 @@ public class AqlBuilder {
 	private String buildSelectClause(Map<Integer, Filter> filterMap, Object[] selectList) {
 		StringBuilder select = new StringBuilder();
 		for (Object field : selectList) {
-			String elem = "";
 			if (field instanceof String) {
-				elem = (String)field;
-				if (elem.startsWith("$temporal.")) {				
-					Integer filterId = Integer.parseInt(elem.substring("$temporal.".length()));
-					Filter filter = filterMap.get(filterId);
-					elem = getLhs(filter.getExpr()) + " as \"" + filter.getDesc() + " \""; 
-				}
-				
-				select.append(elem).append(", ");
+				select.append(getFieldExpr(filterMap, (String)field, true)).append(", ");
 			} else if (field instanceof SelectField) {
 				SelectField aggField = (SelectField)field;
 				String fieldName = aggField.getName();
 				
 				if (aggField.getAggFns() == null || aggField.getAggFns().isEmpty()) {
-					select.append(fieldName).append(", ");
+					select.append(getFieldExpr(filterMap, fieldName, true)).append(", ");
 				} else {
+					String fieldExpr = getFieldExpr(filterMap, fieldName, false);
+					
 					StringBuilder fnExpr = new StringBuilder("");
 					for (Function fn : aggField.getAggFns()) {
 						if (fnExpr.length() > 0) {
@@ -69,7 +63,7 @@ public class AqlBuilder {
 							fnExpr.append(fn.getName()).append("(");
 						}
 						
-						fnExpr.append(fieldName).append(") as \"").append(fn.getDesc()).append(" \"");
+						fnExpr.append(fieldExpr).append(") as \"").append(fn.getDesc()).append(" \"");
 					}
 					
 					select.append(fnExpr.toString()).append(", ");
@@ -80,6 +74,22 @@ public class AqlBuilder {
 		int endIdx = select.length() - 2;		
 		return select.substring(0, endIdx < 0 ? 0 : endIdx);
 	}
+	
+	private String getFieldExpr(Map<Integer, Filter> filterMap, String fieldName, boolean includeDesc) {
+		if (!fieldName.startsWith("$temporal.")) {
+			return fieldName;
+		}
+
+		Integer filterId = Integer.parseInt(fieldName.substring("$temporal.".length()));
+		Filter filter = filterMap.get(filterId);
+
+		String expr = getLhs(filter.getExpr());
+		if (includeDesc) {
+			expr += " as \"" + filter.getDesc() + "\"";
+		}
+
+		return expr;
+	}	
 	
 	private String buildWhereClause(Map<Integer, Filter> filterMap, QueryExpressionNode[] queryExprNodes) {		
 		StringBuilder whereClause = new StringBuilder();
