@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -301,7 +302,7 @@ public class QueryServiceImpl implements QueryService {
 					.dateFormat(dateFormat).timeFormat(timeFormat);
 			query.compile(
 					cprForm, 
-					getAqlWithCpId(sdb, countQuery, req.getAql()), 
+					getAqlWithCpIdInSelect(sdb, countQuery, req.getAql()), 
 					getRestriction(sdb, req.getCpId()));
 			
 			QueryResponse resp = query.getData();
@@ -355,7 +356,7 @@ public class QueryServiceImpl implements QueryService {
 				.dateFormat(dateFormat).timeFormat(timeFormat)
 				.compile(
 						cprForm, 
-						getAqlWithCpId(sdb, countQuery, req.getAql()), 
+						getAqlWithCpIdInSelect(sdb, countQuery, req.getAql()), 
 						getRestriction(sdb, req.getCpId()));
 			
 			String filename = UUID.randomUUID().toString();
@@ -792,18 +793,7 @@ public class QueryServiceImpl implements QueryService {
 			return QueryDefEvent.serverError(message, e);
 		}
 	}
-    
-     
-	private List<SavedQuerySummary> toQuerySummaryList(List<SavedQuery> queries) {
-		List<SavedQuerySummary> querySummaries = new ArrayList<SavedQuerySummary>();
-		
-		for (SavedQuery savedQuery : queries) {
-			querySummaries.add(SavedQuerySummary.fromSavedQuery(savedQuery));
-		}
-		
-		return querySummaries;
-	}	
-	
+         
 	private SavedQuery getSavedQuery(SessionDataBean sdb, SavedQueryDetail detail) {
 		User user = new User();
 		user.setId(sdb.getUserId());
@@ -897,22 +887,36 @@ public class QueryServiceImpl implements QueryService {
 				
 				throw new IllegalAccessError("Access to cp is not permitted: " + cpId);
 			} else {
-				StringBuilder joinedCps = new StringBuilder(cpForm).append(".id in (");
+				List<String> restrictions = new ArrayList<String>();
 				
-				String delim = "";
-				for (Long cp : cpIds) {
-					joinedCps.append(delim).append(cp);
-					delim = ",";
+				int startIdx = 0, numCpIds = cpIds.size();
+				int chunkSize = 999;
+				while (startIdx < numCpIds) {
+					int endIdx = startIdx + chunkSize;
+					if (endIdx > numCpIds) {
+						endIdx = numCpIds;
+					}
+					
+					restrictions.add(getCpIdRestriction(cpIds.subList(startIdx, endIdx)));
+					startIdx = endIdx;
 				}
 				
-				return joinedCps.append(")").toString();				
+				return "(" + StringUtils.join(restrictions, " or ") + ")";
 			}
 		}
 		
 		return null;
 	}
 	
-	private String getAqlWithCpId(SessionDataBean sdb, boolean isCount, String aql) {
+	private String getCpIdRestriction(List<Long> cpIds) {
+		return new StringBuilder(cpForm)
+			.append(".id in (")
+			.append(StringUtils.join(cpIds, ", "))
+			.append(")")
+			.toString();
+	}
+			
+	private String getAqlWithCpIdInSelect(SessionDataBean sdb, boolean isCount, String aql) {
 		if (sdb.isAdmin() || isCount) {
 			return aql;
 		} else {
