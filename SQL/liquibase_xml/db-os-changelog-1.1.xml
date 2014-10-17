@@ -57,14 +57,15 @@
       stripComments="true"/>
   </changeSet>
   
-  <changeSet id="Permissible_values csv file upload" author="asamgir">
+  <!-- Commenting for now, will uncomment once get the updated PV file from QA -->
+  <!-- <changeSet id="Permissible_values csv file upload" author="asamgir">
     <loadUpdateData encoding="UTF-8"
       file="./SQL/Permissible_values/CATISSUE_PERMISSIBLE_VALUE.csv"
       primaryKey="IDENTIFIER"
       tableName="CATISSUE_PERMISSIBLE_VALUE">
       <column name="CONCEPT_CODE" type="String"/>            
     </loadUpdateData>
-  </changeSet>
+  </changeSet> -->
 
   <changeSet id="User view for use in AQ" author="vpawar" runOnChange="true" dbms="mysql">
     <sql>
