@@ -2,6 +2,7 @@ package krishagni.catissueplus.upgrade;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,8 +22,10 @@ import krishagni.catissueplus.dto.FormDetailsDTO;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domain.BaseAbstractAttribute;
 import edu.common.dynamicextensions.domain.CategoryAttribute;
@@ -74,6 +77,7 @@ import edu.common.dynamicextensions.domaininterface.SemanticPropertyInterface;
 import edu.common.dynamicextensions.domaininterface.StringTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.TaggedValueInterface;
 import edu.common.dynamicextensions.domaininterface.UserDefinedDEInterface;
+import edu.common.dynamicextensions.domaininterface.databaseproperties.TablePropertiesInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.AbstractContainmentControlInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.CheckBoxInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ComboBoxInterface;
@@ -147,6 +151,12 @@ public class MigrateForm {
 	
 	private ContainerInterface oldForm = null;
 	
+	private CSVWriter recordsLog;
+	
+	private int logEntriesCnt = 0;
+	
+	private Set<String> obsoleteTables = new HashSet<String>();
+	
 	static {
 		
 		entityCache = EntityCache.getInstance();
@@ -157,10 +167,17 @@ public class MigrateForm {
 		datePatternMap.put("YearOnly", "yyyy");
 		
 		staticEntityMap = getStaticEntityIdsMap();
+		
+		logger.setLevel(Level.INFO);
 	}
 	
 	public MigrateForm(UserContext usrCtx) {
 		this.usrCtx = usrCtx;
+	}
+	
+	public MigrateForm(UserContext usrCtx, CSVWriter recordsLog) {
+		this.usrCtx = usrCtx;
+		this.recordsLog = recordsLog;		
 	}
 	
 	private static Map<String, Long> getStaticEntityIdsMap() {
@@ -200,13 +217,13 @@ public class MigrateForm {
 	}
 	
 	public void migrateForm(Long containerId, List<FormInfo> formInfos) 
-	throws Exception {
-		logger.info("Starting to migrate container: " + containerId);
-		
+	throws Exception {		
 		oldForm = getOldFormDefinition(containerId);
 		if (oldForm == null) {
 			return;
 		}
+		
+		logger.info("Starting to migrate form: " + oldForm.getCaption() + "(" + containerId + ")");		
 		
 		formMigrationCtxt = getNewFormDefinition(oldForm);
 		if (formMigrationCtxt == null) {
@@ -224,6 +241,14 @@ public class MigrateForm {
 		}
 		
 		attachForm(jdbcDao, formInfos);
+	}
+	
+	public String getFormCaption() {
+		return formMigrationCtxt.newForm.getCaption();
+	}
+	
+	public String getObsoleteTables() {
+		return StringUtils.join(obsoleteTables, ",");
 	}
 
 	
@@ -264,12 +289,12 @@ public class MigrateForm {
 			entity = catEntity.getEntity();
 		} else {
 			entity = (EntityInterface)oldForm.getAbstractEntity();
-		}
+		}		
+		obsoleteTables.add(entity.getTableProperties().getName());
+		
 		String entityName = entity.getName();
-		
-		Container newForm = new Container();
-		
 		String oldFormCaption = oldForm.getCaption() != null ? oldForm.getCaption() : entityName;
+		Container newForm = new Container();
 		newForm.setCaption(getCaption(oldFormCaption));
 		newForm.setName(getUniqueFormName(entityName));
 		
@@ -344,7 +369,30 @@ public class MigrateForm {
 		} else {
 			throw new RuntimeException("Unknown control type: " + oldCtrl);
 		}		
+						
 		return ctrl;
+	}
+	
+	private void addToOldTable(ControlInterface oldCtrl) {
+		if (!(oldCtrl.getBaseAbstractAttribute() instanceof AssociationInterface)) {
+			return;
+		}
+		
+		AssociationInterface assoc = (AssociationInterface)oldCtrl.getBaseAbstractAttribute();
+		EntityInterface targetEntity = assoc.getTargetEntity();
+		if (targetEntity == null) {
+			return;
+		}
+		
+
+		TablePropertiesInterface tabProps = targetEntity.getTableProperties();
+		if (tabProps == null) {
+			return;
+		}
+		
+		if (tabProps.getName() != null) {
+			obsoleteTables.add(tabProps.getName());
+		}
 	}
 		
 	private SubFormControl getNewSubFormControl(
@@ -584,6 +632,8 @@ public class MigrateForm {
 		MultiSelectCheckBox multiSelectCb = new MultiSelectCheckBox();
 		setSelectProps(multiSelectCb, oldCtrl);
 		multiSelectCb.setOptionsPerRow(getOptionsPerRow(oldCtrl));
+		
+		addToOldTable(oldCtrl);
 		return multiSelectCb;
 	}
 	
@@ -600,6 +650,7 @@ public class MigrateForm {
 		ListBox listBox = null;
 		if (oldCtrl.getIsMultiSelect() != null && oldCtrl.getIsMultiSelect()) {
 			listBox = new MultiSelectListBox();
+			addToOldTable(oldCtrl);
 		} else {
 			listBox = new ListBox();
 		}
@@ -610,6 +661,7 @@ public class MigrateForm {
 		}		
 		listBox.setAutoCompleteDropdownEnabled(bool(oldCtrl.getIsUsingAutoCompleteDropdown()));
 		listBox.setMinQueryChars(3);
+						
 		return listBox;		
 	}
 	
@@ -1008,7 +1060,7 @@ public class MigrateForm {
 		long t1 = System.currentTimeMillis();
 			
 		List<RecordObject> recAndObjectIds = getRecordAndObjectIds(info.getOldFormCtxId());
-		logger.info("Number of records to migrate for container : " + oldForm.getId() + 
+		logger.info("Number of records to migrate for form : " + oldForm.getCaption() + "(" + oldForm.getId() + ")" + 
 				" with form context id : " + info.getOldFormCtxId() + " is : " + recAndObjectIds.size());
 		if (recAndObjectIds.size() == 0) {
 			return;
@@ -1058,12 +1110,14 @@ public class MigrateForm {
 			} catch (DynamicExtensionsSystemException e) {
 				if (!e.getMessage().startsWith("Exception in execution query :: Unhooked data present in database for recordEntryId")) {
 					throw e;
+				} else {
+					log(recObj.recordId, null, e.getMessage());
 				}
 				logger.warn(e.getMessage());
 			}
 		}
 		
-		logger.info("Migrated records for container: " + oldForm.getId() + 
+		logger.info("Migrated records for form: " + oldForm.getCaption() + "(" + oldForm.getId() + ")" + 
 				", number of records = " + recAndObjectIds.size() + 
 				", time = " + (System.currentTimeMillis() - t1) / 1000 + " seconds"); 
 	}
@@ -1209,9 +1263,11 @@ public class MigrateForm {
 		String query = DbSettingsFactory.getProduct().equals("Oracle") ? INSERT_RECORD_ENTRY_SQL_ORACLE 
 						: INSERT_RECORD_ENTRY_SQL_MYSQL;
 		jdbcDao.executeUpdate(query, params);
+		
+		log(recObj.recordId, newRecordId, "");
 	}
 	
-	
+			
 	protected FormData getFormData(
 			JdbcDao jdbcDao, RecordObject recObj, 
 			FormMigrationCtxt formMigrationCtxt, ContainerInterface oldForm,
@@ -1269,6 +1325,34 @@ public class MigrateForm {
 		}
 		
 		return formData;
+	}
+	
+	private void log(Long oldRecId, Long newRecId, String failReason) 
+	throws IOException {
+		if (recordsLog == null) {
+			return;
+		}
+		
+		String status = "SUCCESS";
+		if (newRecId == null) {
+			status = "FAIL";
+		} else {
+			failReason = "";
+		}
+		
+		recordsLog.writeNext(new String[] {
+				getFormCaption(),
+				oldRecId.toString(),
+				newRecId.toString(),
+				status,
+				failReason
+		});
+		
+		logEntriesCnt++;
+		if (logEntriesCnt >= 25) {
+			logEntriesCnt = 0;
+			recordsLog.flush();
+		}
 	}
 	
 	private FileControlValue getNewFileControlValue(JdbcDao jdbcDao, Map<BaseAbstractAttributeInterface, Object> oldFormData, 

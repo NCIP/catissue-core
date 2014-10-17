@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import krishagni.catissueplus.dto.FormDetailsDTO;
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.de.ui.UserControl;
 
@@ -28,6 +29,10 @@ import edu.emory.mathcs.backport.java.util.Collections;
 public class MigrateSppForm extends MigrateForm {
 	public MigrateSppForm(UserContext usrCtx) {
 		super(usrCtx);
+	}
+	
+	public MigrateSppForm(UserContext usrCtx, CSVWriter recordsLog) {
+		super(usrCtx, recordsLog);
 	}
 	
 	@Override

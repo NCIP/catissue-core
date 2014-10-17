@@ -1,5 +1,7 @@
 package krishagni.catissueplus.upgrade;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,12 +15,15 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
+import edu.common.dynamicextensions.nutility.IoUtil;
 
 
 public class MigrateForms {
@@ -27,6 +32,7 @@ public class MigrateForms {
 	
 	public static void main(String[] args) 
 	throws Exception {
+		logger.setLevel(Level.INFO);
 		
 		if (args.length == 0) {
 			logger.error("Requires admin username as input. Exiting migration");
@@ -62,23 +68,28 @@ public class MigrateForms {
 				(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");		
 	}
 
-	private static void migrateContainers(Map<Long, List<FormInfo>> containerInfo, UserContext usrCtx) {
-		int count = 0;
-
+	private static void migrateContainers(Map<Long, List<FormInfo>> containerInfo, UserContext usrCtx) 
+	throws IOException {
+		CSVWriter recordsLog = new CSVWriter(new FileWriter(DE_FORMS_RECORD_LOG));
+		CSVWriter tabLog = new CSVWriter(new FileWriter(DE_FORMS_OTAB_LOG));
+		
+		int count = 0;		
 		for (Entry<Long, List<FormInfo>> entry : containerInfo.entrySet()) {
 			try {
-				long t1 = System.currentTimeMillis();
-				MigrateForm migrateForm = new MigrateForm(usrCtx);
+				MigrateForm migrateForm = new MigrateForm(usrCtx, recordsLog);
 				migrateForm.migrateForm(entry.getKey(), entry.getValue());
+				logObsoleteTables(tabLog, migrateForm);
 				++count;
-
-				logger.info("Time taken to migrate " + entry.getKey() + " is " + (System.currentTimeMillis() - t1));
-				logger.info("Migrated count: " + count);
+				
+				logger.info("Number of forms migrated till now: " + count);
 			} catch (Exception e) {
 				logger.error("Error migrating container: " + entry.getKey(), e);
 			}	
 		}
-		logger.info("finished migrating " + count + " forms");
+		
+		IoUtil.close(recordsLog);
+		IoUtil.close(tabLog);
+		logger.info("finished migrating " + count + " forms");		
 	}
 	
 	private static boolean areLegacyFormsMigrated() { 
@@ -142,6 +153,15 @@ public class MigrateForms {
 		return containerInfo;
 	}
 	
+	private static void logObsoleteTables(CSVWriter logWriter, MigrateForm migrator) 
+	throws IOException {
+		logWriter.writeNext(new String[] {
+				migrator.getFormCaption(),
+				migrator.getObsoleteTables()
+		});
+		logWriter.flush();
+	}
+	
 	private static final String GET_CONTAINER_IDS_SQL = 
 			"select " +
 			"	c.identifier, cfc.collection_protocol_id, map.static_entity_id , fc.identifier, count(pre.identifier), " +
@@ -157,5 +177,9 @@ public class MigrateForms {
 			"group by c.identifier, cfc.collection_protocol_id, fc.identifier, map.static_entity_id" ;
 	
 	private static final String FORMS_COUNT_SQL = 
-				"select count(identifier) from dyextn_containers";	
+				"select count(identifier) from dyextn_containers";
+	
+	private static final String DE_FORMS_RECORD_LOG = "de-forms-record-mapping.csv";
+	
+	private static final String DE_FORMS_OTAB_LOG = "de-forms-obsolete-tables.csv";
 }

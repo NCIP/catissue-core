@@ -1,5 +1,7 @@
 package krishagni.catissueplus.upgrade;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,11 +15,14 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
+import edu.common.dynamicextensions.nutility.IoUtil;
 
 
 public class MigrateSppForms {
@@ -26,6 +31,7 @@ public class MigrateSppForms {
 	
 	public static void main(String[] args) 
 	throws Exception {
+		logger.setLevel(Level.INFO);
 		
 		if (args.length == 0) {
 			logger.error("Requires admin username as input. Exiting SPP migration");
@@ -56,23 +62,28 @@ public class MigrateSppForms {
 				(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");		
 	}
 
-	private static void migrateSppForms(Map<Long, List<FormInfo>> containerInfo, UserContext usrCtx) {
+	private static void migrateSppForms(Map<Long, List<FormInfo>> containerInfo, UserContext usrCtx) 
+	throws IOException {
+		CSVWriter recordsLog = new CSVWriter(new FileWriter(SPP_FORMS_RECORD_LOG));
+		CSVWriter tabsLog = new CSVWriter(new FileWriter(SPP_FORMS_OTAB_LOG));
+		
 		int count = 0;
-
 		for (Entry<Long, List<FormInfo>> entry : containerInfo.entrySet()) {
 			try {
-				long t1 = System.currentTimeMillis();
-				MigrateSppForm migrateSppForm = new MigrateSppForm(usrCtx);
+				MigrateSppForm migrateSppForm = new MigrateSppForm(usrCtx, recordsLog);
 				migrateSppForm.migrateForm(entry.getKey(), entry.getValue());
+				logObsoleteTables(tabsLog, migrateSppForm);				
 				++count;
 
-				logger.info("Time taken to migrate " + entry.getKey() + " is " + (System.currentTimeMillis() - t1));
-				logger.info("Migrated count: " + count);
+				logger.info("Number of SPP forms migrated till now: " + count);
 			} catch (Exception e) {
 				logger.error("Error migrating container: " + entry.getKey(), e);
-			}	
+			}
 		}
-		logger.info("finished migrating " + count + " SPP forms");
+		
+		IoUtil.close(recordsLog);
+		IoUtil.close(tabsLog);
+		logger.info("Finished migrating " + count + " SPP forms");
 	}
 	
 	private static Map<Long, List<FormInfo>> getSppFormsInfo() {
@@ -120,6 +131,16 @@ public class MigrateSppForms {
 		return containerInfo;
 	}
 	
+	private static void logObsoleteTables(CSVWriter logWriter, MigrateForm migrator) 
+	throws IOException {
+		logWriter.writeNext(new String[] {
+				migrator.getFormCaption(),
+				migrator.getObsoleteTables()
+		});
+		
+		logWriter.flush();
+	}
+	
 	private static final String GET_SPP_CONTAINER_IDS_SQL = 
 			"select " +
 			"	c.identifier, cfc.collection_protocol_id, map.static_entity_id , fc.identifier, count(spe_re.identifier) " +
@@ -131,5 +152,9 @@ public class MigrateSppForms {
 			"	left join catissue_cp_studyformcontext cfc on cfc.study_form_context_id = fc.identifier " + 
 			"	left join dyextn_entity_map map on map.container_id = c.identifier " +
 			"group by " +
-			"   c.identifier, cfc.collection_protocol_id, fc.identifier, map.static_entity_id" ;	
+			"   c.identifier, cfc.collection_protocol_id, fc.identifier, map.static_entity_id" ;
+	
+	private static final String SPP_FORMS_RECORD_LOG = "de-spp-forms-record-mapping.csv";
+	
+	private static final String SPP_FORMS_OTAB_LOG = "de-spp-forms-obsolete-tables.csv";
 }
