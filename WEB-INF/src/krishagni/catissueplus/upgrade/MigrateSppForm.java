@@ -210,18 +210,19 @@ public class MigrateSppForm extends MigrateForm {
 			"	re.identifier, spe_re.specimen_id " +
 			"from " +
 			"   dyextn_abstract_form_context afc " +
-			"	inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = afc.identifier " +
+			"   inner join dyextn_abstract_record_entry re on re.abstract_form_context_id = afc.identifier " +
 			"   inner join catissue_action_application spe_re on spe_re.action_app_record_entry_id = re.identifier " +
 			"where " + 
 			"   afc.identifier = ?";
 	
 	private static final String GET_SPP_COMMON_FIELDS_SQL =
 			"select " +
-			"  reason_deviation, timestamp, user_details, comments " +
+			"  aa.reason_deviation, aa.timestamp, aa.user_details, aa.comments " +
 			"from " +
-			"  catissue_abstract_application " +
+			"  catissue_abstract_application aa " +
+			"  inner join catissue_action_application spe_re on spe_re.identifier = aa.identifier " +
 			"where " +
-			"  identifier = ?";
+			"  spe_re.action_app_record_entry_id = ?";
 	
 	private static final String DEVIATION = "deviationReason";
 	
