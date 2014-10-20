@@ -41,6 +41,11 @@ angular.module('plus.formsServices', [])
         return Utility.get($http, url, successfn);
       },
 
+      deleteForm: function(formId) {
+        var url = baseUrl + "/" + formId;
+        return $http.delete(url).then(successfn);
+      },
+
       getFormFields: function(formId) {
         var url = baseUrl + "/" + formId + "/fields";
         return Utility.get($http, url, successfn);

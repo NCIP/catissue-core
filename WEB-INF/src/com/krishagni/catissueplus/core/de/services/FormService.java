@@ -6,6 +6,8 @@ import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
+import com.krishagni.catissueplus.core.de.events.DeleteFormEvent;
+import com.krishagni.catissueplus.core.de.events.FormDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
@@ -36,6 +38,8 @@ public interface FormService {
 	public AllFormsSummaryEvent getForms(ReqAllFormsSummaryEvent req);
 	
 	public FormDefinitionEvent getFormDefinition(ReqFormDefinitionEvent req);
+	
+	public FormDeletedEvent deleteForm(DeleteFormEvent req);
 	
 	public FormFieldsEvent getFormFields(ReqFormFieldsEvent req);
 	

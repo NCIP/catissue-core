@@ -86,7 +86,7 @@
               inner join catissue_user u on u.identifier = c.created_by
               inner join catissue_form_context fctxt on fctxt.container_id = c.identifier
             where
-              fctxt.cp_id = -1 and fctxt.entity_type != 'Query'
+              c.deleted_on is null and fctxt.cp_id = -1 and fctxt.entity_type != 'Query'
         </sql-query>
 
         <sql-query name="getAllFormsSummary">
@@ -117,10 +117,12 @@
                   dyextn_containers ic
                   left join catissue_form_context ctxt on ctxt.container_id = ic.identifier
                 where
-                  ctxt.entity_type is null or ctxt.entity_type != 'Query'
+                  ic.deleted_on is null and (ctxt.entity_type is null or ctxt.entity_type != 'Query')
                 group by
                   ic.identifier
               ) derived on derived.formId = c.identifier
+            where
+              c.deleted_on is null		
             order by
               modificationTime desc
         </sql-query>
@@ -145,6 +147,7 @@
               inner join dyextn_containers c on ctxt.container_id = c.identifier
               inner join catissue_user u on u.identifier = c.created_by
             where
+              c.deleted_on is null and	
               ctxt.entity_type='SpecimenEvent'
             order by
               c.caption
@@ -170,6 +173,7 @@
               inner join catissue_user u on u.identifier = c.created_by
               inner join catissue_form_context ctxt on ctxt.container_id = c.identifier
             where
+              c.deleted_on is null and
               ctxt.entity_type = 'Query'
             order by
               ctxt.sort_order
@@ -189,12 +193,14 @@
               cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
             from
               catissue_form_context fctxt
+              inner join dyextn_containers c on c.identifier = fctxt.container_id	
               left join catissue_collection_protocol cp on cp.identifier = fctxt.cp_id
             where
+              c.deleted_on is null and 	
               fctxt.container_id = :formId
         </sql-query>
 
-        <query name="getFormContext">
+        <query name="getFormContext"> <!-- TODO -->
             from
               FormContextBean as f
             where
@@ -203,14 +209,14 @@
               f.entityType = :entityType
         </query>
                 
-        <query name="getFormContextsById">
+        <query name="getFormContextsById"> <!-- TODO used in data entry-->
             from
               FormContextBean as f 
             where
               f.identifier in (:ids)
         </query>
         
-        <query name="getQueryFormCtxtByContainerId">
+        <query name="getQueryFormCtxtByContainerId"> <!-- TODO used in aq forms import-->
             from
               FormContextBean as f
             where
@@ -236,7 +242,7 @@
               inner join dyextn_containers c on c.identifier = fc.container_id
               left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :cprId and r.activity_status = 'ACTIVE'
             where
-              fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)
+              c.deleted_on is null and fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)
             group by
               fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
         </sql-query>
@@ -262,7 +268,7 @@
               inner join dyextn_containers c on c.identifier = fc.container_id
               left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
             where
-              fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1)
+              c.deleted_on is null and fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1)
             group by
               fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
         </sql-query>
@@ -288,7 +294,7 @@
               inner join dyextn_containers c on c.identifier = fc.container_id
               left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
             where
-              fc.entity_type = 'SpecimenEvent' and (specimen.identifier = :specimenId or fc.cp_id = -1)
+              c.deleted_on is null and fc.entity_type = 'SpecimenEvent' and (specimen.identifier = :specimenId or fc.cp_id = -1)
             group by
               fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
             order by 
@@ -317,7 +323,7 @@
               inner join dyextn_containers c on c.identifier = fc.container_id
               left join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier and r.object_id = :scgId and r.activity_status = 'ACTIVE'
             where
-              fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1)
+              c.deleted_on is null and fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1)
             group by
               fc.identifier, fc.container_id, c.caption , fc.cp_id, fc.is_multirecord
         </sql-query>
@@ -336,9 +342,13 @@
             from
               catissue_form_record_entry r
               inner join catissue_form_context f on r.form_ctxt_id = f.identifier
+              inner join dyextn_containers c on c.identifier = f.container_id            	
               inner join catissue_user u on u.identifier = r.updated_by
             where
-              form_ctxt_id = :formCtxtId and object_id = :objectId and r.activity_status = 'ACTIVE'
+              c.deleted_on is null and 	
+              r.form_ctxt_id = :formCtxtId and 
+              r.object_id = :objectId and 
+              r.activity_status = 'ACTIVE'
         </sql-query>
 
         <sql-query name="getParticipantObjId">
@@ -354,32 +364,45 @@
               reg.protocol_participant_id = :ppId and cp.title = :cpTitle
         </sql-query>
 
-        <query name = "getContainerId">
-            select
-              containerId
-            from
-              FormContextBean
-            where
-              identifier = :identifier
-        </query>
+        <sql-query name="getContainerId">
+            <return-scalar column="containerId" type="long"/>
 
-        <query name="getFormContextId">
             select
-              identifier, cpId
+              fc.container_id as containerId
             from
-              FormContextBean
+              catissue_form_context fc
+              inner join dyextn_containers c on c.identifier = fc.container_id
             where
-              containerId = :containerId and entityType = :entityType and (cpId = :cpId or cpId = -1)
-        </query>
+              fc.identifier = :identifier and
+              c.deleted_on is null				
+        </sql-query>
 
+        <sql-query name="getFormContextId">
+            <return-scalar column="ctxtId" type="long"/>
+            <return-scalar column="cpId" type="long"/>
+            
+            select
+              fc.identifier as ctxtId, fc.cp_id as cpId
+            from
+              catissue_form_context fc
+              inner join dyextn_containers c on c.identifier = fc.container_id
+            where
+              fc.container_id = :containerId and 
+              entity_type = :entityType and 
+              (cp_id = :cpId or cp_id = -1) and
+              c.deleted_on is null				
+        </sql-query>
+                         
         <sql-query name="getFormIds">
             <return-scalar column="formId" type="long"/>
 
             select
               container_id as formId
             from
-              catissue_form_context
+              catissue_form_context fc
+              inner join dyextn_containers c on c.identifier = fc.container_id	
             where
+              c.deleted_on is null and 	
               (cp_id = :cpId or cp_id = -1) and entity_type = :entityType
         </sql-query>
         
@@ -389,10 +412,14 @@
         	select 
         	  count(*) as recordCnt 
         	from 
-        	  catissue_form_record_entry r  
+        	  catissue_form_record_entry r
+        	  inner join catissue_form_context fc on fc.identifier = r.form_ctxt_id
+        	  inner join dyextn_containers c on c.identifier =fc.container_id		  
             where 
-              r.form_ctxt_id = :formCtxtId and r.object_id = :objectId and r.activity_status = 'ACTIVE' 
+              r.form_ctxt_id = :formCtxtId and 
+        	  r.object_id = :objectId and 
+        	  r.activity_status = 'ACTIVE' and
+        	  c.deleted_on is null	 
         </sql-query>
-
     </class>
 </hibernate-mapping>

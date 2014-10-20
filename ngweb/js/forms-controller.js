@@ -7,9 +7,15 @@ angular.module('plus.forms', [])
     $scope.cpList = [];
     $scope.formsList = [];
 
-    FormsService.getAllForms().then(function(formsList) {
-      $scope.formsList = formsList;
-    });
+    var loadAllForms = function() {
+      FormsService.getAllForms().then(
+        function(formsList) {
+          $scope.formsList = formsList;
+        }
+      );
+    };
+
+    loadAllForms();
 
     /** Remove this call and use promises... */
     CollectionProtocolService.getCpList().then(function(cpList) {
@@ -179,7 +185,45 @@ angular.module('plus.forms', [])
         }
       });
     };
-    
+
+    $scope.deleteForm = function(form) {
+      var modalInstance = $modal.open({
+        templateUrl: 'delete-form-confirm.html',
+        controller: function($scope, $modalInstance, form) {
+          $scope.form = form;
+
+          $scope.ok = function() {
+            $modalInstance.close('ok');
+          },
+
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        },
+        resolve: {
+          form: function() {
+            return form;
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          FormsService.deleteForm(form.formId).then(
+            function(result) {
+              if (!result) {
+                Utility.notify($("#notifications"), "You do not have permission to delete form", "error", true);
+                return;
+              }
+
+              Utility.notify($("#notifications"), "Form deleted!", "success", true);
+              loadAllForms();
+            }
+          );
+        }
+      );
+    };
+
     var formAssociationCtrl = function ($scope, $modalInstance, cps, entities, formIds) {
       $scope.cps = cps;
       $scope.entities = entities;

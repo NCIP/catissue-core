@@ -10,6 +10,7 @@
     <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/font-awesome-4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"></link>
     <link href="../external/de/css/de.css" rel="stylesheet" type="text/css"></link>
     <link href="../css/app.css" rel="stylesheet" type="text/css"></link>
 
@@ -31,14 +32,11 @@
         margin-bottom: 4px;
       }
   
-      .modal-content {
-        height: 580px;
-      }
-
       .modal-dialog {
         padding-bottom: 15px;
         padding-top: 15px;
       }
+
       html, body {
         height: 100%;
       }
@@ -77,20 +75,26 @@
         <tbody>
           <tr ng-repeat="form in formsList | filter:searchFormName" 
               ng-mouseenter="form.highlight=true"
-              ng-mouseleave="form.highlight=false">
+              ng-mouseleave="form.highlight=false"
+              style="height: 39px;">
             <td>
               <a style="cursor:pointer;" ng-click="editForm(form)" tooltip-placement="right" tooltip="Click to edit form">{{form.caption}}</a>
             </td>
             <td>{{formatUsername(form.createdBy)}}</td>
             <td ng-if="form.modificationTime">{{formatDate(form.modificationTime)}}</td>
             <td ng-if="!form.modificationTime">{{formatDate(form.creationTime)}}</td>
-            <td> 
+            <td class="clearfix"> 
               {{form.cpCount == -1 ? "ALL" : form.cpCount}} 
-              <div style="cursor: pointer;" ng-if="form.highlight" class="pull-right" ng-click="showFormContexts(form)"
-                   tooltip="Click to attach form to a Collection Protocol"
-                   tooltip-placement="left">
-                <span class="glyphicon glyphicon-wrench"></span>
-                <a>Attach</a>
+
+              <div class="pull-right btn-group btn-group-xs" ng-if="form.highlight">
+                <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"
+                  tooltip-placement="bottom" tooltip="Click to attach form to a Collection Protocol" tooltip-append-to-body="true">
+                  <span class="glyphicon glyphicon-wrench"></span>
+                </button>
+                <button type="button" class="btn btn-default" ng-click="deleteForm(form)" 
+                  tooltip-placement="bottom" tooltip="Delete Form" tooltip-append-to-body="true">
+                  <i class="fa fa-trash-o"></i>
+                </button>
               </div>
             </td>
           </tr>
@@ -99,10 +103,10 @@
     </div>
 
     <script type="text/ng-template" id="formCtxts.html">
-      <div class="modal-header" style="height: 10%;">
+      <div class="ka-modal-header">
         <h4>{{form.caption}}</h4>
       </div>
-      <div class="modal-body" style="height: 75%;">
+      <div class="ka-modal-body">
         <div style="margin-bottom: 10px;">
           Used in following collection protocols
         </div>
@@ -115,7 +119,7 @@
             </tr>
           </thead>
         </table>
-        <div style="height:40%; margin-bottom: 20px; width: 100%; overflow:auto;">
+        <div style="height:175px; margin-bottom: 20px; width: 100%; overflow:auto;">
           <table class="table">
             <tbody>
               <tr ng-repeat="cpFormCtxt in cpFormCtxts">
@@ -130,7 +134,7 @@
             </tbody>
           </table>
         </div>
-        <div style="height: 45%; overflow: auto;">
+        <div style="height: 210px; overflow: auto;">
           <div ng-show="isSpecimenEvent != true">Use form in following collection protocols</div>
           <div ng-show="isSpecimenEvent">Specimen Event forms always attached to all collection protocols. </div>
           <div class="checkbox" ng-show="isSpecimenEvent != true">
@@ -148,12 +152,35 @@
             <label><input type="checkbox" ng-checked="isMultiRecord" ng-model="isMultiRecord"> Multiple records allowed </label>
           </div>
         </div>
+        <div class="ka-modal-footer" ng-switch on="enableAttach(allProtocols, selectedCps, selectedEntity)">
+          <button ng-switch-when="true"  class="btn btn-primary" 
+            ng-click="attach(allProtocols, selectedCps, selectedEntity, isMultiRecord)">
+            Attach Form
+          </button>
+          <button ng-switch-when="true"  class="btn btn-default" ng-click="cancel()">
+            Cancel
+          </button>
+          <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()">
+            Done
+          </button>
+        </div> 
       </div>
-      <div class="modal-footer" ng-switch on="enableAttach(allProtocols, selectedCps, selectedEntity)" style="height: 12%;">
-        <button ng-switch-when="true"  class="btn btn-primary" ng-click="attach(allProtocols, selectedCps, selectedEntity, isMultiRecord)">Attach Form</button>
-        <button ng-switch-when="true"  class="btn btn-default" ng-click="cancel()">Cancel</button>
-        <button ng-switch-when="false" class="btn btn-primary" ng-click="cancel()">Done</button>
-      </div> 
+    </script>
+
+    <script type="text/ng-template" id="delete-form-confirm.html">
+      <div class="ka-modal-header">
+        <span>Delete Form</span>
+        <div class="ka-close" ng-click="cancel()">&times;</div>
+      </div>
+      <div class="ka-modal-body">
+        <p> Are you sure you want to delete following form? </p>
+        <p> <i> {{form.caption}} </i> </p>
+
+        <div class="ka-modal-footer">
+          <button class="btn ka-btn-secondary" ng-click="cancel()">No</button>
+          <button class="btn btn-primary" ng-click="ok()">Yes</button>
+        </div>
+      </div>
     </script>
 
     <script src="../js/utility.js" type="text/javascript"></script>

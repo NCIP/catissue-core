@@ -29,6 +29,8 @@ import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
+import com.krishagni.catissueplus.core.de.events.DeleteFormEvent;
+import com.krishagni.catissueplus.core.de.events.FormDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.SaveBulkFormDataEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
@@ -81,6 +83,22 @@ public class FormsController {
 		}
 		
 		// TODO: Return appropriate error codes
+		return null;
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Long deleteForm(@PathVariable("id") Long formId) {
+		DeleteFormEvent req = new DeleteFormEvent();
+		req.setSessionDataBean(getSession());
+		req.setFormId(formId);
+		
+		FormDeletedEvent resp = formSvc.deleteForm(req);
+		if (resp.getStatus() == EventStatus.OK) {
+			return resp.getFormId();
+		}
+		
 		return null;
 	}
 
@@ -226,7 +244,7 @@ public class FormsController {
 		}
 		
 		JsonElement formDataJsonEle = new JsonParser().parse(formDataJson);
-		if(formDataJsonEle.isJsonArray()) {
+		if (formDataJsonEle.isJsonArray()) {
 			return bulkSaveFormData(formId, formDataJson);
 		} else {
 			FormData formData = FormData.fromJson(formDataJson, formId);

@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.de.events.AllFormsSummaryEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGeneratedEvent;
 import com.krishagni.catissueplus.core.de.events.BOTemplateGenerationEvent;
 import com.krishagni.catissueplus.core.de.events.BulkFormDataSavedEvent;
+import com.krishagni.catissueplus.core.de.events.DeleteFormEvent;
 import com.krishagni.catissueplus.core.de.events.DeleteRecordEntriesEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecordsEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormsEvent;
@@ -34,6 +35,7 @@ import com.krishagni.catissueplus.core.de.events.FormContextsEvent;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataEvent;
 import com.krishagni.catissueplus.core.de.events.FormDefinitionEvent;
+import com.krishagni.catissueplus.core.de.events.FormDeletedEvent;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormFieldsEvent;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
@@ -127,7 +129,28 @@ public class FormServiceImpl implements FormService {
 			return FormDefinitionEvent.ok(container);
 		}
 	}
-
+    
+	@Override
+	@PlusTransactional
+	public FormDeletedEvent deleteForm(DeleteFormEvent req) {
+		Long formId = req.getFormId();
+		boolean isAdmin = req.getSessionDataBean().isAdmin();
+		
+		if (!isAdmin) {
+			return FormDeletedEvent.notAuthorized(req.getFormId());
+		}
+		
+		try {
+			if (Container.softDeleteContainer(formId)) {
+				return FormDeletedEvent.ok(formId);
+			} else {
+				return FormDeletedEvent.notFound(formId);
+			}
+		} catch (Exception e) {
+			return FormDeletedEvent.serverError("Error deleting form", e);
+		}
+	}
+    
     @Override
     @PlusTransactional
 	public FormFieldsEvent getFormFields(ReqFormFieldsEvent req) {
@@ -189,7 +212,7 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
 	@PlusTransactional
-	public FormContextsAddedEvent addFormContexts(AddFormContextsEvent req) {
+	public FormContextsAddedEvent addFormContexts(AddFormContextsEvent req) { // TODO: check form is deleted
 		List<FormContextDetail> formCtxts = req.getFormContexts();
 		for (FormContextDetail formCtxtDetail : formCtxts) {
 			Long formId = formCtxtDetail.getFormId();
@@ -297,13 +320,14 @@ public class FormServiceImpl implements FormService {
 		Long objectId = ((Double) appData.get("objectId")).longValue();
 		List<Long> formCtxtId = new ArrayList<Long>();
 		formCtxtId.add(((Double) appData.get("formCtxtId")).longValue());
+		
 		List<FormContextBean> formContexts = formDao.getFormContextsById(formCtxtId);
 		if(formContexts == null) {
 			throw new IllegalArgumentException("Invalid form context id");
 		}
+		
 		FormContextBean formContext = formContexts.get(0);
 		
-
 		formData.setRecordId(recordId);
 		boolean isInsert = (recordId == null);
 		
