@@ -77,12 +77,14 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
            form.setCreationTime((Date) row[3]);
            form.setModificationTime((Date) row[4]);
            form.setCpCount(-1);
+           form.setSysForm((Boolean)row[8]);
+
            UserSummary user = new UserSummary();
            user.setId((Long) row[5]);
            user.setFirstName((String) row[6]);
            user.setLastName((String) row[7]);
            form.setCreatedBy(user);
-  
+           
            forms.add(form);
        }
   
@@ -130,12 +132,12 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			formCtxt.setFormId((Long)row[1]);
 			formCtxt.setLevel((String)row[2]);
 			formCtxt.setMultiRecord((Boolean)row[3]);
+			formCtxt.setSysForm((Boolean)row[4]);
 
 			CollectionProtocolSummary cp = new CollectionProtocolSummary();
-			cp.setId((Long)row[4]);
-			cp.setShortTitle((String)row[5]);
-			cp.setTitle((String)row[6]);
-
+			cp.setId((Long)row[5]);
+			cp.setShortTitle((String)row[6]);
+			cp.setTitle((String)row[7]);
 			formCtxt.setCollectionProtocol(cp);
 			
 			formCtxts.add(formCtxt);
@@ -285,8 +287,10 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			form.setFormCtxtId((Long)row[0]);
 			form.setFormId(formId);
 			form.setFormCaption((String)row[2]);
-			form.setNoOfRecords((Integer)row[4]);
-			form.setMultiRecord((Boolean)row[5]);
+			form.setMultiRecord((Boolean)row[4]);
+			form.setSysForm((Boolean)row[5]);
+			form.setNoOfRecords((Integer)row[6]);
+			
 			formsMap.put(formId, form);
 		}
 		

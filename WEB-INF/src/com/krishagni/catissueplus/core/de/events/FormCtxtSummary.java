@@ -10,6 +10,8 @@ public class FormCtxtSummary {
 	private Integer noOfRecords;
 	
 	private boolean multiRecord;
+	
+	private boolean sysForm;
 
 	public Long getFormCtxtId() {
 		return formCtxtId;
@@ -49,5 +51,13 @@ public class FormCtxtSummary {
 
 	public void setMultiRecord(boolean isMultiRecord) {
 		this.multiRecord = isMultiRecord;
+	}
+
+	public boolean isSysForm() {
+		return sysForm;
+	}
+
+	public void setSysForm(boolean sysForm) {
+		this.sysForm = sysForm;
 	}
 }

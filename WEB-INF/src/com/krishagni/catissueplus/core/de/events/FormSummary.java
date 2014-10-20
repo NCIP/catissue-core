@@ -18,6 +18,8 @@ public class FormSummary {
 	private Date modificationTime;
 	
 	private Integer cpCount;
+	
+	private boolean sysForm;
 
 	public Long getFormId() {
 		return formId;
@@ -73,5 +75,13 @@ public class FormSummary {
 
 	public void setCpCount(Integer cpCount) {
 		this.cpCount = cpCount;
+	}
+
+	public boolean isSysForm() {
+		return sysForm;
+	}
+
+	public void setSysForm(boolean sysForm) {
+		this.sysForm = sysForm;
 	}
 }

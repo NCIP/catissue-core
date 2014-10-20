@@ -68,7 +68,9 @@
                 update="true"
                 insert="true"
                 />
-
+        
+        <property name="sysForm" column="IS_SYS_FORM" type="boolean"/>
+                			
         <sql-query name="getFormsAttachedToAllProtocols">
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
@@ -136,12 +138,14 @@
             <return-scalar column="userId" type="long"/>
             <return-scalar column="userFirstName" type="string"/>
             <return-scalar column="userLastName" type="string"/>
+            <return-scalar column="sysForm" type="boolean"/>
   
             select
               c.identifier as formId, c.name as formName, c.caption as formCaption,
               c.create_time as creationTime,
               case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
-              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+              u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
+              ctxt.is_sys_form as sysForm	
             from
               catissue_form_context ctxt
               inner join dyextn_containers c on ctxt.container_id = c.identifier
@@ -183,13 +187,15 @@
             <return-scalar column="ctxtId"        type="long"/>
             <return-scalar column="formId"        type="long"/>
             <return-scalar column="entityLevel"   type="string"/>
-            <return-scalar column="isMultirecord" type="boolean"/>
+            <return-scalar column="multirecord" type="boolean"/>
+            <return-scalar column="sysForm"       type="boolean"/>
             <return-scalar column="cpId"          type="long"/>
             <return-scalar column="shortTitle"    type="string"/>
             <return-scalar column="title"         type="string"/>
-
+            
             select
-              fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as entityLevel, fctxt.is_multirecord as isMultirecord,
+              fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as entityLevel, 
+              fctxt.is_multirecord as multirecord, fctxt.is_sys_form as sysForm,
               cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
             from
               catissue_form_context fctxt
@@ -229,13 +235,14 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="multirecord" type="boolean"/>
+            <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
-            <return-scalar column="isMultirecord" type="boolean"/>
-
-
+            
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
-              count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
+              fc.is_multirecord as multirecord, fc.is_sys_form as sysForm,	
+              count(r.identifier) as recordCnt
             from
               catissue_form_context fc
               left join catissue_coll_prot_reg reg on reg.collection_protocol_id = fc.cp_id
@@ -252,12 +259,15 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="multirecord" type="boolean"/>
+            <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
-            <return-scalar column="isMultirecord" type="boolean"/>
+            
 
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
-              count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
+              fc.is_multirecord as multirecord, fc.is_sys_form as sysForm,	
+              count(r.identifier) as recordCnt
             from
               catissue_form_context fc
               left join (
@@ -278,12 +288,14 @@
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="multirecord" type="boolean"/>
+            <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
-            <return-scalar column="isMultirecord" type="boolean"/>
 
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
-              count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
+              fc.is_multirecord as multirecord, fc.is_sys_form as sysForm, 	
+              count(r.identifier) as recordCnt
             from
               catissue_form_context fc
               left join (
@@ -302,18 +314,19 @@
 
         </sql-query>
         
-
         <sql-query name="getScgForms">
             <return-scalar column="formCtxtId" type="long"/>
             <return-scalar column="formId" type="long"/>
             <return-scalar column="formCaption" type="string"/>
             <return-scalar column="cpId" type="long"/>
+            <return-scalar column="multirecord" type="boolean"/>
+            <return-scalar column="sysForm" type="boolean"/>
             <return-scalar column="recordCnt" type="integer"/>
-            <return-scalar column="isMultirecord" type="boolean"/>
 
             select
               fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
-              count(r.identifier) as recordCnt, fc.is_multirecord as isMultirecord
+              fc.is_multirecord as multirecord, fc.is_sys_form as sysForm, 
+              count(r.identifier) as recordCnt
             from
               catissue_form_context fc
               left join (

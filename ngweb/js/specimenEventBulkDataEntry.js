@@ -12,6 +12,16 @@ specimenEvent.controller('SpecimenEventController',
     $scope.specimenEvents = [];
     FormsService.getAllSpecimenEventForms().then( 
       function(events) {
+        if (!events) {
+          return;
+        }
+
+        for (var i = 0; i < events.length; ++i) {
+          if (events[i].sysForm) {
+            events.splice(i, 1);
+          }
+        }
+
         $scope.specimenEvents = events;
       }
     );

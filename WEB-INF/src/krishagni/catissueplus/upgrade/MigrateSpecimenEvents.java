@@ -211,7 +211,7 @@ public class MigrateSpecimenEvents {
 		JdbcDao jdbcDao = JdbcDaoFactory.getJdbcDao();
 		String sql = DbUtil.isOracle() ? INSERT_FORM_CTX_ORA_SQL : INSERT_FORM_CTX_MY_SQL;
 
-		List<? extends Object> params = Arrays.asList(formId, "SpecimenEvent", -1, null, 1);
+		List<? extends Object> params = Arrays.asList(formId, "SpecimenEvent", -1, null, 1, systemEvent ? 1 : 0);
 		Number id = jdbcDao.executeUpdateAndGetKey(sql, params, "IDENTIFIER");
 		if (id == null) {
 			logger.error("Error creating form context for form: " + formId);
@@ -359,13 +359,13 @@ public class MigrateSpecimenEvents {
 	}
 
 	private static final String INSERT_FORM_CTX_MY_SQL = "insert into catissue_form_context( "
-			+ "  identifier, container_id, entity_type, cp_id, sort_order, is_multirecord) "
-			+ "values (" + "  default, ?, ?, ?, ?, ?)";
+			+ "  identifier, container_id, entity_type, cp_id, sort_order, is_multirecord, is_sys_form) "
+			+ "values (" + "  default, ?, ?, ?, ?, ?, ?)";
 
 	private static final String INSERT_FORM_CTX_ORA_SQL = "insert into catissue_form_context( "
-			+ "  identifier, container_id, entity_type, cp_id, sort_order, is_multirecord) "
+			+ "  identifier, container_id, entity_type, cp_id, sort_order, is_multirecord, is_sys_form) "
 			+ "values ("
-			+ "  catissue_form_context_seq.nextval, ?, ?, ?, ?, ?)";
+			+ "  catissue_form_context_seq.nextval, ?, ?, ?, ?, ?, ?)";
 
 	private static final String GET_ID_AND_SPECIMEN_ID_ORA_SQL = 
 			"select * from " +

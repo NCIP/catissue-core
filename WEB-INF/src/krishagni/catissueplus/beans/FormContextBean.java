@@ -13,6 +13,8 @@ public class FormContextBean {
 	private Integer sortOrder;
 	
 	private boolean multiRecord;
+	
+	private boolean sysForm;
 
 	public Long getIdentifier() {
 		return identifier;
@@ -60,5 +62,13 @@ public class FormContextBean {
 
 	public void setMultiRecord(boolean isMultiRecord) {
 		this.multiRecord = isMultiRecord;
+	}
+
+	public boolean isSysForm() {
+		return sysForm;
+	}
+
+	public void setSysForm(boolean sysForm) {
+		this.sysForm = sysForm;
 	}
 }

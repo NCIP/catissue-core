@@ -5,6 +5,9 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
   <changeSet id="specimen extension records - de + events" author="vpawar" failOnError="true" runOnChange="true">
     <sql>
       create or replace view SPECIMEN_EXTN_RECORDS_VIEW as (
@@ -93,5 +96,13 @@
           inner join CATISSUE_DEPARTMENT d ON u.DEPARTMENT_ID = d.IDENTIFIER
       )
     </sql>
+  </changeSet>
+
+  <changeSet id="Added field to indicate a form is system form" author="vpawar">
+    <addColumn tableName="CATISSUE_FORM_CONTEXT">
+      <column name="IS_SYS_FORM" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
   </changeSet>
 </databaseChangeLog>

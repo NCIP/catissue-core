@@ -13,7 +13,9 @@ public class FormContextDetail {
 	
 	private Integer sortOrder;
 
-	private boolean isMultiRecord;
+	private boolean multiRecord;
+	
+	private boolean sysForm;
 
 	public Long getFormCtxtId() {
 		return formCtxtId;
@@ -56,10 +58,18 @@ public class FormContextDetail {
 	}
 
 	public boolean isMultiRecord() {
-		return isMultiRecord;
+		return multiRecord;
 	}
 
-	public void setMultiRecord(boolean isMultiRecord) {
-		this.isMultiRecord = isMultiRecord;
+	public void setMultiRecord(boolean multiRecord) {
+		this.multiRecord = multiRecord;
+	}
+
+	public boolean isSysForm() {
+		return sysForm;
+	}
+
+	public void setSysForm(boolean sysForm) {
+		this.sysForm = sysForm;
 	}
 }
