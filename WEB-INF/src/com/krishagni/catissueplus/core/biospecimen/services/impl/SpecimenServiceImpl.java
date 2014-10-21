@@ -19,12 +19,14 @@ import com.krishagni.catissueplus.core.biospecimen.events.CreateAliquotEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchSpecimenEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensByScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqSpecimensEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeletedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUpdatedEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimensByScgEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimensSummaryEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateSpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -256,6 +258,17 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		catch (Exception ex) {
 			return AliquotCreatedEvent.serverError(ex);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public SpecimensByScgEvent getSpecimensForScg(ReqSpecimensByScgEvent event) {
+		try {
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimensByScgId(event.getScgId());
+			return SpecimensByScgEvent.ok(SpecimenDetail.fromSpecimens(specimens));
+		} catch (Exception ex) {
+			return SpecimensByScgEvent.serverError(ex);
 		}
 	}
 

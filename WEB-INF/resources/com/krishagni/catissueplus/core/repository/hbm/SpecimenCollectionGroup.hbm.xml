@@ -92,7 +92,12 @@
         	select scg.id from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
               where scg.name = :name
         </query>
-        
+
+        <query name="getScgByName">
+        	select scg from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
+              where scg.name = :name
+        </query>
+                
         <query name="getCpeByScgId">
               select scg.collectionProtocolEvent from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup scg
               where scg.id = :scgId

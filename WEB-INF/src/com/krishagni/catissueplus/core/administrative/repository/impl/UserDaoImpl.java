@@ -28,10 +28,13 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return (User) sessionFactory.getCurrentSession().get(User.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public User getUser(String witnessName) {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> users = sessionFactory.getCurrentSession().getNamedQuery(GET_USER_BY_EMAIL_ADDRESS)
+			.setString("emailAddress", witnessName).list();
+		
+		return users.size() > 0 ? users.get(0) : null;
 	}
 
 	@Override

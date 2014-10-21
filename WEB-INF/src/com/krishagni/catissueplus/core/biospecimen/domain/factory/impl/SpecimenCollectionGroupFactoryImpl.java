@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthenticationType;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ScgErrorCode;
@@ -36,7 +37,9 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	private static final String CPE = "collection protocol event";
 
 	private static final String CPR = "collection protocol registration";
-
+	
+	private static final String CP_SHORT_TITLE = "collection protocol short title";
+	
 	private static final String SITE = "site name";
 
 	private static final String BARCODE = "barcode";
@@ -123,7 +126,22 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setCpe(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
+		CollectionProtocolEvent cpe = null;
+		if (scgDetail.getCpeId() != null) {
+			cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
+		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpShortTitle() != null) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByShortTitle(scgDetail.getCpShortTitle());
+			if (cp == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
+				return;
+			}
+			
+			cpe = daoFactory.getCollectionProtocolDao().getCpeByCollectionPointLabel(cp.getId(), scgDetail.getCollectionPointLabel());
+		} else {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "either collection-protocol-event id or (collection-point-label and cp-short-title) is mandatory for this operation" );
+			return;
+		}
+		
 		if (cpe == null) {
 			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
 			return;
@@ -132,10 +150,24 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setCpr(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
+		CollectionProtocolRegistration cpr = null;
+		if (scgDetail.getCprId() != null) {
+			cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
+		} else if (scgDetail.getPpid() != null && scgDetail.getCpShortTitle() != null) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByShortTitle(scgDetail.getCpShortTitle());
+			if (cp == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
+				return ;
+			}
+			
+			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), scgDetail.getPpid());
+		} else {
+			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "Either collection-protocol-registration id or (ppid and cp-short-title is mandatory for this operation!)");
+			return;
+		}
+		
 		if (cpr == null) {
 			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
-			return;
 		}
 		scg.setCollectionProtocolRegistration(cpr);
 	}

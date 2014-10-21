@@ -39,8 +39,10 @@ public class PermissibleValuesManagerImpl implements PermissibleValuesManager {
 	public boolean validate(String attribute, String value) {
 		ValidatePvEvent event = new ValidatePvEvent();
 		event.setAttribute(attribute);
-		if(!value.isEmpty())
-		event.setValues(Arrays.asList(value));
+		if(value != null && !value.isEmpty()) { 
+			event.setValues(Arrays.asList(value));
+		}
+
 		return permissibleValueSvc.validate(event);
 	}
 	@Override

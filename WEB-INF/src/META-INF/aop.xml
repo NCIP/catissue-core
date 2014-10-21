@@ -1,0 +1,20 @@
+<!DOCTYPE aspectj PUBLIC
+        "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+  <weaver options="-nowarn">
+    <!-- only weave classes in our application-specific packages -->
+    <include within="com.krishagni.catissueplus.core.bo.service.impl.*"/>
+    <exclude within="com.krishagni.*"/>
+    <exclude within="org.*"/>
+    <exclude within="edu.*"/>
+  </weaver>
+
+  <aspects>
+    <!-- weave in just this aspect -->        
+    <!--  aspect name="com.krishagni.catissueplus.core.common.BOWeaveFilter"/-->
+  </aspects>
+</aspectj>
+
+
+
+

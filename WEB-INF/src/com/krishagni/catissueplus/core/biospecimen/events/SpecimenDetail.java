@@ -47,10 +47,14 @@ public class SpecimenDetail {
 	private String collectionStatus;
 
 	private Long scgId;
+	
+	private String scgName;
 
 	private Long requirementId;
 
 	private Long parentSpecimenId;
+	
+	private String parentSpecimenLabel;
 
 	private String containerName;
 
@@ -210,6 +214,14 @@ public class SpecimenDetail {
 		this.scgId = scgId;
 	}
 
+	public String getScgName() {
+		return scgName;
+	}
+
+	public void setScgName(String scgName) {
+		this.scgName = scgName;
+	}
+
 	public Long getRequirementId() {
 		return requirementId;
 	}
@@ -224,6 +236,14 @@ public class SpecimenDetail {
 
 	public void setParentSpecimenId(Long parentSpecimenId) {
 		this.parentSpecimenId = parentSpecimenId;
+	}
+
+	public String getParentSpecimenLabel() {
+		return parentSpecimenLabel;
+	}
+
+	public void setParentSpecimenLabel(String parentSpecimenLabel) {
+		this.parentSpecimenLabel = parentSpecimenLabel;
 	}
 
 	public String getContainerName() {
@@ -301,6 +321,7 @@ public class SpecimenDetail {
 		detail.setLineage(specimen.getLineage());
 		if (specimen.getParentSpecimen() != null) {
 			detail.setParentSpecimenId(specimen.getParentSpecimen().getId());
+			detail.setParentSpecimenLabel(specimen.getParentSpecimen().getLabel());
 		}
 		detail.setPathologicalStatus(specimen.getPathologicalStatus());
 		/*    if (specimen.getSpecimenPosition() != null) {
@@ -315,6 +336,16 @@ public class SpecimenDetail {
 			detail.setScgId(specimen.getSpecimenCollectionGroup().getId());
 		}
 		return detail;
+	}
+	
+	public static List<SpecimenDetail> fromSpecimens(List<Specimen> specimens) {
+		List<SpecimenDetail> specimenDetails = new ArrayList<SpecimenDetail>();
+		
+		for (Specimen s : specimens) {
+			specimenDetails.add(fromDomain(s));
+		}
+		
+		return specimenDetails;
 	}
 
 	private static List<ExternalIdentifierDetail> getExternalIdentifierDetails(

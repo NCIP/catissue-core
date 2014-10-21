@@ -73,6 +73,15 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 		query.setString("name", name);
 		return query.list().isEmpty() ? true : false;
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public SpecimenCollectionGroup getScgByName(String name) {
+		List<SpecimenCollectionGroup> scgs = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SCG_BY_NAME).setString("name", name).list();
+		
+		return scgs.size() > 0 ? scgs.get(0) : null;
+	}
 
 	@Override
 	public boolean isBarcodeUnique(String barcode) {
@@ -131,6 +140,8 @@ public class SpecimenCollectionGroupDaoImpl extends AbstractDao<SpecimenCollecti
 	private static final String GET_SCG_ID_BY_BARCODE = FQN + ".getScgIdByBarcode";
 
 	private static final String GET_SCG_ID_BY_NAME = FQN + ".getScgIdByName";
+	
+	private static final String GET_SCG_BY_NAME = FQN + ".getScgByName";
 	
 	private static final String GET_CPE_BY_SCG_ID = FQN + ".getCpeByScgId";
 

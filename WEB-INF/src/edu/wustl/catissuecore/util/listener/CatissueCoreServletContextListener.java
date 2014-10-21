@@ -29,6 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.krishagni.catissueplus.core.bo.factory.impl.BulkOperationProcessor;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
 import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 import com.krishagni.catissueplus.core.notification.schedular.ExternalAppFailNotificationSchedular;
@@ -40,6 +41,7 @@ import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
+import edu.wustl.bulkoperator.util.BulkOperationProperties;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
@@ -159,6 +161,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			FormProperties.getInstance().setPostProcessor(new FormProcessor());
 
             BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
+            
+            BulkOperationProperties.getInstance().setBulkProcessor(new BulkOperationProcessor());
 
             InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);

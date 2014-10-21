@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -139,6 +140,12 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		List<Specimen> result = criteria.list();
 		return result;		
 	}
+	
+	@Override
+	public List<Specimen> getSpecimensByScgId(Long scgId) {
+		return (List<Specimen>) sessionFactory.getCurrentSession().getNamedQuery(GET_SPECIMENS_BY_SCGIDS)
+		.setParameterList("scgIds", Collections.singletonList(scgId)).list();
+	}
 
 	private static final String FQN = Specimen.class.getName();
 
@@ -149,6 +156,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_SPECIMEN_BY_LABEL = FQN +".getSpecimenByLabel";
 	
 	private static final String GET_SPECIMENS_BY_LABEL = FQN + ".getSpecimensByLabel";
+
+	private static final String GET_SPECIMENS_BY_SCGIDS = FQN + ".getSpecimensByScgIds";
 
 
 }

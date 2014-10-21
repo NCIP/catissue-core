@@ -73,6 +73,21 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
+	public CollectionProtocol getCpByShortTitle(String shortTitle) {
+		List<CollectionProtocol> cps = sessionFactory.getCurrentSession().getNamedQuery(GET_OLD_CP_BY_SHORT_NAME)
+				.setString("cpShortTitle", shortTitle).list();
+		return cps.size() > 0 ? cps.get(0) : null;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public CollectionProtocol getCpByTitle(String title) {
+		List<CollectionProtocol> cps = sessionFactory.getCurrentSession().getNamedQuery(GET_OLD_CP_BY_NAME).setString("cpTitle", title).list();
+		return cps.size() > 0 ? cps.get(0) : null;
+	}
+
+	@Override
 	public List<SpecimenRequirement> getSpecimenRequirments(Long cpeId) {
 			Object object = sessionFactory.getCurrentSession().get(CollectionProtocolEvent.class.getName(), cpeId);
 			if (object == null) {
@@ -102,16 +117,31 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return cps;
 	}
 	
+	@Override
+	public CollectionProtocolEvent getCpeByCollectionPointLabel(Long cpId, String collectionPointLabel) {
+		List<CollectionProtocolEvent> cpeList = sessionFactory.getCurrentSession().getNamedQuery(GET_CPE_BY_CP_ID_AND_COLLECTION_POINT_LABEL).setLong("cpId", cpId)
+		.setString("collectionPointLabel", collectionPointLabel).list();
+		
+		return cpeList.size() > 0 ? cpeList.get(0) : null;
+	}
+	
 	private static final String FQN = CollectionProtocol.class.getName();
 
 	private static final String GET_ALL_CPS = FQN + ".getAllProtocols";
 	
 	private static final String GET_CHILD_CPS = FQN + ".getChildProtocols";
 	
+	private static final String GET_OLD_CP_BY_NAME = FQN + ".getOldCpByTitle";
+	
 	private static final String GET_CP_BY_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
 			.getName() + ".getCpByTitle";
 
+	private static final String GET_OLD_CP_BY_SHORT_NAME = FQN + ".getOldCpByShortTitle";
+	
 	private static final String GET_CP_BY_SHORT_NAME = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
 			.getName() + ".getCpByShortTitle";
+	
+	private static final String GET_CPE_BY_CP_ID_AND_COLLECTION_POINT_LABEL = com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.class
+			.getName()+ ".getCpeByCpIdAndCpl";
 
 }

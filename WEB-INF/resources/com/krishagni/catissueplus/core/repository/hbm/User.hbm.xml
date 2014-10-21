@@ -143,7 +143,7 @@
             length="200"/>
 
 	<query name="getUserByEmailAddress">
-		SELECT user.emailAddress FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.emailAddress = :emailAddress
+		SELECT user FROM com.krishagni.catissueplus.core.administrative.domain.User user WHERE user.emailAddress = :emailAddress
 	</query>
 	
 	<query name="getUserByIdAndDomain">

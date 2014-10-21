@@ -110,6 +110,10 @@
 		<query name="getSpecimenByLabel">
 			select sp from com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp where sp.label=:label
 		</query>
+		<query name="getSpecimensByScgIds">
+			select sp from com.krishagni.catissueplus.core.biospecimen.domain.Specimen sp 
+			where sp.specimenCollectionGroup.id in (:scgIds) and sp.activityStatus = 'Active'
+		</query>
 		<sql-query name="getScgIdBySpecimenId">
 			<return-scalar column="scgId" type="long" />
 

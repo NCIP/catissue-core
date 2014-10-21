@@ -76,6 +76,14 @@
     		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.shortTitle = :cpShortTitle
     	</query>
     	
+    	<query name="getCpeByCpIdAndCpl">
+    		from 
+    		  edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe
+    		where 
+    		  cpe.collectionPointLabel = :collectionPointLabel and
+    		  cpe.collectionProtocol.id = :cpId
+    	</query>
+    	
 	 </class>
 
 </hibernate-mapping>

@@ -23,4 +23,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public List<Specimen> getAllSpecimens(int startAt, int maxRecords, String... searchString);
 
 	public Long getSpecimensCount(String... searchString);
+	
+	public List<Specimen> getSpecimensByScgId(Long scgId);
 }

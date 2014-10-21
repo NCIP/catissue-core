@@ -461,9 +461,20 @@
           and 
           	PARENT_CP_ID = :parentId
         </sql-query>
-        
+
+    <query name="getOldCpByShortTitle">
+      select cp from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.shortTitle = :cpShortTitle 
+    </query>
+    
+    <query name="getOldCpByTitle">
+      select cp from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.title = :cpTitle 
+    </query>
+            
     </class>
     <query name="getconsentTierCollection">Select cp.consentTierCollection from edu.wustl.catissuecore.domain.CollectionProtocol cp WHERE cp.id = ?
     </query>
+    
+    
+    
     <sql-query name="getSiteIdsByCPID">select site_id from CATISSUE_SITE_CP where collection_protocol_id = ?</sql-query>
 </hibernate-mapping>

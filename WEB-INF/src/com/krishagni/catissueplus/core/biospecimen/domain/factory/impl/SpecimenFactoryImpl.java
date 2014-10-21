@@ -117,11 +117,19 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setScg(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
+		SpecimenCollectionGroup scg = null;
+		
 		if (specimenDetail.getScgId() == null) {
-			errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, SCG);
-			return;
+			if (!isBlank(specimenDetail.getScgName())) {
+				scg = daoFactory.getScgDao().getScgByName(specimenDetail.getScgName());
+			} else {
+				errorHandler.addError(ScgErrorCode.MISSING_ATTR_VALUE, SCG);
+				return;
+			}
+		} else {
+			scg = daoFactory.getScgDao().getscg(specimenDetail.getScgId());
 		}
-		SpecimenCollectionGroup scg = daoFactory.getScgDao().getscg(specimenDetail.getScgId());
+		
 		if (scg == null) {
 			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SCG);
 			return;
@@ -130,17 +138,22 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setParentSpecimen(SpecimenDetail specimenDetail, Specimen specimen, ObjectCreationException errorHandler) {
-		if(!"New".equals(specimenDetail.getLineage())){ 
-		if (specimenDetail.getParentSpecimenId() == null) {
-			errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, PARENT);
-			return;
-		}
-		Specimen parentSpecimen = daoFactory.getSpecimenDao().getSpecimen(specimenDetail.getParentSpecimenId());
-		if (parentSpecimen == null) {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PARENT_SPECIMEN);
-			return;
-		}
-		specimen.setParentSpecimen(parentSpecimen);
+		if(!"New".equals(specimenDetail.getLineage())){
+			Specimen parentSpecimen;
+			if (specimenDetail.getParentSpecimenId() != null) {
+				parentSpecimen = daoFactory.getSpecimenDao().getSpecimen(specimenDetail.getParentSpecimenId());
+			} else if (!isBlank(specimenDetail.getParentSpecimenLabel())) {
+				parentSpecimen = daoFactory.getSpecimenDao().getSpecimenByLabel(specimenDetail.getParentSpecimenLabel());
+			} else {
+				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, "either parent-specimen-id or parent-specimen-label is required for this operation");
+				return;
+			}
+			
+			if (parentSpecimen == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PARENT_SPECIMEN);
+				return;
+			}
+			specimen.setParentSpecimen(parentSpecimen);
 		}
 	}
 

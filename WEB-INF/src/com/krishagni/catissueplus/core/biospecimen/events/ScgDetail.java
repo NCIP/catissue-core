@@ -10,13 +10,19 @@ public class ScgDetail {
 	private Long cprId;
 
 	private Long cpeId;
+	
+	private String ppid;
+	
+	private String collectionPointLabel;
+	
+	private String cpShortTitle;
 
 	private Long id;
 
 	private String name;
-
 	
 	private String clinicalDiagnosis;
+	
 	private String clinicalStatus;
 
 	private String activityStatus;
@@ -63,6 +69,30 @@ public class ScgDetail {
 
 	public void setCpeId(Long cpeId) {
 		this.cpeId = cpeId;
+	}
+
+	public String getPpid() {
+		return ppid;
+	}
+
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
+	}
+
+	public String getCollectionPointLabel() {
+		return collectionPointLabel;
+	}
+
+	public void setCollectionPointLabel(String collectionPointLabel) {
+		this.collectionPointLabel = collectionPointLabel;
+	}
+
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	public Long getId() {
@@ -240,6 +270,18 @@ public class ScgDetail {
 		detail.setReceivedTimestamp(scg.getReceivedTimestamp());
 		detail.setReceiverName(scg.getReceiver().getLastName() + ", " + scg.getReceiver().getFirstName());
 		detail.setSurgicalPathologyNumber(scg.getSurgicalPathologyNumber());
+		
+		if (scg.getCollectionProtocolRegistration() != null) {
+			detail.setPpid(scg.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+			
+			if (scg.getCollectionProtocolRegistration().getCollectionProtocol() != null) {
+				detail.setCpShortTitle(scg.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle());
+			}
+		}
+		
+		if (scg.getCollectionProtocolEvent() != null) {
+			detail.setCollectionPointLabel(scg.getCollectionProtocolEvent().getCollectionPointLabel());
+		}
 		return detail;
 	}
 

@@ -9,10 +9,15 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.AllSpecimenCollGroupsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.BulkRegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationPatchDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CprRegistrationDetails;
+import com.krishagni.catissueplus.core.biospecimen.events.CreateBulkRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CreateRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.DeleteRegistrationEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.PatchRegistrationEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationCreatedEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationDeletedEvent;
@@ -25,6 +30,7 @@ import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.errors.ObjectCreationException;
+import com.krishagni.catissueplus.core.common.events.EventStatus;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
 import edu.wustl.security.global.Permissions;
@@ -86,6 +92,35 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		catch (Exception e) {
 			return RegistrationCreatedEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public BulkRegistrationCreatedEvent createBulkRegistration(CreateBulkRegistrationEvent req) {
+		try {
+			ParticipantRegistrationDetails participantRegDetails = req.getParticipantDetails();
+			for (int i =0; i < participantRegDetails.getRegistrationDetails().size(); i++) {
+				CreateRegistrationEvent request = new CreateRegistrationEvent();
+				CollectionProtocolRegistrationDetail cprDetails = buildCprForBulkParticipantDetails(participantRegDetails, i );
+				request.setCpId(cprDetails.getCpId());
+				request.setCprDetail(cprDetails);
+				request.setSessionDataBean(req.getSessionDataBean());
+				
+				RegistrationCreatedEvent response = createRegistration(request);
+				
+				if (response.getStatus() == EventStatus.OK) {
+					CollectionProtocolRegistrationDetail savedCpr = response.getCprDetail(); 
+					participantRegDetails.setId(savedCpr.getParticipantDetail().getId());
+					participantRegDetails.getRegistrationDetails().get(i).setCprId(savedCpr.getId());
+				} else {
+					return BulkRegistrationCreatedEvent.invalidRequest(response.getMessage(), response.getErroneousFields());
+				}
+			}
+			
+			return BulkRegistrationCreatedEvent.ok(participantRegDetails);
+		} catch (Exception e) {
+			return BulkRegistrationCreatedEvent.serverError(e);
 		}
 	}
 
@@ -206,4 +241,19 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
+	private CollectionProtocolRegistrationDetail buildCprForBulkParticipantDetails(ParticipantRegistrationDetails participantDetails
+			,int i ) {
+		CollectionProtocolRegistrationDetail cprDetails = new CollectionProtocolRegistrationDetail();
+		ParticipantDetail participant = (ParticipantDetail)participantDetails;
+		
+		cprDetails.setParticipantDetail(participant);
+		CprRegistrationDetails cpr = participantDetails.getRegistrationDetails().get(i);
+		cprDetails.setCpId(cpr.getCpId());
+		cprDetails.setCpTitle(cpr.getCpTitle());
+		cprDetails.setId(cpr.getCprId());
+		cprDetails.setPpid(cpr.getPpId());
+		cprDetails.setRegistrationDate(cpr.getRegistrationDate());
+		cprDetails.setResponseDetail(cpr.getConsentResponseDetail());
+		return cprDetails;
+	}
 }

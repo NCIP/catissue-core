@@ -21,10 +21,16 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public SpecimenRequirement getSpecimenRequirement(Long requirementId);
 
 	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByTitle(String title);
-
+	
 	public com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol getCPByShortTitle(String shortTitle);
+
+	public CollectionProtocol getCpByShortTitle(String shortTitle);
+	
+	public CollectionProtocol getCpByTitle(String shortTitle);
 	
 	public List<SpecimenRequirement> getSpecimenRequirments(Long cpeId);
 
 	public List<CollectionProtocolSummary> getChildProtocols(Long cpId);
+	
+	public CollectionProtocolEvent getCpeByCollectionPointLabel(Long cpId, String collectionPointLabel);
 }

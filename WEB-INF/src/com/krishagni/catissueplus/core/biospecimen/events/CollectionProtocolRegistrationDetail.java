@@ -17,6 +17,8 @@ public class CollectionProtocolRegistrationDetail {
 	private Long id;
 
 	private Long cpId;
+	
+	private String cpTitle;
 
 	private String ppid;
 
@@ -96,6 +98,14 @@ public class CollectionProtocolRegistrationDetail {
 		this.cpId = cpId;
 	}
 
+	public String getCpTitle() {
+		return cpTitle;
+	}
+
+	public void setCpTitle(String cpTitle) {
+		this.cpTitle = cpTitle;
+	}
+
 	public String getPpid() {
 		return ppid;
 	}
@@ -123,10 +133,21 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setId(cpr.getId());
 		detail.setCpId(cpr.getCollectionProtocol().getId());
 		detail.setActivityStatus(cpr.getActivityStatus());
+		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		detail.setBarcode(cpr.getBarcode());
 		detail.setPpid(cpr.getProtocolParticipantIdentifier());
 		detail.setRegistrationDate(cpr.getRegistrationDate());
 		return detail;
+	}
+	
+	public static List<CollectionProtocolRegistrationDetail> fromCprs(List<CollectionProtocolRegistration> cprList) {
+		List<CollectionProtocolRegistrationDetail> cprs = new ArrayList<CollectionProtocolRegistrationDetail>();
+		
+		for (CollectionProtocolRegistration cpr : cprList) {
+			cprs.add(fromDomain(cpr));
+		}
+		
+		return cprs;
 	}
 
 }
