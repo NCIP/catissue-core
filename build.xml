@@ -241,6 +241,12 @@
 				<include name="**/*.hbm.xml" />
 			</fileset>
 		</copy>
+		<copy todir="${target.dir}">
+			<fileset dir="${src.dir}">
+				<include name="META-INF"/>		
+				<include name="META-INF/*"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- Create the Applet JAR Begins-->
@@ -444,6 +450,7 @@
 				<include name="caTissueSuiteV11_UML.zip" />
 				<include name="**/WEB-INF/classes/**/cdms/CdmsIntegratorImpl.class" />
 				<include name="ParticipantConfigXMLTemplateRules.xml" />
+				<include name="**/WEB-INF/classes/META-INF/aop.xml" />
 				<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				<exclude name="**/WEB-INF/classes/**/cdms/*"/>
 
@@ -1123,6 +1130,7 @@
 	<target name="build_client_jar">
 		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
 			<fileset dir="${target.dir}">
+				<include name="**/com/krishagni/catissueplus/core/biospecimen/events/**"/>
 				<include name="**/edu/wustl/catissuecore/domain/**"/>
 				<include name="**/edu/wustl/catissuecore/actionForm/**"/>
 				<include name="**/edu/wustl/catissuecore/util/**"/>
