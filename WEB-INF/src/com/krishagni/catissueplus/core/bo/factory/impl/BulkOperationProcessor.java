@@ -4,11 +4,11 @@ import com.krishagni.catissueplus.core.bo.events.BulkOperationRequest;
 import com.krishagni.catissueplus.core.bo.events.BulkOperationResponse;
 import com.krishagni.catissueplus.core.bo.factory.BulkOperationController;
 import com.krishagni.catissueplus.core.bo.factory.BulkOperationControllerFactory;
+import com.krishagni.catissueplus.bulkoperator.util.BulkProcessor;
+import com.krishagni.catissueplus.bulkoperator.util.ServiceAction;
 import com.krishagni.catissueplus.core.common.errors.ErroneousField;
 import com.krishagni.catissueplus.core.common.events.EventStatus;
 
-import edu.wustl.bulkoperator.util.BulkProcessor;
-import edu.wustl.bulkoperator.util.ServiceAction;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class BulkOperationProcessor implements BulkProcessor {

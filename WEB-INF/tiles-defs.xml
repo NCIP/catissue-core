@@ -321,17 +321,17 @@
 	<!-- Bulk operations pages definitions start -->
 
 	<definition name=".catissuecore.bulkTransferEventsDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkTransferEvents.jsp" />
+		<put name="content" value="/pages/content/bulkOperations/BulkTransferEvents.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.bulkDisposalEventsDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkDisposalEvents.jsp" />
+		<put name="content" value="/pages/content/bulkOperations/BulkDisposalEvents.jsp" />
 	</definition>
 
 	<!-- Bulk operations pages definitions end -->
 
 	<definition name=".catissuecore.participantDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+		<put name="content" value="/pages/content/bulkOperations/Participant.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.participantAddSuccessDef" extends=".catissuecore.homePageDef">
@@ -1395,5 +1395,20 @@
 	<definition name=".nextgen.seBulkDataEntry" extends=".catissuecore.homePageDef5">
 		<put name="pageContentUrl" value="ngweb/pages/SpecimenEventBulkDataEntry.jsp" type="string"/>
 	</definition>
+
+	<!-- Tile defs for bulk-operation pages -->
+	<definition name=".catissuecore.homePageDef" path="/pages/Layout.jsp">
+		<put name="title" value="caTissue Suite v 1.2" />
+		<put name="header" value="/pages/MainHeader.jsp" />
+		<put name="applicationheader" value="/pages/ApplicationHeader.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
+		<put name="content" value="/pages/content/home/Home.jsp" />
+		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.bulkOperationDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/bulkOperations/BulkOperation.jsp" />
+	</definition>
+
 
 </tiles-definitions>

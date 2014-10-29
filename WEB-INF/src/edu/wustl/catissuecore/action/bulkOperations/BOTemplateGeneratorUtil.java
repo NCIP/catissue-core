@@ -1,15 +1,16 @@
 package edu.wustl.catissuecore.action.bulkOperations;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.krishagni.catissueplus.bulkoperator.dao.BulkOperationDao;
+import com.krishagni.catissueplus.bulkoperator.generatetemplate.BOTemplateGenerator;
+import com.krishagni.catissueplus.bulkoperator.generatetemplate.BulkOperationTemplate;
+import com.krishagni.catissueplus.bulkoperator.util.BulkOperationConstants;
+
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.ndao.DbSettingsFactory;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
-import edu.wustl.bulkoperator.dao.BulkOperationDao;
-import edu.wustl.bulkoperator.generatetemplate.BOTemplateGenerator;
-import edu.wustl.bulkoperator.generatetemplate.BulkOperationTemplate;
-import edu.wustl.bulkoperator.util.BulkOperationConstants;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class BOTemplateGeneratorUtil {
 	private static Map<String, String> PARTICIPANT_INTEGRATOR_FIELDS = new HashMap<String, String>();

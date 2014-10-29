@@ -122,11 +122,6 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
 		<!-- shipping tracking merge ends -->
 
-		<!-- bulk Operations-->
-		<mapping resource="edu/wustl/bulkoperator/hbm/JobDetails.hbm.xml"/>
-
-		<mapping resource="edu/wustl/bulkoperator/hbm/MatchingJobDetails.hbm.xml"/>		
-		
 		<!-- caTissue-cider integration -->
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCiderMessage.hbm.xml"/>
 		
@@ -149,7 +144,7 @@
 		<!--  Form Context and Record Entry -->
 		<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
 		<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
-		
+	
 		<!-- mapping for new domain objects added -->
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolRegistration.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Participant.hbm.xml" />
@@ -189,7 +184,8 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Equipment.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Image.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/PermissibleValue.hbm.xml"/>
-		
+		<mapping resource="com/krishagni/catissueplus/bulkoperator/JobDetails.hbm.xml" />
+
 		<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>
 		<mapping resource="com/krishagni/rbac/resources/Operation.hbm.xml"/>

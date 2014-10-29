@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mapping>
-	 <class name="edu.wustl.bulkoperator.metadata.BulkOperationClass">
+	 <class name="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass">
 	 	
 		<field name="className" type="string">
 			<bind-xml name="className" node="attribute"/>
@@ -25,36 +25,36 @@
 		
 		
 
-		<field name="containmentAssociation" get-method="getContainmentAssociationCollection" set-method="setContainmentAssociationCollection" type="edu.wustl.bulkoperator.metadata.BulkOperationClass" collection="collection" >
+		<field name="containmentAssociation" get-method="getContainmentAssociationCollection" set-method="setContainmentAssociationCollection" type="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass" collection="collection" >
 			<bind-xml name="containmentAssociation" node="element" />
 		</field>
-		<field name="referenceAssociation" get-method="getReferenceAssociationCollection" set-method="setReferenceAssociationCollection" type="edu.wustl.bulkoperator.metadata.BulkOperationClass" collection="collection" >
+		<field name="referenceAssociation" get-method="getReferenceAssociationCollection" set-method="setReferenceAssociationCollection" type="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass" collection="collection" >
 			<bind-xml name="referenceAssociation" node="element" />
 		</field>
-		<field name="dynExtEntityAssociationCollection"  type="edu.wustl.bulkoperator.metadata.BulkOperationClass" collection="collection" >
+		<field name="dynExtEntityAssociationCollection"  type="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass" collection="collection" >
 		<bind-xml name="dynExtEntityAssociationCollection" node="element" />
 		</field>
 		
-		<field name="dynExtCategoryAssociationCollection" type="edu.wustl.bulkoperator.metadata.BulkOperationClass" collection="collection" >
+		<field name="dynExtCategoryAssociationCollection" type="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass" collection="collection" >
 			<bind-xml name="dynExtCategoryAssociationCollection" node="element" />
 		</field>
-		<field name="attribute" get-method="getAttributeCollection" set-method="setAttributeCollection" type="edu.wustl.bulkoperator.metadata.Attribute" collection="collection" />
-		<field name="hookingInformation" type="edu.wustl.bulkoperator.metadata.HookingInformation" >
+		<field name="attribute" get-method="getAttributeCollection" set-method="setAttributeCollection" type="com.krishagni.catissueplus.bulkoperator.metadata.Attribute" collection="collection" />
+		<field name="hookingInformation" type="com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation" >
 			<bind-xml name="hookingInformation" node="element" />
 		</field>
 
 	</class>
 
-	<class name="edu.wustl.bulkoperator.metadata.HookingInformation">
-	 		<field name="attribute" get-method="getAttributeCollection" set-method="setAttributeCollection" type="edu.wustl.bulkoperator.metadata.Attribute" collection="collection" />
+	<class name="com.krishagni.catissueplus.bulkoperator.metadata.HookingInformation">
+	 		<field name="attribute" get-method="getAttributeCollection" set-method="setAttributeCollection" type="com.krishagni.catissueplus.bulkoperator.metadata.Attribute" collection="collection" />
 	 		<field name="rootContainerId" type="long">
 				<bind-xml name="rootContainerId" node="attribute"/>
 			</field>
 	</class>
 
-	<class name="edu.wustl.bulkoperator.metadata.BulkOperationMetaData">
+	<class name="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationMetaData">
 	 <map-to xml="BulkOperationMetadata"/>
-	 <field name="BulkOperationClass" type="edu.wustl.bulkoperator.metadata.BulkOperationClass" collection="collection" >
+	 <field name="BulkOperationClass" type="com.krishagni.catissueplus.bulkoperator.metadata.BulkOperationClass" collection="collection" >
 	 	<bind-xml name="BulkOperationClass" node="element" />
 	 </field>
 	 <field name="templateName" type="string">
@@ -64,7 +64,7 @@
 			<bind-xml name="batchSize" node="attribute"/>
 		</field>
 	 </class>
-	 <class name="edu.wustl.bulkoperator.metadata.Attribute">
+	 <class name="com.krishagni.catissueplus.bulkoperator.metadata.Attribute">
 	 	<field name="name" type="string">
 			<bind-xml name="name" node="attribute"/>
 		</field>
@@ -79,10 +79,10 @@
 		<field name="format" type="string">
 			<bind-xml name="format" node="attribute"/>
 		</field>
-		<field name="discriminatorCollection" type="edu.wustl.bulkoperator.metadata.AttributeDiscriminator" collection="collection" />
+		<field name="discriminatorCollection" type="com.krishagni.catissueplus.bulkoperator.metadata.AttributeDiscriminator" collection="collection" />
 	 </class>
 
-	 <class name="edu.wustl.bulkoperator.metadata.AttributeDiscriminator">
+	 <class name="com.krishagni.catissueplus.bulkoperator.metadata.AttributeDiscriminator">
 	 	<field name="name" type="string">
 			<bind-xml name="name" node="attribute"/>
 		</field>

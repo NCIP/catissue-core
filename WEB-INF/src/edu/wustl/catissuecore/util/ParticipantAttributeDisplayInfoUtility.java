@@ -1,6 +1,8 @@
 package edu.wustl.catissuecore.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -13,7 +15,6 @@ import javax.xml.validation.Validator;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.binder.DigesterLoader;
 
-import edu.wustl.bulkoperator.templateImport.XmlRulesModule;
 import edu.wustl.catissuecore.dto.ParticipantAttributeDisplayInfoDTO;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -34,8 +35,9 @@ public class ParticipantAttributeDisplayInfoUtility
 			final String rulesFileLocation =CommonServiceLocator.getInstance().getAppHome()+File.separator+"ParticipantConfigXMLTemplateRules.xml";
 			File schemaLocation = new File(CommonServiceLocator.getInstance().getPropDirPath()
 					+ File.separatorChar + "ParticipantConfig.xsd");
+			
 			Schema schema = factory.newSchema(schemaLocation);
-			DigesterLoader digesterLoader = DigesterLoader.newLoader(new XmlRulesModule(rulesFileLocation));
+			DigesterLoader digesterLoader = DigesterLoader.newLoader(new com.krishagni.catissueplus.bulkoperator.templateImport.XmlRulesModule(rulesFileLocation));
 			Digester digester = digesterLoader.newDigester();
 			digester.setValidating(true);
 			digester.setXMLSchema(schema);

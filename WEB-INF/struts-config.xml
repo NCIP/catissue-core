@@ -157,7 +157,8 @@ PUBLIC
 			type="edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchForm" />
 			<form-bean name="reportForm"
 			type="edu.wustl.common.actionForm.ReportForm" />
-			 
+
+		<form-bean name="bulkOperationForm" type="com.krishagni.catissueplus.bulkoperator.actionForm.BulkOperationForm"/>	 
 	</form-beans>
      
    
@@ -6179,6 +6180,48 @@ PUBLIC
   		<action path="/specimenEventsBulkDataEntry" type="edu.wustl.catissuecore.action.ForwardAction">
 			<forward name="success" path=".nextgen.seBulkDataEntry" />
 		</action>
+
+		<action path="/BulkHandler" type="com.krishagni.catissueplus.bulkoperator.action.BulkHandler"
+			name="" scope="request">
+		    <forward name="success" path="/FileUpload.do?pageOf=bulkHandler"/>
+		</action>
+
+		<action path="/BulkOperation" type="com.krishagni.catissueplus.bulkoperator.action.BulkOperationAction"
+		   name="bulkOperationForm" validate="false" scope="request">
+		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
+		</action>
+
+		<action path="/FileUpload" type="com.krishagni.catissueplus.bulkoperator.action.FileUploadAction"
+			name="bulkOperationForm" scope="request" validate="true">
+			<forward name="success" path="/BulkTemplate.do"/>
+		    <forward name="bulkHandler" path="/BulkHandler.do?fromAction=fileUpload"/>
+		</action>
+
+	   	<action path="/DownloadCSV" type="com.krishagni.catissueplus.bulkoperator.action.BulkOperationAction"
+			name="bulkOperationForm" validate="false" scope="request">
+			<forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
+		</action>
+
+		<action path="/JobDashboard" type="com.krishagni.catissueplus.bulkoperator.action.ShowJobDashboardAction"
+			name="bulkOperationForm" validate="false" scope="request">
+			<forward name="success" path="/pages/content/bulkOperations/JobGridDashboard.jsp" />
+		</action>
+
+		<action path="/BulkTemplate" type="com.krishagni.catissueplus.bulkoperator.action.BulkOperationAction"
+		   name="bulkOperationForm" validate="false" scope="request">
+			<forward name="pageOfBulkOperation" path="/pages/content/bulkOperations/BulkTemplate.jsp" />
+		</action>
+
+		<action path="/JobGridAjax" type="com.krishagni.catissueplus.bulkoperator.action.JobGridAjaxAction"
+			name="" validate="false" scope="request">
+		</action>
+
+		<action path="/DocumentDownload"
+			type="com.krishagni.catissueplus.bulkoperator.action.DownloadJobReportFileAction"
+			validate="false" input="/pages/blank.jsp" scope="request" >
+			<forward name="success" path="/pages/blank.jsp" />
+			<forward name="failure" path="/pages/blank.jsp" />
+		</action>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
@@ -6188,9 +6231,8 @@ PUBLIC
 		key="msg.shippingtracking" null="false" />
 
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
-		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
-		<set-property property="definitions-parser-validate"
-			value="true" />
+		<set-property property="definitions-parser-validate" value="true" />
 	</plug-in>
 </struts-config>

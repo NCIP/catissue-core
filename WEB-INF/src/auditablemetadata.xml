@@ -1014,7 +1014,7 @@
 
 	</AuditableClass>
 
-	<AuditableClass className="edu.wustl.bulkoperator.jobmanager.JobDetails"
+	<AuditableClass className="com.krishagni.catissueplus.bulkoperator.jobmanager.JobDetails"
 	  relationShipType="main" roleName="" isAuditable="false">
 
 		<attribute name="id" dataType="Long" />

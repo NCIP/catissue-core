@@ -29,7 +29,6 @@ import org.apache.commons.io.FilenameUtils;
 import titli.model.util.TitliResultGroup;
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.krishagni.catissueplus.core.bo.factory.impl.BulkOperationProcessor;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
 import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 import com.krishagni.catissueplus.core.notification.schedular.ExternalAppFailNotificationSchedular;
@@ -40,9 +39,9 @@ import edu.common.dynamicextensions.nutility.BOUtil;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.nutility.FormProperties;
 import edu.common.dynamicextensions.query.PathConfig;
-import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
-import edu.wustl.bulkoperator.util.BulkOperationProperties;
-import edu.wustl.bulkoperator.util.BulkOperationUtility;
+
+import com.krishagni.catissueplus.bulkoperator.util.BulkOperationUtility;
+
 import edu.wustl.catissuecore.action.bulkOperations.BOTemplateUpdater;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Address;
@@ -70,7 +69,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.ParseException;
-import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.participant.utility.RaceGenderCodesProperyHandler;
 import edu.wustl.common.scheduler.bizLogic.ScheduleBizLogic;
 import edu.wustl.common.util.CVSTagReader;
@@ -102,9 +100,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * DATASOURCE_JNDI_NAME.
 	 */
 	private static final String JNDI_NAME = "java:/catissuecore";
-	
-	//class level instance to access methods for registering and unregistering queues
-	private final ParticipantManagerUtility participantManagerUtility = new ParticipantManagerUtility();
 
 	/**
 	 * This method is called during server startup, It is used when want some initliazation before
@@ -132,12 +127,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
 			//QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
-			if (XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
-			{
-				BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
-				// eMPI integration initialization
-				initeMPI();
-			}
 			if (Constants.TRUE.equals(XMLPropertyHandler.getValue("Imaging.enabled")))
 			{
 				Variables.isImagingConfigurred = true;
@@ -162,8 +151,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 
             BOUtil.getInstance().setGenerator(new BOTemplateUpdater());
             
-            BulkOperationProperties.getInstance().setBulkProcessor(new BulkOperationProcessor());
-
             InitialContext ic = new InitialContext();
 			DataSource ds = (DataSource)ic.lookup(JNDI_NAME);
 			String dateFomat = CommonServiceLocator.getInstance().getDatePattern();
@@ -198,56 +185,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
  	private void initQueryPathsConfig() {
  		String path = System.getProperty("app.propertiesDir") + File.separatorChar + "paths.xml";
  		PathConfig.intialize(path);
-	}
-
-	/**
-	 * Inite mpi.
-	 */
-	private void initeMPI()
-	{
-		try
-		{
-			checkEMPIAdminUser();
-			RaceGenderCodesProperyHandler.init("HL7MesRaceGenderCodes.xml");
-			participantManagerUtility.registerWMQListener();
-			try
-			{
-				ParticipantManagerUtility.initialiseParticiapntMatchScheduler();
-			}
-			catch (Exception excep)
-			{
-				logger.error(" ####### ERROR WHILE INITIALISING THE SHECUDER FOR PROCESSING THE PARTICIPANTS ######### ");
-				logger.error(excep.getMessage(), excep);
-			}
-
-		}
-		catch (Exception excep)
-		{
-			logger.error("Could not initialized application, Error in loading the HL7 race gender code property handler.");
-			logger.error(excep.getMessage(), excep);
-		}
-		catch (Error excep)
-		{
-			logger.error("EMPI : ERROR WHILE REGISTERING WMQ LISTENER ");
-			logger.error(excep.getMessage(), excep);
-		}
-
-	}
-
-	private void checkEMPIAdminUser() throws ApplicationException, MessagingException
-	{
-		String eMPIAdminUName = XMLPropertyHandler.getValue(Constants.HL7_LISTENER_ADMIN_USER);
-		User validUser = AppUtility.getUser(eMPIAdminUName);
-		EmailHandler emailHandlrObj = new EmailHandler();
-		if (validUser == null)
-		{
-			emailHandlrObj.sendEMPIAdminUserNotExitsEmail();
-		}
-		if (validUser != null
-				&& Constants.ACTIVITY_STATUS_CLOSED.equals(validUser.getActivityStatus()))
-		{
-			emailHandlrObj.sendEMPIAdminUserClosedEmail(validUser);
-		}
 	}
 
 	/**

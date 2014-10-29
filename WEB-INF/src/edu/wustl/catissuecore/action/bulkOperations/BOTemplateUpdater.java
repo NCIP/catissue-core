@@ -1,9 +1,10 @@
 package edu.wustl.catissuecore.action.bulkOperations;
 
+import com.krishagni.catissueplus.bulkoperator.dao.BulkOperationDao;
+
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.nutility.BOTemplateGenerator;
-import edu.wustl.bulkoperator.dao.BulkOperationDao;
 
 public class BOTemplateUpdater implements BOTemplateGenerator {
 
