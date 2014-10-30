@@ -49,6 +49,10 @@ public class CollectionProtocolRegistrationDetail {
 	public Boolean isParticipantModified() {
 		return modifiedAttributes.contains("participantDetail");
 	}
+	
+	public void modifyParticipant() {
+		modifiedAttributes.add("participantDetail");
+	}
 
 	public String getActivityStatus() {
 		return activityStatus;

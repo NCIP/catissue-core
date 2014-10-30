@@ -5,6 +5,7 @@ import static com.krishagni.catissueplus.core.common.CommonValidator.isBlank;
 
 import org.springframework.stereotype.Service;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -75,8 +76,9 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public RegistrationCreatedEvent createRegistration(CreateRegistrationEvent event) {
 		try {
-			if(!privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), event.getCpId(), Permissions.REGISTRATION)){
-				return RegistrationCreatedEvent.accessDenied(Permissions.REGISTRATION,event.getCpId());
+			Long cpId = getCpId(event);
+			if(!privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId, Permissions.REGISTRATION)){
+				return RegistrationCreatedEvent.accessDenied(Permissions.REGISTRATION, cpId);
 			}
 				
 			CollectionProtocolRegistration registration = registrationFactory.createCpr(event.getCprDetail());
@@ -210,6 +212,37 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		catch (Exception e) {
 			return RegistrationDeletedEvent.serverError(e);
+		}
+	}
+	
+	private Long getCpId(CreateRegistrationEvent req) {
+		if (req.getCpId() != null) {
+			return req.getCpId();
+		} else if (req.getCprDetail() != null) {
+			Long cpId = req.getCprDetail().getCpId();
+			String title = req.getCprDetail().getCpTitle();
+			
+			if (cpId != null) {
+				return cpId;
+			} else if (CommonValidator.isBlank(title)) {
+				CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(title);
+				
+				if (cp == null) {
+					ObjectCreationException exception = new ObjectCreationException();
+					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "collection protocol");
+					throw exception;
+				}
+				
+				return cp.getId();
+			} else {
+				ObjectCreationException exception = new ObjectCreationException();
+				exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, "collection protocol");
+				throw exception;
+			}
+		} else {
+			ObjectCreationException exception = new ObjectCreationException();
+			exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, "collection protocol");
+			throw exception;
 		}
 	}
 

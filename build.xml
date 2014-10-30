@@ -1078,7 +1078,8 @@
 	<target name="build_client_jar">
 		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
 			<fileset dir="${target.dir}">
-				<include name="**/com.krishagni.catissueplus.bulkoperator/**"/>
+				<include name="**/com/krishagni/catissueplus/bulkoperator/**"/>
+				<include name="**/com/krishagni/catissueplus/core/biospecimen/domain/**"/>
 				<include name="**/com/krishagni/catissueplus/core/biospecimen/events/**"/>
 				<include name="**/edu/wustl/catissuecore/domain/**"/>
 				<include name="**/edu/wustl/catissuecore/actionForm/**"/>

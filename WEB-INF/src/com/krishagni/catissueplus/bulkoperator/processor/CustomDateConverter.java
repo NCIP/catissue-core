@@ -55,8 +55,8 @@ public class CustomDateConverter implements Converter {
 			 	format.setLenient(false);
 			 	date=format.parse(dateValue);
 		} catch (ParseException e) {
-		
 			logger.error("Error while parsing date.", e);
+			throw new RuntimeException("Invalid Date Format!! Expected Date format is: " + formatString);
 		}
 		return date;
 	}
