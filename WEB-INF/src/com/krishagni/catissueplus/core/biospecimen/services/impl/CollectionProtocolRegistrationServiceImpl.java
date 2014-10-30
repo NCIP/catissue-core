@@ -224,7 +224,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			
 			if (cpId != null) {
 				return cpId;
-			} else if (CommonValidator.isBlank(title)) {
+			} else if (!CommonValidator.isBlank(title)) {
 				CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(title);
 				
 				if (cp == null) {
