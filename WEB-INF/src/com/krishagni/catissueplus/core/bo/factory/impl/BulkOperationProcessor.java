@@ -50,7 +50,7 @@ public class BulkOperationProcessor implements BulkProcessor {
 		if (res.getErroneousFields() != null && res.getErroneousFields().length > 0) {
 			String message = res.getMessage() + " ";
 			for (ErroneousField error : res.getErroneousFields()) {
-				message += "[ " +  error.getErrorMessage() + " ] [ " + error.getFieldName() + " ], ";
+				message += "[detail: " +  error.getErrorMessage() + ", field: " + error.getFieldName() + "], ";
 			}
 			
 			return message;

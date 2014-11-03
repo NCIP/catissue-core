@@ -15,7 +15,7 @@ public class ScgDetail {
 	
 	private String collectionPointLabel;
 	
-	private String cpShortTitle;
+	private String cpTitle;
 
 	private Long id;
 
@@ -87,12 +87,12 @@ public class ScgDetail {
 		this.collectionPointLabel = collectionPointLabel;
 	}
 
-	public String getCpShortTitle() {
-		return cpShortTitle;
+	public String getCpTitle() {
+		return cpTitle;
 	}
 
-	public void setCpShortTitle(String cpShortTitle) {
-		this.cpShortTitle = cpShortTitle;
+	public void setCpTitle(String cpTitle) {
+		this.cpTitle = cpTitle;
 	}
 
 	public Long getId() {
@@ -275,7 +275,7 @@ public class ScgDetail {
 			detail.setPpid(scg.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
 			
 			if (scg.getCollectionProtocolRegistration().getCollectionProtocol() != null) {
-				detail.setCpShortTitle(scg.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle());
+				detail.setCpTitle(scg.getCollectionProtocolRegistration().getCollectionProtocol().getTitle());
 			}
 		}
 		

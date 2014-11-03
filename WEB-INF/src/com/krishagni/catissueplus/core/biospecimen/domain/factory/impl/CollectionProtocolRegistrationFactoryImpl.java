@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -17,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolRegistrationFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -43,6 +46,10 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	private final String CONSENT_RESP_NOT_SPECIFIED = "Not Specified";
 
 	private final String CONSENT_WITNESS = "consent witness";
+	
+	private final String SSN = "social security number";
+
+	private static final String PMI = "participant medical identifier";
 
 	private ParticipantFactory participantFactory;
 
@@ -79,6 +86,11 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		Participant participant;
 		if (participantId == null) {
 			participant = participantFactory.createParticipant(detail.getParticipantDetail());
+			
+			if (participant != null) {
+				ensureUniqueSsn(participant.getSocialSecurityNumber(), exception);
+				ensureUniquePMI(participant.getPmiCollection(), exception);
+			}
 		}
 		else {
 			participant = daoFactory.getParticipantDao().getParticipant(participantId);
@@ -89,6 +101,25 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		registration.setParticipant(participant);
 		exception.checkErrorAndThrow();
 		return registration;
+	}
+	
+	private void ensureUniqueSsn(String ssn, ObjectCreationException errorHandler) {
+		if (!daoFactory.getParticipantDao().isSsnUnique(ssn)) {
+			errorHandler.addError(ParticipantErrorCode.DUPLICATE_SSN, SSN);
+		}
+	}
+
+	private void ensureUniquePMI(Map<String, ParticipantMedicalIdentifier> pmiCollection,
+			ObjectCreationException errorHandler) {
+		//TODO: need to handle for update
+		for (Entry<String, ParticipantMedicalIdentifier> entry : pmiCollection.entrySet()) {
+			String siteName = entry.getKey();
+			String mrn = entry.getValue().getMedicalRecordNumber();
+			if (!daoFactory.getParticipantDao().isPmiUnique(siteName, mrn)) {
+				errorHandler.addError(ParticipantErrorCode.DUPLICATE_PMI, PMI);
+			}
+
+		}
 	}
 
 	//	@Override

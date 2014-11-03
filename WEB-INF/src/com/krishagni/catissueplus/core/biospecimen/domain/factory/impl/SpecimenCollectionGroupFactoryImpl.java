@@ -35,10 +35,14 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	private static final String SCG_COLLECTION_STATUS = "Collection Status";
 
 	private static final String CPE = "collection protocol event";
+	
+	private static final String CPL = "collection point label";
 
 	private static final String CPR = "collection protocol registration";
 	
 	private static final String CP_SHORT_TITLE = "collection protocol short title";
+	
+	private static final String PPID = "participant protocol id";
 	
 	private static final String SITE = "site name";
 
@@ -129,14 +133,19 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		CollectionProtocolEvent cpe = null;
 		if (scgDetail.getCpeId() != null) {
 			cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
-		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpShortTitle() != null) {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByShortTitle(scgDetail.getCpShortTitle());
+		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpTitle() != null) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
 			if (cp == null) {
 				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
 				return;
 			}
 			
 			cpe = daoFactory.getCollectionProtocolDao().getCpeByCollectionPointLabel(cp.getId(), scgDetail.getCollectionPointLabel());
+			
+			if (cpe == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPL);
+				return;
+			}
 		} else {
 			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "either collection-protocol-event id or (collection-point-label and cp-short-title) is mandatory for this operation" );
 			return;
@@ -153,14 +162,18 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 		CollectionProtocolRegistration cpr = null;
 		if (scgDetail.getCprId() != null) {
 			cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
-		} else if (scgDetail.getPpid() != null && scgDetail.getCpShortTitle() != null) {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByShortTitle(scgDetail.getCpShortTitle());
+		} else if (scgDetail.getPpid() != null && scgDetail.getCpTitle() != null) {
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
 			if (cp == null) {
 				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
 				return ;
 			}
 			
 			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), scgDetail.getPpid());
+			if (cpr == null) {
+				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PPID);
+				return ;
+			}
 		} else {
 			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "Either collection-protocol-registration id or (ppid and cp-short-title is mandatory for this operation!)");
 			return;

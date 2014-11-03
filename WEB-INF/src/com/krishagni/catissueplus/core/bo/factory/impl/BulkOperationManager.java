@@ -18,7 +18,7 @@ public class BulkOperationManager {
 		//static registrations
 		bulkOperationMap.put(ParticipantRegistrationDetails.class.getSimpleName(), new CprControllerFactory());
 //		bulkOperationMap.put(SpecimenDetail.class.getSimpleName(), new SpecimenControllerFactory());
-//		bulkOperationMap.put(ScgDetail.class.getSimpleName(), new ScgControllerFactory());
+		bulkOperationMap.put(ScgDetail.class.getSimpleName(), new ScgControllerFactory());
 	}
 	
 	public static BulkOperationManager getInstance() {
