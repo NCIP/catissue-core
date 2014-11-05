@@ -26,8 +26,14 @@ angular.module('openspecimen')
     $scope.loginData = {};
 
     var onLogin = function(result) {
+      $scope.loginError = false;
+
       if (result.status == "ok" && result.data) {
-        $rootScope.currentUser = result.data.user;
+        $rootScope.currentUser = {
+          firstName: result.data.firstName,
+          lastName: result.data.lastName,
+          loginName: result.data.loginName
+        };
         $rootScope.loggedIn = true;
         AuthService.saveToken(result.data.token);
         $state.go('cp_home');
@@ -35,7 +41,7 @@ angular.module('openspecimen')
         $rootScope.currentUser = {};
         $rootScope.loggedIn = false;
         AuthService.removeToken();
-        $scope.loginError = result.status;
+        $scope.loginError = true;
       }
     };
 

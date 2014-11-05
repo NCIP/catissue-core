@@ -132,3 +132,10 @@ body {
 .os-group-controls .form-control:not(:last-child) {
   border-bottom: none;
 }
+
+.os-error-msg {
+  color: #dd4b39;
+  line-height: 17px;
+  display: block;
+  margin: 7px 0px;
+}

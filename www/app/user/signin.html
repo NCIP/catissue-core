@@ -19,6 +19,7 @@
         <input type="text"     class="form-control" ng-model="loginData.loginId" placeholder="Username">
         <input type="password" class="form-control" ng-model="loginData.password" placeholder="Password">
       </div>
+      <span class="os-error-msg" ng-if="loginError">The username or password you entered is incorrect</span>
       <button type="submit" class="btn btn-block btn-primary">Sign in</button>
       <div style="padding-top: 5px;">
         <a href="#/resetPassword" class="df-link-primary-sm">Forgot password?</a>

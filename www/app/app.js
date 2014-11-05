@@ -21,7 +21,7 @@ angular.module('openspecimen', ['ui.router'])
 
     $urlRouterProvider.otherwise('/');
 
-    $httpProvider.interceptors.push('httpRespInterceptor');
+    //$httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
     ApiUrlsProvider.port = 9090;
@@ -39,6 +39,14 @@ angular.module('openspecimen', ['ui.router'])
       },
 
       requestError: function(result) {
+        $q.reject(result);
+      },
+
+      response: function(result) {
+        return result;
+      },
+
+      responseError: function(result) {
         if (result.status == 401) {
           $window.localStorage['osAuthToken'] = '';
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
