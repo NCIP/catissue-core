@@ -109,24 +109,26 @@ public class SpecimenCollGroupServiceImpl implements SpecimenCollGroupService {
 	@Override
 	@PlusTransactional
 	public SpecimensInfoEvent getSpecimensList(ReqSpecimenSummaryEvent req) {
-		try {
-			List<Specimen> specimenList = new ArrayList<Specimen>();
-			List<SpecimenRequirement> requirementList = new ArrayList<SpecimenRequirement>();
-			if (ObjectType.CPE.getName().equals(req.getObjectType())) {
-				requirementList = daoFactory.getCollectionProtocolDao().getSpecimenRequirments(req.getId());
-
-			}
-			else {
-				requirementList = daoFactory.getScgDao().getSpecimenRequirments(req.getId());
-				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
-
-			}
-			return SpecimensInfoEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
-
-		}
-		catch (CatissueException e) {
-			return SpecimensInfoEvent.serverError(e);
-		}
+		// TODO: Fix this API
+		return null;
+//		try {
+//			List<Specimen> specimenList = new ArrayList<Specimen>();
+//			List<SpecimenRequirement> requirementList = new ArrayList<SpecimenRequirement>();
+//			if (ObjectType.CPE.getName().equals(req.getObjectType())) {
+//				requirementList = daoFactory.getCollectionProtocolDao().getSpecimenRequirments(req.getId());
+//
+//			}
+//			else {
+//				requirementList = daoFactory.getScgDao().getSpecimenRequirments(req.getId());
+//				specimenList = daoFactory.getScgDao().getSpecimensList(req.getId());
+//
+//			}
+//			return SpecimensInfoEvent.ok(getSpecimensList(specimenList, requirementList, req.getId()));
+//
+//		}
+//		catch (CatissueException e) {
+//			return SpecimensInfoEvent.serverError(e);
+//		}
 	}
 
 	@Override

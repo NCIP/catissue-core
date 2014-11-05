@@ -53,10 +53,14 @@ public class CollectionProtocolController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<CollectionProtocolSummary> getCollectionProtocolList(
-			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true") String chkPrivlege) {
+			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true")  boolean chkPrivlege,
+			@RequestParam(value = "detailedList", required = false, defaultValue = "false") boolean detailedList) {
+		
 		ReqAllCollectionProtocolsEvent req = new ReqAllCollectionProtocolsEvent();
 		req.setSessionDataBean(getSession());
-		req.setChkPrivileges("true".equalsIgnoreCase(chkPrivlege));
+		req.setChkPrivileges(chkPrivlege);
+		req.setIncludePi(detailedList);
+		req.setIncludeStats(detailedList);
 
 		AllCollectionProtocolsEvent resp = cpSvc.getAllProtocols(req);
 		if (!resp.isSuccess()) {
@@ -65,17 +69,17 @@ public class CollectionProtocolController {
 		return resp.getCpList();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/{id}/childProtocols")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public List<CollectionProtocolSummary> getChildProtocolsList(@PathVariable("id") Long id) {
-		ReqChildProtocolEvent req = new ReqChildProtocolEvent();
-		req.setSessionDataBean(getSession()); 
-		req.setCpId(id);
-
-		ChildCollectionProtocolsEvent result = cpSvc.getChildProtocols(req);
-		return result.getChildProtocols();
-	}
+//	@RequestMapping(method = RequestMethod.GET, value="/{id}/childProtocols")
+//	@ResponseStatus(HttpStatus.OK)
+//	@ResponseBody
+//	public List<CollectionProtocolSummary> getChildProtocolsList(@PathVariable("id") Long id) {
+//		ReqChildProtocolEvent req = new ReqChildProtocolEvent();
+//		req.setSessionDataBean(getSession()); 
+//		req.setCpId(id);
+//
+//		ChildCollectionProtocolsEvent result = cpSvc.getChildProtocols(req);
+//		return result.getChildProtocols();
+//	}
 
 	/*	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 		@ResponseStatus(HttpStatus.OK)
@@ -141,5 +145,4 @@ public class CollectionProtocolController {
 	private SessionDataBean getSession() {
 		return (SessionDataBean) httpServletRequest.getSession().getAttribute(Constants.SESSION_DATA);
 	}
-
 }

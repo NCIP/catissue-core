@@ -141,32 +141,34 @@ public class UserFactoryImpl implements UserFactory {
 
 	private void setUserCPRoles(User user, List<UserCPRoleDetails> userCPRoleDetails,
 			ObjectCreationException exceptionHandler) {
-		if (userCPRoleDetails.isEmpty()) {
-			return;
-		}
-
-		Set<UserCPRole> userCpRoles = new HashSet<UserCPRole>();
-		for (UserCPRoleDetails ucrDetails : userCPRoleDetails) {
-			UserCPRole userCpRole = new UserCPRole();
-			CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByTitle(
-					ucrDetails.getCpTitle());
-			if (collectionProtocol == null) {
-				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
-				return;
-			}
-			userCpRole.setCollectionProtocol(collectionProtocol);
-			userCpRole.setUser(user);
-
-			Role role = daoFactory.getRoleDao().getRoleByName(ucrDetails.getRoleName());
-			if (role == null) {
-				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, ROLE);
-				return;
-			}
-			userCpRole.setId(ucrDetails.getId());
-			userCpRole.setRole(role);
-			userCpRoles.add(userCpRole);
-		}
-		SetUpdater.<UserCPRole> newInstance().update(user.getUserCPRoles(), userCpRoles);
+		// TODO: Fix this
+		
+//		if (userCPRoleDetails.isEmpty()) {
+//			return;
+//		}
+//
+//		Set<UserCPRole> userCpRoles = new HashSet<UserCPRole>();
+//		for (UserCPRoleDetails ucrDetails : userCPRoleDetails) {
+//			UserCPRole userCpRole = new UserCPRole();
+//			CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByTitle(
+//					ucrDetails.getCpTitle());
+//			if (collectionProtocol == null) {
+//				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+//				return;
+//			}
+//			userCpRole.setCollectionProtocol(collectionProtocol);
+//			userCpRole.setUser(user);
+//
+//			Role role = daoFactory.getRoleDao().getRoleByName(ucrDetails.getRoleName());
+//			if (role == null) {
+//				exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, ROLE);
+//				return;
+//			}
+//			userCpRole.setId(ucrDetails.getId());
+//			userCpRole.setRole(role);
+//			userCpRoles.add(userCpRole);
+//		}
+//		SetUpdater.<UserCPRole> newInstance().update(user.getUserCPRoles(), userCpRoles);
 	}
 
 	private void setUserSites(User user, List<String> userSiteNames, ObjectCreationException exceptionHandler) {

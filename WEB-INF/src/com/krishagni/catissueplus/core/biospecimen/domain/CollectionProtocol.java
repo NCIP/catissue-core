@@ -8,7 +8,6 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.privileges.domain.CPSiteRole;
 
 public class CollectionProtocol {
-
 	private Long id;
 
 	private String title;
@@ -18,6 +17,8 @@ public class CollectionProtocol {
 	private Date startDate;
 
 	private Date endDate;
+	
+	private String activityStatus;
 
 	private User principalInvestigator;
 
@@ -61,6 +62,14 @@ public class CollectionProtocol {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(String activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	public User getPrincipalInvestigator() {

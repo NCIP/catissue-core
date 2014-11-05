@@ -195,27 +195,29 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 */
 	private void setCollectionProtocol(CollectionProtocolRegistration registration,
 			CollectionProtocolRegistrationDetail detail, ObjectCreationException exception) {
-		CollectionProtocol protocol = null;
+		// TODO: Fix this
 		
-		if (detail.getCpId() == null) {
-			
-			String cpTitle = detail.getCpTitle();
-			if (StringUtils.isNotBlank(cpTitle)) {
-				protocol = daoFactory.getCollectionProtocolDao().getCpByTitle(cpTitle);
-			} else {
-				exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
-				return;
-			}
-		} else {
-			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
-		}
-		
-		if (protocol == null) {
-			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
-			return;
-		}
-		registration.setCollectionProtocol(protocol);
-		setConsents(registration, detail, exception);
+//		CollectionProtocol protocol = null;
+//		
+//		if (detail.getCpId() == null) {
+//			
+//			String cpTitle = detail.getCpTitle();
+//			if (StringUtils.isNotBlank(cpTitle)) {
+//				protocol = daoFactory.getCollectionProtocolDao().getCpByTitle(cpTitle);
+//			} else {
+//				exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, COLLECTION_PROTOCOL);
+//				return;
+//			}
+//		} else {
+//			protocol = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCpId());
+//		}
+//		
+//		if (protocol == null) {
+//			exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+//			return;
+//		}
+//		registration.setCollectionProtocol(protocol);
+//		setConsents(registration, detail, exception);
 	}
 
 	/**

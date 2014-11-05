@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.http.HttpStatus;
+
 import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
@@ -42,6 +44,8 @@ public class RestApiAuthFilter implements Filter
 			.getCommonLogger(RestApiAuthFilter.class);
 
 	private static final String BASIC_AUTH = "Basic ";
+	
+	private static final String AUTH_API = "/sessions";
 
 	@Override
 	public void destroy()
@@ -55,10 +59,25 @@ public class RestApiAuthFilter implements Filter
 	{
 		HttpServletRequest httpReq = (HttpServletRequest) req;
 		HttpServletResponse httpResp = (HttpServletResponse) resp;
+		
+		httpResp.setHeader("Access-Control-Allow-Origin", "http://localhost:9000");
+		httpResp.setHeader("Access-Control-Allow-Credentials", "true");
+		httpResp.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+		httpResp.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-OS-API-TOKEN");			
+		
+		if (httpReq.getMethod().equalsIgnoreCase("options")) {
+			httpResp.setStatus(HttpServletResponse.SC_OK);	
+			return;
+		}
 
 		if (httpReq.getSession(false) == null ||
 				httpReq.getSession(false).getAttribute(Constants.SESSION_DATA) == null)
 		{
+			if (httpReq.getRequestURI().contains(AUTH_API)) {
+				chain.doFilter(req, resp);
+				return;
+			}
+			
 			String authInfo = httpReq.getHeader(HttpHeaders.AUTHORIZATION);
 			if (authInfo == null)
 			{

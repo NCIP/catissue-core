@@ -1,0 +1,18 @@
+<div>
+  <h3>Collection Protocols</h3>
+  <div class="os-card" ng-repeat="cp in cpList">
+    <h4>{{cp.title}}</h4>
+    <h5>{{cp.principalInvestigator.firstName}} {{cp.principalInvestigator.lastName}}</h5>
+    <p>{{cp.startDate | date: 'MMM dd, yyyy'}}</p>
+    <div class="stats">
+      <div class="stat col-xs-6">
+        <span class="glyphicon glyphicon-user"></span>
+        <span>{{cp.participantCount}}</span>
+      </div>
+      <div class="stat col-xs-6">
+        <span class="glyphicon glyphicon-record"></span>
+        <span>{{cp.specimenCount}}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -159,16 +159,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private void setSpecimenRequirement(SpecimenDetail specimenDetail, Specimen specimen,
 			ObjectCreationException errorHandler) {
-		if (specimenDetail.getRequirementId() == null) {
-			return;
-		}
-		SpecimenRequirement requirement = daoFactory.getCollectionProtocolDao().getSpecimenRequirement(
-				specimenDetail.getRequirementId());
-		if (requirement == null) {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SPECIMEN_REQUIREMENT);
-			return;
-		}
-		specimen.setSpecimenRequirement(requirement);
+		// TODO: Fix this
+		
+//		if (specimenDetail.getRequirementId() == null) {
+//			return;
+//		}
+//		SpecimenRequirement requirement = daoFactory.getCollectionProtocolDao().getSpecimenRequirement(
+//				specimenDetail.getRequirementId());
+//		if (requirement == null) {
+//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, SPECIMEN_REQUIREMENT);
+//			return;
+//		}
+//		specimen.setSpecimenRequirement(requirement);
 	}
 
 	private void setActivityStatus(String activityStatus, Specimen specimen, ObjectCreationException errorHandler) {

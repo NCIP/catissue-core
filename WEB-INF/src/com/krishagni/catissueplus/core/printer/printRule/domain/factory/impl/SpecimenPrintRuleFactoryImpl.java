@@ -141,13 +141,14 @@ public class SpecimenPrintRuleFactoryImpl implements SpecimenPrintRuleFactory {
 
 	private void setCpShortTitle(SpecimenPrintRule specimenPrintRule, String cpShortTitle,
 			ObjectCreationException exceptionHandler) {
-		CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByShortTitle(cpShortTitle);
-		if (collectionProtocol == null) {
-			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
-			return;
-		}
-		specimenPrintRule.setCpShortTitle(collectionProtocol.getShortTitle());
-
+		// TODO: Fix this
+//		CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByShortTitle(cpShortTitle);
+//		if (collectionProtocol == null) {
+//			exceptionHandler.addError(UserErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
+//			return;
+//		}
+//		specimenPrintRule.setCpShortTitle(collectionProtocol.getShortTitle());
+//
 	}
 
 	private void setLoginName(SpecimenPrintRule specimenPrintRule, UserInfo userInfo,

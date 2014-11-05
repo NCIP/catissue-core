@@ -130,59 +130,63 @@ public class SpecimenCollectionGroupFactoryImpl implements SpecimenCollectionGro
 	}
 
 	private void setCpe(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		CollectionProtocolEvent cpe = null;
-		if (scgDetail.getCpeId() != null) {
-			cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
-		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpTitle() != null) {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
-			if (cp == null) {
-				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
-				return;
-			}
-			
-			cpe = daoFactory.getCollectionProtocolDao().getCpeByCollectionPointLabel(cp.getId(), scgDetail.getCollectionPointLabel());
-			
-			if (cpe == null) {
-				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPL);
-				return;
-			}
-		} else {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "either collection-protocol-event id or (collection-point-label and cp-short-title) is mandatory for this operation" );
-			return;
-		}
+		// TODO: Fix this
 		
-		if (cpe == null) {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
-			return;
-		}
-		scg.setCollectionProtocolEvent(cpe);
+//		CollectionProtocolEvent cpe = null;
+//		if (scgDetail.getCpeId() != null) {
+//			cpe = daoFactory.getCollectionProtocolDao().getCpe(scgDetail.getCpeId());
+//		} else if (scgDetail.getCollectionPointLabel() != null && scgDetail.getCpTitle() != null) {
+//			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
+//			if (cp == null) {
+//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
+//				return;
+//			}
+//			
+//			cpe = daoFactory.getCollectionProtocolDao().getCpeByCollectionPointLabel(cp.getId(), scgDetail.getCollectionPointLabel());
+//			
+//			if (cpe == null) {
+//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPL);
+//				return;
+//			}
+//		} else {
+//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "either collection-protocol-event id or (collection-point-label and cp-short-title) is mandatory for this operation" );
+//			return;
+//		}
+//		
+//		if (cpe == null) {
+//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPE);
+//			return;
+//		}
+//		scg.setCollectionProtocolEvent(cpe);
 	}
 
 	private void setCpr(ScgDetail scgDetail, SpecimenCollectionGroup scg, ObjectCreationException errorHandler) {
-		CollectionProtocolRegistration cpr = null;
-		if (scgDetail.getCprId() != null) {
-			cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
-		} else if (scgDetail.getPpid() != null && scgDetail.getCpTitle() != null) {
-			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
-			if (cp == null) {
-				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
-				return ;
-			}
-			
-			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), scgDetail.getPpid());
-			if (cpr == null) {
-				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PPID);
-				return ;
-			}
-		} else {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "Either collection-protocol-registration id or (ppid and cp-short-title is mandatory for this operation!)");
-			return;
-		}
+		// TODO: Fix this
 		
-		if (cpr == null) {
-			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
-		}
-		scg.setCollectionProtocolRegistration(cpr);
+//		CollectionProtocolRegistration cpr = null;
+//		if (scgDetail.getCprId() != null) {
+//			cpr = daoFactory.getCprDao().getCpr(scgDetail.getCprId());
+//		} else if (scgDetail.getPpid() != null && scgDetail.getCpTitle() != null) {
+//			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(scgDetail.getCpTitle());
+//			if (cp == null) {
+//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CP_SHORT_TITLE);
+//				return ;
+//			}
+//			
+//			cpr = daoFactory.getCprDao().getCprByPpId(cp.getId(), scgDetail.getPpid());
+//			if (cpr == null) {
+//				errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, PPID);
+//				return ;
+//			}
+//		} else {
+//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, "Either collection-protocol-registration id or (ppid and cp-short-title is mandatory for this operation!)");
+//			return;
+//		}
+//		
+//		if (cpr == null) {
+//			errorHandler.addError(ScgErrorCode.INVALID_ATTR_VALUE, CPR);
+//		}
+//		scg.setCollectionProtocolRegistration(cpr);
 	}
 
 	private void setClinicalStatus(String clinicalStatus, SpecimenCollectionGroup scg,

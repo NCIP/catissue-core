@@ -45,16 +45,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@Override
 	@PlusTransactional
 	public AllCollectionProtocolsEvent getAllProtocols(ReqAllCollectionProtocolsEvent req) {
-		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getAllCollectionProtocols();
-		List<CollectionProtocolSummary> listToReturn = new ArrayList<CollectionProtocolSummary>();
-		List<Long> cpList = privilegeSvc.getCpList(req.getSessionDataBean().getUserId(), PrivilegeType.REGISTRATION.name(),req.isChkPrivileges());
-		for (CollectionProtocolSummary collectionProtocolSummary : list) {
-			if(cpList.contains(collectionProtocolSummary.getId())){
-				listToReturn.add(collectionProtocolSummary);
+		List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao()
+				.getAllCollectionProtocols(req.isIncludePi(), req.isIncludeStats());
+		
+		
+		List<Long> allowedCpIds = privilegeSvc.getCpList(
+				req.getSessionDataBean().getUserId(), 
+				PrivilegeType.REGISTRATION.name(),req.isChkPrivileges());
+		
+		List<CollectionProtocolSummary> result = new ArrayList<CollectionProtocolSummary>();
+		for (CollectionProtocolSummary collectionProtocolSummary : cpList) {
+			if (allowedCpIds.contains(collectionProtocolSummary.getId())) {
+				result.add(collectionProtocolSummary);
 			}
 		}
-		Collections.sort(listToReturn);
-		return AllCollectionProtocolsEvent.ok(listToReturn);
+		
+		Collections.sort(result);
+		return AllCollectionProtocolsEvent.ok(result);
 	}
 
 	@Override
@@ -102,9 +109,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@Override
 	@PlusTransactional
 	public ChildCollectionProtocolsEvent getChildProtocols(ReqChildProtocolEvent req) {
-		Long cpId = req.getCpId();
-		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getChildProtocols(cpId);
-		return ChildCollectionProtocolsEvent.ok(list);
+		// TODO: Fix this
+		return null;
+		
+//		Long cpId = req.getCpId();
+//		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getChildProtocols(cpId);
+//		return ChildCollectionProtocolsEvent.ok(list);
 	}
 
 }

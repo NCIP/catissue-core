@@ -225,8 +225,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			if (cpId != null) {
 				return cpId;
 			} else if (!CommonValidator.isBlank(title)) {
-				CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCPByTitle(title);
-				
+				CollectionProtocol cp = null; // TODO: Fix this daoFactory.getCollectionProtocolDao().getCPByTitle(title);				
 				if (cp == null) {
 					ObjectCreationException exception = new ObjectCreationException();
 					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, "collection protocol");

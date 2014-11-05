@@ -1,17 +1,24 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class CollectionProtocolSummary implements Comparable<CollectionProtocolSummary>{
+import java.util.Date;
 
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
+public class CollectionProtocolSummary implements Comparable<CollectionProtocolSummary> {
 	private Long id;
 
 	private String shortTitle;
 
 	private String title;
-
-	private String ppidFormat;
-
-	private String cpType;
+	
+	private UserSummary principalInvestigator;
+	
+	private Date startDate;
+	
+	private Long participantCount;
+	
+	private Long specimenCount;
 
 	public Long getId() {
 		return id;
@@ -37,25 +44,40 @@ public class CollectionProtocolSummary implements Comparable<CollectionProtocolS
 		this.title = title;
 	}
 
-	public String getPpidFormat() {
-		return ppidFormat;
+	public UserSummary getPrincipalInvestigator() {
+		return principalInvestigator;
 	}
 
-	public void setPpidFormat(String ppidFormat) {
-		this.ppidFormat = ppidFormat;
+	public void setPrincipalInvestigator(UserSummary principalInvestigator) {
+		this.principalInvestigator = principalInvestigator;
 	}
 
-	public String getCpType() {
-		return cpType;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setCpType(String cpType) {
-		this.cpType = cpType;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
+	public Long getParticipantCount() {
+		return participantCount;
+	}
+
+	public void setParticipantCount(Long participantCount) {
+		this.participantCount = participantCount;
+	}
+
+	public Long getSpecimenCount() {
+		return specimenCount;
+	}
+
+	public void setSpecimenCount(Long specimenCount) {
+		this.specimenCount = specimenCount;
+	}
+	
 	@Override
 	public int compareTo(CollectionProtocolSummary cpSummary) {
 		return this.shortTitle.toUpperCase().compareTo(cpSummary.getShortTitle().toUpperCase());
 	}
-
 }

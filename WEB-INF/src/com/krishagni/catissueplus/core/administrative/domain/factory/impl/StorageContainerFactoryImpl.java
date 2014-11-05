@@ -162,20 +162,22 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 
 	private void setCollectionProtocols(StorageContainer storageContainer, Collection<String> cpTitleCollection,
 			ObjectCreationException exceptionHandler) {
-		if (cpTitleCollection.isEmpty()) {
-			return;
-		}
-
-		Set<CollectionProtocol> collectionProtocols = new HashSet<CollectionProtocol>();
-		for (String cptitle : cpTitleCollection) {
-			CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByTitle(cptitle);
-			if (collectionProtocol == null) {
-				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
-				return;
-			}
-			collectionProtocols.add(collectionProtocol);
-		}
-		storageContainer.setHoldsCPs(collectionProtocols);
+		// TODO: Fix this
+		
+//		if (cpTitleCollection.isEmpty()) {
+//			return;
+//		}
+//
+//		Set<CollectionProtocol> collectionProtocols = new HashSet<CollectionProtocol>();
+//		for (String cptitle : cpTitleCollection) {
+//			CollectionProtocol collectionProtocol = daoFactory.getCollectionProtocolDao().getCPByTitle(cptitle);
+//			if (collectionProtocol == null) {
+//				exceptionHandler.addError(StorageContainerErrorCode.INVALID_ATTR_VALUE, COLLECTION_PROTOCOL);
+//				return;
+//			}
+//			collectionProtocols.add(collectionProtocol);
+//		}
+//		storageContainer.setHoldsCPs(collectionProtocols);
 	}
 
 	private void setCreatedByUser(StorageContainer storageContainer, UserInfo createdBy,

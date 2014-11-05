@@ -4,86 +4,51 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-    <class
-        name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
-        table="CATISSUE_COLLECTION_PROTOCOL"
-        lazy="true">
-    	<cache usage="read-write" />
+  <class
+    name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+    table="CATISSUE_COLLECTION_PROTOCOL"
+    lazy="true">
+    <cache usage="read-write" />
 
-	 	<id
-            name="id"
-            column="IDENTIFIER"
-            type="long"
-            length="30"
-            unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
-            </generator>
-        </id>
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
+      </generator>
+    </id>
 
-        <many-to-one
-            name="principalInvestigator"
-            class="com.krishagni.catissueplus.core.administrative.domain.User"
-            cascade="none"
+    <many-to-one name="principalInvestigator" cascade="none" column="PRINCIPAL_INVESTIGATOR_ID"/>
 
-            column="PRINCIPAL_INVESTIGATOR_ID"/>
+    <property name="title" column="TITLE" unique="true"/>
 
-        <property
-            name="title"
-            type="string"
-            column="TITLE"
-            length="255"
-            not-null="true"
-            unique="true"
-        />
+    <property name="shortTitle" column="SHORT_TITLE"/>
 
-        <property
-            name="shortTitle"
-            type="string"
-            column="SHORT_TITLE"
-            length="255"
-        />
+    <property name="startDate" column="START_DATE"/>
 
-        <property
-            name="startDate"
-            type="date"
-            column="START_DATE"
-            length="50"
-        />
+    <property name="endDate" column="END_DATE"/>
 
-        <property
-            name="endDate"
-            type="date"
-            column="END_DATE"
-            length="50"
-        />
-        
-         <set
-            name="cpSiteRoles"
-            table="CATISSUE_CP_GROUP_ROLES"
-            cascade="all-delete-orphan"
-            inverse="false">
-            <key column="CP_ID"/>
-            <one-to-many
-                class="com.krishagni.catissueplus.core.privileges.domain.CPSiteRole"/>
-         </set>
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <set name="cpSiteRoles" table="CATISSUE_CP_GROUP_ROLES" cascade="all-delete-orphan" inverse="false">
+      <key column="CP_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.privileges.domain.CPSiteRole"/>
+    </set>
          
-        <query name="getCpByTitle">
-    		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.title = :cpTitle
-    	</query>
-    	
-    	 <query name="getCpByShortTitle">
-    		SELECT cp FROM com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp WHERE cp.shortTitle = :cpShortTitle
-    	</query>
-    	
-    	<query name="getCpeByCpIdAndCpl">
-    		from 
-    		  edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe
-    		where 
-    		  cpe.collectionPointLabel = :collectionPointLabel and
-    		  cpe.collectionProtocol.id = :cpId
-    	</query>
-    	
-	 </class>
+    <sql-query name="getParticipantAndSpecimenCount">
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="participantCnt" type="long"/>
+      <return-scalar column="specimenCnt" type="long"/>
 
+      select 
+        cp.identifier as cpId, count(distinct cpr.identifier) as participantCnt, count(distinct sp.identifier) as specimenCnt 
+      from 
+        catissue_collection_protocol cp 
+        left join catissue_coll_prot_reg cpr on cpr.collection_protocol_id = cp.identifier 
+        left join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = cpr.identifier 
+        left join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier 
+      where
+        cp.activity_status = 'Active'
+      group by 
+        cp.identifier
+    </sql-query>
+  </class>
 </hibernate-mapping>
