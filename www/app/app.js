@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openspecimen', ['ui.router'])
+angular.module('openspecimen', ['ui.router', 'ui.bootstrap'])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, ApiUrlsProvider) {
     $stateProvider
       .state('login', {
@@ -12,10 +12,22 @@ angular.module('openspecimen', ['ui.router'])
         abstract: true,
         templateUrl: 'common/appmenu.html'
       })
-      .state('cp_home', {
-        url: '/cp-view', 
+      .state('cp-list', {
+        url: '/cps', 
         templateUrl: 'biospecimen/cp/list.html',
         controller: 'CpListCtrl',
+        parent: 'signed-in'
+      })
+      .state('cp-detail', {
+        url: '/cps/:cpId',
+        templateUrl: 'biospecimen/cp/detail.html',
+        controller: 'CpDetailCtrl',
+        parent: 'signed-in'
+      })
+      .state('participant-list', {
+        url: '/participants?cpId',
+        templateUrl: 'biospecimen/participant/list.html',
+        controller: 'ParticipantListCtrl',
         parent: 'signed-in'
       });
 

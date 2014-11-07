@@ -296,40 +296,42 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 
 	private void setLabel(String label, Specimen specimen, ObjectCreationException errorHandler) {
-		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-				.getCollectionProtocol().getSpecimenLabelFormat();
-		if (isBlank(specimenLabelFormat)) {
-			if (isBlank(label)) {
-				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
-				return;
-			}
-			specimen.setLabel(label);
-		}
-		else {
-			if (!isBlank(label)) {
-				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
-				return;
-			}
-			specimen.setLabel(specimenLabelGenerator.generateLabel(specimenLabelFormat, specimen));
-		}
+		// TODO: Fix this
+//		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+//				.getCollectionProtocol().getSpecimenLabelFormat();
+//		if (isBlank(specimenLabelFormat)) {
+//			if (isBlank(label)) {
+//				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
+//				return;
+//			}
+//			specimen.setLabel(label);
+//		}
+//		else {
+//			if (!isBlank(label)) {
+//				errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
+//				return;
+//			}
+//			specimen.setLabel(specimenLabelGenerator.generateLabel(specimenLabelFormat, specimen));
+//		}
 	}
 
 	private void updateLabel(String label, Specimen specimen, Specimen oldSpecimen, ObjectCreationException errorHandler) {
-		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-				.getCollectionProtocol().getSpecimenLabelFormat();
-
-		if (isBlank(specimenLabelFormat)) {
-			if (isBlank(label)) {
-				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
-				return;
-			}
-			specimen.setLabel(label);
-		}
-		else if (!oldSpecimen.getLabel().equalsIgnoreCase(label)) {
-			errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
-			return;
-		}
-
+		// TODO: Fix this
+//		String specimenLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+//				.getCollectionProtocol().getSpecimenLabelFormat();
+//
+//		if (isBlank(specimenLabelFormat)) {
+//			if (isBlank(label)) {
+//				errorHandler.addError(SpecimenErrorCode.MISSING_ATTR_VALUE, LABEL);
+//				return;
+//			}
+//			specimen.setLabel(label);
+//		}
+//		else if (!oldSpecimen.getLabel().equalsIgnoreCase(label)) {
+//			errorHandler.addError(SpecimenErrorCode.AUTO_GENERATED_LABEL, LABEL);
+//			return;
+//		}
+//
 	}
 
 	/**

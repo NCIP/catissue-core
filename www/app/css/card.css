@@ -11,7 +11,13 @@
   position: relative;
 }
 
+.os-card a {
+  color: black!important;
+  cursor: pointer;
+}
+
 .os-card:hover {
+  cursor: pointer;
   box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
   -webkit-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }

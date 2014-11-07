@@ -12,8 +12,6 @@ import com.krishagni.catissueplus.core.common.errors.CatissueException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-
 public class CollectionProtocolRegistration {
 
 	private Long id;

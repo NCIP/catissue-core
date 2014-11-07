@@ -139,3 +139,23 @@ body {
   display: block;
   margin: 7px 0px;
 }
+
+.os-page-hdr:after {
+  display: block;
+  content: " ";
+  clear: both;
+}
+
+.os-page-hdr h1, .os-page-hdr h2, .os-page-hdr h3, .os-page-hdr h4 {
+  float: left;
+}
+
+.os-page-hdr .os-icon-btn {
+  float: left;
+  margin: 18px 10px 10px;
+  font-size: 20px;
+}
+
+.os-icon-btn {
+  cursor: pointer;
+}

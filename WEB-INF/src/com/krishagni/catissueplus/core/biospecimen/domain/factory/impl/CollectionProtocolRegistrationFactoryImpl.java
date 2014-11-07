@@ -227,21 +227,23 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 * @param exception 
 	 */
 	private void setPPId(CollectionProtocolRegistration registration, String ppId, ObjectCreationException exception) {
-	    String ppidFormat = registration.getCollectionProtocol().getPpidFormat();
-	   if (StringUtils.isBlank(ppId)){
-	        if(StringUtils.isBlank(ppidFormat)){
-	            exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
-	            return;
-	        }
-	        
-	        Long value = keyFactory.getValueByKey(registration.getCollectionProtocol().getId().toString(),
-	                CollectionProtocol.class.getName());
-	        PpidGenerator generator = new PpidGeneratorImpl();
-	        registration.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
-	    }
-	    else{
-	        registration.setProtocolParticipantIdentifier(ppId);
-	    }
+		//TODO: Fix this
+		
+//	    String ppidFormat = registration.getCollectionProtocol().getPpidFormat();
+//	   if (StringUtils.isBlank(ppId)){
+//	        if(StringUtils.isBlank(ppidFormat)){
+//	            exception.addError(ParticipantErrorCode.MISSING_ATTR_VALUE, PPID);
+//	            return;
+//	        }
+//	        
+//	        Long value = keyFactory.getValueByKey(registration.getCollectionProtocol().getId().toString(),
+//	                CollectionProtocol.class.getName());
+//	        PpidGenerator generator = new PpidGeneratorImpl();
+//	        registration.setProtocolParticipantIdentifier(generator.generatePpid(ppidFormat, value));
+//	    }
+//	    else{
+//	        registration.setProtocolParticipantIdentifier(ppId);
+//	    }
 	}
 
 	/**
@@ -252,43 +254,45 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	 */
 	private void setConsents(CollectionProtocolRegistration registration, CollectionProtocolRegistrationDetail detail,
 			ObjectCreationException exception) {
-		List<ConsentTierDetail> userProvidedConsents = new ArrayList<ConsentTierDetail>();
-		Collection<ConsentTier> consentTierCollection = registration.getCollectionProtocol().getConsentTierCollection();
-		if (consentTierCollection == null || consentTierCollection.isEmpty()) {
-			return;
-		}
-
-		if (detail.getResponseDetail() != null) {
-			userProvidedConsents = detail.getResponseDetail().getConsentTierList();
-			setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
-			String witnessName = detail.getResponseDetail().getWitnessName();
-			if (StringUtils.isNotBlank(witnessName)) {
-				User witness = daoFactory.getUserDao().getUser(witnessName);
-				if (witness == null) {
-					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
-				}
-				registration.setConsentWitness(witness);
-			}
-		}
-
-		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
-
-		Iterator<ConsentTier> iter = consentTierCollection.iterator();
-		while (iter.hasNext()) {
-			ConsentTier consentTier = (ConsentTier) iter.next();
-			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-			consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
-			consentTierResponse.setConsentTier(consentTier);
-			consentTierResponse.setCpr(registration);
-			consentTierResponseCollection.add(consentTierResponse);
-			for (ConsentTierDetail tier : userProvidedConsents) {
-				if (consentTier.getStatement().equals(tier.getConsentStatment())) {
-					consentTierResponse.setResponse(tier.getParticipantResponse());
-				}
-
-			}
-		}
-		registration.setConsentResponseCollection(consentTierResponseCollection);
+		// TODO: Fix this
+		
+//		List<ConsentTierDetail> userProvidedConsents = new ArrayList<ConsentTierDetail>();
+//		Collection<ConsentTier> consentTierCollection = registration.getCollectionProtocol().getConsentTierCollection();
+//		if (consentTierCollection == null || consentTierCollection.isEmpty()) {
+//			return;
+//		}
+//
+//		if (detail.getResponseDetail() != null) {
+//			userProvidedConsents = detail.getResponseDetail().getConsentTierList();
+//			setConsentSignDate(registration, detail.getResponseDetail().getConsentDate());
+//			String witnessName = detail.getResponseDetail().getWitnessName();
+//			if (StringUtils.isNotBlank(witnessName)) {
+//				User witness = daoFactory.getUserDao().getUser(witnessName);
+//				if (witness == null) {
+//					exception.addError(ParticipantErrorCode.INVALID_ATTR_VALUE, CONSENT_WITNESS);
+//				}
+//				registration.setConsentWitness(witness);
+//			}
+//		}
+//
+//		Set<ConsentTierResponse> consentTierResponseCollection = new HashSet<ConsentTierResponse>();
+//
+//		Iterator<ConsentTier> iter = consentTierCollection.iterator();
+//		while (iter.hasNext()) {
+//			ConsentTier consentTier = (ConsentTier) iter.next();
+//			ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+//			consentTierResponse.setResponse(CONSENT_RESP_NOT_SPECIFIED);
+//			consentTierResponse.setConsentTier(consentTier);
+//			consentTierResponse.setCpr(registration);
+//			consentTierResponseCollection.add(consentTierResponse);
+//			for (ConsentTierDetail tier : userProvidedConsents) {
+//				if (consentTier.getStatement().equals(tier.getConsentStatment())) {
+//					consentTierResponse.setResponse(tier.getParticipantResponse());
+//				}
+//
+//			}
+//		}
+//		registration.setConsentResponseCollection(consentTierResponseCollection);
 	}
 
 	//	private void setConsentDuringUpdate(CollectionProtocolRegistration registration,

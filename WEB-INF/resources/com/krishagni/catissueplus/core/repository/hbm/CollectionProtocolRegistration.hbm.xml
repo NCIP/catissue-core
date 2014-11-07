@@ -37,7 +37,7 @@
 			cascade="save-update" column="PARTICIPANT_ID" />
 
 		<many-to-one name="collectionProtocol"
-			class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID" />
+			class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID" />
 
 
 
@@ -57,6 +57,26 @@
 			<one-to-many
 				class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup" />
 		</set>
+
+    <sql-query name="getScgAndSpecimenCount">
+      <return-scalar column="cprId" type="long"/>
+      <return-scalar column="scgCount" type="long"/>
+      <return-scalar column="specimenCount" type="long"/>
+                  
+      select
+        cpr.identifier as cprId, count(distinct scg.identifier) as scgCount, count(distinct sp.identifier) as specimenCount
+      from
+        catissue_collection_protocol cp
+        inner join catissue_coll_prot_reg cpr on cpr.collection_protocol_id = cp.identifier and cpr.activity_status = 'Active'
+        left join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = cpr.identifier and scg.collection_status = 'Complete'
+        left join catissue_specimen sp on sp.specimen_collection_group_id = scg.identifier and sp.collection_status = 'Collected'
+      where
+        cp.activity_status = 'Active' and cp.identifier = :cpId
+      group by
+        cpr.identifier
+      order by
+        cpr.identifier
+    </sql-query>
 
 		        <query name="getParticipantsByCpId">
             select cpr.id, participant.id,  
@@ -186,12 +206,12 @@
 			cpr.activityStatus='Active'
 		</query>
 		
-		<query name="getSubRegistrationByParticipantAndCPId">
+		<!-- query name="getSubRegistrationByParticipantAndCPId">
 			from
 			com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration
 			cpr where cpr.participant.id=:participantId and cpr.collectionProtocol.parentCollectionProtocol.id=:cpId and
 			cpr.activityStatus='Active'
-		</query>
+		</query -->
 
 	</class>
 </hibernate-mapping>

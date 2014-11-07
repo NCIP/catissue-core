@@ -6,19 +6,33 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenCollectionGroupInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -26,80 +40,90 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 
 @Repository("collectionProtocolRegistrationDao")
-public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<CollectionProtocolRegistration>
-		implements
-			CollectionProtocolRegistrationDao {
+public class CollectionProtocolRegistrationDaoImpl 
+	extends AbstractDao<CollectionProtocolRegistration>
+	implements CollectionProtocolRegistrationDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ParticipantInfo> getParticipants(Long cpId, String searchString) {
-		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
-
-		String queryName = GET_PARTICIPANTS_BY_CP_ID;
-		if (isSearchTermSpecified) {
-			queryName = GET_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
+	public List<CprSummary> getCprList(CprListCriteria cprCrit) {
+		Criteria query = getCprListQuery(cprCrit);
+		query.setProjection(getCprSummaryFields(cprCrit));
+		
+		List<CprSummary> cprs = new ArrayList<CprSummary>();
+		Map<Long, CprSummary> cprMap = new HashMap<Long, CprSummary>();
+		
+		List<Object[]> rows = query.list();				
+		for (Object[] row : rows) {
+			CprSummary cpr = getCprSummary(row);
+			if (cprCrit.includeStat()) {
+				cprMap.put(cpr.getCprId(), cpr);
+			}
+			
+			cprs.add(cpr);
 		}
 		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
-		query.setLong("cpId", cpId);
-
-		if (isSearchTermSpecified) {
-			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
+		if (!cprCrit.includeStat()) {
+			return cprs;
 		}
-		query.setMaxResults(Utility.getMaxParticipantCnt());
-		List<Object[]> rows = query.list();
-		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
-		for (Object[] row : rows) {
-			result.add(prepareParticipantInfo(row));
+		
+		List<Object[]> countRows = getScgAndSpecimenCounts(
+				cprCrit.cpId(), cprCrit.startAt(), cprCrit.maxResults());
+		for (Object[] row : countRows) {
+			CprSummary cpr = cprMap.get((Long)row[0]);
+			cpr.setScgCount((Long)row[1]);
+			cpr.setSpecimenCount((Long)row[2]);
 		}
-
-		return result;
+		
+		return cprs;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ParticipantInfo> getPhiParticipants(Long cpId, String searchString) {
-		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
-
-		String queryName = GET_PHI_PARTICIPANTS_BY_CP_ID;
-		if (isSearchTermSpecified) {
-			queryName = GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
-		}
-		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
-		query.setLong("cpId", cpId);
-		if (isSearchTermSpecified) {
-			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
-		}
-		query.setMaxResults(Utility.getMaxParticipantCnt());
-		List<ParticipantInfo> result = new ArrayList<ParticipantInfo>();
-		List<Object[]> rows = query.list();
-		for (Object[] row : rows) {
-			result.add(preparePhiParticipantInfo(row));
-		}
-
-		return result;
+	public List<ParticipantSummary> getPhiParticipants(Long cpId, String searchString) {
+//		boolean isSearchTermSpecified = !StringUtils.isBlank(searchString);
+//
+//		String queryName = GET_PHI_PARTICIPANTS_BY_CP_ID;
+//		if (isSearchTermSpecified) {
+//			queryName = GET_PHI_PARTICIPANTS_BY_CP_ID_AND_SEARCH_TERM;
+//		}
+//		
+//		Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
+//		query.setLong("cpId", cpId);
+//		if (isSearchTermSpecified) {
+//			query.setString("searchTerm", "%" + searchString.toLowerCase() + "%");
+//		}
+//		query.setMaxResults(Utility.getMaxParticipantCnt());
+//		List<ParticipantSummary> result = new ArrayList<ParticipantSummary>();
+//		List<Object[]> rows = query.list();
+//		for (Object[] row : rows) {
+//			result.add(preparePhiParticipantInfo(row));
+//		}
+//
+//		return result;
+		return null;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<SpecimenCollectionGroupInfo> getScgList(Long cprId) {
 
-		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
-				CollectionProtocolRegistration.class, cprId);
-		Set<SpecimenCollectionGroupInfo> scgsInfo = new HashSet<SpecimenCollectionGroupInfo>();
-		Collection<SpecimenCollectionGroup> groups = cpr.getScgCollection();
-		for (SpecimenCollectionGroup specimenCollectionGroup : groups) {
-			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimenCollectionGroup.getActivityStatus())){
-			scgsInfo.add(SpecimenCollectionGroupInfo.fromScg(specimenCollectionGroup, cpr.getRegistrationDate()));
-			}
-		}
-		Collection<CollectionProtocolEvent> cpes = cpr.getCollectionProtocol().getCollectionProtocolEventCollection();
-		for (CollectionProtocolEvent collectionProtocolEvent : cpes) {
-			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(collectionProtocolEvent.getActivityStatus())){
-			scgsInfo.add(SpecimenCollectionGroupInfo.fromCpe(collectionProtocolEvent, cpr.getRegistrationDate()));
-			}
-		}
+//		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) sessionFactory.getCurrentSession().get(
+//				CollectionProtocolRegistration.class, cprId);
+//		Set<SpecimenCollectionGroupInfo> scgsInfo = new HashSet<SpecimenCollectionGroupInfo>();
+//		Collection<SpecimenCollectionGroup> groups = cpr.getScgCollection();
+//		for (SpecimenCollectionGroup specimenCollectionGroup : groups) {
+//			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimenCollectionGroup.getActivityStatus())){
+//			scgsInfo.add(SpecimenCollectionGroupInfo.fromScg(specimenCollectionGroup, cpr.getRegistrationDate()));
+//			}
+//		}
+//		Collection<CollectionProtocolEvent> cpes = cpr.getCollectionProtocol().getCollectionProtocolEventCollection();
+//		for (CollectionProtocolEvent collectionProtocolEvent : cpes) {
+//			if(!Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(collectionProtocolEvent.getActivityStatus())){
+//			scgsInfo.add(SpecimenCollectionGroupInfo.fromCpe(collectionProtocolEvent, cpr.getRegistrationDate()));
+//			}
+//		}
+		return null;
 
 		//				" ";
 		//				"scg.collectionProtocolEvent cpe " +
@@ -130,11 +154,11 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		////			scg.setRegistrationDate((Date) object[7]);
 		//			scgs.add(scg);
 		//		}
-		List<SpecimenCollectionGroupInfo> list = new ArrayList<SpecimenCollectionGroupInfo>(scgsInfo);
-		if (list != null) {
-			Collections.sort(list);
-		}
-		return list;
+//		List<SpecimenCollectionGroupInfo> list = new ArrayList<SpecimenCollectionGroupInfo>(scgsInfo);
+//		if (list != null) {
+//			Collections.sort(list);
+//		}
+//		return list;
 	}
 
 	@Override
@@ -172,23 +196,25 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 	}
 	
 	@Override
-	public ParticipantInfo getPhiParticipant(Long cpId, Long participantId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID);
-		query.setLong("cpId", cpId);
-		query.setLong("participantId", participantId);
-		
-		List<Object[]> rows = query.list();
-		return preparePhiParticipantInfo(rows.get(0));
+	public ParticipantSummary getPhiParticipant(Long cpId, Long participantId) {
+//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PHI_PARTICIPANT_BY_CP_PARTICIPANT_ID);
+//		query.setLong("cpId", cpId);
+//		query.setLong("participantId", participantId);
+//		
+//		List<Object[]> rows = query.list();
+//		return preparePhiParticipantInfo(rows.get(0));
+		return null;
 	}
 
 	@Override
-	public ParticipantInfo getParticipant(Long cpId, Long participantId) {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_BY_CP_PARTICIPANT_ID);
-		query.setLong("cpId", cpId);
-		query.setLong("participantId", participantId);
-		
-		List<Object[]> rows = query.list();
-		return prepareParticipantInfo(rows.get(0));
+	public ParticipantSummary getParticipant(Long cpId, Long participantId) {
+//		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_PARTICIPANT_BY_CP_PARTICIPANT_ID);
+//		query.setLong("cpId", cpId);
+//		query.setLong("participantId", participantId);
+//		
+//		List<Object[]> rows = query.list();
+//		return prepareParticipantInfo(rows.get(0));
+		return null;
 	}
 	
 	@Override
@@ -207,28 +233,98 @@ public class CollectionProtocolRegistrationDaoImpl extends AbstractDao<Collectio
 		return query.list();
 	}
 	
-	private ParticipantInfo preparePhiParticipantInfo(Object[] row) {
-		ParticipantInfo participant = prepareParticipantInfo(row);
-		if(row[3] != null){
-			participant.setFirstName((String) row[3]);
+//	private ParticipantSummary preparePhiParticipantInfo(Object[] row) {
+//		ParticipantSummary participant = prepareParticipantInfo(row);
+//		if(row[3] != null){
+//			participant.setFirstName((String) row[3]);
+//		}
+//		if(row[4] != null){
+//			participant.setLastName((String) row[4]);
+//		}
+//		return participant;
+//	}
+	
+	private Criteria getCprListQuery(CprListCriteria cprCrit) {
+		Criteria query = getSessionFactory().getCurrentSession().createCriteria(CollectionProtocolRegistration.class);
+		query.createAlias("collectionProtocol", "cp");
+		query.createAlias("participant", "participant");
+		
+		query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
+		query.add(Restrictions.ne("activityStatus", "Disabled"));
+		query.add(Restrictions.ne("participant.activityStatus", "Disabled"));
+
+		query.addOrder(Order.asc("id"));
+		query.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt());
+		query.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
+		
+		String searchTerm = cprCrit.query();
+		boolean isSearchTermSpecified = !StringUtils.isBlank(searchTerm);
+		if (!isSearchTermSpecified) {
+			return query;
 		}
-		if(row[4] != null){
-			participant.setLastName((String) row[4]);
+		
+		Junction searchCrit = Restrictions.disjunction()
+					.add(Restrictions.ilike("protocolParticipantIdentifier", searchTerm, MatchMode.ANYWHERE));			
+		if (cprCrit.includePhi()) {				
+			searchCrit.add(Restrictions.ilike("participant.firstName", searchTerm, MatchMode.ANYWHERE));
+			searchCrit.add(Restrictions.ilike("participant.lastName", searchTerm, MatchMode.ANYWHERE));
 		}
-		return participant;
+			
+		query.add(searchCrit);
+		return query;		
 	}
 	
-	private ParticipantInfo prepareParticipantInfo(Object[] row) {
-		ParticipantInfo participant = new ParticipantInfo();
-		participant.setCprId((Long) row[0]);
-		participant.setId((Long) row[1]);
-		if(row[2] != null){
-		participant.setPpId((String) row[2]);
+	private ProjectionList getCprSummaryFields(CprListCriteria cprCrit) {
+		ProjectionList projs = Projections.projectionList()
+				.add(Projections.property("id"))
+				.add(Projections.property("protocolParticipantIdentifier"))
+				.add(Projections.property("registrationDate"))
+				.add(Projections.property("participant.id"));
+		
+		if (cprCrit.includePhi()) {
+			projs.add(Projections.property("participant.firstName"))
+				.add(Projections.property("participant.lastName"));				
 		}
-		return participant;
+		
+		return projs;		
 	}
-
+	
+	private CprSummary getCprSummary(Object[] row) {
+		CprSummary cpr = new CprSummary();
+		cpr.setCprId((Long)row[0]);
+		cpr.setPpid((String)row[1]);
+		cpr.setRegistrationDate((Date)row[2]);
+		
+		ParticipantSummary participant = new ParticipantSummary();
+		cpr.setParticipant(participant);			
+		participant.setId((Long)row[3]);
+		if (row.length > 4) {
+			participant.setFirstName((String)row[4]);
+			participant.setLastName((String)row[5]);
+		}
+		
+		return cpr;
+	}
+	
+	private List<Object[]> getScgAndSpecimenCounts(Long cpId, int startAt, int maxResults) {
+		Query countQuery = getSessionFactory().getCurrentSession().getNamedQuery(GET_SCG_AND_SPECIMEN_CNT);
+		countQuery.setLong("cpId", cpId);
+		
+		if (startAt <= 0) {
+			startAt = 0;
+		}
+		
+		if (maxResults <= 0 || maxResults > 100) {
+			maxResults = 100;
+		}
+		
+		return countQuery.setFirstResult(startAt).setMaxResults(maxResults).list();
+	}
+	
+	
 	private static final String FQN = CollectionProtocolRegistration.class.getName();
+	
+	private static final String GET_SCG_AND_SPECIMEN_CNT = FQN + ".getScgAndSpecimenCount";
 	
 	private static final String GET_REGISTRATION_BY_PARTICIPANT_ID = FQN + ".getRegistrationByParticipantId";
 	

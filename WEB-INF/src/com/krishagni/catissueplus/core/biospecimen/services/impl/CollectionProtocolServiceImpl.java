@@ -9,16 +9,18 @@ import com.krishagni.catissueplus.core.administrative.events.ChildCollectionProt
 import com.krishagni.catissueplus.core.administrative.events.ReqChildProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.AllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.RegisteredParticipantsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqAllCollectionProtocolsEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantSummaryEvent;
-import com.krishagni.catissueplus.core.biospecimen.events.ReqParticipantsSummaryEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ReqRegisteredParticipantsEvent;
+import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.CatissueException;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.privileges.PrivilegeType;
 import com.krishagni.catissueplus.core.privileges.services.PrivilegeService;
 
@@ -50,7 +52,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		
 		
 		List<Long> allowedCpIds = privilegeSvc.getCpList(
-				req.getSessionDataBean().getUserId(), 
+				getUserId(req), 
 				PrivilegeType.REGISTRATION.name(),req.isChkPrivileges());
 		
 		List<CollectionProtocolSummary> result = new ArrayList<CollectionProtocolSummary>();
@@ -66,22 +68,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
-	public ParticipantsSummaryEvent getParticipants(ReqParticipantsSummaryEvent req) {
+	public RegisteredParticipantsEvent getRegisteredParticipants(ReqRegisteredParticipantsEvent req) {
 		try {
 			Long cpId = req.getCpId();
 			String searchStr = req.getSearchString();
-			List<ParticipantInfo> participants = new ArrayList<ParticipantInfo>();
-			if(privilegeSvc.hasPrivilege(req.getSessionDataBean().getUserId(), cpId,Permissions.REGISTRATION)){
-					participants = daoFactory.getCprDao().getPhiParticipants(cpId, searchStr);
-			}
-			else{
-				participants = daoFactory.getCprDao().getParticipants(cpId, searchStr);
-			}
+			boolean includePhi = privilegeSvc.hasPrivilege(getUserId(req), cpId, Permissions.REGISTRATION);
 			
-			return ParticipantsSummaryEvent.ok(participants);
-		}
-		catch (CatissueException e) {
-			return ParticipantsSummaryEvent.serverError(e);
+			CprListCriteria listCrit = new CprListCriteria()
+				.cpId(cpId)
+				.query(searchStr)
+				.includePhi(includePhi)
+				.startAt(req.getStartAt())
+				.maxResults(req.getMaxResults())
+				.includeStat(req.isIncludeStats());
+			
+			return RegisteredParticipantsEvent.ok(daoFactory.getCprDao().getCprList(listCrit));
+		} catch (CatissueException e) {
+			return RegisteredParticipantsEvent.serverError(e);
 		}
 	}
 
@@ -91,7 +94,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		try {
 			Long cpId = event.getCpId();
 			Long participantId = event.getParticipantId();
-			ParticipantInfo participant;
+			ParticipantSummary participant;
 			if(privilegeSvc.hasPrivilege(event.getSessionDataBean().getUserId(), cpId,Permissions.REGISTRATION)){
 				participant = daoFactory.getCprDao().getPhiParticipant(cpId, participantId);
 			}
@@ -116,5 +119,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 //		List<CollectionProtocolSummary> list = daoFactory.getCollectionProtocolDao().getChildProtocols(cpId);
 //		return ChildCollectionProtocolsEvent.ok(list);
 	}
-
+	
+	private Long getUserId(RequestEvent req) {
+		return req.getSessionDataBean().getUserId();
+	}
 }

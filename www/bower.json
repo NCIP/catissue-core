@@ -39,7 +39,8 @@
     "font-awesome": "~4.2.0",
     "chosen": "~1.2.0",
     "blueimp-file-upload": "~9.8.0",
-    "select2": "~3.5.1"
+    "select2": "~3.5.1",
+    "angular-bootstrap": "~0.11.2"
   },
   "resolutions": {
     "bootstrap": "~3.3.0"

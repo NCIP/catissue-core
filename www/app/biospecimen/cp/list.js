@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .controller('CpListCtrl', function($scope, CollectionProtocolService) {
+  .controller('CpListCtrl', function($scope, $state, CollectionProtocolService) {
     CollectionProtocolService.getCpList(true).then(
       function(result) {
         if (result.status == "ok") {
@@ -10,4 +10,8 @@ angular.module('openspecimen')
         }
       }
     );
+
+    $scope.showParticipants = function(cp) {
+      $state.go('participant-list', {cpId: cp.id});
+    };
   });

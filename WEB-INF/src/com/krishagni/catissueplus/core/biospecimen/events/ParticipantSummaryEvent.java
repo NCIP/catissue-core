@@ -7,17 +7,17 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class ParticipantSummaryEvent extends ResponseEvent {
 
-	private ParticipantInfo participantInfo;
+	private ParticipantSummary participantInfo;
 
-	public ParticipantInfo getParticipantInfo() {
+	public ParticipantSummary getParticipantInfo() {
 		return participantInfo;
 	}
 
-	public void setParticipantInfo(ParticipantInfo participantInfo) {
+	public void setParticipantInfo(ParticipantSummary participantInfo) {
 		this.participantInfo = participantInfo;
 	}
 
-	public static ParticipantSummaryEvent ok(ParticipantInfo participant) {
+	public static ParticipantSummaryEvent ok(ParticipantSummary participant) {
 		ParticipantSummaryEvent event = new ParticipantSummaryEvent();
 		event.setParticipantInfo(participant);
 		event.setStatus(EventStatus.OK);
