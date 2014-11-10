@@ -100,7 +100,7 @@ angular.module('openspecimen')
         }
       },
 
-      templateUrl: 'common/wizard-template.html'
+      templateUrl: 'modules/common/wizard-template.html'
     };
   })
 
