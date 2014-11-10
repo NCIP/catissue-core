@@ -1,0 +1,223 @@
+<div>
+  <div class="os-modal-header">
+    <span> Register Participant </span>
+    <a class="os-close">&times;</a>
+  </div>
+  <div class="os-modal-body">
+    <div os-wizard="regWizard">
+      <os-wizard-step on-finish="" title="Demographics">
+        <div ng-include="'participant-demographics.html'"></div>
+      </os-wizard-step>
+
+      <os-wizard-step on-finish="" title="Registration Details">
+        <div ng-include="'participant-registration-details.html'"></div>
+      </os-wizard-step>
+
+      <os-wizard-step on-finish="" title="Medical Identifiers">
+        <div ng-include="'participant-mrns.html'"></div>
+      </os-wizard-step>
+    
+      <div class="os-modal-footer">
+        <button class="btn os-btn-text" ng-click="cancel()">
+          Cancel
+        </button>
+        <button class="btn os-btn-secondary" ng-if="!regWizard.isFirstStep()" 
+          ng-click="regWizard.previous(false)">
+          Previous
+        </button>
+        <button class="btn btn-primary" ng-if="!regWizard.isLastStep()" 
+          ng-click="regWizard.next(false)">
+          Next
+        </button>
+        <button class="btn btn-primary" ng-click="ok()">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="participant-demographics.html">
+  <form>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-xs-4">
+          <label class="control-label">First Name</label>
+          <input type="text" class="form-control" placeholder="First Name"/>
+        </div>
+        <div class="col-xs-4">
+          <label class="control-label">Middle Name</label>
+          <input type="text" class="form-control" placeholder="Middle Name"/>
+        </div>
+        <div class="col-xs-4">
+          <label class="control-label">Last Name</label>
+          <input type="text" class="form-control" placeholder="Last Name"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Vital Status</label>
+      <div>
+        <label class="radio-inline">
+          <input type="radio" name="vital-status" value="Alive">Alive
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="vital-status" value="Alive">Dead
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="vital-status" value="Unknown">Unknown
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="vital-status" value="Unspecified">Unspecified
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-xs-4">
+          <label class="control-label">Birth Date</label>
+          <input type="text" class="form-control" placeholder="Birth Date"/>
+        </div>
+        <div class="col-xs-4">
+          <label class="control-label">Death Date</label>
+          <input type="text" class="form-control" placeholder="Death Date"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Gender</label>
+      <div>
+        <label class="radio-inline">
+          <input type="radio" name="gender" value="Female Gender">Female
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" value="Male Gender">Male
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" value="Unknown">Unknown
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" value="Unspecified">Unspecified
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Race</label>
+      <div class="clearfix">
+        <label class="checkbox-inline col-xs-2">
+          <input type="checkbox" value="White">White
+        </label>
+        <label class="checkbox-inline col-xs-5">
+          <input type="checkbox" value="Black or African American">Black or African American
+        </label>
+        <label class="checkbox-inline col-xs-4">
+          <input type="checkbox" value="American Indian or Alaska Native">American Indian or Alaska Native
+        </label>
+      </div>
+      <div class="clearfix">
+        <label class="checkbox-inline col-xs-2">
+          <input type="checkbox" value="Asian">Asian
+        </label>
+        <label class="checkbox-inline col-xs-5">
+          <input type="checkbox" value="Native Hawaiian or Other Pacific Islander">Native Hawaiian or Other Pacific Islander
+        </label>
+        <label class="checkbox-inline col-xs-4">
+          <input type="checkbox" value="Not Reported">Not Reported
+        </label>
+      </div>
+      <div class="clearfix">
+        <label class="checkbox-inline col-xs-2">
+          <input type="checkbox" value="Unknown">Unknown
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label">Ethnicity</label>
+      <div class="clearfix">
+        <label class="radio-inline">
+          <input type="radio" name="ethnicity" value="Hispanic or Latino">Hispanic or Latino
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="ethnicity" value="Not Hispanic or Latino">Not Hispanic or Latino
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="ethnicity" value="Not Reported">Not Reported
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="ethnicity" value="Unknown">Unknown
+        </label>
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="participant-registration-details.html">
+  <form>
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">Barcode</label>
+        <input type="text" class="form-control" placeholder="Barcode">
+      </div>
+      <div class="col-xs-6">
+        <label class="control-label">Participant Protocol ID</label>
+        <input type="text" class="form-control" placeholder="Participant Protocol ID">
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">Registration Date</label>
+        <input type="text" class="form-control" placeholder="Registration Date">
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="participant-mrns.html">
+  <form>
+    <div class="form-group clearfix">
+      <div class="col-xs-5">
+        <label class="control-label">Site</label>
+      </div>
+      <div class="col-xs-5">
+        <label class="control-label">Medical Record Number</label>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-5">
+        <input type="text" class="form-control" value="Site1">
+      </div>
+      <div class="col-xs-5">
+        <input type="text" class="form-control" value="MRN1">
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-default">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-5">
+        <input type="text" class="form-control" value="Site2">
+      </div>
+      <div class="col-xs-5">
+        <input type="text" class="form-control" value="MRN2">
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-default">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </div>
+    <div class="clearfix">
+      <a class="os-icon-btn col-xs-2">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add MRN
+      </a>
+    </div>
+  </form>
+</script>

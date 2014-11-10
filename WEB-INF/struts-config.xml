@@ -243,7 +243,7 @@ PUBLIC
 		</action>
 
 		<action path="/Home" type="edu.wustl.catissuecore.action.ForwardAction">
-			<forward name="success"  path="/CpBasedSearch.do"  />
+			<forward name="success"  path="/index.html"  />
 		</action>
 		<action path="/Aboutv11p" type="org.apache.struts.actions.ForwardAction"
 			parameter=".catissuecore.aboutv11pDef" />
@@ -6222,6 +6222,8 @@ PUBLIC
 			<forward name="success" path="/pages/blank.jsp" />
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
+
+		<action path="/v20" type="org.apache.struts.actions.ForwardAction" parameter="/v20.html"/>
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

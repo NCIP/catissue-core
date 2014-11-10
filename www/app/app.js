@@ -5,28 +5,28 @@ angular.module('openspecimen', ['ui.router', 'ui.bootstrap'])
     $stateProvider
       .state('login', {
         url: '/',
-        templateUrl: 'user/signin.html',
+        templateUrl: 'modules/user/signin.html',
         controller: 'LoginCtrl'
       })
       .state('signed-in', {
         abstract: true,
-        templateUrl: 'common/appmenu.html'
+        templateUrl: 'modules/common/appmenu.html'
       })
       .state('cp-list', {
         url: '/cps', 
-        templateUrl: 'biospecimen/cp/list.html',
+        templateUrl: 'modules/biospecimen/cp/list.html',
         controller: 'CpListCtrl',
         parent: 'signed-in'
       })
       .state('cp-detail', {
         url: '/cps/:cpId',
-        templateUrl: 'biospecimen/cp/detail.html',
+        templateUrl: 'modules/biospecimen/cp/detail.html',
         controller: 'CpDetailCtrl',
         parent: 'signed-in'
       })
       .state('participant-list', {
         url: '/participants?cpId',
-        templateUrl: 'biospecimen/participant/list.html',
+        templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
         parent: 'signed-in'
       });

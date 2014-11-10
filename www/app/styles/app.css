@@ -159,3 +159,7 @@ body {
 .os-icon-btn {
   cursor: pointer;
 }
+
+.os-modal-800 .modal-content {
+  width: 800px;
+}

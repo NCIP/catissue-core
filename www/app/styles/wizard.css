@@ -1,0 +1,100 @@
+
+.os-wizard-steps {
+  display: table;
+  margin: 0px auto 20px;
+}
+
+.os-wizard-steps:after, .os-wizard-step-titles:after, .os-wizard-step-progs:after, .os-wizard-step-prog > div:after {
+  content: ' ';
+  display: table;
+  clear: both;
+}
+
+.os-wizard-step-title {
+  float: left;
+  width: 200px;
+  text-align: center;
+  color: #999999;
+}
+
+.os-wizard-step-title.os-wizard-step-selected {
+  font-weight: bold;
+  color: #232323;
+}
+
+.os-wizard-step-title.os-wizard-step-finished {
+  color: #232323;
+}
+
+.os-wizard-step-prog {
+  float: left;
+}
+
+.os-wizard-step-prog > div {
+  width: 20px;
+  height: 20px;
+  float: left;
+  border-radius: 50%;
+  border: 4px solid #edeff0;
+  background-color: #edeff0;
+  cursor: pointer;
+}
+
+.os-wizard-step-prog.os-wizard-step-selected > div, .os-wizard-step-prog.os-wizard-step-finished > div {
+  background-color: #3276b1;
+}
+
+.os-wizard-step-prog.os-wizard-last-step:after,
+.os-wizard-step-prog.os-wizard-first-step:before {
+  width: 90px;
+  height: 0px;
+  border: none; /* This is present to get rid of border added by .os-wizard-step-prog */
+  border-bottom: 2px dashed #edeff0;
+  float: left;
+  content: ' ';
+  margin-top: 8px;
+  background-color: transparent;
+}
+
+.os-wizard-step-prog:after {
+  width: 180px;
+  height: 8px;
+  float: left;
+  content: ' ';
+  margin-top: 6px;
+  background-color: #edeff0;
+  border: 2px solid #edeff0;
+}
+
+.os-wizard-step-prog.os-wizard-step-finished > div:after {
+  width: 20px;
+  height: 4px;
+  background-color: #3276b1;
+  margin-top: 4px;
+  position: absolute;
+}
+
+.os-wizard-step-prog.os-wizard-step-selected.os-wizard-first-step > div:before,
+.os-wizard-step-prog.os-wizard-step-finished.os-wizard-first-step > div:before {
+  content: ' ';
+  width: 0px;
+}
+
+.os-wizard-step-prog.os-wizard-step-selected > div:before,
+.os-wizard-step-prog.os-wizard-step-finished > div:before {
+  content: ' ';
+  width: 6px;
+  height: 4px;
+  background-color: #3276b1;
+  margin-top: 4px;
+  position: absolute;
+  margin-left: -6px;
+}
+
+.os-wizard-step-prog.os-wizard-step-finished:after {
+  background-color: #3276b1;
+}
+
+.os-wizard .os-modal-footer {
+  margin: 10px -20px -10px -20px;
+}
