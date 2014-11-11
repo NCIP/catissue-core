@@ -5,16 +5,16 @@
   </div>
   <div class="os-modal-body">
     <div os-wizard="regWizard">
-      <os-wizard-step on-finish="" title="Demographics">
-        <div ng-include="'participant-demographics.html'"></div>
+      <os-wizard-step on-finish="" title="Basic Info">
+        <div ng-include="'participant-basic-info.html'"></div>
+      </os-wizard-step>
+
+      <os-wizard-step on-finish="" title="Additional Info">
+        <div ng-include="'participant-additional-info.html'"></div>
       </os-wizard-step>
 
       <os-wizard-step on-finish="" title="Registration Details">
         <div ng-include="'participant-registration-details.html'"></div>
-      </os-wizard-step>
-
-      <os-wizard-step on-finish="" title="Medical Identifiers">
-        <div ng-include="'participant-mrns.html'"></div>
       </os-wizard-step>
     
       <div class="os-modal-footer">
@@ -36,6 +36,133 @@
     </div>
   </div>
 </div>
+
+<script type="text/ng-template" id="participant-basic-info.html">
+  <form>
+    <div class="form-group clearfix">
+      <div class="col-xs-4">
+        <label class="control-label">Last Name</label>
+        <input type="text" class="form-control" placeholder="Last Name"/>
+      </div>
+      <div class="col-xs-4">
+        <label class="control-label">First Name</label>
+        <input type="text" class="form-control" placeholder="First Name"/>
+      </div>
+      <div class="col-xs-4">
+        <label class="control-label">Middle Name</label>
+        <input type="text" class="form-control" placeholder="Middle Name"/>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">Birth Date</label>
+        <input type="text" class="form-control" ng-model="participant.birthDate" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Birth Date"/>
+      </div>
+
+      <div class="col-xs-6">
+        <label class="control-label">Social Security Number</label>
+        <input type="text" class="form-control" ng-model="participant.ssn" ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-12 os-section-hdr">
+        <label>Medical Identifiers</label>
+      </div>
+    </div>
+
+    <div class="form-group clearfix" ng-if="participant.pmis.length > 0">
+      <div class="col-xs-5">
+        <label class="control-label">Site</label>
+      </div>
+      <div class="col-xs-5">
+        <label class="control-label">Medical Record Number</label>
+      </div>
+    </div>
+
+    <div class="form-group clearfix" ng-repeat="pmi in participant.pmis">
+      <div class="col-xs-5">
+        <ui-select ng-model="pmi.site">
+          <ui-select-match placeholder="Select site">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="site in sites | filter: $select.search">
+            <span ng-bind-html="site.name | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="col-xs-5">
+        <input type="text" class="form-control" ng-model="pmi.mrn">
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-default" ng-click="removePmi($index)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-success os-btn-col" ng-click="addPmi()">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add MRN
+      </button>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="participant-additional-info.html">
+  <form>
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">Gender</label>
+        <ui-select ng-model="participant.gender">
+          <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
+          <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
+            <span ng-bind-html="gender | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <div class="col-xs-6">
+        <label class="control-label">Ethnicity</label>
+        <ui-select ng-model="participant.ethnicity">
+          <ui-select-match placeholder="Select Ethnicity">{{$select.selected}}</ui-select-match>
+          <ui-select-choices repeat="ethnicity in ethnicity_pvs | filter: $select.search">
+            <span ng-bind-html="ethnicity | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">Vital Status</label>
+        <ui-select ng-model="participant.vitalStatus">
+          <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
+          <ui-select-choices repeat="vitalStatus in vitalStatus_pvs | filter: $select.search">
+            <span ng-bind-html="vitalStatus | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <div class="col-xs-6">
+        <label class="control-label">Death Date</label>
+        <input type="text" class="form-control" ng-model="participant.deathDate" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Death Date" ng-disabled="participant.vitalStatus != 'Dead'"/>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <label class="control-label">Race</label>
+        <ui-select multiple ng-model="participant.races">
+          <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
+          <ui-select-choices repeat="race in race_pvs | filter: $select.search">
+            <span ng-bind-html="race | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </form>
+</script>
 
 <script type="text/ng-template" id="participant-demographics.html">
   <form>
@@ -171,7 +298,7 @@
     <div class="form-group clearfix">
       <div class="col-xs-6">
         <label class="control-label">Registration Date</label>
-        <input type="text" class="form-control" placeholder="Registration Date">
+        <input type="text" class="form-control" ng-model="participant.regDate" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Registration Date"/>
       </div>
     </div>
   </form>

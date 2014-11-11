@@ -98,3 +98,8 @@
 .os-wizard .os-modal-footer {
   margin: 10px -20px -10px -20px;
 }
+
+/*.os-wizard-step-content {
+  max-height: 425px;
+  overflow-y: auto;
+}*/

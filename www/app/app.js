@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('openspecimen', ['ui.router', 'ui.bootstrap'])
-  .config(function($stateProvider, $urlRouterProvider, $httpProvider, ApiUrlsProvider) {
+angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.mask', 'ui.select'])
+  .config(function($stateProvider, $urlRouterProvider, $httpProvider, uiSelectConfig, ApiUrlsProvider) {
     $stateProvider
       .state('login', {
         url: '/',
@@ -41,8 +41,11 @@ angular.module('openspecimen', ['ui.router', 'ui.bootstrap'])
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
-      'collection-protocols': '/rest/ng/collection-protocols'
+      'collection-protocols': '/rest/ng/collection-protocols',
+      'sites': '/rest/ng/sites'
     };
+
+    uiSelectConfig.theme = 'bootstrap';
   })
   .factory('httpRespInterceptor', function($q, $injector, $window) {
     return {

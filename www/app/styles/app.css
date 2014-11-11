@@ -163,3 +163,12 @@ body {
 .os-modal-800 .modal-content {
   width: 800px;
 }
+
+.os-btn-col {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.os-section-hdr {
+  background: #edeff0;
+}
