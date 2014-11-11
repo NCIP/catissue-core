@@ -29,7 +29,7 @@
           ng-click="regWizard.next(false)">
           Next
         </button>
-        <button class="btn btn-primary" ng-click="ok()">
+        <button class="btn btn-primary" ng-click="register()">
           Done
         </button>
       </div>
@@ -42,27 +42,27 @@
     <div class="form-group clearfix">
       <div class="col-xs-4">
         <label class="control-label">Last Name</label>
-        <input type="text" class="form-control" placeholder="Last Name"/>
+        <input type="text" ng-model="cpr.participant.lastName" class="form-control" placeholder="Last Name"/>
       </div>
       <div class="col-xs-4">
         <label class="control-label">First Name</label>
-        <input type="text" class="form-control" placeholder="First Name"/>
+        <input type="text" ng-model="cpr.participant.firstName" class="form-control" placeholder="First Name"/>
       </div>
       <div class="col-xs-4">
         <label class="control-label">Middle Name</label>
-        <input type="text" class="form-control" placeholder="Middle Name"/>
+        <input type="text" ng-model="cpr.participant.middleName" class="form-control" placeholder="Middle Name"/>
       </div>
     </div>
 
     <div class="form-group clearfix">
       <div class="col-xs-6">
         <label class="control-label">Birth Date</label>
-        <input type="text" class="form-control" ng-model="participant.birthDate" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Birth Date"/>
+        <input type="text" ng-model="cpr.participant.birthDate" class="form-control" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Birth Date"/>
       </div>
 
       <div class="col-xs-6">
         <label class="control-label">Social Security Number</label>
-        <input type="text" class="form-control" ng-model="participant.ssn" ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
+        <input type="text" ng-model="cpr.participant.ssn" class="form-control" ng-model="participant.ssn" ui-mask="999-99-9999" placeholder="XXX-XX-XXXX">
       </div>
     </div>
 
@@ -81,7 +81,7 @@
       </div>
     </div>
 
-    <div class="form-group clearfix" ng-repeat="pmi in participant.pmis">
+    <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
       <div class="col-xs-5">
         <ui-select ng-model="pmi.site">
           <ui-select-match placeholder="Select site">{{$select.selected.name}}</ui-select-match>
@@ -91,7 +91,7 @@
         </ui-select>
       </div>
       <div class="col-xs-5">
-        <input type="text" class="form-control" ng-model="pmi.mrn">
+        <input type="text" ng-model="pmi.mrn" class="form-control">
       </div>
       <div class="col-xs-2">
         <button class="btn btn-default" ng-click="removePmi($index)">
@@ -114,7 +114,7 @@
     <div class="form-group clearfix">
       <div class="col-xs-6">
         <label class="control-label">Gender</label>
-        <ui-select ng-model="participant.gender">
+        <ui-select ng-model="cpr.participant.gender">
           <ui-select-match placeholder="Select Gender">{{$select.selected}}</ui-select-match>
           <ui-select-choices repeat="gender in gender_pvs | filter: $select.search">
             <span ng-bind-html="gender | highlight: $select.search"></span>
@@ -124,7 +124,7 @@
 
       <div class="col-xs-6">
         <label class="control-label">Ethnicity</label>
-        <ui-select ng-model="participant.ethnicity">
+        <ui-select ng-model="cpr.participant.ethnicity">
           <ui-select-match placeholder="Select Ethnicity">{{$select.selected}}</ui-select-match>
           <ui-select-choices repeat="ethnicity in ethnicity_pvs | filter: $select.search">
             <span ng-bind-html="ethnicity | highlight: $select.search"></span>
@@ -136,7 +136,7 @@
     <div class="form-group clearfix">
       <div class="col-xs-6">
         <label class="control-label">Vital Status</label>
-        <ui-select ng-model="participant.vitalStatus">
+        <ui-select ng-model="cpr.participant.vitalStatus">
           <ui-select-match placeholder="Select Vital Status">{{$select.selected}}</ui-select-match>
           <ui-select-choices repeat="vitalStatus in vitalStatus_pvs | filter: $select.search">
             <span ng-bind-html="vitalStatus | highlight: $select.search"></span>
@@ -146,14 +146,14 @@
 
       <div class="col-xs-6">
         <label class="control-label">Death Date</label>
-        <input type="text" class="form-control" ng-model="participant.deathDate" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Death Date" ng-disabled="participant.vitalStatus != 'Dead'"/>
+        <input type="text" ng-model="cpr.participant.deathDate" class="form-control" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Death Date" ng-disabled="participant.vitalStatus != 'Dead'"/>
       </div>
     </div>
 
     <div class="form-group clearfix">
       <div class="col-xs-12">
         <label class="control-label">Race</label>
-        <ui-select multiple ng-model="participant.races">
+        <ui-select multiple ng-model="cpr.participant.races">
           <ui-select-match placeholder="Select Race">{{$item}}</ui-select-match>
           <ui-select-choices repeat="race in race_pvs | filter: $select.search">
             <span ng-bind-html="race | highlight: $select.search"></span>
@@ -164,187 +164,23 @@
   </form>
 </script>
 
-<script type="text/ng-template" id="participant-demographics.html">
-  <form>
-    <div class="form-group">
-      <div class="row">
-        <div class="col-xs-4">
-          <label class="control-label">First Name</label>
-          <input type="text" class="form-control" placeholder="First Name"/>
-        </div>
-        <div class="col-xs-4">
-          <label class="control-label">Middle Name</label>
-          <input type="text" class="form-control" placeholder="Middle Name"/>
-        </div>
-        <div class="col-xs-4">
-          <label class="control-label">Last Name</label>
-          <input type="text" class="form-control" placeholder="Last Name"/>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label">Vital Status</label>
-      <div>
-        <label class="radio-inline">
-          <input type="radio" name="vital-status" value="Alive">Alive
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="vital-status" value="Alive">Dead
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="vital-status" value="Unknown">Unknown
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="vital-status" value="Unspecified">Unspecified
-        </label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="row">
-        <div class="col-xs-4">
-          <label class="control-label">Birth Date</label>
-          <input type="text" class="form-control" placeholder="Birth Date"/>
-        </div>
-        <div class="col-xs-4">
-          <label class="control-label">Death Date</label>
-          <input type="text" class="form-control" placeholder="Death Date"/>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label">Gender</label>
-      <div>
-        <label class="radio-inline">
-          <input type="radio" name="gender" value="Female Gender">Female
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="gender" value="Male Gender">Male
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="gender" value="Unknown">Unknown
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="gender" value="Unspecified">Unspecified
-        </label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label">Race</label>
-      <div class="clearfix">
-        <label class="checkbox-inline col-xs-2">
-          <input type="checkbox" value="White">White
-        </label>
-        <label class="checkbox-inline col-xs-5">
-          <input type="checkbox" value="Black or African American">Black or African American
-        </label>
-        <label class="checkbox-inline col-xs-4">
-          <input type="checkbox" value="American Indian or Alaska Native">American Indian or Alaska Native
-        </label>
-      </div>
-      <div class="clearfix">
-        <label class="checkbox-inline col-xs-2">
-          <input type="checkbox" value="Asian">Asian
-        </label>
-        <label class="checkbox-inline col-xs-5">
-          <input type="checkbox" value="Native Hawaiian or Other Pacific Islander">Native Hawaiian or Other Pacific Islander
-        </label>
-        <label class="checkbox-inline col-xs-4">
-          <input type="checkbox" value="Not Reported">Not Reported
-        </label>
-      </div>
-      <div class="clearfix">
-        <label class="checkbox-inline col-xs-2">
-          <input type="checkbox" value="Unknown">Unknown
-        </label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label">Ethnicity</label>
-      <div class="clearfix">
-        <label class="radio-inline">
-          <input type="radio" name="ethnicity" value="Hispanic or Latino">Hispanic or Latino
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="ethnicity" value="Not Hispanic or Latino">Not Hispanic or Latino
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="ethnicity" value="Not Reported">Not Reported
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="ethnicity" value="Unknown">Unknown
-        </label>
-      </div>
-    </div>
-  </form>
-</script>
-
 <script type="text/ng-template" id="participant-registration-details.html">
   <form>
     <div class="form-group clearfix">
       <div class="col-xs-6">
         <label class="control-label">Barcode</label>
-        <input type="text" class="form-control" placeholder="Barcode">
+        <input type="text" ng-model="cpr.barcode" class="form-control" placeholder="Barcode">
       </div>
       <div class="col-xs-6">
         <label class="control-label">Participant Protocol ID</label>
-        <input type="text" class="form-control" placeholder="Participant Protocol ID">
+        <input type="text" ng-model="cpr.ppid" class="form-control" placeholder="Participant Protocol ID">
       </div>
     </div>
     <div class="form-group clearfix">
       <div class="col-xs-6">
         <label class="control-label">Registration Date</label>
-        <input type="text" class="form-control" ng-model="participant.regDate" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Registration Date"/>
+        <input type="text" ng-model="cpr.regDate" class="form-control" datepicker-popup="yyyy-MM-dd" show-button-bar="false" is-open="dt.isOpen" ng-focus="dt.isOpen=true" placeholder="Registration Date"/>
       </div>
-    </div>
-  </form>
-</script>
-
-<script type="text/ng-template" id="participant-mrns.html">
-  <form>
-    <div class="form-group clearfix">
-      <div class="col-xs-5">
-        <label class="control-label">Site</label>
-      </div>
-      <div class="col-xs-5">
-        <label class="control-label">Medical Record Number</label>
-      </div>
-    </div>
-    <div class="form-group clearfix">
-      <div class="col-xs-5">
-        <input type="text" class="form-control" value="Site1">
-      </div>
-      <div class="col-xs-5">
-        <input type="text" class="form-control" value="MRN1">
-      </div>
-      <div class="col-xs-2">
-        <button class="btn btn-default">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-      </div>
-    </div>
-    <div class="form-group clearfix">
-      <div class="col-xs-5">
-        <input type="text" class="form-control" value="Site2">
-      </div>
-      <div class="col-xs-5">
-        <input type="text" class="form-control" value="MRN2">
-      </div>
-      <div class="col-xs-2">
-        <button class="btn btn-default">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-      </div>
-    </div>
-    <div class="clearfix">
-      <a class="os-icon-btn col-xs-2">
-        <span class="glyphicon glyphicon-plus"></span>
-        Add MRN
-      </a>
     </div>
   </form>
 </script>

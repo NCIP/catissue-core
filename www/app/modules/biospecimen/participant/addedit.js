@@ -3,18 +3,18 @@ angular.module('openspecimen')
   .controller('ParticipantAddEditCtrl', function($scope, $stateParams, SiteService, PvManager) {
     $scope.cpId = $stateParams.cpId;
 
-    $scope.participant = {
-      birthDate: '',
-      gender: '',
-      pmis: []
+    $scope.cpr = {
+      participant: {
+        pmis: []
+      }
     };
 
     $scope.addPmi = function() {
-      $scope.participant.pmis.push({mrn: '', site: ''});
+      $scope.cpr.participant.pmis.push({mrn: '', site: ''});
     };
 
     $scope.removePmi = function(index) {
-      $scope.participant.pmis.splice(index, 1);
+      $scope.cpr.participant.pmis.splice(index, 1);
     };
 
     SiteService.getSites().then(
@@ -30,4 +30,8 @@ angular.module('openspecimen')
     PvManager.loadPvs($scope, 'ethnicity');
     PvManager.loadPvs($scope, 'vitalStatus');
     PvManager.loadPvs($scope, 'race');
+
+    $scope.register = function() {
+      alert(JSON.stringify($scope.cpr));
+    }
   });
