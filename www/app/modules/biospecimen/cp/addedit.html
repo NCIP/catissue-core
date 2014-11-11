@@ -1,0 +1,78 @@
+<div>
+  <div class="os-modal-header">
+    <span> Collection Protocol </span>
+    <a class="os-close">&times;</a>
+  </div>
+  <div class="os-modal-body">
+    <div os-wizard="regWizard">
+      <os-wizard-step on-finish="" title="Basic Info">
+        <div ng-include="'cp-basic-info.html'"></div>
+      </os-wizard-step>
+
+      <os-wizard-step on-finish="" title="Consent">
+      </os-wizard-step>
+
+      <div class="os-modal-footer">
+        <button class="btn os-btn-text" ng-click="cancel()">
+          Cancel
+        </button>
+        <button class="btn os-btn-secondary" ng-if="!regWizard.isFirstStep()"
+          ng-click="regWizard.previous(false)">
+          Previous
+        </button>
+        <button class="btn btn-primary" ng-if="!regWizard.isLastStep()"
+          ng-click="regWizard.next(false)">
+          Next
+        </button>
+        <button class="btn btn-primary" ng-click="save()">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="cp-basic-info.html">
+  <form>
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">Principle Investigator</label>
+        <ui-select ng-model="collectionProtocol.pi">
+          <ui-select-match placeholder="Select User">{{$select.selected.lastName}}, {{$select.selected.firstName}} </ui-select-match>
+          <ui-select-choices repeat="user in users | filter: $select.search">
+            <span ng-bind-html="user.lastName + ', '+ user.firstName | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <label class="control-label">Protocol Coordinators</label>
+        <ui-select multiple ng-model="collectionProtocol.coordinator">
+          <ui-select-match placeholder="Select User">{{$item.lastName}}, {{$item.firstName}}</ui-select-match>
+          <ui-select-choices repeat="user in users | filter: $select.search">
+            <span ng-bind-html="user.lastName + ', '+ user.firstName | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <label class="control-label">Title</label>
+        <textarea class="form-control" ng-model="collectionProtocol.title" placeholder="Title"></textarea>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <label class="control-label">Short Title</label>
+        <input type="text" class="form-control" ng-model="collectionProtocol.shortTitle" placeholder="Short Title">
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-6">
+        <label class="control-label">IRB ID</label>
+        <input type="text" class="form-control" ng-model="collectionProtocol.irbId" placeholder="IRB ID">
+      </div>
+    </div>
+  </form>
+</script>

@@ -36,13 +36,14 @@ angular.module('openspecimen', ['ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.m
     //$httpProvider.interceptors.push('httpRespInterceptor');
 
     ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
+    ApiUrlsProvider.port = 8180;
     ApiUrlsProvider.secure = false;
     ApiUrlsProvider.app = "/openspecimen";
     ApiUrlsProvider.urls = {
       'sessions': '/rest/ng/sessions',
       'collection-protocols': '/rest/ng/collection-protocols',
-      'sites': '/rest/ng/sites'
+      'sites': '/rest/ng/sites',
+      'users': '/rest/ng/users'
     };
 
     uiSelectConfig.theme = 'bootstrap';
