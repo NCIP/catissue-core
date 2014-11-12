@@ -42,6 +42,7 @@ angular.module('openspecimen')
     return {
       getPvs: function(attr) {
         var deferred = $q.defer();
+        var result = undefined;
         if (pvMap[attr]) {
           result = {status: 'ok', data: pvMap[attr]};
         } else {
