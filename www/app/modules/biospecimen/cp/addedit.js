@@ -4,7 +4,8 @@ angular.module('openspecimen')
 
     $scope.collectionProtocol = {
       pi: '',
-      coordinator: []
+      coordinator: [],
+      statements: []
     };
 
     UserService.getUsers().then(
@@ -15,6 +16,14 @@ angular.module('openspecimen')
         $scope.users = result.data.users;
       }
     );
+
+    $scope.addStatement = function(statements) {
+      statements.push({text:''});
+    }
+
+    $scope.removeStatement = function(index) {
+      $scope.collectionProtocol.statements.splice(index,1);
+    }
 
     $scope.save = function() {
       alert(JSON.stringify($scope.collectionProtocol))
