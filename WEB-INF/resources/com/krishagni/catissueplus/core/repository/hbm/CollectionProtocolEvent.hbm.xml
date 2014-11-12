@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+
+  <class
+    name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"
+    table="CATISSUE_COLL_PROT_EVENT"
+    lazy="true" >
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_COLL_PROT_EV_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="collectionPointLabel" column="COLLECTION_POINT_LABEL"/>
+
+    <property name="studyCalendarEventPoint" column="STUDY_CALENDAR_EVENT_POINT"/>
+
+    <many-to-one name="collectionProtocol" cascade="none" column="COLLECTION_PROTOCOL_ID"/>
+
+    <property name="labelFormat" column="LABELFORMAT"/>
+ 
+    <many-to-one name="defaultSite" cascade="none" column="DEFAULT_SITE_ID"/> 
+      
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+      
+    <property name="clinicalDiagnosis" column="CLINICAL_DIAGNOSIS"/>
+      
+    <property name="clinicalStatus" column="CLINICAL_STATUS"/>
+      
+    <many-to-one name="specimenCollectionSite" cascade="none" column="SITE_ID"/>
+   
+    <set name="specimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="save-update">
+      <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
+    </set>
+
+    <set name="specimenCollectionGroups" table="CATISSUE_SPECIMEN_COLL_GROUP" inverse="true" cascade="save-update">
+      <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionGroup"/>
+    </set>
+  </class>
+</hibernate-mapping>

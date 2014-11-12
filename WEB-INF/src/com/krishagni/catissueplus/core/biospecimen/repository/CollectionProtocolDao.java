@@ -11,8 +11,10 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
 	public List<CollectionProtocolSummary> getAllCollectionProtocols(boolean includePi, boolean includeStats);
 
-//	public CollectionProtocol getCollectionProtocol(Long cpId);
-//
+	public CollectionProtocol getCollectionProtocol(String title);
+
+	public CollectionProtocol getCollectionProtocol(Long cpId);
+
 //	public CollectionProtocolEvent getCpe(Long cpeId);
 //
 //	public SpecimenRequirement getSpecimenRequirement(Long requirementId);

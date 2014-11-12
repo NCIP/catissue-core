@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .directive('osWizard', function() {
+  .directive('osWizard', function($q) {
     return {
       restrict: 'A',
 
@@ -21,38 +21,70 @@ angular.module('openspecimen')
             return false;
           }
 
-          if ($scope.steps[$scope.selectedStep].onFinish() &&
-              !$scope.steps[$scope.selectedStep].onFinish()(this.forward)) {
-            return false;
+          var onFinish = $scope.steps[$scope.selectedStep].onFinish();
+          if (!onFinish) {
+            onFinish = function() { return true; };
           }
 
-          $scope.selectedStep--;
-          $scope.steps[$scope.selectedStep + 1].selected = false;
-          $scope.steps[$scope.selectedStep].selected = true;
-          $scope.steps[$scope.selectedStep].finished = false;
-          return true;
+          return $q.when(onFinish(this.forward)).then(
+            function(result) {
+              if (!result) {
+                return false;
+              }
+
+              $scope.selectedStep--;
+              $scope.steps[$scope.selectedStep + 1].selected = false;
+              $scope.steps[$scope.selectedStep].selected = true;
+              $scope.steps[$scope.selectedStep].finished = false;
+              return true;
+            }
+          );
         };
 
         this.next = function() {
           this.forward = true;
-          if ($scope.steps[$scope.selectedStep].onFinish() &&
-              !$scope.steps[$scope.selectedStep].onFinish()(this.forward)) {
-            return false;
-          }
 
-          if ($scope.selectedStep == $scope.steps.length - 1) {
-            return true; // should it return true or false; // earlier it was false
+          var onFinish = $scope.steps[$scope.selectedStep].onFinish();
+          if (!onFinish) {
+            onFinish = function() { return true; };
           }
+       
+          return $q.when(onFinish(this.forward)).then(
+            function(result) {
+              if (!result) {
+                return false;
+              }
 
-          $scope.selectedStep++;
-          $scope.steps[$scope.selectedStep - 1].finished = true;
-          $scope.steps[$scope.selectedStep - 1].selected = false;
-          $scope.steps[$scope.selectedStep].selected= true;
-          return true;
+              if ($scope.selectedStep == $scope.steps.length - 1) {
+                return true; // should it return true or false; // earlier it was false
+              }
+
+              $scope.selectedStep++;
+              $scope.steps[$scope.selectedStep - 1].finished = true;
+              $scope.steps[$scope.selectedStep - 1].selected = false;
+              $scope.steps[$scope.selectedStep].selected= true;
+              return true;
+            }
+          );
         };
 
         this.getCurrentStep = function() {
           return $scope.selectedStep ;
+        };
+
+
+        var stepThrough = function(current, numSteps, fn) {
+          if (current == numSteps) {
+            return;
+          }
+
+          $q.when(fn()).then(
+            function(result) {
+              if (result) {
+                stepThrough(current + 1, numSteps, fn);
+              }
+            }
+          );
         };
 
         $scope.gotoStep = function(step) {
@@ -70,11 +102,7 @@ angular.module('openspecimen')
             fn = $scope.ctrl.previous;
           }
 
-          for (var i = 0; i < numSteps; ++i) {
-            if(!fn()) {
-              break;
-            }
-          }
+          stepThrough(0, numSteps, fn);
         };
 
         this.isFirstStep = function() {

@@ -172,3 +172,33 @@ body {
 .os-section-hdr {
   background: #edeff0;
 }
+
+.os-alert {
+  text-align: center;
+  z-index: 100;
+  position: absolute;
+  width:100%;
+  border-radius: 0px;
+  left: 0;
+}
+
+input.ng-dirty.ng-invalid {
+  border-color: #FA787E
+}
+ 
+.os-btn-secondary {
+  color: #ffffff;
+  background: #888;
+  border-color: #666;
+}
+
+.os-btn-secondary:hover, .os-btn-secondary:focus, .os-btn-secondary:active {
+  color: #ffffff;
+  background: #777;
+  border-color: #555;
+}
+
+.os-btn-text {
+  background: transparent;
+  color: #428bca;
+}

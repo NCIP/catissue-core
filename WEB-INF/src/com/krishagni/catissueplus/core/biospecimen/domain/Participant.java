@@ -185,6 +185,7 @@ public class Participant {
 		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
 			delete(false);
 		}
+		
 		this.activityStatus = activityStatus;
 	}
 

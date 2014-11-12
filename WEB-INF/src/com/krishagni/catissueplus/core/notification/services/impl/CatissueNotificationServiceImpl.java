@@ -61,7 +61,7 @@ public class CatissueNotificationServiceImpl implements CatissueNotificationServ
 			participantDetail.setGender(event.getRegistrationDetails().getGender());
 
 			CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
-			cprDetail.setParticipantDetail(participantDetail);
+			cprDetail.setParticipant(participantDetail);
 			cprDetail.setPpid(event.getRegistrationDetails().getPpId());
 			cprDetail.setRegistrationDate(event.getRegistrationDetails().getEnrollmentDate());
 			cprDetail.setCpId(cpId);

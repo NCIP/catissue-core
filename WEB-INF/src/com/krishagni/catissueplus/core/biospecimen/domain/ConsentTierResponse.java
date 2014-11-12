@@ -10,8 +10,6 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
-import edu.wustl.catissuecore.domain.ConsentTier;
-
 public class ConsentTierResponse {
 
 	private Long id;

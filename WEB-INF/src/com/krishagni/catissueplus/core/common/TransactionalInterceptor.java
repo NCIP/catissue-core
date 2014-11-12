@@ -50,7 +50,9 @@ public class TransactionalInterceptor {
 		try {
 			object = pjp.proceed();
 			ResponseEvent resp = (ResponseEvent)object;
-			if (resp.getStatus() == EventStatus.OK && isTransactionStarted && tx != null) {
+			if ((resp == null || resp.getStatus() == EventStatus.OK) && 
+				isTransactionStarted && 
+				tx != null) {				
 				tx.commit();
 				LOGGER.info("Transaction commited.");
 			}

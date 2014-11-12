@@ -1,21 +1,17 @@
 
 package com.krishagni.catissueplus.core.biospecimen.matching;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.FetchMode;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Restrictions;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMedicalIdentifierNumberDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.CommonValidator;
+import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 
 public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 
@@ -30,50 +26,32 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 	}
 
 	@Override
-	public List<Participant> getMatchingParticipants(ParticipantDetail detail) {
-		List<Participant> matchParticipantsList = new ArrayList<Participant>();
-		if ((CommonValidator.isBlank(detail.getFirstName()) && CommonValidator.isBlank(detail.getLastName()))
-				&& CommonValidator.isBlank(detail.getSsn()) && detail.getPmiCollection().isEmpty()) {
-			return matchParticipantsList;
-		}
-
-		return daoFactory.getParticipantDao().getMatchingParticipants(getDetachedCriteria(detail));
-	}
-
-	private DetachedCriteria getDetachedCriteria(ParticipantDetail detail) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Participant.class);
-
-		Disjunction disjunction = Restrictions.disjunction();
-
-		if (!CommonValidator.isBlank(detail.getFirstName()) || !CommonValidator.isBlank(detail.getLastName())) {
-			Criterion firstName = Expression.eq("firstName", detail.getFirstName());
-			Criterion lastName = Expression.eq("lastName", detail.getLastName());
-
-			disjunction.add(Restrictions.and(firstName, lastName));
-		}
-
-		if (!CommonValidator.isBlank(detail.getSsn())) {
-			disjunction.add(Restrictions.eq("socialSecurityNumber", detail.getSsn()));
-		}
-
-		List<ParticipantMedicalIdentifierNumberDetail> list = detail.getPmiCollection();
-		if (list != null && !list.isEmpty()) {
-			criteria.createAlias("pmiCollection", "pmi");
-			criteria.setFetchMode("pmi", FetchMode.JOIN);
-			criteria.createAlias("pmi.site", "site");
-			criteria.setFetchMode("site", FetchMode.JOIN);
-			for (ParticipantMedicalIdentifierNumberDetail pmi : list) {
-
-				if (!CommonValidator.isBlank(pmi.getMrn()) && !CommonValidator.isBlank(pmi.getSiteName())) {
-					Criterion pmiCrit = Expression.eq("pmi.medicalRecordNumber", pmi.getMrn());
-					Criterion siteCrit = Expression.eq("site.name", pmi.getSiteName());
-					disjunction.add(Restrictions.and(pmiCrit, siteCrit));
-				}
-
+	public ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent req) {
+		ParticipantDao dao = daoFactory.getParticipantDao();
+		ParticipantDetail participant = req.getParticipantDetail();
+		
+		if (StringUtils.isNotBlank(participant.getSsn())) {
+			Participant matched = dao.getBySsn(participant.getSsn());
+			if (matched != null) {
+				List<ParticipantDetail> result = ParticipantDetail.from(Collections.singletonList(matched));
+				return ParticipantMatchedEvent.ok("ssn", result);
 			}
 		}
-		criteria.add(disjunction);
-		return criteria;
+		
+		if (participant.getPmis() != null) {
+			List<Participant> matched = dao.getByPmis(participant.getPmis());
+			if (matched != null && !matched.isEmpty()) {
+				return ParticipantMatchedEvent.ok("pmi", ParticipantDetail.from(matched));
+			}
+		}
+		
+		if (StringUtils.isNotBlank(participant.getLastName()) && participant.getBirthDate() != null) {
+			List<Participant> matched = dao.getByLastNameAndBirthDate(participant.getLastName(), participant.getBirthDate());
+			if (matched != null && !matched.isEmpty()) {
+				return ParticipantMatchedEvent.ok("lnameAndDob", ParticipantDetail.from(matched));
+			}
+		}
+		
+		return ParticipantMatchedEvent.ok("none", Collections.<ParticipantDetail>emptyList());		
 	}
-
 }

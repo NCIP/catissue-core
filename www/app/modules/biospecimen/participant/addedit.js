@@ -1,20 +1,26 @@
 
 angular.module('openspecimen')
-  .controller('ParticipantAddEditCtrl', function($scope, $stateParams, SiteService, PvManager) {
-    $scope.cpId = $stateParams.cpId;
+  .controller('ParticipantAddEditCtrl', function(
+    $scope, $modalInstance, $stateParams, 
+    AlertService, CollectionProtocolService, ParticipantService,
+    SiteService, PvManager) {
 
-    $scope.participant = {
-      birthDate: '',
-      gender: '',
-      pmis: []
+    $scope.cpId = $stateParams.cpId;
+    $scope.pid = undefined;
+
+    $scope.cpr = {
+      participant: {
+        pmis: []
+      },
+      registrationDate: Date.now()
     };
 
     $scope.addPmi = function() {
-      $scope.participant.pmis.push({mrn: '', site: ''});
+      $scope.cpr.participant.pmis.push({mrn: '', site: ''});
     };
 
     $scope.removePmi = function(index) {
-      $scope.participant.pmis.splice(index, 1);
+      $scope.cpr.participant.pmis.splice(index, 1);
     };
 
     SiteService.getSites().then(
@@ -30,4 +36,127 @@ angular.module('openspecimen')
     PvManager.loadPvs($scope, 'ethnicity');
     PvManager.loadPvs($scope, 'vitalStatus');
     PvManager.loadPvs($scope, 'race');
+
+
+    var isMatchingInfoPresent = function(participant) { 
+      if (participant.lastName && participant.birthDate) {
+        return true;
+      }
+
+      if (participant.ssn) {
+        return true;
+      }
+ 
+      if (participant.pmis && participant.pmis.length > 0) {
+        return true;
+      }
+
+      return false;
+    };
+ 
+    $scope.ignoreAndCreateNew = function(wizard) {
+      $scope.matchedResults = undefined;
+      $scope.ignoreMatches = true; 
+      wizard.next(false);
+    };
+
+ 
+    var handleMatchedResults = function() {
+      if (!$scope.selectedParticipant) {
+        AlertService.display($scope, "Select Participant before moving forward", "danger");
+        return false;
+      }
+
+      $scope.cpr.participant = angular.extend({}, $scope.selectedParticipant);
+      angular.forEach($scope.cpr.participant.pmis, function(pmi) {
+        pmi.site = {name: pmi.siteName};
+      });
+
+      $scope.matchedResults = undefined;
+      return true;
+    };
+
+    $scope.validateBasicInfo = function() {
+      if ($scope.matchedResults) {
+        return handleMatchedResults();
+      }   
+
+      var participant = $scope.cpr.participant;
+      if (participant.id || $scope.ignoreMatches || !isMatchingInfoPresent(participant)) {
+        return true;
+      }
+
+      var criteria = {
+        lastName: participant.lastName,
+        birthDate: participant.birthDate,
+        ssn : formatSsn(participant.ssn),
+        pmis: formatPmis(participant.pmis)
+      };
+
+      $scope.matchedResults = undefined;
+      return ParticipantService.getMatchingParticipants(criteria).then(
+        function(result) {
+          if (result.status != 'ok') {
+            AlertService.display($scope, "Participant matching failed", "danger");
+            return false;
+          }
+
+          if (result.data.matchedAttr == 'none') {
+            return true;
+          }
+
+          $scope.matchedResults = result.data;
+          return false;
+        }
+      );
+    };
+
+    $scope.selectParticipant = function(participant) {
+      $scope.selectedParticipant = participant;
+    };
+
+    $scope.lookupAgain = function() {
+      $scope.matchedResults = undefined;
+    };
+
+    var formatSsn = function(ssn) {
+      if (ssn && ssn.length > 0) {
+        ssn = [ssn.slice(0, 3), '-', ssn.slice(3, 5), '-', ssn.slice(5)].join('');
+      } 
+
+      return ssn;
+    };
+
+    var formatPmis = function(inputPmis) {
+      var pmis = [];
+      angular.forEach(inputPmis, function(pmi) {
+        pmis.push({siteName: pmi.site.name, mrn: pmi.mrn});
+      });
+
+      return pmis;
+    };
+
+
+    var handleRegResult = function(result) {
+      if (result.status == 'ok') {
+        $modalInstance.close('ok');
+      } else if (result.status == 'user_error') {
+        var errMsgs = result.data.errorMessages;
+        if (errMsgs.length > 0) {
+          var errMsg = errMsgs[0].attributeName + ": " + errMsgs[0].message;
+          AlertService.display($scope, errMsg, 'danger');
+        }
+      }
+    };
+
+    $scope.register = function() {
+      var req = angular.copy($scope.cpr);
+      req.participant.ssn = formatSsn(req.participant.ssn);
+      req.participant.pmis = formatPmis(req.participant.pmis);
+      CollectionProtocolService.registerParticipant($scope.cpId, req).then(handleRegResult);
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
   });

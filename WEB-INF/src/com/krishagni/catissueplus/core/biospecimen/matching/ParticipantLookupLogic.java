@@ -1,12 +1,8 @@
 package com.krishagni.catissueplus.core.biospecimen.matching;
 
-import java.util.List;
-
-import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
-
+import com.krishagni.catissueplus.core.biospecimen.events.MatchParticipantEvent;
+import com.krishagni.catissueplus.core.biospecimen.events.ParticipantMatchedEvent;
 
 public interface ParticipantLookupLogic {
-
-	List<Participant> getMatchingParticipants(ParticipantDetail participantDetail);
+	ParticipantMatchedEvent getMatchingParticipants(MatchParticipantEvent req);
 }
